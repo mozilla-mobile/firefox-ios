@@ -344,15 +344,15 @@ public class RustSyncManager: NSObject, SyncManager {
         return engineEnablements
     }
 
-    public class ScopedKeyError: MaybeErrorType {
+    public struct ScopedKeyError: MaybeErrorType {
         public let description = "No key data found for scope."
     }
 
-    public class DeviceIdError: MaybeErrorType {
+    public struct DeviceIdError: MaybeErrorType {
         public let description = "Failed to get deviceId."
     }
 
-    public class NoTokenServerURLError: MaybeErrorType {
+    public struct NoTokenServerURLError: MaybeErrorType {
         public let description = "Failed to get token server endpoint url."
     }
 
@@ -376,7 +376,7 @@ public class RustSyncManager: NSObject, SyncManager {
                                      dispatchGroup: DispatchGroupInterface,
                                      loginKey: String?,
                                      creditCardKey: String?,
-                                     completion: @escaping (([String], [String: String])) -> Void) {
+                                     completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
         var registeredPlaces = false
@@ -422,7 +422,8 @@ public class RustSyncManager: NSObject, SyncManager {
                  rustEngines.append(engine.rawValue)
              }
         }
-
+        // FXIOS-13954 - This is to be revisited once we are on Swift 6.2 with default main actor isolation.
+        // This isn't updating any UI elements within the completion block, so not touching it for now
         dispatchGroup.notify(queue: .global()) {
             completion((rustEngines, localEncryptionKeys))
         }
@@ -430,7 +431,7 @@ public class RustSyncManager: NSObject, SyncManager {
 
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
                            dispatchGroup: DispatchGroupInterface = DispatchGroup(),
-                           completion: @escaping (([String], [String: String])) -> Void) {
+                           completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         logins.getStoredKey { loginResult in
             let loginKey: String?
 

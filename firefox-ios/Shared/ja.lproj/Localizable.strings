@@ -1475,7 +1475,7 @@
 "Settings.ShowLinkPreviews.Title" = "リンク先のプレビューを表示";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
-"Settings.ShowLoginsInAppMenu.Title" = "アプリケーションメニューに表示";
+"Settings.ShowLoginsInAppMenu.Title" = "アプリメニューに表示する";
 
 /* The description of the open new tab siri shortcut */
 "Settings.Siri.OpenTabShortcut" = "新規タブを開く";
@@ -1622,7 +1622,7 @@
 "ShareSheet.SendToDevice.Title.v108" = "リンクを端末へ送信";
 
 /* Label for show search suggestions setting. */
-"Show Search Suggestions" = "検索語句の候補を表示";
+"Show Search Suggestions" = "検索語句の候補を表示する";
 
 /* Accessibility label for the tabs button in the (top) tab toolbar */
 "Show Tabs" = "タブを表示";

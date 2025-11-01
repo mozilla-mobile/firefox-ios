@@ -33,6 +33,7 @@ public struct PrefsKeys {
     public static let TermsOfUseImpressionCount = "TermsOfUseImpressionCount"
     public static let TermsOfUseRemindMeLaterCount = "TermsOfUseRemindMeLaterCount"
     public static let TermsOfUseDismissCount = "TermsOfUseDismissCount"
+    public static let TermsOfUseRemindersCount = "TermsOfUseRemindersCount"
     public static let TermsOfUseRemindMeLaterTapDate = "TermsOfUseRemindMeLaterTapDate"
     public static let TermsOfUseLearnMoreTapDate = "TermsOfUseLearnMoreTapDate"
     public static let TermsOfUsePrivacyNoticeTapDate = "TermsOfUsePrivacyNoticeTapDate"
@@ -122,10 +123,8 @@ public struct PrefsKeys {
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
-    }
-
-    public struct Search {
-        public static let recentSearchesCache = "recentSearchesCacheBaseKey"
+        public static let showTrendingSearches = "trendingSearchesFeatureKey"
+        public static let showRecentSearches = "recentSearchesFeatureKey"
     }
 
     public struct RemoteSettings {
@@ -166,6 +165,7 @@ public struct PrefsKeys {
         public static let closePrivateTabs = "ClosePrivateTabs"
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
+        public static let translationsFeature = "settings.translationFeature"
     }
 
     // Activity Stream

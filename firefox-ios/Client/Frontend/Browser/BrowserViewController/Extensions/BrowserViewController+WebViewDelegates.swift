@@ -461,6 +461,14 @@ extension BrowserViewController: WKNavigationDelegate {
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
         let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+
+        // Stories feed tabs are not managed by tabManager, so just allow them without any special logic
+        let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
+        if isStoriesFeed {
+            decisionHandler(.allow)
+            return
+        }
+
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -1289,7 +1297,8 @@ private extension BrowserViewController {
     // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
     // so we will block the creation of a new Webview with this check
     func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
-        return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
+        let domain = navigationAction.sourceFrame.request.url?.baseDomain ?? ""
+        return ["paypal.com", "shopify.com"].contains(domain)
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {

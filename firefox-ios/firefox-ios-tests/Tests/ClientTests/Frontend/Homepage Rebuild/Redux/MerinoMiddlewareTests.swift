@@ -28,7 +28,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
-    func test_initializeAction_getPocketData() throws {
+    func test_initializeHomepageAction_getPocketData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
         let expectation = XCTestExpectation(description: "Homepage action initialize dispatched")
@@ -44,7 +44,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MerinoAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? MerinoMiddlewareActionType)
 
-        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedStories)
+        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionCalled.merinoStories?.count, 3)
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
@@ -69,7 +69,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MerinoAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? MerinoMiddlewareActionType)
 
-        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedStories)
+        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
         XCTAssertEqual(actionCalled.merinoStories?.count, 3)
@@ -95,7 +95,33 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MerinoAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? MerinoMiddlewareActionType)
 
-        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedStories)
+        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
+        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
+        XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
+    }
+
+    func test_initializeStoriesFeed_getPocketData() throws {
+        let subject = createSubject(merinoManager: merinoManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: StoriesFeedActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "Stories feed action initialize dispatched")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.pocketSectionProvider(AppState(), action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MerinoAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? MerinoMiddlewareActionType)
+
+        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
         XCTAssertEqual(actionCalled.merinoStories?.count, 3)
@@ -131,7 +157,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 2)
+        XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 2)
         XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
         XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
     }

@@ -229,6 +229,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNotEqual(actionType, HomepageActionType.viewDidLayoutSubviews)
     }
 
+    @MainActor
     func test_viewDidAppear_withStoriesRedesignDisabled_triggersHomepageAction() throws {
         setIsStoriesRedesignEnabled(isEnabled: false)
         let subject = createSubject()
@@ -282,6 +283,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
+    @MainActor
     func test_scrollViewDidEndDecelerating_withStoriesRedesignDisabled_triggersHomepageAction() throws {
         setIsStoriesRedesignEnabled(isEnabled: false)
         let subject = createSubject()
@@ -505,13 +507,14 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             MerinoAction(
                 merinoStories: merinoStories,
                 windowUUID: windowUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
     }
 }
 
 // FXIOS-13346 / FXIOS-13343 - needed to update tests since we added a bandaid fix to not call
+@MainActor
 private func changeInitialStateToTriggerUpdateInSnapshot() -> HomepageState {
    return HomepageState.reducer(
         HomepageState(windowUUID: .XCTestDefaultUUID),

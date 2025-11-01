@@ -4,7 +4,21 @@
 
 import XCTest
 
-class FindInPageTests: FeatureFlaggedTestBase {
+class FindInPageTests: BaseTestCase {
+    var browserScreen: BrowserScreen!
+    var findInPageScreen: FindInPageScreen!
+
+    private func navigateToOpenFindInPage(openSite: String) {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(openSite)
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+
+        navigator.goto(FindInPage)
+    }
+
     private func openFindInPageFromMenu(openSite: String) {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -30,7 +44,6 @@ class FindInPageTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323463
     func testFindInLargeDoc() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
@@ -54,7 +67,6 @@ class FindInPageTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306851
     // Smoketest
     func testFindFromMenu() {
-        app.launch()
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 
@@ -103,9 +115,38 @@ class FindInPageTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields["Book"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306851
+    // Smoketest TAE
+    func testFindFromMenu_TAE() {
+        browserScreen = BrowserScreen(app: app)
+        findInPageScreen = FindInPageScreen(app: app)
+        let searchTerm = "Book"
+        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigateToOpenFindInPage(openSite: userState.url!)
+
+        findInPageScreen.waitForFindInPageBarToAppear()
+        findInPageScreen.searchForText(searchTerm)
+
+        findInPageScreen.assertResultsCountIsDisplayed("1 of 6")
+
+        findInPageScreen.tapNextResult()
+        findInPageScreen.assertResultsCountIsDisplayed("2 of 6")
+
+        findInPageScreen.tapNextResult()
+        findInPageScreen.assertResultsCountIsDisplayed("3 of 6")
+
+        findInPageScreen.tapPreviousResult()
+        findInPageScreen.assertResultsCountIsDisplayed("2 of 6")
+
+        findInPageScreen.tapPreviousResult()
+        findInPageScreen.assertResultsCountIsDisplayed("1 of 6")
+
+        navigator.goto(BrowserTab)
+        findInPageScreen.assertSearchBarDisappeared(searchKeyword: searchTerm)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2323705
     func testFindInPageTwoWordsSearch() {
-        app.launch()
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
         // Enter some text to start finding
@@ -122,7 +163,6 @@ class FindInPageTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323714
     func testFindInPageTwoWordsSearchLargeDoc() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
@@ -143,7 +183,6 @@ class FindInPageTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323718
     func testFindInPageResultsPageShowHideContent() {
-        app.launch()
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
         // Enter some text to start finding
@@ -160,7 +199,6 @@ class FindInPageTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323801
     func testQueryWithNoMatches() {
-        app.launch()
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 
@@ -176,7 +214,6 @@ class FindInPageTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323802
     func testBarDisappearsWhenReloading() {
-        app.launch()
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 
@@ -195,29 +232,7 @@ class FindInPageTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323803
-    func testBarDisappearsWhenOpeningTabsTray_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        openFindInPageFromMenu(openSite: userState.url!)
-
-        // Dismiss keyboard
-        app.buttons[AccessibilityIdentifiers.FindInPage.findInPageCloseButton].waitAndTap()
-        navigator.nowAt(BrowserTab)
-
-        // Going to tab tray and back to the website hides the search field.
-        navigator.goto(TabTray)
-
-        app.cells.staticTexts["The Book of Mozilla"].firstMatch.waitAndTap()
-        XCTAssertFalse(app.searchFields["find.searchField"].exists)
-        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton].exists)
-        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton].exists)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2323803
-    func testBarDisappearsWhenOpeningTabsTray_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testBarDisappearsWhenOpeningTabsTray() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 
@@ -236,7 +251,6 @@ class FindInPageTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323467
     func testFindFromLongTap() {
-        app.launch()
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
         let textToFind = "from"

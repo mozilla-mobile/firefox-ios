@@ -14,10 +14,12 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     protocol Delegate: AnyObject {
         /// Called when the pan gesture begins during a swipe operation.
         /// This method is invoked once when the user starts swiping between tabs.
+        @MainActor
         func swipeGestureDidBegin()
 
         /// Called when the pan gesture ends, either by completion, cancellation, or failure.
         /// This method is invoked once at the end of the swipe operation, regardless of outcome.
+        @MainActor
         func swipeGestureDidEnd()
     }
 
@@ -86,7 +88,15 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     private func setupGesture() {
@@ -105,7 +115,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         })
     }
 
-    nonisolated private func unsubscribeFromRedux() {
+    private func unsubscribeFromRedux() {
         store.unsubscribe(self)
     }
 
@@ -149,7 +159,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         toolbarState?.isShowingNavigationToolbar == true else { return }
         enablePanGestureRecognizer()
     }
-
     // MARK: - Pan Gesture Handling
     @objc
     @MainActor
@@ -257,12 +266,13 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             CGAffineTransform(translationX: targetPreview, y: 0) : .identity
             webPagePreview.alpha = shouldCompleteTransition ? 1.0 : 0.0
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
+            disablePanGestureRecognizer()
         } completion: { [self] _ in
             webPagePreview.transitionDidEnd()
             homepageScreenshot = nil
-            webPagePreview.isHidden = true
-
+            enablePanGestureRecognizer()
             if shouldCompleteTransition {
+                webPagePreview.isHidden = true
                 store.dispatchLegacy(
                     ToolbarAction(
                         shouldAnimate: false,

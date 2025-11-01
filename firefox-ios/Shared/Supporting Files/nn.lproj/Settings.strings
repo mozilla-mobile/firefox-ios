@@ -149,7 +149,7 @@
 "Settings.Notifications.SyncNotificationsStatus.v112" = "Dette må vere slått på for å ta imot faner og bli varsla når du loggar inn på ei anna eining.";
 
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
-"Settings.Notifications.SyncNotificationsTitle.v112" = "Synkroniser";
+"Settings.Notifications.SyncNotificationsTitle.v112" = "Synk.";
 
 /* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both %1$@ and %2$@ are the app name (e.g. Firefox). */
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Du slo av alle %1$@-varsel. Slå dei på ved å, på eininga, gå til Innstillingar > Varsel > %2$@";
@@ -276,4 +276,19 @@
 
 /* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Ny fane";
+
+/* This is the section title text for the the Translation feature under the Translation settings section. */
+"Settings.Translation.SectionTitle.v145" = "Innstillinger for omsetting";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
+"Settings.Translation.SettingOff.v145" = "Av";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
+"Settings.Translation.SettingOn.v145" = "På";
+
+/* In the settings menu, in the General section, this is the title for the Translation settings section. */
+"Settings.Translation.Title.v145" = "Omsetting";
+
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "Slå på omsettingar";
 

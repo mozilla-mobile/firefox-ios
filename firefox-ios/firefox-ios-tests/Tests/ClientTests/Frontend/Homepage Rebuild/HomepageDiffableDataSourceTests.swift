@@ -52,6 +52,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
     }
 
+    @MainActor
     func test_updateSnapshot_withColorValueOnState() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
         let wallpaperConfig = WallpaperConfiguration(
@@ -67,7 +68,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             MerinoAction(
                 merinoStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
 
@@ -89,6 +90,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
     }
 
+    @MainActor
     func test_updateSnapshot_withValidState_returnTopSites() throws {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
@@ -122,6 +124,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    @MainActor
     func test_updateSnapshot_withValidState_returnPocketStories() throws {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
@@ -131,7 +134,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             MerinoAction(
                 merinoStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
 
@@ -146,6 +149,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    @MainActor
     func test_updateSnapshot_withValidState_returnMessageCard() throws {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
@@ -176,6 +180,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    @MainActor
     func test_updateSnapshot_withValidState_returnBookmarks() throws {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)

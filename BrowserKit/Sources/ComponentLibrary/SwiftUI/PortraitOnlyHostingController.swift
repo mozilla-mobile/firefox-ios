@@ -8,7 +8,7 @@ import SwiftUI
 ///
 /// Usage: `PortraitOnlyHostingController(rootView: MySwiftUIView())`
 @available(iOS 13.0, *)
-public class PortraitOnlyHostingController<Content: View>: UIHostingController<Content> {
+public final class PortraitOnlyHostingController<Content: View>: UIHostingController<Content> {
     override public init(rootView: Content) {
         super.init(rootView: rootView)
     }
@@ -31,5 +31,9 @@ public class PortraitOnlyHostingController<Content: View>: UIHostingController<C
     /// Sets portrait as the preferred presentation orientation
     override public var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
+    }
+
+    override public var prefersHomeIndicatorAutoHidden: Bool {
+        return true
     }
 }

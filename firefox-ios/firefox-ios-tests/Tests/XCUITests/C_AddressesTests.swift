@@ -319,6 +319,7 @@ class O_AddressesTests: BaseTestCase {
         addNewAddress()
         tapSave()
         let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
+        mozWaitElementEnabled(element: app.navigationBars[addresses.title], timeout: TIMEOUT)
         app.buttons[addresses.addAddress].waitAndTap()
         addNewAddress()
         tapSave()

@@ -34,13 +34,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .searchEngineConsolidation,
-                titleText: format(string: "Consolidated Search"),
-                statusText: format(string: "Toggle to use Consolidated Search")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .deeplinkOptimizationRefactor,
                 titleText: format(string: "Deeplink Optimization Refactor"),
                 statusText: format(string: "Toggle to enable deeplink optimization refactor")
@@ -147,6 +140,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .recentSearches,
+                titleText: format(string: "Search - Recent"),
+                statusText: format(string: "Toggle to enable the recent searches feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .trendingSearches,
+                titleText: format(string: "Search - Trending"),
+                statusText: format(string: "Toggle to enable the trending searches feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageShortcutsLibrary,
                 titleText: format(string: "Shortcuts Library"),
                 statusText: format(string: "Toggle to enable the homepage shortcuts library")
@@ -157,6 +164,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .homepageStoriesRedesign,
                 titleText: format(string: "Stories Redesign"),
                 statusText: format(string: "Toggle to enable homepage stories section redesign")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .tabScrollRefactorFeature,
+                titleText: format(string: "Tab scroll refactor"),
+                statusText: format(string: "Toggle to enable tab scroll refactor feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -178,6 +192,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .touFeature,
                 titleText: format(string: "Terms of Use"),
                 statusText: format(string: "Toggle to enable Terms of Use feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .translation,
+                titleText: format(string: "Translations"),
+                statusText: format(string: "Toggle to enable translations feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },

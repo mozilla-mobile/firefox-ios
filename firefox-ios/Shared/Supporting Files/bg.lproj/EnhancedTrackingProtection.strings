@@ -95,13 +95,13 @@
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Изключихте защитите";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected. */
-"Menu.EnhancedTrackingProtection.On.Header.v128" = "Вие сте защитени. Ако забележим нещо, ще ви уведомим.";
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "Защитени сте. Ако забележим нещо, ще ви уведомим.";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Връзката ви не е защитена.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
-"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Бъдете внимателни в този сайт";
+"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Бъдете внимателни на тази страница";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ е нащрек";

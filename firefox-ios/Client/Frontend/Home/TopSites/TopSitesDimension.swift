@@ -27,6 +27,7 @@ protocol TopSitesDimension {
     ///   - interface: The interface where the top sites are being shown
     ///                (ex in landscape, iPhone and its horizontal size class)
     /// - Returns: The top site dimension including its numberOfRows and numberOfTilesPerRow
+    @MainActor
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
                              interface: TopSitesUIInterface
@@ -34,6 +35,7 @@ protocol TopSitesDimension {
 }
 
 class LegacyTopSitesDimensionImplementation: TopSitesDimension {
+    @MainActor
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
                              interface: TopSitesUIInterface
@@ -67,6 +69,7 @@ class LegacyTopSitesDimensionImplementation: TopSitesDimension {
     /// - Parameter interface: Tile number is based on layout, this param contains the parameters
     ///                        needed to computer the tile number
     /// - Returns: The number of tiles per row the user will see
+    @MainActor
     private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
         let cellWidth = TopSitesViewModel.UX.cellEstimatedSize.width
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: interface.trait,

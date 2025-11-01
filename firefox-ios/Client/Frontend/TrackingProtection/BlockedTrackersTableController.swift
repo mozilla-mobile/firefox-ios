@@ -215,7 +215,9 @@ class BlockedTrackersTableViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustLayout()
+            ensureMainThread {
+                self.adjustLayout()
+            }
         default: break
         }
     }

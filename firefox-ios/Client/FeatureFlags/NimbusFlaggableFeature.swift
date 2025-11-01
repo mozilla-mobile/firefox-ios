@@ -39,6 +39,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case noInternetConnectionErrorPage
     case recentSearches
     case reportSiteIssue
+    case relayIntegration
     case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
     case splashScreen
@@ -63,6 +64,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tosFeature
     case touFeature
     case trackingProtectionRefactor
+    case translation
     case trendingSearches
     case unifiedAds
     case unifiedSearch
@@ -73,9 +75,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appearanceMenu,
+                .appleSummarizer,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
+                .downloadLiveActivities,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageStoriesRedesign,
@@ -83,20 +87,22 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .hostedSummarizer,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
+                .recentSearches,
                 .searchEngineConsolidation,
+                .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
-                .trackingProtectionRefactor,
-                .downloadLiveActivities,
-                .appleSummarizer,
-                .hostedSummarizer,
                 .touFeature,
+                .trackingProtectionRefactor,
+                .translation,
+                .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
@@ -169,6 +175,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .relayIntegration,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
@@ -183,6 +190,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tosFeature,
                 .touFeature,
                 .trackingProtectionRefactor,
+                .translation,
                 .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,

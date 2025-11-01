@@ -1,41 +1,53 @@
 /* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
-"Summarizer.AppleBrand.Label.v142" = "由 Apple 智能总结";
+"Summarizer.AppleBrand.Label.v142" = "摘要由 Apple 智能生成";
+
+/* The a11y label for the close button in the summary view. */
+"Summarizer.CloseButton.Accessibility.Label.v145" = "关闭摘要";
 
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "关闭";
 
 /* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
-"Summarizer.Error.MissingPageContent.Message.v142" = "页面仍在加载，请待加载完毕后点击“总结”。";
+"Summarizer.Error.MissingPageContent.Message.v142" = "页面仍在加载，请待加载完毕后点击“生成摘要”。";
 
 /* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
 "Summarizer.Error.RateLimited.Message.v142" = "暂时无法处理此任务，请稍后再试！";
 
 /* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
-"Summarizer.Error.Unknown.Message.v142" = "总结页面时出错，请稍后再试！";
+"Summarizer.Error.Unknown.Message.v142" = "生成页面摘要时出错，请稍后再试。";
 
 /* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
 "Summarizer.Error.UnsafeWebsite.Message.v142" = "检测到受限内容。此页面可能受到限制，或大部分是视觉内容。";
 
 /* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
-"Summarizer.Error.UnsupportedContent.Message.v142" = "此网站不允许总结页面，请尝试其他页面。";
+"Summarizer.Error.UnsupportedContent.Message.v142" = "此网站不允许生成内容摘要，请尝试其他页面。";
 
 /* The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors. */
 "Summarizer.Footnote.Label.v144" = "请注意：摘要内容可能存在错误。";
 
 /* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
-"Summarizer.HostedBrand.Label.v142" = "由 %@ 总结";
+"Summarizer.HostedBrand.Label.v142" = "摘要由 %@ 生成";
+
+/* The a11y label for the loading label on the summarize loading screen. */
+"Summarizer.Loading.Accessibility.Label.v145" = "正在加载摘要";
 
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
-"Summarizer.Loading.Label.v142" = "正在总结…";
+"Summarizer.Loading.Label.v142" = "正在生成摘要…";
+
+/* The a11y label for the retry button in the summary view when the summarizer fails with an error that allows retrying to summarize the page. */
+"Summarizer.RetryButton.Accessibility.Label.v145" = "重新尝试生成页面摘要";
 
 /* The label for the error button that allows the user to retry summarizing the page. */
 "Summarizer.RetryButton.Label.v142" = "重试";
+
+/* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "拖动或轻点网页以关闭摘要";
 
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "允许";
 
 /* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ 使用 Apple 智能来总结页面。";
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ 使用 Apple 智能生成页面摘要。";
 
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "取消";
@@ -44,16 +56,19 @@
 "Summarizer.ToS.Alert.ContinueButton.Label.v144" = "继续";
 
 /* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ 使用云端 AI 生成网页内容摘要，并将摘要结果返回至您的设备。";
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ 使用云端 AI 生成页面摘要，并将摘要结果返回至您的设备。";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "详细了解";
 
 /* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "允许总结页面？";
+"Summarizer.ToS.Alert.Title.Label.v142" = "允许生成页面摘要？";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "运作方式";
+
+/* The a11y label for the allow button on the info panel when the user has not yet accepted the ToS. */
+"Summarizer.ToS.InfoPanel.AllowButton.Accessibility.Label.v145" = "接受";
 
 /* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
 "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "继续";
@@ -62,5 +77,5 @@
 "Summarizer.ToS.InfoPanel.Label.v143" = "通过 %@ 即刻掌握核心要点。";
 
 /* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
-"Summarizer.ToS.InfoPanel.Title.Label.v143" = "总结此页面？";
+"Summarizer.ToS.InfoPanel.Title.Label.v143" = "生成页面摘要？";
 

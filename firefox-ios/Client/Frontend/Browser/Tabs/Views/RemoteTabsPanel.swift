@@ -67,7 +67,15 @@ class RemoteTabsPanel: UIViewController,
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     var currentWindowUUID: UUID? { return windowUUID }
@@ -188,11 +196,11 @@ class RemoteTabsPanel: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .remoteTabsPanel)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func newState(state: RemoteTabsPanelState) {

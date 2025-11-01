@@ -12,7 +12,9 @@ let testURL = "https://storage.googleapis.com/mobile_test_assets/test_app/downlo
 let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-download-text-blob/"
 let testBLOBFileSize = "35 bytes"
 
-class DownloadsTests: FeatureFlaggedTestBase {
+class DownloadsTests: BaseTestCase {
+    var downloadsScreen: DownloadsScreen!
+    var browserScreen: BrowserScreen!
     override func tearDown() {
         defer { super.tearDown() }
 
@@ -45,7 +47,6 @@ class DownloadsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306896
     func testDownloadFilesAppMenuFirstTime() {
-        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
@@ -56,7 +57,6 @@ class DownloadsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306897
     func testDownloadFileContextMenu() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(testURL)
@@ -84,7 +84,6 @@ class DownloadsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306898
     // Smoketest
     func testDownloadFile() {
-        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -100,9 +99,21 @@ class DownloadsTests: FeatureFlaggedTestBase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306898
+    // Smoketest TAE
+    func testDownloadFile_TAE() {
+        downloadsScreen = DownloadsScreen(app: app)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_Downloads)
+
+        downloadsScreen.assertNumberOfDownloadedItems(expectedCount: 1)
+        // There should be one item downloaded. It's name and size should be shown
+        downloadsScreen.assertDownloadedFileDetailsAreVisible(fileName: testFileNameDownloadPanel, fileSize: testFileSize)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306899
     func testDownloadBLOBFile() {
-        app.launch()
         downloadBLOBFile()
         mozWaitForElementToExist(app.buttons["Downloads"])
         navigator.goto(BrowserTabMenu)
@@ -117,7 +128,6 @@ class DownloadsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306900
     func testDeleteDownloadedFile() throws {
-        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -130,7 +140,6 @@ class DownloadsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306901
     func testShareDownloadedFile() throws {
-        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -173,7 +182,6 @@ class DownloadsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306902
     func testLongPressOnDownloadedFile() {
-        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -237,7 +245,6 @@ class DownloadsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306903
     func testDownloadMoreThanOneFile() {
-        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 2)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -247,45 +254,7 @@ class DownloadsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306904
-    func testRemoveUserDataRemovesDownloadedFiles_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        // The option to remove downloaded files from clear private data is off by default
-        navigator.goto(ClearPrivateDataSettings)
-        mozWaitForElementToExist(app.cells.switches["Downloaded Files"])
-        XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correctly by default")
-
-        // Change the value of the setting to on (make an action for this)
-        navigator.goto(HomePanelsScreen)
-        downloadFile(fileName: testFileName, numberOfDownloads: 1)
-
-        // Check there is one item
-        navigator.nowAt(BrowserTab)
-        navigator.goto(LibraryPanel_Downloads)
-
-        mozWaitForElementToExist(app.tables["DownloadsTable"])
-        checkTheNumberOfDownloadedItems(items: 1)
-
-        // Remove private data once the switch to remove downloaded files is enabled
-        navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(ClearPrivateDataSettings)
-        app.cells.switches["Downloaded Files"].waitAndTap()
-        navigator.performAction(Action.AcceptClearPrivateData)
-
-        navigator.goto(HomePanelsScreen)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Downloads)
-        // Check the item has been removed
-        checkTheNumberOfDownloadedItems(items: 0)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306904
-    func testRemoveUserDataRemovesDownloadedFiles_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testRemoveUserDataRemovesDownloadedFiles() {
         navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
         navigator.goto(ClearPrivateDataSettings)
@@ -326,10 +295,19 @@ class DownloadsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306895
     // Smoketest
     func testToastButtonToGoToDownloads() {
-        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         app.buttons["Downloads"].waitAndTap()
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 1)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306895
+    // Smoketest TAE
+    func testToastButtonToGoToDownloads_TAE() {
+        browserScreen = BrowserScreen(app: app)
+        downloadsScreen = DownloadsScreen(app: app)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
+        browserScreen.tapDownloadsToastButton()
+        downloadsScreen.assertNumberOfDownloadedItems(expectedCount: 1)
     }
 }

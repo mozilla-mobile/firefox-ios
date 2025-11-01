@@ -451,7 +451,11 @@ class LegacyHomepageViewController: UIViewController,
             store.dispatchLegacy(action)
             // On a website we just dismiss the keyboard
         } else {
-            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
+            let action = ToolbarAction(
+                shouldShowKeyboard: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.keyboardStateDidChange
+            )
             store.dispatchLegacy(action)
         }
     }
@@ -926,13 +930,11 @@ extension LegacyHomepageViewController: Notifiable {
         switch notification.name {
         case .TabsPrivacyModeChanged:
             let notificationWindowUUID = notification.windowUUID
-            let object = notification.object as AnyObject?
+            let isPrivate = (notification.object as? NSDictionary)?[Tab.privateModeKey] as? Bool
 
             ensureMainThread {
-                guard
-                    let dict = object as? NSDictionary,
-                    let isPrivate = dict[Tab.privateModeKey] as? Bool,
-                    self.windowUUID == notificationWindowUUID
+                guard let isPrivate,
+                      self.windowUUID == notificationWindowUUID
                 else { return }
                 self.adjustPrivacySensitiveSections(isPrivate: isPrivate)
             }

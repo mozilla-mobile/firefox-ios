@@ -41,7 +41,8 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
-    func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
+    @MainActor
+    func test_retrievedUpdatedSitesAction_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
@@ -67,7 +68,8 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, ["hello"])
     }
 
-    func test_retrievedUpdatedStoriesAction_returnsDefaultState() throws {
+    @MainActor
+    func test_retrievedUpdatedSitesAction_returnsDefaultState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
@@ -87,6 +89,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, [])
     }
 
+    @MainActor
     func test_updatedNumberOfRows_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
@@ -104,6 +107,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.numberOfRows, 4)
     }
 
+    @MainActor
     func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
@@ -122,6 +126,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
     }
 
     // MARK: numberOfTilesPerRow
+    @MainActor
     func test_viewWillTransition_numberOfTilesPerRow_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = topSiteReducer()
@@ -139,6 +144,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.numberOfTilesPerRow, 8)
     }
 
+    @MainActor
     func test_viewDidLayoutSubviews_numberOfTilesPerRow_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = topSiteReducer()
@@ -156,6 +162,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.numberOfTilesPerRow, 8)
     }
 
+    @MainActor
     func test_initialize_numberOfTilesPerRow_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = topSiteReducer()

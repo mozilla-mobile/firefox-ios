@@ -257,6 +257,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
+            mozWaitElementHittable(element: app.collectionViews.cells[option], timeout: 10)
             app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
@@ -270,6 +271,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         app.tables["Context Menu"].buttons["shareLarge"].waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
+            mozWaitElementHittable(element: app.collectionViews.cells[option], timeout: 10)
             app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()

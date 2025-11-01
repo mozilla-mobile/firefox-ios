@@ -777,7 +777,13 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
             if isEditing {
-                store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
+                store.dispatchLegacy(
+                    ToolbarAction(
+                        shouldShowKeyboard: false,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarActionType.keyboardStateDidChange
+                    )
+                )
             }
         }
 
@@ -1139,6 +1145,26 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(storiesFeedViewController)
     }
 
+    func showStoriesWebView(url: URL?) {
+        guard let url else { return }
+
+        // Creates an unmanaged tab that is destroyed once the stories webview view controller is dismissed
+        // Used to prevent persisting tab in the tab tray during and across app sessions
+        let tab = Tab(profile: profile, isPrivate: false, windowUUID: windowUUID)
+        let tabConfigurationProvider = TabConfigurationProvider(prefs: profile.prefs)
+        let tabConfiguration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
+        tab.url = url
+        tab.navigationDelegate = browserViewController
+        tab.tabDelegate = browserViewController
+        tab.createWebview(configuration: tabConfiguration)
+        tab.loadRequest(URLRequest(url: url))
+
+        // Present the stories web view with the tab's webview
+        guard let webView = tab.webView else { return }
+        let webviewViewController = StoriesWebviewViewController(windowUUID: windowUUID, webView: webView)
+        router.push(webviewViewController)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {
@@ -1187,6 +1213,10 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Terms of Use
 
     func showTermsOfUse(context: TriggerContext = .appLaunch) {
+        guard !childCoordinators.contains(where: { $0 is TermsOfUseCoordinator }) else {
+            return // route is handled with existing child coordinator
+        }
+
         let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
 
         let router = DefaultRouter(navigationController: presenter.navigationController ?? UINavigationController())

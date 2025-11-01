@@ -13,7 +13,8 @@ import SiteImageView
 class HistoryPanel: UIViewController,
                     LibraryPanel,
                     LibraryPanelContextMenu,
-                    Themeable {
+                    Themeable,
+                    Notifiable {
     struct UX {
         static let WelcomeScreenItemWidth = 170
         static let IconSize = 23
@@ -165,15 +166,11 @@ class HistoryPanel: UIViewController,
 
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        viewModel.historyPanelNotifications.forEach {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(handleNotifications),
-                name: $0,
-                object: nil
-            )
-        }
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: viewModel.historyPanelNotifications
+        )
 
         handleRefreshControl()
         setupLayout()
@@ -328,40 +325,46 @@ class HistoryPanel: UIViewController,
     }
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
-            viewModel.removeAllData()
-            fetchDataAndUpdateLayout(animating: true)
+        let notificationName = notification.name
+        let notificationDBName = notification.object as? String
 
-            if profile.hasSyncableAccount() {
-                resyncHistory()
-            }
-            break
-        case UIContentSizeCategory.didChangeNotification:
-            if emptyStateOverlayView.superview != nil {
-                emptyStateOverlayView.removeFromSuperview()
-            }
-            emptyStateOverlayView = createEmptyStateOverlayView()
-            resyncHistory()
-            break
-        case .DatabaseWasReopened:
-            if let dbName = notification.object as? String, dbName == "browser.db" {
-                fetchDataAndUpdateLayout(animating: true)
-            }
-        case .OpenClearRecentHistory:
-            if viewModel.isSearchInProgress {
-                exitSearchState()
-            }
+        ensureMainThread {
+            switch notificationName {
+            case .FirefoxAccountChanged, .PrivateDataClearedHistory:
+                self.viewModel.removeAllData()
+                self.fetchDataAndUpdateLayout(animating: true)
 
-            showClearRecentHistory()
-            break
-        case .OpenRecentlyClosedTabs:
-            historyCoordinatorDelegate?.showRecentlyClosedTab()
-            applySnapshot(animatingDifferences: true)
-            break
-        default:
-            // no need to do anything at all
-            break
+                if self.profile.hasSyncableAccount() {
+                    self.resyncHistory()
+                }
+
+            case UIContentSizeCategory.didChangeNotification:
+                if self.emptyStateOverlayView.superview != nil {
+                    self.emptyStateOverlayView.removeFromSuperview()
+                }
+                self.emptyStateOverlayView = self.createEmptyStateOverlayView()
+                self.resyncHistory()
+
+            case .DatabaseWasReopened:
+                if let dbName = notificationDBName, dbName == "browser.db" {
+                    self.fetchDataAndUpdateLayout(animating: true)
+                }
+
+            case .OpenClearRecentHistory:
+                if self.viewModel.isSearchInProgress {
+                    self.exitSearchState()
+                }
+
+                self.showClearRecentHistory()
+
+            case .OpenRecentlyClosedTabs:
+                self.historyCoordinatorDelegate?.showRecentlyClosedTab()
+                self.applySnapshot(animatingDifferences: true)
+
+            default:
+                // no need to do anything at all
+                break
+            }
         }
     }
 
@@ -464,10 +467,10 @@ class HistoryPanel: UIViewController,
 
                 // FXIOS-10996 Temporary check for duplicates to help diagnose history panel crashes
                 if sectionData.count > sectionDataUniqued.count {
-                    // If you crash here, please record your steps in ticket FXIOS-10996. Diagnose if possible as you
+                    // If you crash here, please record your steps in ticket FXIOS-11563. Diagnose if possible as you
                     // have stumbled upon one of our rare Sentry crashes that is probably dependent on your unique
                     // browsing history state.
-                    assertionFailure("FXIOS-10996 We should never have duplicates! Log how you made this crash happen.")
+                    assertionFailure("FXIOS-11563 We should never have duplicates! Log how you made this crash happen.")
                 }
 
                 snapshot.appendItems(

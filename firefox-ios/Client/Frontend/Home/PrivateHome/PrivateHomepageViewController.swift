@@ -27,6 +27,7 @@ final class PrivateHomepageViewController: UIViewController,
         static let defaultScrollContainerPadding: CGFloat = 16
         private static let iPadScrollContainerPadding: CGFloat = 164
 
+        @MainActor
         static func scrollContainerPadding(with traitCollection: UITraitCollection) -> CGFloat {
             let isiPad = UIDevice.current.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
             return isiPad ? UX.iPadScrollContainerPadding : UX.defaultScrollContainerPadding

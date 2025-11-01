@@ -63,8 +63,8 @@ public struct CustomPageControl: View {
             ForEach(0..<numberOfPages, id: \.self) { index in
                 Circle()
                     .fill(index == currentPage ? primaryActionColor : secondaryActionColor)
-                    .frame(width: 8, height: 8)
-                    .scaleEffect(index == currentPage ? 1.2 : 1.0)
+                    .frame(width: 6, height: 6)
+                    .scaleEffect(index == currentPage ? 1.1 : 1.0)
                     .animation(.easeInOut(duration: 0.2), value: currentPage)
             }
         }

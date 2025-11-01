@@ -92,4 +92,19 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         let currentCardName = onboardingCards[currentIndex].name
         onComplete(currentCardName)
     }
+
+    func scrollToNextPage() {
+        guard !onboardingCards.isEmpty else { return }
+        let maxIndex = onboardingCards.count - 1
+        let next = min(pageCount + 1, maxIndex)
+        guard next != pageCount else { return }
+        pageCount = next
+    }
+
+    func scrollToPreviousPage() {
+        guard !onboardingCards.isEmpty else { return }
+        let previous = max(pageCount - 1, 0)
+        guard previous != pageCount else { return }
+        pageCount = previous
+    }
 }

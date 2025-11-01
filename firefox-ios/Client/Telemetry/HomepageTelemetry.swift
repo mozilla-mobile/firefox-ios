@@ -49,7 +49,7 @@ struct HomepageTelemetry {
     }
 
     func sendSectionLabeledCounter(for itemType: ItemType) {
-        gleanWrapper.recordLabel(for: GleanMetrics.Homepage.sectionViewed, label: itemType.sectionName)
+        gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Homepage.sectionViewed, label: itemType.sectionName)
     }
 
     // MARK: - Top Sites
@@ -70,7 +70,7 @@ struct HomepageTelemetry {
 
     func sendTopSitesPressedEvent(position: Int, tileType: String, isZeroSearch: Bool) {
         let originExtra: TelemetryWrapper.EventValue = isZeroSearch ? .fxHomepageOriginZeroSearch : .fxHomepageOriginOther
-        gleanWrapper.recordLabel(
+        gleanWrapper.incrementLabeledCounter(
             for: GleanMetrics.TopSites.pressedTileOrigin,
             label: originExtra.rawValue
         )
@@ -83,8 +83,8 @@ struct HomepageTelemetry {
     // MARK: - Pocket
     func sendTapOnPocketStoryCounter(position: Int, isZeroSearch: Bool) {
         let originExtra: TelemetryWrapper.EventValue = isZeroSearch ? .fxHomepageOriginZeroSearch : .fxHomepageOriginOther
-        gleanWrapper.recordLabel(for: GleanMetrics.Pocket.openStoryOrigin, label: originExtra.rawValue)
-        gleanWrapper.recordLabel(for: GleanMetrics.Pocket.openStoryPosition, label: "position-\(position)")
+        gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Pocket.openStoryOrigin, label: originExtra.rawValue)
+        gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Pocket.openStoryPosition, label: "position-\(position)")
     }
 
     func sendPocketSectionCounter() {

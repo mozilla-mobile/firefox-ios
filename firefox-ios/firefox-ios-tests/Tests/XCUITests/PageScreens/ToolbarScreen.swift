@@ -13,8 +13,69 @@ final class ToolbarScreen {
         self.sel = selectors
     }
 
+    private var tabsButton: XCUIElement { sel.TABS_BUTTON.element(in: app) }
+    private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app)}
+    private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app)}
+
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settingsButton, timeout: timeout)
+    }
+
+    func assertTabsButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(tabsButton)
+    }
+
+    func pressTabsButton(duration: TimeInterval) {
+        tabsButton.press(forDuration: duration)
+    }
+
+    func assertTabsOpened(expectedCount: Int) {
+        BaseTestCase().mozWaitForElementToExist(tabsButton)
+
+        guard let tabsOpen = tabsButton.value as? String, tabsOpen == "\(expectedCount)" else {
+            XCTFail("Tabs button counter is not showing the correct count. Expected: \(expectedCount)")
+            return
+        }
+    }
+
+    func tapOnTabsButton() {
+        tabsButton.waitAndTap()
+    }
+
+    func assertNewTabButtonExist() {
+        BaseTestCase().mozWaitForElementToExist(newTabButton)
+    }
+
+    func assertTabsButtonValue(expectedCount: String) {
+        let tabsValue = sel.TABS_BUTTON.element(in: app).value as? String
+        XCTAssertEqual(expectedCount, tabsValue, "Expected \(expectedCount) open tabs after switching")
+    }
+
+    func pressBackButton(duration: TimeInterval) {
+        BaseTestCase().mozWaitForElementToExist(backButton)
+        backButton.press(forDuration: duration)
+    }
+
+    func pressForwardButton(duration: TimeInterval) {
+        let forward = sel.FORWARD_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(forward)
+        forward.press(forDuration: duration)
+    }
+
+    func waitUntilBackButtonHittable(timeout: TimeInterval = 2.0) {
+        BaseTestCase().mozWaitElementHittable(element: backButton, timeout: timeout)
+    }
+
+    func assertBackButtonExist() {
+        BaseTestCase().mozWaitForElementToExist(backButton)
+    }
+
+    func tapBackButton() {
+        backButton.waitAndTap()
+    }
+
+    func assertBackButtonIsDisabled() {
+        XCTAssertFalse(backButton.isEnabled, "Expected Back button to be disabled")
     }
 }

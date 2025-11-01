@@ -6,13 +6,11 @@ import SwiftUI
 import Common
 
 public struct AttributedLinkText<Action: RawRepresentable>: View where Action.RawValue == String {
+    let theme: Theme
     let fullText: String
     let linkText: String
     let action: Action
     let linkAction: (Action) -> Void
-
-    @State private var attributedString: AttributedString
-    let theme: Theme
 
     public init(
         theme: Theme,
@@ -26,24 +24,17 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
         self.linkText = linkText
         self.action = action
         self.linkAction = linkAction
-
-        var attrString = AttributedString(fullText)
-        attrString.foregroundColor = Color(uiColor: theme.colors.textSecondary)
-
-        let actionURL = URL(string: "action://\(action.rawValue)")!
-        if let range = attrString.range(of: linkText) {
-            attrString[range].underlineStyle = .single
-            attrString[range].foregroundColor = Color(uiColor: theme.colors.actionPrimary)
-            attrString[range].link = actionURL
-        }
-
-        self._attributedString = State(initialValue: attrString)
     }
 
     public var body: some View {
         Text(attributedString)
             .fixedSize(horizontal: false, vertical: true)
-            .accessibilityAddTraits([.isStaticText, .isButton])
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isLink)
+            .accessibilityLabel(fullText)
+            .accessibilityAction {
+                linkAction(action)
+            }
             .font(.caption)
             .multilineTextAlignment(.center)
             .environment(\.openURL, OpenURLAction { url in
@@ -55,5 +46,19 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
                 }
                 return .systemAction
             })
+    }
+
+    private var attributedString: AttributedString {
+        var attrString = AttributedString(fullText)
+        attrString.foregroundColor = Color(uiColor: theme.colors.textSecondary)
+
+        let actionURL = URL(string: "action://\(action.rawValue)")!
+        if let range = attrString.range(of: linkText) {
+            attrString[range].underlineStyle = .single
+            attrString[range].foregroundColor = Color(uiColor: theme.colors.actionPrimary)
+            attrString[range].link = actionURL
+        }
+
+        return attrString
     }
 }

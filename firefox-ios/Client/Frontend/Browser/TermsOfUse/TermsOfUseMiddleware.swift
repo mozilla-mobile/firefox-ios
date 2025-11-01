@@ -7,7 +7,7 @@ import Shared
 
 // TODO: FXIOS-12947 - Add tests for TermsOfUse Feature
 @MainActor
-class TermsOfUseMiddleware {
+final class TermsOfUseMiddleware {
     private let prefs: Prefs
     private let logger: Logger
     let telemetry: TermsOfUseTelemetry
@@ -25,44 +25,32 @@ class TermsOfUseMiddleware {
     }
 
     private func handleTermsOfUseAction(_ action: Action) {
-        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
-        // because we dispatch to the main thread in the store. We will want
-        // to also isolate that to the @MainActor to remove this.
-        guard Thread.isMainThread else {
-            self.logger.log(
-                "Terms of Use Middleware is not being called from the main thread!",
-                level: .fatal,
-                category: .coordinator
-            )
-            return
-        }
+        guard let action = action as? TermsOfUseAction,
+              let type = action.actionType as? TermsOfUseActionType else { return }
 
-        MainActor.assumeIsolated {
-            guard let action = action as? TermsOfUseAction,
-                  let type = action.actionType as? TermsOfUseActionType else { return }
-
-            switch type {
-            case TermsOfUseActionType.termsShown:
-                self.recordImpression()
-            case TermsOfUseActionType.termsAccepted:
-                self.recordAcceptance()
-            case TermsOfUseActionType.remindMeLaterTapped:
-                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseRemindMeLaterTapDate)
-                self.telemetry.termsOfUseRemindMeLaterButtonTapped()
-            case TermsOfUseActionType.gestureDismiss:
-                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-                self.telemetry.termsOfUseDismissed()
-            case TermsOfUseActionType.learnMoreLinkTapped:
-                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseLearnMoreTapDate)
-                self.telemetry.termsOfUseLearnMoreButtonTapped()
-            case TermsOfUseActionType.privacyLinkTapped:
-                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUsePrivacyNoticeTapDate)
-                self.telemetry.termsOfUsePrivacyNoticeLinkTapped()
-            case TermsOfUseActionType.termsLinkTapped:
-                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseTermsLinkTapDate)
-                self.telemetry.termsOfUseTermsOfUseLinkTapped()
-            }
+        switch type {
+        case TermsOfUseActionType.termsShown:
+            self.recordImpression()
+        case TermsOfUseActionType.termsAccepted:
+            self.recordAcceptance()
+        case TermsOfUseActionType.remindMeLaterTapped:
+            self.incrementRemindersCount()
+            self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
+            self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseRemindMeLaterTapDate)
+            self.telemetry.termsOfUseRemindMeLaterButtonTapped()
+        case TermsOfUseActionType.gestureDismiss:
+            self.incrementRemindersCount()
+            self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
+            self.telemetry.termsOfUseDismissed()
+        case TermsOfUseActionType.learnMoreLinkTapped:
+            self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseLearnMoreTapDate)
+            self.telemetry.termsOfUseLearnMoreButtonTapped()
+        case TermsOfUseActionType.privacyLinkTapped:
+            self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUsePrivacyNoticeTapDate)
+            self.telemetry.termsOfUsePrivacyNoticeLinkTapped()
+        case TermsOfUseActionType.termsLinkTapped:
+            self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseTermsLinkTapDate)
+            self.telemetry.termsOfUseTermsOfUseLinkTapped()
         }
     }
 
@@ -81,5 +69,14 @@ class TermsOfUseMiddleware {
 
         // Record telemetry for ToU impression
         telemetry.termsOfUseDisplayed()
+    }
+
+    private func incrementRemindersCount() {
+        // Only increment for reminders - after the first dismissal
+        let hasBeenDismissedBefore = self.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil
+        guard hasBeenDismissedBefore else { return }
+
+        let currentCount = self.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
+        self.prefs.setInt(Int32(currentCount + 1), forKey: PrefsKeys.TermsOfUseRemindersCount)
     }
 }

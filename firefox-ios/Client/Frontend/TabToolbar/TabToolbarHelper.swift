@@ -30,18 +30,31 @@ protocol TabToolbarProtocol: AnyObject {
 }
 
 protocol TabToolbarDelegate: AnyObject {
+    @MainActor
     func configureDataClearanceContextualHint(_ view: UIView)
+    @MainActor
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
     func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 

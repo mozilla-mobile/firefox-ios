@@ -27,6 +27,7 @@ final class MerinoStateTests: XCTestCase {
         XCTAssertEqual(initialState.merinoData, [])
     }
 
+    @MainActor
     func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = pocketReducer()
@@ -46,7 +47,7 @@ final class MerinoStateTests: XCTestCase {
             MerinoAction(
                 merinoStories: stories,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
 
@@ -55,6 +56,7 @@ final class MerinoStateTests: XCTestCase {
         XCTAssertEqual(newState.merinoData.compactMap { $0.title }, ["feed1", "feed2", "feed3"])
     }
 
+    @MainActor
     func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = pocketReducer()
@@ -72,6 +74,7 @@ final class MerinoStateTests: XCTestCase {
         XCTAssertTrue(newState.shouldShowSection)
     }
 
+    @MainActor
     func test_toggleShowSectionSetting_withToggleOff_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = pocketReducer()

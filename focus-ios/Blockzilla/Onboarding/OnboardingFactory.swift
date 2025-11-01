@@ -6,14 +6,14 @@ import UIKit
 import Onboarding
 import SwiftUI
 
-class TestOnboarding: OnboardingEventsHandling {
+final class TestOnboarding: OnboardingEventsHandling {
     @Published var route: Onboarding.ToolTipRoute?
     var routePublisher: Published<Onboarding.ToolTipRoute?>.Publisher { $route }
     func send(_ action: Onboarding.Action) {}
     func dismissTooltip(route: Onboarding.ToolTipRoute) {}
 }
 
-class OnboardingFactory {
+final class OnboardingFactory {
     static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool) -> OnboardingEventsHandling {
         let getShownTips: () -> Set<ToolTipRoute> = {
             return UserDefaults

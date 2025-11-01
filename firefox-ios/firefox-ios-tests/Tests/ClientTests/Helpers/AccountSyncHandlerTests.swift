@@ -45,6 +45,7 @@ class AccountSyncHandlerTests: XCTestCase {
         expectation.isInverted = true
         profile.hasSyncableAccountMock = false
         let subject = AccountSyncHandler(with: profile, queue: queue, onSyncCompleted: {
+            expectation.fulfill()
         })
         let tab = createTab(profile: profile)
         subject.tabDidGainFocus(tab)

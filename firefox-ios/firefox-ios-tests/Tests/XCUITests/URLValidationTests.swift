@@ -9,6 +9,7 @@ class URLValidationTests: BaseTestCase {
                     "www.mozilla.org/en-US", "https://www.mozilla.org/", "https://www.mozilla.org/en", "https://www.mozilla.org/en-US"]
     let urlHttpTypes = ["http://example.com", "http://example.com/"]
     let urlField = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+    var browserScreen: BrowserScreen!
 
     override func setUp() {
         super.setUp()
@@ -18,6 +19,7 @@ class URLValidationTests: BaseTestCase {
         scrollToElement(app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"])
         app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].waitAndTap()
         navigator.goto(NewTabScreen)
+        browserScreen = BrowserScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2460854
@@ -43,9 +45,35 @@ class URLValidationTests: BaseTestCase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2460854
+    // Smoketest TAE
+    func testDifferentURLTypes_TAE() {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        for url in urlTypes {
+            navigator.openURL(url)
+            waitUntilPageLoad()
+            browserScreen.assertMozillaPageLoaded(urlField: urlField)
+            clearURL_TAE()
+        }
+
+        for url in urlHttpTypes {
+            navigator.openURL(url)
+            waitUntilPageLoad()
+            browserScreen.assertExampleDomainLoaded(urlField: urlField)
+            clearURL_TAE()
+        }
+    }
+
     private func clearURL() {
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         app.buttons["Clear text"].waitAndTap()
+    }
+
+    private func clearURL_TAE() {
+        navigator.nowAt(BrowserTab)
+        navigator.goto(URLBarOpen)
+        browserScreen.clearURL()
     }
 }

@@ -8,7 +8,7 @@ protocol UserScriptProvider {
     func getScript(for name: String) -> String?
 }
 
-class DefaultUserScriptProvider: UserScriptProvider {
+final class DefaultUserScriptProvider: UserScriptProvider {
     func getScript(for name: String) -> String? {
         guard let path = Bundle.main.path(forResource: name, ofType: "js"),
               let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String

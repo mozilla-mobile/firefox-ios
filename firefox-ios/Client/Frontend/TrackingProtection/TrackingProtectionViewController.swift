@@ -53,6 +53,7 @@ class TrackingProtectionViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private let logger: Logger
 
     weak var enhancedTrackingProtectionMenuDelegate: TrackingProtectionMenuDelegate?
 
@@ -127,19 +128,34 @@ class TrackingProtectionViewController: UIViewController,
          profile: Profile,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared) {
         self.model = viewModel
         self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.logger = logger
         trackingProtectionState = TrackingProtectionState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
         subscribeToRedux()
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            logger.log(
+                "TrackingProtectionViewController was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view controller was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     @available(*, unavailable)
@@ -246,7 +262,7 @@ class TrackingProtectionViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .trackingProtection)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -255,11 +271,11 @@ class TrackingProtectionViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: self.windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .trackingProtection)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: Content View
@@ -357,16 +373,21 @@ class TrackingProtectionViewController: UIViewController,
         constraints.append(contentsOf: trackersConnectionConstraints)
         trackersView.trackersButtonCallback = { [weak self] in
             guard let self else { return }
-            store.dispatchLegacy(
-                TrackingProtectionAction(windowUUID: windowUUID,
-                                         actionType: TrackingProtectionActionType.tappedShowBlockedTrackers)
+            store.dispatch(
+                TrackingProtectionAction(
+                    windowUUID: self.windowUUID,
+                    actionType: TrackingProtectionActionType.tappedShowBlockedTrackers
+                )
             )
         }
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
             guard let self, model.connectionSecure else { return }
-            store.dispatchLegacy(
-                TrackingProtectionAction(windowUUID: windowUUID,
-                                         actionType: TrackingProtectionActionType.tappedShowTrackingProtectionDetails)
+
+            store.dispatch(
+                TrackingProtectionAction(
+                    windowUUID: self.windowUUID,
+                    actionType: TrackingProtectionActionType.tappedShowTrackingProtectionDetails
+                )
             )
         }
     }
@@ -571,16 +592,16 @@ class TrackingProtectionViewController: UIViewController,
 
     @objc
     private func didTapClearCookiesAndSiteData() {
-        store.dispatchLegacy(
-            TrackingProtectionAction(windowUUID: windowUUID,
+        store.dispatch(
+            TrackingProtectionAction(windowUUID: self.windowUUID,
                                      actionType: TrackingProtectionActionType.tappedShowClearCookiesAlert)
         )
     }
 
     @objc
     func protectionSettingsTapped() {
-        store.dispatchLegacy(
-            TrackingProtectionAction(windowUUID: windowUUID,
+        store.dispatch(
+            TrackingProtectionAction(windowUUID: self.windowUUID,
                                      actionType: TrackingProtectionActionType.tappedShowSettings)
         )
     }
@@ -589,8 +610,8 @@ class TrackingProtectionViewController: UIViewController,
     func openSettingsTapped() {
         let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
         if !isContentBlockingConfigEnabled {
-            store.dispatchLegacy(
-                TrackingProtectionAction(windowUUID: windowUUID,
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: self.windowUUID,
                                          actionType: TrackingProtectionActionType.tappedShowSettings)
             )
         }
@@ -609,7 +630,7 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func showSettings() {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.trackingProtectionSettings),
                 windowUUID: self.windowUUID,

@@ -40,7 +40,7 @@ final class MockNimbusStringHelper: NimbusStringHelperProtocol, @unchecked Senda
     }
 }
 
-class MockNimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
+final class MockNimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
     required init(logger: Logger = DefaultLogger.shared) { }
 
     func createNimbusMessagingHelper() -> NimbusMessagingHelperProtocol? {

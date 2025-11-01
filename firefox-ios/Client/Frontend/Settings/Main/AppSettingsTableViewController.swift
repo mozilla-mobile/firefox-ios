@@ -374,6 +374,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(SummarizeSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
+        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
+            generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         generalSettings += [
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
@@ -476,6 +480,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ResetContextualHints(settings: self),
             ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
             ResetTermsOfServiceAcceptancePage(settings: self, settingsDelegate: self),
+            ResetSearchEnginePrefsSetting(settings: self),
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             TermsOfUseTimeout(settings: self, settingsDelegate: self),

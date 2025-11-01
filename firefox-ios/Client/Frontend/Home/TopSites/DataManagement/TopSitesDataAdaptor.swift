@@ -113,14 +113,16 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     // MARK: - Data loading
 
     // Loads the data source of top sites. Internal for convenience of testing
-    func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
+    private func loadTopSitesData() {
         loadContiles(dispatchGroup: dispatchGroup)
         loadTopSites(dispatchGroup: dispatchGroup)
 
+        // FXIOS-13954 - This code will disappear soon since it's part of the legacy homepage only. If it hasn't
+        // disappeared then we should is to be revisited once we are on Swift 6.2 with default main actor isolation.
+        // Note: `didLoadNewData` calls `ensureMainThread`
         dispatchGroup.notify(queue: dataQueue) { [weak self] in
             self?.recalculateTopSiteData()
             self?.delegate?.didLoadNewData()
-            dataLoadingCompletion?()
         }
     }
 
