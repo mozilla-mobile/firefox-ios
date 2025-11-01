@@ -488,6 +488,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
             ScreenshotSetting(settings: self),
             DeleteLoginsKeysSetting(settings: self),
+            DeleteAutofillKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self)
