@@ -144,7 +144,30 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         present(summarizeToolbarEntryContextHintVC, animated: true)
         UIAccessibility.post(notification: .layoutChanged, argument: summarizeToolbarEntryContextHintVC)
     }
+    
+    // MARK: - Translation CFR
+    func configureTranslationContextualHint(for view: UIView) {
+        guard let state = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
+        // Show up arrow for iPad and landscape or top address bar; otherwise show down arrow
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let shouldShowUpArrow = state.toolbarPosition == .top || !showNavToolbar
 
+        translationContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: shouldShowUpArrow ? .up : .down,
+            andDelegate: self,
+            presentedUsing: { [weak self] in
+                self?.presentTranslationContextualHint()
+            },
+            andActionForButton: { },
+            overlayState: overlayManager)
+    }
+
+    private func presentTranslationContextualHint() {
+        present(translationContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
+    }
+    
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
     }

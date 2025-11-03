@@ -47,11 +47,13 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         case .toolbarUpdate:
             hintTypeShouldBePresented = canToolbarUpdateCFRBePresented
+        case .translation:
+            hintTypeShouldBePresented = canTranslationCFRBePresented
         case .summarizeToolbarEntry:
             hintTypeShouldBePresented = true
         }
 
-        return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)
+        return hintTypeShouldBePresented
     }
 
     // MARK: - Private helpers
@@ -76,6 +78,10 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// - toolbar-update-hint flag is enabled
     private var canToolbarUpdateCFRBePresented: Bool {
         return isToolbarUpdateCFRFeatureEnabled
+    }
+
+    private var canTranslationCFRBePresented: Bool {
+        return featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) ? true : false
     }
 
     /// We present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been

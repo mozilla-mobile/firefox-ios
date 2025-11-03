@@ -1277,7 +1277,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             iconName: StandardImageIdentifiers.Medium.lightning,
             isEnabled: true,
             hasCustomColor: !hasAlternativeLocationColor,
-            contextualHintType: ContextualHintType.summarizeToolbarEntry.rawValue,
+//            contextualHintType: ContextualHintType.summarizeToolbarEntry.rawValue,
             a11yLabel: .Toolbars.SummarizeButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.summarizeButton)
     }
@@ -1318,6 +1318,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
+            contextualHintType: ContextualHintType.translation.rawValue,
             a11yLabel: configuration.state.buttonA11yLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.translateButton
         )
