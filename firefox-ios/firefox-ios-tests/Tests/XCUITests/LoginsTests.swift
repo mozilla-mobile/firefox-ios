@@ -622,6 +622,7 @@ class LoginTest: BaseTestCase {
     }
 
     private func validateChangedPasswordSavedState_TAE(isPasswordSaved: Bool = true) {
+        let password = "password"
         saveLogin_TAE(givenUrl: testLoginPage)
         openLoginsSettings()
         // There is a Saved Password toggle option (enabled)
@@ -639,7 +640,7 @@ class LoginTest: BaseTestCase {
         passworField.waitAndTap()
         passworField.press(forDuration: 1.5)
         app.staticTexts["Select All"].waitAndTap()
-        passworField.typeText("password")
+        passworField.typeText(password)
         app.buttons["submit"].waitAndTap()
 
         saveLoginAlertScreen.waitForAlert()

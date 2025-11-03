@@ -93,7 +93,6 @@ final class LoginSettingsScreen {
             BaseTestCase().mozWaitForElementToExist(app.keyboards.keys.firstMatch)
         }
         for letter in typedText {
-            print("\(letter)")
             app.keyboards.keys["\(letter)"].waitAndTap()
         }
     }
@@ -126,13 +125,14 @@ final class LoginSettingsScreen {
     }
 
     func unlockLoginsView() {
+        let passcode = "foo\n"
         if sel.ONBOARDING_CONTINUE_BUTTON.element(in: app).exists {
             sel.ONBOARDING_CONTINUE_BUTTON.element(in: app).waitAndTap()
         }
 
         let passcode = sel.PASSCODE_FIELD.element(in: springboard)
         BaseTestCase().mozWaitForElementToExist(passcode)
-        passcode.tapAndTypeText("foo\n")
+        passcode.tapAndTypeText(passcode)
         BaseTestCase().mozWaitForElementToNotExist(passcode)
     }
 }

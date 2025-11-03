@@ -576,6 +576,7 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {
+        let text = "example.com\n"
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -584,7 +585,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         // swiftlint:disable empty_count
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
-        app.typeText("example.com\n")
+        app.typeText(text)
 
         mozWaitForValueContains(urlBar, value: "example.com")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
