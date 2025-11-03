@@ -65,6 +65,9 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
+        case .shouldUseJapanConfiguration:
+            return checkShouldUseJapanConfigurationFeature(from: nimbus)
+
         case .menuDefaultBrowserBanner:
             return checkMenuDefaultBrowserBanner(from: nimbus)
 
@@ -509,5 +512,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.webEngineIntegrationRefactor.value().enabled
+    }
+
+    private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
     }
 }
