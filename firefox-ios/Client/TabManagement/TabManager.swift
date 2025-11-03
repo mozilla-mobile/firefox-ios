@@ -25,6 +25,7 @@ protocol TabManager: AnyObject {
     var count: Int { get }
 
     var selectedTab: Tab? { get }
+    var selectedIndex: Int { get }
     var backupCloseTab: BackupCloseTab? { get set }
 
     var tabs: [Tab] { get }

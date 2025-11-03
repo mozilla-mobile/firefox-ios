@@ -1326,7 +1326,6 @@ class BrowserViewController: UIViewController,
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        updateToolbarStateForTraitCollection(traitCollection)
         updateAddressToolbarContainerPosition(for: traitCollection)
     }
 
@@ -4483,8 +4482,6 @@ extension BrowserViewController: TabManagerDelegate {
             /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
             willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
-        } else if isSwipingTabsEnabled {
-            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
         /// If the selectedTab is showing an error page trigger a reload
