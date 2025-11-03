@@ -27,12 +27,12 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
         featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
     }
 
-    var isJapan: Bool {
-        featureFlags.isFeatureEnabled(.isJapan, checking: .buildAndUser)
+    var shouldUseJapanConfiguration: Bool {
+        featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
     }
 
     var onboardingVariant: OnboardingVariant {
-        if isModernOnboardingEnabled && isJapan {
+        if isModernOnboardingEnabled && shouldUseJapanConfiguration {
             return .japan
         } else if isModernOnboardingEnabled {
             return .modern

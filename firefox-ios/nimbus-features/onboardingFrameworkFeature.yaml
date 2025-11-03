@@ -5,12 +5,12 @@ features:
       The new onboarding framework feature that will allow onboarding
       to be experimentable through initial experiments.
     variables:
-      enableModernUi:
+      enable-modern-ui:
         description: >
           Toggle between legacy (false) and modern (true) UI variants.
         type: Boolean
         default: false
-      isJapan:
+      should-use-japan-configuration:
         description: >
           Toggle between standard (false) and Japan-specific (true) assets and content.
         type: Boolean
@@ -38,8 +38,8 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enableModernUi: false
-          isJapan: false
+          enable-modern-ui: false
+          should-use-japan-configuration: false
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
