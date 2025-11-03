@@ -11,6 +11,7 @@ import XCTest
 final class FxSuggestTelemetryTests: XCTestCase {
     private var gleanWrapper: MockGleanWrapper!
 
+    @MainActor
     override func setUp() {
         super.setUp()
         setupTelemetry(with: MockProfile())
