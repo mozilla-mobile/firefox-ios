@@ -42,9 +42,8 @@ jobs:
       - name: Setup Xcode
         run: |
           sudo rm -rf /Applications/Xcode.app
-          sudo xcode-select -s /Applications/Xcode_26.0.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode_26.0.1.app/Contents/Developer
           xcodebuild -version
-          xcodes runtimes install 'iOS 26.0'
       - name: Run setup scripts for Focus
         run: |
           ./bootstrap.sh focus
@@ -52,7 +51,7 @@ jobs:
         run: |
           xcodebuild build-for-testing -scheme FocusSnapshotTests \
             -project focus-ios/Blockzilla.xcodeproj \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0.1' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
             -derivedDataPath l10n-screenshots-dd
       - name: Targzip Derived Data
         run: |
