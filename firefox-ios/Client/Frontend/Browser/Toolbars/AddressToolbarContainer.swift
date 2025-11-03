@@ -66,7 +66,6 @@ final class AddressToolbarContainer: UIView,
         static let skeletonBarWidthOffset: CGFloat = 32
         static let addNewTabFadeAnimationDuration: TimeInterval = 0.2
         static let addNewTabPercentageAnimationThreshold: CGFloat = 0.3
-        static let keyboardAccessoryViewOffset: CGFloat = 22
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -189,36 +188,6 @@ final class AddressToolbarContainer: UIView,
     func hideSkeletonBars() {
         leftSkeletonAddressBar.isHidden = true
         rightSkeletonAddressBar.isHidden = true
-    }
-
-    func offsetForKeyboardAccessory(hasAccessoryView: Bool) -> CGFloat {
-        guard #available(iOS 26.0, *), let windowUUID else { return 0 }
-
-        let isEditingAddress = state?.addressToolbar.isEditing == true
-        let isBottomToolbar = state?.toolbarPosition == .bottom
-
-        store.dispatchLegacy(
-            ToolbarAction(
-                shouldShowKeyboard: hasAccessoryView,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
-        )
-
-        let shouldAdjustForAccessory = hasAccessoryView &&
-                                       !isEditingAddress &&
-                                       isBottomToolbar
-
-        if shouldAdjustForAccessory {
-            store.dispatchLegacy(
-                ToolbarAction(
-                    scrollAlpha: 0,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
-        }
-        return shouldAdjustForAccessory ? UX.keyboardAccessoryViewOffset : 0
     }
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {

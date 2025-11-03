@@ -668,7 +668,7 @@ private extension LegacyTabScrollController {
                     ToolbarAction(
                         scrollAlpha: Float(alpha),
                         windowUUID: windowUUID,
-                        actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                        actionType: ToolbarActionType.scrollAlphaDidChange
                     )
                 )
             }
