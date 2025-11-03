@@ -157,8 +157,11 @@ class DownloadsPanel: UIViewController,
     }
 
     private func shareDownloadedFile(_ downloadedFile: DownloadedFile, indexPath: IndexPath) {
+        // Since this file is already downloaded, we don't have a remote URL to use for the "Send to Device" activity
+        let shareType = ShareType.file(url: downloadedFile.path, remoteURL: nil)
+
         let shareActivityViewController = ShareManager.createActivityViewController(
-            shareType: .file(url: downloadedFile.path),
+            shareType: shareType,
             shareMessage: nil,
             completionHandler: { _, _ in }
         )
