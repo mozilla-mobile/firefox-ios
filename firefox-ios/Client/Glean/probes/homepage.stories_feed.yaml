@@ -27,16 +27,15 @@ homepage.stories_feed:
     type: event
     description: |
       Recorded when a user closes the stories feed via the back button or swipe back gesture.
+    data_sensitivity:
+      - interaction
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/29541
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2027-06-01"
-    metadata:
-      tags:
-        - StoriesFeed
+    expires: "2026-06-01"
   story_viewed:
     type: event
     description: |
@@ -45,17 +44,16 @@ homepage.stories_feed:
       index:
         type: quantity
         description: |
-          The index of the story
+          The index of the story, in normal format (ie. index 1 = story 1)
+    data_sensitivity:
+      - interaction
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/29541
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2027-06-01"
-    metadata:
-      tags:
-        - StoriesFeed
+    expires: "2026-06-01"
   story_tapped:
     type: event
     description: |
@@ -64,28 +62,26 @@ homepage.stories_feed:
       index:
         type: quantity
         description: |
-          The index of the story
+          The index of the story, in normal format (ie. index 1 = story 1)
+    data_sensitivity:
+      - interaction
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/29541
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2027-06-01"
-    metadata:
-      tags:
-        - StoriesFeed
+    expires: "2026-06-01"
   viewed:
     type: event
     description: |
       Recorded when a user sees the stories feed screen.
+    data_sensitivity:
+      - interaction
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/29541
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2027-06-01"
-    metadata:
-      tags:
-        - StoriesFeed
+    expires: "2026-06-01"
