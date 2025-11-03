@@ -157,9 +157,9 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private let dataQueue = DispatchQueue(label: "com.moz.mainMenuAction.queue")
     // TODO: FXIOS-13791 These properties need to be noniolsated because this work is put on its own queue
-    private nonisolated(unsafe) var isInReadingList = false
-    private nonisolated(unsafe) var isBookmarked = false
-    private nonisolated(unsafe) var isPinned = false
+    nonisolated(unsafe) private var isInReadingList = false
+    nonisolated(unsafe) private var isBookmarked = false
+    nonisolated(unsafe) private var isPinned = false
 
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
