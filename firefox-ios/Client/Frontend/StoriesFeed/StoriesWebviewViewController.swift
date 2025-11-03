@@ -62,9 +62,13 @@ class StoriesWebviewViewController: UIViewController,
         super.viewDidLoad()
 
         setupWebView()
-        setupNavigationTitle()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+    }
+
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupNavigationTitle()
     }
 
     // MARK: Helper functions
