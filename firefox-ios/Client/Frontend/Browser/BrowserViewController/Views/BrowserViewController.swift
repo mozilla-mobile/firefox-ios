@@ -1693,6 +1693,14 @@ class BrowserViewController: UIViewController,
 
         guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
             overKeyboardContainer.removeKeyboardSpacer()
+            guard #available(iOS 26.0, *) else { return }
+            store.dispatchLegacy(
+                ToolbarAction(
+                    scrollAlpha: 1,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                )
+            )
             return
         }
         let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
