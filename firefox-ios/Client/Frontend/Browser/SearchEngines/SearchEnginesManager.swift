@@ -8,9 +8,13 @@ import Shared
 import Storage
 
 protocol SearchEnginesManagerProvider: AnyObject {
+    @MainActor
     var defaultEngine: OpenSearchEngine? { get }
+    @MainActor
     var orderedEngines: [OpenSearchEngine] { get }
+    @MainActor
     var delegate: SearchEngineDelegate? { get set }
+    @MainActor
     func getOrderedEngines(completion: @escaping SearchEngineCompletion)
 }
 
@@ -46,6 +50,7 @@ struct SearchEngineProviderFactory {
 /// enabled quick search engines, and it is possible to disable every non-default quick search engine).
 ///
 /// This class is not thread-safe -- you should only access it on a single thread (usually, the main thread)!
+@MainActor
 class SearchEnginesManager: SearchEnginesManagerProvider {
     private let prefs: Prefs
     private let fileAccessor: FileAccessor

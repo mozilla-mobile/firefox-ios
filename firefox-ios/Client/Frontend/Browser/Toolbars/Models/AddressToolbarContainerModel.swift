@@ -190,6 +190,7 @@ final class AddressToolbarContainerModel: Equatable {
         )
     }
 
+    @MainActor
     init(
         state: ToolbarState,
         profile: Profile,
@@ -242,6 +243,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.toolbarHelper = toolbarHelper
     }
 
+    @MainActor
     func searchTermFromURL(_ url: URL?) -> String? {
         var searchURL: URL? = url
 
