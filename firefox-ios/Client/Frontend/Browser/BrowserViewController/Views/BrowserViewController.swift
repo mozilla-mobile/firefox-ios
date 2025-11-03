@@ -1511,7 +1511,7 @@ class BrowserViewController: UIViewController,
             if summarizeToolbarEntryContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
                 summarizeToolbarEntryContextHintVC.dismiss(animated: true)
             }
-            
+
             if translationContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
                 translationContextHintVC.dismiss(animated: true)
             }
