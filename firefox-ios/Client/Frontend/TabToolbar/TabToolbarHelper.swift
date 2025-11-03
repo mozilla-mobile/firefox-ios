@@ -17,6 +17,7 @@ protocol TabToolbarProtocol: AnyObject {
     var forwardButton: TabToolbarButton { get }
     var backButton: TabToolbarButton { get }
     var multiStateButton: TabToolbarButton { get }
+    var readerModeButton: TabToolbarButton { get }
     var actionButtons: [ThemeApplicable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
@@ -56,6 +57,8 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     @MainActor
     func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    @MainActor
+    func tabToolbarDidPressReaderMode(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
 enum MiddleButtonState {
@@ -72,6 +75,7 @@ open class TabToolbarHelper: NSObject {
     let ImageHome = UIImage.templateImageNamed(StandardImageIdentifiers.Large.home)
     let ImageBookmark = UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmarkTrayFill)
     let ImageFire = UIImage.templateImageNamed(StandardImageIdentifiers.Large.dataClearance)
+    let ImageReaderMode = UIImage.templateImageNamed(StandardImageIdentifiers.Large.readerMode)
 
     func setMiddleButtonState(_ state: MiddleButtonState) {
         let device = UIDevice.current.userInterfaceIdiom
@@ -183,6 +187,15 @@ open class TabToolbarHelper: NSObject {
         toolbar.bookmarksButton.accessibilityLabel = .LegacyAppMenu.Toolbar.BookmarksButtonAccessibilityLabel
         toolbar.bookmarksButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
         toolbar.bookmarksButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.bookmarksButton
+
+        toolbar.readerModeButton.contentMode = .center
+        toolbar.readerModeButton.showsLargeContentViewer = true
+        toolbar.readerModeButton.largeContentImage = ImageReaderMode
+        toolbar.readerModeButton.largeContentTitle = .ReaderMode.AccessibilityLabel
+        toolbar.readerModeButton.setImage(ImageReaderMode, for: .normal)
+        toolbar.readerModeButton.accessibilityLabel = .ReaderMode.AccessibilityLabel
+        toolbar.readerModeButton.addTarget(self, action: #selector(didClickReaderMode), for: .touchUpInside)
+        toolbar.readerModeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.readerModeButton
 
         // The default long press duration is 0.5.  Here we extend it if
         // UILargeContentViewInteraction is enabled to allow the large content
@@ -311,6 +324,16 @@ open class TabToolbarHelper: NSObject {
             toolbar,
             button: toolbar.addNewTabButton
         )
+    }
+
+    @objc
+    func didClickReaderMode() {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        if !Thread.isMainThread {
+            assertionFailure("This must be called main thread")
+        }
+
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressReaderMode(toolbar, button: toolbar.readerModeButton)
     }
 
     @objc

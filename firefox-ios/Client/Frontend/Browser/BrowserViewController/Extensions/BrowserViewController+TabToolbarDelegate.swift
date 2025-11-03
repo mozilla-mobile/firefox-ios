@@ -265,6 +265,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                   newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
 
+    func tabToolbarDidPressReaderMode(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        toggleReaderMode()
+    }
+
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnMenu(button: button)
     }
