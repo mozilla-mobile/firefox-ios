@@ -200,4 +200,71 @@ extension Selector {
                  groups: groups
         )
     }
+
+    static func webViewOtherByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.other.rawValue,
+            label,
+            label
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: label,
+                        description: description,
+                        groups: groups)
+    }
+
+    static func navigationBarByTitle(_ title: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.navigationBar.rawValue,
+            title,
+            title
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: title,
+                        description: description,
+                        groups: groups)
+    }
+
+    static func tableCellByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (label == %@ OR identifier == %@)",
+            XCUIElement.ElementType.cell.rawValue,
+            label,
+            label
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: label,
+                        description: description,
+                        groups: groups)
+    }
+
+    static func buttonIdOrLabel(_ value: String,
+                                description: String,
+                                groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.button.rawValue,
+            value,
+            value
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: value,
+                        description: description,
+                        groups: groups
+        )
+    }
+
+    static func springboardPasscodeField(description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "elementType == %d",
+            XCUIElement.ElementType.secureTextField.rawValue
+        )
+        return Selector(strategy: .predicate(p),
+                        value: "springboardPasscode",
+                        description: description,
+                        groups: groups
+        )
+    }
 }

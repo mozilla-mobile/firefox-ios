@@ -194,4 +194,29 @@ final class BrowserScreen {
     func assertAddressBar_LockIconExist(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON.element(in: app))
     }
+
+    func assertAddressBarHasKeyboardFocus() {
+        let addressBar = sel.ADDRESS_BAR.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+
+        let hasFocus = addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false
+        XCTAssertTrue(hasFocus, "Expected the address bar to have keyboard focus, but it doesn't.")
+    }
+
+    func longPressLink(named linkName: String, duration: TimeInterval = 2.0) {
+        let link = sel.linkElement(named: linkName).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(link)
+        link.press(forDuration: duration)
+    }
+
+    func waitForLinkPreview(named preview: String) {
+        let previewLabel = sel.linkPreview(named: preview).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(previewLabel)
+    }
+
+    func longPressFirstLink() {
+        let firstLink = app.webViews.links.firstMatch
+        BaseTestCase().mozWaitForElementToExist(firstLink)
+        firstLink.press(forDuration: 1)
+    }
 }

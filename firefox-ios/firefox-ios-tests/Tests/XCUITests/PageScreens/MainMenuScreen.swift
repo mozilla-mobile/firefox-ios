@@ -16,4 +16,20 @@ final class MainMenuScreen {
     func assertDesktopSiteExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sel.DESKTOP_SITE.element(in: app), timeout: timeout)
     }
+
+    func waitForMenuOptionsToExist() {
+        let elements = [
+            sel.BOOKMARKS_BUTTON.element(in: app),
+            sel.HISTORY_BUTTON.element(in: app),
+            sel.DOWNLOADS_BUTTON.element(in: app),
+            sel.PASSWORDS_BUTTON.element(in: app),
+            sel.SETTINGS_CELL.element(in: app)
+        ]
+        BaseTestCase().waitForElementsToExist(elements)
+    }
+
+    func assertMainMenuSettingsExist() {
+        let settings = sel.SETTINGS_CELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(settings)
+    }
 }
