@@ -767,7 +767,7 @@ class TabsTestsIphone: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
+        browserScreen.tapCancelButtonIfExist()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
