@@ -121,7 +121,7 @@ class ShareManager: NSObject {
     }
 
     @MainActor
-    private static func getApplicationActivities(forShareType shareType: ShareType) -> [UIActivity] {
+    static func getApplicationActivities(forShareType shareType: ShareType) -> [UIActivity] {
         var appActivities = [UIActivity]()
 
         // Set up the "Send to Device" activity, which shares URLs between a Firefox account user's synced devices. We can
