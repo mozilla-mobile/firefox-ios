@@ -197,9 +197,9 @@ class TrackingProtectionViewController: UIViewController,
         updateBlockedTrackersCount()
         updateConnectionStatus()
         applyTheme()
-        getCertificates(for: model.url) { [weak self] certificates in
+        getCertificates(for: model.url) { certificates in
             if let certificates {
-                ensureMainThread {
+                ensureMainThread { [weak self] in
                     self?.model.certificates = certificates
                 }
             }
