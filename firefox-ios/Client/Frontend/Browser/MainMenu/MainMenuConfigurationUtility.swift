@@ -492,10 +492,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: true,
             isActive: nightModeIsOn,
             a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode,
-            a11yHint: nightModeIsOn ? Tools.WebsiteDarkModeOn : Tools.WebsiteDarkModeOff,
+            a11yHint: nightModeIsOn ? Tools.WebsiteDarkModeOnV2 : Tools.WebsiteDarkModeOffV2,
             a11yId: AccessibilityIdentifiers.MainMenu.nightMode,
             isOptional: true,
-            infoTitle: nightModeIsOn ? Tools.WebsiteDarkModeOn : Tools.WebsiteDarkModeOff,
+            infoTitle: nightModeIsOn ? Tools.WebsiteDarkModeOnV2 : Tools.WebsiteDarkModeOffV2,
             action: {
                 store.dispatch(
                     MainMenuAction(
