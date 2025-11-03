@@ -777,13 +777,7 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
             if isEditing {
-                store.dispatchLegacy(
-                    ToolbarAction(
-                        shouldShowKeyboard: false,
-                        windowUUID: windowUUID,
-                        actionType: ToolbarActionType.keyboardStateDidChange
-                    )
-                )
+                store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
             }
         }
 
