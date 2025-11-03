@@ -279,7 +279,6 @@ class StoriesFeedViewController: UIViewController,
     // MARK: - Telemetry
     /// The sampleOnly parameter is there to distinguish between “sampling visibility”
     /// while the user is still scrolling vs. doing a full flush at the end of scrolling.
-    @MainActor
     private func trackVisibleItemImpressions(sampleOnly: Bool = false) {
         guard let collectionView else { return }
 
@@ -297,7 +296,7 @@ class StoriesFeedViewController: UIViewController,
             let visibleArea = intersection.width * intersection.height
             let ratio = visibleArea / max(cellArea, 1)
 
-            if ratio >= impressionsTracker.impressionThreshold {
+            if ratio >= impressionsTracker.impressionVisibilityThreshold {
                 impressionsTracker.markPending(indexPath)
             }
 
@@ -310,7 +309,7 @@ class StoriesFeedViewController: UIViewController,
     private func flushImpressions() {
         impressionsTracker.flush { indexPaths in
             for indexPath in indexPaths {
-                telemetry.sendImpressionTelemetryFor(storyIndex: indexPath.item)
+                telemetry.sendStoryViewedTelemetryFor(storyIndex: indexPath.item)
             }
         }
     }

@@ -30,7 +30,7 @@ final class ImpressionTrackerTests: XCTestCase {
         }
     }
 
-    private func makeIP(_ item: Int, _ section: Int = 0) -> IndexPath {
+    private func makeIndexPath(_ item: Int, _ section: Int = 0) -> IndexPath {
         IndexPath(item: item, section: section)
     }
 
@@ -48,7 +48,7 @@ final class ImpressionTrackerTests: XCTestCase {
 
     func testSinglePending_GetsSentOnce() {
         var validator = SendCapture()
-        let ip = makeIP(0)
+        let ip = makeIndexPath(0)
         subject.markPending(ip)
 
         subject.flush { validator.record($0) }
@@ -59,7 +59,7 @@ final class ImpressionTrackerTests: XCTestCase {
 
     func testMultiplePending_SendsAllInOneBatch() {
         var validator = SendCapture()
-        let a = makeIP(0), b = makeIP(1), c = makeIP(2)
+        let a = makeIndexPath(0), b = makeIndexPath(1), c = makeIndexPath(2)
         [a, b, c].forEach(subject.markPending)
 
         subject.flush { validator.record($0) }
@@ -70,7 +70,7 @@ final class ImpressionTrackerTests: XCTestCase {
 
     func testDuplicateMarks_AreDeDuplicated() {
         var validator = SendCapture()
-        let ip = makeIP(3)
+        let ip = makeIndexPath(3)
         subject.markPending(ip)
         subject.markPending(ip)
         subject.markPending(ip)
@@ -83,7 +83,7 @@ final class ImpressionTrackerTests: XCTestCase {
 
     func testAlreadySent_NotResentOnNextFlush() {
         var validator = SendCapture()
-        let ip = makeIP(1)
+        let ip = makeIndexPath(1)
         subject.markPending(ip)
         subject.flush { validator.record($0) }
 
@@ -97,7 +97,7 @@ final class ImpressionTrackerTests: XCTestCase {
 
     func testPendingClearsOnFlush_EvenWhenNoNewItems() {
         var validator = SendCapture()
-        let ip = makeIP(2)
+        let ip = makeIndexPath(2)
 
         subject.markPending(ip)
         subject.flush { validator.record($0) }
@@ -110,9 +110,9 @@ final class ImpressionTrackerTests: XCTestCase {
         XCTAssertEqual(validator.payloads.count, 1)
     }
 
-    func testReset_AllowsResend() {
+    func testReset_AllowsResend_OnReset() {
         var validator = SendCapture()
-        let ip = makeIP(4)
+        let ip = makeIndexPath(4)
 
         subject.markPending(ip)
         subject.flush { validator.record($0) }
@@ -129,8 +129,8 @@ final class ImpressionTrackerTests: XCTestCase {
 
     func testSectionsMatter_IndexPathEqualityBySectionAndItem() {
         var validator = SendCapture()
-        let itemOne = makeIP(0, 0)
-        let sameAsItemOneButDifferentSection = makeIP(0, 1)
+        let itemOne = makeIndexPath(0, 0)
+        let sameAsItemOneButDifferentSection = makeIndexPath(0, 1)
 
         subject.markPending(itemOne)
         subject.markPending(sameAsItemOneButDifferentSection)
@@ -146,7 +146,7 @@ final class ImpressionTrackerTests: XCTestCase {
 
     func testInterleavedFlushes_SendsOnlyNewItemsEachTime() {
         var validator = SendCapture()
-        let a = makeIP(0), b = makeIP(1), c = makeIP(2)
+        let a = makeIndexPath(0), b = makeIndexPath(1), c = makeIndexPath(2)
 
         subject.markPending(a)
         subject.flush { validator.record($0) }
@@ -166,7 +166,7 @@ final class ImpressionTrackerTests: XCTestCase {
 
     func testNoLeakBetweenBatches_PendingIsIsolated() {
         var validator = SendCapture()
-        let a = makeIP(10), b = makeIP(11)
+        let a = makeIndexPath(10), b = makeIndexPath(11)
 
         subject.markPending(a)
         subject.flush { validator.record($0) }

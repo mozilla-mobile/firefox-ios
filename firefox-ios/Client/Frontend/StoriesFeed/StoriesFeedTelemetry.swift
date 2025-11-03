@@ -11,7 +11,7 @@ struct StoriesFeedTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func sendImpressionTelemetryFor(storyIndex: Int) {
+    func sendStoryViewedTelemetryFor(storyIndex: Int) {
         let extra = GleanMetrics.HomepageStoriesFeed.StoryViewedExtra(index: Int32(storyIndex + 1))
         gleanWrapper.recordEvent(for: GleanMetrics.HomepageStoriesFeed.storyViewed, extras: extra)
     }

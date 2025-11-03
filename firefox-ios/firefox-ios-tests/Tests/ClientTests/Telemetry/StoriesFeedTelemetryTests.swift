@@ -81,7 +81,7 @@ final class StoriesFeedTelemetryTests: XCTestCase {
         let expectedIndex = Int32(1)
         let expectedMetricType = type(of: event)
 
-        subject?.sendImpressionTelemetryFor(storyIndex: 0)
+        subject?.sendStoryViewedTelemetryFor(storyIndex: 0)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
