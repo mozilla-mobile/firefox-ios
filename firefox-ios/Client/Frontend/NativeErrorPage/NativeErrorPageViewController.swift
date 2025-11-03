@@ -332,7 +332,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     @objc
-    private nonisolated func didTapReload() {
+    nonisolated private func didTapReload() {
         store.dispatchLegacy(
             GeneralBrowserAction(
                 isNativeErrorPage: true,

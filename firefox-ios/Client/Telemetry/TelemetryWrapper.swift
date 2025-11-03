@@ -757,7 +757,7 @@ extension TelemetryWrapper {
     }
 
     // Use this override to unit tests TelemetryWrapper. Only use this for unit tests!
-    static nonisolated(unsafe) var hasTelemetryOverride = false
+    nonisolated(unsafe) static var hasTelemetryOverride = false
 
     // swiftlint:disable:next function_body_length
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
