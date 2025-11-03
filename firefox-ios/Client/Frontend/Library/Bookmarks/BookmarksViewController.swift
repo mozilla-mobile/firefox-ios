@@ -11,9 +11,10 @@ import SiteImageView
 import MozillaAppServices
 
 final class BookmarksViewController: SiteTableViewController,
-                               LibraryPanel,
-                               CanRemoveQuickActionBookmark,
-                               UITableViewDropDelegate {
+                                     LibraryPanel,
+                                     CanRemoveQuickActionBookmark,
+                                     UITableViewDropDelegate,
+                                     Notifiable {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -122,9 +123,6 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     deinit {
-        // FIXME: FXIOS-12995 Use Notifiable
-        notificationCenter.removeObserver(self)
-
         // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
         a11yEmptyStateScrollView.removeFromSuperview()
     }
@@ -640,6 +638,18 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         updateEmptyState(animated: false)
     }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
+            ensureMainThread {
+                self.reloadData()
+            }
+        default:
+            break
+        }
+    }
 }
 
 // MARK: - LibraryPanelContextMenu
@@ -738,20 +748,6 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: bookmarkCoordinatorDelegate))
 
         return actions
-    }
-}
-
-// MARK: - Notifiable
-extension BookmarksViewController: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
-            ensureMainThread {
-                self.reloadData()
-            }
-        default:
-            break
-        }
     }
 }
 

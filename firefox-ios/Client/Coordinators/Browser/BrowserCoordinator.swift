@@ -1147,7 +1147,19 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showStoriesWebView(url: URL?) {
         guard let url else { return }
-        let tab = tabManager.addTab(URLRequest(url: url), afterTab: nil, zombie: false, isPrivate: false)
+
+        // Creates an unmanaged tab that is destroyed once the stories webview view controller is dismissed
+        // Used to prevent persisting tab in the tab tray during and across app sessions
+        let tab = Tab(profile: profile, isPrivate: false, windowUUID: windowUUID)
+        let tabConfigurationProvider = TabConfigurationProvider(prefs: profile.prefs)
+        let tabConfiguration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
+        tab.url = url
+        tab.navigationDelegate = browserViewController
+        tab.tabDelegate = browserViewController
+        tab.createWebview(configuration: tabConfiguration)
+        tab.loadRequest(URLRequest(url: url))
+
+        // Present the stories web view with the tab's webview
         guard let webView = tab.webView else { return }
         let webviewViewController = StoriesWebviewViewController(windowUUID: windowUUID, webView: webView)
         router.push(webviewViewController)
