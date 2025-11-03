@@ -52,7 +52,7 @@ jobs:
         run: |
           xcodebuild build-for-testing -scheme FocusSnapshotTests \
             -project focus-ios/Blockzilla.xcodeproj \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0.1' \
             -derivedDataPath l10n-screenshots-dd
       - name: Targzip Derived Data
         run: |
