@@ -624,8 +624,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
                   let url = tab.url
             else { return }
 
-            // Since this file is already downloaded, we don't have a remote URL to use for the "Send to Device" activity
-            self.share(fileURL: url, remoteURL: nil, buttonView: self.buttonView)
+            self.share(fileURL: url, buttonView: self.buttonView)
         }.items
     }
 
@@ -667,10 +666,12 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     /// non-HTML MIME type currently opened in the webView, such as a PDF).
     /// NOTE: Called from getShareFileAction (files in the browser) and getShareAction (websites)
     @MainActor
-    private func share(fileURL: URL, remoteURL: URL?, buttonView: UIView) {
+    private func share(fileURL: URL, buttonView: UIView) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
+
+        // Since this file is already downloaded, we don't have a remote URL to use for the "Send to Device" activity
         navigationHandler?.showShareSheet(
-            shareType: .file(url: fileURL, remoteURL: remoteURL),
+            shareType: .file(url: fileURL, remoteURL: nil),
             shareMessage: nil,
             sourceView: buttonView,
             sourceRect: nil,

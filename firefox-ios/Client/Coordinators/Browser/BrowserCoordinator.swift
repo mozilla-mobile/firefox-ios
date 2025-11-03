@@ -684,6 +684,7 @@ class BrowserCoordinator: BaseCoordinator,
         if selectedTab.mimeType == MIMEType.PDF {
             showShareSheetForCurrentlySelectedTab()
         } else {
+            // Online PDFs viewed in a tab can be shared via this URL to other Firefox synced devices with Send to Device.
             let remoteURL = selectedTab.webView?.url
 
             selectedTab.webView?.createPDF { [weak self] result in
