@@ -44,8 +44,7 @@ protocol GleanWrapper: Sendable {
 
 /// Glean wrapper to abstract Glean from our application
 struct DefaultGleanWrapper: GleanWrapper {
-    // FIXME: (Bugzilla #1978613) Check if Glean is Sendable https://bugzilla.mozilla.org/show_bug.cgi?id=1978613
-    private nonisolated(unsafe) let glean: Glean
+    private let glean: Glean
 
     init(glean: Glean = Glean.shared) {
         self.glean = glean
