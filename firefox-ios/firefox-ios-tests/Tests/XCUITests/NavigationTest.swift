@@ -158,7 +158,7 @@ class NavigationTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441495
-    func testScrollsToTopWithMultipleTabs() {
+    func testScrollingBehaviorInAWebPage() {
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
@@ -438,7 +438,7 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307022
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
-    func testWriteToChildPopupTab() {
+    func testValidatePopUpWindows() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowsingSettings)
@@ -582,7 +582,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
         let switchBlockLinks = app.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockExternal.title]
         scrollToElement(switchBlockLinks)
-        if let switchValue = switchBlockLinks.value as? String, switchValue == "1" {
+        if let switchValue = switchBlockLinks.value as? String, switchValue == "0" {
             switchBlockLinks.waitAndTap()
         }
         // Open website and tap on one of the external article links
@@ -597,32 +597,21 @@ class NavigationTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(BrowserTab)
-        validateExternalLink(isPrivate: true)
+        validateExternalLink()
     }
 
-    private func validateExternalLink(isPrivate: Bool = false) {
-        navigator.openURL("ultimateqa.com/dummy-automation-websites")
+    private func validateExternalLink() {
+        navigator.openURL("https://www.apple.com/apple-news/")
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["Apple News"])
 
-        // If there are multiple matches for "SauceDemo.com", then both the normal tab and the private tab views may be
-        // in the view hierarchy simultaneously. This should not change unintentionally! Check the Debug View Hierarchy.
-        // Note: Additional matches may also appear if the external website updates.
-        XCTAssertEqual(app.links.matching(identifier: "SauceDemo.com").count, 1, "Too many matches")
-
-        app.swipeUp()
-        app.links["SauceDemo.com"].firstMatch.tap(force: true)
-        waitUntilPageLoad()
-        // Sometimes first tap is not working on iPad
-        if iPad() {
-            if let urlTextField =  app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
-                as? String,
-               urlTextField == "ultimateqa.com" {
-                app.links["SauceDemo.com"].firstMatch.tap(force: true)
-            }
-        }
+        // Validate the external app is blocked from opening
+        app.otherElements["Local, navigation"].staticTexts["Try it free * footnote, Apple News+"]
+            .firstMatch.waitAndTap()
+        mozWaitForElementToExist(app.webViews.staticTexts["Apple News"])
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
-        XCTAssertEqual(tabsButton.value as? String, "2", "Total number of opened tabs should be 2")
+        XCTAssertEqual(tabsButton.value as? String, "1", "Total number of opened tabs should be 1")
     }
 
     private func openContextMenuForArticleLink() {
