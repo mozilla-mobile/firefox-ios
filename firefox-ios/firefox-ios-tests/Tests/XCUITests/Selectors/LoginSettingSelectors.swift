@@ -24,6 +24,7 @@ protocol LoginSettingsSelectorsSet {
     var REVEAL_BUTTON: Selector { get }
     var PASSCODE_FIELD: Selector { get }
     var ONBOARDING_CONTINUE_BUTTON: Selector { get }
+    var SAVE_BUTTON_ADD_LOGIN: Selector { get }
     func domainLabel(_ domain: String) -> Selector
     func createdLoginCell(_ domain: String) -> Selector
     var all: [Selector] { get }
@@ -48,6 +49,7 @@ struct LoginSettingsSelectors: LoginSettingsSelectorsSet {
         static let savePasswordsToggle = AccessibilityIdentifiers.Settings.Logins.Passwords.saveLogins
         static let revealButton = "Reveal"
         static let onboardingContinue = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
+        static let saveButton_AddLogin = AccessibilityIdentifiers.Settings.Logins.Passwords.AddLogin.saveButton
     }
 
     let LOGIN_LIST = Selector.tableIdOrLabel(
@@ -157,6 +159,12 @@ struct LoginSettingsSelectors: LoginSettingsSelectorsSet {
         groups: ["settings", "logins"]
     )
 
+    let SAVE_BUTTON_ADD_LOGIN = Selector.buttonId(
+        IDs.saveButton_AddLogin,
+        description: "Save Button in Add Login Screen",
+        groups: ["settings", "logins"]
+    )
+
     func domainLabel(_ domain: String) -> Selector {
         Selector.staticTextByExactLabel(
             domain,
@@ -177,5 +185,6 @@ struct LoginSettingsSelectors: LoginSettingsSelectorsSet {
                            EMPTY_STATE_LABEL, EDIT_BUTTON, ADD_BUTTON, PASSWORD_ADD_BUTTON,
                            ADD_CREDENTIAL_TABLE, WEBSITE_FIELD_CELL, USERNAME_FIELD_CELL,
                            SAVE_BUTTON_CELL, SAVED_PASSWORDS_LABEL, SAVE_PASSWORDS_TOGGLE,
-                           REVEAL_BUTTON, PASSCODE_FIELD, ONBOARDING_CONTINUE_BUTTON] }
+                           REVEAL_BUTTON, PASSCODE_FIELD, ONBOARDING_CONTINUE_BUTTON,
+                           SAVE_BUTTON_ADD_LOGIN] }
 }

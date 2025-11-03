@@ -79,7 +79,7 @@ final class LoginSettingsScreen {
         sel.PASSWORD_FIELD_CELL.element(in: app).waitAndTap()
         enterTextInField(typedText: password)
 
-        sel.SAVE_BUTTON.element(in: app).waitAndTap()
+        sel.SAVE_BUTTON_ADD_LOGIN.element(in: app).waitAndTap()
 
         BaseTestCase().mozWaitForElementToExist(sel.SAVED_PASSWORDS_LABEL.element(in: app))
     }
