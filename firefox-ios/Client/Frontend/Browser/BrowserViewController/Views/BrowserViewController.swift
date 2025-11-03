@@ -257,6 +257,11 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
     }()
 
+    private(set) lazy var translationContextHintVC: ContextualHintViewController = {
+        let translationProvider = ContextualHintViewProvider(forHintType: .translation, with: profile)
+        return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
+    }()
+
     private(set) lazy var summarizeToolbarEntryContextHintVC: ContextualHintViewController = {
         let summarizeViewProvider = ContextualHintViewProvider(forHintType: .summarizeToolbarEntry, with: profile)
         return ContextualHintViewController(with: summarizeViewProvider, windowUUID: windowUUID)
@@ -929,6 +934,7 @@ class BrowserViewController: UIViewController,
 
         dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
+        dismissToolbarCFRs(with: windowUUID)
     }
 
     private func showToastType(toast: ToastType) {
@@ -1505,6 +1511,10 @@ class BrowserViewController: UIViewController,
             // In general we want to dismiss when changing layout on iPhone
             if summarizeToolbarEntryContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
                 summarizeToolbarEntryContextHintVC.dismiss(animated: true)
+            }
+
+            if translationContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
+                translationContextHintVC.dismiss(animated: true)
             }
         }
 
@@ -3830,6 +3840,8 @@ class BrowserViewController: UIViewController,
             configureNavigationContextualHint(button)
         case ContextualHintType.summarizeToolbarEntry.rawValue:
             configureSummarizeToolbarEntryContextualHint(for: button)
+        case ContextualHintType.translation.rawValue:
+            configureTranslationContextualHint(for: button)
         default:
             return
         }
