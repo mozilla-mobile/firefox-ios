@@ -451,11 +451,7 @@ class LegacyHomepageViewController: UIViewController,
             store.dispatchLegacy(action)
             // On a website we just dismiss the keyboard
         } else {
-            let action = ToolbarAction(
-                shouldShowKeyboard: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
             store.dispatchLegacy(action)
         }
     }
