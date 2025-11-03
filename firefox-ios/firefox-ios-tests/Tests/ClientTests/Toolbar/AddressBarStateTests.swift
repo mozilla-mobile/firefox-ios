@@ -45,7 +45,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.lockIconImageName)
         XCTAssertNil(initialState.safeListedURLImageName)
         XCTAssertFalse(initialState.isEditing)
-        XCTAssertFalse(initialState.shouldShowKeyboard)
+        XCTAssertTrue(initialState.shouldShowKeyboard)
         XCTAssertFalse(initialState.shouldSelectSearchTerm)
         XCTAssertFalse(initialState.isLoading)
         XCTAssertNil(initialState.readerModeState)
@@ -80,7 +80,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(newState.lockIconImageName)
         XCTAssertNil(newState.safeListedURLImageName)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertFalse(newState.shouldShowKeyboard)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.isLoading)
         XCTAssertNil(newState.readerModeState)
@@ -620,6 +620,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, searchTerm)
         XCTAssertTrue(newState.isEditing)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
@@ -686,7 +687,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
     }
 
-    func test_scrollAlphaNeedsUpdateAction_returnsExpectedState() {
+    func test_scrollAlphaDidChangeAction_returnsExpectedState() {
         setupStore()
         let initialState = ToolbarState(windowUUID: windowUUID)
         let reducer = ToolbarState.reducer
@@ -696,7 +697,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             ToolbarAction(
                 scrollAlpha: 0,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                actionType: ToolbarActionType.scrollAlphaDidChange
             )
         )
 
@@ -744,7 +745,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertFalse(newState.shouldShowKeyboard)
+        XCTAssertTrue(newState.shouldShowKeyboard)
     }
 
     func test_cancelEditAction_withWebsite_returnsExpectedState() {
@@ -773,7 +774,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertFalse(newState.shouldShowKeyboard)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
@@ -809,19 +810,18 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
 }
 
-    func test_keyboardStateDidChangeAction_returnsExpectedState() {
+    func test_hideKeyboardAction_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        XCTAssertFalse(initialState.shouldShowKeyboard)
+        XCTAssertTrue(initialState.shouldShowKeyboard)
 
         let newState = reducer(
             initialState,
             ToolbarAction(
-                shouldShowKeyboard: false,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
+                actionType: ToolbarActionType.hideKeyboard
             )
         )
 
