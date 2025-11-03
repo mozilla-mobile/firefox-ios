@@ -623,6 +623,8 @@ class LoginTest: BaseTestCase {
 
     private func validateChangedPasswordSavedState_TAE(isPasswordSaved: Bool = true) {
         let password = "password"
+        let selectAll = "Select All"
+        let submit = "submit"
         saveLogin_TAE(givenUrl: testLoginPage)
         openLoginsSettings()
         // There is a Saved Password toggle option (enabled)
@@ -639,9 +641,9 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(passworField)
         passworField.waitAndTap()
         passworField.press(forDuration: 1.5)
-        app.staticTexts["Select All"].waitAndTap()
+        app.staticTexts[selectAll].waitAndTap()
         passworField.typeText(password)
-        app.buttons["submit"].waitAndTap()
+        app.buttons[submit].waitAndTap()
 
         saveLoginAlertScreen.waitForAlert()
         saveLoginAlertScreen.respondToAlert(savePassword: isPasswordSaved)

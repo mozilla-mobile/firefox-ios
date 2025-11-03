@@ -125,14 +125,14 @@ final class LoginSettingsScreen {
     }
 
     func unlockLoginsView() {
-        let passcode = "foo\n"
+        let passcodeValue = "foo\n"
         if sel.ONBOARDING_CONTINUE_BUTTON.element(in: app).exists {
             sel.ONBOARDING_CONTINUE_BUTTON.element(in: app).waitAndTap()
         }
 
         let passcode = sel.PASSCODE_FIELD.element(in: springboard)
         BaseTestCase().mozWaitForElementToExist(passcode)
-        passcode.tapAndTypeText(passcode)
+        passcode.tapAndTypeText(passcodeValue)
         BaseTestCase().mozWaitForElementToNotExist(passcode)
     }
 }
