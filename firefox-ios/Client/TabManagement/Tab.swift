@@ -1177,8 +1177,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     }
 
     override var inputAccessoryView: UIView? {
-        guard url?.shortDomain != URLConstants.perplexityAI?.shortDomain,
-              delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
+        guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
 
         translatesAutoresizingMaskIntoConstraints = false
 
