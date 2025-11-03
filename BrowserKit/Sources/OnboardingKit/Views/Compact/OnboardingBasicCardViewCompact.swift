@@ -65,7 +65,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFont)
+            .font(UX.CardView.titleFontForCurrentLocale)
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -92,8 +92,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     var bodyView: some View {
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
-            .foregroundColor(theme.colors.textPrimary.color)
-            .multilineTextAlignment(.center)
+            .foregroundColor(theme.colors.textSecondary.color)
+            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
             .lineLimit(nil)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
