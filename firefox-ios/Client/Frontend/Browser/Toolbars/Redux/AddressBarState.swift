@@ -146,6 +146,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
 
+        case ToolbarActionType.didStartTranslatingPage,
+            ToolbarActionType.translationCompleted,
+            ToolbarActionType.receivedTranslationLanguage,
+            ToolbarActionType.didReceiveErrorTranslating:
+            return handleLeadingPageChangedAction(state: state, action: action)
+
         case ToolbarActionType.readerModeStateChanged:
             return handleReaderModeStateChangedAction(state: state, action: action)
 
@@ -264,6 +270,38 @@ struct AddressBarState: StateType, Sendable, Equatable {
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
             translationConfiguration: state.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleLeadingPageChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else {
+            return defaultState(from: state)
+        }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
+            trailingPageActions: state.trailingPageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            translationConfiguration: toolbarAction.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -981,11 +1019,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
             let canTranslateFromAction = action.translationConfiguration?.canTranslate ?? false
             let canTranslateFromState = addressBarState.translationConfiguration?.canTranslate ?? false
             if canTranslateFromAction || canTranslateFromState {
-                let translateAction = translateAction(
-                    enabled: isLoading == false,
-                    hasAlternativeLocationColor: hasAlternativeLocationColor
-                )
-                actions.append(translateAction)
+                let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
+                if let configuration {
+                    let translateAction = translateAction(
+                        enabled: isLoading == false,
+                        configuration: configuration,
+                        hasAlternativeLocationColor: hasAlternativeLocationColor
+                    )
+                    actions.append(translateAction)
+                }
             }
         }
 
@@ -1233,20 +1275,26 @@ struct AddressBarState: StateType, Sendable, Equatable {
     // Sets up translation icon on the toolbar
     //
     // We handle tapping differently for translation button by showing a loading icon
-    // instead of a highlighted color is needed.
+    // instead of a highlighted color.
     // If we kept the highlighted color, then it will cause the translation icon to flicker
     // when switching from inactive icon to loading icon when user taps on it. Hence, `hasHighlightedColor: false`.
     private static func translateAction(
         enabled: Bool,
+        configuration: TranslationConfiguration,
         hasAlternativeLocationColor: Bool
     ) -> ToolbarActionConfiguration {
+        // We do not want to use template mode for translate active icon.
+        let isActiveState = configuration.state == .active
+
         return ToolbarActionConfiguration(
             actionType: .translate,
-            iconName: StandardImageIdentifiers.Medium.translate,
+            iconName: configuration.state.buttonImageName,
+            templateModeForImage: !isActiveState,
+            shouldUseLoadingSpinner: configuration.state == .loading,
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
-            a11yLabel: .Toolbars.Translation.ButtonInactiveAccessibilityLabel,
+            a11yLabel: configuration.state.buttonA11yLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.translateButton
         )
     }

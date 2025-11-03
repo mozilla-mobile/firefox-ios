@@ -602,6 +602,12 @@ enums:
       trackers:
         description: >
           Corresponding to the trackers image
+      sync-with-icons-japan:
+        description: >
+          Corresponding to the sync-with-icons image for Japan
+      trackers-japan:
+        description: >
+          Corresponding to the trackers image for Japan
   OnboardingCardType:
     description: >
       The identifiers for the different types of onboarding cards.
@@ -662,3 +668,18 @@ enums:
       toolbar-bottom:
         description: >
           Corresponding to the toolbar on the bottom
+      theme-system-japan:
+        description: >
+          Corresponding to the system theme for Japan
+      theme-dark-japan:
+        description: >
+          Corresponding to the dark theme for Japan
+      theme-light-japan:
+        description: >
+          Corresponding to the light theme for Japan
+      toolbar-top-japan:
+        description: >
+          Corresponding to the toolbar on top for Japan
+      toolbar-bottom-japan:
+        description: >
+          Corresponding to the toolbar on the bottom for Japan

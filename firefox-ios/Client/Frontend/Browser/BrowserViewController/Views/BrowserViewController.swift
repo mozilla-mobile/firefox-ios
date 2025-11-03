@@ -353,8 +353,9 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
-    private var isPreSearchEnabled: Bool {
+    private var isRecentOrTrendingSearchEnabled: Bool {
         let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
         return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
@@ -469,22 +470,15 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
-        unsubscribeFromRedux()
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
-        // KVO observation removal directly requires self so we can not use the apple
-        // recommended work around here.
         guard Thread.isMainThread else {
-            logger.log(
-                "BVC was not deallocated on the main thread. KVOs were not cleaned up.",
-                level: .fatal,
-                category: .lifecycle
-            )
-            assertionFailure("BVC was not deallocated on the main thread. KVOs were not cleaned up.")
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
             return
         }
 
         MainActor.assumeIsolated {
+            logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
+            unsubscribeFromRedux()
             observedWebViews.forEach({ stopObserving(webView: $0) })
         }
     }
@@ -894,11 +888,11 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .browserViewController)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
@@ -1488,6 +1482,7 @@ class BrowserViewController: UIViewController,
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
             if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+                updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
             }
             updateToolbarStateForTraitCollection(traitCollection)
@@ -1574,7 +1569,17 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateHeaderConstraints() {
+        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         header.snp.remakeConstraints { make in
+            // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
+            // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
+            // on iOS 26. Prior to iOS 26, safe area inset was updating correctly on rotation.
+            // Impact: Header remains partially visible when scrolling.
+            // Workaround: Manually adjust constraints based on orientation.
+            // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
+            // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
+            let topConstraint = (isNavToolbar || shouldShowTopTabs) ? view.safeArea.top : view.snp.top
             if isBottomSearchBar {
                 make.left.right.equalTo(view)
                 make.top.equalTo(view.safeArea.top)
@@ -1583,9 +1588,9 @@ class BrowserViewController: UIViewController,
                 make.height.equalTo(0)
             } else {
                 if let scrollController = scrollController as? LegacyTabScrollProvider {
-                    scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                    scrollController.headerTopConstraint = make.top.equalTo(topConstraint).constraint
                 } else {
-                    headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                    headerTopConstraint = make.top.equalTo(topConstraint).constraint
                 }
                 make.left.right.equalTo(view)
             }
@@ -3804,9 +3809,11 @@ class BrowserViewController: UIViewController,
 
     /// Zero search describes the state in which the user highlights the address bar, but no
     /// text has been entered.
-    /// We only want to display if webview, user has either trending searches or recent searches enabled.
+    /// We only want to display if webview, user has either trending searches or recent searches enabled
+    /// and is not private mode.
     private func showZeroSearchView() {
-        guard contentContainer.hasWebView, isPreSearchEnabled else {
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        guard contentContainer.hasWebView, isRecentOrTrendingSearchEnabled, !isPrivateTab else {
             hideSearchController()
             return
         }
@@ -3856,9 +3863,11 @@ class BrowserViewController: UIViewController,
                 toast.removeFromSuperview()
             }
             // Instead of showing homepage when user enters overlay mode,
-            // we want to show the zero search state if trending searches or recent searches is enabled
-            if !isPreSearchEnabled {
-                showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            // we want to show the zero search state if trending searches or recent searches is enabled or if in private mode
+            // we handle that in `showZeroSearchView()` and avoid embedding homepage here.
+            let isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
+            if !isRecentOrTrendingSearchEnabled || isPrivateMode {
+                showEmbeddedHomepage(inline: false, isPrivate: isPrivateMode)
             }
         }
 

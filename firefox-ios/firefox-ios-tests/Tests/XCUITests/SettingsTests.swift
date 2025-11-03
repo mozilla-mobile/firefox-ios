@@ -309,11 +309,11 @@ class SettingsTests: FeatureFlaggedTestBase {
         translationSwitch.waitAndTap()
         XCTAssertEqual(translationSwitch.value as? String,
                        "0",
-                       "Summarize content - toggle is enabled by default")
+                       "Translation feature - toggle is enabled by default")
         translationSwitch.waitAndTap()
         XCTAssertEqual(translationSwitch.value as? String,
                        "1",
-                       "Summarize content - toggle is enabled by default")
+                       "Translation feature - toggle is enabled by default")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951992

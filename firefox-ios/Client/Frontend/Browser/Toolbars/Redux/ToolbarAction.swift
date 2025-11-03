@@ -126,6 +126,12 @@ enum ToolbarActionType: ActionType {
     case didStartTyping
     case translucencyDidChange
     case navigationMiddleButtonDidChange
+    // Translations related actions that are needed to associate with the toolbar
+    // due to how our leadingPageActions are tied to ToolbarActions
+    case didStartTranslatingPage
+    case translationCompleted
+    case receivedTranslationLanguage
+    case didReceiveErrorTranslating
 }
 
 struct ToolbarMiddlewareAction: Action {

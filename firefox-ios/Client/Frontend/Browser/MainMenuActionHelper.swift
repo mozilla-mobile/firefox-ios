@@ -148,9 +148,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
                 // Immutable copies need to be passed across async boundaries
                 let actions = actions
-                DispatchQueue.main.async {
-                    completion(actions)
-                }
+                completion(actions)
             })
         }
     }
@@ -165,7 +163,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
-    private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
+    private func updateData(dataLoadingCompletion: (@MainActor @Sendable () -> Void)? = nil) {
         var url: String?
 
         if let tabUrl = tabUrl, tabUrl.isReaderModeURL, let tabUrlDecoded = tabUrl.decodeReaderModeURL {
@@ -184,8 +182,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         getIsPinned(url: url, group: group)
         getIsInReadingList(url: url, group: group)
 
-        let dataQueue = DispatchQueue.global()
-        group.notify(queue: dataQueue) {
+        group.notify(queue: .main) {
             dataLoadingCompletion?()
         }
     }

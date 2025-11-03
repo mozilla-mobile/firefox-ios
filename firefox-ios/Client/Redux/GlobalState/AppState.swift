@@ -84,7 +84,8 @@ let middlewares = [
     StartAtHomeMiddleware().startAtHomeProvider,
     ShortcutsLibraryMiddleware().shortcutsLibraryProvider,
     SummarizerMiddleware().summarizerProvider,
-    TermsOfUseMiddleware().termsOfUseProvider
+    TermsOfUseMiddleware().termsOfUseProvider,
+    TranslationsMiddleware().translationsProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

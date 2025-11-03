@@ -72,4 +72,10 @@ final class SettingScreen {
     func waitForClearPrivateDataCellSync() {
         BaseTestCase().mozWaitForElementToExist(clearDataCell)
     }
+
+    func swipeUpFromNewTabCell() {
+        let newTab = sel.NEW_TAB_CELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(newTab)
+        newTab.swipeUp()
+    }
 }

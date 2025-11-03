@@ -187,11 +187,11 @@ final class NativeErrorPageViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: self.windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .nativeErrorPage)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -199,7 +199,15 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     override func viewDidLoad() {
@@ -210,6 +218,11 @@ final class NativeErrorPageViewController: UIViewController,
 
         store.dispatch(NativeErrorPageAction(windowUUID: windowUUID,
                                              actionType: NativeErrorPageActionType.errorPageLoaded))
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view.accessibilityViewIsModal = true
     }
 
     override func viewWillTransition(

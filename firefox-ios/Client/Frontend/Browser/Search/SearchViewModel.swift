@@ -113,10 +113,11 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     @MainActor
     var shouldShowSearchEngineSuggestions: Bool {
         let shouldShowSuggestions = searchEnginesManager?.shouldShowSearchSuggestions ?? false
-        return shouldShowSuggestions && !searchQuery.isEmpty
+        return shouldShowSuggestions && !isZeroSearchState
     }
 
     var shouldShowSyncedTabsSuggestions: Bool {
+        guard !isZeroSearchState else { return false }
         return shouldShowFirefoxSuggestions(
             model.shouldShowSyncedTabsSuggestions
         )
@@ -157,7 +158,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     /// Does not show when search term in url is empty (aka zero search state).
     @MainActor
     var hasFirefoxSuggestions: Bool {
-        guard !searchQuery.isEmpty else { return false }
+        guard !isZeroSearchState else { return false }
         return hasBookmarksSuggestions
                || hasHistorySuggestions
                || hasHistoryAndBookmarksSuggestions
@@ -169,6 +170,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     // MARK: - Zero Search State Variables
     // Determines whether we should zero search state based on searchQuery being empty.
+    // Zero search state is when the user has not entered a search term in the address bar.
     @MainActor
     var isZeroSearchState: Bool {
         return searchQuery.isEmpty
@@ -214,6 +216,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     @MainActor
     func shouldShowHeader(for section: Int) -> Bool {
         switch section {
+        case SearchListSection.recentSearches.rawValue:
+            guard !recentSearches.isEmpty else { return false }
+            return shouldShowRecentSearches
         case SearchListSection.trendingSearches.rawValue:
             guard !trendingSearches.isEmpty else { return false }
             return shouldShowTrendingSearches
@@ -465,8 +470,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     }
 
     /// Determines if a suggestion should be shown based on the view model's privacy mode and
-    /// the specific suggestion's status.
+    /// the specific suggestion's status. We do not show if in zero search state.
     private func shouldShowFirefoxSuggestions(_ suggestion: Bool) -> Bool {
+        guard !isZeroSearchState else { return false }
         model.shouldShowPrivateModeFirefoxSuggestions = true
         return isPrivate ?
         (suggestion && model.shouldShowPrivateModeFirefoxSuggestions) :

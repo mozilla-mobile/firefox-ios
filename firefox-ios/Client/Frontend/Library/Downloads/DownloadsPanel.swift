@@ -10,7 +10,8 @@ class DownloadsPanel: UIViewController,
                       UITableViewDelegate,
                       UITableViewDataSource,
                       LibraryPanel,
-                      Themeable {
+                      Themeable,
+                      Notifiable {
     private struct UX {
         static let welcomeScreenTopPadding: CGFloat = 120
         static let welcomeScreenPadding: CGFloat = 15
@@ -26,10 +27,6 @@ class DownloadsPanel: UIViewController,
     var notificationCenter: NotificationProtocol
     private var viewModel = DownloadsPanelViewModel()
     private let logger: Logger
-    private let events: [Notification.Name] = [.FileDidDownload,
-                                               .PrivateDataClearedDownloadedFiles,
-                                               UIContentSizeCategory.didChangeNotification,
-                                               .DownloadPanelFileWasDeleted]
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -62,15 +59,16 @@ class DownloadsPanel: UIViewController,
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        events.forEach {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(notificationReceived),
-                name: $0,
-                object: nil
-            )
-        }
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                .FileDidDownload,
+                .PrivateDataClearedDownloadedFiles,
+                UIContentSizeCategory.didChangeNotification,
+                .DownloadPanelFileWasDeleted
+            ]
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -108,26 +106,28 @@ class DownloadsPanel: UIViewController,
         tableView.delegate = nil
     }
 
-    @objc
-    func notificationReceived(_ notification: Notification) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
+    func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+        let notificationWindowUUID = notification.windowUUID
 
-            switch notification.name {
+        ensureMainThread {
+            switch notificationName {
             case .FileDidDownload, .PrivateDataClearedDownloadedFiles:
                 self.reloadData()
+
             case UIContentSizeCategory.didChangeNotification:
                 self.reloadData()
                 if self.emptyStateOverlayView.superview != nil {
                     self.emptyStateOverlayView.removeFromSuperview()
                 }
                 self.emptyStateOverlayView = self.createEmptyStateOverlayView()
-                break
+
             case .DownloadPanelFileWasDeleted:
-                guard let uuid = notification.windowUUID,
+                guard let uuid = notificationWindowUUID,
                       uuid != self.windowUUID else { return }
                 // If another window's download panel has deleted a file, ensure we refresh our table
                 self.reloadData()
+
             default:
                 break
             }
