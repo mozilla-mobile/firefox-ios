@@ -72,6 +72,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedSummarize() {}
 
+    func pressedTranslation() {}
+
     func pressedAutoFillsPasswords() {}
 
     // MARK: BrowsingSettingsDelegate

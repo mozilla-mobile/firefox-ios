@@ -734,7 +734,7 @@
 "Menu.CustomizeHomePage.v99" = "საწყისი გვერდის მორგება";
 
 /* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
-"Menu.Downloads.Label" = "ჩამოტვირთვები";
+"Menu.Downloads.Label" = "ჩამოტვირთვა";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "დაცვა გამორთულია ამ საიტზე";

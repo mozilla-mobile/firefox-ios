@@ -29,50 +29,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306905
-    func testBookmarkingUI_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+    func testBookmarkingUI() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-
-        // Go to a webpage, and add to bookmarks, check it's added
-        navigator.openURL(path(forTestPage: url_1))
-        navigator.nowAt(BrowserTab)
-        waitForTabsButton()
-        bookmark()
-        waitForTabsButton()
-        checkBookmarked()
-
-        // Load a different page on a new tab, check it's not bookmarked
-        if iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL(path(forTestPage: url_2["url"]!))
-
-        navigator.nowAt(BrowserTab)
-        waitForTabsButton()
-        checkUnbookmarked()
-
-        // Go back, check it's still bookmarked, check it's on bookmarks home panel
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        app.otherElements["Tabs Tray"].cells.staticTexts["Example Domain"].waitAndTap()
-        navigator.nowAt(BrowserTab)
-        waitForTabsButton()
-        checkBookmarked()
-
-        // Open it, then unbookmark it, and check it's no longer on bookmarks home panel
-        unbookmark(url: urlLabelExample_3)
-        waitForTabsButton()
-        checkUnbookmarked()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306905
-    func testBookmarkingUI_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-
         // Go to a webpage, and add to bookmarks, check it's added
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
@@ -151,7 +109,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306906
-    func testAccessBookmarksFromContextMenu() {
+    func testValidateBookmarksOptions() {
         app.launch()
         // Add a bookmark
         navigator.nowAt(HomePanelsScreen)
@@ -211,18 +169,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306913
-    func testAddBookmark() throws {
-        app.launch()
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
-
-        addNewBookmark()
-        // Verify that clicking on bookmark opens the website
-        app.tables["Bookmarks List"].cells.element(boundBy: 1).waitAndTap()
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306914
     func testAddNewFolder() {
         app.launch()
@@ -235,7 +181,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.tables.cells.textFields.element(boundBy: 0).tapAndTypeText("Test Folder")
         app.buttons["Save"].waitAndTap()
         app.buttons["Done"].waitAndTap()
-        checkItemsInBookmarksList(items: 1)
+        mozWaitForElementToExist(app.staticTexts["Test Folder"])
         navigator.nowAt(MobileBookmarks)
         // Now remove the folder
         navigator.performAction(Action.RemoveItemMobileBookmarks)
@@ -255,74 +201,40 @@ class BookmarksTests: FeatureFlaggedTestBase {
         XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306915
-    func testAddNewMarker() throws {
-        app.launch()
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
-
-        navigator.goto(LibraryPanel_Bookmarks)
-        navigator.nowAt(MobileBookmarks)
-        navigator.performAction(Action.AddNewSeparator)
-        app.buttons["Done"].waitAndTap()
-        // There is one item plus the default Desktop Bookmarks folder
-        checkItemsInBookmarksList(items: 2)
-
-        // Remove it
-        navigator.nowAt(MobileBookmarks)
-        navigator.performAction(Action.RemoveItemMobileBookmarks)
-        mozWaitForElementToExist(app.buttons["Delete"])
-        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        checkItemsInBookmarksList(items: 1)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306916
-    func testDeleteBookmarkSwiping() throws {
-        app.launch()
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
-
-        addNewBookmark()
-        // Remove by swiping
-        app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        app.buttons["Delete"].waitAndTap()
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        checkItemsInBookmarksList(items: 1)
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306917
-    func testDeleteBookmarkContextMenu() throws {
+    func testDeleteBookmarkContextMenu() {
         app.launch()
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
-
-        addNewBookmark()
-        // Remove by long press and select option from context menu
-        app.tables.staticTexts.element(boundBy: 1).press(forDuration: 1)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements["Remove Bookmark"].waitAndTap()
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        checkItemsInBookmarksList(items: 1)
-    }
-
-    private func addNewBookmark() {
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
-        navigator.nowAt(MobileBookmarks)
-        navigator.performAction(Action.AddNewBookmark)
-        mozWaitForElementToExist(app.navigationBars["Bookmarks"])
-        // Enter the bookmarks details
-        app.textFields[AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.titleTextField].tapAndTypeText("BBC")
-        app.textFields[AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.urlTextField].tapAndTypeText("bbc.com")
-        navigator.performAction(Action.SaveCreatedBookmark)
-        app.buttons["Done"].tap(force: true)
-        // There is one item plus the default Desktop Bookmarks folder
-        checkItemsInBookmarksList(items: 2)
-    }
-
-    private func checkItemsInBookmarksList(items: Int) {
+        // There is only one row in the bookmarks panel, which is the desktop folder
         mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, items)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
+
+        // Add a bookmark
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+
+        navigator.openURL(url_3)
+        waitForTabsButton()
+        navigator.nowAt(BrowserTab)
+        bookmark()
+
+        // Check that it appears in Bookmarks panel
+        navigator.goto(LibraryPanel_Bookmarks)
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
+        // Remove by long press and select option from context menu
+        app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
+        mozWaitForElementToExist(app.tables["Context Menu"])
+        app.tables["Context Menu"].cells.buttons["Remove Bookmark"].waitAndTap()
+        // Verify that there are only 1 cell (desktop bookmark folder)
+        mozWaitForElementToExist(app.staticTexts["No bookmarks yet"])
+        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
+        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
+        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
+        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
     private func typeOnSearchBar(text: String) {
@@ -332,48 +244,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306909
     // Smoketest
-    func testBookmarkLibraryAddDeleteBookmark_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        navigator.goto(LibraryPanel_Bookmarks)
-        // There is only one row in the bookmarks panel, which is the desktop folder
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        let count = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(count, 0, "Expected 0 bookmarks in the list, but found \(count)")
-
-        // Add a bookmark
-        navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-
-        navigator.openURL(url_3)
-        waitForTabsButton()
-        navigator.nowAt(BrowserTab)
-        bookmark()
-
-        // Check that it appears in Bookmarks panel
-        navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-
-        // Delete the Bookmark added, check it is removed
-        app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
-        app.buttons["Delete"].waitAndTap()
-
-        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
-        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
-        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
-        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
-        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306909
-    // Smoketest
-    func testBookmarkLibraryAddDeleteBookmark_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+    func testBookmarkLibraryAddDeleteBookmark() {
         app.launch()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -405,27 +276,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
         XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306910
-    // Smoketest
-    func testDesktopFoldersArePresent() throws {
-        app.launch()
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Desktop folder is no longer available")
-
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        navigator.goto(LibraryPanel_Bookmarks)
-        // There is only one folder at the root of the bookmarks
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
-
-        // There is only three folders inside the desktop bookmarks
-        app.tables["Bookmarks List"].cells.firstMatch.waitAndTap()
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306911
@@ -473,34 +323,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445808
-    func testLongTapRecentlySavedLink_tabTrayExperimentOff() throws {
+    func testLongTapRecentlySavedLink() {
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Bookmark panel from homepage no longer available")
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        validateLongTapOptionsFromBookmarkLink(isExperiment: false)
-        forceRestartApp()
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        if #available(iOS 18, *) {
-            XCUIDevice.shared.orientation = .landscapeLeft
-            validateLongTapOptionsFromBookmarkLink(isExperiment: false)
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2445808
-    func testLongTapRecentlySavedLink_tabTrayExperimentOn() throws {
-        app.launch()
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Bookmark panel from homepage no longer available")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         validateLongTapOptionsFromBookmarkLink(isExperiment: true)
         forceRestartApp()
         app.launch()
@@ -527,11 +352,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2784448
     // Smoketest
     func testBookmarksToggleIsAvailable() throws {
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Bookmark toggle is no longer available")
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(url_3)
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -550,9 +372,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         XCTAssertEqual(bookmarksToggle.value! as? String, "0", "Bookmark toogle is not disabled")
         navigator.nowAt(HomeSettings)
-        navigator.goto(BrowserTab)
-        navigator.performAction(Action.GoToHomePage)
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        navigator.goto(NewTabScreen)
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapIfExists()
         mozWaitForElementToNotExist(app.cells["BookmarksCell"])
         navigator.nowAt(BrowserTab)
         // issue 28625: iOS 15 may not open the menu fully.

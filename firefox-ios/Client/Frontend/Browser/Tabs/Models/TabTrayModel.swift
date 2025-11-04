@@ -8,5 +8,7 @@ struct TabTrayModel: Equatable {
     var isPrivateMode: Bool
     var selectedPanel: TabTrayPanelType
     var normalTabsCount: String
+    var privateTabsCount: String
     var hasSyncableAccount: Bool
+    var enableDeleteTabsButton: Bool
 }

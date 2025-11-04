@@ -445,6 +445,11 @@ final class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    func pressedTranslation() {
+        let viewController = TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        router.push(viewController)
+    }
+
     // MARK: AccountSettingsDelegate
 
     func pressedConnectSetting() {

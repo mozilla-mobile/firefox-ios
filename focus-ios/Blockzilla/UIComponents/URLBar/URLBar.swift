@@ -11,7 +11,7 @@ enum Source: String {
    case action, shortcut, suggestion, topsite, widget, none
 }
 
-class URLBar: UIView {
+final class URLBar: UIView {
     fileprivate var viewModel: URLBarViewModel
     private var cancellables: Set<AnyCancellable> = []
 
@@ -292,16 +292,41 @@ class URLBar: UIView {
         super.init(frame: CGRect.zero)
         isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
 
+        setupInteractions()
+        setupViewHierarchy()
+        setupLayoutGuides()
+        addLeftBarViewConstraints()
+        addRightBarViewConstraints()
+        addBackButtonConstraints()
+        addForwardButtonConstraints()
+        addContextMenuButtonConstraints()
+        addDeleteButtonConstraints()
+        addUrlBarBorderViewConstraints()
+        addUrlBarBackgroundViewConstraints()
+        addShieldConstraints()
+        addCancelButtonConstraints()
+        addTextAndLockContainerConstraints()
+        addStopReloadButtonConstraints()
+        addUrlTextFieldConstraints()
+        addProgressBarConstraints()
+        addTruncatedUrlTextConstraints()
+        addCollapsedUrlAndLockWrapperConstraints()
+        setupInitialState()
+        bindButtonActions()
+        bindViewModelEvents()
+    }
+
+    private func setupInteractions() {
         let dragInteraction = UIDragInteraction(delegate: self)
         urlBarBackgroundView.addInteraction(dragInteraction)
+    }
 
+    private func setupViewHierarchy() {
         addSubview(backButton)
         addSubview(forwardButton)
         addSubview(deleteButton)
         addSubview(contextMenuButton)
-
         urlBarBackgroundView.addSubview(textAndLockContainer)
-
         addSubview(cancelButton)
         textAndLockContainer.addSubview(stopReloadButton)
         addSubview(urlBarBorderView)
@@ -311,16 +336,14 @@ class URLBar: UIView {
         textAndLockContainer.addSubview(urlTextField)
         addSubview(shieldIcon)
         addSubview(progressBar)
+    }
 
-        var toolsetButtonWidthMultiplier: CGFloat {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                return 0.04
-            } else {
-                return 0.05
-            }
-        }
-
+    private func setupLayoutGuides() {
         addLayoutGuide(leftBarViewLayoutGuide)
+        addLayoutGuide(rightBarViewLayoutGuide)
+    }
+
+    private func addLeftBarViewConstraints() {
         leftBarViewLayoutGuide.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
             make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
@@ -330,8 +353,9 @@ class URLBar: UIView {
 
             showToolsetConstraints.append(make.leading.equalTo( forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
         }
+    }
 
-        addLayoutGuide(rightBarViewLayoutGuide)
+    private func addRightBarViewConstraints() {
         rightBarViewLayoutGuide.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
             make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
@@ -340,19 +364,33 @@ class URLBar: UIView {
 
             showToolsetConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
         }
+    }
+
+    private func addBackButtonConstraints() {
+        var toolsetButtonWidthMultiplier: CGFloat {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                return 0.04
+            } else {
+                return 0.05
+            }
+        }
 
         backButton.snp.makeConstraints { make in
             make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
             make.centerY.equalTo(self)
             make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier)
         }
+    }
 
+    private func addForwardButtonConstraints() {
         forwardButton.snp.makeConstraints { make in
             make.leading.equalTo(backButton.snp.trailing)
             make.centerY.equalTo(self)
             make.size.equalTo(backButton)
         }
+    }
 
+    private func addContextMenuButtonConstraints() {
         contextMenuButton.snp.makeConstraints { make in
             if inBrowsingMode {
                 make.trailing.equalTo(safeAreaLayoutGuide)
@@ -362,13 +400,17 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(UIConstants.layout.contextMenuButtonSize)
         }
+    }
 
+    private func addDeleteButtonConstraints() {
         deleteButton.snp.makeConstraints { make in
             make.trailing.equalTo(contextMenuButton.snp.leading).inset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : UIConstants.layout.deleteButtonMarginContextMenu)
             make.centerY.equalTo(self)
             make.size.equalTo(backButton)
         }
+    }
 
+    private func addUrlBarBorderViewConstraints() {
         urlBarBorderView.snp.makeConstraints { make in
             make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
@@ -388,18 +430,22 @@ class URLBar: UIView {
 
             showToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarIconInset).constraint)
         }
+    }
 
+    private func addUrlBarBackgroundViewConstraints() {
         urlBarBackgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIConstants.layout.urlBarBorderInset)
         }
+    }
 
-        addShieldConstraints()
-
+    private func addCancelButtonConstraints() {
         cancelButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(leftBarViewLayoutGuide)
             make.top.bottom.equalToSuperview()
         }
+    }
 
+    private func addTextAndLockContainerConstraints() {
         textAndLockContainer.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().priority(999)
@@ -410,13 +456,17 @@ class URLBar: UIView {
             hideLeftBarViewConstraints.append(make.leading.equalToSuperview().offset(UIConstants.layout.urlBarTextInset).constraint)
             centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
         }
+    }
 
+    private func addStopReloadButtonConstraints() {
         stopReloadButton.snp.makeConstraints { make in
             make.trailing.equalTo(urlBarBorderView)
             make.leading.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize)
             make.center.equalToSuperview()
         }
+    }
 
+    private func addUrlTextFieldConstraints() {
         urlTextField.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(shieldIcon.snp.trailing).offset(5)
@@ -426,19 +476,25 @@ class URLBar: UIView {
             hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
             showPageActionsConstraints.append(make.trailing.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize).constraint)
         }
+    }
 
+    private func addProgressBarConstraints() {
         progressBar.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.bottom.equalTo(self).offset(UIConstants.layout.progressBarHeight)
             make.height.equalTo(UIConstants.layout.progressBarHeight)
         }
+    }
 
+    private func addTruncatedUrlTextConstraints() {
         truncatedUrlText.snp.makeConstraints { make in
             make.centerY.equalTo(self).offset(8)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().offset(UIConstants.layout.truncatedUrlTextOffset)
         }
+    }
 
+    private func addCollapsedUrlAndLockWrapperConstraints() {
         collapsedUrlAndLockWrapper.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.bottom.equalTo(truncatedUrlText)
@@ -446,15 +502,14 @@ class URLBar: UIView {
             make.leading.equalTo(truncatedUrlText)
             make.trailing.equalTo(truncatedUrlText)
         }
+    }
 
+    private func setupInitialState() {
         hideLeftBarViewConstraints.forEach { $0.activate() }
         showLeftBarViewConstraints.forEach { $0.deactivate() }
         showToolsetConstraints.forEach { $0.deactivate() }
         expandedBarConstraints.forEach { $0.activate() }
         updateToolsetConstraints()
-
-        bindButtonActions()
-        bindViewModelEvents()
     }
 
     fileprivate func bindButtonActions() {
@@ -1168,7 +1223,7 @@ extension URLBar: UIDragInteractionDelegate {
     }
 }
 
-private class URLTextField: AutocompleteTextField {
+private final class URLTextField: AutocompleteTextField {
     // Disable user interaction on resign so that touch and hold on URL bar creates menu
     override func resignFirstResponder() -> Bool {
         isUserInteractionEnabled = false

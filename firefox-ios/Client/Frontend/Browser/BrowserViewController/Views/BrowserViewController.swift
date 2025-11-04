@@ -97,8 +97,6 @@ class BrowserViewController: UIViewController,
     let documentLogger: DocumentLogger
     var downloadHelper: DownloadHelper?
 
-    private lazy var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
-
     // MARK: Optional UI elements
 
     var topTabsViewController: TopTabsViewController?
@@ -112,7 +110,6 @@ class BrowserViewController: UIViewController,
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
-    var currentMiddleButtonState: MiddleButtonState?
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
@@ -356,11 +353,13 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
-    var isTrendingSearchEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+    private var isRecentOrTrendingSearchEnabled: Bool {
+        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
-    var isRecentSearchEnabled: Bool {
+    private var isRecentSearchEnabled: Bool {
         return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
     }
 
@@ -471,22 +470,15 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
-        unsubscribeFromRedux()
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
-        // KVO observation removal directly requires self so we can not use the apple
-        // recommended work around here.
         guard Thread.isMainThread else {
-            logger.log(
-                "BVC was not deallocated on the main thread. KVOs were not cleaned up.",
-                level: .fatal,
-                category: .lifecycle
-            )
-            assertionFailure("BVC was not deallocated on the main thread. KVOs were not cleaned up.")
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
             return
         }
 
         MainActor.assumeIsolated {
+            logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
+            unsubscribeFromRedux()
             observedWebViews.forEach({ stopObserving(webView: $0) })
         }
     }
@@ -896,11 +888,11 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .browserViewController)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
@@ -1490,6 +1482,7 @@ class BrowserViewController: UIViewController,
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
             if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+                updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
             }
             updateToolbarStateForTraitCollection(traitCollection)
@@ -1576,7 +1569,17 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateHeaderConstraints() {
+        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         header.snp.remakeConstraints { make in
+            // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
+            // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
+            // on iOS 26. Prior to iOS 26, safe area inset was updating correctly on rotation.
+            // Impact: Header remains partially visible when scrolling.
+            // Workaround: Manually adjust constraints based on orientation.
+            // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
+            // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
+            let topConstraint = (isNavToolbar || shouldShowTopTabs) ? view.safeArea.top : view.snp.top
             if isBottomSearchBar {
                 make.left.right.equalTo(view)
                 make.top.equalTo(view.safeArea.top)
@@ -1585,9 +1588,9 @@ class BrowserViewController: UIViewController,
                 make.height.equalTo(0)
             } else {
                 if let scrollController = scrollController as? LegacyTabScrollProvider {
-                    scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                    scrollController.headerTopConstraint = make.top.equalTo(topConstraint).constraint
                 } else {
-                    headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                    headerTopConstraint = make.top.equalTo(topConstraint).constraint
                 }
                 make.left.right.equalTo(view)
             }
@@ -1678,6 +1681,13 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustBottomSearchBarForKeyboard() {
+        /// On iOS 26+, we use `UIKeyboardLayoutGuide` (https://developer.apple.com/documentation/uikit/uikeyboardlayoutguide)
+        /// to avoid keyboard frame calculation issues. The legacy `keyboardFrameEndUserInfoKey` API returns
+        /// incorrect keyboard frames when autofill displays suggested credentials above the keyboard.
+        /// It  might be an apple bug.
+        /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
+        let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
+
         guard isBottomSearchBar,
               let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0
         else {
@@ -1685,7 +1695,8 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: keyboardHeight)
+        let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight)
 
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
@@ -1977,7 +1988,7 @@ class BrowserViewController: UIViewController,
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
 
-        let trendingClient = TrendingSearchClient(searchEngine: searchEnginesManager.defaultEngine)
+        let trendingClient = TrendingSearchClient()
 
         let recentSearchProvider = DefaultRecentSearchProvider(historyStorage: profile.places)
 
@@ -2194,19 +2205,16 @@ class BrowserViewController: UIViewController,
         // No tab
         guard let tab = tabManager.selectedTab else {
             handleMiddleButtonState(state)
-            currentMiddleButtonState = state
             return
         }
 
         // Tab with starting page
         if tab.isURLStartingPage {
             handleMiddleButtonState(state)
-            currentMiddleButtonState = state
             return
         }
 
         handleMiddleButtonState(.home)
-        currentMiddleButtonState = .home
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
@@ -2447,6 +2455,7 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
+            translationConfiguration: TranslationConfiguration(prefs: profile.prefs),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatchLegacy(action)
@@ -2598,6 +2607,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showShortcutsLibrary()
         case .storiesFeed:
             navigationHandler?.showStoriesFeed()
+        case .storiesWebView:
+            navigationHandler?.showStoriesWebView(url: type.url)
         }
     }
 
@@ -3291,12 +3302,14 @@ class BrowserViewController: UIViewController,
 
         if webViewStatus == .finishedNavigation {
             let isSelectedTab = (tab == tabManager.selectedTab)
+            let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
 
-            if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
+            // Screenshots are not needed when the tab is not selected or when opening a tab from the stories feed
+            if !isSelectedTab, !isStoriesFeed, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
-                webView.frame = contentContainer.frame
-                view.insertSubview(webView, at: 0)
+                        webView.frame = contentContainer.frame
+                        view.insertSubview(webView, at: 0)
                 // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
                 // touch-screen keyboard from the background even though they shouldn't be able to.
                 webView.resignFirstResponder()
@@ -3801,9 +3814,11 @@ class BrowserViewController: UIViewController,
 
     /// Zero search describes the state in which the user highlights the address bar, but no
     /// text has been entered.
-    /// We only want to display if webview, user has either trending searches or recent searches enabled.
+    /// We only want to display if webview, user has either trending searches or recent searches enabled
+    /// and is not private mode.
     private func showZeroSearchView() {
-        guard contentContainer.hasWebView, isTrendingSearchEnabled else {
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        guard contentContainer.hasWebView, isRecentOrTrendingSearchEnabled, !isPrivateTab else {
             hideSearchController()
             return
         }
@@ -3853,9 +3868,11 @@ class BrowserViewController: UIViewController,
                 toast.removeFromSuperview()
             }
             // Instead of showing homepage when user enters overlay mode,
-            // we want to show the zero search state with trending searches
-            if !isTrendingSearchEnabled {
-                showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            // we want to show the zero search state if trending searches or recent searches is enabled or if in private mode
+            // we handle that in `showZeroSearchView()` and avoid embedding homepage here.
+            let isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
+            if !isRecentOrTrendingSearchEnabled || isPrivateMode {
+                showEmbeddedHomepage(inline: false, isPrivate: isPrivateMode)
             }
         }
 
@@ -4189,6 +4206,7 @@ extension BrowserViewController: HomePanelDelegate {
         let tab = tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
         // Select new tab automatically if needed
         guard !selectNewTab else {
+            cancelEditMode()
             tabManager.selectTab(tab)
             return
         }

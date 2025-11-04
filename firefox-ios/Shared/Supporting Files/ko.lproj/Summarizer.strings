@@ -1,6 +1,9 @@
 /* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
 "Summarizer.AppleBrand.Label.v142" = "Apple Intelligence로 요약";
 
+/* The a11y label for the close button in the summary view. */
+"Summarizer.CloseButton.Accessibility.Label.v145" = "요약 닫기";
+
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "닫기";
 
@@ -25,11 +28,20 @@
 /* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
 "Summarizer.HostedBrand.Label.v142" = "%@로 요약";
 
+/* The a11y label for the loading label on the summarize loading screen. */
+"Summarizer.Loading.Accessibility.Label.v145" = "요약 읽는 중";
+
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "요약하는 중…";
 
+/* The a11y label for the retry button in the summary view when the summarizer fails with an error that allows retrying to summarize the page. */
+"Summarizer.RetryButton.Accessibility.Label.v145" = "웹 페이지 요약 다시 시도";
+
 /* The label for the error button that allows the user to retry summarizing the page. */
 "Summarizer.RetryButton.Label.v142" = "다시 시도";
+
+/* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "웹 페이지를 끌거나 눌러 요약 정보를 닫으세요.";
 
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "허용";
@@ -54,6 +66,9 @@
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "작동 방식";
+
+/* The a11y label for the allow button on the info panel when the user has not yet accepted the ToS. */
+"Summarizer.ToS.InfoPanel.AllowButton.Accessibility.Label.v145" = "동의";
 
 /* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
 "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "계속";

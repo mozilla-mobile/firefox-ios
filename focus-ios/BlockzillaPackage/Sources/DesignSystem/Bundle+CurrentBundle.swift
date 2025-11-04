@@ -8,7 +8,7 @@
  */
 import Foundation
 
-private class CurrentBundleFinder {}
+private final class CurrentBundleFinder {}
 
 extension Foundation.Bundle {
     static var myModule: Bundle = {

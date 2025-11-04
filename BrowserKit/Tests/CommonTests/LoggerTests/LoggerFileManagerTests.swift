@@ -117,6 +117,11 @@ private final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
         destinationURL = dstURL
     }
 
+    var moveItemCalled = 0
+    func moveItem(at: URL, to: URL) throws {
+        moveItemCalled += 1
+    }
+
     var removeItemCalled = 0
     func removeItem(atPath path: String) throws {
         removeItemCalled += 1

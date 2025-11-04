@@ -52,6 +52,7 @@ final class HomepageViewController: UIViewController,
     private let syncTabContextualHintViewController: ContextualHintViewController
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
+    private var didFinishFirstLayout = false
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -69,7 +70,7 @@ final class HomepageViewController: UIViewController,
     // Telemetry related
     private var alreadyTrackedSections = Set<HomepageSection>()
     private var alreadyTrackedTopSites = Set<HomepageItem>()
-    private let trackingImpressionsThrottler: ThrottleProtocol
+    private let trackingImpressionsThrottler: GCDThrottlerProtocol
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -80,7 +81,7 @@ final class HomepageViewController: UIViewController,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         throttler: ThrottleProtocol = GCDThrottler(seconds: 0.5)
+         throttler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -121,7 +122,15 @@ final class HomepageViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     func stopCFRsTimer() {
@@ -136,15 +145,6 @@ final class HomepageViewController: UIViewController,
         configureCollectionView()
         setupLayout()
         configureDataSource()
-
-        store.dispatchLegacy(
-            HomepageAction(
-                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
-                showiPadSetup: shouldUseiPadSetup(),
-                windowUUID: windowUUID,
-                actionType: HomepageActionType.initialize
-            )
-        )
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
@@ -188,6 +188,22 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        /// FXIOS-13970: Legacy homepage layout was appearing blank on iOS 15. The root cause was from applying the diffable
+        /// data source snapshot before the view had finished it's first layout pass, causing the snapshot to be ignored.
+        /// This issue seems to be resolved by the SDK on later iOS versions
+        if !didFinishFirstLayout {
+            didFinishFirstLayout = true
+            store.dispatchLegacy(
+                HomepageAction(
+                    numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
+                    showiPadSetup: shouldUseiPadSetup(),
+                    windowUUID: windowUUID,
+                    actionType: HomepageActionType.initialize
+                )
+            )
+        }
+
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
 
@@ -332,13 +348,13 @@ final class HomepageViewController: UIViewController,
         self.homepageState = state
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(
             windowUUID: windowUUID,
             actionType: ScreenActionType.closeScreen,
             screen: .homepage
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: - Theming

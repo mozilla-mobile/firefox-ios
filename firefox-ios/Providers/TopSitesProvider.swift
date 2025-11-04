@@ -66,7 +66,7 @@ class TopSitesProviderImplementation: @MainActor TopSitesProvider, @unchecked Se
         getFrecencySites(group: group, numberOfMaxItems: numberOfMaxItems)
         getPinnedSites(group: group)
 
-        group.notify(queue: .global()) { [weak self] in
+        group.notify(queue: .main) { [weak self] in
             guard let self = self else { return }
             self.calculateTopSites(completion: completion)
         }

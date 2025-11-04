@@ -4,7 +4,7 @@
 
 import Foundation
 
-final class NimbusFeatureFlagLayer {
+final class NimbusFeatureFlagLayer: Sendable {
     // MARK: - Public methods
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus = FxNimbus.shared
@@ -65,6 +65,9 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
+        case .shouldUseJapanConfiguration:
+            return checkShouldUseJapanConfigurationFeature(from: nimbus)
+
         case .menuDefaultBrowserBanner:
             return checkMenuDefaultBrowserBanner(from: nimbus)
 
@@ -112,6 +115,9 @@ final class NimbusFeatureFlagLayer {
 
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
+
+        case .relayIntegration:
+            return checkRelayIntegration(from: nimbus)
 
         case .hostedSummarizerToolbarEntrypoint:
            return checkHostedSummarizerToolbarEntrypoint(from: nimbus)
@@ -166,6 +172,9 @@ final class NimbusFeatureFlagLayer {
 
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
+
+        case .translation:
+            return checkTranslationFeature(from: nimbus)
 
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
@@ -308,6 +317,10 @@ final class NimbusFeatureFlagLayer {
         return config.navigationHint
     }
 
+    private func checkRelayIntegration(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.relayIntegrationFeature.value().enabled
+    }
+
     private func checkToolbarUpdateHintFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.toolbarUpdateHint
@@ -325,6 +338,10 @@ final class NimbusFeatureFlagLayer {
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.trackingProtectionRefactor.value()
         return config.enabled
+    }
+
+    private func checkTranslationFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.translationsFeature.value().enabled
     }
 
     private func checkTrendingSearches(from nimbus: FxNimbus) -> Bool {
@@ -495,5 +512,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.webEngineIntegrationRefactor.value().enabled
+    }
+
+    private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
     }
 }

@@ -23,7 +23,7 @@ let homeTabName = "Homepage"
 let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
-class DragAndDropTests: FeatureFlaggedTestBase {
+class DragAndDropTests: BaseTestCase {
 //  Disable test suite since in theory it does not make sense with Chron tabs implementation
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
@@ -32,9 +32,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest
-    func testRearrangeTabsTabTray_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testRearrangeTabsTabTray() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -42,8 +40,6 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
         if #available(iOS 17, *) {
             dragAndDrop(
                 dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
@@ -55,9 +51,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
-    func testRearrangeMoreThan3TabsTabTraytabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testRearrangeMoreThan3TabsTabTraytab() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -71,7 +65,6 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         waitUntilPageLoad()
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(thirdWebsite.url)
@@ -87,8 +80,6 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         )
         XCTAssertEqual(fourthWebsitePosition, thirdWebsite.tabName, "last tab before is not correct")
 
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
         if #available(iOS 17, *) {
             dragAndDrop(
                 dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
@@ -106,53 +97,13 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361191
-    func testRearrangeTabsTabTrayLandscape_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testRearrangeTabsTabTrayLandscape() {
         // Set the device in landscape mode
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
 
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
-        if #available(iOS 17, *) {
-            // Rearrange the tabs via drag home tab and drop it on twitter tab
-            dragAndDrop(
-                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-            )
-            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-
-            if !iPad() {
-                let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-
-                if let urlString = url.value as? String {
-                    XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
-                } else {
-                    XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
-                }
-            } else {
-                XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
-            }
-        }
-    }
-
-    func testRearrangeTabsTabTrayLandscape_tabTrayExperimentOn() throws {
-        guard iPad() else {
-            throw XCTSkip("Drag and drop is only applicable for iPad with tab tray enabled")
-        }
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        // Set the device in landscape mode
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-        openTwoWebsites()
-        navigator.goto(TabTray)
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
         if #available(iOS 17, *) {
             // Rearrange the tabs via drag home tab and drop it on twitter tab
             dragAndDrop(
@@ -165,57 +116,13 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361192
-    func testDragAndDropHomeTabTabsTray_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
+    func testDragAndDropHomeTabTabsTray() {
         navigator.openNewURL(urlString: secondWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
 
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
-        if #available(iOS 17, *) {
-            // Drag and drop home tab from the first position to the second
-            dragAndDrop(
-                dragElement: app.collectionViews.cells["Homepage"].firstMatch,
-                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-            )
-            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
-            // Check that focus is kept on last website open
-            if !iPad() {
-                let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-
-                if let urlString = url.value as? String {
-                    XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
-                } else {
-                    XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
-                }
-            } else {
-                XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
-            }
-        }
-    }
-
-    func testDragAndDropHomeTabTabsTray_tabTrayExperimentOn() throws {
-        guard iPad() else {
-            throw XCTSkip("Drag and drop is only applicable for iPad with tab tray enabled")
-        }
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        navigator.openNewURL(urlString: secondWebsite.url)
-        waitUntilPageLoad()
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
-
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
         if #available(iOS 17, *) {
             // Drag and drop home tab from the first position to the second
             dragAndDrop(
@@ -229,11 +136,9 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361193
-    func testRearrangeTabsPrivateModeTabTray_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+    func testRearrangeTabsPrivateModeTabTray() {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(
@@ -241,8 +146,6 @@ class DragAndDropTests: FeatureFlaggedTestBase {
             firstTab: firstWebsite.tabName,
             secondTab: secondWebsite.tabName
         )
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
         if #available(iOS 17, *) {
             // Drag first tab on the second one
             dragAndDrop(
@@ -266,12 +169,22 @@ private extension BaseTestCase {
         // Open two tabs
         if !userState.isPrivate && iPad() {
             navigator.nowAt(NewTabScreen)
+        } else {
+            navigator.nowAt(BrowserTab)
+        }
+        if userState.isPrivate {
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
         }
         navigator.openURL(firstWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
+        if XCUIDevice.shared.orientation == UIDeviceOrientation.portrait && !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        } else {
+            navigator.nowAt(BrowserTab)
+        }
         navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()

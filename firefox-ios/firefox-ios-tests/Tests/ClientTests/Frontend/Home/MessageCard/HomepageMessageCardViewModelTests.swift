@@ -182,7 +182,7 @@ class MockStyleDataProtocol: StyleDataProtocol {
 }
 
 // MARK: - MockGleanPlumbMessageManagerProtocol
-class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
+class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol, @unchecked Sendable {
     func onStartup() {}
 
     var message: GleanPlumbMessage?

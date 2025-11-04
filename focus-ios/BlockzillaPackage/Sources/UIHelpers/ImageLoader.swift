@@ -5,7 +5,7 @@
 import UIKit
 import Combine
 
-public class ImageLoader {
+public final class ImageLoader {
     private let cachedImages = NSCache<NSURL, UIImage>()
     private var runningRequests = [UUID: URLSessionDataTask]()
     private init() {}

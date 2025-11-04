@@ -20,6 +20,7 @@ protocol HomepageSectionHandler {
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?)
 
+    @MainActor
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath)
 }
 

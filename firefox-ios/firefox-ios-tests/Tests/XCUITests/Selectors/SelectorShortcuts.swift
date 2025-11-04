@@ -81,18 +81,13 @@ extension Selector {
     static func imageId(_ id: String, description: String, groups: [String] = []) -> Selector {
         Selector(strategy: .imageById(id), value: id, description: description, groups: groups)
     }
-/*
-    static func buttonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
-        let predicate = NSPredicate(
-            format: "elementType == %d AND label == %@",
-            XCUIElement.ElementType.button.rawValue,
-            label
-        )
-        return Selector(strategy: .predicate(predicate), value: label, description: description, groups: groups)
-    }
-*/
+
     static func tableOtherById(_ id: String, description: String, groups: [String] = []) -> Selector {
         Selector(strategy: .otherInTablesById(id), value: id, description: description, groups: groups)
+    }
+
+    static func tableCellById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .tableCellById(id), value: id, description: description, groups: groups)
     }
 
     static func cellById(_ id: String, description: String, groups: [String] = []) -> Selector {
@@ -100,6 +95,18 @@ extension Selector {
                             XCUIElement.ElementType.cell.rawValue,
                             id)
         return Selector(strategy: .predicate(p), value: id, description: description, groups: groups)
+    }
+
+    static func cellByLabel(_ label: String, description: String, groups: [String]) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label == %@",
+                            XCUIElement.ElementType.cell.rawValue,
+                            label
+        )
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
+
+    static func linkById(_ id: String, description: String, groups: [String] = []) -> Selector {
+            Selector(strategy: .linkById(id), value: id, description: description, groups: groups)
     }
 
     static func imageById(_ id: String, description: String, groups: [String] = []) -> Selector {
@@ -157,5 +164,107 @@ extension Selector {
                         value: text,
                         description: description,
                         groups: groups)
+    }
+
+    static func searchFieldById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .predicate(
+            NSPredicate(format: "elementType == %d AND identifier == %@", XCUIElement.ElementType.searchField.rawValue, id)
+            ),
+                 value: id,
+                 description: description,
+                 groups: groups
+        )
+    }
+
+    static func linkStaticTextByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND label == %@",
+            XCUIElement.ElementType.staticText.rawValue,
+            label
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: label,
+                        description: description,
+                        groups: groups
+        )
+    }
+
+    static func switchById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .predicate(
+            NSPredicate(format: "elementType == %d AND identifier == %@",
+                        XCUIElement.ElementType.switch.rawValue,
+                        id)
+            ),
+                 value: id,
+                 description: description,
+                 groups: groups
+        )
+    }
+
+    static func webViewOtherByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.other.rawValue,
+            label,
+            label
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: label,
+                        description: description,
+                        groups: groups)
+    }
+
+    static func navigationBarByTitle(_ title: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.navigationBar.rawValue,
+            title,
+            title
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: title,
+                        description: description,
+                        groups: groups)
+    }
+
+    static func tableCellByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (label == %@ OR identifier == %@)",
+            XCUIElement.ElementType.cell.rawValue,
+            label,
+            label
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: label,
+                        description: description,
+                        groups: groups)
+    }
+
+    static func buttonIdOrLabel(_ value: String,
+                                description: String,
+                                groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.button.rawValue,
+            value,
+            value
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: value,
+                        description: description,
+                        groups: groups
+        )
+    }
+
+    static func springboardPasscodeField(description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "elementType == %d",
+            XCUIElement.ElementType.secureTextField.rawValue
+        )
+        return Selector(strategy: .predicate(p),
+                        value: "springboardPasscode",
+                        description: description,
+                        groups: groups
+        )
     }
 }

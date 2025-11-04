@@ -521,7 +521,6 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
         app.launch()
         navigator.goto(SearchSettings)
@@ -537,7 +536,7 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -556,7 +555,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -565,7 +563,6 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
         app.launch()
         // Disable general search suggests
@@ -583,7 +580,9 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -602,7 +601,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -610,7 +608,7 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.tables["SiteTable"])
     }
 
-    // MARK: - Trending Searches
+    // MARK: - Pre Search (Trending Searches + Recent Searches)
     func testTrendingSearches_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         app.launch()
@@ -620,12 +618,94 @@ class SearchTests: FeatureFlaggedTestBase {
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         // Trending Search appears
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending Searches"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Trending on Google"])
         app.tables["SiteTable"].cells.firstMatch.waitAndTap()
         waitUntilPageLoad()
 
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
         mozWaitForValueContains(url, value: "google")
+    }
+
+    func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+
+        // By default, enable trending searches
+        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        ].switches.firstMatch
+        let recentSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showRecentSearches
+        ].switches.firstMatch
+
+        mozWaitForElementToExist(trendingSearchSuggestSwitch)
+        mozWaitForElementToNotExist(recentSearchSuggestSwitch)
+
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending on Google"])
+    }
+
+    func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        // Disable general search suggests
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+        app.tables.switches["Show Search Suggestions"].waitAndTap()
+
+        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        ].switches.firstMatch
+
+        trendingSearchSuggestSwitch.waitAndTap()
+
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        mozWaitForElementToNotExist(app.tables["SiteTable"].otherElements["Trending on Google"])
+    }
+
+    func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
+        app.launch()
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+
+        // By default, enable trending searches
+        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        ].switches.firstMatch
+        let recentSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showRecentSearches
+        ].switches.firstMatch
+
+        mozWaitForElementToExist(trendingSearchSuggestSwitch)
+        mozWaitForElementToNotExist(recentSearchSuggestSwitch)
+
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending on Google"])
     }
 }

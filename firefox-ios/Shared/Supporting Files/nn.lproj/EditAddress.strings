@@ -26,7 +26,7 @@
 "Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "Land eller region";
 
 /* Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information. */
-"Addresses.EditAddress.AutofillAddressCounty.v129" = "Fylke/storkommune";
+"Addresses.EditAddress.AutofillAddressCounty.v129" = "Fylke/Storkommune";
 
 /* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
 "Addresses.EditAddress.AutofillAddressDepartment.v129" = "Avdeling";
