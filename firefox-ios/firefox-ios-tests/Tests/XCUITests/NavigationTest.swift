@@ -608,7 +608,6 @@ class NavigationTest: BaseTestCase {
         app.typeText("example.com\n")
 
         browserScreen.assertAddressBarContains(value: "example.com")
-        // mozWaitForValueContains(urlBar, value: "example.com")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
     }
