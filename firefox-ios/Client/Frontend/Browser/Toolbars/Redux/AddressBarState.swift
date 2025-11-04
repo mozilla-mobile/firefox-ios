@@ -1008,30 +1008,54 @@ struct AddressBarState: StateType, Sendable, Equatable {
                 let shareAction = shareAction(enabled: isLoading == false,
                                               hasAlternativeLocationColor: hasAlternativeLocationColor)
                 actions.append(shareAction)
+
+                if let translationAction = configureTranslationIcon(
+                    for: action,
+                    addressBarState: addressBarState,
+                    isLoading: isLoading,
+                    hasAlternativeLocationColor: hasAlternativeLocationColor
+                ) {
+                    actions.append(translationAction)
+                }
             }
         } else if !isHomepage, isShowingNavigationToolbar {
             let shareAction = shareAction(enabled: isLoading == false,
                                           hasAlternativeLocationColor: hasAlternativeLocationColor)
             actions.append(shareAction)
 
-            // TODO: FXIOS-13930 - Add loading and active mode to the translation icon
-            // Check if action has an updated configuration, otherwise default to state.
-            let canTranslateFromAction = action.translationConfiguration?.canTranslate ?? false
-            let canTranslateFromState = addressBarState.translationConfiguration?.canTranslate ?? false
-            if canTranslateFromAction || canTranslateFromState {
-                let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
-                if let configuration {
-                    let translateAction = translateAction(
-                        enabled: isLoading == false,
-                        configuration: configuration,
-                        hasAlternativeLocationColor: hasAlternativeLocationColor
-                    )
-                    actions.append(translateAction)
-                }
+            if let translationAction = configureTranslationIcon(
+                for: action,
+                addressBarState: addressBarState,
+                isLoading: isLoading,
+                hasAlternativeLocationColor: hasAlternativeLocationColor
+            ) {
+                actions.append(translationAction)
             }
         }
 
         return actions
+    }
+
+    // Checks whether we should show the translation icon based on the translation configuration
+    // state and setups up the configuration for the translation icon on the toolbar (for iPad and iPhone)
+    private static func configureTranslationIcon(
+        for action: ToolbarAction,
+        addressBarState: AddressBarState,
+        isLoading: Bool?,
+        hasAlternativeLocationColor: Bool
+    ) -> ToolbarActionConfiguration? {
+        // Check if action has an updated configuration, otherwise default to state.
+        let canTranslateFromAction = action.translationConfiguration?.canTranslate ?? false
+        let canTranslateFromState = addressBarState.translationConfiguration?.canTranslate ?? false
+        let shouldShowTranslationIcon = canTranslateFromAction || canTranslateFromState
+        guard shouldShowTranslationIcon else { return nil }
+        let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
+        guard let configuration else { return nil }
+        return translateAction(
+            enabled: isLoading == false,
+            configuration: configuration,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
     }
 
     private static func trailingPageActions(
