@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "pink-light-min.png",
+      "filename" : "pink-light-min.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "pink-dark-min.png",
+      "filename" : "pink-dark-min.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "AppIcon_Alt_Tinted.png",
+      "filename" : "AppIcon_Alt_Tinted.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

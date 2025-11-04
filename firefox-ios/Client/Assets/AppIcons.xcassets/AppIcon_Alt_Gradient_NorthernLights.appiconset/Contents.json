@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "northernlights-light-min.png",
+      "filename" : "northernlights-light-min.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "northernlights-dark-min.png",
+      "filename" : "northernlights-dark-min.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "AppIcon_Alt_Tinted.png",
+      "filename" : "AppIcon_Alt_Tinted.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

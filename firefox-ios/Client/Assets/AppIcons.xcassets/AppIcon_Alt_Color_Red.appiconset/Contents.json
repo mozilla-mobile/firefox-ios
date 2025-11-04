@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "red-light-min.png",
+      "filename" : "red-light-min.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "red-dark-min.png",
+      "filename" : "red-dark-min.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "AppIcon_Alt_Tinted.png",
+      "filename" : "AppIcon_Alt_Tinted.heic",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
