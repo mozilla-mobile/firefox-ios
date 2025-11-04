@@ -28,6 +28,7 @@ protocol TopSitesManagerInterface {
     /// - Parameters:
     ///   - otherSites: Contains the user's pinned sites, history, and default suggested sites.
     ///   - sponsoredSites: Contains the sponsored sites.
+    @MainActor
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration]
 
     /// Removes the site out of the top sites.

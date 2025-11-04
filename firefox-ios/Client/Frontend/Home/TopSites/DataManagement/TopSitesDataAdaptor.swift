@@ -20,6 +20,7 @@ protocol TopSitesDataAdaptor {
     var numberOfRows: Int { get }
 
     /// Get top sites data
+    @MainActor
     func getTopSitesData() -> [TopSite]
 }
 
