@@ -21,6 +21,13 @@ let website_2 = [
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
 class NavigationTest: BaseTestCase {
+    var contextMenuScreen: ContextMenuScreen!
+    var toolbarScreen: ToolbarScreen!
+    var settingsScreen: SettingScreen!
+    var browserScreen: BrowserScreen!
+    var sslScreen: SSLWarningScreen!
+    var mainMenuScreen: MainMenuScreen!
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
@@ -189,6 +196,15 @@ class NavigationTest: BaseTestCase {
                 app.buttons["Bookmark Link"]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306836
+    // Smoketest TAE
+    func testLongPressLinkOptions_TAE() {
+        let contextMenuScreen = ContextMenuScreen(app: app)
+
+        openContextMenuForArticleLink()
+        contextMenuScreen.waitForContextMenuOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441496
@@ -416,6 +432,56 @@ class NavigationTest: BaseTestCase {
         XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2441776
+    // Smoketest TAE
+    func testPopUpBlocker_TAE() throws {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let settingsScreen = SettingScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
+
+        // Check that it is enabled by default
+        navigator.nowAt(BrowserTab)
+        toolbarScreen.assertTabToolbarMenuButtonExists()
+        navigator.goto(BrowsingSettings)
+        settingsScreen.waitForBrowsingLinksSection()
+        settingsScreen.assertBlockPopUpsSwitchIsOn()
+        // Navigate back to the homepage
+        navigator.goto(BrowserTab)
+        navigator.nowAt(NewTabScreen)
+
+        // Check that there are no pop ups
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
+        navigator.openURL(popUpTestUrl)
+        browserScreen.addressToolbarContainValue(value: "localhost")
+        mozWaitForElementToExist(app.webViews.staticTexts["Blocked Element"])
+
+        toolbarScreen.assertTabsButtonValue(expectedCount: "1")
+
+        // Now disable the Browsing -> Block PopUps option
+        navigator.goto(BrowserTabMenu)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+        }
+        navigator.goto(BrowsingSettings)
+        settingsScreen.waitForBrowsingLinksSection()
+        settingsScreen.tapOnBlockPopupsSwitch()
+        settingsScreen.assertBlockPopUpsSwitchIsOff()
+        // Navigate back to the homepage
+        settingsScreen.navigateBackToHomePage()
+        navigator.nowAt(HomePanelsScreen)
+
+        // Check that now pop ups are shown, two sites loaded
+        navigator.goto(URLBarOpen)
+        navigator.openURL(popUpTestUrl)
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "example.com")
+        toolbarScreen.assertMultipleTabsOpen()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
     func testSSL() {
@@ -434,6 +500,30 @@ class NavigationTest: BaseTestCase {
         app.buttons["Advanced"].waitAndTap()
         app.links["Visit site anyway"].waitAndTap()
         mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT_LONG)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306858
+    // Smoketest TAE
+    func testSSL_TAE() {
+        let sslScreen = SSLWarningScreen(app: app)
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("https://expired.badssl.com/")
+        sslScreen.waitForWarning()
+        sslScreen.assertWarningVisible()
+
+        sslScreen.tapGoBack()
+        sslScreen.waitForWarningToDisappear()
+
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL("https://expired.badssl.com/")
+        sslScreen.waitForWarning()
+        sslScreen.assertWarningVisible()
+
+        sslScreen.tapAdvanced()
+        sslScreen.tapVisitSiteAnyway()
+        sslScreen.waitForPageToLoadAfterBypass()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307022
@@ -472,22 +562,52 @@ class NavigationTest: BaseTestCase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307020
+    // Smoketest TAE
+    func testVerifyBrowserTabMenu_TAE() {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let mainMenuScreen = MainMenuScreen(app: app)
+        toolbarScreen.assertSettingsButtonExists()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
+        mainMenuScreen.waitForMenuOptionsToExist()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {
+        let text = "example.com\n"
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         urlBar.waitAndTap()
 
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        // swiftlint:disable empty_count
+        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+        app.typeText(text)
+
+        mozWaitForValueContains(urlBar, value: "example.com")
+        XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
+        // swiftlint:enable empty_count
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2441775
+    // Smoketest TAE
+    func testURLBar_TAE() {
+        let browserScreen = BrowserScreen(app: app)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        browserScreen.tapOnAddressBar()
+
+        browserScreen.assertAddressBarHasKeyboardFocus()
 
         // These instances are false positives of the swiftlint configuration
         // swiftlint:disable empty_count
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
         app.typeText("example.com\n")
 
-        mozWaitForValueContains(urlBar, value: "example.com")
+        browserScreen.assertAddressBarContains(value: "example.com")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
     }
