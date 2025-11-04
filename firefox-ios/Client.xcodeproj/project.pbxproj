@@ -16790,6 +16790,7 @@
 				E6639F191BF11E3A002D0853 /* Conditionally Add Optional Resources */,
 				E6B09CD31C74EEDB00C63FA1 /* Copy Frameworks */,
 				4368F81027955AE80013419B /* ShellScript */,
+				C31224262EB9944500683849 /* Strip Symbols */,
 			);
 			buildRules = (
 			);
@@ -17679,6 +17680,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"$ACTION\" != \"indexbuild\" ]; then\n    /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash \"$SOURCE_ROOT/bin/nimbus-fml.sh\" --verbose\nfi\n\n";
+		};
+		C31224262EB9944500683849 /* Strip Symbols */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Strip Symbols";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\nset -e\n\nif [ \"Firefox\" = \"${CONFIGURATION}\" ]; then\n  # Path to the app directory\n  APP_DIR_PATH=\"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}\"\n  # Strip main binary\n  strip -rSTx \"${APP_DIR_PATH}/${EXECUTABLE_NAME}\"\n  # Path to the Frameworks directory\n  APP_FRAMEWORKS_DIR=\"${APP_DIR_PATH}/Frameworks\"\n\n  # Strip symbols from frameworks, if Frameworks/ exists at all\n  # ... as long as the framework is NOT signed by Apple\n  if [ -d \"${APP_FRAMEWORKS_DIR}\" ]\n  then\n    find \"${APP_FRAMEWORKS_DIR}\" -type f -perm +111 -maxdepth 2 -mindepth 2 -exec bash -c '\n    codesign -v -R=\"anchor apple\" \"{}\" &> /dev/null ||\n    (\n        echo \"Stripping {}\" &&\n        if [ -w \"{}\" ]; then\n            strip -rSTx \"{}\"\n        else\n            echo \"Warning: No write permission for {}\"\n        fi\n    )\n    ' \\;\n  fi\n\n  # Path to the PlugIns directory\n  APP_PLUGINS_DIR=\"${APP_DIR_PATH}/PlugIns\"\n\n  # Strip symbols from plugins, if PlugIns/ exists at all\n  # ... as long as the plugin is NOT signed by Apple\n  if [ -d \"${APP_PLUGINS_DIR}\" ]\n  then\n    find \"${APP_PLUGINS_DIR}\" -type f -perm +111 -maxdepth 2 -mindepth 2 -exec bash -c '\n    codesign -v -R=\"anchor apple\" \"{}\" &> /dev/null ||\n    (\n        echo \"Stripping {}\" &&\n        if [ -w \"{}\" ]; then\n            strip -rSTx \"{}\"\n        else\n            echo \"Warning: No write permission for {}\"\n        fi\n    )\n    ' \\;\n  fi\nfi\n";
 		};
 		C874A4E327F62C5B006F54E5 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
