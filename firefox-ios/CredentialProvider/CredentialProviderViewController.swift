@@ -69,29 +69,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
         }
     }
 
-    // FIXME: FXIOS-13980 Commented out because unused. See other FXIOS-13980 FIXME for more info or view ticket details.
-    // swiftlint:disable:next orphaned_doc_comment
-    /**
-    Prepares the interface to display a list of credentials from which the user can select.
-
-    - Parameter serviceIdentifiers: An array of service identifiers that provide a
-     hint about the service for which the user needs credentials.
-
-    The system calls this method to tell your extension’s view controller to prepare to present a list of credentials.
-    After calling this method, the system presents the view controller to the user.
-
-    Use the given `serviceIdentifiers` array to filter or prioritize the credentials to display.
-    The service identifier array might be empty,
-    but your extension should still show credentials from which the user can pick.
-    */
-//    override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-//        if appAuthenticator.canAuthenticateDeviceOwner {
-//            self.presenter?.credentialList(for: serviceIdentifiers)
-//        } else {
-//            self.presenter?.showPasscodeRequirement()
-//        }
-//    }
-
     /**
     Attempts to provide the user-requested credential with no further user interaction.
 
