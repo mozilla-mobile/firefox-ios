@@ -9,7 +9,7 @@ protocol AddCustomDomainViewControllerDelegate: AnyObject {
     func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController)
 }
 
-class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
+final class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     private lazy var inputLabel: SmartLabel = {
         let inputLabel = SmartLabel()
         inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel

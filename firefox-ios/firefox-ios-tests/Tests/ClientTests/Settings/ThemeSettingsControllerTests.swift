@@ -129,7 +129,7 @@ class ThemeSettingsControllerTests: XCTestCase, StoreTestUtility {
         let action = ScreenAction(windowUUID: .XCTestDefaultUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .themeSettings)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

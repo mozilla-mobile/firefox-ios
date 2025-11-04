@@ -4,7 +4,7 @@
 
 import LocalAuthentication
 
-class AuthenticationManager {
+final class AuthenticationManager {
     enum AuthenticationState {
         case loggedin, loggedout, canceled
     }

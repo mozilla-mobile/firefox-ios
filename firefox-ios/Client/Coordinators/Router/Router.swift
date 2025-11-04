@@ -9,19 +9,23 @@ import UIKit
 /// presses and run the corresponding completion handler for the view controller that was popped.
 protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentationControllerDelegate {
     /// The navigation controller of the router which is used for pushing and presenting view controllers
+    @MainActor
     var navigationController: NavigationController { get }
 
     /// The root view controller of the navigation controller, which is the first view
     /// controller on the navigation controller stack
+    @MainActor
     var rootViewController: UIViewController? { get }
 
     /// Boolean value indicating whether or not the router is presenting a view controller for a vertical flow
+    @MainActor
     var isPresenting: Bool { get }
 
     /// Present a view controller for a vertical flow.
     /// - Parameters:
     ///   - viewController: The view controller to present
     ///   - animated: true means it will be animated
+    @MainActor
     func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?)
 
     /// Present a view controller with a custom transition.
@@ -33,6 +37,7 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     ///   - animated: true means it will be animated
     ///   - customTransition: Custom transition to animate the presentation with
     ///   - presentationStyle: the presentation style
+    @MainActor
     func present(_ viewController: UIViewController,
                  animated: Bool,
                  customTransition: UIViewControllerTransitioningDelegate?,
@@ -42,6 +47,7 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     /// - Parameters:
     ///   - animated: true means it will be animated
     ///   - completion: The completion to call once the view controller is dismissed
+    @MainActor
     func dismiss(animated: Bool, completion: (() -> Void)?)
 
     /// When a ViewController is pushed for an horizontal flow, we store a completion handler in a dictionary
@@ -52,12 +58,14 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     ///   - viewController: The view controller to push
     ///   - animated: true means it will be animated
     ///   - completion: the completion that will be called when dismissing the view controller
+    @MainActor
     func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?)
 
     /// When a view controller is popped, either from the back button, the navigation controller delegate
     /// function determines which view controller was popped and executes the corresponding completion handler.
     ///
     /// - Parameter animated: true means it will be animated
+    @MainActor
     func popViewController(animated: Bool)
 
     /// Set the root view controller
@@ -66,27 +74,33 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     ///   - viewController: The view controller to set as root
     ///   - hideBar: Hide the navigation bar or not
     ///   - animated: Animates the transitions or not
+    @MainActor
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool)
 }
 
 /// Adds default parameters on Router protocol
 extension Router {
+    @MainActor
     func present(_ viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
         present(viewController, animated: animated, completion: completion)
     }
 
+    @MainActor
     func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
         dismiss(animated: animated, completion: completion)
     }
 
+    @MainActor
     func push(_ viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
         push(viewController, animated: animated, completion: completion)
     }
 
+    @MainActor
     func popViewController(animated: Bool = true) {
         popViewController(animated: animated)
     }
 
+    @MainActor
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool = false, animated: Bool = false) {
         setRootViewController(viewController, hideBar: hideBar, animated: animated)
     }

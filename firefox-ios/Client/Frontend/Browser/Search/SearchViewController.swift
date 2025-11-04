@@ -358,12 +358,10 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func loadRecentSearches() {
-        guard viewModel.shouldShowRecentSearches else { return }
         viewModel.retrieveRecentSearches()
     }
 
     private func loadTrendingSearches() {
-        guard viewModel.shouldShowTrendingSearches else { return }
         Task {
             await viewModel.retrieveTrendingSearches()
             reloadTableView()
@@ -461,6 +459,14 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
+        case .recentSearches:
+            guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
+
+            guard let recentSearch = viewModel.recentSearches[safe: indexPath.row],
+                  let url = defaultEngine.searchURLForQuery(recentSearch)
+            else { return }
+            searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: recentSearch)
+
         case .trendingSearches:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
@@ -549,13 +555,21 @@ class SearchViewController: SiteTableViewController,
 
         var title: String
         switch section {
+        case SearchListSection.recentSearches.rawValue:
+            guard !viewModel.recentSearches.isEmpty else { return nil }
+            title = .SearchZero.RecentSearchesSectionTitle
+
         case SearchListSection.trendingSearches.rawValue:
-            // TODO: FXIOS-13644 - Add proper strings when finalized
+            guard !viewModel.trendingSearches.isEmpty else { return nil }
             if let engineName = viewModel.searchEnginesManager?.defaultEngine?.shortName {
-                title = "Trending on \(engineName)"
+                title = String(
+                    format: .SearchZero.TrendingSearchesSectionTitle,
+                    engineName
+                )
             } else {
                 title = ""
             }
+
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
@@ -599,6 +613,8 @@ class SearchViewController: SiteTableViewController,
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let section = SearchListSection(rawValue: indexPath.section) {
             switch section {
+            case .recentSearches, .trendingSearches:
+                break
             case .searchSuggestions:
                 if let site = viewModel.suggestions?[indexPath.row] {
                     if searchTelemetry?.visibleSuggestions.contains(site) == false {
@@ -641,19 +657,21 @@ class SearchViewController: SiteTableViewController,
                         searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
                     }
                 }
-            case .trendingSearches:
-                break
             }
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
+        case .recentSearches:
+            return viewModel.shouldShowRecentSearches ? viewModel.recentSearches.count : 0
+        case .trendingSearches:
+            return viewModel.shouldShowTrendingSearches ? viewModel.trendingSearches.count : 0
         case .searchSuggestions:
             guard let count = viewModel.suggestions?.count else { return 0 }
             return count < 4 ? count : 4
         case .openedTabs:
-            return !viewModel.searchQuery.isEmpty ? viewModel.filteredOpenedTabs.count : 0
+            return !viewModel.isZeroSearchState ? viewModel.filteredOpenedTabs.count : 0
         case .remoteTabs:
             return viewModel.shouldShowSyncedTabsSuggestions ? viewModel.filteredRemoteClientTabs.count : 0
         case .history:
@@ -661,9 +679,7 @@ class SearchViewController: SiteTableViewController,
         case .bookmarks:
             return viewModel.shouldShowBookmarksSuggestions ? viewModel.bookmarkSites.count : 0
         case .firefoxSuggestions:
-            return viewModel.firefoxSuggestions.count
-        case .trendingSearches:
-            return viewModel.shouldShowTrendingSearches ? viewModel.trendingSearches.count : 0
+            return !viewModel.isZeroSearchState ? viewModel.firefoxSuggestions.count : 0
         }
     }
 
@@ -726,6 +742,16 @@ class SearchViewController: SiteTableViewController,
                                    _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
+        case .recentSearches:
+            if let recentSearch = viewModel.recentSearches[safe: indexPath.row] {
+                let oneLineCellViewModel = oneLineCellModelForSearch(
+                    with: recentSearch,
+                    and: StandardImageIdentifiers.Large.history
+                )
+                oneLineCell.configure(viewModel: oneLineCellViewModel)
+                cell = oneLineCell
+            }
+
         case .trendingSearches:
             if let trendingSearch = viewModel.trendingSearches[safe: indexPath.row] {
                 let arrowImageName = StandardImageIdentifiers.Large.arrowTrending
@@ -885,20 +911,23 @@ class SearchViewController: SiteTableViewController,
     // MARK: - Notifiable
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            reloadData()
-        case .SearchSettingsChanged:
-            reloadSearchEngines()
-            // We fetch new list since trending searches are specific to the search engine.
-            loadTrendingSearches()
-        case .SponsoredAndNonSponsoredSuggestionsChanged:
-            guard !viewModel.searchQuery.isEmpty else { return }
-            Task {
-                await viewModel.loadFirefoxSuggestions()
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                self.reloadData()
+            case .SearchSettingsChanged:
+                self.reloadSearchEngines()
+                // We fetch new list since trending searches are specific to the search engine.
+                self.loadTrendingSearches()
+            case .SponsoredAndNonSponsoredSuggestionsChanged:
+                guard !self.viewModel.searchQuery.isEmpty else { return }
+                Task {
+                    await self.viewModel.loadFirefoxSuggestions()
+                }
+            default:
+                break
             }
-        default:
-            break
         }
     }
 

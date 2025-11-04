@@ -38,6 +38,7 @@ final class AddressToolbarContainerModel: Equatable {
 
     let windowUUID: UUID
 
+    @MainActor
     var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url)
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
@@ -108,6 +109,7 @@ final class AddressToolbarContainerModel: Equatable {
     ///   - isReaderModeAvailableOrActive: Indicates if reader mode is available or active,
     ///   used to determine trailing actions.
     /// - Returns: A skeleton `AddressToolbarConfiguration` suitable for placeholder or loading UI.
+    @MainActor
     func configureSkeletonAddressBar(
         with url: URL?,
         isReaderModeAvailableOrActive: Bool?
@@ -259,11 +261,14 @@ final class AddressToolbarContainerModel: Equatable {
                 title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
                 maskImageName: action.maskImageName,
+                templateModeForImage: action.templateModeForImage,
+                shouldUseLoadingSpinner: action.shouldUseLoadingSpinner,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 isSelected: action.isSelected,
                 hasCustomColor: action.hasCustomColor,
+                hasHighlightedColor: action.hasHighlightedColor,
                 largeContentTitle: action.largeContentTitle,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
@@ -313,9 +318,9 @@ final class AddressToolbarContainerModel: Equatable {
 
     static func == (lhs: AddressToolbarContainerModel, rhs: AddressToolbarContainerModel) -> Bool {
         lhs.navigationActions == rhs.navigationActions &&
+        lhs.leadingPageActions == rhs.leadingPageActions &&
         lhs.trailingPageActions == rhs.trailingPageActions &&
         lhs.browserActions == rhs.browserActions &&
-
         lhs.toolbarLayoutStyle == rhs.toolbarLayoutStyle &&
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineName == rhs.searchEngineName &&

@@ -398,11 +398,15 @@ final class TabTrayViewController: UIViewController,
                 guard let self else { return }
 
                 // Undo the action described by the toast
-                if let action = toastType.reduxAction(for: self.windowUUID), undoClose {
+                if let action = (toastType.reduxAction(for: self.windowUUID) as? TabPanelViewAction), undoClose {
                     store.dispatchLegacy(action)
                 }
                 self.shownToast = nil
             }
+        }
+
+        if let enableDeleteTabsButton = tabTrayState.enableDeleteTabsButton {
+            deleteButton.isEnabled = enableDeleteTabsButton
         }
 
         // Only apply normal theme when there's no on going animations
@@ -714,7 +718,7 @@ final class TabTrayViewController: UIViewController,
             currentToast.dismiss(false)
         }
 
-        if toastType.reduxAction(for: windowUUID) != nil {
+        if toastType.reduxAction(for: windowUUID) as? TabPanelViewAction != nil {
             let viewModel = ButtonToastViewModel(labelText: toastType.title, buttonText: toastType.buttonText)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: retrieveTheme(),
@@ -869,7 +873,8 @@ final class TabTrayViewController: UIViewController,
             )
         }
 
-        alert.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
+        let tabsCountString = tabTrayState.isNormalTabsPanel ? tabTrayState.normalTabsCount : tabTrayState.privateTabsCount
+        alert.addAction(UIAlertAction(title: String(format: .TabsTray.TabTrayCloseTabsTitle, tabsCountString),
                                       style: .destructive,
                                       handler: { _ in
             self.confirmCloseAll()

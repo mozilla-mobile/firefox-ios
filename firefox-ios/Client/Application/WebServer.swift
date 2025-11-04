@@ -13,8 +13,9 @@ protocol WebServerProtocol {
     func start() throws -> Bool
 }
 
-class WebServer: WebServerProtocol {
-    private var logger: Logger
+// FIXME: FXIOS-13989 Make truly thread safe
+final class WebServer: WebServerProtocol, @unchecked Sendable {
+    private let logger: Logger
     static let WebServerSharedInstance = WebServer()
 
     class var sharedInstance: WebServer {

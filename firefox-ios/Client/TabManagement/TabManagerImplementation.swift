@@ -100,9 +100,9 @@ class TabManagerImplementation: NSObject,
 
     private let inactiveTabsManager: InactiveTabsManagerProtocol
     private let logger: Logger
-    private nonisolated let tabDataStore: TabDataStore
+    nonisolated private let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
-    private nonisolated let imageStore: DiskImageStore?
+    nonisolated private let imageStore: DiskImageStore?
     private let windowManager: WindowManager
     private let windowIsNew: Bool
     private let profile: Profile
@@ -251,16 +251,31 @@ class TabManagerImplementation: NSObject,
                                                 restorePosition: tabs.firstIndex(of: tab),
                                                 isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
+
+        // Backup tabs for tab undo, this is not a feature on iPhone but is on iPad
         backupCloseTabs = tabs
 
-        for tab in currentModeTabs {
-            self.removeTab(tab.tabUUID)
-        }
+        // Scroll position for most tabs has been stored via session data when we navigate away,
+        // but we need to save the selected tabs session data to persist scroll position
+        saveSessionData(forTab: selectedTab)
 
+        for tab in currentModeTabs {
+            // Remove each tab without persisting changes
+            self.removeTab(tab, flushToDisk: false)
+            if tab == currentModeTabs.last {
+                // Select tab calls preserve tabs so we don't need to call it again
+                if tab.isPrivate,
+                   let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
+                    // We remove all private tabs so select most recent normal tab
+                    selectTab(mostRecentActiveTab)
+                } else {
+                    // For normal tabs create a new tab and select it
+                    selectTab(addTab())
+                }
+            }
+        }
         // Save the tab state that existed prior to removals (preserves original selected tab)
         backupCloseTab = currentSelectedTab
-
-        commitChanges()
     }
 
     /// Remove a tab, will notify delegate of the tab removal

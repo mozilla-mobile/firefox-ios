@@ -446,10 +446,18 @@ extension LibraryViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .LibraryPanelStateDidChange:
-            setupButtons()
-            updateSegmentControl()
+            ensureMainThread {
+                self.setupButtons()
+                self.updateSegmentControl()
+            }
+
         case .LibraryPanelBookmarkTitleChanged:
-            updateTitle(subpanelTitle: notification.userInfo?["title"] as? String)
+            let title = notification.userInfo?["title"] as? String
+
+            ensureMainThread {
+                self.updateTitle(subpanelTitle: title)
+            }
+
         default: break
         }
     }

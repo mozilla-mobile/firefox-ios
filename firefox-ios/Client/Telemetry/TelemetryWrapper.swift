@@ -38,7 +38,8 @@ enum SearchLocation: String {
     case quickSearch = "quicksearch"
 }
 
-class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
+// FIXME: FXIOS-13987 Make truly thread safe
+class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable, @unchecked Sendable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     static let shared = TelemetryWrapper()
@@ -757,7 +758,7 @@ extension TelemetryWrapper {
     }
 
     // Use this override to unit tests TelemetryWrapper. Only use this for unit tests!
-    static nonisolated(unsafe) var hasTelemetryOverride = false
+    nonisolated(unsafe) static var hasTelemetryOverride = false
 
     // swiftlint:disable:next function_body_length
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {

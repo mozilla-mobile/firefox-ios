@@ -217,7 +217,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            tableView.reloadData()
+            ensureMainThread {
+                self.tableView.reloadData()
+            }
         default:
             break
         }
