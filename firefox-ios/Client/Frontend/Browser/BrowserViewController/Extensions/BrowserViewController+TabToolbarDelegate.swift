@@ -167,10 +167,22 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         present(translationContextHintVC, animated: true)
         UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
     }
-    
+
+    func dismissToolbarCFRs(with windowUUID: WindowUUID) {
+        guard let toolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        ) else {
+            return
+        }
+        if toolbarState.addressToolbar.leadingPageActions[safe: 1]?.actionType != .translate {
+            resetTranslationCFRTimer()
+        }
+    }
     // Reset the CFR timer for the translation button to avoid presenting the CFR
     // In cases, such as if translation icon is not available
-    func resetTranslationCFRTimer() {
+    private func resetTranslationCFRTimer() {
         translationContextHintVC.stopTimer()
     }
 
