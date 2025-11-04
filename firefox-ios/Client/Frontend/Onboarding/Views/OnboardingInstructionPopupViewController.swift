@@ -31,8 +31,9 @@ class OnboardingInstructionPopupViewController: UIViewController,
     }
 
     // MARK: - Properties
-    lazy var contentContainerView: UIView = .build { stack in
-        stack.backgroundColor = .clear
+    lazy var contentContainerView: UIView = .build { view in
+        view.backgroundColor = .clear
+        view.isAccessibilityElement = false
     }
 
     private lazy var contentStackView: UIStackView = .build { stack in
@@ -41,6 +42,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         stack.distribution = .fill
         stack.spacing = UX.contentStackViewSpacing
         stack.axis = .vertical
+        stack.isAccessibilityElement = false
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -49,6 +51,8 @@ class OnboardingInstructionPopupViewController: UIViewController,
         label.font = FXFontStyles.Bold.title3.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.TitleLabel"
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .header
     }
 
     private lazy var numeratedLabels = [UILabel]()
@@ -59,10 +63,13 @@ class OnboardingInstructionPopupViewController: UIViewController,
         stack.distribution = .fill
         stack.axis = .vertical
         stack.spacing = UX.textStackViewSpacing
+        stack.isAccessibilityElement = false
     }
 
     private lazy var primaryButton: PrimaryRoundedGlassButton = .build { button in
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = .button
     }
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
@@ -106,6 +113,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
 
         setupView()
         updateLayout()
+        configureAccessibility()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
@@ -184,6 +192,9 @@ class OnboardingInstructionPopupViewController: UIViewController,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
         )
         primaryButton.configure(viewModel: buttonViewModel)
+
+        // Reconfigure accessibility after labels are updated
+        configureAccessibility()
     }
     private func addViewsToView() {
         createLabels(from: viewModel.instructionSteps)
@@ -200,6 +211,15 @@ class OnboardingInstructionPopupViewController: UIViewController,
     }
 
     // MARK: - Helper methods
+    private func configureAccessibility() {
+        var accessibilityElements: [UIView] = [titleLabel]
+        accessibilityElements.append(contentsOf: numeratedLabels)
+        accessibilityElements.append(primaryButton)
+
+        // Set the accessibility elements in the correct order
+        view.accessibilityElements = accessibilityElements
+    }
+
     private func createLabels(from descriptionTexts: [String]) {
         numeratedLabels.removeAll()
         let attributedStrings = viewModel.getAttributedStrings(
@@ -213,6 +233,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
                 label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.NumeratedLabel\(index)"
                 label.attributedText = attributedText
                 label.numberOfLines = 0
+                label.isAccessibilityElement = true
             }
             numeratedLabels.append(label)
         }
