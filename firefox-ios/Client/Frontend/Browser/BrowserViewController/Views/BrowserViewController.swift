@@ -79,7 +79,7 @@ class BrowserViewController: UIViewController,
         .title,
         .hasOnlySecureContent,
         // TODO: FXIOS-12158 Add back after investigating why video player is broken
-//        .fullscreenState
+        //        .fullscreenState
     ]
 
     weak var browserDelegate: BrowserDelegate?
@@ -155,7 +155,7 @@ class BrowserViewController: UIViewController,
     // the bottom reader mode, the bottom url bar and the ZoomPageBar
     private(set) lazy var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
 
-    // Constraints used to show/hide toolbars 
+    // Constraints used to show/hide toolbars
     var headerTopConstraint: Constraint?
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
@@ -533,7 +533,7 @@ class BrowserViewController: UIViewController,
 
     func didFinishAnnouncement(notification: Notification) {
         if let userInfo = notification.userInfo,
-            let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
+           let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
             let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
             let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
             if announcementText == saveSuccessMessage || announcementText == updateSuccessMessage {
@@ -812,9 +812,9 @@ class BrowserViewController: UIViewController,
 
     private func processAppleIntelligenceState() {
         if #available(iOS 26, *) {
-            #if canImport(FoundationModels)
-                AppleIntelligenceUtil().processAvailabilityState()
-            #endif
+#if canImport(FoundationModels)
+            AppleIntelligenceUtil().processAvailabilityState()
+#endif
         }
     }
 
@@ -1466,7 +1466,7 @@ class BrowserViewController: UIViewController,
         // Dismiss toolbar CFR on iPad when horizontal or vertical size class changes
         // as this also could change if the navigation bar is shown or not
         let sizeClassChanged = previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
-                                previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+        previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
 
         if toolbarUpdateContextHintVC.isPresenting,
            UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
@@ -2082,7 +2082,7 @@ class BrowserViewController: UIViewController,
             // Get the folder title using the recent bookmark folder pref
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
             if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
-                recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
+               recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
                 profile.places.getBookmark(guid: recentBookmarkFolderGuid)
                     .uponQueue(.main) { result in
                         // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
@@ -2093,7 +2093,7 @@ class BrowserViewController: UIViewController,
                             self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
                         }
                     }
-            // If recent bookmarks folder is nil or the mobile (default) folder
+                // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
                 showToast(
                     urlString,
@@ -2199,7 +2199,9 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    override nonisolated func observeValue(
+    // MARK: - Webview property changed
+
+    override func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
         change: [NSKeyValueChangeKey: Any]?,
@@ -2216,146 +2218,177 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // Extract typed values before crossing isolation boundary (so we don't capture `change`).
+        let newDouble = change?[.newKey] as? Double
+        let newBool = change?[.newKey] as? Bool
+        let newURL = change?[.newKey] as? URL
+
         ensureMainThread {
-            self.observeValue(path: path, webView: webView, change: change)
-        }
-    }
+            guard let tab = self.tabManager[webView] else { return }
 
-    @MainActor
-    private func observeValue(path: KVOConstants,
-                              webView: WKWebView,
-                              change: [NSKeyValueChangeKey: Any]?) {
-        guard let tab = tabManager[webView]
-        else { return }
-
-        switch path {
-        case .estimatedProgress:
-            guard tab === tabManager.selectedTab else { break }
-            let isLoadingDocument = tab.isDownloadingDocument()
-            let isValidURL = if let url = webView.url {
-                !InternalURL.isValid(url: url)
-            } else {
-                false
-            }
-            if isValidURL || isLoadingDocument {
-                let progress = if let progress = change?[.newKey] as? Double {
-                    progress
-                } else {
-                    webView.estimatedProgress
-                }
-                addressToolbarContainer.updateProgressBar(progress: progress)
-                setupMiddleButtonStatus(isLoading: true)
-            } else {
-                addressToolbarContainer.hideProgressBar()
-                setupMiddleButtonStatus(isLoading: false)
-            }
-        case .loading:
-            guard var loading = change?[.newKey] as? Bool else { break }
-            if let doc = tab.temporaryDocument {
-                loading = doc.isDownloading
-            }
-            setupMiddleButtonStatus(isLoading: loading)
-
-            let action = ToolbarAction(
-                isLoading: loading,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.websiteLoadingStateDidChange
-            )
-            store.dispatch(action)
-
-        case .URL:
-            // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
-            if tab.url?.absoluteString == "about:blank" && webView.url == nil {
+            switch path {
+            case .estimatedProgress:
+                self.handleEstimatedProgress(tab: tab, webView: webView, progress: newDouble)
+            case .loading:
+                self.handleLoading(isLoading: newBool, tab: tab)
+            case .URL:
+                self.handleURL(url: newURL, tab: tab, webView: webView)
+            case .title:
+                self.handleTitleChanged(tab: tab)
+            case .canGoBack:
+                self.handleCanGoBackChanged(tab: tab, canGoBack: newBool)
+            case .canGoForward:
+                self.handleCanGoForwardChanged(tab: tab, canGoForward: newBool)
+            case .hasOnlySecureContent:
+                self.handleHasOnlySecureContentChanged(webView: webView)
                 break
+//            // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//            case .fullscreenState:
+//                self.handleFullscreenStateChanged()
+            default:
+                assertionFailure("Unhandled KVO key: \(path.rawValue)")
             }
-
-            // Ensure we do have a URL from that observer
-            // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
-            let url: URL? = if let webURL = webView.url {
-                webURL
-            } else if let changeURL = change?[.newKey] as? URL {
-                changeURL
-            } else {
-                nil
-            }
-            guard let url else { break }
-            if !url.isFxHomeUrl {
-                updateToolbarAnimationStateIfNeeded()
-            }
-            // Security safety check (Bugzilla #1933079)
-            if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
-                tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
-                return
-            }
-
-            // To prevent spoofing, only change the URL immediately if the new URL is on
-            // the same origin as the current URL. Otherwise, if the origins are different
-            // or either origin is nil, set the tab URL to the URL's origin and return.
-            guard let tabURLOrigin = tab.url?.origin,
-                  let urlOrigin = url.origin,
-                  tabURLOrigin == urlOrigin else {
-                if let urlOrigin = url.origin,
-                   let newTabURL = URL(string: urlOrigin) {
-                    tab.url = newTabURL
-                }
-                return
-            }
-            tab.url = url
-
-            if tab === tabManager.selectedTab {
-                updateUIForReaderHomeStateForTab(tab)
-            }
-            // Catch history pushState navigation, but ONLY for same origin navigation,
-            // for reasons above about URL spoofing risk.
-            navigateInTab(tab: tab, webViewStatus: .url)
-        case .title:
-            // Ensure that the tab title *actually* changed to prevent repeated calls
-            // to navigateInTab(tab:) except when ReaderModeState is active
-            // so that evaluateJavascriptInDefaultContentWorld() is called.
-            guard let title = tab.title else { break }
-            if !title.isEmpty {
-                if title != tab.lastTitle {
-                    tab.lastTitle = title
-                    navigateInTab(tab: tab, webViewStatus: .title)
-                } else {
-                    navigateIfReaderModeActive(currentTab: tab)
-                }
-            }
-            TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
-        case .canGoBack:
-            guard tab === tabManager.selectedTab,
-                  let canGoBack = change?[.newKey] as? Bool
-            else { break }
-            dispatchBackForwardToolbarAction(canGoBack: canGoBack, windowUUID: windowUUID)
-        case .canGoForward:
-            guard tab === tabManager.selectedTab,
-                  let canGoForward = change?[.newKey] as? Bool
-            else { break }
-            dispatchBackForwardToolbarAction(canGoForward: canGoForward, windowUUID: windowUUID)
-        case .hasOnlySecureContent:
-            store.dispatch(
-                TrackingProtectionAction(windowUUID: windowUUID,
-                                         actionType: TrackingProtectionActionType.updateConnectionStatus)
-            )
-            guard let selectedTabURL = tabManager.selectedTab?.url,
-                  let webViewURL = webView.url,
-                  selectedTabURL == webViewURL else { return }
-
-            // TODO: FXIOS-12158 Add back after investigating why video player is broken
-//        case .fullscreenState:
-//            if #available(iOS 16.0, *) {
-//                guard webView.fullscreenState == .enteringFullscreen ||
-//                        webView.fullscreenState == .exitingFullscreen else { return }
-//                if webView.fullscreenState == .enteringFullscreen {
-//                    fullscreenDelegate?.enteringFullscreen()
-//                } else {
-//                    fullscreenDelegate?.exitingFullscreen()
-//                }
-//            }
-        default:
-            assertionFailure("Unhandled KVO key: \(path.rawValue)")
         }
     }
+
+    private func handleEstimatedProgress(tab: Tab, webView: WKWebView, progress: Double?) {
+        guard tab === tabManager.selectedTab else { return }
+        let isLoadingDocument = tab.isDownloadingDocument()
+        let isValidURL = if let url = webView.url {
+            !InternalURL.isValid(url: url)
+        } else {
+            false
+        }
+        if isValidURL || isLoadingDocument {
+            let progressValue = if let progress {
+                progress
+            } else {
+                webView.estimatedProgress
+            }
+            addressToolbarContainer.updateProgressBar(progress: progressValue)
+            setupMiddleButtonStatus(isLoading: true)
+        } else {
+            addressToolbarContainer.hideProgressBar()
+            setupMiddleButtonStatus(isLoading: false)
+        }
+    }
+
+    private func handleLoading(isLoading: Bool?, tab: Tab) {
+        guard var loading = isLoading else { return }
+        if let doc = tab.temporaryDocument {
+            loading = doc.isDownloading
+        }
+        setupMiddleButtonStatus(isLoading: loading)
+
+        let action = ToolbarAction(
+            isLoading: loading,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.websiteLoadingStateDidChange
+        )
+        store.dispatch(action)
+    }
+
+    private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
+        // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
+        if tab.url?.absoluteString == "about:blank" && webView.url == nil {
+            return
+        }
+
+        // Ensure we do have a URL from that observer
+        // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
+        let url: URL? = if let webURL = webView.url {
+            webURL
+        } else if let changedURL = url {
+            changedURL
+        } else {
+            nil
+        }
+        guard let url else { return }
+        if !url.isFxHomeUrl {
+            updateToolbarAnimationStateIfNeeded()
+        }
+        // Security safety check (Bugzilla #1933079)
+        if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
+            tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
+            return
+        }
+
+        // To prevent spoofing, only change the URL immediately if the new URL is on
+        // the same origin as the current URL. Otherwise, if the origins are different
+        // or either origin is nil, set the tab URL to the URL's origin and return.
+        guard let tabURLOrigin = tab.url?.origin,
+              let urlOrigin = url.origin,
+              tabURLOrigin == urlOrigin else {
+            if let urlOrigin = url.origin,
+               let newTabURL = URL(string: urlOrigin) {
+                tab.url = newTabURL
+            }
+            return
+        }
+        tab.url = url
+
+        if tab === tabManager.selectedTab {
+            updateUIForReaderHomeStateForTab(tab)
+        }
+        // Catch history pushState navigation, but ONLY for same origin navigation,
+        // for reasons above about URL spoofing risk.
+        navigateInTab(tab: tab, webViewStatus: .url)
+    }
+
+    private func handleTitleChanged(tab: Tab) {
+        // Ensure that the tab title *actually* changed to prevent repeated calls
+        // to navigateInTab(tab:) except when ReaderModeState is active
+        // so that evaluateJavascriptInDefaultContentWorld() is called.
+        guard let title = tab.title else { return }
+        if !title.isEmpty {
+            if title != tab.lastTitle {
+                tab.lastTitle = title
+                navigateInTab(tab: tab, webViewStatus: .title)
+            } else {
+                navigateIfReaderModeActive(currentTab: tab)
+            }
+        }
+        TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
+    }
+
+    private func handleCanGoBackChanged(tab: Tab, canGoBack: Bool?) {
+        guard tab === tabManager.selectedTab,
+              let canGoBack
+        else { return }
+        dispatchBackForwardToolbarAction(canGoBack: canGoBack, windowUUID: windowUUID)
+    }
+
+    private func handleCanGoForwardChanged(tab: Tab, canGoForward: Bool?) {
+        guard tab === tabManager.selectedTab,
+              let canGoForward
+        else { return }
+        dispatchBackForwardToolbarAction(canGoForward: canGoForward, windowUUID: windowUUID)
+    }
+
+    private func handleHasOnlySecureContentChanged(webView: WKWebView) {
+        store.dispatch(
+            TrackingProtectionAction(windowUUID: windowUUID,
+                                     actionType: TrackingProtectionActionType.updateConnectionStatus)
+        )
+
+        guard let selectedTabURL = tabManager.selectedTab?.url,
+              let webViewURL = webView.url,
+              selectedTabURL == webViewURL else { return }
+    }
+
+    private func handleFullscreenStateChanged(webView: WKWebView) {
+//        if #available(iOS 16.0, *) {
+//            guard webView.fullscreenState == .enteringFullscreen ||
+//                    webView.fullscreenState == .exitingFullscreen else { return }
+//            if webView.fullscreenState == .enteringFullscreen {
+//                fullscreenDelegate?.enteringFullscreen()
+//            } else {
+//                fullscreenDelegate?.exitingFullscreen()
+//            }
+//        }
+    }
+
+    // MARK: - Update UI
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false) {
         updateURLBarDisplayURL(tab)
@@ -2478,6 +2511,8 @@ class BrowserViewController: UIViewController,
                 }
             }
     }
+
+    // MARK: - Handle navigation
 
     private func executeNavigationAndDisplayActions() {
         guard let state = browserViewControllerState else { return }
