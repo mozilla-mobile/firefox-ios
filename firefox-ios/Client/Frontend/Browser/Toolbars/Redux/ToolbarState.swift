@@ -140,16 +140,17 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.cancelEditOnHomepage,
-            ToolbarActionType.keyboardStateDidChange, ToolbarActionType.websiteLoadingStateDidChange,
+            ToolbarActionType.hideKeyboard, ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
-            ToolbarActionType.scrollAlphaNeedsUpdate, ToolbarActionType.readerModeStateChanged,
+            ToolbarActionType.scrollAlphaDidChange, ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
             ToolbarActionType.didStartTranslatingPage,
             ToolbarActionType.translationCompleted,
-            ToolbarActionType.receivedTranslationLanguage:
+            ToolbarActionType.receivedTranslationLanguage,
+            ToolbarActionType.didReceiveErrorTranslating:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:

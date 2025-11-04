@@ -95,7 +95,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "ComponentLibraryTests",
-            dependencies: ["ComponentLibrary"]),
+            dependencies: ["ComponentLibrary"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]
+        ),
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
@@ -228,7 +232,10 @@ let package = Package(
             ]),
         .testTarget(
             name: "OnboardingKitTests",
-            dependencies: ["OnboardingKit"]),
+            dependencies: ["OnboardingKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
             dependencies: ["ContentBlockingGenerator"]),

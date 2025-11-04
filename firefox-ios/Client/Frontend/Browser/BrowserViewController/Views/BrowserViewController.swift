@@ -353,8 +353,9 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
-    private var isPreSearchEnabled: Bool {
+    private var isRecentOrTrendingSearchEnabled: Bool {
         let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
         return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
@@ -469,22 +470,15 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
-        unsubscribeFromRedux()
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
-        // KVO observation removal directly requires self so we can not use the apple
-        // recommended work around here.
         guard Thread.isMainThread else {
-            logger.log(
-                "BVC was not deallocated on the main thread. KVOs were not cleaned up.",
-                level: .fatal,
-                category: .lifecycle
-            )
-            assertionFailure("BVC was not deallocated on the main thread. KVOs were not cleaned up.")
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
             return
         }
 
         MainActor.assumeIsolated {
+            logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
+            unsubscribeFromRedux()
             observedWebViews.forEach({ stopObserving(webView: $0) })
         }
     }
@@ -894,11 +888,11 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .browserViewController)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
@@ -1694,26 +1688,15 @@ class BrowserViewController: UIViewController,
         /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
         let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
 
-        let keyboardHeight = keyboardState?.intersectionHeightForView(view)
-        let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
-
-        guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
+        guard isBottomSearchBar,
+              let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0
+        else {
             overKeyboardContainer.removeKeyboardSpacer()
-            guard #available(iOS 26.0, *) else { return }
-            store.dispatchLegacy(
-                ToolbarAction(
-                    scrollAlpha: 1,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
             return
         }
-        let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
-            hasAccessoryView: tabManager.selectedTab?.webView?.accessoryView != nil
-        )
+
         let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
-        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight)
 
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
@@ -3826,9 +3809,11 @@ class BrowserViewController: UIViewController,
 
     /// Zero search describes the state in which the user highlights the address bar, but no
     /// text has been entered.
-    /// We only want to display if webview, user has either trending searches or recent searches enabled.
+    /// We only want to display if webview, user has either trending searches or recent searches enabled
+    /// and is not private mode.
     private func showZeroSearchView() {
-        guard contentContainer.hasWebView, isPreSearchEnabled else {
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        guard contentContainer.hasWebView, isRecentOrTrendingSearchEnabled, !isPrivateTab else {
             hideSearchController()
             return
         }
@@ -3878,9 +3863,11 @@ class BrowserViewController: UIViewController,
                 toast.removeFromSuperview()
             }
             // Instead of showing homepage when user enters overlay mode,
-            // we want to show the zero search state if trending searches or recent searches is enabled
-            if !isPreSearchEnabled {
-                showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            // we want to show the zero search state if trending searches or recent searches is enabled or if in private mode
+            // we handle that in `showZeroSearchView()` and avoid embedding homepage here.
+            let isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
+            if !isRecentOrTrendingSearchEnabled || isPrivateMode {
+                showEmbeddedHomepage(inline: false, isPrivate: isPrivateMode)
             }
         }
 
@@ -4705,13 +4692,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        store.dispatchLegacy(
-            ToolbarAction(
-                shouldShowKeyboard: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
-        )
         keyboardState = nil
         updateViewConstraints()
 

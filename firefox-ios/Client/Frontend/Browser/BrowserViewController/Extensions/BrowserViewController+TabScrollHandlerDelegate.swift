@@ -81,7 +81,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                    actionType: ToolbarActionType.scrollAlphaDidChange
                 )
             )
         }
@@ -108,7 +108,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                    actionType: ToolbarActionType.scrollAlphaDidChange
                 )
             )
         }
@@ -131,7 +131,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                    actionType: ToolbarActionType.scrollAlphaDidChange
                 )
             )
         }
@@ -156,7 +156,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: self.windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                    actionType: ToolbarActionType.scrollAlphaDidChange
                 )
             )
         }

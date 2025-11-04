@@ -11,7 +11,9 @@ protocol HistoryCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate 
     func showRecentlyClosedTab()
 }
 
-class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
+class HistoryCoordinator: BaseCoordinator,
+                          HistoryCoordinatorDelegate,
+                          Notifiable {
     // MARK: - Properties
 
     private let profile: Profile
@@ -37,17 +39,17 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
         self.navigationHandler = navigationHandler
         super.init(router: router)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        self.notificationCenter.addObserver(
-            self,
-            selector: #selector(openClearHistory),
-            name: .OpenClearRecentHistory,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.OpenClearRecentHistory]
         )
     }
 
-    @objc
-    private nonisolated func openClearHistory() {
+    // MARK: Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == .OpenClearRecentHistory else { return }
+
         ensureMainThread {
             guard let historyPanel = self.router.rootViewController as? HistoryPanel else { return }
             historyPanel.showClearRecentHistory()

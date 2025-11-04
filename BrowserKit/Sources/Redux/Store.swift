@@ -69,7 +69,7 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         }
     }
 
-    public nonisolated func dispatchLegacy(_ action: Action) {
+    nonisolated public func dispatchLegacy(_ action: Action) {
         logger.log("Legacy dispatched action: \(action.debugDescription)", level: .info, category: .redux)
 
         guard Thread.isMainThread else {

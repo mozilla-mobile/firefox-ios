@@ -395,7 +395,8 @@ final class SearchViewModelTests: XCTestCase {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = "hello"
-        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        let trendingSearchesSectionIndex = 1
+        let shouldShowHeader = subject.shouldShowHeader(for: trendingSearchesSectionIndex)
         XCTAssertFalse(shouldShowHeader)
     }
 
@@ -406,7 +407,8 @@ final class SearchViewModelTests: XCTestCase {
         let subject = createSubject(mockTrendingClient: mockClient)
         await subject.retrieveTrendingSearches()
         subject.searchQuery = ""
-        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        let trendingSearchesSectionIndex = 1
+        let shouldShowHeader = subject.shouldShowHeader(for: trendingSearchesSectionIndex)
         XCTAssertEqual(subject.trendingSearches, ["foo", "bar"])
         XCTAssertTrue(shouldShowHeader)
     }
@@ -416,7 +418,8 @@ final class SearchViewModelTests: XCTestCase {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = ""
-        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        let trendingSearchesSectionIndex = 1
+        let shouldShowHeader = subject.shouldShowHeader(for: trendingSearchesSectionIndex)
         XCTAssertEqual(subject.trendingSearches, [])
         XCTAssertFalse(shouldShowHeader)
     }
@@ -425,7 +428,8 @@ final class SearchViewModelTests: XCTestCase {
     func test_shouldShowHeader_forTrendingSearches_withoutFeatureFlagOn_doesNotShowHeader() async {
         setupNimbusTrendingSearchesTesting(isEnabled: false)
         let subject = createSubject()
-        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        let trendingSearchesSectionIndex = 1
+        let shouldShowHeader = subject.shouldShowHeader(for: trendingSearchesSectionIndex)
         XCTAssertEqual(subject.trendingSearches, [])
         XCTAssertFalse(shouldShowHeader)
     }
@@ -455,12 +459,74 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(subject.trendingSearches, [])
     }
 
-    func test_retrieveRecentSearches_withSuccess_hasExpectedList() {
+    // MARK: - Recent Searches
+    @MainActor
+    func test_shouldShowHeader_forRecentSearches_withFFOn_andSearchTerm_doesNotShowHeader() async {
+        setupNimbusRecentSearchesTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.searchQuery = "hello"
+        let recentSearchesSectionIndex = 0
+        let shouldShowHeader = subject.shouldShowHeader(for: recentSearchesSectionIndex)
+        XCTAssertFalse(shouldShowHeader)
+    }
+
+    @MainActor
+    func test_shouldShowHeader_withRecentSearches_withFFOn_andSearchTermEmpty_showsHeader() async {
         setupNimbusRecentSearchesTesting(isEnabled: true)
         let mockRecentSearchProvider = MockRecentSearchProvider()
         let subject = createSubject(mockRecentSearchProvider: mockRecentSearchProvider)
         subject.retrieveRecentSearches()
-        XCTAssertEqual(mockRecentSearchProvider.loadRecentSearchesCalledCount, 1)
+        subject.searchQuery = ""
+        let recentSearchesSectionIndex = 0
+        let expectation = XCTestExpectation(description: "Recent Searches have been fetched")
+
+        let shouldShowHeader = subject.shouldShowHeader(for: recentSearchesSectionIndex)
+
+        mockRecentSearchProvider.loadRecentSearches { result in
+            XCTAssertEqual(result, ["search term 1", "search term 2"])
+            expectation.fulfill()
+        }
+
+        await fulfillment(of: [expectation], timeout: 1.0)
+        XCTAssertTrue(shouldShowHeader)
+    }
+
+    @MainActor
+    func test_shouldShowHeader_withNoRecentSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() async {
+        setupNimbusRecentSearchesTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.searchQuery = ""
+        let recentSearchesSectionIndex = 0
+        let shouldShowHeader = subject.shouldShowHeader(for: recentSearchesSectionIndex)
+        XCTAssertEqual(subject.recentSearches, [])
+        XCTAssertFalse(shouldShowHeader)
+    }
+
+    @MainActor
+    func test_shouldShowHeader_forRecentSearches_withoutFeatureFlagOn_doesNotShowHeader() async {
+        setupNimbusRecentSearchesTesting(isEnabled: false)
+        let subject = createSubject()
+        let recentSearchesSectionIndex = 0
+        let shouldShowHeader = subject.shouldShowHeader(for: recentSearchesSectionIndex)
+        XCTAssertEqual(subject.recentSearches, [])
+        XCTAssertFalse(shouldShowHeader)
+    }
+
+    func test_retrieveRecentSearches_withSuccess_hasExpectedList() {
+        setupNimbusRecentSearchesTesting(isEnabled: true)
+        let mockRecentSearchProvider = MockRecentSearchProvider()
+        let subject = createSubject(mockRecentSearchProvider: mockRecentSearchProvider)
+
+        let expectation = XCTestExpectation(description: "Recent Searches have been fetched")
+
+        subject.retrieveRecentSearches()
+
+        mockRecentSearchProvider.loadRecentSearches { result in
+            XCTAssertEqual(result, ["search term 1", "search term 2"])
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1.0)
     }
 
     func test_retrieveRecentSearches_withNilProvider_hasEmptyList() {
