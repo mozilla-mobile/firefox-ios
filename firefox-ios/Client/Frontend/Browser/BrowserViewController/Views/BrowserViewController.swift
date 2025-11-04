@@ -29,6 +29,7 @@ import enum MozillaAppServices.VisitType
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,
+                             Notifiable,
                              LibraryPanelDelegate,
                              RecentlyClosedPanelDelegate,
                              QRCodeViewControllerDelegate,
@@ -519,20 +520,17 @@ class BrowserViewController: UIViewController,
         ratingPromptManager.showRatingPromptIfNeeded()
     }
 
-    @objc
     private func didAddPendingBlobDownloadToQueue() {
         pendingDownloadWebView = nil
     }
 
     /// If user manually opens the keyboard and presses undo, the app switches to the last
     /// open tab, and because of that we need to leave overlay state
-    @objc
     func didTapUndoCloseAllTabToast(notification: Notification) {
         guard windowUUID == notification.windowUUID else { return }
         overlayManager.switchTab(shouldCancelLoading: true)
     }
 
-    @objc
     func didFinishAnnouncement(notification: Notification) {
         if let userInfo = notification.userInfo,
             let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
@@ -547,7 +545,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
@@ -647,7 +644,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     fileprivate func appMenuBadgeUpdate() {
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = isActionNeeded
@@ -736,7 +732,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     func appDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
@@ -757,7 +752,6 @@ class BrowserViewController: UIViewController,
         scrollController.showToolbars(animated: true)
     }
 
-    @objc
     func sceneDidEnterBackgroundNotification(notification: Notification) {
         // Ensure the notification is for the current window scene
         guard let currentWindowScene = view.window?.windowScene,
@@ -768,12 +762,10 @@ class BrowserViewController: UIViewController,
         privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
-    @objc
     func sceneDidActivateNotification() {
         privacyWindowHelper.removeWindow()
     }
 
-    @objc
     func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
@@ -805,7 +797,6 @@ class BrowserViewController: UIViewController,
         return self.presentedViewController == nil || presentedViewController is PhotonActionSheet
     }
 
-    @objc
     func appDidBecomeActiveNotification() {
         processAppleIntelligenceState()
         privacyWindowHelper.removeWindow()
@@ -1096,94 +1087,58 @@ class BrowserViewController: UIViewController,
         navigationItem.backButtonDisplayMode = .generic
     }
 
-    // FIXME: FXIOS-12995 Use Notifiable on all of these...
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+        Task { @MainActor in
+            switch notificationName {
+            case UIApplication.willResignActiveNotification: appWillResignActiveNotification()
+            case UIApplication.didBecomeActiveNotification: appDidBecomeActiveNotification()
+            case UIApplication.didEnterBackgroundNotification: appDidEnterBackgroundNotification()
+            case UIScene.didEnterBackgroundNotification: sceneDidEnterBackgroundNotification(notification: notification)
+            case UIScene.didActivateNotification: sceneDidActivateNotification()
+            case UIAccessibility.announcementDidFinishNotification: didFinishAnnouncement(notification: notification)
+            case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+                onReduceTransparencyStatusDidChange(notification)
+            case .FirefoxAccountStateChange: appMenuBadgeUpdate()
+            case .SearchBarPositionDidChange: searchBarPositionDidChange(notification: notification)
+            case .DidTapUndoCloseAllTabToast: didTapUndoCloseAllTabToast(notification: notification)
+            case .PendingBlobDownloadAddedToQueue: didAddPendingBlobDownloadToQueue()
+            case .SearchSettingsDidUpdateDefaultSearchEngine: updateForDefaultSearchEngineDidChange(notification)
+            case .PageZoomLevelUpdated: handlePageZoomLevelUpdated(notification)
+            case .PageZoomSettingsChanged: handlePageZoomSettingsChanged(notification)
+            case .RemoteTabNotificationTapped: openRecentlyClosedTabs()
+            case .StopDownloads: onStopDownloads(notification)
+            default: break
+            }
+        }
+    }
+
     private func setupNotifications() {
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appWillResignActiveNotification),
-            name: UIApplication.willResignActiveNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appDidBecomeActiveNotification),
-            name: UIApplication.didBecomeActiveNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appDidEnterBackgroundNotification),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(sceneDidEnterBackgroundNotification),
-            name: UIScene.didEnterBackgroundNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(sceneDidActivateNotification),
-            name: UIScene.didActivateNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appMenuBadgeUpdate),
-            name: .FirefoxAccountStateChange,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(searchBarPositionDidChange),
-            name: .SearchBarPositionDidChange,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(didTapUndoCloseAllTabToast),
-            name: .DidTapUndoCloseAllTabToast,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(didFinishAnnouncement),
-            name: UIAccessibility.announcementDidFinishNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(didAddPendingBlobDownloadToQueue),
-            name: .PendingBlobDownloadAddedToQueue,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(updateForDefaultSearchEngineDidChange),
-            name: .SearchSettingsDidUpdateDefaultSearchEngine,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(handlePageZoomLevelUpdated),
-            name: .PageZoomLevelUpdated,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(handlePageZoomSettingsChanged),
-            name: .PageZoomSettingsChanged,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(openRecentlyClosedTabs),
-            name: .RemoteTabNotificationTapped,
-            object: nil
-        )
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(onStopDownloads(_:)),
-            name: .StopDownloads,
-            object: nil
-        )
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(onReduceTransparencyStatusDidChange(_:)),
-            name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                UIApplication.willResignActiveNotification,
+                UIApplication.didBecomeActiveNotification,
+                UIApplication.didEnterBackgroundNotification,
+                UIScene.didEnterBackgroundNotification,
+                UIScene.didActivateNotification,
+                UIAccessibility.announcementDidFinishNotification,
+                UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                .FirefoxAccountStateChange,
+                .SearchBarPositionDidChange,
+                .DidTapUndoCloseAllTabToast,
+                .PendingBlobDownloadAddedToQueue,
+                .SearchSettingsDidUpdateDefaultSearchEngine,
+                .PageZoomLevelUpdated,
+                .PageZoomSettingsChanged,
+                .RemoteTabNotificationTapped,
+                .StopDownloads
+            ]
         )
     }
 
-    @objc
     private func onStopDownloads(_ notification: Notification) {
         ensureMainThread {
             guard let notiWindowUUID = notification.userInfo?["windowUUID"] as? String,
@@ -1193,7 +1148,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
         updateToolbarDisplay()
 
@@ -3620,13 +3574,11 @@ class BrowserViewController: UIViewController,
 
     // MARK: Page Zoom
 
-    @objc
     func handlePageZoomSettingsChanged(_ notification: Notification) {
         zoomManager.updateZoomChangedInOtherWindow()
         zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomLevel())
     }
 
-    @objc
     func handlePageZoomLevelUpdated(_ notification: Notification) {
         guard let uuid = notification.windowUUID,
               let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel,
@@ -4241,13 +4193,10 @@ extension BrowserViewController: HomePanelDelegate {
         showBookmarkToast(urlString: urlString, action: action)
     }
 
-    @objc
     func openRecentlyClosedTabs() {
-        DispatchQueue.main.async {
-            self.navigationHandler?.show(homepanelSection: .history)
-            self.notificationCenter.post(name: .OpenRecentlyClosedTabs)
-        }
-     }
+        self.navigationHandler?.show(homepanelSection: .history)
+        self.notificationCenter.post(name: .OpenRecentlyClosedTabs)
+    }
 
     // MARK: - BrowserStatusBarScrollDelegate
     func homepageScrollViewDidScroll(scrollOffset: CGFloat) {
@@ -4286,7 +4235,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
         self.present(navController, animated: true, completion: nil)
     }
 
-    @objc
     func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
         // Update search icon when the search engine changes
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
