@@ -12,7 +12,7 @@ final class WebViewLanguageSampleSource: LanguageSampleSource {
     init(webView: WKWebView) {
         self.webView = webView
     }
-    
+
     @MainActor
     func getLanguageSample(scriptEvalExpression: String) async throws -> String? {
         try await webView.callAsyncJavaScript(

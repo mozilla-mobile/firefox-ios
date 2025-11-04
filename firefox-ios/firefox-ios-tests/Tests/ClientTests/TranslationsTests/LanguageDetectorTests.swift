@@ -40,17 +40,16 @@ final class LanguageDetectorTests: XCTestCase {
             XCTFail("expected error")
         } catch { }
     }
-    
+
     func testDetectLanguageReturnsLanguageCode() {
         let subject = createSubject()
-        
+
         XCTAssertEqual(subject.detectLanguage(of: "Hello world"), "en")
         XCTAssertEqual(subject.detectLanguage(of: "Bonjour le monde"), "fr")
         XCTAssertEqual(subject.detectLanguage(of: "Hola mundo"), "es")
         XCTAssertEqual(subject.detectLanguage(of: "こんにちは世界"), "ja")
         XCTAssertEqual(subject.detectLanguage(of: "안녕하세요 세계"), "ko")
     }
-
 
     func testDetectLanguageReturnsNilForEmptyOrWhitespace() {
         let subject = createSubject()

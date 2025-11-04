@@ -6,11 +6,11 @@ import Foundation
 @testable import Client
 
 /// Test helper that simulates JS evaluation for language sample extraction.
-@MainActor
 final class MockLanguageSampleSource: LanguageSampleSource {
     var mockResult: Any?
     var mockError: Error?
 
+    @MainActor
     func getLanguageSample(scriptEvalExpression: String) async throws -> String? {
         if let error = mockError { throw error }
         return mockResult as? String
