@@ -87,8 +87,8 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
-                    linkAction: viewModel.handleEmbededLinkAction(action:),
-                    textAlignment: UX.CardView.textAlignmentForCurrentLocale
+                    textAlignment: UX.CardView.textAlignmentForCurrentLocale,
+                    linkAction: viewModel.handleEmbededLinkAction(action:)
                 )
             }
         }

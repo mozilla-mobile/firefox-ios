@@ -18,8 +18,8 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
         fullText: String,
         linkText: String,
         action: Action,
-        linkAction: @escaping (Action) -> Void,
-        textAlignment: TextAlignment = .center
+        textAlignment: TextAlignment = .center,
+        linkAction: @escaping (Action) -> Void
     ) {
         self.theme = theme
         self.fullText = fullText
