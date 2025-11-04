@@ -3124,11 +3124,9 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Toolbar Refactor Deeplink Helper Method.
     private func cancelEditMode() {
-        ensureMainThread {
-            let action = ToolbarAction(windowUUID: self.windowUUID,
-                                       actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
-        }
+        let action = ToolbarAction(windowUUID: self.windowUUID,
+                                   actionType: ToolbarActionType.cancelEdit)
+        store.dispatch(action)
     }
 
     func closeAllPrivateTabs() {
