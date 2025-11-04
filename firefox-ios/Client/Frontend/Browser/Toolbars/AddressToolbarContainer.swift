@@ -202,8 +202,8 @@ final class AddressToolbarContainer: UIView,
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard tabManager.selectedIndex != -1 else { return }
 
-        let previousTab = tabs[safe: tabManager.selectedIndex]
-        let forwardTab = tabs[safe: tabManager.selectedIndex]
+        let previousTab = tabs[safe: tabManager.selectedIndex - 1]
+        let forwardTab = tabs[safe: tabManager.selectedIndex + 1]
 
         configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
         leftSkeletonAddressBar.isHidden = previousTab == nil
