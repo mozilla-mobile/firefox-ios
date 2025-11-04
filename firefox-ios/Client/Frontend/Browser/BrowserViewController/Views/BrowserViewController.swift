@@ -2554,7 +2554,6 @@ class BrowserViewController: UIViewController,
                     actionType: GeneralBrowserActionType.enteredZeroSearchScreen)
             )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
-            configureHomepageZeroSearchView()
         case .zeroSearch:
             showZeroSearchView()
         case .shortcutsLibrary:
@@ -3801,6 +3800,7 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
+        configureHomepageZeroSearchView()
         if isSwipingTabsEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
