@@ -56,34 +56,20 @@ enum UX {
         static let titleFont = FXFontStyles.Bold.title1.scaledSwiftUIFont()
         static let titleFontRegular = FXFontStyles.Regular.title1.scaledSwiftUIFont()
         static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
-
-        /// Returns the appropriate title font based on locale.
-        /// For Japan locale, returns regular (non-bold) font; otherwise returns bold font.
+        private static var isJapanLocale: Bool {
+            Locale.current.languageCode == "ja"
+        }
         static var titleFontForCurrentLocale: DynamicFont {
             isJapanLocale ? titleFontRegular : titleFont
         }
-
-        /// Returns the appropriate text alignment for titles and body text based on locale.
-        /// For Japan locale, returns leading alignment; otherwise returns center alignment.
         static var textAlignmentForCurrentLocale: TextAlignment {
             isJapanLocale ? .leading : .center
         }
-
-        /// Returns the appropriate horizontal alignment for VStack containers based on locale.
-        /// For Japan locale, returns leading alignment; otherwise returns center alignment.
         static var horizontalAlignmentForCurrentLocale: HorizontalAlignment {
             isJapanLocale ? .leading : .center
         }
-
-        /// Returns the appropriate alignment for frame modifiers based on locale.
-        /// For Japan locale, returns leading alignment; otherwise returns center alignment.
         static var frameAlignmentForCurrentLocale: Alignment {
             isJapanLocale ? .leading : .center
-        }
-
-        /// Checks if the current device locale is Japanese.
-        private static var isJapanLocale: Bool {
-            Locale.current.languageCode == "ja"
         }
         static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
         static let primaryActionGlassFont = FXFontStyles.Bold.headline.scaledSwiftUIFont()
