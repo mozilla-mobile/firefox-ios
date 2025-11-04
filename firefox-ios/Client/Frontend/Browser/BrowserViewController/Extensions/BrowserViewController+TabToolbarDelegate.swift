@@ -167,6 +167,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         present(translationContextHintVC, animated: true)
         UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
     }
+    
+    // Reset the CFR timer for the translation button to avoid presenting the CFR
+    // In cases, such as if translation icon is not available
+    func resetTranslationCFRTimer() {
+        translationContextHintVC.stopTimer()
+    }
 
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
