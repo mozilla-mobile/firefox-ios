@@ -2887,10 +2887,10 @@ class BrowserViewController: UIViewController,
         var actions: [[PhotonRowActions]] = []
         let useToolbarRefactorLongPressActions = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
         if useToolbarRefactorLongPressActions {
-            actions = getTabToolbarRefactorLongPressActions()
+            actions = getNavigationToolbarRefactorLongPressActions()
         } else {
-            actions.append(getTabToolbarLongPressActionsForModeSwitching())
-            actions.append(getMoreTabToolbarLongPressActions())
+            actions.append(getNavigationToolbarLongPressActionsForModeSwitching())
+            actions.append(getMoreNavigationToolbarLongPressActions())
         }
 
         let viewModel = PhotonActionSheetViewModel(

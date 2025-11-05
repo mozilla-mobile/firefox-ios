@@ -262,7 +262,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
-    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
+    func getNavigationToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
         guard let selectedTab = tabManager.selectedTab else { return [] }
         let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
         let infinity = "\u{221E}"
@@ -296,7 +296,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         return [privateBrowsingMode]
     }
 
-    func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
+    func getMoreNavigationToolbarLongPressActions() -> [PhotonRowActions] {
         let newTab = getNewTabAction()
         let newPrivateTab = getNewPrivateTabAction()
         let closeTab = getCloseTabAction()
@@ -308,7 +308,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         return [newTab, closeTab]
     }
 
-    func getTabToolbarRefactorLongPressActions() -> [[PhotonRowActions]] {
+    func getNavigationToolbarRefactorLongPressActions() -> [[PhotonRowActions]] {
         let newTab = getNewTabAction()
         let newPrivateTab = getNewPrivateTabAction()
         let closeTab = getCloseTabAction()
