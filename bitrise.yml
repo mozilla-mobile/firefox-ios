@@ -6,9 +6,6 @@ pipelines:
     workflows:
       determine_apps_affected: {}
       firefox_configure_build:
-        meta:
-          bitrise.io:
-            machine_type_id: g2.mac.2medium
         run_if:
           expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
         depends_on:
@@ -295,6 +292,9 @@ workflows:
         - channel: "#firefox-ios"
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.2medium
 
   run_firefox_ui_tests_ios26:
     before_run:
