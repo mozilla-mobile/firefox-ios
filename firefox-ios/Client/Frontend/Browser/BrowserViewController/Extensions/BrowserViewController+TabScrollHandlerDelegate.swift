@@ -42,6 +42,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         let bottomOffset = clamp(offset: originBottom + clampProgress, min: 0, max: bottomContainerHeight)
         bottomContainerConstraint?.update(offset: bottomOffset)
         bottomContainer.superview?.layoutIfNeeded()
+        dismissToolbarCFRs(with: windowUUID, state: state)
     }
 
     func showToolbar() {

@@ -168,7 +168,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
     }
 
-    func dismissToolbarCFRs(with windowUUID: WindowUUID) {
+    func dismissToolbarCFRs(with windowUUID: WindowUUID, state: TabScrollHandler.ToolbarDisplayState?) {
+        print("cyn dismissToolbarCFRs")
         guard let toolbarState = store.state.screenState(
             ToolbarState.self,
             for: .toolbar,
@@ -176,14 +177,25 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         ) else {
             return
         }
-        if toolbarState.addressToolbar.leadingPageActions[safe: 1]?.actionType != .translate {
-            resetTranslationCFRTimer()
+
+        let translationAction = toolbarState.addressToolbar.leadingPageActions.first { $0.actionType == .translate }
+        if translationAction == nil {
+            if translationContextHintVC.isPresenting {
+                translationContextHintVC.dismiss(animated: false)
+                print("cyn dismiss translation button not present, no CFR")
+            } else {
+                resetTranslationCFRTimer()
+                print("cyn reset translation button not present, no CFR")
+            }
+        } else {
+            print("cyn translation button is present, show CFR")
         }
     }
     // Reset the CFR timer for the translation button to avoid presenting the CFR
     // In cases, such as if translation icon is not available
     private func resetTranslationCFRTimer() {
         translationContextHintVC.stopTimer()
+        print("cyn reset timer triggered")
     }
 
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

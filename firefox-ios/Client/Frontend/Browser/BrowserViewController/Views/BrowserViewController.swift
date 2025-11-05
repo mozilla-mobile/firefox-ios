@@ -934,7 +934,7 @@ class BrowserViewController: UIViewController,
 
         dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
-        dismissToolbarCFRs(with: windowUUID)
+        dismissToolbarCFRs(with: windowUUID, state: nil)
     }
 
     private func showToastType(toast: ToastType) {
