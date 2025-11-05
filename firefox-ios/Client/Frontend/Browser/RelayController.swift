@@ -18,6 +18,9 @@ protocol RelayControllerProtocol {
     /// - Returns: `true` if the website is valid for Relay, after checking block/allow lists.
     @MainActor
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool
+
+    @MainActor
+    func populateEmailFieldWithRelayMask(for tab: Tab)
 }
 
 @MainActor
@@ -87,7 +90,38 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         return shouldShow
     }
 
+    func populateEmailFieldWithRelayMask(for tab: Tab) {
+        guard let webView = tab.webView else { return }
+        guard let email = generateRelayMask(for: tab.url?.baseDomain ?? "") else { return }
+
+        guard let jsonData = try? JSONEncoder().encode(email),
+              let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
+            logger.log("[RELAY] Couldn't encode string for Relay JS injection.", level: .warning, category: .autofill)
+            return
+        }
+
+        let jsFunctionCall = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
+        let closureLogger = logger
+        webView.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
+            guard error == nil else {
+                closureLogger.log("[RELAY] Javascript error: \(error!)", level: .warning, category: .autofill)
+                return
+            }
+        }
+    }
+
     // MARK: - Private Utilities
+
+    private func generateRelayMask(for websiteDomain: String) -> String? {
+        guard let client else { return nil }
+        do {
+            let relayAddress = try client.createAddress(description: "", generatedFor: "TODO", usedOn: "")
+            return relayAddress.address
+        } catch {
+            logger.log("[RELAY] Error creating Relay address", level: .warning, category: .autofill)
+        }
+        return nil
+    }
 
     private func configureRelayRSClient() {
         guard let rsService = profile.remoteSettingsService else {

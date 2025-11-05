@@ -3934,7 +3934,14 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleEmailFieldDetected() {
-        // TODO: Message Relay controller. Forthcoming. [FXIOS-13622] [FXIOS-13625]
+        // TODO: Arriving off the main thread?
+        assert(Thread.isMainThread)
+        guard RelayController.isFeatureEnabled else { return }
+        guard let tabURL = tabManager.selectedTab?.url else { return }
+
+        if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            // TODO: Show keyboard accessory view
+        }
     }
 }
 

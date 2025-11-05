@@ -7756,6 +7756,17 @@ extension String {
         comment: "Title label displayed for the cancel action in an alert when the password autofill fails and needs user interaction.")
 }
 
+// MARK: - Relay Masks
+extension String {
+    public struct RelayMask {
+        public static let UseRelayEmailMaskFromKeyboard = MZLocalizedString(
+            key: "RelayMask.UseRelayEmailMaskFromKeyboard.v146",
+            tableName: "RelayMask",
+            value: "Use email mask",
+            comment: "Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically.")
+    }
+}
+
 // MARK: - Password autofill
 extension String {
     public struct PasswordAutofill {
