@@ -41,9 +41,7 @@ class StoriesWebviewViewController: UIViewController,
         label.numberOfLines = 1
     }
 
-    private let shieldImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: StandardImageIdentifiers.Large.shieldCheckmark)?.withRenderingMode(.alwaysTemplate)
-    }
+    private let shieldImageView: UIImageView = .build()
 
     private lazy var reloadToolbarButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
@@ -164,6 +162,10 @@ class StoriesWebviewViewController: UIViewController,
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         // Update domain label when navigation finishes (in the same window)
         domainLabel.text = webView.url?.normalizedHost
+
+        shieldImageView.image = webView.hasOnlySecureContent ?
+            UIImage.templateImageNamed(StandardImageIdentifiers.Small.shieldCheckmarkFill)
+            : UIImage(named: StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
     }
 
     // MARK: - WKUIDelegate
@@ -187,6 +189,6 @@ class StoriesWebviewViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         applyNavigationBarTheme(theme: theme)
         domainLabel.textColor = theme.colors.textPrimary
-        shieldImageView.tintColor = theme.colors.iconPrimary
+        shieldImageView.tintColor = theme.colors.iconSecondary
     }
 }
