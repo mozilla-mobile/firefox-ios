@@ -59,10 +59,6 @@ final class PrivateHomepageViewController: UIViewController,
 
     private let scrollView: UIScrollView = .build()
 
-    private var headerViewModel: HomepageHeaderCellViewModel {
-        return HomepageHeaderCellViewModel(showiPadSetup: shouldUseiPadSetup())
-    }
-
     private let scrollContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.scrollContainerStackSpacing
