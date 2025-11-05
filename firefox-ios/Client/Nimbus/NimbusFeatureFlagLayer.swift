@@ -44,9 +44,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
 
-        case .hntTopSitesVisualRefresh:
-            return checkHntTopSitesVisualRefreshFeature(from: nimbus)
-
         case .homepageRedesign:
             return checkHomepageRedesignFeature(from: nimbus)
 
@@ -218,10 +215,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
-    }
-
-    private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
 
     private func checkHomepageRedesignFeature(from nimbus: FxNimbus) -> Bool {

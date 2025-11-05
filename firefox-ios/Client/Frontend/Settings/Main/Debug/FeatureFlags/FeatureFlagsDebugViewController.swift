@@ -203,13 +203,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .hntTopSitesVisualRefresh,
-                titleText: format(string: "Top Sites Visual Refresh"),
-                statusText: format(string: "Toggle to enable the top sites visual refresh")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .unifiedAds,
                 titleText: format(string: "Unified Ads"),
                 statusText: format(string: "Toggle to use unified ads API")

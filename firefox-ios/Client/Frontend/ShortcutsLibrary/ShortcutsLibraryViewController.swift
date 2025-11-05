@@ -230,8 +230,7 @@ class ShortcutsLibraryViewController: UIViewController,
     ) -> UICollectionViewCell {
         switch item {
         case .shortcut(let site):
-            let isTopSitesRefreshEnabled = featureFlags.isFeatureEnabled(.hntTopSitesVisualRefresh, checking: .buildOnly)
-            let cellType: ReusableCell.Type = isTopSitesRefreshEnabled ? TopSiteCell.self : LegacyTopSiteCell.self
+            let cellType: ReusableCell.Type = TopSiteCell.self
 
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
@@ -240,9 +239,6 @@ class ShortcutsLibraryViewController: UIViewController,
             if let topSiteCell = topSiteCell as? TopSiteCell {
                 topSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: nil)
                 return topSiteCell
-            } else if let legacyTopSiteCell = topSiteCell as? LegacyTopSiteCell {
-                legacyTopSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: nil)
-                return legacyTopSiteCell
             }
 
             return UICollectionViewCell()

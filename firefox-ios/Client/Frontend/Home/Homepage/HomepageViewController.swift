@@ -490,8 +490,7 @@ final class HomepageViewController: UIViewController,
             messageCardCell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
             return messageCardCell
         case .topSite(let site, let textColor):
-            let isTopSitesRefreshEnabled = featureFlags.isFeatureEnabled(.hntTopSitesVisualRefresh, checking: .buildOnly)
-            let cellType: ReusableCell.Type = isTopSitesRefreshEnabled ? TopSiteCell.self : LegacyTopSiteCell.self
+            let cellType: ReusableCell.Type = TopSiteCell.self
 
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
@@ -500,9 +499,6 @@ final class HomepageViewController: UIViewController,
             if let topSiteCell = topSiteCell as? TopSiteCell {
                 topSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
                 return topSiteCell
-            } else if let legacyTopSiteCell = topSiteCell as? LegacyTopSiteCell {
-                legacyTopSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
-                return legacyTopSiteCell
             }
 
             return UICollectionViewCell()

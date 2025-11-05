@@ -50,7 +50,6 @@ final class HomepageDiffableDataSource:
         static var cellTypes: [ReusableCell.Type] {
             return [
                 HomepageMessageCardCell.self,
-                LegacyTopSiteCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 SearchBarCell.self,

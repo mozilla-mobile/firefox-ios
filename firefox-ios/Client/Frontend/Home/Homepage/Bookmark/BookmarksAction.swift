@@ -31,3 +31,8 @@ enum BookmarksActionType: ActionType {
 enum BookmarksMiddlewareActionType: ActionType {
     case initialize
 }
+
+enum BookmarkAction {
+    case add
+    case remove
+}
