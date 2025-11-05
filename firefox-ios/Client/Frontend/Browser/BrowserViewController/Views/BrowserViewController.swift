@@ -1110,6 +1110,7 @@ class BrowserViewController: UIViewController,
             case .PageZoomSettingsChanged: handlePageZoomSettingsChanged(notification)
             case .RemoteTabNotificationTapped: openRecentlyClosedTabs()
             case .StopDownloads: onStopDownloads(notification)
+            case .SettingsDismissed: onSettingsDismissed()
             default: break
             }
         }
@@ -1135,9 +1136,20 @@ class BrowserViewController: UIViewController,
                 .PageZoomLevelUpdated,
                 .PageZoomSettingsChanged,
                 .RemoteTabNotificationTapped,
-                .StopDownloads
+                .StopDownloads,
+                .SettingsDismissed
             ]
         )
+    }
+
+    private func onSettingsDismissed() {
+        // FXIOS-13959: Changing address toolbar position from settings prevents content interaction homepage/webpage
+        // This bug is only happening in iOS 15 + 16
+        // Trigger a layout refresh to correctly position mask for translucent toolbars
+        if #unavailable(iOS 17) {
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
     }
 
     private func onStopDownloads(_ notification: Notification) {

@@ -498,7 +498,7 @@ class BrowserCoordinator: BaseCoordinator,
             return // route is handled with existing child coordinator
         }
         windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
-        let navigationController = ThemedNavigationController(windowUUID: windowUUID)
+        let navigationController = SettingsNavigationController(windowUUID: windowUUID)
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
         navigationController.modalPresentationStyle = modalPresentationStyle
@@ -558,14 +558,6 @@ class BrowserCoordinator: BaseCoordinator,
     func didFinishSettings(from coordinator: SettingsCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
-
-        // FXIOS-13959: Changing address toolbar position from settings prevents content interaction homepage/webpage
-        // This bug is only happening in iOS 15 + 16
-        // Trigger a layout refresh to correctly position mask for translucent toolbars
-        if #unavailable(iOS 17) {
-            browserViewController.view.setNeedsLayout()
-            browserViewController.view.layoutIfNeeded()
-        }
     }
 
     func openDebugTestTabs(count: Int) {
