@@ -294,7 +294,7 @@ workflows:
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     meta:
       bitrise.io:
-        machine_type_id: g2.mac.2medium
+        machine_type_id: g2.mac.medium
 
   run_firefox_ui_tests_ios26:
     before_run:
