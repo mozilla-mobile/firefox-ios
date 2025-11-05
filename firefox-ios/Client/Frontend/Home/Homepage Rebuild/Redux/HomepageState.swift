@@ -287,7 +287,7 @@ struct HomepageState: ScreenState, Equatable {
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: state.headerState,
-            messageState: state.messageState,
+            messageState: messageState,
             topSitesState: topSitesState,
             searchState: searchState,
             jumpBackInState: jumpBackInState,
