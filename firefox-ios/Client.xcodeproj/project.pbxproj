@@ -1517,6 +1517,11 @@
 		C24B31292E86B8470049134A /* GenericSelectableItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */; };
 		C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */; };
 		C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */; };
+		C27EF6132EBA28E100BED719 /* LanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */; };
+		C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */; };
+		C27EF61A2EBA364E00BED719 /* LanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */; };
+		C27EF61C2EBA38AA00BED719 /* WebViewLanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF61B2EBA38A100BED719 /* WebViewLanguageSampleSource.swift */; };
+		C27EF61F2EBA395A00BED719 /* MockLanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF61E2EBA395000BED719 /* MockLanguageSampleSource.swift */; };
 		C283EECC2E4D2C02008EB540 /* ASSummarizerRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */; };
 		C283EECE2E4D4DC7008EB540 /* RemoteSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */; };
 		C283EED02E4D4FE7008EB540 /* SummarizerConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */; };
@@ -9779,6 +9784,11 @@
 		C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinator.swift; sourceTree = "<group>"; };
 		C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinatorTests.swift; sourceTree = "<group>"; };
 		C26C4D1F8CFB13730BA74DF5 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/FindInPage.strings; sourceTree = "<group>"; };
+		C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetector.swift; sourceTree = "<group>"; };
+		C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetectorTests.swift; sourceTree = "<group>"; };
+		C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSampleSource.swift; sourceTree = "<group>"; };
+		C27EF61B2EBA38A100BED719 /* WebViewLanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewLanguageSampleSource.swift; sourceTree = "<group>"; };
+		C27EF61E2EBA395000BED719 /* MockLanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLanguageSampleSource.swift; sourceTree = "<group>"; };
 		C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSummarizerRemoteConfig.swift; sourceTree = "<group>"; };
 		C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSummarizerConfigSource.swift; sourceTree = "<group>"; };
 		C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManager.swift; sourceTree = "<group>"; };
@@ -14137,6 +14147,7 @@
 		AA5E81452EB12BAB00919E60 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
+				C27EF6182EBA363800BED719 /* LanguageDetector */,
 				AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */,
 				AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */,
 			);
@@ -14154,6 +14165,8 @@
 		AAD9D6492EB25B2700BFECAF /* TranslationsTests */ = {
 			isa = PBXGroup;
 			children = (
+				C27EF61E2EBA395000BED719 /* MockLanguageSampleSource.swift */,
+				C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */,
 				AAD9D64A2EB25B3200BFECAF /* TranslationsMiddlewareTests.swift */,
 			);
 			path = TranslationsTests;
@@ -14332,6 +14345,16 @@
 				6669B5E1211418A200CA117B /* WebsiteDataSearchResultsViewController.swift */,
 			);
 			path = WebsiteDataManagement;
+			sourceTree = "<group>";
+		};
+		C27EF6182EBA363800BED719 /* LanguageDetector */ = {
+			isa = PBXGroup;
+			children = (
+				C27EF61B2EBA38A100BED719 /* WebViewLanguageSampleSource.swift */,
+				C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */,
+				C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */,
+			);
+			path = LanguageDetector;
 			sourceTree = "<group>";
 		};
 		C29B64EC2AD937C200F3244B /* QRCode */ = {
@@ -18563,6 +18586,7 @@
 				E19B38B328A42D5E00D8C541 /* WallpaperCollectionViewCell.swift in Sources */,
 				C7FA9E1E2E4BD4D1004F2CA1 /* AddShortcutsSetting.swift in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
+				C27EF61C2EBA38AA00BED719 /* WebViewLanguageSampleSource.swift in Sources */,
 				8A3EF8092A2FD02B00796E3A /* ExperimentsSettings.swift in Sources */,
 				BA4BB99E2D7FB38B006BD137 /* ThemeSelectionView.swift in Sources */,
 				C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */,
@@ -18976,6 +19000,7 @@
 				2137785F297F3B1B00D01309 /* DownloadsPanelViewModel.swift in Sources */,
 				EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */,
 				8A3EF7F02A2FCF3100796E3A /* HiddenSettings.swift in Sources */,
+				C27EF61A2EBA364E00BED719 /* LanguageSampleSource.swift in Sources */,
 				1D3822E92BAB99250046BC5E /* UIView+ThemeUUIDIdentifiable.swift in Sources */,
 				B2FEA6912B4661BE0058E616 /* AddressAutofillToggle.swift in Sources */,
 				B2FEA68F2B460D9E0058E616 /* AddressAutofillSettingsViewModel.swift in Sources */,
@@ -19104,6 +19129,7 @@
 				D59431ED25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */,
 				213778632980448C00D01309 /* DownloadFileFetcher.swift in Sources */,
 				F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */,
+				C27EF6132EBA28E100BED719 /* LanguageDetector.swift in Sources */,
 				8AF6D4E12A856B4500B0474B /* ContileNetworking.swift in Sources */,
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
 				8AC6F2262D6E263500D10A9F /* ExperimentRemoteTabsEmptyView.swift in Sources */,
@@ -19432,6 +19458,7 @@
 				ED7A08E12CF679CE0035EC8F /* MockShareTab.swift in Sources */,
 				1D4D79462BF2F4E7007C6796 /* SimpleTab.swift in Sources */,
 				21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */,
+				C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */,
 				81DAB2F92C8901AC00F4BE98 /* MainMenuStateTests.swift in Sources */,
 				8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */,
 				8AAEBA0B2BF53AF6000C02B5 /* MicrosurveyStateTests.swift in Sources */,
@@ -19664,6 +19691,7 @@
 				A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */,
 				8A635ECD289437A8006378BA /* SyncedTabCellTests.swift in Sources */,
 				8A01FE402DF0CE4E002C483B /* MockDateProvider.swift in Sources */,
+				C27EF61F2EBA395A00BED719 /* MockLanguageSampleSource.swift in Sources */,
 				8A97E6EF2C584C4900F94793 /* AddressLocaleFeatureValidatorTests.swift in Sources */,
 				C714D7B62E4673A300FC02E6 /* ShortcutsLibraryDiffableDataSourceTests.swift in Sources */,
 				C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */,
