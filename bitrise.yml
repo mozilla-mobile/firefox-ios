@@ -147,6 +147,7 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - restore-spm-cache@2.1.1:
         is_always_run: true
+    - activate-build-cache-for-xcode@0: {}
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
@@ -2446,5 +2447,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-26.0.x
+    stack: osx-xcode-26.0.x-edge
     machine_type_id: g2.mac.4large
