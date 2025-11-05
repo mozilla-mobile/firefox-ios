@@ -8,53 +8,7 @@ import Common
 class PhotonActionSheetTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
     // Smoketest
-    func testPinToShortcuts_topSitesVisualRefreshFlagDisabled() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hnt-top-sites-visual-refresh-feature")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
-        waitUntilPageLoad()
-        // Open Page Action Menu Sheet and Pin the site
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenuMore)
-        navigator.performAction(Action.PinToTopSitesPAM)
-
-        // Navigate to topsites to verify that the site has been pinned
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        if iPad() {
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
-        }
-
-        // Verify that the site is pinned to top
-        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        let cell = itemCell.staticTexts["Example Domain"]
-        mozWaitForElementToExist(cell)
-        if #available(iOS 17, *) {
-            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
-        } else {
-            // No identifier is available for iOS 17 amd below
-            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images.element(boundBy: 1))
-        }
-
-        // Remove pin
-        cell.press(forDuration: 2)
-        app.tables.cells.buttons[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
-        // Check that it has been unpinned
-        if #available(iOS 17, *) {
-            mozWaitForElementToNotExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
-        } else {
-            mozWaitForElementToNotExist(app.links["Example Domain"].images.element(boundBy: 1))
-        }
-
-        mozWaitForElementToNotExist(cell)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306849
-    // Smoketest
-    func testPinToShortcuts_testPinToShortcuts_topSitesVisualRefreshFlagEnabled() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
+    func testPinToShortcuts() {
         app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -96,8 +50,7 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(cell)
     }
 
-    func testPinToShortcuts_andThenRemovingShortcuts_topSitesVisualRefreshFlagEnabled() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
+    func testPinToShortcuts_andThenRemovingShortcuts() {
         app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
