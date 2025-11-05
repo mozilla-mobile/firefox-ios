@@ -62,7 +62,7 @@ class ButtonToast: Toast {
     // Pass themeManager to call on init
     init(viewModel: ButtonToastViewModel,
          theme: Theme?,
-         completion: ((_ buttonPressed: Bool) -> Void)? = nil) {
+         completion: (@MainActor (_ buttonPressed: Bool) -> Void)? = nil) {
         super.init(frame: .zero)
 
         self.completionHandler = completion
