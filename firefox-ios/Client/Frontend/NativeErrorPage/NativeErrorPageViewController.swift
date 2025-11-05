@@ -237,12 +237,6 @@ final class NativeErrorPageViewController: UIViewController,
         showViewForCurrentOrientation()
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        adjustConstraints()
-        showViewForCurrentOrientation()
-    }
-
     private func configureUI() {
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .NativeErrorPage.ButtonLabel,
