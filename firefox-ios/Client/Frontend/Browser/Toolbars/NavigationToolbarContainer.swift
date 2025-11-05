@@ -63,6 +63,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
         })
     }
 
+    // Laurie - This is never called?
     func unsubscribeFromRedux() {
         store.unsubscribe(self)
     }
