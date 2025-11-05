@@ -209,6 +209,10 @@ class CustomSearchViewController: SettingsTableViewController {
             target: self,
             action: #selector(self.addCustomSearchEngine)
         )
+        if #available(iOS 26.0, *) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            self.navigationItem.rightBarButtonItem?.tintColor = theme.colors.textAccent
+        }
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
 
         self.navigationItem.rightBarButtonItem?.isEnabled = false

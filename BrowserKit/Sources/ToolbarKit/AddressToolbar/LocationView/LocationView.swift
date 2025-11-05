@@ -21,6 +21,7 @@ final class LocationView: UIView,
         static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.03
         static let bottomAddressBarYoffset: CGFloat = -28
+        static let bottomAddressBarYoffsetForDefaultScale: CGFloat = -10
         static let topAddressBarYoffset: CGFloat = 26
         static let smallScale: CGFloat = 0.7
         static let identityResetAnimationDuration: TimeInterval = 0.2
@@ -159,7 +160,11 @@ final class LocationView: UIView,
             delegate: delegate
         )
 
-        applyToolbarAlphaIfNeeded(alpha: uxConfig.scrollAlpha, barPosition: addressBarPosition)
+        applyToolbarAlphaIfNeeded(
+            alpha: uxConfig.scrollAlpha,
+            barPosition: addressBarPosition,
+            isKeyboardVisible: config.shouldShowKeyboard
+        )
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
@@ -395,10 +400,14 @@ final class LocationView: UIView,
     }
 
     // MARK: - LocationView Scaling
-    private func shrinkLocationView(barPosition: AddressToolbarPosition) {
+    private func shrinkLocationView(barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? UX.bottomAddressBarYoffset : UX.topAddressBarYoffset
-        transform = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
+        let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
+        transform = isKeyboardVisible ? CGAffineTransform(
+            translationX: 0,
+            y: UX.bottomAddressBarYoffsetForDefaultScale
+        ) : scaledTransformation
         urlTextField.isUserInteractionEnabled = false
     }
 
@@ -416,11 +425,11 @@ final class LocationView: UIView,
         )
     }
 
-    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
+    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
         if scrollAlpha.isZero {
-            shrinkLocationView(barPosition: barPosition)
+            shrinkLocationView(barPosition: barPosition, isKeyboardVisible: isKeyboardVisible)
         } else {
             restoreLocationViewSize()
         }
