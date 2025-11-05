@@ -71,20 +71,20 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "ios-new-onboarding",
-      "id": "ios-new-onboarding",
+      "slug": "japan-onboarding",
+      "id": "japan-onboarding",
       "arguments": {},
       "application": "org.mozilla.ios.FirefoxBeta",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.FirefoxBeta",
       "channel": "beta",
-      "userFacingName": "iOS New Onboarding",
-      "userFacingDescription": "New onboarding",
+      "userFacingName": "Japan Onboarding",
+      "userFacingDescription": "Japan Onboarding",
       "isEnrollmentPaused": false,
       "isRollout": true,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-onboarding-framework-feature-beta-no_targeting-rollout-1",
+        "namespace": "ios-onboarding-framework-feature-beta-no_targeting-rollout-2",
         "start": 0,
         "count": 10000,
         "total": 10000
@@ -108,14 +108,15 @@
               "featureId": "onboarding-framework-feature",
               "enabled": true,
               "value": {
-                "enableModernUi": true
+                "enable-modern-ui": true,
+                "should-use-japan-configuration": true
               }
             }
           ]
         }
       ],
-      "targeting": "(app_version|versionCompare('142.1.0') >= 0)",
-      "startDate": "2025-08-14",
+      "targeting": "(app_version|versionCompare('145.1.0') >= 0) && (language in ['ja'])",
+      "startDate": "2025-11-05",
       "enrollmentEndDate": null,
       "endDate": null,
       "proposedDuration": 28,
@@ -124,7 +125,7 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2025-08-14T20:22:54.795561Z",
+      "publishedDate": "2025-11-05T16:32:01.980436Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": "",
       "firefoxLabsDescription": "",
