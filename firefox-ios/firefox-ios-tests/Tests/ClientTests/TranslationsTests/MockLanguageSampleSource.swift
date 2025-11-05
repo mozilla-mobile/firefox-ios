@@ -6,7 +6,7 @@ import Foundation
 @testable import Client
 
 /// Test helper that simulates JS evaluation for language sample extraction.
-final class MockLanguageSampleSource: LanguageSampleSource {
+final class MockLanguageSampleSource: LanguageSampleSource, @unchecked Sendable {
     var mockResult: Any?
     var mockError: Error?
 

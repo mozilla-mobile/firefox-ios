@@ -8,18 +8,31 @@ import XCTest
 @testable import Client
 
 final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility {
-    var mockStore: MockStoreForMiddleware<AppState>!
-    var mockProfile: MockProfile!
+    private var mockStore: MockStoreForMiddleware<AppState>!
+    private var mockProfile: MockProfile!
+    private var mockWindowManager: MockWindowManager!
+    private var mockTabManager: MockTabManager!
+
     override func setUp() {
         super.setUp()
         mockProfile = MockProfile()
-        DependencyHelperMock().bootstrapDependencies()
+        mockTabManager = MockTabManager()
+        mockWindowManager = MockWindowManager(
+            wrappedManager: WindowManagerImplementation(),
+            tabManager: mockTabManager
+        )
+        DependencyHelperMock().bootstrapDependencies(
+            injectedWindowManager: mockWindowManager,
+            injectedTabManager: mockTabManager
+        )
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setupStore()
     }
 
     override func tearDown() {
         mockProfile = nil
+        mockTabManager = nil
+        mockWindowManager = nil
         DependencyHelperMock().reset()
         resetStore()
         super.tearDown()
@@ -51,7 +64,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
-    func test_urlDidChangeAction_withTranslationConfiguration_doesDispatchAction() throws {
+    func test_urlDidChangeAction_withoutWebView_doesDispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject()
         let action = ToolbarAction(
@@ -62,17 +75,47 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         subject.translationsProvider(mockStore.state, action)
 
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_doesDispatchAction() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupWebViewForTabManager()
+        let subject = createSubject()
+        let action = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "expect receivedTranslationLanguage action to be fired")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
 
-        XCTAssertEqual(action.translationConfiguration?.state, .inactive)
+        XCTAssertEqual(actionCalled.translationConfiguration?.state, .inactive)
         XCTAssertEqual(actionType, ToolbarActionType.receivedTranslationLanguage)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
     }
 
     // MARK: - Helpers
     private func createSubject() -> TranslationsMiddleware {
-        return TranslationsMiddleware()
+        let mockLanguageDetector = MockLanguageDetector()
+        return TranslationsMiddleware(languageDetector: mockLanguageDetector)
+    }
+
+    private func setupWebViewForTabManager() {
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        mockTabManager.selectedTab = tab
     }
 
     private func setTranslationsFeatureEnabled(enabled: Bool) {

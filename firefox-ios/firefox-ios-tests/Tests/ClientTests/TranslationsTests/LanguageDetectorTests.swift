@@ -9,61 +9,80 @@ import XCTest
 final class LanguageDetectorTests: XCTestCase {
     var mockLanguageSampleSource = MockLanguageSampleSource()
 
-    func testExtractSampleReturnsTextSample() async throws {
+    func test_detectLanguage_withFrench_returnsProperLanguageCode() async throws {
         mockLanguageSampleSource.mockResult = "Bonjour le monde"
         let subject = createSubject()
-        let result = try await subject.extractSample(from: mockLanguageSampleSource)
-        XCTAssertEqual(result, "Bonjour le monde")
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "fr")
     }
 
-    func testExtractSampleReturnsNilForEmptyString() async throws {
+    func test_detectLanguage_withEnglish_returnsProperLanguageCode() async throws {
+        mockLanguageSampleSource.mockResult = "Hello world"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "en")
+    }
+
+    func test_detectLanguage_withSpanish_returnsProperLanguageCode() async throws {
+        mockLanguageSampleSource.mockResult = "Hola mundo"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "es")
+    }
+
+    func test_detectLanguage_withJapanese_returnsProperLanguageCode() async throws {
+        mockLanguageSampleSource.mockResult = "こんにちは世界"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "ja")
+    }
+
+    func test_detectLanguage_withKorean_returnsProperLanguageCode() async throws {
+        mockLanguageSampleSource.mockResult = "안녕하세요 세계"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "ko")
+    }
+
+    func test_detectLanguage_withEmptyString_returnsNil() async throws {
         mockLanguageSampleSource.mockResult = ""
         let subject = createSubject()
-        let result = try await subject.extractSample(from: mockLanguageSampleSource)
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
         XCTAssertNil(result)
     }
 
-    func testExtractSampleReturnsNilForNonString() async throws {
+    func test_detectLanguage_withWhitespaces_returnsNil() async throws {
+        mockLanguageSampleSource.mockResult = " \n\t "
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertNil(result)
+    }
+
+    func test_detectLanguage_returnsNilForNonString() async throws {
         mockLanguageSampleSource.mockResult = 42
         let subject = createSubject()
-        let result = try await subject.extractSample(from: mockLanguageSampleSource)
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
         XCTAssertNil(result)
     }
 
-    func testExtractSamplePropagatesError() async {
+    func test_detectLanguage_propagatesError() async {
         enum FakeError: Error, Equatable { case foo }
         mockLanguageSampleSource.mockError = FakeError.foo
         let subject = createSubject()
 
         do {
-            _ = try await subject.extractSample(from: mockLanguageSampleSource)
+            _ = try await subject.detectLanguage(from: mockLanguageSampleSource)
             XCTFail("expected error")
         } catch {
             XCTAssertEqual(error as? FakeError, .foo)
         }
     }
 
-    func testDetectLanguageReturnsLanguageCode() {
+    func test_detectLanguage_prefersDominantLanguage() async throws {
         let subject = createSubject()
-
-        XCTAssertEqual(subject.detectLanguage(of: "Hello world"), "en")
-        XCTAssertEqual(subject.detectLanguage(of: "Bonjour le monde"), "fr")
-        XCTAssertEqual(subject.detectLanguage(of: "Hola mundo"), "es")
-        XCTAssertEqual(subject.detectLanguage(of: "こんにちは世界"), "ja")
-        XCTAssertEqual(subject.detectLanguage(of: "안녕하세요 세계"), "ko")
-    }
-
-    func testDetectLanguageReturnsNilForEmptyOrWhitespace() {
-        let subject = createSubject()
-
-        XCTAssertNil(subject.detectLanguage(of: ""))
-        XCTAssertNil(subject.detectLanguage(of: " \n\t "))
-    }
-
-    func testDetectLanguagePrefersDominantLanguage() {
-        let subject = createSubject()
-        let text = "Hello, bonjour, hello, hello"
-        XCTAssertEqual(subject.detectLanguage(of: text), "en")
+        mockLanguageSampleSource.mockResult = "Hello, bonjour, hello, hello"
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "en")
     }
 
     private func createSubject() -> LanguageDetector {
