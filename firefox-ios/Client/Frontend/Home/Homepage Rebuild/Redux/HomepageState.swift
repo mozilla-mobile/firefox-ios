@@ -276,6 +276,7 @@ struct HomepageState: ScreenState, Equatable {
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
+        let messageState = MessageCardState.defaultState(from: state.messageState)
         let topSitesState = TopSitesSectionState.defaultState(from: state.topSitesState)
         let searchState = SearchBarState.defaultState(from: state.searchState)
         let jumpBackInState = JumpBackInSectionState.defaultState(from: state.jumpBackInState)
@@ -286,7 +287,7 @@ struct HomepageState: ScreenState, Equatable {
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: state.headerState,
-            messageState: state.messageState,
+            messageState: messageState,
             topSitesState: topSitesState,
             searchState: searchState,
             jumpBackInState: jumpBackInState,
