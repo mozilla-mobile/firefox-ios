@@ -138,7 +138,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
-                store.dispatchLegacy(
+                store.dispatch(
                     JumpBackInAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,
@@ -155,7 +155,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
-                store.dispatchLegacy(
+                store.dispatch(
                     BookmarksAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,
@@ -175,7 +175,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Stories
             ) { value in
-                store.dispatchLegacy(
+                store.dispatch(
                     MerinoAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,
