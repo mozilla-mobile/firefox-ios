@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-class SensitiveViewController: UIViewController {
+class SensitiveViewController: UIViewController, Notifiable {
     private enum VisibilityState {
         case active
         case inactive
@@ -15,17 +15,37 @@ class SensitiveViewController: UIViewController {
     private var backgroundBlurView: UIVisualEffectView?
     private var isAuthenticated = false
     private var visibilityState: VisibilityState = .active
-    private var sceneWillEnterForegroundObserver: NSObjectProtocol?
-    private var didEnterBackgroundObserver: NSObjectProtocol?
-    private var willResignActiveObserver: NSObjectProtocol?
-    private var didBecomeActiveObserver: NSObjectProtocol?
+    private let notificationCenter: NotificationProtocol
+
+    init(notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.notificationCenter = notificationCenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Lifecycle methods
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        sceneWillEnterForegroundObserver = observe(UIScene.willEnterForegroundNotification) { [weak self] notification in
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIScene.willEnterForegroundNotification,
+                        UIApplication.didEnterBackgroundNotification,
+                        UIApplication.willResignActiveNotification,
+                        UIApplication.didBecomeActiveNotification]
+        )
+    }
+
+    // MARK: - Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIScene.willEnterForegroundNotification:
             guard let notificationScene = notification.object as? UIWindowScene else { return }
             ensureMainThread { [weak self] in
                 guard let self,
@@ -34,18 +54,14 @@ class SensitiveViewController: UIViewController {
                 self.visibilityState = .active
                 self.handleCheckAuthentication()
             }
-        }
-
-        didEnterBackgroundObserver = observe(UIApplication.didEnterBackgroundNotification) { [weak self] notification in
+        case UIApplication.didEnterBackgroundNotification:
             ensureMainThread { [weak self] in
                 guard let self else { return }
                 self.visibilityState = .backgrounded
                 self.isAuthenticated = false
                 self.installBlurredOverlay()
             }
-        }
-
-        willResignActiveObserver = observe(UIApplication.willResignActiveNotification) { [weak self] notification in
+        case UIApplication.willResignActiveNotification:
             ensureMainThread { [weak self] in
                 guard let self else { return }
                 if self.visibilityState == .active {
@@ -53,9 +69,7 @@ class SensitiveViewController: UIViewController {
                     self.installBlurredOverlay()
                 }
             }
-        }
-
-        didBecomeActiveObserver = observe(UIApplication.didBecomeActiveNotification) { [weak self] notification in
+        case UIApplication.didBecomeActiveNotification:
             ensureMainThread { [weak self] in
                 guard let self else { return }
                 if self.visibilityState == .inactive {
@@ -63,26 +77,9 @@ class SensitiveViewController: UIViewController {
                     self.removedBlurredOverlay()
                 }
             }
+
+        default: break
         }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        [sceneWillEnterForegroundObserver,
-         didEnterBackgroundObserver,
-         didBecomeActiveObserver,
-         willResignActiveObserver].forEach {
-            guard let observer = $0 else { return }
-            NotificationCenter.default.removeObserver(observer)
-        }
-    }
-
-    // MARK: - Utility func
-
-    private func observe(_ notification: Notification.Name,
-                         with closure: @escaping @Sendable (Notification) -> Void) -> NSObjectProtocol? {
-        return NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main, using: closure)
     }
 
     private func handleCheckAuthentication() {
