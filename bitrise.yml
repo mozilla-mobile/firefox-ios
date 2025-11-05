@@ -6,6 +6,7 @@ pipelines:
     workflows:
       determine_apps_affected: {}
       firefox_configure_build:
+        machine_type_id: g2.mac.2medium
         run_if:
           expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
         depends_on:
