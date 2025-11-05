@@ -163,6 +163,7 @@
         "SearchTests\/testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn()",
         "SearchTests\/testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn()",
         "SearchTests\/testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn()",
+        "SearchTests\/testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn()",
         "SearchTests\/testTrendingSearches_trendingSearchesExperimentOn()",
         "SettingsTests\/testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff()",
         "SettingsTests\/testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn()",

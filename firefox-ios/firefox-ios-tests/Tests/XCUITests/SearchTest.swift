@@ -708,4 +708,28 @@ class SearchTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending on Google"])
     }
+
+    func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+        let testString = "example"
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tapAndTypeText(testString)
+
+        // Search Term suggestions appears
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])
+        app.typeText(XCUIKeyboardKey.return.rawValue)
+
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+        app.buttons["Clear text"].firstMatch.waitAndTap()
+
+        // Trending Search appears
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Trending on Google"])
+        app.tables["SiteTable"].cells.firstMatch.waitAndTap()
+        waitUntilPageLoad()
+    }
 }
