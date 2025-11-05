@@ -31,8 +31,8 @@ final class TabCell: UICollectionViewCell,
                                                                   trailing: 12)
 
         // Using the same sizes for fallback favicon as the top sites on the homepage
-        static let imageBackgroundSize = TopSiteItemCell.UX.imageBackgroundSize
-        static let topSiteIconSize = TopSiteItemCell.UX.iconSize
+        static let topSiteIconSize = CGSize(width: 36, height: 36)
+        static let imageBackgroundSize = CGSize(width: 60, height: 60)
     }
     // MARK: - Properties
 

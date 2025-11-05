@@ -232,20 +232,17 @@ private extension WallpaperSettingsViewModel {
                                          extras: self.telemetryMetadata(for: wallpaper, in: collection))
 
             // TODO: FXIOS-11486 Move interface for setting wallpaper into Wallpaper middleware
-            if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-                let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
-                // We are passing the wallpaperConfiguration here even though right now it is not being used
-                // by the middleware that is responding to this action. It will be as soon as we move the wallpaper
-                // manager logic to the middlware.
-                let windowUUID = self.windowUUID
-                ensureMainThread {
-                    let action = WallpaperAction(
-                        wallpaperConfiguration: wallpaperConfig,
-                        windowUUID: windowUUID,
-                        actionType: WallpaperActionType.wallpaperSelected
-                    )
-                    store.dispatch(action)
-                }
+            let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
+            // We are passing the wallpaperConfiguration here even though right now it is not being used
+            // by the middleware that is responding to this action. It will be as soon as we move the wallpaper
+            // manager logic to the middlware.
+            ensureMainThread {
+                let action = WallpaperAction(
+                    wallpaperConfiguration: wallpaperConfig,
+                    windowUUID: self.windowUUID,
+                    actionType: WallpaperActionType.wallpaperSelected
+                )
+                store.dispatch(action)
             }
             completion(result)
         }

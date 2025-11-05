@@ -65,9 +65,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
             return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
 
-        case .homepageRebuild:
-            return checkHomepageFeature(from: nimbus)
-
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
@@ -261,11 +258,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         default:
             return false
         }
-    }
-
-    private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.homepageRebuildFeature.value()
-        return config.enabled
     }
 
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {

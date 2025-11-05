@@ -1711,11 +1711,7 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
-        } else {
-            statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
-        }
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
     }
 
     /// Embed a ContentContainable inside the content container
@@ -1728,17 +1724,12 @@ class BrowserViewController: UIViewController,
         viewController.willMove(toParent: self)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
-        } else {
-            statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
-        }
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
         // for the first two layers of views other than web view and legacy homepage
         if toolbarHelper.shouldBlur() &&
-            !viewController.isKind(of: WebviewViewController.self) &&
-            !viewController.isKind(of: LegacyHomepageViewController.self) {
+            !viewController.isKind(of: WebviewViewController.self) {
             viewController.view.clipsToBounds = false
             viewController.view.subviews.forEach { $0.clipsToBounds = false }
         } else {
@@ -1762,23 +1753,12 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            browserDelegate?.showHomepage(
-                overlayManager: overlayManager,
-                isZeroSearch: inline,
-                statusBarScrollDelegate: statusBarOverlay,
-                toastContainer: contentContainer
-            )
-        } else {
-            browserDelegate?.showLegacyHomepage(
-                inline: inline,
-                toastContainer: contentContainer,
-                homepanelDelegate: self,
-                libraryPanelDelegate: self,
-                statusBarScrollDelegate: statusBarOverlay,
-                overlayManager: overlayManager
-            )
-        }
+        browserDelegate?.showHomepage(
+            overlayManager: overlayManager,
+            isZeroSearch: inline,
+            statusBarScrollDelegate: statusBarOverlay,
+            toastContainer: contentContainer
+        )
 
         if isSwipingTabsEnabled {
             // show the homepage in case it was not visible, as it is needed for screenshot purpose.
@@ -4241,6 +4221,7 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 }
 
+// Laurie
 // MARK: HomePanelDelegate
 extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
@@ -4492,11 +4473,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
-            } else {
-                browserDelegate?.show(webView: webView)
-            }
+            updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
 
             if selectedTab.isFxHomeTab {
                 // Added as initial fix for WKWebView memory leak. Needs further investigation.

@@ -26,9 +26,6 @@ public enum LoggerCategory: String {
     /// Related to experiments, nimbus and the messaging framework.
     case experiments
 
-    /// Related to old homepage UI and it's data management. To be replaced by the homepage rebuild project.
-    case legacyHomepage
-
     /// Related to new homepage UI and it's data management for the homepage rebuild project.
     case homepage
 

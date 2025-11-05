@@ -217,7 +217,7 @@ final class PrivateHomepageViewController: UIViewController,
         guard let privateBrowsingURL = SupportUtils.URLForPrivateBrowsingLearnMore else {
             self.logger.log("Failed to retrieve URL from SupportUtils.URLForPrivateBrowsingLearnMore",
                             level: .debug,
-                            category: .legacyHomepage)
+                            category: .homepage)
             return
         }
         parentCoordinator?.homePanelDidRequestToOpenInNewTab(
