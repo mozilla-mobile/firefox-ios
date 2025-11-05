@@ -228,7 +228,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     let prefKey: String?
     let prefs: Prefs?
 
-    var settingDidChange: ((Bool) -> Void)?
+    var settingDidChange: (@MainActor (Bool) -> Void)?
     private let defaultValue: Bool?
     private let statusText: NSAttributedString?
     private let featureFlagName: NimbusFeatureFlagID?
@@ -240,7 +240,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         attributedTitleText: NSAttributedString,
         attributedStatusText: NSAttributedString? = nil,
         featureFlagName: NimbusFeatureFlagID? = nil,
-        settingDidChange: ((Bool) -> Void)? = nil
+        settingDidChange: (@MainActor (Bool) -> Void)? = nil
     ) {
         self.prefs = prefs
         self.prefKey = prefKey
@@ -258,7 +258,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         defaultValue: Bool,
         titleText: String,
         statusText: String? = nil,
-        settingDidChange: ((Bool) -> Void)? = nil
+        settingDidChange: (@MainActor (Bool) -> Void)? = nil
     ) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
@@ -285,7 +285,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         defaultValue: Bool = false,
         featureFlagName: NimbusFeatureFlagID? = nil,
         enabled: Bool = true,
-        settingDidChange: @escaping (Bool) -> Void
+        settingDidChange: @escaping @MainActor (Bool) -> Void
     ) {
         self.statusText = description.map(NSAttributedString.init(string:))
         self.prefs = prefs
@@ -300,7 +300,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         with featureFlagID: NimbusFeatureFlagID,
         titleText: NSAttributedString,
         statusText: NSAttributedString? = nil,
-        settingDidChange: ((Bool) -> Void)? = nil
+        settingDidChange: (@MainActor (Bool) -> Void)? = nil
     ) {
         self.init(
             prefs: nil,
@@ -464,7 +464,7 @@ class StringPrefSetting: StringSetting {
         placeholder: String,
         accessibilityIdentifier: String,
         settingIsValid isValueValid: ((String?) -> Bool)? = nil,
-        settingDidChange: ((String?) -> Void)? = nil
+        settingDidChange: (@MainActor (String?) -> Void)? = nil
     ) {
         super.init(defaultValue: defaultValue,
                    placeholder: placeholder,
@@ -485,7 +485,7 @@ class WebPageSetting: StringPrefSetting {
         placeholder: String,
         accessibilityIdentifier: String,
         isChecked: @escaping () -> Bool = { return false },
-        settingDidChange: ((String?) -> Void)? = nil
+        settingDidChange: (@MainActor (String?) -> Void)? = nil
     ) {
         self.isChecked = isChecked
         super.init(prefs: prefs,
@@ -539,7 +539,7 @@ class StringSetting: Setting, UITextFieldDelegate {
 
     private let defaultValue: String?
     private let placeholder: String
-    private let settingDidChange: ((String?) -> Void)?
+    private let settingDidChange: (@MainActor (String?) -> Void)?
     private let settingIsValid: ((String?) -> Bool)?
     private let persister: SettingValuePersister
 
@@ -551,7 +551,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         accessibilityIdentifier: String,
         persister: SettingValuePersister,
         settingIsValid isValueValid: ((String?) -> Bool)? = nil,
-        settingDidChange: ((String?) -> Void)? = nil
+        settingDidChange: (@MainActor (String?) -> Void)? = nil
     ) {
         self.defaultValue = defaultValue
         self.settingDidChange = settingDidChange
