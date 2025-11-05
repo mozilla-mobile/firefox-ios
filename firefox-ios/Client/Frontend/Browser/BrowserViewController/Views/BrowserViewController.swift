@@ -1146,6 +1146,7 @@ class BrowserViewController: UIViewController,
         // FXIOS-13959: Changing address toolbar position from settings prevents content interaction homepage/webpage
         // This bug is only happening in iOS 15 + 16
         // Trigger a layout refresh to correctly position mask for translucent toolbars
+        // Remove when support for iOS 15 + 16 is dropped: FXIOS-14024
         if #unavailable(iOS 17) {
             view.setNeedsLayout()
             view.layoutIfNeeded()
