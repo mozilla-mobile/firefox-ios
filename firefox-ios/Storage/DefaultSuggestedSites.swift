@@ -149,21 +149,21 @@ open class DefaultSuggestedSites {
                 )
             ),
             Site.createSuggestedSite(
-                url: "https://ameblo.jp/",
-                title: "Amebaブログ",
-                trackingId: 801,
-                faviconResource: .bundleAsset(
-                    name: "ameblo",
-                    forRemoteResource: URL(string: "https://stat100.ameba.jp/common_style/img/sp/apple-touch-icon.png")!
-                )
-            ),
-            Site.createSuggestedSite(
                 url: "https://m.yahoo.co.jp/",
                 title: "Yahoo! JAPAN",
                 trackingId: 802,
                 faviconResource: .bundleAsset(
                     name: "yahoo",
                     forRemoteResource: URL(string: "https://s.yimg.jp/c/icon/s/bsc/2.0/y120.png")!
+                )
+            ),
+            Site.createSuggestedSite(
+                url: "https://ameblo.jp/",
+                title: "Amebaブログ",
+                trackingId: 801,
+                faviconResource: .bundleAsset(
+                    name: "ameblo",
+                    forRemoteResource: URL(string: "https://stat100.ameba.jp/common_style/img/sp/apple-touch-icon.png")!
                 )
             ),
             Site.createSuggestedSite(
