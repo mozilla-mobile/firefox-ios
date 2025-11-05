@@ -943,7 +943,6 @@ workflows:
             echo "Setting Nimbus variables"
             /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
         title: Nimbus Variable Setup
-        
     - xcode-archive@4.0:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
