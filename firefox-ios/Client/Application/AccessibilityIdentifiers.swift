@@ -239,7 +239,7 @@ struct AccessibilityIdentifiers {
         }
 
         struct StoriesWebview {
-            static let refreshButton = "StoriesWebviewRefreshButton"
+            static let reloadButton = "StoriesWebviewReloadButton"
         }
     }
 

@@ -45,17 +45,17 @@ class StoriesWebviewViewController: UIViewController,
         imageView.image = UIImage(named: StandardImageIdentifiers.Large.shieldCheckmark)?.withRenderingMode(.alwaysTemplate)
     }
 
-    private lazy var refreshToolbarButton: UIBarButtonItem = {
+    private lazy var reloadToolbarButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.arrowCounterClockwise),
             style: .plain,
             target: self,
-            action: #selector(didTapRefresh)
+            action: #selector(didTapReload)
         )
         /// FXIOS-14029 Update to .FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel once we have
         /// translations in v146, reuse .TabLocationReloadAccessibilityLabel since it is the same string
         button.accessibilityLabel = .TabLocationReloadAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.StoriesWebview.refreshButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.StoriesWebview.reloadButton
         return button
     }()
 
@@ -109,7 +109,7 @@ class StoriesWebviewViewController: UIViewController,
 
     // MARK: Selectors
     @objc
-    func didTapRefresh() {
+    func didTapReload() {
         webView?.reload()
     }
 
@@ -125,7 +125,7 @@ class StoriesWebviewViewController: UIViewController,
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
 
-        navigationItem.rightBarButtonItem = refreshToolbarButton
+        navigationItem.rightBarButtonItem = reloadToolbarButton
     }
 
     private func setupNavigationTitle() {

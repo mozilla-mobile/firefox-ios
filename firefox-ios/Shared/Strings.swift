@@ -1096,7 +1096,7 @@ extension String {
 
             public struct StoriesWebview {
                 public static let ReloadPageAccessibilityLabel = MZLocalizedString(
-                    key: "FirefoxHome.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
+                    key: "FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
                     tableName: "FirefoxHomepage",
                     value: "Reload page",
                     comment: "Accessibility label for the page reload button in the navigation toolbar of the stories webview")
