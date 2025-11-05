@@ -56,6 +56,7 @@ enum UX {
         static let titleFont = FXFontStyles.Bold.title1.scaledSwiftUIFont()
         static let titleFontRegular = FXFontStyles.Regular.title1.scaledSwiftUIFont()
         static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
+        // TODO: FXIOS-14022 Check Japanese alignment depeding on the experiment branch
         private static var isJapanLocale: Bool {
             Locale.current.languageCode == "ja"
         }
