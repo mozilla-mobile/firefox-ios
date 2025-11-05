@@ -114,7 +114,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
             backgroundViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
+
             loaderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loaderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             loaderView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.logoSize),
