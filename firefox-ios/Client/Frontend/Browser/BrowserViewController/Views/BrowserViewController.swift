@@ -2241,7 +2241,6 @@ class BrowserViewController: UIViewController,
                 self.handleCanGoForwardChanged(tab: tab, canGoForward: newBool)
             case .hasOnlySecureContent:
                 self.handleHasOnlySecureContentChanged(webView: webView)
-                break
 //            // TODO: FXIOS-12158 Add back after investigating why video player is broken
 //            case .fullscreenState:
 //                self.handleFullscreenStateChanged()
@@ -2377,6 +2376,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleFullscreenStateChanged(webView: WKWebView) {
+//        // TODO: FXIOS-12158 Add back after investigating why video player is broken
 //        if #available(iOS 16.0, *) {
 //            guard webView.fullscreenState == .enteringFullscreen ||
 //                    webView.fullscreenState == .exitingFullscreen else { return }
