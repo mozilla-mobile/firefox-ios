@@ -86,7 +86,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFont)
+            .font(UX.CardView.titleFontForCurrentLocale)
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
