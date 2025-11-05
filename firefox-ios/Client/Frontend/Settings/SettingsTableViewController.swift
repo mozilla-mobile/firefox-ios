@@ -228,7 +228,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     let prefKey: String?
     let prefs: Prefs?
 
-    var settingDidChange: (@MainActor (Bool) -> Void)?
+    var settingDidChange: ((Bool) -> Void)?
     private let defaultValue: Bool?
     private let statusText: NSAttributedString?
     private let featureFlagName: NimbusFeatureFlagID?
@@ -240,7 +240,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         attributedTitleText: NSAttributedString,
         attributedStatusText: NSAttributedString? = nil,
         featureFlagName: NimbusFeatureFlagID? = nil,
-        settingDidChange: (@MainActor (Bool) -> Void)? = nil
+        settingDidChange: ((Bool) -> Void)? = nil
     ) {
         self.prefs = prefs
         self.prefKey = prefKey
@@ -258,7 +258,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         defaultValue: Bool,
         titleText: String,
         statusText: String? = nil,
-        settingDidChange: (@MainActor (Bool) -> Void)? = nil
+        settingDidChange: ((Bool) -> Void)? = nil
     ) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
@@ -285,7 +285,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         defaultValue: Bool = false,
         featureFlagName: NimbusFeatureFlagID? = nil,
         enabled: Bool = true,
-        settingDidChange: @escaping @MainActor (Bool) -> Void
+        settingDidChange: @escaping (Bool) -> Void
     ) {
         self.statusText = description.map(NSAttributedString.init(string:))
         self.prefs = prefs
@@ -300,7 +300,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         with featureFlagID: NimbusFeatureFlagID,
         titleText: NSAttributedString,
         statusText: NSAttributedString? = nil,
-        settingDidChange: (@MainActor (Bool) -> Void)? = nil
+        settingDidChange: ((Bool) -> Void)? = nil
     ) {
         self.init(
             prefs: nil,
@@ -647,13 +647,11 @@ class StringSetting: Setting, UITextFieldDelegate {
         textField.textColor = color
     }
 
-    @objc
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return isValid(textField.text)
     }
 
-    @objc
     func textFieldDidEndEditing(_ textField: UITextField) {
         let text = textField.text
         if !isValid(text) {
