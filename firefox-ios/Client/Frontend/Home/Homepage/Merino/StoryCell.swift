@@ -138,10 +138,10 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
-        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        contentView.layer.shadowRadius = HomepageUX.shadowRadius
+        contentView.layer.shadowOffset = HomepageUX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        contentView.layer.shadowOpacity = HomepageUX.shadowOpacity
     }
 
     // MARK: - ThemeApplicable

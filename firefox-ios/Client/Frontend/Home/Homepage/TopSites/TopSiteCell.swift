@@ -63,7 +63,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         titleLabel.textAlignment = .center
         titleLabel.font = FXFontStyles.Bold.caption1.scaledFont()
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
+        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageUX.shadowRadius
         titleLabel.backgroundColor = .clear
         titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
@@ -72,12 +72,12 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         sponsoredLabel.textAlignment = .center
         sponsoredLabel.font = FXFontStyles.Regular.caption1.scaledFont()
         sponsoredLabel.adjustsFontForContentSizeCategory = true
-        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
+        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageUX.shadowRadius
     }
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
-        selectedOverlay.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        selectedOverlay.layer.cornerRadius = HomepageUX.generalCornerRadius
     }
 
     override var isSelected: Bool {
@@ -273,9 +273,9 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.faviconCornerRadius).cgPath
         rootContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
-        rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
-        rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        rootContainer.layer.shadowOpacity = HomepageUX.shadowOpacity
+        rootContainer.layer.shadowOffset = HomepageUX.shadowOffset
+        rootContainer.layer.shadowRadius = HomepageUX.shadowRadius
     }
 }
 

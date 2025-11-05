@@ -56,7 +56,7 @@ class WallpaperThumbnailUtility {
         } catch {
             logger.log("Wallpaper thumbnail update error: \(error.localizedDescription)",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
         }
     }
 

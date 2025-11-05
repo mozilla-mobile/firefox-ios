@@ -95,7 +95,7 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
 
         contentView.layer.shadowPath = UIBezierPath(
             roundedRect: contentView.bounds,
-            cornerRadius: HomepageViewModel.UX.generalCornerRadius
+            cornerRadius: HomepageUX.generalCornerRadius
         ).cgPath
     }
 
@@ -189,20 +189,20 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        contentView.layer.cornerRadius = HomepageUX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
-        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+                                                    cornerRadius: HomepageUX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = HomepageUX.shadowRadius
+        contentView.layer.shadowOffset = HomepageUX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        contentView.layer.shadowOpacity = HomepageUX.shadowOpacity
     }
 
     // MARK: - Blurrable
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+            contentView.layer.cornerRadius = HomepageUX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5

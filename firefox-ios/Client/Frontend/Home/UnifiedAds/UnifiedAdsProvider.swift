@@ -81,14 +81,14 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         guard let resourceEndpoint = resourceEndpoint else {
             logger.log("The resource URL is invalid: \(String(describing: resourceEndpoint))",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
             return nil
         }
 
         guard let contextId = TelemetryContextualIdentifier.contextId else {
             logger.log("No context id: \(String(describing: TelemetryContextualIdentifier.contextId))",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
             return nil
         }
 
@@ -111,7 +111,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         } catch {
             logger.log("The request body is invalid: \(String(describing: requestBody))",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
             return nil
         }
         return request
@@ -149,7 +149,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         } catch let error {
             self.logger.log("Unable to parse with error: \(error)",
                             level: .warning,
-                            category: .legacyHomepage)
+                            category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
     }

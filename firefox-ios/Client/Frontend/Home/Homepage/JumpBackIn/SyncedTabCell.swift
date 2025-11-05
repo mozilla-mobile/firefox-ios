@@ -174,7 +174,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
 
         contentView.layer.shadowPath = UIBezierPath(
             roundedRect: contentView.bounds,
-            cornerRadius: HomepageViewModel.UX.generalCornerRadius
+            cornerRadius: HomepageUX.generalCornerRadius
         ).cgPath
     }
 
@@ -285,13 +285,13 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        contentView.layer.cornerRadius = HomepageUX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
-        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+                                                    cornerRadius: HomepageUX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = HomepageUX.shadowRadius
+        contentView.layer.shadowOffset = HomepageUX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        contentView.layer.shadowOpacity = HomepageUX.shadowOpacity
     }
 
     // MARK: - ThemeApplicable
@@ -314,7 +314,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
         // Add blur
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+            contentView.layer.cornerRadius = HomepageUX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5

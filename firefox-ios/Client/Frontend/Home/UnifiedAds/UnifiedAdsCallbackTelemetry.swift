@@ -53,7 +53,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         guard var urlComponents = URLComponents(string: urlString) else {
             logger.log("The provided URL is invalid: \(String(describing: urlString))",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
             return
         }
 
@@ -64,7 +64,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         guard let url = urlComponents.url else {
             logger.log("The provided URL components are invalid: \(String(describing: urlString))",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
             return
         }
 
@@ -79,7 +79,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
             case .failure:
                 logger.log("The unified ads telemetry call failed: \(String(describing: urlString))",
                            level: .warning,
-                           category: .legacyHomepage)
+                           category: .homepage)
             }
         }
     }

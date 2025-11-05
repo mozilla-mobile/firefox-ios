@@ -52,7 +52,7 @@ final class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlagga
         guard let resourceEndpoint = resourceEndpoint else {
             logger.log("The Contile resource URL is invalid: \(String(describing: resourceEndpoint))",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
             completion(.failure(Error.noDataAvailable))
             return
         }
@@ -96,7 +96,7 @@ final class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlagga
         } catch let error {
             self.logger.log("Unable to parse with error: \(error)",
                             level: .warning,
-                            category: .legacyHomepage)
+                            category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
     }

@@ -17,7 +17,7 @@ final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, 
     // MARK: - UI Elements
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
-        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.cornerRadius = HomepageUX.generalCornerRadius
     }
 
     private var heroImageView: HeroImageView = .build { _ in }
@@ -51,7 +51,7 @@ final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, 
         super.layoutSubviews()
         rootContainer.layer.shadowPath = UIBezierPath(
             roundedRect: rootContainer.bounds,
-            cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+            cornerRadius: HomepageUX.generalCornerRadius).cgPath
     }
 
     func configure(config: BookmarkConfiguration, theme: Theme) {
@@ -98,12 +98,12 @@ final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, 
 
     private func setupShadow(theme: Theme) {
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+                                                      cornerRadius: HomepageUX.generalCornerRadius).cgPath
 
         rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
-        rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        rootContainer.layer.shadowOpacity = HomepageUX.shadowOpacity
+        rootContainer.layer.shadowOffset = HomepageUX.shadowOffset
+        rootContainer.layer.shadowRadius = HomepageUX.shadowRadius
     }
 
     // MARK: - ThemeApplicable

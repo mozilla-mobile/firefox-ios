@@ -54,10 +54,10 @@ final class TabCell: UICollectionViewCell,
     }
 
     private lazy var faviconBG: UIView = .build { view in
-        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
-        view.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        view.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        view.layer.cornerRadius = HomepageUX.generalCornerRadius
+        view.layer.borderWidth = HomepageUX.generalBorderWidth
+        view.layer.shadowOffset = HomepageUX.shadowOffset
+        view.layer.shadowRadius = HomepageUX.shadowRadius
         view.isHidden = true
     }
 

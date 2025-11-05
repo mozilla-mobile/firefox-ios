@@ -761,6 +761,7 @@ class BrowserCoordinator: BaseCoordinator,
             selectNewTab: selectNewTab
         )
     }
+
     func showShareSheet(
         shareType: ShareType,
         shareMessage: ShareMessage?,

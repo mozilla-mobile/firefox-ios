@@ -95,7 +95,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, WallpaperStora
             } catch {
                 logger.log("WallpaperStorageUtility decoding error: \(error.localizedDescription)",
                            level: .warning,
-                           category: .legacyHomepage)
+                           category: .homepage)
             }
         }
 

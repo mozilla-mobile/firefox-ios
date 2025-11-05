@@ -60,7 +60,7 @@ class WallpaperMetadataUtility {
         } catch {
             logger.log("Failed to fetch new metadata: \(error.localizedDescription)",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
             return false
         }
     }
@@ -100,7 +100,7 @@ class WallpaperMetadataUtility {
         } catch {
             logger.log("Failed to get old metadata: \(error.localizedDescription)",
                        level: .warning,
-                       category: .legacyHomepage)
+                       category: .homepage)
             return true
         }
     }
