@@ -1093,6 +1093,14 @@ extension String {
                     value: "All Stories",
                     comment: "This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles")
             }
+
+            public struct StoriesWebview {
+                public static let ReloadPageAccessibilityLabel = MZLocalizedString(
+                    key: "FirefoxHome.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
+                    tableName: "FirefoxHomepage",
+                    value: "Reload page",
+                    comment: "Accessibility label for the page reload button in the navigation toolbar of the stories webview")
+            }
         }
 
         public struct RecentlySaved { }

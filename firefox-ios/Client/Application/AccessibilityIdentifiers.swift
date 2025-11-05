@@ -237,6 +237,10 @@ struct AccessibilityIdentifiers {
         struct StoriesFeed {
             static let storiesFeedCell = "StoriesFeedCell"
         }
+
+        struct StoriesWebview {
+            static let refreshButton = "StoriesWebviewRefreshButton"
+        }
     }
 
     struct GeneralizedIdentifiers {

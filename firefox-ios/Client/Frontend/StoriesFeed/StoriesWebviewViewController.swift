@@ -45,6 +45,20 @@ class StoriesWebviewViewController: UIViewController,
         imageView.image = UIImage(named: StandardImageIdentifiers.Large.shieldCheckmark)?.withRenderingMode(.alwaysTemplate)
     }
 
+    private lazy var refreshToolbarButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.arrowCounterClockwise),
+            style: .plain,
+            target: self,
+            action: #selector(didTapRefresh)
+        )
+        /// FXIOS-14029 Update to .FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel once we have
+        /// translations in v146, reuse .TabLocationReloadAccessibilityLabel since it is the same string
+        button.accessibilityLabel = .TabLocationReloadAccessibilityLabel
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.StoriesWebview.refreshButton
+        return button
+    }()
+
     init(profile: Profile,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -63,7 +77,7 @@ class StoriesWebviewViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupWebView()
+        setupUI()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
     }
 
@@ -93,8 +107,14 @@ class StoriesWebviewViewController: UIViewController,
         domainLabel.text = webView.url?.normalizedHost
     }
 
+    // MARK: Selectors
+    @objc
+    func didTapRefresh() {
+        webView?.reload()
+    }
+
     // MARK: Helper functions
-    private func setupWebView() {
+    private func setupUI() {
         guard let webView else { return }
         view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -104,6 +124,8 @@ class StoriesWebviewViewController: UIViewController,
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+
+        navigationItem.rightBarButtonItem = refreshToolbarButton
     }
 
     private func setupNavigationTitle() {
