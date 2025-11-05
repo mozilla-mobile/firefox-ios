@@ -201,7 +201,6 @@
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesEnabled()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_bookmarksEnabled()",
-        "SearchEnginesManagerTests\/testQuickSearchEngines()",
         "ShareTelemetryTests",
         "ShortcutRouteTests\/testOpenLastBookmarkShortcutWithInvalidUrl()",
         "TabManagerTests\/testDeleteSelectedTab()",
