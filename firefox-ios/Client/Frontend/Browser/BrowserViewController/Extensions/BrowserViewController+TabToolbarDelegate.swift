@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
+extension BrowserViewController: PhotonActionSheetProtocol {
     // MARK: Data Clearance CFR / Contextual Hint
 
     // Reset the CFR timer for the data clearance button to avoid presenting the CFR
@@ -187,14 +187,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         translationContextHintVC.stopTimer()
     }
 
-    func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnHome()
-    }
-
-    func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnDataClearance()
-    }
-
     /// Triggers clearing the users private session data, an alert is shown once and then, deletion is done directly after
     func didTapOnDataClearance() {
         guard !(profile.prefs.boolForKey(PrefsKeys.dataClearanceAlertShown) ?? false) else {
@@ -264,62 +256,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         completion(timingToMatchGradientOverlay)
     }
 
-    func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-    }
-
     func dismissUrlBar() {
         if addressToolbarContainer.inOverlayMode {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
-    }
-
-    func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnBack()
-    }
-
-    func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        handleTabToolBarDidLongPressForwardOrBack()
-    }
-
-    func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnForward()
-    }
-
-    func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        handleTabToolBarDidLongPressForwardOrBack()
-    }
-
-    private func handleTabToolBarDidLongPressForwardOrBack() {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        navigationHandler?.showBackForwardList()
-    }
-
-    func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        showLibrary(panel: .bookmarks)
-    }
-
-    func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))
-        focusLocationTextField(forTab: tabManager.selectedTab)
-        overlayManager.openNewTab(url: nil,
-                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
-    }
-
-    func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnMenu(button: button)
-    }
-
-    func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        updateZoomPageBarVisibility(visible: false)
-        focusOnTabSegment()
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .press,
-            object: .tabToolbar,
-            value: .tabView
-        )
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
@@ -429,17 +369,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 }
             }
         }.items
-    }
-
-    func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        presentTabsLongPressAction(from: button)
-    }
-
-    func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        focusLocationTextField(forTab: tabManager.selectedTab)
     }
 }
 
