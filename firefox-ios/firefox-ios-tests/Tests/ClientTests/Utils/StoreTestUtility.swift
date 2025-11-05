@@ -26,7 +26,7 @@ class StoreTestUtilityHelper {
         )
 #endif
     }
-
+    @MainActor
     static func setupStore(with mockStore: any DefaultDispatchStore<AppState>) {
 #if TESTING
         store = mockStore
