@@ -55,7 +55,6 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         let image = UIImageView(image: fromSnapshot)
         let containerView = transitionContext.containerView
         let finalFrame = transitionContext.finalFrame(for: toController)
-        let launchController = fromController as? ModernLaunchScreenViewController
 
         toController.view.frame = finalFrame
         toController.view.alpha = UX.midAlpha
@@ -66,7 +65,6 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
 
         UIView.animate(withDuration: UX.totalDuration) {
             toController.view.alpha = UX.opaqueAlpha
-            launchController?.stopLoaderAnimation()
             image.alpha = UX.clearAlpha
         } completion: { _ in
             image.removeFromSuperview()
@@ -82,13 +80,11 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         let containerView = transitionContext.containerView
         let finalFrame = transitionContext.finalFrame(for: toController)
         toController.view.frame = finalFrame
-        let launchController = toController as? ModernLaunchScreenViewController
 
         containerView.addSubview(toController.view)
         containerView.addSubview(fromController.view)
 
         UIView.animate(withDuration: UX.totalDuration) {
-            launchController?.startLoaderAnimation()
             fromController.view.alpha = UX.clearAlpha
         } completion: { _ in
             transitionContext.completeTransition(true)
