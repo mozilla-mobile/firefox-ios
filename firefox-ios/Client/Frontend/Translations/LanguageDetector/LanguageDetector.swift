@@ -9,15 +9,15 @@ import NaturalLanguage
 /// The sample is extracted using JS.
 final class LanguageDetector {
     /// JS function that is called to get a page sample back. The function is implemented in `Summarizer.js`.
-    private static let languageSampleScript =
+    private let languageSampleScript =
         "return await window.__firefox__.Translations.getLanguageSampleWhenReady()"
 
     /// Extracts a text sample from the page via the JS bridge.
     /// Returns `nil` if the bridge isn’t ready or no sample is available.
     @MainActor
     func extractSample(from source: LanguageSampleSource) async throws -> String? {
-        let result = try await source.getLanguageSample(scriptEvalExpression: Self.languageSampleScript)
-        guard let sample = result, !sample.isEmpty else { return nil }
+        let sample = try await source.getLanguageSample(scriptEvalExpression: languageSampleScript)
+        guard let sample = sample, !sample.isEmpty else { return nil }
         return sample
     }
 

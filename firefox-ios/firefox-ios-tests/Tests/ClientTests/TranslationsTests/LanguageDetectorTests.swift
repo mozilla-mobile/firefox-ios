@@ -31,14 +31,16 @@ final class LanguageDetectorTests: XCTestCase {
     }
 
     func testExtractSamplePropagatesError() async {
-        enum FakeError: Error { case foo }
+        enum FakeError: Error, Equatable { case foo }
         mockLanguageSampleSource.mockError = FakeError.foo
         let subject = createSubject()
 
         do {
             _ = try await subject.extractSample(from: mockLanguageSampleSource)
             XCTFail("expected error")
-        } catch { }
+        } catch {
+            XCTAssertEqual(error as? FakeError, .foo)
+        }
     }
 
     func testDetectLanguageReturnsLanguageCode() {
