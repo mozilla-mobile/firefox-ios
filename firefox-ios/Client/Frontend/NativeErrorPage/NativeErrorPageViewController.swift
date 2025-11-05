@@ -326,7 +326,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     @objc
-    private nonisolated func didTapReload() {
+    nonisolated private func didTapReload() {
         ensureMainThread {
             store.dispatch(
                 GeneralBrowserAction(
