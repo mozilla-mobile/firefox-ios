@@ -6999,11 +6999,6 @@ extension String {
         tableName: "TabToolbar",
         value: "Data Clearance",
         comment: "Accessibility label for the tab toolbar fire button in private mode, used to provide users a way to end and delete their private session data.")
-    public static let TabToolbarReloadAccessibilityLabel = MZLocalizedString(
-        key: "Reload",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility Label for the tab toolbar Reload button")
     public static let TabToolbarStopAccessibilityLabel = MZLocalizedString(
         key: "Stop",
         tableName: nil,
@@ -7029,11 +7024,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the tab toolbar indicating the Home button.")
-    public static let TabToolbarNavigationToolbarAccessibilityLabel = MZLocalizedString(
-        key: "Navigation Toolbar",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
 }
 
 extension String {
@@ -8387,6 +8377,18 @@ extension String {
                 tableName: "Menu",
                 value: "Close All Tabs",
                 comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
+        }
+        struct v145 {
+            public static let TabToolbarReloadAccessibilityLabel = MZLocalizedString(
+                key: "Reload",
+                tableName: nil,
+                value: nil,
+                comment: "Accessibility Label for the tab toolbar Reload button")
+            public static let TabToolbarNavigationToolbarAccessibilityLabel = MZLocalizedString(
+                key: "Navigation Toolbar",
+                tableName: nil,
+                value: nil,
+                comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
         }
     }
 }
