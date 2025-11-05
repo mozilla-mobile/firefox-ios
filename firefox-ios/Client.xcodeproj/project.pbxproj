@@ -1232,7 +1232,6 @@
 		8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD248F02C0F735200500AB7 /* BehavioralTargetingEvent.swift */; };
 		8AD3AFC32D143EF600CFC887 /* HomepageDimensionImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3AFC22D143EF000CFC887 /* HomepageDimensionImplementation.swift */; };
 		8AD3AFC52D143F1200CFC887 /* HomepageDimensionCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3AFC42D143F0D00CFC887 /* HomepageDimensionCalculatorTests.swift */; };
-		8AD40FD127BADCBA00672675 /* TabToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD027BADCBA00672675 /* TabToolbarButton.swift */; };
 		8AD40FD327BB068F00672675 /* MainMenuActionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */; };
 		8ADA19A22E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */; };
 		8ADAA6D42CD175FB00E3D3E8 /* StickersCatalog.xcstickers in Resources */ = {isa = PBXBuildFile; fileRef = 8ADAA6D32CD175FB00E3D3E8 /* StickersCatalog.xcstickers */; };
@@ -9084,7 +9083,6 @@
 		8AD3271427E3B45D00EAF033 /* SponsoredSiteInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredSiteInfo.swift; sourceTree = "<group>"; };
 		8AD3AFC22D143EF000CFC887 /* HomepageDimensionImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageDimensionImplementation.swift; sourceTree = "<group>"; };
 		8AD3AFC42D143F0D00CFC887 /* HomepageDimensionCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageDimensionCalculatorTests.swift; sourceTree = "<group>"; };
-		8AD40FD027BADCBA00672675 /* TabToolbarButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarButton.swift; sourceTree = "<group>"; };
 		8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuActionHelper.swift; sourceTree = "<group>"; };
 		8AD440CBBF202B15E74E186D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Search.strings; sourceTree = "<group>"; };
 		8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTelemetryTests.swift; sourceTree = "<group>"; };
@@ -13730,15 +13728,6 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		8AD40FB727BAD1D600672675 /* TabToolbar */ = {
-			isa = PBXGroup;
-			children = (
-				8AD40FD027BADCBA00672675 /* TabToolbarButton.swift */,
-				2137786429832C8900D01309 /* OverlayModeManager.swift */,
-			);
-			path = TabToolbar;
-			sourceTree = "<group>";
-		};
 		8AD40FB827BAD1DD00672675 /* TabContentsScripts */ = {
 			isa = PBXGroup;
 			children = (
@@ -15444,6 +15433,7 @@
 				E16941B72C5119A200FF5F4E /* Autocompletable.swift */,
 				E1ABF9062BF49744009C995C /* Models */,
 				E18CE8D92BDA3F6B00EE2BCD /* NavigationToolbarContainer.swift */,
+				2137786429832C8900D01309 /* OverlayModeManager.swift */,
 				E1DE2F812BE394C80054BCDC /* Redux */,
 				E153FBA92DD47C540040CE37 /* SearchBarLocationSaver.swift */,
 				E14792A22C2C5C660058211C /* ToolbarHelper.swift */,
@@ -16349,7 +16339,6 @@
 				8AD40FB827BAD1DD00672675 /* TabContentsScripts */,
 				EB9A179720E69A7E00B12184 /* Theme */,
 				AB2AC6642BD15E2C00022AAB /* TrackingProtection */,
-				8AD40FB727BAD1D600672675 /* TabToolbar */,
 				C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
 				C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */,
@@ -19054,7 +19043,6 @@
 				1DFE57FD27BADD7D0025DE58 /* HomepageViewModel.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				EDADF77A2D70BD3E00C39295 /* AppIconSelectionTelemetry.swift in Sources */,
-				8AD40FD127BADCBA00672675 /* TabToolbarButton.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				742BD99E2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift in Sources */,
 				9636D92C27F9E50100771F5E /* GleanPlumbMessageStore.swift in Sources */,
