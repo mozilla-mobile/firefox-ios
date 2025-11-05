@@ -339,7 +339,7 @@ class CodeUsageDetector {
                 """
             case .dispatchLegacy:
                 return """
-                DispatchLegacy is used in file %@ at line %d. 
+                DispatchLegacy is used in file %@ at line %d.
                 Please replace with `dispatch` instead and call it from the main actor
                 """
             }
