@@ -478,6 +478,15 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     LoginManagerContent.fromFill = false
   }
 
+  function fillRelayEmail(email) {
+      /* TODO: Do we need this fromFill set for Relay? */
+      LoginManagerContent.fromFill = true
+      this.yieldFocusBackToField();
+      const emailField = LoginManagerContent.activeField;
+      emailField?.setUserInput(email);
+      LoginManagerContent.fromFill = false
+  }
+
   function isUpdatedPasswordManagerEnabled(enabled) {
     LoginManagerContent.updatedPasswordManagerEnabled = enabled
   }
@@ -594,6 +603,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     this.yieldFocusBackToField = yieldFocusBackToField;
     this.generatePassword = generatePassword;
     this.fillGeneratedPassword = fillGeneratedPassword;
+    this.fillRelayEmail = fillRelayEmail;
     this.isUpdatedPasswordManagerEnabled = isUpdatedPasswordManagerEnabled;
   }
 
