@@ -131,6 +131,15 @@ open class DefaultSuggestedSites {
          ],
         "ja_JP": [
             Site.createSuggestedSite(
+                url: "https://mzl.la/4nJ5E8m",
+                title: "Firefoxガイド",
+                trackingId: 804,
+                faviconResource: .bundleAsset(
+                    name: "firefox-jp",
+                    forRemoteResource: URL(string: "https://www.firefox.com/media/img/favicons/firefox/browser/apple-touch-icon.79c2abeb4e35.png")!
+                )
+            ),
+            Site.createSuggestedSite(
                 url: "https://tenki.jp/",
                 title: "tenki.jp",
                 trackingId: 800,
