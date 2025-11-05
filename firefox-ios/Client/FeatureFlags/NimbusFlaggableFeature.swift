@@ -30,6 +30,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
     case inactiveTabs
+    case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
     case menuRefactor
     case menuRedesignHint
@@ -157,6 +158,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageStoriesRedesign,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
                 .menuRefactor,
                 .menuRedesignHint,

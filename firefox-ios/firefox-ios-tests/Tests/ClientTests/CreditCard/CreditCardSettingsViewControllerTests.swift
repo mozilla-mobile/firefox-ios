@@ -25,12 +25,17 @@ final class CreditCardSettingsViewControllerTests: XCTestCase {
         viewModel = nil
     }
 
+    @MainActor
     func testInputViewFormValuesClearedOnDismiss() {
         let subject = createSubject()
         subject.viewModel.cardInputViewModel.nameOnCard = "Ashton Mealy"
         subject.viewModel.cardInputViewModel.cardNumber = "4268811063712243"
         subject.viewModel.cardInputViewModel.expirationDate = "1288"
-        let creditCardInputView = CreditCardInputView(viewModel: viewModel, windowUUID: WindowUUID.XCTestDefaultUUID)
+        let creditCardInputView = CreditCardInputView(
+            viewModel: viewModel,
+            windowUUID: WindowUUID.XCTestDefaultUUID,
+            themeManager: MockThemeManager()
+        )
         let hostingController = UIHostingController(rootView: creditCardInputView)
         subject.present(hostingController, animated: true)
         let presentationController = UIPresentationController(

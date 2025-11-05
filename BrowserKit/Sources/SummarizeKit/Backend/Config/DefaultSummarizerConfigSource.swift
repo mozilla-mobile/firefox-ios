@@ -8,8 +8,8 @@ public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {
     public init() {}
 
     // FIXME: FXIOS-13417 We should strongly type options in the future so they can be any Sendable & Hashable
-    private static nonisolated(unsafe) let appleBaseOptions: [String: AnyHashable] = [ "temperature": 0.1 ]
-    private static nonisolated(unsafe) let liteLLMBaseOptions: [String: AnyHashable] = [
+    nonisolated(unsafe) private static let appleBaseOptions: [String: AnyHashable] = [ "temperature": 0.1 ]
+    nonisolated(unsafe) private static let liteLLMBaseOptions: [String: AnyHashable] = [
         "temperature": 0.1,
         "top_p": 0.01,
         "max_tokens": LiteLLMConfig.maxTokens,

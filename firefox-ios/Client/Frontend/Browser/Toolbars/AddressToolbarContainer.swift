@@ -195,8 +195,17 @@ final class AddressToolbarContainer: UIView,
         guard #available(iOS 26.0, *), let windowUUID else { return 0 }
 
         let isEditingAddress = state?.addressToolbar.isEditing == true
+        let shoudShowKeyboard = state?.addressToolbar.shouldShowKeyboard
         let isBottomToolbar = state?.toolbarPosition == .bottom
+        let shouldAdjustForAccessory = hasAccessoryView &&
+                                       !isEditingAddress &&
+                                       isBottomToolbar
 
+        let accessoryViewOffset = shouldAdjustForAccessory ? UX.keyboardAccessoryViewOffset : 0
+
+        /// We want to check here if the keyboard accessory view state has changed
+        /// To avoid spamming redux actions.
+        guard hasAccessoryView != shoudShowKeyboard else { return accessoryViewOffset }
         store.dispatchLegacy(
             ToolbarAction(
                 shouldShowKeyboard: hasAccessoryView,
@@ -204,10 +213,6 @@ final class AddressToolbarContainer: UIView,
                 actionType: ToolbarActionType.keyboardStateDidChange
             )
         )
-
-        let shouldAdjustForAccessory = hasAccessoryView &&
-                                       !isEditingAddress &&
-                                       isBottomToolbar
 
         if shouldAdjustForAccessory {
             store.dispatchLegacy(
@@ -218,7 +223,7 @@ final class AddressToolbarContainer: UIView,
                 )
             )
         }
-        return shouldAdjustForAccessory ? UX.keyboardAccessoryViewOffset : 0
+        return accessoryViewOffset
     }
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {

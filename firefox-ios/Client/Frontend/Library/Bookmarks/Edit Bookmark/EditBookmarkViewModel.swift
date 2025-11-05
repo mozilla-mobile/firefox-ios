@@ -7,12 +7,13 @@ import Foundation
 import MozillaAppServices
 import Shared
 
-typealias VoidReturnCallback = () -> Void
+typealias VoidReturnCallback = @MainActor () -> Void
 
 protocol ParentFolderSelector: AnyObject {
     /// In some cases, a child `EditFolderViewController` needs to pass information to a parent `EditBookmarkViewController`
     /// to select the folder that was just created
     /// - Parameter folder: The folder that was created in the `EditFolderViewController`
+    @MainActor
     func selectFolderCreatedFromChild(folder: Folder)
 }
 
@@ -76,6 +77,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
         return folder.indentation
     }
 
+    @MainActor
     func selectFolder(_ folder: Folder) {
         isFolderCollapsed.toggle()
         selectedFolder = folder

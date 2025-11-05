@@ -79,7 +79,7 @@ typealias TabUUID = String
 
 @MainActor
 class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
-    static nonisolated let privateModeKey = "PrivateModeKey"
+    nonisolated static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
         get {
@@ -288,7 +288,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
     // TODO: FXIOS-13297 Keep track of new DispatchQueueInterface usages
-    private nonisolated let removeDispatchQueue: DispatchQueueInterface
+    nonisolated private let removeDispatchQueue: DispatchQueueInterface
     var faviconURL: String? {
         didSet {
             guard let url = url,
@@ -924,7 +924,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return false
     }
 
-    private nonisolated func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
+    nonisolated private func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
         guard !docsURL.isEmpty else { return }
         removeDispatchQueue.async { [fileManager] in
             docsURL.forEach { url in

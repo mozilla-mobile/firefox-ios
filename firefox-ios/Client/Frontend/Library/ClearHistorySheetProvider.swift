@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Common
 
+@MainActor
 class ClearHistorySheetProvider {
     private let profile: Profile
     private let windowManager: WindowManager
@@ -19,10 +20,9 @@ class ClearHistorySheetProvider {
     /// - Parameters:
     ///   - viewController: The view controller the clear history prompt is shown on
     ///   - didComplete: Did complete a recent history clear up action
-    @MainActor
     func showClearRecentHistory(
         onViewController viewController: UIViewController,
-        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
+        didComplete: @MainActor @escaping @Sendable (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         let alert = createAlertAndConfigureWithArrowIfNeeded(from: viewController)
         setupActions(for: alert, didComplete: didComplete)
@@ -30,7 +30,6 @@ class ClearHistorySheetProvider {
         viewController.present(alert, animated: true)
     }
 
-    @MainActor
     func createAlertAndConfigureWithArrowIfNeeded(from viewController: UIViewController) -> UIAlertController {
         let alert = UIAlertController(title: .LibraryPanel.History.ClearHistorySheet.Title,
                                       message: nil,
@@ -50,20 +49,18 @@ class ClearHistorySheetProvider {
         return alert
     }
 
-    @MainActor
     func setupActions(
         for alert: UIAlertController,
-        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
+        didComplete: @MainActor @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         addDeleteSomeData(to: alert, didComplete: didComplete)
         addDeleteEverythingOption(to: alert, didComplete: didComplete)
         addCancelAction(to: alert)
     }
 
-    @MainActor
     func addDeleteSomeData(
         to alert: UIAlertController,
-        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
+        didComplete: @MainActor @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         typealias DateOptions = HistoryDeletionUtilityDateOptions
         [
@@ -76,9 +73,9 @@ class ClearHistorySheetProvider {
             let action = UIAlertAction(title: name, style: .destructive) { _ in
                 let deletionUtility = HistoryDeletionUtility(with: self.profile)
                 deletionUtility.deleteHistoryFrom(timeRange) { dateOption in
-                    NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
-                    didComplete?(dateOption)
                     DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
+                        didComplete(dateOption)
                         deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
                     }
                 }
@@ -88,31 +85,29 @@ class ClearHistorySheetProvider {
         }
     }
 
-    @MainActor
     func addDeleteEverythingOption(
         to alert: UIAlertController,
-        didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
+        didComplete: @MainActor @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         alert.addAction(UIAlertAction(title: .LibraryPanel.History.ClearHistorySheet.AllTimeOption,
                                       style: .destructive) { _ in
-            let deletionUtilitiy = HistoryDeletionUtility(with: self.profile)
-            deletionUtilitiy.deleteHistoryFrom(.allTime) { dateOption in
+            let deletionUtility = HistoryDeletionUtility(with: self.profile)
+            deletionUtility.deleteHistoryFrom(.allTime) { dateOption in
                 DispatchQueue.main.async {
                     // Clear and reset tab history for all windows / tab managers
                     self.windowManager.allWindowTabManagers().forEach { $0.clearAllTabsHistory() }
-                }
-                NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
-                didComplete?(dateOption)
-                // perform history metadata deletion that sends a notification and updates
-                // the data and the UI for recently visited section, which can only happen on main thread
-                DispatchQueue.main.async {
-                    deletionUtilitiy.deleteHistoryMetadataOlderThan(dateOption)
+
+                    NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
+                    didComplete(dateOption)
+
+                    // perform history metadata deletion that sends a notification and updates
+                    // the data and the UI for recently visited section, which can only happen on main thread
+                    deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
                 }
             }
         })
     }
 
-    @MainActor
     func addCancelAction(to alert: UIAlertController) {
         let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
         alert.addAction(cancelAction)

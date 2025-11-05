@@ -195,7 +195,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 isZeroSearch: isZeroSearch,
                 windowUUID: windowUUID,
@@ -680,9 +680,13 @@ class BrowserCoordinator: BaseCoordinator,
 
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
+
         if selectedTab.mimeType == MIMEType.PDF {
             showShareSheetForCurrentlySelectedTab()
         } else {
+            // Online PDFs viewed in a tab can be shared via this URL to other Firefox synced devices with Send to Device.
+            let remoteURL = selectedTab.webView?.url
+
             selectedTab.webView?.createPDF { [weak self] result in
                 guard let self else { return }
                 switch result {
@@ -694,7 +698,7 @@ class BrowserCoordinator: BaseCoordinator,
                     do {
                         try data.write(to: outputURL)
                         startShareSheetCoordinator(
-                            shareType: .file(url: outputURL),
+                            shareType: .file(url: outputURL, remoteURL: remoteURL),
                             shareMessage: nil,
                             sourceView: self.browserViewController.addressToolbarContainer,
                             sourceRect: nil,
@@ -870,7 +874,7 @@ class BrowserCoordinator: BaseCoordinator,
     /// There are many ways to share many types of content from various areas of the app. Code paths that go through this
     /// method include:
     /// * Sharing content from a long press on Home screen tiles (e.g. long press Jump Back In context menu)
-    /// * From the old Menu > Share and the new Menu > Tools > Share
+    /// * From the old Menu > Share and the new Menu > More > Share
     /// * From the new toolbar share button beside the address bar
     /// * From long pressing a link in the WKWebView and sharing from the context menu (via ActionProviderBuilder > addShare)
     /// * Via the sharesheet deeplink path in `RouteBuilder` (e.g. tapping home cards that initiate sharing content)
@@ -900,8 +904,13 @@ class BrowserCoordinator: BaseCoordinator,
             // FXIOS-10824 It's strange if the user has to wait a long time to download files that are literally already
             // being shown in the webview.
             var overrideShareType = shareType
-            if case ShareType.tab = shareType {
-                overrideShareType = await tryDownloadingTabFileToShare(shareType: shareType)
+            if case let ShareType.tab(url, tab) = shareType {
+                // For tabs displaying content other than HTML MIME types, we can download the temporary document (i.e. a PDF
+                // file) and share that instead.
+                overrideShareType = await tryDownloadingTabFileToShare(
+                    withTabURL: url,
+                    forShareTab: tab
+                )
             }
 
             await MainActor.run { [weak self, overrideShareType] in
@@ -1040,7 +1049,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.onViewDismissed = { [weak self] in
             guard let self else { return }
             self.didDismissTabTray(from: tabTrayCoordinator)
-            store.dispatchLegacy(
+            store.dispatch(
                 TabTrayAction(
                     windowUUID: self.windowUUID,
                     actionType: TabTrayActionType.modalSwipedToClose
@@ -1243,7 +1252,7 @@ class BrowserCoordinator: BaseCoordinator,
             actionType: PasswordGeneratorActionType.showPasswordGenerator,
             currentFrame: frame
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         let bottomSheetVM = BottomSheetViewModel(
             shouldDismissForTapOutside: true,
@@ -1341,21 +1350,26 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Private helpers
 
-    nonisolated private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
-        // We can only try to download files for `.tab` type shares that have a TemporaryDocument
-        guard case let ShareType.tab(_, tab) = shareType,
-              let temporaryDocument = await tab.temporaryDocument,
-              !temporaryDocument.isDownloading else {
-            return shareType
-        }
-
-        guard let fileURL = await temporaryDocument.download() else {
+    /// Tabs displaying content other than a HTML MIME type can be downloaded and treated as files when shared. This method
+    /// attempts to download any such files. If there is no file to download, returns just a regular `ShareType.tab`.
+    /// - Parameters:
+    ///   - tabURL: The URL for the tab pointing to a website.
+    ///   - tab: The current tab displaying the tabURL.
+    /// - Returns: Returns a `ShareType.file` containing a `file://` URL that points to a downloaded file on the device. If
+    ///            no file was downloaded, then just returns a regular `ShareType.tab` with the passed in `tabURL` and `tab`.
+    private func tryDownloadingTabFileToShare(
+        withTabURL tabURL: URL,
+        forShareTab tab: ShareTab
+    ) async -> ShareType {
+        guard let temporaryDocument = tab.temporaryDocument,
+              !temporaryDocument.isDownloading,
+              let fileURL = await temporaryDocument.download() else {
             // If no file was downloaded, simply share the tab as usual with a web URL
-            return shareType
+            return .tab(url: tabURL, tab: tab)
         }
 
         // If we successfully got a temp file URL, share it like a downloaded file
-        return .file(url: fileURL)
+        return .file(url: fileURL, remoteURL: tabURL)
     }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type
