@@ -9,12 +9,10 @@ import Foundation
 class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
     struct UX {
         static let horizontalMargin: CGFloat = 8
-        static let generalCornerRadius: CGFloat = 8
-        static let imageBackgroundSize = CGSize(width: 60, height: 60)
     }
 
     private lazy var emptyBG: UIView = .build { view in
-        view.layer.cornerRadius = UX.generalCornerRadius
+        view.layer.cornerRadius = HomepageUX.generalCornerRadius
     }
 
     override init(frame: CGRect) {
@@ -32,8 +30,8 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
 
         NSLayoutConstraint.activate([
             emptyBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            emptyBG.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
-            emptyBG.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
+            emptyBG.widthAnchor.constraint(equalToConstant: HomepageUX.imageBackgroundSize.width),
+            emptyBG.heightAnchor.constraint(equalToConstant: HomepageUX.imageBackgroundSize.height),
             emptyBG.topAnchor.constraint(equalTo: contentView.topAnchor),
         ])
     }

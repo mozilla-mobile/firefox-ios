@@ -6,12 +6,6 @@ import Foundation
 import SiteImageView
 
 struct HomepageHeroImageViewModel: HeroImageViewModel {
-    struct UX {
-        static let generalCornerRadius: CGFloat = 8
-        static let generalBorderWidth: CGFloat = 0.5
-        static let fallbackFaviconSize = CGSize(width: 36, height: 36)
-    }
-
     let urlStringRequest: String
     let type: SiteImageView.SiteImageType
     let generalCornerRadius: CGFloat
@@ -23,11 +17,11 @@ struct HomepageHeroImageViewModel: HeroImageViewModel {
     init(
         urlStringRequest: String,
         type: SiteImageView.SiteImageType = .heroImage,
-        generalCornerRadius: CGFloat = UX.generalCornerRadius,
-        faviconCornerRadius: CGFloat = UX.generalCornerRadius,
-        faviconBorderWidth: CGFloat = UX.generalBorderWidth,
+        generalCornerRadius: CGFloat = HomepageUX.generalCornerRadius,
+        faviconCornerRadius: CGFloat = HomepageUX.generalCornerRadius,
+        faviconBorderWidth: CGFloat = HomepageUX.generalBorderWidth,
         heroImageSize: CGSize,
-        fallbackFaviconSize: CGSize = UX.fallbackFaviconSize
+        fallbackFaviconSize: CGSize = HomepageUX.fallbackFaviconSize
     ) {
         self.urlStringRequest = urlStringRequest
         self.type = type

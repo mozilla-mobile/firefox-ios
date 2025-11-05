@@ -13,4 +13,9 @@ struct HomepageUX {
     // General
     static let generalCornerRadius: CGFloat = 8
     static let generalBorderWidth: CGFloat = 0.5
+
+    // Top sites
+    static let topSiteIconSize = CGSize(width: 36, height: 36)
+    static let imageBackgroundSize = CGSize(width: 60, height: 60)
+    static let fallbackFaviconSize = CGSize(width: 36, height: 36)
 }

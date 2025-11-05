@@ -7,7 +7,6 @@ import Common
 
 import enum MozillaAppServices.VisitType
 
-// Laurie
 protocol LibraryPanelDelegate: AnyObject {
     @MainActor
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)

@@ -123,7 +123,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(subject.tabToolbar.privateModeBadge.badge.isHidden)
     }
 
-    // laurie - test
     func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {
         let subject = createSubject()
         let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)

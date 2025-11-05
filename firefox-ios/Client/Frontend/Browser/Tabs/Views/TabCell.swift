@@ -29,10 +29,6 @@ final class TabCell: UICollectionViewCell,
                                                                   leading: 12,
                                                                   bottom: 12,
                                                                   trailing: 12)
-
-        // Using the same sizes for fallback favicon as the top sites on the homepage
-        static let topSiteIconSize = CGSize(width: 36, height: 36)
-        static let imageBackgroundSize = CGSize(width: 60, height: 60)
     }
     // MARK: - Properties
 
@@ -288,11 +284,11 @@ final class TabCell: UICollectionViewCell,
 
             faviconBG.centerYAnchor.constraint(equalTo: backgroundHolder.centerYAnchor, constant: UX.faviconYOffset),
             faviconBG.centerXAnchor.constraint(equalTo: backgroundHolder.centerXAnchor),
-            faviconBG.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
-            faviconBG.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
+            faviconBG.heightAnchor.constraint(equalToConstant: HomepageUX.imageBackgroundSize.height),
+            faviconBG.widthAnchor.constraint(equalToConstant: HomepageUX.imageBackgroundSize.width),
 
-            smallFaviconView.heightAnchor.constraint(equalToConstant: UX.topSiteIconSize.height),
-            smallFaviconView.widthAnchor.constraint(equalToConstant: UX.topSiteIconSize.width),
+            smallFaviconView.heightAnchor.constraint(equalToConstant: HomepageUX.topSiteIconSize.height),
+            smallFaviconView.widthAnchor.constraint(equalToConstant: HomepageUX.topSiteIconSize.width),
             smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
             smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
         ])
