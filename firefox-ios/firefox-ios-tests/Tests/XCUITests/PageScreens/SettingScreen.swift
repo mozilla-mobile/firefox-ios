@@ -15,6 +15,7 @@ final class SettingScreen {
 
     private var clearDataCell: XCUIElement { sel.CLEAR_PRIVATE_DATA_CELL.element(in: app) }
     private var okButton: XCUIElement { sel.ALERT_OK_BUTTON.element(in: app)}
+    private var toggle: XCUIElement { sel.BLOCK_POPUPS_SWITCH.element(in: app) }
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
@@ -77,5 +78,40 @@ final class SettingScreen {
         let newTab = sel.NEW_TAB_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(newTab)
         newTab.swipeUp()
+    }
+
+    func waitForBrowsingLinksSection() {
+        let browsingSection = sel.BROWSING_LINKS_SECTION.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(browsingSection)
+    }
+
+    func assertBlockPopUpsSwitchIsOn() {
+        BaseTestCase().mozWaitForElementToExist(toggle)
+
+        let value = toggle.value as? String
+        XCTAssertEqual(value, "1", "Expected 'Block Pop-Ups' switch to be ON (value = 1), but got \(String(describing: value))")
+    }
+
+    func tapOnBlockPopupsSwitch() {
+        toggle.waitAndTap()
+    }
+
+    func assertBlockPopUpsSwitchIsOff() {
+        let toggle = sel.BLOCK_POPUPS_SWITCH.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(toggle)
+
+        let value = toggle.value as? String
+        XCTAssertEqual(value, "0", "Expected 'Block Pop-Ups' switch to be OFF (value = 0), but got \(String(describing: value))")
+    }
+
+    func navigateBackToHomePage() {
+        sel.TITLE.element(in: app).waitAndTap()
+        sel.NAVIGATIONBAR.element(in: app).waitAndTap()
+    }
+
+    func connectSettingSwipeUp() {
+        let connectSetting = sel.CONNECT_SETTING.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(connectSetting)
+        connectSetting.swipeUp()
     }
 }

@@ -10,6 +10,7 @@ protocol ToolbarSelectorsSet {
     var NEW_TAB_BUTTON: Selector { get }
     var BACK_BUTTON: Selector { get }
     var FORWARD_BUTTON: Selector { get }
+    var TABTOOLBAR_MENUBUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -20,6 +21,7 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let newTabButton = AccessibilityIdentifiers.Toolbar.addNewTabButton
         static let backButton = AccessibilityIdentifiers.Toolbar.backButton
         static let forwardButton = AccessibilityIdentifiers.Toolbar.forwardButton
+        static let tabToolbar_MenuButton = "TabToolbar.menuButton"
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -52,5 +54,11 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["toolbar"]
     )
 
-    var all: [Selector] { [SETTINGS_MENU_BUTTON, TABS_BUTTON, BACK_BUTTON, FORWARD_BUTTON] }
+    let TABTOOLBAR_MENUBUTTON = Selector.buttonId(
+        IDs.tabToolbar_MenuButton,
+        description: "TabToolbar Menu Button",
+        groups: ["toolbar"]
+    )
+
+    var all: [Selector] { [SETTINGS_MENU_BUTTON, TABS_BUTTON, BACK_BUTTON, FORWARD_BUTTON, TABTOOLBAR_MENUBUTTON] }
 }

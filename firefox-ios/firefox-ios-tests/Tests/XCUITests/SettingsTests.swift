@@ -280,7 +280,13 @@ class SettingsTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
         validateTranslationSettingsUI()
-        navigator.nowAt(SettingsScreen)
+        dismissSearchScreenFromTranslation()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("https://example.com")
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
 
     func testTranslationSettingsDoesNotAppear_translationExperimentOff() {
@@ -292,6 +298,12 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(table)
         let translateSettings = table.cells[AccessibilityIdentifiers.Settings.Translation.title]
         mozWaitForElementToNotExist(translateSettings)
+
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("https://example.com")
+        waitUntilPageLoad()
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
 
     func testTranslationSettingsWithToggleOnOff_translationExperimentOn() {
@@ -310,10 +322,28 @@ class SettingsTests: FeatureFlaggedTestBase {
         XCTAssertEqual(translationSwitch.value as? String,
                        "0",
                        "Translation feature - toggle is enabled by default")
+        dismissSearchScreenFromTranslation()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("https://example.com")
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
+
+        navigator.goto(SettingsScreen)
+        mozWaitForElementToExist(table)
+        translationSettings.waitAndTap()
         translationSwitch.waitAndTap()
         XCTAssertEqual(translationSwitch.value as? String,
                        "1",
                        "Translation feature - toggle is enabled by default")
+        dismissSearchScreenFromTranslation()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("https://example.com")
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
+
+        validateTranslationSettingsUI()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951992
@@ -540,5 +570,10 @@ class SettingsTests: FeatureFlaggedTestBase {
                        "1",
                        "Translation feature - toggle is enabled by default")
         navigator.goto(SettingsScreen)
+    }
+
+    private func dismissSearchScreenFromTranslation() {
+        app.navigationBars["Translation"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
     }
 }

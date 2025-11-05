@@ -150,7 +150,8 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didStartTranslatingPage,
             ToolbarActionType.translationCompleted,
             ToolbarActionType.receivedTranslationLanguage,
-            ToolbarActionType.didReceiveErrorTranslating:
+            ToolbarActionType.didReceiveErrorTranslating,
+            ToolbarActionType.didTranslationSettingsChange:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:

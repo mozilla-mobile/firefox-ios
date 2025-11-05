@@ -49,7 +49,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         } else {
             navigationHintDoubleTapTimer = nil
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.navigationButtonDoubleTapped)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         }
     }
 
@@ -62,7 +62,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             actionOnDismiss: {
                 let action = ToolbarAction(windowUUID: self.windowUUID,
                                            actionType: ToolbarActionType.navigationHintFinishedPresenting)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
             },
             andActionForButton: { },
             overlayState: overlayManager,
@@ -88,7 +88,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         } else {
             let action = ToolbarAction(windowUUID: self.windowUUID,
                                        actionType: ToolbarActionType.navigationHintFinishedPresenting)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         }
     }
 
@@ -373,7 +373,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             if let tab = self.tabManager.selectedTab {
                 self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 self.tabManager.removeTab(tab.tabUUID)
-                store.dispatchLegacy(
+                store.dispatch(
                     GeneralBrowserAction(
                         windowUUID: self.windowUUID,
                         actionType: GeneralBrowserActionType.didCloseTabFromToolbar
@@ -497,7 +497,11 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     }
 
     func showTrackingProtection() {
-        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                  actionType: GeneralBrowserActionType.showTrackingProtectionDetails))
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showTrackingProtectionDetails
+            )
+        )
     }
 }

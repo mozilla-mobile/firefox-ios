@@ -28,9 +28,8 @@ jobs:
       - name: Setup Xcode
         run: |
           sudo rm -rf /Applications/Xcode.app
-          sudo xcode-select -s /Applications/Xcode_26.0.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode_26.0.1.app/Contents/Developer
           xcodebuild -version
-          xcodes runtimes install 'iOS 26.0'
       - name: Run setup scripts for Focus
         run: |
           ./bootstrap.sh focus
