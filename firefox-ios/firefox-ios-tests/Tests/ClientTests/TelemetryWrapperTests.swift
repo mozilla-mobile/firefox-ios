@@ -96,22 +96,6 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertNil(GleanMetrics.TopSites.tilePressed.testGetValue())
     }
 
-    func test_topSiteContextualMenu_GleanIsCalled() throws {
-        let extras = [
-            ExtraKey.contextualMenuType.rawValue: HomepageContextMenuHelper.ContextualActionType.settings.rawValue
-        ]
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .topSiteContextualMenu,
-            value: nil,
-            extras: extras
-        )
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contextualMenu)
-    }
-
     func test_topSiteContextualMenuWithoutExtra_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(
             category: .action,
