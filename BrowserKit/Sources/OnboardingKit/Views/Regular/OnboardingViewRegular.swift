@@ -77,7 +77,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         )
         .padding(.bottom)
     }
-    
+
     private func handleAccessibilityScroll(from edge: Edge) {
         if edge == .leading {
             viewModel.scrollToPreviousPage()
