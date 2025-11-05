@@ -76,7 +76,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
             isEditing: false,
-            shouldShowKeyboard: true,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
@@ -191,8 +191,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.didSetTextInLocationView:
             return handleDidSetTextInLocationViewAction(state: state, action: action)
 
-        case ToolbarActionType.hideKeyboard:
-            return handleHideKeyboardAction(state: state)
+        case ToolbarActionType.keyboardStateDidChange:
+            return handleShouldShowKeyboardAction(state: state, action: action)
 
         case ToolbarActionType.clearSearch:
             return handleClearSearchAction(state: state, action: action)
@@ -238,7 +238,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
             isEditing: false,
-            shouldShowKeyboard: true,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
@@ -622,7 +622,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         if state.url == nil {
             return handleCancelEditAction(state: state, action: action)
         } else {
-            return handleHideKeyboardAction(state: state)
+            return handleShouldShowKeyboardAction(state: state, action: action)
         }
     }
 
@@ -648,7 +648,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: false,
-            shouldShowKeyboard: true,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -696,7 +696,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
     /// This case can occur when scrolling on homepage or in search view
     /// and the user is still in isEditing mode (aka Cancel button is shown)
     /// But we don't show the keyboard and the cursor is not active
-    private static func handleHideKeyboardAction(state: Self) -> Self {
+    private static func handleShouldShowKeyboardAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -710,7 +712,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            shouldShowKeyboard: false,
+            shouldShowKeyboard: toolbarAction.shouldShowKeyboard ?? false,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,

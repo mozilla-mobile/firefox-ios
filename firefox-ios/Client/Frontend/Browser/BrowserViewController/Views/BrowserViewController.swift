@@ -1643,15 +1643,18 @@ class BrowserViewController: UIViewController,
         /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
         let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
 
-        guard isBottomSearchBar,
-              let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0
-        else {
+        let keyboardHeight = keyboardState?.intersectionHeightForView(view)
+        let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
+
+        guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
-
+        let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
+            hasAccessoryView: tabManager.selectedTab?.webView?.accessoryView != nil
+        )
         let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
-        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight)
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
 
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
@@ -4686,6 +4689,23 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        if #available(iOS 26.0, *), isBottomSearchBar {
+            store.dispatch(
+                ToolbarAction(
+                    scrollAlpha: 1,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                )
+            )
+        }
+
+        store.dispatchLegacy(
+            ToolbarAction(
+                shouldShowKeyboard: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.keyboardStateDidChange
+            )
+        )
         keyboardState = nil
         updateViewConstraints()
 
