@@ -443,10 +443,14 @@
 		39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */; };
 		39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39AF317329DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift */; };
 		39BD570E2E53F3ED00CA1317 /* MerinoFeedFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BD570D2E53F3E400CA1317 /* MerinoFeedFetcher.swift */; };
+		39BF0CD32EB4ED6F002064F5 /* StoriesFeedTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BF0CD22EB4ED66002064F5 /* StoriesFeedTelemetryTests.swift */; };
+		39BF0CD52EB512A1002064F5 /* ImpressionTrackingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BF0CD42EB51297002064F5 /* ImpressionTrackingUtility.swift */; };
+		39BF0CD72EB512CD002064F5 /* ImpressionTrackingUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BF0CD62EB512C5002064F5 /* ImpressionTrackingUtilityTests.swift */; };
 		39C137972655798A003DC662 /* NimbusIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C137962655798A003DC662 /* NimbusIntegrationTests.swift */; };
 		39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */; };
 		39D056382665235700FBEE59 /* initial_experiments.json in Resources */ = {isa = PBXBuildFile; fileRef = 3964F5FB2656D2B500065278 /* initial_experiments.json */; };
 		39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */; };
+		39DE3DEC2EB3BBA000CC07C6 /* StoriesFeedTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39DE3DEB2EB3BB9700CC07C6 /* StoriesFeedTelemetry.swift */; };
 		39EB469A1E26DDB4006346E8 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39EF434E260A73950011E22E /* Experiments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF434D260A73950011E22E /* Experiments.swift */; };
 		39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39F4C0F92045D87400746155 /* FocusHelper.js */; };
@@ -3291,11 +3295,15 @@
 		39AD454C88A908D41BA13329 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = te.lproj/Today.strings; sourceTree = "<group>"; };
 		39AF317329DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMessagingMessageTests.swift; sourceTree = "<group>"; };
 		39BD570D2E53F3E400CA1317 /* MerinoFeedFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoFeedFetcher.swift; sourceTree = "<group>"; };
+		39BF0CD22EB4ED66002064F5 /* StoriesFeedTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedTelemetryTests.swift; sourceTree = "<group>"; };
+		39BF0CD42EB51297002064F5 /* ImpressionTrackingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpressionTrackingUtility.swift; sourceTree = "<group>"; };
+		39BF0CD62EB512C5002064F5 /* ImpressionTrackingUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpressionTrackingUtilityTests.swift; sourceTree = "<group>"; };
 		39C137962655798A003DC662 /* NimbusIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusIntegrationTests.swift; sourceTree = "<group>"; };
 		39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxScreenGraphTests.swift; sourceTree = "<group>"; };
 		39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMessagingTriggerTests.swift; sourceTree = "<group>"; };
 		39DB4F1AA7B4688949522C99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		39DD4C8BA7FCE677AFDACC2D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		39DE3DEB2EB3BB9700CC07C6 /* StoriesFeedTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedTelemetry.swift; sourceTree = "<group>"; };
 		39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxScreenGraph.swift; sourceTree = "<group>"; };
 		39EF434D260A73950011E22E /* Experiments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experiments.swift; sourceTree = "<group>"; };
 		39F4C0F92045D87400746155 /* FocusHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = FocusHelper.js; sourceTree = "<group>"; };
@@ -13685,6 +13693,7 @@
 		8AC225632B6D3F9600CDA7FD /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
+				39BF0CD22EB4ED66002064F5 /* StoriesFeedTelemetryTests.swift */,
 				8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */,
 				C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */,
 				8A87E98B2E70792F006F0239 /* FxSuggestTelemetryTests.swift */,
@@ -14449,6 +14458,7 @@
 				C7B37A332E8AFCF7006B2D32 /* StoriesFeedSectionLayoutProvider.swift */,
 				C7149DFF2EB14E2400C1FF00 /* StoriesWebviewViewController.swift */,
 				C7E35BAE2EA17CEE00FB63E2 /* StoriesFeedDimensionCalculator.swift */,
+				39DE3DEB2EB3BB9700CC07C6 /* StoriesFeedTelemetry.swift */,
 			);
 			path = StoriesFeed;
 			sourceTree = "<group>";
@@ -15745,6 +15755,7 @@
 				ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */,
 				818BCC732E463BA5008309B1 /* CuratedRecommendationCacheUtility.swift */,
 				0E4AF8602D763E9D002E4238 /* DownloadLiveActivityUtil.swift */,
+				39BF0CD42EB51297002064F5 /* ImpressionTrackingUtility.swift */,
 				96D95015270238500079D39D /* GCDThrottler.swift */,
 				8A48807D2E68923200AD43D5 /* GleanHttpUploader.swift */,
 				8A48807B2E68922400AD43D5 /* GleanOhttpUploader.swift */,
@@ -16133,6 +16144,7 @@
 				94AEF1542D690040003E2623 /* DownloadLiveActivityTest.swift */,
 				0E65573F2D82232200D7F017 /* DownloadProgressManagerTests.swift */,
 				6A3E5D89283831D0001E706E /* DownloadQueueTests.swift */,
+				39BF0CD62EB512C5002064F5 /* ImpressionTrackingUtilityTests.swift */,
 				E1E425312B5A2E9700899550 /* DownloadTests.swift */,
 				1D7B789E2AE088930011E9F2 /* EventQueueTests.swift */,
 				8A96C4B728F9DD0600B75884 /* Extensions */,
@@ -18349,6 +18361,7 @@
 				219914052AF963F900153598 /* TabTrayAction.swift in Sources */,
 				5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
+				39DE3DEC2EB3BBA000CC07C6 /* StoriesFeedTelemetry.swift in Sources */,
 				C7F5331A2E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift in Sources */,
 				C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */,
 				8A8917692B57283B008B01EA /* LegacyHomepageHeaderCell.swift in Sources */,
@@ -18405,6 +18418,7 @@
 				8A3EF8172A2FD2B900796E3A /* AdvancedAccountSettings.swift in Sources */,
 				EBB89509219398E500EB91A0 /* TabContentBlocker+ContentScript.swift in Sources */,
 				1DA710072AE7106B00677F6B /* AppDataUsageReportSetting.swift in Sources */,
+				39BF0CD52EB512A1002064F5 /* ImpressionTrackingUtility.swift in Sources */,
 				D3BE7B461B054F8600641031 /* UITestAppDelegate.swift in Sources */,
 				C8DC90C72A06759E0008832B /* MarkupAttributionUtility.swift in Sources */,
 				219A0FD52ACC8506009A6D1A /* InactiveTabsCell.swift in Sources */,
@@ -19323,6 +19337,7 @@
 				ED33E3572D0A4CE9002265A7 /* URLActivityItemProviderTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
+				39BF0CD72EB512CD002064F5 /* ImpressionTrackingUtilityTests.swift in Sources */,
 				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,
 				0E6557402D82232B00D7F017 /* DownloadProgressManagerTests.swift in Sources */,
 				AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */,
@@ -19611,6 +19626,7 @@
 				8AC8841F2D5261170033ABF5 /* MockCrashTracker.swift in Sources */,
 				8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */,
 				5A475E8F29DB89CE009C13FD /* MockTabDataStore.swift in Sources */,
+				39BF0CD32EB4ED6F002064F5 /* StoriesFeedTelemetryTests.swift in Sources */,
 				ED45893E2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift in Sources */,
 				5AD3B67A2CF653A600AFA1FE /* MockLocale.swift in Sources */,
 				8A7A93EE2810ADF2005E7E1B /* ContileProviderTests.swift in Sources */,
@@ -29405,7 +29421,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				DEFINES_MODULE = YES;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9G8J6YA743;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 43AQ936H96;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;

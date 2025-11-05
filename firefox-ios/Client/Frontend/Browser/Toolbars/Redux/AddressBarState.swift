@@ -76,7 +76,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
             isEditing: false,
-            shouldShowKeyboard: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
@@ -146,10 +146,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
 
+        // Translation related actions
         case ToolbarActionType.didStartTranslatingPage,
             ToolbarActionType.translationCompleted,
             ToolbarActionType.receivedTranslationLanguage,
-            ToolbarActionType.didReceiveErrorTranslating:
+            ToolbarActionType.didReceiveErrorTranslating,
+            ToolbarActionType.didTranslationSettingsChange:
             return handleLeadingPageChangedAction(state: state, action: action)
 
         case ToolbarActionType.readerModeStateChanged:
@@ -189,8 +191,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.didSetTextInLocationView:
             return handleDidSetTextInLocationViewAction(state: state, action: action)
 
-        case ToolbarActionType.keyboardStateDidChange:
-            return handleShouldShowKeyboardAction(state: state, action: action)
+        case ToolbarActionType.hideKeyboard:
+            return handleHideKeyboardAction(state: state)
 
         case ToolbarActionType.clearSearch:
             return handleClearSearchAction(state: state, action: action)
@@ -236,7 +238,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
             isEditing: false,
-            shouldShowKeyboard: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
@@ -620,7 +622,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         if state.url == nil {
             return handleCancelEditAction(state: state, action: action)
         } else {
-            return handleShouldShowKeyboardAction(state: state, action: action)
+            return handleHideKeyboardAction(state: state)
         }
     }
 
@@ -646,7 +648,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: false,
-            shouldShowKeyboard: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -694,9 +696,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     /// This case can occur when scrolling on homepage or in search view
     /// and the user is still in isEditing mode (aka Cancel button is shown)
     /// But we don't show the keyboard and the cursor is not active
-    private static func handleShouldShowKeyboardAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
+    private static func handleHideKeyboardAction(state: Self) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -710,7 +710,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            shouldShowKeyboard: toolbarAction.shouldShowKeyboard ?? false,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -1010,30 +1010,54 @@ struct AddressBarState: StateType, Sendable, Equatable {
                 let shareAction = shareAction(enabled: isLoading == false,
                                               hasAlternativeLocationColor: hasAlternativeLocationColor)
                 actions.append(shareAction)
+
+                if let translationAction = configureTranslationIcon(
+                    for: action,
+                    addressBarState: addressBarState,
+                    isLoading: isLoading,
+                    hasAlternativeLocationColor: hasAlternativeLocationColor
+                ) {
+                    actions.append(translationAction)
+                }
             }
         } else if !isHomepage, isShowingNavigationToolbar {
             let shareAction = shareAction(enabled: isLoading == false,
                                           hasAlternativeLocationColor: hasAlternativeLocationColor)
             actions.append(shareAction)
 
-            // TODO: FXIOS-13930 - Add loading and active mode to the translation icon
-            // Check if action has an updated configuration, otherwise default to state.
-            let canTranslateFromAction = action.translationConfiguration?.canTranslate ?? false
-            let canTranslateFromState = addressBarState.translationConfiguration?.canTranslate ?? false
-            if canTranslateFromAction || canTranslateFromState {
-                let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
-                if let configuration {
-                    let translateAction = translateAction(
-                        enabled: isLoading == false,
-                        configuration: configuration,
-                        hasAlternativeLocationColor: hasAlternativeLocationColor
-                    )
-                    actions.append(translateAction)
-                }
+            if let translationAction = configureTranslationIcon(
+                for: action,
+                addressBarState: addressBarState,
+                isLoading: isLoading,
+                hasAlternativeLocationColor: hasAlternativeLocationColor
+            ) {
+                actions.append(translationAction)
             }
         }
 
         return actions
+    }
+
+    // Checks whether we should show the translation icon based on the translation configuration
+    // state and setups up the configuration for the translation icon on the toolbar (for iPad and iPhone)
+    private static func configureTranslationIcon(
+        for action: ToolbarAction,
+        addressBarState: AddressBarState,
+        isLoading: Bool?,
+        hasAlternativeLocationColor: Bool
+    ) -> ToolbarActionConfiguration? {
+        // Check if action has an updated configuration, otherwise default to state.
+        let canTranslateFromAction = action.translationConfiguration?.canTranslate ?? false
+        let canTranslateFromState = addressBarState.translationConfiguration?.canTranslate ?? false
+        let shouldShowTranslationIcon = canTranslateFromAction || canTranslateFromState
+        guard shouldShowTranslationIcon else { return nil }
+        let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
+        guard let configuration else { return nil }
+        return translateAction(
+            enabled: isLoading == false,
+            configuration: configuration,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
     }
 
     private static func trailingPageActions(

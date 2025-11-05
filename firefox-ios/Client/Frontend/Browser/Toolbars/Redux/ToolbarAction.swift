@@ -32,7 +32,6 @@ struct ToolbarAction: Action {
     let isLoading: Bool?
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
-    let shouldShowKeyboard: Bool?
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let translationConfiguration: TranslationConfiguration?
@@ -60,7 +59,6 @@ struct ToolbarAction: Action {
          isLoading: Bool? = nil,
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
-         shouldShowKeyboard: Bool? = nil,
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
@@ -90,7 +88,6 @@ struct ToolbarAction: Action {
         self.isLoading = isLoading
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
-        self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
         self.middleButton = middleButton
@@ -102,7 +99,7 @@ enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
     case urlDidChange
-    case scrollAlphaNeedsUpdate
+    case scrollAlphaDidChange
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged
@@ -111,7 +108,7 @@ enum ToolbarActionType: ActionType {
     case didStartEditingUrl
     case cancelEditOnHomepage
     case cancelEdit
-    case keyboardStateDidChange
+    case hideKeyboard
     case animationStateChanged
     case readerModeStateChanged
     case backForwardButtonStateChanged
@@ -135,6 +132,7 @@ enum ToolbarActionType: ActionType {
     case translationCompleted
     case receivedTranslationLanguage
     case didReceiveErrorTranslating
+    case didTranslationSettingsChange
 }
 
 struct ToolbarMiddlewareAction: Action {

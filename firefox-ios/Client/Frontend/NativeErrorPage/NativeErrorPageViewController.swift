@@ -220,6 +220,11 @@ final class NativeErrorPageViewController: UIViewController,
                                              actionType: NativeErrorPageActionType.errorPageLoaded))
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view.accessibilityViewIsModal = true
+    }
+
     override func viewWillTransition(
         to size: CGSize,
         with coordinator: UIViewControllerTransitionCoordinator
@@ -327,7 +332,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     @objc
-    private nonisolated func didTapReload() {
+    nonisolated private func didTapReload() {
         store.dispatchLegacy(
             GeneralBrowserAction(
                 isNativeErrorPage: true,
