@@ -32,6 +32,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
 
+        case .firefoxJpGuideDefaultSite:
+            return checkFirefoxJpGuideDefaultSiteFeature(from: nimbus)
+
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
@@ -431,6 +434,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.downloadLiveActivitiesFeature.value().enabled
+    }
+
+    private func checkFirefoxJpGuideDefaultSiteFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.firefoxJpGuideDefaultSite.value().enabled
     }
 
     private func checkFirefoxSuggestFeature(from nimbus: FxNimbus) -> Bool {

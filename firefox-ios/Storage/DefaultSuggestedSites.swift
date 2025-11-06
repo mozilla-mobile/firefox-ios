@@ -6,6 +6,8 @@ import Foundation
 import Localizations
 
 open class DefaultSuggestedSites {
+    public static let firefoxJpGuideURL = "https://blog.mozilla.org/ja/firefox-ja/ios-guide/"
+
     private static let urlMap = [
         "https://www.amazon.com/": [
             "as": "https://www.amazon.in",
@@ -131,6 +133,15 @@ open class DefaultSuggestedSites {
          ],
         "ja_JP": [
             Site.createSuggestedSite(
+                url: firefoxJpGuideURL,
+                title: "Firefoxガイド",
+                trackingId: 804,
+                faviconResource: .bundleAsset(
+                    name: "firefox-jp",
+                    forRemoteResource: URL(string: "https://www.firefox.com/media/img/favicons/firefox/browser/apple-touch-icon.79c2abeb4e35.png")!
+                )
+            ),
+            Site.createSuggestedSite(
                 url: "https://tenki.jp/",
                 title: "tenki.jp",
                 trackingId: 800,
@@ -140,21 +151,21 @@ open class DefaultSuggestedSites {
                 )
             ),
             Site.createSuggestedSite(
-                url: "https://ameblo.jp/",
-                title: "Amebaブログ",
-                trackingId: 801,
-                faviconResource: .bundleAsset(
-                    name: "ameblo",
-                    forRemoteResource: URL(string: "https://stat100.ameba.jp/common_style/img/sp/apple-touch-icon.png")!
-                )
-            ),
-            Site.createSuggestedSite(
                 url: "https://m.yahoo.co.jp/",
                 title: "Yahoo! JAPAN",
                 trackingId: 802,
                 faviconResource: .bundleAsset(
                     name: "yahoo",
                     forRemoteResource: URL(string: "https://s.yimg.jp/c/icon/s/bsc/2.0/y120.png")!
+                )
+            ),
+            Site.createSuggestedSite(
+                url: "https://ameblo.jp/",
+                title: "Amebaブログ",
+                trackingId: 801,
+                faviconResource: .bundleAsset(
+                    name: "ameblo",
+                    forRemoteResource: URL(string: "https://stat100.ameba.jp/common_style/img/sp/apple-touch-icon.png")!
                 )
             ),
             Site.createSuggestedSite(
