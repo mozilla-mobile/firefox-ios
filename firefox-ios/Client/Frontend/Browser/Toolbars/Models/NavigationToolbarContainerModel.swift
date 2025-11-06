@@ -53,21 +53,25 @@ struct NavigationToolbarContainerModel: Equatable {
 
     private static func getA11yCustomAction(action: ToolbarActionConfiguration, windowUUID: WindowUUID) -> (() -> Void)? {
         return action.a11yCustomActionName != nil ? {
-            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                 windowUUID: windowUUID,
-                                                 actionType: ToolbarMiddlewareActionType.customA11yAction)
-            store.dispatchLegacy(action)
+            ensureMainThread {
+                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                     windowUUID: windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.customA11yAction)
+                store.dispatch(action)
+            }
         } : nil
     }
 
     private static func getOnSelected(action: ToolbarActionConfiguration, windowUUID: WindowUUID) -> ((UIButton) -> Void)? {
         return { button in
-            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                 buttonTapped: button,
-                                                 gestureType: .tap,
-                                                 windowUUID: windowUUID,
-                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
-            store.dispatchLegacy(action)
+            ensureMainThread {
+                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                     buttonTapped: button,
+                                                     gestureType: .tap,
+                                                     windowUUID: windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
+                store.dispatch(action)
+            }
         }
     }
 
@@ -75,12 +79,14 @@ struct NavigationToolbarContainerModel: Equatable {
                                        state: ToolbarState,
                                        windowUUID: WindowUUID) -> ((UIButton) -> Void)? {
         return action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
-            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                 buttonTapped: button,
-                                                 gestureType: .longPress,
-                                                 windowUUID: windowUUID,
-                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
-            store.dispatchLegacy(action)
+            ensureMainThread {
+                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                     buttonTapped: button,
+                                                     gestureType: .longPress,
+                                                     windowUUID: windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
+                store.dispatch(action)
+            }
         } : nil
     }
 }
