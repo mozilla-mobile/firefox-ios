@@ -318,7 +318,7 @@ private final class MockBookmarkNode: @unchecked Sendable, FxBookmarkNode {
     }
 }
 
-private final class MockPinnedSites: MockablePinnedSites {
+private final class MockPinnedSites: MockablePinnedSites, @unchecked Sendable {
     let isPinnedTopSite: Bool
 
     init(stubbedIsPinnedtopSite: Bool) {

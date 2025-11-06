@@ -13,7 +13,8 @@ protocol TopSiteHistoryManagerProvider: Sendable {
 }
 
 // Manages the top site
-final class TopSiteHistoryManager: TopSiteHistoryManagerProvider {
+// FIXME: FXIOS-14053 Can't be `final` and `Sendable` unless tests are rewritten for `TopSiteHistoryManagerStub`
+class TopSiteHistoryManager: TopSiteHistoryManagerProvider, @unchecked Sendable {
     private let profile: Profile
 
     private let topSiteCacheSize: Int32 = 32
