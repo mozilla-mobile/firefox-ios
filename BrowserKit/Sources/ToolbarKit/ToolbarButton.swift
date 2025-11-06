@@ -71,7 +71,7 @@ class ToolbarButton: UIButton,
         self.notificationCenter = notificationCenter
 
         // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
-        if element.shouldUseLoadingSpinner {
+        if element.isLoading {
             makeLoadingButton()
         } else {
             hideLoadingIcon()

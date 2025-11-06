@@ -142,6 +142,7 @@ final class TranslationsMiddleware {
             )
             store.dispatch(toolbarAction)
         } catch {
+            // TODO: FXIOS-14043 Possibly want to add telemetry for these errors.
             logger.log(
                 "Unable to detect language from page to determine if eligible for translations.",
                 level: .warning,
