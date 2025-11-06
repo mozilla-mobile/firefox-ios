@@ -391,7 +391,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                translationConfiguration: TranslationConfiguration(
+                    prefs: mockProfile.prefs,
+                    state: .inactive
+                ),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
             )

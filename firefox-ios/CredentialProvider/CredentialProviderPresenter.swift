@@ -80,54 +80,6 @@ final class CredentialProviderPresenter: @unchecked Sendable {
 
         attemptProvision(currentRetry: 0)
     }
-
-    func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        if self.profile.logins.reopenIfClosed() != nil {
-            cancel(with: .failed)
-        } else {
-            profile.logins.listLogins(completionHandler: { [weak self] result in
-                switch result {
-                case .failure:
-                    self?.cancel(with: .failed)
-                case .success(let loginRecords):
-                    var sortedLogins = loginRecords.sorted(by: <)
-                    for (index, element) in sortedLogins.enumerated() {
-                        if let identifier = serviceIdentifiers
-                            .first?
-                            .identifier.asURL?.domainURL
-                            .absoluteString.titleFromHostname,
-                           element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
-                            sortedLogins.remove(at: index)
-                            sortedLogins.insert(element, at: 0)
-                        }
-                    }
-
-                    DispatchQueue.main.async {
-                        let dataSource = sortedLogins.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
-                        self?.view?.show(itemList: dataSource)
-                    }
-                }
-            })
-        }
-    }
-
-    func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        // Force a short delay before we trigger authentication.
-        // See https://github.com/mozilla-mobile/firefox-ios/issues/9354
-        DispatchQueue.main.asyncAfter(deadline: .now() + CredentialProviderAuthenticationDelay) {
-            self.appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
-                switch result {
-                case .success:
-                    // Move to the main thread because a state update triggers UI changes.
-                    DispatchQueue.main.async { [unowned self] in
-                        self.showCredentialList(for: serviceIdentifiers)
-                    }
-                case .failure:
-                    self.cancel(with: .userCanceled)
-                }
-            }
-        }
-    }
 }
 
 private extension CredentialProviderPresenter {

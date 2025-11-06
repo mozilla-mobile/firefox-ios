@@ -39,7 +39,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
                     defaultValue: true,
                     titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
                 ) { isOn in
-                    store.dispatchLegacy(
+                    store.dispatch(
                         TopSitesAction(
                             isEnabled: isOn,
                             windowUUID: self.windowUUID,
@@ -54,7 +54,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
                     defaultValue: featureFlags.isFeatureEnabled(.hntSponsoredShortcuts, checking: .userOnly),
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
                 ) { _ in
-                    store.dispatchLegacy(
+                    store.dispatch(
                         TopSitesAction(
                             windowUUID: self.windowUUID,
                             actionType: TopSitesActionType.toggleShowSponsoredSettings
@@ -84,7 +84,7 @@ extension TopSitesSettingsViewController {
         override var status: NSAttributedString {
             let defaultValue = TopSitesRowCountSettingsController.defaultNumberOfRows
             let numberOfRows = profile?.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
-            store.dispatchLegacy(
+            store.dispatch(
                 TopSitesAction(
                     numberOfRows: Int(numberOfRows),
                     windowUUID: self.windowUUID,

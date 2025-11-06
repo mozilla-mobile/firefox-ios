@@ -68,6 +68,7 @@ class WKSecurityOriginMock: WKSecurityOrigin {
 // MARK: WKWebViewMock
 class WKWebViewMock: WKWebView {
     var overridenURL: URL
+    var didLoad: (() -> Void)?
 
     init(_ url: URL) {
         self.overridenURL = url
@@ -80,6 +81,15 @@ class WKWebViewMock: WKWebView {
 
     override var url: URL {
         return overridenURL
+    }
+
+    // Simulate async load behavior
+    override func load(_ request: URLRequest) -> WKNavigation? {
+        DispatchQueue.main.async {
+            self.overridenURL = request.url ?? self.overridenURL
+            self.didLoad?()
+        }
+        return nil
     }
 }
 

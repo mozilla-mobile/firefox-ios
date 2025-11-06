@@ -41,6 +41,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 }
                 .padding(.top, UX.CardView.cardTopPadding)
             }
+            .animation(.easeOut, value: geometry.size)
         }
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
@@ -52,16 +53,18 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()
-                        imageView(scale: scale)
-                        titleView
+                        VStack(spacing: UX.CardView.spacing * scale) {
+                            imageView(scale: scale)
+                            titleView
+                        }
                         bodyView
                         Spacer()
                         links
                         Spacer()
                     }
                     .padding(UX.CardView.verticalPadding * scale)
-                        .frame(width: geometry.size.width)
-                        .frame(minHeight: geometry.size.height)
+                    .frame(width: geometry.size.width)
+                    .frame(minHeight: geometry.size.height)
                 }
                 .scrollBounceBehavior(basedOnSize: true)
             }
@@ -78,13 +81,14 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     // MARK: - Subviews
 
     var links: some View {
-        VStack(alignment: .center, spacing: UX.Onboarding.Spacing.standard) {
+        VStack(alignment: UX.CardView.horizontalAlignmentForCurrentLocale, spacing: UX.Onboarding.Spacing.standard) {
             ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
                 AttributedLinkText<TosAction>(
                     theme: theme,
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
+                    textAlignment: UX.CardView.textAlignmentForCurrentLocale,
                     linkAction: viewModel.handleEmbededLinkAction(action:)
                 )
             }
@@ -106,7 +110,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
 
     var titleView: some View {
         Text(viewModel.configuration.title)
-            .font(UX.CardView.titleFont)
+            .font(UX.CardView.titleFontForCurrentLocale)
             .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
@@ -119,7 +123,8 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
             .fixedSize(horizontal: false, vertical: true)
             .font(UX.CardView.bodyFont)
             .foregroundColor(Color(theme.colors.textSecondary))
-            .multilineTextAlignment(.center)
+            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
+            .frame(maxWidth: .infinity, alignment: UX.CardView.frameAlignmentForCurrentLocale)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)DescriptionLabel")
             .accessibilityLabel(viewModel.configuration.body)
     }
