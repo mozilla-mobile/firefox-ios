@@ -498,7 +498,7 @@ class BrowserCoordinator: BaseCoordinator,
             return // route is handled with existing child coordinator
         }
         windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
-        let navigationController = ThemedNavigationController(windowUUID: windowUUID)
+        let navigationController = SettingsNavigationController(windowUUID: windowUUID)
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
         navigationController.modalPresentationStyle = modalPresentationStyle
