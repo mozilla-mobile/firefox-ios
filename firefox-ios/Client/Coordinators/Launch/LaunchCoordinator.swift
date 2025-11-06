@@ -176,8 +176,11 @@ final class LaunchCoordinator: BaseCoordinator,
         )
 
         let viewController = PortraitOnlyHostingController(rootView: view)
-        viewController.modalPresentationStyle = .fullScreen
+        // OverFullScreen is needed in order to show the view controller underneath the presented controller and to avoid
+        // white strip glitch cause by sync issue with SwiftUI and UIKit.
+        viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
+        viewController.view.backgroundColor = .clear
 
         router.present(viewController, animated: true)
     }
@@ -298,8 +301,9 @@ final class LaunchCoordinator: BaseCoordinator,
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)
-        hostingController.modalPresentationStyle = .fullScreen
+        hostingController.modalPresentationStyle = .overFullScreen
         hostingController.modalTransitionStyle = .crossDissolve
+        hostingController.view.backgroundColor = .clear
 
         router.present(hostingController, animated: true)
     }
