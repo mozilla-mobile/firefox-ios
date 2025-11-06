@@ -21,6 +21,7 @@ final class OnboardingService: FeatureFlaggable {
     private var profile: Profile
     private var introScreenManager: IntroScreenManagerProtocol?
     private var themeManager: ThemeManager
+    private var hasSyncFlowStarted = false
 
     // MARK: - Injected Dependencies
     private let notificationManager: NotificationManagerProtocol
@@ -279,6 +280,9 @@ final class OnboardingService: FeatureFlaggable {
         profile: Profile,
         completion: @escaping () -> Void
     ) -> UIViewController {
+        // Reset sync flow started flag when creating a new sign-in view controller
+        hasSyncFlowStarted = false
+
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             params,
             flowType: .emailLoginFlow,
@@ -297,6 +301,10 @@ final class OnboardingService: FeatureFlaggable {
         }
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
+        // Set callback to track when sync flow starts (when user presses scan or email button)
+        (singInSyncVC as? FirefoxAccountSignInViewController)?.onSyncFlowStarted = { [weak self] in
+            self?.hasSyncFlowStarted = true
+        }
 
         let controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = completion
@@ -351,7 +359,14 @@ final class OnboardingService: FeatureFlaggable {
     @objc
     nonisolated private func dismissSelector() {
         ensureMainThread {
-            self.delegate?.dismiss(animated: true, completion: nil)
+            let syncFlowStarted = self.hasSyncFlowStarted
+            self.delegate?.dismiss(animated: true) {
+                // If sync flow has started (user pressed scan or email button), dismiss the entire onboarding flow
+                if syncFlowStarted {
+                    self.navigationDelegate?.finishOnboardingFlow()
+                }
+                // If sync flow hasn't started, only the sync controller is dismissed
+            }
         }
     }
 }
