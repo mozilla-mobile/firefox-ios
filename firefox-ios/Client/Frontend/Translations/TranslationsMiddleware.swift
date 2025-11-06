@@ -122,7 +122,13 @@ final class TranslationsMiddleware {
             else { return }
 
             let languageSampleSource = WebViewLanguageSampleSource(webView: webView)
-            let pageLanguage = try await languageDetector.detectLanguage(from: languageSampleSource)
+            await handleDetectingLanguage(from: languageSampleSource, with: action.windowUUID)
+        }
+    }
+
+    private func handleDetectingLanguage(from source: WebViewLanguageSampleSource, with windowUUID: WindowUUID) async {
+        do {
+            let pageLanguage = try await languageDetector.detectLanguage(from: source)
 
             guard let pageLanguage, pageLanguage != Locale.current.languageCode else { return }
 
@@ -131,10 +137,17 @@ final class TranslationsMiddleware {
                     prefs: profile.prefs,
                     state: .inactive
                 ),
-                windowUUID: action.windowUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.receivedTranslationLanguage
             )
             store.dispatch(toolbarAction)
+        } catch {
+            logger.log(
+                "Unable to detect language from page to determine if eligible for translations.",
+                level: .warning,
+                category: .translations,
+                extra: ["LanguageDetector error": "\(error.localizedDescription)"]
+            )
         }
     }
 
