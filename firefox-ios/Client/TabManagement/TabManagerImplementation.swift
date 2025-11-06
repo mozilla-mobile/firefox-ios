@@ -890,7 +890,7 @@ class TabManagerImplementation: NSObject,
         let action = PrivateModeAction(isPrivate: isPrivate,
                                        windowUUID: windowUUID,
                                        actionType: PrivateModeActionType.setPrivateModeTo)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         tab.resumeDocumentDownload()
 
@@ -952,7 +952,7 @@ class TabManagerImplementation: NSObject,
                                           isNativeErrorPage: isNativeErrorPage,
                                           windowUUID: windowUUID,
                                           actionType: GeneralBrowserActionType.updateSelectedTab)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
