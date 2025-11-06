@@ -399,15 +399,17 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         if let profile {
             privacySettings.append(
-                BoolSetting(prefs: profile.prefs,
-                            theme: themeManager.getCurrentTheme(for: windowUUID),
-                            prefKey: PrefsKeys.Settings.closePrivateTabs,
-                            defaultValue: true,
-                            titleText: .AppSettingsClosePrivateTabsTitle,
-                            statusText: .AppSettingsClosePrivateTabsDescription) { _ in
-                                let action = TabTrayAction(windowUUID: self.windowUUID,
-                                                           actionType: TabTrayActionType.closePrivateTabsSettingToggled)
-                                store.dispatchLegacy(action)
+                BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.Settings.closePrivateTabs,
+                    defaultValue: true,
+                    titleText: .AppSettingsClosePrivateTabsTitle,
+                    statusText: .AppSettingsClosePrivateTabsDescription
+                ) { _ in
+                    let action = TabTrayAction(windowUUID: self.windowUUID,
+                                               actionType: TabTrayActionType.closePrivateTabsSettingToggled)
+                    store.dispatch(action)
                 }
             )
         }

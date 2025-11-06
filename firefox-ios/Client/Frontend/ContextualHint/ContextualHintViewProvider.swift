@@ -20,6 +20,7 @@ enum ContextualHintType: String {
     case dataClearance = "DataClearance"
     case navigation = "Navigation"
     case toolbarUpdate = "ToolbarUpdate"
+    case translation = "Translation"
     case summarizeToolbarEntry = "SummarizeToolbarEntry"
 }
 

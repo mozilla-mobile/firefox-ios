@@ -145,6 +145,48 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: summarizeToolbarEntryContextHintVC)
     }
 
+    // MARK: - Translation CFR
+    func configureTranslationContextualHint(for view: UIView) {
+        guard let state = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
+        // Show up arrow for iPad and landscape or top address bar; otherwise show down arrow
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let shouldShowUpArrow = state.toolbarPosition == .top || !showNavToolbar
+
+        translationContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: shouldShowUpArrow ? .up : .down,
+            andDelegate: self,
+            presentedUsing: { [weak self] in
+                self?.presentTranslationContextualHint()
+            },
+            andActionForButton: { },
+            overlayState: overlayManager)
+    }
+
+    private func presentTranslationContextualHint() {
+        present(translationContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
+    }
+
+    func dismissToolbarCFRs(with windowUUID: WindowUUID) {
+        guard let toolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        ) else {
+            return
+        }
+        let translationAction = toolbarState.addressToolbar.leadingPageActions.first(where: { $0.actionType == .translate })
+        if translationAction == nil {
+            resetTranslationCFRTimer()
+        }
+    }
+    // Reset the CFR timer for the translation button to avoid presenting the CFR
+    // In cases, such as if translation icon is not available
+    private func resetTranslationCFRTimer() {
+        translationContextHintVC.stopTimer()
+    }
+
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
     }
@@ -201,6 +243,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     private func closePrivateTabsAndOpenNewPrivateHomepage() {
         tabManager.removeTabs(tabManager.privateTabs)
         tabManager.selectTab(tabManager.addTab(isPrivate: true))
+    }
+
+    /// This is a workaround for dismissing CFRs when keyboard is showing up.
+    func dismissCFRs() {
+        summarizeToolbarEntryContextHintVC.dismiss(animated: false)
+        translationContextHintVC.dismiss(animated: false)
     }
 
     /// Setup animation for data clearance flow unless reduce motion is enabled

@@ -218,7 +218,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
             )
             return
         }
-        store.dispatchLegacy(
+        store.dispatch(
             MessageCardAction(
                 windowUUID: windowUUID,
                 actionType: MessageCardActionType.tappedOnCloseButton
@@ -237,7 +237,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
             )
             return
         }
-        store.dispatchLegacy(
+        store.dispatch(
             MessageCardAction(
                 windowUUID: windowUUID,
                 actionType: MessageCardActionType.tappedOnActionButton

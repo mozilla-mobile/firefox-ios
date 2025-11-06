@@ -10,8 +10,7 @@ import Common
 import struct MozillaAppServices.LoginEntry
 
 class PasswordDetailViewController: SensitiveViewController,
-                                    Themeable,
-                                    Notifiable {
+                                    Themeable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
     }
@@ -55,7 +54,7 @@ class PasswordDetailViewController: SensitiveViewController,
         } else {
             tableView = UITableView(frame: .zero, style: .plain)
         }
-        super.init(nibName: nil, bundle: nil)
+        super.init()
 
         startObservingNotifications(
             withNotificationCenter: NotificationCenter.default,
@@ -132,7 +131,8 @@ class PasswordDetailViewController: SensitiveViewController,
     }
 
     // MARK: Notifiable
-    func handleNotifications(_ notification: Notification) {
+    override func handleNotifications(_ notification: Notification) {
+        super.handleNotifications(notification)
         guard notification.name == UIApplication.didEnterBackgroundNotification else { return }
 
         ensureMainThread {

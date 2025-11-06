@@ -498,7 +498,7 @@ class BrowserCoordinator: BaseCoordinator,
             return // route is handled with existing child coordinator
         }
         windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
-        let navigationController = ThemedNavigationController(windowUUID: windowUUID)
+        let navigationController = SettingsNavigationController(windowUUID: windowUUID)
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
         navigationController.modalPresentationStyle = modalPresentationStyle
@@ -1126,7 +1126,7 @@ class BrowserCoordinator: BaseCoordinator,
             browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
         }
 
-        guard !childCoordinators.contains(where: { $0 is SummarizeController }) else { return }
+        guard !childCoordinators.contains(where: { $0 is SummarizeCoordinator }) else { return }
         let coordinator = SummarizeCoordinator(
             browserSnapshot: browserScreenshot,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,
@@ -1156,21 +1156,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showStoriesWebView(url: URL?) {
         guard let url else { return }
-
-        // Creates an unmanaged tab that is destroyed once the stories webview view controller is dismissed
-        // Used to prevent persisting tab in the tab tray during and across app sessions
-        let tab = Tab(profile: profile, isPrivate: false, windowUUID: windowUUID)
-        let tabConfigurationProvider = TabConfigurationProvider(prefs: profile.prefs)
-        let tabConfiguration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
-        tab.url = url
-        tab.navigationDelegate = browserViewController
-        tab.tabDelegate = browserViewController
-        tab.createWebview(configuration: tabConfiguration)
-        tab.loadRequest(URLRequest(url: url))
-
-        // Present the stories web view with the tab's webview
-        guard let webView = tab.webView else { return }
-        let webviewViewController = StoriesWebviewViewController(windowUUID: windowUUID, webView: webView)
+        let webviewViewController = StoriesWebviewViewController(profile: profile, windowUUID: windowUUID)
+        webviewViewController.configure(url: url)
         router.push(webviewViewController)
     }
 
