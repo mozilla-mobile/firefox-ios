@@ -36,9 +36,9 @@ features:
       - channel: beta
         value:
           enabled: false
-          search-bar: true
+          search-bar: false
           shortcuts-library: false
-          stories-redesign: true
+          stories-redesign: false
           discover-more-feature-configuration:
             discover-more-v1-experience: false
             show-discover-more-button: false
