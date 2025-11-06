@@ -956,8 +956,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
 
-        temporaryDocument?.download { [weak self] url in
-            ensureMainThread {
+        temporaryDocument?.download { url in
+            ensureMainThread { [weak self] in
                 guard let url else { return }
 
                 // Prevent the WebView to load a new item so it doesn't add a new entry to the back and forward list.

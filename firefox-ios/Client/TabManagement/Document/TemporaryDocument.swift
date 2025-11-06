@@ -17,7 +17,7 @@ protocol TemporaryDocument: Sendable {
 
     func download() async -> URL?
 
-    func download(_ completion: @escaping (URL?) -> Void)
+    func download(_ completion: @escaping @Sendable (URL?) -> Void)
 
     func cancelDownload()
 
