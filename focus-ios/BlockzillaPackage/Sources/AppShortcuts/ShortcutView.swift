@@ -8,7 +8,7 @@ import UIComponents
 import Combine
 
 @available(iOS 14, *)
-public class ShortcutView: UIView {
+public final class ShortcutView: UIView {
     public var contextMenuIsDisplayed = false
     public private(set) var viewModel: ShortcutViewModel
 

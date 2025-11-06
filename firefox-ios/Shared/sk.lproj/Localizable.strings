@@ -17,7 +17,7 @@
 "About" = "O aplikácii";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "Pridať do skratiek";
+"ActivityStream.ContextMenu.AddToShortcuts" = "Pridať medzi Skratky";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Pripnúť";
@@ -236,7 +236,7 @@
 "Decrease text size" = "Zmeniť veľkosť textu";
 
 /* Title for default search engine picker. */
-"Default Search Engine" = "Predvolený vyhľadávací modul";
+"Default Search Engine" = "Predvolený vyhľadávač";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
 "DefaultBrowserCloseButtonAccessibility.v102" = "Zavrieť";
@@ -926,7 +926,7 @@
 "ProtectionStatus.Secure" = "Pripojenie je zabezpečené";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "Moduly pre rýchle vyhľadávanie";
+"Quick-Search Engines" = "Rýchle vyhľadávače";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "Ohodnotiť na App Store";
@@ -1013,10 +1013,10 @@
 "Search.SuggestSectionTitle.v102" = "Návrhy Firefoxu";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "Nový vyhľadávací modul sa objaví v paneli rýchleho vyhľadávania.";
+"Search.ThirdPartyEngines.AddMessage" = "Nový vyhľadávač sa zobrazí v paneli rýchleho vyhľadávania.";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
-"Search.ThirdPartyEngines.AddSuccess" = "Pridať vyhľadávací modul!";
+"Search.ThirdPartyEngines.AddSuccess" = "Vyhľadávač bol pridaný!";
 
 /* The title that asks the user to Add the search provider */
 "Search.ThirdPartyEngines.AddTitle" = "Pridať poskytovateľa vyhľadávania?";
@@ -1025,7 +1025,7 @@
 "Search.ThirdPartyEngines.Cancel" = "Zrušiť";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Vyhľadávací modul s týmto názvom alebo s touto adresou už bol pridaný.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Vyhľadávač s týmto názvom alebo adresou URL už bol pridaný.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Zlyhanie";
@@ -1118,19 +1118,19 @@
 "Settings" = "Nastavenia";
 
 /* The button text in Search Settings that opens the Custom Search Engine view. */
-"Settings.AddCustomEngine" = "Pridať vyhľadávací modul";
+"Settings.AddCustomEngine" = "Pridať vyhľadávač";
 
 /* The text on the Save button when saving a custom search engine */
 "Settings.AddCustomEngine.SaveButtonText" = "Uložiť";
 
 /* The title of the  Custom Search Engine view. */
-"Settings.AddCustomEngine.Title" = "Pridanie vyhľadávacieho modulu";
+"Settings.AddCustomEngine.Title" = "Pridanie vyhľadávača";
 
 /* The title for the field which sets the title for a custom search engine. */
 "Settings.AddCustomEngine.TitleLabel" = "Názov";
 
 /* The placeholder for Title Field when saving a custom search engine. */
-"Settings.AddCustomEngine.TitlePlaceholder" = "Vyhľadávací modul";
+"Settings.AddCustomEngine.TitlePlaceholder" = "Vyhľadávač";
 
 /* The title for URL Field */
 "Settings.AddCustomEngine.URLLabel" = "Adresa URL";
@@ -1442,7 +1442,7 @@
 "Settings.Passwords.OnboardingMessage.v103" = "Vaše heslá sú teraz chránené pomocou Face ID, Touch ID alebo prístupového kódu zariadenia.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
-"Settings.Passwords.SavePasswords.v103" = "Ukladanie hesiel";
+"Settings.Passwords.SavePasswords.v103" = "Ukladať heslá";
 
 /* Title for the passwords screen. */
 "Settings.Passwords.Title.v103" = "Heslá";

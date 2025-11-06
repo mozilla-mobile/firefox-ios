@@ -94,7 +94,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     func configure(
         state: SectionHeaderConfiguration,
-        moreButtonAction: ((UIButton) -> Void)? = nil,
+        moreButtonAction: (@MainActor (UIButton) -> Void)? = nil,
         textColor: UIColor?,
         theme: Theme
     ) {
@@ -157,10 +157,13 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            adjustLayout()
-        default: break
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                self.adjustLayout()
+            default: break
+            }
         }
     }
 }

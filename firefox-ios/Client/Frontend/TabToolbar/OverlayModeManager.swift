@@ -16,12 +16,14 @@ protocol OverlayModeManager: OverlayStateProtocol {
 
     /// Enter overlay mode with paste content
     /// - Parameter pasteContent: String with the content to paste on the search
+    @MainActor
     func openSearch(with pasteContent: String)
 
     /// Enter overlay mode when opening a new tab
     /// - Parameters:
     ///   - url: Tab url to determine if is the url is homepage or nil
     ///   - newTabSettings: User option for new tab, if it's a custom url (homepage) the keyboard is not raised
+    @MainActor
     func openNewTab(url: URL?, newTabSettings: NewTabPage)
 
     /// Leave overlay mode when the user finishes editing. This is called when
@@ -29,23 +31,27 @@ protocol OverlayModeManager: OverlayStateProtocol {
     /// keyboard, or by tapping on a suggestion in the search view.
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current
     ///                                  search should be canceled
+    @MainActor
     func finishEditing(shouldCancelLoading: Bool)
 
     /// Leave overlay mode when the user cancels editing. This is called when
     /// the user dismisses the search view without committing their edits.
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current
     ///                                  search should be canceled
+    @MainActor
     func cancelEditing(shouldCancelLoading: Bool)
 
     /// Leave overlay mode when tab change happens, like switching tabs or open a site from any homepage section
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current
     ///                                  search should be canceled
+    @MainActor
     func switchTab(shouldCancelLoading: Bool)
 }
 
 class DefaultOverlayModeManager: OverlayModeManager {
     private var urlBarView: URLBarViewProtocol?
 
+    @MainActor
     var inOverlayMode: Bool {
         return urlBarView?.inOverlayMode ?? false
     }
@@ -56,25 +62,30 @@ class DefaultOverlayModeManager: OverlayModeManager {
         self.urlBarView = urlBarView
     }
 
+    @MainActor
     func openSearch(with pasteContent: String) {
         enterOverlayMode(pasteContent, pasted: true, search: true)
     }
 
+    @MainActor
     func openNewTab(url: URL?, newTabSettings: NewTabPage) {
         guard shouldEnterOverlay(for: url, newTabSettings: newTabSettings) else { return }
 
         enterOverlayMode(nil, pasted: false, search: true)
     }
 
+    @MainActor
     func finishEditing(shouldCancelLoading: Bool) {
         guard inOverlayMode else { return }
         leaveOverlayMode(reason: .finished, shouldCancelLoading: shouldCancelLoading)
     }
 
+    @MainActor
     func cancelEditing(shouldCancelLoading: Bool) {
         leaveOverlayMode(reason: .cancelled, shouldCancelLoading: shouldCancelLoading)
     }
 
+    @MainActor
     func switchTab(shouldCancelLoading: Bool) {
         guard inOverlayMode else { return }
 
@@ -91,10 +102,12 @@ class DefaultOverlayModeManager: OverlayModeManager {
         }
     }
 
+    @MainActor
     private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
         urlBarView?.enterOverlayMode(locationText, pasted: pasted, search: search)
     }
 
+    @MainActor
     private func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
         urlBarView?.leaveOverlayMode(reason: reason, shouldCancelLoading: cancel)
     }

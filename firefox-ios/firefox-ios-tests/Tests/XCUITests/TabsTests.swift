@@ -19,6 +19,12 @@ let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.htm
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TabsTests: BaseTestCase {
+    var toolBarScreen: ToolbarScreen!
+    var tabTrayScreen: TabTrayScreen!
+    var browserScreen: BrowserScreen!
+    var newTabsScreen: NewTabsScreen!
+    var firefoxHomePageScreen: FirefoxHomePageScreen!
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
     func testAddTabFromTabTray() {
@@ -47,6 +53,37 @@ class TabsTests: BaseTestCase {
         let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_1"
         mozWaitForElementToExist(app.cells[identifier])
         XCTAssertEqual(app.cells[identifier].label, "\(urlLabel). \(selectedTab)")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307042
+    // Smoketest TAE
+    func testAddTabFromTabTray_TAE() {
+        toolBarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+        navigator.nowAt(NewTabScreen)
+        toolBarScreen.assertTabsButtonExists()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        // The tabs counter shows the correct number
+        toolBarScreen.assertTabsOpened(expectedCount: 2)
+
+        // The tab tray shows the correct tabs
+        if iPad() {
+            toolBarScreen.tapOnTabsButton()
+        } else {
+            navigator.goto(TabTray)
+        }
+        tabTrayScreen.assertTabCellVisibleAndHasCorrectLabel(
+            index: 1,
+            urlLabel: urlLabel,
+            selectedTab: selectedTab
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354300
@@ -143,6 +180,35 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306865
+    // Smoketest TAE
+    func testCloseAllTabsUndo_TAE() throws {
+        if !iPad() {
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
+        }
+        toolBarScreen = ToolbarScreen(app: app)
+        firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+        // A different tab than home is open to do the proper checks
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        toolBarScreen.assertTabsButtonExists()
+        navigator.nowAt(BrowserTab)
+        toolBarScreen.tapOnTabsButton()
+        tabTrayScreen.tapOnNewTabButton()
+        navigator.goto(TabTray)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        // Close all tabs, undo it and check that the number of tabs is correct
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        tabTrayScreen.undoRemovingAllTabs()
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        tabTrayScreen.waitForTabWithLabel(urlLabel)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
     // Smoketest
     func testCloseAllTabsPrivateModeUndo() {
@@ -177,6 +243,45 @@ class TabsTests: BaseTestCase {
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2354473
+    // Smoketest TAE
+    func testCloseAllTabsPrivateModeUndo_TAE() {
+        browserScreen = BrowserScreen(app: app)
+        toolBarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        browserScreen.assertCancelButtonOnUrlBarExist()
+        navigator.back()
+        // A different tab than home is open to do the proper checks
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        toolBarScreen.assertTabsButtonExists()
+
+        if iPad() {
+            toolBarScreen.tapOnTabsButton()
+            tabTrayScreen.tapOnNewTabButton()
+        } else {
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            toolBarScreen.assertTabsButtonExists()
+        }
+
+        navigator.nowAt(BrowserTab)
+        navigator.goto(URLBarOpen)
+        if iPad() {
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        } else {
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        }
+        // Close all tabs, undo it and check that the number of tabs is correct
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        browserScreen.assertPrivateBrowsingLabelExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354579
@@ -230,6 +335,8 @@ class TabsTests: BaseTestCase {
     func testOpenNewTabLandscape() {
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
+        homepageSearchBar.tapIfExists()
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
@@ -238,6 +345,24 @@ class TabsTests: BaseTestCase {
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is displayed
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306884
+    // Smoketest TAE
+    func testOpenNewTabLandscape_TAE() {
+        toolBarScreen = ToolbarScreen(app: app)
+        XCUIDevice.shared.orientation = .landscapeLeft
+        // Verify the '+' icon is shown and open a tab with it
+        homepageSearchBar.tapIfExists()
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        toolBarScreen.assertNewTabButtonExist()
+
+        // Go back to portrait mode
+        XCUIDevice.shared.orientation = .portrait
+        // Verify that the '+' is displayed
+        toolBarScreen.assertNewTabButtonExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
@@ -291,6 +416,56 @@ class TabsTests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
+        navigator.nowAt(NewTabScreen)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306838
+    // Smoketest TAE
+    func testLongTapTabCounter_TAE() {
+        toolBarScreen = ToolbarScreen(app: app)
+        newTabsScreen = NewTabsScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+        firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+
+        guard !iPad() else { return }
+        // Long tap on Tab Counter should show the correct options
+        navigator.nowAt(NewTabScreen)
+        toolBarScreen.assertTabsButtonExists()
+        toolBarScreen.pressTabsButton(duration: 1)
+        newTabsScreen.assertLargeAndCrossIconsExist()
+        // Open New Tab
+        newTabsScreen.tapOnPlusIconScreen()
+        navigator.performAction(Action.CloseURLBarOpen)
+
+        toolBarScreen.assertTabsButtonExists()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        tabTrayScreen.tapTabAtIndex(index: 0)
+
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+
+        // Close tab
+        navigator.nowAt(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+
+        toolBarScreen.assertTabsButtonExists()
+        toolBarScreen.pressTabsButton(duration: 1)
+        mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.plus])
+        newTabsScreen.tapOnCrossIconScreen()
+        navigator.nowAt(NewTabScreen)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+
+        // Go to Private Mode
+        tabTrayScreen.tapTabAtIndex(index: 0)
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+        toolBarScreen.assertTabsButtonExists()
+        toolBarScreen.pressTabsButton(duration: 1)
+        newTabsScreen.tapNewPrivateTab()
+        browserScreen.tapCancelButtonOnUrlBarExist()
+        toolBarScreen.assertTabsButtonExists()
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
     }
@@ -501,11 +676,21 @@ fileprivate extension BaseTestCase {
 }
 
 class TabsTestsIphone: BaseTestCase {
+    var toolBarScreen: ToolbarScreen!
+    var tabTrayScreen: TabTrayScreen!
+    var browserScreen: BrowserScreen!
+    var newTabsScreen: NewTabsScreen!
+    var firefoxHomePageScreen: FirefoxHomePageScreen!
+
     override func setUp() {
         specificForPlatform = .phone
         if !iPad() {
             super.setUp()
         }
+        toolBarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        newTabsScreen = NewTabsScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2355535
@@ -534,6 +719,32 @@ class TabsTestsIphone: BaseTestCase {
         closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2355535
+    // Smoketest TAE
+    func testCloseTabFromLongPressTabsButton_TAE() {
+        if skipPlatform { return }
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.back()
+
+        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        toolBarScreen.assertTabsButtonExists()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.nowAt(NewTabScreen)
+        toolBarScreen.assertTabsButtonExists()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.nowAt(NewTabScreen)
+        toolBarScreen.assertTabsButtonExists()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
+    }
+
     // This test only runs for iPhone see bug 1409750
     // https://mozilla.testrail.io/index.php?/cases/view/2355536
     // Smoketest
@@ -545,6 +756,18 @@ class TabsTestsIphone: BaseTestCase {
         navigator.nowAt(BrowserTab)
         // Adding tapping action to avoid the test to fail in bitrise
         app.buttons["Cancel"].tapIfExists()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2355536
+    // Smoketest TAE
+    func testAddTabByLongPressTabsButton_TAE() {
+        if skipPlatform { return }
+        navigator.nowAt(BrowserTab)
+        toolBarScreen.assertTabsButtonExists()
+        navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+        navigator.nowAt(BrowserTab)
+        browserScreen.tapCancelButtonIfExist()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
@@ -563,6 +786,21 @@ class TabsTestsIphone: BaseTestCase {
         let privateIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)0"
         mozWaitForElementToExist(app.buttons[privateIdentifier])
         XCTAssertTrue(app.buttons[privateIdentifier].isEnabled)
+        XCTAssertTrue(userState.isPrivate)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2355537
+    // Smoketest TAE
+    func testAddPrivateTabByLongPressTabsButton_TAE() {
+        if skipPlatform { return }
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
+        navigator.nowAt(BrowserTab)
+        // Adding tapping action to avoid the test to fail in bitrise
+        browserScreen.tapCancelButtonIfExist()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        tabTrayScreen.assertTabButtonEnabled(at: 0)
         XCTAssertTrue(userState.isPrivate)
     }
 
@@ -591,6 +829,27 @@ class TabsTestsIphone: BaseTestCase {
         XCTAssertEqual("2", numTab)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306861
+    // Smoketest TAE
+    func testSwitchBetweenTabsToastButton_TAE() {
+        if skipPlatform { return }
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+
+        app.webViews.links.firstMatch.press(forDuration: 1)
+        newTabsScreen.pressOpenNewTabButtonExist(duration: 1, timeout: TIMEOUT)
+        newTabsScreen.tapOnSwitchButton()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "iana")
+        browserScreen.assertRFCLinkExist()
+        toolBarScreen.assertTabsButtonExists()
+        toolBarScreen.assertTabsButtonValue(expectedCount: "2")
+    }
+
     // This test is disabled for iPad because the toast menu is not shown there
     // https://mozilla.testrail.io/index.php?/cases/view/2306860
     // Smoketest
@@ -615,6 +874,26 @@ class TabsTestsIphone: BaseTestCase {
         let privateIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)0"
         mozWaitForElementToExist(app.buttons[privateIdentifier])
         XCTAssertTrue(app.buttons[privateIdentifier].isEnabled)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306860
+    // Smoketest TAE
+    func testSwitchBetweenTabsNoPrivatePrivateToastButton_TAE() {
+        if skipPlatform { return }
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+
+        app.webViews.links.firstMatch.press(forDuration: 1)
+        newTabsScreen.pressOpenNewPrivateTabButton(duration: 1, timeout: TIMEOUT)
+        newTabsScreen.tapOnSwitchButton()
+
+        // Check that the tab has changed to the new open one and that the user is in private mode
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "iana")
+        navigator.goto(TabTray)
+        tabTrayScreen.assertTabButtonEnabled(at: 0)
     }
 }
 

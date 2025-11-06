@@ -5,9 +5,9 @@
 import UIKit
 import Common
 
-typealias SearchEngineCompletion = @Sendable (SearchEnginePrefs, [OpenSearchEngine]) -> Void
+typealias SearchEngineCompletion = @MainActor @Sendable (SearchEnginePrefs, [OpenSearchEngine]) -> Void
 
-protocol SearchEngineProvider {
+protocol SearchEngineProvider: Sendable {
     /// Takes a list of custom search engines (added by the user) along with an ordered
     /// engine name list (to provide sorting) which is stored in Prefs, and returns a
     /// a final list of search engines.
@@ -38,7 +38,7 @@ struct SearchEnginePrefs {
     let version: SearchEngineOrderingPrefsVersion
 }
 
-class DefaultSearchEngineProvider: SearchEngineProvider {
+final class DefaultSearchEngineProvider: SearchEngineProvider {
     private let logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
@@ -101,7 +101,7 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
 
     private func getUnorderedBundledEnginesFor(locale: Locale,
                                                possibleLanguageIdentifier: [String],
-                                               completion: @escaping ([OpenSearchEngine]) -> Void ) {
+                                               completion: @escaping @Sendable ([OpenSearchEngine]) -> Void ) {
         let region = locale.regionCode ?? "US"
         let parser = OpenSearchParser(pluginMode: true)
 

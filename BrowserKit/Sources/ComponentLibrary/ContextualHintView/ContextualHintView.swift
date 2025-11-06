@@ -6,7 +6,7 @@ import Foundation
 import Common
 import UIKit
 
-public class ContextualHintView: UIView, ThemeApplicable {
+public final class ContextualHintView: UIView, ThemeApplicable {
     private var viewModel: ContextualHintViewModel?
 
     struct UX {

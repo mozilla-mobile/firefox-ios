@@ -13,7 +13,7 @@ import Fuzi
  *
  * OpenSearch spec: http://www.opensearch.org/Specifications/OpenSearch/1.1
  */
-class OpenSearchParser {
+final class OpenSearchParser {
     private static let typeSearch = "text/html"
     private static let typeSuggest = "application/x-suggestions+json"
 

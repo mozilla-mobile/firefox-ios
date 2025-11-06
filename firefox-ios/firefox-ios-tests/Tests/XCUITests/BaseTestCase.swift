@@ -71,13 +71,13 @@ class BaseTestCase: XCTestCase {
         let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
         if icon.exists {
             icon.press(forDuration: 1.5)
-            springboard.buttons["Remove App"].waitAndTap()
+            springboard.buttons["Remove App"].tapWithRetry()
             mozWaitForElementToNotExist(springboard.buttons["Remove App"])
             mozWaitForElementToExist(springboard.alerts.firstMatch)
-            springboard.alerts.buttons["Delete App"].waitAndTap()
+            springboard.alerts.buttons["Delete App"].tapWithRetry()
             mozWaitForElementToNotExist(springboard.alerts.buttons["Delete App"])
             mozWaitForElementToExist(springboard.alerts.firstMatch)
-            springboard.alerts.buttons["Delete"].waitAndTap()
+            springboard.alerts.buttons["Delete"].tapWithRetry()
         }
     }
 
@@ -303,11 +303,13 @@ class BaseTestCase: XCTestCase {
         userState = navigator.userState
     }
 
-    func addContentToReaderView() {
+    func addContentToReaderView(isHomePageOn: Bool = true) {
         updateScreenGraph()
         userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        if isHomePageOn {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         app.buttons["Reader View"].waitAndTap()

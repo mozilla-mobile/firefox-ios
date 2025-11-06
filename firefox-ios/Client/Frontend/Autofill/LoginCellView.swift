@@ -37,14 +37,15 @@ struct LoginCellView: View {
                     .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                     .accessibilityHidden(true)
                 VStack(alignment: .leading) {
-                    Text(login.username.isEmpty ? String.PasswordAutofill.LoginListCellNoUsername
-                         : login.username)
+                    Text(login.origin)
                         .font(.body)
                         .foregroundColor(textColor)
                         .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
-                    Text(verbatim: "**********")
+                    Text(login.username.isEmpty ? String.PasswordAutofill.LoginListCellNoUsername
+                         : login.username)
                         .font(.subheadline)
                         .foregroundColor(customLightGray)
+                        .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                 }
                 Spacer()
             }

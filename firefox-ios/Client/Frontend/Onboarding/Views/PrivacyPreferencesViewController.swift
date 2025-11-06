@@ -268,7 +268,9 @@ final class PrivacyPreferencesViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            setDetentSize()
+            ensureMainThread {
+                self.setDetentSize()
+            }
         default: break
         }
     }
@@ -285,7 +287,11 @@ final class PrivacyPreferencesViewController: UIViewController,
         }
 
         titleLabel.textColor = theme.colors.textPrimary
-        doneButton.setTitleColor(theme.colors.textAccent, for: .normal)
+        if #available(iOS 26.0, *) {
+            doneButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        } else {
+            doneButton.setTitleColor(theme.colors.textAccent, for: .normal)
+        }
         crashReportsSwitch.applyTheme(theme: theme)
         technicalDataSwitch.applyTheme(theme: theme)
         setupContentViews()

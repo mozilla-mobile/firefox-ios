@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol ShareTab {
+protocol ShareTab: Sendable {
     @MainActor
     var displayTitle: String { get }
     @MainActor
@@ -14,7 +14,7 @@ protocol ShareTab {
     @MainActor
     var webView: TabWebView? { get }
 
-    // Tabs displaying content other than HTML mime type can optionally be downloaded and treated as files when shared
+    // Tabs displaying content other than a HTML MIME type can optionally be downloaded and treated as files when shared.
     @MainActor
     var temporaryDocument: TemporaryDocument? { get }
 }

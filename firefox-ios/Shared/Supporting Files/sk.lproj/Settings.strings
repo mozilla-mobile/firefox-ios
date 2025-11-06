@@ -176,7 +176,7 @@
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Karty a panel s adresou skrývať rolovaním";
 
 /* Accessibility label for default search engine setting. */
-"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Predvolený vyhľadávací modul";
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Predvolený vyhľadávač";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Ďalšie informácie o Návrhoch Firefoxu";
@@ -185,7 +185,7 @@
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Alternatívne vyhľadávače";
 
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
-"Settings.Search.DefaultSearchEngine.Title.v121" = "Predvolený vyhľadávací modul";
+"Settings.Search.DefaultSearchEngine.Title.v121" = "Predvolený vyhľadávač";
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "Návrhy z vyhľadávačov";

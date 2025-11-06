@@ -30,6 +30,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
         XCTAssertTrue(shouldFilter, "Should filter data scheme URL")
     }
 
+    @MainActor
     func testAllowsSubframes() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows subframes")
@@ -43,6 +44,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterNullFrame() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .cancel, "Doesnt allow null target frame")
@@ -55,6 +57,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_hasNoDataURL() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .cancel, "Cancel no data URL on main frame")
@@ -68,6 +71,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_cancelGenericDataURL() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .cancel, "Cancel generic data URL")
@@ -81,6 +85,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsImage() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows image")
@@ -94,6 +99,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_cancelImageSVG() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .cancel, "Cancel SVG + XML images")
@@ -107,6 +113,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_cancelImageSVGCaplocks() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .cancel, "Cancel SVG + XML images")
@@ -120,6 +127,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsOtherImages() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows jpg images")
@@ -133,6 +141,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsVideo() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows video")
@@ -146,6 +155,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsApplicationPDF() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows application PDF")
@@ -159,6 +169,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsApplicationJSON() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows application JSON")
@@ -172,6 +183,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsBase64() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows base 64")
@@ -185,6 +197,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsDataComma() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows data comma")
@@ -198,6 +211,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsTextPlainComma() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows text plain comma")
@@ -211,6 +225,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
                                            navigationAction: policy)
     }
 
+    @MainActor
     func testFilterMainFrame_allowsTextPlainSemicolon() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows text plain semicolon")

@@ -146,9 +146,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
         navigationItem.title = String.AppSettingsTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: .AppSettingsDone,
-            style: .done,
+            style: .plain,
             target: self,
             action: #selector(done))
+        if #available(iOS 26.0, *) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+        }
     }
 
     // MARK: - Accessibility Identifiers
@@ -395,15 +399,17 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         if let profile {
             privacySettings.append(
-                BoolSetting(prefs: profile.prefs,
-                            theme: themeManager.getCurrentTheme(for: windowUUID),
-                            prefKey: PrefsKeys.Settings.closePrivateTabs,
-                            defaultValue: true,
-                            titleText: .AppSettingsClosePrivateTabsTitle,
-                            statusText: .AppSettingsClosePrivateTabsDescription) { _ in
-                                let action = TabTrayAction(windowUUID: self.windowUUID,
-                                                           actionType: TabTrayActionType.closePrivateTabsSettingToggled)
-                                store.dispatchLegacy(action)
+                BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.Settings.closePrivateTabs,
+                    defaultValue: true,
+                    titleText: .AppSettingsClosePrivateTabsTitle,
+                    statusText: .AppSettingsClosePrivateTabsDescription
+                ) { _ in
+                    let action = TabTrayAction(windowUUID: self.windowUUID,
+                                               actionType: TabTrayActionType.closePrivateTabsSettingToggled)
+                    store.dispatch(action)
                 }
             )
         }
@@ -480,6 +486,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ResetContextualHints(settings: self),
             ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
             ResetTermsOfServiceAcceptancePage(settings: self, settingsDelegate: self),
+            ResetSearchEnginePrefsSetting(settings: self),
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             TermsOfUseTimeout(settings: self, settingsDelegate: self),
@@ -487,6 +494,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
             ScreenshotSetting(settings: self),
             DeleteLoginsKeysSetting(settings: self),
+            DeleteAutofillKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self)

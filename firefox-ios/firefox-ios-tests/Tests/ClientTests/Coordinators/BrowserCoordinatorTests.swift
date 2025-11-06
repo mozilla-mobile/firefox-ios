@@ -664,12 +664,21 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     // MARK: - Stories Feed
 
-    func testStoriesFeed_showsStoriesFeed() throws {
+    func testShowStoriesFeed_showsStoriesFeed() throws {
         let subject = createSubject()
 
         subject.showStoriesFeed()
 
         XCTAssertNotNil(mockRouter.pushedViewController as? StoriesFeedViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
+    func testShowStoriesWebview_showsStoriesWebview() throws {
+        let subject = createSubject()
+
+        subject.showStoriesWebView(url: URL(string: "https://www.mozilla.com"))
+
+        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesWebviewViewController)
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 

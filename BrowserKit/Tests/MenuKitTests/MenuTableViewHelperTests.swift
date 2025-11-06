@@ -10,16 +10,16 @@ final class MenuTableViewHelperTests: XCTestCase {
     var tableView: UITableView!
     var helper: MenuTableViewHelper!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         tableView = UITableView()
         helper = MenuTableViewHelper(tableView: tableView)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         tableView = nil
         helper = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testReload_withMenuData() {

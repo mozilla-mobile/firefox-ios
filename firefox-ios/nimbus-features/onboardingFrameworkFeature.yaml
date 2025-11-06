@@ -5,9 +5,14 @@ features:
       The new onboarding framework feature that will allow onboarding
       to be experimentable through initial experiments.
     variables:
-      enableModernUi:
+      enable-modern-ui:
         description: >
           Toggle between legacy (false) and modern (true) UI variants.
+        type: Boolean
+        default: false
+      should-use-japan-configuration:
+        description: >
+          Toggle between standard (false) and Japan-specific (true) assets and content.
         type: Boolean
         default: false
       conditions:
@@ -33,7 +38,8 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enableModernUi: false
+          enable-modern-ui: false
+          should-use-japan-configuration: false
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
@@ -306,6 +312,93 @@ features:
               prerequisites:
                 - ALWAYS
               uiVariant: modern
+            welcome-modern-japan:
+              card-type: basic
+              order: 10
+              title: Onboarding/Onboarding.Modern.Welcome.Title.v145
+              body: Onboarding/Onboarding.Modern.Welcome.Description.v145
+              image: trackers-japan
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Modern.Welcome.ActionTreatmentA.v145
+                  action: open-instructions-popup
+                secondary:
+                  title: Onboarding/Onboarding.Modern.Welcome.Skip.v145
+                  action: forward-one-card
+              instructions-popup:
+                title: Onboarding/DefaultBrowserPopup.Title.v114
+                button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
+                button-action: open-ios-fx-settings
+                instructions:
+                  - Onboarding/DefaultBrowserPopup.FirstLabel.v114
+                  - Onboarding/DefaultBrowserPopup.SecondLabel.v114
+                  - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: japan
+            sign-to-sync-modern-japan:
+              card-type: basic
+              order: 30
+              title: Onboarding/Onboarding.Modern.Sync.Title.v145
+              body: Onboarding/Onboarding.Modern.Sync.Description.v145
+              image: sync-with-icons-japan
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Modern.Sync.SignIn.Action.v145
+                  action: sync-sign-in
+                secondary:
+                  title: Onboarding/Onboarding.Modern.Sync.Skip.Action.v145
+                  action: forward-one-card
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: japan
+            customization-toolbar-modern-japan:
+              card-type: multiple-choice
+              order: 20
+              title: Onboarding/Onboarding.Modern.Customization.Toolbar.Title.v145
+              body: Onboarding/Onboarding.Modern.Customization.Toolbar.Description.v145
+              image: toolbar
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Modern.Customization.Toolbar.Continue.Action.v145
+                  action: forward-one-card
+              multiple-choice-buttons:
+                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145
+                  image: toolbar-bottom-japan
+                  action: toolbar-bottom
+                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v145
+                  image: toolbar-top-japan
+                  action: toolbar-top
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: japan
+            customization-theme-modern-japan:
+              card-type: multiple-choice
+              order: 25
+              title: Onboarding/Onboarding.Modern.Customization.Theme.Title.v145
+              body: Onboarding/Onboarding.Modern.Customization.Theme.Description.v145
+              image: themeing
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Modern.Customization.Toolbar.Continue.Action.v145
+                  action: forward-one-card
+              multiple-choice-buttons:
+                - title: Onboarding/Onboarding.Modern.Customization.Theme.Automatic.v145
+                  image: theme-system-japan
+                  action: theme-system-default
+                - title: Onboarding/Onboarding.Modern.Customization.Theme.Light.v145
+                  image: theme-light-japan
+                  action: theme-light
+                - title: Onboarding/Onboarding.Modern.Customization.Theme.Dark.v145
+                  image: theme-dark-japan
+                  action: theme-dark
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: japan
           dismissable: true
 
 objects:
@@ -506,6 +599,8 @@ enums:
         description: Use the existing (legacy) onboarding UI.
       modern:
         description: Use the new (modern) onboarding UI.
+      japan:
+        description: Use the Japan-specific onboarding UI with localized assets.
   OnboardingActions:
     description: >
       The identifiers for the different actions available for cards in onboarding
@@ -602,6 +697,12 @@ enums:
       trackers:
         description: >
           Corresponding to the trackers image
+      sync-with-icons-japan:
+        description: >
+          Corresponding to the sync-with-icons image for Japan
+      trackers-japan:
+        description: >
+          Corresponding to the trackers image for Japan
   OnboardingCardType:
     description: >
       The identifiers for the different types of onboarding cards.
@@ -662,3 +763,18 @@ enums:
       toolbar-bottom:
         description: >
           Corresponding to the toolbar on the bottom
+      theme-system-japan:
+        description: >
+          Corresponding to the system theme for Japan
+      theme-dark-japan:
+        description: >
+          Corresponding to the dark theme for Japan
+      theme-light-japan:
+        description: >
+          Corresponding to the light theme for Japan
+      toolbar-top-japan:
+        description: >
+          Corresponding to the toolbar on top for Japan
+      toolbar-bottom-japan:
+        description: >
+          Corresponding to the toolbar on the bottom for Japan

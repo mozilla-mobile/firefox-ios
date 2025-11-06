@@ -4,7 +4,7 @@
 
 import Foundation
 
-final class NimbusSearchBarLayer {
+final class NimbusSearchBarLayer: Sendable {
     // MARK: - Public methods
     public func getDefaultPosition(from nimbus: FxNimbus = FxNimbus.shared) -> SearchBarPosition {
         let isAtBottom = nimbus.features.search.value().awesomeBar.position.isBottom
