@@ -181,8 +181,8 @@ final class BookmarksViewController: SiteTableViewController,
     // MARK: - Data
 
     override func reloadData() {
-        viewModel.reloadData { [weak self] in
-            ensureMainThread {
+        viewModel.reloadData {
+            ensureMainThread { [weak self] in
                 self?.tableView.reloadData()
                 if self?.viewModel.shouldFlashRow ?? false {
                     self?.flashRow()
