@@ -131,7 +131,7 @@ open class DefaultSuggestedSites {
          ],
         "ja_JP": [
             Site.createSuggestedSite(
-                url: "https://mzl.la/4nJ5E8m",
+                url: "https://blog.mozilla.org/ja/firefox-ja/ios-guide/",
                 title: "Firefoxガイド",
                 trackingId: 804,
                 faviconResource: .bundleAsset(
