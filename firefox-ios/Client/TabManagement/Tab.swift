@@ -1047,12 +1047,21 @@ extension Tab: TabWebViewDelegate {
     }
 
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool {
+        let isPDF = mimeType == MIMEType.PDF
+        let hasCustomAccessory = tabWebView.accessoryView.hasAccessoryView
+        let isPerplexityDomain = url?.shortDomain == URLConstants.perplexityAI?.shortDomain
+
         // Hide the default WKWebView accessory view panel for PDF documents and
         // there is no accessory view to display (but only for iPad cases)
-        let isPDF = mimeType == MIMEType.PDF
         if UIDevice.current.userInterfaceIdiom == .pad {
-            return !isPDF && tabWebView.accessoryView.hasAccessoryView
+            return !isPDF && hasCustomAccessory
         }
+        /// Hide the default accessory view for Perplexity AI domain or when
+        /// No custom accessory view is configured (`hasAccessoryView` is `false`)
+        if isPerplexityDomain && !hasCustomAccessory {
+            return false
+        }
+
         return !isPDF
     }
 }
@@ -1177,8 +1186,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     }
 
     override var inputAccessoryView: UIView? {
-        guard url?.shortDomain != URLConstants.perplexityAI?.shortDomain,
-              delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
+        guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
 
         translatesAutoresizingMaskIntoConstraints = false
 
