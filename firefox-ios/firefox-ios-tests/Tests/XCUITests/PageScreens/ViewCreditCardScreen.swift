@@ -22,9 +22,15 @@ final class ViewCreditCardScreen {
 
     func assertCardDetails(_ details: [String]) {
         for detail in details {
-            let element = sel.cardDetailLabel(detail).element(in: app)
-            BaseTestCase().mozWaitForElementToExist(element)
-            XCTAssertTrue(element.exists, "\(detail) does not exist")
+            if #available(iOS 16, *) {
+                let button = app.buttons[detail]
+                BaseTestCase().mozWaitForElementToExist(button)
+                XCTAssertTrue(button.exists, "\(detail) does not exist (button)")
+            } else {
+                let label = app.staticTexts[detail]
+                BaseTestCase().mozWaitForElementToExist(label)
+                XCTAssertTrue(label.exists, "\(detail) does not exist (label)")
+            }
         }
     }
 

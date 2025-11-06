@@ -869,37 +869,11 @@ class CreditCardsTests: BaseTestCase {
         toolbarScreen.assertTabsButtonExists()
         navigator.goto(CreditCardsSettings)
         loginSettingsScreen.unlockLoginsView()
-        /* mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
-        addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")*/
         creditCardsScreen.openAddCreditCardForm()
         addCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         creditCardsScreen.openSavedCard(at: 1)
         viewCardScreen.waitForViewCardScreen(containing: "1252")
         viewCardScreen.assertCardDetails(["Test", "05 / 40"])
-        // Tap on a saved card
-        // mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        // app.tables.cells.element(boundBy: 1).waitAndTap()
-        // The "View card" page is displayed with all the details of the card
-        /*waitForElementsToExist(
-            [
-                app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard],
-                app.tables.cells.element(
-                    boundBy: 1
-                ).buttons.elementContainingText(
-                    "1252"
-                )
-            ]
-        )
-        let cardDetails = ["Test", "05 / 40"]
-        for index in cardDetails {
-            if #available(iOS 16, *) {
-                mozWaitForElementToExist(app.buttons[index])
-                XCTAssertTrue(app.buttons[index].exists, "\(index) does not exists")
-            } else {
-                mozWaitForElementToExist(app.staticTexts[index])
-            }
-        }*/
     }
 
     private func addCreditCard(name: String, cardNumber: String, expirationDate: String) {
