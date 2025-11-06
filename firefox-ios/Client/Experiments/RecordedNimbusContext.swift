@@ -115,7 +115,6 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
         language = calculatedAttributes.language
         region = calculatedAttributes.region
         touExperiencePoints = Experiments.touExperiencePoints(region: region)
-        
         self.logger.log("init end", level: .debug, category: .experiments)
     }
 

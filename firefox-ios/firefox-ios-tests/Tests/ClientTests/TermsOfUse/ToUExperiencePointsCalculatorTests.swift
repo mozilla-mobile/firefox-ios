@@ -18,7 +18,7 @@ final class ToUExperiencePointsCalculatorTests: XCTestCase {
         userDefaults = nil
         super.tearDown()
     }
-    
+
     func testCalculatePoints_ZeroPoints_WhenNoSettingsEnabled() {
         let calculator = ToUExperiencePointsCalculator(userDefaults: userDefaults, region: "US")
         XCTAssertEqual(calculator.calculatePoints(), 0)
@@ -62,5 +62,4 @@ final class ToUExperiencePointsCalculatorTests: XCTestCase {
         let calculator = ToUExperiencePointsCalculator(userDefaults: userDefaults, region: "DE")
         XCTAssertEqual(calculator.calculatePoints(), 2)
     }
-
 }

@@ -27,11 +27,9 @@ struct ToUExperiencePointsCalculator {
 
     func calculatePoints() -> Int32 {
         var points: Int32 = 0
-        
         if hasEnabledStrictTracking() {
             points += 1
         }
-        
         if hasDisabledSponsoredContent() {
             points += 1
         }
@@ -45,19 +43,19 @@ struct ToUExperiencePointsCalculator {
         guard userDefaults.bool(forKey: enabledKey) else { return false }
         return userDefaults.string(forKey: strengthKey) == BlockingStrength.strict.rawValue
     }
-    
+
     private func hasDisabledSponsoredContent() -> Bool {
         guard let region = region,
               Self.sponsoredContentSupportedCountries.contains(region) else {
             return false
         }
-        
+
         let allShortcutsKey = ProfilePrefsReader.prefix + PrefsKeys.UserFeatureFlagPrefs.TopSiteSection
         let sponsoredKey = ProfilePrefsReader.prefix + PrefsKeys.FeatureFlags.SponsoredShortcuts
-        
+
         let allShortcutsEnabled = userDefaults.object(forKey: allShortcutsKey) as? Bool ?? true
         let sponsoredEnabled = userDefaults.object(forKey: sponsoredKey) as? Bool ?? true
-        
+
         return !allShortcutsEnabled || !sponsoredEnabled
     }
 }
