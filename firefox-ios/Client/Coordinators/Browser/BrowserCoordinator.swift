@@ -164,8 +164,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func setHomepageVisibility(isVisible: Bool) {
-        let homepage = homepageViewController
-        guard let homepage else { return }
+        guard let homepage = homepageViewController else { return }
         homepage.view.isHidden = !isVisible
     }
 
