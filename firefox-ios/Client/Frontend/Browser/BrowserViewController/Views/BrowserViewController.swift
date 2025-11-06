@@ -3933,15 +3933,20 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
 
-    private func handleEmailFieldDetected() {
+    private func handleEmailFieldDetected(for tab: Tab?) {
         // TODO: Arriving off the main thread?
         assert(Thread.isMainThread)
+        guard let tab, let tabURL = tab.url else { return }
         guard RelayController.isFeatureEnabled else { return }
-        guard let tabURL = tabManager.selectedTab?.url else { return }
 
         if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
-            // TODO: Show keyboard accessory view
+            tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
+            tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
         }
+    }
+
+    private func handleUseRelayMaskTapped() {
+        // TODO: Forthcoming.
     }
 }
 
@@ -4055,7 +4060,10 @@ extension BrowserViewController: LegacyTabDelegate {
                 guard let tabURL = tab?.url else { return }
 
                 // Handle email fields separately; currently only used for email masking (Relay service)
-                guard field != .email else { self?.handleEmailFieldDetected(); return }
+                guard field != .email else {
+                    self?.handleEmailFieldDetected(for: tab)
+                    return
+                }
 
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
                 let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,

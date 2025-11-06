@@ -49,6 +49,7 @@ struct AccessibilityIdentifiers {
             static let previousButton = "KeyboardAccessory.previousButton"
             static let addressAutofillButton = "KeyboardAccessory.addressAutofillButton"
             static let creditCardAutofillButton = "KeyboardAccessory.creditCardAutofillButton"
+            static let relayMaskAutofillButton = "KeyboardAccessory.relayMaskAutofillButton"
         }
 
         struct AddressToolbar {
