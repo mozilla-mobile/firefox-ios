@@ -78,8 +78,10 @@ final class OnboardingService: FeatureFlaggable {
             completion(.success(.advance(numberOfPages: 3)))
 
         case .syncSignIn:
-            handleSyncSignIn(from: cardName, with: activityEventHelper) {
-                completion(.success(.advance(numberOfPages: 1)))
+            handleSyncSignIn(from: cardName, with: activityEventHelper) { [weak self] in
+                if self?.hasSyncFlowStarted == true {
+                    completion(.success(.advance(numberOfPages: 1)))
+                }
             }
 
         case .setDefaultBrowser:
@@ -358,12 +360,7 @@ final class OnboardingService: FeatureFlaggable {
     @objc
     nonisolated private func dismissSelector() {
         ensureMainThread {
-            let syncFlowStarted = self.hasSyncFlowStarted
-            self.delegate?.dismiss(animated: true) {
-                if syncFlowStarted {
-                    self.navigationDelegate?.finishOnboardingFlow()
-                }
-            }
+            self.delegate?.dismiss(animated: true, completion: nil)
         }
     }
 }
