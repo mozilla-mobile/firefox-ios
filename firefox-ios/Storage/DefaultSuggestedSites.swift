@@ -6,6 +6,8 @@ import Foundation
 import Localizations
 
 open class DefaultSuggestedSites {
+    public static let firefoxJpGuideURL = "https://blog.mozilla.org/ja/firefox-ja/ios-guide/"
+
     private static let urlMap = [
         "https://www.amazon.com/": [
             "as": "https://www.amazon.in",
@@ -131,7 +133,7 @@ open class DefaultSuggestedSites {
          ],
         "ja_JP": [
             Site.createSuggestedSite(
-                url: "https://blog.mozilla.org/ja/firefox-ja/ios-guide/",
+                url: firefoxJpGuideURL,
                 title: "Firefoxガイド",
                 trackingId: 804,
                 faviconResource: .bundleAsset(

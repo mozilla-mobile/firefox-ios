@@ -50,6 +50,13 @@ class TopSitesProviderImplementation: @MainActor TopSitesProvider, FeatureFlagga
         return "topSites.suggestedSites"
     }
 
+    private var shouldExcludeFirefoxJpGuide: Bool {
+        let isFirefoxJpGuideDefaultSiteEnabled = featureFlags.isFeatureEnabled(.firefoxJpGuideDefaultSite,
+                                                                               checking: .buildOnly)
+        let locale = Locale.current
+        return locale.identifier == "ja_JP" && !isFirefoxJpGuideDefaultSiteEnabled
+    }
+
     init(
         placesFetcher: RustPlaces,
         pinnedSiteFetcher: PinnedSites,
@@ -75,21 +82,15 @@ class TopSitesProviderImplementation: @MainActor TopSitesProvider, FeatureFlagga
     func defaultTopSites(_ prefs: Prefs) -> [Site] {
         var suggested = DefaultSuggestedSites.defaultSites()
 
-        if shouldExcludeFirefoxJpGuide() {
-            /// Assumes the Firefox Japanese Guide is the first default site in the list in the `ja_JP` locale in
-            /// `DefaultSuggestedSites.swift`
-            suggested.remove(at: 0)
+        if shouldExcludeFirefoxJpGuide {
+            // Remove the Firefox Japanese Guide from the list of default sites
+            suggested.removeAll {
+                $0.url == DefaultSuggestedSites.firefoxJpGuideURL
+            }
         }
 
         let deleted = prefs.arrayForKey(defaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
-    }
-
-    private func shouldExcludeFirefoxJpGuide() -> Bool {
-        let isFirefoxJpGuideDefaultSiteEnabled = featureFlags.isFeatureEnabled(.firefoxJpGuideDefaultSite,
-                                                                               checking: .buildOnly)
-        let locale = Locale.current
-        return locale.identifier == "ja_JP" && !isFirefoxJpGuideDefaultSiteEnabled
     }
 }
 
