@@ -41,7 +41,9 @@ class StoriesWebviewViewController: UIViewController,
         label.numberOfLines = 1
     }
 
-    private let shieldImageView: UIImageView = .build()
+    private let shieldImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Small.shieldCheckmarkFill)
+    }
 
     private lazy var reloadToolbarButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
@@ -163,9 +165,11 @@ class StoriesWebviewViewController: UIViewController,
         // Update domain label when navigation finishes (in the same window)
         domainLabel.text = webView.url?.normalizedHost
 
-        shieldImageView.image = webView.hasOnlySecureContent ?
+        shieldImageView.image = if webView.hasOnlySecureContent {
             UIImage.templateImageNamed(StandardImageIdentifiers.Small.shieldCheckmarkFill)
-            : UIImage(named: StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+        } else {
+            UIImage(named: StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+        }
     }
 
     // MARK: - WKUIDelegate
