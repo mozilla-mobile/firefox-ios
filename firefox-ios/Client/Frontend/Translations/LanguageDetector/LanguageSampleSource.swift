@@ -7,7 +7,7 @@ import Foundation
 /// A small abstraction for obtaining a language sample from webpage content.
 /// This is done to allow `LanguageDetector` to request text from a page without knowing
 /// whether the source is a real `WKWebView` running JavaScript or a test mock.
-protocol LanguageSampleSource {
+protocol LanguageSampleSource: Sendable {
     /// `scriptEvalExpression` is the JavaScript expression that should be evaluated
     /// by the underlying implementation.
     @MainActor

@@ -10,11 +10,18 @@ import Common
 final class TranslationsMiddleware {
     private let profile: Profile
     private let logger: Logger
+    private let languageDetector: LanguageDetectorProvider
+    private let windowManager: WindowManager
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         languageDetector: LanguageDetectorProvider = LanguageDetector(),
+         logger: Logger = DefaultLogger.shared,
+         windowManager: WindowManager = AppContainer.shared.resolve()
+    ) {
         self.profile = profile
+        self.languageDetector = languageDetector
         self.logger = logger
+        self.windowManager = windowManager
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -104,21 +111,31 @@ final class TranslationsMiddleware {
         store.dispatch(toolbarAction)
     }
 
-    // TODO: FXIOS-13844 - Check if we can translate a page based on certain eligibility
-    @MainActor
+    /// Checks whether the current page in the active tab is eligible for translation,
+    /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
-        // We dispatch an action for now, but eventually we want to inject a script
-        // to check if the page language differs from our locale language.
-        guard action.translationConfiguration?.canTranslate == true else { return }
-        let toolbarAction = ToolbarAction(
-            translationConfiguration: TranslationConfiguration(
-                prefs: profile.prefs,
-                state: .inactive
-            ),
-            windowUUID: action.windowUUID,
-            actionType: ToolbarActionType.receivedTranslationLanguage
-        )
-        store.dispatch(toolbarAction)
+        Task { @MainActor in
+            guard action.translationConfiguration?.canTranslate == true else { return }
+
+            guard let selectedTab = self.windowManager.tabManager(for: action.windowUUID).selectedTab,
+                  let webView = selectedTab.webView
+            else { return }
+
+            let languageSampleSource = WebViewLanguageSampleSource(webView: webView)
+            let pageLanguage = try await languageDetector.detectLanguage(from: languageSampleSource)
+
+            guard let pageLanguage, pageLanguage != Locale.current.languageCode else { return }
+
+            let toolbarAction = ToolbarAction(
+                translationConfiguration: TranslationConfiguration(
+                    prefs: profile.prefs,
+                    state: .inactive
+                ),
+                windowUUID: action.windowUUID,
+                actionType: ToolbarActionType.receivedTranslationLanguage
+            )
+            store.dispatch(toolbarAction)
+        }
     }
 
     // TODO: FXIOS-13844 - Start translation a page and dispatch action after completion
