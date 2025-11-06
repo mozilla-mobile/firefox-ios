@@ -668,16 +668,19 @@ final class BookmarksViewController: SiteTableViewController,
 
 extension BookmarksViewController: LibraryPanelContextMenu {
     func presentContextMenu(for indexPath: IndexPath) {
-        viewModel.getSiteDetails(for: indexPath) { [weak self] site in
-            guard let self else { return }
-            if let site {
-                presentContextMenu(for: site, with: indexPath, completionHandler: {
-                    return self.contextMenu(for: site, with: indexPath)
-                })
-            } else if let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row],
-                      bookmarkNode.type == .folder,
-                      isCurrentFolderEditable(at: indexPath) {
-                presentContextMenu(for: bookmarkNode, indexPath: indexPath)
+        viewModel.getSiteDetails(for: indexPath) { site in
+            ensureMainThread { [weak self] in
+                guard let self else { return }
+
+                if let site {
+                    self.presentContextMenu(for: site, with: indexPath, completionHandler: {
+                        return self.contextMenu(for: site, with: indexPath)
+                    })
+                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                          bookmarkNode.type == .folder,
+                          self.isCurrentFolderEditable(at: indexPath) {
+                    self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
+                }
             }
         }
     }

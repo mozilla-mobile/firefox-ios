@@ -375,7 +375,7 @@ extension PasswordDetailViewController {
             }
     }
 
-    func onProfileDidFinishSyncing(completion: @escaping () -> Void) {
+    func onProfileDidFinishSyncing(completion: @escaping @Sendable () -> Void) {
         // Reload details after syncing.
         viewModel.profile.logins.getLogin(id: viewModel.login.id) { [weak self] result in
             DispatchQueue.main.async {

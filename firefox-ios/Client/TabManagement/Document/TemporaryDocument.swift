@@ -152,7 +152,7 @@ final class DefaultTemporaryDocument: NSObject,
         return tempFileURL
     }
 
-    func download(_ completion: @escaping (URL?) -> Void) {
+    func download(_ completion: @escaping @Sendable (URL?) -> Void) {
         if let tempFile = queryTempFile() {
             ensureMainThread {
                 completion(tempFile)
