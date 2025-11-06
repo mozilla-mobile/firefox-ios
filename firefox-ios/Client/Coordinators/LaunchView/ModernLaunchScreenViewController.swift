@@ -142,6 +142,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     }
 
     func loadNextLaunchType() {
+        loaderView.startAnimating()
         viewModel.loadNextLaunchType()
     }
 
