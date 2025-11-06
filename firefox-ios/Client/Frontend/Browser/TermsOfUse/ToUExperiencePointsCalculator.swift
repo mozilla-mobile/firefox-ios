@@ -45,6 +45,7 @@ struct ToUExperiencePointsCalculator {
     }
 
     private func hasDisabledSponsoredContent() -> Bool {
+        // Only award points in countries where sponsored content is available
         guard let region = region,
               Self.sponsoredContentSupportedCountries.contains(region) else {
             return false
@@ -56,6 +57,8 @@ struct ToUExperiencePointsCalculator {
         let allShortcutsEnabled = userDefaults.object(forKey: allShortcutsKey) as? Bool ?? true
         let sponsoredEnabled = userDefaults.object(forKey: sponsoredKey) as? Bool ?? true
 
-        return !allShortcutsEnabled || !sponsoredEnabled
+        // Award point if user disabled sponsored shortcuts specifically
+        // OR if they disabled all shortcuts
+        return !sponsoredEnabled || !allShortcutsEnabled
     }
 }
