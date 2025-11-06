@@ -1126,7 +1126,7 @@ class BrowserCoordinator: BaseCoordinator,
             browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
         }
 
-        guard !childCoordinators.contains(where: { $0 is SummarizeController }) else { return }
+        guard !childCoordinators.contains(where: { $0 is SummarizeCoordinator }) else { return }
         let coordinator = SummarizeCoordinator(
             browserSnapshot: browserScreenshot,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,
