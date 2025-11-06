@@ -8,7 +8,7 @@ import Shared
 import Account
 
 private class CustomFxAContentServerEnableSetting: BoolSetting {
-      init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
+      init(prefs: Prefs, settingDidChange: (@MainActor  (Bool?) -> Void)? = nil) {
           super.init(
               prefs: prefs,
               prefKey: PrefsKeys.KeyUseCustomFxAContentServer,
@@ -22,7 +22,7 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
   }
 
   private class CustomSyncTokenServerEnableSetting: BoolSetting {
-      init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
+      init(prefs: Prefs, settingDidChange: (@MainActor (Bool?) -> Void)? = nil) {
           super.init(
               prefs: prefs,
               prefKey: PrefsKeys.KeyUseCustomSyncTokenServerOverride,
@@ -41,7 +41,7 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
         placeholder: String,
         accessibilityIdentifier: String,
         isChecked: @escaping () -> Bool = { return false },
-        settingDidChange: ((String?) -> Void)? = nil
+        settingDidChange: (@MainActor (String?) -> Void)? = nil
       ) {
           super.init(prefs: prefs,
                      prefKey: prefKey,

@@ -21,6 +21,7 @@ public class CloseButton: UIButton,
 
     private struct UX {
         static let closeButtonSize = CGSize(width: 30, height: 30)
+        static let maxCloseButtonSize = CGSize(width: 44, height: 44)
         static let crossCircleImage = StandardImageIdentifiers.ExtraLarge.crossCircleFill
     }
 
@@ -66,8 +67,10 @@ public class CloseButton: UIButton,
     }
 
     private func updateButtonSizeForDynamicFont() {
-        let dynamicWidth = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width), UX.closeButtonSize.width)
-        let dynamicHeight = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height), UX.closeButtonSize.height)
+        let scaledWidth = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width)
+        let scaledHeight = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height)
+        let dynamicWidth = min(max(scaledWidth, UX.closeButtonSize.width), UX.maxCloseButtonSize.width)
+        let dynamicHeight = min(max(scaledHeight, UX.closeButtonSize.height), UX.maxCloseButtonSize.height)
         heightConstraint?.constant = dynamicHeight
         widthConstraint?.constant = dynamicWidth
     }

@@ -845,7 +845,7 @@
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Redes sociais colocam rastreadores em outros sites para traçar um perfil seu mais completo e direcionado. Bloquear esses rastreadores reduz o quanto as empresas de mídias sociais conseguem ver o que você faz online.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinters";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Rastreadores de identidade digital (fingerprinters)";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Novidades";

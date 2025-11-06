@@ -187,11 +187,11 @@ final class NativeErrorPageViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: self.windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .nativeErrorPage)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -199,7 +199,15 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     override func viewDidLoad() {
@@ -212,6 +220,11 @@ final class NativeErrorPageViewController: UIViewController,
                                              actionType: NativeErrorPageActionType.errorPageLoaded))
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view.accessibilityViewIsModal = true
+    }
+
     override func viewWillTransition(
         to size: CGSize,
         with coordinator: UIViewControllerTransitionCoordinator
@@ -220,12 +233,6 @@ final class NativeErrorPageViewController: UIViewController,
             to: size,
             with: coordinator
         )
-        adjustConstraints()
-        showViewForCurrentOrientation()
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
         adjustConstraints()
         showViewForCurrentOrientation()
     }
@@ -319,7 +326,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     @objc
-    private nonisolated func didTapReload() {
+    nonisolated private func didTapReload() {
         store.dispatchLegacy(
             GeneralBrowserAction(
                 isNativeErrorPage: true,

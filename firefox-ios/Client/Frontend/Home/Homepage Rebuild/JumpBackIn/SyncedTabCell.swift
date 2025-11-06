@@ -16,9 +16,10 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
 
     private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
     private var syncedDeviceIconCenterConstraint: NSLayoutConstraint?
-    private var showAllSyncedTabsAction: (() -> Void)?
     private var tabStackTopConstraint: NSLayoutConstraint?
-    private var openSyncedTabAction: (() -> Void)?
+
+    private var showAllSyncedTabsAction: (@MainActor () -> Void)?
+    private var openSyncedTabAction: (@MainActor () -> Void)?
 
     // MARK: - UI Elements
     private var tabHeroImage: HeroImageView = .build { _ in }
@@ -110,8 +111,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
 
     func configure(configuration: JumpBackInSyncedTabConfiguration,
                    theme: Theme,
-                   onTapShowAllAction: (() -> Void)?,
-                   onOpenSyncedTabAction: ((URL) -> Void)?) {
+                   onTapShowAllAction: (@MainActor () -> Void)?,
+                   onOpenSyncedTabAction: (@MainActor (URL) -> Void)?) {
         tabItemTitle.text = configuration.titleText
         syncedDeviceLabel.text = configuration.descriptionText
         accessibilityLabel = configuration.accessibilityLabel

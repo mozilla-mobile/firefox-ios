@@ -398,7 +398,7 @@ final class TabTrayViewController: UIViewController,
                 guard let self else { return }
 
                 // Undo the action described by the toast
-                if let action = toastType.reduxAction(for: self.windowUUID), undoClose {
+                if let action = (toastType.reduxAction(for: self.windowUUID) as? TabPanelViewAction), undoClose {
                     store.dispatchLegacy(action)
                 }
                 self.shownToast = nil
@@ -718,7 +718,7 @@ final class TabTrayViewController: UIViewController,
             currentToast.dismiss(false)
         }
 
-        if toastType.reduxAction(for: windowUUID) != nil {
+        if toastType.reduxAction(for: windowUUID) as? TabPanelViewAction != nil {
             let viewModel = ButtonToastViewModel(labelText: toastType.title, buttonText: toastType.buttonText)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: retrieveTheme(),

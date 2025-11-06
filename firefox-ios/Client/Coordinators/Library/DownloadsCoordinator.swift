@@ -72,8 +72,12 @@ class DownloadsCoordinator: BaseCoordinator,
             tabManager: tabManager
         )
         add(child: coordinator)
+
+        // Since this file is already downloaded, we don't have a remote URL to use for the "Send to Device" activity
+        let shareType = ShareType.file(url: file.path, remoteURL: nil)
+
         coordinator.start(
-            shareType: .file(url: file.path),
+            shareType: shareType,
             shareMessage: nil,
             sourceView: sourceView,
             sourceRect: nil,

@@ -78,4 +78,30 @@ final class ToolbarScreen {
     func assertBackButtonIsDisabled() {
         XCTAssertFalse(backButton.isEnabled, "Expected Back button to be disabled")
     }
+
+    func assertTabToolbarMenuButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.TABTOOLBAR_MENUBUTTON.element(in: app), timeout: timeout)
+    }
+
+    func assertMultipleTabsOpen() {
+        let tabsButton = sel.TABS_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(tabsButton)
+        let value = tabsButton.value as? String
+        XCTAssertNotEqual(
+            value,
+            "1",
+            "Expected several tabs to be open, but found only one."
+        )
+    }
+
+    func openBrowserMenu() {
+        let menuButton = sel.TABTOOLBAR_MENUBUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(menuButton)
+        menuButton.waitAndTap()
+    }
+
+    func assertTabToolbarMenuExist() {
+        let menuButton = sel.TABTOOLBAR_MENUBUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(menuButton)
+    }
 }
