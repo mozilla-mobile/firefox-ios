@@ -85,7 +85,6 @@ class CreditCardsTests: BaseTestCase {
         // Autofill Credit cards section displays
         creditCardScreen.waitForSectionVisible()
         creditCardScreen.openAddCreditCardForm()
-        // addCardButton.waitAndTap()
         // Add Credit Card page is displayed
         creditCardScreen.waitForSectionVisible()
         // Add, and save a valid credit card
@@ -808,7 +807,6 @@ class CreditCardsTests: BaseTestCase {
 
         navigator.nowAt(NewTabScreen)
         toolbarScreen.assertTabsButtonExists()
-        // waitForTabsButton()
         navigator.goto(CreditCardsSettings)
         creditCards.unlockIfNeeded()
 
