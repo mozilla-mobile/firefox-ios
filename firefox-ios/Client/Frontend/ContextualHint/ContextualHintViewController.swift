@@ -107,6 +107,10 @@ class ContextualHintViewController: UIViewController,
     }
 
     // MARK: - Button Actions
+    func dismiss() {
+        self.dismiss(animated: false, completion: nil)
+    }
+
     private func dismissAnimated() {
         viewProvider.sendTelemetryEvent(for: .closeButton)
         self.dismiss(animated: true, completion: nil)
