@@ -41,7 +41,7 @@ final class ToUExperiencePointsCalculatorTests: XCTestCase {
         let calculator = ToUExperiencePointsCalculator(userDefaults: userDefaults, region: "US")
         XCTAssertEqual(calculator.calculatePoints(), 1)
     }
-    
+
     func testCalculatePoints_OnePoint_WhenSponsoredDisabled() {
         let sponsoredKey = ProfilePrefsReader.prefix + PrefsKeys.FeatureFlags.SponsoredShortcuts
         userDefaults.set(false, forKey: sponsoredKey)
