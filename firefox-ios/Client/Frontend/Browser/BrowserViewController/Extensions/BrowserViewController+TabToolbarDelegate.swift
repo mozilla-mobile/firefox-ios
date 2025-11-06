@@ -249,6 +249,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func dismissCFRs() {
         summarizeToolbarEntryContextHintVC.dismiss()
         translationContextHintVC.dismiss()
+        summarizeToolbarEntryContextHintVC.dismiss(animated: false)
+        translationContextHintVC.dismiss(animated: false)
     }
 
     /// Setup animation for data clearance flow unless reduce motion is enabled
