@@ -301,7 +301,6 @@ final class OnboardingService: FeatureFlaggable {
         }
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
-        // Set callback to track when sync flow starts (when user presses scan or email button)
         (singInSyncVC as? FirefoxAccountSignInViewController)?.onSyncFlowStarted = { [weak self] in
             self?.hasSyncFlowStarted = true
         }
@@ -361,11 +360,9 @@ final class OnboardingService: FeatureFlaggable {
         ensureMainThread {
             let syncFlowStarted = self.hasSyncFlowStarted
             self.delegate?.dismiss(animated: true) {
-                // If sync flow has started (user pressed scan or email button), dismiss the entire onboarding flow
                 if syncFlowStarted {
                     self.navigationDelegate?.finishOnboardingFlow()
                 }
-                // If sync flow hasn't started, only the sync controller is dismissed
             }
         }
     }
