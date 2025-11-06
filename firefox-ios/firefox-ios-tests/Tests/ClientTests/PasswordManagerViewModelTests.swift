@@ -41,7 +41,8 @@ class PasswordManagerViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testaddLoginWithEmptyString() {
+    @MainActor
+    func testAddLoginWithEmptyString() {
         setupTelemetry(with: MockProfile())
         let login = LoginEntry(fromJSONDict: [
                         "hostname": "https://example.com",
@@ -58,6 +59,7 @@ class PasswordManagerViewModelTests: XCTestCase {
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Logins.saved)
     }
 
+    @MainActor
     func testaddLoginWithString() {
         setupTelemetry(with: MockProfile())
         let login = LoginEntry(fromJSONDict: [
