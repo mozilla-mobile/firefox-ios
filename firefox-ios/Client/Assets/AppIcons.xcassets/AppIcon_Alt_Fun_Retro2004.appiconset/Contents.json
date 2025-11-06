@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "retro2004-light.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -12,6 +13,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "retro2004-dark.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
