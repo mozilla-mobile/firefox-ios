@@ -1741,8 +1741,7 @@ class BrowserViewController: UIViewController,
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
         resetDataClearanceCFRTimer()
-        summarizeToolbarEntryContextHintVC.dismiss()
-        translationContextHintVC.dismiss()
+        dismissCFRs()
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
