@@ -128,23 +128,23 @@ enum AppIcon: String, CaseIterable {
             return .Settings.AppIconSelection.AppIconNames.NorthernLights
         // MARK: Fun
         case .cool:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Cool
         case .cuddling:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Cuddling
         case .flaming:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Flaming
         case .minimal:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Minimal
         case .momo:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Momo
         case .pixelated:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Pixelated
         case .pride:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Pride
         case .retro2004:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Retro2004
         case .retro2017:
-            <#code#>
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Retro2017
         }
     }
 
