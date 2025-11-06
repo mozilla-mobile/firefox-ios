@@ -61,8 +61,10 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                     onMultipleChoiceAction(newAction, viewModel.name)
                 }
                 Spacer(minLength: UX.CardView.minContentSpacing)
-                bodyView
-                Spacer(minLength: UX.CardView.minContentSpacing)
+                if !viewModel.body.isEmpty {
+                    bodyView
+                    Spacer(minLength: UX.CardView.minContentSpacing)
+                }
                 VStack(spacing: UX.CardView.buttonsSpacing) {
                     primaryButton
                     // Hidden spacer button to maintain consistent layout spacing

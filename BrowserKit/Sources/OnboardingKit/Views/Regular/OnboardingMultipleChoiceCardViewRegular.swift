@@ -49,8 +49,10 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
                     }
-                    bodyView
-                    Spacer(minLength: UX.CardView.minContentSpacing)
+                    if !viewModel.body.isEmpty {
+                        bodyView
+                        Spacer(minLength: UX.CardView.minContentSpacing)
+                    }
                 }
                 .padding(UX.CardView.verticalPadding)
             }
