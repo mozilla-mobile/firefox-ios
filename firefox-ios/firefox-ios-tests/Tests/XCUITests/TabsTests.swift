@@ -357,12 +357,12 @@ class TabsTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        toolBarScreen.assertNewTabButtonExist()
+        toolBarScreen.assertNewTabButtonExists()
 
         // Go back to portrait mode
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is displayed
-        toolBarScreen.assertNewTabButtonExist()
+        toolBarScreen.assertNewTabButtonExists()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
