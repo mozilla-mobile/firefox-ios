@@ -6,9 +6,11 @@ import Foundation
 
 /// Test helper that simulates language detection.
 final class MockLanguageDetector: LanguageDetectorProvider, @unchecked Sendable {
-    var detectLanguageCallCount = 0
+    var detectedLanguage = "ja"
+    var mockError: Error?
+
     func detectLanguage(from source: LanguageSampleSource) async throws -> String? {
-        detectLanguageCallCount += 1
-        return "ja"
+        if let error = mockError { throw error }
+        return detectedLanguage
     }
 }
