@@ -13,7 +13,8 @@ final class NimbusFeatureFlagLayer: Sendable {
         switch featureID {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
-
+        case .adsClient:
+            return checkAdsClient(from: nimbus)
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
@@ -406,7 +407,11 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.addressAutofillEdit.value()
+        return config.status
+    }
 
+    private func checkAdsClient(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.adsClient.value()
         return config.status
     }
 
