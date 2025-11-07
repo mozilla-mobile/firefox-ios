@@ -181,14 +181,8 @@ class BookmarksCoordinator: BaseCoordinator,
         setBackBarButtonItemTitle(viewModel.getBackNavigationButtonTitle)
         let controller = EditBookmarkViewController(viewModel: viewModel,
                                                     windowUUID: windowUUID)
-        controller.onViewWillAppear = { [weak self] in
-            self?.libraryNavigationHandler?.setNavigationBarHidden(true)
-        }
-        controller.onViewWillDisappear = { [weak self] in
-            if !(controller.transitionCoordinator?.isInteractive ?? false) {
-                self?.libraryNavigationHandler?.setNavigationBarHidden(false)
-            }
-        }
+        // Note: EditBookmarkViewController manages its own navigation bar visibility
+        // in viewWillAppear/viewWillDisappear, so we don't interfere with it here
         return controller
     }
 
@@ -205,14 +199,8 @@ class BookmarksCoordinator: BaseCoordinator,
         setBackBarButtonItemTitle("")
         let controller = EditFolderViewController(viewModel: viewModel,
                                                   windowUUID: windowUUID)
-        controller.onViewWillAppear = { [weak self] in
-            self?.libraryNavigationHandler?.setNavigationBarHidden(true)
-        }
-        controller.onViewWillDisappear = { [weak self] in
-            if !(controller.transitionCoordinator?.isInteractive ?? false) {
-                self?.libraryNavigationHandler?.setNavigationBarHidden(false)
-            }
-        }
+        // Note: EditFolderViewController manages its own navigation bar visibility
+        // in viewWillAppear/viewWillDisappear, so we don't interfere with it here
         return controller
     }
 
