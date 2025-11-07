@@ -131,7 +131,6 @@ class ToolbarButton: UIButton,
                 view.removeFromSuperview()
             }
         }
-        layoutIfNeeded()
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -320,9 +319,6 @@ class ToolbarButton: UIButton,
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
         badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
         maskImageView?.tintColor = colors.layer1
-
-        layoutIfNeeded()
-        setNeedsUpdateConfiguration()
     }
 
     // MARK: - UIGestureRecognizerDelegate
