@@ -1226,7 +1226,6 @@ workflows:
     steps:
     - cache-pull@2.7.2:
         is_always_run: true
-    - activate-build-cache-for-xcode@0: {}
     - xcode-test@6.0.0:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
@@ -1606,7 +1605,6 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - activate-build-cache-for-xcode@0: {}
     - xcode-test@6.0.1:
         timeout: 6000
         inputs:
