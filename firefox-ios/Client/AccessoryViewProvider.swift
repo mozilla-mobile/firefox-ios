@@ -168,7 +168,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
 
     private lazy var relayMaskView: AutofillAccessoryViewButtonItem = {
         let accessoryView = AutofillAccessoryViewButtonItem(
-            image: UIImage(named: StandardImageIdentifiers.Large.lightning),
+            image: UIImage(named: StandardImageIdentifiers.Large.relayMaskIcon),
             labelText: .RelayMask.UseRelayEmailMaskFromKeyboard,
             tappedAction: { [weak self] in
                 self?.tappedUseRelayMaskButton()
@@ -177,7 +177,6 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         accessoryView.accessibilityLabel = .RelayMask.UseRelayEmailMaskFromKeyboard
         accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.relayMaskAutofillButton
         accessoryView.isAccessibilityElement = true
-        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
