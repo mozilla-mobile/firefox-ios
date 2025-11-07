@@ -16,6 +16,7 @@ final class ToolbarScreen {
     private var tabsButton: XCUIElement { sel.TABS_BUTTON.element(in: app) }
     private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app)}
     private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app)}
+    private var tabToolbarMenuButton: XCUIElement { sel.TABTOOLBAR_MENUBUTTON.element(in: app) }
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
@@ -43,13 +44,13 @@ final class ToolbarScreen {
         tabsButton.waitAndTap()
     }
 
-    func assertNewTabButtonExist() {
+    func assertNewTabButtonExists() {
         BaseTestCase().mozWaitForElementToExist(newTabButton)
     }
 
     func assertTabsButtonValue(expectedCount: String) {
-        let tabsValue = sel.TABS_BUTTON.element(in: app).value as? String
-        XCTAssertEqual(expectedCount, tabsValue, "Expected \(expectedCount) open tabs after switching")
+        let tabsButtonValue = tabsButton.value as? String
+        XCTAssertEqual(expectedCount, tabsButtonValue, "Expected \(expectedCount) open tabs after switching")
     }
 
     func pressBackButton(duration: TimeInterval) {
@@ -67,7 +68,7 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitElementHittable(element: backButton, timeout: timeout)
     }
 
-    func assertBackButtonExist() {
+    func assertBackButtonExists() {
         BaseTestCase().mozWaitForElementToExist(backButton)
     }
 
@@ -80,11 +81,10 @@ final class ToolbarScreen {
     }
 
     func assertTabToolbarMenuButtonExists(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(sel.TABTOOLBAR_MENUBUTTON.element(in: app), timeout: timeout)
+        BaseTestCase().mozWaitForElementToExist(tabToolbarMenuButton, timeout: timeout)
     }
 
     func assertMultipleTabsOpen() {
-        let tabsButton = sel.TABS_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(tabsButton)
         let value = tabsButton.value as? String
         XCTAssertNotEqual(
@@ -95,13 +95,14 @@ final class ToolbarScreen {
     }
 
     func openBrowserMenu() {
-        let menuButton = sel.TABTOOLBAR_MENUBUTTON.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(menuButton)
-        menuButton.waitAndTap()
+        tabToolbarMenuButton.waitAndTap()
     }
 
-    func assertTabToolbarMenuExist() {
-        let menuButton = sel.TABTOOLBAR_MENUBUTTON.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(menuButton)
+    func assertTabToolbarMenuExists() {
+        BaseTestCase().mozWaitForElementToExist(tabToolbarMenuButton)
+    }
+
+    func tapReloadButton() {
+        sel.RELOAD_BUTTON.element(in: app).waitAndTap()
     }
 }
