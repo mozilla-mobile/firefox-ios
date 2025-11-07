@@ -177,6 +177,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         accessoryView.accessibilityLabel = .RelayMask.UseRelayEmailMaskFromKeyboard
         accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.relayMaskAutofillButton
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
