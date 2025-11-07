@@ -284,7 +284,8 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        // Using real site for now since we don't have test pages
+        navigator.openURL("https://ameblo.jp/ruu-blog/")
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
@@ -301,7 +302,8 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        // Using real site for now since we don't have test pages
+        navigator.openURL("https://ameblo.jp/ruu-blog/")
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
@@ -326,7 +328,8 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        // Using real site for now since we don't have test pages
+        navigator.openURL("https://ameblo.jp/ruu-blog/")
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
         navigator.goto(SettingsScreen)
@@ -340,7 +343,8 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        // Using real site for now since we don't have test pages
+        navigator.openURL("https://ameblo.jp/ruu-blog/")
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
         validateTranslationSettingsUI()
