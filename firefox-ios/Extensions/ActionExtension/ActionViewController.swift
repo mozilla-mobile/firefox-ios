@@ -5,8 +5,6 @@
 import UIKit
 import Storage
 import Shared
-import Common
-import Localizations
 
 class ActionViewController: UIViewController {
     override func viewDidLoad() {
