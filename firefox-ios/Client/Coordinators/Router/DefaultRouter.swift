@@ -4,6 +4,16 @@
 
 import UIKit
 
+// TODO: Find a better place for this
+enum DismissalReason: Equatable {
+    case user
+    case deeplink
+}
+
+protocol DismissalNotifiable: AnyObject {
+    func willBeDismissed(reason: DismissalReason)
+}
+
 class DefaultRouter: NSObject, Router {
     var completions: [UIViewController: () -> Void]
 
@@ -66,6 +76,20 @@ class DefaultRouter: NSObject, Router {
         if let controller = navigationController.popViewController(animated: animated) {
             runCompletion(for: controller)
         }
+    }
+
+    // TODO: Unit test + add documentation on protocol method
+    func popToViewController(_ viewController: UIViewController,
+                             reason: DismissalReason = .user,
+                             animated: Bool) -> [UIViewController]? {
+        if let controllers = navigationController.popToViewController(viewController, animated: animated) {
+            for controller in controllers {
+                (controller as? DismissalNotifiable)?.willBeDismissed(reason: reason)
+                runCompletion(for: controller)
+            }
+            return controllers
+        }
+        return nil
     }
 
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool = false, animated: Bool = false) {

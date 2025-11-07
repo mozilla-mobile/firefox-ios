@@ -10,7 +10,8 @@ import UIKit
 class StoriesFeedViewController: UIViewController,
                                  UICollectionViewDelegate,
                                  StoreSubscriber,
-                                 Themeable {
+                                 Themeable,
+                                 DismissalNotifiable {
     // Used to only record "closed" telemetry on back button press and swipe gestures
     var recordTelemetryOnDisappear = true
 
@@ -324,5 +325,11 @@ class StoriesFeedViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         collectionView?.backgroundColor = .clear
+    }
+
+    // MARK: - DismissalNotifiable
+
+    func willBeDismissed(reason: DismissalReason) {
+        // TODO: Depending on the reason, then adjust the business logic
     }
 }

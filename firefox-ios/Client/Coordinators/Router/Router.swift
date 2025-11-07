@@ -68,6 +68,12 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     @MainActor
     func popViewController(animated: Bool)
 
+    // TODO: Documentation
+    @MainActor
+    func popToViewController(_ viewController: UIViewController,
+                             reason: DismissalReason,
+                             animated: Bool) -> [UIViewController]?
+
     /// Set the root view controller
     ///
     /// - Parameters:
@@ -98,6 +104,13 @@ extension Router {
     @MainActor
     func popViewController(animated: Bool = true) {
         popViewController(animated: animated)
+    }
+
+    @MainActor
+    func popToViewController(_ viewController: UIViewController,
+                             reason: DismissalReason = .user,
+                             animated: Bool = true) -> [UIViewController]? {
+        popToViewController(viewController, reason: reason, animated: animated)
     }
 
     @MainActor

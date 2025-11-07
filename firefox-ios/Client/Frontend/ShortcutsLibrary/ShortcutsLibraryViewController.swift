@@ -10,7 +10,8 @@ class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
                                       FeatureFlaggable,
                                       StoreSubscriber,
-                                      Themeable {
+                                      Themeable,
+                                      DismissalNotifiable {
     struct UX {
         static let shortcutsSectionTopInset: CGFloat = 24
     }
@@ -363,5 +364,11 @@ class ShortcutsLibraryViewController: UIViewController,
                 actionType: ShortcutsLibraryActionType.tapOnShortcutCell
             )
         )
+    }
+
+    // MARK: - DismissalNotifiable
+
+    func willBeDismissed(reason: DismissalReason) {
+        // TODO: Depending on the reason, then adjust the business logic
     }
 }
