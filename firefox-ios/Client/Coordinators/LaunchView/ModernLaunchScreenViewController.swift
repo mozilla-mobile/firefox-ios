@@ -15,6 +15,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         static let fadeOutDelay: TimeInterval = 0
         static let fadeOutAlpha: CGFloat = 0.0
         static let minimumDisplayTimeSeconds: TimeInterval = 0.1
+        static let logoSize: CGFloat = 125.0
     }
 
     private weak var coordinator: LaunchFinishedLoadingDelegate?
@@ -34,12 +35,13 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     private var shouldLoadNextLaunchType = false
 
     // MARK: - UI Components
-    private lazy var modernLaunchView: ModernLaunchScreenView = {
-        return ModernLaunchScreenView(windowUUID: windowUUID, themeManager: themeManager)
-    }()
-
-    private lazy var hostingController: UIHostingController<ModernLaunchScreenView> = {
-        let controller = UIHostingController(rootView: modernLaunchView)
+    private let loaderView: LaunchScreenLoaderView = .build {
+        $0.isAccessibilityElement = false
+    }
+    private lazy var backgroundViewController: UIHostingController<LaunchScreenBackgroundView> = {
+        let controller = UIHostingController(
+            rootView: LaunchScreenBackgroundView(windowUUID: windowUUID, themeManager: themeManager)
+        )
         controller.view.backgroundColor = .clear
         return controller
     }()
@@ -81,6 +83,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        loaderView.startAnimating()
         // TODO: FXIOS-13434 Refactor the `LaunchScreenViewModel` to enhance the logic
         // making it easier to comprehend and facilitating unit testing.
         // Only load next launch type if loading is complete, otherwise defer it
@@ -93,11 +96,6 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        startLoaderAnimation()
-    }
-
     // MARK: - Loading
     func startLoading() {
         isLoading = true
@@ -106,36 +104,30 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
 
     // MARK: - Setup
     private func setupLayout() {
-        addChild(hostingController)
-        view.addSubview(hostingController.view)
-        hostingController.didMove(toParent: self)
+        addChild(backgroundViewController)
+        view.addSubviews(backgroundViewController.view, loaderView)
+        backgroundViewController.didMove(toParent: self)
 
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        backgroundViewController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            backgroundViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            loaderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loaderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loaderView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.logoSize),
+            loaderView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.logoSize)
         ])
-    }
-
-    // MARK: - Animation Control
-    func startLoaderAnimation() {
-        modernLaunchView.startAnimation()
-    }
-
-    func stopLoaderAnimation() {
-        modernLaunchView.stopAnimation()
     }
 
     // MARK: - LaunchFinishedLoadingDelegate
     func launchWith(launchType: LaunchType) {
-        stopLoaderAnimation()
         coordinator?.launchWith(launchType: launchType)
     }
 
     func launchBrowser() {
-        stopLoaderAnimation()
         coordinator?.launchBrowser()
     }
 
@@ -149,10 +141,15 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         }
     }
 
+    func loadNextLaunchType() {
+        loaderView.startAnimating()
+        viewModel.loadNextLaunchType()
+    }
+
     // MARK: - Themeable Protocol
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.gradientOnboardingStop3
     }
 }

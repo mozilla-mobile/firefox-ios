@@ -37,8 +37,11 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             case .alternateEngines:
                 return .Settings.Search.AlternateSearchEnginesTitle
             case .preSearch:
-                // TODO: FXIOS-13644 - Add proper strings when finalized
-                return "Pre Search"
+                // This section doesn't have a title since we don't want
+                // to introduce a new term such as pre-search for users.
+                // There should be some rework of the search settings in the future
+                // so that cross-platform we're more in sync.
+                return ""
             case .searchEnginesSuggestions:
                 return .Settings.Search.EnginesSuggestionsTitle
             case .firefoxSuggestSettings:
@@ -149,10 +152,14 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         if !(self.navigationController is ThemedNavigationController) {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(
                 title: .SettingsSearchDoneButton,
-                style: .done,
+                style: .plain,
                 target: self,
                 action: #selector(self.dismissAnimated)
             )
+            if #available(iOS 26.0, *) {
+                let textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+                self.navigationItem.leftBarButtonItem?.tintColor = textColor
+            }
         }
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -341,13 +348,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     // MARK: Pre Search Cells
     private func configureCellForTrendingSearchesAction(cell: ThemedSubtitleTableViewCell) {
         if isTrendingSearchesEnabled {
-            // TODO: FXIOS-13644 - Add proper strings when finalized
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showTrendingSearches,
                 defaultValue: model.shouldShowTrendingSearches,
-                titleText: String.localizedStringWithFormat(
-                    "Show Trending Searches"
-                ),
+                titleText: .Settings.Search.SearchZero.TrendingSearchesToggle,
                 cell: cell,
                 selector: #selector(didToggleShowTrendingSearches)
             )
@@ -357,13 +361,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     private func configureCellForRecentSearchesAction(cell: ThemedSubtitleTableViewCell) {
         if isRecentSearchesEnabled {
-            // TODO: FXIOS-13644 - Add proper strings when finalized
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showRecentSearches,
                 defaultValue: model.shouldShowRecentSearches,
-                titleText: String.localizedStringWithFormat(
-                    "Show Recent Searches"
-                ),
+                titleText: .Settings.Search.SearchZero.RecentSearchesToggle,
                 cell: cell,
                 selector: #selector(didToggleShowRecentSearches)
             )
@@ -638,11 +639,14 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             let index = indexPath.item + 1
             let engine = model.orderedEngines[index]
 
-            model.deleteCustomEngine(engine) { [weak self] in
-                tableView.deleteRows(at: [indexPath], with: .right)
-                // Change navigationItem's right button item title to Edit and disable the edit button
-                // once the deletion is done
-                self?.setEditing(false, animated: true)
+            model.deleteCustomEngine(engine) {
+                ensureMainThread { [weak self] in
+                    self?.tableView.deleteRows(at: [indexPath], with: .right)
+
+                    // Change navigationItem's right button item title to Edit and disable the edit button
+                    // once the deletion is done
+                    self?.setEditing(false, animated: true)
+                }
             }
 
             // End editing if we are no longer edit since we've deleted all editable cells.
@@ -658,6 +662,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         showDeletion = editing
         UIView.performWithoutAnimation {
             self.navigationItem.rightBarButtonItem?.title = editing ? .SettingsSearchDoneButton : .SettingsSearchEditButton
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let textColor = editing ? theme.colors.textAccent : theme.colors.textPrimary
+            self.navigationItem.rightBarButtonItem?.tintColor = textColor
         }
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         navigationItem.rightBarButtonItem?.action = editing ?

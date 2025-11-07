@@ -23,6 +23,16 @@ protocol SettingsSelectorsSet {
     var CLEAR_PRIVATE_DATA_CELL: Selector { get }
     var ALERT_OK_BUTTON: Selector { get }
 
+    // General
+    var NEW_TAB_CELL: Selector { get }
+    var TITLE: Selector { get }
+    var NAVIGATIONBAR: Selector { get }
+    var CONNECT_SETTING: Selector { get }
+
+    // Browsing
+    var BROWSING_LINKS_SECTION: Selector { get }
+    var BLOCK_POPUPS_SWITCH: Selector { get }
+
     var all: [Selector] { get }
 }
 
@@ -37,6 +47,11 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let loginsTitle = AccessibilityIdentifiers.Settings.Logins.title
         static let creditCardsTitle = AccessibilityIdentifiers.Settings.CreditCards.title
         static let addressTitle = AccessibilityIdentifiers.Settings.Address.title
+        static let browsingLinks = AccessibilityIdentifiers.Settings.Browsing.links
+        static let blockPopUps = AccessibilityIdentifiers.Settings.Browsing.blockPopUps
+        static let title = AccessibilityIdentifiers.Settings.title
+        static let navigationBarItem = AccessibilityIdentifiers.Settings.navigationBarItem
+        static let connectSetting = AccessibilityIdentifiers.Settings.ConnectSetting.title
     }
 
     // Core Element Selector
@@ -119,10 +134,47 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["alert"]
     )
 
+    let NEW_TAB_CELL = Selector.tableCellById(
+        "NewTab",
+        description: "Cell for New Tab option in Settings",
+        groups: ["settings"]
+    )
+
+    let TITLE = Selector.buttonId(
+        IDs.title,
+        description: "Settings Title",
+        groups: ["settings"]
+    )
+
+    let NAVIGATIONBAR = Selector.buttonId(
+        IDs.navigationBarItem,
+        description: "Navigation Bar Item",
+        groups: ["settings"]
+    )
+
+    let CONNECT_SETTING = Selector.cellById(
+        IDs.connectSetting,
+        description: "Connect Settings",
+        groups: ["settings"]
+    )
+
+    let BROWSING_LINKS_SECTION = Selector.tableOtherById(
+        IDs.browsingLinks,
+        description: "Browsing Links section in Settings table",
+        groups: ["settings", "browsing"]
+    )
+
+    let BLOCK_POPUPS_SWITCH = Selector.switchById(
+        IDs.blockPopUps,
+        description: "Switch for 'Block Pop-Ups' in Settings → Browsing",
+        groups: ["settings", "browsing"]
+    )
+
     var all: [Selector] {
         [SETTINGS_TABLE, DONE_BUTTON, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
-         CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON]
+         CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, BROWSING_LINKS_SECTION,
+         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH]
     }
 }

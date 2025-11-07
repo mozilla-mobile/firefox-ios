@@ -50,7 +50,15 @@ class SearchEngineSelectionViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     override func viewDidLoad() {
@@ -110,8 +118,8 @@ class SearchEngineSelectionViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
-        store.dispatchLegacy(
+    func unsubscribeFromRedux() {
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,

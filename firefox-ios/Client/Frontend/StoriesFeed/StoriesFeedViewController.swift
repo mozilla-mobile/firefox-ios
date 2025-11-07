@@ -26,6 +26,12 @@ class StoriesFeedViewController: UIViewController,
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    // Telemetry related
+    private let telemetry: StoriesFeedTelemetry
+    private let scrollThrottler: GCDThrottlerProtocol
+    private let impressionsThrottler: GCDThrottlerProtocol
+    private let impressionsTracker: ImpressionTrackingUtility
+
     // MARK: - Private constants
     private let logger: Logger
 
@@ -33,13 +39,21 @@ class StoriesFeedViewController: UIViewController,
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         telemetry: StoriesFeedTelemetry = StoriesFeedTelemetry(),
+         impressionsThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
+         scrollThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
+         impressionsTracker: ImpressionTrackingUtility = ImpressionTrackingUtility()
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
         self.storiesFeedState = StoriesFeedState(windowUUID: windowUUID)
+        self.telemetry = telemetry
+        self.impressionsThrottler = impressionsThrottler
+        self.scrollThrottler = scrollThrottler
+        self.impressionsTracker = impressionsTracker
 
         super.init(nibName: nil, bundle: nil)
 
@@ -51,7 +65,19 @@ class StoriesFeedViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure(
+                "StoriesFeedViewController was not deallocated on the main thread. Observer was not removed."
+            )
+            return
+        }
+
+        MainActor.assumeIsolated {
+            telemetry.storiesFeedClosed()
+            impressionsTracker.reset()
+            unsubscribeFromRedux()
+        }
     }
 
     // MARK: View lifecycle
@@ -71,11 +97,17 @@ class StoriesFeedViewController: UIViewController,
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        telemetry.storiesFeedViewed()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigationBar(animated: animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackVisibleItemImpressions(sampleOnly: true)
     }
 
     // MARK: - Redux
@@ -158,12 +190,10 @@ class StoriesFeedViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
+        let sectionProvider = StoriesFeedSectionLayoutProvider()
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
-            let section = StoriesFeedSectionLayoutProvider.createStoriesFeedSectionLayout(
-                for: environment
-            )
-            return section
+            return sectionProvider.createStoriesFeedSectionLayout(for: environment)
         }
         return layout
     }
@@ -216,6 +246,7 @@ class StoriesFeedViewController: UIViewController,
 
         switch item {
         case .stories(let config):
+            telemetry.sendStoryTappedTelemetry(atIndex: indexPath.row)
             let destination = NavigationDestination(
                 .storiesWebView,
                 url: config.url,
@@ -228,6 +259,58 @@ class StoriesFeedViewController: UIViewController,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )
             )
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollThrottler.throttle { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.trackVisibleItemImpressions(sampleOnly: true)
+            }
+        }
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate { flushImpressions() }
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { flushImpressions() }
+
+    // MARK: - Telemetry
+    /// The sampleOnly parameter is there to distinguish between “sampling visibility”
+    /// while the user is still scrolling vs. doing a full flush at the end of scrolling.
+    private func trackVisibleItemImpressions(sampleOnly: Bool = false) {
+        guard let collectionView else { return }
+
+        let visibleRect = CGRect(origin: collectionView.contentOffset,
+                                 size: collectionView.bounds.size)
+
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { continue }
+
+            let cellFrame = attributes.frame
+            let intersection = visibleRect.intersection(cellFrame)
+            guard !intersection.isNull else { continue }
+
+            let cellArea = cellFrame.width * cellFrame.height
+            let visibleArea = intersection.width * intersection.height
+            let ratio = visibleArea / max(cellArea, 1)
+
+            if ratio >= impressionsTracker.impressionVisibilityThreshold {
+                impressionsTracker.markPending(indexPath)
+            }
+
+            if sampleOnly {
+                flushImpressions()
+            }
+        }
+    }
+
+    private func flushImpressions() {
+        impressionsTracker.flush { indexPaths in
+            for indexPath in indexPaths {
+                telemetry.sendStoryViewedTelemetryFor(storyIndex: indexPath.item)
+            }
         }
     }
 

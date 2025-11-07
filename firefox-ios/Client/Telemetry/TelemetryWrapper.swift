@@ -38,7 +38,11 @@ enum SearchLocation: String {
     case quickSearch = "quicksearch"
 }
 
-class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
+// FIXME: FXIOS-13987 Make truly thread safe
+class TelemetryWrapper: TelemetryWrapperProtocol,
+                        FeatureFlaggable,
+                        Notifiable,
+                        @unchecked Sendable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     static let shared = TelemetryWrapper()
@@ -82,6 +86,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         } catch {}
     }
 
+    @MainActor
     func setup(profile: Profile) {
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
@@ -93,6 +98,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         initGlean(profile, sendUsageData: sendUsageData)
     }
 
+    @MainActor
     func initGlean(
         _ profile: Profile,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
@@ -175,17 +181,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(recordEnteredBackgroundPreferenceMetrics(notification:)),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(recordFinishedLaunchingPreferenceMetrics(notification:)),
-            name: UIApplication.didFinishLaunchingNotification,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIApplication.didEnterBackgroundNotification,
+                UIApplication.didFinishLaunchingNotification
+            ]
         )
     }
 
@@ -205,9 +207,28 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
     }
 
-    @objc
-    func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
+    // MARK: Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didEnterBackgroundNotification:
+            // For recording metrics that are better recorded when going to background due
+            // to the particular measurement, or availability of the information.
+            ensureMainThread {
+                self.recordEnteredBackgroundPreferenceMetrics()
+            }
+        case UIApplication.didFinishLaunchingNotification:
+            ensureMainThread {
+                self.recordFinishedLaunchingPreferenceMetrics()
+            }
+        default:
+            break
+        }
+    }
+
+    @MainActor
+    func recordFinishedLaunchingPreferenceMetrics() {
         guard let profile = self.profile else { return }
+
         // Pocket stories visible
         if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) {
             GleanMetrics.FirefoxHomePage.pocketStoriesVisible.set(pocketStoriesVisible)
@@ -216,10 +237,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
     }
 
-    // Function for recording metrics that are better recorded when going to background due
-    // to the particular measurement, or availability of the information.
-    @objc
-    func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
+    @MainActor
+    func recordEnteredBackgroundPreferenceMetrics() {
         guard let profile = self.profile else {
             assertionFailure("Error unwrapping profile")
             return
@@ -757,7 +776,7 @@ extension TelemetryWrapper {
     }
 
     // Use this override to unit tests TelemetryWrapper. Only use this for unit tests!
-    static nonisolated(unsafe) var hasTelemetryOverride = false
+    nonisolated(unsafe) static var hasTelemetryOverride = false
 
     // swiftlint:disable:next function_body_length
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {

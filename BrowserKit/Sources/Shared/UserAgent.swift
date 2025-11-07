@@ -48,9 +48,7 @@ open class UserAgent {
     }
 
     public static func desktopUserAgent() -> String {
-        // swiftlint:disable line_length
-        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15"
-        // swiftlint:enable line_length
+        return UserAgentBuilder.defaultDesktopUserAgent().userAgent()
     }
 
     public static func mobileUserAgent() -> String {
@@ -111,7 +109,9 @@ struct CustomUserAgentConstant {
     ]
 
     static let customDesktopUAForDomain = [
+        // TODO: FXIOS-8027, FXIOS-11230, FXIOS-13891 PayPal buttons open blank tabs
         "paypal.com": defaultMobileUA,
+        // FXIOS-10251: Do not appear as desktop/Safari for firefox.com/pair
         "firefox.com": defaultMobileUA
     ]
 }

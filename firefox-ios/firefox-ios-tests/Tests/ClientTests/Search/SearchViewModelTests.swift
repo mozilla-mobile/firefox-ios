@@ -45,6 +45,7 @@ final class SearchViewModelTests: XCTestCase {
 
     override func tearDown() {
         profile = nil
+        mockDelegate = nil
         super.tearDown()
     }
 
@@ -395,18 +396,28 @@ final class SearchViewModelTests: XCTestCase {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = "hello"
-        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        let trendingSearchesSectionIndex = 1
+        let shouldShowHeader = subject.shouldShowHeader(for: trendingSearchesSectionIndex)
         XCTAssertFalse(shouldShowHeader)
     }
 
     @MainActor
-    func test_shouldShowHeader_withTrendingSearches_withFFOn_andSearchTermEmpty_showsHeader() async {
+    func test_shouldShowHeader_withTrendingSearches_withFFOn_andSearchTermEmpty_showsHeader() {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
+        let expectation = XCTestExpectation(description: "reload table view called")
         let mockClient = MockTrendingSearchClient(result: .success(["foo", "bar"]))
+        mockDelegate.didReloadTableViewCalled = {
+            expectation.fulfill()
+        }
         let subject = createSubject(mockTrendingClient: mockClient)
-        await subject.retrieveTrendingSearches()
-        subject.searchQuery = ""
-        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        subject.loadTrendingSearches()
+
+        wait(for: [expectation], timeout: 1)
+
+        let trendingSearchesSectionIndex = 1
+        let shouldShowHeader = subject.shouldShowHeader(for: trendingSearchesSectionIndex)
+
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
         XCTAssertEqual(subject.trendingSearches, ["foo", "bar"])
         XCTAssertTrue(shouldShowHeader)
     }
@@ -416,51 +427,123 @@ final class SearchViewModelTests: XCTestCase {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = ""
-        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        let trendingSearchesSectionIndex = 1
+        let shouldShowHeader = subject.shouldShowHeader(for: trendingSearchesSectionIndex)
         XCTAssertEqual(subject.trendingSearches, [])
         XCTAssertFalse(shouldShowHeader)
     }
 
     @MainActor
-    func test_shouldShowHeader_forTrendingSearches_withoutFeatureFlagOn_doesNotShowHeader() async {
+    func test_shouldShowHeader_forTrendingSearches_withoutFeatureFlagOn_doesNotShowHeader() {
         setupNimbusTrendingSearchesTesting(isEnabled: false)
         let subject = createSubject()
-        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        let trendingSearchesSectionIndex = 1
+        let shouldShowHeader = subject.shouldShowHeader(for: trendingSearchesSectionIndex)
         XCTAssertEqual(subject.trendingSearches, [])
         XCTAssertFalse(shouldShowHeader)
     }
 
-    func test_retrieveTrendingSearches_withSuccess_hasExpectedList() async {
+    func test_retrieveTrendingSearches_withSuccess_hasExpectedList() {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
+        let expectation = XCTestExpectation(description: "reload table view called")
         let mockClient = MockTrendingSearchClient(result: .success(["foo", "bar"]))
+        mockDelegate.didReloadTableViewCalled = {
+            expectation.fulfill()
+        }
         let subject = createSubject(mockTrendingClient: mockClient)
-        await subject.retrieveTrendingSearches()
+
+        subject.loadTrendingSearches()
+
+        wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
         XCTAssertEqual(subject.trendingSearches, ["foo", "bar"])
     }
 
-    func test_retrieveTrendingSearches_withError_hasEmptyList() async {
+    func test_retrieveTrendingSearches_withError_hasEmptyList() {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         enum TestError: Error { case example }
         let mockClient = MockTrendingSearchClient(result: .failure(TestError.example))
         let subject = createSubject(mockTrendingClient: mockClient)
-        await subject.retrieveTrendingSearches()
+        subject.loadTrendingSearches()
         XCTAssertEqual(subject.trendingSearches, [])
     }
 
-    func test_retrieveTrendingSearches_withoutFFEnabled_hasEmptyList() async {
+    func test_retrieveTrendingSearches_withoutFFEnabled_hasEmptyList() {
         setupNimbusTrendingSearchesTesting(isEnabled: false)
         let mockClient = MockTrendingSearchClient(result: .success(["foo", "bar"]))
         let subject = createSubject(mockTrendingClient: mockClient)
-        await subject.retrieveTrendingSearches()
+        subject.loadTrendingSearches()
         XCTAssertEqual(subject.trendingSearches, [])
+    }
+
+    // MARK: - Recent Searches
+    @MainActor
+    func test_shouldShowHeader_forRecentSearches_withFFOn_andSearchTerm_doesNotShowHeader() async {
+        setupNimbusRecentSearchesTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.searchQuery = "hello"
+        let recentSearchesSectionIndex = 0
+        let shouldShowHeader = subject.shouldShowHeader(for: recentSearchesSectionIndex)
+        XCTAssertFalse(shouldShowHeader)
+    }
+
+    @MainActor
+    func test_shouldShowHeader_withRecentSearches_withFFOn_andSearchTermEmpty_showsHeader() async {
+        setupNimbusRecentSearchesTesting(isEnabled: true)
+        let mockRecentSearchProvider = MockRecentSearchProvider()
+        let subject = createSubject(mockRecentSearchProvider: mockRecentSearchProvider)
+        subject.retrieveRecentSearches()
+        subject.searchQuery = ""
+        let recentSearchesSectionIndex = 0
+        let expectation = XCTestExpectation(description: "Recent Searches have been fetched")
+
+        let shouldShowHeader = subject.shouldShowHeader(for: recentSearchesSectionIndex)
+
+        mockRecentSearchProvider.loadRecentSearches { result in
+            XCTAssertEqual(result, ["search term 1", "search term 2"])
+            expectation.fulfill()
+        }
+
+        await fulfillment(of: [expectation], timeout: 1.0)
+        XCTAssertTrue(shouldShowHeader)
+    }
+
+    @MainActor
+    func test_shouldShowHeader_withNoRecentSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() async {
+        setupNimbusRecentSearchesTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.searchQuery = ""
+        let recentSearchesSectionIndex = 0
+        let shouldShowHeader = subject.shouldShowHeader(for: recentSearchesSectionIndex)
+        XCTAssertEqual(subject.recentSearches, [])
+        XCTAssertFalse(shouldShowHeader)
+    }
+
+    @MainActor
+    func test_shouldShowHeader_forRecentSearches_withoutFeatureFlagOn_doesNotShowHeader() async {
+        setupNimbusRecentSearchesTesting(isEnabled: false)
+        let subject = createSubject()
+        let recentSearchesSectionIndex = 0
+        let shouldShowHeader = subject.shouldShowHeader(for: recentSearchesSectionIndex)
+        XCTAssertEqual(subject.recentSearches, [])
+        XCTAssertFalse(shouldShowHeader)
     }
 
     func test_retrieveRecentSearches_withSuccess_hasExpectedList() {
         setupNimbusRecentSearchesTesting(isEnabled: true)
         let mockRecentSearchProvider = MockRecentSearchProvider()
         let subject = createSubject(mockRecentSearchProvider: mockRecentSearchProvider)
+
+        let expectation = XCTestExpectation(description: "Recent Searches have been fetched")
+
         subject.retrieveRecentSearches()
-        XCTAssertEqual(mockRecentSearchProvider.loadRecentSearchesCalledCount, 1)
+
+        mockRecentSearchProvider.loadRecentSearches { result in
+            XCTAssertEqual(result, ["search term 1", "search term 2"])
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1.0)
     }
 
     func test_retrieveRecentSearches_withNilProvider_hasEmptyList() {
@@ -521,11 +604,13 @@ class MockSearchDelegate: SearchViewDelegate {
     var searchData = Cursor<Site>()
     var didReloadTableViewCount = 0
     var didReloadSearchEngines = 0
+    var didReloadTableViewCalled: (() -> Void)?
 
     func reloadSearchEngines() {
         didReloadSearchEngines += 1
     }
     func reloadTableView() {
+        didReloadTableViewCalled?()
         didReloadTableViewCount += 1
     }
 }

@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 /// Stores information related to an image request inside SiteImageView.
-public struct SiteImageModel {
+public struct SiteImageModel: Sendable {
     // A unique ID to tie the request to a certain image view
     let id: UUID
 
@@ -19,8 +19,9 @@ public struct SiteImageModel {
     // Used to cache any resources related to this request
     let cacheKey: String
 
-    // The bundled resource or remote URL (e.g. faviconURL, preferrably high resolution) for this image.
-    var siteResource: SiteResource?
+    // The bundled resource or remote URL (e.g. faviconURL, preferably high resolution) for this image.
+    // FIXME: FXIOS-14017 This property prevents SiteImageModel from being truly Sendable
+    nonisolated(unsafe) var siteResource: SiteResource?
 
     public init(id: UUID,
                 imageType: SiteImageType,

@@ -4,7 +4,7 @@
 
 import Foundation
 
-final class NimbusFeatureFlagLayer {
+final class NimbusFeatureFlagLayer: Sendable {
     // MARK: - Public methods
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus = FxNimbus.shared
@@ -31,6 +31,9 @@ final class NimbusFeatureFlagLayer {
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
+
+        case .firefoxJpGuideDefaultSite:
+            return checkFirefoxJpGuideDefaultSiteFeature(from: nimbus)
 
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
@@ -64,6 +67,9 @@ final class NimbusFeatureFlagLayer {
 
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
+
+        case .shouldUseJapanConfiguration:
+            return checkShouldUseJapanConfigurationFeature(from: nimbus)
 
         case .menuDefaultBrowserBanner:
             return checkMenuDefaultBrowserBanner(from: nimbus)
@@ -430,6 +436,10 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.downloadLiveActivitiesFeature.value().enabled
     }
 
+    private func checkFirefoxJpGuideDefaultSiteFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.firefoxJpGuideDefaultSite.value().enabled
+    }
+
     private func checkFirefoxSuggestFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
@@ -509,5 +519,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.webEngineIntegrationRefactor.value().enabled
+    }
+
+    private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
     }
 }

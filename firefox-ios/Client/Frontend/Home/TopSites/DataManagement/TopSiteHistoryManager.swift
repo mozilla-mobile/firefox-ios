@@ -19,6 +19,7 @@ class TopSiteHistoryManager: TopSiteHistoryManagerProvider {
     private let topSiteCacheSize: Int32 = 32
     private let topSitesProvider: TopSitesProvider
 
+    @MainActor
     init(profile: Profile) {
         self.profile = profile
         self.topSitesProvider = TopSitesProviderImplementation(

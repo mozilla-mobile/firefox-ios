@@ -31,6 +31,8 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var iconName: String?
     var badgeImageName: String?
     var maskImageName: String?
+    var templateModeForImage = true
+    var isLoading = false
     var numberOfTabs: Int?
     var isFlippedForRTL = false
     var isEnabled: Bool

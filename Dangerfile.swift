@@ -316,6 +316,7 @@ class CodeUsageDetector {
         case deferred
         case swiftUIText
         case task
+        case dispatchLegacy
 
         var message: String {
             switch self {
@@ -336,6 +337,11 @@ class CodeUsageDetector {
                 New `Task {}` added in file %@ at line %d.
                 Please add a concurrency reviewer on your PR: \(contacts)
                 """
+            case .dispatchLegacy:
+                return """
+                DispatchLegacy is used in file %@ at line %d.
+                Please replace with `dispatch` instead and call it from the main actor
+                """
             }
         }
 
@@ -353,12 +359,23 @@ class CodeUsageDetector {
                 return "Text(\""
             case .task:
                 return " Task {"
+            case .dispatchLegacy:
+                return ".dispatchLegacy("
             }
         }
 
         var shouldComment: Bool {
             switch self {
             case .task:
+                return true
+            default:
+                return false
+            }
+        }
+
+        var shouldWarn: Bool {
+            switch self {
+            case .deferred, .dispatchLegacy:
                 return true
             default:
                 return false
@@ -414,6 +431,8 @@ class CodeUsageDetector {
                 let lineNumber = hunk.newLineStart + newLineCount - 1
                 if keyword.shouldComment {
                     markdown(String(format: message, file, lineNumber))
+                } else if keyword.shouldWarn {
+                    warn(String(format: message, file, lineNumber))
                 } else {
                     fail(String(format: message, file, lineNumber))
                 }
@@ -432,6 +451,8 @@ class CodeUsageDetector {
             let lineNumber = index + 1
             if keyword.shouldComment {
                 markdown(String(format: message, file, lineNumber))
+            } else if keyword.shouldWarn {
+                warn(String(format: message, file, lineNumber))
             } else {
                 fail(String(format: message, file, lineNumber))
             }

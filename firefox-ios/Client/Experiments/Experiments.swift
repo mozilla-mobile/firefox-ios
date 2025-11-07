@@ -207,6 +207,11 @@ enum Experiments {
         return prefsReader.hasAcceptedTermsOfUse()
     }
 
+    static func touExperiencePoints(region: String?) -> Int32 {
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.getTouExperiencePoints(region: region)
+    }
+
     private static func isAppleIntelligenceAvailable() -> Bool {
         guard #available(iOS 26, *) else { return false }
         #if canImport(FoundationModels)

@@ -70,7 +70,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
             addressListViewModel: viewModel.addressListViewModel)
         self.addressAutofillSettingsPageView = UIHostingController(rootView: addressAutofillSettingsVC)
 
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     /// Not implemented for this view controller. Raises a fatal error.

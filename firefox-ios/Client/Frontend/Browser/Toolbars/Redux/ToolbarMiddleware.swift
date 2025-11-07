@@ -172,6 +172,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
             guard let url = action.url, let searchTerm = action.searchTerm else { return }
             recentSearchProvider.addRecentSearch(searchTerm, url: url.absoluteString)
 
+        case ToolbarActionType.navigationMiddleButtonDidChange:
+            guard let middleButton = action.middleButton else { return }
+            toolbarTelemetry.middleButtonType(middleButton)
+
         default:
             break
         }
@@ -314,6 +318,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
             }
+        case .translate:
+            // The effects of tapping on the translate button is also handled in
+            // the `TranslationsMiddleware`. This is because we want to
+            // separate the translations logic from the toolbar middleware.
+            // And anything that needs to interact with our translations scripts
+            // can listen and respond to events in that specific middleware.
+            break
         default:
             break
         }

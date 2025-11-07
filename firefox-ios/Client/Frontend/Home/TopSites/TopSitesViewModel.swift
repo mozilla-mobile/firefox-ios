@@ -35,6 +35,7 @@ class TopSitesViewModel {
     private let unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry
     private let sponsoredTileTelemetry: SponsoredTileTelemetry
 
+    @MainActor
     init(profile: Profile,
          isZeroSearch: Bool = false,
          theme: Theme,

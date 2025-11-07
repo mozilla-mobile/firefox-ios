@@ -66,6 +66,7 @@ final class AddressToolbarContainer: UIView,
         static let skeletonBarWidthOffset: CGFloat = 32
         static let addNewTabFadeAnimationDuration: TimeInterval = 0.2
         static let addNewTabPercentageAnimationThreshold: CGFloat = 0.3
+        static let keyboardAccessoryViewOffset: CGFloat = 22
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -158,6 +159,23 @@ final class AddressToolbarContainer: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            DefaultLogger.shared.log(
+                "AddressToolbarContainer was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
+    }
+
     func configure(
         windowUUID: WindowUUID,
         profile: Profile,
@@ -188,6 +206,41 @@ final class AddressToolbarContainer: UIView,
     func hideSkeletonBars() {
         leftSkeletonAddressBar.isHidden = true
         rightSkeletonAddressBar.isHidden = true
+    }
+
+    func offsetForKeyboardAccessory(hasAccessoryView: Bool) -> CGFloat {
+        guard #available(iOS 26.0, *), let windowUUID else { return 0 }
+
+        let isEditingAddress = state?.addressToolbar.isEditing == true
+        let shoudShowKeyboard = state?.addressToolbar.shouldShowKeyboard
+        let isBottomToolbar = state?.toolbarPosition == .bottom
+        let shouldAdjustForAccessory = hasAccessoryView &&
+                                       !isEditingAddress &&
+                                       isBottomToolbar
+
+        let accessoryViewOffset = shouldAdjustForAccessory ? UX.keyboardAccessoryViewOffset : 0
+
+        /// We want to check here if the keyboard accessory view state has changed
+        /// To avoid spamming redux actions.
+        guard hasAccessoryView != shoudShowKeyboard else { return accessoryViewOffset }
+        store.dispatch(
+            ToolbarAction(
+                shouldShowKeyboard: hasAccessoryView,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.keyboardStateDidChange
+            )
+        )
+
+        if shouldAdjustForAccessory {
+            store.dispatch(
+                ToolbarAction(
+                    scrollAlpha: 0,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                )
+            )
+        }
+        return accessoryViewOffset
     }
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {
@@ -228,7 +281,7 @@ final class AddressToolbarContainer: UIView,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .toolbar)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -246,7 +299,7 @@ final class AddressToolbarContainer: UIView,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .toolbar)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         store.unsubscribe(self)
     }
 
@@ -465,13 +518,13 @@ final class AddressToolbarContainer: UIView,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) {
             if searchTerm.isEmpty, !toolbarState.addressToolbar.isEmptySearch {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didDeleteSearchTerm)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
             } else if !searchTerm.isEmpty, toolbarState.addressToolbar.isEmptySearch {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didEnterSearchTerm)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
             } else if !toolbarState.addressToolbar.didStartTyping {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartTyping)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
             }
         }
         self.searchTerm = searchTerm
@@ -486,7 +539,7 @@ final class AddressToolbarContainer: UIView,
 
         let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
                                              actionType: ToolbarMiddlewareActionType.didClearSearch)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func openBrowser(searchTerm: String) {
@@ -501,9 +554,14 @@ final class AddressToolbarContainer: UIView,
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)
 
-        // We want to show suggestions if we turn on the trending searches
-        // which displays the zero search state.
-        let isZeroSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        // We want to show suggestions if we turn on the trending searches or recent searches
+        // which displays the zero search state. Only if not in private mode.
+        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isRecentOrTrendingSearchEnabled = isTrendingSearchEnabled || isRecentSearchEnabled
+        let isPrivateMode = model?.isPrivateMode ?? false
+        let isZeroSearchEnabled = isRecentOrTrendingSearchEnabled && !isPrivateMode
+
         if shouldShowSuggestions || isZeroSearchEnabled {
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         }
@@ -532,7 +590,7 @@ final class AddressToolbarContainer: UIView,
 
         let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
                                              actionType: ToolbarMiddlewareActionType.didStartDragInteraction)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func addressToolbarDidBeginDragInteraction() {
@@ -560,7 +618,7 @@ final class AddressToolbarContainer: UIView,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didPasteSearchTerm
             )
-            store.dispatchLegacy(action)
+            store.dispatch(action)
 
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {
@@ -568,7 +626,7 @@ final class AddressToolbarContainer: UIView,
                                        shouldAnimate: true,
                                        windowUUID: windowUUID,
                                        actionType: ToolbarActionType.didStartEditingUrl)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         }
     }
 
@@ -583,7 +641,7 @@ final class AddressToolbarContainer: UIView,
 
         if toolbarState.addressToolbar.isEditing {
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         }
     }
 
