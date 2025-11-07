@@ -7767,8 +7767,8 @@ extension String {
         public static let RelayEmailMaskAvailableCFR = MZLocalizedString(
             key: "RelayMask.RelayEmailMaskAvailableCFR.v146",
             tableName: "RelayMask",
-            value: "New! Firefox Relay email masks are now available on mobile.",
-            comment: "Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile.")
+            value: "New! %@ Relay email masks are now available on mobile.",
+            comment: "Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox')")
         public static let RelayEmailMaskFreeTierLimitReached = MZLocalizedString(
             key: "RelayMask.RelayEmailMaskFreeTierLimitReached.v146",
             tableName: "RelayMask",
@@ -7777,7 +7777,7 @@ extension String {
         public static let RelayEmailMaskGenericErrorMessage = MZLocalizedString(
             key: "RelayMask.RelayEmailMaskGenericErrorMessage.v146",
             tableName: "RelayMask",
-            value: "Email masks aren't available right now. Try again in a few minutes.",
+            value: "Email masks aren’t available right now. Try again in a few minutes.",
             comment: "Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask.")
     }
 }
