@@ -41,6 +41,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 }
                 .padding(.top, UX.CardView.cardTopPadding)
             }
+            .animation(.easeOut, value: geometry.size)
         }
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }

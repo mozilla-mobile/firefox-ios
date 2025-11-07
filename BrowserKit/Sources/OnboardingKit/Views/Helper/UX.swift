@@ -113,10 +113,11 @@ enum UX {
 
     struct LaunchScreen {
         struct Logo {
-            static let size: CGFloat = 125
             static let rotationDuration: TimeInterval = 2.0
-            static let rotationAngle: Double = 360
+            static let rotationAngle: Double = .pi * 2.0
             static let image = "firefoxLoader"
+            static let animationKey = "rotationAnimation"
+            static let animationKeyPath = "transform.rotation.z"
         }
     }
 
