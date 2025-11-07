@@ -3934,8 +3934,6 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleEmailFieldDetected(for tab: Tab?) {
-        // TODO: Arriving off the main thread?
-        assert(Thread.isMainThread)
         guard let tab, let tabURL = tab.url else { return }
         guard RelayController.isFeatureEnabled else { return }
 
