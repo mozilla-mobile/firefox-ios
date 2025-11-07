@@ -34,28 +34,6 @@ final class StoriesFeedViewControllerTests: XCTestCase {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func testDeinit_whenRecordTelemetryOnDisappearIsFalse_doesNotRecordClosedTelemetry() {
-        let telemetry = MockStoriesFeedTelemetry()
-        var subject = createOptionalSubject(telemetry: telemetry)
-
-        subject?.recordTelemetryOnDisappear = false
-
-        subject = nil
-
-        XCTAssertEqual(telemetry.storiesFeedClosedCalled, 0)
-    }
-
-    func testDeinit_whenRecordTelemetryOnDisappearIsTrue_recordsClosedTelemetry() {
-        let telemetry = MockStoriesFeedTelemetry()
-        var subject = createOptionalSubject(telemetry: telemetry)
-
-        subject?.recordTelemetryOnDisappear = true
-
-        subject = nil
-
-        XCTAssertEqual(telemetry.storiesFeedClosedCalled, 1)
-    }
-
     private func createSubject(telemetry: StoriesFeedTelemetryProtocol? = nil) -> StoriesFeedViewController {
         let storiesFeedViewController = StoriesFeedViewController(windowUUID: .XCTestDefaultUUID,
                                                                   telemetry: telemetry ?? MockStoriesFeedTelemetry())

@@ -4,16 +4,6 @@
 
 import UIKit
 
-// TODO: Find a better place for this
-enum DismissalReason: Equatable {
-    case user
-    case deeplink
-}
-
-protocol DismissalNotifiable: AnyObject {
-    func willBeDismissed(reason: DismissalReason)
-}
-
 class DefaultRouter: NSObject, Router {
     var completions: [UIViewController: () -> Void]
 
@@ -78,7 +68,6 @@ class DefaultRouter: NSObject, Router {
         }
     }
 
-    // TODO: Unit test + add documentation on protocol method
     func popToViewController(_ viewController: UIViewController,
                              reason: DismissalReason = .user,
                              animated: Bool) -> [UIViewController]? {

@@ -68,8 +68,18 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     @MainActor
     func popViewController(animated: Bool)
 
-    // TODO: Documentation
+    /// Pops all view controllers off of the navigation stack until we reach `viewController`
+    /// The navigation stack is not modified if the viewController parameter is the currently presented view controller or
+    /// does not exist in the navigation stack at all.
+    ///
+    /// - Parameters:
+    ///   - viewController: The view controller to pop to
+    ///   - reason: The reason/trigger for the dismissal (eg user, deeplink)
+    ///   - animated: Whether or not to animate the transition
+    ///
+    /// - Returns: A collection of the popped view controllers. Returns nil if no view controllers are popped.
     @MainActor
+    @discardableResult
     func popToViewController(_ viewController: UIViewController,
                              reason: DismissalReason,
                              animated: Bool) -> [UIViewController]?

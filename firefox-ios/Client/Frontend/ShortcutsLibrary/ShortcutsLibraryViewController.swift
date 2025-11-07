@@ -16,13 +16,11 @@ class ShortcutsLibraryViewController: UIViewController,
         static let shortcutsSectionTopInset: CGFloat = 24
     }
 
-    // Used to only record "closed" telemetry on back button press and swipe gestures
-    var recordTelemetryOnDisappear = true
-
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: ShortcutsLibraryDiffableDataSource?
     private var shortcutsLibraryState: ShortcutsLibraryState
+    private var recordTelemetryOnDisappear = true
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -369,6 +367,6 @@ class ShortcutsLibraryViewController: UIViewController,
     // MARK: - DismissalNotifiable
 
     func willBeDismissed(reason: DismissalReason) {
-        // TODO: Depending on the reason, then adjust the business logic
+        recordTelemetryOnDisappear = false
     }
 }

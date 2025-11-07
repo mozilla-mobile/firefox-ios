@@ -48,6 +48,15 @@ class MockNavigationController: NavigationController {
 
     func popToViewController(_ viewController: UIViewController, animated: Bool) -> [UIViewController]? {
         popToViewControllerCalled += 1
-        return nil
+
+        // Simulate popping everything above the target
+        guard let index = viewControllers.firstIndex(of: viewController),
+              index < viewControllers.count - 1 else {
+            return nil
+        }
+
+        let popped = Array(viewControllers[(index + 1)...])
+        viewControllers.removeSubrange((index + 1)...)
+        return popped
     }
 }

@@ -65,6 +65,13 @@ class MockRouter: NSObject, Router {
         savedCompletion = nil
     }
 
+    @MainActor
+    func popToViewController(_ viewController: UIViewController,
+                             reason: DismissalReason,
+                             animated: Bool) -> [UIViewController]? {
+        return nil
+    }
+
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool) {
         rootViewController = viewController
         setRootViewControllerCalled += 1

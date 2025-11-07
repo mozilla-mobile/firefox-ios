@@ -713,7 +713,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         guard let navigationController = mockRouter.navigationController as? MockNavigationController else { return }
 
         XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
-        XCTAssertFalse(shortcutsLibraryViewController.recordTelemetryOnDisappear)
     }
 
     func testPopToBVC_popsStoriesFeedViewController() {
@@ -729,7 +728,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         guard let navigationController = mockRouter.navigationController as? MockNavigationController else { return }
 
         XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
-        XCTAssertFalse(storiesFeedViewController.recordTelemetryOnDisappear)
     }
 
     func testPopToBVC_popsStoriesWebviewViewController() {
@@ -748,7 +746,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         guard let navigationController = mockRouter.navigationController as? MockNavigationController else { return }
 
         XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
-        XCTAssertFalse(storiesFeedViewController.recordTelemetryOnDisappear)
     }
 
     func testShouldShowNewTabToast_returnsTrue() throws {

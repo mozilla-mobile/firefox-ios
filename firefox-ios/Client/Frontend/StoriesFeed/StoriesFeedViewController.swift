@@ -12,9 +12,6 @@ class StoriesFeedViewController: UIViewController,
                                  StoreSubscriber,
                                  Themeable,
                                  DismissalNotifiable {
-    // Used to only record "closed" telemetry on back button press and swipe gestures
-    var recordTelemetryOnDisappear = true
-
     // MARK: - Themeable Properties
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -35,6 +32,7 @@ class StoriesFeedViewController: UIViewController,
     private let scrollThrottler: GCDThrottlerProtocol
     private let impressionsThrottler: GCDThrottlerProtocol
     private let impressionsTracker: ImpressionTrackingUtility
+    private var recordTelemetryOnDisappear = true
 
     // MARK: - Private constants
     private let logger: Logger
@@ -330,6 +328,6 @@ class StoriesFeedViewController: UIViewController,
     // MARK: - DismissalNotifiable
 
     func willBeDismissed(reason: DismissalReason) {
-        // TODO: Depending on the reason, then adjust the business logic
+        recordTelemetryOnDisappear = false
     }
 }
