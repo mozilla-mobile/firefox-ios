@@ -293,7 +293,6 @@ final class AddressToolbarContainerModel: Equatable {
                                                  windowUUID: windowUUID,
                                                  actionType: ToolbarMiddlewareActionType.customA11yAction)
             store.dispatch(action)
-
         } : nil
     }
 

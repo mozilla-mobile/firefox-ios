@@ -8,10 +8,10 @@ import Common
 /// Stores your entire app state in the form of a single data structure.
 /// This state can only be modified by dispatching Actions to the store.
 /// Whenever the state of the store changes, the store will notify all store subscriber.
+@MainActor
 public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     typealias SubscriptionType = SubscriptionWrapper<State>
 
-    @MainActor
     public var state: State {
         didSet {
             subscriptions.forEach {
@@ -27,7 +27,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
 
     private var reducer: Reducer<State>
     private var middlewares: [Middleware<State>]
-    @MainActor
     private var subscriptions: Set<SubscriptionType> = []
     private var actionRunning = false
     private let logger: Logger
@@ -46,13 +45,11 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     }
 
     /// General subscription to app main state
-    @MainActor
     public func subscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State {
         subscribe(subscriber, transform: nil)
     }
 
     /// Adds support to subscribe to subState parts of the store's state
-    @MainActor
     public func subscribe<SubState, S: StoreSubscriber>(
         _ subscriber: S,
         transform: ((Subscription<State>) -> Subscription<SubState>)?
@@ -62,14 +59,12 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         subscribe(subscriber, mainSubscription: originalSubscription, transformedSubscription: transformedSubscription)
     }
 
-    @MainActor
     public func unsubscribe(_ subscriber: any StoreSubscriber) {
         if let index = subscriptions.firstIndex(where: { return $0.subscriber === subscriber }) {
             subscriptions.remove(at: index)
         }
     }
 
-    @MainActor
     public func unsubscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State {
         if let index = subscriptions.firstIndex(where: { return $0.subscriber === subscriber }) {
             subscriptions.remove(at: index)
@@ -91,7 +86,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         }
     }
 
-    @MainActor
     public func dispatch(_ action: Action) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
@@ -99,7 +93,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         processQueuedActions()
     }
 
-    @MainActor
     private func processQueuedActions() {
         guard !isProcessingActions else { return }
         isProcessingActions = true
@@ -110,7 +103,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         isProcessingActions = false
     }
 
-    @MainActor
     private func executeAction(_ action: Action) {
         // Each active screen state is given an opportunity to be reduced using the dispatched action
         // (Note: this is true even if the action's UUID differs from the screen's window's UUID).
@@ -129,7 +121,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         state = newState
     }
 
-    @MainActor
     private func subscribe<SubState, S: StoreSubscriber>(
         _ subscriber: S,
         mainSubscription: Subscription<State>,
