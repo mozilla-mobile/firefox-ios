@@ -1031,8 +1031,8 @@ extension BrowserViewController: WKNavigationDelegate {
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
 
-                if isNativeErrorPageEnabled {
-                    guard isNICErrorPageEnabled && error.code == noInternetErrorCode else { return }
+                // Only handle No internet access because other cases show about:blank page
+                if isNICErrorPageEnabled && error.code == noInternetErrorCode {
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
