@@ -809,8 +809,8 @@ open class BrowserProfile: Profile,
         }
     }
 
-    class NoAccountError: MaybeErrorType {
-        var description = "No account."
+    struct NoAccountError: MaybeErrorType {
+        let description = "No account."
     }
 }
 

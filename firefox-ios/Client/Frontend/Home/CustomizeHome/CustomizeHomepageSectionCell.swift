@@ -19,7 +19,7 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
         button.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
     }
 
-    private var touchUpAction: ((UIButton) -> Void)?
+    private var touchUpAction: (@MainActor (UIButton) -> Void)?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -53,7 +53,7 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
         layoutIfNeeded()
     }
 
-    func configure(onTapAction: ((UIButton) -> Void)?, theme: Theme) {
+    func configure(onTapAction: (@MainActor (UIButton) -> Void)?, theme: Theme) {
         touchUpAction = onTapAction
         let goToSettingsButtonViewModel = SecondaryRoundedButtonViewModel(
             title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,

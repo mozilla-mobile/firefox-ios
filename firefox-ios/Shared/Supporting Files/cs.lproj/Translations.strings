@@ -10,6 +10,9 @@
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the loading button that appears when the page is being translated. */
 "Translations.Banner.Loading.Button.AccessibilityLabel.v145" = "Probíhá překlad stránky";
 
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the chevron button that navigates the user to the translation settings page. */
+"Translations.Banner.OpenSettings.Button.AccessibilityLabel.v145" = "Otevřít jazykové nastavení";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error. */
 "Translations.Banner.RetryButton.v145" = "Opakovat";
 
@@ -40,6 +43,9 @@
 /* On the translation feature bottom sheet, this is the text for the error message that appears when a user has no internet connection when trying to translate a page. */
 "Translations.Sheet.Error.TitleLabel.v145" = "Nepodařilo se načíst jazyky";
 
+/* This is a less descriptive text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.FromLabel.v145" = "Z jazyka";
+
 /* This is the text on the secondary button used to indicate that page is being translated and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.LoadingButton.v145" = "Probíhá překlad stránky";
 
@@ -48,4 +54,19 @@
 
 /* This is the title for the bottom sheet view that allows users to configure their language preferences for the translations feature. */
 "Translations.Sheet.TitleLabel.v145" = "Přeložit stránku";
+
+/* This is the less descriptive text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.ToLabel.v145" = "Do jazyka";
+
+/* This is the accessibility label for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
+"Translations.Sheet.TranslateFrom.AccessibilityLabel.v145" = "Přeložit z jazyka %@";
+
+/* This is the text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.TranslateFromLabel.v145" = "Překlad z";
+
+/* This is the accessibility label for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
+"Translations.Sheet.TranslateTo.AccessibilityLabel.v145" = "Přeložit do jazyka %@";
+
+/* This is the text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.TranslateToLabel.v145" = "Přeložit do";
 

@@ -8,6 +8,7 @@ public protocol FileManagerProtocol: Sendable {
     func fileExists(atPath path: String) -> Bool
     func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL]
     func contentsOfDirectory(atPath path: String) throws -> [String]
+    func moveItem(at: URL, to: URL) throws
     func removeItem(atPath path: String) throws
     func removeItem(at url: URL) throws
     func copyItem(at srcURL: URL, to dstURL: URL) throws

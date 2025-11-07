@@ -245,7 +245,7 @@ open class FxAccountManager: @unchecked Sendable {
     /// Get the account management URL.
     public func getManageAccountURL(
         entrypoint: String,
-        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
+        completionHandler: @MainActor @Sendable @escaping (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {

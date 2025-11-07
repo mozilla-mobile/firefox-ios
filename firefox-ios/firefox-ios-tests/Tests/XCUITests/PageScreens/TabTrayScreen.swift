@@ -15,6 +15,7 @@ final class TabTrayScreen {
 
     private var trayContainer: XCUIElement { sel.TABSTRAY_CONTAINER.element(in: app) }
     private var collectionView: XCUIElement { sel.COLLECTION_VIEW.element(in: app) }
+    private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app)}
 
     func assertFirstCellVisible(timeout: TimeInterval = TIMEOUT) {
         let firstCell = collectionView.cells.element(boundBy: 0)
@@ -54,5 +55,47 @@ final class TabTrayScreen {
             file: file,
             line: line
         )
+    }
+
+    func assertTabCellVisibleAndHasCorrectLabel(index: Int, urlLabel: String, selectedTab: String) {
+        let tabSelector = sel.tabCellWithIndex(index, urlLabel, selectedTab)
+        let tabCell = tabSelector.element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(tabCell)
+
+        let expectedLabel = "\(urlLabel). \(selectedTab)"
+        XCTAssertEqual(tabCell.label, expectedLabel, "The tab cell label is incorrect.")
+    }
+
+    func tapOnNewTabButton() {
+        newTabButton.waitAndTap()
+    }
+
+    func assertNewTabButtonExist() {
+        BaseTestCase().mozWaitForElementToExist(newTabButton)
+    }
+
+    func tapTabAtIndex(index: Int) {
+        let tabSelector = sel.tabCellAtIndex(index: index)
+        let tabCell = tabSelector.element(in: app)
+
+        tabCell.waitAndTap()
+    }
+
+    func assertTabButtonEnabled(at index: Int) {
+        let tabButton = sel.tabSelectorButton(at: index).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(tabButton)
+        XCTAssertTrue(tabButton.isEnabled, "Tab button at index \(index) should be enabled")
+    }
+
+    func undoRemovingAllTabs() {
+        let undoButton = sel.UNDO_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(undoButton)
+        undoButton.waitAndTap()
+    }
+
+    func waitForTabWithLabel(_ label: String) {
+        let tabStaticText = app.cells.staticTexts[label]
+        BaseTestCase().mozWaitForElementToExist(tabStaticText)
     }
 }

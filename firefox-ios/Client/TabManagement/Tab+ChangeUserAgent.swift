@@ -46,10 +46,10 @@ extension Tab {
             return isPrivate ? privateModeHostList.contains(baseDomain) : baseDomainList.contains(baseDomain)
         }
 
-        static func performMigration() {
-            guard FileManager.default.fileExists(atPath: oldUAFileLocation.path) else { return }
+        static func performMigration(fileManager: FileManagerProtocol = FileManager.default) {
+            guard fileManager.fileExists(atPath: oldUAFileLocation.path) else { return }
             do {
-                try FileManager.default.moveItem(at: oldUAFileLocation, to: file)
+                try fileManager.moveItem(at: oldUAFileLocation, to: file)
             } catch {
                 DefaultLogger.shared.log("Migration of changed UA file failed", level: .info, category: .tabs)
             }

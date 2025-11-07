@@ -10,7 +10,7 @@ import class MozillaAppServices.FeatureHolder
 import enum MozillaAppServices.NimbusError
 import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 
-protocol GleanPlumbMessageManagerProtocol {
+protocol GleanPlumbMessageManagerProtocol: Sendable {
     /// Performs the bookkeeping and preparation of messages for their respective surfaces.
     /// We can build our collection of eligible messages for a surface in here.
     func onStartup()
@@ -57,7 +57,7 @@ protocol GleanPlumbMessageManagerProtocol {
 ///     - exposure
 ///     - malformed message
 ///     - expiration (handled in the store)
-class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
+final class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     // MARK: - Properties
     static let shared = GleanPlumbMessageManager()
 

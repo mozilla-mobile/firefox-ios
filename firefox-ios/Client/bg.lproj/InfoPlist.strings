@@ -5,7 +5,7 @@
 "New Tab" = "Нов раздел";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "От тук може да правите и качвате снимки.";
+"NSCameraUsageDescription" = "Firefox използва камерата ви, за да сканира QR кодове и да прави снимки и видео.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox изисква Face ID, за да има достъп до запазените от вас пароли и методи на плащане.";

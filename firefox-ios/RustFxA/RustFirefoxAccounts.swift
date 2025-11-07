@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Storage
 
 import class MozillaAppServices.FxAccountManager
 import class MozillaAppServices.FxAConfig
@@ -40,6 +41,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     // https://searchfox.org/mozilla-central/rev/887d4b5da89a11920ed0fd96b7b7f066927a67db/services/fxaccounts/FxAccountsCommon.js#88
     public static let pushScope = "chrome://fxa-device-update"
     public static let shared = RustFirefoxAccounts()
+
     public var accountManager: FxAccountManager?
     public var avatar: Avatar?
     // TODO: FXIOS-12596 There is no need for this to be static. This should be an easier fix
@@ -175,13 +177,18 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
             fatalError("Missing or invalid 'MozDevelopmentTeam' key in Info.plist")
         }
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
+        let useRustKeychainForFxA = prefs?.boolForKey(PrefsKeys.RustFxaKeychainEnabled) ?? false
+
+        if useRustKeychainForFxA {
+            RustFxAKeychain.reportFxaKeychainUsageTelemetry()
+        }
 
         return FxAccountManager(
             config: config,
             deviceConfig: deviceConfig,
             applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
             keychainAccessGroup: accessGroupIdentifier,
-            useRustKeychainForFxA: prefs?.boolForKey(PrefsKeys.RustFxaKeychainEnabled) ?? false
+            useRustKeychainForFxA: useRustKeychainForFxA
         )
     }
 

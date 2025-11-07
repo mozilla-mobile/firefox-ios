@@ -50,7 +50,7 @@
 "MainMenu.Account.SyncError.Description.v131" = "დასინქრონება შეჩერებულია";
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
-"MainMenu.Account.SyncError.Title.v131" = "კვლავ შესვლა სინქრონიზაციისთვის";
+"MainMenu.Account.SyncError.Title.v131" = "კვლავ შესვლა და სინქ.";
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.BookmarkPage.Title.v141" = "გვერდის ჩანიშვნა";

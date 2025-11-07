@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-struct AppState: StateType {
+struct AppState: StateType, Sendable {
     let activeScreens: ActiveScreensState
 
     static let reducer: Reducer<Self> = { state, action in
@@ -84,7 +84,8 @@ let middlewares = [
     StartAtHomeMiddleware().startAtHomeProvider,
     ShortcutsLibraryMiddleware().shortcutsLibraryProvider,
     SummarizerMiddleware().summarizerProvider,
-    TermsOfUseMiddleware().termsOfUseProvider
+    TermsOfUseMiddleware().termsOfUseProvider,
+    TranslationsMiddleware().translationsProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

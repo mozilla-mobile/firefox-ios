@@ -40,6 +40,8 @@ class MockOnboardingNavigationDelegate: OnboardingNavigationDelegate {
 }
 
 final class MockIntroScreenManager: IntroScreenManagerProtocol {
+    var onboardingVariant: Client.OnboardingVariant
+
     /// Controls what `shouldShowIntroScreen` returns
     var stubShouldShowIntroScreen: Bool
 
@@ -51,10 +53,12 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
 
     init(
         shouldShowIntro: Bool = false,
-        isModernEnabled: Bool = false
+        isModernEnabled: Bool = false,
+        onboardingVariant: Client.OnboardingVariant = .legacy
     ) {
         self.stubShouldShowIntroScreen = shouldShowIntro
         self.stubIsModernOnboardingEnabled = isModernEnabled
+        self.onboardingVariant = onboardingVariant
     }
 
     var shouldShowIntroScreen: Bool {

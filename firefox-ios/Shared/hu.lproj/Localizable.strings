@@ -398,7 +398,7 @@
 "fxa.signin.ready-to-scan" = "Leolvasásra kész";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "E-mail használata ehelyett";
+"fxa.signin.use-email-instead" = "Inkább e-mail használata";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Szinkronizálás most";
@@ -1430,7 +1430,7 @@
 "Settings.OfferClipboardBar.Title" = "Másolt hivatkozások megnyitásának felajánlása";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "E-mail hivatkozások társítása";
+"Settings.OpenWith.PageTitle" = "E-mail-hivatkozások társítása";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Levelezőalkalmazás";

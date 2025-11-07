@@ -79,11 +79,32 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "ຂ້າມ";
 
+/* Option for the automatic theme. */
+"Onboarding.Modern.Customization.Theme.Automatic.v145" = "ອັດຕະໂນມັດ";
+
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
 "Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "ສືບຕໍ່";
 
+/* Option for the dark theme. */
+"Onboarding.Modern.Customization.Theme.Dark.v145" = "ມືດ";
+
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "ເລືອກຮູບແບບສີສັນທີ່ທ່ານມັກ ຫຼື ມີ %@ ກົງກັບອຸປະກອນຂອງທ່ານ, ໃຫ້ທ່ານຄວບຄຸມ.";
+
+/* Option for the light theme. */
+"Onboarding.Modern.Customization.Theme.Light.v145" = "ແຈ້ງ";
+
+/* Title for the theme selection card. */
+"Onboarding.Modern.Customization.Theme.Title.v145" = "ເລືອກຮູບແບບສີສັນຂອງທ່ານ";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "ປຸ່ມກົດ";
+
+/* Action to set the toolbar to the bottom. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "ລຸ່ມ";
+
+/* Continue button on the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "ສືບຕໍ່";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "ເລືອກບ່ອນທີ່ຈະໃສ່ແຖບທີ່ຢູ່ຂອງເຈົ້າ";
@@ -91,14 +112,26 @@
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "ເທິງ";
 
+/* Action to set the toolbar to the top. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "ເທິງ";
+
+/* Button to skip the entire onboarding flow. */
+"Onboarding.Modern.General.Skip.v145" = "ຂ້າມ";
+
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "ສາມາດເອົາບຸກມາກ, ປະຫວັດ, ແລະ ລະຫັດຜ່ານຂອງທ່ານຈາກອຸປະກອນໃດກໍໄດ້.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "ເລີ່ມການຊິງຄ";
 
+/* Button to start the Sync setup process. */
+"Onboarding.Modern.Sync.SignIn.Action.v145" = "ເລີ່ມການຊິງຄ";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.Skip.Action.v140" = "ບໍ່ແມ່ນດຽວນີ້";
+
+/* Button to skip the Sync setup during onboarding. */
+"Onboarding.Modern.Sync.Skip.Action.v145" = "ບໍ່ແມ່ນຕອນນີ້";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Sync.Title.v140" = "ສືບຕໍຈາກບ່ອນທີ່ທ່ານໄດ້ເຮັດຄ້າງປະໄວ້ໄດ້ໃນທັນທີ";
@@ -106,8 +139,14 @@
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "ສືບຕໍ່";
 
+/* Title for the confirmation button on the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "ສືບຕໍ່";
+
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "ຈັດການ";
+
+/* The text for the Manage settings link button. */
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "ຈັດການການຕັ້ງຄ່າ";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "ເພື່ອຊ່ວຍປັບປຸງບຣາວເຊີໃຫ້ດີຂື້ນ, %1$@ ສົ່ງຂໍ້ມູນການວິເຄາະ ແລະ ການໂຕ້ຕອບມາທີ່ %2$@. %3$@";

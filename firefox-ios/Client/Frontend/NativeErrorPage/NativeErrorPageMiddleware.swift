@@ -6,8 +6,10 @@ import Foundation
 import Redux
 import Common
 
+@MainActor
 final class NativeErrorPageMiddleware {
     private var nativeErrorPageHelper: NativeErrorPageHelper?
+
     lazy var nativeErrorPageProvider: Middleware<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
@@ -22,12 +24,12 @@ final class NativeErrorPageMiddleware {
     }
 
     private func initializeNativeErrorPage(windowUUID: WindowUUID) {
-        if let helper = nativeErrorPageHelper {
-            let model = helper.parseErrorDetails()
-            store.dispatchLegacy(NativeErrorPageAction(nativePageErrorModel: model,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageMiddlewareActionType.initialize)
-            )
-        }
+        guard let helper = nativeErrorPageHelper else { return }
+        let model = helper.parseErrorDetails()
+        store.dispatch(
+            NativeErrorPageAction(nativePageErrorModel: model,
+                                  windowUUID: windowUUID,
+                                  actionType: NativeErrorPageMiddlewareActionType.initialize)
+        )
     }
 }

@@ -237,12 +237,15 @@ private extension WallpaperSettingsViewModel {
                 // We are passing the wallpaperConfiguration here even though right now it is not being used
                 // by the middleware that is responding to this action. It will be as soon as we move the wallpaper
                 // manager logic to the middlware.
-                let action = WallpaperAction(
-                    wallpaperConfiguration: wallpaperConfig,
-                    windowUUID: windowUUID,
-                    actionType: WallpaperActionType.wallpaperSelected
-                )
-                store.dispatchLegacy(action)
+                let windowUUID = self.windowUUID
+                ensureMainThread {
+                    let action = WallpaperAction(
+                        wallpaperConfiguration: wallpaperConfig,
+                        windowUUID: windowUUID,
+                        actionType: WallpaperActionType.wallpaperSelected
+                    )
+                    store.dispatch(action)
+                }
             }
             completion(result)
         }

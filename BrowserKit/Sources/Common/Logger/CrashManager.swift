@@ -26,8 +26,8 @@ public protocol CrashManager: Sendable {
  * interface.  If so, they should try to customize their crash reports to match.
  */
 public protocol CustomCrashReport {
-    var typeName: String { get set }
-    var message: String { get set }
+    var typeName: String { get }
+    var message: String { get }
 }
 
 /// **Note**: This class is safely `@unchecked Sendable` because we protect the only mutable state (`enabled`) with a manual

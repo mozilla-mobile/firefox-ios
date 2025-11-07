@@ -31,7 +31,7 @@ final class BookmarksTelemetryTests: XCTestCase {
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(gleanWrapper.recordLabelCalled, 1)
+        XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
     }
 
     func testRecordBookmark_WhenDeletedBookmark_ThenGleanIsCalled() throws {
@@ -42,7 +42,7 @@ final class BookmarksTelemetryTests: XCTestCase {
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(gleanWrapper.recordLabelCalled, 1)
+        XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
     }
 
     func testRecordBookmark_WhenOpenedSite_ThenGleanIsCalled() throws {
@@ -53,7 +53,7 @@ final class BookmarksTelemetryTests: XCTestCase {
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(gleanWrapper.recordLabelCalled, 1)
+        XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
     }
 
     func testRecordBookmark_WhenEditedSite_ThenGleanIsCalled() throws {
@@ -64,7 +64,7 @@ final class BookmarksTelemetryTests: XCTestCase {
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(gleanWrapper.recordLabelCalled, 1)
+        XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
     }
 
     func testRecordBookmark_WhenAddedFolder_ThenGleanIsCalled() throws {

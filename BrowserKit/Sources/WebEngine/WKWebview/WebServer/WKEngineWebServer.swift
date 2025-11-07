@@ -26,7 +26,7 @@ protocol WKEngineWebServerProtocol {
     )
 }
 
-class WKEngineWebServer: WKEngineWebServerProtocol {
+final class WKEngineWebServer: WKEngineWebServerProtocol {
     // FXIOS-13518 - WKEngineWebServer shared is not thread safe
     nonisolated(unsafe) static let shared: WKEngineWebServerProtocol = WKEngineWebServer()
 

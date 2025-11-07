@@ -29,7 +29,9 @@ final class InactiveTabsTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307045
-    func testInactiveTabs() {
+    func testInactiveTabs() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest, "Inactive tabs are no longer available with the new tab tray")
         // Confirm we have tabs loaded
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"]
         waitForTabsButton()

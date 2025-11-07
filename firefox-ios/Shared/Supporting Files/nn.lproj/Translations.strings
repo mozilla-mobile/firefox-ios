@@ -1,3 +1,6 @@
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
+"Translations.Banner.Close.Button.AccessibilityLabel.v145" = "Lat att omsettingspanelet";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that the page has been translated to another language. %1$@ is the original language and %2$@ is the language that the page was translated to. */
 "Translations.Banner.ConfirmationTitleLabel.v145" = "Omsett frå %1$@ til %2$@";
 

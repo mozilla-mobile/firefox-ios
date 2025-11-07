@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 /// Used to describe an action that can be dispatched by the redux store
-public protocol Action: CustomDebugStringConvertible {
+public protocol Action: Sendable, CustomDebugStringConvertible {
     var windowUUID: WindowUUID { get }
     var actionType: ActionType { get }
 }

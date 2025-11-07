@@ -22,7 +22,7 @@ final class TranslationSetting: Setting {
 
     override var status: NSAttributedString? {
         guard let profile else { return nil }
-        let isSwitchOn = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.Translation) ?? true
+        let isSwitchOn = profile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
         let statusString: String = isSwitchOn ? .Settings.Translation.SettingOn : .Settings.Translation.SettingOff
         return NSAttributedString(string: statusString)
     }

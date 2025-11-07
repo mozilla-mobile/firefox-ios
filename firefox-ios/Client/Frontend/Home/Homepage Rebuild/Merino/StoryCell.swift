@@ -169,8 +169,10 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            guard let story = self.story else { return }
-            titleLabel.numberOfLines = getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)
+            ensureMainThread {
+                guard let story = self.story else { return }
+                self.titleLabel.numberOfLines = self.getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)
+            }
         default: break
         }
     }

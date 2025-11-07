@@ -12,9 +12,11 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockStore: MockStoreForMiddleware<AppState>!
+    var mockProfile: MockProfile!
 
     override func setUp() {
         super.setUp()
+        mockProfile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
 
         // We must reset the global mock store prior to each test
@@ -24,6 +26,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     override func tearDown() {
         DependencyHelperMock().reset()
         resetStore()
+        mockProfile = nil
         super.tearDown()
     }
 
@@ -59,6 +62,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 displayNavBorder: true,
                 isNewTabFeatureEnabled: false,
                 canShowDataClearanceAction: false,
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars)
         )
@@ -75,6 +79,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isNewTabFeatureEnabled)
         XCTAssertFalse(newState.canShowDataClearanceAction)
         XCTAssertFalse(newState.canShowNavigationHint)
+        XCTAssertNil(newState.addressToolbar.translationConfiguration)
     }
 
     func test_borderPositionChangedAction_returnsExpectedState() {
@@ -106,6 +111,24 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.isShowingNavigationToolbar)
         XCTAssertTrue(newState.canGoBack)
         XCTAssertFalse(newState.canGoForward)
+        XCTAssertNil(newState.addressToolbar.translationConfiguration)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertNotNil(newState.addressToolbar.translationConfiguration)
     }
 
     func test_didSetTextInLocationViewAction_returnsExpectedState() {
@@ -185,15 +208,16 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
-    func test_hideKeyboardAction_returnsExpectedState() {
+    func test_keyboardStateDidChangeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
         let newState = reducer(
             initialState,
             ToolbarAction(
+                shouldShowKeyboard: true,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.hideKeyboard)
+                actionType: ToolbarActionType.keyboardStateDidChange)
         )
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)

@@ -11,6 +11,7 @@ import Glean
 class OnboardingTelemetryUtilityTests: XCTestCase {
     typealias CardNames = NimbusOnboardingTestingConfigUtility.CardOrder
 
+    @MainActor
     override func setUp() {
         super.setUp()
         setupTelemetry(with: MockProfile())

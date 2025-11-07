@@ -19,6 +19,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case downloadLiveActivities
     case feltPrivacyFeltDeletion
     case feltPrivacySimplifiedUI
+    case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
     case hntTopSitesVisualRefresh
@@ -30,6 +31,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
     case inactiveTabs
+    case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
     case menuRefactor
     case menuRedesignHint
@@ -140,8 +142,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .startAtHome:
             return FlagKeys.StartAtHome
-        case .translation:
-            return FlagKeys.Translation
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
                 .addressAutofillEdit,
@@ -151,6 +151,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
+                .firefoxJpGuideDefaultSite,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageRedesign,
@@ -159,6 +160,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageStoriesRedesign,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
                 .menuRefactor,
                 .menuRedesignHint,
@@ -192,6 +194,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tosFeature,
                 .touFeature,
                 .trackingProtectionRefactor,
+                .translation,
                 .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,

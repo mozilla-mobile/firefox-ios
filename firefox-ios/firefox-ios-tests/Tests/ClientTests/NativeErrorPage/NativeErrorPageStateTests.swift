@@ -17,6 +17,7 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertNil(initialState.url)
     }
 
+    @MainActor
     func testLoadErrorpageData() {
         let initialState = createSubject()
         let reducer = nativeErrorPageReducer()

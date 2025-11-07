@@ -25,8 +25,11 @@ final class TabScrollHandler: NSObject,
                               TabScrollHandlerProtocol,
                               UIScrollViewDelegate {
     protocol Delegate: AnyObject {
+        @MainActor
         func updateToolbarTransition(progress: CGFloat, towards state: ToolbarDisplayState)
+        @MainActor
         func showToolbar()
+        @MainActor
         func hideToolbar()
     }
 
@@ -311,7 +314,6 @@ final class TabScrollHandler: NSObject,
     /// based on minimum translation distance and velocity thresholds.
     ///
     /// - Parameters:
-    ///   - velocity: The pan gesture recognizer used to detect scroll movement.
     ///   - delta: The vertical scroll delta calculated from gesture translation.
     /// - Returns: A Boolean value indicating whether the gesture should trigger a UI response.
     private func shouldConfirmTransition(for velocity: CGPoint,
@@ -319,8 +321,7 @@ final class TabScrollHandler: NSObject,
         guard shouldUpdateUIWhenScrolling else { return false }
 
         let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
-//        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
-        return isSignificantScroll  // || isFastEnough
+        return isSignificantScroll
     }
 
     private func reload() {
@@ -399,7 +400,7 @@ final class TabScrollHandler: NSObject,
         if (lastContentOffsetY > 0 && contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && contentOffset.y > 0) {
             lastContentOffsetY = contentOffset.y
-            store.dispatchLegacy(
+            store.dispatch(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: contentOffset,
                     windowUUID: windowUUID,

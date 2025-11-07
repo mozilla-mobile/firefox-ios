@@ -4,7 +4,7 @@
 
 import UIKit
 
-class OpenUtils: NSObject {
+final class OpenUtils: NSObject {
     private let selectedURL: URL
     private let webViewController: LegacyWebViewController
 

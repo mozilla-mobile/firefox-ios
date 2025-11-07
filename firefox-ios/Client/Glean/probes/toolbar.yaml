@@ -429,3 +429,18 @@ awesomebar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
+user.toolbar:
+  middle_button_type:
+    type: string
+    description: |
+      Records the user's preference for the middle button (newTab or home).
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30060
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30078
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"

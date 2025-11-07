@@ -401,7 +401,7 @@
 "Settings.setAsDefaultBrowser" = "ნაგულისხმევ ბრაუზერად მითითება";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for set as default browser option. */
-"Settings.setAsDefaultBrowserDescription" = "შედეგად, ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან, პირდაპირ გახსნის %@.";
+"Settings.setAsDefaultBrowserDescription" = "შედეგად, ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან პირდაპირ გახსნის %@.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "სისტემის მიხედვით";

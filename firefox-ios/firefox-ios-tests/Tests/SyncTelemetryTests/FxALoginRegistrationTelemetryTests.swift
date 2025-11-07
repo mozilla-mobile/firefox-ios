@@ -14,17 +14,19 @@ struct MockFxAUrls {
     static let mockSignInTockenUrl =  URL(string: "https://accounts.firefox.com/oauth/signin_token_code/")!
 }
 
-// TODO: FXIOS-13748 - Migrate SyncTelemetryTests to use mock telemetry or GleanWrapper
 class SyncTelemetryTests: XCTestCase {
     var fxaWebViewTelemetry: FxAWebViewTelemetry!
+    var telemetryWrapper: MockTelemetryWrapper!
 
     override func setUp() {
         super.setUp()
-        fxaWebViewTelemetry = FxAWebViewTelemetry()
+        telemetryWrapper = MockTelemetryWrapper()
+        fxaWebViewTelemetry = FxAWebViewTelemetry(telemetryWrapper: telemetryWrapper)
     }
 
     override func tearDown() {
         fxaWebViewTelemetry = nil
+        telemetryWrapper = nil
         super.tearDown()
     }
 
@@ -51,4 +53,64 @@ class SyncTelemetryTests: XCTestCase {
         XCTAssertNotNil(flow)
         XCTAssertEqual(flow, FxAUrlPathStartedFlow.confirmSignupCode)
     }
+
+    // MARK: - recordTelemetry() tests
+
+      func testRecordTelemetry_signinStarted_recordsCorrectEvent() {
+          fxaWebViewTelemetry.recordTelemetry(for: .startedFlow(type: .signinStarted))
+
+          XCTAssertEqual(telemetryWrapper.recordEventCallCount, 1)
+          XCTAssertEqual(telemetryWrapper.recordedCategories.first, .firefoxAccount)
+          XCTAssertEqual(telemetryWrapper.recordedMethods.first, .view)
+          XCTAssertEqual(telemetryWrapper.recordedObjects.first, .fxaLoginWebpage)
+      }
+
+      func testRecordTelemetry_signinCompleted_recordsCorrectEvent() {
+          fxaWebViewTelemetry.recordTelemetry(for: .startedFlow(type: .signinStarted))
+          fxaWebViewTelemetry.recordTelemetry(for: .completed)
+
+          XCTAssertEqual(telemetryWrapper.recordEventCallCount, 2)
+          XCTAssertEqual(telemetryWrapper.recordedObjects.last, .fxaLoginCompleteWebpage)
+      }
+
+      func testRecordTelemetry_signinTokenCode_recordsCorrectEvent() {
+          fxaWebViewTelemetry.recordTelemetry(for: .startedFlow(type: .signinTokenCode))
+
+          XCTAssertEqual(telemetryWrapper.recordEventCallCount, 1)
+          XCTAssertEqual(telemetryWrapper.recordedCategories.first, .firefoxAccount)
+          XCTAssertEqual(telemetryWrapper.recordedMethods.first, .view)
+          XCTAssertEqual(telemetryWrapper.recordedObjects.first, .fxaConfirmSignInToken)
+      }
+
+      func testRecordTelemetry_signupStarted_recordsCorrectEvent() {
+          fxaWebViewTelemetry.recordTelemetry(for: .startedFlow(type: .signupStarted))
+
+          XCTAssertEqual(telemetryWrapper.recordEventCallCount, 1)
+          XCTAssertEqual(telemetryWrapper.recordedCategories.first, .firefoxAccount)
+          XCTAssertEqual(telemetryWrapper.recordedMethods.first, .view)
+          XCTAssertEqual(telemetryWrapper.recordedObjects.first, .fxaRegistrationWebpage)
+      }
+
+      func testRecordTelemetry_signupCompleted_recordsCorrectEvent() {
+          fxaWebViewTelemetry.recordTelemetry(for: .startedFlow(type: .signupStarted))
+          fxaWebViewTelemetry.recordTelemetry(for: .completed)
+
+          XCTAssertEqual(telemetryWrapper.recordEventCallCount, 2)
+          XCTAssertEqual(telemetryWrapper.recordedObjects.last, .fxaRegistrationCompletedWebpage)
+      }
+
+      func testRecordTelemetry_confirmSignupCode_recordsCorrectEvent() {
+          fxaWebViewTelemetry.recordTelemetry(for: .startedFlow(type: .confirmSignupCode))
+
+          XCTAssertEqual(telemetryWrapper.recordEventCallCount, 1)
+          XCTAssertEqual(telemetryWrapper.recordedCategories.first, .firefoxAccount)
+          XCTAssertEqual(telemetryWrapper.recordedMethods.first, .view)
+          XCTAssertEqual(telemetryWrapper.recordedObjects.first, .fxaConfirmSignUpCode)
+      }
+
+      func testRecordTelemetry_completedWithoutStartedFlow_doesNotRecordEvent() {
+          fxaWebViewTelemetry.recordTelemetry(for: .completed)
+
+          XCTAssertEqual(telemetryWrapper.recordEventCallCount, 0)
+      }
 }

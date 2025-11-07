@@ -28,6 +28,7 @@ final class ShareTelemetryTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testSharedTo_withNoActivityType() throws {
         setupTelemetry(with: MockProfile())
         let subject = createSubject()
@@ -52,6 +53,7 @@ final class ShareTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
+    @MainActor
     func testSharedTo_withActivityType() throws {
         setupTelemetry(with: MockProfile())
         let subject = createSubject()

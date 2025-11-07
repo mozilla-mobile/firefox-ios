@@ -7,27 +7,20 @@ import ComponentLibrary
 import Common
 
 public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var textColor: Color = .clear
-    @State private var secondaryTextColor: Color = .clear
-    @State private var cardBackgroundColor: Color = .clear
-
     @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let onEmbededLinkAction: (TosAction) -> Void
 
     public init(
         viewModel: TosFlowViewModel<ViewModel>,
         windowUUID: WindowUUID,
-        themeManager: ThemeManager,
-        onEmbededLinkAction: @escaping (TosAction) -> Void
+        themeManager: ThemeManager
     ) {
         self._viewModel = StateObject(wrappedValue: viewModel)
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.onEmbededLinkAction = onEmbededLinkAction
     }
 
     // MARK: - Body
@@ -47,8 +40,7 @@ public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: Vi
         TermsOfServiceRegularView(
             viewModel: viewModel,
             windowUUID: windowUUID,
-            themeManager: themeManager,
-            onEmbededLinkAction: onEmbededLinkAction
+            themeManager: themeManager
         )
     }
 
@@ -57,8 +49,7 @@ public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: Vi
         TermsOfServiceCompactView(
             viewModel: viewModel,
             windowUUID: windowUUID,
-            themeManager: themeManager,
-            onEmbededLinkAction: onEmbededLinkAction
+            themeManager: themeManager
         )
     }
 }

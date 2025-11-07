@@ -21,6 +21,7 @@ final class OnboardingService: FeatureFlaggable {
     private var profile: Profile
     private var introScreenManager: IntroScreenManagerProtocol?
     private var themeManager: ThemeManager
+    private var hasSyncFlowStarted = false
 
     // MARK: - Injected Dependencies
     private let notificationManager: NotificationManagerProtocol
@@ -77,8 +78,10 @@ final class OnboardingService: FeatureFlaggable {
             completion(.success(.advance(numberOfPages: 3)))
 
         case .syncSignIn:
-            handleSyncSignIn(from: cardName, with: activityEventHelper) {
-                completion(.success(.advance(numberOfPages: 1)))
+            handleSyncSignIn(from: cardName, with: activityEventHelper) { [weak self] in
+                if self?.hasSyncFlowStarted == true {
+                    completion(.success(.advance(numberOfPages: 1)))
+                }
             }
 
         case .setDefaultBrowser:
@@ -279,6 +282,9 @@ final class OnboardingService: FeatureFlaggable {
         profile: Profile,
         completion: @escaping () -> Void
     ) -> UIViewController {
+        // Reset sync flow started flag when creating a new sign-in view controller
+        hasSyncFlowStarted = false
+
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             params,
             flowType: .emailLoginFlow,
@@ -290,9 +296,16 @@ final class OnboardingService: FeatureFlaggable {
             style: .plain,
             target: self,
             action: #selector(dismissSelector))
-        buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+        if #available(iOS 26.0, *) {
+            buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+        } else {
+            buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+        }
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
+        (singInSyncVC as? FirefoxAccountSignInViewController)?.onSyncFlowStarted = { [weak self] in
+            self?.hasSyncFlowStarted = true
+        }
 
         let controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = completion

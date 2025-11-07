@@ -111,10 +111,24 @@ extension BrowserDBSQLite: PinnedSites {
         let args: Args = [site.url, now, site.title, host]
         let arglist = BrowserDB.varlist(args.count)
 
-        return self.database.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, domain) VALUES \(arglist)", args)])
-        >>== {
-            self.notificationCenter.post(name: .TopSitesUpdated, object: self)
-            return succeed()
+        return self.database
+            .run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, domain) VALUES \(arglist)", args)])
+            .bind { result in
+                if let error = result.failureValue {
+                    return deferMaybe(error)
+                }
+                self.notificationCenter.post(name: .TopSitesUpdated, object: self)
+                return succeed()
+            }
+    }
+
+    public func addPinnedTopSite(_ site: Site, completion: @escaping @Sendable (Result<Void, Error>) -> Void) {
+        addPinnedTopSite(site).upon { result in
+            if result.successValue != nil {
+                completion(.success(()))
+            } else if let error = result.failureValue {
+                completion(.failure(error))
+            }
         }
     }
 }

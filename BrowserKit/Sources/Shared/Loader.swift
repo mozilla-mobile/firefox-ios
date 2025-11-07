@@ -9,6 +9,7 @@ import Foundation
  */
 public protocol LoaderListener: AnyObject {
     associatedtype T
+    @MainActor
     func loader(dataLoaded data: T)
 }
 
@@ -25,6 +26,7 @@ open class Loader<T, ListenerType: LoaderListener> where T == ListenerType.T {
         listeners.insert(listener)
     }
 
+    @MainActor
     open func load(_ data: T) {
         for listener in listeners {
             listener.loader(dataLoaded: data)

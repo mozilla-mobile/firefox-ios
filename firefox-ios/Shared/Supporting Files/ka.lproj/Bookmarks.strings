@@ -11,7 +11,7 @@
 "Bookmarks.EmptyState.Root.BodySignedOut.v135" = "შეინახეთ საიტები გვერდების მონახულებისას. შედით და წამოიღეთ სანიშნები სხვა დასინქრონებული მოწყობილობებიდან.";
 
 /* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
-"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "შესვლა სინქრ.";
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "შესვლა და სინქრ.";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.Title.v135" = "სანიშნები არაა";

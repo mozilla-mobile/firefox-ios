@@ -20,6 +20,7 @@ protocol TopSitesDataAdaptor {
     var numberOfRows: Int { get }
 
     /// Get top sites data
+    @MainActor
     func getTopSitesData() -> [TopSite]
 }
 
@@ -78,6 +79,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         loadTopSitesData()
     }
 
+    @MainActor
     func getTopSitesData() -> [TopSite] {
         recalculateTopSiteData()
         return topSites
@@ -88,6 +90,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     /// Top sites are composed of pinned sites, history, Contiles and Google top site.
     /// Google top site is always first, then comes the contiles, pinned sites and history top sites.
     /// We only add Google top site or Contiles if number of pins doesn't exceeds the available number shown of tiles.
+    @MainActor
     private func recalculateTopSiteData() {
         var sites = historySites
         let availableSpaceCount = getAvailableSpaceCount(maxTopSites: maxTopSites)
@@ -113,14 +116,18 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     // MARK: - Data loading
 
     // Loads the data source of top sites. Internal for convenience of testing
-    func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
+    private func loadTopSitesData() {
         loadContiles(dispatchGroup: dispatchGroup)
         loadTopSites(dispatchGroup: dispatchGroup)
 
-        dispatchGroup.notify(queue: dataQueue) { [weak self] in
-            self?.recalculateTopSiteData()
-            self?.delegate?.didLoadNewData()
-            dataLoadingCompletion?()
+        // FXIOS-13954 - This code will disappear soon since it's part of the legacy homepage only. If it hasn't
+        // disappeared then we should is to be revisited once we are on Swift 6.2 with default main actor isolation.
+        // Note: `didLoadNewData` calls `ensureMainThread`
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            MainActor.assumeIsolated {
+                self?.recalculateTopSiteData()
+                self?.delegate?.didLoadNewData()
+            }
         }
     }
 
@@ -186,6 +193,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         return Int(preferredNumberOfRows ?? defaultNumberOfRows)
     }
 
+    @MainActor
     func addSponsoredTiles(sites: inout [Site],
                            shouldAddGoogle: Bool,
                            availableSpaceCount: Int) {

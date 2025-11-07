@@ -53,7 +53,7 @@
 "Addresses.EditAddress.AutofillAddressName.v129" = "სახელი";
 
 /* Label for the field where users can input the name of their neighborhood. This detail adds precision to addresses, especially in densely populated areas, improving the accuracy of autofill. */
-"Addresses.EditAddress.AutofillAddressNeighborhood.v129" = "სამეზობლო";
+"Addresses.EditAddress.AutofillAddressNeighborhood.v129" = "უბანი";
 
 /* Label for the oblast field, relevant for addresses in countries like Russia and Ukraine. Oblasts are a significant administrative division, and their specification aids in autofill accuracy. */
 "Addresses.EditAddress.AutofillAddressOblast.v129" = "ოლქი";

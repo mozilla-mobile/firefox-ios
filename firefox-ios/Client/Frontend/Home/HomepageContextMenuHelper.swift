@@ -11,13 +11,17 @@ import enum MozillaAppServices.BookmarkRoots
 
 // swiftlint:disable class_delegate_protocol
 protocol HomepageContextMenuHelperDelegate: UIViewController {
+    @MainActor
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
+    @MainActor
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
+    @MainActor
     func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction)
 }
 // swiftlint:enable class_delegate_protocol
 
 extension HomepageContextMenuHelperDelegate {
+    @MainActor
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
         homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }

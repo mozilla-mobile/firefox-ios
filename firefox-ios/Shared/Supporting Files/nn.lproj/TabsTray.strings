@@ -20,7 +20,7 @@
 "TabTray.TabsSelectorNormalTabsTitle.v140" = "Faner";
 
 /* The title on the button to look at synced tabs. */
-"TabTray.TabsSelectorSyncedTabsTitle.v140" = "Synkroniser";
+"TabTray.TabsSelectorSyncedTabsTitle.v140" = "Synk.";
 
 /* Text for a button in the tabs tray used to open another menu to close older tabs. */
 "TabTrayCloseOldTabsTitle.v140" = "Lat att eldre faner…";

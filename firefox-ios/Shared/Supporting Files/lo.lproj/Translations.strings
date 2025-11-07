@@ -1,0 +1,12 @@
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error. */
+"Translations.Banner.RetryButton.v145" = "ລອງໃໝ່";
+
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralSubtitle.v145" = "ກະລຸນາລອງອີກຄັ້ງ.";
+
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralTitle.v145" = "ບໍ່ສາມາດແປໜ້າໄດ້";
+
+/* On the translation feature bottom sheet, this is the title for the button that allows the user to try to translate a page again after facing an error. */
+"Translations.Sheet.Error.RetryButton.v145" = "ລອງໃໝ່";
+

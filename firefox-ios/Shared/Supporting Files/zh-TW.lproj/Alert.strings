@@ -2,7 +2,7 @@
 "CreditCard.SnackBar.CancelRemoveCardButton.v112" = "取消";
 
 /* Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices */
-"CreditCard.SnackBar.RemoveCardSublabel.v112" = "將從您所有進行同步的裝置中，刪除卡片資訊。";
+"CreditCard.SnackBar.RemoveCardSublabel.v112" = "將從您所有進行同步的裝置中，刪除這張卡片。";
 
 /* Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card */
 "CreditCard.SnackBar.RemoveCardTitle.v122" = "要移除卡片嗎？";

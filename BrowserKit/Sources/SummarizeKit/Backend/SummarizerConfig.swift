@@ -12,7 +12,7 @@ public struct SummarizerConfig: Equatable, Sendable {
     ///    and we want to allow for easy experimentation with these parameters.
     /// 2. The Apple foundation model is a new API that may introduce additional parameters or change existing ones.
     /// Options can include things like temperature, max tokens, and other model-specific settings.
-    public nonisolated(unsafe) let options: [String: AnyHashable]
+    nonisolated(unsafe) public let options: [String: AnyHashable]
     public static let defaultConfig =
         SummarizerConfig(instructions: SummarizerModelInstructions.defaultInstructions, options: [:])
 

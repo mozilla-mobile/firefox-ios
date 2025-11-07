@@ -82,7 +82,7 @@ struct AddressBarSettingsView: View, FeatureFlaggable {
     private struct NavigationToolbarSection: View {
         let theme: Theme?
         let selectedOption: NavigationBarMiddleButtonType
-        let onChange: (NavigationBarMiddleButtonType) -> Void
+        let onChange: @MainActor (NavigationBarMiddleButtonType) -> Void
         let cornerRadius: CGFloat
 
         var body: some View {
@@ -109,6 +109,6 @@ struct AddressBarSettingsView: View, FeatureFlaggable {
         let action = ToolbarAction(middleButton: selectedOption,
                                    windowUUID: windowUUID,
                                    actionType: ToolbarActionType.navigationMiddleButtonDidChange)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 }

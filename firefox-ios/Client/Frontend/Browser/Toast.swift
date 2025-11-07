@@ -27,7 +27,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
 
     public var notificationCenter: NotificationProtocol = NotificationCenter.default
     var animationConstraint: NSLayoutConstraint?
-    var completionHandler: ((Bool) -> Void)?
+    var completionHandler: (@MainActor (Bool) -> Void)?
 
     weak var viewController: UIViewController?
 
@@ -184,7 +184,9 @@ class Toast: UIView, ThemeApplicable, Notifiable {
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustLayoutForA11ySizeCategory()
+            ensureMainThread {
+                self.adjustLayoutForA11ySizeCategory()
+            }
         default: break
         }
     }

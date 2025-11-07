@@ -92,7 +92,7 @@ final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
     }
 
     /// Begin the process of fetching history data. A prefetch also triggers this.
-    func reloadData(completion: @escaping (Bool) -> Void) {
+    func reloadData(completion: @Sendable @escaping (Bool) -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         guard !profile.isShutdown, !isFetchInProgress else {
             completion(false)
@@ -103,9 +103,9 @@ final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
             resetHistory()
         }
 
-        fetchData { [weak self] fetchedSites in
-            DispatchQueue.global().async {
-                guard let self = self,
+        fetchData { fetchedSites in
+            DispatchQueue.global().async { [weak self] in
+                guard let self,
                       !fetchedSites.isEmpty else {
                     completion(false)
                     return
@@ -127,7 +127,7 @@ final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
         }
     }
 
-    func performSearch(term: String, completion: @escaping (Bool) -> Void) {
+    func performSearch(term: String, completion: @MainActor @Sendable @escaping (Bool) -> Void) {
         isFetchInProgress = true
 
         profile.places.interruptReader()
@@ -135,21 +135,24 @@ final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
             matchingSearchQuery: term,
             limit: searchQueryFetchLimit
         ).uponQueue(.main) { result in
-            self.isFetchInProgress = false
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
+                self.isFetchInProgress = false
 
-            guard result.isSuccess else {
-                self.logger.log(
-                    "Error searching history panel",
-                    level: .warning,
-                    category: .sync,
-                    description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
-                )
-                completion(false)
-                return
-            }
-            if let result = result.successValue {
-                self.searchResultSites = result.map { Site.createBasicSite(url: $0.url, title: $0.title) }
-                completion(!result.isEmpty)
+                guard result.isSuccess else {
+                    self.logger.log(
+                        "Error searching history panel",
+                        level: .warning,
+                        category: .sync,
+                        description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
+                    )
+                    completion(false)
+                    return
+                }
+                if let result = result.successValue {
+                    self.searchResultSites = result.map { Site.createBasicSite(url: $0.url, title: $0.title) }
+                    completion(!result.isEmpty)
+                }
             }
         }
     }
@@ -208,7 +211,7 @@ final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
 
     // MARK: - Private helpers
 
-    private func fetchData(completion: @escaping (([Site]) -> Void)) {
+    private func fetchData(completion: @escaping @Sendable ([Site]) -> Void) {
         guard !isFetchInProgress else {
             completion([])
             return
@@ -220,12 +223,12 @@ final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
             limit: queryFetchLimit,
             offset: currentFetchOffset,
             excludedTypes: VisitTransitionSet(0)
-        ).upon { [weak self] result in
+        ).upon { result in
             completion(result.successValue?.asArray() ?? [])
 
             // Force 100ms delay between resolution of the last batch of results
             // and the next time `fetchData()` can be called.
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
                 guard let self = self else { return }
                 self.isFetchInProgress = false
                 self.logger.log("currentFetchOffset is: \(self.currentFetchOffset)",

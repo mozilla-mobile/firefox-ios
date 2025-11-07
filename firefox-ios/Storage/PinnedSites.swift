@@ -17,4 +17,7 @@ public protocol PinnedSites {
     func addPinnedTopSite(_ site: Site) -> Success
     func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>>
     func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>>
+
+    // Completion handler 
+    func addPinnedTopSite(_ site: Site, completion: @escaping @Sendable (Result<Void, Error>) -> Void)
 }

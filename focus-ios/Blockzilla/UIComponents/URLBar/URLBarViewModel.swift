@@ -23,7 +23,7 @@ public enum ShieldIconStatus: Equatable {
     case connectionNotSecure
 }
 
-public class URLBarViewModel {
+public final class URLBarViewModel {
     @Published public var canGoBack = false
     @Published public var canGoForward = false
     @Published public var canDelete = false

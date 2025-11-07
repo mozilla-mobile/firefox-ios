@@ -17,6 +17,12 @@ public struct ToolbarElement: Equatable {
     /// Mask name of the badge's toolbar element
     let maskImageName: String?
 
+    /// Indicated whether to use template mode or not for an image
+    let templateModeForImage: Bool
+
+    /// TODO: FXIOS-13949 Should investigate if there is a better way to do this
+    let isLoading: Bool
+
     /// Number of open tabs
     let numberOfTabs: Int?
 
@@ -31,6 +37,9 @@ public struct ToolbarElement: Equatable {
 
     /// Indicates if the element has a custom color
     let hasCustomColor: Bool
+
+    /// Indicates if the element has a highlighted color when tapping on it
+    let hasHighlightedColor: Bool
 
     /// Title to display in the large content viewer
     let largeContentTitle: String?
@@ -69,11 +78,14 @@ public struct ToolbarElement: Equatable {
                 title: String? = nil,
                 badgeImageName: String? = nil,
                 maskImageName: String? = nil,
+                templateModeForImage: Bool = true,
+                isLoading: Bool = false,
                 numberOfTabs: Int? = nil,
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
                 isSelected: Bool = false,
                 hasCustomColor: Bool = false,
+                hasHighlightedColor: Bool = true,
                 largeContentTitle: String? = nil,
                 contextualHintType: String? = nil,
                 a11yLabel: String,
@@ -88,11 +100,14 @@ public struct ToolbarElement: Equatable {
         self.title = title
         self.badgeImageName = badgeImageName
         self.maskImageName = maskImageName
+        self.templateModeForImage = templateModeForImage
+        self.isLoading = isLoading
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
         self.isSelected = isSelected
         self.hasCustomColor = hasCustomColor
+        self.hasHighlightedColor = hasHighlightedColor
         self.largeContentTitle = largeContentTitle
         self.contextualHintType = contextualHintType
         self.onSelected = onSelected
@@ -110,11 +125,14 @@ public struct ToolbarElement: Equatable {
         lhs.title == rhs.title &&
         lhs.badgeImageName == rhs.badgeImageName &&
         lhs.maskImageName == rhs.maskImageName &&
+        lhs.templateModeForImage == rhs.templateModeForImage &&
+        lhs.isLoading == rhs.isLoading &&
         lhs.numberOfTabs == rhs.numberOfTabs &&
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
         lhs.isSelected == rhs.isSelected &&
         lhs.hasCustomColor == rhs.hasCustomColor &&
+        lhs.hasHighlightedColor == rhs.hasHighlightedColor &&
         lhs.largeContentTitle == rhs.largeContentTitle &&
         lhs.contextualHintType == rhs.contextualHintType &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&

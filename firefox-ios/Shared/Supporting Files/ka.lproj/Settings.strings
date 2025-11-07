@@ -194,7 +194,7 @@
 "Settings.Search.PageTitle.v121" = "ძიება";
 
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Description.v125" = "შემოთავაზებების ჩვენება საძიებოებისგან პირად ფანჯრებში";
+"Settings.Search.PrivateSession.Description.v125" = "საძიებოსგან შემოთავაზებების ჩვენება პირად ფანჯრებში";
 
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v124" = "ჩვენება პირად ფანჯრებში";
@@ -203,7 +203,7 @@
 "Settings.Search.ShowSuggestions.v121" = "ძიების შემოთავაზების ჩვენება";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "მისამართების ველი – Firefox-შემოთავაზება";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "მისამართების ველში Firefox-შემოთავაზება";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "ვრცლად Firefox-შემოთავაზების შესახებ";
@@ -257,7 +257,7 @@
 "Settings.Summarize.SummarizePagesTitle.v142" = "გვერდების შეჯამება";
 
 /* In the settings menu, in the General section, this is the title for the Summarize settings section. */
-"Settings.Summarize.Title.v142" = "გვერდის დასკვნა";
+"Settings.Summarize.Title.v142" = "გვერდის შეჯამება";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "ვრცლად";

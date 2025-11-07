@@ -32,11 +32,37 @@ final class ShareManagerTests: XCTestCase {
 
     // MARK: - Test sharing a file
 
-    func testGetActivityItems_forFileURL_withNoShareText() throws {
+    func testGetActivityItems_forFileURL_withNoRemoteURL_withNoShareText() throws {
         let testShareActivityType = UIActivity.ActivityType.message
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testFileURL),
+            forShareType: .file(url: testFileURL, remoteURL: nil),
+            withExplicitShareMessage: nil
+        )
+
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let itemForURLActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testShareActivityType
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 1] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testShareActivityType
+        )
+
+        XCTAssertEqual(activityItems.count, 2)
+        XCTAssertEqual(itemForURLActivity as? URL, testFileURL)
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    func testGetActivityItems_forFileURL_withRemoteURL_withNoShareText() throws {
+        let testShareActivityType = UIActivity.ActivityType.message
+
+        // Should be no difference with or without remoteURL
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .file(url: testFileURL, remoteURL: testWebURL),
             withExplicitShareMessage: nil
         )
 
@@ -62,7 +88,7 @@ final class ShareManagerTests: XCTestCase {
         let testMessage = "Test message"
         let testSubtitle = "Test subtitle"
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testFileURL),
+            forShareType: .file(url: testFileURL, remoteURL: nil),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
         )
 
@@ -109,7 +135,7 @@ final class ShareManagerTests: XCTestCase {
         let testShareActivityType = UIActivity.ActivityType.message
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testWebURL),
+            forShareType: .file(url: testWebURL, remoteURL: nil),
             withExplicitShareMessage: nil
         )
 
@@ -136,7 +162,7 @@ final class ShareManagerTests: XCTestCase {
         let testSubtitle = "Test subtitle"
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testWebURL),
+            forShareType: .file(url: testWebURL, remoteURL: nil),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
         )
 
@@ -310,6 +336,59 @@ final class ShareManagerTests: XCTestCase {
             "When an explicit share message is set, we expect to see that message, not the webpage's title."
         )
         XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    // MARK: - Custom SendToDeviceActivity
+
+    func testCustomApplicationActivities_forSiteShare() throws {
+        let testShareActivityType = UIActivity.ActivityType("org.mozilla.ios.Fennec.sendToDevice")
+        let testActivityTitle = "Send Link to Device"
+
+        let testShareType = ShareType.site(url: testWebURL)
+
+        let activityItems = ShareManager.getApplicationActivities(forShareType: testShareType)
+
+        let customActivityType = try XCTUnwrap(activityItems[safe: 0] as? SendToDeviceActivity)
+        XCTAssertEqual(activityItems.count, 1)
+        XCTAssertEqual(customActivityType.activityTitle, testActivityTitle)
+        XCTAssertEqual(customActivityType.activityType, testShareActivityType)
+    }
+
+    func testCustomApplicationActivities_forTabShare() throws {
+        let testShareActivityType = UIActivity.ActivityType("org.mozilla.ios.Fennec.sendToDevice")
+        let testActivityTitle = "Send Link to Device"
+
+        let testShareType = ShareType.tab(url: testWebURL, tab: testTab)
+
+        let activityItems = ShareManager.getApplicationActivities(forShareType: testShareType)
+
+        let customActivityType = try XCTUnwrap(activityItems[safe: 0] as? SendToDeviceActivity)
+        XCTAssertEqual(activityItems.count, 1)
+        XCTAssertEqual(customActivityType.activityTitle, testActivityTitle)
+        XCTAssertEqual(customActivityType.activityType, testShareActivityType)
+    }
+
+    func testCustomApplicationActivities_forFileShareWithRemoteURL_AddsSendToDevice() throws {
+        let testShareActivityType = UIActivity.ActivityType("org.mozilla.ios.Fennec.sendToDevice")
+        let testActivityTitle = "Send Link to Device"
+
+        let testShareType = ShareType.file(url: testFileURL, remoteURL: testWebURL)
+
+        let activityItems = ShareManager.getApplicationActivities(forShareType: testShareType)
+
+        let customActivityType = try XCTUnwrap(activityItems[safe: 0] as? SendToDeviceActivity)
+        XCTAssertEqual(activityItems.count, 1)
+        XCTAssertEqual(customActivityType.activityTitle, testActivityTitle)
+        XCTAssertEqual(customActivityType.activityType, testShareActivityType)
+    }
+
+    func testCustomApplicationActivities_forFileShareWithNoRemoteURL_DoesNotAddSendToDevice() throws {
+        // Simulate file share for downloaded files
+        let testShareType = ShareType.file(url: testFileURL, remoteURL: nil)
+
+        let activityItems = ShareManager.getApplicationActivities(forShareType: testShareType)
+
+        XCTAssertEqual(activityItems.count, 0)
     }
 
     // MARK: - Helpers

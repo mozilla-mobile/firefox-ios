@@ -149,7 +149,7 @@
 "Settings.Notifications.SyncNotificationsStatus.v112" = "Dette må vere slått på for å ta imot faner og bli varsla når du loggar inn på ei anna eining.";
 
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
-"Settings.Notifications.SyncNotificationsTitle.v112" = "Synkroniser";
+"Settings.Notifications.SyncNotificationsTitle.v112" = "Synk.";
 
 /* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both %1$@ and %2$@ are the app name (e.g. Firefox). */
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Du slo av alle %1$@-varsel. Slå dei på ved å, på eininga, gå til Innstillingar > Varsel > %2$@";

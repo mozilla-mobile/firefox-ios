@@ -28,6 +28,7 @@ class TopSitesViewModelTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testDeletionOfSingleSuggestedSite() {
         let viewModel = TopSitesViewModel(profile: profile,
                                           isZeroSearch: false,
@@ -47,6 +48,7 @@ class TopSitesViewModelTests: XCTestCase {
         }))
     }
 
+    @MainActor
     func testDeletionOfAllDefaultSites() {
         let viewModel = TopSitesViewModel(profile: self.profile,
                                           isZeroSearch: false,
@@ -68,6 +70,7 @@ class TopSitesViewModelTests: XCTestCase {
 
 // MARK: Helper methods
 extension TopSitesViewModelTests {
+    @MainActor
     func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> TopSitesViewModel {
         let viewModel = TopSitesViewModel(profile: self.profile,
                                           isZeroSearch: false,

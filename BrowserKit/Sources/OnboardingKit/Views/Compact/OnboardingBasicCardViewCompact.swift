@@ -33,14 +33,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     var body: some View {
         GeometryReader { geometry in
             cardContent(geometry: geometry)
-                .onAppear {
-                    applyTheme()
-                }
-                .listenToThemeChanges { window in
-                    guard window == windowUUID else { return }
-                    applyTheme()
-                }
         }
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     @ViewBuilder
@@ -71,7 +65,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFont)
+            .font(UX.CardView.titleFontForCurrentLocale)
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -85,7 +79,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @ViewBuilder
     func imageView(geometry: GeometryProxy) -> some View {
         if let img = viewModel.image {
-            let imgHeight = min(img.size.height, geometry.size.height * 0.5)
+            let imgHeight = min(img.size.height, geometry.size.height * 0.4)
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -98,8 +92,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     var bodyView: some View {
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
-            .foregroundColor(theme.colors.textPrimary.color)
-            .multilineTextAlignment(.center)
+            .foregroundColor(theme.colors.textSecondary.color)
+            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
             .lineLimit(nil)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
@@ -133,9 +127,5 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                 accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
             )
         }
-    }
-
-    func applyTheme() {
-        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }

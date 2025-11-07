@@ -35,7 +35,7 @@
 "Onboarding.Customization.Theme.Dark.Action.v123" = "Tmavá";
 
 /* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Theme.Description.v123" = "Pozrite sa na web v tom najlepšom svetle.";
+"Onboarding.Customization.Theme.Description.v123" = "Prehliadajte web v tom najlepšom svetle.";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
 "Onboarding.Customization.Theme.Light.Action.v123" = "Svetlá";

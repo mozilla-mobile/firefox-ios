@@ -160,6 +160,7 @@ public class BrowserAddressToolbar: UIView,
     private func configureUX(config: AddressToolbarUXConfiguration,
                              toolbarPosition: AddressToolbarPosition) {
         locationContainer.layer.cornerRadius = config.toolbarCornerRadius
+        locationContainer.updateShadowOpacityBasedOn(scrollAlpha: config.scrollAlpha)
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
         let locationViewPaddings = config.locationViewVerticalPaddings(addressBarPosition: toolbarPosition)
         toolbarBottomConstraint?.constant = -locationViewPaddings.bottom

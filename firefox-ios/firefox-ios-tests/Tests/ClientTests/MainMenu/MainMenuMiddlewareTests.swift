@@ -152,8 +152,8 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.option, "settings")
     }
 
-    func test_tapNavigateToDestination_printSheetV2Action_sendTelemetryData() throws {
-        let action = getNavigationDestinationAction(for: .printSheetV2)
+    func test_tapNavigateToDestination_printSheetAction_sendTelemetryData() throws {
+        let action = getNavigationDestinationAction(for: .printSheet)
         let subject = createSubject()
 
         subject.mainMenuProvider(AppState(), action)
@@ -194,8 +194,8 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.option, "share")
     }
 
-    func test_tapNavigateToDestination_saveAsPDFV2Action_sendTelemetryData() throws {
-        let action = getNavigationDestinationAction(for: .saveAsPDFV2)
+    func test_tapNavigateToDestination_saveAsPDFAction_sendTelemetryData() throws {
+        let action = getNavigationDestinationAction(for: .saveAsPDF)
         let subject = createSubject()
 
         subject.mainMenuProvider(AppState(), action)

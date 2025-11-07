@@ -12,7 +12,7 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  * A controller that manages a single web view and provides a way for
  * the user to navigate back to Settings.
  */
-class SettingsContentViewController: UIViewController, WKNavigationDelegate {
+final class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     let interstitialBackgroundColor: UIColor
     var url: URL
     var timer: Timer?

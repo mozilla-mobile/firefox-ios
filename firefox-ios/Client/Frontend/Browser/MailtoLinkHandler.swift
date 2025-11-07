@@ -7,6 +7,7 @@ import UIKit
 open class MailtoLinkHandler {
     lazy var mailSchemeProviders: [String: MailProvider] = self.fetchMailSchemeProviders()
 
+    @MainActor
     func launchMailClientForScheme(_ scheme: String, metadata: MailToMetadata, defaultMailtoURL: URL) {
         guard let provider = mailSchemeProviders[scheme],
               let mailURL = provider.newEmailURLFromMetadata(metadata)

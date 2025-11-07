@@ -9,7 +9,8 @@ import Common
 
 import struct MozillaAppServices.LoginEntry
 
-class PasswordManagerListViewController: SensitiveViewController, Themeable {
+class PasswordManagerListViewController: SensitiveViewController,
+                                         Themeable {
     private struct UX {
         static let separatorInset: CGFloat = 20
         static let selectAllButtonMargin: CGFloat = 16
@@ -63,7 +64,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         } else {
             tableView = .build()
         }
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -104,16 +105,14 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         // No need to hide the navigation bar on iPad to make room, and hiding makes the search bar too close to the top
         searchController.hidesNavigationBarDuringPresentation = UIDevice.current.userInterfaceIdiom != .pad
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self,
-                                       selector: #selector(remoteLoginsDidChange),
-                                       name: .DataRemoteLoginChangesWereApplied,
-                                       object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(dismissAlertController),
-                                       name: UIApplication.didEnterBackgroundNotification,
-                                       object: nil)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                .DataRemoteLoginChangesWereApplied,
+                UIApplication.didEnterBackgroundNotification
+            ]
+        )
 
         setupDefaultNavButtons()
         view.addSubview(tableView)
@@ -268,6 +267,24 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
                                      method: .tap,
                                      object: .loginsManagementLoginsTapped)
     }
+
+    // MARK: Notifiable
+    override func handleNotifications(_ notification: Notification) {
+        super.handleNotifications(notification)
+        let notificationName = notification.name
+
+        ensureMainThread {
+            switch notificationName {
+            case .DataRemoteLoginChangesWereApplied:
+                self.loadLogins()
+            case UIApplication.didEnterBackgroundNotification:
+                self.deleteAlert?.dismiss(animated: false, completion: nil)
+                self.navigationController?.view.endEditing(true)
+            default:
+                break
+            }
+        }
+    }
 }
 
 extension PasswordManagerListViewController: UISearchResultsUpdating {
@@ -292,19 +309,6 @@ extension PasswordManagerListViewController: UISearchControllerDelegate {
 
 // MARK: - Selectors
 private extension PasswordManagerListViewController {
-    @objc
-    func remoteLoginsDidChange() {
-        DispatchQueue.main.async {
-            self.loadLogins()
-        }
-    }
-
-    @objc
-    func dismissAlertController() {
-        self.deleteAlert?.dismiss(animated: false, completion: nil)
-        navigationController?.view.endEditing(true)
-    }
-
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
         loadingView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

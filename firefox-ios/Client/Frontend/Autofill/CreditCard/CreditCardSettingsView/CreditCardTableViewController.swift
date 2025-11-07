@@ -8,7 +8,9 @@ import UIKit
 
 import struct MozillaAppServices.CreditCard
 
-class CreditCardTableViewController: UIViewController, Themeable {
+class CreditCardTableViewController: UIViewController,
+                                     Themeable,
+                                     Notifiable {
     // MARK: UX constants
     struct UX {
         static let toggleSwitchContainerHeight: CGFloat = 40
@@ -85,12 +87,11 @@ class CreditCardTableViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(didFinishAnnouncement),
-            name: UIAccessibility.announcementDidFinishNotification,
-            object: nil)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [UIAccessibility.announcementDidFinishNotification]
+        )
     }
 
     private func viewSetup() {
@@ -120,8 +121,10 @@ class CreditCardTableViewController: UIViewController, Themeable {
         tableView.reloadData()
     }
 
-    @objc
-    func didFinishAnnouncement(notification: Notification) {
+    // MARK: Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == UIAccessibility.announcementDidFinishNotification else { return }
+
         if let userInfo = notification.userInfo,
            let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
             let saveSuccessMessage: String = .CreditCard.SnackBar.SavedCardLabel
@@ -130,8 +133,11 @@ class CreditCardTableViewController: UIViewController, Themeable {
             if announcementText == saveSuccessMessage
                 || announcementText == updateSuccessMessage
                 || announcementText == removeCardMessage {
-                if let lastIndex = lastSelectedIndex, let lastSelectedCell = tableView.cellForRow(at: lastIndex) {
-                    UIAccessibility.post(notification: .layoutChanged, argument: lastSelectedCell)
+                ensureMainThread {
+                    if let lastIndex = self.lastSelectedIndex,
+                       let lastSelectedCell = self.tableView.cellForRow(at: lastIndex) {
+                        UIAccessibility.post(notification: .layoutChanged, argument: lastSelectedCell)
+                    }
                 }
             }
         }

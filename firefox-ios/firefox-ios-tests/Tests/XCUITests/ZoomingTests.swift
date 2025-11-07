@@ -23,10 +23,6 @@ final class ZoomingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306947
     // Smoketest
     func testZoomingActions() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // Navigate to Zoom panel
         openURLAndNavigateToZoom(index: 0)
         XCTAssertEqual(zoomBar.currentZoomPercent(), "100%")
@@ -51,11 +47,6 @@ final class ZoomingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
     func testZoomingActionsLandscape() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
-
         openURLAndNavigateToZoom(index: 0)
 
         XCUIDevice.shared.orientation = .landscapeLeft
@@ -71,7 +62,7 @@ final class ZoomingTests: BaseTestCase {
         }
 
         // Switch to the private mode and check again the zoom
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         openURLAndNavigateToZoom(index: 0)
         validateZoomActions()
 
@@ -82,11 +73,6 @@ final class ZoomingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
     func testZoomForceCloseFirefox() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
-
         openURLAndNavigateToZoom(index: 0)
 
         XCTAssertEqual(zoomBar.currentZoomPercent(), "100%")
@@ -115,17 +101,13 @@ final class ZoomingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
     func testSwitchingZoomedTabs() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing
         goToTabTray()
         if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         }
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         validateZoomLevelOnSwitchingTabs()
     }
 
@@ -141,6 +123,17 @@ final class ZoomingTests: BaseTestCase {
                                   "www.mozilla.org",
                                   "www.google.com"
         ]
+        if XCUIDevice.shared.orientation != .landscapeLeft && !iPad() && userState.isPrivate == false {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        } else if XCUIDevice.shared.orientation == .landscapeLeft && userState.isPrivate == false {
+            homepageSearchBar.tapIfExists()
+            navigator.nowAt(BrowserTab)
+        } else if iPad() && userState.isPrivate == false {
+            navigator.nowAt(BrowserTab)
+        } else {
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+        }
         navigator.openURL(websites[index])
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -197,13 +190,17 @@ final class ZoomingTests: BaseTestCase {
         zoomBar.tapZoomIn(times: 4)
         zoomBar.assertZoomPercent("175%")
 
-        openNewTab()
+        if !userState.isPrivate {
+            openNewTab()
+        }
         openURLAndNavigateToZoom(index: 1)
         zoomBar.tapZoomIn(times: 1)
         zoomBar.assertZoomPercent("110%")
 
         // Open a new tab from the TabTray → website[2] → keep 100%
-        openNewTab()
+        if !userState.isPrivate {
+            openNewTab()
+        }
         openURLAndNavigateToZoom(index: 2)
         zoomBar.assertZoomPercent("100%")
 

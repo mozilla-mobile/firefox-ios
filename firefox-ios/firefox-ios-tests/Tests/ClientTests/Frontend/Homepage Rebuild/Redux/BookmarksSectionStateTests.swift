@@ -32,6 +32,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.bookmarks, [])
     }
 
+    @MainActor
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = bookmarksSectionReducer()
@@ -48,6 +49,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.bookmarks.count, 0)
     }
 
+    @MainActor
     func test_fetchBookmarksAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = bookmarksSectionReducer()
@@ -73,6 +75,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.bookmarks.first?.accessibilityLabel, "Bookmarks Title")
     }
 
+    @MainActor
     func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = bookmarksSectionReducer()
@@ -90,6 +93,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertTrue(newState.shouldShowSection)
     }
 
+    @MainActor
     func test_toggleShowSectionSetting_withToggleOff_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = bookmarksSectionReducer()

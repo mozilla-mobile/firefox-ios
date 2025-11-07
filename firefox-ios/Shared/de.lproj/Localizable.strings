@@ -773,10 +773,10 @@
 "Menu.ReadingList.Label" = "Leseliste";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
-"Menu.ReloadWithoutTrackingProtection.Title" = "Ohne Schutz vor Aktivitätenverfolgung neu laden";
+"Menu.ReloadWithoutTrackingProtection.Title" = "Ohne Tracking-Schutz neu laden";
 
 /* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
-"Menu.ReloadWithTrackingProtection.Title" = "Mit Schutz vor Aktivitätenverfolgung neu laden";
+"Menu.ReloadWithTrackingProtection.Title" = "Mit Tracking-Schutz neu laden";
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Lesezeichen entfernt";
@@ -1400,7 +1400,7 @@
 "Settings.NewTab.Option.Custom" = "Benutzerdefiniert";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
+"Settings.NewTab.Option.FirefoxHome" = "Firefox-Startseite";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Startseite";
@@ -1553,7 +1553,7 @@
 "Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Wenn eine Website nicht wie erwartet funktioniert, tippen Sie auf das Schloss in der Adressleiste und deaktivieren Sie den erweiterten Tracking-Schutz für diese Seite.";
 
 /* Description for standard level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Erlaubt einigen System („Trackern“), Ihre Aktivitäten zu verfolgen, damit Websites wie erwartet funktionieren.";
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Erlaubt bestimmter Werbung („Trackern“), Ihre Aktivitäten zu verfolgen, damit Websites wie erwartet funktionieren.";
 
 /* Description for strict level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Blockiert mehr Tracker, Anzeigen und Pop-ups. Seiten werden schneller geladen, aber einige Funktionen funktionieren möglicherweise nicht.";
@@ -1562,7 +1562,7 @@
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Schutzstufe";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
-"Settings.TrackingProtection.SectionName" = "Schutz vor Aktivitätenverfolgung";
+"Settings.TrackingProtection.SectionName" = "Tracking-Schutz";
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standard";

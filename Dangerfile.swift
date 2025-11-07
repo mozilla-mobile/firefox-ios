@@ -316,6 +316,7 @@ class CodeUsageDetector {
         case deferred
         case swiftUIText
         case task
+        case dispatchLegacy
 
         var message: String {
             switch self {
@@ -334,7 +335,12 @@ class CodeUsageDetector {
                 return """
                 ### 🧑‍💻 New `Task {}` detected
                 New `Task {}` added in file %@ at line %d.
-                Please tag a concurrency reviewer: \(contacts)
+                Please add a concurrency reviewer on your PR: \(contacts)
+                """
+            case .dispatchLegacy:
+                return """
+                DispatchLegacy is used in file %@ at line %d.
+                Please replace with `dispatch` instead and call it from the main actor
                 """
             }
         }
@@ -353,12 +359,23 @@ class CodeUsageDetector {
                 return "Text(\""
             case .task:
                 return " Task {"
+            case .dispatchLegacy:
+                return ".dispatchLegacy("
             }
         }
 
         var shouldComment: Bool {
             switch self {
             case .task:
+                return true
+            default:
+                return false
+            }
+        }
+
+        var shouldWarn: Bool {
+            switch self {
+            case .deferred, .dispatchLegacy:
                 return true
             default:
                 return false
@@ -414,6 +431,8 @@ class CodeUsageDetector {
                 let lineNumber = hunk.newLineStart + newLineCount - 1
                 if keyword.shouldComment {
                     markdown(String(format: message, file, lineNumber))
+                } else if keyword.shouldWarn {
+                    warn(String(format: message, file, lineNumber))
                 } else {
                     fail(String(format: message, file, lineNumber))
                 }
@@ -423,14 +442,20 @@ class CodeUsageDetector {
 
     private func detect(keywords: [Keywords], inLines lines: [String], file: String) {
         for keyword in keywords {
-            detect(keyword: keyword.keyword, inLines: lines, file: file, message: keyword.message)
+            detect(keyword: keyword, inLines: lines, file: file, message: keyword.message)
         }
     }
 
-    private func detect(keyword: String, inLines lines: [String], file: String, message: String) {
-        for (index, line) in lines.enumerated() where line.contains(keyword) {
+    private func detect(keyword: Keywords, inLines lines: [String], file: String, message: String) {
+        for (index, line) in lines.enumerated() where line.contains(keyword.keyword) {
             let lineNumber = index + 1
-            fail(String(format: message, file, lineNumber))
+            if keyword.shouldComment {
+                markdown(String(format: message, file, lineNumber))
+            } else if keyword.shouldWarn {
+                warn(String(format: message, file, lineNumber))
+            } else {
+                fail(String(format: message, file, lineNumber))
+            }
         }
     }
 }
@@ -503,7 +528,7 @@ func checkStringsFile() {
         markdown("""
         ### ✍️ **Strings Updated**
         Detected changes in `Shared/Strings.swift`.
-        To keep strings up to standards, please tag a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) for review. 🌍
+        To keep strings up to standards, please add a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) as reviewer. 🌍
         """)
     }
 }

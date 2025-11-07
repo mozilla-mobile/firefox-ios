@@ -7,6 +7,7 @@ import XCTest
 protocol TopSitesSelectorsSet {
     var TOP_SITE_ITEM_CELL: Selector { get }
     var COLLECTION_VIEW: Selector { get }
+    var TOPSITE_YOUTUBE: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -14,6 +15,7 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
     private enum IDs {
         static let collectionView = AccessibilityIdentifiers.FirefoxHomepage.collectionView
         static let itemCell = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
+        static let youtube = "YouTube"
     }
 
     let TOP_SITE_ITEM_CELL = Selector.anyId(
@@ -28,10 +30,17 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         groups: ["homepage", "topsites"]
     )
 
+    let TOPSITE_YOUTUBE = Selector.linkStaticTextByLabel(
+        IDs.youtube,
+        description: "YouTube Top Site link label inside a Link element",
+        groups: ["homepage", "topsites"]
+    )
+
     var all: [Selector] {
         [
             TOP_SITE_ITEM_CELL,
-            COLLECTION_VIEW
+            COLLECTION_VIEW,
+            TOPSITE_YOUTUBE
         ]
     }
 }

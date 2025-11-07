@@ -154,6 +154,9 @@
 /* Title for the confirmation button on the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Pokračovat";
 
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "Automatická ochrana vašich osobních údajů\nRychlé načítání stránek a chytřejší vyhledávání\nPřináší nezisková organizace %@, které důvěřujete již více než 20 let";
+
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Správa";
 

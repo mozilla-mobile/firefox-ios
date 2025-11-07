@@ -41,7 +41,7 @@
 "MainMenu.Account.SignedOut.Description.v131" = "Synchronizujte heslá, karty a ďalšie položky";
 
 /* On the main menu, when the user is signed out. The description for the sign in action */
-"MainMenu.Account.SignedOut.Description.v141" = "Synchronizácia záložiek, hesiel, kariet a ďalších položiek";
+"MainMenu.Account.SignedOut.Description.v141" = "Synchronizujte svoje záložky, heslá, karty a ďalšie položky";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Prihlásiť sa";
@@ -62,7 +62,7 @@
 "MainMenu.DesktopSiteOn.Title.v142" = "Zapnutá";
 
 /* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
-"MainMenu.HeaderBanner.Subtitle.v142" = "Trvá to pár sekúnd. Zmeniť môžete kedykoľvek.";
+"MainMenu.HeaderBanner.Subtitle.v142" = "Trvá to pár sekúnd. Zmeniť to môžete kedykoľvek.";
 
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
 "MainMenu.HeaderBanner.Title.v142" = "Nastavte si %@ ako predvolený";

@@ -419,7 +419,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(URLBarOpen)
         addWebsiteToShortcut(website: url_3)
         addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
+        cancelButton.tapWithRetry()
 
         // Verify shortcuts are displayed on the homepage
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]

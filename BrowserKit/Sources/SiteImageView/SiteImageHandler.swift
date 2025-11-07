@@ -4,13 +4,13 @@
 
 import UIKit
 
-public protocol SiteImageHandler {
+public protocol SiteImageHandler: Sendable {
     func getImage(model: SiteImageModel) async -> UIImage
     func cacheFaviconURL(siteURL: URL, faviconURL: URL)
     func clearAllCaches()
 }
 
-public class DefaultSiteImageHandler: SiteImageHandler {
+public final class DefaultSiteImageHandler: SiteImageHandler {
     private let urlHandler: FaviconURLHandler
     private let imageHandler: ImageHandler
 

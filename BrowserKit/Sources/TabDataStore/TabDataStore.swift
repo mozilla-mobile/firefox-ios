@@ -274,7 +274,7 @@ public actor DefaultTabDataStore: TabDataStore {
     /// for that window based on the file name.
     /// - Parameter url: the URL to parse.
     /// - Returns: a window UUID or nil if the URL was invalid.
-    private nonisolated func windowUUID(fromURL url: URL) -> WindowUUID? {
+    nonisolated private func windowUUID(fromURL url: URL) -> WindowUUID? {
         let file = url.lastPathComponent
         guard file.hasPrefix(filePrefix) else { return nil }
         let uuidString = String(file.dropFirst(filePrefix.count))

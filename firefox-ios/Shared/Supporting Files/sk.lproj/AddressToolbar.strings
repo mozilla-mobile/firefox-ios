@@ -14,5 +14,5 @@
 "AddressToolbar.SearchEngine.A11y.Hint.v133" = "Otvorí výber vyhľadávacieho nástroja";
 
 /* Accessibility label for the search engine icon in the address bar. %@ is the name of the search engine (e.g. Google). */
-"AddressToolbar.SearchEngine.A11y.Label.v128" = "Vyhľadávací modul: %@";
+"AddressToolbar.SearchEngine.A11y.Label.v128" = "Vyhľadávač: %@";
 

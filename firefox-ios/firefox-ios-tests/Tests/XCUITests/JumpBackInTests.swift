@@ -5,12 +5,7 @@
 import XCTest
 import Common
 
-class JumpBackInTests: BaseTestCase {
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        throw XCTSkip("Skipping all JumpBackInTests. The option is not available on the new homepage")
-    }
-
+class JumpBackInTests: FeatureFlaggedTestBase {
     func closeKeyboard() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
@@ -26,14 +21,10 @@ class JumpBackInTests: BaseTestCase {
         }
     }
 
-    // Disabled since we are using FeatureFlaggedTestBase
-//    override func setUp() {
-//        super.setUp()
-//        prepareTest()
-//    }
-
     func prepareTest() {
         // "Jump Back In" is enabled by default. See Settings -> Homepage
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
+        app.launch()
         navigator.goto(HomeSettings)
         mozWaitForElementToExist(app.switches["Jump Back In"])
         XCTAssertEqual(app.switches["Jump Back In"].value as? String, "1")
@@ -59,7 +50,6 @@ class JumpBackInTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306920
-    // Smoketest
     func testPrivateTab() throws {
         prepareTest()
         // Visit https://www.wikipedia.org

@@ -461,6 +461,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
         let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -912,7 +913,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                windowUUID: windowUUID,
                                                actionType: NativeErrorPageActionType.receivedError
             )
-            store.dispatchLegacy(action)
+            store.dispatch(action)
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
             ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
@@ -993,13 +994,13 @@ extension BrowserViewController: WKNavigationDelegate {
                     windowUUID: windowUUID,
                     actionType: ToolbarActionType.urlDidChange
                 )
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 let middlewareAction = ToolbarMiddlewareAction(
                     scrollOffset: scrollController.contentOffset,
                     windowUUID: windowUUID,
                     actionType: ToolbarMiddlewareActionType.urlDidChange
                 )
-                store.dispatchLegacy(middlewareAction)
+                store.dispatch(middlewareAction)
             }
             return
         }
@@ -1036,7 +1037,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
                     )
-                    store.dispatchLegacy(action)
+                    store.dispatch(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
@@ -1289,7 +1290,8 @@ private extension BrowserViewController {
     // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
     // so we will block the creation of a new Webview with this check
     func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
-        return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
+        let domain = navigationAction.sourceFrame.request.url?.baseDomain ?? ""
+        return ["paypal.com", "shopify.com"].contains(domain)
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {

@@ -45,6 +45,7 @@ extension XCTestCase {
     /// Helper function to ensure Glean telemetry is setup for unit tests
     /// This should not be called in new code:
     /// - We should us GleanWrapper or mock objects instead of concrete type testing for Glean
+    @MainActor
     func setupTelemetry(with profile: Profile) {
         TelemetryWrapper.hasTelemetryOverride = true
 

@@ -760,6 +760,272 @@ public func FfiConverterTypeRelayClient_lower(_ value: RelayClient) -> UnsafeMut
 
 
 
+
+
+/**
+ * Client for fetching Relay data from Remote Settings
+ *
+ * This struct holds separate Remote Settings clients for the allowlist and denylist
+ * collections. It follows the same pattern as SuggestRemoteSettingsClient.
+ */
+public protocol RelayRemoteSettingsClientProtocol: AnyObject, Sendable {
+    
+    /**
+     * Determines whether Firefox Relay should be offered for a given site.
+     *
+     * This function implements the Relay visibility decision logic based on three factors:
+     * 1. Whether the site is on the denylist
+     * 2. Whether the user is an existing Relay user
+     * 3. Whether the site is on the allowlist
+     *
+     * # Decision Logic (in order)
+     *
+     * 1. If the site is on the **denylist**, don't show Relay (regardless of user status)
+     * 2. If the site is NOT on the denylist and the user **is** a Relay user, show Relay
+     * 3. If the site is NOT on the denylist and the user is **not** a Relay user, check the allowlist:
+     * - If the site is on the **allowlist**, show Relay (to promote Relay to new users)
+     * - Otherwise, don't show Relay
+     *
+     * # Fail-Safe Behavior
+     *
+     * If Remote Settings is unavailable:
+     * - If denylist fetch fails: don't show Relay (conservative: avoid showing on potentially blocked sites)
+     * - If allowlist fetch fails for non-Relay users: assume empty (conservative: don't promote without data)
+     *
+     * # Arguments
+     * * `host` - The full hostname (e.g., "mail.google.com", "www.example.com")
+     * * `domain` - The registrable domain from PSL (e.g., "google.com", "example.co.uk")
+     * * `is_relay_user` - Whether the user already has a Relay account
+     *
+     * # Public Suffix List (PSL)
+     *
+     * Mobile clients should use PSL to extract the domain:
+     * - **Host**: Full hostname like "mail.google.com"
+     * - **Domain**: Registrable domain (eTLD+1) like "google.com"
+     * - Swift: Use `URL.host` and extract domain via PSL library
+     * - Kotlin: Use `URL.host` and extract domain via PSL library
+     *
+     * # Returns
+     * `true` if Relay should be shown for this site, `false` otherwise
+     *
+     * # Determining if User is a Relay User
+     *
+     * Mobile clients should check if the user is a Relay user by calling
+     * `FirefoxAccount.getAttachedClients()` and checking if Relay is in the
+     * list of attached clients.
+     *
+     * # Example
+     * ```kotlin
+     * val url = URL("https://mail.google.com/inbox")
+     * val host = url.host // "mail.google.com"
+     * val domain = PublicSuffixList.getRegistrableDomain(host) // "google.com"
+     *
+     * val rsClient = RelayRemoteSettingsClient(remoteSettingsService)
+     * val attachedClients = fxAccount.getAttachedClients()
+     * val isRelayUser = attachedClients.any { it.clientId == RELAY_CLIENT_ID }
+     *
+     * if (rsClient.shouldShowRelay(host, domain, isRelayUser)) {
+     * // Show Relay UI
+     * }
+     * ```
+     */
+    func shouldShowRelay(host: String, domain: String, isRelayUser: Bool)  -> Bool
+    
+}
+/**
+ * Client for fetching Relay data from Remote Settings
+ *
+ * This struct holds separate Remote Settings clients for the allowlist and denylist
+ * collections. It follows the same pattern as SuggestRemoteSettingsClient.
+ */
+open class RelayRemoteSettingsClient: RelayRemoteSettingsClientProtocol, @unchecked Sendable {
+    fileprivate let pointer: UnsafeMutableRawPointer!
+
+    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoPointer {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noPointer: NoPointer) {
+        self.pointer = nil
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
+        return try! rustCall { uniffi_relay_fn_clone_relayremotesettingsclient(self.pointer, $0) }
+    }
+    /**
+     * Creates a new RelayRemoteSettingsClient from a RemoteSettingsService
+     */
+public convenience init(rsService: RemoteSettingsService) {
+    let pointer =
+        try! rustCall() {
+    uniffi_relay_fn_constructor_relayremotesettingsclient_new(
+        FfiConverterTypeRemoteSettingsService_lower(rsService),$0
+    )
+}
+    self.init(unsafeFromRawPointer: pointer)
+}
+
+    deinit {
+        guard let pointer = pointer else {
+            return
+        }
+
+        try! rustCall { uniffi_relay_fn_free_relayremotesettingsclient(pointer, $0) }
+    }
+
+    
+
+    
+    /**
+     * Determines whether Firefox Relay should be offered for a given site.
+     *
+     * This function implements the Relay visibility decision logic based on three factors:
+     * 1. Whether the site is on the denylist
+     * 2. Whether the user is an existing Relay user
+     * 3. Whether the site is on the allowlist
+     *
+     * # Decision Logic (in order)
+     *
+     * 1. If the site is on the **denylist**, don't show Relay (regardless of user status)
+     * 2. If the site is NOT on the denylist and the user **is** a Relay user, show Relay
+     * 3. If the site is NOT on the denylist and the user is **not** a Relay user, check the allowlist:
+     * - If the site is on the **allowlist**, show Relay (to promote Relay to new users)
+     * - Otherwise, don't show Relay
+     *
+     * # Fail-Safe Behavior
+     *
+     * If Remote Settings is unavailable:
+     * - If denylist fetch fails: don't show Relay (conservative: avoid showing on potentially blocked sites)
+     * - If allowlist fetch fails for non-Relay users: assume empty (conservative: don't promote without data)
+     *
+     * # Arguments
+     * * `host` - The full hostname (e.g., "mail.google.com", "www.example.com")
+     * * `domain` - The registrable domain from PSL (e.g., "google.com", "example.co.uk")
+     * * `is_relay_user` - Whether the user already has a Relay account
+     *
+     * # Public Suffix List (PSL)
+     *
+     * Mobile clients should use PSL to extract the domain:
+     * - **Host**: Full hostname like "mail.google.com"
+     * - **Domain**: Registrable domain (eTLD+1) like "google.com"
+     * - Swift: Use `URL.host` and extract domain via PSL library
+     * - Kotlin: Use `URL.host` and extract domain via PSL library
+     *
+     * # Returns
+     * `true` if Relay should be shown for this site, `false` otherwise
+     *
+     * # Determining if User is a Relay User
+     *
+     * Mobile clients should check if the user is a Relay user by calling
+     * `FirefoxAccount.getAttachedClients()` and checking if Relay is in the
+     * list of attached clients.
+     *
+     * # Example
+     * ```kotlin
+     * val url = URL("https://mail.google.com/inbox")
+     * val host = url.host // "mail.google.com"
+     * val domain = PublicSuffixList.getRegistrableDomain(host) // "google.com"
+     *
+     * val rsClient = RelayRemoteSettingsClient(remoteSettingsService)
+     * val attachedClients = fxAccount.getAttachedClients()
+     * val isRelayUser = attachedClients.any { it.clientId == RELAY_CLIENT_ID }
+     *
+     * if (rsClient.shouldShowRelay(host, domain, isRelayUser)) {
+     * // Show Relay UI
+     * }
+     * ```
+     */
+open func shouldShowRelay(host: String, domain: String, isRelayUser: Bool) -> Bool  {
+    return try!  FfiConverterBool.lift(try! rustCall() {
+    uniffi_relay_fn_method_relayremotesettingsclient_should_show_relay(self.uniffiClonePointer(),
+        FfiConverterString.lower(host),
+        FfiConverterString.lower(domain),
+        FfiConverterBool.lower(isRelayUser),$0
+    )
+})
+}
+    
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRelayRemoteSettingsClient: FfiConverter {
+
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = RelayRemoteSettingsClient
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> RelayRemoteSettingsClient {
+        return RelayRemoteSettingsClient(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: RelayRemoteSettingsClient) -> UnsafeMutableRawPointer {
+        return value.uniffiClonePointer()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RelayRemoteSettingsClient {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if (ptr == nil) {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: RelayRemoteSettingsClient, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRelayRemoteSettingsClient_lift(_ pointer: UnsafeMutableRawPointer) throws -> RelayRemoteSettingsClient {
+    return try FfiConverterTypeRelayRemoteSettingsClient.lift(pointer)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRelayRemoteSettingsClient_lower(_ value: RelayRemoteSettingsClient) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeRelayRemoteSettingsClient.lower(value)
+}
+
+
+
+
 /**
  * Represents a Relay email address object returned by the Relay API.
  *
@@ -1139,10 +1405,17 @@ private let initializationResult: InitializationResult = {
     if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 52619) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_relay_checksum_method_relayremotesettingsclient_should_show_relay() != 53216) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_relay_checksum_constructor_relayclient_new() != 25664) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_relay_checksum_constructor_relayremotesettingsclient_new() != 27724) {
+        return InitializationResult.apiChecksumMismatch
+    }
 
+    uniffiEnsureRemoteSettingsInitialized()
     return InitializationResult.ok
 }()
 

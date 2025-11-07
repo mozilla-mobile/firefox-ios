@@ -250,8 +250,7 @@ extension PreviewModel {
             onComplete: {}
         ),
         windowUUID: .DefaultUITestingUUID,
-        themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-        onEmbededLinkAction: { _ in }
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
     )
 }
 

@@ -18,7 +18,8 @@ enum CreditCardSettingsState: String, Equatable, CaseIterable {
     case list = "List"
 }
 
-class CreditCardSettingsViewModel {
+// FIXME: FXIOS-14006 Class is not thread safe
+final class CreditCardSettingsViewModel: @unchecked Sendable {
     var autofill: RustAutofill?
     var profile: Profile
     let windowUUID: WindowUUID
@@ -67,7 +68,7 @@ class CreditCardSettingsViewModel {
         }
     }
 
-    func getCreditCardList(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
+    func getCreditCardList(_ completionHandler: @escaping @Sendable ([CreditCard]?) -> Void) {
         autofill?.listCreditCards(completion: { creditCards, error in
             guard let cards = creditCards,
                   error == nil else {

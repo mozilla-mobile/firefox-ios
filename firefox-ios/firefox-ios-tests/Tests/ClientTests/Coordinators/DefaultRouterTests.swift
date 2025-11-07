@@ -39,6 +39,7 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(subject.completions.count, 1)
     }
 
+    @MainActor
     func testPresentViewController_dismissModalCompletionCalled() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -69,6 +70,7 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(navigationController.dismissCalled, 1)
     }
 
+    @MainActor
     func testPresentThenDismiss_removesCompletion() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -133,6 +135,7 @@ final class DefaultRouterTests: XCTestCase {
 
     // MARK: - UINavigationControllerDelegate
 
+    @MainActor
     func testNavigationControllerDelegate_doesntRunCompletionWhenNoFromVC() {
         let subject = DefaultRouter(navigationController: navigationController)
         let expectation = expectation(description: "Completion is called")

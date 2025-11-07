@@ -155,7 +155,7 @@
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Вы отключили все уведомления %1$@. Включите их, выбрав «Настройки» > «Уведомления» > «%2$@»";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
-"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Узнайте о полезных функциях и о том, как максимально эффективно использовать %@.";
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Узнавайте о полезных функциях и о том, как максимально эффективно использовать %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Советы и особенности";
@@ -236,7 +236,7 @@
 "Settings.Studies.Link.v136" = "Подробнее";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Message.v136" = "Опробуйте функции и идеи перед тем, как они станут доступны для всех и каждого.";
+"Settings.Studies.Message.v136" = "Опробуйте функции и идеи до того, как они станут доступны для всех.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Устанавливать и запускать исследования";

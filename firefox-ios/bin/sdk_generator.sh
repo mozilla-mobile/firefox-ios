@@ -25,7 +25,7 @@
 
 set -e
 
-GLEAN_PARSER_VERSION=17.1
+GLEAN_PARSER_VERSION=18.0
 
 # CMDNAME is used in the usage text below.
 # shellcheck disable=SC2034
@@ -190,6 +190,8 @@ VENVDIR="${SOURCE_ROOT}/.venv"
     | sed 's/^\(.\)/warning: \1/'  \
     | sed '/Your metrics are Glean/s/^warning: //'
 
+# Any of the below variables might be empty, so by not quoting them we ensure they are just left out as arguments
+# shellcheck disable=SC2086
 PARSER_OUTPUT=$("${VENVDIR}"/bin/python -m glean_parser \
     translate \
     -f "swift" \

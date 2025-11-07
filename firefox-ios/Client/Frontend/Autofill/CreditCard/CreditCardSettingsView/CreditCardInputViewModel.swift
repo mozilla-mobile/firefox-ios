@@ -253,7 +253,7 @@ class CreditCardInputViewModel: ObservableObject {
     }
 
     func removeCreditCard(creditCard: CreditCard?,
-                          completion: @escaping (CreditCardModifiedStatus, Bool) -> Void) {
+                          completion: @escaping @Sendable (CreditCardModifiedStatus, Bool) -> Void) {
         guard let currentCreditCard = creditCard,
               !currentCreditCard.guid.isEmpty else {
             completion(.none, false)

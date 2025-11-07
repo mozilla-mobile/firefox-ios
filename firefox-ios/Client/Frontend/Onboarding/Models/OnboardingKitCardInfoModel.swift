@@ -84,10 +84,6 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
         default: return Int.max        // No priority
         }
     }
-
-    var image: UIImage? {
-        return UIImage(named: imageID)
-    }
 }
 
 // TODO: FXIOS-12866 Nimbus generated code should add `Sendable` to enums

@@ -158,11 +158,6 @@ public protocol NimbusUserConfiguration {
     ///
     var rolloutParticipation: Bool { get set }
 
-    /// Control participation (opting in) for all experiments and rollouts at once. This is likely a user action.
-    /// - Deprecated: Use experimentParticipation and rolloutParticipation instead for granular control.
-    @available(*, deprecated, message: "Use experimentParticipation and rolloutParticipation instead")
-    var globalUserParticipation: Bool { get set }
-
     /// Get the list of currently enrolled experiments
     ///
     /// - Returns  A list of `EnrolledExperiment`s

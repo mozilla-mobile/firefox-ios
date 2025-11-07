@@ -4,7 +4,7 @@
 
 import Foundation
 
-class Debouncer {
+final class Debouncer {
     var completion: (() -> Void)?
     private let timeInterval: TimeInterval
     private var timer: Timer?

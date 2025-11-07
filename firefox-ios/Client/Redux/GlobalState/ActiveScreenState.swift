@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-enum AppScreenState {
+enum AppScreenState: Sendable {
     case browserViewController(BrowserViewControllerState)
     case homepage(HomepageState)
     case mainMenu(MainMenuState)
@@ -100,7 +100,7 @@ enum AppScreenState {
     }
 }
 
-struct ActiveScreensState {
+struct ActiveScreensState: Sendable {
     let screens: [AppScreenState]
 
     init() {

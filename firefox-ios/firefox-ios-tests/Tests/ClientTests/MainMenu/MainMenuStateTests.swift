@@ -28,6 +28,7 @@ final class MainMenuStateTests: XCTestCase {
         XCTAssertNil(initialState.currentTabInfo)
     }
 
+    @MainActor
     func testUpdatingCurrentTabInfo() {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
@@ -64,6 +65,7 @@ final class MainMenuStateTests: XCTestCase {
         XCTAssertEqual(newState.currentTabInfo, expectedResult)
     }
 
+    @MainActor
     func testNavigation_AllCases() {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
@@ -88,6 +90,7 @@ final class MainMenuStateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testToggleUserAgentAction() {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
@@ -105,6 +108,7 @@ final class MainMenuStateTests: XCTestCase {
         XCTAssertTrue(newState.shouldDismiss)
     }
 
+    @MainActor
     func testCloseAction() {
         let initialState = createSubject()
         let reducer = mainMenuReducer()

@@ -12,6 +12,14 @@ protocol BrowserSelectorsSet {
     var STATIC_TEXT_MOZILLA: Selector { get }
     var STATIC_TEXT_EXAMPLE_DOMAIN: Selector { get }
     var CLEAR_TEXT_BUTTON: Selector { get }
+    var CANCEL_BUTTON_URL_BAR: Selector { get }
+    var PRIVATE_BROWSING: Selector { get }
+    var CANCEL_BUTTON: Selector { get }
+    var LINK_RFC_2606: Selector { get }
+    var BOOK_OF_MOZILLA_TEXT: Selector { get }
+    var ADDRESSTOOLBAR_LOCKICON: Selector { get }
+    func linkElement(named name: String) -> Selector
+    func linkPreview(named preview: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -22,6 +30,11 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let menuButton = "Menu"
         static let clearTextLabel = "Clear text"
         static let downloadLabel = "Downloads"
+        static let cancelButtonUrlBar = AccessibilityIdentifiers.Browser.UrlBar.cancelButton
+        static let privateBrowsdingLabel = "Private Browsing"
+        static let cancelButton = "Cancel"
+        static let rfc = "RFC 2606"
+        static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -66,8 +79,61 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser"]
     )
 
+    let CANCEL_BUTTON_URL_BAR = Selector.buttonId(
+        IDs.cancelButtonUrlBar,
+        description: "Cancel Button in the Url Bar",
+        groups: ["browser"]
+    )
+
+    let PRIVATE_BROWSING = Selector.staticTextId(
+        IDs.privateBrowsdingLabel,
+        description: "Private Browsing Label",
+        groups: ["browser"]
+    )
+
+    let CANCEL_BUTTON = Selector.buttonId(
+        IDs.cancelButton,
+        description: "Cancel Button",
+        groups: ["browser"]
+    )
+
+    let LINK_RFC_2606 = Selector.linkById(
+        IDs.rfc,
+        description: "Link to RFC 2606 in example page",
+        groups: ["browser", "webview"]
+    )
+
+    let BOOK_OF_MOZILLA_TEXT = Selector.staticTextByExactLabel(
+        "The Book of Mozilla",
+        description: "StaticText 'The Book of Mozilla' within table",
+        groups: ["browser", "visualCheck"]
+    )
+
+    let ADDRESSTOOLBAR_LOCKICON = Selector.buttonId(
+        IDs.AddressToolbar_LockIcon,
+        description: "Lock Icon on the Address toolbar",
+        groups: ["browser"]
+    )
+
+    func linkElement(named name: String) -> Selector {
+        Selector.linkById(
+            name,
+            description: "Web link named \(name)",
+            groups: ["browser", "webview"]
+        )
+    }
+
+    func linkPreview(named preview: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            preview,
+            description: "Long-press link preview label",
+            groups: ["browser", "webview"]
+        )
+    }
+
     var all: [Selector] { [ADDRESS_BAR, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
-                           CLEAR_TEXT_BUTTON]
+                           CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
+                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON]
     }
 }

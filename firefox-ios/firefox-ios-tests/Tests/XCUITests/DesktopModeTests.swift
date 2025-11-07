@@ -291,7 +291,8 @@ class DesktopModeTestsIphone: BaseTestCase {
 
         navigator.nowAt(BrowserTab)
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
-        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(TabTray)
+        navigator.goto(NewTabScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()

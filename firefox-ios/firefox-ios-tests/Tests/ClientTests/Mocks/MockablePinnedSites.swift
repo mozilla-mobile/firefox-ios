@@ -16,5 +16,9 @@ class MockablePinnedSites: PinnedSites {
         addPinnedTopSiteCalledCount += 1
         return Success()
     }
+    func addPinnedTopSite(_ site: Site, completion: @escaping @Sendable (Result<Void, Error>) -> Void) {
+        addPinnedTopSiteCalledCount += 1
+        completion(.success(()))
+    }
     func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
 }

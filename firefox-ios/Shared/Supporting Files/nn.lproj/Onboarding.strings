@@ -56,7 +56,7 @@
 "Onboarding.Customization.Toolbar.Bottom.Action.v123" = "Botn";
 
 /* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
-"Onboarding.Customization.Toolbar.Continue.Action.v123" = "Lagre og byrje å surfe";
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "Lagre og begynn å surfe";
 
 /* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Toolbar.Description.v123" = "Hald søk innan rekkjevidde.";
@@ -153,6 +153,9 @@
 
 /* Title for the confirmation button on the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Hald fram";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "Automatisk vern av den personlege informasjonen din\nLast inn nettstadar raskt og søk smartare\nVert levert av den ideelle organisasjonen %@, fortrudd i over 20 år";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Handsam";

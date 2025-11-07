@@ -5,7 +5,7 @@
 import UIKit
 import Combine
 
-class SplashViewController: UIViewController {
+final class SplashViewController: UIViewController {
     init(authenticationManager: AuthenticationManager) {
         self.authenticationManager = authenticationManager
         super.init(nibName: nil, bundle: nil)

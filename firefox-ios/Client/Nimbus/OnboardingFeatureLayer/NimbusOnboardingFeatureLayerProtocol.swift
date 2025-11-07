@@ -79,6 +79,8 @@ extension NimbusOnboardingFeatureLayerProtocol {
         case .syncDevicesCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.sync
         case .syncWithIcons: return ImageIdentifiers.Onboarding.HeaderImages.syncWithIcons
         case .trackers: return ImageIdentifiers.Onboarding.HeaderImages.trackers
+        case .syncWithIconsJapan: return ImageIdentifiers.Onboarding.HeaderImages.syncWithIconsJapan
+        case .trackersJapan: return ImageIdentifiers.Onboarding.HeaderImages.trackersJapan
         }
     }
 
@@ -91,6 +93,11 @@ extension NimbusOnboardingFeatureLayerProtocol {
         case .themeLight: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeLight
         case .toolbarTop: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarTop
         case .toolbarBottom: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarBottom
+        case .themeSystemJapan: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeSystemJapan
+        case .themeDarkJapan: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeDarkJapan
+        case .themeLightJapan: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeLightJapan
+        case .toolbarTopJapan: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarTopJapan
+        case .toolbarBottomJapan: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarBottomJapan
         }
     }
 }

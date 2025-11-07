@@ -44,7 +44,7 @@
 "Onboarding.Customization.Theme.Skip.Action.v123" = "Überspringen";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
-"Onboarding.Customization.Theme.System.Action.v123" = "Automatische Systemeinstellung";
+"Onboarding.Customization.Theme.System.Action.v123" = "System-Standard";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "Wählen Sie ein Theme";
@@ -65,7 +65,7 @@
 "Onboarding.Customization.Toolbar.Skip.Action.v123" = "Überspringen";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Toolbar.Title.v123" = "Wählen Sie die Position für eine Symbolleiste";
+"Onboarding.Customization.Toolbar.Title.v123" = "Wählen Sie die Position für die Symbolleiste";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Customization.Toolbar.Top.Action.v123" = "Oben";

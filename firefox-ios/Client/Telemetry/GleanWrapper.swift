@@ -5,7 +5,7 @@
 import Foundation
 import Glean
 
-protocol GleanWrapper {
+protocol GleanWrapper: Sendable {
     func handleDeeplinkUrl(url: URL)
     func setUpload(isEnabled: Bool)
     func enableTestingMode()
@@ -17,9 +17,10 @@ protocol GleanWrapper {
     func recordEvent<NoExtras>(for metric: EventMetricType<NoExtras>) where NoExtras: EventExtras
     func incrementCounter(for metric: CounterMetricType)
     func recordString(for metric: StringMetricType, value: String)
-    func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String)
+    func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String)
     func setBoolean(for metric: BooleanMetricType, value: Bool)
     func recordQuantity(for metric: QuantityMetricType, value: Int64)
+    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String)
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64)
     func recordUrl(for metric: UrlMetricType, value: URL)
     func recordDatetime(for metric: DatetimeMetricType, value: Date)
@@ -84,7 +85,7 @@ struct DefaultGleanWrapper: GleanWrapper {
         metric.set(value)
     }
 
-    func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String) {
+    func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String) {
         metric[label].add()
     }
 
@@ -94,6 +95,10 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     func recordQuantity(for metric: QuantityMetricType, value: Int64) {
         metric.set(value)
+    }
+
+    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String) {
+        metric[label].set(value)
     }
 
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {

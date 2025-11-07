@@ -31,7 +31,7 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
         store.subscribe(self)
 
         let action = FakeReduxAction(windowUUID: windowUUID, actionType: FakeReduxActionType.requestInitialValue)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func unsubscribeFromRedux() {
@@ -47,18 +47,18 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
 
     func increaseCounter() {
         let action = FakeReduxAction(windowUUID: windowUUID, actionType: FakeReduxActionType.increaseCounter)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func decreaseCounter() {
         let action = FakeReduxAction(windowUUID: windowUUID, actionType: FakeReduxActionType.decreaseCounter)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func setPrivateMode(to value: Bool) {
         let action = FakeReduxAction(privateMode: value,
                                      windowUUID: windowUUID,
                                      actionType: FakeReduxActionType.setPrivateModeTo)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 }

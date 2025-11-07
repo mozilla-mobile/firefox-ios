@@ -11,14 +11,14 @@ final class OnboardingFlowViewModelTests: XCTestCase {
     private var testHelper: OnboardingTestHelper!
 
     // MARK: - Setup & Teardown
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         testHelper = OnboardingTestHelper()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         testHelper = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Helper Methods

@@ -203,7 +203,7 @@
 "Onboarding.Modern.TermsOfService.Title.v145" = "Prevzemite nadzor nad internetom";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "pogoji uporabe %@a.";
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "pogoji uporabe %@a";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Nastavi kot privzeti brskalnik";
@@ -299,7 +299,7 @@
 "Onboarding.TermsOfService.Title.v135" = "Dobrodošli v %@u";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "Pogoji uporabe %@a.";
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "pogoji uporabe %@a";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klasično ozadje";

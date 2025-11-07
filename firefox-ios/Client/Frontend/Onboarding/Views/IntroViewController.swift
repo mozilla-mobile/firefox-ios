@@ -199,7 +199,9 @@ class IntroViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.didEnterBackgroundNotification:
-            appDidEnterBackgroundNotification()
+            ensureMainThread {
+                self.appDidEnterBackgroundNotification()
+            }
         default:
             break
         }

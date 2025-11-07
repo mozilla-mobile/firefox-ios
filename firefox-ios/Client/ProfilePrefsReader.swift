@@ -59,4 +59,12 @@ struct ProfilePrefsReader {
 
         return hasAcceptedToU || hasAcceptedToS
     }
+
+    /// Delegates calculation to ToUExperiencePointsCalculator
+    /// Parameter region: The user's region code
+    /// Returns: The calculated  points (0, 1, or 2) based on user settings
+    func getTouExperiencePoints(region: String?) -> Int32 {
+        let calculator = ToUExperiencePointsCalculator(userDefaults: userDefaults, region: region)
+        return calculator.calculatePoints()
+    }
 }

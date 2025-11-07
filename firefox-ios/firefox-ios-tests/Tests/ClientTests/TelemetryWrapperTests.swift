@@ -14,6 +14,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     var profile: Profile!
 
+    @MainActor
     override func setUp() {
         super.setUp()
         profile = MockProfile()
@@ -238,6 +239,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: Wallpapers
 
+    @MainActor
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
         TelemetryWrapper.shared.setup(profile: profile)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -250,14 +252,14 @@ class TelemetryWrapperTests: XCTestCase {
         WallpaperManager().setCurrentWallpaper(to: defaultWallpaper) { _ in }
         XCTAssertEqual(WallpaperManager().currentWallpaper.type, .none)
 
-        let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
-        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics()
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = WallpaperManager().currentWallpaper.id.lowercased()
         XCTAssertNil(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue())
     }
 
+    @MainActor
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         TelemetryWrapper.shared.setup(profile: profile)
@@ -270,8 +272,7 @@ class TelemetryWrapperTests: XCTestCase {
         WallpaperManager().setCurrentWallpaper(to: themedWallpaper) { _ in }
         XCTAssertEqual(WallpaperManager().currentWallpaper.type, .other)
 
-        let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
-        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics()
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = WallpaperManager().currentWallpaper.id.lowercased()

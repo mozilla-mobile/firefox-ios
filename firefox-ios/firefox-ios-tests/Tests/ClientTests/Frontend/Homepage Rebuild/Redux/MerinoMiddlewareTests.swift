@@ -157,7 +157,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 2)
+        XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 2)
         XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
         XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
     }

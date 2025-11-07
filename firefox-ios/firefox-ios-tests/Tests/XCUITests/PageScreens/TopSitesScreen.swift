@@ -54,11 +54,11 @@ final class TopSitesScreen {
         site.press(forDuration: duration)
     }
 
-    func assertVisibleTopSites(timeout: TimeInterval = TIMEOUT_LONG) {
+    func assertVisibleTopSites(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(topSiteCellGroup, timeout: timeout)
     }
 
-    func assertNotVisibleTopSites(timeout: TimeInterval = TIMEOUT_LONG) {
+    func assertNotVisibleTopSites(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToNotExist(topSiteCellGroup, timeout: timeout)
     }
 
@@ -74,13 +74,13 @@ final class TopSitesScreen {
     }
 
     // Asserts a top site with a specific label exists.
-    func assertTopSiteExists(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
+    func assertTopSiteExists(named name: String, timeout: TimeInterval = TIMEOUT) {
         let linkElement = app.links.staticTexts[name]
         BaseTestCase().mozWaitForElementToExist(linkElement, timeout: timeout)
     }
 
     // Asserts a top site with a specific label does not exist.
-    func assertTopSiteDoesNotExist(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
+    func assertTopSiteDoesNotExist(named name: String, timeout: TimeInterval = TIMEOUT) {
         let linkElement = app.links.staticTexts[name]
         BaseTestCase().mozWaitForElementToNotExist(linkElement, timeout: timeout)
     }
@@ -99,5 +99,10 @@ final class TopSitesScreen {
             .links["Pinned: \(name)"]
         BaseTestCase().mozWaitForElementToExist(pinnedSite)
         pinnedSite.press(forDuration: duration)
+    }
+
+    func assertYoutubeTopSitesExist() {
+        BaseTestCase().mozWaitForElementToExist(sel.COLLECTION_VIEW.element(in: app))
+        BaseTestCase().mozWaitForElementToExist(sel.TOPSITE_YOUTUBE.element(in: app))
     }
 }

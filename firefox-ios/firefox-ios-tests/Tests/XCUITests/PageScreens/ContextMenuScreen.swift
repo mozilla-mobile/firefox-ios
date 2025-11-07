@@ -28,4 +28,42 @@ final class ContextMenuScreen {
         BaseTestCase().mozWaitForElementToExist(unpinButton)
         unpinButton.waitAndTap()
     }
+
+    func waitForContextMenuOptions() {
+        BaseTestCase().waitForElementsToExist([
+            sel.OPEN_IN_NEW_TAB.element(in: app),
+            sel.OPEN_IN_NEW_PRIVATE_TAB.element(in: app),
+            sel.COPY_LINK.element(in: app),
+            sel.DOWNLOAD_LINK.element(in: app),
+            sel.SHARE_LINK.element(in: app),
+            sel.BOOKMARK_LINK.element(in: app)
+        ])
+    }
+
+    func tapOpenInNewTab() {
+        sel.OPEN_IN_NEW_TAB.element(in: app).waitAndTap()
+    }
+
+    func tapCopyLink() {
+        sel.COPY_LINK.element(in: app).waitAndTap()
+    }
+
+    func assertPrivateModeOptionsVisible() {
+        BaseTestCase().mozWaitForElementToNotExist(sel.OPEN_IN_NEW_TAB.element(in: app))
+        BaseTestCase().waitForElementsToExist([
+            sel.OPEN_IN_NEW_PRIVATE_TAB.element(in: app),
+            sel.COPY_LINK.element(in: app),
+            sel.DOWNLOAD_LINK.element(in: app)
+        ])
+    }
+
+    func openInNewPrivateTabAndSwitch() {
+        let openPrivate = sel.OPEN_IN_NEW_PRIVATE_TAB.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(openPrivate)
+        openPrivate.press(forDuration: 1)
+
+        let switchBtn = sel.SWITCH_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(switchBtn)
+        switchBtn.waitAndTap()
+    }
 }

@@ -241,6 +241,9 @@
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Welcome.Title.v140" = "甩掉恼人广告";
 
+/* Title for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Title.v145" = "甩掉鬼祟跟踪器";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "继续";
 

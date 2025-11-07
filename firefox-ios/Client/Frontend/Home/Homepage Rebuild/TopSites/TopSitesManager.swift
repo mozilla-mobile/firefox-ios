@@ -28,6 +28,7 @@ protocol TopSitesManagerInterface {
     /// - Parameters:
     ///   - otherSites: Contains the user's pinned sites, history, and default suggested sites.
     ///   - sponsoredSites: Contains the sponsored sites.
+    @MainActor
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration]
 
     /// Removes the site out of the top sites.
@@ -78,6 +79,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         self.maxTopSites = maxTopSites
     }
 
+    @MainActor
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
         let availableSpaceCount = getAvailableSpaceCount(with: otherSites)
         let googleTopSite = addGoogleTopSite(with: availableSpaceCount)
@@ -142,6 +144,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.hntSponsoredShortcuts, checking: .userOnly)
     }
 
+    @MainActor
     private func filterSponsoredSites(
         contiles: [Site],
         with availableSpaceCount: Int,
@@ -161,6 +164,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
 
     /// Show the sponsored site only if site is not already present in the pinned sites
     /// and it's not the default search engine
+    @MainActor
     private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteConfiguration]) -> Bool {
         let siteDomain = sponsoredSite.url.asURL?.shortDomain
         let sponsoredSiteIsAlreadyPresent = otherSites.contains { (topSite: TopSiteConfiguration) in

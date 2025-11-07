@@ -376,6 +376,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     // MARK: - Sync tab layout
 
+    @MainActor
     func testMaxDisplayedItemSyncedTab_withAccount() {
         let subject = createSubject()
 
@@ -385,6 +386,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(maxItems.syncedTabCount, 1)
     }
 
+    @MainActor
     func testMaxDisplayedItemSyncedTab_withoutAccount() {
         let subject = createSubject()
 

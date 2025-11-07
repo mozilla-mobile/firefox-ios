@@ -218,7 +218,7 @@
 "Onboarding.Modern.TermsOfService.Title.v145" = "თავადვე განკარგეთ ინტერნეტი";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ – გამოყენების პირობები.";
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "გამოყენების პირობები, რომელთაც ადგენს %@.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "ნაგულისხმევ ბრაუზერად დაყენება";
@@ -314,7 +314,7 @@
 "Onboarding.TermsOfService.Title.v135" = "მოგესალმებათ %@";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ – გამოყენების პირობები.";
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "გამოყენების პირობები, რომელთაც ადგენს %@.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "ჩვეული ფონი";

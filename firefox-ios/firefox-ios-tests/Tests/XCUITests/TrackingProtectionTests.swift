@@ -18,6 +18,11 @@ let secureTrackingProtectionOnLabel = "Privacy & Security Settings"
 let secureTrackingProtectionOffLabel = "Secure connection. Enhanced Tracking Protection is off."
 
 class TrackingProtectionTests: BaseTestCase {
+    var browserScreen: BrowserScreen!
+    var trackingProtectionScreen: TrackingProtectionScreen!
+    var toolbarScreen: ToolbarScreen!
+    var settingsScreen: SettingScreen!
+
     private func disableEnableTrackingProtectionForSite() {
         navigator.performAction(Action.TrackingProtectionperSiteToggle)
     }
@@ -132,6 +137,63 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.tables.cells["NewTab"])
         app.tables.cells["NewTab"].swipeUp()
+        // Enable TP again
+        navigator.goto(TrackingProtectionSettings)
+        // Turn on ETP
+        navigator.performAction(Action.SwitchETP)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307059
+    // Smoketest TAE
+    func testStandardProtectionLevel_TAE() {
+        browserScreen = BrowserScreen(app: app)
+        trackingProtectionScreen = TrackingProtectionScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        settingsScreen = SettingScreen(app: app)
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        browserScreen.assertCancelButtonOnUrlBarExist()
+        navigator.back()
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
+        navigator.goto(TrackingProtectionSettings)
+
+        // Make sure ETP is enabled by default
+        trackingProtectionScreen.assertTrackingProtectionSwitchIsEnabled()
+
+        // Turn off ETP
+        navigator.performAction(Action.SwitchETP)
+
+        // Verify it is turned off
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+
+        // The lock icon should still be there
+        browserScreen.assertAddressBar_LockIconExist()
+        toolbarScreen.assertSettingsButtonExists()
+
+        // Switch to Private Browsing
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+
+        // Make sure TP is also there in PBM
+        browserScreen.assertAddressBar_LockIconExist()
+        toolbarScreen.assertSettingsButtonExists()
+
+        navigator.goto(BrowserTabMenu)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+        }
+        navigator.goto(SettingsScreen)
+        settingsScreen.swipeUpFromNewTabCell()
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
         // Turn on ETP

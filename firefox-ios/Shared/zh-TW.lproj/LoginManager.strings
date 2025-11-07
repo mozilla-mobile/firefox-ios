@@ -26,7 +26,7 @@
 "DeleteLoginAlert.Message.Local.v122" = "無法還原此動作。";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"DeleteLoginAlert.Message.Synced.v122" = "將從您所有進行同步的裝置中，刪除密碼。";
+"DeleteLoginAlert.Message.Synced.v122" = "將從您所有進行同步的裝置中，刪除這筆密碼。";
 
 /* Title for the prompt that appears when the user deletes a login. */
 "DeleteLoginsAlert.Title.v122" = "要移除密碼嗎？";

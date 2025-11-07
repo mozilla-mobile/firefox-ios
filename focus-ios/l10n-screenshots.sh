@@ -30,8 +30,9 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-DEVICE="iPhone 16"
+DEVICE="iPhone 17"
 
+# ...existing code...
 for lang in $LOCALES; do
     # start simple with Focus only
     echo "Snapshotting on $DEVICE"
@@ -43,7 +44,7 @@ for lang in $LOCALES; do
       --skip_open_summary \
       --xcargs "-maximum-parallel-testing-workers 1" \
       --erase_simulator --localize_simulator \
-      --ios_version "26.0" \
+      --ios_version "26.1" \
       --devices "$DEVICE" \
       --languages "$lang" \
       --output_directory "l10n-screenshots/$lang" \

@@ -6,6 +6,7 @@ import Foundation
 import Redux
 import Common
 
+@MainActor
 final class MicrosurveyPromptMiddleware {
     private let microsurveyManager: MicrosurveyManager
 
@@ -13,7 +14,6 @@ final class MicrosurveyPromptMiddleware {
         self.microsurveyManager = microsurveyManager
     }
 
-    // TODO: FXIOS-12831 We need this middleware isolated to the main actor (due to `onMessagePressed` call)
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
 
@@ -43,7 +43,7 @@ final class MicrosurveyPromptMiddleware {
             windowUUID: windowUUID,
             actionType: MicrosurveyPromptMiddlewareActionType.initialize
         )
-        store.dispatchLegacy(newAction)
+        store.dispatch(newAction)
         microsurveyManager.handleMessageDisplayed()
     }
 

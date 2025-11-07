@@ -348,7 +348,9 @@ extension BackForwardListViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
-            reduceTransparencyChanged()
+            ensureMainThread {
+                self.reduceTransparencyChanged()
+            }
         default: break
         }
     }

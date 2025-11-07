@@ -2,7 +2,7 @@
 "Addresses.EditAddress.Alert.CancelButton.v129" = "取消";
 
 /* Message explaining the consequences of removing an address from all synced devices. */
-"Addresses.EditAddress.Alert.Message.v129" = "將從您所有進行同步的裝置中，刪除地址資訊。";
+"Addresses.EditAddress.Alert.Message.v129" = "將從您所有進行同步的裝置中，刪除這個地址。";
 
 /* Title for the remove button in the remove address alert. */
 "Addresses.EditAddress.Alert.RemoveButton.v129" = "移除";

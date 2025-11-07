@@ -75,13 +75,13 @@ final class CookiePersistenceTests: BaseTestCase {
 
     func testCookiePersistenceOpenRegularTabAfterPrivateTab() {
         // Go to private tab
-        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-        mozWaitForElementToExist(app.buttons["Private"])
-        app.buttons["Private"].tap()
-        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        if userState.isPrivate {
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            navigator.nowAt(BrowserTab)
+        }
 
         // Open URL for Cookie login
-        navigator.goto(TabTray)
         openCookieSite()
         let webview = app.webViews.firstMatch
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])

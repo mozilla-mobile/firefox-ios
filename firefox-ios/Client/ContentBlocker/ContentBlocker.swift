@@ -286,7 +286,7 @@ extension ContentBlocker {
                 }
             }
             logger.log("Removed \(available.count) lists from rule store.", level: .info, category: .adblock)
-            dispatchGroup.notify(queue: DispatchQueue.main) {
+            dispatchGroup.notify(queue: .main) {
                 completion()
             }
         }

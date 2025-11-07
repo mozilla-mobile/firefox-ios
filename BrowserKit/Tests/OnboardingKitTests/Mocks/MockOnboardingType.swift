@@ -48,7 +48,7 @@ enum MockOnboardingActionType: String, CaseIterable, RawRepresentable, Sendable 
 }
 
 // MARK: - Mock OnboardingCardInfoModel
-struct MockOnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
+struct MockOnboardingCardInfoModel: OnboardingCardInfoModelProtocol, @unchecked Sendable {
     typealias OnboardingType = MockOnboardingType
     typealias OnboardingPopupActionType = MockOnboardingPopupActionType
     typealias OnboardingMultipleChoiceActionType = MockOnboardingMultipleChoiceActionType

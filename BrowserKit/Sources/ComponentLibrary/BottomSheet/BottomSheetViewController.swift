@@ -177,16 +177,15 @@ public class BottomSheetViewController: UIViewController,
     @available(iOS 26.0, *)
     private func setupGlassEffect() {
         // Only add glass effect if it doesn't already exist
-        guard glassEffectView == nil else { return }
+        guard glassEffectView == nil else {
+            updateGlassEffectTint()
+            return
+        }
 
         let effectView = UIVisualEffectView()
 
         #if canImport(FoundationModels)
-        let glassEffect = UIGlassEffect()
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        glassEffect.tintColor = theme.colors.layer2.withAlphaComponent(UX.glassAlpha)
-        glassEffect.isInteractive = true
-        effectView.effect = glassEffect
+        effectView.effect = createGlassEffect()
         #else
         effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         #endif
@@ -209,9 +208,24 @@ public class BottomSheetViewController: UIViewController,
     }
 
     @available(iOS 26.0, *)
-    private func removeGlassEffect() {
-        glassEffectView?.removeFromSuperview()
-        glassEffectView = nil
+    private func createGlassEffect() -> UIVisualEffect {
+        #if canImport(FoundationModels)
+        let glassEffect = UIGlassEffect()
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        glassEffect.tintColor = theme.colors.layer2.withAlphaComponent(UX.glassAlpha)
+        glassEffect.isInteractive = true
+        return glassEffect
+        #else
+        return UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
+    }
+
+    @available(iOS 26.0, *)
+    private func updateGlassEffectTint() {
+        #if canImport(FoundationModels)
+        guard let effectView = glassEffectView else { return }
+        effectView.effect = createGlassEffect()
+        #endif
     }
 
     private func setupView() {

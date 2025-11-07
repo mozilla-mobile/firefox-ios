@@ -30,6 +30,7 @@ struct AccessibilityIdentifiers {
         static let searchButton = "TabToolbar.searchButton"
         static let stopButton = "TabToolbar.stopButton"
         static let bookmarksButton = "TabToolbar.libraryButton"
+        static let translateButton = "TabToolbar.translateButton"
     }
 
     struct Browser {
@@ -235,6 +236,10 @@ struct AccessibilityIdentifiers {
 
         struct StoriesFeed {
             static let storiesFeedCell = "StoriesFeedCell"
+        }
+
+        struct StoriesWebview {
+            static let reloadButton = "StoriesWebviewReloadButton"
         }
     }
 
@@ -497,6 +502,8 @@ struct AccessibilityIdentifiers {
             static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
             static let showPrivateSuggestions = "PrivateMode.showPrivateSuggestions"
+            static let showTrendingSearches = "showTrendingSearch"
+            static let showRecentSearches = "showRecentSearch"
             static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
         }
 

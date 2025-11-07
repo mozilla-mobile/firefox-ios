@@ -24,8 +24,6 @@ public protocol OnboardingCardInfoModelProtocol: Sendable {
     var embededLinkText: [EmbeddedLink] { get }
     var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>? { get }
 
-    var image: UIImage? { get }
-
     init(
         cardType: OnboardingCardType,
         name: String,
@@ -41,4 +39,15 @@ public protocol OnboardingCardInfoModelProtocol: Sendable {
         instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>?,
         embededLinkText: [EmbeddedLink]
     )
+}
+
+extension OnboardingCardInfoModelProtocol {
+    var image: UIImage? {
+        // Try to load from the SPM module's bundle first
+        if let image = UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) {
+            return image
+        }
+        // Fallback to main bundle
+        return UIImage(named: imageID, in: Bundle.main, compatibleWith: nil)
+    }
 }

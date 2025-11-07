@@ -10,6 +10,8 @@ class OnboardingTests: BaseTestCase {
     var rootA11yId: String {
         return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)"
     }
+    var onboardingScreen: OnboardingScreen!
+    var firefoxHomePageScreen: FirefoxHomePageScreen!
 
     override func setUp() {
         launchArguments = [LaunchArguments.ClearProfile,
@@ -18,6 +20,8 @@ class OnboardingTests: BaseTestCase {
                            LaunchArguments.SkipTermsOfUse]
         currentScreen = 0
         super.setUp()
+        onboardingScreen = OnboardingScreen(app: app)
+        firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
     }
 
     override func tearDown() {
@@ -99,6 +103,40 @@ class OnboardingTests: BaseTestCase {
         app.buttons["Close"].tapIfExists()
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
+    }
+
+    // Smoketest TAE
+    // https://mozilla.testrail.io/index.php?/cases/view/2575178
+    func testFirstRunTour_TAE() throws {
+        guard #available(iOS 17.0, *), !skipPlatform else { return }
+
+        // Complete the First run from first screen to the latest one
+        // Check that the first's tour screen is shown as well as all the elements in there
+        onboardingScreen.agreeAndContinue()
+        onboardingScreen.waitForCurrentScreenElements()
+
+        // Swipe to the second screen
+        onboardingScreen.goToNextScreen()
+        onboardingScreen.waitForCurrentScreenElements()
+
+        // Swipe to the third screen
+        onboardingScreen.goToNextScreen()
+        onboardingScreen.assertCurrentScreenElements()
+
+        // Swipe to the fourth screen
+        onboardingScreen.goToNextScreen()
+        onboardingScreen.assertCurrentScreenElements(secondaryExists: false)
+
+        // Swipe to the fifth screen (only iPhone)
+        if !iPad() {
+            onboardingScreen.goToNextScreenViaPrimary()
+            onboardingScreen.assertCurrentScreenElements(secondaryExists: false)
+        }
+
+        // Finish onboarding
+        onboardingScreen.finishOnboarding()
+        // Dismiss new changes pop up if exists
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2793818
@@ -208,6 +246,26 @@ class OnboardingTests: BaseTestCase {
         app.buttons["CloseButton"].waitAndTap()
     }
 
+    // Smoketest TAE
+    // https://mozilla.testrail.io/index.php?/cases/view/2306814
+    func testOnboardingSignIn_TAE() {
+        let onboardingScreen = OnboardingScreen(app: app)
+
+        onboardingScreen.agreeAndContinue()
+        onboardingScreen.swipeToNextScreen()
+
+        onboardingScreen.assertTextsOnCurrentScreen(
+            expectedTitle: "Stay encrypted when you hop between devices",
+            expectedDescription: "Firefox encrypts your passwords, bookmarks, and more when you’re synced.",
+            expectedPrimary: "Sign In",
+            expectedSecondary: "Skip"
+        )
+
+        onboardingScreen.tapSignIn()
+        onboardingScreen.assertSignInScreen()
+        onboardingScreen.exitSignInFlow()
+    }
+
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testCloseTour() {
@@ -219,6 +277,14 @@ class OnboardingTests: BaseTestCase {
         app.buttons["Close"].tapIfExists()
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
+    }
+
+    // Smoketest TAE
+    // https://mozilla.testrail.io/index.php?/cases/view/2306816
+    func testCloseTour_TAE() {
+        onboardingScreen.agreeAndContinue()
+        onboardingScreen.closeTourIfNeeded()
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306815

@@ -22,7 +22,7 @@ enum TermsOfUseTimeoutOption: Int {
     var title: String {
         switch self {
         case .normal:
-            return "default (120 hours)"
+            return "120 hours"
         case .oneMinute:
             return "one minute"
         }
@@ -43,7 +43,7 @@ class TermsOfUseTimeout: HiddenSetting {
         let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterTermsOfUseTimeoutOverride)
         let touTimeoutOption = TermsOfUseTimeoutOption(rawValue: rawValue) ?? .normal
 
-        let buttonTitle = "Set ToU Timeout \(touTimeoutOption.title)"
+        let buttonTitle = "Set ToU Timeout (current is \(touTimeoutOption.title))"
         return NSAttributedString(
             string: buttonTitle,
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]

@@ -498,26 +498,6 @@ class NimbusTests: XCTestCase {
         XCTAssertFalse(try helper.evalJexl(expression: "is_first_run"))
     }
 
-    func testNimbusRecordsEnrollmentStatusMetrics() throws {
-        let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
-
-        try nimbus.setExperimentsLocallyOnThisThread(minimalExperimentJSON())
-        try nimbus.applyPendingExperimentsOnThisThread()
-
-        XCTAssertNotNil(GleanMetrics.NimbusEvents.enrollmentStatus.testGetValue(), "EnrollmentStatus event must exist")
-        let enrollmentStatusEvents = GleanMetrics.NimbusEvents.enrollmentStatus.testGetValue()!
-        XCTAssertEqual(enrollmentStatusEvents.count, 1, "event count must match")
-
-        let enrolledExtra = enrollmentStatusEvents[0].extra!
-        XCTAssertNotEqual(nil, enrolledExtra["branch"], "branch must not be nil")
-        XCTAssertEqual("secure-gold", enrolledExtra["slug"], "slug must match")
-        XCTAssertEqual("Enrolled", enrolledExtra["status"], "status must match")
-        XCTAssertEqual("Qualified", enrolledExtra["reason"], "reason must match")
-        XCTAssertEqual(nil, enrolledExtra["error_string"], "errorString must match")
-        XCTAssertEqual(nil, enrolledExtra["conflict_slug"], "conflictSlug must match")
-    }
-
     class TestRecordedContext: RecordedContext, @unchecked Sendable {
         var recorded: [[String: Any]] = []
         var enabled: Bool

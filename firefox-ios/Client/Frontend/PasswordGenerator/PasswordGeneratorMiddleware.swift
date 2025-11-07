@@ -8,6 +8,7 @@ import Shared
 import Common
 import WebKit
 
+@MainActor
 final class PasswordGeneratorMiddleware {
     private let logger: Logger
     private let generatedPasswordStorage: GeneratedPasswordStorageProtocol
@@ -16,7 +17,7 @@ final class PasswordGeneratorMiddleware {
     // The JS password generator generates a password using a list of DEFAULT_RULES.
     // Some websites, however, fail when generating the password using the default rules.
     // For these websites we have specific rules hosted in remote settings in the password-rules collection.
-    // We cache them so we don't have to parse the JSON everytime.
+    // We cache them so we don't have to parse the JSON every time.
     // TODO: FXIOS-12590 This global property is not concurrency safe
     nonisolated(unsafe) private static var cachedPasswordRules: [PasswordRuleRecord]?
 
@@ -65,7 +66,7 @@ final class PasswordGeneratorMiddleware {
                 actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                 password: password
             )
-            store.dispatchLegacy(newAction)
+            store.dispatch(newAction)
         } else {
             generateNewPassword(frame: frame, completion: { generatedPassword in
                 self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
@@ -74,12 +75,12 @@ final class PasswordGeneratorMiddleware {
                     actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                     password: generatedPassword
                 )
-                store.dispatchLegacy(newAction)
+                store.dispatch(newAction)
             })
         }
     }
 
-    private func generateNewPassword(frame: WKFrameInfo, completion: @escaping (String) -> Void) {
+    private func generateNewPassword(frame: WKFrameInfo, completion: @MainActor @escaping (String) -> Void) {
         let originRules = PasswordGeneratorMiddleware.getPasswordRule(for: frame.securityOrigin.host)
         let jsFunctionCall = "window.__firefox__.logins.generatePassword(\(originRules ?? "" ))"
         frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
@@ -128,7 +129,7 @@ final class PasswordGeneratorMiddleware {
                 actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                 password: generatedPassword
             )
-            store.dispatchLegacy(newAction)
+            store.dispatch(newAction)
         })
     }
 

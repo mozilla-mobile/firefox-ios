@@ -134,16 +134,6 @@ struct AnimatedGradientView: ThemeableView {
             theme.colors.gradientOnboardingStop3.color,
             theme.colors.gradientOnboardingStop4.color
         ])
-        .onAppear {
-            applyTheme()
-        }
-        .listenToThemeChanges { window in
-            guard window == windowUUID else { return }
-            applyTheme()
-        }
-    }
-
-    func applyTheme() {
-        theme = themeManager.getCurrentTheme(for: windowUUID)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 }

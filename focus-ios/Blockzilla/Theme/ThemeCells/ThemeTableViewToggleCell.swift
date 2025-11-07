@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ThemeTableViewToggleCell: UITableViewCell {
+final class ThemeTableViewToggleCell: UITableViewCell {
     var toggle = UISwitch()
     weak var delegate: SystemThemeDelegate?
 

@@ -253,7 +253,9 @@ final class TermsOfUseViewController: UIViewController,
         let attributed = NSMutableAttributedString(
             string: TermsOfUseStrings.termsOfUseInfoText,
             attributes: [
-                .font: UX.descriptionFont,
+                // UITextView.attributedText overrides adjustsFontForContentSizeCategory behavior
+                // Unlike UILabel, we must explicitly set scaledFont() in the attributed string
+                .font: FXFontStyles.Regular.body.scaledFont(),
                 .foregroundColor: currentTheme().colors.textSecondary,
                 .paragraphStyle: paragraphStyle
             ]
@@ -285,6 +287,7 @@ final class TermsOfUseViewController: UIViewController,
         // This prevents dismissing the Terms of Use sheet when interacting with its content.
         if !sheetContainer.frame.contains(sender.location(in: view)) {
             store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss))
+            coordinator?.dismissTermsFlow()
         }
     }
 
@@ -315,10 +318,12 @@ final class TermsOfUseViewController: UIViewController,
 
     @objc private func acceptTapped() {
         store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .termsAccepted))
+        coordinator?.dismissTermsFlow()
     }
 
     @objc private func remindMeLaterTapped() {
         store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .remindMeLaterTapped))
+        coordinator?.dismissTermsFlow()
     }
 
     func applyTheme() {

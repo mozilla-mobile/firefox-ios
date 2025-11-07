@@ -657,6 +657,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3209877
     func testCloseTabFromLongPressFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() throws {
         app.launch()
         guard !iPad() else {
@@ -676,6 +677,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3209878
     func testNavigateBackFromWebpageToHomepageForBottomToolbar_homepageSearchBarExperimentOn() throws {
         app.launch()
         guard !iPad() else {

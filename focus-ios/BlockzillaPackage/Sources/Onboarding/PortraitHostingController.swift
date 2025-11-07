@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public class PortraitHostingController<Content>: UIHostingController<Content> where Content: View {
+public final class PortraitHostingController<Content>: UIHostingController<Content> where Content: View {
     override public var shouldAutorotate: Bool { return false }
 
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask { return .portrait }
