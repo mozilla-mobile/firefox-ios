@@ -498,7 +498,7 @@ class BrowserCoordinator: BaseCoordinator,
             return // route is handled with existing child coordinator
         }
         windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
-        let navigationController = ThemedNavigationController(windowUUID: windowUUID)
+        let navigationController = SettingsNavigationController(windowUUID: windowUUID)
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
         navigationController.modalPresentationStyle = modalPresentationStyle
@@ -1126,7 +1126,7 @@ class BrowserCoordinator: BaseCoordinator,
             browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
         }
 
-        guard !childCoordinators.contains(where: { $0 is SummarizeController }) else { return }
+        guard !childCoordinators.contains(where: { $0 is SummarizeCoordinator }) else { return }
         let coordinator = SummarizeCoordinator(
             browserSnapshot: browserScreenshot,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,

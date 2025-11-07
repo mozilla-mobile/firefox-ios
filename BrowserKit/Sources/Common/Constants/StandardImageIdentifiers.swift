@@ -48,6 +48,7 @@ public struct StandardImageIdentifiers {
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let appMenu = "appMenuLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
+        public static let arrowCounterClockwise = "arrowCounterClockwiseLarge"
         public static let arrowTrending = "arrowTrendingLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let avatarWarningCircleFillMulticolorDark = "avatarWarningCircleFillMulticolorLargeDark"

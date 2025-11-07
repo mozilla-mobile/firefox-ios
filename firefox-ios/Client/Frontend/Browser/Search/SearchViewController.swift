@@ -353,19 +353,8 @@ class SearchViewController: SiteTableViewController,
     /// - Trending searches: popular or curated terms shown to inspire discovery.
     /// - Recent searches: the user’s own past searches for quick re-access.
     private func loadZeroSearchData() {
-        loadTrendingSearches()
-        loadRecentSearches()
-    }
-
-    private func loadRecentSearches() {
+        viewModel.loadTrendingSearches()
         viewModel.retrieveRecentSearches()
-    }
-
-    private func loadTrendingSearches() {
-        Task {
-            await viewModel.retrieveTrendingSearches()
-            reloadTableView()
-        }
     }
 
     func didSelectEngine(_ sender: UIButton) {
@@ -919,7 +908,7 @@ class SearchViewController: SiteTableViewController,
             case .SearchSettingsChanged:
                 self.reloadSearchEngines()
                 // We fetch new list since trending searches are specific to the search engine.
-                self.loadTrendingSearches()
+                self.viewModel.loadTrendingSearches()
             case .SponsoredAndNonSponsoredSuggestionsChanged:
                 guard !self.viewModel.searchQuery.isEmpty else { return }
                 Task {

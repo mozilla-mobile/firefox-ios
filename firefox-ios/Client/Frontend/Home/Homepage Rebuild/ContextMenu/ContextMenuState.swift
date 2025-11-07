@@ -175,7 +175,7 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             ContextMenuState.dispatchSettingsAction(windowUUID: windowUUID, section: .topSites)
-            store.dispatchLegacy(
+            store.dispatch(
                 ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSettingsAction)
             )
         }).items
@@ -206,7 +206,7 @@ struct ContextMenuState {
                     isPrivate: false,
                     selectNewTab: true
                 )
-                store.dispatchLegacy(
+                store.dispatch(
                     ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSponsoredAction)
                 )
             }).items
@@ -360,13 +360,15 @@ struct ContextMenuState {
 
     // MARK: Dispatch Actions
     private static func dispatchSettingsAction(windowUUID: WindowUUID, section: Route.SettingsSection) {
-        store.dispatchLegacy(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.settings(section)),
-                windowUUID: windowUUID,
-                actionType: NavigationBrowserActionType.tapOnSettingsSection
+        ensureMainThread {
+            store.dispatch(
+                NavigationBrowserAction(
+                    navigationDestination: NavigationDestination(.settings(section)),
+                    windowUUID: windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnSettingsSection
+                )
             )
-        )
+        }
     }
 
     private static func dispatchOpenNewTabAction(
@@ -375,38 +377,44 @@ struct ContextMenuState {
         isPrivate: Bool,
         selectNewTab: Bool = false
     ) {
-        store.dispatchLegacy(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(
-                    .newTab,
-                    url: siteURL,
-                    isPrivate: isPrivate,
-                    selectNewTab: selectNewTab
-                ),
-                windowUUID: windowUUID,
-                actionType: NavigationBrowserActionType.tapOnOpenInNewTab
+        ensureMainThread {
+            store.dispatch(
+                NavigationBrowserAction(
+                    navigationDestination: NavigationDestination(
+                        .newTab,
+                        url: siteURL,
+                        isPrivate: isPrivate,
+                        selectNewTab: selectNewTab
+                    ),
+                    windowUUID: windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnOpenInNewTab
+                )
             )
-        )
+        }
     }
 
     private static func dispatchShareSheetAction(windowUUID: WindowUUID, shareSheetConfiguration: ShareSheetConfiguration) {
-        store.dispatchLegacy(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
-                windowUUID: windowUUID,
-                actionType: NavigationBrowserActionType.tapOnShareSheet
+        ensureMainThread {
+            store.dispatch(
+                NavigationBrowserAction(
+                    navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
+                    windowUUID: windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnShareSheet
+                )
             )
-        )
+        }
     }
 
     private static func dispatchContextMenuAction(windowUUID: WindowUUID, site: Site, actionType: ActionType) {
-        store.dispatchLegacy(
-            ContextMenuAction(
-                site: site,
-                windowUUID: windowUUID,
-                actionType: actionType
+        ensureMainThread {
+            store.dispatch(
+                ContextMenuAction(
+                    site: site,
+                    windowUUID: windowUUID,
+                    actionType: actionType
+                )
             )
-        )
+        }
     }
 
     private static func dispatchContextMenuActionForSection(
@@ -414,12 +422,14 @@ struct ContextMenuState {
         menuType: MenuType?,
         actionType: ActionType
     ) {
-        store.dispatchLegacy(
-            ContextMenuAction(
-                menuType: menuType,
-                windowUUID: windowUUID,
-                actionType: actionType
+        ensureMainThread {
+            store.dispatch(
+                ContextMenuAction(
+                    menuType: menuType,
+                    windowUUID: windowUUID,
+                    actionType: actionType
+                )
             )
-        )
+        }
     }
 }

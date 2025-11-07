@@ -1054,10 +1054,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let shouldShowTranslationIcon = canTranslateFromAction || canTranslateFromState
         guard shouldShowTranslationIcon else { return nil }
         let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
-        guard let configuration else { return nil }
+        guard let state = configuration?.state else { return nil }
         return translateAction(
             enabled: isLoading == false,
-            configuration: configuration,
+            state: state,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
     }
@@ -1308,22 +1308,22 @@ struct AddressBarState: StateType, Sendable, Equatable {
     // when switching from inactive icon to loading icon when user taps on it. Hence, `hasHighlightedColor: false`.
     private static func translateAction(
         enabled: Bool,
-        configuration: TranslationConfiguration,
+        state: TranslationConfiguration.IconState,
         hasAlternativeLocationColor: Bool
     ) -> ToolbarActionConfiguration {
         // We do not want to use template mode for translate active icon.
-        let isActiveState = configuration.state == .active
+        let isActiveState = state == .active
 
         return ToolbarActionConfiguration(
             actionType: .translate,
-            iconName: configuration.state.buttonImageName,
+            iconName: state.buttonImageName,
             templateModeForImage: !isActiveState,
-            shouldUseLoadingSpinner: configuration.state == .loading,
+            isLoading: state == .loading,
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
             contextualHintType: ContextualHintType.translation.rawValue,
-            a11yLabel: configuration.state.buttonA11yLabel,
+            a11yLabel: state.buttonA11yLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.translateButton
         )
     }

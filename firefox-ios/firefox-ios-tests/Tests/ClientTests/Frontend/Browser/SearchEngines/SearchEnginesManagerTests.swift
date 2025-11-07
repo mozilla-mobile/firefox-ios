@@ -5,8 +5,10 @@
 @testable import Client
 import Foundation
 import XCTest
+import Common
 import Shared
 
+@MainActor
 class SearchEnginesManagerTests: XCTestCase {
     private let defaultSearchEngineName = "ATester"
     private let expectedEngineNames = ["ATester", "BTester", "CTester", "DTester", "ETester", "FTester"]
@@ -73,9 +75,11 @@ class SearchEnginesManagerTests: XCTestCase {
 
         let exp = expectation(description: "Engine was deleted")
         searchEnginesManager.deleteCustomEngine(testEngine) { [self] in
-            XCTAssertFalse(searchEnginesManager.orderedEngines.contains(where: { $0 == testEngine }))
+            ensureMainThread {
+                XCTAssertFalse(self.searchEnginesManager.orderedEngines.contains(where: { $0 == testEngine }))
 
-            exp.fulfill()
+                exp.fulfill()
+            }
         }
 
         waitForExpectations(timeout: 2)

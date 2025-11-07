@@ -1112,6 +1112,7 @@ class BrowserViewController: UIViewController,
             case .PageZoomSettingsChanged: handlePageZoomSettingsChanged(notification)
             case .RemoteTabNotificationTapped: openRecentlyClosedTabs()
             case .StopDownloads: onStopDownloads(notification)
+            case .SettingsDismissed: onSettingsDismissed()
             default: break
             }
         }
@@ -1137,9 +1138,21 @@ class BrowserViewController: UIViewController,
                 .PageZoomLevelUpdated,
                 .PageZoomSettingsChanged,
                 .RemoteTabNotificationTapped,
-                .StopDownloads
+                .StopDownloads,
+                .SettingsDismissed
             ]
         )
+    }
+
+    private func onSettingsDismissed() {
+        // FXIOS-13959: Changing address toolbar position from settings prevents content interaction homepage/webpage
+        // This bug is only happening in iOS 15 + 16
+        // Trigger a layout refresh to correctly position mask for translucent toolbars
+        // Remove when support for iOS 15 + 16 is dropped: FXIOS-14024
+        if #unavailable(iOS 17) {
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
     }
 
     private func onStopDownloads(_ notification: Notification) {
@@ -1733,6 +1746,7 @@ class BrowserViewController: UIViewController,
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
         resetDataClearanceCFRTimer()
+        dismissCFRs()
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
@@ -4667,14 +4681,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 )
             )
         }
-
-        store.dispatchLegacy(
-            ToolbarAction(
-                shouldShowKeyboard: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
-        )
         keyboardState = nil
         updateViewConstraints()
 
@@ -4691,6 +4697,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        store.dispatch(
+            ToolbarAction(
+                shouldShowKeyboard: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.keyboardStateDidChange
+            )
+        )
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: findInPageBar != nil)
         guard isSwipingTabsEnabled else { return }

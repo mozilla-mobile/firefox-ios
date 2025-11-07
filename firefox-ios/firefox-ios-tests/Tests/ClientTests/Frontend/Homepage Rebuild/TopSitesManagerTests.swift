@@ -26,6 +26,7 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     // MARK: Google Top Site
+    @MainActor
     func test_recalculateTopSites_shouldShowGoogle_returnGoogleTopSite() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager())
         let topSites = subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
@@ -36,6 +37,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.first?.title, "Google Test")
     }
 
+    @MainActor
     func test_recalculateTopSites_noGoogleSiteData_returnNoGoogleTopSite() throws {
         let subject = try createSubject()
         let topSites = subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
@@ -44,6 +46,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertNil(topSites.first)
     }
 
+    @MainActor
     func test_recalculateTopSites_withOtherSitesAndShouldShowGoogle_returnGoogleTopSite() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager())
         let topSites = subject.recalculateTopSites(
@@ -57,6 +60,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.first?.title, "Google Test")
     }
 
+    @MainActor
      func test_recalculateTopSites_withOtherSitesAndNoGoogleSite_returnNoGoogleTopSite() throws {
          let subject = try createSubject()
          let topSites = subject.recalculateTopSites(
@@ -148,6 +152,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 0)
     }
 
+    @MainActor
     func test_recalculateTopSites_shouldShowSponsoredSites_returnOnlyMaxSponsoredSites() throws {
         // Max contiles is currently at 2, so it should add 2 contiles only.
         let subject = try createSubject()
@@ -174,6 +179,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.title }, expectedTitles)
     }
 
+    @MainActor
     func test_recalculateTopSites_shouldNotShowSponsoredSites_returnNoSponsoredSites() throws {
         profile?.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
 
@@ -217,6 +223,7 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     // MARK: Tiles space calculation
+    @MainActor
     func test_recalculateTopSites_maxCountZero_returnNoSites() throws {
         let subject = try createSubject(
             googleTopSiteManager: MockGoogleTopSiteManager(),
@@ -230,6 +237,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 0)
     }
 
+    @MainActor
     func test_recalculateTopSites_noAvailableSpace_returnOnlyPinnedSites() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
 
@@ -244,6 +252,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.site.url }, ["www.mozilla.com", "www.firefox.com"])
     }
 
+    @MainActor
     func test_recalculateTopSites_duplicatePinnedTile_doesNotShowDuplicateSponsoredSite() throws {
         let subject = try createSubject()
 
@@ -259,6 +268,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.site.url }, ["https://mozilla.com", "https://firefox.com"])
     }
 
+    @MainActor
     func test_recalculateTopSites_andNoPinnedSites_returnGoogleAndSponsoredSites() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
         let topSites = subject.recalculateTopSites(
@@ -273,6 +283,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.site.url }, ["https://www.google.com/webhp?client=firefox-b-1-m&channel=ts", "https://firefox.com"])
     }
 
+    @MainActor
     func test_recalculateTopSites_availableSpace_returnSitesInOrder() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager())
 
@@ -301,6 +312,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.site.url }, expectedURLs)
     }
 
+    @MainActor
     func test_recalculateTopSites_matchingSponsoredAndHistoryBasedTiles_removeDuplicates() throws {
         let subject = try createSubject()
 
@@ -324,6 +336,7 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     // MARK: - Search engine
+    @MainActor
     func test_searchEngine_sponsoredSite_getsRemoved() throws {
         let searchEngine = OpenSearchEngine(engineID: "Firefox",
                                             shortName: "Firefox",
@@ -415,7 +428,8 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(mockPinnedSites.addPinnedTopSiteCalledCount, 1)
     }
 
-    func test_sponsoredShorcutsFlagEnabled_withoutUserPref_returnsSponsoredSites() throws {
+    @MainActor
+    func test_sponsoredShortcutsFlagEnabled_withoutUserPref_returnsSponsoredSites() throws {
         setupNimbusHNTSponsoredShortcutsTesting(isEnabled: true)
 
         let subject = try createSubject()
@@ -428,6 +442,7 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 2)
     }
 
+    @MainActor
     func test_sponsoredShorcutsFlagDisabled_withoutUserPref_returnsNoSponsoredSites() throws {
         setupNimbusHNTSponsoredShortcutsTesting(isEnabled: false)
 
@@ -441,7 +456,8 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 0)
     }
 
-    func test_sponsoredShorcutsFlagEnabled_withUserPref_returnsNoSponsoredSites() throws {
+    @MainActor
+    func test_sponsoredShortcutsFlagEnabled_withUserPref_returnsNoSponsoredSites() throws {
         profile?.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
         setupNimbusHNTSponsoredShortcutsTesting(isEnabled: true)
 
@@ -455,7 +471,8 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 0)
     }
 
-    func test_sponsoredShorcutsFlagDisabled_withUserPref_returnsSponsoredSites() throws {
+    @MainActor
+    func test_sponsoredShortcutsFlagDisabled_withUserPref_returnsSponsoredSites() throws {
         profile?.prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
         setupNimbusHNTSponsoredShortcutsTesting(isEnabled: false)
 

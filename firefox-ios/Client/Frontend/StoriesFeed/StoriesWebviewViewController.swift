@@ -42,8 +42,22 @@ class StoriesWebviewViewController: UIViewController,
     }
 
     private let shieldImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: StandardImageIdentifiers.Large.shieldCheckmark)?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Small.shieldCheckmarkFill)
     }
+
+    private lazy var reloadToolbarButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.arrowCounterClockwise),
+            style: .plain,
+            target: self,
+            action: #selector(didTapReload)
+        )
+        /// FXIOS-14029 Update to .FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel once we have
+        /// translations in v146, reuse .TabLocationReloadAccessibilityLabel since it is the same string
+        button.accessibilityLabel = .TabLocationReloadAccessibilityLabel
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.StoriesWebview.reloadButton
+        return button
+    }()
 
     init(profile: Profile,
          windowUUID: WindowUUID,
@@ -63,7 +77,7 @@ class StoriesWebviewViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupWebView()
+        setupUI()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
     }
 
@@ -93,8 +107,14 @@ class StoriesWebviewViewController: UIViewController,
         domainLabel.text = webView.url?.normalizedHost
     }
 
+    // MARK: Selectors
+    @objc
+    func didTapReload() {
+        webView?.reload()
+    }
+
     // MARK: Helper functions
-    private func setupWebView() {
+    private func setupUI() {
         guard let webView else { return }
         view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -104,6 +124,8 @@ class StoriesWebviewViewController: UIViewController,
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+
+        navigationItem.rightBarButtonItem = reloadToolbarButton
     }
 
     private func setupNavigationTitle() {
@@ -142,6 +164,12 @@ class StoriesWebviewViewController: UIViewController,
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         // Update domain label when navigation finishes (in the same window)
         domainLabel.text = webView.url?.normalizedHost
+
+        shieldImageView.image = if webView.hasOnlySecureContent {
+            UIImage.templateImageNamed(StandardImageIdentifiers.Small.shieldCheckmarkFill)
+        } else {
+            UIImage(named: StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+        }
     }
 
     // MARK: - WKUIDelegate
@@ -165,6 +193,6 @@ class StoriesWebviewViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         applyNavigationBarTheme(theme: theme)
         domainLabel.textColor = theme.colors.textPrimary
-        shieldImageView.tintColor = theme.colors.iconPrimary
+        shieldImageView.tintColor = theme.colors.iconSecondary
     }
 }
