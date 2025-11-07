@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Common
+import SiteImageView
 
 // TODO: FXIOS-12712 Make Site actually sendable
 public struct Site: @unchecked Sendable,

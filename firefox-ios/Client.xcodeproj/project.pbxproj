@@ -624,7 +624,6 @@
 		5A29212A295CAA1700242235 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
 		5A31275828906422001F30FA /* BookmarksDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A31275728906422001F30FA /* BookmarksDelegateMock.swift */; };
 		5A32C2B62AD8517200A9B5A4 /* MetricKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A32C2B52AD8517200A9B5A4 /* MetricKitWrapper.swift */; };
-		5A37861429A2BFB9006B3A34 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A37861329A2BFB9006B3A34 /* Common */; };
 		5A37861D29A2C37C006B3A34 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A37861C29A2C37C006B3A34 /* Common */; };
 		5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */; };
 		5A3A7DCE2886F7880065F81A /* BookmarksDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DCD2886F7880065F81A /* BookmarksDataAdaptor.swift */; };
@@ -1327,6 +1326,9 @@
 		8C2937702BF79F0300146613 /* EditAddressLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29376D2BF79F0200146613 /* EditAddressLocalization.swift */; };
 		8C2937712BF79F0300146613 /* EditAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29376E2BF79F0300146613 /* EditAddressViewController.swift */; };
 		8C2937722BF79F0300146613 /* Address+Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29376F2BF79F0300146613 /* Address+Encodable.swift */; };
+		8C381F002EBE1C74009A54AA /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 8C381EFF2EBE1C74009A54AA /* SiteImageView */; };
+		8C381F022EBE1CC3009A54AA /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 8C381F012EBE1CC3009A54AA /* SiteImageView */; };
+		8C381F042EBE1D3A009A54AA /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 8C381F032EBE1D3A009A54AA /* SiteImageView */; };
 		8C3A17792E68390000341A01 /* ModernLaunchScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3A17782E68390000341A01 /* ModernLaunchScreenViewControllerTests.swift */; };
 		8C4B0F5D2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */; };
 		8C51ED6C2DE0A49800B3E58A /* NimbusOnboardingKitFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C51ED6B2DE0A49800B3E58A /* NimbusOnboardingKitFeatureLayer.swift */; };
@@ -2047,7 +2049,6 @@
 		E5C2BB372EA9070E001E3DEF /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = E5C2BB362EA9070E001E3DEF /* Shared */; };
 		E5C2C0B82EA90E0D001E3DEF /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		E5C2C0B92EA90E0D001E3DEF /* libAccount.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* libAccount.a */; };
-		E5C2C1552EA9132B001E3DEF /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = E5C2C1542EA9132B001E3DEF /* Common */; };
 		E5C2C1572EA9138D001E3DEF /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = E5C2C1562EA9138D001E3DEF /* Common */; };
 		E60D03181D511398002FE3F6 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
 		E60D03271D511554002FE3F6 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
@@ -11234,10 +11235,10 @@
 			files = (
 				0BCC26962CFF106A0072CD5A /* Localizations.framework in Frameworks */,
 				43BE581B278BE5AE00491291 /* RustMozillaAppServices.framework in Frameworks */,
+				8C381F022EBE1CC3009A54AA /* SiteImageView in Frameworks */,
 				0BCC26952CFF10590072CD5A /* Shared in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
-				E5C2C1552EA9132B001E3DEF /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11326,8 +11327,8 @@
 			files = (
 				43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */,
 				8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */,
-				5A37861429A2BFB9006B3A34 /* Common in Frameworks */,
 				5A984D342C8A31C6007938C9 /* Kingfisher in Frameworks */,
+				8C381F002EBE1C74009A54AA /* SiteImageView in Frameworks */,
 				0BF802E62CFF0951005633E5 /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11406,6 +11407,7 @@
 			files = (
 				8CF609272EA8D46E00F069B6 /* UniformTypeIdentifiers.framework in Frameworks */,
 				E5C2BB372EA9070E001E3DEF /* Shared in Frameworks */,
+				8C381F042EBE1D3A009A54AA /* SiteImageView in Frameworks */,
 				E5C2BB322EA90705001E3DEF /* RustMozillaAppServices.framework in Frameworks */,
 				E5C2C0B82EA90E0D001E3DEF /* libStorage.a in Frameworks */,
 				E5C2C0B92EA90E0D001E3DEF /* libAccount.a in Frameworks */,
@@ -16570,7 +16572,7 @@
 			name = Sync;
 			packageProductDependencies = (
 				0BCC26942CFF10590072CD5A /* Shared */,
-				E5C2C1542EA9132B001E3DEF /* Common */,
+				8C381F012EBE1CC3009A54AA /* SiteImageView */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -16676,10 +16678,10 @@
 			);
 			name = Storage;
 			packageProductDependencies = (
-				5A37861329A2BFB9006B3A34 /* Common */,
 				8A88815D2B21071E009635AE /* GCDWebServers */,
 				5A984D332C8A31C6007938C9 /* Kingfisher */,
 				0BF802E52CFF0951005633E5 /* Shared */,
+				8C381EFF2EBE1C74009A54AA /* SiteImageView */,
 			);
 			productName = Storage;
 			productReference = 2FCAE21A1ABB51F800877008 /* libStorage.a */;
@@ -16840,6 +16842,7 @@
 			name = ActionExtension;
 			packageProductDependencies = (
 				E5C2BB362EA9070E001E3DEF /* Shared */,
+				8C381F032EBE1D3A009A54AA /* SiteImageView */,
 			);
 			productName = ActionExtension;
 			productReference = 8CF609252EA8D46E00F069B6 /* ActionExtension.appex */;
@@ -31381,10 +31384,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = TabDataStore;
 		};
-		5A37861329A2BFB9006B3A34 /* Common */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Common;
-		};
 		5A37861C29A2C37C006B3A34 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
@@ -31506,6 +31505,18 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ComponentLibrary;
 		};
+		8C381EFF2EBE1C74009A54AA /* SiteImageView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SiteImageView;
+		};
+		8C381F012EBE1CC3009A54AA /* SiteImageView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SiteImageView;
+		};
+		8C381F032EBE1D3A009A54AA /* SiteImageView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SiteImageView;
+		};
 		8C51ED732DE0A64D00B3E58A /* OnboardingKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OnboardingKit;
@@ -31527,10 +31538,6 @@
 		E5C2BB362EA9070E001E3DEF /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
-		};
-		E5C2C1542EA9132B001E3DEF /* Common */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Common;
 		};
 		E5C2C1562EA9138D001E3DEF /* Common */ = {
 			isa = XCSwiftPackageProductDependency;

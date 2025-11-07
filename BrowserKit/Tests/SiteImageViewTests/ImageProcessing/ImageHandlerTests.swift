@@ -4,7 +4,6 @@
 
 import XCTest
 import LinkPresentation
-@testable import Common
 @testable import SiteImageView
 
 final class ImageHandlerTests: XCTestCase {
