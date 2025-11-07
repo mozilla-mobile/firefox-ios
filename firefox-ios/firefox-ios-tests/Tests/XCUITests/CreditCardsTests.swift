@@ -12,6 +12,7 @@ class CreditCardsTests: BaseTestCase {
     var nameOnCard: XCUIElement!
     var cardNr: XCUIElement!
     var expiration: XCUIElement!
+    let url_fill_form = "https://mozilla.github.io/form-fill-examples/basic_cc.html"
 
     var toolbarScreen: ToolbarScreen!
     var creditCardScreen: CreditCardsScreen!
@@ -87,7 +88,7 @@ class CreditCardsTests: BaseTestCase {
         creditCardScreen.openAddCreditCardForm()
         // Add Credit Card page is displayed
         creditCardScreen.waitForSectionVisible()
-        // Add, and save a valid credit card
+        // Add and save a valid credit card
         addCreditCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
 
         creditCardScreen.assertCardSaved(containing: "1252", details: ["Test", "Expires", "5/40"])
@@ -225,7 +226,7 @@ class CreditCardsTests: BaseTestCase {
         let futureExpiryMonthYear = formatter.string(from: dateFiveYearsFromNow!)
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: futureExpiryMonthYear)
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         // The autofill option (Use saved card prompt) is not displayed
         var cardNumber = app.webViews["Web content"].textFields["Card Number:"]
@@ -277,7 +278,7 @@ class CreditCardsTests: BaseTestCase {
         let futureExpiryMonthYear = creditCardScreen.expirationDateFiveYearsFromNow()
         creditCardScreen.addNewCreditCard(name: "Test", cardNumber: cards[0], expirationDate: futureExpiryMonthYear)
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         // The autofill option (Use saved card prompt) is not displayed
         let cardNumber = creditCardScreen.getCardNumberField()
@@ -508,7 +509,7 @@ class CreditCardsTests: BaseTestCase {
             throw XCTSkip("testSaveThisCardPrompt() does not work on iOS 15 and 16")
         }
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         // Fill in the form with the card details of a new (unsaved) credit card.
         fillCardDetailsOnWebsite(fillNewInfo: true)
@@ -536,7 +537,7 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         // Fill in the form with the card details of a new (unsaved) credit card.
         fillCardDetailsOnWebsite(fillNewInfo: true)
@@ -606,7 +607,7 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         if iPad() {
             app.webViews["Web content"].textFields["Card Number:"].waitAndTap()
@@ -751,7 +752,7 @@ class CreditCardsTests: BaseTestCase {
     private func reachAutofillWebsite() {
         // Reach autofill website
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         app.textFields.element(boundBy: 1).waitAndTap()
         if iPad() {
@@ -777,7 +778,7 @@ class CreditCardsTests: BaseTestCase {
         app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         var cardNumber = app.webViews["Web content"].textFields["Card Number:"]
         if #unavailable(iOS 17) {
@@ -815,7 +816,7 @@ class CreditCardsTests: BaseTestCase {
         creditCards.addNewCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
 
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
 
         addCreditCardScreen.interactWithCreditCardForm()
