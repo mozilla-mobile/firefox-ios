@@ -1307,6 +1307,17 @@
 		8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */; };
 		8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */; };
 		8C1C2E452C32D1470087846C /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */; };
+		8C2380E12EBE07B10018D543 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
+		8C2380E22EBE07C50018D543 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */; };
+		8C2380E32EBE08010018D543 /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
+		8C2380E42EBE080A0018D543 /* RustErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7109D2ABE380B0029726E /* RustErrors.swift */; };
+		8C2380E52EBE08130018D543 /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
+		8C2380E62EBE081A0018D543 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
+		8C2380E72EBE08470018D543 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
+		8C2380E82EBE08780018D543 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
+		8C2380E92EBE08890018D543 /* AutofillProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */; };
+		8C2380EA2EBE08930018D543 /* PlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */; };
+		8C2380EB2EBE089B0018D543 /* TabsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */; };
 		8C2447E82DFADF3D00BD2C91 /* ActivityEventHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447E72DFADF3D00BD2C91 /* ActivityEventHelper.swift */; };
 		8C2447EA2DFADF6300BD2C91 /* OnboardingServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447E92DFADF6300BD2C91 /* OnboardingServiceDelegate.swift */; };
 		8C2447EC2DFADF6800BD2C91 /* OnboardingNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447EB2DFADF6800BD2C91 /* OnboardingNavigationDelegate.swift */; };
@@ -1339,26 +1350,7 @@
 		8CF40B482DFC22C200DCB7F0 /* OnboardingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF40B472DFC22C200DCB7F0 /* OnboardingServiceTests.swift */; };
 		8CF609272EA8D46E00F069B6 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF609262EA8D46E00F069B6 /* UniformTypeIdentifiers.framework */; };
 		8CF609322EA8D46F00F069B6 /* ActionExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8CF609252EA8D46E00F069B6 /* ActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8CF609572EA8D72800F069B6 /* DevicePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */; };
-		8CF609582EA8D73200F069B6 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		8CF609592EA8D73F00F069B6 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
-		8CF6095A2EA8D74E00F069B6 /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
-		8CF6095B2EA8D76800F069B6 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
-		8CF609612EA8D82E00F069B6 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
-		8CF609622EA8D83500F069B6 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */; };
-		8CF609632EA8D86100F069B6 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
-		8CF609642EA8D86800F069B6 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
-		8CF609652EA8DA1100F069B6 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
-		8CF609662EA8DA3400F069B6 /* HostingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */; };
-		8CF609672EA8DA6000F069B6 /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
-		8CF609682EA8DA6700F069B6 /* RustErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7109D2ABE380B0029726E /* RustErrors.swift */; };
-		8CF609692EA8DA6E00F069B6 /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
-		8CF6096A2EA8DA7500F069B6 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
-		8CF6096B2EA8DA9100F069B6 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
-		8CF6096C2EA8DAB700F069B6 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
-		8CF6096D2EA8DABF00F069B6 /* AutofillProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */; };
-		8CF6096E2EA8DAC600F069B6 /* PlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */; };
-		8CF6096F2EA8DACF00F069B6 /* TabsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		94AEF1552D690043003E2623 /* DownloadLiveActivityTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEF1542D690040003E2623 /* DownloadLiveActivityTest.swift */; };
 		94D3DD162D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3DD152D545B6A00D368B8 /* DownloadLiveActivity.swift */; };
@@ -11197,16 +11189,6 @@
 			);
 			target = F84B22481A0920C600AAB793 /* ShareTo */;
 		};
-		E5C2C78D2EAA1256001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				EmbeddedNavController.swift,
-				SendToDevice.swift,
-				ShareViewController.swift,
-				UXConstants.swift,
-			);
-			target = 8CF609242EA8D46E00F069B6 /* ActionExtension */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -11215,7 +11197,7 @@
 		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PageScreens; sourceTree = "<group>"; };
 		8CF609282EA8D46E00F069B6 /* ActionExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ActionExtension; sourceTree = "<group>"; };
 		BCBE04E22E3A52D4004B6039 /* Summarize */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Summarize; sourceTree = "<group>"; };
-		E5C2C7722EAA110F001E3DEF /* ExtensionsUtils */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E5C2C7832EAA124F001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, E5C2C78C2EAA1256001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, E5C2C78D2EAA1256001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ExtensionsUtils; sourceTree = "<group>"; };
+		E5C2C7722EAA110F001E3DEF /* ExtensionsUtils */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E5C2C7832EAA124F001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, E5C2C78C2EAA1256001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ExtensionsUtils; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -18294,26 +18276,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CF6096D2EA8DABF00F069B6 /* AutofillProvider.swift in Sources */,
-				8CF6096E2EA8DAC600F069B6 /* PlacesProvider.swift in Sources */,
-				8CF609632EA8D86100F069B6 /* HelpView.swift in Sources */,
-				8CF609612EA8D82E00F069B6 /* SyncDisplayState.swift in Sources */,
-				8CF609652EA8DA1100F069B6 /* DevicePickerTableViewCell.swift in Sources */,
-				8CF609662EA8DA3400F069B6 /* HostingTableViewCell.swift in Sources */,
+				8C2380E32EBE08010018D543 /* LoginRecordExtension.swift in Sources */,
+				8C2380E92EBE08890018D543 /* AutofillProvider.swift in Sources */,
+				8C2380EA2EBE08930018D543 /* PlacesProvider.swift in Sources */,
+				8C2380EB2EBE089B0018D543 /* TabsProvider.swift in Sources */,
+				8C2380E22EBE07C50018D543 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
+				8C2380E62EBE081A0018D543 /* EventQueue.swift in Sources */,
 				8CF609592EA8D73F00F069B6 /* Profile.swift in Sources */,
-				8CF6096F2EA8DACF00F069B6 /* TabsProvider.swift in Sources */,
-				8CF6096A2EA8DA7500F069B6 /* EventQueue.swift in Sources */,
-				8CF6096B2EA8DA9100F069B6 /* AppEvent.swift in Sources */,
-				8CF609672EA8DA6000F069B6 /* LoginRecordExtension.swift in Sources */,
-				8CF6095A2EA8D74E00F069B6 /* SendToDeviceHelper.swift in Sources */,
-				8CF6096C2EA8DAB700F069B6 /* LoginProvider.swift in Sources */,
-				8CF609682EA8DA6700F069B6 /* RustErrors.swift in Sources */,
-				8CF609692EA8DA6E00F069B6 /* RustSyncManager.swift in Sources */,
-				8CF609582EA8D73200F069B6 /* InstructionsView.swift in Sources */,
-				8CF609622EA8D83500F069B6 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
-				8CF609572EA8D72800F069B6 /* DevicePickerViewController.swift in Sources */,
-				8CF609642EA8D86800F069B6 /* AccessibilityIdentifiers.swift in Sources */,
-				8CF6095B2EA8D76800F069B6 /* DevicePickerTableViewHeaderCell.swift in Sources */,
+				8C2380E42EBE080A0018D543 /* RustErrors.swift in Sources */,
+				8C2380E82EBE08780018D543 /* LoginProvider.swift in Sources */,
+				8C2380E12EBE07B10018D543 /* SyncDisplayState.swift in Sources */,
+				8C2380E72EBE08470018D543 /* AppEvent.swift in Sources */,
+				8C2380E52EBE08130018D543 /* RustSyncManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
