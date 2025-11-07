@@ -1161,6 +1161,23 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(webviewViewController)
     }
 
+    func popToBVC() {
+        guard let currentViewController = router.navigationController.topViewController else { return }
+
+        // Check if the current view controller is the shortcuts library, and if so, don't record closed telemetry when
+        // programatically popping back to BVC
+        (currentViewController as? ShortcutsLibraryViewController)?.recordTelemetryOnDisappear = false
+
+        // Check if the stories feed view controller is in the navigation stack, and if so, don't record closed telemetry
+        // when programatically popping back to BVC
+        if let storiesFeedVC = router.navigationController.viewControllers
+                .first(where: { $0 is StoriesFeedViewController }) as? StoriesFeedViewController {
+            storiesFeedVC.recordTelemetryOnDisappear = false
+        }
+
+        _ = router.navigationController.popToViewController(browserViewController, animated: true)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {

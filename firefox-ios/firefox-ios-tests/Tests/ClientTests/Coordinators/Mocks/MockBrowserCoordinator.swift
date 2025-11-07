@@ -51,6 +51,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showStoriesWebViewCalled = 0
     var showTermsOfUseCalled = 0
     var shouldShowNewTabToastCalled = 0
+    var popToBVCCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -223,5 +224,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     func shouldShowNewTabToast(tab: Client.Tab) -> Bool {
         shouldShowNewTabToastCalled += 1
         return true
+    }
+
+    func popToBVC() {
+        popToBVCCalled += 1
     }
 }

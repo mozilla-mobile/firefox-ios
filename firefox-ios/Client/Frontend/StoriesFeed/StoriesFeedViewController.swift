@@ -11,6 +11,9 @@ class StoriesFeedViewController: UIViewController,
                                  UICollectionViewDelegate,
                                  StoreSubscriber,
                                  Themeable {
+    // Used to only record "closed" telemetry on back button press and swipe gestures
+    var recordTelemetryOnDisappear = true
+
     // MARK: - Themeable Properties
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -74,7 +77,9 @@ class StoriesFeedViewController: UIViewController,
         }
 
         MainActor.assumeIsolated {
-            telemetry.storiesFeedClosed()
+            if recordTelemetryOnDisappear {
+                telemetry.storiesFeedClosed()
+            }
             impressionsTracker.reset()
             unsubscribeFromRedux()
         }
