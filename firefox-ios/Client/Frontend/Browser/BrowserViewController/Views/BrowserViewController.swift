@@ -3117,6 +3117,7 @@ class BrowserViewController: UIViewController,
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+        popToBVC()
         cancelEditMode()
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
