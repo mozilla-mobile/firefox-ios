@@ -744,7 +744,8 @@ extension BrowserViewController: WKNavigationDelegate {
            let request = request {
             // Certain files are too large to download before the preview presents, so block until we have something to show
             let group = DispatchGroup()
-            var url: URL?
+            // FIXME: FXIOS-14054 Should not mutate local properties in concurrent code
+            nonisolated(unsafe) var url: URL?
             group.enter()
             let temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
             temporaryDocument.download { docURL in
