@@ -25,6 +25,7 @@ class MockRouter: NSObject, Router {
     var savedCompletion: (() -> Void)?
     var isNavigationBarHidden = false
     var topViewController: UIViewController?
+    var viewControllers: [UIViewController]?
 
     init(navigationController: NavigationController) {
         self.navigationController = navigationController
