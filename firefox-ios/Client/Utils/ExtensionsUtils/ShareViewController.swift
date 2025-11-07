@@ -7,7 +7,6 @@ import Shared
 import Storage
 import Account
 import Common
-import Localizations
 
 import class MozillaAppServices.Viaduct
 import enum MozillaAppServices.BookmarkRoots
