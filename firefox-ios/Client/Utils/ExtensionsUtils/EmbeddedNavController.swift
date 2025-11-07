@@ -54,7 +54,7 @@ class EmbeddedNavController {
             // Account for one info row
             let shrinkage = UX.navBarLandscapeShrinkage + (UX.numberOfActionRows + 1) * UX.perRowShrinkageForLandscape
             updatedHeight = CGFloat(
-                isLandscapeSmallScreen(forTraitCollection) ? UX.topViewHeight - shrinkage : UX.topViewHeight
+                UX.isLandscapeSmallScreen(forTraitCollection) ? UX.topViewHeight - shrinkage : UX.topViewHeight
             )
         } else {
             let compactSize = UX.topViewHeight - UX.navBarLandscapeShrinkage

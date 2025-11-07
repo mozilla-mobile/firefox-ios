@@ -8,24 +8,9 @@ import Shared
 import Common
 import Localizations
 
-// Small iPhone screens in landscape require that the popup have a shorter height.
-@MainActor
-func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
-    if !UX.enableResizeRowsForSmallScreens {
-        return false
-    }
-
-    let hasSmallScreen = DeviceInfo.screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
-    return hasSmallScreen && traitCollection.verticalSizeClass == .compact
-}
-
-class ActionViewController: UIViewController, ShareControllerDelegate {
-    private var embedController: EmbeddedNavController?
-    private var shareViewController: ShareViewController?
-
+class ActionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         view.backgroundColor = .clear
         view.alpha = 0
 
@@ -33,42 +18,28 @@ class ActionViewController: UIViewController, ShareControllerDelegate {
             guard let self = self else { return }
             DispatchQueue.main.async {
                 guard let shareItem = shareItem else {
-                    let alert = UIAlertController(
-                        title: .SendToErrorTitle,
-                        message: .SendToErrorMessage,
-                        preferredStyle: .alert
-                    )
-                    alert.addAction(UIAlertAction(
-                        title: .SendToErrorOKButton,
-                        style: .default
-                    ) { _ in self.finish(afterDelay: 0)
-                    })
-                    self.present(alert, animated: true, completion: nil)
+                    self.finish(afterDelay: 0)
                     return
                 }
 
-                let shareController = ShareViewController()
-                shareController.delegate = self
-                shareController.shareItem = shareItem
-                self.shareViewController = shareController
-
-                self.embedController = EmbeddedNavController(
-                    isSearchMode: !shareItem.isUrlType(),
-                    parent: self,
-                    rootViewController: shareController
-                )
+                // Directly open Firefox without showing a sheet
+                switch shareItem {
+                case .shareItem(let item):
+                    self.openFirefox(withUrl: item.url, isSearch: false)
+                case .rawText(let text):
+                    self.openFirefox(withUrl: text, isSearch: true)
+                }
             }
         }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.2) {
-            self.view.alpha = 1
-        }
+        // Keep view invisible since we're opening Firefox directly
+        view.alpha = 0
     }
 
-    /// Extracts the shared item using the extension’s helper.
+    /// Extracts the shared item using the extension's helper.
     private func getShareItem(completion: @escaping (ExtensionUtils.ExtractedShareItem?) -> Void) {
         let context = extensionContext
         ExtensionUtils.extractSharedItem(fromExtensionContext: context) { [weak self] item, error in
@@ -83,6 +54,49 @@ class ActionViewController: UIViewController, ShareControllerDelegate {
         }
     }
 
+    /// Opens Firefox with the given URL or text.
+    private func openFirefox(withUrl url: String, isSearch: Bool) {
+        // Telemetry is handled in the app delegate that receives this event.
+        let profile = BrowserProfile(localName: "profile")
+        profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
+
+        func firefoxUrl(_ url: String) -> String {
+            let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
+            if isSearch {
+                return "firefox://open-text?text=\(encoded)"
+            }
+            return "firefox://open-url?url=\(encoded)"
+        }
+
+        guard let url = URL(string: firefoxUrl(url)) else {
+            finish(afterDelay: 0)
+            return
+        }
+
+        var responder = self as UIResponder?
+        let selectorOpenURL = sel_registerName("openURL:")
+        while let current = responder {
+            if #available(iOS 18.0, *) {
+                if let application = responder as? UIApplication {
+                    application.open(url, options: [:], completionHandler: nil)
+                    finish(afterDelay: 0)
+                    return
+                }
+            } else {
+                if current.responds(to: selectorOpenURL) {
+                    current.perform(selectorOpenURL, with: url, afterDelay: 0)
+                    finish(afterDelay: 0)
+                    return
+                }
+            }
+
+            responder = current.next
+        }
+
+        // If we couldn't open Firefox, finish anyway
+        finish(afterDelay: 0)
+    }
+
     /// Fades out the UI and completes the extension request.
     func finish(afterDelay delay: TimeInterval) {
         UIView.animate(withDuration: 0.2, delay: delay, options: [], animations: {
@@ -90,14 +104,5 @@ class ActionViewController: UIViewController, ShareControllerDelegate {
         }) { _ in
             self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
         }
-    }
-
-    func getValidExtensionContext() -> NSExtensionContext? {
-        extensionContext
-    }
-
-    /// Hides the popup UI when an alert is presented.
-    func hidePopupWhenShowingAlert() {
-        embedController?.navigationController.view.alpha = 0
     }
 }

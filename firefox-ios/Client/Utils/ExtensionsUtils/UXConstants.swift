@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
+import Shared
 
 struct UX {
     static let doneDialogAnimationDuration: TimeInterval = 0.2
@@ -30,4 +32,19 @@ struct UX {
     // by shrinking rows, so this shrinkage code is here if needed.
     static let enableResizeRowsForSmallScreens = UX.numberOfActionRows > 4
     static let perRowShrinkageForLandscape = UX.enableResizeRowsForSmallScreens ? 8 : 0
+
+    /// Determines if the current device is a small iPhone screen in landscape orientation.
+    /// Small iPhone screens in landscape require that the popup have a shorter height.
+    ///
+    /// - Parameter traitCollection: The trait collection to evaluate.
+    /// - Returns: `true` if the device is a small iPhone screen in landscape, `false` otherwise.
+    @MainActor
+    static func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
+        guard enableResizeRowsForSmallScreens else {
+            return false
+        }
+
+        let hasSmallScreen = DeviceInfo.screenSizeOrientationIndependent().width <= CGFloat(topViewWidth)
+        return hasSmallScreen && traitCollection.verticalSizeClass == .compact
+    }
 }
