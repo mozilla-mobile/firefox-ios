@@ -4,7 +4,14 @@
 
 import Glean
 
-struct StoriesFeedTelemetry {
+protocol StoriesFeedTelemetryProtocol {
+    func sendStoryViewedTelemetryFor(storyIndex: Int)
+    func storiesFeedClosed()
+    func storiesFeedViewed()
+    func sendStoryTappedTelemetry(atIndex: Int)
+}
+
+struct StoriesFeedTelemetry: StoriesFeedTelemetryProtocol {
     private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {

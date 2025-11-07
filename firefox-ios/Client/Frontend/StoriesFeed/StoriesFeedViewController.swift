@@ -30,7 +30,7 @@ class StoriesFeedViewController: UIViewController,
     }
 
     // Telemetry related
-    private let telemetry: StoriesFeedTelemetry
+    private let telemetry: StoriesFeedTelemetryProtocol
     private let scrollThrottler: GCDThrottlerProtocol
     private let impressionsThrottler: GCDThrottlerProtocol
     private let impressionsTracker: ImpressionTrackingUtility
@@ -43,7 +43,7 @@ class StoriesFeedViewController: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         telemetry: StoriesFeedTelemetry = StoriesFeedTelemetry(),
+         telemetry: StoriesFeedTelemetryProtocol = StoriesFeedTelemetry(),
          impressionsThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
          scrollThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
          impressionsTracker: ImpressionTrackingUtility = ImpressionTrackingUtility()

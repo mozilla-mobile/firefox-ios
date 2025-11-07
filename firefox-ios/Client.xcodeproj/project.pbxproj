@@ -1574,6 +1574,7 @@
 		C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */; };
 		C796E22A2E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */; };
 		C7A48CF72EBA98A70098845C /* StoriesWebviewViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A48CF62EBA98A00098845C /* StoriesWebviewViewControllerTests.swift */; };
+		C7A492722EBE45D50098845C /* MockStoriesFeedTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A492712EBE45CD0098845C /* MockStoriesFeedTelemetry.swift */; };
 		C7B376E32E870173006B2D32 /* StoriesFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B376E22E870173006B2D32 /* StoriesFeedCell.swift */; };
 		C7B376E52E870E80006B2D32 /* StoriesFeedDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B376E42E870E80006B2D32 /* StoriesFeedDiffableDataSource.swift */; };
 		C7B376E82E871095006B2D32 /* StoriesFeedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B376E72E871095006B2D32 /* StoriesFeedState.swift */; };
@@ -9876,6 +9877,7 @@
 		C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewControllerTests.swift; sourceTree = "<group>"; };
 		C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewController.swift; sourceTree = "<group>"; };
 		C7A48CF62EBA98A00098845C /* StoriesWebviewViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesWebviewViewControllerTests.swift; sourceTree = "<group>"; };
+		C7A492712EBE45CD0098845C /* MockStoriesFeedTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStoriesFeedTelemetry.swift; sourceTree = "<group>"; };
 		C7A6413B89FE82B94F735FFD /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C7B376E22E870173006B2D32 /* StoriesFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedCell.swift; sourceTree = "<group>"; };
 		C7B376E42E870E80006B2D32 /* StoriesFeedDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedDiffableDataSource.swift; sourceTree = "<group>"; };
@@ -14432,6 +14434,7 @@
 		C720FB3D2E9559B300AB0DAC /* StoriesFeed */ = {
 			isa = PBXGroup;
 			children = (
+				C7A492702EBE45C50098845C /* Mock */,
 				C736C9C52E9D7C1B00658045 /* Redux */,
 				C720FB3E2E955A2B00AB0DAC /* StoriesFeedViewControllerTests.swift */,
 				C720FB402E955A4E00AB0DAC /* StoriesFeedDiffableDataSourceTests.swift */,
@@ -14457,6 +14460,14 @@
 				C7F538D42E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift */,
 			);
 			path = Redux;
+			sourceTree = "<group>";
+		};
+		C7A492702EBE45C50098845C /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				C7A492712EBE45CD0098845C /* MockStoriesFeedTelemetry.swift */,
+			);
+			path = Mock;
 			sourceTree = "<group>";
 		};
 		C7B376E62E871053006B2D32 /* Redux */ = {
@@ -19716,6 +19727,7 @@
 				0E9702742CC2F2FB00C357B7 /* PasswordGeneratorTelemetryTests.swift in Sources */,
 				CA7BD568248189E800A0A61B /* BreachAlertsTests.swift in Sources */,
 				253648E12B2111C100D5C2C5 /* SearchViewControllerTests.swift in Sources */,
+				C7A492722EBE45D50098845C /* MockStoriesFeedTelemetry.swift in Sources */,
 				4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */,
 				A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */,
 				8A635ECD289437A8006378BA /* SyncedTabCellTests.swift in Sources */,
