@@ -67,22 +67,31 @@ enum AppIcon: String, CaseIterable {
     case northernLights
 
     // MARK: Fun
+    /// A version of the app icon with a fox outline with sunglasses.
     case cool
 
+    /// A version of the app icon with a fox cuddling a globe.
     case cuddling
 
+    /// A version of the app icon with a fox outline with flames.
     case flaming
 
+    /// A version of the app icon with a one-colored fox outline.
     case minimal
 
+    /// A version of the app icon with a cartoony fox resting on a globe.
     case momo
 
+    /// A version of the app icon with a pixelated fox resting on a globe.
     case pixelated
 
+    /// A version of the app icon with a fox outline in rainbow colors.
     case pride
 
+    /// A version of the app icon with a fox resting on a globe with visible continents.
     case retro2004
 
+    /// A version of the app icon with a fox resting on a stylized globe.
     case retro2017
 
     /// The name of the asset to display in the app selection.
