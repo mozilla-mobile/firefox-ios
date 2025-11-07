@@ -145,7 +145,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     func test_urlDidChangeAction_withSamePageLanguage_doesNotDispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
         setupWebViewForTabManager()
-        enum TestError: Error { case example }
+
         let languageDetector = MockLanguageDetector()
         languageDetector.detectedLanguage = "en"
 

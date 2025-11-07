@@ -1318,7 +1318,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actionType: .translate,
             iconName: state.buttonImageName,
             templateModeForImage: !isActiveState,
-            shouldUseLoadingSpinner: state == .loading,
+            isLoading: state == .loading,
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
