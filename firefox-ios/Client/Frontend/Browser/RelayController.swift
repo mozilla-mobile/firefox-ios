@@ -158,20 +158,17 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
 
-        let closureLogger = logger
-        Task {
-            acctManager.getAccessToken(scope: config.scope) { [config] result in
-                switch result {
-                case .failure(let error):
-                    closureLogger.log("[RELAY] Error getting access token for Relay: \(error)", level: .warning, category: .autofill)
-                case .success(let tokenInfo):
-                    do {
-                        let clientResult = try RelayClient(serverUrl: config.serverURL, authToken: tokenInfo.token)
-                        Task { @MainActor in self.handleRelayClientCreated(clientResult) }
-                    } catch {
-                        closureLogger.log("[RELAY] Error creating Relay client: \(error)", level: .warning, category: .autofill)
-                        Task { @MainActor in self.isCreatingClient = false }
-                    }
+        acctManager.getAccessToken(scope: config.scope) { [config, weak self] result in
+            switch result {
+            case .failure(let error):
+                self?.logger.log("[RELAY] Error getting access token for Relay: \(error)", level: .warning, category: .autofill)
+            case .success(let tokenInfo):
+                do {
+                    let clientResult = try RelayClient(serverUrl: config.serverURL, authToken: tokenInfo.token)
+                    self?.handleRelayClientCreated(clientResult)
+                } catch {
+                    self?.logger.log("[RELAY] Error creating Relay client: \(error)", level: .warning, category: .autofill)
+                    self?.isCreatingClient = false
                 }
             }
         }
