@@ -287,6 +287,16 @@ enum AppIcon: String, CaseIterable {
         }
     }
 
+    /// Determines whether the icon belongs to the fun icon set.
+    var isFunIcon: Bool {
+        switch self {
+        case .cool, .cuddling, .flaming, .minimal, .momo, .pixelated, .pride, .retro2004, .retro2017:
+            return true
+        default:
+            return false
+        }
+    }
+
     /// Initialize an `AppIcon` from the current `UIApplication.shared.alternateIconName` setting. If the icon cannot be
     /// identified, returns `nil`. This might happen if an old asset is renamed or removed from the asset catalog.
     static func initFromSystem() -> AppIcon? {
