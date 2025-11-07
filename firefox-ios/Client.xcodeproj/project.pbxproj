@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */; };
 		033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */; };
 		033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */; };
 		033C94F72E2FBCDD00C2382F /* TermsOfUseMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C94F62E2FBCD300C2382F /* TermsOfUseMiddlewareTests.swift */; };
@@ -2546,6 +2547,7 @@
 		02C94BE0922C110AFF6944E3 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		02E547BF89DA742677E367E6 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		02FC4A06A948593BE97BC508 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/LoginManager.strings"; sourceTree = "<group>"; };
+		032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToUExperiencePointsCalculatorTests.swift; sourceTree = "<group>"; };
 		033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseTelemetryTests.swift; sourceTree = "<group>"; };
 		033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetTermsOfServiceAcceptancePage.swift; sourceTree = "<group>"; };
 		033C94F62E2FBCD300C2382F /* TermsOfUseMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseMiddlewareTests.swift; sourceTree = "<group>"; };
@@ -11407,6 +11409,7 @@
 		033C94F32E2F839900C2382F /* TermsOfUse */ = {
 			isa = PBXGroup;
 			children = (
+				032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */,
 				033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */,
 				033C94F62E2FBCD300C2382F /* TermsOfUseMiddlewareTests.swift */,
 			);
@@ -19775,6 +19778,7 @@
 				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
 				8AA0A6682CAC747500AC7EB3 /* HomepageDiffableDataSourceTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
+				032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */,
 				F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */,
 				1D3C90882ACE1AF400304C87 /* RemoteTabPanelTests.swift in Sources */,
 				43446CF02412DDBE00F5C643 /* UpdateViewModelTests.swift in Sources */,
