@@ -20,7 +20,7 @@ import struct MozillaAppServices.SyncResult
 import struct MozillaAppServices.Device
 import struct MozillaAppServices.ScopedKey
 import struct MozillaAppServices.AccessTokenInfo
-internal import Localizations
+import Localizations
 
 // Extends NSObject so we can use timers.
 public class RustSyncManager: NSObject, SyncManager {
