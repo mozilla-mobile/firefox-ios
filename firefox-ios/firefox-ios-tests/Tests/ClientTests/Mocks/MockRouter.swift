@@ -71,19 +71,7 @@ class MockRouter: NSObject, Router {
                              reason: DismissalReason,
                              animated: Bool) -> [UIViewController]? {
         popToViewControllerCalled += 1
-
-        guard let stack = viewControllers,
-              let index = stack.firstIndex(where: { $0 === viewController }),
-              index < stack.count - 1 else {
-            return nil
-        }
-
-        let popped = Array(stack[(index + 1)...])
-
-        viewControllers = Array(stack[...index])
-        topViewController = viewControllers?.last
-
-        return popped
+        return nil
     }
 
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool) {
