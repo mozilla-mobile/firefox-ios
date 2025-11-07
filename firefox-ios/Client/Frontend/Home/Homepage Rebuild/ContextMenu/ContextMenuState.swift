@@ -34,6 +34,7 @@ struct ContextMenuState {
 
     weak var coordinatorDelegate: ContextMenuCoordinator?
 
+    @MainActor
     init(
         profile: Profile = AppContainer.shared.resolve(),
         bookmarkDelegate: BookmarksHandlerDelegate,
@@ -65,6 +66,7 @@ struct ContextMenuState {
     }
 
     // MARK: - Top sites item's context menu actions
+    @MainActor
     private func getTopSitesActions(site: Site) -> [PhotonRowActions] {
         let topSiteActions: [PhotonRowActions]
 
@@ -80,6 +82,7 @@ struct ContextMenuState {
         return topSiteActions
     }
 
+    @MainActor
     private func getPinnedTileActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getRemovePinTopSiteAction(site: site),
@@ -89,6 +92,7 @@ struct ContextMenuState {
                 getShareAction(siteURL: site.url)]
     }
 
+    @MainActor
     private func getSponsoredTileActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getOpenInNewTabAction(siteURL: siteURL),
@@ -98,6 +102,7 @@ struct ContextMenuState {
                 getShareAction(siteURL: site.url)]
     }
 
+    @MainActor
     private func getOtherTopSitesActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getPinTopSiteAction(site: site),
@@ -213,6 +218,7 @@ struct ContextMenuState {
     }
 
     // MARK: - JumpBack In section item's context menu actions
+    @MainActor
     private func getJumpBackInActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
 
@@ -225,6 +231,7 @@ struct ContextMenuState {
     }
 
     // MARK: - Homepage Bookmarks section item's context menu actions
+    @MainActor
     private func getBookmarksActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
 
@@ -237,6 +244,7 @@ struct ContextMenuState {
     }
 
     // MARK: - Pocket item's context menu actions
+    @MainActor
     private func getPocketActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL)
@@ -321,6 +329,7 @@ struct ContextMenuState {
         })
     }
 
+    @MainActor
     private func getShareAction(siteURL: String) -> PhotonRowActions {
         // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
         // this state across isolation boundaries...
@@ -359,77 +368,72 @@ struct ContextMenuState {
     }
 
     // MARK: Dispatch Actions
+    @MainActor
     private static func dispatchSettingsAction(windowUUID: WindowUUID, section: Route.SettingsSection) {
-        ensureMainThread {
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(.settings(section)),
-                    windowUUID: windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnSettingsSection
-                )
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.settings(section)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnSettingsSection
             )
-        }
+        )
     }
 
+    @MainActor
     private static func dispatchOpenNewTabAction(
         windowUUID: WindowUUID,
         siteURL: URL,
         isPrivate: Bool,
         selectNewTab: Bool = false
     ) {
-        ensureMainThread {
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(
-                        .newTab,
-                        url: siteURL,
-                        isPrivate: isPrivate,
-                        selectNewTab: selectNewTab
-                    ),
-                    windowUUID: windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnOpenInNewTab
-                )
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(
+                    .newTab,
+                    url: siteURL,
+                    isPrivate: isPrivate,
+                    selectNewTab: selectNewTab
+                ),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnOpenInNewTab
             )
-        }
+        )
     }
 
+    @MainActor
     private static func dispatchShareSheetAction(windowUUID: WindowUUID, shareSheetConfiguration: ShareSheetConfiguration) {
-        ensureMainThread {
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
-                    windowUUID: windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnShareSheet
-                )
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShareSheet
             )
-        }
+        )
     }
 
+    @MainActor
     private static func dispatchContextMenuAction(windowUUID: WindowUUID, site: Site, actionType: ActionType) {
-        ensureMainThread {
-            store.dispatch(
-                ContextMenuAction(
-                    site: site,
-                    windowUUID: windowUUID,
-                    actionType: actionType
-                )
+        store.dispatch(
+            ContextMenuAction(
+                site: site,
+                windowUUID: windowUUID,
+                actionType: actionType
             )
-        }
+        )
     }
 
+    @MainActor
     private static func dispatchContextMenuActionForSection(
         windowUUID: WindowUUID,
         menuType: MenuType?,
         actionType: ActionType
     ) {
-        ensureMainThread {
-            store.dispatch(
-                ContextMenuAction(
-                    menuType: menuType,
-                    windowUUID: windowUUID,
-                    actionType: actionType
-                )
+        store.dispatch(
+            ContextMenuAction(
+                menuType: menuType,
+                windowUUID: windowUUID,
+                actionType: actionType
             )
-        }
+        )
     }
 }
