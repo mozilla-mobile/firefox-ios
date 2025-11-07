@@ -121,6 +121,9 @@
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "เข้าถึงที่คั่นหน้า ประวัติ และรหัสผ่านของคุณได้จากทุกอุปกรณ์";
 
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "ข้อมูลของคุณ เช่น ที่คั่นหน้า รหัสผ่าน และอื่นๆ จะซิงค์กับทุกอุปกรณ์ ทุกอย่างปลอดภัยด้วยการเข้ารหัส มีเพียงคุณเท่านั้นที่เข้าถึงได้";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "เริ่มซิงค์";
 
@@ -198,6 +201,9 @@
 
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "ยกระดับประสบการณ์การท่องเว็บของคุณ";
+
+/* Title for the Terms of Service screen in the v2 onboarding flow. */
+"Onboarding.Modern.TermsOfService.Title.v145" = "จัดการอินเทอร์เน็ตของคุณ";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "เงื่อนไขการใช้งาน %@";
