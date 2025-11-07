@@ -1306,17 +1306,6 @@
 		8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */; };
 		8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */; };
 		8C1C2E452C32D1470087846C /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */; };
-		8C2380E12EBE07B10018D543 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
-		8C2380E22EBE07C50018D543 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */; };
-		8C2380E32EBE08010018D543 /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
-		8C2380E42EBE080A0018D543 /* RustErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7109D2ABE380B0029726E /* RustErrors.swift */; };
-		8C2380E52EBE08130018D543 /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
-		8C2380E62EBE081A0018D543 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
-		8C2380E72EBE08470018D543 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
-		8C2380E82EBE08780018D543 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
-		8C2380E92EBE08890018D543 /* AutofillProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */; };
-		8C2380EA2EBE08930018D543 /* PlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */; };
-		8C2380EB2EBE089B0018D543 /* TabsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */; };
 		8C2447E82DFADF3D00BD2C91 /* ActivityEventHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447E72DFADF3D00BD2C91 /* ActivityEventHelper.swift */; };
 		8C2447EA2DFADF6300BD2C91 /* OnboardingServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447E92DFADF6300BD2C91 /* OnboardingServiceDelegate.swift */; };
 		8C2447EC2DFADF6800BD2C91 /* OnboardingNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447EB2DFADF6800BD2C91 /* OnboardingNavigationDelegate.swift */; };
@@ -1351,7 +1340,6 @@
 		8CF40B482DFC22C200DCB7F0 /* OnboardingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF40B472DFC22C200DCB7F0 /* OnboardingServiceTests.swift */; };
 		8CF609272EA8D46E00F069B6 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF609262EA8D46E00F069B6 /* UniformTypeIdentifiers.framework */; };
 		8CF609322EA8D46F00F069B6 /* ActionExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8CF609252EA8D46E00F069B6 /* ActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8CF609592EA8D73F00F069B6 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		94AEF1552D690043003E2623 /* DownloadLiveActivityTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEF1542D690040003E2623 /* DownloadLiveActivityTest.swift */; };
 		94D3DD162D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3DD152D545B6A00D368B8 /* DownloadLiveActivity.swift */; };
@@ -2045,10 +2033,13 @@
 		E58368AA287D632F0087A449 /* StoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58368A9287D632F0087A449 /* StoryProvider.swift */; };
 		E5A75E7C2EBE31580028C9DF /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = E5A75E7B2EBE31580028C9DF /* Common */; };
 		E5A75E7E2EBE31800028C9DF /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = E5A75E7D2EBE31800028C9DF /* Fuzi */; };
-		E5A75E802EBE31BF0028C9DF /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = E5A75E7F2EBE31BF0028C9DF /* Common */; };
+		E5BDF3522EBE3C8300FD3E6D /* EmbeddedNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BDF34A2EBE3C8300FD3E6D /* EmbeddedNavController.swift */; };
+		E5BDF3532EBE3C8300FD3E6D /* SendToDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BDF34B2EBE3C8300FD3E6D /* SendToDevice.swift */; };
+		E5BDF3542EBE3C8300FD3E6D /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BDF34C2EBE3C8300FD3E6D /* ShareViewController.swift */; };
+		E5BDF3552EBE3C8300FD3E6D /* UXConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BDF34D2EBE3C8300FD3E6D /* UXConstants.swift */; };
+		E5BDF3FA2EBE3CC200FD3E6D /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = E5BDF3F92EBE3CC200FD3E6D /* Common */; };
+		E5BDF3FC2EBE3CF200FD3E6D /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = E5BDF3FB2EBE3CF200FD3E6D /* Fuzi */; };
 		E5C2BA922EA9054E001E3DEF /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AC2CFF16220072CD5A /* Shared */; };
-		E5C2BB322EA90705001E3DEF /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		E5C2BB372EA9070E001E3DEF /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = E5C2BB362EA9070E001E3DEF /* Shared */; };
 		E5C2C0BA2EA90E0D001E3DEF /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		E5C2C1572EA9138D001E3DEF /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = E5C2C1562EA9138D001E3DEF /* Common */; };
 		E60D03181D511398002FE3F6 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
@@ -2433,13 +2424,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = E17EFC2C2CD16F5900169A1F;
 			remoteInfo = sticker;
-		};
-		E5C2BB342EA90705001E3DEF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43BE5774278BA4D900491291;
-			remoteInfo = RustMozillaAppServices;
 		};
 		E63CD1B11B31B66400A63AFF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -10826,6 +10810,10 @@
 		E571EE79287569960051D9AA /* StoryProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryProviderTests.swift; sourceTree = "<group>"; };
 		E58368A9287D632F0087A449 /* StoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryProvider.swift; sourceTree = "<group>"; };
 		E59A418F9208400903902F07 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		E5BDF34A2EBE3C8300FD3E6D /* EmbeddedNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedNavController.swift; sourceTree = "<group>"; };
+		E5BDF34B2EBE3C8300FD3E6D /* SendToDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendToDevice.swift; sourceTree = "<group>"; };
+		E5BDF34C2EBE3C8300FD3E6D /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		E5BDF34D2EBE3C8300FD3E6D /* UXConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UXConstants.swift; sourceTree = "<group>"; };
 		E5C24864B9BA6790B352962E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Search.strings; sourceTree = "<group>"; };
 		E5D343558F3C933F5CA7690C /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Storage.strings"; sourceTree = "<group>"; };
 		E60961861B62B8A700DD640F /* Fennec.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Fennec.xcconfig; path = Configuration/Fennec.xcconfig; sourceTree = "<group>"; };
@@ -11171,26 +11159,6 @@
 			);
 			target = 8CF609242EA8D46E00F069B6 /* ActionExtension */;
 		};
-		E5C2C7832EAA124F001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				EmbeddedNavController.swift,
-				SendToDevice.swift,
-				ShareViewController.swift,
-				UXConstants.swift,
-			);
-			target = F84B21BD1A090F8100AAB793 /* Client */;
-		};
-		E5C2C78C2EAA1256001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				EmbeddedNavController.swift,
-				SendToDevice.swift,
-				ShareViewController.swift,
-				UXConstants.swift,
-			);
-			target = F84B22481A0920C600AAB793 /* ShareTo */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -11199,7 +11167,6 @@
 		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PageScreens; sourceTree = "<group>"; };
 		8CF609282EA8D46E00F069B6 /* ActionExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ActionExtension; sourceTree = "<group>"; };
 		BCBE04E22E3A52D4004B6039 /* Summarize */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Summarize; sourceTree = "<group>"; };
-		E5C2C7722EAA110F001E3DEF /* ExtensionsUtils */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E5C2C7832EAA124F001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, E5C2C78C2EAA1256001E3DEF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ExtensionsUtils; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -11333,6 +11300,7 @@
 				5A984D342C8A31C6007938C9 /* Kingfisher in Frameworks */,
 				8C381F002EBE1C74009A54AA /* SiteImageView in Frameworks */,
 				0BF802E62CFF0951005633E5 /* Shared in Frameworks */,
+				E5BDF3FA2EBE3CC200FD3E6D /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11408,10 +11376,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5A75E802EBE31BF0028C9DF /* Common in Frameworks */,
 				8CF609272EA8D46E00F069B6 /* UniformTypeIdentifiers.framework in Frameworks */,
-				E5C2BB372EA9070E001E3DEF /* Shared in Frameworks */,
-				E5C2BB322EA90705001E3DEF /* RustMozillaAppServices.framework in Frameworks */,
 				E5C2C0BA2EA90E0D001E3DEF /* Sync.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11463,6 +11428,7 @@
 				5A8FD0EE293A7D6D00333AA7 /* SnapKit in Frameworks */,
 				0BCC26AD2CFF16220072CD5A /* Shared in Frameworks */,
 				C877039625222FDC006E38EB /* Localizations.framework in Frameworks */,
+				E5BDF3FC2EBE3CF200FD3E6D /* Fuzi in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
 				E5C2C1572EA9138D001E3DEF /* Common in Frameworks */,
 			);
@@ -15869,7 +15835,6 @@
 				E650755A1E37F747006961AC /* Swizzling.h */,
 				E650755B1E37F747006961AC /* Swizzling.m */,
 				5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */,
-				E5C2C7722EAA110F001E3DEF /* ExtensionsUtils */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -16510,6 +16475,10 @@
 		F8708D241A0970990051AB07 /* ShareTo */ = {
 			isa = PBXGroup;
 			children = (
+				E5BDF34A2EBE3C8300FD3E6D /* EmbeddedNavController.swift */,
+				E5BDF34B2EBE3C8300FD3E6D /* SendToDevice.swift */,
+				E5BDF34C2EBE3C8300FD3E6D /* ShareViewController.swift */,
+				E5BDF34D2EBE3C8300FD3E6D /* UXConstants.swift */,
 				F8708D251A0970990051AB07 /* Images.xcassets */,
 				F8708D261A0970990051AB07 /* Info.plist */,
 				E41A7D4A1A1BE04500245963 /* InitialViewController.swift */,
@@ -16686,6 +16655,7 @@
 				5A984D332C8A31C6007938C9 /* Kingfisher */,
 				0BF802E52CFF0951005633E5 /* Shared */,
 				8C381EFF2EBE1C74009A54AA /* SiteImageView */,
+				E5BDF3F92EBE3CC200FD3E6D /* Common */,
 			);
 			productName = Storage;
 			productReference = 2FCAE21A1ABB51F800877008 /* libStorage.a */;
@@ -16835,7 +16805,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				E5C2BB352EA90705001E3DEF /* PBXTargetDependency */,
 				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
 				2F11EE501ABCAE910083902D /* PBXTargetDependency */,
 				D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */,
@@ -16845,8 +16814,6 @@
 			);
 			name = ActionExtension;
 			packageProductDependencies = (
-				E5C2BB362EA9070E001E3DEF /* Shared */,
-				E5A75E7F2EBE31BF0028C9DF /* Common */,
 			);
 			productName = ActionExtension;
 			productReference = 8CF609252EA8D46E00F069B6 /* ActionExtension.appex */;
@@ -16989,7 +16956,6 @@
 			fileSystemSynchronizedGroups = (
 				034784BA2E2690F600D04A84 /* TermsOfUse */,
 				BCBE04E22E3A52D4004B6039 /* Summarize */,
-				E5C2C7722EAA110F001E3DEF /* ExtensionsUtils */,
 				ED85DD2C2DE669FF00487807 /* probes */,
 			);
 			name = Client;
@@ -17063,6 +17029,7 @@
 			packageProductDependencies = (
 				5A8FD0ED293A7D6D00333AA7 /* SnapKit */,
 				E5C2C1562EA9138D001E3DEF /* Common */,
+				E5BDF3FB2EBE3CF200FD3E6D /* Fuzi */,
 			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
@@ -18283,18 +18250,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C2380E32EBE08010018D543 /* LoginRecordExtension.swift in Sources */,
-				8C2380E92EBE08890018D543 /* AutofillProvider.swift in Sources */,
-				8C2380EA2EBE08930018D543 /* PlacesProvider.swift in Sources */,
-				8C2380EB2EBE089B0018D543 /* TabsProvider.swift in Sources */,
-				8C2380E22EBE07C50018D543 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
-				8C2380E62EBE081A0018D543 /* EventQueue.swift in Sources */,
-				8CF609592EA8D73F00F069B6 /* Profile.swift in Sources */,
-				8C2380E42EBE080A0018D543 /* RustErrors.swift in Sources */,
-				8C2380E82EBE08780018D543 /* LoginProvider.swift in Sources */,
-				8C2380E12EBE07B10018D543 /* SyncDisplayState.swift in Sources */,
-				8C2380E72EBE08470018D543 /* AppEvent.swift in Sources */,
-				8C2380E52EBE08130018D543 /* RustSyncManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19928,6 +19883,10 @@
 				E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */,
 				FA6B2AC41D41F02D00429414 /* String+Punycode.swift in Sources */,
 				EDDF340B2CDD1B7C008BB6A4 /* SearchEngineModel.swift in Sources */,
+				E5BDF3522EBE3C8300FD3E6D /* EmbeddedNavController.swift in Sources */,
+				E5BDF3532EBE3C8300FD3E6D /* SendToDevice.swift in Sources */,
+				E5BDF3542EBE3C8300FD3E6D /* ShareViewController.swift in Sources */,
+				E5BDF3552EBE3C8300FD3E6D /* UXConstants.swift in Sources */,
 				E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */,
 				8A456B6F2DC50F9400056533 /* MockLoginProvider.swift in Sources */,
 				F8A0B08429AD64790091C75B /* RustSyncManager.swift in Sources */,
@@ -20113,11 +20072,6 @@
 			isa = PBXTargetDependency;
 			target = E17EFC2C2CD16F5900169A1F /* Sticker */;
 			targetProxy = E17EFC322CD16F5B00169A1F /* PBXContainerItemProxy */;
-		};
-		E5C2BB352EA90705001E3DEF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43BE5774278BA4D900491291 /* RustMozillaAppServices */;
-			targetProxy = E5C2BB342EA90705001E3DEF /* PBXContainerItemProxy */;
 		};
 		E69DB0821E97DEAA008A67E6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -31544,13 +31498,14 @@
 			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
 		};
-		E5A75E7F2EBE31BF0028C9DF /* Common */ = {
+		E5BDF3F92EBE3CC200FD3E6D /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
 		};
-		E5C2BB362EA9070E001E3DEF /* Shared */ = {
+		E5BDF3FB2EBE3CF200FD3E6D /* Fuzi */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
+			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
+			productName = Fuzi;
 		};
 		E5C2C1562EA9138D001E3DEF /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
