@@ -26,6 +26,7 @@ class MockRouter: NSObject, Router {
     var isNavigationBarHidden = false
     var topViewController: UIViewController?
     var viewControllers: [UIViewController]?
+    var popToViewControllerCalled = 0
 
     init(navigationController: NavigationController) {
         self.navigationController = navigationController
@@ -55,6 +56,7 @@ class MockRouter: NSObject, Router {
     func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
         savedCompletion = completion
         pushedViewController = viewController
+        topViewController = viewController
         navigationController.pushViewController(viewController, animated: false)
         pushCalled += 1
     }
@@ -65,11 +67,23 @@ class MockRouter: NSObject, Router {
         savedCompletion = nil
     }
 
-    @MainActor
     func popToViewController(_ viewController: UIViewController,
                              reason: DismissalReason,
                              animated: Bool) -> [UIViewController]? {
-        return nil
+        popToViewControllerCalled += 1
+
+        guard let stack = viewControllers,
+              let index = stack.firstIndex(where: { $0 === viewController }),
+              index < stack.count - 1 else {
+            return nil
+        }
+
+        let popped = Array(stack[(index + 1)...])
+
+        viewControllers = Array(stack[...index])
+        topViewController = viewControllers?.last
+
+        return popped
     }
 
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool) {

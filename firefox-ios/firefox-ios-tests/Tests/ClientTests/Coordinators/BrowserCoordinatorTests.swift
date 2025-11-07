@@ -700,52 +700,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
-    func testPopToBVC_popsShortcutsLibraryViewController() {
+    func testPopToBVC_popsViewControllers() {
         let subject = createSubject()
 
-        let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: .XCTestDefaultUUID)
-        mockRouter.push(shortcutsLibraryViewController,
-                        animated: false,
-                        completion: nil)
+        mockRouter.push(browserViewController, animated: false)
+        (0...1).forEach { _ in
+            mockRouter.push(UIViewController(), animated: false)
+        }
 
         subject.popToBVC()
 
-        guard let navigationController = mockRouter.navigationController as? MockNavigationController else { return }
-
-        XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
-    }
-
-    func testPopToBVC_popsStoriesFeedViewController() {
-        let subject = createSubject()
-
-        let storiesFeedViewController = StoriesFeedViewController(windowUUID: windowUUID)
-        mockRouter.push(storiesFeedViewController,
-                        animated: false,
-                        completion: nil)
-
-        subject.popToBVC()
-
-        guard let navigationController = mockRouter.navigationController as? MockNavigationController else { return }
-
-        XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
-    }
-
-    func testPopToBVC_popsStoriesWebviewViewController() {
-        let subject = createSubject()
-
-        let storiesFeedViewController = StoriesFeedViewController(windowUUID: windowUUID)
-        mockRouter.push(storiesFeedViewController,
-                        animated: false,
-                        completion: nil)
-        mockRouter.push(StoriesWebviewViewController(profile: profile, windowUUID: windowUUID),
-                        animated: false,
-                        completion: nil)
-
-        subject.popToBVC()
-
-        guard let navigationController = mockRouter.navigationController as? MockNavigationController else { return }
-
-        XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
+        XCTAssertEqual(mockRouter.popToViewControllerCalled, 1)
     }
 
     func testShouldShowNewTabToast_returnsTrue() throws {
