@@ -5,7 +5,7 @@
 import Shared
 import UIKit
 import Storage
-import Common
+import SiteImageView
 
 public protocol GoogleTopSiteManagerProvider: Sendable {
     var pinnedSiteData: Site? { get }
