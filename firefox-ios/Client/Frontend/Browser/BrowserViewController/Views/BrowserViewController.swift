@@ -523,6 +523,7 @@ class BrowserViewController: UIViewController,
 
         crashTracker.updateData()
         ratingPromptManager.showRatingPromptIfNeeded()
+        _ = RelayController.shared // Ensure RelayController is init'd early to allow for account notification observers.
     }
 
     private func didAddPendingBlobDownloadToQueue() {
@@ -3930,6 +3931,20 @@ class BrowserViewController: UIViewController,
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
         navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
+
+    private func handleEmailFieldDetected(for tab: Tab?) {
+        guard let tab, let tabURL = tab.url else { return }
+        guard RelayController.isFeatureEnabled else { return }
+
+        if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
+            tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
+        }
+    }
+
+    private func handleUseRelayMaskTapped() {
+        // TODO: Forthcoming.
+    }
 }
 
 extension BrowserViewController: LegacyClipboardBarDisplayHandlerDelegate {
@@ -4040,6 +4055,13 @@ extension BrowserViewController: LegacyTabDelegate {
         logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
             Task {
                 guard let tabURL = tab?.url else { return }
+
+                // Handle email fields separately; currently only used for email masking (Relay service)
+                guard field != .email else {
+                    self?.handleEmailFieldDetected(for: tab)
+                    return
+                }
+
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
                 let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,
                                                                           tabURL: tabURL,
