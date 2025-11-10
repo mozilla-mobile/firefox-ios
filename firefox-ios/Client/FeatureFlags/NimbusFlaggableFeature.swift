@@ -19,6 +19,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case downloadLiveActivities
     case feltPrivacyFeltDeletion
     case feltPrivacySimplifiedUI
+    case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
     case hntTopSitesVisualRefresh
@@ -30,6 +31,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
     case inactiveTabs
+    case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
     case menuRefactor
     case menuRedesignHint
@@ -149,6 +151,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
+                .firefoxJpGuideDefaultSite,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageRedesign,
@@ -157,6 +160,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageStoriesRedesign,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
                 .menuRefactor,
                 .menuRedesignHint,

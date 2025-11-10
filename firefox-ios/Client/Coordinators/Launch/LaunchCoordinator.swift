@@ -28,7 +28,6 @@ final class LaunchCoordinator: BaseCoordinator,
     private let isIphone: Bool
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
-    private let modernTransitionDelegate = ModernLaunchTransitionDelegate()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
 
     init(router: Router,
@@ -177,9 +176,11 @@ final class LaunchCoordinator: BaseCoordinator,
         )
 
         let viewController = PortraitOnlyHostingController(rootView: view)
-        viewController.modalPresentationStyle = .fullScreen
+        // `.overFullScreen` is required to display the underlying view controller beneath the presented one,
+        // and to prevent a white strip glitch caused by synchronization issues between SwiftUI and UIKit.
+        viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
-        viewController.transitioningDelegate = modernTransitionDelegate
+        viewController.view.backgroundColor = .clear
 
         router.present(viewController, animated: true)
     }
@@ -249,7 +250,11 @@ final class LaunchCoordinator: BaseCoordinator,
     @MainActor
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
-        let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let onboardingModel = NimbusOnboardingKitFeatureLayer(
+            onboardingVariant: manager.onboardingVariant
+        ).getOnboardingModel(
+            for: .freshInstall
+        )
         let activityEventHelper = ActivityEventHelper()
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
@@ -296,9 +301,11 @@ final class LaunchCoordinator: BaseCoordinator,
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)
-        hostingController.modalPresentationStyle = .fullScreen
+        // `.overFullScreen` is required to display the underlying view controller beneath the presented one,
+        // and to prevent a white strip glitch caused by synchronization issues between SwiftUI and UIKit.
+        hostingController.modalPresentationStyle = .overFullScreen
         hostingController.modalTransitionStyle = .crossDissolve
-        hostingController.transitioningDelegate = modernTransitionDelegate
+        hostingController.view.backgroundColor = .clear
 
         router.present(hostingController, animated: true)
     }

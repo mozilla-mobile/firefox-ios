@@ -46,16 +46,28 @@ final class BookmarksViewController: SiteTableViewController,
         switch state {
         case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textPrimary
+            }
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
+            }
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
+            }
             bottomRightButton.isEnabled = true
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditModeInvalidField):
             bottomRightButton.title = String.AppSettingsDone
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
+            }
             bottomRightButton.isEnabled = false
             return [flexibleSpace, bottomRightButton]
         default:
@@ -169,8 +181,8 @@ final class BookmarksViewController: SiteTableViewController,
     // MARK: - Data
 
     override func reloadData() {
-        viewModel.reloadData { [weak self] in
-            ensureMainThread {
+        viewModel.reloadData {
+            ensureMainThread { [weak self] in
                 self?.tableView.reloadData()
                 if self?.viewModel.shouldFlashRow ?? false {
                     self?.flashRow()
@@ -656,16 +668,19 @@ final class BookmarksViewController: SiteTableViewController,
 
 extension BookmarksViewController: LibraryPanelContextMenu {
     func presentContextMenu(for indexPath: IndexPath) {
-        viewModel.getSiteDetails(for: indexPath) { [weak self] site in
-            guard let self else { return }
-            if let site {
-                presentContextMenu(for: site, with: indexPath, completionHandler: {
-                    return self.contextMenu(for: site, with: indexPath)
-                })
-            } else if let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row],
-                      bookmarkNode.type == .folder,
-                      isCurrentFolderEditable(at: indexPath) {
-                presentContextMenu(for: bookmarkNode, indexPath: indexPath)
+        viewModel.getSiteDetails(for: indexPath) { site in
+            ensureMainThread { [weak self] in
+                guard let self else { return }
+
+                if let site {
+                    self.presentContextMenu(for: site, with: indexPath, completionHandler: {
+                        return self.contextMenu(for: site, with: indexPath)
+                    })
+                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                          bookmarkNode.type == .folder,
+                          self.isCurrentFolderEditable(at: indexPath) {
+                    self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
+                }
             }
         }
     }

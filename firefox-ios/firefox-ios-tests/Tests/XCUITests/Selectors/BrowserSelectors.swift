@@ -18,6 +18,8 @@ protocol BrowserSelectorsSet {
     var LINK_RFC_2606: Selector { get }
     var BOOK_OF_MOZILLA_TEXT: Selector { get }
     var ADDRESSTOOLBAR_LOCKICON: Selector { get }
+    func linkElement(named name: String) -> Selector
+    func linkPreview(named preview: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -112,6 +114,22 @@ struct BrowserSelectors: BrowserSelectorsSet {
         description: "Lock Icon on the Address toolbar",
         groups: ["browser"]
     )
+
+    func linkElement(named name: String) -> Selector {
+        Selector.linkById(
+            name,
+            description: "Web link named \(name)",
+            groups: ["browser", "webview"]
+        )
+    }
+
+    func linkPreview(named preview: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            preview,
+            description: "Long-press link preview label",
+            groups: ["browser", "webview"]
+        )
+    }
 
     var all: [Selector] { [ADDRESS_BAR, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,

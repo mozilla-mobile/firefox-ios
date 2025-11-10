@@ -505,7 +505,7 @@ class HistoryTests: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openBookOfMozilla()
-        toolbarScreen.assertBackButtonExist()
+        toolbarScreen.assertBackButtonExists()
         toolbarScreen.pressBackButton(duration: 1)
         browserScreen.tapOnBookOfMozilla()
         toolbarScreen.tapBackButton()

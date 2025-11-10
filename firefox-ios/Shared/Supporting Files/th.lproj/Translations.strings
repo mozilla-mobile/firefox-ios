@@ -10,6 +10,9 @@
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the loading button that appears when the page is being translated. */
 "Translations.Banner.Loading.Button.AccessibilityLabel.v145" = "กำลังแปลหน้า";
 
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the chevron button that navigates the user to the translation settings page. */
+"Translations.Banner.OpenSettings.Button.AccessibilityLabel.v145" = "เปิดการตั้งค่าภาษา";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error. */
 "Translations.Banner.RetryButton.v145" = "ลองใหม่";
 
@@ -24,6 +27,9 @@
 
 /* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
 "Translations.Sheet.Error.GeneralSubtitle.v145" = "โปรดลองอีกครั้ง";
+
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralTitle.v145" = "ไม่สามารถแปลหน้านี้ได้";
 
 /* On the translation feature bottom sheet, this is the title for the button that allows the user to try to translate a page again after facing an error. */
 "Translations.Sheet.Error.RetryButton.v145" = "ลองใหม่";

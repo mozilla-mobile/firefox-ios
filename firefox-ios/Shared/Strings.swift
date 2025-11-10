@@ -1093,6 +1093,14 @@ extension String {
                     value: "All Stories",
                     comment: "This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles")
             }
+
+            public struct StoriesWebview {
+                public static let ReloadPageAccessibilityLabel = MZLocalizedString(
+                    key: "FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
+                    tableName: "FirefoxHomepage",
+                    value: "Reload page",
+                    comment: "Accessibility label for the page reload button in the navigation toolbar of the stories webview")
+            }
         }
 
         public struct RecentlySaved { }
@@ -6976,7 +6984,7 @@ extension String {
         value: nil,
         comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
     public static let TabPeekRemoveBookmark = MZLocalizedString(
-        key: "TabPeek.RemoveBookmark.v145",
+        key: "TabPeek.RemoveBookmark.v146",
         tableName: "3DTouchActions",
         value: "Remove Bookmark",
         comment: "Label for preview action on Tab Tray Tab to remove current tab from Bookmarks")
@@ -7746,6 +7754,32 @@ extension String {
         tableName: "CredentialProvider",
         value: "Cancel",
         comment: "Title label displayed for the cancel action in an alert when the password autofill fails and needs user interaction.")
+}
+
+// MARK: - Relay Masks
+extension String {
+    public struct RelayMask {
+        public static let UseRelayEmailMaskFromKeyboard = MZLocalizedString(
+            key: "RelayMask.UseRelayEmailMaskFromKeyboard.v146",
+            tableName: "RelayMask",
+            value: "Use email mask",
+            comment: "Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically.")
+        public static let RelayEmailMaskAvailableCFR = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskAvailableCFR.v146",
+            tableName: "RelayMask",
+            value: "New! %@ Relay email masks are now available on mobile.",
+            comment: "Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox')")
+        public static let RelayEmailMaskFreeTierLimitReached = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskFreeTierLimitReached.v146",
+            tableName: "RelayMask",
+            value: "Your 5 free email masks are in use, so we picked one for you.",
+            comment: "Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly.")
+        public static let RelayEmailMaskGenericErrorMessage = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskGenericErrorMessage.v146",
+            tableName: "RelayMask",
+            value: "Email masks aren’t available right now. Try again in a few minutes.",
+            comment: "Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask.")
+    }
 }
 
 // MARK: - Password autofill

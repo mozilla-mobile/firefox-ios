@@ -100,9 +100,9 @@ class TabManagerImplementation: NSObject,
 
     private let inactiveTabsManager: InactiveTabsManagerProtocol
     private let logger: Logger
-    private nonisolated let tabDataStore: TabDataStore
+    nonisolated private let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
-    private nonisolated let imageStore: DiskImageStore?
+    nonisolated private let imageStore: DiskImageStore?
     private let windowManager: WindowManager
     private let windowIsNew: Bool
     private let profile: Profile

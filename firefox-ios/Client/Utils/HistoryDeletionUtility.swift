@@ -16,13 +16,14 @@ enum HistoryDeletionUtilityDateOptions: String, CaseIterable {
 }
 
 protocol HistoryDeletionProtocol {
-    func delete(_ sites: [String], completion: @escaping (Bool) -> Void)
+    func delete(_ sites: [String], completion: @Sendable @escaping (Bool) -> Void)
+    @MainActor
     func deleteHistoryFrom(_ dateOption: HistoryDeletionUtilityDateOptions,
-                           completion: @escaping (HistoryDeletionUtilityDateOptions) -> Void)
+                           completion: @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void)
 }
 
-class HistoryDeletionUtility: HistoryDeletionProtocol {
-    private var profile: Profile
+final class HistoryDeletionUtility: HistoryDeletionProtocol, Sendable {
+    private let profile: Profile
     private let gleanWrapper: GleanWrapper
 
     init(with profile: Profile, gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
@@ -33,7 +34,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
     // MARK: Interface
     func delete(
         _ sites: [String],
-        completion: @escaping (Bool) -> Void
+        completion: @Sendable @escaping (Bool) -> Void
     ) {
         deleteFromHistory(sites)
         deleteMetadata(sites) { result in
@@ -41,9 +42,10 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         }
     }
 
+    @MainActor
     func deleteHistoryFrom(
         _ dateOption: HistoryDeletionUtilityDateOptions,
-        completion: @escaping (HistoryDeletionUtilityDateOptions) -> Void
+        completion: @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
         // For efficiency, we'll delete data in parallel, which is why closures are
@@ -65,7 +67,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
 
     private func deleteMetadata(
         _ sites: [String],
-        completion: @escaping (Bool) -> Void
+        completion: @Sendable @escaping (Bool) -> Void
     ) {
         sites.forEach { currentSite in
             profile.places
@@ -81,6 +83,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
     }
 
     // MARK: - Date based deletion functions
+    @MainActor
     private func deleteWKWebsiteDataSince(
         _ dateOption: HistoryDeletionUtilityDateOptions,
         for types: Set<String>
@@ -96,7 +99,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
 
     private func deleteProfileHistorySince(
         _ dateOption: HistoryDeletionUtilityDateOptions,
-        completion: @escaping (Bool?) -> Void
+        completion: @Sendable @escaping (Bool?) -> Void
     ) {
         switch dateOption {
         case .allTime:

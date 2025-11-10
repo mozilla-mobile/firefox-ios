@@ -462,13 +462,6 @@ extension BrowserViewController: WKNavigationDelegate {
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
         let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
 
-        // Stories feed tabs are not managed by tabManager, so just allow them without any special logic
-        let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
-        if isStoriesFeed {
-            decisionHandler(.allow)
-            return
-        }
-
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -751,7 +744,8 @@ extension BrowserViewController: WKNavigationDelegate {
            let request = request {
             // Certain files are too large to download before the preview presents, so block until we have something to show
             let group = DispatchGroup()
-            var url: URL?
+            // FIXME: FXIOS-14054 Should not mutate local properties in concurrent code
+            nonisolated(unsafe) var url: URL?
             group.enter()
             let temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
             temporaryDocument.download { docURL in
@@ -920,7 +914,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                windowUUID: windowUUID,
                                                actionType: NativeErrorPageActionType.receivedError
             )
-            store.dispatchLegacy(action)
+            store.dispatch(action)
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
             ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
@@ -1001,13 +995,13 @@ extension BrowserViewController: WKNavigationDelegate {
                     windowUUID: windowUUID,
                     actionType: ToolbarActionType.urlDidChange
                 )
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 let middlewareAction = ToolbarMiddlewareAction(
                     scrollOffset: scrollController.contentOffset,
                     windowUUID: windowUUID,
                     actionType: ToolbarMiddlewareActionType.urlDidChange
                 )
-                store.dispatchLegacy(middlewareAction)
+                store.dispatch(middlewareAction)
             }
             return
         }
@@ -1038,13 +1032,13 @@ extension BrowserViewController: WKNavigationDelegate {
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
 
-                if isNativeErrorPageEnabled {
-                    guard isNICErrorPageEnabled && error.code == noInternetErrorCode else { return }
+                // Only handle No internet access because other cases show about:blank page
+                if isNICErrorPageEnabled && error.code == noInternetErrorCode {
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
                     )
-                    store.dispatchLegacy(action)
+                    store.dispatch(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)

@@ -6,6 +6,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class StoriesFeedViewControllerTests: XCTestCase {
     var mockStore: MockStoreForMiddleware<AppState>!
 

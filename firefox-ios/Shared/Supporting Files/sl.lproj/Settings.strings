@@ -191,13 +191,13 @@
 "Settings.Search.PageTitle.v121" = "Iskanje";
 
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Description.v125" = "Prikazuj predloge iskalnikov v zasebnih sejah";
+"Settings.Search.PrivateSession.Description.v125" = "Prikazuj predloge iskalnikov v zasebnem brskanju";
 
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Setting.v124" = "Prikaži v zasebnih sejah";
+"Settings.Search.PrivateSession.Setting.v124" = "Prikazuj v zasebnih sejah";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
-"Settings.Search.ShowSuggestions.v121" = "Prikaži predloge iskanja";
+"Settings.Search.ShowSuggestions.v121" = "Prikazuj predloge iskanja";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
 "Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Naslovna vrstica – Firefoxovi predlogi";
@@ -236,7 +236,7 @@
 "Settings.Studies.Message.v136" = "Preizkusite funkcije in ideje, preden so na voljo vsem.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
-"Settings.Studies.Title.v136" = "Namesti in uporabljaj raziskave";
+"Settings.Studies.Title.v136" = "Nameščaj in izvajaj raziskave";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Več o tem";
@@ -249,6 +249,12 @@
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "Pogoji uporabe";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "Domov";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Nov zavihek";
 
 /* This is the section title text for the the Translation feature under the Translation settings section. */
 "Settings.Translation.SectionTitle.v145" = "Nastavitve prevajanja";

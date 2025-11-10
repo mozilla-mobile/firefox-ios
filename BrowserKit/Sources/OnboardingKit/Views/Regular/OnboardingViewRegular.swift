@@ -38,6 +38,9 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 }
                 .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
             }
+            .accessibilityScrollAction { edge in
+                handleAccessibilityScroll(from: edge)
+            }
             Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)
                     .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
@@ -73,5 +76,20 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             themeManager: themeManager
         )
         .padding(.bottom)
+    }
+
+    private func handleAccessibilityScroll(from edge: Edge) {
+        if edge == .leading {
+            viewModel.scrollToPreviousPage()
+        } else if edge == .trailing {
+            viewModel.scrollToNextPage()
+        }
+        switch edge {
+        case .leading, .trailing:
+            DispatchQueue.main.async {
+                UIAccessibility.post(notification: .screenChanged, argument: nil)
+            }
+        default: break
+        }
     }
 }

@@ -64,7 +64,7 @@ extension AppDelegate {
         }
     }
 
-    private nonisolated func setPreferencesForSyncedAccount(for profile: Profile, count: Int) {
+    nonisolated private func setPreferencesForSyncedAccount(for profile: Profile, count: Int) {
         guard profile.hasSyncableAccount() else { return }
         profile.prefs.setBool(true, forKey: PrefsKeys.Sync.signedInFxaAccount)
         // The additional +1 is to also add a count for the local device being used

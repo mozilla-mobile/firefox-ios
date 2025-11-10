@@ -25,6 +25,9 @@
 /* Text for a button in the tabs tray used to open another menu to close older tabs. */
 "TabTrayCloseOldTabsTitle.v140" = "Tanca les pestanyes antigues…";
 
+/* Text for a button in the tabs tray used delete current active tabs. %@ is for the number of tabs that will be going to be closed. */
+"TabTrayCloseOneTabTitle.v145" = "Tanca les pestanyes (%@)";
+
 /* Text for the menu title under the tabs tray in which users can close tabs older than a certain period of time. */
 "TabTrayCloseTabsOlderThanTitle.v140" = "Tanca les pestanyes més antigues que…";
 
