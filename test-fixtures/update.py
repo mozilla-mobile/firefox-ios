@@ -49,6 +49,7 @@ def latest_stable_stack():
         resp = requests.get(BITRISE_STACK_INFO, headers=headers)    
         resp.raise_for_status()
         resp_json = resp.json()
+        print(resp_json)
 
         stack_names = [stack.get("name").replace(".md", "") for stack in resp_json]
         keys = sorted([stack_name for stack_name in stack_names 
