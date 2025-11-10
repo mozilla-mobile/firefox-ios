@@ -267,20 +267,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return cell
 
         case .delete:
-            guard let deleteCell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier,
-                                                                 for: indexPath) as? ThemedTableViewCell else {
-                return UITableViewCell()
-            }
-            deleteCell.textLabel?.text = .LoginDetailDelete
-            deleteCell.textLabel?.textAlignment = .center
-            deleteCell.accessibilityTraits = UIAccessibilityTraits.button
-            deleteCell.selectionStyle = .none
-            deleteCell.configure(viewModel: ThemedTableViewCellViewModel(theme: currentTheme(),
-                                                                         type: .destructive))
-            deleteCell.applyTheme(theme: currentTheme())
-
-            setCellSeparatorFullWidth(deleteCell)
-            return deleteCell
+            return cell(tableView: tableView, forDelete: indexPath)
         }
     }
 
