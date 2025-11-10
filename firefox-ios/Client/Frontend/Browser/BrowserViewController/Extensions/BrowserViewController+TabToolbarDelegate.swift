@@ -245,6 +245,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         tabManager.selectTab(tabManager.addTab(isPrivate: true))
     }
 
+    /// This is a workaround for dismissing CFRs when keyboard is showing up.
+    func dismissCFRs() {
+        print("YRD --- dismissCFRs")
+        summarizeToolbarEntryContextHintVC.dismiss(animated: false)
+        translationContextHintVC.dismiss(animated: false)
+    }
+
     /// Setup animation for data clearance flow unless reduce motion is enabled
     /// - Parameter completion: returns the proper timing to match animation on when to close tabs and display toast
     private func setupDataClearanceAnimation(completion: @escaping (Double) -> Void) {

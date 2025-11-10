@@ -3629,6 +3629,7 @@ class BrowserViewController: UIViewController,
         let overlayAction = GeneralBrowserAction(showOverlay: false,
                                                  windowUUID: windowUUID,
                                                  actionType: GeneralBrowserActionType.showOverlay)
+        print("YRD--- tappedZeroSearchScrim")
         store.dispatch(overlayAction)
     }
 
@@ -3861,7 +3862,10 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
+        print("addressToolbarDidBeginEditing")
+        dismissCFRs()
         addressToolbarDidEnterOverlayMode(addressToolbarContainer)
+        
     }
 
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
@@ -4867,8 +4871,10 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
+        print("YRD--- topTabsDidPressNewTab")
         let shouldLoadCustomHomePage = newTabSettings == .homePage
         let homePageURL = NewTabHomePageAccessors.getHomePage(profile.prefs)
+        dismissCFRs()
 
         if shouldLoadCustomHomePage, let url = homePageURL {
             openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)

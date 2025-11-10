@@ -52,6 +52,7 @@ class ContextualHintViewController: UIViewController,
 
     // MARK: - View lifecycle
     override func viewDidLoad() {
+        print("YRD --- ContextualHintViewController.viewDidLoad")
         super.viewDidLoad()
         commonInit()
         isPresenting = true
