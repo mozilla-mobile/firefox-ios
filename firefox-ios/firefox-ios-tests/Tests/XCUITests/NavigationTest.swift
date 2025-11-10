@@ -214,6 +214,7 @@ class NavigationTest: BaseTestCase {
 
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -230,6 +231,7 @@ class NavigationTest: BaseTestCase {
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
 
         app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
