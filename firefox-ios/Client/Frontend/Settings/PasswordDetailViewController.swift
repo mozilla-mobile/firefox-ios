@@ -185,20 +185,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return breachCell
 
         case .username:
-            guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
-                return UITableViewCell()
-            }
-            let cellModel = LoginDetailTableViewCellModel(
-                title: .LoginDetailUsername,
-                description: viewModel.login.username,
-                keyboardType: .emailAddress,
-                returnKeyType: .next,
-                a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
-                isEditingFieldData: isEditingFieldData)
-            loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: currentTheme())
-            usernameField = loginCell.descriptionLabel
-            return loginCell
+            return cell(tableView: tableView, forUsername: indexPath)
 
         case .password:
             return cell(tableView: tableView, forPassword: indexPath)
