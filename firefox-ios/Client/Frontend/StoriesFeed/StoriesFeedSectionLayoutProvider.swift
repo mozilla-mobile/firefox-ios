@@ -6,12 +6,14 @@ import Foundation
 
 struct StoriesFeedSectionLayoutProvider {
     struct UX {
-        static let cellSize = CGSize(width: 361, height: 282)
+        static let cellSize = CGSize(width: 320, height: 282)
+        static let minimumCellWidth = cellSize.width
         static let interItemSpacing: CGFloat = 20
         static let interGroupSpacing: CGFloat = 16
         static let topSectionInset: CGFloat = 10
         static let minimumSectionHorizontalInset: CGFloat = 16
         static let minimumCellsPerRow = 1
+        static let groupWidthRatio: CGFloat = 0.9
     }
 
     func createStoriesFeedSectionLayout(
@@ -42,7 +44,8 @@ struct StoriesFeedSectionLayoutProvider {
         )
 
         let containerWidth = environment.container.effectiveContentSize.width
-        let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: containerWidth)
+        let groupWidth = containerWidth * UX.groupWidthRatio
+        let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: groupWidth)
 
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
@@ -51,7 +54,9 @@ struct StoriesFeedSectionLayoutProvider {
         )
         group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.interItemSpacing)
 
-        let horizontalInsets = StoriesFeedDimensionCalculator.horizontalInset(for: containerWidth, cellCount: cellCount)
+        // Horizontal insets
+        let horizontalInsetRatio = (1 - UX.groupWidthRatio) / 2
+        let horizontalInsets = containerWidth * horizontalInsetRatio
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: UX.topSectionInset,
