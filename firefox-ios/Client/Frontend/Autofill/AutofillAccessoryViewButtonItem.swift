@@ -128,7 +128,6 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         accessoryImageView.accessibilityElementsHidden = !isiOS26Available
         accessoryImageView.accessibilityTraits = isiOS26Available ? .button : .none
         useAccessoryTextLabel.accessibilityTraits = isiOS26Available ? .none : .button
-        useAccessoryTextLabel.isHidden = isiOS26Available
     }
 
     private func updateBackgroundColor() {
