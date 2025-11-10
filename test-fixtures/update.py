@@ -1,6 +1,5 @@
 import os
 from shutil import copyfile
-from wsgiref import headers
 from ruamel.yaml import YAML
 
 
@@ -41,8 +40,8 @@ def latest_stack(stacks_info):
 def latest_stable_stack(stacks_info):
     stack_names = [stack.get("name").replace(".md", "") for stack in stacks_info]
     keys = sorted([stack_name for stack_name in stack_names 
-                   if pattern in stack_name and '-edge' not in stack_name], reverse=True)
-    return keys[0]
+                   if pattern in stack_name and '-edge' not in stack_name])
+    return keys[-1]
         
 def write_to_bitrise_yml(yaml, version):
     yaml['workflows'][WORKFLOW]['meta']['bitrise.io']['stack'] = '{0}{1}'.format(pattern, version)
