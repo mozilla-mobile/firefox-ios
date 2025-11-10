@@ -34,11 +34,12 @@ protocol RelayControllerProtocol {
     func emailFieldFocused(in tab: Tab)
 }
 
+/// Describes the result of an attempt to generate a Relay mask for an email field.
 enum RelayMaskGenerationResult {
     /// A new mask was generated successfully.
     case newMaskGenerated
     /// User is on a free plan and their limit has been reached.
-    /// For Phase 1, we will randomly re-use an existing mask.
+    /// For Phase 1, one of the user's existing masks will be randomly picked.
     case freeTierLimitReached
     /// A problem occurred.
     case error
