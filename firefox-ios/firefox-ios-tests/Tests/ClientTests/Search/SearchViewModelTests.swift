@@ -304,6 +304,19 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
+    func test_historySites_excludesBookmarkedSites() {
+        let subject = createSubject()
+        XCTAssertEqual(subject.delegate?.searchData.count, 0)
+        let data = ArrayCursor<Site>(data: [
+            Site.createBasicSite(url: "https://example.com?mfadid=adm", title: "Test1", isBookmarked: true),
+            Site.createBasicSite(url: "https://example.com", title: "Test2", isBookmarked: true),
+            Site.createBasicSite(url: "https://example.com?a=b&c=d", title: "Test3", isBookmarked: false)
+        ])
+
+        subject.loader(dataLoaded: data)
+        XCTAssertEqual(subject.historySites.count, 1)
+    }
+
     @MainActor
     func testLoad_forHistoryAndBookmarks_doesNotTriggerReloadForSameSuggestions() async throws {
         searchEnginesManager.shouldShowSponsoredSuggestions = false

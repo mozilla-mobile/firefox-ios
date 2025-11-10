@@ -47,8 +47,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     @MainActor
     var historySites: [Site] {
-        delegate?.searchData.compactMap { $0 }
-            .filter { $0.isBookmarked == false } ?? []
+        let bookmarkURLs = Set(bookmarkSites.map { $0.url })
+
+        return delegate?.searchData.compactMap { $0 }
+            .filter { $0.isBookmarked == false && !bookmarkURLs.contains($0.url) } ?? []
     }
 
     private let maxNumOfFirefoxSuggestions: Int32 = 1
