@@ -148,41 +148,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
 
         switch cellType {
         case .breach:
-            guard let breachCell = cell(tableView: tableView, forIndexPath: indexPath) else {
-                return UITableViewCell()
-            }
-            guard let breach = viewModel.breachRecord else { return breachCell }
-            breachCell.isHidden = false
-            let breachDetailView: BreachAlertsDetailView = .build()
-            breachCell.contentView.addSubview(breachDetailView)
-
-            NSLayoutConstraint.activate([
-                breachDetailView.leadingAnchor.constraint(equalTo: breachCell.contentView.leadingAnchor,
-                                                          constant: UX.horizontalMargin),
-                breachDetailView.topAnchor.constraint(equalTo: breachCell.contentView.topAnchor,
-                                                      constant: UX.horizontalMargin),
-                breachDetailView.trailingAnchor.constraint(equalTo: breachCell.contentView.trailingAnchor,
-                                                           constant: -UX.horizontalMargin),
-                breachDetailView.bottomAnchor.constraint(equalTo: breachCell.contentView.bottomAnchor,
-                                                         constant: -UX.horizontalMargin)
-            ])
-            breachDetailView.setup(breach)
-            breachDetailView.applyTheme(theme: currentTheme())
-
-            breachDetailView.onTapLearnMore = { [weak self] in
-                self?.didTapBreachLearnMore()
-            }
-
-            breachDetailView.onTapBreachLink = { [weak self] in
-                self?.didTapBreachLink()
-            }
-
-            breachCell.isAccessibilityElement = false
-            breachCell.contentView.accessibilityElementsHidden = true
-            breachCell.accessibilityElements = [breachDetailView]
-            breachCell.applyTheme(theme: currentTheme())
-
-            return breachCell
+            return cell(tableView: tableView, forBreach: indexPath)
 
         case .username:
             return cell(tableView: tableView, forUsername: indexPath)
