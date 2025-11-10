@@ -18,7 +18,7 @@ protocol RelayControllerProtocol {
     /// - Returns: `true` if the website is valid for Relay, after checking block/allow lists.
     @MainActor
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool
-    
+
     /// Requests the RelayController to populate the email tab for the actively focused field
     /// in the given tab. A safety check is performed internally to make sure this tab is the
     /// same one that was focused originally in `emailFieldFocused`. If the two differ, the
@@ -26,7 +26,7 @@ protocol RelayControllerProtocol {
     /// - Parameter tab: the tab to populate. The email field is expected to be focused, otherwise a JS error will be logged.
     @MainActor
     func populateEmailFieldWithRelayMask(for tab: Tab)
-    
+
     /// Notifies the RelayController which tab is currently focused for the purposes of generating a Relay mask.
     /// - Parameter tab: the current tab.
     @MainActor
