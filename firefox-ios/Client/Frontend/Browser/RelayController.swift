@@ -25,12 +25,23 @@ protocol RelayControllerProtocol {
     /// operation is cancelled.
     /// - Parameter tab: the tab to populate. The email field is expected to be focused, otherwise a JS error will be logged.
     @MainActor
-    func populateEmailFieldWithRelayMask(for tab: Tab)
+    func populateEmailFieldWithRelayMask(for tab: Tab,
+                                         completion: @Sendable @MainActor @escaping (RelayMaskGenerationResult) -> Void)
 
     /// Notifies the RelayController which tab is currently focused for the purposes of generating a Relay mask.
     /// - Parameter tab: the current tab.
     @MainActor
     func emailFieldFocused(in tab: Tab)
+}
+
+enum RelayMaskGenerationResult {
+    /// A new mask was generated successfully.
+    case newMaskGenerated
+    /// User is on a free plan and their limit has been reached.
+    /// For Phase 1, we will randomly re-use an existing mask.
+    case freeTierLimitReached
+    /// A problem occurred.
+    case error
 }
 
 @MainActor
@@ -101,21 +112,26 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         return shouldShow
     }
 
-    func populateEmailFieldWithRelayMask(for tab: Tab) {
+    func populateEmailFieldWithRelayMask(for tab: Tab,
+                                         completion: @escaping @MainActor @Sendable (RelayMaskGenerationResult) -> Void) {
         guard focusedTab == nil || focusedTab === tab else {
             logger.log("[RELAY] Attempting to populate Relay mask after tab has changed. Bailing.",
                        level: .warning,
                        category: .autofill)
             focusedTab = nil
+            // Note: this is an edge case error and in this scenario we will not call the completion at
+            // all, given that we're no longer on the correct tab.
             return
         }
 
         guard let webView = tab.webView else { return }
-        guard let email = generateRelayMask(for: tab.url?.baseDomain ?? "") else { return }
+        let (email, result) = generateRelayMask(for: tab.url?.baseDomain ?? "")
+        guard result != .error else { completion(.error); return }
 
         guard let jsonData = try? JSONEncoder().encode(email),
               let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
             logger.log("[RELAY] Couldn't encode string for Relay JS injection.", level: .warning, category: .autofill)
+            completion(.error)
             return
         }
 
@@ -127,6 +143,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                 return
             }
         }
+
+        completion(result)
     }
 
     func emailFieldFocused(in tab: Tab) {
@@ -135,11 +153,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     // MARK: - Private Utilities
 
-    private func generateRelayMask(for websiteDomain: String) -> String? {
-        guard let client else { return nil }
+    private func generateRelayMask(for websiteDomain: String) -> (mask: String?, result: RelayMaskGenerationResult) {
+        guard let client else { return (nil, .error) }
         do {
             let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
-            return relayAddress.fullAddress
+            return (relayAddress.fullAddress, .newMaskGenerated)
         } catch {
             // Certain errors we need to custom-handle
             if case let RelayApiError.Api(_, code, _) = error, code == "free_tier_limit" {
@@ -149,7 +167,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                     let fullList = try client.fetchAddresses()
                     let listCount = fullList.count // This should always be 5, but check anyway for safety
                     if listCount >= 1, let relayMask = fullList[safe: Int.random(in: 0 ..< listCount)] {
-                        return relayMask.fullAddress
+                        return (relayMask.fullAddress, .freeTierLimitReached)
                     } else {
                         logger.log("[RELAY] Couldn't fetch random mask", level: .warning, category: .autofill)
                     }
@@ -160,7 +178,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                 logger.log("[RELAY] API error creating Relay address: \(error)", level: .warning, category: .autofill)
             }
         }
-        return nil
+        return (nil, .error)
     }
 
     private func configureRelayRSClient() {

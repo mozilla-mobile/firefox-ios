@@ -3945,7 +3945,13 @@ class BrowserViewController: UIViewController,
     private func handleUseRelayMaskTapped() {
         guard RelayController.isFeatureEnabled else { return }
         guard let currentTab = tabManager.selectedTab else { return }
-        RelayController.shared.populateEmailFieldWithRelayMask(for: currentTab)
+        RelayController.shared.populateEmailFieldWithRelayMask(for: currentTab) { [weak self] result in
+            self?.handleRelayMaskResult(result)
+        }
+    }
+
+    private func handleRelayMaskResult(_ result: RelayMaskGenerationResult) {
+        // TODO: show toast messages if needed
     }
 }
 
