@@ -271,6 +271,37 @@ extension PasswordDetailViewController: UITableViewDataSource {
         }
     }
 
+    private func cell(tableView: UITableView, forLastModifiedSeparator indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: LoginDetailCenteredTableViewCell.cellIdentifier,
+            for: indexPath) as? LoginDetailCenteredTableViewCell else {
+            return UITableViewCell()
+        }
+
+        let created: String = .LoginDetailCreatedAt
+        let lastModified: String = .LoginDetailModifiedAt
+        let lastModifiedFormatted = String(
+            format: lastModified,
+            Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged))
+                .toRelativeTimeString(dateStyle: .medium)
+        )
+        let createdFormatted = String(
+            format: created,
+            Date.fromTimestamp(UInt64(viewModel.login.timeCreated))
+                .toRelativeTimeString(dateStyle: .medium, timeStyle: .none)
+        )
+        let cellModel = LoginDetailCenteredTableViewCellModel(
+            label: createdFormatted + "\n" + lastModifiedFormatted)
+        cell.configure(viewModel: cellModel)
+        if #available(iOS 26.0, *) {
+            setCellSeparatorHidden(cell, useRightInset: false)
+        } else {
+            setCellSeparatorHidden(cell)
+        }
+        cell.applyTheme(theme: currentTheme())
+        return cell
+    }
+
     private func cell(tableView: UITableView, forDelete indexPath: IndexPath) -> UITableViewCell {
         guard let deleteCell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier,
                                                              for: indexPath) as? ThemedTableViewCell else {
