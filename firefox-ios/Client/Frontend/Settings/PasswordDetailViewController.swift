@@ -201,24 +201,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .password:
-            guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
-                return UITableViewCell()
-            }
-            let cellModel = LoginDetailTableViewCellModel(
-                title: .LoginDetailPassword,
-                description: viewModel.login.password,
-                displayDescriptionAsPassword: true,
-                a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
-                isEditingFieldData: isEditingFieldData)
-            if #available(iOS 26.0, *) {
-                setCellSeparatorHidden(loginCell, useRightInset: false)
-            } else {
-                setCellSeparatorHidden(loginCell)
-            }
-            loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: currentTheme())
-            passwordField = loginCell.descriptionLabel
-            return loginCell
+            return cell(tableView: tableView, forPassword: indexPath)
 
         case .website:
             return cell(tableView: tableView, forWebsite: indexPath)
