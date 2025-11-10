@@ -3861,7 +3861,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
-        print("addressToolbarDidBeginEditing")
+        // If the user press the url bar dismiss CFR
         dismissCFRs()
         addressToolbarDidEnterOverlayMode(addressToolbarContainer)
     }
@@ -4871,6 +4871,7 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         let shouldLoadCustomHomePage = newTabSettings == .homePage
         let homePageURL = NewTabHomePageAccessors.getHomePage(profile.prefs)
+        // If the user opens a new tab dismiss CFR
         dismissCFRs()
 
         if shouldLoadCustomHomePage, let url = homePageURL {
