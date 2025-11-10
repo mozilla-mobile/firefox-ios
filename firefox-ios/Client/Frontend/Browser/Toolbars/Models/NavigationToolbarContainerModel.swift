@@ -18,6 +18,7 @@ struct NavigationToolbarContainerModel: Equatable {
                                               isTranslucencyEnabled: isTranslucent)
     }
 
+    @MainActor
     init(state: ToolbarState, windowUUID: WindowUUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.canShowNavigationHint = state.canShowNavigationHint
@@ -51,42 +52,39 @@ struct NavigationToolbarContainerModel: Equatable {
         self.windowUUID = windowUUID
     }
 
+    @MainActor
     private static func getA11yCustomAction(action: ToolbarActionConfiguration, windowUUID: WindowUUID) -> (() -> Void)? {
         return action.a11yCustomActionName != nil ? {
-            ensureMainThread {
-                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                     windowUUID: windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.customA11yAction)
-                store.dispatch(action)
-            }
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.customA11yAction)
+            store.dispatch(action)
         } : nil
     }
 
+    @MainActor
     private static func getOnSelected(action: ToolbarActionConfiguration, windowUUID: WindowUUID) -> ((UIButton) -> Void)? {
         return { button in
-            ensureMainThread {
-                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                     buttonTapped: button,
-                                                     gestureType: .tap,
-                                                     windowUUID: windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
-                store.dispatch(action)
-            }
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 buttonTapped: button,
+                                                 gestureType: .tap,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
+            store.dispatch(action)
         }
     }
 
+    @MainActor
     private static func getOnLongPress(action: ToolbarActionConfiguration,
                                        state: ToolbarState,
                                        windowUUID: WindowUUID) -> ((UIButton) -> Void)? {
         return action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
-            ensureMainThread {
-                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                     buttonTapped: button,
-                                                     gestureType: .longPress,
-                                                     windowUUID: windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
-                store.dispatch(action)
-            }
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 buttonTapped: button,
+                                                 gestureType: .longPress,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
+            store.dispatch(action)
         } : nil
     }
 }

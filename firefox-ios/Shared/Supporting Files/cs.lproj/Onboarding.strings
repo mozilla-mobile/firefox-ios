@@ -194,7 +194,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Údaje o vašem zařízení, konfiguraci hardwaru a způsobu používání aplikace %1$@ pomáhají zlepšovat funkce, výkon a stabilitu pro všechny. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Posílat technická data a data o interakcích společnosti %@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Posílat technická data a data o interakcích organizaci %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Pomozte nám vylepšit %@";
@@ -299,7 +299,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Údaje o vašem zařízení, konfiguraci hardwaru a způsobu používání aplikace %1$@ pomáhají zlepšovat funkce, výkon a stabilitu pro všechny. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Posílat technická data a data o interakcích společnosti %@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Posílat technická data a data o interakcích organizaci %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "Pomozte nám vylepšit %@";

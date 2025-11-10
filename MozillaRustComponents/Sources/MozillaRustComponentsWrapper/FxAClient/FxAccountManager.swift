@@ -201,7 +201,7 @@ open class FxAccountManager: @unchecked Sendable {
     public func getAccessToken(
         scope: String,
         ttl: UInt64? = nil,
-        completionHandler: @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
+        completionHandler: @MainActor @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {

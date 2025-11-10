@@ -197,7 +197,7 @@
 "ContextMenu.ShareLinkButtonTitle" = "Կիսվել հղումով";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
-"ContextualHints.SearchBarPlacement.CallToAction" = "Ներդիրի կարգավորումներ";
+"ContextualHints.SearchBarPlacement.CallToAction" = "Գործիքագոտու կարգավորումներ";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Երկու շաբաթ չնայած էջանիշերը տեղափոխվում են այստեղ:";
@@ -626,7 +626,7 @@
 "LibraryPanel.History.SyncedHistory.v100" = "Համաժամեցված պատմություն";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
-"LibraryPanel.Section.Older" = "Հին";
+"LibraryPanel.Section.Older" = "Ավելի հին";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Արտոնագրեր";
@@ -1007,10 +1007,10 @@
 "Search or enter address" = "Որոնեք կամ մուտքագրեք հասցե";
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
-"Search.Awesomebar.SwitchToTab" = "Անցնել ներդիրին";
+"Search.Awesomebar.SwitchToTab" = "Փոխարկել ներդիրին";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox-ի առաջարկ";
+"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Նոր որոնիչը կհայտնվի արագ որոնման գոտիում:";
@@ -1142,7 +1142,7 @@
 "Settings.AddressBar.Bottom.v138" = "Ներքևում";
 
 /* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
-"Settings.AddressBar.SectionTitle.v138" = "Հասցեների բարի տեղադրում";
+"Settings.AddressBar.SectionTitle.v138" = "Հասցեագոտու դիրք";
 
 /* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
 "Settings.AddressBar.SettingsTitle.v138" = "Հասցեագոտի";
@@ -1562,7 +1562,7 @@
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Պաշտպանության մակարդակ";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
-"Settings.TrackingProtection.SectionName" = "Հետագծման պաշտպանություն";
+"Settings.TrackingProtection.SectionName" = "Հետագծման պաշտպ.";
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Սովորական (սկզբնադիր)";
@@ -1598,7 +1598,7 @@
 "ShareExtension.AddToReadingListActionDone.Title" = "Ավելացված է ընթերցման ցուցակում";
 
 /* Action label on share extension to bookmark the page in Firefox. */
-"ShareExtension.BookmarkThisPageAction.Title" = "Էջանշել այս էջը";
+"ShareExtension.BookmarkThisPageAction.Title" = "Էջանշել սա";
 
 /* Share extension label shown after user has performed 'Bookmark this Page' action. */
 "ShareExtension.BookmarkThisPageActionDone.Title" = "Էջանշված";

@@ -33,7 +33,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
     fileprivate func getBookmarksAsSites(
         matchingSearchQuery query: String,
         limit: UInt,
-        completionHandler: @escaping (([Site]) -> Void)
+        completionHandler: @escaping @Sendable (([Site]) -> Void)
     ) {
         profile.places.searchBookmarks(query: query, limit: limit).upon { result in
             guard let bookmarkItems = result.successValue else {
@@ -49,7 +49,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
     private func getHistoryAsSites(
         matchingSearchQuery query: String,
         limit: Int,
-        completionHandler: @escaping (([Site]) -> Void)
+        completionHandler: @escaping @Sendable (([Site]) -> Void)
     ) {
         profile.places.interruptReader()
         profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).upon { result in

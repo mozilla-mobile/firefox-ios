@@ -121,6 +121,9 @@
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "ਕਿਸੇ ਵੀ ਡਿਵਾਈਸਾਂ ਉੱਤੇ ਆਪਣੇ ਬੁੱਕਮਾਰਕ, ਅਤੀਤ ਅਤੇ ਪਾਸਵਰਡ ਲਵੋ।";
 
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "ਤੁਹਾਡੇ ਬੁੱਕਮਾਰਕ, ਪਾਸਵਰਡ ਅਤੇ ਹੋਰ ਚੀਜ਼ਾਂ ਕਿਸੇ ਵੀ ਡਿਵਾਈਸ ਉੱਤੇ ਸਿੰਕ ਹੁੰਦੀਆਂ ਹਨ। ਹਰ ਚੀਜ਼ ਇੰਕ੍ਰਿਪਸ਼ਨ ਨਾਲ ਸੁਰੱਖਿਅਤ ਹੈ ਤਾਂ ਕਿ ਸਿਰਫ਼ ਤੁਸੀਂ ਹੀ ਇਸ ਨੂੰ ਵਰਤ ਸਕੋ।";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "ਸਿੰਕ ਕਰਨਾ ਸ਼ੁਰੂ ਕਰੋ";
 
@@ -136,11 +139,17 @@
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Sync.Title.v140" = "ਜਿੱਥੇ ਤੁਸੀਂ ਛੱਡਿਆ ਸੀ, ਉਥੋਂ ਫ਼ੌਰਨ ਖੋਲ੍ਹੋ";
 
+/* Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Sync.Title.v145" = "ਆਪਣੇ ਬਰਾਊਜ਼ ਕਰਨ ਦੇ ਸਾਰੇ ਮੌਕਿਆਂ ਉੱਤੇ %@ ਨੂੰ ਨਾਲ ਰੱਖੋ";
+
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "ਜਾਰੀ ਰੱਖੋ";
 
 /* Title for the confirmation button on the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "ਜਾਰੀ ਰੱਖੋ";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "ਤੁਹਾਡੀ ਨਿੱਜੀ ਜਾਣਕਾਰੀ ਨੂੰ ਆਪਣੇ-ਆਪ ਸੁਰੱਖਿਅਤ ਰੱਖਦਾ ਹੈ\nਸਾਈਟਾਂ ਨੂੰ ਤੇਜ਼ ਲੋਡ ਕਰਦਾ ਅਤੇ ਸੁਚੱਜੇ ਢੰਘ ਨਾਲ ਖੋਜ ਕਰਦਾ ਹੈ\nਗ਼ੈਰ-ਫਾਇਦਾ ਸੰਗਠਨ %@ ਵਲੋਂ ਤੁਹਾਡੇ ਲਈ ਪੇਸ਼ ਕੀਤਾ, 20 ਸਾਲਾਂ ਤੋਂ ਵੱਧ ਭਰੋਸੇਮੰਦ";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "ਬੰਦੋਬਸਤ";

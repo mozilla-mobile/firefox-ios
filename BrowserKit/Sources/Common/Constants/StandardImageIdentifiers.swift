@@ -127,6 +127,7 @@ public struct StandardImageIdentifiers {
         public static let readingList = "readingListLarge"
         public static let readingListAdd = "readingListAddLarge"
         public static let readingListSlashFill = "readingListSlashFillLarge"
+        public static let relayMaskIcon = "relayMaskIcon"
         public static let save = "saveLarge"
         public static let saveFile = "saveFileLarge"
         public static let search = "searchLarge"
