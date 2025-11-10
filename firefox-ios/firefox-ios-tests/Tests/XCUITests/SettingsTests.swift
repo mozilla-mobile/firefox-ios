@@ -284,8 +284,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        // Using real site for now since we don't have test pages
-        navigator.openURL("https://www.mozilla.jp/")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
@@ -302,8 +301,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        // Using real site for now since we don't have test pages
-        navigator.openURL("https://www.mozilla.jp/")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
@@ -328,8 +326,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        // Using real site for now since we don't have test pages
-        navigator.openURL("https://www.mozilla.jp/")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
         navigator.goto(SettingsScreen)
@@ -343,8 +340,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        // Using real site for now since we don't have test pages
-        navigator.openURL("mozilla.fr")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
         validateTranslationSettingsUI()
