@@ -3,10 +3,6 @@ name: Bitrise Xcode Check and Update
 on:
   schedule:
     - cron: '0 */6 * * *'
-  push:
-    branches:
-      - main
-      - cs/rate-limiting-github-api-403-error
 
 jobs:
   build:
