@@ -82,6 +82,7 @@ public struct StandardImageIdentifiers {
         public static let download = "downloadLarge"
         public static let edit = "editLarge"
         public static let ellipsis = "ellipsisLarge"
+        public static let emailMask = "emailMaskLarge"
         public static let fingerprinter = "fingerprinterLarge"
         public static let folder = "folderLarge"
         public static let forward = "forwardLarge"
