@@ -237,34 +237,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .lastModifiedSeparator:
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: LoginDetailCenteredTableViewCell.cellIdentifier,
-                for: indexPath) as? LoginDetailCenteredTableViewCell else {
-                return UITableViewCell()
-            }
-
-            let created: String = .LoginDetailCreatedAt
-            let lastModified: String = .LoginDetailModifiedAt
-            let lastModifiedFormatted = String(
-                format: lastModified,
-                Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged))
-                    .toRelativeTimeString(dateStyle: .medium)
-            )
-            let createdFormatted = String(
-                format: created,
-                Date.fromTimestamp(UInt64(viewModel.login.timeCreated))
-                    .toRelativeTimeString(dateStyle: .medium, timeStyle: .none)
-            )
-            let cellModel = LoginDetailCenteredTableViewCellModel(
-                label: createdFormatted + "\n" + lastModifiedFormatted)
-            cell.configure(viewModel: cellModel)
-            if #available(iOS 26.0, *) {
-                setCellSeparatorHidden(cell, useRightInset: false)
-            } else {
-                setCellSeparatorHidden(cell)
-            }
-            cell.applyTheme(theme: currentTheme())
-            return cell
+            return cell(tableView: tableView, forLastModifiedSeparator: indexPath)
 
         case .delete:
             return cell(tableView: tableView, forDelete: indexPath)
