@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-// import Storage
-// import Shared
+import Storage
+import Shared
 
 class ActionViewController: UIViewController {
     override func viewDidLoad() {
@@ -12,23 +12,23 @@ class ActionViewController: UIViewController {
         view.backgroundColor = .clear
         view.alpha = 0
 
-//        getShareItem { [weak self] shareItem in
-//            guard let self = self else { return }
-//            DispatchQueue.main.async {
-//                guard let shareItem = shareItem else {
-//                    self.finish(afterDelay: 0)
-//                    return
-//                }
-//
-//                // Directly open Firefox without showing a sheet
-//                switch shareItem {
-//                case .shareItem(let item):
-//                    self.openFirefox(withUrl: item.url, isSearch: false)
-//                case .rawText(let text):
-//                    self.openFirefox(withUrl: text, isSearch: true)
-//                }
-//            }
-//        }
+        getShareItem { [weak self] shareItem in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                guard let shareItem = shareItem else {
+                    self.finish(afterDelay: 0)
+                    return
+                }
+
+                // Directly open Firefox without showing a sheet
+                switch shareItem {
+                case .shareItem(let item):
+                    self.openFirefox(withUrl: item.url, isSearch: false)
+                case .rawText(let text):
+                    self.openFirefox(withUrl: text, isSearch: true)
+                }
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -38,25 +38,25 @@ class ActionViewController: UIViewController {
     }
 
     // Extracts the shared item using the extension's helper.
-//    private func getShareItem(completion: @escaping (ExtensionUtils.ExtractedShareItem?) -> Void) {
-//        let context = extensionContext
-//        ExtensionUtils.extractSharedItem(fromExtensionContext: context) { [weak self] item, error in
-//            if let item = item, error == nil {
-//                completion(item)
-//            } else {
-//                completion(nil)
-//                DispatchQueue.main.async {
-//                    self?.extensionContext?.cancelRequest(withError: CocoaError(.keyValueValidation))
-//                }
-//            }
-//        }
-//    }
+    private func getShareItem(completion: @escaping (ExtensionUtils.ExtractedShareItem?) -> Void) {
+        let context = extensionContext
+        ExtensionUtils.extractSharedItem(fromExtensionContext: context) { [weak self] item, error in
+            if let item = item, error == nil {
+                completion(item)
+            } else {
+                completion(nil)
+                DispatchQueue.main.async {
+                    self?.extensionContext?.cancelRequest(withError: CocoaError(.keyValueValidation))
+                }
+            }
+        }
+    }
 
     /// Opens Firefox with the given URL or text.
     private func openFirefox(withUrl url: String, isSearch: Bool) {
         // Telemetry is handled in the app delegate that receives this event.
-//        let profile = BrowserProfile(localName: "profile")
-//        profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
+        let profile = BrowserProfile(localName: "profile")
+        profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
 
         func firefoxUrl(_ url: String) -> String {
             let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
