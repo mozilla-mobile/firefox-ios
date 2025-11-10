@@ -3951,7 +3951,16 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleRelayMaskResult(_ result: RelayMaskGenerationResult) {
-        // TODO: show toast messages if needed
+        switch result {
+        case .newMaskGenerated:
+            break
+        case .error:
+            let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
+            SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
+        case .freeTierLimitReached:
+            let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
+            SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
+        }
     }
 }
 
