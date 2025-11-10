@@ -61,8 +61,9 @@ public protocol BookmarksHandler {
 public protocol HistoryHandler {
     func applyObservation(visitObservation: VisitObservation,
                           completion: @escaping (Result<Void, any Error>) -> Void)
-    func getHistoryMetadataSince(
-        since startDate: Int64,
+
+    func getMostRecentHistoryMetadata(
+        limit: Int32,
         completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
     )
 
@@ -550,12 +551,12 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
 
     // MARK: History metadata
     /// Currently only used to get the recent searches from the user's history storage.
-    public func getHistoryMetadataSince(
-        since startDate: Int64,
+    public func getMostRecentHistoryMetadata(
+        limit: Int32,
         completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
     ) {
         withReader({ connection in
-            return try connection.getHistoryMetadataSince(since: startDate)
+            return try connection.getMostRecentHistoryMetadata(limit: limit)
         }, completion: completion)
     }
 

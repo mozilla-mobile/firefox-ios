@@ -18,8 +18,8 @@ final class DefaultRecentSearchProvider: RecentSearchProvider {
     private let logger: Logger
     private let nimbus: FxNimbus
 
-    private var maxNumberOfSuggestions: Int {
-        return nimbus.features.recentSearchesFeature.value().maxSuggestions
+    private var maxNumberOfSuggestions: Int32 {
+        return Int32(nimbus.features.recentSearchesFeature.value().maxSuggestions)
     }
 
     init(
@@ -57,16 +57,14 @@ final class DefaultRecentSearchProvider: RecentSearchProvider {
     /// Only care about returning the `maxNumberOfSuggestions`.
     /// We don't have an interface to fetch only a certain amount, so we follow what Android does for now.
     func loadRecentSearches(completion: @escaping ([String]) -> Void) {
-      // TODO: FXIOS-13782 Use get_most_recent method to fetch history
-      historyStorage.getHistoryMetadataSince(since: Int64.min) { [weak self] result in
-          if case .success(let historyMetadata) = result {
-              let uniqueSearchTermResult = historyMetadata.compactMap { $0.searchTerm }
-                  .uniqued()
-                  .prefix(self?.maxNumberOfSuggestions ?? 5)
-              completion(Array(uniqueSearchTermResult))
-          } else {
-              completion([])
-          }
-      }
+        historyStorage.getMostRecentHistoryMetadata(limit: maxNumberOfSuggestions) { result in
+            if case .success(let historyMetadata) = result {
+                let uniqueSearchTermResult = historyMetadata.compactMap { $0.searchTerm }
+                    .uniqued()
+                completion(uniqueSearchTermResult)
+            } else {
+                completion([])
+            }
+        }
     }
 }
