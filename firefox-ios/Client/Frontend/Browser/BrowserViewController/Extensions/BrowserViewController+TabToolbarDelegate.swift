@@ -247,7 +247,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     /// This is a workaround for dismissing CFRs when keyboard is showing up.
     func dismissCFRs() {
-        print("YRD --- dismissCFRs")
         summarizeToolbarEntryContextHintVC.dismiss(animated: false)
         translationContextHintVC.dismiss(animated: false)
     }
