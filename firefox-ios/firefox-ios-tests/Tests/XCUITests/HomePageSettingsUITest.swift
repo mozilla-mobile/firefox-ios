@@ -228,6 +228,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
         waitForElementsToExist(
             [
                 app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],

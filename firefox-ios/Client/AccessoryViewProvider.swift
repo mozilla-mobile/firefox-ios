@@ -168,7 +168,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
 
     private lazy var relayMaskView: AutofillAccessoryViewButtonItem = {
         let accessoryView = AutofillAccessoryViewButtonItem(
-            image: UIImage(named: StandardImageIdentifiers.Large.relayMaskIcon),
+            image: UIImage(named: StandardImageIdentifiers.Large.emailMask),
             labelText: .RelayMask.UseRelayEmailMaskFromKeyboard,
             tappedAction: { [weak self] in
                 self?.tappedUseRelayMaskButton()
