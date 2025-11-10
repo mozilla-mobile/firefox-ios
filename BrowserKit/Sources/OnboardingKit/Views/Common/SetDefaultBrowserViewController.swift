@@ -7,7 +7,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-// BottomSheetViewController
+// TODO: FXIOS-14070 - migrate OnboardingBottomSheetViewController to ComponentLibrary and adopt it where needed. 
 public class SetDefaultBrowserViewController: UIViewController,
                                               Themeable {
     public var themeManager: any Common.ThemeManager
@@ -15,9 +15,8 @@ public class SetDefaultBrowserViewController: UIViewController,
     public var currentWindowUUID: Common.WindowUUID?
     private var notificationCenter: NotificationProtocol
     private let child: UIViewController
-    var onHeightUpdate: ((CGFloat) -> Void)?
-
-    private var lastCalculatedHeight: CGFloat = 0
+    
+    var lastCalculatedHeight: CGFloat = 0
     private var hasInitialLayoutCompleted = false
 
     private lazy var closeButton: UIButton = .build {
@@ -29,6 +28,10 @@ public class SetDefaultBrowserViewController: UIViewController,
             self?.dismiss(animated: true)
         }), for: .touchUpInside)
         $0.showsLargeContentViewer = true
+    }
+    private lazy var contentView: UIScrollView = .build {
+        $0.showsVerticalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
     }
 
     init(
@@ -60,22 +63,10 @@ public class SetDefaultBrowserViewController: UIViewController,
         let navController = UINavigationController(rootViewController: controller)
 
         if #available(iOS 16.0, *) {
-            var heightValue = 0.0
-
-            controller.onHeightUpdate = { [weak navController] height in
-                heightValue = height
-                if let sheet = navController?.sheetPresentationController {
-                    sheet.animateChanges {
-                        sheet.invalidateDetents()
-                    }
-                }
+            let customDetent = UISheetPresentationController.Detent.custom { [weak controller] context in
+                return controller?.lastCalculatedHeight ?? 0.0
             }
-
-            let customDetent = UISheetPresentationController.Detent.custom { context in
-                return heightValue
-            }
-
-            navController.sheetPresentationController?.detents = [.medium()]
+            navController.sheetPresentationController?.detents = [customDetent]
         } else {
             navController.sheetPresentationController?.detents = [.large(), .medium()]
         }
@@ -88,6 +79,7 @@ public class SetDefaultBrowserViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
@@ -109,19 +101,29 @@ public class SetDefaultBrowserViewController: UIViewController,
             calculateAndUpdateHeight()
         }
     }
+    
+    private func setupLayout() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+        
+        addChild(child)
+        view.addSubview(contentView)
+        contentView.addSubview(child.view)
+
+        contentView.pinToSuperview()
+        NSLayoutConstraint.activate([
+            child.view.topAnchor.constraint(equalTo: contentView.contentLayoutGuide.topAnchor),
+            child.view.bottomAnchor.constraint(equalTo: contentView.contentLayoutGuide.bottomAnchor),
+            child.view.leadingAnchor.constraint(equalTo: contentView.contentLayoutGuide.leadingAnchor),
+            child.view.trailingAnchor.constraint(equalTo: contentView.contentLayoutGuide.trailingAnchor),
+            child.view.widthAnchor.constraint(equalTo: contentView.frameLayoutGuide.widthAnchor),
+            child.view.heightAnchor.constraint(greaterThanOrEqualTo: contentView.heightAnchor)
+        ])
+        
+        child.didMove(toParent: self)
+    }
 
     private func calculateAndUpdateHeight() {
         child.view.layoutIfNeeded()
-
-        var calculatedHeight: CGFloat = 0
-
-//        if let hostingController = child as? UIHostingController<any View> {
-//        let hostingSize = child.view.sizeThatFits(CGSize(
-//            width: view.bounds.width,
-//            height: CGFloat.greatestFiniteMagnitude
-//        ))
-//        calculatedHeight = hostingSize.height
-//        } else {
         let targetSize = CGSize(
             width: view.bounds.width,
             height: UIView.layoutFittingCompressedSize.height
@@ -132,24 +134,14 @@ public class SetDefaultBrowserViewController: UIViewController,
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
-        calculatedHeight = fittingSize.height
-//        }
-
-        let heightDifference = abs(calculatedHeight - lastCalculatedHeight)
-        if heightDifference > 5 || lastCalculatedHeight == 0 {
+        let calculatedHeight = fittingSize.height
+        print("FF: calculated Height: \(calculatedHeight)")
+        if #available(iOS 16.0, *) {
             lastCalculatedHeight = calculatedHeight
-            onHeightUpdate?(calculatedHeight)
+            navigationController?.sheetPresentationController?.animateChanges { [weak self] in
+                self?.navigationController?.sheetPresentationController?.invalidateDetents()
+            }
         }
-    }
-
-    private func setupLayout() {
-        addChild(child)
-
-        view.addSubviews(child.view)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
-
-        child.view.pinToSuperview()
-        child.didMove(toParent: self)
     }
 
     // MARK: - Themeable
