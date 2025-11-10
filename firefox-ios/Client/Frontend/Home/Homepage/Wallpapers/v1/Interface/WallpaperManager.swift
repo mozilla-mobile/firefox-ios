@@ -17,6 +17,7 @@ protocol WallpaperManagerInterface {
     var availableCollections: [WallpaperCollection] { get }
     var canSettingsBeShown: Bool { get }
 
+    @MainActor
     func canOnboardingBeShown(using: Profile) -> Bool
     func onboardingSeen()
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
@@ -80,6 +81,7 @@ class WallpaperManager: WallpaperManagerInterface {
 
     /// Determines whether the wallpaper onboarding can be shown
     /// Doesn't need overlayState to check for CFR because the state was previously check
+    @MainActor
     func canOnboardingBeShown(using profile: Profile) -> Bool {
         let cfrHintUtility = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
         let toolbarUpdateCFRShown = !cfrHintUtility.canPresent(.toolbarUpdate)

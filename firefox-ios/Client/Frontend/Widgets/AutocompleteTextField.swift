@@ -426,7 +426,9 @@ class AutocompleteTextField: UITextField,
         return super.canPerformAction(action, withSender: sender)
     }
 
-    func menuHelperPasteAndGo() {
-        autocompleteDelegate?.autocompletePasteAndGo(self)
+    nonisolated func menuHelperPasteAndGo() {
+        ensureMainThread {
+            self.autocompleteDelegate?.autocompletePasteAndGo(self)
+        }
     }
 }

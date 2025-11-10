@@ -89,6 +89,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
         }
     }
 
+    @MainActor
     func createNewFolder() {
         bookmarkCoordinatorDelegate?.showBookmarkDetail(
             bookmarkType: .folder,
@@ -137,6 +138,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
         }
     }
 
+    @MainActor
     func didFinish() {
         bookmarkCoordinatorDelegate?.didFinish()
     }

@@ -4,6 +4,7 @@
 
 import Foundation
 
+@MainActor
 struct StoriesFeedSectionLayoutProvider {
     struct UX {
         static let cellSize = CGSize(width: 320, height: 282)

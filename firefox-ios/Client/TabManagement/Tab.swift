@@ -52,11 +52,17 @@ extension TabContentScript {
 }
 
 protocol LegacyTabDelegate: AnyObject {
+    @MainActor
     func tab(_ tab: Tab, didAddLoginAlert alert: SaveLoginAlert)
+    @MainActor
     func tab(_ tab: Tab, didRemoveLoginAlert alert: SaveLoginAlert)
+    @MainActor
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String)
+    @MainActor
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String)
+    @MainActor
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
+    @MainActor
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 

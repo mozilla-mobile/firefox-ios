@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 import UIKit
 
 enum CFRTelemetryEvent {
@@ -24,6 +25,7 @@ enum ContextualHintType: String {
     case summarizeToolbarEntry = "SummarizeToolbarEntry"
 }
 
+@MainActor
 class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
     typealias CFRStrings = String.ContextualHints
@@ -141,12 +143,14 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
 
     // MARK: - Present
     @objc
-    private func presentHint() {
-        guard shouldPresentContextualHint() else { return }
+    private nonisolated func presentHint() {
+        ensureMainThread {
+            guard self.shouldPresentContextualHint() else { return }
 
-        timer?.invalidate()
-        timer = nil
-        presentFromTimer?()
-        presentFromTimer = nil
+            self.timer?.invalidate()
+            self.timer = nil
+            self.presentFromTimer?()
+            self.presentFromTimer = nil
+        }
     }
 }
