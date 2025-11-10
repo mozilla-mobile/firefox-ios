@@ -422,9 +422,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         } else {
             navigator.performAction(Action.GoToHomePage)
         }
-        if iPad() {
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
-        }
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         longPressBookmarkCell()
         contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
         // The webpage opens in a new private tab
