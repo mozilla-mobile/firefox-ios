@@ -22,14 +22,15 @@ patterns = [pattern]
 BITRISE_YML = 'bitrise.yml'
 WORKFLOW = 'NewXcodeVersions'
 
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # Ensure this variable is set in your CI environment
+
+headers = {
+    "Authorization": f"token {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github.v3+json"
+}
+
 def latest_stack():
     try:
-        GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # Ensure this variable is set in your CI environment
-
-        headers = {
-            "Authorization": f"token {GITHUB_TOKEN}",
-            "Accept": "application/vnd.github.v3+json"
-        }
         resp = requests.get(BITRISE_STACK_INFO, headers=headers)    
         resp.raise_for_status()
         resp_json = resp.json()
@@ -45,7 +46,8 @@ def latest_stack():
         
 def latest_stable_stack():
     try:
-        resp = requests.get(BITRISE_STACK_INFO)
+        resp = requests.get(BITRISE_STACK_INFO, headers=headers)    
+        resp.raise_for_status()
         resp_json = resp.json()
 
         stack_names = [stack.get("name").replace(".md", "") for stack in resp_json]
