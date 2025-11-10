@@ -328,14 +328,12 @@ final class OnboardingService: FeatureFlaggable {
             closeButtonA11yIdentifier:
                 AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
         )
-//        let bottomSheetVC = OnboardingBottomSheetViewController(
-//            viewModel: bottomSheetViewModel,
-//            childViewController: instructionsVC,
-//            usingDimmedBackground: true,
-//            windowUUID: windowUUID
-//        )
 
-        let bottomSheetVC = SetDefaultBrowserViewController.factory(child: instructionsVC, windowUUID: windowUUID)
+        let bottomSheetVC = SetDefaultBrowserViewController.factory(
+            child: instructionsVC,
+            closeButtonModel: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
+            windowUUID: windowUUID
+        )
         return bottomSheetVC
     }
 

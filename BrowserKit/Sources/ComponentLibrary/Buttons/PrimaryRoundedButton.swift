@@ -7,14 +7,19 @@ import UIKit
 
 public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     private struct UX {
-        static var buttonCornerRadius: CGFloat {
+        static var isGlassVersionAvailable: Bool {
             if #available(iOS 26.0, *) {
-                return 32
+                return true
             } else {
-                return 12
+                return false
             }
         }
-        static let buttonVerticalInset: CGFloat = 12
+        static var buttonCornerRadius: CGFloat {
+            return isGlassVersionAvailable ? 32.0 : 12.0
+        }
+        static var buttonVerticalInset: CGFloat {
+            return isGlassVersionAvailable ? 15.0 : 12.0
+        }
         static let buttonHorizontalInset: CGFloat = 16
 
         static let contentInsets = NSDirectionalEdgeInsets(
@@ -69,10 +74,15 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             var container = incoming
             if self?.state == .disabled {
                 container.foregroundColor = self?.foregroundColorDisabled
-            } else {
+            // For glass version we don't need to apply the foregrund color as it is handled by the .glassProminent config
+            } else if #unavailable(iOS 26) {
                 container.foregroundColor = self?.foregroundColor
             }
-            container.font = FXFontStyles.Bold.callout.scaledFont()
+            if #available(iOS 26, *) {
+                container.font = FXFontStyles.Bold.headline.scaledFont()
+            } else {
+                container.font = FXFontStyles.Bold.callout.scaledFont()
+            }
             return container
         }
         updatedConfiguration.imageColorTransformer = UIConfigurationColorTransformer { [weak self] color in

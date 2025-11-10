@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import Common
 import UIKit
+import SwiftUI
+import Common
 import ComponentLibrary
 
 // BottomSheetViewController
@@ -33,6 +33,7 @@ public class SetDefaultBrowserViewController: UIViewController,
 
     init(
         child: UIViewController,
+        closeButtonModel: CloseButtonViewModel,
         windowUUID: WindowUUID,
         notificationCenter: NotificationProtocol,
         themeManager: ThemeManager
@@ -46,26 +47,23 @@ public class SetDefaultBrowserViewController: UIViewController,
 
     public static func factory(
         child: UIViewController,
+        closeButtonModel: CloseButtonViewModel,
         windowUUID: WindowUUID,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) -> UIViewController {
-        let testChild = UIHostingController(rootView: TestOnboardingView())
-        testChild.view.backgroundColor = .clear
-        let controller = SetDefaultBrowserViewController(child: testChild,
+        let controller = SetDefaultBrowserViewController(child: child,
+                                                         closeButtonModel: closeButtonModel,
                                                          windowUUID: windowUUID,
                                                          notificationCenter: notificationCenter,
                                                          themeManager: themeManager)
         let navController = UINavigationController(rootViewController: controller)
 
         if #available(iOS 16.0, *) {
-            final class HeightHolder {
-                var height: CGFloat = 400
-            }
-            let heightHolder = HeightHolder()
+            var heightValue = 0.0
 
             controller.onHeightUpdate = { [weak navController] height in
-                heightHolder.height = height
+                heightValue = height
                 if let sheet = navController?.sheetPresentationController {
                     sheet.animateChanges {
                         sheet.invalidateDetents()
@@ -74,15 +72,15 @@ public class SetDefaultBrowserViewController: UIViewController,
             }
 
             let customDetent = UISheetPresentationController.Detent.custom { context in
-                return heightHolder.height
+                return heightValue
             }
 
-            navController.sheetPresentationController?.detents = [customDetent]
+            navController.sheetPresentationController?.detents = [.medium()]
         } else {
             navController.sheetPresentationController?.detents = [.large(), .medium()]
         }
-        navController.sheetPresentationController?.prefersGrabberVisible = true
         navController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
+        navController.sheetPresentationController?.prefersScrollingExpandsWhenScrolledToEdge = false
         return navController
     }
 
@@ -113,30 +111,29 @@ public class SetDefaultBrowserViewController: UIViewController,
     }
 
     private func calculateAndUpdateHeight() {
-        child.view.setNeedsLayout()
         child.view.layoutIfNeeded()
 
         var calculatedHeight: CGFloat = 0
 
-        if let hostingController = child as? UIHostingController<TestOnboardingView> {
-            let hostingSize = hostingController.sizeThatFits(in: CGSize(
-                width: view.bounds.width,
-                height: CGFloat.greatestFiniteMagnitude
-            ))
-            calculatedHeight = hostingSize.height
-        } else {
-            let targetSize = CGSize(
-                width: view.bounds.width,
-                height: UIView.layoutFittingCompressedSize.height
-            )
+//        if let hostingController = child as? UIHostingController<any View> {
+//        let hostingSize = child.view.sizeThatFits(CGSize(
+//            width: view.bounds.width,
+//            height: CGFloat.greatestFiniteMagnitude
+//        ))
+//        calculatedHeight = hostingSize.height
+//        } else {
+        let targetSize = CGSize(
+            width: view.bounds.width,
+            height: UIView.layoutFittingCompressedSize.height
+        )
 
-            let fittingSize = child.view.systemLayoutSizeFitting(
-                targetSize,
-                withHorizontalFittingPriority: .required,
-                verticalFittingPriority: .fittingSizeLevel
-            )
-            calculatedHeight = fittingSize.height
-        }
+        let fittingSize = child.view.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        calculatedHeight = fittingSize.height
+//        }
 
         let heightDifference = abs(calculatedHeight - lastCalculatedHeight)
         if heightDifference > 5 || lastCalculatedHeight == 0 {
@@ -160,45 +157,8 @@ public class SetDefaultBrowserViewController: UIViewController,
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         closeButton.tintColor = theme.colors.iconPrimary
-    }
-}
-
-import SwiftUI
-
-struct TestOnboardingView: View {
-    var body: some View {
-            VStack(spacing: 32.0) {
-                VStack {
-                }
-                Text("Switch your default browser")
-                    .font(FXFontStyles.Bold.title3.scaledSwiftUIFont())
-
-                Text("""
-        1. Go to **Settings**
-
-        2. Tap to **Default Browser App**
-
-        3. Select **Firefox**
-        """
-                )
-                .font(FXFontStyles.Regular.subheadline.scaledSwiftUIFont())
-
-                OnboardingPrimaryButton(
-                    title: "Go to settings",
-                    action: {
-                    },
-                    theme: LightTheme(),
-                    accessibilityIdentifier: "")
-            }
-        .padding(.horizontal, 40.0)
-        .padding(.top, 30.0)
-        .padding(.bottom, 20.0)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .scrollBounceBehavior(basedOnSize: true)
-        .background(Color.blue.opacity(0.1))
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.red, lineWidth: 3)
-        )
+        if #unavailable(iOS 26.0) {
+            view.backgroundColor = theme.colors.layer1
+        }
     }
 }

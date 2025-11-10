@@ -11,6 +11,7 @@ extension View {
     func primaryButtonStyle(theme: Theme) -> some View {
         if #available(iOS 26.0, *) {
             self.buttonStyle(.glassProminent)
+                .tint(theme.colors.actionPrimary.color)
                 .font(UX.CardView.primaryActionGlassFont)
         } else {
             self.buttonStyle(.borderless)
