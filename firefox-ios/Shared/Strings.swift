@@ -7779,6 +7779,31 @@ extension String {
             tableName: "RelayMask",
             value: "Email masks aren’t available right now. Try again in a few minutes.",
             comment: "Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask.")
+        public static let RelayEmailMaskSuggestMasksToggle = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSuggestMasksToggle.v146",
+            tableName: "RelayMask",
+            value: "Suggest Email Masks",
+            comment: "Label for settings toggle which allows users to enable or disable the suggestion of Relay email masks on registration forms, to provide anonymous email masking.")
+        public static let RelayEmailMaskSettingsTitle = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSettingsTitle.v146",
+            tableName: "RelayMask",
+            value: "Email Masks",
+            comment: "Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay.")
+        public static let RelayEmailMaskSettingsDetailInfo = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSettingsDetailInfo.v146",
+            tableName: "RelayMask",
+            value: "Hide your real email to protect your inbox from spam. Some sites don’t support it.",
+            comment: "Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality.")
+        public static let RelayEmailMaskSettingsLearnMore = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSettingsLearnMore.v146",
+            tableName: "RelayMask",
+            value: "Learn more",
+            comment: "Website link title that takes users to a website to learn additional information about the Relay email mask feature.")
+        public static let RelayEmailMaskSettingsManageEmailMasks = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146",
+            tableName: "RelayMask",
+            value: "Manage Email Masks",
+            comment: "Button title which takes users to a webpage to manage their Relay email masks and related settings.")
     }
 }
 
