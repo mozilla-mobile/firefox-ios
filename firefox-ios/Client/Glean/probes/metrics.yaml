@@ -3588,6 +3588,8 @@ nimbus_system:
           type: boolean
         cannot_use_apple_intelligence:
           type: boolean
+        tou_experience_points:
+          type: number
     description: |
       The Nimbus context object that is recorded to Glean
     bugs:

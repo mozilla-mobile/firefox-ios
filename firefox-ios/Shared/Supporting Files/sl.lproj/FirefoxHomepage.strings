@@ -4,6 +4,9 @@
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "Domača stran";
 
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Priljubljeno danes";
+
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "Zgodbe";
 

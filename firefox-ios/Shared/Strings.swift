@@ -7804,6 +7804,32 @@ extension String {
         comment: "Title label displayed for the cancel action in an alert when the password autofill fails and needs user interaction.")
 }
 
+// MARK: - Relay Masks
+extension String {
+    public struct RelayMask {
+        public static let UseRelayEmailMaskFromKeyboard = MZLocalizedString(
+            key: "RelayMask.UseRelayEmailMaskFromKeyboard.v146",
+            tableName: "RelayMask",
+            value: "Use email mask",
+            comment: "Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically.")
+        public static let RelayEmailMaskAvailableCFR = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskAvailableCFR.v146",
+            tableName: "RelayMask",
+            value: "New! %@ Relay email masks are now available on mobile.",
+            comment: "Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox')")
+        public static let RelayEmailMaskFreeTierLimitReached = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskFreeTierLimitReached.v146",
+            tableName: "RelayMask",
+            value: "Your 5 free email masks are in use, so we picked one for you.",
+            comment: "Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly.")
+        public static let RelayEmailMaskGenericErrorMessage = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskGenericErrorMessage.v146",
+            tableName: "RelayMask",
+            value: "Email masks aren’t available right now. Try again in a few minutes.",
+            comment: "Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask.")
+    }
+}
+
 // MARK: - Password autofill
 extension String {
     public struct PasswordAutofill {

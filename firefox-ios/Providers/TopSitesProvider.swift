@@ -38,7 +38,7 @@ extension TopSitesProvider {
 }
 
 // TODO: FXIOS-13706 TopSitesProviderImplementation should be concurrency safe
-class TopSitesProviderImplementation: @MainActor TopSitesProvider, @unchecked Sendable {
+class TopSitesProviderImplementation: @MainActor TopSitesProvider, FeatureFlaggable, @unchecked Sendable {
     private let pinnedSiteFetcher: PinnedSites
     private let placesFetcher: RustPlaces
     private let prefs: Prefs
@@ -48,6 +48,13 @@ class TopSitesProviderImplementation: @MainActor TopSitesProvider, @unchecked Se
 
     var defaultSuggestedSitesKey: String {
         return "topSites.suggestedSites"
+    }
+
+    private var shouldExcludeFirefoxJpGuide: Bool {
+        let isFirefoxJpGuideDefaultSiteEnabled = featureFlags.isFeatureEnabled(.firefoxJpGuideDefaultSite,
+                                                                               checking: .buildOnly)
+        let locale = Locale.current
+        return locale.identifier == "ja_JP" && !isFirefoxJpGuideDefaultSiteEnabled
     }
 
     init(
@@ -73,7 +80,15 @@ class TopSitesProviderImplementation: @MainActor TopSitesProvider, @unchecked Se
     }
 
     func defaultTopSites(_ prefs: Prefs) -> [Site] {
-        let suggested = DefaultSuggestedSites.defaultSites()
+        var suggested = DefaultSuggestedSites.defaultSites()
+
+        if shouldExcludeFirefoxJpGuide {
+            // Remove the Firefox Japanese Guide from the list of default sites
+            suggested.removeAll {
+                $0.url == DefaultSuggestedSites.firefoxJpGuideURL
+            }
+        }
+
         let deleted = prefs.arrayForKey(defaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
     }

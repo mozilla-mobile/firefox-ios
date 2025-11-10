@@ -8,13 +8,13 @@
 "DefaultBrowserPopup.FirstLabel.v114" = "1. Անցեք *Կարգավորումներ*";
 
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.SecondLabel.v114" = "2. Հպեք *Սկզբնադիր դիտարկիչ հավելված*";
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Հպեք *Սկզբնադիր դիտարկիչի հավելված*";
 
 /* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. %@ is the app name (e.g. Firefox). The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. Ընտրեք *%@*";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
-"DefaultBrowserPopup.Title.v114" = "Փոխարկեք ձեր սկզբնադիր դիտարկիչը";
+"DefaultBrowserPopup.Title.v114" = "Փոխարկեք Ձեր սկզբնադիր դիտարկիչը";
 
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "Հարմարեցնել %@-ը";
@@ -113,7 +113,7 @@
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Ընտրեք, թե որտեղ տեղադրել հասցեի տողը";
 
 /* Title for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Title.v145" = "Ընտրեք ձեր հասցեի տողը";
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "Ընտրեք Ձեր հասցեագոտին";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Վերևում";

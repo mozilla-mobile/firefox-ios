@@ -4,6 +4,15 @@
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "Eka paĝo";
 
+/* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
+"FirefoxHome.Stories.AllStoriesButtonTitle.v145" = "Ĉiuj artikoloj";
+
+/* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
+"FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Ĉiuj artikoloj";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Popularaj hodiaŭ";
+
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "Artikoloj";
 

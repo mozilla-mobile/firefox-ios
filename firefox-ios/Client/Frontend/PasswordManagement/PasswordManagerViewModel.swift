@@ -78,7 +78,7 @@ final class PasswordManagerViewModel {
 
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
-    func queryLogins(_ query: String, completion: @escaping ([Login]) -> Void) {
+    func queryLogins(_ query: String, completion: @escaping @Sendable ([Login]) -> Void) {
         loginProvider.searchLoginsWithQuery(query) { result in
             ensureMainThread {
                 switch result {
@@ -155,7 +155,7 @@ final class PasswordManagerViewModel {
         }
     }
 
-    public func save(loginRecord: LoginEntry, completion: @escaping ((String?) -> Void)) {
+    public func save(loginRecord: LoginEntry, completion: @escaping @Sendable ((String?) -> Void)) {
         loginProvider.addLogin(login: loginRecord, completionHandler: { result in
             switch result {
             case .success(let encryptedLogin):
