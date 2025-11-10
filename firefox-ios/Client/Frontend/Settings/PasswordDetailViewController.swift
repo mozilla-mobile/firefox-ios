@@ -214,6 +214,23 @@ extension PasswordDetailViewController: UITableViewDataSource {
         }
     }
 
+    private func cell(tableView: UITableView, forUsername indexPath: IndexPath) -> UITableViewCell {
+        guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+            return UITableViewCell()
+        }
+        let cellModel = LoginDetailTableViewCellModel(
+            title: .LoginDetailUsername,
+            description: viewModel.login.username,
+            keyboardType: .emailAddress,
+            returnKeyType: .next,
+            a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
+            isEditingFieldData: isEditingFieldData)
+        loginCell.configure(viewModel: cellModel)
+        loginCell.applyTheme(theme: currentTheme())
+        usernameField = loginCell.descriptionLabel
+        return loginCell
+    }
+
     private func cell(tableView: UITableView, forPassword indexPath: IndexPath) -> UITableViewCell {
         guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
             return UITableViewCell()
