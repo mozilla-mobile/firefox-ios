@@ -3936,13 +3936,15 @@ class BrowserViewController: UIViewController,
         guard RelayController.isFeatureEnabled else { return }
 
         if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            RelayController.shared.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
         }
     }
 
     private func handleUseRelayMaskTapped() {
-        // TODO: Forthcoming.
+        guard let currentTab = tabManager.selectedTab else { return }
+        RelayController.shared.populateEmailFieldWithRelayMask(for: currentTab)
     }
 }
 

@@ -21,6 +21,9 @@ protocol RelayControllerProtocol {
 
     @MainActor
     func populateEmailFieldWithRelayMask(for tab: Tab)
+
+    @MainActor
+    func emailFieldFocused(in tab: Tab)
 }
 
 @MainActor
@@ -37,7 +40,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         var serverURL: String {
             switch self {
             case .prod: return "https://relay.firefox.com"
-            case .staging: assertionFailure("ToDo."); return "<invalid>"  // TBD.
+            case .staging: assertionFailure("[ToDo] Need Relay staging info."); return "https://relay.firefox.com"  // TBD.
             }
         }
 
@@ -65,6 +68,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private var client: RelayClient?
     private var isCreatingClient = false
     private let notificationCenter: NotificationProtocol
+    private weak var focusedTab: Tab?
 
     // MARK: - Init
 
@@ -91,6 +95,14 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     func populateEmailFieldWithRelayMask(for tab: Tab) {
+        guard focusedTab == nil || focusedTab === tab else {
+            logger.log("[RELAY] Attempting to populate Relay mask after tab has changed. Bailing.",
+                       level: .warning,
+                       category: .autofill)
+            focusedTab = nil
+            return
+        }
+
         guard let webView = tab.webView else { return }
         guard let email = generateRelayMask(for: tab.url?.baseDomain ?? "") else { return }
 
@@ -110,15 +122,36 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
     }
 
+    func emailFieldFocused(in tab: Tab) {
+        focusedTab = tab
+    }
+
     // MARK: - Private Utilities
 
     private func generateRelayMask(for websiteDomain: String) -> String? {
         guard let client else { return nil }
         do {
-            let relayAddress = try client.createAddress(description: "", generatedFor: "TODO", usedOn: "")
-            return relayAddress.address
+            let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
+            return relayAddress.fullAddress
         } catch {
-            logger.log("[RELAY] Error creating Relay address", level: .warning, category: .autofill)
+            // Certain errors we need to custom-handle
+            if case let RelayApiError.Api(_, code, _) = error, code == "free_tier_limit" {
+                // For Phase 1, we return a random email from the user's list
+                logger.log("[RELAY] Free tier limit reached. Using random mask.", level: .info, category: .autofill)
+                do {
+                    let fullList = try client.fetchAddresses()
+                    let listCount = fullList.count // This should always be 5, but check anyway for safety
+                    if listCount >= 1, let relayMask = fullList[safe: Int.random(in: 0 ..< listCount)] {
+                        return relayMask.fullAddress
+                    } else {
+                        logger.log("[RELAY] Couldn't fetch random mask", level: .warning, category: .autofill)
+                    }
+                } catch {
+                    logger.log("[RELAY] Error fetching address list: \(error)", level: .warning, category: .autofill)
+                }
+            } else {
+                logger.log("[RELAY] API error creating Relay address: \(error)", level: .warning, category: .autofill)
+            }
         }
         return nil
     }
