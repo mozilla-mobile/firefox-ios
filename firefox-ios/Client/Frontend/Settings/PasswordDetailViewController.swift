@@ -244,6 +244,23 @@ extension PasswordDetailViewController: UITableViewDataSource {
         }
     }
 
+    private func cell(tableView: UITableView, forWebsite indexPath: IndexPath) -> UITableViewCell {
+        guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+            return UITableViewCell()
+        }
+        let cellModel = LoginDetailTableViewCellModel(
+            title: .LoginDetailWebsite,
+            description: viewModel.login.hostname,
+            a11yId: AccessibilityIdentifiers.Settings.Passwords.websiteField)
+        if isEditingFieldData {
+            loginCell.contentView.alpha = 0.5
+        }
+        loginCell.configure(viewModel: cellModel)
+        loginCell.applyTheme(theme: currentTheme())
+        websiteField = loginCell.descriptionLabel
+        return loginCell
+    }
+
     private func cell(tableView: UITableView, forLastModifiedSeparator indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: LoginDetailCenteredTableViewCell.cellIdentifier,
