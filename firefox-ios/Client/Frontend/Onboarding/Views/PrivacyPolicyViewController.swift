@@ -18,6 +18,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     /// Optional custom tint color for the navigation bar button for iOS 26
     /// This is useful when displaying web pages with fixed backgrounds (e.g., white)
     /// that don't adapt to dark mode, ensuring the button remains visible.
+    @available(iOS 16.0, *)
     var customTintBarButtonColor: UIColor?
 
     init(
