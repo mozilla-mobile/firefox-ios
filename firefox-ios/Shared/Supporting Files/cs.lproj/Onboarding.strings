@@ -154,6 +154,9 @@
 /* Title for the confirmation button on the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Pokračovat";
 
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "Automatická ochrana vašich osobních údajů\nRychlé načítání stránek a chytřejší vyhledávání\nPřináší nezisková organizace %@, které důvěřujete již více než 20 let";
+
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Správa";
 
@@ -191,7 +194,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Údaje o vašem zařízení, konfiguraci hardwaru a způsobu používání aplikace %1$@ pomáhají zlepšovat funkce, výkon a stabilitu pro všechny. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Posílat technická data a data o interakcích společnosti %@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Posílat technická data a data o interakcích organizaci %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Pomozte nám vylepšit %@";
@@ -296,7 +299,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Údaje o vašem zařízení, konfiguraci hardwaru a způsobu používání aplikace %1$@ pomáhají zlepšovat funkce, výkon a stabilitu pro všechny. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Posílat technická data a data o interakcích společnosti %@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Posílat technická data a data o interakcích organizaci %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "Pomozte nám vylepšit %@";

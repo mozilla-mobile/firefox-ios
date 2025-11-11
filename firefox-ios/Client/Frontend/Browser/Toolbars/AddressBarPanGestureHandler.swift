@@ -14,10 +14,12 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     protocol Delegate: AnyObject {
         /// Called when the pan gesture begins during a swipe operation.
         /// This method is invoked once when the user starts swiping between tabs.
+        @MainActor
         func swipeGestureDidBegin()
 
         /// Called when the pan gesture ends, either by completion, cancellation, or failure.
         /// This method is invoked once at the end of the swipe operation, regardless of outcome.
+        @MainActor
         func swipeGestureDidEnd()
     }
 
@@ -86,7 +88,15 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     private func setupGesture() {
@@ -96,7 +106,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     // MARK: - Redux
-    nonisolated func subscribeToRedux() {
+    func subscribeToRedux() {
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -105,7 +115,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         })
     }
 
-    nonisolated private func unsubscribeFromRedux() {
+    private func unsubscribeFromRedux() {
         store.unsubscribe(self)
     }
 
@@ -263,7 +273,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             enablePanGestureRecognizer()
             if shouldCompleteTransition {
                 webPagePreview.isHidden = true
-                store.dispatchLegacy(
+                store.dispatch(
                     ToolbarAction(
                         shouldAnimate: false,
                         windowUUID: windowUUID,
@@ -276,8 +286,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 if let nextTab {
                     tabManager.selectTab(nextTab)
                 } else {
-                    store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                              actionType: GeneralBrowserActionType.addNewTab))
+                    store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                        actionType: GeneralBrowserActionType.addNewTab))
                 }
             } else {
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,

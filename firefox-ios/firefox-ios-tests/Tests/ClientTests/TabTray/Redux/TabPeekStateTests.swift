@@ -18,6 +18,7 @@ final class TabPeekStateTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testLoadTabPeekAction_showAddBookmarks_andSendToDevice() {
         let initialState = createSubject()
         let reducer = tabPeekReducer()
@@ -32,6 +33,22 @@ final class TabPeekStateTests: XCTestCase {
         XCTAssertEqual(newState.showSendToDevice, true)
     }
 
+    @MainActor
+    func testLoadTabPeekAction_showRemoveBookmark_andSendToDevice() {
+        let initialState = createSubject()
+        let reducer = tabPeekReducer()
+
+        XCTAssertEqual(initialState.showRemoveBookmark, false)
+        XCTAssertEqual(initialState.showSendToDevice, false)
+
+        let action = getAction(for: .loadTabPeek)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.showRemoveBookmark, true)
+        XCTAssertEqual(newState.showSendToDevice, true)
+    }
+
+    @MainActor
     func testLoadTabPeekAction_doesNotShowAddBookmarks_orSendToDevice() {
         let initialState = createSubject()
         let reducer = tabPeekReducer()
@@ -41,6 +58,7 @@ final class TabPeekStateTests: XCTestCase {
 
         let model = TabPeekModel(
             canTabBeSaved: false,
+            canTabBeRemoved: false,
             canCopyURL: true,
             isSyncEnabled: true,
             screenshot: UIImage(),
@@ -53,6 +71,30 @@ final class TabPeekStateTests: XCTestCase {
         XCTAssertEqual(newState.showSendToDevice, false)
     }
 
+    @MainActor
+    func testLoadTabPeekAction_doesNotShowRemoveBookmark_orSendToDevice() {
+        let initialState = createSubject()
+        let reducer = tabPeekReducer()
+
+        XCTAssertEqual(initialState.showRemoveBookmark, false)
+        XCTAssertEqual(initialState.showSendToDevice, false)
+
+        let model = TabPeekModel(
+            canTabBeSaved: false,
+            canTabBeRemoved: false,
+            canCopyURL: true,
+            isSyncEnabled: true,
+            screenshot: UIImage(),
+            accessiblityLabel: ""
+        )
+        let action = getAction(for: .loadTabPeek, with: model)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.showRemoveBookmark, false)
+        XCTAssertEqual(newState.showSendToDevice, false)
+    }
+
+    @MainActor
     func testLoadTabPeekAction_showBookmarks_andDoesNotShowDevice() {
         let initialState = createSubject()
         let reducer = tabPeekReducer()
@@ -62,6 +104,7 @@ final class TabPeekStateTests: XCTestCase {
 
         let model = TabPeekModel(
             canTabBeSaved: true,
+            canTabBeRemoved: false,
             canCopyURL: true,
             isSyncEnabled: false,
             screenshot: UIImage(),
@@ -87,6 +130,7 @@ final class TabPeekStateTests: XCTestCase {
         for actionType: TabPeekActionType,
         with model: TabPeekModel = TabPeekModel(
             canTabBeSaved: true,
+            canTabBeRemoved: true,
             canCopyURL: true,
             isSyncEnabled: true,
             screenshot: UIImage(),

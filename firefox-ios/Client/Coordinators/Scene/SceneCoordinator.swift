@@ -20,6 +20,7 @@ class SceneCoordinator: BaseCoordinator,
     private let windowManager: WindowManager
     private let reservedWindowUUID: ReservedWindowUUID
     private let introManager: IntroScreenManagerProtocol
+    private weak var launchScreenViewController: UIViewController?
 
     init(scene: UIScene,
          sceneSetupHelper: SceneSetupHelper = SceneSetupHelper(),
@@ -62,7 +63,7 @@ class SceneCoordinator: BaseCoordinator,
             // Use legacy launch screen for returning users or when modern onboarding is disabled
             launchScreenVC = LaunchScreenViewController(windowUUID: windowUUID, coordinator: self)
         }
-
+        launchScreenViewController = launchScreenVC
         router.push(launchScreenVC, animated: false)
     }
 
@@ -165,6 +166,12 @@ class SceneCoordinator: BaseCoordinator,
     func didFinishTermsOfService(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true)
         remove(child: coordinator)
+        // TODO: FXIOS-13434 Refactor the `LaunchScreenViewModel` to enhance the presentation logic
+        // This workaround is needed since .overFullScreen presentation doesn't call UIViewController lifecycle methods.
+        guard let launchScreenViewController = launchScreenViewController as? ModernLaunchScreenViewController else {
+            return
+        }
+        launchScreenViewController.loadNextLaunchType()
     }
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {

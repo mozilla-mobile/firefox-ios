@@ -7,6 +7,7 @@ import Redux
 import Account
 import Shared
 
+@MainActor
 final class MainMenuMiddleware: FeatureFlaggable {
     private enum TelemetryAction {
         static let findInPage = "find_in_page"
@@ -41,25 +42,11 @@ final class MainMenuMiddleware: FeatureFlaggable {
     }
 
     lazy var mainMenuProvider: Middleware<AppState> = { state, action in
-        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
-        // because we dispatch to the main thread in the store. We will want to
-        // also isolate that to the @MainActor to remove this.
-        guard Thread.isMainThread else {
-            self.logger.log(
-                "Main Menu Middleware is not being called from the main thread!",
-                level: .fatal,
-                category: .tabs
-            )
-            return
-        }
-        MainActor.assumeIsolated {
-            guard let action = action as? MainMenuAction else { return }
-            let isHomepage = action.telemetryInfo?.isHomepage ?? false
-            self.handleMainMenuActions(action: action, isHomepage: isHomepage)
-        }
+        guard let action = action as? MainMenuAction else { return }
+        let isHomepage = action.telemetryInfo?.isHomepage ?? false
+        self.handleMainMenuActions(action: action, isHomepage: isHomepage)
     }
 
-    @MainActor
     private func handleMainMenuActions(action: MainMenuAction, isHomepage: Bool) {
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
@@ -122,16 +109,14 @@ final class MainMenuMiddleware: FeatureFlaggable {
         }
     }
 
-    @MainActor
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
         dispatchUpdateBannerVisibility(action: action)
         dispatchUpdateMenuAppearance(action: action)
         handleViewDidLoadAction(action: action)
     }
 
-    @MainActor
     private func dispatchUpdateBannerVisibility(action: MainMenuAction) {
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.updateBannerVisibility,
@@ -141,7 +126,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
     }
 
     private func dispatchUpdateMenuAppearance(action: MainMenuAction) {
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.updateMenuAppearance,
@@ -151,13 +136,13 @@ final class MainMenuMiddleware: FeatureFlaggable {
     }
 
     private func handleViewDidLoadAction(action: MainMenuAction) {
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.requestTabInfo
             )
         )
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.requestTabInfoForSiteProtectionsHeader
@@ -219,13 +204,13 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case .settings:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.settings)
 
-        case .printSheetV2:
+        case .printSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
 
         case .shareSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.share)
 
-        case .saveAsPDFV2:
+        case .saveAsPDF:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.saveAsPDF)
 
         case .syncSignIn:

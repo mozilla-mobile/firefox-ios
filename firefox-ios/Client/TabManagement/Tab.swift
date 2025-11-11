@@ -79,7 +79,7 @@ typealias TabUUID = String
 
 @MainActor
 class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
-    static let privateModeKey = "PrivateModeKey"
+    nonisolated static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
         get {
@@ -288,7 +288,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
     // TODO: FXIOS-13297 Keep track of new DispatchQueueInterface usages
-    private nonisolated let removeDispatchQueue: DispatchQueueInterface
+    nonisolated private let removeDispatchQueue: DispatchQueueInterface
     var faviconURL: String? {
         didSet {
             guard let url = url,
@@ -808,10 +808,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.screenshot = screenshot
     }
 
-    func toggleChangeUserAgent() {
-        changedUserAgent = !changedUserAgent
+    func toggleChangeUserAgent(originalURL: URL? = nil) {
+        changedUserAgent.toggle()
+        let activeURL = originalURL ?? url
 
-        if changedUserAgent, let url = url {
+        if changedUserAgent, let url = activeURL {
             let url = ChangeUserAgent().removeMobilePrefixFrom(url: url)
             let request = URLRequest(url: url)
             webView?.load(request)
@@ -923,7 +924,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return false
     }
 
-    private nonisolated func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
+    nonisolated private func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
         guard !docsURL.isEmpty else { return }
         removeDispatchQueue.async { [fileManager] in
             docsURL.forEach { url in
@@ -955,8 +956,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
 
-        temporaryDocument?.download { [weak self] url in
-            ensureMainThread {
+        temporaryDocument?.download { url in
+            ensureMainThread { [weak self] in
                 guard let url else { return }
 
                 // Prevent the WebView to load a new item so it doesn't add a new entry to the back and forward list.

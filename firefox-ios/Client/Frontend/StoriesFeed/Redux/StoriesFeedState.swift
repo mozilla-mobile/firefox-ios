@@ -10,7 +10,7 @@ struct StoriesFeedState: ScreenState, Equatable {
     let storiesData: [MerinoStoryConfiguration]
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let storiesFeedState = store.state.screenState(
+        guard let storiesFeedState = appState.screenState(
             StoriesFeedState.self,
             for: .storiesFeed,
             window: uuid

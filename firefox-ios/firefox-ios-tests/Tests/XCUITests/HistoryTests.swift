@@ -31,11 +31,17 @@ class HistoryTests: BaseTestCase {
     let testWithDB = [
         "testOpenHistoryFromBrowserContextMenuOptions",
         "testClearHistoryFromSettings",
-        "testClearRecentHistory"
+        "testClearRecentHistory",
+        "testClearRecentHistory_TAE"
     ]
 
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample-places.db"
+
+    var toolbarScreen: ToolbarScreen!
+    var settingScreen: SettingScreen!
+    var browserScreen: BrowserScreen!
+    var historyScreen: HistoryScreen!
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -52,6 +58,10 @@ class HistoryTests: BaseTestCase {
                                LaunchArguments.DisableAnimations]
         }
         super.setUp()
+        toolbarScreen = ToolbarScreen(app: app)
+        settingScreen = SettingScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        historyScreen = HistoryScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307300
@@ -139,6 +149,28 @@ class HistoryTests: BaseTestCase {
         // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
         // After this issue is clarified the assertion will be re-enabled or changed.
         // XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307014
+    // Smoketest TAE
+    func testClearPrivateData_TAE() throws {
+        XCTExpectFailure("The app was not launched", strict: false) {
+            navigator.nowAt(NewTabScreen)
+            toolbarScreen.assertSettingsButtonExists()
+            // Clear private data from settings and confirm
+            navigator.goto(ClearPrivateDataSettings)
+            settingScreen.clearPrivateDataAndConfirm()
+
+            // Wait for OK pop-up to disappear after confirming
+            settingScreen.assertConfirmationAlertNotPresent()
+            // Try to tap on the disabled Clear Private Data button
+            settingScreen.tryTapClearPrivateDataButton()
+
+            // If the button is disabled, the confirmation pop-up should not exist
+            // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
+            // After this issue is clarified the assertion will be re-enabled or changed.
+            // XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
         }
     }
 
@@ -460,6 +492,29 @@ class HistoryTests: BaseTestCase {
         mozWaitForValueContains(url, value: "localhost")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307025
+    // Smoke TAE
+    func testTabHistory_TAE() {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        openBookOfMozilla()
+        toolbarScreen.waitUntilBackButtonHittable(timeout: 2.0)
+        toolbarScreen.pressBackButton(duration: 1.5)
+        browserScreen.tapOnBookOfMozilla()
+        browserScreen.waitForBookOfMozillaToDisappear()
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        openBookOfMozilla()
+        toolbarScreen.assertBackButtonExists()
+        toolbarScreen.pressBackButton(duration: 1)
+        browserScreen.tapOnBookOfMozilla()
+        toolbarScreen.tapBackButton()
+        toolbarScreen.assertBackButtonIsDisabled()
+        toolbarScreen.pressForwardButton(duration: 1)
+        browserScreen.tapOnBookOfMozilla()
+        browserScreen.addressToolbarContainValue(value: "localhost")
+    }
+
     // Private function created to select desired option from the "Clear Recent History" list
     // We used this approach to avoid code duplication
 
@@ -512,6 +567,26 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
+    }
+
+    private func clearRecentHistoryAndValidate(
+        option: String,
+        shouldKeepOldEntries: Bool,
+        oldEntries: [String]
+    ) {
+        let olderText = "Older"
+        navigateToPage(isTabTrayOff: false)
+        navigator.performAction(Action.ClearRecentHistory)
+        historyScreen.tapOnClearRecentHistoryOption(optionSelected: option)
+
+        if shouldKeepOldEntries {
+            historyScreen.waitForHistoryEntries(oldEntries)
+        } else {
+            historyScreen.waitForHistoryEntriesNotExist(oldEntries)
+        }
+
+        historyScreen.waitForStaticText(option, shouldExist: false)
+        historyScreen.waitForStaticText(olderText, shouldExist: shouldKeepOldEntries)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306894
@@ -568,6 +643,34 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Older"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306894
+    // Smoke TAE
+    func testClearRecentHistory_TAE() {
+        clearRecentHistoryAndValidate(
+            option: "Last 24 Hours",
+            shouldKeepOldEntries: true,
+            oldEntries: oldHistoryEntries
+        )
+
+        clearRecentHistoryAndValidate(
+            option: "Last 7 Days",
+            shouldKeepOldEntries: true,
+            oldEntries: oldHistoryEntries
+        )
+
+        clearRecentHistoryAndValidate(
+            option: "Last 4 Weeks",
+            shouldKeepOldEntries: true,
+            oldEntries: oldHistoryEntries
+        )
+
+        clearRecentHistoryAndValidate(
+            option: "All Time",
+            shouldKeepOldEntries: false,
+            oldEntries: oldHistoryEntries
+        )
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306890
     // Smoketest
     func testDeleteHistoryEntryBySwiping() {
@@ -578,5 +681,17 @@ class HistoryTests: BaseTestCase {
         app.buttons["Delete"].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["http://example.com"])
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306890
+    // Smoketest TAE
+    func testDeleteHistoryEntryBySwiping_TAE() {
+        navigateToPage(isTabTrayOff: false)
+        navigator.goto(LibraryPanel_History)
+        historyScreen.waitForExampleEntry()
+        historyScreen.swipeLeftOnExampleEntry()
+        historyScreen.tapDeleteButton()
+        historyScreen.assertExampleEntryRemoved()
+        historyScreen.assertEmptyMessageVisible()
     }
 }

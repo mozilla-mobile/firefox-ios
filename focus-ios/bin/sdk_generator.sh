@@ -20,12 +20,12 @@
 # 4. Add your definition files (`metrics.yaml`, `pings.yaml`, `tags.yaml`) as Input Files for the "Run Script" step.
 # 5. Run the build.
 # 6. Add the files in the `Generated` folder to your project.
-# 7. Add the same files from the `Generated` folder as Output Files of the newly created "Run SCript" step.
+# 7. Add the same files from the `Generated` folder as Output Files of the newly created "Run Script" step.
 # 8. Start using the generated metrics.
 
 set -e
 
-GLEAN_PARSER_VERSION=17.1
+GLEAN_PARSER_VERSION=18.0
 
 # CMDNAME is used in the usage text below.
 # shellcheck disable=SC2034
@@ -122,23 +122,43 @@ while (( "$#" )); do
 done
 
 if [ "$ACTION" = "indexbuild" ]; then
-  echo "Skipping code generation in 'indexbuild' build. See https://bugzilla.mozilla.org/show_bug.cgi?id=1744504 for more info."
-  exit 0
+    echo "Skipping code generation in 'indexbuild' build. See https://bugzilla.mozilla.org/show_bug.cgi?id=1744504 for more info."
+    exit 0
 fi
 
 if [ "${#PARAMS[@]}" -gt 0 ]; then
     YAML_FILES=("${PARAMS[@]}")
 else
-    if [ -z "$SCRIPT_INPUT_FILE_COUNT" ] || [ "$SCRIPT_INPUT_FILE_COUNT" -eq 0 ]; then
+    # Check if at least one input file and/or one input file list has been specified
+    if [[ (-z "$SCRIPT_INPUT_FILE_COUNT" || "$SCRIPT_INPUT_FILE_COUNT" -eq 0) && (-z "$SCRIPT_INPUT_FILE_LIST_COUNT" || "$SCRIPT_INPUT_FILE_LIST_COUNT" -eq 0) ]]; then
         echo "warning: No input files specified."
         exit 0
     fi
 
-    for i in $(seq 0 $((SCRIPT_INPUT_FILE_COUNT - 1))); do
-        infilevar="SCRIPT_INPUT_FILE_${i}"
-        infile="${!infilevar}"
-        YAML_FILES+=("${infile}")
-    done
+    if [ "$SCRIPT_INPUT_FILE_COUNT" -gt 0 ]; then
+        echo "Processing $SCRIPT_INPUT_FILE_COUNT single file inputs..."
+        # Append the content of single input files
+        for i in $(seq 0 $((SCRIPT_INPUT_FILE_COUNT - 1))); do
+            infilevar="SCRIPT_INPUT_FILE_${i}"
+            infile="${!infilevar}"
+            YAML_FILES+=("${infile}")
+        done
+    fi
+
+    if [ "$SCRIPT_INPUT_FILE_LIST_COUNT" -gt 0 ]; then
+        echo "Processing $SCRIPT_INPUT_FILE_LIST_COUNT file lists..."
+        # Append the content of any file lists (lists of file paths)
+        for i in $(seq 0 $((SCRIPT_INPUT_FILE_LIST_COUNT - 1))); do
+            infilevar="SCRIPT_INPUT_FILE_LIST_${i}"
+            infile="${!infilevar}"
+
+            while read -r line; do
+                YAML_FILES+=("${line}")
+            done <"$infile"
+        done
+    fi
+
+    echo "Discovered YAML input files: ${YAML_FILES[*]}"
 fi
 
 if [ -z "$SOURCE_ROOT" ]; then
@@ -170,6 +190,8 @@ VENVDIR="${SOURCE_ROOT}/.venv"
     | sed 's/^\(.\)/warning: \1/'  \
     | sed '/Your metrics are Glean/s/^warning: //'
 
+# Any of the below variables might be empty, so by not quoting them we ensure they are just left out as arguments
+# shellcheck disable=SC2086
 PARSER_OUTPUT=$("${VENVDIR}"/bin/python -m glean_parser \
     translate \
     -f "swift" \

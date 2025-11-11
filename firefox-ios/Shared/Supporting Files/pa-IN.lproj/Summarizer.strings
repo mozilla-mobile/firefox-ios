@@ -34,8 +34,14 @@
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "…ਸਾਰ ਬਣਾਇਆ ਜਾ ਰਿਹਾ ਹੈ";
 
+/* The a11y label for the retry button in the summary view when the summarizer fails with an error that allows retrying to summarize the page. */
+"Summarizer.RetryButton.Accessibility.Label.v145" = "ਵੈੱਬ ਸਫ਼ੇ ਦਾ ਸਾਰ ਬਣਾਉਣ ਦੀ ਫੇਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ";
+
 /* The label for the error button that allows the user to retry summarizing the page. */
 "Summarizer.RetryButton.Label.v142" = "ਮੁੜ-ਕੋਸ਼ਿਸ਼";
+
+/* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "ਸਾਰ ਨੂੰ ਬੰਦ ਕਰਨ ਵਾਸਤੇ ਵੈੱਬ ਸਫ਼ੇ ਨੂੰ ਖਿੱਚੋ ਜਾਂ  ਛੂਹੋ";
 
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "ਮਨਜ਼ੂਰ";
@@ -60,6 +66,9 @@
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ";
+
+/* The a11y label for the allow button on the info panel when the user has not yet accepted the ToS. */
+"Summarizer.ToS.InfoPanel.AllowButton.Accessibility.Label.v145" = "ਸਹਿਮਤੀ ਨੂੰ ਮਨਜ਼ੂਰ ਕਰੋ";
 
 /* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
 "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "ਜਾਰੀ ਰੱਖੋ";

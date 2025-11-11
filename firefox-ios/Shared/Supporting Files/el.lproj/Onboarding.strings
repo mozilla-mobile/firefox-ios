@@ -191,7 +191,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Αυτόματη αποστολή αναφορών κατάρρευσης";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Τα δεδομένα σχετικά με τη συσκευή σας, τη διαμόρφωση του υλικού της και τον τρόπο με τον οποίο χρησιμοποιείτε το %1$@ συμβάλλουν στη βελτίωση των λειτουργιών, των επιδόσεων και της σταθερότητας για τους χρήστες σε όλο τον κόσμο. %2$@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Τα δεδομένα σχετικά με τη συσκευή σας, τη διαμόρφωση του υλικού της και τον τρόπο με τον οποίο χρησιμοποιείτε το %1$@ συμβάλλουν στη βελτίωση των λειτουργιών, των επιδόσεων και της σταθερότητας για όλους τους χρήστες. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Αποστολή τεχνικών δεδομένων και δεδομένων αλληλεπίδρασης στη %@";
@@ -296,7 +296,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Αυτόματη αποστολή αναφορών κατάρρευσης";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Τα δεδομένα σχετικά με τη συσκευή σας, τη διαμόρφωση του υλικού της και τον τρόπο με τον οποίο χρησιμοποιείτε το %1$@ συμβάλλουν στη βελτίωση των λειτουργιών, των επιδόσεων και της σταθερότητας για τους χρήστες σε όλο τον κόσμο. %2$@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Τα δεδομένα σχετικά με τη συσκευή σας, τη διαμόρφωση του υλικού της και τον τρόπο με τον οποίο χρησιμοποιείτε το %1$@ συμβάλλουν στη βελτίωση των λειτουργιών, των επιδόσεων και της σταθερότητας για όλους τους χρήστες. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Αποστολή τεχνικών δεδομένων και δεδομένων αλληλεπίδρασης στη %@";

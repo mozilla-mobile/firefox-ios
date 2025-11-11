@@ -12,7 +12,6 @@ protocol FirefoxHomePageSelectorsSet {
 struct FirefoxHomePageSelectors: FirefoxHomePageSelectorsSet {
     private enum IDs {
         static let topSites_ItemCell = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
-        // app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
     }
 
     let TOPSITES_ITEMCELL = Selector.linkById(

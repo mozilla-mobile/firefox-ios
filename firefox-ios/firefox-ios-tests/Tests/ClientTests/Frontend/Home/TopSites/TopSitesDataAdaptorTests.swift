@@ -9,6 +9,7 @@ import Shared
 import Storage
 import XCTest
 
+@MainActor
 class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
     private var searchEnginesManager: SearchEnginesManager!

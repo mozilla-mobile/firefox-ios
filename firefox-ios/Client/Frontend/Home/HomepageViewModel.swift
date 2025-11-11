@@ -6,10 +6,12 @@ import Common
 import Shared
 
 protocol HomepageViewModelDelegate: AnyObject {
+    @MainActor
     func reloadView()
 }
 
 protocol HomepageDataModelDelegate: AnyObject {
+    @MainActor
     func reloadView()
 }
 
@@ -31,6 +33,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         static let generalIconCornerRadius: CGFloat = 4
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
 
+        @MainActor
         static func leadingInset(
             traitCollection: UITraitCollection,
             interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
@@ -41,6 +44,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
             return traitCollection.horizontalSizeClass == .regular ? iPadInset : standardInset
         }
 
+        @MainActor
         static func topSiteLeadingInset(traitCollection: UITraitCollection) -> CGFloat {
             guard UIDevice.current.userInterfaceIdiom != .phone else { return 0 }
 
@@ -218,6 +222,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                    category: .legacyHomepage)
     }
 
+    @MainActor
     func refreshData(for traitCollection: UITraitCollection, size: CGSize) {
         updateEnabledSections()
         childViewModels.forEach {

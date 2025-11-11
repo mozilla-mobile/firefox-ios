@@ -8,6 +8,10 @@ protocol ToolbarSelectorsSet {
     var SETTINGS_MENU_BUTTON: Selector { get }
     var TABS_BUTTON: Selector { get }
     var NEW_TAB_BUTTON: Selector { get }
+    var BACK_BUTTON: Selector { get }
+    var FORWARD_BUTTON: Selector { get }
+    var TABTOOLBAR_MENUBUTTON: Selector { get }
+    var RELOAD_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -16,6 +20,10 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let settingsMenuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
         static let tabsButton = AccessibilityIdentifiers.Toolbar.tabsButton
         static let newTabButton = AccessibilityIdentifiers.Toolbar.addNewTabButton
+        static let backButton = AccessibilityIdentifiers.Toolbar.backButton
+        static let forwardButton = AccessibilityIdentifiers.Toolbar.forwardButton
+        static let tabToolbar_MenuButton = "TabToolbar.menuButton"
+        static let reloadButton = AccessibilityIdentifiers.Toolbar.reloadButton
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -36,5 +44,30 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["toolbar"]
     )
 
-    var all: [Selector] { [SETTINGS_MENU_BUTTON, TABS_BUTTON] }
+    let BACK_BUTTON = Selector.buttonId(
+        IDs.backButton,
+        description: "Back navigation button in the toolbar",
+        groups: ["toolbar"]
+    )
+
+    let FORWARD_BUTTON = Selector.buttonId(
+        IDs.forwardButton,
+        description: "Forward navigation button in the toolbar",
+        groups: ["toolbar"]
+    )
+
+    let TABTOOLBAR_MENUBUTTON = Selector.buttonId(
+        IDs.tabToolbar_MenuButton,
+        description: "TabToolbar Menu Button",
+        groups: ["toolbar"]
+    )
+
+    let RELOAD_BUTTON = Selector.buttonId(
+        IDs.reloadButton,
+        description: "Reload button on browser toolbar",
+        groups: ["browser", "toolbar"]
+    )
+
+    var all: [Selector] { [SETTINGS_MENU_BUTTON, TABS_BUTTON, NEW_TAB_BUTTON, BACK_BUTTON, FORWARD_BUTTON,
+                           TABTOOLBAR_MENUBUTTON, RELOAD_BUTTON] }
 }

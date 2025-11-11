@@ -5,6 +5,7 @@
 import Common
 import Redux
 
+@MainActor
 final class SearchEngineSelectionMiddleware {
     private let profile: Profile
     private let logger: Logger
@@ -38,7 +39,7 @@ final class SearchEngineSelectionMiddleware {
         case SearchEngineSelectionActionType.didTapSearchEngine:
             // Trigger editing in the toolbar
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
 
         default:
             break
@@ -51,6 +52,6 @@ final class SearchEngineSelectionMiddleware {
             actionType: SearchEngineSelectionActionType.didLoadSearchEngines,
             searchEngines: searchEngines.map({ $0.generateModel() })
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 }

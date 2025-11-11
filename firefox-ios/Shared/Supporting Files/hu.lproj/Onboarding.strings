@@ -44,7 +44,7 @@
 "Onboarding.Customization.Theme.Skip.Action.v123" = "Kihagyás";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
-"Onboarding.Customization.Theme.System.Action.v123" = "Rendszer alapértelmezése";
+"Onboarding.Customization.Theme.System.Action.v123" = "Rendszertéma";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "Válasszon témát";
@@ -203,7 +203,7 @@
 "Onboarding.Modern.TermsOfService.Subtitle.v140" = "Villámgyors oldalbetöltés\nAutomatikus követésvédelem\nSzinkronizálás az összes eszközén";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
-"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "A folytatással elfogadja az %@";
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "A folytatással elfogadja a %@";
 
 /* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "A folytatással elfogadja az %@";
@@ -218,7 +218,7 @@
 "Onboarding.Modern.TermsOfService.Title.v145" = "Vegye át az internet irányítását";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "A %@ felhasználási feltételei.";
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ felhasználási feltételeit.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Beállítás alapértelmezett böngészőként";
@@ -260,7 +260,7 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Értesítések bekapcsolása";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Sync.Description.v123" = "Ha szinkronizálva van, akkor a %@ titkosítja a jelszavait, könyvjelzőit és egyebeket.";
+"Onboarding.Sync.Description.v123" = "A szinkronizálás során a %@ titkosítja a jelszavait, könyvjelzőit és egyebeit.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "Bejelentkezés";

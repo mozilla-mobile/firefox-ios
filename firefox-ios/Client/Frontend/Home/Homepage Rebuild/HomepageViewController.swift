@@ -52,6 +52,7 @@ final class HomepageViewController: UIViewController,
     private let syncTabContextualHintViewController: ContextualHintViewController
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
+    private var didFinishFirstLayout = false
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -121,7 +122,15 @@ final class HomepageViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     func stopCFRsTimer() {
@@ -137,15 +146,6 @@ final class HomepageViewController: UIViewController,
         setupLayout()
         configureDataSource()
 
-        store.dispatchLegacy(
-            HomepageAction(
-                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
-                showiPadSetup: shouldUseiPadSetup(),
-                windowUUID: windowUUID,
-                actionType: HomepageActionType.initialize
-            )
-        )
-
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
@@ -156,7 +156,7 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillAppear
@@ -167,7 +167,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewDidAppear
@@ -188,10 +188,26 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        /// FXIOS-13970: Legacy homepage layout was appearing blank on iOS 15. The root cause was from applying the diffable
+        /// data source snapshot before the view had finished it's first layout pass, causing the snapshot to be ignored.
+        /// This issue seems to be resolved by the SDK on later iOS versions
+        if !didFinishFirstLayout {
+            didFinishFirstLayout = true
+            store.dispatch(
+                HomepageAction(
+                    numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
+                    showiPadSetup: shouldUseiPadSetup(),
+                    windowUUID: windowUUID,
+                    actionType: HomepageActionType.initialize
+                )
+            )
+        }
+
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
 
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 numberOfTopSitesPerRow: numberOfTilesPerRow,
                 windowUUID: windowUUID,
@@ -203,7 +219,7 @@ final class HomepageViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 numberOfTopSitesPerRow: numberOfTilesPerRow(for: size.width),
                 windowUUID: windowUUID,
@@ -255,7 +271,7 @@ final class HomepageViewController: UIViewController,
         if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
-            store.dispatchLegacy(
+            store.dispatch(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: scrollView.contentOffset,
                     windowUUID: windowUUID,
@@ -266,7 +282,7 @@ final class HomepageViewController: UIViewController,
     private func handleToolbarStateOnScroll() {
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     /// Calculates the number of tiles that can fit in a single row based on the available width.
@@ -298,7 +314,7 @@ final class HomepageViewController: UIViewController,
             actionType: ScreenActionType.showScreen,
             screen: .homepage
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -332,13 +348,13 @@ final class HomepageViewController: UIViewController,
         self.homepageState = state
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(
             windowUUID: windowUUID,
             actionType: ScreenActionType.closeScreen,
             screen: .homepage
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: - Theming
@@ -714,7 +730,7 @@ final class HomepageViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
@@ -734,7 +750,7 @@ final class HomepageViewController: UIViewController,
     @objc
     private func dismissKeyboard() {
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: Long Press (Photon Action Sheet)
@@ -764,7 +780,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToHomepageSettings() {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(.homePage)),
                 windowUUID: self.windowUUID,
@@ -774,7 +790,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToPocketLearnMore() {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
                     .link,
@@ -794,7 +810,7 @@ final class HomepageViewController: UIViewController,
             sourceView: sourceView,
             toastContainer: toastContainer
         )
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
                 windowUUID: windowUUID,
@@ -821,7 +837,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToBookmarksPanel() {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.bookmarksPanel),
                 windowUUID: windowUUID,
@@ -831,7 +847,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToShortcutsLibrary() {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.shortcutsLibrary),
                 windowUUID: windowUUID,
@@ -841,7 +857,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToStoriesFeed() {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.storiesFeed),
                 windowUUID: windowUUID,
@@ -851,7 +867,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: destination,
                 windowUUID: self.windowUUID,
@@ -862,7 +878,7 @@ final class HomepageViewController: UIViewController,
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
         let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
-        store.dispatchLegacy(
+        store.dispatch(
             MerinoAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
@@ -877,7 +893,7 @@ final class HomepageViewController: UIViewController,
             position: index,
             topSiteConfiguration: config
         )
-        store.dispatchLegacy(
+        store.dispatch(
             TopSitesAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
@@ -934,7 +950,7 @@ final class HomepageViewController: UIViewController,
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
-            store.dispatchLegacy(
+            store.dispatch(
                 JumpBackInAction(
                     tab: config.tab,
                     windowUUID: self.windowUUID,
@@ -979,7 +995,7 @@ final class HomepageViewController: UIViewController,
             itemType: item.telemetryItemType,
             topSitesTelemetryConfig: topSitesTelemetryConfig
         )
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 telemetryExtras: telemetryExtras,
                 windowUUID: windowUUID,

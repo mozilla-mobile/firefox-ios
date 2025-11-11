@@ -9,7 +9,8 @@ import Common
 
 import struct MozillaAppServices.LoginEntry
 
-class PasswordDetailViewController: SensitiveViewController, Themeable {
+class PasswordDetailViewController: SensitiveViewController,
+                                    Themeable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
     }
@@ -53,13 +54,13 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         } else {
             tableView = UITableView(frame: .zero, style: .plain)
         }
-        super.init(nibName: nil, bundle: nil)
+        super.init()
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(dismissAlertController),
-                                               name: UIApplication.didEnterBackgroundNotification,
-                                               object: nil)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [UIApplication.didEnterBackgroundNotification]
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -127,6 +128,16 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         let theme = currentTheme()
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
+    }
+
+    // MARK: Notifiable
+    override func handleNotifications(_ notification: Notification) {
+        super.handleNotifications(notification)
+        guard notification.name == UIApplication.didEnterBackgroundNotification else { return }
+
+        ensureMainThread {
+            self.deleteAlert?.dismiss(animated: false, completion: nil)
+        }
     }
 }
 
@@ -345,11 +356,6 @@ extension PasswordDetailViewController: KeyboardHelperDelegate {
 
 // MARK: - Selectors
 extension PasswordDetailViewController {
-    @objc
-    func dismissAlertController() {
-        deleteAlert?.dismiss(animated: false, completion: nil)
-    }
-
     func deleteLogin() {
         viewModel.profile.hasSyncedLogins()
             .uponQueue(.main) { yes in
@@ -369,7 +375,7 @@ extension PasswordDetailViewController {
             }
     }
 
-    func onProfileDidFinishSyncing(completion: @escaping () -> Void) {
+    func onProfileDidFinishSyncing(completion: @escaping @Sendable () -> Void) {
         // Reload details after syncing.
         viewModel.profile.logins.getLogin(id: viewModel.login.id) { [weak self] result in
             DispatchQueue.main.async {

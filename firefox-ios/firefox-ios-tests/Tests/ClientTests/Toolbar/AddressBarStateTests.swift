@@ -5,6 +5,7 @@
 import Redux
 import XCTest
 import Common
+import Shared
 import SummarizeKit
 
 @testable import Client
@@ -12,10 +13,12 @@ import SummarizeKit
 final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    var mockProfile: MockProfile!
 
     override func setUp() {
         super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        mockProfile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setIsHostedSummarizerFeatureEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies()
     }
@@ -23,6 +26,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     override func tearDown() {
         DependencyHelperMock().reset()
         resetStore()
+        mockProfile = nil
         super.tearDown()
     }
 
@@ -41,7 +45,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.lockIconImageName)
         XCTAssertNil(initialState.safeListedURLImageName)
         XCTAssertFalse(initialState.isEditing)
-        XCTAssertTrue(initialState.shouldShowKeyboard)
+        XCTAssertFalse(initialState.shouldShowKeyboard)
         XCTAssertFalse(initialState.shouldSelectSearchTerm)
         XCTAssertFalse(initialState.isLoading)
         XCTAssertNil(initialState.readerModeState)
@@ -76,12 +80,13 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(newState.lockIconImageName)
         XCTAssertNil(newState.safeListedURLImageName)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertTrue(newState.shouldShowKeyboard)
+        XCTAssertFalse(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.isLoading)
         XCTAssertNil(newState.readerModeState)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertTrue(newState.isEmptySearch)
+        XCTAssertNil(newState.translationConfiguration)
     }
 
     func test_numberOfTabsChangedAction_withoutNavToolbar_returnsExpectedState() {
@@ -375,6 +380,125 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions[1].isEnabled, false)
     }
 
+    // MARK: - Translation Configuration
+    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsTranslateButton() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(
+                    prefs: mockProfile.prefs,
+                    state: .inactive
+                ),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 2)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
+        XCTAssertEqual(newState.leadingPageActions[1].iconName, StandardImageIdentifiers.Medium.translate)
+        XCTAssertFalse(newState.leadingPageActions[1].isLoading)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsLoadingIcon() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .loading),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 2)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
+        XCTAssertTrue(newState.leadingPageActions[1].isLoading)
+        XCTAssertNil(newState.leadingPageActions[1].iconName)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsActiveIcon() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .active),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 2)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
+        XCTAssertFalse(newState.leadingPageActions[1].isLoading)
+        XCTAssertEqual(newState.leadingPageActions[1].iconName, ImageIdentifiers.Translations.translationActive)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsSettingsEnabled_showsNoTranslateButton() {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 1)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_andFFDisabled_doesNotIncludeTranslateButton() {
+        setTranslationsFeatureEnabled(enabled: false)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 1)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
     func test_traitCollectionDidChangedAction_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
@@ -499,7 +623,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, searchTerm)
         XCTAssertTrue(newState.isEditing)
-        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
@@ -566,7 +689,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
     }
 
-    func test_scrollAlphaDidChangeAction_returnsExpectedState() {
+    func test_scrollAlphaNeedsUpdateAction_returnsExpectedState() {
         setupStore()
         let initialState = ToolbarState(windowUUID: windowUUID)
         let reducer = ToolbarState.reducer
@@ -576,7 +699,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             ToolbarAction(
                 scrollAlpha: 0,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.scrollAlphaDidChange
+                actionType: ToolbarActionType.scrollAlphaNeedsUpdate
             )
         )
 
@@ -624,7 +747,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertTrue(newState.shouldShowKeyboard)
+        XCTAssertFalse(newState.shouldShowKeyboard)
     }
 
     func test_cancelEditAction_withWebsite_returnsExpectedState() {
@@ -653,7 +776,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertTrue(newState.shouldShowKeyboard)
+        XCTAssertFalse(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
@@ -689,18 +812,19 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
 }
 
-    func test_hideKeyboardAction_returnsExpectedState() {
+    func test_keyboardStateDidChangeAction_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        XCTAssertTrue(initialState.shouldShowKeyboard)
+        XCTAssertFalse(initialState.shouldShowKeyboard)
 
         let newState = reducer(
             initialState,
             ToolbarAction(
+                shouldShowKeyboard: false,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.hideKeyboard
+                actionType: ToolbarActionType.keyboardStateDidChange
             )
         )
 
@@ -838,6 +962,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     private func setIsHostedSummarizerFeatureEnabled(enabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature(enabled: enabled, toolbarEntrypoint: enabled)
+        }
+    }
+
+    private func setTranslationsFeatureEnabled(enabled: Bool) {
+        FxNimbus.shared.features.translationsFeature.with { _, _ in
+            return TranslationsFeature(enabled: enabled)
         }
     }
 

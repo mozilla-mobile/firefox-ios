@@ -35,6 +35,7 @@ class TopSitesViewModel {
     private let unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry
     private let sponsoredTileTelemetry: SponsoredTileTelemetry
 
+    @MainActor
     init(profile: Profile,
          isZeroSearch: Bool = false,
          theme: Theme,
@@ -162,6 +163,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return numberOfItems
     }
 
+    @MainActor
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -200,6 +202,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !topSites.isEmpty
     }
 
+    @MainActor
     func refreshData(for traitCollection: UITraitCollection,
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,

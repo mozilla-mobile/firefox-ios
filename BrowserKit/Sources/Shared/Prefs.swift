@@ -123,10 +123,8 @@ public struct PrefsKeys {
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
-    }
-
-    public struct Search {
-        public static let recentSearchesCache = "recentSearchesCacheBaseKey"
+        public static let showTrendingSearches = "trendingSearchesFeatureKey"
+        public static let showRecentSearches = "recentSearchesFeatureKey"
     }
 
     public struct RemoteSettings {
@@ -159,6 +157,7 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case toolbarUpdateKey = "ContextualHintToolbarUpdate"
+        case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }
 

@@ -4,7 +4,8 @@
 
 import Foundation
 
-class SubscriptionWrapper<State>: Hashable {
+@MainActor
+final class SubscriptionWrapper<State>: @MainActor Hashable {
     private let originalSubscription: Subscription<State>
     weak var subscriber: AnyStoreSubscriber?
     private let objectIdentifier: ObjectIdentifier
@@ -41,12 +42,13 @@ class SubscriptionWrapper<State>: Hashable {
     }
 }
 
-public class Subscription<State> {
-    public var observer: ((State?, State) -> Void)?
+@MainActor
+public final class Subscription<State> {
+    public var observer: (@MainActor (State?, State) -> Void)?
 
     init() {}
 
-    public init(sink: @escaping (@escaping (State?, State) -> Void) -> Void) {
+    init(sink: @escaping (@MainActor @escaping (State?, State) -> Void) -> Void) {
         sink { old, new in
             self.newValues(oldState: old, newState: new)
         }

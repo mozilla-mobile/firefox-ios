@@ -75,7 +75,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func subscribeToRedux() {
         let action = ThemeSettingsViewAction(windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.themeSettingsDidAppear)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -88,7 +88,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .themeSettings)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func newState(state: ThemeSettingsState) {
@@ -103,7 +103,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ThemeSettingsViewAction(useSystemAppearance: control.isOn,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.toggleUseSystemAppearance)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation
@@ -120,14 +120,16 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     @objc
-    func systemBrightnessChanged() {
-        guard themeState.isAutomaticBrightnessEnabled else { return }
+    nonisolated func systemBrightnessChanged() {
+        ensureMainThread {
+            guard self.themeState.isAutomaticBrightnessEnabled else { return }
 
-        let action = ThemeSettingsViewAction(windowUUID: windowUUID,
-                                             actionType: ThemeSettingsViewActionType.receivedSystemBrightnessChange)
-        store.dispatchLegacy(action)
+            let action = ThemeSettingsViewAction(windowUUID: self.windowUUID,
+                                                 actionType: ThemeSettingsViewActionType.receivedSystemBrightnessChange)
+            store.dispatch(action)
 
-        brightnessChanged()
+            self.brightnessChanged()
+        }
     }
 
     /// Update Theme if user or system brightness change due to user action
@@ -144,7 +146,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ThemeSettingsViewAction(userBrightness: control.value,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.updateUserBrightness)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
@@ -299,7 +301,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ThemeSettingsViewAction(automaticBrightnessEnabled: isOn,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.enableAutomaticBrightness)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
         tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
@@ -314,7 +316,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ThemeSettingsViewAction(manualThemeType: theme,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.switchManualTheme)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,

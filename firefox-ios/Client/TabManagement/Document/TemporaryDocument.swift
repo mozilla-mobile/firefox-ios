@@ -17,7 +17,7 @@ protocol TemporaryDocument: Sendable {
 
     func download() async -> URL?
 
-    func download(_ completion: @escaping (URL?) -> Void)
+    func download(_ completion: @escaping @Sendable (URL?) -> Void)
 
     func cancelDownload()
 
@@ -69,9 +69,9 @@ final class DefaultTemporaryDocument: NSObject,
     private var currentDownloadTask: URLSessionDownloadTask?
 
     private var onDownload: ((URL?) -> Void)?
-    var onDownloadProgressUpdate: ((Double) -> Void)?
+    var onDownloadProgressUpdate: (@MainActor (Double) -> Void)?
     var onDownloadStarted: VoidReturnCallback?
-    var onDownloadError: ((Error?) -> Void)?
+    var onDownloadError: (@MainActor (Error?) -> Void)?
     var isDownloading: Bool {
         return currentDownloadTask != nil
     }
@@ -152,7 +152,7 @@ final class DefaultTemporaryDocument: NSObject,
         return tempFileURL
     }
 
-    func download(_ completion: @escaping (URL?) -> Void) {
+    func download(_ completion: @escaping @Sendable (URL?) -> Void) {
         if let tempFile = queryTempFile() {
             ensureMainThread {
                 completion(tempFile)
@@ -228,7 +228,9 @@ final class DefaultTemporaryDocument: NSObject,
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         currentDownloadTask = nil
         guard let url = storeTempDownloadFile(at: location) else {
-            onDownloadError?(nil)
+            ensureMainThread {
+                self.onDownloadError?(nil)
+            }
             return
         }
         ensureMainThread { [weak self] in

@@ -33,6 +33,16 @@ struct CredentialProvider {
     }
 }
 
+/// The `ASCredentialProviderViewController` overrides in this class are required
+/// parts of the AuthenticationServices extension lifecycle. 
+/// 
+/// The password manager extension depends on these hooks for Firefox to behave correctly 
+/// when used as an external password manager.
+///
+/// NOTE: The `AS` in `ASCredentialProviderViewController` refers to Apple’s AuthenticationServices framework
+/// and not our internal Application Services module.
+/// For Reference:  
+/// - https://developer.apple.com/documentation/authenticationservices/ascredentialproviderviewcontroller
 class CredentialProviderViewController: ASCredentialProviderViewController {
     private var presenter: CredentialProviderPresenter?
     private let appAuthenticator = AppAuthenticator()

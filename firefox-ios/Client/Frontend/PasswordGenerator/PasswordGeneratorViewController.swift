@@ -96,7 +96,15 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -213,8 +221,8 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
-        store.dispatchLegacy(
+    func unsubscribeFromRedux() {
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,
@@ -236,16 +244,29 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     }
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            applyDynamicFontChange()
-        case UIApplication.willResignActiveNotification:
-            store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                         actionType: PasswordGeneratorActionType.hidePassword))
-        case UIApplication.didBecomeActiveNotification:
-            store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                         actionType: PasswordGeneratorActionType.showPassword))
-        default: break
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                ensureMainThread {
+                    self.applyDynamicFontChange()
+                }
+            case UIApplication.willResignActiveNotification:
+                store.dispatch(
+                    PasswordGeneratorAction(
+                        windowUUID: self.windowUUID,
+                        actionType: PasswordGeneratorActionType.hidePassword
+                    )
+                )
+            case UIApplication.didBecomeActiveNotification:
+                store.dispatch(
+                    PasswordGeneratorAction(
+                        windowUUID: self.windowUUID,
+                        actionType: PasswordGeneratorActionType.showPassword
+                    )
+                )
+            default: break
+            }
         }
     }
 }
