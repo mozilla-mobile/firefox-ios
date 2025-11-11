@@ -59,7 +59,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         var serverURL: String {
             switch self {
             case .prod: return "https://relay.firefox.com"
-            case .staging: assertionFailure("[ToDo] Need Relay staging info."); return "https://relay.firefox.com"  // TBD.
+            case .staging: return "https://relay.allizom.org"
             }
         }
 
@@ -166,8 +166,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                 logger.log("[RELAY] Free tier limit reached. Using random mask.", level: .info, category: .autofill)
                 do {
                     let fullList = try client.fetchAddresses()
-                    let listCount = fullList.count // This should always be 5, but check anyway for safety
-                    if listCount >= 1, let relayMask = fullList[safe: Int.random(in: 0 ..< listCount)] {
+                    if let relayMask = fullList.randomElement() {
                         return (relayMask.fullAddress, .freeTierLimitReached)
                     } else {
                         logger.log("[RELAY] Couldn't fetch random mask", level: .warning, category: .autofill)
