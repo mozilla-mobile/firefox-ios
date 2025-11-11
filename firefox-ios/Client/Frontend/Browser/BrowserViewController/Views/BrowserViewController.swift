@@ -3936,13 +3936,31 @@ class BrowserViewController: UIViewController,
         guard RelayController.isFeatureEnabled else { return }
 
         if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            RelayController.shared.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
         }
     }
 
     private func handleUseRelayMaskTapped() {
-        // TODO: Forthcoming.
+        guard RelayController.isFeatureEnabled else { return }
+        guard let currentTab = tabManager.selectedTab else { return }
+        RelayController.shared.populateEmailFieldWithRelayMask(for: currentTab) { [weak self] result in
+            self?.handleRelayMaskResult(result)
+        }
+    }
+
+    private func handleRelayMaskResult(_ result: RelayMaskGenerationResult) {
+        switch result {
+        case .newMaskGenerated:
+            break
+        case .error:
+            let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
+            SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
+        case .freeTierLimitReached:
+            let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
+            SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
+        }
     }
 }
 
