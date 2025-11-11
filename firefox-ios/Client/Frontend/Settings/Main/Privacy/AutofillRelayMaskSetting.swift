@@ -12,7 +12,6 @@ class AutofillRelayMaskSetting: Setting, FeatureFlaggable {
     }
 
     override var accessibilityIdentifier: String? {
-        // TODO: Do we need a separate AX string for this?
         return String.RelayMask.RelayEmailMaskSettingsTitle
     }
 
