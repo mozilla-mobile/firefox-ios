@@ -33,6 +33,7 @@ class LibraryViewController: UIViewController, Themeable {
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
+    private var titleLabel: UILabel?
 
     // UI Elements
     private lazy var librarySegmentControl: UISegmentedControl = .build { librarySegmentControl in
@@ -89,21 +90,35 @@ class LibraryViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
-
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
             observing: [.LibraryPanelStateDidChange, .LibraryPanelBookmarkTitleChanged]
         )
+       // updateTitle()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         recreateSegmentedControl()
         applyTheme()
+        // Ensure navigation bar is visible and title is set
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.isNavigationBarHidden = false
+        updateTitle()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self = self else { return }
+            self.navigationItem.titleView?.setNeedsLayout()
+            self.navigationItem.titleView?.layoutIfNeeded()
+        }
     }
 
     private func recreateSegmentedControl() {
@@ -113,12 +128,9 @@ class LibraryViewController: UIViewController, Themeable {
         newSegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
         librarySegmentControl = newSegmentControl
-
         let newItem = UIBarButtonItem(customView: newSegmentControl)
-
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
         segmentControlToolbar.setItems([newItem], animated: false)
-
         NSLayoutConstraint.activate([
             librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
@@ -129,10 +141,16 @@ class LibraryViewController: UIViewController, Themeable {
         super.viewDidLayoutSubviews()
         // Needed to update toolbar on panel changes
         updateViewWithState()
+        // Update title when layout changes to ensure proper width calculation
+        if titleLabel != nil {
+            updateTitle()
+        }
     }
 
     private func viewSetup() {
         navigationItem.rightBarButtonItem = topRightButton
+        // Ensure navigation bar is visible
+        navigationController?.setNavigationBarHidden(false, animated: false)
         view.addSubviews(controllerContainerView, segmentControlToolbar)
 
         NSLayoutConstraint.activate([
@@ -159,11 +177,55 @@ class LibraryViewController: UIViewController, Themeable {
     /// - Parameter subpanelTitle: The title coming from a subpanel, optional as by default we set the title to be
     /// the selectedPanel.title
     private func updateTitle(subpanelTitle: String? = nil) {
-        if let subpanelTitle {
-            navigationItem.title = subpanelTitle
-        } else if let newTitle = viewModel.selectedPanel?.title {
-            navigationItem.title = newTitle
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        // Determine the correct title text
+        let titleText: String = {
+            if let subpanelTitle { return subpanelTitle }
+            if let newTitle = viewModel.selectedPanel?.title { return newTitle }
+            return ""
+        }()
+        guard !titleText.isEmpty else {
+            navigationItem.titleView = nil
+            titleLabel = nil
+            return
         }
+        // --- Label setup ---
+        let label = UILabel()
+        label.text = titleText
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        label.textAlignment = .center
+        label.textColor = .label
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.9
+        label.translatesAutoresizingMaskIntoConstraints = false
+        // --- Container view setup ---
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(label)
+        // Allow the label to shrink properly inside container
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            label.topAnchor.constraint(equalTo: container.topAnchor),
+            label.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            container.widthAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.width - 180),
+            container.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        navigationItem.titleView = container
+        titleLabel = label
+        // Force layout update to ensure proper sizing
+        DispatchQueue.main.async {
+            container.layoutIfNeeded()
+            label.layoutIfNeeded()
+        }
+    }
+
+    private func applyThemeToTitleLabel() {
+        guard let label = titleLabel else { return }
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        label.textColor = theme.colors.textPrimary
     }
 
     private func shouldHideBottomToolbar(panel: LibraryPanel) -> Bool {
@@ -178,7 +240,7 @@ class LibraryViewController: UIViewController, Themeable {
         panel.view.accessibilityLabel = accessibilityLabel
         panel.view.accessibilityIdentifier = accessibilityIdentifier
         panel.title = accessibilityLabel
-        panel.navigationController?.setNavigationBarHidden(true, animated: false)
+        panel.navigationController?.setNavigationBarHidden(true, animated: true)
         panel.navigationController?.isNavigationBarHidden = true
     }
 
@@ -268,7 +330,13 @@ class LibraryViewController: UIViewController, Themeable {
             libraryPanel.view.trailingAnchor.constraint(equalTo: controllerContainerView.trailingAnchor)
         ])
         libraryPanel.didMove(toParent: self)
-        updateTitle()
+        // Ensure navigation bar is visible before updating title
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.isNavigationBarHidden = false
+        // Delay title update to ensure navigation bar is fully visible
+        DispatchQueue.main.async { [weak self] in
+            self?.updateTitle()
+        }
     }
 
     // MARK: - Buttons setup
@@ -412,6 +480,7 @@ class LibraryViewController: UIViewController, Themeable {
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
+        applyThemeToTitleLabel()
     }
 
     func setNavigationBarHidden(_ value: Bool) {
@@ -425,6 +494,12 @@ class LibraryViewController: UIViewController, Themeable {
         guard let index = viewModel.selectedPanel?.rawValue,
               let currentPanel = childPanelControllers[safe: index] else { return }
         currentPanel.view.layoutIfNeeded()
+        // When navigation bar becomes visible again, update the title
+        if !value {
+            DispatchQueue.main.async { [weak self] in
+                self?.updateTitle()
+            }
+        }
     }
 }
 
@@ -442,7 +517,13 @@ extension LibraryViewController: Notifiable {
             let title = notification.userInfo?["title"] as? String
 
             ensureMainThread {
-                self.updateTitle(subpanelTitle: title)
+                // Ensure navigation bar is visible before updating title
+                self.navigationController?.setNavigationBarHidden(false, animated: false)
+                self.navigationController?.isNavigationBarHidden = false
+                // Small delay to ensure navigation bar is fully visible
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                    self?.updateTitle(subpanelTitle: title)
+                }
             }
 
         default: break
