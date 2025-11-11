@@ -322,16 +322,13 @@ final class OnboardingService: FeatureFlaggable {
             windowUUID: windowUUID,
             buttonTappedFinishFlow: completion
         )
-        let bottomSheetViewModel = BottomSheetViewModel(
-            shouldDismissForTapOutside: true,
-            closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier:
-                AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
-        )
 
-        let bottomSheetVC = SetDefaultBrowserViewController.factory(
+        let bottomSheetVC = SetDefaultBrowserViewController(
             child: instructionsVC,
-            closeButtonModel: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
+            closeButtonModel: CloseButtonViewModel(
+                a11yLabel: .CloseButtonTitle,
+                a11yIdentifier: AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
+            ),
             windowUUID: windowUUID
         )
         return bottomSheetVC

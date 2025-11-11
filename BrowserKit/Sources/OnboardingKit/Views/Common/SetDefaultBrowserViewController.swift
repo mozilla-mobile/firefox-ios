@@ -9,121 +9,125 @@ import ComponentLibrary
 
 // TODO: FXIOS-14070 - migrate OnboardingBottomSheetViewController to ComponentLibrary and adopt it where needed. 
 public class SetDefaultBrowserViewController: UIViewController,
-                                              Themeable {
+                                              Themeable,
+                                              Notifiable {
+    private struct UX {
+        static var closeButtonPadding: CGFloat {
+            if #available(iOS 26, *) {
+                return 18.0
+            }
+            return 12.0
+        }
+    }
+    
     public var themeManager: any Common.ThemeManager
     public var themeListenerCancellable: Any?
     public var currentWindowUUID: Common.WindowUUID?
+
     private var notificationCenter: NotificationProtocol
     private let child: UIViewController
-    
-    var lastCalculatedHeight: CGFloat = 0
+    private var lastCalculatedHeight: CGFloat = 0
     private var hasInitialLayoutCompleted = false
 
     private lazy var closeButton: UIButton = .build {
-        $0.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
         $0.addAction(UIAction(handler: { [weak self] _ in
             self?.dismiss(animated: true)
         }), for: .touchUpInside)
+
         $0.showsLargeContentViewer = true
+        if #available(iOS 26, *) {
+            $0.configuration = .prominentGlass()
+            $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
+                .withRenderingMode(.alwaysTemplate)
+        } else {
+            $0.configuration = .plain()
+            $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill)
+        }
     }
+
     private lazy var contentView: UIScrollView = .build {
         $0.showsVerticalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
     }
 
-    init(
+    public init(
         child: UIViewController,
         closeButtonModel: CloseButtonViewModel,
         windowUUID: WindowUUID,
-        notificationCenter: NotificationProtocol,
-        themeManager: ThemeManager
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
         self.child = child
         super.init(nibName: nil, bundle: nil)
-    }
-
-    public static func factory(
-        child: UIViewController,
-        closeButtonModel: CloseButtonViewModel,
-        windowUUID: WindowUUID,
-        notificationCenter: NotificationProtocol = NotificationCenter.default,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
-    ) -> UIViewController {
-        let controller = SetDefaultBrowserViewController(child: child,
-                                                         closeButtonModel: closeButtonModel,
-                                                         windowUUID: windowUUID,
-                                                         notificationCenter: notificationCenter,
-                                                         themeManager: themeManager)
-        let navController = UINavigationController(rootViewController: controller)
-
-        if #available(iOS 16.0, *) {
-            let customDetent = UISheetPresentationController.Detent.custom { [weak controller] context in
-                return controller?.lastCalculatedHeight ?? 0.0
-            }
-            navController.sheetPresentationController?.detents = [customDetent]
-        } else {
-            navController.sheetPresentationController?.detents = [.large(), .medium()]
-        }
-        navController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
-        navController.sheetPresentationController?.prefersScrollingExpandsWhenScrolledToEdge = false
-        return navController
+        setupDetents()
+        
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func setupDetents() {
+        if #available(iOS 16.0, *) {
+            let customDetent = UISheetPresentationController.Detent.custom { [weak self] context in
+                return self?.lastCalculatedHeight ?? 0.0
+            }
+            sheetPresentationController?.detents = [customDetent]
+        } else {
+            sheetPresentationController?.detents = [.large(), .medium()]
+        }
+    }
+
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
-        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        calculateAndUpdateHeight()
+        
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
     }
 
-    override public func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if !hasInitialLayoutCompleted {
-            calculateAndUpdateHeight()
-            hasInitialLayoutCompleted = true
-        }
-    }
-
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if lastCalculatedHeight == 0 {
-            calculateAndUpdateHeight()
-        }
-    }
-    
     private func setupLayout() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
-        
-        addChild(child)
-        view.addSubview(contentView)
-        contentView.addSubview(child.view)
 
-        contentView.pinToSuperview()
+        addChild(child)
+        view.addSubviews(contentView, closeButton)
+        contentView.addSubview(child.view)
+        child.view.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonPadding),
+
+            contentView.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+
             child.view.topAnchor.constraint(equalTo: contentView.contentLayoutGuide.topAnchor),
             child.view.bottomAnchor.constraint(equalTo: contentView.contentLayoutGuide.bottomAnchor),
             child.view.leadingAnchor.constraint(equalTo: contentView.contentLayoutGuide.leadingAnchor),
             child.view.trailingAnchor.constraint(equalTo: contentView.contentLayoutGuide.trailingAnchor),
             child.view.widthAnchor.constraint(equalTo: contentView.frameLayoutGuide.widthAnchor),
+
             child.view.heightAnchor.constraint(greaterThanOrEqualTo: contentView.heightAnchor)
         ])
-        
+
         child.didMove(toParent: self)
+        closeButton.setContentCompressionResistancePriority(.required, for: .vertical)
+        closeButton.setContentHuggingPriority(.required, for: .vertical)
     }
 
     private func calculateAndUpdateHeight() {
-        child.view.layoutIfNeeded()
         let targetSize = CGSize(
             width: view.bounds.width,
             height: UIView.layoutFittingCompressedSize.height
@@ -134,23 +138,60 @@ public class SetDefaultBrowserViewController: UIViewController,
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
-        let calculatedHeight = fittingSize.height
-        print("FF: calculated Height: \(calculatedHeight)")
+        let calculatedHeight = fittingSize.height + closeButton.frame.height + UX.closeButtonPadding * 2
         if #available(iOS 16.0, *) {
             lastCalculatedHeight = calculatedHeight
-            navigationController?.sheetPresentationController?.animateChanges { [weak self] in
-                self?.navigationController?.sheetPresentationController?.invalidateDetents()
+            sheetPresentationController?.animateChanges { [weak self] in
+                self?.sheetPresentationController?.invalidateDetents()
             }
+        }
+    }
+    
+    // MARK: - Notifiable
+    public nonisolated func handleNotifications(_ notification: Notification) {
+        DispatchQueue.main.async { [self] in
+            calculateAndUpdateHeight()
         }
     }
 
     // MARK: - Themeable
-
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        closeButton.tintColor = theme.colors.iconPrimary
+        closeButton.configuration?.baseBackgroundColor = theme.colors.layer2.withAlphaComponent(0.95)
+        closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         if #unavailable(iOS 26.0) {
             view.backgroundColor = theme.colors.layer1
         }
     }
+}
+
+private class TestController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let label = UILabel()
+        label.text = "Hello, World!"
+        view.addSubview(label)
+        view.backgroundColor = .red
+        label.pinToSuperview()
+    }
+}
+
+private class Presenter: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let controller = SetDefaultBrowserViewController(
+            child: TestController(),
+            closeButtonModel: .init(a11yLabel: "", a11yIdentifier: ""),
+            windowUUID: .XCTestDefaultUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+        )
+        DispatchQueue.main.async {
+            self.present(controller, animated: true)
+        }
+    }
+}
+
+@available(iOS 17.0, *)
+#Preview {
+    return Presenter()
 }

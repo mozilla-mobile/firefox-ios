@@ -14,7 +14,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         static let textStackViewSpacing: CGFloat = 24
 
         static let scrollViewVerticalPadding: CGFloat = 30
-        static let topPaddingPhone: CGFloat = 30
+        static let topPaddingPhone: CGFloat = 20
         static let leadingPaddingPhone: CGFloat = 40
         static let trailingPaddingPhone: CGFloat = 40
         static let bottomPaddingPhone: CGFloat = 20
@@ -33,12 +33,13 @@ class OnboardingInstructionPopupViewController: UIViewController,
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.TitleLabel"
     }
 
-    private lazy var descriptionLabel: UILabel = .build { label in
+    private lazy var descriptionLabel: UITextView = .build { label in
         label.textAlignment = .left
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.NumeratedLabels"
-        label.numberOfLines = 0
+        label.isScrollEnabled = false
+        label.isEditable = false
+        label.isSelectable = false
     }
 
     private lazy var primaryButton: PrimaryRoundedGlassButton = .build { button in
@@ -81,7 +82,8 @@ class OnboardingInstructionPopupViewController: UIViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [UIApplication.didEnterBackgroundNotification]
+            observing: [UIApplication.didEnterBackgroundNotification,
+                        UIContentSizeCategory.didChangeNotification]
         )
 
         setupView()
@@ -121,12 +123,12 @@ class OnboardingInstructionPopupViewController: UIViewController,
                 titleLabel.topAnchor.constraint(equalTo: contentContainerView.topAnchor),
                 titleLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
                 titleLabel.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
-                
+
                 descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                       constant: UX.contentStackViewSpacing),
                 descriptionLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
                 descriptionLabel.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
-                
+
                 primaryButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
                                                    constant: UX.contentStackViewSpacing),
                 primaryButton.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
@@ -142,9 +144,9 @@ class OnboardingInstructionPopupViewController: UIViewController,
             title: viewModel.buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
         )
-        
+
         configureDescriptionLabel(from: viewModel.instructionSteps)
-        
+
         titleLabel.setContentHuggingPriority(.required, for: .vertical)
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         primaryButton.configure(viewModel: buttonViewModel)
@@ -158,13 +160,13 @@ class OnboardingInstructionPopupViewController: UIViewController,
 
     // MARK: - Helper methods
     private func configureDescriptionLabel(from descriptionTexts: [String]) {
-        let attributedParagraphs = viewModel.getAttributedStrings(with: descriptionLabel.font)
+        let font = FXFontStyles.Regular.subheadline.scaledFont()
+        let attributedParagraphs = viewModel.getAttributedStrings(with: font)
 
-        // Combine all attributed strings with proper paragraph spacing
         let combined = NSMutableAttributedString()
 
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.paragraphSpacing = 40      // space *after* each paragraph
+        paragraphStyle.paragraphSpacing = 40
         paragraphStyle.alignment = .left
 
         for (index, attributedText) in attributedParagraphs.enumerated() {
@@ -172,9 +174,9 @@ class OnboardingInstructionPopupViewController: UIViewController,
             mutable.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: mutable.length))
             combined.append(mutable)
 
-            // Optionally add a logical separator between paragraphs (not visible)
             if index < attributedParagraphs.count - 1 {
-                combined.append(NSAttributedString(string: "\u{2029}")) // paragraph separator character
+                // Add paragragh separator charachter
+                combined.append(NSAttributedString(string: "\u{2029}"))
             }
         }
 
@@ -191,6 +193,10 @@ class OnboardingInstructionPopupViewController: UIViewController,
                     self.dismiss(animated: false)
                     self.buttonTappedFinishFlow?()
                 }
+            }
+        case UIContentSizeCategory.didChangeNotification:
+            ensureMainThread { [self] in
+                configureDescriptionLabel(from: viewModel.instructionSteps)
             }
         default:
             break
@@ -216,6 +222,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.backgroundColor = .clear
 
         // Call applyTheme() on primaryButton to let it handle theme-specific styling
         primaryButton.applyTheme(theme: theme)
