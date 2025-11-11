@@ -7,12 +7,12 @@ struct StoriesFeedDimensionCalculator {
     static func numberOfCellsThatFit(in containerWidth: CGFloat) -> Int {
         // # of cells that would fit in container
         let cellsPerRow = containerWidth / StoriesFeedSectionLayoutProvider.UX.minimumCellWidth
-        // Amount of space used by inter-item spacing and horizontal insets
+        // Amount of space used by inter-item spacing
         let spacingAdjustment = (cellsPerRow > 1 ?
                                  (cellsPerRow - 1) * StoriesFeedSectionLayoutProvider.UX.interItemSpacing : 0)
         // Available container width for cells
         let adjustedContainerWidth = containerWidth - spacingAdjustment
-        // Number of cells that will fit in a row, considering inter-item spacing and horizontal insets
+        // Number of cells that will fit in a row, considering inter-item spacing
         let adjustedCellsPerRow = Int(adjustedContainerWidth / StoriesFeedSectionLayoutProvider.UX.minimumCellWidth)
         return max(StoriesFeedSectionLayoutProvider.UX.minimumCellsPerRow, adjustedCellsPerRow)
     }
