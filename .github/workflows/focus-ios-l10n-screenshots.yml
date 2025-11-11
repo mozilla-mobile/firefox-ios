@@ -8,7 +8,7 @@ on:
         type: string
         default: "main"
   schedule:
-    - cron: "0 4 * * 1"
+    - cron: "0 22 * * 6"
 
 jobs:
   determine-locales:
