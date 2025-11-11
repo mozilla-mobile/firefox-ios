@@ -418,6 +418,18 @@ class LibraryViewController: UIViewController, Themeable {
         }
     }
 
+    private func updateContainerViewConstraints(hideToolbar: Bool) {
+        if hideToolbar {
+            // Switch to safe area constraint when toolbar is hidden
+            containerTopToToolbarConstraint?.isActive = false
+            containerTopToSafeAreaConstraint?.isActive = true
+        } else {
+            // Switch to toolbar constraint when toolbar is visible
+            containerTopToSafeAreaConstraint?.isActive = false
+            containerTopToToolbarConstraint?.isActive = true
+        }
+    }
+
     private func currentTheme() -> Theme {
         return themeManager.getCurrentTheme(for: windowUUID)
     }
