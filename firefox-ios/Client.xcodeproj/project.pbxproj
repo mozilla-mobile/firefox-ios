@@ -181,6 +181,8 @@
 		1D5A117A2EAEC51100DD27F7 /* ResetSearchEnginePrefsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */; };
 		1D5CBF492B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
 		1D5CBF4A2B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
+		1D6ECD2F2EC2CDC10017EC7A /* AutofillRelayMaskSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6ECD2E2EC2CDB90017EC7A /* AutofillRelayMaskSetting.swift */; };
+		1D6ED1C52EC3C43A0017EC7A /* RelayMaskSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */; };
 		1D74FF502B2797EA00FF01D0 /* WindowManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */; };
 		1D7B78972ADF32590011E9F2 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
 		1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
@@ -2888,6 +2890,8 @@
 		1D5A0F5B2EA2FB4800DD27F7 /* RelayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayController.swift; sourceTree = "<group>"; };
 		1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetSearchEnginePrefsSetting.swift; sourceTree = "<group>"; };
 		1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPayloads.swift; sourceTree = "<group>"; };
+		1D6ECD2E2EC2CDB90017EC7A /* AutofillRelayMaskSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillRelayMaskSetting.swift; sourceTree = "<group>"; };
+		1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayMaskSettingsViewController.swift; sourceTree = "<group>"; };
 		1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManagerTests.swift; sourceTree = "<group>"; };
 		1D774B3D9C6E21B77FB7B38F /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		1D7B78962ADF32590011E9F2 /* EventQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventQueue.swift; sourceTree = "<group>"; };
@@ -12147,6 +12151,7 @@
 				EBB895322193FFF400EB91A0 /* ContentBlockerSettingViewController.swift */,
 				3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */,
 				BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */,
+				1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */,
 				DFACBF83277B9B36003D5F41 /* HomepageSettings */,
 				8A3EF7ED2A2FCEC900796E3A /* Main */,
 				D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */,
@@ -13013,6 +13018,7 @@
 			children = (
 				8A19ACAF2A329078001C2147 /* AutofillCreditCardSettings.swift */,
 				219588932D6E519F00B8715E /* AutofillPasswordSetting.swift */,
+				1D6ECD2E2EC2CDB90017EC7A /* AutofillRelayMaskSetting.swift */,
 				8A19ACB12A3290AE001C2147 /* ClearPrivateDataSetting.swift */,
 				8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */,
 				8A19ACAD2A329058001C2147 /* PasswordManagerSetting.swift */,
@@ -18777,6 +18783,7 @@
 				964FA97528A1A8F20024BB3B /* ContextualHintEligibilityUtility.swift in Sources */,
 				439C489C29760575007C3DCD /* CreditCardValidator.swift in Sources */,
 				8ADC2A122A3375B900543DAA /* FxAEntryPoint.swift in Sources */,
+				1D6ECD2F2EC2CDC10017EC7A /* AutofillRelayMaskSetting.swift in Sources */,
 				8AEAD9F32C3D7B3E001A2C5A /* FeatureFlagsSettings.swift in Sources */,
 				216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */,
 				8A454D302CB81697009436D9 /* MerinoMiddleware.swift in Sources */,
@@ -18816,6 +18823,7 @@
 				8A1AB6BB2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift in Sources */,
 				0E65573E2D81CD1A00D7F017 /* DownloadQueue.swift in Sources */,
 				C88E7A572A0553360072E638 /* OnboardingButtonInfoModel.swift in Sources */,
+				1D6ED1C52EC3C43A0017EC7A /* RelayMaskSettingsViewController.swift in Sources */,
 				AB9A0C012C6CBC9100BFA22A /* TrackingProtectionDetailsViewController.swift in Sources */,
 				21B548952B1E5F1400DC1DF8 /* InactiveTabsManager.swift in Sources */,
 				8A6E63C92D4948BE0040D355 /* JumpBackInTabConfiguration.swift in Sources */,
