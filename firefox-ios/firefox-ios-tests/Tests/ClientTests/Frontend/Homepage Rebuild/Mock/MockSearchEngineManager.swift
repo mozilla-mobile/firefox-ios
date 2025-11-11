@@ -6,7 +6,7 @@ import Foundation
 import Common
 @testable import Client
 
-class MockSearchEnginesManager: SearchEnginesManagerProvider {
+final class MockSearchEnginesManager: SearchEnginesManagerProvider, @unchecked Sendable {
     private let searchEngines: [OpenSearchEngine]
 
     weak var delegate: (any SearchEngineDelegate)?

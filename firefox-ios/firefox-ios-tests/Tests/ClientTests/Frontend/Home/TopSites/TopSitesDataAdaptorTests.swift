@@ -591,7 +591,7 @@ extension TopSitesDataAdaptorTests {
 }
 
 // MARK: TopSiteHistoryManagerStub
-class TopSiteHistoryManagerStub: TopSiteHistoryManager {
+class TopSiteHistoryManagerStub: TopSiteHistoryManager, @unchecked Sendable {
     override func getTopSites(completion: @escaping ([Site]) -> Void) {
         completion(createHistorySites())
     }

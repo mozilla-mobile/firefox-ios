@@ -7,7 +7,7 @@ import Storage
 
 @testable import Client
 
-class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
+final class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider, @unchecked Sendable {
     private let sites: [Site]?
     var removeDefaultTopSitesTileCalledCount = 0
     var removeTopSiteCalledCount = 0

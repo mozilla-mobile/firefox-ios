@@ -7,7 +7,7 @@ import Common
 import Shared
 import Storage
 
-protocol TopSitesManagerInterface {
+protocol TopSitesManagerInterface: Sendable {
     /// Returns a list of top sites state using the top site history manager to fetch the other sites
     /// which is composed of history-based (Frecency) + pinned + default suggested tiles
     func getOtherSites() async -> [TopSiteConfiguration]
