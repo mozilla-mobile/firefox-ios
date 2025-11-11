@@ -4739,13 +4739,17 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        store.dispatch(
-            ToolbarAction(
-                shouldShowKeyboard: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
+        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let isEditing = toolbarState?.addressToolbar.isEditing == true
+        if !isEditing {
+            store.dispatch(
+                ToolbarAction(
+                    shouldShowKeyboard: false,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.keyboardStateDidChange
+                )
             )
-        )
+        }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: findInPageBar != nil)
         guard isSwipingTabsEnabled else { return }
