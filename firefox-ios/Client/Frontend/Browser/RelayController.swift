@@ -214,6 +214,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             guard Self.isFeatureEnabled else { return }
             if hasRelayAccount() {
                 createRelayClient()
+            } else {
+                client = nil
             }
         }
     }
