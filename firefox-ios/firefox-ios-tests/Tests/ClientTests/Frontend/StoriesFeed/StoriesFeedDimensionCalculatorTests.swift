@@ -48,7 +48,7 @@ final class StoriesFeedDimensionCalculatorTests: XCTestCase {
         XCTAssertEqual(cellCount, 1)
     }
 
-    func test_numberOfCellsThatFit_witIhphoneSeLandscape_returnsExpectedCellCount() {
+    func test_numberOfCellsThatFit_withIphoneSeLandscape_returnsExpectedCellCount() {
         let deviceSize = DeviceSize.iPhoneSELandscapeWidth
         let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: deviceSize)
         XCTAssertEqual(cellCount, 1)

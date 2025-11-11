@@ -44,8 +44,7 @@ struct StoriesFeedSectionLayoutProvider {
         )
 
         let containerWidth = environment.container.effectiveContentSize.width
-        let groupWidth = containerWidth * UX.groupWidthRatio
-        let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: groupWidth)
+        let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: containerWidth)
 
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
@@ -55,6 +54,7 @@ struct StoriesFeedSectionLayoutProvider {
         group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.interItemSpacing)
 
         // Horizontal insets
+        let groupWidth = containerWidth * UX.groupWidthRatio
         let horizontalInsetRatio = (1 - UX.groupWidthRatio) / 2
         let horizontalInsets = containerWidth * horizontalInsetRatio
         let section = NSCollectionLayoutSection(group: group)

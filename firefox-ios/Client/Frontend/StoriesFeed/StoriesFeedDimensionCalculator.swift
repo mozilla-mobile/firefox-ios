@@ -5,8 +5,10 @@
 struct StoriesFeedDimensionCalculator {
     // Calculates the number of cells that fit given a container's width, including spacing between items
     static func numberOfCellsThatFit(in containerWidth: CGFloat) -> Int {
+        // Portion of the container not occupied by insets
+        let availableContainerWidth = containerWidth * StoriesFeedSectionLayoutProvider.UX.groupWidthRatio
         // # of cells that would fit in container
-        let cellsPerRow = containerWidth / StoriesFeedSectionLayoutProvider.UX.minimumCellWidth
+        let cellsPerRow = availableContainerWidth / StoriesFeedSectionLayoutProvider.UX.minimumCellWidth
         // Amount of space used by inter-item spacing
         let spacingAdjustment = (cellsPerRow > 1 ?
                                  (cellsPerRow - 1) * StoriesFeedSectionLayoutProvider.UX.interItemSpacing : 0)
