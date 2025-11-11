@@ -217,6 +217,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         Task { @MainActor in
             if hasRelayAccount() {
                 createRelayClient()
+            } else {
+                client = nil
             }
         }
     }
