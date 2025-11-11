@@ -34,6 +34,10 @@ class LibraryViewController: UIViewController, Themeable {
     // Views
     private var controllerContainerView: UIView = .build { view in }
 
+    // Constraints for dynamic layout
+    private var containerTopToToolbarConstraint: NSLayoutConstraint?
+    private var containerTopToSafeAreaConstraint: NSLayoutConstraint?
+
     // UI Elements
     private lazy var librarySegmentControl: UISegmentedControl = .build { librarySegmentControl in
         librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
@@ -135,6 +139,14 @@ class LibraryViewController: UIViewController, Themeable {
         navigationItem.rightBarButtonItem = topRightButton
         view.addSubviews(controllerContainerView, segmentControlToolbar)
 
+        // Create and store the two possible top constraints for the container view
+        containerTopToToolbarConstraint = controllerContainerView.topAnchor.constraint(
+            equalTo: segmentControlToolbar.bottomAnchor
+        )
+        containerTopToSafeAreaConstraint = controllerContainerView.topAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.topAnchor
+        )
+
         NSLayoutConstraint.activate([
             segmentControlToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             segmentControlToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -143,7 +155,7 @@ class LibraryViewController: UIViewController, Themeable {
             librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
 
-            controllerContainerView.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
+            containerTopToToolbarConstraint!, // Activate by default (toolbar visible)
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -380,15 +392,30 @@ class LibraryViewController: UIViewController, Themeable {
         let panelState = getCurrentPanelState()
 
         switch panelState {
-        case .bookmarks(state: .inFolderEditMode):
-            let affectedOptions: [LibraryPanelType] = [.history, .downloads, .readingList]
-            affectedOptions.forEach { librarySegmentOption in
-                self.librarySegmentControl.setEnabled(false, forSegmentAt: librarySegmentOption.rawValue)
-            }
+        case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField), .bookmarks(state: .inFolderEditMode):
+            // Hide the segmented control when creating/editing bookmarks or in folder edit mode
+            segmentControlToolbar.isHidden = true
+            // Update constraints to make container view extend to top when toolbar is hidden
+            updateContainerViewConstraints(hideToolbar: true)
         default:
+            // Show the segmented control and enable all segments
+            segmentControlToolbar.isHidden = false
+            updateContainerViewConstraints(hideToolbar: false)
             LibraryPanelType.allCases.forEach { librarySegmentOption in
                 self.librarySegmentControl.setEnabled(true, forSegmentAt: librarySegmentOption.rawValue)
             }
+        }
+    }
+
+    private func updateContainerViewConstraints(hideToolbar: Bool) {
+        if hideToolbar {
+            // Switch to safe area constraint when toolbar is hidden
+            containerTopToToolbarConstraint?.isActive = false
+            containerTopToSafeAreaConstraint?.isActive = true
+        } else {
+            // Switch to toolbar constraint when toolbar is visible
+            containerTopToSafeAreaConstraint?.isActive = false
+            containerTopToToolbarConstraint?.isActive = true
         }
     }
 
