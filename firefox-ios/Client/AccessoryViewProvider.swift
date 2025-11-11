@@ -254,7 +254,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     }
 
     private func setupLayout() {
-        [nextButton, previousButton].forEach { navigationButtonsStackView.addArrangedSubview($0) }
+        [previousButton, nextButton].forEach { navigationButtonsStackView.addArrangedSubview($0) }
         setupHeightSpacer(toolbarTopHeightSpacer, height: UX.spacerViewHeight)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
@@ -311,8 +311,8 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         ].compactMap { $0 }, animated: true)
 
         toolbar.accessibilityElements = [
-            nextButton,
             previousButton,
+            nextButton,
             autofillAccessoryView?.customView,
             doneButton.customView
         ].compactMap { $0 }
