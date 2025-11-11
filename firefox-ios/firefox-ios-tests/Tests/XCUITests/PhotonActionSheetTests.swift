@@ -23,6 +23,9 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         // Navigate to topsites to verify that the site has been pinned
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
 
         // Verify that the site is pinned to top
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
@@ -65,6 +68,9 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         // Navigate to topsites to verify that the site has been pinned
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
 
         // Verify that the site is pinned to top
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
@@ -102,6 +108,9 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
 
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let shortcutCell = itemCell.staticTexts["Example Domain"]
@@ -134,6 +143,9 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
 
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let shortcutCell = itemCell.staticTexts["Example Domain"]

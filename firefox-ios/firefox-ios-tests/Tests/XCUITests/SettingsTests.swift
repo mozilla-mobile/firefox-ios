@@ -284,7 +284,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
@@ -301,7 +301,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
@@ -326,7 +326,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
         navigator.goto(SettingsScreen)
@@ -340,7 +340,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
         validateTranslationSettingsUI()

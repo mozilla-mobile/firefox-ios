@@ -16,7 +16,7 @@ final class MockHistoryHandler: HistoryHandler {
     var onApply: (() -> Void)?
 
     // MARK: History Metadata
-    var getHistoryMetadataSinceCallCount = 0
+    var getMostRecentHistoryMetadataCallCount = 0
     var noteHistoryMetadataCallCount = 0
     var result: Result<[MozillaAppServices.HistoryMetadata], Error> = .success(
         [
@@ -53,11 +53,11 @@ final class MockHistoryHandler: HistoryHandler {
         onApply?()
     }
 
-    func getHistoryMetadataSince(
-        since startDate: Int64,
+    func getMostRecentHistoryMetadata(
+        limit: Int32,
         completion: @escaping @Sendable (Result<[MozillaAppServices.HistoryMetadata], any Error>) -> Void
     ) {
-        getHistoryMetadataSinceCallCount += 1
+        getMostRecentHistoryMetadataCallCount += 1
         completion(result)
     }
 
