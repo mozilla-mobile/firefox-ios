@@ -6,8 +6,6 @@ import Common
 import Shared
 
 class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    weak var parentCoordinator: BrowsingSettingsDelegate?
-
     init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
