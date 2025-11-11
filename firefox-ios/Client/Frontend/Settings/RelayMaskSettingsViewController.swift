@@ -3,9 +3,17 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Foundation
 import Shared
+import ComponentLibrary
 
 class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+    private lazy var linkButton: LinkButton = .build()
+
+    private struct UX {
+        static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
+    }
+
     init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
@@ -30,6 +38,51 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
         return [SettingSection(footerTitle: NSAttributedString(string: .RelayMask.RelayEmailMaskSettingsDetailInfo),
                                children: [showEmailMaskSuggestions]),
                 SettingSection(children: [manageMaskSetting])]
+    }
+
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let _defaultFooter = super.tableView(
+            tableView,
+            viewForFooterInSection: section
+        ) as? ThemedTableSectionHeaderFooterView
+        guard let defaultFooter = _defaultFooter else { return nil }
+
+        if section == 0 {
+            let linkButtonViewModel = LinkButtonViewModel(
+                title: String.RelayMask.RelayEmailMaskSettingsLearnMore,
+                a11yIdentifier: String.RelayMask.RelayEmailMaskSettingsLearnMore,
+                font: FXFontStyles.Regular.caption1.scaledFont(),
+                contentInsets: UX.buttonContentInsets
+            )
+            linkButton.configure(viewModel: linkButtonViewModel)
+
+            linkButton.addTarget(self, action: #selector(learnMoreTapped), for: .touchUpInside)
+
+            defaultFooter.stackView.addArrangedSubview(linkButton)
+
+            return defaultFooter
+        }
+
+        return defaultFooter
+    }
+
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    @objc
+    func learnMoreTapped() {
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        // TODO: This will be updated soon to a SUMO link. Waiting for final URL from prod/UX.
+        viewController.url = SupportUtils.URLForRelayAccountManagement
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    // MARK: - ThemeApplicable
+
+    override func applyTheme() {
+        super.applyTheme()
+        linkButton.applyTheme(theme: currentTheme())
     }
 }
 
