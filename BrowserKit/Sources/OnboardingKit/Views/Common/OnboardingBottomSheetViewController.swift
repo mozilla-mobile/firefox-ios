@@ -8,7 +8,7 @@ import Common
 import ComponentLibrary
 
 // TODO: FXIOS-14070 - migrate OnboardingBottomSheetViewController to ComponentLibrary and adopt it where needed. 
-public class SetDefaultBrowserViewController: UIViewController,
+public class OnboardingBottomSheetViewController: UIViewController,
                                               Themeable,
                                               Notifiable {
     private struct UX {
@@ -19,7 +19,7 @@ public class SetDefaultBrowserViewController: UIViewController,
             return 12.0
         }
     }
-    
+
     public var themeManager: any Common.ThemeManager
     public var themeListenerCancellable: Any?
     public var currentWindowUUID: Common.WindowUUID?
@@ -29,12 +29,11 @@ public class SetDefaultBrowserViewController: UIViewController,
     private var lastCalculatedHeight: CGFloat = 0
     private var hasInitialLayoutCompleted = false
 
+    private let closeButtonModel: CloseButtonViewModel
     private lazy var closeButton: UIButton = .build {
         $0.addAction(UIAction(handler: { [weak self] _ in
             self?.dismiss(animated: true)
         }), for: .touchUpInside)
-
-        $0.showsLargeContentViewer = true
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
             $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
@@ -61,9 +60,9 @@ public class SetDefaultBrowserViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
         self.child = child
+        self.closeButtonModel = closeButtonModel
         super.init(nibName: nil, bundle: nil)
         setupDetents()
-        
     }
 
     required init?(coder: NSCoder) {
@@ -86,8 +85,8 @@ public class SetDefaultBrowserViewController: UIViewController,
         super.viewDidLoad()
         setupLayout()
         applyTheme()
-        calculateAndUpdateHeight()
-        
+        calculateAndUpdateDetentsHeight()
+
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
@@ -97,7 +96,9 @@ public class SetDefaultBrowserViewController: UIViewController,
     }
 
     private func setupLayout() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+        closeButton.accessibilityLabel = closeButtonModel.a11yLabel
+        closeButton.accessibilityIdentifier = closeButtonModel.a11yIdentifier
+        closeButton.scalesLargeContentImage = true
 
         addChild(child)
         view.addSubviews(contentView, closeButton)
@@ -127,7 +128,7 @@ public class SetDefaultBrowserViewController: UIViewController,
         closeButton.setContentHuggingPriority(.required, for: .vertical)
     }
 
-    private func calculateAndUpdateHeight() {
+    private func calculateAndUpdateDetentsHeight() {
         let targetSize = CGSize(
             width: view.bounds.width,
             height: UIView.layoutFittingCompressedSize.height
@@ -146,52 +147,23 @@ public class SetDefaultBrowserViewController: UIViewController,
             }
         }
     }
-    
+
     // MARK: - Notifiable
     public nonisolated func handleNotifications(_ notification: Notification) {
         DispatchQueue.main.async { [self] in
-            calculateAndUpdateHeight()
+            calculateAndUpdateDetentsHeight()
         }
     }
 
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        closeButton.configuration?.baseBackgroundColor = theme.colors.layer2.withAlphaComponent(0.95)
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         if #unavailable(iOS 26.0) {
             view.backgroundColor = theme.colors.layer1
+            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+        } else {
+            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2.withAlphaComponent(0.95)
         }
     }
-}
-
-private class TestController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let label = UILabel()
-        label.text = "Hello, World!"
-        view.addSubview(label)
-        view.backgroundColor = .red
-        label.pinToSuperview()
-    }
-}
-
-private class Presenter: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let controller = SetDefaultBrowserViewController(
-            child: TestController(),
-            closeButtonModel: .init(a11yLabel: "", a11yIdentifier: ""),
-            windowUUID: .XCTestDefaultUUID,
-            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-        )
-        DispatchQueue.main.async {
-            self.present(controller, animated: true)
-        }
-    }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    return Presenter()
 }

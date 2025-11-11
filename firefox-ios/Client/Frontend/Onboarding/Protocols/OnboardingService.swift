@@ -323,7 +323,7 @@ final class OnboardingService: FeatureFlaggable {
             buttonTappedFinishFlow: completion
         )
 
-        let bottomSheetVC = SetDefaultBrowserViewController(
+        let bottomSheetVC = OnboardingBottomSheetViewController(
             child: instructionsVC,
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: .CloseButtonTitle,
