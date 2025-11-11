@@ -40,6 +40,10 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
             )
 
             showMaskSettings += [showEmailMaskSuggestions]
+
+            let manageMaskSetting = ManageRelayMasksSetting(theme: theme, prefs: profile.prefs)
+
+            manageMasksSettings += [manageMaskSetting]
         }
 
         settings += [SettingSection(title: NSAttributedString(string: ""),
@@ -49,5 +53,31 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
                                     children: manageMasksSettings)]
 
         return settings
+    }
+}
+
+final class ManageRelayMasksSetting: Setting {
+    override var accessoryView: UIImageView? {
+        let image = UIImage(named: StandardImageIdentifiers.Small.externalLink)
+        return UIImageView(image: image)
+    }
+
+    override var accessibilityIdentifier: String? {
+        return String.RelayMask.RelayEmailMaskSettingsManageEmailMasks
+    }
+
+    override var style: UITableViewCell.CellStyle { return .default }
+
+    init(theme: Theme, prefs: Prefs) {
+        let color = theme.colors.textPrimary
+        let attributes = [NSAttributedString.Key.foregroundColor: color]
+        super.init(title: NSAttributedString(string: String.RelayMask.RelayEmailMaskSettingsManageEmailMasks,
+                                             attributes: attributes))
+        self.theme = theme
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        // TODO: Need to fix this to always open in Firefox, or push a web view on the nav stack. TBD.
+        // UIApplication.shared.open(url: URL(string: "https://relay.firefox.com/accounts/profile")!)
     }
 }
