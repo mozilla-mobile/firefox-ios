@@ -233,12 +233,12 @@ class ShareViewController: UIViewController {
 
         let pageInfoHeightAdjustment = UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape
         pageInfoHeight?.constant = CGFloat(
-            UX.isLandscapeSmallScreen(traitCollection) ? pageInfoHeightAdjustment : UX.pageInfoRowHeight
+            isLandscapeSmallScreen(traitCollection) ? pageInfoHeightAdjustment : UX.pageInfoRowHeight
         )
         let actionRowHeightAdjustment = UX.actionRowHeight - UX.perRowShrinkageForLandscape
         actionRowHeights.forEach {
             $0.constant = CGFloat(
-                UX.isLandscapeSmallScreen(traitCollection) ? actionRowHeightAdjustment : UX.actionRowHeight
+                isLandscapeSmallScreen(traitCollection) ? actionRowHeightAdjustment : UX.actionRowHeight
             )
         }
     }
@@ -259,7 +259,7 @@ class ShareViewController: UIViewController {
         let pageInfoHeightAdjustment = UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape
         pageInfoHeight = row.heightAnchor.constraint(
             equalToConstant: CGFloat(
-                UX.isLandscapeSmallScreen(traitCollection) ? pageInfoHeightAdjustment : UX.pageInfoRowHeight
+                isLandscapeSmallScreen(traitCollection) ? pageInfoHeightAdjustment : UX.pageInfoRowHeight
             )
         )
         pageInfoHeight?.isActive = true
@@ -300,7 +300,7 @@ class ShareViewController: UIViewController {
         parent.addArrangedSubview(row)
         let heightAdjustment = UX.actionRowHeight - UX.perRowShrinkageForLandscape
         let heightConstraint = row.heightAnchor.constraint(
-            equalToConstant: CGFloat(UX.isLandscapeSmallScreen(traitCollection) ? heightAdjustment : UX.actionRowHeight)
+            equalToConstant: CGFloat(isLandscapeSmallScreen(traitCollection) ? heightAdjustment : UX.actionRowHeight)
         )
         heightConstraint.isActive = true
         actionRowHeights.append(heightConstraint)
