@@ -16,46 +16,22 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not implemented") }
 
-    private func getDefaultBrowserSetting() -> [SettingSection] {
-        let footerTitle = NSAttributedString(
-            string: "wut")
-
-        return [SettingSection(footerTitle: footerTitle,
-                               children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])]
-    }
-
     override func generateSettings() -> [SettingSection] {
-        var settings = [SettingSection]()
+        guard let profile else { return [] }
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let showEmailMaskSuggestions = BoolSetting(prefs: profile.prefs,
+                                                   theme: theme,
+                                                   prefKey: PrefsKeys.ShowRelayMaskSuggestions,
+                                                   defaultValue: true,
+                                                   titleText: .RelayMask.RelayEmailMaskSuggestMasksToggle)
+        let manageMaskSetting = ManageRelayMasksSetting(theme: theme,
+                                                        prefs: profile.prefs,
+                                                        windowUUID: windowUUID,
+                                                        navigationController: navigationController)
 
-        var showMaskSettings = [Setting]()
-        var manageMasksSettings = [Setting]()
-        if let profile {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
-            let showEmailMaskSuggestions = BoolSetting(
-                prefs: profile.prefs,
-                theme: theme,
-                prefKey: PrefsKeys.ShowRelayMaskSuggestions,
-                defaultValue: true,
-                titleText: .RelayMask.RelayEmailMaskSuggestMasksToggle
-            )
-
-            showMaskSettings += [showEmailMaskSuggestions]
-
-            let manageMaskSetting = ManageRelayMasksSetting(theme: theme,
-                                                            prefs: profile.prefs,
-                                                            windowUUID: windowUUID,
-                                                            navigationController: navigationController)
-
-            manageMasksSettings += [manageMaskSetting]
-        }
-
-        settings += [SettingSection(title: NSAttributedString(string: ""),
-                                    footerTitle: NSAttributedString(string: .RelayMask.RelayEmailMaskSettingsDetailInfo),
-                                    children: showMaskSettings),
-                     SettingSection(title: NSAttributedString(string: ""),
-                                    children: manageMasksSettings)]
-
-        return settings
+        return [SettingSection(footerTitle: NSAttributedString(string: .RelayMask.RelayEmailMaskSettingsDetailInfo),
+                               children: [showEmailMaskSuggestions]),
+                SettingSection(children: [manageMaskSetting])]
     }
 }
 
@@ -75,10 +51,10 @@ final class ManageRelayMasksSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .default }
 
     init(theme: Theme, prefs: Prefs, windowUUID: WindowUUID, navigationController: UINavigationController?) {
-        let color = theme.colors.textPrimary
-        let attributes = [NSAttributedString.Key.foregroundColor: color]
         self.parentNav = navigationController
         self.windowUUID = windowUUID
+        let color = theme.colors.textPrimary
+        let attributes = [NSAttributedString.Key.foregroundColor: color]
         super.init(title: NSAttributedString(string: String.RelayMask.RelayEmailMaskSettingsManageEmailMasks,
                                              attributes: attributes))
         self.theme = theme
