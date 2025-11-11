@@ -10,6 +10,11 @@ import Shared
 /// Describes public protocol for Relay component to track state and facilitate
 /// messaging between the BVC, keyboard accessory, and A~S Relay APIs.
 protocol RelayControllerProtocol {
+    /// Returns whether Relay Settings should be available. For Phase 1 this is true if the
+    /// user is logged into Mozilla sync and already has Relay enabled on their account.
+    @MainActor
+    func shouldDisplayRelaySettings() -> Bool
+
     /// Whether to present the UI for a Relay mask after focusing on an email field.
     /// This should account for all logic necessary for Relay display, which includes:
     ///    - User account status (signed into Mozilla / Relay active)
@@ -107,7 +112,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     // MARK: - RelayControllerProtocol
 
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool {
-        guard Self.isFeatureEnabled, let relayRSClient, hasRelayAccount() else { return false }
+        // Note: the prefs key defaults to On. No value (nil) should be treated as true.
+        guard Self.isFeatureEnabled, profile.prefs.boolForKey(PrefsKeys.ShowRelayMaskSuggestions) ?? true else {
+            return false
+        }
+        guard let relayRSClient, hasRelayAccount() else { return false }
         guard let domain = url.baseDomain, let host = url.normalizedHost else { return false }
         let shouldShow = relayRSClient.shouldShowRelay(host: host, domain: domain, isRelayUser: true)
         return shouldShow
@@ -150,6 +159,10 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     func emailFieldFocused(in tab: Tab) {
         focusedTab = tab
+    }
+
+    func shouldDisplayRelaySettings() -> Bool {
+        return Self.isFeatureEnabled && hasRelayAccount()
     }
 
     // MARK: - Private Utilities

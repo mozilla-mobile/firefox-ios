@@ -22,6 +22,9 @@ protocol PrivacySettingsDelegate: AnyObject {
     func pressedPasswords()
 
     @MainActor
+    func pressedRelayMask()
+
+    @MainActor
     func pressedNotifications()
 
     @MainActor
