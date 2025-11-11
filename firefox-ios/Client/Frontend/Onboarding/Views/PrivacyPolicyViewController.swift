@@ -15,7 +15,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
-    /// Optional custom tint color for the navigation bar button.
+    /// Optional custom tint color for the navigation bar button for iOS 26
     /// This is useful when displaying web pages with fixed backgrounds (e.g., white)
     /// that don't adapt to dark mode, ensuring the button remains visible.
     var customTintBarButtonColor: UIColor?
@@ -67,15 +67,15 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 
     // MARK: - Theming
     func applyTheme() {
-        if let customTintColor = customTintBarButtonColor {
-            navigationItem.rightBarButtonItem?.tintColor = customTintColor
-        } else {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
-            if #available(iOS 26.0, *) {
-                navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        if #available(iOS 26.0, *) {
+            if let customTintColor = customTintBarButtonColor {
+                navigationItem.rightBarButtonItem?.tintColor = customTintColor
             } else {
-                navigationItem.rightBarButtonItem?.tintColor = theme.colors.actionPrimary
+                navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
             }
+        } else {
+            navigationItem.rightBarButtonItem?.tintColor = theme.colors.actionPrimary
         }
     }
 }
