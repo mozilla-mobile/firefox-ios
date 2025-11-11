@@ -15,9 +15,19 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
         }
 
         let urlString = isSearch
-            ? "firefox://open-text?text=\(encodedContent)"
-            : "firefox://open-url?url=\(encodedContent)"
+            ? "\(mozInternalScheme)://open-text?text=\(encodedContent)"
+            : "\(mozInternalScheme)://open-url?url=\(encodedContent)"
 
         return URL(string: urlString)
     }
+
+    let mozInternalScheme: String = {
+        guard let string = Bundle.main.object(
+            forInfoDictionaryKey: "MozInternalURLScheme"
+        ) as? String, !string.isEmpty else {
+            // Something went wrong/weird, fallback to the public one.
+            return "firefox"
+        }
+        return string
+    }()
 }
