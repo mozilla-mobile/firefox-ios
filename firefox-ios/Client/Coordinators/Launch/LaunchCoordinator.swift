@@ -189,9 +189,7 @@ final class LaunchCoordinator: BaseCoordinator,
         guard let url else { return }
         let presentLinkVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
         // Set a visible color that works against white web page background
-        if #available(iOS 26.0, *) {
-            presentLinkVC.customTintBarButtonColor = themeManager.getCurrentTheme(for: windowUUID).colors.textOnLight
-        }
+        presentLinkVC.customTintBarButtonColor = themeManager.getCurrentTheme(for: windowUUID).colors.textOnLight
 
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
