@@ -18,9 +18,10 @@ jobs:
   get-screenshots:
     name: Generate screenshots
     runs-on: macos-26
+    timeout-minutes: 90
     steps:
       - name: Clone firefox-ios repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: mozilla-mobile/firefox-ios
           ref: ${{ inputs.branch }}
@@ -33,8 +34,7 @@ jobs:
         run: |
           ./bootstrap.sh focus
       - name: Fetch derived data
-        timeout-minutes: 20
-        id: download-derived-data
+        timeout-minutes: 15
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.derived-data }}
