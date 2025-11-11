@@ -392,7 +392,9 @@ class LibraryViewController: UIViewController, Themeable {
         let panelState = getCurrentPanelState()
 
         switch panelState {
-        case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField), .bookmarks(state: .inFolderEditMode):
+        case .bookmarks(state: .itemEditMode),
+             .bookmarks(state: .itemEditModeInvalidField),
+             .bookmarks(state: .inFolderEditMode):
             // Hide the segmented control when creating/editing bookmarks or in folder edit mode
             segmentControlToolbar.isHidden = true
             // Update constraints to make container view extend to top when toolbar is hidden
