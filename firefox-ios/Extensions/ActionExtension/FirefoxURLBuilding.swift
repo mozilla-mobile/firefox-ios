@@ -1,0 +1,23 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+
+protocol FirefoxURLBuilding {
+    func buildFirefoxURL(for content: String, isSearch: Bool) -> URL?
+}
+
+struct FirefoxURLBuilder: FirefoxURLBuilding {
+    func buildFirefoxURL(for content: String, isSearch: Bool) -> URL? {
+        guard let encodedContent = content.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
+            return nil
+        }
+
+        let urlString = isSearch
+            ? "firefox://open-text?text=\(encodedContent)"
+            : "firefox://open-url?url=\(encodedContent)"
+
+        return URL(string: urlString)
+    }
+}

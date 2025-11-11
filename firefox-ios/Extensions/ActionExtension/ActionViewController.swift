@@ -3,30 +3,28 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Storage
-import Shared
+import UniformTypeIdentifiers
 
-class ActionViewController: UIViewController {
+final class ActionViewController: UIViewController {
+    private let firefoxURLBuilder: FirefoxURLBuilding
+    private let telemetryService: TelemetryRecording
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.firefoxURLBuilder = FirefoxURLBuilder()
+        self.telemetryService = TelemetryService()
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    required init?(coder: NSCoder) {
+        self.firefoxURLBuilder = FirefoxURLBuilder()
+        self.telemetryService = TelemetryService()
+        super.init(coder: coder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
-        view.alpha = 0
-
-        getShareItem { [weak self] shareItem in
-            guard let self = self else { return }
-
-            guard let shareItem = shareItem else {
-                self.finish(afterDelay: 0)
-                return
-            }
-
-            switch shareItem {
-            case .shareItem(let item):
-                self.openFirefox(withUrl: item.url, isSearch: false)
-            case .rawText(let text):
-                self.openFirefox(withUrl: text, isSearch: true)
-            }
-        }
+        setupView()
+        handleShareExtension()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -34,70 +32,169 @@ class ActionViewController: UIViewController {
         view.alpha = 0
     }
 
-    private func getShareItem(completion: @escaping (ExtensionUtils.ExtractedShareItem?) -> Void) {
-        ExtensionUtils.extractSharedItem(fromExtensionContext: extensionContext) { [weak self] item, error in
-            DispatchQueue.main.async {
-                if let item = item, error == nil {
-                    completion(item)
+    private func setupView() {
+        view.backgroundColor = .clear
+        view.alpha = 0
+    }
+
+    private func handleShareExtension() {
+        guard let extensionContext = extensionContext,
+              let inputItems = extensionContext.inputItems as? [NSExtensionItem] else {
+            finishExtension(with: nil)
+            return
+        }
+
+        findURLInItems(inputItems) { [weak self] shareItem in
+            guard let self = self else { return }
+
+            if let shareItem = shareItem {
+                self.openFirefox(with: .shareItem(shareItem))
+                return
+            }
+
+            self.findTextInItems(inputItems) { textShareItem in
+                if let textShareItem = textShareItem {
+                    self.openFirefox(with: textShareItem)
                 } else {
-                    completion(nil)
-                    let errorToReport = error ?? CocoaError(.keyValueValidation)
-                    self?.extensionContext?.cancelRequest(withError: errorToReport)
+                    self.finishExtension(with: nil)
                 }
             }
         }
     }
 
-    private func openFirefox(withUrl urlString: String, isSearch: Bool) {
-        let profile = BrowserProfile(localName: "profile")
-        profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
+    private func findURLInItems(_ items: [NSExtensionItem], completion: @escaping (ShareItem?) -> Void) {
+        for item in items {
+            guard let attachments = item.attachments else { continue }
 
-        guard let encodedContent = urlString.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
-            finish(afterDelay: 0)
+            for attachment in attachments where attachment.isURL {
+                let title = item.attributedContentText?.string
+
+                attachment.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { obj, error in
+                    guard error == nil, let url = obj as? URL else {
+                        return
+                    }
+
+                    DispatchQueue.main.async {
+                        completion(ShareItem(url: url.absoluteString, title: title))
+                    }
+                }
+                return
+            }
+        }
+
+        completion(nil)
+    }
+
+    private func findTextInItems(_ items: [NSExtensionItem], completion: @escaping (ExtractedShareItem?) -> Void) {
+        for item in items {
+            guard let attachments = item.attachments else { continue }
+
+            for attachment in attachments where attachment.isText {
+                attachment.loadItem(forTypeIdentifier: UTType.text.identifier, options: nil) { [weak self] obj, error in
+                    guard error == nil, let text = obj as? String else {
+                        return
+                    }
+
+                    DispatchQueue.main.async {
+                        if let url = self?.convertTextToURL(text) {
+                            completion(.shareItem(ShareItem(url: url.absoluteString, title: nil)))
+                        } else {
+                            completion(.rawText(text))
+                        }
+                    }
+                }
+                return
+            }
+        }
+
+        completion(nil)
+    }
+
+    private func convertTextToURL(_ text: String) -> URL? {
+        guard text.contains(".") else {
+            return nil
+        }
+
+        var urlString = text
+        if !urlString.hasPrefix("http") {
+            urlString = "http://\(urlString)"
+        }
+
+        guard let url = URL(string: urlString),
+              let host = url.host,
+              !host.isEmpty,
+              host.contains(".") else {
+            return nil
+        }
+
+        return url
+    }
+
+    private func openFirefox(with shareItem: ExtractedShareItem) {
+        telemetryService.recordShareExtensionOpened()
+
+        let (content, isSearch) = extractContentAndType(from: shareItem)
+
+        guard let firefoxURL = firefoxURLBuilder.buildFirefoxURL(for: content, isSearch: isSearch) else {
+            finishExtension(with: nil)
             return
         }
 
-        let firefoxUrlString = isSearch
-            ? "firefox://open-text?text=\(encodedContent)"
-            : "firefox://open-url?url=\(encodedContent)"
+        openURL(firefoxURL)
+        finishExtension(with: nil)
+    }
 
-        guard let firefoxUrl = URL(string: firefoxUrlString) else {
-            finish(afterDelay: 0)
-            return
+    private func extractContentAndType(from shareItem: ExtractedShareItem) -> (content: String, isSearch: Bool) {
+        switch shareItem {
+        case .shareItem(let item):
+            return (item.url, false)
+        case .rawText(let text):
+            return (text, true)
         }
+    }
 
-        var responder = self as UIResponder?
-
+    private func openURL(_ url: URL) {
         if #available(iOS 18.0, *) {
-            while let current = responder {
-                if let application = current as? UIApplication {
-                    application.open(firefoxUrl, options: [:], completionHandler: nil)
-                    finish(afterDelay: 0)
-                    return
-                }
-                responder = current.next
-            }
+            openURLModern(url)
         } else {
-            let selectorOpenURL = sel_registerName("openURL:")
-            while let current = responder {
-                if current.responds(to: selectorOpenURL) {
-                    current.perform(selectorOpenURL, with: firefoxUrl, afterDelay: 0)
-                    finish(afterDelay: 0)
-                    return
-                }
-                responder = current.next
-            }
+            openURLLegacy(url)
         }
-
-        finish(afterDelay: 0)
     }
 
-    /// Fades out the UI and completes the extension request.
-    func finish(afterDelay delay: TimeInterval) {
-        UIView.animate(withDuration: 0.2, delay: delay, options: [], animations: {
+    private func openURLModern(_ url: URL) {
+        var responder: UIResponder? = self
+
+        while let current = responder {
+            if let application = current as? UIApplication {
+                application.open(url, options: [:], completionHandler: nil)
+                return
+            }
+            responder = current.next
+        }
+    }
+
+    private func openURLLegacy(_ url: URL) {
+        let selector = sel_registerName("openURL:")
+        var responder: UIResponder? = self
+
+        while let current = responder {
+            if current.responds(to: selector) {
+                current.perform(selector, with: url, afterDelay: 0)
+                return
+            }
+            responder = current.next
+        }
+    }
+
+    private func finishExtension(with error: Error?, afterDelay delay: TimeInterval = 0) {
+        UIView.animate(withDuration: 0.2, delay: delay, animations: {
             self.view.alpha = 0
-        }) { _ in
-            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+        }) { [weak self] _ in
+            if let error = error {
+                self?.extensionContext?.cancelRequest(withError: error)
+            } else {
+                self?.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+            }
         }
     }
 }
