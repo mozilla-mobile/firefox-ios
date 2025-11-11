@@ -188,6 +188,9 @@ final class LaunchCoordinator: BaseCoordinator,
     private func presentLink(with url: URL?) {
         guard let url else { return }
         let presentLinkVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
+        // Set a visible color that works against white web page background
+        presentLinkVC.customTintBarButtonColor = themeManager.getCurrentTheme(for: windowUUID).colors.textOnLight
+
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
