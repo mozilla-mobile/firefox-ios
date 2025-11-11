@@ -5,6 +5,7 @@
 import Common
 import UIKit
 
+// TODO: - FXIOS-14081 add glass version configuration like Secondary SwiftUI button in Modern onboarding.
 public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     private struct UX {
         static var buttonCornerRadius: CGFloat {

@@ -15,7 +15,7 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             }
         }
         static var buttonCornerRadius: CGFloat {
-            return isGlassVersionAvailable ? 32.0 : 12.0
+            return 12.0
         }
         static var buttonVerticalInset: CGFloat {
             return isGlassVersionAvailable ? 15.0 : 12.0
@@ -41,8 +41,10 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
 
         if #available(iOS 26.0, *) {
             configuration = .prominentGlass()
+            configuration?.cornerStyle = .capsule
         } else {
-            configuration = UIButton.Configuration.filled()
+            configuration = .filled()
+            configuration?.background.cornerRadius = UX.buttonCornerRadius
         }
         titleLabel?.adjustsFontForContentSizeCategory = true
 
@@ -108,8 +110,6 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         // Using a nil backgroundColorTransformer will just make the background view
         // use configuration.background.backgroundColor without any transformation
         updatedConfiguration.background.backgroundColorTransformer = nil
-        updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
-        updatedConfiguration.cornerStyle = .fixed
 
         accessibilityIdentifier = viewModel.a11yIdentifier
 

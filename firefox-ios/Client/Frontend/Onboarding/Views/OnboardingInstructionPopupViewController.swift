@@ -12,12 +12,9 @@ class OnboardingInstructionPopupViewController: UIViewController,
     private enum UX {
         static let contentStackViewSpacing: CGFloat = 30.0
         static let textStackViewSpacing: CGFloat = 24
-
-        static let scrollViewVerticalPadding: CGFloat = 30
-        static let topPaddingPhone: CGFloat = 20
-        static let leadingPaddingPhone: CGFloat = 40
-        static let trailingPaddingPhone: CGFloat = 40
-        static let bottomPaddingPhone: CGFloat = 20
+        static let verticalPadding: CGFloat = 50
+        static let horizontalPadding: CGFloat = 40
+        static let descriptionTextViewParagraphSpacing: CGFloat = 40.0
     }
 
     // MARK: - Properties
@@ -101,24 +98,21 @@ class OnboardingInstructionPopupViewController: UIViewController,
     func setupView() {
         addViewsToView()
 
-        let topPadding = UX.topPaddingPhone
-        let leadingPadding = UX.leadingPaddingPhone
-        let trailingPadding = UX.trailingPaddingPhone
-        let bottomPadding = UX.bottomPaddingPhone
-
         NSLayoutConstraint.activate(
             [
                 // Content view wrapper around text
                 contentContainerView.topAnchor.constraint(
                     equalTo: view.topAnchor,
-                    constant: UX.scrollViewVerticalPadding + topPadding
+                    constant: UX.verticalPadding
                 ),
-                contentContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingPadding),
+                contentContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                              constant: UX.verticalPadding),
                 contentContainerView.bottomAnchor.constraint(
                     equalTo: view.bottomAnchor,
-                    constant: -UX.scrollViewVerticalPadding - bottomPadding
+                    constant: -UX.verticalPadding
                 ),
-                contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -trailingPadding),
+                contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                               constant: -UX.horizontalPadding),
 
                 titleLabel.topAnchor.constraint(equalTo: contentContainerView.topAnchor),
                 titleLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),

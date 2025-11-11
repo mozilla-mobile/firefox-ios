@@ -9,8 +9,8 @@ import ComponentLibrary
 
 // TODO: FXIOS-14070 - migrate OnboardingBottomSheetViewController to ComponentLibrary and adopt it where needed. 
 public class OnboardingBottomSheetViewController: UIViewController,
-                                              Themeable,
-                                              Notifiable {
+                                                  Themeable,
+                                                  Notifiable {
     private struct UX {
         static var closeButtonPadding: CGFloat {
             if #available(iOS 26, *) {
@@ -18,6 +18,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
             }
             return 12.0
         }
+        static let detentHeightCoefficient: CGFloat = 2.0
     }
 
     public var themeManager: any Common.ThemeManager
@@ -26,8 +27,8 @@ public class OnboardingBottomSheetViewController: UIViewController,
 
     private var notificationCenter: NotificationProtocol
     private let child: UIViewController
+    /// The last calculated height for the bottom sheet custom detent.
     private var lastCalculatedHeight: CGFloat = 0
-    private var hasInitialLayoutCompleted = false
 
     private let closeButtonModel: CloseButtonViewModel
     private lazy var closeButton: UIButton = .build {
@@ -36,12 +37,12 @@ public class OnboardingBottomSheetViewController: UIViewController,
         }), for: .touchUpInside)
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
-            $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
-                .withRenderingMode(.alwaysTemplate)
         } else {
-            $0.configuration = .plain()
-            $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill)
+            $0.configuration = .filled()
+            $0.configuration?.cornerStyle = .capsule
         }
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
+            .withRenderingMode(.alwaysTemplate)
     }
 
     private lazy var contentView: UIScrollView = .build {
@@ -139,7 +140,10 @@ public class OnboardingBottomSheetViewController: UIViewController,
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
-        let calculatedHeight = fittingSize.height + closeButton.frame.height + UX.closeButtonPadding * 2
+        closeButton.layoutIfNeeded()
+        let calculatedHeight = fittingSize.height
+                                + closeButton.frame.height
+                                + UX.closeButtonPadding * UX.detentHeightCoefficient
         if #available(iOS 16.0, *) {
             lastCalculatedHeight = calculatedHeight
             sheetPresentationController?.animateChanges { [weak self] in

@@ -44,7 +44,7 @@ extension View {
                 .foregroundStyle(theme.colors.textSecondary.color)
         } else {
             self.buttonStyle(.borderless)
-                .foregroundStyle(theme.colors.textInverted.color)
+                .foregroundStyle(theme.colors.iconOnColor.color)
         }
     }
 
