@@ -391,7 +391,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                translationConfiguration: TranslationConfiguration(
+                    prefs: mockProfile.prefs,
+                    state: .inactive
+                ),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
             )
@@ -402,7 +405,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
         XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
         XCTAssertEqual(newState.leadingPageActions[1].iconName, StandardImageIdentifiers.Medium.translate)
-        XCTAssertFalse(newState.leadingPageActions[1].shouldUseLoadingSpinner)
+        XCTAssertFalse(newState.leadingPageActions[1].isLoading)
     }
 
     func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsLoadingIcon() {
@@ -425,7 +428,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions.count, 2)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
         XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
-        XCTAssertTrue(newState.leadingPageActions[1].shouldUseLoadingSpinner)
+        XCTAssertTrue(newState.leadingPageActions[1].isLoading)
         XCTAssertNil(newState.leadingPageActions[1].iconName)
     }
 
@@ -449,7 +452,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions.count, 2)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
         XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
-        XCTAssertFalse(newState.leadingPageActions[1].shouldUseLoadingSpinner)
+        XCTAssertFalse(newState.leadingPageActions[1].isLoading)
         XCTAssertEqual(newState.leadingPageActions[1].iconName, ImageIdentifiers.Translations.translationActive)
     }
 

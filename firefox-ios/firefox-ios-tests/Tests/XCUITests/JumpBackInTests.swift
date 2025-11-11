@@ -102,6 +102,9 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         // The experiment is not opening the keyboard on a new tab
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
 
         // Amazon and Twitter are visible in the "Jump Back In" section
         scrollDown()
@@ -175,6 +178,9 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
 
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
         app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)

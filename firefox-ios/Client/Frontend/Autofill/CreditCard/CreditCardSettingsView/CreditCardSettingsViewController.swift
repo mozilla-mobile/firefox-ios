@@ -61,7 +61,7 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
         self.creditCardEmptyView.view.backgroundColor = .clear
 
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         self.creditCardTableViewController.didSelectCardAtIndex = { [weak self] creditCard in
             self?.viewCreditCard(card: creditCard)
             self?.sendCreditCardsManagementCardTappedTelemetry()
@@ -163,7 +163,11 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
             viewModel.cardInputViewModel.creditCard = creditCard
         }
         viewModel.cardInputViewModel.updateState(state: editState)
-        creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel, windowUUID: windowUUID)
+        creditCardEditView = CreditCardInputView(
+            viewModel: viewModel.cardInputViewModel,
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
         viewModel.cardInputViewModel.dismiss = { [weak self] status, successVal in
             DispatchQueue.main.async {
                 if successVal {

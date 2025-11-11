@@ -29,8 +29,8 @@ final class LocationView: UIView,
 
     private var urlAbsolutePath: String?
     private var searchTerm: String?
-    private var onTapLockIcon: ((UIButton) -> Void)?
-    private var onLongPress: (() -> Void)?
+    private var onTapLockIcon: (@MainActor (UIButton) -> Void)?
+    private var onLongPress: (@MainActor () -> Void)?
     private weak var delegate: LocationViewDelegate?
     private var theme: Theme?
     private var isUnifiedSearchEnabled = false

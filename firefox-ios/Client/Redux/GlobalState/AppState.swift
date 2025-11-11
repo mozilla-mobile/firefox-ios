@@ -92,12 +92,14 @@ let middlewares = [
 // we change the store to be instantiated as a variable.
 // For non testing builds, we leave the store as a constant.
 #if TESTING
-nonisolated(unsafe) var store: any DefaultDispatchStore<AppState> = Store(
+@MainActor
+var store: any DefaultDispatchStore<AppState> = Store(
     state: AppState(),
     reducer: AppState.reducer,
     middlewares: AppConstants.isRunningUnitTest ? [] : middlewares
 )
 #else
+@MainActor
 let store: any DefaultDispatchStore<AppState> = Store(state: AppState(),
                                                       reducer: AppState.reducer,
                                                       middlewares: middlewares)

@@ -220,6 +220,11 @@ final class NativeErrorPageViewController: UIViewController,
                                              actionType: NativeErrorPageActionType.errorPageLoaded))
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view.accessibilityViewIsModal = true
+    }
+
     override func viewWillTransition(
         to size: CGSize,
         with coordinator: UIViewControllerTransitionCoordinator
@@ -228,12 +233,6 @@ final class NativeErrorPageViewController: UIViewController,
             to: size,
             with: coordinator
         )
-        adjustConstraints()
-        showViewForCurrentOrientation()
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
         adjustConstraints()
         showViewForCurrentOrientation()
     }
@@ -327,14 +326,16 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     @objc
-    private nonisolated func didTapReload() {
-        store.dispatchLegacy(
-            GeneralBrowserAction(
-                isNativeErrorPage: true,
-                windowUUID: self.windowUUID,
-                actionType: GeneralBrowserActionType.reloadWebsite
+    private func didTapReload() {
+        ensureMainThread {
+            store.dispatch(
+                GeneralBrowserAction(
+                    isNativeErrorPage: true,
+                    windowUUID: self.windowUUID,
+                    actionType: GeneralBrowserActionType.reloadWebsite
+                )
             )
-        )
+        }
     }
 
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {

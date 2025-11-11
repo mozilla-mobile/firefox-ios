@@ -41,21 +41,19 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
         SheetSizedCard {
             GeometryReader { geometry in
                 ScrollView(showsIndicators: false) {
-                    VStack {
-                        VStack(spacing: UX.CardView.tosSpacing) {
-                            VStack(spacing: UX.CardView.spacing) {
-                                imageView
-                                titleView
-                                bodyView
-                            }
-                            VStack(spacing: UX.CardView.spacing) {
-                                links
-                                primaryButton
-                            }
+                    VStack(spacing: UX.CardView.tosSpacing) {
+                        VStack(spacing: UX.CardView.spacing) {
+                            imageView
+                            titleView
                         }
-                        .padding(.vertical, UX.CardView.verticalPadding)
-                        .frame(width: UX.CardView.primaryButtonWidthiPad)
+                        bodyView
+                        VStack(spacing: UX.CardView.spacing) {
+                            links
+                            primaryButton
+                        }
                     }
+                    .padding(.vertical, UX.CardView.verticalPadding)
+                    .frame(width: UX.CardView.primaryButtonWidthiPad)
                     .frame(width: geometry.size.width)
                     .frame(minHeight: geometry.size.height)
                 }
@@ -70,13 +68,14 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     // MARK: - Subviews
 
     var links: some View {
-        VStack(alignment: .center, spacing: UX.Onboarding.Spacing.standard) {
+        VStack(alignment: UX.CardView.horizontalAlignmentForCurrentLocale, spacing: UX.Onboarding.Spacing.standard) {
             ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
                 AttributedLinkText<TosAction>(
                     theme: theme,
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
+                    textAlignment: UX.CardView.textAlignmentForCurrentLocale,
                     linkAction: viewModel.handleEmbededLinkAction(action:)
                 )
             }
@@ -96,7 +95,7 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
 
     var titleView: some View {
         Text(viewModel.configuration.title)
-            .font(UX.CardView.titleFont)
+            .font(UX.CardView.titleFontForCurrentLocale)
             .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
@@ -109,7 +108,8 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
             .fixedSize(horizontal: false, vertical: true)
             .font(UX.CardView.bodyFont)
             .foregroundColor(Color(theme.colors.textSecondary))
-            .multilineTextAlignment(.center)
+            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
+            .frame(maxWidth: .infinity, alignment: UX.CardView.frameAlignmentForCurrentLocale)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)DescriptionLabel")
             .accessibilityLabel(viewModel.configuration.body)
     }

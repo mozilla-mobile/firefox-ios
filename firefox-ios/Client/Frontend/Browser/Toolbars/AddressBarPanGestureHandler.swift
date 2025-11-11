@@ -106,7 +106,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     // MARK: - Redux
-    nonisolated func subscribeToRedux() {
+    func subscribeToRedux() {
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -273,7 +273,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             enablePanGestureRecognizer()
             if shouldCompleteTransition {
                 webPagePreview.isHidden = true
-                store.dispatchLegacy(
+                store.dispatch(
                     ToolbarAction(
                         shouldAnimate: false,
                         windowUUID: windowUUID,
@@ -286,8 +286,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 if let nextTab {
                     tabManager.selectTab(nextTab)
                 } else {
-                    store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                              actionType: GeneralBrowserActionType.addNewTab))
+                    store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                        actionType: GeneralBrowserActionType.addNewTab))
                 }
             } else {
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,

@@ -172,6 +172,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
             guard let url = action.url, let searchTerm = action.searchTerm else { return }
             recentSearchProvider.addRecentSearch(searchTerm, url: url.absoluteString)
 
+        case ToolbarActionType.navigationMiddleButtonDidChange:
+            guard let middleButton = action.middleButton else { return }
+            toolbarTelemetry.middleButtonType(middleButton)
+
         default:
             break
         }

@@ -7,7 +7,7 @@ import Common
 import Shared
 
 enum AccessoryType {
-    case standard, creditCard, address, login, passwordGenerator
+    case standard, creditCard, address, login, passwordGenerator, relayEmailMask
 }
 
 final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
@@ -44,6 +44,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     var savedAddressesClosure: (() -> Void)?
     var savedLoginsClosure: (() -> Void)?
     var useStrongPasswordClosure: (() -> Void)?
+    var useRelayMaskClosure: (() -> Void)?
 
     var hasAccessoryView: Bool {
         return autofillAccessoryView != nil
@@ -165,6 +166,21 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         return accessoryView
     }()
 
+    private lazy var relayMaskView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.emailMask),
+            labelText: .RelayMask.UseRelayEmailMaskFromKeyboard,
+            tappedAction: { [weak self] in
+                self?.tappedUseRelayMaskButton()
+            })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .RelayMask.UseRelayEmailMaskFromKeyboard
+        accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.relayMaskAutofillButton
+        accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
+        return accessoryView
+    }()
+
     // MARK: - Initialization
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: WindowUUID,
@@ -225,6 +241,8 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
             autofillAccessoryView = loginAutofillView
         case .passwordGenerator:
             autofillAccessoryView = passwordGeneratorView
+        case .relayEmailMask:
+            autofillAccessoryView = relayMaskView
         }
         configureToolbarItems()
         layoutIfNeeded()
@@ -337,7 +355,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         previousButton.tintColor = barButtonsTintColor
         nextButton.tintColor = barButtonsTintColor
 
-        [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView].forEach {
+        [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView, relayMaskView].forEach {
             $0.accessoryImageViewTintColor = colors.iconPrimary
             $0.backgroundColor = buttonsBackgroundColor
         }
@@ -378,6 +396,11 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     @objc
     private func tappedUseStrongPasswordButton() {
         useStrongPasswordClosure?()
+    }
+
+    @objc
+    private func tappedUseRelayMaskButton() {
+        useRelayMaskClosure?()
     }
 
     // MARK: - Telemetry

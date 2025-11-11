@@ -21,7 +21,7 @@ class MainMenuViewController: UIViewController,
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
-        static let menuHeightTolerance: CGFloat = 30
+        static let menuHeightTolerance: CGFloat = 20
         static let topMarginCFR: CGFloat = 100
     }
     typealias SubscriberStateType = MainMenuState

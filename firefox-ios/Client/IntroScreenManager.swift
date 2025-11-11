@@ -8,6 +8,7 @@ import Shared
 protocol IntroScreenManagerProtocol {
     var shouldShowIntroScreen: Bool { get }
     var isModernOnboardingEnabled: Bool { get }
+    var onboardingVariant: OnboardingVariant { get }
     func didSeeIntroScreen()
 }
 
@@ -24,5 +25,19 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
 
     var isModernOnboardingEnabled: Bool {
         featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+    }
+
+    var shouldUseJapanConfiguration: Bool {
+        featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
+    }
+
+    var onboardingVariant: OnboardingVariant {
+        if isModernOnboardingEnabled && shouldUseJapanConfiguration {
+            return .japan
+        } else if isModernOnboardingEnabled {
+            return .modern
+        } else {
+            return .legacy
+        }
     }
 }

@@ -2,7 +2,7 @@
 "ContextualHints.FeltDeletion.Body.v122" = "Tocá aquí para iniciar una nueva sesión privada. Borrá tu historial, cookies — todo.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar. */
-"ContextualHints.Translations.Body.v145" = "Las traducciones rápidas y privadas están listas cuando tú lo estés.";
+"ContextualHints.Translations.Body.v145" = "Las traducciones rápidas y privadas están listas cuando vos estés.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox). */
 "ContextualHints.Translations.Title.v145" = "%@ habla tu idioma";

@@ -47,8 +47,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     @MainActor
     var historySites: [Site] {
-        delegate?.searchData.compactMap { $0 }
-            .filter { $0.isBookmarked == false } ?? []
+        let bookmarkURLs = Set(bookmarkSites.map { $0.url })
+
+        return delegate?.searchData.compactMap { $0 }
+            .filter { $0.isBookmarked == false && !bookmarkURLs.contains($0.url) } ?? []
     }
 
     private let maxNumOfFirefoxSuggestions: Int32 = 1
@@ -61,6 +63,11 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         didSet {
             querySuggestClient()
             handleShowingOrHidingQuickSearchEngines(with: oldValue, newValue: searchQuery)
+            // When clearing the search query, we want to reload the trending searches since
+            // it was set to empty previously.
+            if searchQuery.isEmpty {
+                loadTrendingSearches()
+            }
         }
     }
 
@@ -326,10 +333,15 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     // MARK: - Zero Search State Feature
     // The zero search state refers to when user puts focus in the address bar but does not enter any text.
 
-    // Loads trending searches from the default search engine and updates `trendingSearches`.
-    // Falls back to an empty list on error.
+    func loadTrendingSearches() {
+        Task { @MainActor in
+            await retrieveTrendingSearches()
+            delegate?.reloadTableView()
+        }
+    }
+
     @MainActor
-    func retrieveTrendingSearches() async {
+    private func retrieveTrendingSearches() async {
         guard shouldShowTrendingSearches else {
             trendingSearches = []
             return

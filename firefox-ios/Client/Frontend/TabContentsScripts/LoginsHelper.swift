@@ -13,6 +13,7 @@ import struct MozillaAppServices.LoginEntry
 enum FocusFieldType: String, Codable {
     case username
     case password
+    case email
 }
 
 struct FieldFocusMessage: Codable {
@@ -199,6 +200,10 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
         // NOTE: This is a partial stub / placeholder
         // FXIOS-3856 will further enhance the logs into actual callback
         switch message.fieldType {
+        case .email:
+            logger.log("Parsed message email",
+                       level: .debug,
+                       category: .webview)
         case .username:
             logger.log("Parsed message username",
                        level: .debug,
@@ -380,12 +385,13 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
         currentRequestId = requestId
     }
 
+    @MainActor
     private func clearStoredPasswordAfterGeneration(origin: String) {
         if let windowUUID = self.tab?.windowUUID {
             let action = PasswordGeneratorAction(windowUUID: windowUUID,
                                                  actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
                                                  origin: origin)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         }
     }
 
