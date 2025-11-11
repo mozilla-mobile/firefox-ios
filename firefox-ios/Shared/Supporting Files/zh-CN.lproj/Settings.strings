@@ -248,7 +248,7 @@
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "左右摇动设备以生成页面摘要。";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "摇动以生成摘要";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "摇动生成摘要";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "手势";

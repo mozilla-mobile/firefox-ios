@@ -108,7 +108,7 @@ class LoginTest: BaseTestCase {
     }
 
     private func openLoginsSettingsFromBrowserTab_TAE() {
-        toolBarScreen.assertTabToolbarMenuExist()
+        toolBarScreen.assertTabToolbarMenuExists()
         navigator.goto(BrowserTabMenu)
         mainMenuScreen.assertMainMenuSettingsExist()
         navigator.goto(LoginsSettings)

@@ -356,7 +356,7 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get token server endpoint url."
     }
 
-    func shouldSyncLogins(completion: @escaping (Bool) -> Void) {
+    func shouldSyncLogins(completion: @escaping @Sendable (Bool) -> Void) {
         if !(self.prefs.boolForKey(PrefsKeys.LoginsHaveBeenVerified) ?? false) {
             // We should only sync logins when the verification step has completed successfully.
             // Otherwise logins could exist in the database that can't be decrypted and would
@@ -378,7 +378,8 @@ public class RustSyncManager: NSObject, SyncManager {
                                      creditCardKey: String?,
                                      completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
-        var rustEngines: [String] = []
+        // FIXME: FXIOS-14052 Unprotected properties should not be mutated on background threads
+        nonisolated(unsafe) var rustEngines: [String] = []
         var registeredPlaces = false
         var registeredAutofill = false
 
@@ -468,7 +469,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    private func doSync(params: SyncParams, completion: @escaping (SyncResult) -> Void) {
+    private func doSync(params: SyncParams, completion: @escaping @Sendable (SyncResult) -> Void) {
         beginSyncing()
         syncManagerAPI.sync(params: params) { syncResult in
             // Save the persisted state

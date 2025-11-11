@@ -40,6 +40,9 @@
 /* The label for the error button that allows the user to retry summarizing the page. */
 "Summarizer.RetryButton.Label.v142" = "ਮੁੜ-ਕੋਸ਼ਿਸ਼";
 
+/* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "ਸਾਰ ਨੂੰ ਬੰਦ ਕਰਨ ਵਾਸਤੇ ਵੈੱਬ ਸਫ਼ੇ ਨੂੰ ਖਿੱਚੋ ਜਾਂ  ਛੂਹੋ";
+
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "ਮਨਜ਼ੂਰ";
 

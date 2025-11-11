@@ -175,9 +175,8 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
         )
 
-        if isNativeErrorPageEnabled && !useOldErrorPage {
-            return responseForNativeErrorPage(request: request)
-        } else if isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage {
+        // Only handle No internet access because other cases show about:blank page
+        if isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)
