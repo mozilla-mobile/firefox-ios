@@ -109,20 +109,18 @@ extension BrowserViewController: @MainActor DownloadQueueDelegate {
         else { return }
 
         // We only care about download errors specific to our window's downloads
-        DispatchQueue.main.async {
-            downloadToast.dismiss(false)
-            if #available(iOS 17, *),
-               let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
-                downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
-                self.downloadLiveActivityWrapper = nil
-            }
-            self.downloadProgressManager = nil
+        downloadToast.dismiss(false)
+        if #available(iOS 17, *),
+           let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
+            downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
+            self.downloadLiveActivityWrapper = nil
+        }
+        self.downloadProgressManager = nil
 
-            if error != nil {
-                SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                bottomContainer: self.contentContainer,
-                                                theme: self.currentTheme())
-            }
+        if error != nil {
+            SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                            bottomContainer: self.contentContainer,
+                                            theme: self.currentTheme())
         }
     }
 
