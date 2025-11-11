@@ -586,6 +586,7 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
+        updateSwipingTabs()
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
@@ -692,7 +693,6 @@ class BrowserViewController: UIViewController,
 
         updateToolbarStateTraitCollectionIfNecessary(newCollection)
         appMenuBadgeUpdate()
-        updateSwipingTabs(showNavToolbar: showNavToolbar)
         updateTopTabs(showTopTabs: showTopTabs)
 
         header.setNeedsLayout()
@@ -701,15 +701,15 @@ class BrowserViewController: UIViewController,
         updateToolbarDisplay()
     }
 
-    private func updateSwipingTabs(showNavToolbar: Bool) {
+    private func updateSwipingTabs() {
         guard isSwipingTabsEnabled else { return }
 
-        if showNavToolbar,
+        if isBottomSearchBar,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            !toolbarState.addressToolbar.isEditing {
             addressBarPanGestureHandler?.enablePanGestureRecognizer()
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-        } else if showNavToolbar == false {
+        } else {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
         }
@@ -4523,6 +4523,8 @@ extension BrowserViewController: TabManagerDelegate {
             /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
             willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
+        } else if isSwipingTabsEnabled {
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
         /// If the selectedTab is showing an error page trigger a reload
@@ -4786,25 +4788,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {
-        guard isSwipingTabsEnabled else { return }
-        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-    }
-
     private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
-        guard shouldCancelEditing else {
-            guard isSwipingTabsEnabled,
-                  let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-                  toolbarState.addressToolbar.url == nil,
-                  toolbarState.isShowingNavigationToolbar == true
-            else { return }
-            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-            return
-        }
+        guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
-        guard isSwipingTabsEnabled else { return }
-        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
     }
 
     private var shouldCancelEditing: Bool {
