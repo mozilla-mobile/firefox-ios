@@ -41,7 +41,10 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
 
             showMaskSettings += [showEmailMaskSuggestions]
 
-            let manageMaskSetting = ManageRelayMasksSetting(theme: theme, prefs: profile.prefs)
+            let manageMaskSetting = ManageRelayMasksSetting(theme: theme,
+                                                            prefs: profile.prefs,
+                                                            windowUUID: windowUUID,
+                                                            navigationController: navigationController)
 
             manageMasksSettings += [manageMaskSetting]
         }
@@ -57,6 +60,9 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
 }
 
 final class ManageRelayMasksSetting: Setting {
+    private let windowUUID: WindowUUID
+    private let parentNav: UINavigationController?
+
     override var accessoryView: UIImageView? {
         let image = UIImage(named: StandardImageIdentifiers.Small.externalLink)
         return UIImageView(image: image)
@@ -68,16 +74,19 @@ final class ManageRelayMasksSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .default }
 
-    init(theme: Theme, prefs: Prefs) {
+    init(theme: Theme, prefs: Prefs, windowUUID: WindowUUID, navigationController: UINavigationController?) {
         let color = theme.colors.textPrimary
         let attributes = [NSAttributedString.Key.foregroundColor: color]
+        self.parentNav = navigationController
+        self.windowUUID = windowUUID
         super.init(title: NSAttributedString(string: String.RelayMask.RelayEmailMaskSettingsManageEmailMasks,
                                              attributes: attributes))
         self.theme = theme
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        // TODO: Need to fix this to always open in Firefox, or push a web view on the nav stack. TBD.
-        // UIApplication.shared.open(url: URL(string: "https://relay.firefox.com/accounts/profile")!)
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        viewController.url = SupportUtils.URLForRelayAccountManagement
+        parentNav?.pushViewController(viewController, animated: true)
     }
 }
