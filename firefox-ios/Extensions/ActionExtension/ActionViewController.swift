@@ -5,6 +5,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
+@MainActor
 final class ActionViewController: UIViewController {
     private let firefoxURLBuilder: FirefoxURLBuilding
     private let telemetryService: TelemetryRecording
@@ -24,7 +25,10 @@ final class ActionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        handleShareExtension()
+
+        Task {
+            await handleShareExtension()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -37,77 +41,64 @@ final class ActionViewController: UIViewController {
         view.alpha = 0
     }
 
-    private func handleShareExtension() {
+    private func handleShareExtension() async {
         guard let extensionContext = extensionContext,
               let inputItems = extensionContext.inputItems as? [NSExtensionItem] else {
             finishExtension(with: nil)
             return
         }
 
-        findURLInItems(inputItems) { [weak self] shareItem in
-            guard let self = self else { return }
+        if let shareItem = await findURLInItems(inputItems) {
+            openFirefox(with: .shareItem(shareItem))
+            return
+        }
 
-            if let shareItem = shareItem {
-                self.openFirefox(with: .shareItem(shareItem))
-                return
-            }
-
-            self.findTextInItems(inputItems) { textShareItem in
-                if let textShareItem = textShareItem {
-                    self.openFirefox(with: textShareItem)
-                } else {
-                    self.finishExtension(with: nil)
-                }
-            }
+        if let textShareItem = await findTextInItems(inputItems) {
+            openFirefox(with: textShareItem)
+        } else {
+            finishExtension(with: nil)
         }
     }
 
-    private func findURLInItems(_ items: [NSExtensionItem], completion: @escaping (ShareItem?) -> Void) {
+    private func findURLInItems(_ items: [NSExtensionItem]) async -> ShareItem? {
         for item in items {
             guard let attachments = item.attachments else { continue }
 
             for attachment in attachments where attachment.isURL {
                 let title = item.attributedContentText?.string
 
-                attachment.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { obj, error in
-                    guard error == nil, let url = obj as? URL else {
-                        return
-                    }
-
-                    DispatchQueue.main.async {
-                        completion(ShareItem(url: url.absoluteString, title: title))
-                    }
+                do {
+                    let url = try await attachment.loadURL()
+                    return ShareItem(url: url.absoluteString, title: title)
+                } catch {
+                    continue
                 }
-                return
             }
         }
 
-        completion(nil)
+        return nil
     }
 
-    private func findTextInItems(_ items: [NSExtensionItem], completion: @escaping (ExtractedShareItem?) -> Void) {
+    private func findTextInItems(_ items: [NSExtensionItem]) async -> ExtractedShareItem? {
         for item in items {
             guard let attachments = item.attachments else { continue }
 
             for attachment in attachments where attachment.isText {
-                attachment.loadItem(forTypeIdentifier: UTType.text.identifier, options: nil) { [weak self] obj, error in
-                    guard error == nil, let text = obj as? String else {
-                        return
-                    }
+                do {
+                    let text = try await attachment.loadText()
 
-                    DispatchQueue.main.async {
-                        if let url = self?.convertTextToURL(text) {
-                            completion(.shareItem(ShareItem(url: url.absoluteString, title: nil)))
-                        } else {
-                            completion(.rawText(text))
-                        }
+                    if let url = convertTextToURL(text) {
+                        return .shareItem(ShareItem(url: url.absoluteString, title: nil))
+                    } else {
+                        return .rawText(text)
                     }
+                } catch {
+                    continue
                 }
-                return
             }
         }
 
-        completion(nil)
+        return nil
     }
 
     private func convertTextToURL(_ text: String) -> URL? {
