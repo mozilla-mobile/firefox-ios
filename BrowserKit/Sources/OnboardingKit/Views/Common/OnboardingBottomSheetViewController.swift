@@ -18,7 +18,6 @@ public class OnboardingBottomSheetViewController: UIViewController,
             }
             return 12.0
         }
-        static let detentHeightCoefficient: CGFloat = 2.0
     }
 
     public var themeManager: any Common.ThemeManager
@@ -143,7 +142,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
         closeButton.layoutIfNeeded()
         let calculatedHeight = fittingSize.height
                                 + closeButton.frame.height
-                                + UX.closeButtonPadding * UX.detentHeightCoefficient
+                                + UX.closeButtonPadding * 2.0
         if #available(iOS 16.0, *) {
             lastCalculatedHeight = calculatedHeight
             sheetPresentationController?.animateChanges { [weak self] in
