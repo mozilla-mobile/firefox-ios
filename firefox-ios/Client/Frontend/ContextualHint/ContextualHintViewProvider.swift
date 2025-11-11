@@ -143,7 +143,7 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
 
     // MARK: - Present
     @objc
-    private nonisolated func presentHint() {
+    nonisolated private func presentHint() {
         ensureMainThread {
             guard self.shouldPresentContextualHint() else { return }
 
