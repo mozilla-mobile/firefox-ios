@@ -62,6 +62,6 @@ class WallpaperBackgroundView: UIView {
         let isLandscape = UIDevice.current.orientation.isLandscape
         return isLandscape ?
         wallpaperState.wallpaperConfiguration.landscapeImage :
-         wallpaperState.wallpaperConfiguration.landscapeImage
+         wallpaperState.wallpaperConfiguration.portraitImage
     }
 }
