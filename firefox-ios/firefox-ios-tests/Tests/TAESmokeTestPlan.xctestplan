@@ -606,8 +606,6 @@
         "TabsTests\/testSwitchBetweenTabs_tabTrayExperimentOn()",
         "TabsTests\/testTabTrayCloseMultipleTabs()",
         "TabsTests\/testTabTrayCloseMultipleTabs_tabTrayExperimentOff()",
-        "TabsTests\/testTabTrayContextMenuCloseTab()",
-        "TabsTests\/testTabTrayContextMenuCloseTab_tabTrayExperimentOff()",
         "TabsTestsIpad",
         "TabsTestsIpad\/testUpdateTabCounter()",
         "TabsTestsIphone\/testAddPrivateTabByLongPressTabsButton()",
