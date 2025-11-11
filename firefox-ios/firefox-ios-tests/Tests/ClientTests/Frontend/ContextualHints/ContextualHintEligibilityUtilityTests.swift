@@ -7,6 +7,7 @@ import XCTest
 import Shared
 @testable import Client
 
+@MainActor
 class ContextualHintEligibilityUtilityTests: XCTestCase {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 
@@ -114,7 +115,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
-    @MainActor
     func test_shouldNotPresentJumpBackHint_WithOverlayMode() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
@@ -124,7 +124,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
-    @MainActor
     func test_shouldNotPresentJumpBackInWhenSyncedTabConfigured() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)
 
@@ -139,7 +138,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
-    @MainActor
     func test_shouldNotPresentSyncedHint_WithOverlayMode() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
