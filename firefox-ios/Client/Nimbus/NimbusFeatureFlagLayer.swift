@@ -59,6 +59,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageStoriesRedesign:
             return checkHomepageStoriesRedesignFeature(from: nimbus)
 
+        case .homepageScrim:
+            return checkHomepageScrimFeature(from: nimbus)
+
         case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
             return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
 
@@ -238,6 +241,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageStoriesRedesignFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().storiesRedesign
+    }
+
+    private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().scrim
     }
 
     private func checkHomepageDiscoverMoreFeature(

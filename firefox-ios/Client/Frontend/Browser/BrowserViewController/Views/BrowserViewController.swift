@@ -3874,11 +3874,16 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
-        configureHomepageZeroSearchView()
+
+        if featureFlags.isFeatureEnabled(.homepageScrim, checking: .buildOnly) {
+            configureHomepageZeroSearchView()
+        }
+
         if isSwipingTabsEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
         }
+
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.screenChanged,
