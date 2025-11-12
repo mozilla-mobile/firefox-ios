@@ -66,7 +66,7 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
 
         let transformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
             var container = incoming
-            
+
             // For glass version we don't need to apply the foregrund color as it is handled by the .glassProminent config
             if #unavailable(iOS 26) {
                 container.foregroundColor = self?.foregroundColor
@@ -118,7 +118,7 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.title = "Skip"
 
         configuration = updatedConfiguration
-        
+
         setNeedsUpdateConfiguration()
     }
 

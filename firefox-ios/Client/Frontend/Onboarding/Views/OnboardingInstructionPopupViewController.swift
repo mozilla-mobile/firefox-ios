@@ -158,7 +158,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         let attributedParagraphs = viewModel.getAttributedStrings(with: font)
 
         let combinedString = NSMutableAttributedString()
-        
+
         let isRTL = view.effectiveUserInterfaceLayoutDirection == .rightToLeft
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.paragraphSpacing = UX.descriptionTextViewParagraphSpacing
@@ -166,7 +166,11 @@ class OnboardingInstructionPopupViewController: UIViewController,
 
         for (index, attributedText) in attributedParagraphs.enumerated() {
             let paragraphString = NSMutableAttributedString(attributedString: attributedText)
-            paragraphString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: paragraphString.length))
+            paragraphString.addAttribute(
+                .paragraphStyle,
+                value: paragraphStyle,
+                range: NSRange(location: 0, length: paragraphString.length)
+            )
             combinedString.append(paragraphString)
 
             if index < attributedParagraphs.count - 1 {
