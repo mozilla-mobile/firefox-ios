@@ -44,12 +44,8 @@ public class OnboardingBottomSheetViewController: UIViewController,
             .withRenderingMode(.alwaysTemplate)
     }
     private lazy var backgroundView: UIVisualEffectView = .build {
-        if #available(iOS 26.0, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            $0.effect = glassEffect
-        } else {
-            $0.effect = UIBlurEffect(style: .systemThinMaterial)
+        if #unavailable(iOS 26.0) {
+            $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         }
     }
 
@@ -173,11 +169,14 @@ public class OnboardingBottomSheetViewController: UIViewController,
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
+        view.backgroundColor = .clear
+        // The background view is not needed when presenting a bottom sheet in iOS 26.
+        // The bottom sheet presentation already contains the glass effect.
         if #unavailable(iOS 26.0) {
-            view.backgroundColor = theme.colors.layer1
+            backgroundView.alpha = 1.0
             closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         } else {
-            view.backgroundColor = .clear
+            backgroundView.alpha = 0.0
         }
     }
 }

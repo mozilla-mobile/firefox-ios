@@ -10,7 +10,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
                                                 Themeable,
                                                 Notifiable {
     private enum UX {
-        static let contentStackViewSpacing: CGFloat = 30.0
+        static let contentStackViewSpacing: CGFloat = 20.0
         static let textStackViewSpacing: CGFloat = 24
         static let verticalPadding: CGFloat = 50
         static let horizontalPadding: CGFloat = 40
@@ -225,12 +225,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
 
         // Call applyTheme() on primaryButton to let it handle theme-specific styling
         primaryButton.applyTheme(theme: theme)
-
-        if #available(iOS 26.0, *) {
-            view.backgroundColor = .clear
-        } else {
-            view.backgroundColor = theme.colors.layer1
-        }
+        view.backgroundColor = .clear
     }
 }
 
