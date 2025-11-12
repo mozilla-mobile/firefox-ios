@@ -185,6 +185,7 @@ final class DefaultRouterTests: XCTestCase {
         subject.push(viewController) {
             expectation.fulfill()
         }
+        navigationController.viewControllers = []
         subject.checkNavigationCompletion(for: navigationController)
 
         waitForExpectations(timeout: 0.1, handler: nil)
