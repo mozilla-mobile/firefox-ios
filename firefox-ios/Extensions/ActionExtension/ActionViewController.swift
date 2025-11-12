@@ -8,32 +8,29 @@ import UniformTypeIdentifiers
 @MainActor
 final class ActionViewController: UIViewController {
     private let firefoxURLBuilder: FirefoxURLBuilding
-    private let telemetryService: TelemetryRecording
-
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         self.firefoxURLBuilder = FirefoxURLBuilder()
-        self.telemetryService = TelemetryService()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-
+    
+    init(firefoxURLBuilder: FirefoxURLBuilding) {
+        self.firefoxURLBuilder = firefoxURLBuilder
+        super.init(nibName: nil, bundle: nil)
+    }
+    
     required init?(coder: NSCoder) {
-        self.firefoxURLBuilder = FirefoxURLBuilder()
-        self.telemetryService = TelemetryService()
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
 
+        // TODO: - Refactor with completions
         Task {
             await handleShareExtension()
         }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        view.alpha = 0
     }
 
     private func setupView() {
@@ -60,6 +57,7 @@ final class ActionViewController: UIViewController {
         }
     }
 
+    // TODO: - move it to FirefoxURLBuilding - so we can test it easily
     private func findURLInItems(_ items: [NSExtensionItem]) async -> ShareItem? {
         for item in items {
             guard let attachments = item.attachments else { continue }
@@ -101,6 +99,7 @@ final class ActionViewController: UIViewController {
         return nil
     }
 
+    // TODO: - Move to FirefoxURLBuidling
     private func convertTextToURL(_ text: String) -> URL? {
         guard text.contains(".") else {
             return nil
@@ -122,8 +121,6 @@ final class ActionViewController: UIViewController {
     }
 
     private func openFirefox(with shareItem: ExtractedShareItem) {
-        telemetryService.recordShareExtensionOpened()
-
         let (content, isSearch) = extractContentAndType(from: shareItem)
 
         guard let firefoxURL = firefoxURLBuilder.buildFirefoxURL(for: content, isSearch: isSearch) else {
@@ -143,16 +140,8 @@ final class ActionViewController: UIViewController {
             return (text, true)
         }
     }
-
+    
     private func openURL(_ url: URL) {
-        if #available(iOS 18.0, *) {
-            openURLModern(url)
-        } else {
-            openURLLegacy(url)
-        }
-    }
-
-    private func openURLModern(_ url: URL) {
         var responder: UIResponder? = self
 
         while let current = responder {
@@ -164,28 +153,11 @@ final class ActionViewController: UIViewController {
         }
     }
 
-    private func openURLLegacy(_ url: URL) {
-        let selector = sel_registerName("openURL:")
-        var responder: UIResponder? = self
-
-        while let current = responder {
-            if current.responds(to: selector) {
-                current.perform(selector, with: url, afterDelay: 0)
-                return
-            }
-            responder = current.next
-        }
-    }
-
-    private func finishExtension(with error: Error?, afterDelay delay: TimeInterval = 0) {
-        UIView.animate(withDuration: 0.2, delay: delay, animations: {
-            self.view.alpha = 0
-        }) { [weak self] _ in
-            if let error = error {
-                self?.extensionContext?.cancelRequest(withError: error)
-            } else {
-                self?.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
-            }
+    private func finishExtension(with error: Error?) {
+        if let error  {
+            extensionContext?.cancelRequest(withError: error)
+        } else {
+            extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
         }
     }
 }

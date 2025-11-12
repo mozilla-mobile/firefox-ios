@@ -7,7 +7,7 @@
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Open in Firefox</string>
+	<string>Open In Firefox</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(APP_VERSION)</string>
 	<key>CFBundleVersion</key>

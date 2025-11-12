@@ -15,8 +15,8 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
         }
 
         let urlString = isSearch
-            ? "\(mozInternalScheme)://open-text?text=\(encodedContent)"
-            : "\(mozInternalScheme)://open-url?url=\(encodedContent)"
+            ? "\(mozInternalScheme)://open-text?text=\(encodedContent)&openWithFirefox=true"
+            : "\(mozInternalScheme)://open-url?url=\(encodedContent)&openWithFirefox=true"
 
         return URL(string: urlString)
     }
