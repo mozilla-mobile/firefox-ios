@@ -37,7 +37,7 @@ extension UIImage {
         return renderer.image { context in
             let cgContext = context.cgContext
 
-            UIColor.white.setFill()
+            UIColor.clear.setFill()
             context.fill(CGRect(origin: .zero, size: size))
 
             // Coordinate system must be flipped to match PDF rendering
