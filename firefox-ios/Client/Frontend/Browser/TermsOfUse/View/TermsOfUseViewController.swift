@@ -283,12 +283,11 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     @objc private func backgroundTapped(_ sender: UITapGestureRecognizer) {
-        // Only dismiss the view if the tap occurred outside the visible sheetContainer.
-        // This prevents dismissing the Terms of Use sheet when interacting with its content.
-        if !sheetContainer.frame.contains(sender.location(in: view)) {
-            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss))
-            coordinator?.dismissTermsFlow()
-        }
+        // Only intercepts tap occurred outside the visible sheetContainer.
+        // This prevents interacting with its content.
+        guard !sheetContainer.frame.contains(sender.location(in: view)) else { return }
+        // FXIOS-30197: Intentionally no longer dismissing when tapping the background scrim.
+        // Add any other scrim interaction here
     }
 
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
