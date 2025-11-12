@@ -1507,7 +1507,6 @@
 		BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */; };
 		BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */; };
 		C21C084E2EC48D3B000C7D31 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8CB511202EC1F17D004A2320 /* Shared */; };
-		C21C09252EC49B43000C7D31 /* FirefoxURLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21C09242EC49B43000C7D31 /* FirefoxURLBuilderTests.swift */; };
 		C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */; };
 		C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */; };
 		C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */; };
@@ -2382,13 +2381,6 @@
 			remoteInfo = Storage;
 		};
 		8CF609302EA8D46F00F069B6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8CF609242EA8D46E00F069B6;
-			remoteInfo = ActionExtension;
-		};
-		C21C09212EC49B1C000C7D31 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
 			proxyType = 1;
@@ -9878,7 +9870,6 @@
 		C1C54E119D804703437D116C /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C1DF4F71AB33BAB7B199F361 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C1F24EFFB6E9B114849A4DB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
-		C21C09242EC49B43000C7D31 /* FirefoxURLBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxURLBuilderTests.swift; sourceTree = "<group>"; };
 		C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerTests.swift; sourceTree = "<group>"; };
 		C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewModel.swift; sourceTree = "<group>"; };
 		C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntensityVisualEffectView.swift; sourceTree = "<group>"; };
@@ -14470,14 +14461,6 @@
 			path = Summarizer;
 			sourceTree = "<group>";
 		};
-		C21C09232EC49B29000C7D31 /* ActionExtension */ = {
-			isa = PBXGroup;
-			children = (
-				C21C09242EC49B43000C7D31 /* FirefoxURLBuilderTests.swift */,
-			);
-			path = ActionExtension;
-			sourceTree = "<group>";
-		};
 		C22753422A3CA25100B9C0D1 /* WebsiteDataManagement */ = {
 			isa = PBXGroup;
 			children = (
@@ -16288,7 +16271,6 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				C21C09232EC49B29000C7D31 /* ActionExtension */,
 				EDADF7822D70D59900C39295 /* AppIconSelection */,
 				8A171A6029F82AD90085770E /* Application */,
 				B23620492B7EAF2C000B1DE7 /* Autofill */,
@@ -17103,7 +17085,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				C21C09222EC49B1C000C7D31 /* PBXTargetDependency */,
 				7B9BF92F1E435DE400CB24F4 /* PBXTargetDependency */,
 				F84B21D51A090F8100AAB793 /* PBXTargetDependency */,
 			);
@@ -19901,7 +19882,6 @@
 				C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */,
 				81AE06F62E3AA6A3002C3E58 /* MerinoProviderTests.swift in Sources */,
 				21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */,
-				C21C09252EC49B43000C7D31 /* FirefoxURLBuilderTests.swift in Sources */,
 				6ADB651B285C03B100947EA4 /* DownloadHelperTests.swift in Sources */,
 				8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */,
 				0E9702742CC2F2FB00C357B7 /* PasswordGeneratorTelemetryTests.swift in Sources */,
@@ -20153,11 +20133,6 @@
 			isa = PBXTargetDependency;
 			target = 8CF609242EA8D46E00F069B6 /* ActionExtension */;
 			targetProxy = 8CF609302EA8D46F00F069B6 /* PBXContainerItemProxy */;
-		};
-		C21C09222EC49B1C000C7D31 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8CF609242EA8D46E00F069B6 /* ActionExtension */;
-			targetProxy = C21C09212EC49B1C000C7D31 /* PBXContainerItemProxy */;
 		};
 		C82043712523DBEB00740B71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
