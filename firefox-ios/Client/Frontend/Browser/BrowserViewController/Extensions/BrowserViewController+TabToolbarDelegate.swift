@@ -190,8 +190,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     /// This is a workaround for dismissing CFRs when keyboard is showing up.
     func dismissCFRs() {
-        summarizeToolbarEntryContextHintVC.dismiss(animated: false)
-        translationContextHintVC.dismiss(animated: false)
+        if summarizeToolbarEntryContextHintVC.isPresenting {
+            summarizeToolbarEntryContextHintVC.dismiss(animated: false)
+        }
+        if translationContextHintVC.isPresenting {
+            translationContextHintVC.dismiss(animated: false)
+        }
     }
 
     /// Triggers clearing the users private session data, an alert is shown once and then, deletion is done directly after
