@@ -123,8 +123,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         // FXIOS-13954 - This code will disappear soon since it's part of the legacy homepage only. If it hasn't
         // disappeared then we should is to be revisited once we are on Swift 6.2 with default main actor isolation.
         // Note: `didLoadNewData` calls `ensureMainThread`
-        dispatchGroup.notify(queue: .main) { [weak self] in
-            MainActor.assumeIsolated {
+        dispatchGroup.notify(queue: .main) {
+            MainActor.assumeIsolated { [weak self] in
                 self?.recalculateTopSiteData()
                 self?.delegate?.didLoadNewData()
             }

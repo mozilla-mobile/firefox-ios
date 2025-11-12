@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-final class MockTopSitesManager: TopSitesManagerInterface {
+final class MockTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
     var recalculateTopSitesCalledCount = 0
     var pinTopSiteCalledCount = 0
 

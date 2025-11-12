@@ -6,14 +6,15 @@ import Foundation
 import Shared
 import Storage
 
-protocol TopSiteHistoryManagerProvider {
+protocol TopSiteHistoryManagerProvider: Sendable {
     func getTopSites(completion: @escaping ([Site]?) -> Void)
     func removeDefaultTopSitesTile(site: Site)
     func remove(pinnedSite: Site) async throws
 }
 
 // Manages the top site
-class TopSiteHistoryManager: TopSiteHistoryManagerProvider {
+// FIXME: FXIOS-14053 Can't be `final` and `Sendable` unless tests are rewritten for `TopSiteHistoryManagerStub`
+class TopSiteHistoryManager: TopSiteHistoryManagerProvider, @unchecked Sendable {
     private let profile: Profile
 
     private let topSiteCacheSize: Int32 = 32

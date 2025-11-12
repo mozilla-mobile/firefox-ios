@@ -158,6 +158,10 @@ final class BrowserScreen {
         urlElement.waitAndTap()
     }
 
+    func typeOnSearchBar(text: String) {
+        addressBar.typeText(text)
+    }
+
     func assertCancelButtonOnUrlBarExist() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }
@@ -218,5 +222,15 @@ final class BrowserScreen {
         let firstLink = app.webViews.links.firstMatch
         BaseTestCase().mozWaitForElementToExist(firstLink)
         firstLink.press(forDuration: 1)
+    }
+
+    func assertTypeSuggestText(text: String) {
+        let suggestedText = app.tables.firstMatch.cells.staticTexts[text]
+        BaseTestCase().mozWaitForElementToExist(suggestedText)
+    }
+
+    func assertNumberOfSuggestedLines(expectedLines: Int) {
+        let suggestedLines = app.tables.firstMatch.cells
+        XCTAssertEqual(suggestedLines.count, expectedLines)
     }
 }
