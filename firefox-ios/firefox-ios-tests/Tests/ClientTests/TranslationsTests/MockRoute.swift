@@ -14,7 +14,7 @@ final class MockRoute: TinyRoute {
     var error: Error?
 
     init(replyText: String) {
-        self.reply = TinyHTTPReply(http: nil, body: Data(replyText.utf8))
+        self.reply = TinyHTTPReply(httpResponse: nil, body: Data(replyText.utf8))
     }
 
     init(reply: TinyHTTPReply? = nil, error: Error? = nil) {

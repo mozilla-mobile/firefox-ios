@@ -48,10 +48,10 @@ public final class TinyRouter {
         }
 
         // Try the default route if no registered route handled the request
-        if let d = defaultRoute, let reply = try d.handle(url: url, components: comps) {
+        if let route = defaultRoute, let reply = try route.handle(url: url, components: comps) {
             return reply
         }
-        
+
         throw TinyRouterError.notFound
     }
 }
