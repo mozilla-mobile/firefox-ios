@@ -29,6 +29,8 @@ final class TinyRouterTests: XCTestCase {
     }
 
     func test_route_order_firstRegisteredWins() throws {
+        /// This test ensures that if multiple routes are registered for the same path,
+        /// the router uses the first one registered.
         let first = MockRoute(replyText: "first")
         let second = MockRoute(replyText: "second")
 
