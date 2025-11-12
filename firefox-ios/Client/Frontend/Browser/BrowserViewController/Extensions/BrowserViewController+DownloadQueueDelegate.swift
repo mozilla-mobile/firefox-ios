@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-extension BrowserViewController: @MainActor DownloadQueueDelegate {
+extension BrowserViewController: DownloadQueueDelegate {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
         // For now, each window handles its downloads independently; ignore any messages for other windows' downloads.
         let uuid = windowUUID
@@ -109,9 +109,6 @@ extension BrowserViewController: @MainActor DownloadQueueDelegate {
         else { return }
 
         // We only care about download errors specific to our window's downloads
-        // BEWARE! Brittle Code Alert! There is some weird timing magic that happens here even though this function
-        // is already being called on the Main Thread. In order to have both toasts show up in the
-        // download flow we need this dispatch to wait for the next run loop.
         DispatchQueue.main.async {
             downloadToast.dismiss(false)
             if #available(iOS 17, *),
