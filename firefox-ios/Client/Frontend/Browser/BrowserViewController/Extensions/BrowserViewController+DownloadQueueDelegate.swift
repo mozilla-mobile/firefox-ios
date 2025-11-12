@@ -109,18 +109,23 @@ extension BrowserViewController: @MainActor DownloadQueueDelegate {
         else { return }
 
         // We only care about download errors specific to our window's downloads
-        downloadToast.dismiss(false)
-        if #available(iOS 17, *),
-           let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
-            downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
-            self.downloadLiveActivityWrapper = nil
-        }
-        self.downloadProgressManager = nil
+        // BEWARE! Brittle Code Alert! There is some weird timing magic that happens here even though this function
+        // is already being called on the Main Thread. In order to have both toasts show up in the
+        // download flow we need this dispatch to wait for the next run loop.
+        DispatchQueue.main.async {
+            downloadToast.dismiss(false)
+            if #available(iOS 17, *),
+               let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
+                downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
+                self.downloadLiveActivityWrapper = nil
+            }
+            self.downloadProgressManager = nil
 
-        if error != nil {
-            SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                            bottomContainer: self.contentContainer,
-                                            theme: self.currentTheme())
+            if error != nil {
+                SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                                bottomContainer: self.contentContainer,
+                                                theme: self.currentTheme())
+            }
         }
     }
 
