@@ -5,7 +5,6 @@
 import UIKit
 import UniformTypeIdentifiers
 
-@MainActor
 final class ActionViewController: UIViewController {
     private let firefoxURLBuilder: FirefoxURLBuilding
 
