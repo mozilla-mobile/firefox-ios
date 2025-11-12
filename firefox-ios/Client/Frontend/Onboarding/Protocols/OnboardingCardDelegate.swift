@@ -117,7 +117,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
                 )
             }
         )
-        
+
         let bottomSheetVC = OnboardingBottomSheetViewController(
             child: instructionsVC,
             closeButtonModel: CloseButtonViewModel(
