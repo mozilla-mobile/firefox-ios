@@ -23,47 +23,45 @@ extension NSItemProvider {
         hasItemConformingToTypeIdentifier(UTType.url.identifier)
     }
 
-    func loadURL() async throws -> URL {
-        try await withCheckedThrowingContinuation { continuation in
-            loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { item, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-
-                guard let url = item as? URL else {
-                    continuation.resume(throwing: NSError(
-                        domain: "org.mozilla.fennec",
-                        code: 999,
-                        userInfo: ["Problem": "Non-URL result"]
-                    ))
-                    return
-                }
-
-                continuation.resume(returning: url)
+    func loadURL(completion: @escaping (Result<URL, Error>) -> Void) {
+        loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { item, error in
+            if let error = error {
+                completion(.failure(error))
+                return
             }
+
+            guard let url = item as? URL else {
+                let error = NSError(
+                    domain: "org.mozilla.fennec",
+                    code: 999,
+                    userInfo: ["Problem": "Non-URL result"]
+                )
+                completion(.failure(error))
+                return
+            }
+
+            completion(.success(url))
         }
     }
 
-    func loadText() async throws -> String {
-        try await withCheckedThrowingContinuation { continuation in
-            loadItem(forTypeIdentifier: UTType.text.identifier, options: nil) { item, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-
-                guard let text = item as? String else {
-                    continuation.resume(throwing: NSError(
-                        domain: "org.mozilla.fennec",
-                        code: 999,
-                        userInfo: ["Problem": "Non-String result"]
-                    ))
-                    return
-                }
-
-                continuation.resume(returning: text)
+    func loadText(completion: @escaping (Result<String, Error>) -> Void) {
+        loadItem(forTypeIdentifier: UTType.text.identifier, options: nil) { item, error in
+            if let error = error {
+                completion(.failure(error))
+                return
             }
+
+            guard let text = item as? String else {
+                let error = NSError(
+                    domain: "org.mozilla.fennec",
+                    code: 999,
+                    userInfo: ["Problem": "Non-String result"]
+                )
+                completion(.failure(error))
+                return
+            }
+
+            completion(.success(text))
         }
     }
 }
