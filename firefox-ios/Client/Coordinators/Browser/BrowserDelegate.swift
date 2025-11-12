@@ -6,24 +6,6 @@ import Foundation
 import WebKit
 
 protocol BrowserDelegate: AnyObject {
-    /// Show the homepage to the user
-    /// - Parameters:
-    ///   - inline: See showEmbeddedHomepage function in BVC for description
-    ///   - toastContainer: The container view for alert shown from share extension in the home page context menu
-    ///   - homepanelDelegate: The homepanel delegate for the homepage
-    ///   - libraryPanelDelegate:  The library panel delegate for the homepage
-    ///   - statusBarScrollDelegate: The delegate that takes care of the status bar overlay scroll
-    ///   - overlayManager: The overlay manager for the homepage
-    @MainActor
-    func showLegacyHomepage(
-        inline: Bool,
-        toastContainer: UIView,
-        homepanelDelegate: HomePanelDelegate,
-        libraryPanelDelegate: LibraryPanelDelegate,
-        statusBarScrollDelegate: StatusBarScrollDelegate,
-        overlayManager: OverlayModeManager
-    )
-
     /// Show the new homepage to the user as part of the homepage rebuild project
     @MainActor
     func showHomepage(

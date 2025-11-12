@@ -129,7 +129,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         testTab.url = URL(string: "internal://local/about/home")!
         let mockTabWebView = MockTabWebView(tab: testTab)
         testTab.webView = mockTabWebView
-        setupNimbusHomepageRebuildForTesting(isEnabled: true)
 
         let expectation = XCTestExpectation(description: "General browser action is dispatched")
         mockStore.dispatchCalled = {
@@ -499,12 +498,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(enabled: isEnabled)
-        }
-    }
-
-    private func setupNimbusHomepageRebuildForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRebuildFeature.with { _, _ in
-            return HomepageRebuildFeature(enabled: isEnabled)
         }
     }
 

@@ -38,7 +38,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showDocumentLoadingCalled = 0
     var removeDocumentLoadingCalled = 0
     var showHomepageCalled = 0
-    var showLegacyHomepageCalled = 0
     var browserHasLoadedCalled = 0
     var homepageScreenshotToolCalled = 0
     var showNativeErrorPageCalled = 0
@@ -166,17 +165,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func show(webView: WKWebView) {
         showWebViewCalled += 1
-    }
-
-    func showLegacyHomepage(
-        inline: Bool,
-        toastContainer: UIView,
-        homepanelDelegate: any Client.HomePanelDelegate,
-        libraryPanelDelegate: any Client.LibraryPanelDelegate,
-        statusBarScrollDelegate: any Client.StatusBarScrollDelegate,
-        overlayManager: any Client.OverlayModeManager
-    ) {
-        showLegacyHomepageCalled += 1
     }
 
     func showHomepage(

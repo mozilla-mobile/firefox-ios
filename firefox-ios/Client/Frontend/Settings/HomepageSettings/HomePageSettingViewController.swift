@@ -127,8 +127,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
-        let shouldHideSections = featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly)
-                              && featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+        let shouldHideSections = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
 
         if let profile, !shouldHideSections {
             let jumpBackInSetting = BoolSetting(

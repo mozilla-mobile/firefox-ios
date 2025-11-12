@@ -79,7 +79,6 @@ typealias TabUUID = String
 
 @MainActor
 class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
-    nonisolated static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
         get {
