@@ -181,18 +181,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             resetTranslationCFRTimer()
         }
     }
+
     // Reset the CFR timer for the translation button to avoid presenting the CFR
     // In cases, such as if translation icon is not available
     private func resetTranslationCFRTimer() {
         translationContextHintVC.stopTimer()
     }
 
-    func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnHome()
-    }
-
-    func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnDataClearance()
+    /// This is a workaround for dismissing CFRs when keyboard is showing up.
+    func dismissCFRs() {
+        summarizeToolbarEntryContextHintVC.dismiss(animated: false)
+        translationContextHintVC.dismiss(animated: false)
     }
 
     /// Triggers clearing the users private session data, an alert is shown once and then, deletion is done directly after
@@ -245,12 +244,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         tabManager.selectTab(tabManager.addTab(isPrivate: true))
     }
 
-    /// This is a workaround for dismissing CFRs when keyboard is showing up.
-    func dismissCFRs() {
-        summarizeToolbarEntryContextHintVC.dismiss(animated: false)
-        translationContextHintVC.dismiss(animated: false)
-    }
-
     /// Setup animation for data clearance flow unless reduce motion is enabled
     /// - Parameter completion: returns the proper timing to match animation on when to close tabs and display toast
     private func setupDataClearanceAnimation(completion: @escaping (Double) -> Void) {
@@ -277,6 +270,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if addressToolbarContainer.inOverlayMode {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
+    }
+
+    // MARK: - TabToolbarDelegate
+
+    func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        didTapOnHome()
+    }
+
+    func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        didTapOnDataClearance()
     }
 
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
