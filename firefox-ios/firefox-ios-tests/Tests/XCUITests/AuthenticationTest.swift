@@ -65,8 +65,10 @@ class AuthenticationTest: BaseTestCase {
     }
 
     private func logIn() {
-        app.alerts.textFields[username].typeText("guest")
-        app.alerts.secureTextFields[password].tapAndTypeText("guest")
-        app.alerts.buttons["Log in"].waitAndTap()
+        let guestLabel = "guest"
+        let LoginLabel = "Log in"
+        app.alerts.textFields[username].typeText(guestLabel)
+        app.alerts.secureTextFields[password].tapAndTypeText(guestLabel)
+        app.alerts.buttons[LoginLabel].waitAndTap()
     }
 }
