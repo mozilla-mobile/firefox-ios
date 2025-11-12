@@ -41,17 +41,28 @@ public final class TinyRouter {
         let path = url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
 
         // Check all registered routes for exact or prefix matches
-        for entry in entries where path == entry.prefix || path.hasPrefix(entry.prefix + "/") {
-            if let reply = try entry.route.handle(url: url, components: comps) {
-                return reply
-            }
+        if let reply = try handleRegisteredRoutes(for: path, url: url, components: comps) {
+            return reply
         }
 
         // Try the default route if no registered route handled the request
-        if let route = defaultRoute, let reply = try route.handle(url: url, components: comps) {
+        if let reply = try defaultRoute?.handle(url: url, components: comps) {
             return reply
         }
 
         throw TinyRouterError.notFound
+    }
+
+    private func handleRegisteredRoutes(
+        for path: String,
+        url: URL,
+        components: URLComponents
+    ) throws -> TinyHTTPReply? {
+        for entry in entries where path == entry.prefix || path.hasPrefix(entry.prefix + "/") {
+            if let reply = try entry.route.handle(url: url, components: components) {
+                return reply
+            }
+        }
+        return nil
     }
 }
