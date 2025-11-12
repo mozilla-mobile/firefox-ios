@@ -178,8 +178,8 @@
 		1D4D79462BF2F4E7007C6796 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		1D558A582BED7ECB001EF527 /* MockWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D558A562BED7ECB001EF527 /* MockWindowManager.swift */; };
 		1D558A5A2BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D558A592BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift */; };
-		1D5A117A2EAEC51100DD27F7 /* ResetSearchEnginePrefsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */; };
 		1D5A0F5C2EA2FB4E00DD27F7 /* RelayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5A0F5B2EA2FB4800DD27F7 /* RelayController.swift */; };
+		1D5A117A2EAEC51100DD27F7 /* ResetSearchEnginePrefsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */; };
 		1D5CBF492B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
 		1D5CBF4A2B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
 		1D69FF8D27B17286001F660E /* HomeLogoHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D69FF8C27B17285001F660E /* HomeLogoHeaderCell.swift */; };
@@ -1532,6 +1532,12 @@
 		C283EED02E4D4FE7008EB540 /* SummarizerConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */; };
 		C283EED22E4D5356008EB540 /* SummarizerConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */; };
 		C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */; };
+		C2886BAA2EC4A42F007AE6C3 /* TinyRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BA92EC4A42D007AE6C3 /* TinyRouter.swift */; };
+		C2886BAC2EC4A5C4007AE6C3 /* TinyHTTPReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BAB2EC4A5BC007AE6C3 /* TinyHTTPReply.swift */; };
+		C2886BAE2EC4A62D007AE6C3 /* TinyRouterError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BAD2EC4A626007AE6C3 /* TinyRouterError.swift */; };
+		C2886BB02EC4A7DA007AE6C3 /* TinyRouteProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BAF2EC4A7D4007AE6C3 /* TinyRouteProtocol.swift */; };
+		C2886BB22EC4AB58007AE6C3 /* TinyRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BB12EC4AB52007AE6C3 /* TinyRouterTests.swift */; };
+		C2886BB42EC4AC61007AE6C3 /* MockRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BB32EC4AC5E007AE6C3 /* MockRoute.swift */; };
 		C28CAABF2E5C8C660049D7C7 /* InsetUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */; };
 		C29B64812AD6959E00F3244B /* QRCodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */; };
 		C29B64832AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */; };
@@ -2866,8 +2872,8 @@
 		1D3C90872ACE1AF400304C87 /* RemoteTabPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabPanelTests.swift; sourceTree = "<group>"; };
 		1D558A562BED7ECB001EF527 /* MockWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWindowManager.swift; sourceTree = "<group>"; };
 		1D558A592BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSimpleTabsCoordinator.swift; sourceTree = "<group>"; };
-		1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetSearchEnginePrefsSetting.swift; sourceTree = "<group>"; };
 		1D5A0F5B2EA2FB4800DD27F7 /* RelayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayController.swift; sourceTree = "<group>"; };
+		1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetSearchEnginePrefsSetting.swift; sourceTree = "<group>"; };
 		1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPayloads.swift; sourceTree = "<group>"; };
 		1D69FF8C27B17285001F660E /* HomeLogoHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLogoHeaderCell.swift; sourceTree = "<group>"; };
 		1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManagerTests.swift; sourceTree = "<group>"; };
@@ -9855,6 +9861,12 @@
 		C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManager.swift; sourceTree = "<group>"; };
 		C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManagerTests.swift; sourceTree = "<group>"; };
 		C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigSource.swift; sourceTree = "<group>"; };
+		C2886BA92EC4A42D007AE6C3 /* TinyRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyRouter.swift; sourceTree = "<group>"; };
+		C2886BAB2EC4A5BC007AE6C3 /* TinyHTTPReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyHTTPReply.swift; sourceTree = "<group>"; };
+		C2886BAD2EC4A626007AE6C3 /* TinyRouterError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyRouterError.swift; sourceTree = "<group>"; };
+		C2886BAF2EC4A7D4007AE6C3 /* TinyRouteProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyRouteProtocol.swift; sourceTree = "<group>"; };
+		C2886BB12EC4AB52007AE6C3 /* TinyRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyRouterTests.swift; sourceTree = "<group>"; };
+		C2886BB32EC4AC5E007AE6C3 /* MockRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRoute.swift; sourceTree = "<group>"; };
 		C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetUpdatable.swift; sourceTree = "<group>"; };
 		C29B428A81B120AFF0666037 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Menu.strings; sourceTree = "<group>"; };
 		C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinator.swift; sourceTree = "<group>"; };
@@ -14210,6 +14222,7 @@
 		AA5E81452EB12BAB00919E60 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
+				C2886BA82EC4A41E007AE6C3 /* TinyRouter */,
 				C27EF6182EBA363800BED719 /* LanguageDetector */,
 				AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */,
 				AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */,
@@ -14228,6 +14241,8 @@
 		AAD9D6492EB25B2700BFECAF /* TranslationsTests */ = {
 			isa = PBXGroup;
 			children = (
+				C2886BB32EC4AC5E007AE6C3 /* MockRoute.swift */,
+				C2886BB12EC4AB52007AE6C3 /* TinyRouterTests.swift */,
 				AADBD0E32EBBA79700F35E30 /* MockLanguageDetector.swift */,
 				C27EF61E2EBA395000BED719 /* MockLanguageSampleSource.swift */,
 				C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */,
@@ -14419,6 +14434,17 @@
 				C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */,
 			);
 			path = LanguageDetector;
+			sourceTree = "<group>";
+		};
+		C2886BA82EC4A41E007AE6C3 /* TinyRouter */ = {
+			isa = PBXGroup;
+			children = (
+				C2886BAF2EC4A7D4007AE6C3 /* TinyRouteProtocol.swift */,
+				C2886BAD2EC4A626007AE6C3 /* TinyRouterError.swift */,
+				C2886BAB2EC4A5BC007AE6C3 /* TinyHTTPReply.swift */,
+				C2886BA92EC4A42D007AE6C3 /* TinyRouter.swift */,
+			);
+			path = TinyRouter;
 			sourceTree = "<group>";
 		};
 		C29B64EC2AD937C200F3244B /* QRCode */ = {
@@ -19301,6 +19327,7 @@
 				C7F5331E2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift in Sources */,
 				21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
+				C2886BAC2EC4A5C4007AE6C3 /* TinyHTTPReply.swift in Sources */,
 				C29B64EE2AD937D500F3244B /* QRCodeNavigationHandler.swift in Sources */,
 				8A19ACB42A3290D9001C2147 /* ContentBlockerSetting.swift in Sources */,
 				219935E72B05447C00E5966F /* TabDisplayModel.swift in Sources */,
@@ -19326,11 +19353,13 @@
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				ED7A08DF2CF674BA0035EC8F /* ShareTab.swift in Sources */,
 				E19F86032D6F4B51007453A7 /* ToolbarLayoutStyle.swift in Sources */,
+				C2886BAA2EC4A42F007AE6C3 /* TinyRouter.swift in Sources */,
 				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeWithBackdrop.swift in Sources */,
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
 				E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */,
 				8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */,
+				C2886BAE2EC4A62D007AE6C3 /* TinyRouterError.swift in Sources */,
 				0ECAA5F32DAD737700E27780 /* DownloadLiveActivityIntent.swift in Sources */,
 				8A9F4EF22DC8F15D004644B9 /* PlacesProvider.swift in Sources */,
 				E13C072D2C2189B80087E404 /* ToolbarActionConfiguration.swift in Sources */,
@@ -19363,6 +19392,7 @@
 				59A68D66379CFA85C4EAF00B /* TwoLineImageOverlayCell.swift in Sources */,
 				5A96FB5A2D94357800917B12 /* ScreenshotSetting.swift in Sources */,
 				0A49784A2C53E63200B1E82A /* TrackingProtectionViewController.swift in Sources */,
+				C2886BB02EC4A7DA007AE6C3 /* TinyRouteProtocol.swift in Sources */,
 				8A48807C2E68922400AD43D5 /* GleanOhttpUploader.swift in Sources */,
 				0AFE9BF12CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift in Sources */,
 				8A9E041B2D4D08350022ED90 /* BookmarkConfiguration.swift in Sources */,
@@ -19512,6 +19542,7 @@
 				39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */,
 				E14C78962C105488002AD3C7 /* AddressToolbarContainerModelTests.swift in Sources */,
 				C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */,
+				C2886BB42EC4AC61007AE6C3 /* MockRoute.swift in Sources */,
 				2199A1D42DB8389000DC84BD /* MockZoomStore.swift in Sources */,
 				0BAF20E52E02A1A4000D4542 /* BrowserWebUIDelegateTests.swift in Sources */,
 				C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */,
@@ -19562,6 +19593,7 @@
 				C869915728917809007ACC5C /* NetworkingMock.swift in Sources */,
 				ED575BD32D00F9D00056BCDA /* MockTemporaryDocument.swift in Sources */,
 				8A9D31682D135A1300171502 /* MockBookmarksSaver.swift in Sources */,
+				C2886BB22EC4AB58007AE6C3 /* TinyRouterTests.swift in Sources */,
 				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
 				C8EDDBF029DD83FC003A4C07 /* RouteTests.swift in Sources */,
 				0A7693612C7DD19600103A6D /* CertificatesViewModelTests.swift in Sources */,
