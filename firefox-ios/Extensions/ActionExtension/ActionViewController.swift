@@ -8,17 +8,17 @@ import UniformTypeIdentifiers
 @MainActor
 final class ActionViewController: UIViewController {
     private let firefoxURLBuilder: FirefoxURLBuilding
-    
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         self.firefoxURLBuilder = FirefoxURLBuilder()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-    
+
     init(firefoxURLBuilder: FirefoxURLBuilding) {
         self.firefoxURLBuilder = firefoxURLBuilder
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -140,7 +140,7 @@ final class ActionViewController: UIViewController {
             return (text, true)
         }
     }
-    
+
     private func openURL(_ url: URL) {
         var responder: UIResponder? = self
 
@@ -154,7 +154,7 @@ final class ActionViewController: UIViewController {
     }
 
     private func finishExtension(with error: Error?) {
-        if let error  {
+        if let error {
             extensionContext?.cancelRequest(withError: error)
         } else {
             extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
