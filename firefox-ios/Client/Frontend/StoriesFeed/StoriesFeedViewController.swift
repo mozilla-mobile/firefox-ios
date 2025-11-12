@@ -88,7 +88,7 @@ class StoriesFeedViewController: UIViewController,
         setupLayout()
         configureDataSource()
 
-        store.dispatchLegacy(
+        store.dispatch(
             StoriesFeedAction(
                 windowUUID: windowUUID,
                 actionType: StoriesFeedActionType.initialize
@@ -117,7 +117,7 @@ class StoriesFeedViewController: UIViewController,
             actionType: ScreenActionType.showScreen,
             screen: .storiesFeed
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -142,7 +142,7 @@ class StoriesFeedViewController: UIViewController,
             actionType: ScreenActionType.closeScreen,
             screen: .storiesFeed
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: Helper functions

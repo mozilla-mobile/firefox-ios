@@ -781,7 +781,7 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
             if isEditing {
-                store.dispatchLegacy(
+                store.dispatch(
                     ToolbarAction(
                         shouldShowKeyboard: false,
                         windowUUID: windowUUID,
