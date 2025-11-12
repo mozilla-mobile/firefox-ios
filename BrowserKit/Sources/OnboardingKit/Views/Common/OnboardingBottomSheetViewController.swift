@@ -35,13 +35,22 @@ public class OnboardingBottomSheetViewController: UIViewController,
             self?.dismiss(animated: true)
         }), for: .touchUpInside)
         if #available(iOS 26, *) {
-            $0.configuration = .prominentGlass()
+            $0.configuration = .prominentClearGlass()
         } else {
             $0.configuration = .filled()
             $0.configuration?.cornerStyle = .capsule
         }
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?
             .withRenderingMode(.alwaysTemplate)
+    }
+    private lazy var backgroundView: UIVisualEffectView = .build {
+        if #available(iOS 26.0, *) {
+            let glassEffect = UIGlassEffect()
+            glassEffect.isInteractive = true
+            $0.effect = glassEffect
+        } else {
+            $0.effect = UIBlurEffect(style: .systemThinMaterial)
+        }
     }
 
     private lazy var contentView: UIScrollView = .build {
@@ -101,13 +110,15 @@ public class OnboardingBottomSheetViewController: UIViewController,
         closeButton.scalesLargeContentImage = true
 
         addChild(child)
-        view.addSubviews(contentView, closeButton)
+        view.addSubviews(backgroundView, contentView, closeButton)
         contentView.addSubview(child.view)
         child.view.translatesAutoresizingMaskIntoConstraints = false
 
+        backgroundView.pinToSuperview()
         NSLayoutConstraint.activate([
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonPadding),
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                             constant: UX.closeButtonPadding),
 
             contentView.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -166,7 +177,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
             view.backgroundColor = theme.colors.layer1
             closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         } else {
-            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2.withAlphaComponent(0.95)
+            view.backgroundColor = .clear
         }
     }
 }

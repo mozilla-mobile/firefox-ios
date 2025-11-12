@@ -157,24 +157,25 @@ class OnboardingInstructionPopupViewController: UIViewController,
         let font = FXFontStyles.Regular.subheadline.scaledFont()
         let attributedParagraphs = viewModel.getAttributedStrings(with: font)
 
-        let combined = NSMutableAttributedString()
-
+        let combinedString = NSMutableAttributedString()
+        
+        let isRTL = view.effectiveUserInterfaceLayoutDirection == .rightToLeft
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.paragraphSpacing = 40
-        paragraphStyle.alignment = .left
+        paragraphStyle.paragraphSpacing = UX.descriptionTextViewParagraphSpacing
+        paragraphStyle.alignment = isRTL ? .right : .left
 
         for (index, attributedText) in attributedParagraphs.enumerated() {
-            let mutable = NSMutableAttributedString(attributedString: attributedText)
-            mutable.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: mutable.length))
-            combined.append(mutable)
+            let paragraphString = NSMutableAttributedString(attributedString: attributedText)
+            paragraphString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: paragraphString.length))
+            combinedString.append(paragraphString)
 
             if index < attributedParagraphs.count - 1 {
                 // Add paragragh separator charachter
-                combined.append(NSAttributedString(string: "\u{2029}"))
+                combinedString.append(NSAttributedString(string: "\u{2029}"))
             }
         }
 
-        descriptionLabel.attributedText = combined
+        descriptionLabel.attributedText = combinedString
     }
 
     // MARK: - Notifiable
