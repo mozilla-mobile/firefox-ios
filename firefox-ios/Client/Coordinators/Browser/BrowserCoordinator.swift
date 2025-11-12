@@ -1161,6 +1161,10 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(webviewViewController)
     }
 
+    func popToBVC() {
+        router.popToViewController(browserViewController, reason: .deeplink)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {
