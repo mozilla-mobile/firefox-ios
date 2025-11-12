@@ -99,12 +99,13 @@ final class RemoteTabsPanelMiddleware {
 
     private func getTabsAndDevices(window: WindowUUID, useCache: Bool = false) {
         let completion = { (result: [ClientAndTabs]?) in
-            // laurie
             guard let clientAndTabs = result else {
-                let action = RemoteTabsPanelAction(reason: .failedToSync,
-                                                   windowUUID: window,
-                                                   actionType: RemoteTabsPanelActionType.refreshDidFail)
-                store.dispatch(action)
+                ensureMainThread {
+                    let action = RemoteTabsPanelAction(reason: .failedToSync,
+                                                       windowUUID: window,
+                                                       actionType: RemoteTabsPanelActionType.refreshDidFail)
+                    store.dispatch(action)
+                }
                 return
             }
             var action: RemoteTabsPanelAction
@@ -122,7 +123,9 @@ final class RemoteTabsPanelMiddleware {
                                                windowUUID: window,
                                                actionType: RemoteTabsPanelActionType.refreshDidSucceed)
             }
-            store.dispatch(action)
+            ensureMainThread {
+                store.dispatch(action)
+            }
         }
 
         if useCache {
@@ -134,15 +137,16 @@ final class RemoteTabsPanelMiddleware {
 
     private func handleFetchingMostRecentRemoteTab(windowUUID: WindowUUID) {
         let completion = { (result: [ClientAndTabs]?) in
-            guard let mostRecentSyncedTab = self.retrieveConfigurationForMostRecentTab(from: result) else { return }
-            // laurie
-            store.dispatch(
-                RemoteTabsAction(
-                    mostRecentSyncedTab: mostRecentSyncedTab,
-                    windowUUID: windowUUID,
-                    actionType: RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab
+            ensureMainThread {
+                guard let mostRecentSyncedTab = self.retrieveConfigurationForMostRecentTab(from: result) else { return }
+                store.dispatch(
+                    RemoteTabsAction(
+                        mostRecentSyncedTab: mostRecentSyncedTab,
+                        windowUUID: windowUUID,
+                        actionType: RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab
+                    )
                 )
-            )
+            }
         }
         profile.getCachedClientsAndTabs(completion: completion)
     }
