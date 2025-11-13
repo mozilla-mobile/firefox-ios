@@ -80,7 +80,7 @@ final class ContextMenuCoordinatorTests: XCTestCase {
     }
 }
 
-class MockBookmarksHandlerDelegate: BookmarksHandlerDelegate {
+final class MockBookmarksHandlerDelegate: BookmarksHandlerDelegate, @unchecked Sendable {
     func addBookmark(urlString: String, title: String?, site: Site?) { }
     func removeBookmark(urlString: String, title: String?, site: Site?) { }
 }
