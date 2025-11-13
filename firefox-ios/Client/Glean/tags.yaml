@@ -72,6 +72,9 @@ ReaderMode:
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
+Search:
+  description: Corresponds to all things related to search.
+
 ShortcutsLibrary:
   description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
 
