@@ -13,7 +13,7 @@ protocol TopSitesWidget {
     func writeWidgetKitTopSites()
 }
 
-class TopSitesWidgetManager: TopSitesWidget {
+final class TopSitesWidgetManager: TopSitesWidget, Sendable {
     private let topSitesProvider: TopSitesProvider
     private let userDefaults: UserDefaultsInterface
 

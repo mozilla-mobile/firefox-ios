@@ -8,5 +8,6 @@ enum DismissalReason: Equatable {
 }
 
 protocol DismissalNotifiable: AnyObject {
+    @MainActor
     func willBeDismissed(reason: DismissalReason)
 }

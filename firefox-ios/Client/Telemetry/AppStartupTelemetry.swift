@@ -16,7 +16,8 @@ protocol AppStartupTelemetry {
     func sendStartupTelemetry()
 }
 
-final class DefaultAppStartupTelemetry: AppStartupTelemetry {
+// TODO: Laurie
+final class DefaultAppStartupTelemetry: AppStartupTelemetry, @unchecked Sendable {
     let profile: Profile
 
     // MARK: Init

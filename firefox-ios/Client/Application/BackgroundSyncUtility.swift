@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import BackgroundTasks
+@preconcurrency import BackgroundTasks
 import Common
 
-class BackgroundSyncUtility: BackgroundUtilityProtocol {
+// TODO: Laurie
+final class BackgroundSyncUtility: BackgroundUtilityProtocol, @unchecked Sendable {
     let profile: Profile
     let application: UIApplication
     let logger: Logger
