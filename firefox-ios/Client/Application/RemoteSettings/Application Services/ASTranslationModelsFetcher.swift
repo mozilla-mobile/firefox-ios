@@ -59,11 +59,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
 
     init?(logger: Logger = DefaultLogger.shared) {
         let profile: Profile = AppContainer.shared.resolve()
-        guard let service = profile.remoteSettingsService else {
-            logger.log("Remote Settings service unavailable.", level: .warning, category: .remoteSettings)
-            return nil
-        }
-        self.service = service
+        self.service = profile.remoteSettingsService
         self.modelsClient = ASRemoteSettingsCollection.translationsModels.makeClient()
         self.translatorsClient = ASRemoteSettingsCollection.translationsWasm.makeClient()
         self.logger = logger
