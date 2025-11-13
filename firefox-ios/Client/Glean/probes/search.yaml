@@ -25,7 +25,7 @@ search.trending_searches:
   suggestions_shown:
     type: event
     description: |
-      Triggered when the user types in the address bar and trending search suggestions are shown in the suggestions overlay.
+      Triggered when trending search suggestions are shown to the user.
     extra_keys:
       count:
         type: quantity
@@ -40,11 +40,14 @@ search.trending_searches:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - TrendingSearches
 
   suggestion_tapped:
     type: event
     description: |
-      Triggered when the user taps a trending search suggestion in the suggestions overlay.
+      Triggered when the user taps a trending search suggestion.
     extra_keys:
       position:
         type: quantity
@@ -59,13 +62,16 @@ search.trending_searches:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - TrendingSearches
 
 # Recent Searches
 search.recent_searches:
   suggestions_shown:
     type: event
     description: |
-      Triggered when the user types in the address bar and recent search suggestions are shown in the suggestions overlay.
+      Triggered when recent search suggestions are shown to the user.
     extra_keys:
       count:
         type: quantity
@@ -80,11 +86,14 @@ search.recent_searches:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - RecentSearches
 
   suggestion_tapped:
     type: event
     description: |
-      Triggered when the user taps a recent search suggestion in the suggestions overlay.
+      Triggered when the user taps a recent search suggestion.
     extra_keys:
       position:
         type: quantity
@@ -99,3 +108,6 @@ search.recent_searches:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - RecentSearches
