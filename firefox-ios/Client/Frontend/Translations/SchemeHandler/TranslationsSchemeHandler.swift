@@ -39,7 +39,6 @@ import WebKit
 ///
 /// 7. WebKit resolves (or rejects) the original JavaScript `fetch()` promise.
 final class TranslationsSchemeHandler: NSObject, WKURLSchemeHandler {
-
     /// The custom scheme this handler is responsible for.
     static let scheme = "translations"
 
@@ -75,7 +74,6 @@ final class TranslationsSchemeHandler: NSObject, WKURLSchemeHandler {
             // Delegate everything for this host to TinyRouter.
             let reply = try router.route(url)
             try send(reply, for: url, to: urlSchemeTask)
-
         } catch {
             urlSchemeTask.didFailWithError(mapError(error))
         }
@@ -102,13 +100,11 @@ final class TranslationsSchemeHandler: NSObject, WKURLSchemeHandler {
         }
         return .unknown(String(describing: error))
     }
-    
+
     /// Validates an incoming request and returns a well-formed URL,
     /// or throws a typed error if the request is not acceptable.
     private func validateRequest(_ task: WKURLSchemeTask) throws -> URL {
-        guard let url = task.request.url else {
-            throw TinyRouterError.badURL
-        }
+        guard let url = task.request.url else { throw TinyRouterError.badURL }
 
         // Only accept the custom scheme.
         guard url.scheme == Self.scheme else {
