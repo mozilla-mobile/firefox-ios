@@ -616,6 +616,8 @@ class BrowserViewController: UIViewController,
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
+        let scrollAlpha = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)?.scrollAlpha
+        let isScrollAlphaZero = if #available(iOS 26.0, *) { scrollAlpha == 0 } else { false }
 
         if isBottomSearchBar {
             header.isClearBackground = false
@@ -633,7 +635,7 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
-        bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
+        bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isScrollAlphaZero
 
         let maskView = UIView(frame: CGRect(x: 0,
                                             y: -contentContainer.frame.origin.y,
