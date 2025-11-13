@@ -6,6 +6,7 @@ import Common
 import UIKit
 
 class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
+    @MainActor
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88

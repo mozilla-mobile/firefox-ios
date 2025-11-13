@@ -8,6 +8,7 @@ import SiteImageView
 
 /// The standard cell used in homepage merino section
 class MerinoStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
+    @MainActor
     struct UX {
         static let cellHeight: CGFloat = 112
         static let cellWidth: CGFloat = 350

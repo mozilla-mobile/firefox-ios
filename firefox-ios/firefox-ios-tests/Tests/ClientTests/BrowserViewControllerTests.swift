@@ -26,10 +26,10 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         super.setUp()
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
-        DependencyHelperMock().bootstrapDependencies()
+        tabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
 
         profile = MockProfile()
-        tabManager = MockTabManager()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()

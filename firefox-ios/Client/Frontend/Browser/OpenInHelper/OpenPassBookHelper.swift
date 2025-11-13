@@ -75,6 +75,7 @@ final class OpenPassBookHelper: @unchecked Sendable {
             return await openPassFromDataTask(url: url)
     }
 
+    @MainActor
     private func openPassFromDataTask(url: URL?) async -> InvalidPassError? {
         let data = await getData(url: url)
         guard let data = data else {
@@ -114,6 +115,7 @@ final class OpenPassBookHelper: @unchecked Sendable {
         }
     }
 
+    @MainActor
     private func openPassWithContentsOfURL(url: URL?) async throws {
         guard let url = url else {
             throw InvalidPassError.contentsOfURL
@@ -128,6 +130,7 @@ final class OpenPassBookHelper: @unchecked Sendable {
         }
     }
 
+    @MainActor
     private func open(passData: Data) throws {
         do {
             let pass = try PKPass(data: passData)

@@ -7,25 +7,31 @@ import Common
 import MozillaAppServices
 
 protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
+    @MainActor
     func start(from folder: FxBookmarkNode)
 
     /// Shows the bookmark detail to modify a bookmark folder
+    @MainActor
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode)
 
     /// Shows the bookmark detail to create a new bookmark or folder in the parent folder
+    @MainActor
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
         parentFolderSelector: ParentFolderSelector?
     )
 
+    @MainActor
     func showSignIn()
 
     /// Calls the parent coordinator dismiss and remove the bookmarks coordinator
+    @MainActor
     func didFinish()
 }
 
 extension BookmarksCoordinatorDelegate {
+    @MainActor
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
