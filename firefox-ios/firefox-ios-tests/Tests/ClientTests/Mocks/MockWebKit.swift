@@ -125,8 +125,8 @@ final class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
     private let _request: URLRequest
     var request: URLRequest { _request }
 
-    init(url: URL) {
-        self._request = URLRequest(url: url)
+    init(request: URLRequest) {
+        self._request = request
     }
 
     private(set) var receivedResponses: [URLResponse] = []

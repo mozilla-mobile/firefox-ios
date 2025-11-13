@@ -10,7 +10,7 @@ final class TranslationsSchemeHandlerTests: XCTestCase {
     func test_start_validModelsRequest_sendsResponseAndFinishes() {
         let subject = createSubject()
         let url = URL(string: "translations://app/translator")!
-        let task = WKURLSchemeTaskMock(url: url)
+        let task = WKURLSchemeTaskMock(request: URLRequest(url: url))
         let webView = makeWebView()
 
         subject.webView(webView, start: task)
@@ -24,14 +24,13 @@ final class TranslationsSchemeHandlerTests: XCTestCase {
         XCTAssertNotNil(http)
         XCTAssertEqual(http?.statusCode, 200)
 
-        let bodyString = String(data: task.receivedBodies.first ?? Data(), encoding: .utf8)
-        XCTAssertNotNil(bodyString)
+        XCTAssertEqual(task.receivedBodies.first, Data([1, 2, 3]))
     }
 
     func test_start_wrongScheme_failsWithUnsupportedScheme() {
         let subject = createSubject()
         let url = URL(string: "http://app/models")!
-        let task = WKURLSchemeTaskMock(url: url)
+        let task = WKURLSchemeTaskMock(request: URLRequest(url: url))
         let webView = makeWebView()
 
         subject.webView(webView, start: task)
@@ -54,7 +53,7 @@ final class TranslationsSchemeHandlerTests: XCTestCase {
     func test_start_wrongHost_failsWithUnsupportedHost() {
         let subject = createSubject()
         let url = URL(string: "translations://other/models")!
-        let task = WKURLSchemeTaskMock(url: url)
+        let task = WKURLSchemeTaskMock(request: URLRequest(url: url))
         let webView = makeWebView()
 
         subject.webView(webView, start: task)
@@ -72,6 +71,27 @@ final class TranslationsSchemeHandlerTests: XCTestCase {
                 found: "other"
             )
         )
+    }
+
+    func test_start_badURL_failsWithBadURL() {
+        let subject = createSubject()
+        let webView = makeWebView()
+
+        // Start from a valid request, then nuke the URL.
+        var request = URLRequest(url: URL(string: "translations://app/translator")!)
+        request.url = nil
+
+        let task = WKURLSchemeTaskMock(request: request)
+
+        subject.webView(webView, start: task)
+
+        XCTAssertTrue(task.receivedResponses.isEmpty)
+        XCTAssertTrue(task.receivedBodies.isEmpty)
+        XCTAssertEqual(task.finishCallCount, 0)
+        XCTAssertEqual(task.failedErrors.count, 1)
+
+        let error = task.failedErrors.first as? TinyRouterError
+        XCTAssertEqual(error, .badURL)
     }
 
     private func createSubject() -> TranslationsSchemeHandler {
