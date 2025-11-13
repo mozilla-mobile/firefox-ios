@@ -12,15 +12,10 @@ final class RouteBuilder: FeatureFlaggable {
     private var isPrivate = false
     private var prefs: Prefs?
     private var mainQueue: DispatchQueueInterface
-    private let actionExtensionTelemetry: ActionExtensionTelemetry
     var shouldOpenNewTab = true
 
-    init(
-        mainQueue: DispatchQueueInterface = DispatchQueue.main,
-        actionExtensionTelemetry: ActionExtensionTelemetry = ActionExtensionTelemetry()
-    ) {
+    init(mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.mainQueue = mainQueue
-        self.actionExtensionTelemetry = actionExtensionTelemetry
     }
 
     func configure(isPrivate: Bool,
@@ -77,9 +72,6 @@ final class RouteBuilder: FeatureFlaggable {
 
             case .openUrl:
                 let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
-                if isOpeningWithFirefoxExtension {
-                    actionExtensionTelemetry.shareURL()
-                }
                 return .search(url: urlQuery, isPrivate: isPrivate)
 
             case .openText:
@@ -87,9 +79,6 @@ final class RouteBuilder: FeatureFlaggable {
                 let queryURL = URIFixup.getURL(queryValue)
                 let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
                 let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
-                if isOpeningWithFirefoxExtension {
-                    actionExtensionTelemetry.shareText()
-                }
                 return .searchQuery(query: safeQuery, isPrivate: isPrivate)
 
             case .glean:

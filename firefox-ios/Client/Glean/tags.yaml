@@ -15,9 +15,6 @@ $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
 # Please add your tags alphabetically.
 ###############################################################################
 
-ActionExtension:
-  description: Opens shared links and text directly in the app.
-
 Addresses:
   description: Corresponds to the collection, storage, and autofilling of addresses.
 
