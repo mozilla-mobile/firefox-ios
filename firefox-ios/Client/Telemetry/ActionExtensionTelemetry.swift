@@ -14,11 +14,11 @@ struct ActionExtensionTelemetry {
 
     /// Records when a user shares a URL from the Action Extension
     func shareURL() {
-        gleanWrapper.recordEvent(for: GleanMetrics.ActionExtension.url)
+        gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtension.urlShared)
     }
 
     /// Records when a user shares text from the Action Extension
     func shareText() {
-        gleanWrapper.recordEvent(for: GleanMetrics.ActionExtension.text)
+        gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtension.textShared)
     }
 }

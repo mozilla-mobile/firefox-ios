@@ -24,7 +24,7 @@ final class ActionExtensionTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenShareURL_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.ActionExtension.url
+        let event = GleanMetrics.ShareOpenInFirefoxExtension.urlShared
         let expectedMetricType = type(of: event)
 
         subject?.shareURL()
@@ -38,7 +38,7 @@ final class ActionExtensionTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenShareText_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.ActionExtension.text
+        let event = GleanMetrics.ShareOpenInFirefoxExtension.textShared
         let expectedMetricType = type(of: event)
 
         subject?.shareText()

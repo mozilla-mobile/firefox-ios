@@ -13,7 +13,8 @@
 $schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 $tags:
-  - ActionExtension
+  - Share
+  - OpenInFirefoxActionExtension
 
 ###############################################################################
 # Documentation
@@ -21,11 +22,11 @@ $tags:
 
 # Add your new metrics and/or events here.
 
-action_extension:
-  url:
+share.open_in_firefox_extension:
+  url_shared:
     type: event
     description: |
-      Recorded when the user shares a URL from the Action Extension.
+      Recorded when the user shares a URL from the "Open in Firefox" Action Extension.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/20805
     data_reviews:
@@ -33,11 +34,14 @@ action_extension:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-
-  text:
+    metadata:
+      tags:
+        - Share
+        - OpenInFirefoxActionExtension
+  text_shared:
     type: event
     description: |
-      Recorded when the user shares text from the Action Extension.
+      Recorded when the user shares text from the "Open in Firefox" Action Extension.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/20805
     data_reviews:
@@ -45,3 +49,7 @@ action_extension:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - OpenInFirefoxActionExtension

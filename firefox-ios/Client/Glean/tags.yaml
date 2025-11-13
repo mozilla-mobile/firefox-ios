@@ -15,9 +15,6 @@ $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
 # Please add your tags alphabetically.
 ###############################################################################
 
-ActionExtension:
-  description: Opens shared links and text directly in the app.
-
 Addresses:
   description: Corresponds to the collection, storage, and autofilling of addresses.
 
@@ -63,6 +60,9 @@ Library:
 Microsurvey:
   description: Corresponds to the microsurveys shown to the user.
 
+OpenInFirefoxActionExtension:
+  description: Corresponds to the iOS Action Extension that allows users to share URLs and text from other apps into Firefox.
+
 Passwords:
   description: Corresponds to the collection, storage, and autofilling of login passwords.
 
@@ -75,6 +75,15 @@ ReaderMode:
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
+Settings:
+  description: Corresponds to all the options encompassed in the app's settings screens.
+
+Share:
+  description: Corresponds to sharing functionality, including both the iOS Action Extension for sharing content into the app and the system share sheet for sharing content out of the app.
+
+ShareSheet:
+  description: Corresponds to the iOS system share sheet for sharing content out of the app.
+
 ShortcutsLibrary:
   description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
 
@@ -83,12 +92,6 @@ StoriesFeed:
 
 Summarizer:
   description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
-
-Settings:
-  description: Corresponds to all the options encompassed in the app's settings screens.
-
-ShareSheet:
-  description: Corresponds to the iOS system share sheet for sharing content out of the app.
 
 TabsPanel:
   description: Corresponds to all things related to the tab panel.
