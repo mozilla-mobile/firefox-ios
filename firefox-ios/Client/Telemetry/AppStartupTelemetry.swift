@@ -16,7 +16,7 @@ protocol AppStartupTelemetry {
     func sendStartupTelemetry()
 }
 
-// TODO: Laurie
+// TODO: FXIOS-14115 - DefaultAppStartupTelemetry @unchecked Sendable
 final class DefaultAppStartupTelemetry: AppStartupTelemetry, @unchecked Sendable {
     let profile: Profile
 

@@ -33,7 +33,7 @@ protocol NotificationManagerProtocol {
     func removePendingNotificationsWithId(ids: [String])
 }
 
-// TODO: Laurie
+// TODO: FXIOS-14114 - NotificationManager @unchecked Sendable
 final class NotificationManager: NotificationManagerProtocol, @unchecked Sendable {
     private let telemetry: NotificationManagerTelemetry
     private let center: UserNotificationCenterProtocol

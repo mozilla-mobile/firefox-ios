@@ -6,7 +6,7 @@ import Foundation
 @preconcurrency import BackgroundTasks
 import Common
 
-// TODO: Laurie
+// TODO: FXIOS-14113 - BackgroundSyncUtility @unchecked Sendable
 final class BackgroundSyncUtility: BackgroundUtilityProtocol, @unchecked Sendable {
     let profile: Profile
     let application: UIApplication
