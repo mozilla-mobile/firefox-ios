@@ -11,7 +11,7 @@ import Redux
 /// A protocol that defines methods for handling bookmark operations.
 /// Classes conforming to this protocol can manage adding and removing bookmarks.
 /// Since bookmarks are not using Redux, we use this instead of dispatching an action.
-protocol BookmarksHandlerDelegate: AnyObject {
+protocol BookmarksHandlerDelegate: AnyObject, Sendable {
     @MainActor
     func addBookmark(urlString: String, title: String?, site: Site?)
     @MainActor
