@@ -260,6 +260,27 @@ enum Experiments {
             .with(featureManifest: FxNimbus.shared)
             .with(commandLineArgs: CommandLine.arguments)
             .with(recordedContext: nimbusRecordedContext)
+            .onCreate(callback: { _ in
+                    DefaultLogger.shared.log(
+                        "Nimbus is ready",
+                        level: .info,
+                        category: .experiments
+                    )
+            })
+            .onApply(callback: { _ in
+                    DefaultLogger.shared.log(
+                        "Nimbus enrollment and experiments application complete",
+                        level: .info,
+                        category: .experiments
+                    )
+            })
+            .onFetch(callback: { _ in
+                DefaultLogger.shared.log(
+                    "Nimbus fetch of new experiments has completed",
+                    level: .info,
+                    category: .experiments
+                )
+            })
             .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
     }
 
@@ -277,7 +298,7 @@ enum Experiments {
         // Getting the singleton first time initializes it.
         let nimbus = Experiments.shared
 
-        DefaultLogger.shared.log("Nimbus is ready!",
+        DefaultLogger.shared.log("Nimbus singleton initialized successfully",
                                  level: .info,
                                  category: .experiments)
 

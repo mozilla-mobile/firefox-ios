@@ -305,7 +305,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
         )
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
@@ -318,7 +318,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
         )
         return featureFlagStatus
@@ -331,7 +331,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
         )
         return featureFlagStatus
@@ -344,7 +344,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
         )
         return featureFlagStatus
@@ -361,7 +361,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
         )
         return featureFlagStatus
@@ -374,7 +374,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
         )
         return featureFlagStatus
@@ -387,7 +387,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
         )
         return featureFlagStatus
@@ -427,7 +427,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [NimbusFeatureFlagID.trendingSearches.rawValue: "\(isTrendingSearchEnabled)"]
         )
 
@@ -435,7 +435,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [NimbusFeatureFlagID.recentSearches.rawValue: "\(isRecentSearchEnabled)"]
         )
         return isTrendingSearchEnabled || isRecentSearchEnabled
@@ -448,7 +448,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Feature flag status",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
         )
         return featureFlagStatus
@@ -1418,7 +1418,7 @@ class BrowserViewController: UIViewController,
         logger.log(
             "Current Nimbus available experiments configuration",
             level: .info,
-            category: .nimbus,
+            category: .experiments,
             extra: currentExperimentsDictionary,
         )
     }

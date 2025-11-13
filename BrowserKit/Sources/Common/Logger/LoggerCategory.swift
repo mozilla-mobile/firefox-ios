@@ -45,9 +45,6 @@ public enum LoggerCategory: String {
     /// Related to Merino AS.
     case merino
 
-    /// Related to Nimubs.
-    case nimbus
-
     /// Related to onboarding
     case onboarding
 
