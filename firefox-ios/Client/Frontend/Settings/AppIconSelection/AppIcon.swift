@@ -137,23 +137,23 @@ enum AppIcon: String, CaseIterable {
             return .Settings.AppIconSelection.AppIconNames.NorthernLights
         // MARK: Fun
         case .cool:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Cool
+            return .Settings.AppIconSelection.AppIconNames.Fun.Cool
         case .cuddling:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Cuddling
+            return .Settings.AppIconSelection.AppIconNames.Fun.Cuddling
         case .flaming:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Flaming
+            return .Settings.AppIconSelection.AppIconNames.Fun.Flaming
         case .minimal:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Minimal
+            return .Settings.AppIconSelection.AppIconNames.Fun.Minimal
         case .momo:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Momo
+            return .Settings.AppIconSelection.AppIconNames.Fun.Momo
         case .pixelated:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Pixelated
+            return .Settings.AppIconSelection.AppIconNames.Fun.Pixelated
         case .pride:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Pride
+            return .Settings.AppIconSelection.AppIconNames.Fun.Pride
         case .retro2004:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Retro2004
+            return .Settings.AppIconSelection.AppIconNames.Fun.Retro2004
         case .retro2017:
-            return .Settings.AppIconSelection.AppIconNames.FromContributors.Retro2017
+            return .Settings.AppIconSelection.AppIconNames.Fun.Retro2017
         }
     }
 
