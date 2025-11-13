@@ -65,4 +65,17 @@ public final class TinyRouter {
         }
         return nil
     }
+
+    /// Convenience method to return an 200 response from some data.
+    /// Throws `.badResponse` if the HTTPURLResponse cannot be constructed.
+    static func ok(data: Data, contentType: String, url: URL) throws -> TinyHTTPReply {
+        let response = HTTPURLResponse(
+            url: url,
+            statusCode: 200,
+            httpVersion: "HTTP/1.1",
+            headerFields: ["Content-Type": contentType]
+        )
+        guard let httpResponse = response else { throw TinyRouterError.badResponse }
+        return TinyHTTPReply(httpResponse: httpResponse, body: data)
+    }
 }
