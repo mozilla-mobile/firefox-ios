@@ -88,7 +88,7 @@ class ShortcutsLibraryViewController: UIViewController,
         setupLayout()
         configureDataSource()
 
-        store.dispatchLegacy(
+        store.dispatch(
             ShortcutsLibraryAction(
                 windowUUID: windowUUID,
                 actionType: ShortcutsLibraryActionType.initialize
@@ -132,7 +132,7 @@ class ShortcutsLibraryViewController: UIViewController,
             actionType: ScreenActionType.showScreen,
             screen: .shortcutsLibrary
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -157,7 +157,7 @@ class ShortcutsLibraryViewController: UIViewController,
             actionType: ScreenActionType.closeScreen,
             screen: .shortcutsLibrary
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: - Themeable
@@ -267,7 +267,7 @@ class ShortcutsLibraryViewController: UIViewController,
             sourceView: sourceView,
             toastContainer: self.view
         )
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
                 windowUUID: windowUUID,
@@ -283,7 +283,7 @@ class ShortcutsLibraryViewController: UIViewController,
                                 theme: currentTheme,
                                 completion: { buttonPressed in
             if buttonPressed {
-                store.dispatchLegacy(
+                store.dispatch(
                     ShortcutsLibraryAction(
                         tab: tab,
                         windowUUID: self.windowUUID,
@@ -358,14 +358,14 @@ class ShortcutsLibraryViewController: UIViewController,
 
         recordTelemetryOnDisappear = false
 
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: destination,
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell
             )
         )
-        store.dispatchLegacy(
+        store.dispatch(
             ShortcutsLibraryAction(
                 windowUUID: windowUUID,
                 actionType: ShortcutsLibraryActionType.tapOnShortcutCell
