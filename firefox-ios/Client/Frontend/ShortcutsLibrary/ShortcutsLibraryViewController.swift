@@ -10,18 +10,17 @@ class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
                                       FeatureFlaggable,
                                       StoreSubscriber,
-                                      Themeable {
+                                      Themeable,
+                                      DismissalNotifiable {
     struct UX {
         static let shortcutsSectionTopInset: CGFloat = 24
     }
-
-    // Used to only record "closed" telemetry on back button press and swipe gestures
-    var recordTelemetryOnDisappear = true
 
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: ShortcutsLibraryDiffableDataSource?
     private var shortcutsLibraryState: ShortcutsLibraryState
+    private var recordTelemetryOnDisappear = true
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -64,7 +63,20 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            logger.log(
+                "MainMenuViewController was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view controller was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     // MARK: View lifecycle
@@ -231,8 +243,7 @@ class ShortcutsLibraryViewController: UIViewController,
     ) -> UICollectionViewCell {
         switch item {
         case .shortcut(let site):
-            let isTopSitesRefreshEnabled = featureFlags.isFeatureEnabled(.hntTopSitesVisualRefresh, checking: .buildOnly)
-            let cellType: ReusableCell.Type = isTopSitesRefreshEnabled ? TopSiteCell.self : LegacyTopSiteCell.self
+            let cellType: ReusableCell.Type = TopSiteCell.self
 
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
@@ -241,9 +252,6 @@ class ShortcutsLibraryViewController: UIViewController,
             if let topSiteCell = topSiteCell as? TopSiteCell {
                 topSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: nil)
                 return topSiteCell
-            } else if let legacyTopSiteCell = topSiteCell as? LegacyTopSiteCell {
-                legacyTopSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: nil)
-                return legacyTopSiteCell
             }
 
             return UICollectionViewCell()
@@ -363,5 +371,11 @@ class ShortcutsLibraryViewController: UIViewController,
                 actionType: ShortcutsLibraryActionType.tapOnShortcutCell
             )
         )
+    }
+
+    // MARK: - DismissalNotifiable
+
+    func willBeDismissed(reason: DismissalReason) {
+        recordTelemetryOnDisappear = false
     }
 }

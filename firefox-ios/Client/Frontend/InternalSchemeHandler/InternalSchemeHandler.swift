@@ -13,7 +13,6 @@ enum InternalPageSchemeHandlerError: Error {
 }
 
 protocol InternalSchemeResponse {
-    @MainActor
     func response(forRequest: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)?
 }
 

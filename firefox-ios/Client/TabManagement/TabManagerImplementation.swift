@@ -1099,11 +1099,6 @@ class TabManagerImplementation: NSObject,
         }
 
         selectTab(nextSelectedTab)
-
-        let notificationObject = [Tab.privateModeKey: nextSelectedTab?.isPrivate ?? true]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
-                                        object: notificationObject,
-                                        userInfo: windowUUID.userInfo)
         return result
     }
 

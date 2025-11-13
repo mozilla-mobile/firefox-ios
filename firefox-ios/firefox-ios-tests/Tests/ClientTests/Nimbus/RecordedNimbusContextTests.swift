@@ -154,4 +154,29 @@ class RecordedNimbusContextTests: XCTestCase {
 
         XCTAssertEqual(eventQueries, RecordedNimbusContext.EVENT_QUERIES)
     }
+
+    /// This function makes sure that the items in metrics.yaml and RecordedNimbusContext
+    /// are the same, to prevent human error forgetting to enter something somewhere
+    func testRecordedNimbusContextMetricsAreEquivalent() {
+        let recordedContext = RecordedNimbusContext(
+            isFirstRun: true,
+            isDefaultBrowser: true,
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
+            isAppleIntelligenceAvailable: true,
+            cannotUseAppleIntelligence: true
+        )
+        var recordedContextMembers = Set(Mirror(reflecting: recordedContext).children.compactMap(\.label))
+        // removing values that are not part of the metrics file
+        recordedContextMembers.remove("logger")
+        recordedContextMembers.remove("eventQueries")
+
+        let metricsObject = GleanMetrics.NimbusSystem.RecordedNimbusContextObject()
+        let metricsObjectMembers = Set(Mirror(reflecting: metricsObject).children.compactMap(\.label))
+
+        let differences = recordedContextMembers.symmetricDifference(metricsObjectMembers)
+
+        XCTAssertTrue(differences.isEmpty)
+    }
 }
