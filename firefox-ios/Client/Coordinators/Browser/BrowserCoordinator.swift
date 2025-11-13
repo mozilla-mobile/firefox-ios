@@ -1111,7 +1111,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func popToBVC() {
-        router.popToViewController(browserViewController, reason: .deeplink)
+        _ = router.popToViewController(browserViewController, reason: .deeplink)
     }
 
     // MARK: Microsurvey
