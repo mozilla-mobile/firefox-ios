@@ -71,14 +71,12 @@ final class RouteBuilder: FeatureFlaggable {
                 )
 
             case .openUrl:
-                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
                 return .search(url: urlQuery, isPrivate: isPrivate)
 
             case .openText:
                 let queryValue = urlScanner.value(query: "text") ?? ""
                 let queryURL = URIFixup.getURL(queryValue)
                 let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
-                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
                 return .searchQuery(query: safeQuery, isPrivate: isPrivate)
 
             case .glean:
