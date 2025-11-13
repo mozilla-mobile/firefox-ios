@@ -93,7 +93,7 @@ enum CreditCardModifiedStatus {
     }
 }
 
-// TODO: task - Laurie
+// TODO: FXIOS-14112 - Fix CreditCardInputViewModel @unchecked Sendable
 final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     typealias CreditCardText = String.CreditCard.Alert
     let logger: Logger
