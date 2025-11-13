@@ -164,7 +164,6 @@ class BrowsingPDFTests: BaseTestCase {
             .element
             .children(matching: .other)
             .element(boundBy: 0)
-        // https://github.com/mozilla-mobile/firefox-ios/issues/30424
         if iPad() {
             app.buttons["Cancel"].waitAndTap()
         }
@@ -174,7 +173,6 @@ class BrowsingPDFTests: BaseTestCase {
 
         // Remove pdf pinned site
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        // https://github.com/mozilla-mobile/firefox-ios/issues/30424
         if iPad() {
             app.buttons["Cancel"].waitAndTap()
         }
