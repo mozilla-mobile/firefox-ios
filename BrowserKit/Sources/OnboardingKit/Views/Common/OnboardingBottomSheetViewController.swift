@@ -159,7 +159,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
     }
 
     // MARK: - Notifiable
-    public nonisolated func handleNotifications(_ notification: Notification) {
+    nonisolated public func handleNotifications(_ notification: Notification) {
         DispatchQueue.main.async { [self] in
             calculateAndUpdateDetentsHeight()
         }
