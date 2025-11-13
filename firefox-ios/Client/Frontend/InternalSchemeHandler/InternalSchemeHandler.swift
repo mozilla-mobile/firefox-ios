@@ -12,6 +12,7 @@ enum InternalPageSchemeHandlerError: Error {
     case notAuthorized
 }
 
+@MainActor
 protocol InternalSchemeResponse {
     func response(forRequest: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)?
 }

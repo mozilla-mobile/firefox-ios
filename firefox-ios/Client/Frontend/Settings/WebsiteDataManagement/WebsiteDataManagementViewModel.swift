@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-class WebsiteDataManagementViewModel {
+final class WebsiteDataManagementViewModel {
     enum State {
         case loading
         case displayInitial
