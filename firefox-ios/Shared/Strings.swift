@@ -3260,7 +3260,7 @@ extension String {
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Retro2017.Title.146",
                         tableName: "AppIconSelection",
                         value: "Retro 2017",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a fox resting on a stylized globe.")
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox resting on a stylized globe.")
                 }
             }
 
