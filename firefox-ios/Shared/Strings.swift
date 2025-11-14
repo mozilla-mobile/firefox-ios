@@ -3242,7 +3242,7 @@ extension String {
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Pixelated.Title.146",
                         tableName: "AppIconSelection",
                         value: "Pixelated",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a pixelated fox resting on a globe.")
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a pixelated fox resting on a globe.")
 
                     public static let Pride = MZLocalizedString(
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Pride.Title.146",
