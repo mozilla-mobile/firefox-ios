@@ -13,7 +13,7 @@ struct DefaultBrowserUtil {
     let locale: LocaleInterface
     let application: UIApplicationInterface
     let dmaCountries = ["BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", "HR", "IT", "CY", "LV",
-                        "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR"]
+                        "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR", "JP"]
     private let logger: Logger
     init(userDefault: UserDefaultsInterface = UserDefaults.standard,
          telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
@@ -98,6 +98,12 @@ struct DefaultBrowserUtil {
                                     method: .open,
                                     object: .defaultBrowser,
                                     extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: isDefault])
+    }
+
+    /// Checks if the user is in a DMA (Digital Markets Act) effective region
+    var isDMAUser: Bool {
+        guard let regionCode = locale.localeRegionCode else { return false }
+        return dmaCountries.contains(regionCode)
     }
 
     private func trackIfNewUserIsComingFromBrowserChoiceScreen(_ isDefault: Bool) {
