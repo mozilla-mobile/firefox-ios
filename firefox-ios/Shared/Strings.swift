@@ -3230,7 +3230,7 @@ extension String {
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Minimal.Title.146",
                         tableName: "AppIconSelection",
                         value: "Minimal",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a one-colored fox outline.")
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a one-colored fox outline.")
 
                     public static let Momo = MZLocalizedString(
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Momo.Title.v139",
