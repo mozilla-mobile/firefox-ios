@@ -28,6 +28,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate, @unchecked Sendab
     private var messagingManager: GleanPlumbMessageManagerProtocol
     private var notificationManager: NotificationManagerProtocol
 
+    @MainActor
     var shouldShowSurface: Bool {
         updateMessage()
         return message != nil
@@ -105,6 +106,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate, @unchecked Sendab
     }
 
     /// Call messagingManager to retrieve the message for notification surface.
+    @MainActor
     private func updateMessage() {
         message = messagingManager.getNextMessage(for: notificationSurfaceID)
     }

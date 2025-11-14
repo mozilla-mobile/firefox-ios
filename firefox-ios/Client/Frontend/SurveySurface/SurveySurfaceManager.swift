@@ -24,6 +24,7 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     private var viewModel: SurveySurfaceViewModel?
     private var viewController: SurveySurfaceViewController?
 
+    @MainActor
     var shouldShowSurveySurface: Bool {
         // TODO: Remove hack (temporary fix to avoid showing SurveySurface in UITest for release branch)
         if AppConstants.isRunningUITests { return false }
@@ -70,6 +71,7 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     }
 
     /// Call messagingManager to retrieve the message for research surface.
+    @MainActor
     private func updateMessage() {
         message = messagingManager.getNextMessage(for: surveySurfaceID)
     }

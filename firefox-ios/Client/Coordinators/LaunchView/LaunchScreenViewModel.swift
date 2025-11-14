@@ -29,6 +29,7 @@ class LaunchScreenViewModel {
 
     weak var delegate: LaunchFinishedLoadingDelegate?
 
+    @MainActor
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
          messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,

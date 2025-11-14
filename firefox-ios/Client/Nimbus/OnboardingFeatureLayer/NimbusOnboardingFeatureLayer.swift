@@ -35,6 +35,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             isDismissible: framework.dismissable)
     }
 
+    @MainActor
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
         from cardData: [String: NimbusOnboardingCardData],
@@ -67,6 +68,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         }
     }
 
+    @MainActor
     private func getOnboardingCards(
         from cardData: [String: NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
