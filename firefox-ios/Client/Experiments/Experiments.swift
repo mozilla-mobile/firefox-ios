@@ -57,11 +57,13 @@ enum Experiments {
     nonisolated(unsafe) private static var studiesSetting: Bool?
     nonisolated(unsafe) private static var telemetrySetting: Bool?
 
+    @MainActor
     static func setStudiesSetting(_ setting: Bool) {
         studiesSetting = setting
         updateUserParticipation()
     }
 
+    @MainActor
     static func setTelemetrySetting(_ setting: Bool) {
         telemetrySetting = setting
         if !setting {
@@ -70,6 +72,7 @@ enum Experiments {
         updateUserParticipation()
     }
 
+    @MainActor
     private static func updateUserParticipation() {
         // we only want to reset the participation flags if both settings have been
         // initialized.
@@ -96,6 +99,7 @@ enum Experiments {
         return storage.string(forKey: NIMBUS_LOCAL_DATA_KEY)
     }
 
+    @MainActor
     static var dbPath: String? {
         let profilePath: String?
         if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
@@ -139,8 +143,9 @@ enum Experiments {
     }
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
-    /// TODO FXIOS-12602 This global property is not concurrency safe
-    nonisolated(unsafe) static var shared: NimbusInterface = {
+    /// Isolated to the main actor because this is shared global state.
+    @MainActor
+    static var shared: NimbusInterface = {
         let defaults = UserDefaults.standard
         let isFirstRun: Bool = defaults.object(forKey: NIMBUS_IS_FIRST_RUN_KEY) == nil
         if isFirstRun {
@@ -230,6 +235,7 @@ enum Experiments {
         #endif
     }
 
+    @MainActor
     private static func buildNimbus(dbPath: String,
                                     errorReporter: @escaping NimbusErrorReporter,
                                     initialExperiments: URL?,
@@ -294,6 +300,7 @@ enum Experiments {
     /// - Parameters:
     ///     - fireURL: an optional file URL that stores the initial experiments document.
     ///     - firstRun: a flag indicating that this is the first time that the app has been run.
+    @MainActor
     static func initialize() {
         // Getting the singleton first time initializes it.
         let nimbus = Experiments.shared
@@ -309,6 +316,7 @@ enum Experiments {
 }
 
 extension Experiments {
+    @MainActor
     public static func createJexlHelper() -> NimbusMessagingHelperProtocol? {
         let contextProvider = GleanPlumbContextProvider()
         let context = contextProvider.createAdditionalDeviceContext()
@@ -317,8 +325,10 @@ extension Experiments {
 
     public static let messaging: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager()
 
+    @MainActor
     public static let events: NimbusEventStore = sdk.events
 
+    @MainActor
     public static let sdk: NimbusInterface = shared
 }
 

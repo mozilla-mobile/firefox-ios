@@ -61,6 +61,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
 
     private var logger: Logger
 
+    @MainActor
     init(isFirstRun: Bool,
          isDefaultBrowser: Bool,
          isBottomToolbarUser: Bool,
