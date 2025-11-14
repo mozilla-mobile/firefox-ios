@@ -273,6 +273,7 @@ final class LaunchCoordinator: BaseCoordinator,
             }
 
             // Filter out welcome cards for DMA users
+            // TODO: FXIOS-14125 #30620 Test DMA filtering for Japan/Global Onboarding
             if isDefault && viewModel.name.localizedCaseInsensitiveContains("welcome") {
                 return false
             }
