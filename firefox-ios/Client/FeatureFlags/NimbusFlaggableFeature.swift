@@ -41,7 +41,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case recentSearches
     case reportSiteIssue
     case relayIntegration
-    case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
     case splashScreen
     case startAtHome
@@ -167,7 +166,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .noInternetConnectionErrorPage,
                 .recentSearches,
                 .reportSiteIssue,
-                .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
                 .splashScreen,
                 .appleSummarizer,
