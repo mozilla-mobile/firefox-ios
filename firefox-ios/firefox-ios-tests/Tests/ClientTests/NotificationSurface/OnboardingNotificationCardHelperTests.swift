@@ -8,6 +8,7 @@ import Common
 
 @testable import Client
 
+@MainActor
 class OnboardingNotificationCardHelperTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingTestingConfigUtility!
     typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder

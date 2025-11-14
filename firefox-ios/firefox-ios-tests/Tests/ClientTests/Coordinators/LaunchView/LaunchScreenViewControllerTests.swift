@@ -12,6 +12,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
+    @MainActor
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()

@@ -22,12 +22,14 @@ class NotificationSurfaceManagerTests: XCTestCase {
         notificationManager = nil
     }
 
+    @MainActor
     func testShouldShowSurface_noMessage() {
         let subject = createSubject()
 
         XCTAssertFalse(subject.shouldShowSurface)
     }
 
+    @MainActor
     func testShouldShowSurface_validMessage() {
         let subject = createSubject()
         let message = createMessage()
@@ -36,6 +38,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertTrue(subject.shouldShowSurface)
     }
 
+    @MainActor
     func testShowSurface_noMessage() async {
         let subject = createSubject()
 
@@ -47,6 +50,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(notificationManager.scheduledNotifications, 0)
     }
 
+    @MainActor
     func testShowSurface_validMessage() async {
         let subject = createSubject()
         let message = createMessage()

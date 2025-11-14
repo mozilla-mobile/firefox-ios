@@ -22,12 +22,14 @@ class SurveySurfaceManagerTests: XCTestCase {
         messageManager = nil
     }
 
+    @MainActor
     func testNilMessage_surveySurfaceShouldNotShow() {
         let subject = createSubject()
 
         XCTAssertFalse(subject.shouldShowSurveySurface)
     }
 
+    @MainActor
     func testGoodButNotSurveyMessage_surveySurfaceShouldNotShow() {
         let subject = createSubject()
         let goodMessage = createMessage(for: .newTabCard, isExpired: false)
@@ -36,6 +38,7 @@ class SurveySurfaceManagerTests: XCTestCase {
         XCTAssertFalse(subject.shouldShowSurveySurface)
     }
 
+    @MainActor
     func testGoodMessage_surveySurfaceShouldShow() {
         let subject = setupStandardConditions()
 
@@ -65,6 +68,7 @@ class SurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(subject?.viewModel.info.image, expectedImage)
     }
 
+    @MainActor
     func testManager_noDelegatesCalled() {
         let manager = setupStandardConditions()
         XCTAssertTrue(manager.shouldShowSurveySurface)
@@ -74,6 +78,7 @@ class SurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
+    @MainActor
     func testManager_didDisplayMessage() {
         let manager = setupStandardConditions()
         XCTAssertTrue(manager.shouldShowSurveySurface)
@@ -95,6 +100,7 @@ class SurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
+    @MainActor
     func testManager_didTapDismissMessage() {
         let manager = setupStandardConditions()
         XCTAssertTrue(manager.shouldShowSurveySurface)

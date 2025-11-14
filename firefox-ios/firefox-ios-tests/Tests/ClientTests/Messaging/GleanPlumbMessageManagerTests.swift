@@ -59,6 +59,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertTrue(FxNimbus.shared.getCoenrollingFeatureIds().contains("messaging"))
     }
 
+    @MainActor
     func testManagerGetMessage() throws {
         let hardcodedNimbusFeatures =
             HardcodedNimbusFeatures(with: [
@@ -90,6 +91,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 0)
     }
 
+    @MainActor
     func testManagerGetMessageExceptIfAnyOne() {
         let hardcodedNimbusFeatures =
             HardcodedNimbusFeatures(with: [
@@ -110,6 +112,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testManagerGetMessageExceptIfAnySome() {
         let hardcodedNimbusFeatures =
             HardcodedNimbusFeatures(with: [
@@ -130,6 +133,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testManagerGetMessage_happyPath_bySurface() throws {
         let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
         hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
@@ -147,6 +151,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 0)
     }
 
+    @MainActor
     func testManagerGetMessage_happyPath_byTrigger() throws {
         let expectedId = "infoCard"
         let messages = [
@@ -160,6 +165,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(observed.id, expectedId)
     }
 
+    @MainActor
     func testManagerGetMessage_happyPath_byMultipleTriggers() throws {
         let expectedId = "infoCard"
         let messages = [
@@ -174,6 +180,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(observed.id, expectedId)
     }
 
+    @MainActor
     func testManagerGetMessage_experiments_exposureEvents() throws {
         let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
         hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
@@ -193,6 +200,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 1)
     }
 
+    @MainActor
     func testManagerGetMessage_experiments_controlMessages() throws {
         let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
         hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
@@ -216,6 +224,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 1)
     }
 
+    @MainActor
     func testManagerGetMessage_experiments_malformedControlMessages() throws {
         let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
         hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
@@ -239,6 +248,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(hardcodedNimbusFeatures.getMalformed(for: "messaging"), "control")
     }
 
+    @MainActor
     func testManagerGetMessage_experiments_multiplControlMessages() throws {
         let hardcodedNimbusFeatures = HardcodedNimbusFeatures(with: ["messaging": "{}"])
         hardcodedNimbusFeatures.connect(with: FxNimbus.shared)
@@ -265,6 +275,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 2)
     }
 
+    @MainActor
     func testManagerGetMessages_happyPath_withNoAction() throws {
         let expectedId = "infoCard"
         let messages = [

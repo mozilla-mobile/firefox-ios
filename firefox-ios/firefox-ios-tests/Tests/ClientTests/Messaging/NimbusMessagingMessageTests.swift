@@ -45,6 +45,7 @@ final class NimbusMessagingMessageTests: XCTestCase {
         XCTAssertEqual(rawMessages.count, messages.count)
     }
 
+    @MainActor
     func testAllMessageTriggers() throws {
         let evaluationUtility = NimbusMessagingEvaluationUtility()
         let helper = NimbusMessagingHelperUtility().createNimbusMessagingHelper()!
