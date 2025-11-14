@@ -5,9 +5,7 @@
     },
     {
       "appearance" : "dark",
-      "value" : {
-        "solid" : "srgb:0.12549,0.07059,0.22745,1.00000"
-      }
+      "value" : "automatic"
     }
   ],
   "groups" : [
