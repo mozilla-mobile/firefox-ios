@@ -187,6 +187,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             resetTranslationCFRTimer()
         }
     }
+
+    func resetCFRsTimer() {
+        resetDataClearanceCFRTimer()
+        resetSummarizeToolbarCFRTimer()
+    }
+
     // Reset the CFR timer for the translation button to avoid presenting the CFR
     // In cases, such as if translation icon is not available
     private func resetTranslationCFRTimer() {
