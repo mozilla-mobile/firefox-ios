@@ -3212,7 +3212,7 @@ extension String {
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Cool.Title.146",
                         tableName: "AppIconSelection",
                         value: "Cool",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a fox outline with sunglasses.")
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with sunglasses.")
 
                     public static let Cuddling = MZLocalizedString(
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Cuddling.Title.146",
