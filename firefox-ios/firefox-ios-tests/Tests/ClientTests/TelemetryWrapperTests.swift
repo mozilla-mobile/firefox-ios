@@ -22,6 +22,7 @@ class TelemetryWrapperTests: XCTestCase {
         setupTelemetry(with: profile)
     }
 
+    @MainActor
     override func tearDown() {
         tearDownTelemetry()
         Experiments.events.clearEvents()
@@ -790,6 +791,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: - Nimbus Calls
 
+    @MainActor
     func test_appForeground_NimbusIsCalled() throws {
         XCTAssertFalse(
             try Experiments.createJexlHelper()!.evalJexl(
@@ -810,6 +812,7 @@ class TelemetryWrapperTests: XCTestCase {
         )
     }
 
+    @MainActor
     func test_syncLogin_NimbusIsCalled() {
         XCTAssertFalse(
             try Experiments.createJexlHelper()!.evalJexl(
