@@ -191,3 +191,20 @@ pre_sync_key_retrieval_failure:
       error_message:
         description: The error encountered retrieving the credit cards encryption key
         type: string
+
+credit_card_verification:
+  total_scrubbed_records:
+    type: counter
+    description: >
+      Track how many undecryptable credit cards we scrub during the credit card
+      verification process
+    bugs:
+      - TBD
+    data_reviews:
+      - TBD
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+      - lougenia@mozilla.com
+    expires: "never"
