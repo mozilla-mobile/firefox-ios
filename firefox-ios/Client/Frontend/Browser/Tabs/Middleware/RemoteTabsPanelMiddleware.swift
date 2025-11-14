@@ -11,7 +11,7 @@ import Redux
 import struct MozillaAppServices.Device
 
 @MainActor
-final class RemoteTabsPanelMiddleware {
+final class RemoteTabsPanelMiddleware: Notifiable {
     private let profile: Profile
     var notificationCenter: NotificationProtocol
 
@@ -174,25 +174,17 @@ final class RemoteTabsPanelMiddleware {
 
     // MARK: - Notifications
     private func observeNotifications() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self,
-                                       selector: #selector(notificationReceived),
-                                       name: .FirefoxAccountChanged,
-                                       object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(notificationReceived),
-                                       name: .ProfileDidFinishSyncing,
-                                       object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(notificationReceived),
-                                       name: .constellationStateUpdate,
-                                       object: nil)
+        startObservingNotifications(withNotificationCenter: notificationCenter,
+                                    forObserver: self,
+                                    observing: [.FirefoxAccountChanged,
+                                                .ProfileDidFinishSyncing,
+                                                .constellationStateUpdate])
     }
 
-    @objc
-    func notificationReceived(_ notification: Notification) {
+    func handleNotifications(_ notification: Notification) {
+        let name = notification.name
         ensureMainThread {
-            switch notification.name {
+            switch name {
             case .FirefoxAccountChanged,
                     .ProfileDidFinishSyncing:
                 // This update occurs independently of any specific window, so for now we send `.unavailable`
