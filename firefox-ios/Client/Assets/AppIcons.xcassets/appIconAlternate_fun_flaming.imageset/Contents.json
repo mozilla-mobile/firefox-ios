@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "flaming-light.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "flaming-dark-no-bckground.png",
       "idiom" : "universal"
     }
