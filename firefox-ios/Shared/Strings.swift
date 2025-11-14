@@ -3206,6 +3206,15 @@ extension String {
                     value: "Northern Lights",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green.")
 
+                /// Names and subtitles for approved icons added by contributors.
+                public struct FromContributors {
+                    public static let Momo = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139",
+                        tableName: "AppIconSelection",
+                        value: "Momo",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe.")
+                }
+
                 /// Names and subtitles for approved icons considered "fun".
                 public struct Fun {
                     public static let Cool = MZLocalizedString(
@@ -3231,12 +3240,6 @@ extension String {
                         tableName: "AppIconSelection",
                         value: "Minimal",
                         comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a one-colored fox outline.")
-
-                    public static let Momo = MZLocalizedString(
-                        key: "Settings.AppIconSelection.AppIconNames.Fun.Momo.Title.v139",
-                        tableName: "AppIconSelection",
-                        value: "Momo",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe.")
 
                     public static let Pixelated = MZLocalizedString(
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Pixelated.Title.146",

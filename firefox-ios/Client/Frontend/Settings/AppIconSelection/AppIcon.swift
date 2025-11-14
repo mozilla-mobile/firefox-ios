@@ -145,7 +145,7 @@ enum AppIcon: String, CaseIterable {
         case .minimal:
             return .Settings.AppIconSelection.AppIconNames.Fun.Minimal
         case .momo:
-            return .Settings.AppIconSelection.AppIconNames.Fun.Momo
+            return .Settings.AppIconSelection.AppIconNames.FromContributors.Momo
         case .pixelated:
             return .Settings.AppIconSelection.AppIconNames.Fun.Pixelated
         case .pride:
