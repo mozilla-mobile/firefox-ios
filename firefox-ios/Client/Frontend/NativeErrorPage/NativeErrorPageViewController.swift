@@ -237,12 +237,6 @@ final class NativeErrorPageViewController: UIViewController,
         showViewForCurrentOrientation()
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        adjustConstraints()
-        showViewForCurrentOrientation()
-    }
-
     private func configureUI() {
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .NativeErrorPage.ButtonLabel,
@@ -332,14 +326,16 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     @objc
-    nonisolated private func didTapReload() {
-        store.dispatchLegacy(
-            GeneralBrowserAction(
-                isNativeErrorPage: true,
-                windowUUID: self.windowUUID,
-                actionType: GeneralBrowserActionType.reloadWebsite
+    private func didTapReload() {
+        ensureMainThread {
+            store.dispatch(
+                GeneralBrowserAction(
+                    isNativeErrorPage: true,
+                    windowUUID: self.windowUUID,
+                    actionType: GeneralBrowserActionType.reloadWebsite
+                )
             )
-        )
+        }
     }
 
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {

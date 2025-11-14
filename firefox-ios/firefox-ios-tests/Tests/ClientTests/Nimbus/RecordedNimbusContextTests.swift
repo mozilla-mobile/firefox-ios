@@ -76,6 +76,10 @@ class RecordedNimbusContextTests: XCTestCase {
             json?.removeValue(forKey: "cannot_use_apple_intelligence") as? Bool,
             recordedContext.cannotUseAppleIntelligence
         )
+        XCTAssertEqual(
+            json?.removeValue(forKey: "tou_experience_points") as? Int32,
+            recordedContext.touExperiencePoints
+        )
 
         var events = json?.removeValue(forKey: "events") as? [String: Double]
         XCTAssertNotNil(events)
@@ -126,6 +130,10 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertEqual(
             value?.hasAcceptedTermsOfUse,
             recordedContext.hasAcceptedTermsOfUse
+        )
+        XCTAssertEqual(
+            value?.touExperiencePoints,
+            recordedContext.touExperiencePoints.toInt64()
         )
 
         XCTAssertNotNil(value?.eventQueryValues)

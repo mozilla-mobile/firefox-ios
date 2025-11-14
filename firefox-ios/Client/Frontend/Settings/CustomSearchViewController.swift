@@ -168,7 +168,7 @@ class CustomSearchViewController: SettingsTableViewController {
                 if let text = text { return !text.isEmpty }
 
                 return false
-            }, settingDidChange: {fieldText in
+            }, settingDidChange: { fieldText in
                 guard let title = fieldText else { return }
                 self.engineTitle = title
                 self.updateSaveButton()
@@ -183,7 +183,7 @@ class CustomSearchViewController: SettingsTableViewController {
             settingIsValid: { text in
                 // Can check url text text validity here.
                 return true
-            }, settingDidChange: {fieldText in
+            }, settingDidChange: { fieldText in
                 self.urlString = fieldText
                 self.updateSaveButton()
             })
@@ -209,6 +209,10 @@ class CustomSearchViewController: SettingsTableViewController {
             target: self,
             action: #selector(self.addCustomSearchEngine)
         )
+        if #available(iOS 26.0, *) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            self.navigationItem.rightBarButtonItem?.tintColor = theme.colors.textAccent
+        }
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
 
         self.navigationItem.rightBarButtonItem?.isEnabled = false
@@ -236,7 +240,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
     fileprivate let defaultValue: String?
     fileprivate let placeholder: String
-    fileprivate let settingDidChange: ((String?) -> Void)?
+    fileprivate let settingDidChange: (@MainActor (String?) -> Void)?
     fileprivate let settingIsValid: ((String?) -> Bool)?
 
     let textField: UITextView = .build()
@@ -249,7 +253,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         height: CGFloat = 44,
         keyboardType: UIKeyboardType = .default,
         settingIsValid isValueValid: ((String?) -> Bool)? = nil,
-        settingDidChange: ((String?) -> Void)? = nil
+        settingDidChange: (@MainActor (String?) -> Void)? = nil
     ) {
         self.defaultValue = defaultValue
         self.TextFieldHeight = height

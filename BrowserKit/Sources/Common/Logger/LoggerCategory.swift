@@ -84,6 +84,9 @@ public enum LoggerCategory: String {
     /// Related to Glean telemetry pings and events
     case telemetry
 
+    /// Related to translations feature
+    case translations
+
     /// Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
 

@@ -357,12 +357,12 @@ class TabsTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        toolBarScreen.assertNewTabButtonExist()
+        toolBarScreen.assertNewTabButtonExists()
 
         // Go back to portrait mode
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is displayed
-        toolBarScreen.assertNewTabButtonExist()
+        toolBarScreen.assertNewTabButtonExists()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
@@ -513,21 +513,6 @@ class TabsTests: BaseTestCase {
         } else {
             XCTAssertEqual(tabsTrayCell.element(boundBy: 6).label, "Homepage. Currently selected tab.")
         }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306869
-    func testTabTrayContextMenuCloseTab() throws {
-        if !iPad() {
-            let shouldSkipTest = true
-            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
-        }
-        // Have multiple tabs opened in the tab tray
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        addTabsAndUndoCloseTabAction(nrOfTabs: 3)
-        // Repeat steps for private browsing mode
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        addTabsAndUndoCloseTabAction(nrOfTabs: 4)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306868
@@ -767,7 +752,7 @@ class TabsTestsIphone: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
+        browserScreen.tapCancelButtonIfExist()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 

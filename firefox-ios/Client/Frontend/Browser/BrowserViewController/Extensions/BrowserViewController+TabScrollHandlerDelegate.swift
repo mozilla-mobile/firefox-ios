@@ -9,6 +9,14 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         return calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
     }
 
+    // Checks if minimal address bar is enabled and tab is on reader mode bar or findInPage
+    private var shouldSendAlphaChangeAction: Bool {
+        guard let tab = tabManager.selectedTab,
+              let tabURL = tab.url else { return false }
+
+        return isMinimalAddressBarEnabled && !tab.isFindInPageMode && !tabURL.isReaderModeURL
+    }
+
     private var headerOffset: CGFloat {
         let baseOffset = -getHeaderSize().height
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
@@ -20,28 +28,32 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         return baseOffset + UX.minimalHeaderOffset
     }
 
-    /// Interactive toolbar transition.
-    /// Top bar moves in [headerOffset, 0] using `originTop - clampProgress`
-    /// Bottom bar moves in [0, height]using `originBottom + clampProgress`
-    /// Values are clamped to their ranges, then layout is requested.
+    /// Animates the toolbar transition between expanded and collapsed states based on scroll progress.
+    /// This method applies a smooth translation transform to either the top or bottom toolbar
+    /// (depending on whether `isBottomSearchBar` is true), animating its movement as the user scrolls.
+    /// - Parameters:
+    ///   - progress: The current scroll progress used to determine the translation amount.
+    /// Positive values indicate upward scrolling (collapsing), and negative values indicate downward scrolling (expanding).
+    ///   - state: The target display state of the toolbar (`.collapsed` or `.expanded`).
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
-        // Clamp movement to the intended direction (toward `state`)
-        let clampProgress = (state == .collapsed) ? max(0, progress) : min(0, progress)
+        let isCollapsing = (state == .collapsed)
+        let clampProgress = isCollapsing ? max(0, progress) : min(0, progress)
 
-        // Top toolbar: range [headerOffset ... 0]
-        if !isBottomSearchBar {
-            let originTop: CGFloat = (state == .expanded) ? 0 : headerOffset
-            let topOffset = clamp(offset: originTop - clampProgress, min: headerOffset, max: 0)
-            headerTopConstraint?.update(offset: topOffset)
-            header.superview?.layoutIfNeeded()
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut]) { [self] in
+            if isBottomSearchBar {
+                let translationY = isCollapsing ? clampProgress : 0
+                let transform = CGAffineTransform(translationX: 0, y: translationY)
+                bottomContainer.transform = transform
+                overKeyboardContainer.transform = transform
+                bottomBlurView.transform = transform
+            } else {
+                let topTransform = isCollapsing
+                    ? CGAffineTransform(translationX: 0, y: -clampProgress)
+                    : .identity
+                header.transform = topTransform
+                topBlurView.transform = topTransform
+            }
         }
-
-        // Bottom toolbar: range [0 ... height]
-        let bottomContainerHeight = getBottomContainerSize().height
-        let originBottom: CGFloat = (state == .expanded) ? bottomContainerHeight : 0
-        let bottomOffset = clamp(offset: originBottom + clampProgress, min: 0, max: bottomContainerHeight)
-        bottomContainerConstraint?.update(offset: bottomOffset)
-        bottomContainer.superview?.layoutIfNeeded()
     }
 
     func showToolbar() {
@@ -67,7 +79,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
     private func updateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
         guard UIAccessibility.isReduceMotionEnabled else {
-            animateTopToolbar(topOffset: topOffset, alpha: alpha)
+            animateTopToolbar(alpha: alpha)
             return
         }
 
@@ -77,11 +89,11 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         header.updateAlphaForSubviews(alpha)
 
         if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
+            store.dispatch(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaDidChange
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
                 )
             )
         }
@@ -91,9 +103,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                                      overKeyboardContainerOffset: CGFloat,
                                      alpha: CGFloat) {
         guard UIAccessibility.isReduceMotionEnabled else {
-            animateBottomToolbar(bottomOffset: bottomContainerOffset,
-                                 overKeyboardOffset: overKeyboardContainerOffset,
-                                 alpha: alpha)
+            animateBottomToolbar(alpha: alpha)
             return
         }
 
@@ -104,71 +114,69 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         bottomContainer.superview?.setNeedsLayout()
 
         if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
+            store.dispatch(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaDidChange
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
                 )
             )
         }
     }
 
-    private func animateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
-        headerTopConstraint?.update(offset: topOffset)
-
+    private func animateTopToolbar(alpha: CGFloat) {
+        let isShowing = alpha == 1
         UIView.animate(withDuration: UX.topToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut, .beginFromCurrentState]) { [weak self] in
-            guard let self else { return }
-
-            header.superview?.layoutIfNeeded()
-            header.updateAlphaForSubviews(alpha)
+                       options: [.curveEaseOut]) { [self] in
+            if !isShowing {
+                header.transform = .identity.translatedBy(x: 0, y: -topBlurView.frame.height)
+                topBlurView.transform = .identity.translatedBy(x: 0,
+                                                               y: -topBlurView.frame.height)
+            } else {
+                header.transform = .identity
+                topBlurView.transform = .identity
+            }
         }
 
         if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
+            store.dispatch(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaDidChange
-                )
-            )
-        }
-    }
-
-    private func animateBottomToolbar(bottomOffset: CGFloat,
-                                      overKeyboardOffset: CGFloat,
-                                      alpha: CGFloat) {
-        bottomContainerConstraint?.update(offset: bottomOffset)
-        overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
-
-        UIView.animate(withDuration: UX.bottomToolbarDuration,
-                       delay: 0,
-                       options: [.curveEaseOut, .beginFromCurrentState]) { [weak self] in
-            guard let self else { return }
-
-            bottomContainer.superview?.layoutIfNeeded()
-        }
-
-        if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
-                ToolbarAction(
-                    scrollAlpha: Float(alpha),
-                    windowUUID: self.windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaDidChange
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
                 )
             )
         }
    }
 
-    // Checks if minimal address bar is enabled and tab is on reader mode bar or findInPage
-    private var shouldSendAlphaChangeAction: Bool {
-        guard let tab = tabManager.selectedTab,
-              let tabURL = tab.url else { return false }
+    private func animateBottomToolbar(alpha: CGFloat) {
+        let isShowing = alpha == 1
+        let customOffset: CGFloat = getBottomContainerSize().height + overKeyboardContainerHeight
+        UIView.animate(withDuration: UX.bottomToolbarDuration,
+                       delay: 0,
+                       options: [.curveEaseOut]) { [self] in
+            if !isShowing {
+                bottomContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
+                overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
+                bottomBlurView.transform = .identity.translatedBy(x: 0, y: customOffset)
+            } else {
+                bottomContainer.transform = .identity
+                overKeyboardContainer.transform = .identity
+                bottomBlurView.transform = .identity
+            }
+        }
 
-        return isMinimalAddressBarEnabled && !tab.isFindInPageMode && !tabURL.isReaderModeURL
-    }
+        if shouldSendAlphaChangeAction {
+            store.dispatch(
+                ToolbarAction(
+                    scrollAlpha: Float(alpha),
+                    windowUUID: self.windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                )
+            )
+        }
+   }
 
     /// Helper method for testing overKeyboardScrollHeight behavior.
     /// - Parameters:

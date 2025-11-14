@@ -356,7 +356,7 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get token server endpoint url."
     }
 
-    func shouldSyncLogins(completion: @escaping (Bool) -> Void) {
+    func shouldSyncLogins(completion: @escaping @Sendable (Bool) -> Void) {
         if !(self.prefs.boolForKey(PrefsKeys.LoginsHaveBeenVerified) ?? false) {
             // We should only sync logins when the verification step has completed successfully.
             // Otherwise logins could exist in the database that can't be decrypted and would
@@ -378,7 +378,8 @@ public class RustSyncManager: NSObject, SyncManager {
                                      creditCardKey: String?,
                                      completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
-        var rustEngines: [String] = []
+        // FIXME: FXIOS-14052 Unprotected properties should not be mutated on background threads
+        nonisolated(unsafe) var rustEngines: [String] = []
         var registeredPlaces = false
         var registeredAutofill = false
 
@@ -445,6 +446,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     category: .sync
                 )
                 loginKey = nil
+                self.logins.reportPreSyncKeyRetrievalFailure(err: err.localizedDescription)
             }
 
             self.autofill.getStoredKey { creditCardResult in
@@ -458,8 +460,14 @@ public class RustSyncManager: NSObject, SyncManager {
                         level: .warning,
                         category: .sync
                     )
+                    creditCardKey = nil
+                    self.autofill.reportPreSyncKeyRetrievalFailure(err: err.localizedDescription)
                 }
-                self.registerSyncEngines(engines: engines,
+
+                // calling `getEnginesWithRetrievedKeys` to remove engines that will fail to sync because
+                // the encryption key is missing
+                let enginesToSync = self.getEnginesWithRetrievedKeys(creditCardKey, loginKey, engines)
+                self.registerSyncEngines(engines: enginesToSync,
                                          dispatchGroup: dispatchGroup,
                                          loginKey: loginKey,
                                          creditCardKey: creditCardKey,
@@ -468,7 +476,24 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    private func doSync(params: SyncParams, completion: @escaping (SyncResult) -> Void) {
+   func getEnginesWithRetrievedKeys(_ creditCardKey: String?,
+                                    _ loginKey: String?,
+                                    _ engines: [RustSyncManagerAPI.TogglableEngine]
+                                   ) -> [RustSyncManagerAPI.TogglableEngine] {
+       var enginesToSync = engines
+
+       if loginKey == nil {
+           enginesToSync = enginesToSync.filter { $0 != RustSyncManagerAPI.TogglableEngine.passwords }
+       }
+
+       if creditCardKey == nil {
+           enginesToSync = enginesToSync.filter { $0 != RustSyncManagerAPI.TogglableEngine.creditcards }
+       }
+
+       return enginesToSync
+    }
+
+    private func doSync(params: SyncParams, completion: @escaping @Sendable (SyncResult) -> Void) {
         beginSyncing()
         syncManagerAPI.sync(params: params) { syncResult in
             // Save the persisted state

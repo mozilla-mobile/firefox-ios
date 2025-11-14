@@ -61,6 +61,7 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(mockHistoryStorage.getMostRecentHistoryMetadataCallCount, 1)
     }
 
     func test_loadRecentSearches_withError_returnsEmptyList() {
@@ -75,6 +76,7 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(mockHistoryStorage.getMostRecentHistoryMetadataCallCount, 1)
     }
 
     func createSubject(for searchEngineID: String) -> RecentSearchProvider {

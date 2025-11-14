@@ -218,6 +218,22 @@ class PrivateBrowsingTest: BaseTestCase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307012
+    // Smoketest TAE
+    func testLongPressLinkOptionsPrivateMode_TAE() {
+        let browserScreen = BrowserScreen(app: app)
+        let contextMenuScreen = ContextMenuScreen(app: app)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
+        browserScreen.longPressLink(named: website_2["link"]!)
+        browserScreen.waitForLinkPreview(named: website_2["moreLinkLongPressUrl"]!)
+
+        contextMenuScreen.assertPrivateModeOptionsVisible()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2497357
     func testAllPrivateTabsRestore() throws {
         // Several tabs opened in private tabs tray. Tap on the trashcan
@@ -326,6 +342,32 @@ class PrivateBrowsingTestIphone: BaseTestCase {
         )
         let numPrivTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("2", numPrivTab)
+    }
+
+    // This test is disabled for iPad because the toast menu is not shown there
+    // https://mozilla.testrail.io/index.php?/cases/view/2307013
+    // Smoketest TAE
+    func testSwitchBetweenPrivateTabsToastButton_TAE() {
+        if skipPlatform { return }
+
+        let browserScreen = BrowserScreen(app: app)
+        let contextMenuScreen = ContextMenuScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+
+        // Go to Private mode
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+        browserScreen.longPressFirstLink()
+        contextMenuScreen.openInNewPrivateTabAndSwitch()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "iana")
+        browserScreen.assertRFCLinkExist()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2")
     }
 }
 

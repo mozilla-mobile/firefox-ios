@@ -146,7 +146,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         navigationItem.title = String.AppSettingsTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: .AppSettingsDone,
-            style: .done,
+            style: .plain,
             target: self,
             action: #selector(done))
     }
@@ -395,15 +395,17 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         if let profile {
             privacySettings.append(
-                BoolSetting(prefs: profile.prefs,
-                            theme: themeManager.getCurrentTheme(for: windowUUID),
-                            prefKey: PrefsKeys.Settings.closePrivateTabs,
-                            defaultValue: true,
-                            titleText: .AppSettingsClosePrivateTabsTitle,
-                            statusText: .AppSettingsClosePrivateTabsDescription) { _ in
-                                let action = TabTrayAction(windowUUID: self.windowUUID,
-                                                           actionType: TabTrayActionType.closePrivateTabsSettingToggled)
-                                store.dispatchLegacy(action)
+                BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.Settings.closePrivateTabs,
+                    defaultValue: true,
+                    titleText: .AppSettingsClosePrivateTabsTitle,
+                    statusText: .AppSettingsClosePrivateTabsDescription
+                ) { _ in
+                    let action = TabTrayAction(windowUUID: self.windowUUID,
+                                               actionType: TabTrayActionType.closePrivateTabsSettingToggled)
+                    store.dispatch(action)
                 }
             )
         }
@@ -575,6 +577,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func askedToReload() {
         tableView.reloadData()
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        if #available(iOS 26.0, *) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+        }
     }
 
     // MARK: - UITableViewDelegate

@@ -71,7 +71,7 @@ class ToolbarButton: UIButton,
         self.notificationCenter = notificationCenter
 
         // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
-        if element.shouldUseLoadingSpinner {
+        if element.isLoading {
             makeLoadingButton()
         } else {
             hideLoadingIcon()
@@ -131,7 +131,6 @@ class ToolbarButton: UIButton,
                 view.removeFromSuperview()
             }
         }
-        layoutIfNeeded()
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -320,8 +319,6 @@ class ToolbarButton: UIButton,
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
         badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
         maskImageView?.tintColor = colors.layer1
-
-        layoutIfNeeded()
         setNeedsUpdateConfiguration()
     }
 

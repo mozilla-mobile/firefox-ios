@@ -358,6 +358,13 @@ public class PlacesReadConnection {
         }
     }
 
+    open func getMostRecentHistoryMetadata(limit: Int32) throws -> [HistoryMetadata] {
+        return try queue.sync {
+            try self.checkApi()
+            return try self.conn.getMostRecentHistoryMetadata(limit: limit)
+        }
+    }
+    
     open func queryHistoryMetadata(query: String, limit: Int32) throws -> [HistoryMetadata] {
         return try queue.sync {
             try self.checkApi()

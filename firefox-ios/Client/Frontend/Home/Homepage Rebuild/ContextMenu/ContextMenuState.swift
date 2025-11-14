@@ -34,6 +34,7 @@ struct ContextMenuState {
 
     weak var coordinatorDelegate: ContextMenuCoordinator?
 
+    @MainActor
     init(
         profile: Profile = AppContainer.shared.resolve(),
         bookmarkDelegate: BookmarksHandlerDelegate,
@@ -65,6 +66,7 @@ struct ContextMenuState {
     }
 
     // MARK: - Top sites item's context menu actions
+    @MainActor
     private func getTopSitesActions(site: Site) -> [PhotonRowActions] {
         let topSiteActions: [PhotonRowActions]
 
@@ -80,6 +82,7 @@ struct ContextMenuState {
         return topSiteActions
     }
 
+    @MainActor
     private func getPinnedTileActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getRemovePinTopSiteAction(site: site),
@@ -89,6 +92,7 @@ struct ContextMenuState {
                 getShareAction(siteURL: site.url)]
     }
 
+    @MainActor
     private func getSponsoredTileActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getOpenInNewTabAction(siteURL: siteURL),
@@ -98,6 +102,7 @@ struct ContextMenuState {
                 getShareAction(siteURL: site.url)]
     }
 
+    @MainActor
     private func getOtherTopSitesActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getPinTopSiteAction(site: site),
@@ -175,7 +180,7 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             ContextMenuState.dispatchSettingsAction(windowUUID: windowUUID, section: .topSites)
-            store.dispatchLegacy(
+            store.dispatch(
                 ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSettingsAction)
             )
         }).items
@@ -206,13 +211,14 @@ struct ContextMenuState {
                     isPrivate: false,
                     selectNewTab: true
                 )
-                store.dispatchLegacy(
+                store.dispatch(
                     ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSponsoredAction)
                 )
             }).items
     }
 
     // MARK: - JumpBack In section item's context menu actions
+    @MainActor
     private func getJumpBackInActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
 
@@ -225,6 +231,7 @@ struct ContextMenuState {
     }
 
     // MARK: - Homepage Bookmarks section item's context menu actions
+    @MainActor
     private func getBookmarksActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
 
@@ -237,6 +244,7 @@ struct ContextMenuState {
     }
 
     // MARK: - Pocket item's context menu actions
+    @MainActor
     private func getPocketActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL)
@@ -321,6 +329,7 @@ struct ContextMenuState {
         })
     }
 
+    @MainActor
     private func getShareAction(siteURL: String) -> PhotonRowActions {
         // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
         // this state across isolation boundaries...
@@ -359,8 +368,9 @@ struct ContextMenuState {
     }
 
     // MARK: Dispatch Actions
+    @MainActor
     private static func dispatchSettingsAction(windowUUID: WindowUUID, section: Route.SettingsSection) {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(section)),
                 windowUUID: windowUUID,
@@ -369,13 +379,14 @@ struct ContextMenuState {
         )
     }
 
+    @MainActor
     private static func dispatchOpenNewTabAction(
         windowUUID: WindowUUID,
         siteURL: URL,
         isPrivate: Bool,
         selectNewTab: Bool = false
     ) {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
                     .newTab,
@@ -389,8 +400,9 @@ struct ContextMenuState {
         )
     }
 
+    @MainActor
     private static func dispatchShareSheetAction(windowUUID: WindowUUID, shareSheetConfiguration: ShareSheetConfiguration) {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
                 windowUUID: windowUUID,
@@ -399,8 +411,9 @@ struct ContextMenuState {
         )
     }
 
+    @MainActor
     private static func dispatchContextMenuAction(windowUUID: WindowUUID, site: Site, actionType: ActionType) {
-        store.dispatchLegacy(
+        store.dispatch(
             ContextMenuAction(
                 site: site,
                 windowUUID: windowUUID,
@@ -409,12 +422,13 @@ struct ContextMenuState {
         )
     }
 
+    @MainActor
     private static func dispatchContextMenuActionForSection(
         windowUUID: WindowUUID,
         menuType: MenuType?,
         actionType: ActionType
     ) {
-        store.dispatchLegacy(
+        store.dispatch(
             ContextMenuAction(
                 menuType: menuType,
                 windowUUID: windowUUID,

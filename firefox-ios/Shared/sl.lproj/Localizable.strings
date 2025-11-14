@@ -533,7 +533,7 @@
 "Increase text size" = "Povečaj velikost besedila";
 
 /* Relative time for a tab that was visited within the last few moments. */
-"just now" = "zdaj";
+"just now" = "pravkar";
 
 /* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ActualSize" = "Dejanska velikost";
@@ -1442,7 +1442,7 @@
 "Settings.Passwords.OnboardingMessage.v103" = "Vaša gesla so zdaj zaščitena s Face ID, Touch ID ali geslom naprave.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
-"Settings.Passwords.SavePasswords.v103" = "Shrani gesla";
+"Settings.Passwords.SavePasswords.v103" = "Shranjuj gesla";
 
 /* Title for the passwords screen. */
 "Settings.Passwords.Title.v103" = "Gesla";
@@ -1622,7 +1622,7 @@
 "ShareSheet.SendToDevice.Title.v108" = "Pošlji povezavo na napravo";
 
 /* Label for show search suggestions setting. */
-"Show Search Suggestions" = "Prikaži predloge iskanja";
+"Show Search Suggestions" = "Prikazuj predloge iskanja";
 
 /* Accessibility label for the tabs button in the (top) tab toolbar */
 "Show Tabs" = "Prikaži zavihke";

@@ -34,6 +34,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     var applicationHelper: MockApplicationHelper!
     let messageId = "testId"
 
+    @MainActor
     override func setUp() {
         super.setUp()
         setupTelemetry(with: MockProfile())

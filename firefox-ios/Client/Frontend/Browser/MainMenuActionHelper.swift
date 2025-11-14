@@ -668,8 +668,10 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     @MainActor
     private func share(fileURL: URL, buttonView: UIView) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
+
+        // Since this file is already downloaded, we don't have a remote URL to use for the "Send to Device" activity
         navigationHandler?.showShareSheet(
-            shareType: .file(url: fileURL),
+            shareType: .file(url: fileURL, remoteURL: nil),
             shareMessage: nil,
             sourceView: buttonView,
             sourceRect: nil,

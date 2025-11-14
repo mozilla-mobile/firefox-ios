@@ -5,7 +5,7 @@
 import Foundation
 import Glean
 
-protocol GleanWrapper {
+protocol GleanWrapper: Sendable {
     func handleDeeplinkUrl(url: URL)
     func setUpload(isEnabled: Bool)
     func enableTestingMode()

@@ -1,5 +1,5 @@
 /* Setting for closing private tabs */
-"Close Private Tabs" = "Փակել Գաղտնի ներդիրները";
+"Close Private Tabs" = "Փակել գաղտնի ներդիրները";
 
 /* Context menu option for opening a link in a new private tab */
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Բացել նոր անձնական ներդիրում";

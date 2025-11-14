@@ -145,6 +145,9 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
         let topSitesCells = app.collectionViews.links["TopSitesCell"]
         if #available(iOS 16, *) {
             waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)

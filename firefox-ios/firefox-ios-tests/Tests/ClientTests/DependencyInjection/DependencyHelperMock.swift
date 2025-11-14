@@ -20,13 +20,6 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile as Profile)
 
-        let searchEnginesManager = SearchEnginesManager(
-            prefs: profile.prefs,
-            files: profile.files,
-            engineProvider: MockSearchEngineProvider()
-        )
-        AppContainer.shared.register(service: searchEnginesManager)
-
         let diskImageStore: DiskImageStore = DefaultDiskImageStore(
             files: profile.files,
             namespace: TabManagerConstants.tabScreenshotNamespace,
@@ -52,6 +45,13 @@ class DependencyHelperMock {
                     windowManager: windowManager
                 )
                 AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
+
+                let searchEnginesManager = SearchEnginesManager(
+                    prefs: profile.prefs,
+                    files: profile.files,
+                    engineProvider: MockSearchEngineProvider()
+                )
+                AppContainer.shared.register(service: searchEnginesManager)
             }
         } else {
             DispatchQueue.main.sync {
@@ -61,6 +61,13 @@ class DependencyHelperMock {
                     windowManager: windowManager
                 )
                 AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
+
+                let searchEnginesManager = SearchEnginesManager(
+                    prefs: profile.prefs,
+                    files: profile.files,
+                    engineProvider: MockSearchEngineProvider()
+                )
+                AppContainer.shared.register(service: searchEnginesManager)
             }
         }
 

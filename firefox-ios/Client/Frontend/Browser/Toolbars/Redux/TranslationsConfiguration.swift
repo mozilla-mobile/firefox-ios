@@ -41,9 +41,12 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     }
 
     let prefs: Prefs
-    let state: IconState
+    let state: IconState?
 
-    init(prefs: Prefs, state: IconState = .inactive) {
+    // We initially set icon state as nil until we can detect the
+    // web page and determine if we should show the translation icon
+    // and set the icon to .inactive state.
+    init(prefs: Prefs, state: IconState? = nil) {
         self.prefs = prefs
         self.state = state
     }
