@@ -102,8 +102,7 @@ struct DefaultBrowserUtil {
 
     /// Checks if the application is set as the default web browser
     var isDefault: Bool {
-        guard #available(iOS 18.2, *) else { return false }
-        return (try? application.isDefault(.webBrowser)) ?? false
+        return userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
     }
 
     private func trackIfNewUserIsComingFromBrowserChoiceScreen(_ isDefault: Bool) {
