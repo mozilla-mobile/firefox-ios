@@ -100,10 +100,10 @@ struct DefaultBrowserUtil {
                                     extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: isDefault])
     }
 
-    /// Checks if the user is in a DMA (Digital Markets Act) effective region
-    var isDMAUser: Bool {
-        guard let regionCode = locale.localeRegionCode else { return false }
-        return dmaCountries.contains(regionCode)
+    /// Checks if the application is set as the default web browser
+    var isDefault: Bool {
+        guard #available(iOS 18.2, *) else { return false }
+        return (try? application.isDefault(.webBrowser)) ?? false
     }
 
     private func trackIfNewUserIsComingFromBrowserChoiceScreen(_ isDefault: Bool) {

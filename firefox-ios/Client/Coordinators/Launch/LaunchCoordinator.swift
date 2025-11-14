@@ -263,7 +263,7 @@ final class LaunchCoordinator: BaseCoordinator,
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isDMAUser = defaultBrowserUtil.isDMAUser
+        let isDefault = defaultBrowserUtil.isDefault
 
         let onboardingCards = onboardingModel.cards.filter { viewModel in
             // Filter out cards that are not relevant for the current device type.
@@ -273,7 +273,7 @@ final class LaunchCoordinator: BaseCoordinator,
             }
 
             // Filter out welcome cards for DMA users
-            if isDMAUser && viewModel.name.localizedCaseInsensitiveContains("welcome") {
+            if isDefault && viewModel.name.localizedCaseInsensitiveContains("welcome") {
                 return false
             }
 
