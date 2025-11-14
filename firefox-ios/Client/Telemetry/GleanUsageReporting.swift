@@ -16,6 +16,7 @@ enum UsageReason: String, Equatable {
 protocol GleanUsageReportingApi {
     func setEnabled(_ enabled: Bool)
     func setUsageReason(_ usageReason: UsageReason)
+    @MainActor
     func submitPing()
     func startTrackingDuration()
     func stopTrackingDuration()
@@ -48,6 +49,7 @@ final class GleanUsageReporting: GleanUsageReportingApi {
         GleanMetrics.Pings.shared.usageReporting.submit()
     }
 
+    @MainActor
     private func setUsageConstantValues() {
         GleanMetrics.Usage.os.set("iOS")
         GleanMetrics.Usage.osVersion.set(UIDevice.current.systemVersion)
@@ -64,36 +66,29 @@ final class GleanUsageReporting: GleanUsageReportingApi {
     }
 }
 
-class GleanLifecycleObserver {
+// TODO: Laurie - GleanLifecycleObserver shouldn't be @unchecked Sendable
+final class GleanLifecycleObserver: Notifiable, @unchecked Sendable {
     let gleanUsageReportingApi: GleanUsageReportingApi
     private var isObserving = false
-    private let notificationCenter: NotificationCenter
+    private let notificationCenter: NotificationProtocol
 
     init(
         gleanUsageReportingApi: GleanUsageReportingApi = GleanUsageReporting(),
-        notificationCenter: NotificationCenter = .default
+        notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.gleanUsageReportingApi = gleanUsageReportingApi
         self.notificationCenter = notificationCenter
     }
 
+    @MainActor
     func startObserving() {
         guard !isObserving else { return }
         isObserving = true
 
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appWillEnterForeground),
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
-
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appDidEnterBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
+        startObservingNotifications(withNotificationCenter: notificationCenter,
+                                    forObserver: self,
+                                    observing: [UIApplication.willEnterForegroundNotification,
+                                                UIApplication.didEnterBackgroundNotification])
 
         // Handle the case where the app is already in the foreground when the observer is started
         handleForegroundEvent()
@@ -103,35 +98,36 @@ class GleanLifecycleObserver {
         guard isObserving else { return }
         isObserving = false
 
-        notificationCenter.removeObserver(
-            self,
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
-
-        notificationCenter.removeObserver(
-            self,
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
+        stopObservingNotifications(withNotificationCenter: notificationCenter,
+                                   forObserver: self,
+                                   observing: [UIApplication.willEnterForegroundNotification,
+                                               UIApplication.didEnterBackgroundNotification])
     }
 
-    @objc
-    private func appWillEnterForeground(notification: NSNotification) {
-        handleForegroundEvent()
+    // MARK: Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIApplication.willEnterForegroundNotification:
+                self.handleForegroundEvent()
+            case UIApplication.didEnterBackgroundNotification:
+                self.handleBackgroundEvent()
+            default:
+                break
+            }
+        }
     }
 
-    @objc
-    private func appDidEnterBackground(notification: NSNotification) {
-        handleBackgroundEvent()
-    }
-
+    @MainActor
     func handleForegroundEvent() {
         gleanUsageReportingApi.startTrackingDuration()
         gleanUsageReportingApi.setUsageReason(.active)
         gleanUsageReportingApi.submitPing()
     }
 
+    @MainActor
     func handleBackgroundEvent() {
         gleanUsageReportingApi.stopTrackingDuration()
         gleanUsageReportingApi.setUsageReason(.inactive)
@@ -139,7 +135,7 @@ class GleanLifecycleObserver {
     }
 }
 
-class GleanUsageReportingMetricsService {
+final class GleanUsageReportingMetricsService {
     private var lifecycleObserver: GleanLifecycleObserver
     let profile: Profile
 
@@ -151,6 +147,7 @@ class GleanUsageReportingMetricsService {
         self.lifecycleObserver = lifecycleObserver
     }
 
+    @MainActor
     func start() {
         lifecycleObserver.gleanUsageReportingApi.setEnabled(true)
         checkAndSetUsageProfileId()
