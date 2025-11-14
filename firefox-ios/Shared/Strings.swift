@@ -3248,7 +3248,7 @@ extension String {
                         key: "Settings.AppIconSelection.AppIconNames.Fun.Pride.Title.146",
                         tableName: "AppIconSelection",
                         value: "Pride",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a fox outline in rainbow colors.")
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name the Firefox for iOS app icon of a fox outline in rainbow colors.")
 
                     public static let Retro2004 = MZLocalizedString(
                         key: "Settings.AppIconSelection.AppIconNames.FromContributors.Retro2004.Title.146",
