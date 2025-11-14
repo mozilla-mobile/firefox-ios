@@ -41,7 +41,7 @@ final class ActionViewController: UIViewController {
         }
 
         firefoxURLBuilder.findURLInItems(inputItems) { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
 
             switch result {
             case .success(let shareItem):

@@ -11,11 +11,21 @@ protocol FirefoxURLBuilding {
     func convertTextToURL(_ text: String) -> URL?
 }
 
+enum ShareExtensionError: Error {
+    case noURLFound
+    case noTextFound
+}
+
 struct FirefoxURLBuilder: FirefoxURLBuilding {
-    enum ShareExtensionError: Error {
-        case noURLFound
-        case noTextFound
-    }
+    let mozInternalScheme: String = {
+        guard let string = Bundle.main.object(
+            forInfoDictionaryKey: "MozInternalURLScheme"
+        ) as? String, !string.isEmpty else {
+            // Something went wrong/weird, fallback to the public one.
+            return "firefox"
+        }
+        return string
+    }()
 
     func buildFirefoxURL(from shareItem: ExtractedShareItem) -> URL? {
         let (content, isSearch) = switch shareItem {
@@ -130,14 +140,4 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
 
         return url
     }
-
-    let mozInternalScheme: String = {
-        guard let string = Bundle.main.object(
-            forInfoDictionaryKey: "MozInternalURLScheme"
-        ) as? String, !string.isEmpty else {
-            // Something went wrong/weird, fallback to the public one.
-            return "firefox"
-        }
-        return string
-    }()
 }
