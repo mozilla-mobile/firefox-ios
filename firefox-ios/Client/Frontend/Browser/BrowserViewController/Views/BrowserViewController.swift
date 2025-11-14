@@ -3972,7 +3972,8 @@ class BrowserViewController: UIViewController,
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
 
-        if featureFlags.isFeatureEnabled(.homepageScrim, checking: .buildOnly) {
+        if let isHomeTab = tabManager.selectedTab?.isFxHomeTab,
+           featureFlags.isFeatureEnabled(.homepageScrim, checking: .buildOnly) && isHomeTab {
             configureHomepageZeroSearchView()
         }
 
