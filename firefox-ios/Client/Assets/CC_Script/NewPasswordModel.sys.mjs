@@ -678,4 +678,7 @@ function makeRuleset(coeffs, biases) {
 export const NewPasswordModel = {
   type: "new",
   rules: makeRuleset([...coefficients.new], biases),
+
+  LoginRegex: loginRegex,
+  LoginFormAttrRegex: loginFormAttrRegex,
 };
