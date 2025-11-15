@@ -148,140 +148,164 @@ extension PasswordDetailViewController: UITableViewDataSource {
 
         switch cellType {
         case .breach:
-            guard let breachCell = cell(tableView: tableView, forIndexPath: indexPath) else {
-                return UITableViewCell()
-            }
-            guard let breach = viewModel.breachRecord else { return breachCell }
-            breachCell.isHidden = false
-            let breachDetailView: BreachAlertsDetailView = .build()
-            breachCell.contentView.addSubview(breachDetailView)
-
-            NSLayoutConstraint.activate([
-                breachDetailView.leadingAnchor.constraint(equalTo: breachCell.contentView.leadingAnchor,
-                                                          constant: UX.horizontalMargin),
-                breachDetailView.topAnchor.constraint(equalTo: breachCell.contentView.topAnchor,
-                                                      constant: UX.horizontalMargin),
-                breachDetailView.trailingAnchor.constraint(equalTo: breachCell.contentView.trailingAnchor,
-                                                           constant: -UX.horizontalMargin),
-                breachDetailView.bottomAnchor.constraint(equalTo: breachCell.contentView.bottomAnchor,
-                                                         constant: -UX.horizontalMargin)
-            ])
-            breachDetailView.setup(breach)
-            breachDetailView.applyTheme(theme: currentTheme())
-
-            breachDetailView.onTapLearnMore = { [weak self] in
-                self?.didTapBreachLearnMore()
-            }
-
-            breachDetailView.onTapBreachLink = { [weak self] in
-                self?.didTapBreachLink()
-            }
-
-            breachCell.isAccessibilityElement = false
-            breachCell.contentView.accessibilityElementsHidden = true
-            breachCell.accessibilityElements = [breachDetailView]
-            breachCell.applyTheme(theme: currentTheme())
-
-            return breachCell
+            return cell(tableView: tableView, forBreach: indexPath)
 
         case .username:
-            guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
-                return UITableViewCell()
-            }
-            let cellModel = LoginDetailTableViewCellModel(
-                title: .LoginDetailUsername,
-                description: viewModel.login.username,
-                keyboardType: .emailAddress,
-                returnKeyType: .next,
-                a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
-                isEditingFieldData: isEditingFieldData)
-            loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: currentTheme())
-            usernameField = loginCell.descriptionLabel
-            return loginCell
+            return cell(tableView: tableView, forUsername: indexPath)
 
         case .password:
-            guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
-                return UITableViewCell()
-            }
-            let cellModel = LoginDetailTableViewCellModel(
-                title: .LoginDetailPassword,
-                description: viewModel.login.password,
-                displayDescriptionAsPassword: true,
-                a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
-                isEditingFieldData: isEditingFieldData)
-            if #available(iOS 26.0, *) {
-                setCellSeparatorHidden(loginCell, useRightInset: false)
-            } else {
-                setCellSeparatorHidden(loginCell)
-            }
-            loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: currentTheme())
-            passwordField = loginCell.descriptionLabel
-            return loginCell
+            return cell(tableView: tableView, forPassword: indexPath)
 
         case .website:
-            guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
-                return UITableViewCell()
-            }
-            let cellModel = LoginDetailTableViewCellModel(
-                title: .LoginDetailWebsite,
-                description: viewModel.login.hostname,
-                a11yId: AccessibilityIdentifiers.Settings.Passwords.websiteField)
-            if isEditingFieldData {
-                loginCell.contentView.alpha = 0.5
-            }
-            loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: currentTheme())
-            websiteField = loginCell.descriptionLabel
-            return loginCell
+            return cell(tableView: tableView, forWebsite: indexPath)
 
         case .lastModifiedSeparator:
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: LoginDetailCenteredTableViewCell.cellIdentifier,
-                for: indexPath) as? LoginDetailCenteredTableViewCell else {
-                return UITableViewCell()
-            }
-
-            let created: String = .LoginDetailCreatedAt
-            let lastModified: String = .LoginDetailModifiedAt
-            let lastModifiedFormatted = String(
-                format: lastModified,
-                Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged))
-                    .toRelativeTimeString(dateStyle: .medium)
-            )
-            let createdFormatted = String(
-                format: created,
-                Date.fromTimestamp(UInt64(viewModel.login.timeCreated))
-                    .toRelativeTimeString(dateStyle: .medium, timeStyle: .none)
-            )
-            let cellModel = LoginDetailCenteredTableViewCellModel(
-                label: createdFormatted + "\n" + lastModifiedFormatted)
-            cell.configure(viewModel: cellModel)
-            if #available(iOS 26.0, *) {
-                setCellSeparatorHidden(cell, useRightInset: false)
-            } else {
-                setCellSeparatorHidden(cell)
-            }
-            cell.applyTheme(theme: currentTheme())
-            return cell
+            return cell(tableView: tableView, forLastModifiedSeparator: indexPath)
 
         case .delete:
-            guard let deleteCell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier,
-                                                                 for: indexPath) as? ThemedTableViewCell else {
-                return UITableViewCell()
-            }
-            deleteCell.textLabel?.text = .LoginDetailDelete
-            deleteCell.textLabel?.textAlignment = .center
-            deleteCell.accessibilityTraits = UIAccessibilityTraits.button
-            deleteCell.selectionStyle = .none
-            deleteCell.configure(viewModel: ThemedTableViewCellViewModel(theme: currentTheme(),
-                                                                         type: .destructive))
-            deleteCell.applyTheme(theme: currentTheme())
-
-            setCellSeparatorFullWidth(deleteCell)
-            return deleteCell
+            return cell(tableView: tableView, forDelete: indexPath)
         }
+    }
+
+    private func cell(tableView: UITableView, forBreach indexPath: IndexPath) -> UITableViewCell {
+        guard let breachCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+            return UITableViewCell()
+        }
+        guard let breach = viewModel.breachRecord else { return breachCell }
+        breachCell.isHidden = false
+        let breachDetailView: BreachAlertsDetailView = .build()
+        breachCell.contentView.addSubview(breachDetailView)
+
+        NSLayoutConstraint.activate([
+            breachDetailView.leadingAnchor.constraint(equalTo: breachCell.contentView.leadingAnchor,
+                                                      constant: UX.horizontalMargin),
+            breachDetailView.topAnchor.constraint(equalTo: breachCell.contentView.topAnchor,
+                                                  constant: UX.horizontalMargin),
+            breachDetailView.trailingAnchor.constraint(equalTo: breachCell.contentView.trailingAnchor,
+                                                       constant: -UX.horizontalMargin),
+            breachDetailView.bottomAnchor.constraint(equalTo: breachCell.contentView.bottomAnchor,
+                                                     constant: -UX.horizontalMargin)
+        ])
+        breachDetailView.setup(breach)
+        breachDetailView.applyTheme(theme: currentTheme())
+
+        breachDetailView.onTapLearnMore = { [weak self] in
+            self?.didTapBreachLearnMore()
+        }
+
+        breachDetailView.onTapBreachLink = { [weak self] in
+            self?.didTapBreachLink()
+        }
+
+        breachCell.isAccessibilityElement = false
+        breachCell.contentView.accessibilityElementsHidden = true
+        breachCell.accessibilityElements = [breachDetailView]
+        breachCell.applyTheme(theme: currentTheme())
+
+        return breachCell
+    }
+
+    private func cell(tableView: UITableView, forUsername indexPath: IndexPath) -> UITableViewCell {
+        guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+            return UITableViewCell()
+        }
+        let cellModel = LoginDetailTableViewCellModel(
+            title: .LoginDetailUsername,
+            description: viewModel.login.username,
+            keyboardType: .emailAddress,
+            returnKeyType: .next,
+            a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
+            isEditingFieldData: isEditingFieldData)
+        loginCell.configure(viewModel: cellModel)
+        loginCell.applyTheme(theme: currentTheme())
+        usernameField = loginCell.descriptionLabel
+        return loginCell
+    }
+
+    private func cell(tableView: UITableView, forPassword indexPath: IndexPath) -> UITableViewCell {
+        guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+            return UITableViewCell()
+        }
+        let cellModel = LoginDetailTableViewCellModel(
+            title: .LoginDetailPassword,
+            description: viewModel.login.password,
+            displayDescriptionAsPassword: true,
+            a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
+            isEditingFieldData: isEditingFieldData)
+        if #available(iOS 26.0, *) {
+            setCellSeparatorHidden(loginCell, useRightInset: false)
+        } else {
+            setCellSeparatorHidden(loginCell)
+        }
+        loginCell.configure(viewModel: cellModel)
+        loginCell.applyTheme(theme: currentTheme())
+        passwordField = loginCell.descriptionLabel
+        return loginCell
+    }
+
+    private func cell(tableView: UITableView, forWebsite indexPath: IndexPath) -> UITableViewCell {
+        guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+            return UITableViewCell()
+        }
+        let cellModel = LoginDetailTableViewCellModel(
+            title: .LoginDetailWebsite,
+            description: viewModel.login.hostname,
+            a11yId: AccessibilityIdentifiers.Settings.Passwords.websiteField)
+        if isEditingFieldData {
+            loginCell.contentView.alpha = 0.5
+        }
+        loginCell.configure(viewModel: cellModel)
+        loginCell.applyTheme(theme: currentTheme())
+        websiteField = loginCell.descriptionLabel
+        return loginCell
+    }
+
+    private func cell(tableView: UITableView, forLastModifiedSeparator indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: LoginDetailCenteredTableViewCell.cellIdentifier,
+            for: indexPath) as? LoginDetailCenteredTableViewCell else {
+            return UITableViewCell()
+        }
+
+        let created: String = .LoginDetailCreatedAt
+        let lastModified: String = .LoginDetailModifiedAt
+        let lastModifiedFormatted = String(
+            format: lastModified,
+            Date.fromTimestamp(UInt64(viewModel.login.timePasswordChanged))
+                .toRelativeTimeString(dateStyle: .medium)
+        )
+        let createdFormatted = String(
+            format: created,
+            Date.fromTimestamp(UInt64(viewModel.login.timeCreated))
+                .toRelativeTimeString(dateStyle: .medium, timeStyle: .none)
+        )
+        let cellModel = LoginDetailCenteredTableViewCellModel(
+            label: createdFormatted + "\n" + lastModifiedFormatted)
+        cell.configure(viewModel: cellModel)
+        if #available(iOS 26.0, *) {
+            setCellSeparatorHidden(cell, useRightInset: false)
+        } else {
+            setCellSeparatorHidden(cell)
+        }
+        cell.applyTheme(theme: currentTheme())
+        return cell
+    }
+
+    private func cell(tableView: UITableView, forDelete indexPath: IndexPath) -> UITableViewCell {
+        guard let deleteCell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier,
+                                                             for: indexPath) as? ThemedTableViewCell else {
+            return UITableViewCell()
+        }
+        deleteCell.textLabel?.text = .LoginDetailDelete
+        deleteCell.textLabel?.textAlignment = .center
+        deleteCell.accessibilityTraits = UIAccessibilityTraits.button
+        deleteCell.selectionStyle = .none
+        deleteCell.configure(viewModel: ThemedTableViewCellViewModel(theme: currentTheme(),
+                                                                     type: .destructive))
+        deleteCell.applyTheme(theme: currentTheme())
+
+        setCellSeparatorFullWidth(deleteCell)
+        return deleteCell
     }
 
     private func cell(tableView: UITableView, forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell? {
