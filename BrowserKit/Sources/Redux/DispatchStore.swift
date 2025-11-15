@@ -6,7 +6,6 @@ import Foundation
 
 /// Protocol that allows to subscribe to the store and receive dispatched actions to modify the store state
 public protocol DispatchStore {
-    nonisolated func dispatchLegacy(_ action: Action)
     @MainActor
     func dispatch(_ action: Action)
 }

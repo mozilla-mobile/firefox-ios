@@ -664,7 +664,7 @@ private extension LegacyTabScrollController {
             self.bottomContainerOffset = bottomContainerOffset
 
             if isMinimalAddressBarEnabled && tab?.isFindInPageMode == false && tab?.url?.isReaderModeURL == false {
-                store.dispatchLegacy(
+                store.dispatch(
                     ToolbarAction(
                         scrollAlpha: Float(alpha),
                         windowUUID: windowUUID,
@@ -780,7 +780,7 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
         if (lastContentOffsetY > 0 && contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && contentOffset.y > 0) {
             lastContentOffsetY = contentOffset.y
-            store.dispatchLegacy(
+            store.dispatch(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: contentOffset,
                     windowUUID: windowUUID,

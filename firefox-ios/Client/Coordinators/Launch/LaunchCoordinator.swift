@@ -26,6 +26,7 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
+    private let defaultBrowserUtil: DefaultBrowserUtil
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -33,10 +34,12 @@ final class LaunchCoordinator: BaseCoordinator,
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
+         defaultBrowserUtil: DefaultBrowserUtil = DefaultBrowserUtil()) {
         self.profile = profile
         self.isIphone = isIphone
         self.windowUUID = windowUUID
+        self.defaultBrowserUtil = defaultBrowserUtil
         super.init(router: router)
     }
 
@@ -260,12 +263,21 @@ final class LaunchCoordinator: BaseCoordinator,
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isDefault = defaultBrowserUtil.isDefault
+
         let onboardingCards = onboardingModel.cards.filter { viewModel in
             // Filter out cards that are not relevant for the current device type.
             if isPad, let action = viewModel.multipleChoiceButtons.first?.action,
                action == .toolbarTop || action == .toolbarBottom {
                 return false
             }
+
+            // Filter out welcome cards for DMA users
+            // TODO: FXIOS-14125 #30620 Test DMA filtering for Japan/Global Onboarding
+            if isDefault && viewModel.name.localizedCaseInsensitiveContains("welcome") {
+                return false
+            }
+
             return true
         }
 
