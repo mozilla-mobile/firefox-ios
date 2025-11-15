@@ -22,7 +22,7 @@ public protocol CrashManager: Sendable {
  * We implement this on exception classes that correspond to Rust errors to
  * customize how the crash reports look.
  *
- * CrashReporting implementors should test if exceptions implement this
+ * CrashReporting implementers should test if exceptions implement this
  * interface.  If so, they should try to customize their crash reports to match.
  */
 public protocol CustomCrashReport {
@@ -234,7 +234,7 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
         return event
     }
 
-    /// Do not send messages to Sentry if disabled OR if we are not on beta and the severity isnt severe
+    /// Do not send messages to Sentry if disabled OR if we are not on beta and the severity isn't severe
     /// This is the behaviour we want for Sentry logging
     ///       .info .warning .fatal
     /// Debug      n        n          n
