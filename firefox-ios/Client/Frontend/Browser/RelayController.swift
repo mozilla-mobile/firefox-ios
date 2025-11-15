@@ -182,11 +182,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     private func configureRelayRSClient() {
-        guard let rsService = profile.remoteSettingsService else {
-            logger.log("[RELAY] No RS service available on profile.", level: .warning, category: .autofill)
-            return
-        }
-        relayRSClient = RelayRemoteSettingsClient(rsService: rsService)
+        relayRSClient = RelayRemoteSettingsClient(rsService: profile.remoteSettingsService)
     }
 
     private func beginObserving() {
