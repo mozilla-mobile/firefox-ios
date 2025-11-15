@@ -61,7 +61,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build { [weak self] view in
         view.refreshPasswordButtonOnClick = {
             guard let self else {return}
-            store.dispatchLegacy(PasswordGeneratorAction(
+            store.dispatch(PasswordGeneratorAction(
                 windowUUID: self.windowUUID,
                 actionType: PasswordGeneratorActionType.userTappedRefreshPassword,
                 currentFrame: self.currentFrame)
@@ -179,9 +179,9 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     // MARK: - Interaction Handlers
     @objc
     func useButtonOnClick() {
-        store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                     actionType: PasswordGeneratorActionType.userTappedUsePassword,
-                                                     currentFrame: currentFrame))
+        store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
+                                               actionType: PasswordGeneratorActionType.userTappedUsePassword,
+                                               currentFrame: currentFrame))
         dismiss(animated: true)
     }
 
@@ -205,7 +205,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     // MARK: - Redux
     func subscribeToRedux() {
-        store.dispatchLegacy(
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
