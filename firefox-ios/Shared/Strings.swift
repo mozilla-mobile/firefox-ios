@@ -3207,12 +3207,33 @@ extension String {
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green.")
 
                 /// Names and subtitles for approved icons added by contributors.
-                struct FromContributors {
+                public struct FromContributors {
                     public static let Momo = MZLocalizedString(
                         key: "Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139",
                         tableName: "AppIconSelection",
                         value: "Momo",
                         comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe.")
+                }
+
+                /// Names and subtitles for approved icons considered "fun".
+                public struct Fun {
+                    public static let Cool = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Cool.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Cool",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with sunglasses.")
+
+                    public static let Cuddling = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Cuddling.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Cuddling",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a fox cuddling a globe.")
+
+                    public static let Flaming = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Flaming.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Flaming",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with flames.")
                 }
             }
 

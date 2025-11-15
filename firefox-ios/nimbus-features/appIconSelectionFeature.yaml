@@ -1,0 +1,20 @@
+# The configuration for the appIconSelectionFeature feature
+# Please remember to add this feature to the feature flag spreadsheet.
+features:
+  app-icon-selection-feature:
+    description: >
+      Controls which app icons users can select as their default app icon from the App Icon Selection screen in Settings.
+    variables:
+      funIconsEnabled:
+        description: >
+          Controls whether users see the fun icons in the app icon settings.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          funIconsEnabled: false
+      - channel: developer
+        value:
+          funIconsEnabled: true
+
