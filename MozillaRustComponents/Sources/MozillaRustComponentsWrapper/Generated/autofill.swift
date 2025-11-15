@@ -400,6 +400,22 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterUInt64: FfiConverterPrimitive {
+    typealias FfiType = UInt64
+    typealias SwiftType = UInt64
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt64 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterInt64: FfiConverterPrimitive {
     typealias FfiType = Int64
     typealias SwiftType = Int64
@@ -510,6 +526,16 @@ public protocol StoreProtocol: AnyObject, Sendable {
     func runMaintenance() throws 
     
     func scrubEncryptedData() throws 
+    
+    /**
+     * The `scrub_undecryptable_credit_card_data_for_remote_replacement` function locally scrubs credit cards
+     * that cannot be decrypted, sets the record's metadata to their default values, and resets the credit card
+     * engine so any existing server records can overwrite the locally scrubbed records.
+     *
+     * NB: This function was created to unblock iOS credit card users who are unable to sync records and should not be used
+     * outside of this use case.
+     */
+    func scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKey: String) throws  -> CreditCardsDeletionMetrics
     
     func touchAddress(guid: String) throws 
     
@@ -664,6 +690,22 @@ open func scrubEncryptedData()throws   {try rustCallWithError(FfiConverterTypeAu
     uniffi_autofill_fn_method_store_scrub_encrypted_data(self.uniffiClonePointer(),$0
     )
 }
+}
+    
+    /**
+     * The `scrub_undecryptable_credit_card_data_for_remote_replacement` function locally scrubs credit cards
+     * that cannot be decrypted, sets the record's metadata to their default values, and resets the credit card
+     * engine so any existing server records can overwrite the locally scrubbed records.
+     *
+     * NB: This function was created to unblock iOS credit card users who are unable to sync records and should not be used
+     * outside of this use case.
+     */
+open func scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKey: String)throws  -> CreditCardsDeletionMetrics  {
+    return try  FfiConverterTypeCreditCardsDeletionMetrics_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement(self.uniffiClonePointer(),
+        FfiConverterString.lower(localEncryptionKey),$0
+    )
+})
 }
     
 open func touchAddress(guid: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
@@ -1071,6 +1113,71 @@ public func FfiConverterTypeCreditCard_lift(_ buf: RustBuffer) throws -> CreditC
 #endif
 public func FfiConverterTypeCreditCard_lower(_ value: CreditCard) -> RustBuffer {
     return FfiConverterTypeCreditCard.lower(value)
+}
+
+
+/**
+ * Metrics tracking scrubbing of credit cards that cannot be decrypted, see
+ */
+public struct CreditCardsDeletionMetrics {
+    public var totalScrubbedRecords: UInt64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(totalScrubbedRecords: UInt64) {
+        self.totalScrubbedRecords = totalScrubbedRecords
+    }
+}
+
+#if compiler(>=6)
+extension CreditCardsDeletionMetrics: Sendable {}
+#endif
+
+
+extension CreditCardsDeletionMetrics: Equatable, Hashable {
+    public static func ==(lhs: CreditCardsDeletionMetrics, rhs: CreditCardsDeletionMetrics) -> Bool {
+        if lhs.totalScrubbedRecords != rhs.totalScrubbedRecords {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(totalScrubbedRecords)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardsDeletionMetrics: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardsDeletionMetrics {
+        return
+            try CreditCardsDeletionMetrics(
+                totalScrubbedRecords: FfiConverterUInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: CreditCardsDeletionMetrics, into buf: inout [UInt8]) {
+        FfiConverterUInt64.write(value.totalScrubbedRecords, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardsDeletionMetrics_lift(_ buf: RustBuffer) throws -> CreditCardsDeletionMetrics {
+    return try FfiConverterTypeCreditCardsDeletionMetrics.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardsDeletionMetrics_lower(_ value: CreditCardsDeletionMetrics) -> RustBuffer {
+    return FfiConverterTypeCreditCardsDeletionMetrics.lower(value)
 }
 
 
@@ -1588,6 +1695,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_scrub_encrypted_data() != 8431) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement() != 15563) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_touch_address() != 22966) {

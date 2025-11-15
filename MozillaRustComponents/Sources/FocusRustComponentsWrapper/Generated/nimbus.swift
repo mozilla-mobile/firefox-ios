@@ -747,7 +747,7 @@ open class NimbusClient: NimbusClientProtocol, @unchecked Sendable {
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
         return try! rustCall { uniffi_nimbus_fn_clone_nimbusclient(self.pointer, $0) }
     }
-public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, coenrollingFeatureIds: [String], dbpath: String, remoteSettingsConfig: RemoteSettingsConfig?, metricsHandler: MetricsHandler, geckoPrefHandler: GeckoPrefHandler?)throws  {
+public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, coenrollingFeatureIds: [String], dbpath: String, metricsHandler: MetricsHandler, geckoPrefHandler: GeckoPrefHandler?, remoteSettingsService: RemoteSettingsService?, collectionName: String?)throws  {
     let pointer =
         try rustCallWithError(FfiConverterTypeNimbusError_lift) {
     uniffi_nimbus_fn_constructor_nimbusclient_new(
@@ -755,9 +755,10 @@ public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, c
         FfiConverterOptionTypeRecordedContext.lower(recordedContext),
         FfiConverterSequenceString.lower(coenrollingFeatureIds),
         FfiConverterString.lower(dbpath),
-        FfiConverterOptionTypeRemoteSettingsConfig.lower(remoteSettingsConfig),
         FfiConverterCallbackInterfaceMetricsHandler_lower(metricsHandler),
-        FfiConverterOptionCallbackInterfaceGeckoPrefHandler.lower(geckoPrefHandler),$0
+        FfiConverterOptionCallbackInterfaceGeckoPrefHandler.lower(geckoPrefHandler),
+        FfiConverterOptionTypeRemoteSettingsService.lower(remoteSettingsService),
+        FfiConverterOptionString.lower(collectionName),$0
     )
 }
     self.init(unsafeFromRawPointer: pointer)
@@ -3774,6 +3775,30 @@ fileprivate struct FfiConverterOptionTypeRecordedContext: FfiConverterRustBuffer
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionTypeRemoteSettingsService: FfiConverterRustBuffer {
+    typealias SwiftType = RemoteSettingsService?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeRemoteSettingsService.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeRemoteSettingsService.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionTypePrefEnrollmentData: FfiConverterRustBuffer {
     typealias SwiftType = PrefEnrollmentData?
 
@@ -3790,30 +3815,6 @@ fileprivate struct FfiConverterOptionTypePrefEnrollmentData: FfiConverterRustBuf
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterTypePrefEnrollmentData.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeRemoteSettingsConfig: FfiConverterRustBuffer {
-    typealias SwiftType = RemoteSettingsConfig?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeRemoteSettingsConfig.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeRemoteSettingsConfig.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -4410,7 +4411,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_recordedcontext_to_json() != 46595) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 16871) {
+    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 28763) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 54971) {
