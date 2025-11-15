@@ -3127,7 +3127,7 @@ extension String {
                     tableName: "AppIconSelection",
                     value: "Retro 2004",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2004.")
-                
+
                 public static let Retro2017 = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Retro2017.Title.v139",
                     tableName: "AppIconSelection",
