@@ -436,9 +436,10 @@ class RemoteTabsViewController: UIViewController,
 
         let isCollapsed = hiddenSections.contains(section)
         let collapsibleState = isCollapsed ? ExpandButtonState.trailing : ExpandButtonState.down
-        let headerModel = SiteTableViewHeaderModel(title: client.name,
-                                                   isCollapsible: true,
-                                                   collapsibleState: collapsibleState)
+        let headerModel = SiteTableViewHeaderModel(
+            title: client.name,
+            accessory: .collapsible(state: collapsibleState)
+        )
         headerView.configure(headerModel)
         headerView.showBorder(for: .bottom, true)
         headerView.showBorder(for: .top, section != 0)

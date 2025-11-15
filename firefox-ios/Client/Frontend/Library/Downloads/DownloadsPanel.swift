@@ -324,9 +324,10 @@ class DownloadsPanel: UIViewController,
 
         let title = viewModel.headerTitle(for: section) ?? ""
 
-        let headerViewModel = SiteTableViewHeaderModel(title: title,
-                                                       isCollapsible: false,
-                                                       collapsibleState: nil)
+        let headerViewModel = SiteTableViewHeaderModel(
+            title: title,
+            accessory: .none
+        )
         headerView.configure(headerViewModel)
         headerView.showBorder(for: .top, !viewModel.isFirstSection(section))
         headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
