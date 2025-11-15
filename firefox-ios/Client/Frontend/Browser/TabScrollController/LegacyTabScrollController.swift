@@ -523,6 +523,7 @@ private extension LegacyTabScrollController {
     ///
     /// - Returns: `true` if the scroll delta is allowed without rubberbanding; otherwise, `false`.
     func checkRubberbanding() -> Bool {
+        guard !isMinimalAddressBarEnabled else { return false }
         // Check top rubberbanding
         guard scrollDirection == .up else {
             return isBottomRubberbanding && hasScrollableContent
