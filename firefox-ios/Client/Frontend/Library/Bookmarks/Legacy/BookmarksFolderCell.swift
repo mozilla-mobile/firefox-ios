@@ -10,6 +10,7 @@ import class MozillaAppServices.BookmarkItemData
 
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
 protocol BookmarksFolderCell {
+    @MainActor
     func getViewModel() -> OneLineTableViewCellViewModel
 }
 

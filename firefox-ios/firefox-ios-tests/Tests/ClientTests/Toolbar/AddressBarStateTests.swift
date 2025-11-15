@@ -20,7 +20,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setIsHostedSummarizerFeatureEnabled(enabled: false)
-        DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
     }
 
     override func tearDown() {

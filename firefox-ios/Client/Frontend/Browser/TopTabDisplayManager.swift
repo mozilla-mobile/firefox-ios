@@ -52,8 +52,7 @@ protocol TabDisplayerDelegate: AnyObject {
 
 // Regular tab order persistence for TabDisplayManager
 struct TabDisplayOrder: Codable {
-    // TODO: FXIOS-12589 UserDefaults is not Sendable
-    nonisolated(unsafe) static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+    static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
     var regularTabUUID: [TabUUID] = []
 }
 
@@ -270,11 +269,6 @@ class TopTabDisplayManager: NSObject {
         }
 
         refreshStore(shouldAnimate: true)
-
-        let notificationObject = [Tab.privateModeKey: isPrivate]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
-                                        object: notificationObject,
-                                        userInfo: tabManager.windowUUID.userInfo)
     }
 
     @MainActor

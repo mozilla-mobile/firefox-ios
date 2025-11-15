@@ -1,0 +1,12 @@
+/* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "新功能！現在起行動板也提供 %@ Relay 轉寄信箱功能。";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "您已經有 5 組免費的轉寄信箱使用中，我們幫您挑選了一組。";
+
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "目前無法使用轉寄信箱服務，請稍候幾分鐘再試一次。";
+
+/* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
+"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "使用轉寄信箱";
+

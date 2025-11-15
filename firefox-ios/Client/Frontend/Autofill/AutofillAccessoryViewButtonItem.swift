@@ -33,7 +33,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     // MARK: - Properties
     private let accessoryImageView: UIImageView
     private let useAccessoryTextLabel: UILabel
-    private let tappedAccessoryButtonAction: (() -> Void)?
+    private let tappedAccessoryButtonAction: (@MainActor () -> Void)?
 
     /// Tint color for the accessory image view.
     var accessoryImageViewTintColor: UIColor? {
@@ -128,7 +128,6 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         accessoryImageView.accessibilityElementsHidden = !isiOS26Available
         accessoryImageView.accessibilityTraits = isiOS26Available ? .button : .none
         useAccessoryTextLabel.accessibilityTraits = isiOS26Available ? .none : .button
-        useAccessoryTextLabel.isHidden = isiOS26Available
     }
 
     private func updateBackgroundColor() {

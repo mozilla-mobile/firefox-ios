@@ -160,6 +160,7 @@ struct MainMenuState: ScreenState, Sendable {
         return handleReducer(state: state, action: action)
     }
 
+    @MainActor
     private static func handleReducer(state: MainMenuState, action: Action) -> MainMenuState {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
@@ -295,6 +296,7 @@ struct MainMenuState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleUpdateCurrentTabInfoAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction,
               let currentTabInfo = action.currentTabInfo
@@ -317,6 +319,7 @@ struct MainMenuState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleUpdateProfileImageAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction,
               let accountProfileImage = action.accountProfileImage,
@@ -341,6 +344,7 @@ struct MainMenuState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleShowMoreOptions(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction,
               let currentTabInfo = state.currentTabInfo,

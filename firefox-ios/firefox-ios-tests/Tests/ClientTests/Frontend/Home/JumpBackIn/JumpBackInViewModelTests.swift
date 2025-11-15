@@ -22,11 +22,10 @@ class JumpBackInViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-
-        DependencyHelperMock().bootstrapDependencies()
+        mockTabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         adaptor = JumpBackInDataAdaptorMock()
         mockProfile = MockProfile()
-        mockTabManager = MockTabManager()
         stubBrowserViewController = BrowserViewController(
             profile: mockProfile,
             tabManager: mockTabManager

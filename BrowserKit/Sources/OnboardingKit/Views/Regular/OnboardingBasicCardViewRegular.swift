@@ -63,8 +63,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.imageHeight)
-                .accessibilityLabel(viewModel.title)
+                .frame(height: min(img.size.height, UX.CardView.maxImageHeight))
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }

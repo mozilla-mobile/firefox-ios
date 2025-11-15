@@ -204,6 +204,7 @@ enum AppIcon: String, CaseIterable {
 
     /// Initialize an `AppIcon` from the current `UIApplication.shared.alternateIconName` setting. If the icon cannot be
     /// identified, returns `nil`. This might happen if an old asset is renamed or removed from the asset catalog.
+    @MainActor
     static func initFromSystem() -> AppIcon? {
         if let currentAlternativeIcon = UIApplication.shared.alternateIconName {
             let matchingAppIcons = AppIcon.allCases.filter({ $0.appIconAssetName == currentAlternativeIcon })

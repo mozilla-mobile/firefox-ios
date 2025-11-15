@@ -17,11 +17,11 @@ struct HomepageHeroImageViewModel: HeroImageViewModel {
     init(
         urlStringRequest: String,
         type: SiteImageView.SiteImageType = .heroImage,
-        generalCornerRadius: CGFloat = HomepageViewModel.UX.generalCornerRadius,
-        faviconCornerRadius: CGFloat = HomepageViewModel.UX.generalCornerRadius,
-        faviconBorderWidth: CGFloat = HomepageViewModel.UX.generalBorderWidth,
+        generalCornerRadius: CGFloat = HomepageUX.generalCornerRadius,
+        faviconCornerRadius: CGFloat = HomepageUX.generalCornerRadius,
+        faviconBorderWidth: CGFloat = HomepageUX.generalBorderWidth,
         heroImageSize: CGSize,
-        fallbackFaviconSize: CGSize = HomepageViewModel.UX.fallbackFaviconSize
+        fallbackFaviconSize: CGSize = HomepageUX.fallbackFaviconSize
     ) {
         self.urlStringRequest = urlStringRequest
         self.type = type

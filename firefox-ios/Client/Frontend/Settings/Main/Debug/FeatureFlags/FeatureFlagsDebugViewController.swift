@@ -90,16 +90,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageRebuild,
-                titleText: format(string: "Homepage Rebuild"),
-                statusText: format(string: "Toggle to use the homepage rebuild")
+                with: .homepageSearchBar,
+                titleText: format(string: "Homepage Search Bar"),
+                statusText: format(string: "Toggle to enable homepage search bar for redesign")
             ) { [weak self] _ in
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageSearchBar,
-                titleText: format(string: "Homepage Search Bar"),
-                statusText: format(string: "Toggle to enable homepage search bar for redesign")
+                with: .homepageScrim,
+                titleText: format(string: "Homepage Scrim"),
+                statusText: format(string: "Toggle to enable the scrim on search")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -199,13 +199,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .translation,
                 titleText: format(string: "Translations"),
                 statusText: format(string: "Toggle to enable translations feature")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .hntTopSitesVisualRefresh,
-                titleText: format(string: "Top Sites Visual Refresh"),
-                statusText: format(string: "Toggle to enable the top sites visual refresh")
             ) { [weak self] _ in
                 self?.reloadView()
             },

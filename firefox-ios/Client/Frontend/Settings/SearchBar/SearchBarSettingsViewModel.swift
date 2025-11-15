@@ -43,6 +43,7 @@ enum SearchBarPosition: String, FlaggableFeatureOptions, CaseIterable {
 }
 
 protocol SearchBarPreferenceDelegate: AnyObject {
+    @MainActor
     func didUpdateSearchBarPositionPreference()
 }
 
@@ -130,6 +131,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 
 // MARK: Private
 extension SearchBarSettingsViewModel {
+    @MainActor
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
         let previousPosition: SearchBarPosition? = featureFlags.getCustomState(for: .searchBarPosition)
 

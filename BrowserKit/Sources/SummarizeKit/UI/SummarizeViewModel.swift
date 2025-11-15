@@ -25,8 +25,10 @@ public protocol SummarizeViewModel {
 }
 
 public protocol SummarizeTermOfServiceAcceptor: AnyObject {
+    @MainActor
     func acceptConsent()
 
+    @MainActor
     func denyConsent()
 }
 

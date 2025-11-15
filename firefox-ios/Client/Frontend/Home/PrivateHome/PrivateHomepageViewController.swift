@@ -59,10 +59,6 @@ final class PrivateHomepageViewController: UIViewController,
 
     private let scrollView: UIScrollView = .build()
 
-    private var headerViewModel: HomepageHeaderCellViewModel {
-        return HomepageHeaderCellViewModel(showiPadSetup: shouldUseiPadSetup())
-    }
-
     private let scrollContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.scrollContainerStackSpacing
@@ -217,7 +213,7 @@ final class PrivateHomepageViewController: UIViewController,
         guard let privateBrowsingURL = SupportUtils.URLForPrivateBrowsingLearnMore else {
             self.logger.log("Failed to retrieve URL from SupportUtils.URLForPrivateBrowsingLearnMore",
                             level: .debug,
-                            category: .legacyHomepage)
+                            category: .homepage)
             return
         }
         parentCoordinator?.homePanelDidRequestToOpenInNewTab(

@@ -164,12 +164,18 @@ class BrowsingPDFTests: BaseTestCase {
             .element
             .children(matching: .other)
             .element(boundBy: 0)
+        if iPad() {
+            app.buttons["Cancel"].waitAndTap()
+        }
         pdfTopSite.waitAndTap()
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
 
         // Remove pdf pinned site
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons["Cancel"].waitAndTap()
+        }
         mozWaitForElementToExist(pinnedItem)
         pdfTopSite.press(forDuration: 1)
         app.tables.cells.buttons[StandardImageIdentifiers.Large.pinSlash].waitAndTap()

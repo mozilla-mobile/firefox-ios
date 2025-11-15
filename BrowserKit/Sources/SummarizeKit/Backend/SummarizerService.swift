@@ -48,6 +48,7 @@ public final class DefaultSummarizerService: SummarizerService {
         self.maxWords = maxWords
     }
 
+    @MainActor
     public func summarize(from webView: WKWebView) async throws -> String {
         do {
             let text = try await extractSummarizableText(from: webView)
@@ -69,7 +70,7 @@ public final class DefaultSummarizerService: SummarizerService {
         AsyncThrowingStream { continuation in
             streamContinuation = continuation
             // TODO: FXIOS-13418 Passing closure as a 'sending' parameter risks causing data races
-            Task {
+            Task { @MainActor in
                 do {
                     let text = try await self.extractSummarizableText(from: webView)
                     summarizerLifecycle?.summarizerServiceDidStart(text)

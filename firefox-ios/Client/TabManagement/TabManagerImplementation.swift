@@ -890,7 +890,7 @@ class TabManagerImplementation: NSObject,
         let action = PrivateModeAction(isPrivate: isPrivate,
                                        windowUUID: windowUUID,
                                        actionType: PrivateModeActionType.setPrivateModeTo)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         tab.resumeDocumentDownload()
 
@@ -952,7 +952,7 @@ class TabManagerImplementation: NSObject,
                                           isNativeErrorPage: isNativeErrorPage,
                                           windowUUID: windowUUID,
                                           actionType: GeneralBrowserActionType.updateSelectedTab)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
@@ -1099,11 +1099,6 @@ class TabManagerImplementation: NSObject,
         }
 
         selectTab(nextSelectedTab)
-
-        let notificationObject = [Tab.privateModeKey: nextSelectedTab?.isPrivate ?? true]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
-                                        object: notificationObject,
-                                        userInfo: windowUUID.userInfo)
         return result
     }
 

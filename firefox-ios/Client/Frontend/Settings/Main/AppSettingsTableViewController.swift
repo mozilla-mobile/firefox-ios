@@ -149,10 +149,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
             style: .plain,
             target: self,
             action: #selector(done))
-        if #available(iOS 26.0, *) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
-            navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
-        }
     }
 
     // MARK: - Accessibility Identifiers
@@ -581,6 +577,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func askedToReload() {
         tableView.reloadData()
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        if #available(iOS 26.0, *) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+        }
     }
 
     // MARK: - UITableViewDelegate

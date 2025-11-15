@@ -33,7 +33,7 @@ final class TabPeekViewController: UIViewController,
         let action = TabPeekAction(tabUUID: tab.tabUUID,
                                    windowUUID: windowUUID,
                                    actionType: TabPeekActionType.didLoadTabPeek)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -68,7 +68,7 @@ final class TabPeekViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .tabPeek)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -112,7 +112,7 @@ final class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.addToBookmarks)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 return
             })
         }
@@ -136,7 +136,7 @@ final class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.copyURL)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 return
             })
         }
@@ -148,7 +148,7 @@ final class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.closeTab)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 return
             })
         }

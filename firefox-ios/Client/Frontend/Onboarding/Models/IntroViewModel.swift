@@ -49,6 +49,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     /// Adds a card to `availableCards` if needed.
     /// Does not add the card on iPads where the user can choose the address bar position (`top` or `bottom`),
     /// as we want the address bar to always be on top for iPads.
+    @MainActor
     private func addCardIfNeeded(
         for cardModel: OnboardingCardInfoModelProtocol,
         delegate: OnboardingCardDelegate?,

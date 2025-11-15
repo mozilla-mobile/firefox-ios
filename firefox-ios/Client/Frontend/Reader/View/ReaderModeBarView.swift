@@ -32,6 +32,7 @@ enum ReaderModeBarButtonType {
         }
     }
 
+    @MainActor
     var image: UIImage? {
         let image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
         image?.accessibilityLabel = localizedDescription
@@ -40,6 +41,7 @@ enum ReaderModeBarButtonType {
 }
 
 protocol ReaderModeBarViewDelegate: AnyObject {
+    @MainActor
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 

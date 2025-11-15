@@ -1,0 +1,6 @@
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "ตัวปกปิดอีเมลไม่พร้อมใช้งานในขณะนี้ โปรดลองอีกครั้งในอีกสักครู่";
+
+/* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
+"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "ใช้ตัวปกปิดอีเมล";
+

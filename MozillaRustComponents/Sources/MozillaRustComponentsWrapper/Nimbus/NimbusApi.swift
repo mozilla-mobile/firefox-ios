@@ -177,7 +177,7 @@ public protocol NimbusUserConfiguration {
     func getAvailableExperiments() -> [AvailableExperiment]
 }
 
-public protocol NimbusEventStore {
+public protocol NimbusEventStore: Sendable {
     /// Records an event to the Nimbus event store.
     ///
     /// The method obtains the event counters for the `eventId` that is passed in, advances them if

@@ -9,8 +9,8 @@ import Glean
  * Instances of this class are useful for implementing a messaging service based upon
  * Nimbus.
  *
- * The message helper is designed to help string interpolation and JEXL evalutaiuon against the context
- * of the attrtibutes Nimbus already knows about.
+ * The message helper is designed to help string interpolation and JEXL evaluation against the context
+ * of the attributes Nimbus already knows about.
  *
  * App-specific, additional context can be given at creation time.
  *

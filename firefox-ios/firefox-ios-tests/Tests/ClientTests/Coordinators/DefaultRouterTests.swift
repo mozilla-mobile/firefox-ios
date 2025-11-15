@@ -109,6 +109,31 @@ final class DefaultRouterTests: XCTestCase {
     }
 
     @MainActor
+    func testPopToViewController_notifiesDismissals_andRunsCompletions() throws {
+        let baseVC = UIViewController()
+        let pushedVC = MockDismissalNotifiableViewController()
+        var completionCalled = false
+
+        let subject = DefaultRouter(navigationController: navigationController)
+        subject.push(baseVC, animated: false)
+        subject.push(pushedVC, animated: false) { completionCalled = true }
+
+        let returnedViewControllers = subject.popToViewController(baseVC, reason: .deeplink, animated: false)
+
+        XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
+        XCTAssertEqual(returnedViewControllers?.count, 1)
+
+        let poppedControllers = try XCTUnwrap(returnedViewControllers)
+        XCTAssertTrue(poppedControllers.contains(where: { $0 === pushedVC }))
+
+        XCTAssertEqual(pushedVC.dismissalReason, .deeplink)
+
+        XCTAssertTrue(completionCalled)
+
+        XCTAssertEqual(navigationController.viewControllers, [baseVC])
+    }
+
+    @MainActor
     func testSetRootViewController() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -160,6 +185,7 @@ final class DefaultRouterTests: XCTestCase {
         subject.push(viewController) {
             expectation.fulfill()
         }
+        navigationController.viewControllers = []
         subject.checkNavigationCompletion(for: navigationController)
 
         waitForExpectations(timeout: 0.1, handler: nil)

@@ -240,7 +240,7 @@ private class SiteCursorMock: Cursor<Site>, @unchecked Sendable {
 }
 
 // MARK: - MockablePinnedSites
-private class PinnedSitesMock: MockablePinnedSites {
+private class PinnedSitesMock: MockablePinnedSites, @unchecked Sendable {
     class Error: MaybeErrorType {
         var description = "Error"
     }

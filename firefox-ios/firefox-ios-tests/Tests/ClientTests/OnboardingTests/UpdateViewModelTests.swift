@@ -82,6 +82,7 @@ class UpdateViewModelTests: XCTestCase {
         waitForExpectations(timeout: 2.0)
     }
 
+    @MainActor
     func testHasSingleCard_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()

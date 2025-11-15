@@ -6,12 +6,17 @@ import XCTest
 
 protocol LibrarySelectorsSet {
     var BOOKMARKS_LIST: Selector { get }
+    var DELETE_BUTTON: Selector { get }
+    var SIGN_IN_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
 struct LibrarySelectors: LibrarySelectorsSet {
     private enum IDs {
-        static let bookmarksList = "Bookmarks List"
+        static let bookMarkPanel = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.self
+        static let bookmarksList = bookMarkPanel.tableView
+        static let deleteButton = "Delete"
+        static let signInButton = bookMarkPanel.emptyStateSignInButton
     }
 
     let BOOKMARKS_LIST = Selector.tableIdOrLabel(
@@ -20,5 +25,17 @@ struct LibrarySelectors: LibrarySelectorsSet {
         groups: ["library", "bookmarks"]
     )
 
-    var all: [Selector] { [BOOKMARKS_LIST] }
+    let DELETE_BUTTON = Selector.buttonIdOrLabel(
+        IDs.deleteButton,
+        description: "Delete button in the bookmarks panel",
+        groups: ["library", "bookmarks"]
+    )
+
+    let SIGN_IN_BUTTON = Selector.buttonIdOrLabel(
+        IDs.signInButton,
+        description: "Sign In button in the bookmarks panel empty state",
+        groups: ["library", "bookmarks"]
+    )
+
+    var all: [Selector] { [BOOKMARKS_LIST, DELETE_BUTTON, SIGN_IN_BUTTON] }
 }

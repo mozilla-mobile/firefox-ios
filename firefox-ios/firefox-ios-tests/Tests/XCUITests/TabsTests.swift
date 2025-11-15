@@ -515,21 +515,6 @@ class TabsTests: BaseTestCase {
         }
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306869
-    func testTabTrayContextMenuCloseTab() throws {
-        if !iPad() {
-            let shouldSkipTest = true
-            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
-        }
-        // Have multiple tabs opened in the tab tray
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        addTabsAndUndoCloseTabAction(nrOfTabs: 3)
-        // Repeat steps for private browsing mode
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        addTabsAndUndoCloseTabAction(nrOfTabs: 4)
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306868
     func testTabTrayCloseMultipleTabs() throws {
         if !iPad() {

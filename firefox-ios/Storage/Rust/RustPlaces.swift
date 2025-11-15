@@ -564,6 +564,8 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     /// - Parameters:
     ///   - searchTerm: The search term used to find a page.
     ///   - urlString: The url of the page.
+    ///  `referrerUrl` and `viewTime` is nil because we only care about store search terms
+    ///  `.insertPage` is passed in because if we use default, it ignores and does not save the search term
     public func noteHistoryMetadata(
         for searchTerm: String,
         and urlString: String,
@@ -576,7 +578,9 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
                         url: urlString,
                         searchTerm: searchTerm,
                         referrerUrl: nil
-                    ), viewTime: nil
+                    ),
+                    viewTime: nil,
+                    .init(ifPageMissing: .insertPage)
                 )
             },
             completion: completion)

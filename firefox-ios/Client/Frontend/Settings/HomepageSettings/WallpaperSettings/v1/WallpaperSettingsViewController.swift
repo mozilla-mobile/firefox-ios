@@ -6,6 +6,7 @@ import Common
 import UIKit
 
 class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
+    @MainActor
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
@@ -265,7 +266,7 @@ private extension WallpaperSettingsViewController {
                 case .failure(let error):
                     self?.logger.log("Could not download and set wallpaper: \(error.localizedDescription)",
                                      level: .warning,
-                                     category: .legacyHomepage)
+                                     category: .homepage)
                     self?.showError(error) { _ in
                         self?.downloadAndSetWallpaper(at: indexPath)
                     }

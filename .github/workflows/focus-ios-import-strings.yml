@@ -43,7 +43,7 @@ jobs:
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: focus-string-import-${{ env.current_date }}
-        title: "focus-string-import-${{ env.current_date }}"
+        title: "Add FOCUS [Localization] String import ${{ env.current_date }}" 
         branch: focus-string-import-${{ env.current_date }}
         body: "This (automated) PR import string changes"
         labels: Needs Landing

@@ -78,6 +78,6 @@ jobs:
         commit-message: Auto update SPM with latest rust-component release ${{ env.rust_version }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
-        title: Refactor [v${{ env.next_app_version }}] Auto update SPM with latest rust-component ${{ env.rust_version }}
+        title: Bump FXIOS [Dependency] Auto update SPM for v${{ env.next_app_version }} with latest rust-component ${{ env.rust_version }}
         branch: update-spm-new-rust-component-tag-${{ env.rust_version }}
         token: ${{ secrets.GITHUB_TOKEN }}

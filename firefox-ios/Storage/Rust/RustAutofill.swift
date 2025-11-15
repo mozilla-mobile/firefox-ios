@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Glean
 
 import class MozillaAppServices.Store
 import enum MozillaAppServices.AutofillApiError
@@ -444,6 +445,14 @@ public class RustAutofill: @unchecked Sendable {
         }
     }
 
+    /// Reports when the credit card encryption key can't be rerieved for a credit cards sync
+    public func reportPreSyncKeyRetrievalFailure(err: String) {
+        GleanMetrics
+            .PreSyncKeyRetrievalFailure
+            .creditCards
+            .record(GleanMetrics.PreSyncKeyRetrievalFailure.CreditCardsExtra(errorMessage: err))
+    }
+
     /// Retrieves the stored encryption key.
     ///
     /// - Parameters:
@@ -457,7 +466,11 @@ public class RustAutofill: @unchecked Sendable {
                 self.handleExpectedKeyAction(encryptedCanaryPhrase: encryptedCanaryPhrase,
                                              key: key,
                                              completion: completion)
-            case (.some(key), .none), (.none, .some(encryptedCanaryPhrase)):
+            case (.some(key), .none):
+                GleanMetrics.CreditCardKeyRegeneration.other.record()
+                self.handleUnexpectedKeyAction(completion: completion)
+            case (.none, .some(encryptedCanaryPhrase)):
+                 GleanMetrics.CreditCardKeyRegeneration.lost.record()
                 self.handleUnexpectedKeyAction(completion: completion)
             case (.none, .none):
                 self.handleFirstTimeCallOrClearedKeychainAction(completion: completion)
@@ -494,6 +507,7 @@ public class RustAutofill: @unchecked Sendable {
             logger.log("Autofill key was corrupted, new one generated",
                        level: .warning,
                        category: .storage)
+            GleanMetrics.CreditCardKeyRegeneration.corrupt.record()
             resetCreditCardsAndKey(completion: completion)
         }
     }
@@ -518,6 +532,7 @@ public class RustAutofill: @unchecked Sendable {
                 if hasCreditCards {
                     // Since the key data isn't present and we have credit card records in
                     // the database, we both scrub the records and reset the key.
+                    GleanMetrics.CreditCardKeyRegeneration.keychainDataLost.record()
                     self.resetCreditCardsAndKey(completion: completion)
                 } else {
                     // There are no records in the database so we don't need to scrub any

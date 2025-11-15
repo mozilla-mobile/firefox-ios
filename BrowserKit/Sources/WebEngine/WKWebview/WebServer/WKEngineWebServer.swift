@@ -157,6 +157,7 @@ of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </s
                              "test-mozilla-book",
                              "test-mozilla-org",
                              "test-popup-blocker",
+                             "test-translation",
                              "test-user-agent"]
         htmlFixtures.forEach {
             addHTMLFixture(name: $0, server: server)

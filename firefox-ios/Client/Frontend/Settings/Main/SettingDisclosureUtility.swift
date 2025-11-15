@@ -6,6 +6,7 @@ import Common
 import Foundation
 
 struct SettingDisclosureUtility {
+    @MainActor
     static func buildDisclosureIndicator(theme: Theme) -> UIImageView {
         let disclosureIndicator = UIImageView()
         disclosureIndicator.image = UIImage(
