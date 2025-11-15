@@ -8,7 +8,8 @@ import Glean
 import Shared
 import Common
 
-final class RouteBuilder: FeatureFlaggable {
+// TODO: Laurie - RouteBuilder should not be @unchecked Sendable due to shouldOpenNewTab usage
+final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
     private var isPrivate = false
     private var prefs: Prefs?
     private var mainQueue: DispatchQueueInterface
