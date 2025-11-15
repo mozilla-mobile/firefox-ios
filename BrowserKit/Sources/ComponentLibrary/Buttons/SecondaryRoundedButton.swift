@@ -5,16 +5,22 @@
 import Common
 import UIKit
 
+// TODO: - FXIOS-14081 add glass version configuration like Secondary SwiftUI button in Modern onboarding.
 public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     private struct UX {
-        static var buttonCornerRadius: CGFloat {
+        static var isGlassVersionAvailable: Bool {
             if #available(iOS 26.0, *) {
-                return 32
+                return true
             } else {
-                return 12
+                return false
             }
         }
-        static let buttonVerticalInset: CGFloat = 12
+        static var buttonCornerRadius: CGFloat {
+            return 12.0
+        }
+        static var buttonVerticalInset: CGFloat {
+            return isGlassVersionAvailable ? 15.0 : 12.0
+        }
         static let buttonHorizontalInset: CGFloat = 16
 
         static let contentInsets = NSDirectionalEdgeInsets(
@@ -32,7 +38,13 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        configuration = UIButton.Configuration.filled()
+        if #available(iOS 26.0, *) {
+            configuration = .prominentGlass()
+            configuration?.cornerStyle = .capsule
+        } else {
+            configuration = .filled()
+            configuration?.background.cornerRadius = UX.buttonCornerRadius
+        }
         titleLabel?.adjustsFontForContentSizeCategory = true
         isUserInteractionEnabled = true
         isAccessibilityElement = true
@@ -52,11 +64,18 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
 
         updatedConfiguration.baseForegroundColor = foregroundColor
 
-        let transformer = UIConfigurationTextAttributesTransformer { [weak foregroundColor] incoming in
+        let transformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
             var container = incoming
 
-            container.foregroundColor = foregroundColor
-            container.font = FXFontStyles.Bold.callout.scaledFont()
+            // For glass version we don't need to apply the foregrund color as it is handled by the .glassProminent config
+            if #unavailable(iOS 26) {
+                container.foregroundColor = self?.foregroundColor
+            }
+            if #available(iOS 26, *) {
+                container.font = FXFontStyles.Bold.headline.scaledFont()
+            } else {
+                container.font = FXFontStyles.Bold.callout.scaledFont()
+            }
             return container
         }
         updatedConfiguration.titleTextAttributesTransformer = transformer
@@ -74,9 +93,6 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         // Using a nil backgroundColorTransformer will just make the background view
         // use configuration.background.backgroundColor without any transformation
         updatedConfiguration.background.backgroundColorTransformer = nil
-        updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
-        updatedConfiguration.cornerStyle = .fixed
-        addCornerRadiusForVisualEffectView(radiusSize: UX.buttonCornerRadius)
 
         accessibilityIdentifier = viewModel.a11yIdentifier
 
@@ -88,7 +104,8 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     /// secondary button in the configuration.
     public func makeButtonInvisible() {
         guard var updatedConfiguration = configuration else { return }
-
+        // With the glass version setting the alpha 0.0 is required otherwise the button is not invisible.
+        alpha = 0.0
         isUserInteractionEnabled = false
         isAccessibilityElement = false
         accessibilityElementsHidden = true
@@ -105,20 +122,13 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         setNeedsUpdateConfiguration()
     }
 
-    func addCornerRadiusForVisualEffectView(radiusSize: CGFloat) {
-        // Note: changing the corner radius for the subview, in this case UIVisualEffectView
-        // is required for certain cases where UIVisualEffectView doesn't update with super view radius change
-        for subview in self.subviews where subview is UIVisualEffectView {
-            subview.layer.cornerRadius = radiusSize
-        }
-    }
-
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
         if configuration?.title == nil || !isUserInteractionEnabled {
             makeButtonInvisible()
         } else {
+            alpha = 1.0
             highlightedBackgroundColor = theme.colors.actionSecondaryHover
             normalBackgroundColor = theme.colors.actionSecondary
             foregroundColor = theme.colors.textPrimary
