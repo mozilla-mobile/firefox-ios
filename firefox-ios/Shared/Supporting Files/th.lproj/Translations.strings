@@ -16,6 +16,9 @@
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error. */
 "Translations.Banner.RetryButton.v145" = "ลองใหม่";
 
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they can translate the page to another language. %@ is the other language (e.g. English). */
+"Translations.Banner.TitleLabel.v145" = "แปลหน้าเป็น %@?";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage. */
 "Translations.Banner.TranslateButton.v145" = "แปล";
 

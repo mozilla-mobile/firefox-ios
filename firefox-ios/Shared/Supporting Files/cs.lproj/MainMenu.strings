@@ -302,7 +302,7 @@
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "Vypnout tmavý režim webových stránek";
 
 /* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Zapnutí tmavého režimu webových stránek";
+"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Zapnout tmavý režim webových stránek";
 
 /* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Tmavý režim webových stránek";

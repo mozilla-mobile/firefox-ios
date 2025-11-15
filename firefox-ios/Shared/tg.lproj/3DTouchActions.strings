@@ -16,3 +16,6 @@
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
 "Send to Device" = "Фиристодан ба дастгоҳ";
 
+/* Label for preview action on Tab Tray Tab to remove current tab from Bookmarks */
+"TabPeek.RemoveBookmark.v146" = "Тоза кардани хатбарак";
+
