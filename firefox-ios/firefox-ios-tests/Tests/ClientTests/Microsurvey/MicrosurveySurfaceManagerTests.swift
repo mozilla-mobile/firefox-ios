@@ -21,12 +21,14 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
         AppContainer.shared.reset()
     }
 
+    @MainActor
     func testNilMessage_microsurveyShouldNotShow() {
         let subject = createSubject()
         let model = subject.showMicrosurveyPrompt()
         XCTAssertNil(model)
     }
 
+    @MainActor
     func testValidMessage_microsurveyShouldShow() {
         let subject = createSubject()
         messageManager.message = createMessage()
@@ -39,6 +41,7 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(model?.surveyOptions, ["yes", "no"])
     }
 
+    @MainActor
     func testInvalidMessageSurface_microsurveyShouldNotShow() {
         let subject = createSubject()
         messageManager.message = createMessage(for: .newTabCard)
@@ -46,6 +49,7 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
         XCTAssertNil(model)
     }
 
+    @MainActor
     func testManager_noDelegatesCalled() {
         let subject = createSubject()
         messageManager.message = createMessage()
@@ -56,6 +60,7 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
+    @MainActor
     func testManager_messageDisplayedCalled() {
         let subject = createSubject()
         messageManager.message = createMessage()
@@ -81,6 +86,7 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
+    @MainActor
     func testManager_messageDismissCalled() {
         let subject = createSubject()
         messageManager.message = createMessage()

@@ -67,6 +67,7 @@ final class LaunchTypeTests: XCTestCase {
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
     }
 
+    @MainActor
     func testCanLaunch_updateFromBrowserCoordinator() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
@@ -81,6 +82,7 @@ final class LaunchTypeTests: XCTestCase {
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
     }
 
+    @MainActor
     func testCanLaunch_updateFromSceneCoordinator() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
@@ -115,6 +117,7 @@ final class LaunchTypeTests: XCTestCase {
         XCTAssertFalse(launchType.isFullScreenAvailable(isIphone: false))
     }
 
+    @MainActor
     func testIsFullScreen_updateFullScreenOnIphone() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)

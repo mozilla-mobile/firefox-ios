@@ -22,6 +22,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         self.onboardingVariant = onboardingVariant
     }
 
+    @MainActor
     func getOnboardingModel(
         for onboardingType: OnboardingType,
         from nimbus: FxNimbus = FxNimbus.shared
@@ -38,6 +39,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             isDismissible: framework.dismissable)
     }
 
+    @MainActor
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
         from cardData: [String: NimbusOnboardingCardData],
@@ -73,6 +75,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         }
     }
 
+    @MainActor
     private func getOnboardingCards(
         from cardData: [String: NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]

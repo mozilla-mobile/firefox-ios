@@ -11,6 +11,7 @@ protocol UserResearch {
 }
 
 extension UserResearch {
+    @MainActor
     var experiments: NimbusApi {
         return Experiments.shared
     }

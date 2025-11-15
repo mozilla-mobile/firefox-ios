@@ -187,6 +187,7 @@ final class AppLaunchUtil: Sendable {
         SearchViewModel.userAgent = UserAgent.getUserAgent()
     }
 
+    @MainActor
     private func initializeExperiments() {
         Experiments.initialize()
     }

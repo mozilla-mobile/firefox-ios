@@ -17,6 +17,7 @@ protocol GleanPlumbMessageManagerProtocol: Sendable {
 
     /// Finds the next message to be displayed out of all showable messages.
     /// Surface calls.
+    @MainActor
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage?
 
     /// Report impressions in Glean, and then pass the bookkeeping to increment
@@ -100,11 +101,13 @@ final class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onStartup() { }
 
     /// Returns the next valid and triggered message for the surface, if one exists.
+    @MainActor
     public func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         // All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
         return getNextMessage(for: surface, from: getMessages(messagingFeature.value()))
     }
 
+    @MainActor
     public func getNextMessage(
         for surface: MessageSurfaceId,
         from messages: [GleanPlumbMessage]

@@ -5,6 +5,7 @@
 import Foundation
 
 struct OnboardingNotificationCardHelper {
+    @MainActor
     public func notificationCardIsInOnboarding(
         from featureLayer: NimbusOnboardingFeatureLayer = NimbusOnboardingFeatureLayer()
     ) -> Bool {
@@ -17,6 +18,7 @@ struct OnboardingNotificationCardHelper {
             }
     }
 
+    @MainActor
     func shouldAskForNotificationsPermission(telemetryObj: TelemetryWrapper.EventObject) -> Bool {
         let isOnboarding = telemetryObj == .onboarding
         let shouldAskForPermission = !OnboardingNotificationCardHelper().notificationCardIsInOnboarding() || !isOnboarding

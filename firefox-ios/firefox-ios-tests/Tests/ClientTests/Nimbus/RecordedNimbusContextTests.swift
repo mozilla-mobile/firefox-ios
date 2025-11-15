@@ -18,6 +18,7 @@ class RecordedNimbusContextTests: XCTestCase {
     /**
      * This test should not be modified. It will fail if any of the eventQueries are invalid.
      */
+    @MainActor
     func testValidateEventQueries() throws {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
@@ -31,6 +32,7 @@ class RecordedNimbusContextTests: XCTestCase {
         try validateEventQueries(recordedContext: recordedContext)
     }
 
+    @MainActor
     func testToJsonReturnsExpected() throws {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
@@ -89,6 +91,7 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertEqual(json?.count, 0)
     }
 
+    @MainActor
     func testObjectRecordedToGleanMatchesExpected() throws {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
@@ -140,6 +143,7 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
     }
 
+    @MainActor
     func testGetEventQueries() throws {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
@@ -157,6 +161,7 @@ class RecordedNimbusContextTests: XCTestCase {
 
     /// This function makes sure that the items in metrics.yaml and RecordedNimbusContext
     /// are the same, to prevent human error forgetting to enter something somewhere
+    @MainActor
     func testRecordedNimbusContextAndMetricsContextFieldsAreEquivalent() {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
@@ -178,6 +183,7 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertTrue(recordedContextMembers.symmetricDifference(metricsObjectMembers).isEmpty)
     }
 
+    @MainActor
     func testGetEventQueriesValuesMatchesMetricsQueriesValuesYaml() {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,

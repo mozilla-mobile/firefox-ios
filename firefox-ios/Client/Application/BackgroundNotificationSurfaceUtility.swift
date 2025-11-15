@@ -47,6 +47,7 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol, @unchecke
         }
     }
 
+    @MainActor
     func triggerSurfaceManager() async {
         let hasPermission = await notificationManager.hasPermission()
 

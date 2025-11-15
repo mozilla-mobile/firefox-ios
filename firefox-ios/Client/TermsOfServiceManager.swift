@@ -69,6 +69,7 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
         TermsOfServiceTelemetry().recordDateAndVersion(acceptedDate: installationDate)
     }
 
+    @MainActor
     func shouldSendTechnicalData(telemetryValue: Bool, studiesValue: Bool) {
         // AdjustHelper.setEnabled($0)
         DefaultGleanWrapper().setUpload(isEnabled: telemetryValue)
@@ -91,6 +92,7 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     /// 3. User is in the "control" branch of the onboarding experiment
     /// 4. User did not see the TOS screen
     /// This will be removed in 141.0 ticket FXIOS-12249 
+    @MainActor
     var isAffectedUser: Bool {
         // 1) Installation date check
         let calendar = Calendar.current
@@ -125,6 +127,7 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     // MARK: – Helpers
 
     /// Returns `true` if the given experiment’s branch slug exists and equals “control”.
+    @MainActor
     private func isInControlBranch(experimentId: String) -> Bool {
         guard
             let branch = Experiments.shared.getExperimentBranch(experimentId: experimentId)

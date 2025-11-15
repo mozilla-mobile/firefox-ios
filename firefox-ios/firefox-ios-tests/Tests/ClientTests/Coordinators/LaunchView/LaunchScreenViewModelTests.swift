@@ -34,6 +34,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
+    @MainActor
     func testLaunchDoesntCallLoadedIfNotStarted() {
         let subject = createSubject()
         subject.delegate = delegate
@@ -127,6 +128,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
+    @MainActor
     func testSplashScreenExperiment_afterShown_returnsTrue() {
         let subject = createSubject()
         let value = subject.getSplashScreenExperimentHasShown()
@@ -139,6 +141,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     // MARK: - Helpers
+    @MainActor
     private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchScreenViewModel {
         let onboardingModel = createOnboardingViewModel()

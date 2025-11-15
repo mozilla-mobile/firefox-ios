@@ -26,6 +26,7 @@ final class NimbusMessagingTriggerTests: XCTestCase {
         return FxNimbusMessaging.shared.features.messaging.value()
     }()
 
+    @MainActor
     func testTriggers() throws {
         Experiments.events.clearEvents()
         Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)

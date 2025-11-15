@@ -8,10 +8,10 @@ import Glean
 @testable import Client
 
 // TODO: FXIOS-13514 - Migrate OnboardingTelemetryUtilityTests to use mock telemetry or GleanWrapper
+@MainActor
 class OnboardingTelemetryUtilityTests: XCTestCase {
     typealias CardNames = NimbusOnboardingTestingConfigUtility.CardOrder
 
-    @MainActor
     override func setUp() {
         super.setUp()
         setupTelemetry(with: MockProfile())

@@ -7,6 +7,7 @@ import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 
 protocol NimbusOnboardingFeatureLayerProtocol {
     associatedtype ViewModel
+    @MainActor
     func getOnboardingModel(
         for onboardingType: OnboardingType,
         from nimbus: FxNimbus

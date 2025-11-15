@@ -31,6 +31,7 @@ class MicrosurveySurfaceManager: MicrosurveyManager {
     // MARK: - Functionality
     /// Checks whether a message exists, and is not expired, and attempts to
     /// build a `MicrosurveyPromptView` to be presented.
+    @MainActor
     func showMicrosurveyPrompt() -> MicrosurveyModel? {
         retrieveMessage()
         guard let message else { return nil }
@@ -55,6 +56,7 @@ class MicrosurveySurfaceManager: MicrosurveyManager {
         )
     }
 
+    @MainActor
     private func retrieveMessage() {
         message = messagingManager.getNextMessage(for: .microsurvey)
     }
