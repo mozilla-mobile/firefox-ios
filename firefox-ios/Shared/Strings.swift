@@ -3234,36 +3234,6 @@ extension String {
                         tableName: "AppIconSelection",
                         value: "Flaming",
                         comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with flames.")
-
-                    public static let Minimal = MZLocalizedString(
-                        key: "Settings.AppIconSelection.AppIconNames.Fun.Minimal.Title.146",
-                        tableName: "AppIconSelection",
-                        value: "Minimal",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a one-colored fox outline.")
-
-                    public static let Pixelated = MZLocalizedString(
-                        key: "Settings.AppIconSelection.AppIconNames.Fun.Pixelated.Title.146",
-                        tableName: "AppIconSelection",
-                        value: "Pixelated",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a pixelated fox resting on a globe.")
-
-                    public static let Pride = MZLocalizedString(
-                        key: "Settings.AppIconSelection.AppIconNames.Fun.Pride.Title.146",
-                        tableName: "AppIconSelection",
-                        value: "Pride",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name the Firefox for iOS app icon of a fox outline in rainbow colors.")
-
-                    public static let Retro2004 = MZLocalizedString(
-                        key: "Settings.AppIconSelection.AppIconNames.FromContributors.Retro2004.Title.146",
-                        tableName: "AppIconSelection",
-                        value: "Retro 2004",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox resting on a globe with visible continents.")
-
-                    public static let Retro2017 = MZLocalizedString(
-                        key: "Settings.AppIconSelection.AppIconNames.Fun.Retro2017.Title.146",
-                        tableName: "AppIconSelection",
-                        value: "Retro 2017",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox resting on a stylized globe.")
                 }
             }
 

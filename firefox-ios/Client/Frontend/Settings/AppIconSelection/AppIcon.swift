@@ -143,17 +143,17 @@ enum AppIcon: String, CaseIterable {
         case .flaming:
             return .Settings.AppIconSelection.AppIconNames.Fun.Flaming
         case .minimal:
-            return .Settings.AppIconSelection.AppIconNames.Fun.Minimal
+            return .Settings.AppIconSelection.AppIconNames.Minimal
         case .momo:
             return .Settings.AppIconSelection.AppIconNames.FromContributors.Momo
         case .pixelated:
-            return .Settings.AppIconSelection.AppIconNames.Fun.Pixelated
+            return .Settings.AppIconSelection.AppIconNames.Pixelated
         case .pride:
-            return .Settings.AppIconSelection.AppIconNames.Fun.Pride
+            return .Settings.AppIconSelection.AppIconNames.Pride
         case .retro2004:
-            return .Settings.AppIconSelection.AppIconNames.Fun.Retro2004
+            return .Settings.AppIconSelection.AppIconNames.Retro2004
         case .retro2017:
-            return .Settings.AppIconSelection.AppIconNames.Fun.Retro2017
+            return .Settings.AppIconSelection.AppIconNames.Retro2017
         }
     }
 
@@ -287,10 +287,10 @@ enum AppIcon: String, CaseIterable {
         }
     }
 
-    /// Determines whether the icon belongs to the fun icon set.
+    /// Determines whether the icon belongs to the fun icon set behind a feature flag.
     var isFunIcon: Bool {
         switch self {
-        case .cool, .cuddling, .flaming, .minimal, .momo, .pixelated, .pride, .retro2004, .retro2017:
+        case .cool, .cuddling, .flaming:
             return true
         default:
             return false
