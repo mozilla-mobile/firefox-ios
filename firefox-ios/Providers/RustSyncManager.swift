@@ -372,6 +372,25 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
+    func shouldSyncCreditCards(key: String?, completion: @escaping @Sendable (Bool) -> Void) {
+        guard let encKey = key else {
+            completion(false)
+        }
+        if !(self.prefs.boolForKey(PrefsKeys.CreditCardsHaveBeenVerified) ?? false) {
+            // We should only sync credit cards when the verification step has completed
+            // successfully. Otherwise records could exist in the database that can't be decrypted
+            // and would prevent credit cards from syncing if they are not scrubbed.
+
+            self.autofill.verifyCreditCards(key: encKey) { successfullyVerified in
+                self.prefs.setBool(successfullyVerified, forKey: PrefsKeys.CreditCardsHaveBeenVerified)
+                completion(successfullyVerified)
+            }
+        } else {
+            // Successful credit cards verification already occurred so credit card syncing can proceed
+            completion(true)
+        }
+    }
+
     private func registerSyncEngines(engines: [RustSyncManagerAPI.TogglableEngine],
                                      dispatchGroup: DispatchGroupInterface,
                                      loginKey: String?,
@@ -399,14 +418,18 @@ public class RustSyncManager: NSObject, SyncManager {
                      }
                  }
              case .creditcards:
-                if let key = creditCardKey {
-                    // checking if autofill was already registered with addresses
-                    if !registeredAutofill {
-                        self.autofill.registerWithSyncManager()
-                        registeredAutofill = true
-                    }
-                    localEncryptionKeys[engine.rawValue] = key
-                    rustEngines.append(engine.rawValue)
+                 dispatchGroup.enter()
+                 self.shouldSyncCreditCards(key: creditCardKey) { shouldSync in
+                     defer { dispatchGroup.leave() }
+                     if shouldSync, let key = creditCardKey {
+                         // checking if autofill was already registered with addresses
+                         if !registeredAutofill {
+                             self.autofill.registerWithSyncManager()
+                             registeredAutofill = true
+                         }
+                         localEncryptionKeys[engine.rawValue] = key
+                         rustEngines.append(engine.rawValue)
+                     }
                  }
              case .addresses:
                  // checking if autofill was already registered with credit cards
