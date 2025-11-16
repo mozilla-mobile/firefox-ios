@@ -4499,7 +4499,7 @@ extension BrowserViewController: TabManagerDelegate {
     private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView, previousTab: Tab?) {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
-            guard previousTab?.isFxHomeTab ?? false else { return }
+            guard previousTab != nil else { return }
             store.dispatchLegacy(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
