@@ -9,10 +9,17 @@ features:
           Enables the feature
         type: Boolean
         default: false
+      max-reminders-count:
+        description: >
+          Maximum number of ToU bottom sheet reminders that can be displayed
+        type: Int
+        default: 2
     defaults:
       - channel: beta
         value:
           status: false
+          max-reminders-count: 2
       - channel: developer
         value:
           status: false
+          max-reminders-count: 2

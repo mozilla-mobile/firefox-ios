@@ -17,7 +17,6 @@ enum UX {
         static let portraitHeightRatio: CGFloat = 0.7
         static let maxHeight: CGFloat = 712
 
-        static let cardTopPadding: CGFloat = 32
         static func cardSecondaryContainerPadding(for sizeCategory: ContentSizeCategory) -> CGFloat {
             switch sizeCategory {
             case .accessibilityExtraExtraExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraLarge:
@@ -26,17 +25,15 @@ enum UX {
                 return 32
             }
         }
-        static func titleTopPadding(for screenHeight: CGFloat) -> CGFloat {
-            // iPhone SE and similar small devices (height <= 667)
-            if screenHeight <= 667 {
-                return 80
-            }
-            // Larger iPhones
-            return 100
-        }
+        static let titleCompactTopPadding: CGFloat = 40.0
         static let titleTopPadding: CGFloat = 80
+        static let contentSpacing: CGFloat = 34.0
+        static let buttonsSpacing: CGFloat = 10.0
+        static let buttonsBottomPadding: CGFloat = 16.0
+        static let minContentSpacing: CGFloat = 20.0
+
         static let titleAlignmentMinHeightPadding: CGFloat = 80
-        static let cardHeightRatio: CGFloat = 0.8
+        static let cardHorizontalPadding: CGFloat = 16.0
         static let spacing: CGFloat = 24
         static let regularSizeSpacing: CGFloat = 48
         static let tosSpacing: CGFloat = 48
@@ -44,18 +41,40 @@ enum UX {
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150
+        static let maxImageHeight: CGFloat = 250
         static let tosImageHeight: CGFloat = 70
         static let cornerRadius: CGFloat = 20
         static let secondaryButtonBottomPadding: CGFloat = 24
         static let primaryButtonWidthiPad: CGFloat = 313
+        static let cardTopPadding: CGFloat = 20.0
+        static let cardBottomPadding: CGFloat = 60.0
+        static let carouselDotBottomPadding: CGFloat = 16
 
         // Font sizes for base metrics
         static let titleFontSize: CGFloat = 28
         static let bodyFontSize: CGFloat = 16
 
         static let titleFont = FXFontStyles.Bold.title1.scaledSwiftUIFont()
+        static let titleFontRegular = FXFontStyles.Regular.title1.scaledSwiftUIFont()
         static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
+        // TODO: FXIOS-14022 Check Japanese alignment depeding on the experiment branch
+        private static var isJapanLocale: Bool {
+            Locale.current.languageCode == "ja"
+        }
+        static var titleFontForCurrentLocale: DynamicFont {
+            isJapanLocale ? titleFontRegular : titleFont
+        }
+        static var textAlignmentForCurrentLocale: TextAlignment {
+            isJapanLocale ? .leading : .center
+        }
+        static var horizontalAlignmentForCurrentLocale: HorizontalAlignment {
+            isJapanLocale ? .leading : .center
+        }
+        static var frameAlignmentForCurrentLocale: Alignment {
+            isJapanLocale ? .leading : .center
+        }
         static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
+        static let primaryActionGlassFont = FXFontStyles.Bold.headline.scaledSwiftUIFont()
         static let secondaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
     }
 
@@ -95,18 +114,19 @@ enum UX {
 
     struct LaunchScreen {
         struct Logo {
-            static let size: CGFloat = 125
             static let rotationDuration: TimeInterval = 2.0
-            static let rotationAngle: Double = 360
+            static let rotationAngle: Double = .pi * 2.0
             static let image = "firefoxLoader"
+            static let animationKey = "rotationAnimation"
+            static let animationKeyPath = "transform.rotation.z"
         }
     }
 
-    enum DragCancellableButton {
+    enum Button {
         static let verticalPadding: CGFloat = 12
+        static let verticalGlassPadding: CGFloat = 6
         static let horizontalPadding: CGFloat = 12
         static let cornerRadius: CGFloat = 8
-        static let dragThreshold: CGFloat = 5
-        static let resetDelay: TimeInterval = 0.1
+        static let glassCornerRadius: CGFloat = 25
     }
 }

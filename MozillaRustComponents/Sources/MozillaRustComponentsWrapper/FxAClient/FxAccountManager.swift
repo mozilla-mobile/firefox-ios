@@ -145,7 +145,7 @@ open class FxAccountManager: @unchecked Sendable {
         pairingUrl: String,
         entrypoint: String,
         scopes: [String] = [],
-        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
+        completionHandler: @Sendable @MainActor @escaping (Result<URL, Error>) -> Void
     ) {
         // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
         nonisolated(unsafe) var scopes = scopes
@@ -201,7 +201,7 @@ open class FxAccountManager: @unchecked Sendable {
     public func getAccessToken(
         scope: String,
         ttl: UInt64? = nil,
-        completionHandler: @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
+        completionHandler: @MainActor @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {
@@ -223,6 +223,15 @@ open class FxAccountManager: @unchecked Sendable {
         }
     }
 
+    /// Get a list of the attached OAuth clients.
+    public func getAttachedClients() -> Result<[AttachedClient], Error> {
+        do {
+            return try .success(requireAccount().getAttachedClients())
+        } catch {
+            return .failure(error)
+        }
+    }
+
     /// The account password has been changed locally and a new session token has been sent to us through WebChannel.
     public func handlePasswordChanged(
         newSessionToken: String,
@@ -236,7 +245,7 @@ open class FxAccountManager: @unchecked Sendable {
     /// Get the account management URL.
     public func getManageAccountURL(
         entrypoint: String,
-        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
+        completionHandler: @MainActor @Sendable @escaping (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {

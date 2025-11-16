@@ -5,7 +5,7 @@
 import Common
 import XCTest
 
-final class InactiveTabsTest: FeatureFlaggedTestBase {
+final class InactiveTabsTest: BaseTestCase {
     override func setUp() {
         // Load 20 tabs. 19 tabs are inactive.
         let tabsDatabase = "tabsState20.archive"
@@ -18,7 +18,6 @@ final class InactiveTabsTest: FeatureFlaggedTestBase {
             LaunchArguments.DisableAnimations,
         ]
         launchArguments.append(LaunchArguments.LoadTabsStateArchive + tabsDatabase)
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         super.setUp()
         app.launch()
 
@@ -30,7 +29,9 @@ final class InactiveTabsTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307045
-    func testInactiveTabs_tabTrayExperimentOff() {
+    func testInactiveTabs() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest, "Inactive tabs are no longer available with the new tab tray")
         // Confirm we have tabs loaded
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"]
         waitForTabsButton()

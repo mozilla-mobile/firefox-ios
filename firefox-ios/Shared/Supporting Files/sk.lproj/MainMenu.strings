@@ -41,7 +41,7 @@
 "MainMenu.Account.SignedOut.Description.v131" = "Synchronizujte heslá, karty a ďalšie položky";
 
 /* On the main menu, when the user is signed out. The description for the sign in action */
-"MainMenu.Account.SignedOut.Description.v141" = "Synchronizácia záložiek, hesiel, kariet a ďalších položiek";
+"MainMenu.Account.SignedOut.Description.v141" = "Synchronizujte svoje záložky, heslá, karty a ďalšie položky";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Prihlásiť sa";
@@ -62,7 +62,7 @@
 "MainMenu.DesktopSiteOn.Title.v142" = "Zapnutá";
 
 /* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
-"MainMenu.HeaderBanner.Subtitle.v142" = "Trvá to pár sekúnd. Zmeniť môžete kedykoľvek.";
+"MainMenu.HeaderBanner.Subtitle.v142" = "Trvá to pár sekúnd. Zmeniť to môžete kedykoľvek.";
 
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
 "MainMenu.HeaderBanner.Title.v142" = "Nastavte si %@ ako predvolený";
@@ -411,6 +411,18 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Nástroje";
+
+/* On the main menu, the accessibility label for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145" = "Stránka preložená";
+
+/* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "Preložené do jazyka %@";
+
+/* On the main menu, the title for the action that will translate the content of the webpage. */
+"MainMenu.ToolsSection.Translation.Title.v145" = "Preložiť stránku";
+
+/* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Preložené";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
 "MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Vypnutý";

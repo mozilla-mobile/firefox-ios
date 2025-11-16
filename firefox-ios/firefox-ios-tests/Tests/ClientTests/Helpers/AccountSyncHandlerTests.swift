@@ -21,8 +21,11 @@ class AccountSyncHandlerTests: XCTestCase {
         self.profile = MockProfile()
         self.syncManager = profile.syncManager as? ClientSyncManagerSpy
         self.queue = MockDispatchQueue()
-        DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
         let mockTabManager =  MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(
+            injectedWindowManager: mockWindowManager,
+            injectedTabManager: mockTabManager
+        )
         mockTabManager.recentlyAccessedNormalTabs = [createTab(profile: profile)]
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
@@ -45,6 +48,7 @@ class AccountSyncHandlerTests: XCTestCase {
         expectation.isInverted = true
         profile.hasSyncableAccountMock = false
         let subject = AccountSyncHandler(with: profile, queue: queue, onSyncCompleted: {
+            expectation.fulfill()
         })
         let tab = createTab(profile: profile)
         subject.tabDidGainFocus(tab)

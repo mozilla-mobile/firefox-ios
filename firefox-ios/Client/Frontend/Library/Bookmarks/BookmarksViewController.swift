@@ -11,9 +11,10 @@ import SiteImageView
 import MozillaAppServices
 
 final class BookmarksViewController: SiteTableViewController,
-                               LibraryPanel,
-                               CanRemoveQuickActionBookmark,
-                               UITableViewDropDelegate {
+                                     LibraryPanel,
+                                     CanRemoveQuickActionBookmark,
+                                     UITableViewDropDelegate,
+                                     Notifiable {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -45,16 +46,28 @@ final class BookmarksViewController: SiteTableViewController,
         switch state {
         case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textPrimary
+            }
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
+            }
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
+            }
             bottomRightButton.isEnabled = true
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditModeInvalidField):
             bottomRightButton.title = String.AppSettingsDone
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
+            }
             bottomRightButton.isEnabled = false
             return [flexibleSpace, bottomRightButton]
         default:
@@ -122,9 +135,6 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     deinit {
-        // FIXME: FXIOS-12995 Use Notifiable
-        notificationCenter.removeObserver(self)
-
         // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
         a11yEmptyStateScrollView.removeFromSuperview()
     }
@@ -171,8 +181,8 @@ final class BookmarksViewController: SiteTableViewController,
     // MARK: - Data
 
     override func reloadData() {
-        viewModel.reloadData { [weak self] in
-            ensureMainThread {
+        viewModel.reloadData {
+            ensureMainThread { [weak self] in
                 self?.tableView.reloadData()
                 if self?.viewModel.shouldFlashRow ?? false {
                     self?.flashRow()
@@ -640,22 +650,37 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         updateEmptyState(animated: false)
     }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
+            ensureMainThread {
+                self.reloadData()
+            }
+        default:
+            break
+        }
+    }
 }
 
 // MARK: - LibraryPanelContextMenu
 
 extension BookmarksViewController: LibraryPanelContextMenu {
     func presentContextMenu(for indexPath: IndexPath) {
-        viewModel.getSiteDetails(for: indexPath) { [weak self] site in
-            guard let self else { return }
-            if let site {
-                presentContextMenu(for: site, with: indexPath, completionHandler: {
-                    return self.contextMenu(for: site, with: indexPath)
-                })
-            } else if let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row],
-                      bookmarkNode.type == .folder,
-                      isCurrentFolderEditable(at: indexPath) {
-                presentContextMenu(for: bookmarkNode, indexPath: indexPath)
+        viewModel.getSiteDetails(for: indexPath) { site in
+            ensureMainThread { [weak self] in
+                guard let self else { return }
+
+                if let site {
+                    self.presentContextMenu(for: site, with: indexPath, completionHandler: {
+                        return self.contextMenu(for: site, with: indexPath)
+                    })
+                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                          bookmarkNode.type == .folder,
+                          self.isCurrentFolderEditable(at: indexPath) {
+                    self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
+                }
             }
         }
     }
@@ -738,18 +763,6 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: bookmarkCoordinatorDelegate))
 
         return actions
-    }
-}
-
-// MARK: - Notifiable
-extension BookmarksViewController: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
-            reloadData()
-        default:
-            break
-        }
     }
 }
 

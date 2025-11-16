@@ -142,13 +142,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         titleText.textColor = colors.textPrimary
         closeButton.tintColor = colors.textPrimary
 
-        if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-           toolbarState.isTranslucent {
-            cellBackground.backgroundColor = toolbarState.isTranslucent ? .clear : colors.actionTabInactive
-        } else {
-            cellBackground.backgroundColor = colors.actionTabInactive
-        }
-
+        cellBackground.backgroundColor = .clear
         cellBackground.layer.shadowColor = UIColor.clear.cgColor
         cellBackground.isHidden = false
     }

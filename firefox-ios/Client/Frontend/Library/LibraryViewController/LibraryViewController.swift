@@ -35,20 +35,14 @@ class LibraryViewController: UIViewController, Themeable {
     private var controllerContainerView: UIView = .build { view in }
 
     // UI Elements
-    private lazy var librarySegmentControl: UISegmentedControl = {
-        var librarySegmentControl: UISegmentedControl
-        librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+    private lazy var librarySegmentControl: UISegmentedControl = .build { librarySegmentControl in
         librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
         librarySegmentControl.selectedSegmentIndex = 1
-        librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
-        librarySegmentControl.translatesAutoresizingMaskIntoConstraints = false
-        return librarySegmentControl
-    }()
+    }
 
     private lazy var segmentControlToolbar: UIToolbar = .build { [weak self] toolbar in
         guard let self = self else { return }
         toolbar.delegate = self
-        toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
     }
 
     private lazy var topLeftButton: UIBarButtonItem =  {
@@ -65,7 +59,7 @@ class LibraryViewController: UIViewController, Themeable {
     private lazy var topRightButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
             title: String.AppSettingsDone,
-            style: .done,
+            style: .plain,
             target: self,
             action: #selector(topRightButtonAction)
         )
@@ -84,7 +78,6 @@ class LibraryViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.logger = logger
         self.windowUUID = tabManager.windowUUID
-
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -109,7 +102,27 @@ class LibraryViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        recreateSegmentedControl()
         applyTheme()
+    }
+
+    private func recreateSegmentedControl() {
+        let newSegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+        newSegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
+        newSegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
+        newSegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
+        newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+        librarySegmentControl = newSegmentControl
+
+        let newItem = UIBarButtonItem(customView: newSegmentControl)
+
+        librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
+        segmentControlToolbar.setItems([newItem], animated: false)
+
+        NSLayoutConstraint.activate([
+            librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
+            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
+        ])
     }
 
     override func viewDidLayoutSubviews() {
@@ -288,14 +301,23 @@ class LibraryViewController: UIViewController, Themeable {
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
+            if #available(iOS 26.0, *) {
+                topRightButton.tintColor = currentTheme().colors.textAccent
+            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .bookmarks(state: .itemEditModeInvalidField):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
+            if #available(iOS 26.0, *) {
+                topRightButton.tintColor = currentTheme().colors.textAccent
+            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = false
         default:
             topRightButton.title = String.AppSettingsDone
+            if #available(iOS 26.0, *) {
+                topRightButton.tintColor = currentTheme().colors.textPrimary
+            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
@@ -350,7 +372,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func setupToolBarAppearance() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1
@@ -362,6 +384,8 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func updateSegmentControl() {
+        guard librarySegmentControl.numberOfSegments > 0 else { return }
+
         let panelState = getCurrentPanelState()
 
         switch panelState {
@@ -377,6 +401,10 @@ class LibraryViewController: UIViewController, Themeable {
         }
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.getCurrentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
@@ -384,7 +412,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
@@ -418,10 +446,18 @@ extension LibraryViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .LibraryPanelStateDidChange:
-            setupButtons()
-            updateSegmentControl()
+            ensureMainThread {
+                self.setupButtons()
+                self.updateSegmentControl()
+            }
+
         case .LibraryPanelBookmarkTitleChanged:
-            updateTitle(subpanelTitle: notification.userInfo?["title"] as? String)
+            let title = notification.userInfo?["title"] as? String
+
+            ensureMainThread {
+                self.updateTitle(subpanelTitle: title)
+            }
+
         default: break
         }
     }

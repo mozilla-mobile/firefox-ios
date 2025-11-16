@@ -6,7 +6,6 @@ import UIKit
 
 enum ContentType {
     case homepage
-    case legacyHomepage
     case privateHomepage
     case nativeErrorPage
     case webview
@@ -30,10 +29,6 @@ class ContentContainer: UIView,
         return contentController?.view
     }
 
-    var hasLegacyHomepage: Bool {
-        return type == .legacyHomepage
-    }
-
     var hasPrivateHomepage: Bool {
         return type == .privateHomepage
     }
@@ -43,7 +38,7 @@ class ContentContainer: UIView,
     }
 
     var hasAnyHomepage: Bool {
-        return hasLegacyHomepage || hasHomepage || hasPrivateHomepage
+        return hasHomepage || hasPrivateHomepage
     }
 
     var hasWebView: Bool {
@@ -59,7 +54,7 @@ class ContentContainer: UIView,
     /// If the content shouldn't be removed then it's view hierarchy is kept on screen.
     private var shouldRemovePreviousContent: Bool {
         if isSwipingTabsEnabled {
-            return !hasWebView && !hasHomepage && !hasLegacyHomepage && !hasPrivateHomepage
+            return !hasWebView && !hasHomepage && !hasPrivateHomepage
         }
         return !hasWebView
     }
@@ -70,8 +65,6 @@ class ContentContainer: UIView,
     /// - Returns: True when we can add the view controller to the container
     func canAdd(content: ContentContainable) -> Bool {
         switch type {
-        case .legacyHomepage:
-            return !(content is LegacyHomepageViewController)
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)
         case .homepage:

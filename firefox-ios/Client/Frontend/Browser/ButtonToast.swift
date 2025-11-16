@@ -22,6 +22,7 @@ class ButtonToast: Toast {
         static let buttonBorderRadius: CGFloat = 8
         static let buttonBorderWidth: CGFloat = 1
         static let topBottomButtonPadding: CGFloat = 8
+        static let animationDuration: TimeInterval = 0.3
     }
 
     // MARK: - UI
@@ -61,7 +62,7 @@ class ButtonToast: Toast {
     // Pass themeManager to call on init
     init(viewModel: ButtonToastViewModel,
          theme: Theme?,
-         completion: ((_ buttonPressed: Bool) -> Void)? = nil) {
+         completion: (@MainActor (_ buttonPressed: Bool) -> Void)? = nil) {
         super.init(frame: .zero)
 
         self.completionHandler = completion

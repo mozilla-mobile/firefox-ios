@@ -10,7 +10,7 @@ struct StoriesFeedState: ScreenState, Equatable {
     let storiesData: [MerinoStoryConfiguration]
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let storiesFeedState = store.state.screenState(
+        guard let storiesFeedState = appState.screenState(
             StoriesFeedState.self,
             for: .storiesFeed,
             window: uuid
@@ -47,14 +47,14 @@ struct StoriesFeedState: ScreenState, Equatable {
         }
 
         switch action.actionType {
-        case MerinoMiddlewareActionType.retrievedUpdatedStories:
-            return handleRetrievedUpdatedStoriesAction(action: action, state: state)
+        case MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories:
+            return handleRetrievedUpdatedStoriesFeedStoriesAction(action: action, state: state)
         default:
             return defaultState(from: state)
         }
     }
 
-    private static func handleRetrievedUpdatedStoriesAction(action: Action, state: Self) -> StoriesFeedState {
+    private static func handleRetrievedUpdatedStoriesFeedStoriesAction(action: Action, state: Self) -> StoriesFeedState {
         guard let merinoAction = action as? MerinoAction,
               let stories = merinoAction.merinoStories
         else {

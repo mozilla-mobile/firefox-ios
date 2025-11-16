@@ -21,7 +21,7 @@ import Common
 /// # Methods
 /// - `init(image:labelText:tappedAction:)`: Initializes the accessory view with an image, label, and optional tap action.
 /// - `tappedAccessoryButton()`: Handles the tap action on the accessory view.
-class AutofillAccessoryViewButtonItem: UIBarButtonItem {
+final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     // MARK: - Constants
     private struct UX {
         static let accessoryImageViewSize: CGFloat = 24
@@ -33,7 +33,7 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     // MARK: - Properties
     private let accessoryImageView: UIImageView
     private let useAccessoryTextLabel: UILabel
-    private let tappedAccessoryButtonAction: (() -> Void)?
+    private let tappedAccessoryButtonAction: (@MainActor () -> Void)?
 
     /// Tint color for the accessory image view.
     var accessoryImageViewTintColor: UIColor? {
@@ -128,7 +128,6 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         accessoryImageView.accessibilityElementsHidden = !isiOS26Available
         accessoryImageView.accessibilityTraits = isiOS26Available ? .button : .none
         useAccessoryTextLabel.accessibilityTraits = isiOS26Available ? .none : .button
-        useAccessoryTextLabel.isHidden = isiOS26Available
     }
 
     private func updateBackgroundColor() {

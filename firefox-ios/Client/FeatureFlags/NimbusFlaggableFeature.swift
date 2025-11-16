@@ -19,17 +19,18 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case downloadLiveActivities
     case feltPrivacyFeltDeletion
     case feltPrivacySimplifiedUI
+    case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
-    case hntTopSitesVisualRefresh
-    case homepageRebuild
     case homepageRedesign
     case homepageSearchBar
     case homepageShortcutsLibrary
     case homepageStoriesRedesign
+    case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
     case inactiveTabs
+    case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
     case menuRefactor
     case menuRedesignHint
@@ -39,6 +40,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case noInternetConnectionErrorPage
     case recentSearches
     case reportSiteIssue
+    case relayIntegration
     case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
     case splashScreen
@@ -63,6 +65,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tosFeature
     case touFeature
     case trackingProtectionRefactor
+    case translation
     case trendingSearches
     case unifiedAds
     case unifiedSearch
@@ -73,30 +76,33 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appearanceMenu,
+                .appleSummarizer,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
-                .hntTopSitesVisualRefresh,
-                .homepageRebuild,
+                .downloadLiveActivities,
                 .homepageStoriesRedesign,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .homepageScrim,
+                .hostedSummarizer,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
+                .recentSearches,
                 .searchEngineConsolidation,
+                .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
-                .trackingProtectionRefactor,
-                .downloadLiveActivities,
-                .appleSummarizer,
-                .hostedSummarizer,
                 .touFeature,
+                .trackingProtectionRefactor,
+                .translation,
+                .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
@@ -143,14 +149,15 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
-                .hntTopSitesVisualRefresh,
-                .homepageRebuild,
+                .firefoxJpGuideDefaultSite,
                 .homepageRedesign,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageStoriesRedesign,
+                .homepageScrim,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
                 .menuRefactor,
                 .menuRedesignHint,
@@ -169,6 +176,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .relayIntegration,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
@@ -183,6 +191,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tosFeature,
                 .touFeature,
                 .trackingProtectionRefactor,
+                .translation,
                 .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,

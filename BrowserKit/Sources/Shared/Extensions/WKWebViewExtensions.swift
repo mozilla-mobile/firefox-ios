@@ -33,7 +33,7 @@ extension WKWebView {
     public func evaluateJavascriptInDefaultContentWorld(
         _ javascript: String,
         _ frame: WKFrameInfo? = nil,
-        _ completion: @escaping (Any?, Error?) -> Void
+        _ completion: @MainActor @escaping (Any?, Error?) -> Void
     ) {
         self.evaluateJavaScript(javascript, in: frame, in: .defaultClient) { result in
             switch result {

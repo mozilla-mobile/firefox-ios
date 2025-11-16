@@ -103,48 +103,33 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowHomepage_addsOneHomepageOnly() {
         let subject = createSubject()
-        subject.showLegacyHomepage(
-            inline: true,
-            toastContainer: UIView(),
-            homepanelDelegate: subject.browserViewController,
-            libraryPanelDelegate: subject.browserViewController,
-            statusBarScrollDelegate: scrollDelegate,
-            overlayManager: overlayModeManager
-        )
+        subject.showHomepage(overlayManager: overlayModeManager,
+                             isZeroSearch: true,
+                             statusBarScrollDelegate: scrollDelegate,
+                             toastContainer: UIView())
 
-        let secondHomepage = LegacyHomepageViewController(
-            profile: profile,
-            toastContainer: UIView(),
-            tabManager: tabManager,
-            overlayManager: overlayModeManager
-        )
+        let secondHomepage = HomepageViewController(windowUUID: windowUUID,
+                                                    overlayManager: overlayModeManager,
+                                                    toastContainer: UIView())
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
-        XCTAssertNotNil(subject.legacyHomepageViewController)
+        XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
     }
 
     func testShowHomepage_reuseExistingHomepage() {
         let subject = createSubject()
-        subject.showLegacyHomepage(
-            inline: true,
-            toastContainer: UIView(),
-            homepanelDelegate: subject.browserViewController,
-            libraryPanelDelegate: subject.browserViewController,
-            statusBarScrollDelegate: scrollDelegate,
-            overlayManager: overlayModeManager
-        )
-        let firstHomepage = subject.legacyHomepageViewController
-        XCTAssertNotNil(subject.legacyHomepageViewController)
+        subject.showHomepage(overlayManager: overlayModeManager,
+                             isZeroSearch: true,
+                             statusBarScrollDelegate: scrollDelegate,
+                             toastContainer: UIView())
+        let firstHomepage = subject.homepageViewController
+        XCTAssertNotNil(subject.homepageViewController)
 
-        subject.showLegacyHomepage(
-            inline: true,
-            toastContainer: UIView(),
-            homepanelDelegate: subject.browserViewController,
-            libraryPanelDelegate: subject.browserViewController,
-            statusBarScrollDelegate: scrollDelegate,
-            overlayManager: overlayModeManager
-        )
-        let secondHomepage = subject.legacyHomepageViewController
+        subject.showHomepage(overlayManager: overlayModeManager,
+                             isZeroSearch: true,
+                             statusBarScrollDelegate: scrollDelegate,
+                             toastContainer: UIView())
+        let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 
@@ -187,22 +172,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         )
 
         XCTAssertNil(subject.homepageScreenshotTool())
-    }
-
-    func testHomepageScreenshotTool_returnsLegacyHomepage_forNormalTab() throws {
-        let subject = createSubject()
-        browserViewController.overrideNewTabSettings = .topSites
-        subject.showLegacyHomepage(
-            inline: false,
-            toastContainer: UIView(),
-            homepanelDelegate: subject.browserViewController,
-            libraryPanelDelegate: subject.browserViewController,
-            statusBarScrollDelegate: scrollDelegate,
-            overlayManager: overlayModeManager
-        )
-
-        let screenshotTool = try XCTUnwrap(subject.homepageScreenshotTool())
-        XCTAssertTrue(screenshotTool is LegacyHomepageViewController)
     }
 
     func testHomepageScreenshotTool_returnsPrivateHomepage_forPrivateTab() throws {
@@ -260,7 +229,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserViewController = browserViewController
         subject.show(webView: webview)
 
-        XCTAssertNil(subject.legacyHomepageViewController)
         XCTAssertNotNil(subject.webviewController)
         XCTAssertEqual(browserViewController.embedContentCalled, 1)
         XCTAssertEqual(browserViewController.saveEmbeddedContent?.contentType, .webview)
@@ -651,6 +619,24 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }))
     }
 
+    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() {
+        setIsHostedSummarizerEnabled(true)
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
+        subject.browserViewController = browserViewController
+
+        // Calling twice showSummarizePanel has to add just once the SummarizeCoordinator.
+        subject.showSummarizePanel(.mainMenu, config: SummarizerConfig(instructions: "instructions", options: [:]))
+        subject.showSummarizePanel(.mainMenu, config: SummarizerConfig(instructions: "instructions", options: [:]))
+
+        let numberOfSummarizeCoordinators = subject.childCoordinators.count {
+            $0 is SummarizeCoordinator
+        }
+        XCTAssertEqual(numberOfSummarizeCoordinators, 1)
+    }
+
     // MARK: - Shortcuts Library
 
     func testShowShortcutsLibrary_showsShortcutsLibrary() throws {
@@ -664,13 +650,35 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     // MARK: - Stories Feed
 
-    func testStoriesFeed_showsStoriesFeed() throws {
+    func testShowStoriesFeed_showsStoriesFeed() throws {
         let subject = createSubject()
 
         subject.showStoriesFeed()
 
         XCTAssertNotNil(mockRouter.pushedViewController as? StoriesFeedViewController)
         XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
+    func testShowStoriesWebview_showsStoriesWebview() throws {
+        let subject = createSubject()
+
+        subject.showStoriesWebView(url: URL(string: "https://www.mozilla.com"))
+
+        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesWebviewViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
+    func testPopToBVC_popsViewControllers() {
+        let subject = createSubject()
+
+        mockRouter.push(browserViewController, animated: false)
+        (0...1).forEach { _ in
+            mockRouter.push(UIViewController(), animated: false)
+        }
+
+        subject.popToBVC()
+
+        XCTAssertEqual(mockRouter.popToViewControllerCalled, 1)
     }
 
     func testShouldShowNewTabToast_returnsTrue() throws {

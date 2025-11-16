@@ -104,7 +104,7 @@
 "Addresses.EditAddress.AutofillEditAddressTitle.v129" = "Խմբագրել հասցեն";
 
 /* Title for the input field where users can enter their street address. This is used within the settings for autofill, allowing users to provide their street address for accurate form autofilling. */
-"Addresses.EditAddress.AutofillEditStreetAddressTitle.v129" = "Հասցե";
+"Addresses.EditAddress.AutofillEditStreetAddressTitle.v129" = "Փողոցի հասցե";
 
 /* Label for the button to save the current address details entered or edited by the user. This action confirms the user's changes and updates their autofill settings accordingly. */
 "Addresses.EditAddress.AutofillSaveButton.v129" = "Պահպանել";

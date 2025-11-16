@@ -1,0 +1,24 @@
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralSubtitle.v145" = "ദയവായി വീണ്ടും ശ്രമിക്കുക.";
+
+/* On the translation feature bottom sheet, this is the title for the button that allows the user to try to translate a page again after facing an error. */
+"Translations.Sheet.Error.RetryButton.v145" = "വീണ്ടും ശ്രമിക്കുക";
+
+/* On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page. */
+"Translations.Sheet.Error.SubtitleLabel.v145" = "താങ്ങളുടെ ഗോളാന്തരവല സമ്പൎക്കം നോക്കിയിട്ടു് വീണ്ടും ശ്രമിക്കുക.";
+
+/* This is a less descriptive text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.FromLabel.v145" = "ഇതിൽനിന്നു്";
+
+/* This is the text on the secondary button used to indicate that page is being translated and the button is shown on the translation feature bottom sheet view. */
+"Translations.Sheet.LoadingButton.v145" = "താൾ മൊഴിമാറ്റുന്നു";
+
+/* This is the text on the secondary button used to restore the translated page to its original language and the button is shown on the translation feature bottom sheet view. */
+"Translations.Sheet.ShowOriginalButton.v145" = "യഥാര്‍ത്ഥമുള്ളവ കാണിക്കുക";
+
+/* This is the title for the bottom sheet view that allows users to configure their language preferences for the translations feature. */
+"Translations.Sheet.TitleLabel.v145" = "താൾ മൊഴിമാറ്റുക";
+
+/* This is the less descriptive text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.ToLabel.v145" = "ഇതിലേക്കു്";
+

@@ -14,7 +14,7 @@
 "TermsOfUse.Link.PrivacyNotice.v142" = "პირადულობის განაცხადი";
 
 /* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
-"TermsOfUse.Link.TermsOfUse.v142" = "%@ – გამოყენების პირობები";
+"TermsOfUse.Link.TermsOfUse.v142" = "გამოყენების პირობები, რომელთაც ადგენს %@";
 
 /* Label for the button that allows the user to postpone accepting the Terms of Use. */
 "TermsOfUse.RemindMeLaterButton.v142" = "მოგვიანებით შეხსენება";

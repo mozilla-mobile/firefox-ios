@@ -276,6 +276,50 @@ class SyncManagerTelemetryTests: XCTestCase {
                                   submitTabsPing: submitTabsPing)
     }
 
+    func testSendsAddressesAndGlobalPings() {
+        var globalSyncUuid = UUID()
+        let syncTelemetry = RustSyncTelemetryPing(version: 1,
+                                                  uid: "abc123",
+                                                  events: [],
+                                                  syncs: [SyncInfo(at: now + 20,
+                                                                   took: 8000,
+                                                                   engines: [EngineInfo(name: "addresses",
+                                                                                        at: now + 25,
+                                                                                        took: 6000,
+                                                                                        incoming: nil,
+                                                                                        outgoing: [OutgoingInfo(sent: 10, failed: 5)],
+                                                                                        failureReason: nil,
+                                                                                        validation: nil)],
+                                                                   failureReason: nil)])
+
+        func submitGlobalPing(_: NoReasonCodes?) {
+            XCTAssertNil(SyncMetrics.failureReason["other"].testGetValue())
+            XCTAssertNotNil(globalSyncUuid)
+            XCTAssertEqual(globalSyncUuid, SyncMetrics.syncUuid.testGetValue("sync"))
+        }
+
+        func submitAddressesPing(_: NoReasonCodes?) {
+            globalSyncUuid = SyncMetrics.syncUuid.testGetValue("addresses-sync")!
+            XCTAssertEqual("abc123", AddressesMetrics.uid.testGetValue())
+
+            XCTAssertNotNil(AddressesMetrics.startedAt.testGetValue())
+            XCTAssertNotNil(AddressesMetrics.finishedAt.testGetValue())
+            XCTAssertEqual(now + 25, Int64(AddressesMetrics.startedAt.testGetValue()!.timeIntervalSince1970) / BaseGleanSyncPing.MILLIS_PER_SEC)
+            XCTAssertEqual(now + 31, Int64(AddressesMetrics.finishedAt.testGetValue()!.timeIntervalSince1970) / BaseGleanSyncPing.MILLIS_PER_SEC)
+
+            XCTAssertNil(AddressesMetrics.incoming["applied"].testGetValue())
+            XCTAssertNil(AddressesMetrics.incoming["failed_to_apply"].testGetValue())
+            XCTAssertNil(AddressesMetrics.incoming["reconciled"].testGetValue())
+            XCTAssertEqual(10, AddressesMetrics.outgoing["uploaded"].testGetValue())
+            XCTAssertEqual(5, AddressesMetrics.outgoing["failed_to_upload"].testGetValue())
+            XCTAssertEqual(1, AddressesMetrics.outgoingBatches.testGetValue())
+        }
+
+        try! processSyncTelemetry(syncTelemetry: syncTelemetry,
+                                  submitGlobalPing: submitGlobalPing,
+                                  submitAddressesPing: submitAddressesPing)
+    }
+
     func testReceivesOpenSyncSettingsMenuTelemetry() {
         SyncManagerComponent.reportOpenSyncSettingsMenuTelemetry()
         let events = GleanMetrics.SyncSettings.openMenu.testGetValue()!

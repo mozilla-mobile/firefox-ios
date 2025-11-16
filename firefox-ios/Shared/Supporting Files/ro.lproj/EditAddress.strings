@@ -11,7 +11,7 @@
 "Addresses.EditAddress.Alert.Title.v129" = "Elimină adresa";
 
 /* Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information. */
-"Addresses.EditAddress.AutofillAddAddressTitle.v129" = "Adaugă adresă";
+"Addresses.EditAddress.AutofillAddAddressTitle.v129" = "Adaugă o adresă";
 
 /* Label for the area field, allowing users to specify a particular area within a city or region. This detail can improve the specificity and accuracy of autofilled addresses. */
 "Addresses.EditAddress.AutofillAddressArea.v129" = "Zonă";

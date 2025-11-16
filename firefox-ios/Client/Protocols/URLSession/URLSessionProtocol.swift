@@ -25,7 +25,7 @@ protocol URLSessionProtocol: Sendable {
     func uploadTaskWith(
         with request: URLRequest,
         from bodyData: Data?,
-        completionHandler: @escaping (Data?, URLResponse?, (any Error)?) -> Void
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
     ) -> URLSessionUploadTaskProtocol
 }
 
@@ -70,7 +70,7 @@ extension URLSession: URLSessionProtocol {
     func uploadTaskWith(
         with request: URLRequest,
         from bodyData: Data?,
-        completionHandler: @escaping (Data?, URLResponse?, (any Error)?) -> Void
+        completionHandler: @escaping  @Sendable (Data?, URLResponse?, (any Error)?) -> Void
     ) -> URLSessionUploadTaskProtocol {
         return uploadTask(with: request, from: bodyData, completionHandler: completionHandler)
     }

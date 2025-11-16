@@ -31,6 +31,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
 
     // MARK: - Properties
     var shouldReload: (() -> Void)?
+    /// Callback invoked when sync flow is started (when user presses scan or email button)
+    var onSyncFlowStarted: (() -> Void)?
 
     private let profile: Profile
     private let windowUUID: WindowUUID
@@ -253,6 +255,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     /// Scan QR code button tapped
     @objc
     func scanbuttonTapped(_ sender: UIButton) {
+        onSyncFlowStarted?()
         qrCodeNavigationHandler?.showQRCode(delegate: self, rootNavigationController: navigationController)
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInScanQRCode)
     }
@@ -260,6 +263,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     /// Use email login button tapped
     @objc
     func emailLoginTapped(_ sender: UIButton) {
+        onSyncFlowStarted?()
         let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
             telemetryObj: telemetryObject
         )
@@ -276,7 +280,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
 
-    private func showFxAWebViewController(_ url: URL, completion: @escaping (URL) -> Void) {
+    private func showFxAWebViewController(_ url: URL, completion: @escaping @MainActor @Sendable (URL) -> Void) {
         if let accountManager = profile.rustFxA.accountManager {
             let entrypoint = self.deepLinkParams.entrypoint.rawValue
             accountManager.getManageAccountURL(entrypoint: "ios_settings_\(entrypoint)") { [weak self] result in

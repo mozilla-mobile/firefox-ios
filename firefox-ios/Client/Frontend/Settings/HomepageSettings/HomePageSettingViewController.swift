@@ -43,6 +43,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             style: .plain,
             target: self,
             action: #selector(done))
+        if #available(iOS 26.0, *) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,8 +127,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
-        let shouldHideSections = featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly)
-                              && featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+        let shouldHideSections = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
 
         if let profile, !shouldHideSections {
             let jumpBackInSetting = BoolSetting(
@@ -134,7 +137,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
-                store.dispatchLegacy(
+                store.dispatch(
                     JumpBackInAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,
@@ -151,7 +154,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
-                store.dispatchLegacy(
+                store.dispatch(
                     BookmarksAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,
@@ -171,7 +174,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Stories
             ) { value in
-                store.dispatchLegacy(
+                store.dispatch(
                     MerinoAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,

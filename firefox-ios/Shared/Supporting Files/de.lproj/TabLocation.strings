@@ -2,10 +2,10 @@
 "Address.Bar.Reload.A11y.Hint.v124" = "Doppeltippen und halten, um weitere Optionen zu erhalten";
 
 /* Accessibility label for the security icon in url bar */
-"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Verbindung nicht sicher. Verbesserter Schutz vor Aktivitätenverfolgung ist deaktiviert.";
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Verbindung nicht sicher. Verbesserter Tracking-Schutz ist deaktiviert.";
 
 /* Accessibility label for the security icon in url bar */
-"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Sichere Verbindung. Verbesserter Schutz vor Aktivitätenverfolgung ist deaktiviert.";
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Sichere Verbindung. Verbesserter Tracking-Schutz ist deaktiviert.";
 
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Verbindung nicht sicher";
@@ -14,10 +14,10 @@
 "TabLocation.ETP.On.Secure.A11y.Label.v119" = "Sichere Verbindung";
 
 /* Accessibility label for the lock / tracking protection button on the URL bar */
-"TabLocation.LockButton.AccessibilityLabel.v122" = "Schutz vor Aktivitätenverfolgung";
+"TabLocation.LockButton.AccessibilityLabel.v122" = "Tracking-Schutz";
 
 /* Large content title for the lock button. This title is displayed when accessible font sizes are enabled */
-"TabLocation.LockButton.LargeContentTitle.v122" = "Schutz vor Aktivitätenverfolgung";
+"TabLocation.LockButton.LargeContentTitle.v122" = "Tracking-Schutz";
 
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "Diese Seite teilen";

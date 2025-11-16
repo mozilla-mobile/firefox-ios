@@ -68,6 +68,19 @@ class DefaultRouter: NSObject, Router {
         }
     }
 
+    func popToViewController(_ viewController: UIViewController,
+                             reason: DismissalReason = .user,
+                             animated: Bool = true) -> [UIViewController]? {
+        if let controllers = navigationController.popToViewController(viewController, animated: animated) {
+            for controller in controllers {
+                (controller as? DismissalNotifiable)?.willBeDismissed(reason: reason)
+                runCompletion(for: controller)
+            }
+            return controllers
+        }
+        return nil
+    }
+
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool = false, animated: Bool = false) {
         // Call all completions so all coordinators can be deallocated
         completions.forEach { $0.value() }

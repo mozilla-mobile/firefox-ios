@@ -210,12 +210,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = currentTheme.colors
 
+        view.backgroundColor = .clear
         if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            toolbarState.isTranslucent {
-            view.backgroundColor = colors.layerSurfaceLow.withAlphaComponent(toolbarHelper.backgroundAlpha())
             collectionView.backgroundColor = .clear
         } else {
-            view.backgroundColor = colors.layer3
             collectionView.backgroundColor = view.backgroundColor
         }
 
@@ -245,7 +244,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     @objc
     func newTabTapped() {
         delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
-        store.dispatchLegacy(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapNewTab))
+        store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapNewTab))
     }
 
     @objc
@@ -387,11 +386,11 @@ extension TopTabsViewController: TabDisplayerDelegate {
 extension TopTabsViewController: TopTabCellDelegate {
     @MainActor
     func tabCellDidClose(_ cell: UICollectionViewCell) {
-        store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit))
+        store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit))
         topTabDisplayManager.closeActionPerformed(forCell: cell)
         delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
-        store.dispatchLegacy(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
+        store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
     }
 }
 

@@ -26,7 +26,7 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
-    private let modernLaunchTransitionDelegate = ModernLaunchTransitionDelegate()
+    private let defaultBrowserUtil: DefaultBrowserUtil
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -34,10 +34,12 @@ final class LaunchCoordinator: BaseCoordinator,
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
+         defaultBrowserUtil: DefaultBrowserUtil = DefaultBrowserUtil()) {
         self.profile = profile
         self.isIphone = isIphone
         self.windowUUID = windowUUID
+        self.defaultBrowserUtil = defaultBrowserUtil
         super.init(router: router)
     }
 
@@ -173,13 +175,15 @@ final class LaunchCoordinator: BaseCoordinator,
         let view = TermsOfServiceView(
             viewModel: viewModel,
             windowUUID: windowUUID,
-            themeManager: themeManager,
-            onEmbededLinkAction: { _ in }
+            themeManager: themeManager
         )
 
         let viewController = PortraitOnlyHostingController(rootView: view)
-        viewController.modalPresentationStyle = .fullScreen
-        viewController.transitioningDelegate = modernLaunchTransitionDelegate
+        // `.overFullScreen` is required to display the underlying view controller beneath the presented one,
+        // and to prevent a white strip glitch caused by synchronization issues between SwiftUI and UIKit.
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.view.backgroundColor = .clear
 
         router.present(viewController, animated: true)
     }
@@ -187,6 +191,7 @@ final class LaunchCoordinator: BaseCoordinator,
     private func presentLink(with url: URL?) {
         guard let url else { return }
         let presentLinkVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
+
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
@@ -249,17 +254,30 @@ final class LaunchCoordinator: BaseCoordinator,
     @MainActor
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
-        let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let onboardingModel = NimbusOnboardingKitFeatureLayer(
+            onboardingVariant: manager.onboardingVariant
+        ).getOnboardingModel(
+            for: .freshInstall
+        )
         let activityEventHelper = ActivityEventHelper()
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isDefault = defaultBrowserUtil.isDefault
+
         let onboardingCards = onboardingModel.cards.filter { viewModel in
             // Filter out cards that are not relevant for the current device type.
             if isPad, let action = viewModel.multipleChoiceButtons.first?.action,
                action == .toolbarTop || action == .toolbarBottom {
                 return false
             }
+
+            // Filter out welcome cards for DMA users
+            // TODO: FXIOS-14125 #30620 Test DMA filtering for Japan/Global Onboarding
+            if isDefault && viewModel.name.localizedCaseInsensitiveContains("welcome") {
+                return false
+            }
+
             return true
         }
 
@@ -296,9 +314,11 @@ final class LaunchCoordinator: BaseCoordinator,
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)
-        hostingController.modalPresentationStyle = .fullScreen
+        // `.overFullScreen` is required to display the underlying view controller beneath the presented one,
+        // and to prevent a white strip glitch caused by synchronization issues between SwiftUI and UIKit.
+        hostingController.modalPresentationStyle = .overFullScreen
         hostingController.modalTransitionStyle = .crossDissolve
-        hostingController.transitioningDelegate = modernLaunchTransitionDelegate
+        hostingController.view.backgroundColor = .clear
 
         router.present(hostingController, animated: true)
     }

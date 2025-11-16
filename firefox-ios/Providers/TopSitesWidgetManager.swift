@@ -13,7 +13,8 @@ protocol TopSitesWidget {
     func writeWidgetKitTopSites()
 }
 
-class TopSitesWidgetManager: TopSitesWidget {
+// TODO: FXIOS-14116 - TopSitesWidgetManager @unchecked Sendable
+final class TopSitesWidgetManager: TopSitesWidget, @unchecked Sendable {
     private let topSitesProvider: TopSitesProvider
     private let userDefaults: UserDefaultsInterface
 

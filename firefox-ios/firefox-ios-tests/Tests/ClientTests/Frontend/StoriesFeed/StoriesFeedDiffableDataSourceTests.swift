@@ -41,6 +41,7 @@ final class StoriesFeedDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfSections, 0)
     }
 
+    @MainActor
     func test_updateSnapshot_withValidState_returnsStories() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
@@ -49,7 +50,7 @@ final class StoriesFeedDiffableDataSourceTests: XCTestCase {
             MerinoAction(
                 merinoStories: createStories(count: 10),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories
             )
         )
 

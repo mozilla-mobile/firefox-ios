@@ -18,7 +18,7 @@ enum SectionType: Int, Hashable {
     case stats
 }
 
-class TrackingProtectionViewController: UIViewController {
+final class TrackingProtectionViewController: UIViewController {
     var tooltipHeight: Constraint?
 
     // MARK: - Data source

@@ -148,7 +148,7 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     }
 }
 
-class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
+final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
     static let path = InternalURL.Path.errorpage.rawValue
     // When nativeErrorPage feature flag is true, only create
     // html page with gray background similar to homepage or private homepage.
@@ -175,15 +175,15 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
         )
 
-        if isNativeErrorPageEnabled && !useOldErrorPage {
-            return responseForNativeErrorPage(request: request)
-        } else if isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage {
+        // Only handle No internet access because other cases show about:blank page
+        if isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)
         }
     }
 
+    @MainActor
     func responseForNativeErrorPage(request: URLRequest) -> (URLResponse, Data)? {
         guard let url = request.url else { return nil }
         let response = InternalSchemeHandler.response(forUrl: url)
@@ -289,6 +289,7 @@ class ErrorPageHelper {
         self.logger = logger
     }
 
+    @MainActor
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
         guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)" ) else { return }
 

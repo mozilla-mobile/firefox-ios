@@ -50,7 +50,10 @@ class TestSQLitePinnedSites: XCTestCase {
         }
 
         let addPinnedSites: @Sendable () -> Success = {
-            return pinnedSites.addPinnedTopSite(site1) >>== {
+            return pinnedSites.addPinnedTopSite(site1).bind { result in
+                if let error = result.failureValue {
+                    return deferMaybe(error)
+                }
                 sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
                 return pinnedSites.addPinnedTopSite(site2)
             }
@@ -76,7 +79,10 @@ class TestSQLitePinnedSites: XCTestCase {
         }
 
         let dupePinnedSite: @Sendable () -> Success = {
-            return pinnedSites.addPinnedTopSite(site1) >>== {
+            return pinnedSites.addPinnedTopSite(site1).bind { result in
+                if let error = result.failureValue {
+                    return deferMaybe(error)
+                }
                 return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "There should not be a dupe")
                     XCTAssertEqual(pinnedSites[0]?.url, site1.url, "Site1 should still be the only pin")
@@ -116,7 +122,10 @@ class TestSQLitePinnedSites: XCTestCase {
         }
 
         let addPinnedSites: @Sendable () -> Success = {
-            return pinnedSites.addPinnedTopSite(site1) >>== {
+            return pinnedSites.addPinnedTopSite(site1).bind { result in
+                if let error = result.failureValue {
+                    return deferMaybe(error)
+                }
                 sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
                 return pinnedSites.addPinnedTopSite(site2)
             }

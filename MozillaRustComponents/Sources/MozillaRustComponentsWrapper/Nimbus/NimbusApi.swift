@@ -158,11 +158,6 @@ public protocol NimbusUserConfiguration {
     ///
     var rolloutParticipation: Bool { get set }
 
-    /// Control participation (opting in) for all experiments and rollouts at once. This is likely a user action.
-    /// - Deprecated: Use experimentParticipation and rolloutParticipation instead for granular control.
-    @available(*, deprecated, message: "Use experimentParticipation and rolloutParticipation instead")
-    var globalUserParticipation: Bool { get set }
-
     /// Get the list of currently enrolled experiments
     ///
     /// - Returns  A list of `EnrolledExperiment`s
@@ -182,7 +177,7 @@ public protocol NimbusUserConfiguration {
     func getAvailableExperiments() -> [AvailableExperiment]
 }
 
-public protocol NimbusEventStore {
+public protocol NimbusEventStore: Sendable {
     /// Records an event to the Nimbus event store.
     ///
     /// The method obtains the event counters for the `eventId` that is passed in, advances them if

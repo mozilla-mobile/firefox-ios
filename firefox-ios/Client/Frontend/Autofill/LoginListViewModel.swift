@@ -46,6 +46,15 @@ class LoginListViewModel: ObservableObject {
                 guard let recordHostnameURL = URL(string: login.hostname) else { return false }
                 return recordHostnameURL.baseDomain == tabURL.baseDomain
             }
+            self.logins.sort {
+                guard let login0 = URL(string: $0.hostname) else {
+                    return false
+                }
+                guard let login1 = URL(string: $1.hostname) else {
+                    return false
+                }
+                return login0.host == tabURL.host && login1.host != tabURL.host
+            }
         } catch {
             self.logger.log("Error fetching logins",
                             level: .warning,

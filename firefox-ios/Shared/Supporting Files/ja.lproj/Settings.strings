@@ -64,6 +64,12 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "住所";
 
+/* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.Description.v145" = "ツールバー中央のボタンを変更します。";
+
+/* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "ツールバーのボタン";
+
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "デフォルト";
 
@@ -134,7 +140,7 @@
 "Settings.DailyUsagePing.Message.v135" = "これは %@ がアクティブユーザー数を推定するのに役立ちます。";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
-"Settings.DailyUsagePing.Title.v135" = "毎日の使用頻度を送信";
+"Settings.DailyUsagePing.Title.v135" = "毎日の使用頻度を送信する";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "アカウント";
@@ -194,7 +200,7 @@
 "Settings.Search.PrivateSession.Setting.v124" = "プライベートセッションで表示する";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
-"Settings.Search.ShowSuggestions.v121" = "検索語句の候補を表示";
+"Settings.Search.ShowSuggestions.v121" = "検索語句の候補を表示する";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
 "Settings.Search.Suggest.AddressBarSetting.Title.v124" = "アドレスバー - Firefox Suggest";
@@ -209,22 +215,22 @@
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "閲覧履歴を検索する";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
-"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "ブックマークを検索";
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "ブックマークを検索する";
 
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
-"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "同期したタブを検索";
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "同期したタブを検索する";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. %@ is the app name (e.g. Firefox). - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "検索語句に関連した提案を %@ から取得します";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "ウェブからの提案";
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "ウェブからの提案を含める";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. %@ is the app name (e.g. Firefox). - Firefox. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "スポンサーからの提案を随時表示して %@ を支援します";
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
-"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "スポンサーからの提案";
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "スポンサーからの提案を含める";
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "詳細情報";
@@ -233,7 +239,7 @@
 "Settings.Studies.Message.v136" = "機能やアイデアを一般公開される前に試してみましょう。";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
-"Settings.Studies.Title.v136" = "調査のインストールと実行";
+"Settings.Studies.Title.v136" = "調査のインストールと実行を許可する";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "要約ページへのアクセスを提供します。";
@@ -264,4 +270,25 @@
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "利用規約";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "ホーム";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "新規タブ";
+
+/* This is the section title text for the the Translation feature under the Translation settings section. */
+"Settings.Translation.SectionTitle.v145" = "翻訳の設定";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
+"Settings.Translation.SettingOff.v145" = "オフ";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
+"Settings.Translation.SettingOn.v145" = "オン";
+
+/* In the settings menu, in the General section, this is the title for the Translation settings section. */
+"Settings.Translation.Title.v145" = "翻訳";
+
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "翻訳を有効にする";
 

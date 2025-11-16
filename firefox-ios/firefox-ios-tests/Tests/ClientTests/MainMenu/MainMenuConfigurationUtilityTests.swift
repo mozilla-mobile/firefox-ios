@@ -9,6 +9,7 @@ import SummarizeKit
 
 @testable import Client
 
+@MainActor
 final class MainMenuConfigurationUtilityTests: XCTestCase {
     var configUtility: MainMenuConfigurationUtility!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
@@ -53,7 +54,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         let siteSection = sections.first!
         let titles = siteSection.options.map { $0.title }
 
-        XCTAssertTrue(titles.contains(String.MainMenu.Submenus.Tools.PageZoomV2))
+        XCTAssertTrue(titles.contains(String.MainMenu.Submenus.Tools.PageZoom))
         XCTAssertTrue(titles.contains(String.MainMenu.Submenus.Tools.Print))
     }
 

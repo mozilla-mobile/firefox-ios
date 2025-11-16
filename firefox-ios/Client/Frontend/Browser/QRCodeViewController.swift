@@ -367,7 +367,7 @@ class QRCodeViewController: UIViewController {
     }
 }
 
-extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
+extension QRCodeViewController: @MainActor AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput,
                         didOutput metadataObjects: [AVMetadataObject],
                         from connection: AVCaptureConnection) {

@@ -170,7 +170,7 @@ enum Experiments {
     }()
 
     private static func getAppSettings(isFirstRun: Bool) -> NimbusAppSettings {
-        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+        let isPhone = UIDeviceDetails.userInterfaceIdiom == .phone
 
         let customTargetingAttributes: [String: Any] = [
             "isFirstRun": "\(isFirstRun)",
@@ -205,6 +205,11 @@ enum Experiments {
     private static func hasAcceptedTermsOfUse() -> Bool {
         let prefsReader = ProfilePrefsReader()
         return prefsReader.hasAcceptedTermsOfUse()
+    }
+
+    static func touExperiencePoints(region: String?) -> Int32 {
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.getTouExperiencePoints(region: region)
     }
 
     private static func isAppleIntelligenceAvailable() -> Bool {
@@ -255,6 +260,27 @@ enum Experiments {
             .with(featureManifest: FxNimbus.shared)
             .with(commandLineArgs: CommandLine.arguments)
             .with(recordedContext: nimbusRecordedContext)
+            .onCreate(callback: { _ in
+                    DefaultLogger.shared.log(
+                        "Nimbus is ready",
+                        level: .info,
+                        category: .experiments
+                    )
+            })
+            .onApply(callback: { _ in
+                    DefaultLogger.shared.log(
+                        "Nimbus enrollment and experiments application complete",
+                        level: .info,
+                        category: .experiments
+                    )
+            })
+            .onFetch(callback: { _ in
+                DefaultLogger.shared.log(
+                    "Nimbus fetch of new experiments has completed",
+                    level: .info,
+                    category: .experiments
+                )
+            })
             .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
     }
 
@@ -272,7 +298,7 @@ enum Experiments {
         // Getting the singleton first time initializes it.
         let nimbus = Experiments.shared
 
-        DefaultLogger.shared.log("Nimbus is ready!",
+        DefaultLogger.shared.log("Nimbus singleton initialized successfully",
                                  level: .info,
                                  category: .experiments)
 

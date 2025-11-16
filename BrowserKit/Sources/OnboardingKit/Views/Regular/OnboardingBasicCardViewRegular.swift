@@ -6,10 +6,8 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var textColor: Color = .clear
-    @State private var secondaryTextColor: Color = .clear
-    @State private var cardBackgroundColor: Color = .clear
+struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+    @State var theme: Theme
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -26,6 +24,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
     var body: some View {
@@ -46,19 +45,13 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
             }
             .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
         }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFont)
-            .foregroundColor(textColor)
+            .font(UX.CardView.titleFontForCurrentLocale)
+            .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
@@ -70,8 +63,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.imageHeight)
-                .accessibilityLabel(viewModel.title)
+                .frame(height: min(img.size.height, UX.CardView.maxImageHeight))
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }
@@ -80,49 +72,40 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     var bodyView: some View {
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
-            .foregroundColor(secondaryTextColor)
-            .multilineTextAlignment(.center)
+            .foregroundColor(Color(theme.colors.textSecondary))
+            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
 
     var primaryButton: some View {
-        OnboardingButton.primary(
-            viewModel.buttons.primary.title,
+        OnboardingPrimaryButton(
+            title: viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
                     viewModel.name
                 )
             },
-            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-            width: UX.CardView.primaryButtonWidthiPad,
-            windowUUID: windowUUID,
-            themeManager: themeManager
+            theme: theme,
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
+        .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
     }
 
     @ViewBuilder var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
-            OnboardingButton.secondary(
-                secondary.title,
+            OnboardingSecondaryButton(
+                title: secondary.title,
                 action: {
                     onBottomButtonAction(
                         secondary.action,
                         viewModel.name
                     )
                 },
-                accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
-                width: UX.CardView.primaryButtonWidthiPad,
-                windowUUID: windowUUID,
-                themeManager: themeManager
+                theme: theme,
+                accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
             )
+            .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
         }
-    }
-
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        textColor = Color(color.textPrimary)
-        secondaryTextColor = Color(color.textSecondary)
-        cardBackgroundColor = Color(color.layer2)
     }
 }

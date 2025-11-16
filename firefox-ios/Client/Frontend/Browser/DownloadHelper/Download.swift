@@ -83,7 +83,8 @@ class Download: NSObject {
      }
 }
 
-class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate {
+// FIXME: FXIOS-14051 Class is not thread safe and Sendable
+class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate, @unchecked Sendable {
     let preflightResponse: URLResponse
     let request: URLRequest
 

@@ -418,7 +418,7 @@ final class SettingsCoordinator: BaseCoordinator,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .themeSettings)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {
             let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
@@ -442,6 +442,11 @@ final class SettingsCoordinator: BaseCoordinator,
             prefs: profile.prefs,
             windowUUID: windowUUID
         )
+        router.push(viewController)
+    }
+
+    func pressedTranslation() {
+        let viewController = TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         router.push(viewController)
     }
 
