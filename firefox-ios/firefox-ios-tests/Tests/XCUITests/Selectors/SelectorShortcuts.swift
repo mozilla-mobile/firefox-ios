@@ -334,6 +334,14 @@ extension Selector {
             groups: groups
         )
     }
+
+    static func tableFirstMatch(description: String,
+                                groups: [String] = []) -> Selector {
+            Selector(strategy: .anyById(""),
+                     value: "FirstTable",
+                     description: description,
+                     groups: groups)
+    }
 }
 
 extension XCUIElement {

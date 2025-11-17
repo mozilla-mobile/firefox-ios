@@ -153,7 +153,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        browserScreen.assertCancelButtonOnUrlBarExist()
+        browserScreen.assertCancelButtonOnUrlBarExists()
         navigator.back()
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {

@@ -105,4 +105,10 @@ final class ToolbarScreen {
     func tapReloadButton() {
         sel.RELOAD_BUTTON.element(in: app).waitAndTap()
     }
+
+    func getToolbarSettingsMenuButtonElement() -> XCUIElement {
+        let settingMenuButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(settingMenuButton, timeout: TIMEOUT)
+        return settingMenuButton
+    }
 }
