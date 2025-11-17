@@ -79,7 +79,11 @@ class AppAuthenticator: AppAuthenticationProtocol {
         } else {
             let failureError = error
             DispatchQueue.main.async {
-                completion(.failure(.failedEvaluation(message: failureError?.localizedDescription ?? "Can't evaluate policy")))
+                completion(.failure(
+                    .failedEvaluation(
+                        message: failureError?.localizedDescription ?? "Can't evaluate policy"
+                    )
+                ))
             }
         }
     }
