@@ -455,6 +455,7 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(recentSearch)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: recentSearch)
+            searchTelemetry?.recentSearchesTapped(at: indexPath.row)
 
         case .trendingSearches:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
@@ -463,6 +464,7 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(trendingSearch)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: trendingSearch)
+            searchTelemetry?.trendingSearchesTapped(at: indexPath.row)
 
         case .searchSuggestions:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }

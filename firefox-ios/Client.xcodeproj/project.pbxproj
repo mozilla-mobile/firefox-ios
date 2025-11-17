@@ -1354,6 +1354,7 @@
 		AA24AD302E7C37C6008659A3 /* TrendingSearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD2F2E7C37BF008659A3 /* TrendingSearchClient.swift */; };
 		AA24AD322E7C3A8F008659A3 /* TrendingSearchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */; };
 		AA24AD342E7C3AD2008659A3 /* MockTrendingSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */; };
+		AA3CEBAD2ECB853400DDEFEF /* SearchTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CEBAC2ECB853400DDEFEF /* SearchTelemetryTests.swift */; };
 		AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */; };
 		AA5E81472EB12BDC00919E60 /* TranslationsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */; };
 		AA742C7A2E90358400CF55B3 /* MockMicrosurveyTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */; };
@@ -9556,6 +9557,7 @@
 		AA24AD2F2E7C37BF008659A3 /* TrendingSearchClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingSearchClient.swift; sourceTree = "<group>"; };
 		AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingSearchClientTests.swift; sourceTree = "<group>"; };
 		AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrendingSearchEngine.swift; sourceTree = "<group>"; };
+		AA3CEBAC2ECB853400DDEFEF /* SearchTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTelemetryTests.swift; sourceTree = "<group>"; };
 		AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentSearchProvider.swift; sourceTree = "<group>"; };
 		AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsMiddleware.swift; sourceTree = "<group>"; };
 		AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMicrosurveyTelemetry.swift; sourceTree = "<group>"; };
@@ -13243,6 +13245,7 @@
 		8A5189C62C1B5F6C00CDB668 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				AA3CEBAC2ECB853400DDEFEF /* SearchTelemetryTests.swift */,
 				AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */,
 				AAB4321C2E8189310075E47F /* DefaultRecentSearchProviderTests.swift */,
 				AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */,
@@ -19463,6 +19466,7 @@
 				81DAB2F92C8901AC00F4BE98 /* MainMenuStateTests.swift in Sources */,
 				8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */,
 				8AAEBA0B2BF53AF6000C02B5 /* MicrosurveyStateTests.swift in Sources */,
+				AA3CEBAD2ECB853400DDEFEF /* SearchTelemetryTests.swift in Sources */,
 				8A03FFA32DB12AFF00509A72 /* MockSponsoredTelemetry.swift in Sources */,
 				8A25556D2CF0E0E6009C0989 /* InactiveTabsTelemetryTests.swift in Sources */,
 				8A09A9E32D77552C0069B005 /* HomepageMiddlewareTests.swift in Sources */,

@@ -72,6 +72,12 @@ ReaderMode:
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
+RecentSearches:
+  description: Corresponds to the recent searches feature.
+
+Search:
+  description: Corresponds to all things related to search.
+
 ShortcutsLibrary:
   description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
 
@@ -106,6 +112,9 @@ TopSites:
 
 TrackingProtection:
   description: Corresponds to the enhanced tracking protection bottom sheet which can be displayed over a webpage.
+  
+TrendingSearches:
+  description: Corresponds to the trending searches feature.
 
 User:
   description: Corresponds to user properties and settings.

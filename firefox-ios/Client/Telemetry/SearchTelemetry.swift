@@ -146,6 +146,7 @@ class SearchTelemetry: @unchecked Sendable {
     var shouldSetGoogleTopSiteSearch = false
     var shouldSetUrlTypeSearch = false
     private var tabManager: TabManager
+    private let gleanWrapper: GleanWrapper
 
     var interactionType: SearchTelemetryValues.Interaction = .typed
     var selectedResult: SearchTelemetryValues.SelectedResult = .unknown
@@ -162,8 +163,9 @@ class SearchTelemetry: @unchecked Sendable {
     var searchQuery = ""
     var savedQuery = ""
 
-    init(tabManager: TabManager) {
+    init(tabManager: TabManager, gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.tabManager = tabManager
+        self.gleanWrapper = gleanWrapper
     }
 
     // MARK: Searchbar SAP
@@ -506,6 +508,28 @@ class SearchTelemetry: @unchecked Sendable {
         }
 
         return groupTypes.joined(separator: ",")
+    }
+
+    // MARK: Trending Searches
+    func trendingSearchesShown(surveyId: String) {
+        // TODO: FXIOS-14082: Fix bug in loading too many times and add telemetry
+    }
+
+    func trendingSearchesTapped(at index: Int) {
+        let position = "\(index + 1)"
+        let positionExtra = GleanMetrics.SearchTrendingSearches.SuggestionTappedExtra(position: Int32(position))
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchTrendingSearches.suggestionTapped, extras: positionExtra)
+    }
+
+    // MARK: Recent Searches
+    func recentSearchesShown(surveyId: String) {
+        // TODO: FXIOS-14082: Fix bug in loading too many times and add telemetry
+    }
+
+    func recentSearchesTapped(at index: Int) {
+        let position = "\(index + 1)"
+        let positionExtra = GleanMetrics.SearchRecentSearches.SuggestionTappedExtra(position: Int32(position))
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.suggestionTapped, extras: positionExtra)
     }
 }
 
