@@ -25,7 +25,7 @@ enum QueueEventState: Int {
     case failed
 }
 
-// TODO: FXIOS-TODO Laurie - EventQueue shouldn't be @unchecked Sendable
+// TODO: FXIOS-14149 - EventQueue shouldn't be @unchecked Sendable
 /// A queue that provides synchronization between different areas of the codebase and coordinates
 /// actions that depend on one or more events or app states. For example events see: AppEvent.swift.
 final class EventQueue<QueueEventType: Hashable & Sendable>: @unchecked Sendable {
