@@ -160,7 +160,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return websiteCell(tableView: tableView, indexPath: indexPath)
 
         case .lastModifiedSeparator:
-            return cell(tableView: tableView, forLastModifiedSeparator: indexPath)
+            return lastModifiedSeparatorCell(tableView: tableView, forLastModifiedSeparator: indexPath)
 
         case .delete:
             return cell(tableView: tableView, forDelete: indexPath)
@@ -260,7 +260,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
         return loginCell
     }
 
-    private func cell(tableView: UITableView, forLastModifiedSeparator indexPath: IndexPath) -> UITableViewCell {
+    private func lastModifiedSeparatorCell(tableView: UITableView, forLastModifiedSeparator indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: LoginDetailCenteredTableViewCell.cellIdentifier,
             for: indexPath) as? LoginDetailCenteredTableViewCell else {
