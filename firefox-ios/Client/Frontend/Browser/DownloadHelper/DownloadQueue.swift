@@ -52,6 +52,7 @@ class DownloadQueue: DownloadDelegate {
         delegates.removeAll(where: { $0.delegate === delegate || $0.delegate == nil })
     }
 
+    @MainActor
     func enqueue(_ download: Download) {
         // Clear the download stats if the queue was empty at the start.
         let uuid = download.originWindow
@@ -87,6 +88,7 @@ class DownloadQueue: DownloadDelegate {
         }
     }
 
+    @MainActor
     func resumeAll(for window: WindowUUID) {
         for download in downloads where !download.isComplete && download.originWindow == window {
             download.resume()

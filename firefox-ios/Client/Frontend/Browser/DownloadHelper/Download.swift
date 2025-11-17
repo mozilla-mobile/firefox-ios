@@ -38,6 +38,8 @@ class Download: NSObject {
 
     func cancel() {}
     func pause() {}
+
+    @MainActor
     func resume() {}
 
     fileprivate func uniqueDownloadPathForFilename(_ filename: String) throws -> URL {
