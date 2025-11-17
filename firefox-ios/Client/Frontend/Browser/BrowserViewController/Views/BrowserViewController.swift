@@ -985,6 +985,7 @@ class BrowserViewController: UIViewController,
         setupEssentialUI()
         subscribeToRedux()
         enqueueTabRestoration()
+        updateAddressToolbarContainerPosition(for: traitCollection)
 
         // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
         guard !AppConstants.isRunningUnitTest else { return }
@@ -1299,7 +1300,7 @@ class BrowserViewController: UIViewController,
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        updateAddressToolbarContainerPosition(for: traitCollection)
+        updateToolbarStateForTraitCollection(traitCollection)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -3902,7 +3903,6 @@ class BrowserViewController: UIViewController,
             let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
             if showNavToolbar {
                 addressBarPanGestureHandler?.enablePanGestureRecognizer()
-                addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
             }
         }
         if searchSessionState == .active {
@@ -4790,6 +4790,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
+        if isSwipingTabsEnabled {
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+        }
         guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
     }
