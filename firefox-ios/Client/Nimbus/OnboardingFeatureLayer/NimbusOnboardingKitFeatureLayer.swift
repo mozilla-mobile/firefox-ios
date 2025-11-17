@@ -79,7 +79,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 instructionsPopup: card.instructionsPopup)
         }
         // Filter out cards that are not relevant for the current device type and browser state.
-       .filter { viewModel in
+        .filter { viewModel in
             // Filter out cards that are not relevant for the current device type.
             if isIpad, let action = viewModel.multipleChoiceButtons.first?.action,
                action == .toolbarTop || action == .toolbarBottom {
@@ -90,7 +90,6 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             if isDefaultBrowser && viewModel.name.localizedCaseInsensitiveContains("welcome") {
                 return false
             }
-
             return true
         }
     }
