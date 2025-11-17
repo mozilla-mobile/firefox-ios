@@ -19,8 +19,17 @@ final class HostingTableViewCell<Content: View>: UITableViewCell, ReusableCell {
     }
 
     deinit {
-        // remove parent
-        removeHostingControllerFromParent()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // FIXME: FXIOS-14153 This doesn't seem like it should be necessary, investigate later
+            // remove parent
+            removeHostingControllerFromParent()
+        }
     }
 
     @available(*, unavailable)
