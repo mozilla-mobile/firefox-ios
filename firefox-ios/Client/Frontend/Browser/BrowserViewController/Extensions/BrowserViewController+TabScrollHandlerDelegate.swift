@@ -7,14 +7,52 @@ import SnapKit
 extension BrowserViewController: TabScrollHandler.Delegate,
                                 ToolbarAnimatorDelegate,
                                 ToolbarViewProtocol {
-    var toolbarAnimator: ToolbarAnimator {
-        let toolbarContext = ToolbarContext(overKeyboardContainerHeight: overKeyboardContainerHeight,
-                                            bottomContainerHeight: getBottomContainerSize().height,
-                                            headerHeight: headerHeight)
-        let toolbarAnimator = ToolbarAnimator(context: toolbarContext)
-        toolbarAnimator.view = self
-        toolbarAnimator.delegate = self
-        return toolbarAnimator
+    func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
+        updateToolbarContext()
+        toolbarAnimator?.updateToolbarTransition(progress: progress, towards: state)
+    }
+
+    func showToolbar() {
+        updateToolbarContext()
+        toolbarAnimator?.showToolbar()
+    }
+
+    func hideToolbar() {
+        updateToolbarContext()
+        toolbarAnimator?.hideToolbar()
+    }
+
+    func dispatchScrollAlphaChange(alpha: CGFloat) {
+        if shouldSendAlphaChangeAction {
+            store.dispatch(
+                ToolbarAction(
+                    scrollAlpha: Float(alpha),
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                )
+            )
+        }
+    }
+
+    func setupToolbarAnimator() {
+        let context = ToolbarContext(overKeyboardContainerHeight: overKeyboardContainerHeight,
+                                     bottomContainerHeight: getBottomContainerSize().height,
+                                     headerHeight: headerHeight)
+        toolbarAnimator = ToolbarAnimator(context: context)
+        toolbarAnimator?.view = self
+        toolbarAnimator?.delegate = self
+    }
+
+    // MARK: - Private
+
+    private func updateToolbarContext() {
+        guard let animator = toolbarAnimator else { return }
+        let context = ToolbarContext(
+            overKeyboardContainerHeight: overKeyboardContainerHeight,
+            bottomContainerHeight: getBottomContainerSize().height,
+            headerHeight: headerHeight
+        )
+        animator.updateToolbarContext(context)
     }
 
     private var overKeyboardContainerHeight: CGFloat {
@@ -38,30 +76,6 @@ extension BrowserViewController: TabScrollHandler.Delegate,
               let tabURL = tab.url else { return false }
 
         return isMinimalAddressBarEnabled && !tab.isFindInPageMode && !tabURL.isReaderModeURL
-    }
-
-    func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
-        toolbarAnimator.updateToolbarTransition(progress: progress, towards: state)
-    }
-
-    func showToolbar() {
-        toolbarAnimator.showToolbar()
-    }
-
-    func hideToolbar() {
-        toolbarAnimator.hideToolbar()
-    }
-
-    func dispatchScrollAlphaChange(alpha: CGFloat) {
-        if shouldSendAlphaChangeAction {
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: Float(alpha),
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
-        }
     }
 
     /// Helper method for testing overKeyboardScrollHeight behavior.

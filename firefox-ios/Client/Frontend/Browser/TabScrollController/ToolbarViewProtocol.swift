@@ -30,6 +30,7 @@ struct ToolbarContext {
 @MainActor
 final class ToolbarAnimator {
     struct UX {
+        static let transitionDuration: TimeInterval = 0.2
         static let topToolbarDuration: TimeInterval = 0.3
         static let bottomToolbarDuration: TimeInterval = 0.4
     }
@@ -41,13 +42,21 @@ final class ToolbarAnimator {
         self.context = context
     }
 
+    /// Animates the toolbar's position during scroll-based transitions between expanded and collapsed states.
+    /// It’s typically called by the scroll handler as the user scrolls the page, to visually collapse
+    /// or expand the toolbar according to the scroll direction and progress.
+    /// - Parameters:
+    ///   - progress: The current scroll progress, expressed as a vertical offset value.
+    ///                Positive values indicate upward scrolling (collapsing), while negative values
+    ///                indicate downward scrolling (expanding).
+    ///   - state: The target toolbar display state, either `.collapsed` or `.expanded`.
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
         guard let view else { return }
 
         let isCollapsing = (state == .collapsed)
         let clampProgress = isCollapsing ? max(0, progress) : min(0, progress)
 
-        UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut]) {
+        UIView.animate(withDuration: UX.transitionDuration, delay: 0, options: [.curveEaseOut]) {
             if view.isBottomSearchBar {
                 let translationY = isCollapsing ? clampProgress : 0
                 let transform = CGAffineTransform(translationX: 0, y: translationY)
@@ -85,6 +94,10 @@ final class ToolbarAnimator {
         updateBottomToolbar(bottomContainerOffset: context.bottomContainerHeight,
                             overKeyboardContainerOffset: context.overKeyboardContainerHeight,
                             alpha: 0)
+    }
+
+    func updateToolbarContext(_ updateContext: ToolbarContext) {
+        context = updateContext
     }
 
     // MARK: - Helper private functions

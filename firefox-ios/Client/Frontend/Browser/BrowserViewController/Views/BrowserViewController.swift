@@ -200,6 +200,8 @@ class BrowserViewController: UIViewController,
         }
     }()
 
+    var toolbarAnimator: ToolbarAnimator?
+
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
 
@@ -1068,6 +1070,9 @@ class BrowserViewController: UIViewController,
         subscribeToRedux()
         enqueueTabRestoration()
         updateAddressToolbarContainerPosition(for: traitCollection)
+        if isTabScrollRefactoringEnabled {
+            setupToolbarAnimator()
+        }
 
         // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
         guard !AppConstants.isRunningUnitTest else { return }
