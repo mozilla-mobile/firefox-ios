@@ -29,21 +29,21 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     // MARK: - Initialization Tests
 
     func testInit_withDefaultValues_setsCorrectDefaults() {
-        let layer = NimbusOnboardingKitFeatureLayer(
+        let subject = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: .modern,
             with: mockHelper)
 
-        XCTAssertEqual(layer.onboardingVariant, .modern)
+        XCTAssertEqual(subject.onboardingVariant, .modern)
     }
 
     func testInit_withCustomValues_setsCorrectValues() {
-        let layer = NimbusOnboardingKitFeatureLayer(
+        let subject = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: .japan,
             with: mockHelper,
             isDefaultBrowser: true,
             isIpad: true)
 
-        XCTAssertEqual(layer.onboardingVariant, .japan)
+        XCTAssertEqual(subject.onboardingVariant, .japan)
     }
 
     // MARK: - OnboardingVariant Filtering Tests
