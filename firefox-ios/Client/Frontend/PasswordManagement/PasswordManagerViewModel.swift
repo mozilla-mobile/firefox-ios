@@ -14,7 +14,7 @@ struct NewSearchInProgressError: MaybeErrorType {
     public let description: String
 }
 
-// TODO: FXIOS-14159 Laurie - PasswordManagerViewModel shouldn't be @unchecked Sendable
+// TODO: FXIOS-14159 - PasswordManagerViewModel shouldn't be @unchecked Sendable
 // MARK: - Main View Model
 // Login List View Model
 final class PasswordManagerViewModel: @unchecked Sendable {
