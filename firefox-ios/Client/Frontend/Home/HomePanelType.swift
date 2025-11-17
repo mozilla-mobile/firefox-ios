@@ -8,7 +8,6 @@ import Shared
 enum HomePanelType: Int {
     case topSites = 0
 
-    @MainActor
     var internalUrl: URL {
         let aboutUrl = URL(string: "\(InternalURL.baseUrl)/\(AboutHomeHandler.path)")!
         return URL(string: "#panel=\(self.rawValue)", relativeTo: aboutUrl)!
