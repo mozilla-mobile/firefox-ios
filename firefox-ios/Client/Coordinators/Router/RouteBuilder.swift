@@ -8,7 +8,7 @@ import Glean
 import Shared
 import Common
 
-// TODO: Laurie - RouteBuilder should not be @unchecked Sendable due to shouldOpenNewTab usage
+// TODO: FXIOS-14155 - RouteBuilder should not be @unchecked Sendable due to shouldOpenNewTab usage
 final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
     private var isPrivate = false
     private var prefs: Prefs?

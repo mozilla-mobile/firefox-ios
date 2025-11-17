@@ -34,7 +34,7 @@ enum OhttpEnvironment {
     }
 }
 
-// TODO: Laurie - GleanOhttpUploader shouldn't be @unchecked Sendable
+// TODO: FXIOS-14157 - GleanOhttpUploader shouldn't be @unchecked Sendable
 struct GleanOhttpUploader: PingUploaderProtocol, @unchecked Sendable {
     let connectionTimeout = TimeInterval(10)
     let logger: Logger

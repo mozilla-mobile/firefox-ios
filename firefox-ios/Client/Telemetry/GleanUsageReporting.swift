@@ -66,7 +66,7 @@ final class GleanUsageReporting: GleanUsageReportingApi {
     }
 }
 
-// TODO: Laurie - GleanLifecycleObserver shouldn't be @unchecked Sendable
+// TODO: FXIOS-14156 - GleanLifecycleObserver shouldn't be @unchecked Sendable
 final class GleanLifecycleObserver: Notifiable, @unchecked Sendable {
     let gleanUsageReportingApi: GleanUsageReportingApi
     private var isObserving = false
