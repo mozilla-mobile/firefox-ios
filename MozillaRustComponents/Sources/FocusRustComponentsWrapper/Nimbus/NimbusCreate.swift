@@ -105,11 +105,10 @@ public extension Nimbus {
             recordedContext: recordedContext,
             coenrollingFeatureIds: coenrollingFeatureIds,
             dbpath: dbPath,
-            remoteSettingsConfig: remoteSettings,
             metricsHandler: GleanMetricsHandler(),
             geckoPrefHandler: nil,
-            collectionName: collectionName,
-            remoteSettingsService: remoteSettingsService
+            remoteSettingsService: remoteSettingsService,
+            collectionName: collectionName
         )
 
         return Nimbus(

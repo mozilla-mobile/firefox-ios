@@ -189,7 +189,7 @@ public class NimbusBuilder {
      */
     public func build(
         appInfo: NimbusAppSettings,
-        remoteSettingsService: RemoteSettingsService?
+        remoteSettingsService: RemoteSettingsService? = nil
     ) -> NimbusInterface {
         let serverSettings: NimbusServerSettings?
         if let string = url,
@@ -269,7 +269,7 @@ public class NimbusBuilder {
     func newNimbus(
         _ appInfo: NimbusAppSettings,
         serverSettings: NimbusServerSettings?,
-        remoteSettingsService: RemoteSettingsService
+        remoteSettingsService: RemoteSettingsService?
     ) throws -> NimbusInterface {
         try Nimbus.create(serverSettings,
                           appSettings: appInfo,
