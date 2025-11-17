@@ -99,11 +99,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 switch state {
                 case .loggedin:
                     self.hidePrivacyProtectionWindow()
-                    break
 
                 case .loggedout:
                     self.showPrivacyProtectionWindow()
-                    break
 
                 case .canceled:
                     break
