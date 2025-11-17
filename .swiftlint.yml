@@ -87,7 +87,8 @@ only_rules: # Only enforce these rules, ignore all others
   - closure_body_length
   - function_body_length
   - implicitly_unwrapped_optional
-
+  - prefer_type_checking
+ 
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
 
