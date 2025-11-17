@@ -48,9 +48,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         static let pivotLanguage = "en"
     }
 
-    private let service: RemoteSettingsService
-    private let modelsClient: RemoteSettingsClient?
-    private let translatorsClient: RemoteSettingsClient?
+    private let modelsClient: RemoteSettingsClientProtocol?
+    private let translatorsClient: RemoteSettingsClientProtocol?
     private let logger: Logger
 
     private let decoder: JSONDecoder = {
@@ -60,12 +59,10 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     }()
 
     init(
-        service: RemoteSettingsService,
         modelsClient: RemoteSettingsClientProtocol?,
         translatorsClient: RemoteSettingsClientProtocol?,
         logger: Logger = DefaultLogger.shared
     ) {
-        self.service = service
         self.modelsClient = modelsClient
         self.translatorsClient = translatorsClient
         self.logger = logger
@@ -73,9 +70,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
 
     // Convenience initializer for production code
     convenience init(logger: Logger = DefaultLogger.shared) {
-        let profile: Profile = AppContainer.shared.resolve()
         self.init(
-            service: profile.remoteSettingsService,
             modelsClient: ASRemoteSettingsCollection.translationsModels.makeClient(),
             translatorsClient: ASRemoteSettingsCollection.translationsWasm.makeClient(),
             logger: logger
@@ -113,14 +108,15 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             return nil
         }
 
-        var languageModelFiles = [String: Any]()
-
-        // 1. Try to find a direct model first for the pair sourceLang -> targetLang
+        // Try to find a direct model first for the pair sourceLang -> targetLang
         if let directFiles = getLanguageModelFiles(records: records, from: sourceLang, to: targetLang) {
             let entry = makeLanguagePairEntry(directFiles, from: sourceLang, to: targetLang)
             return encodeModelEntries([entry])
         }
 
+        // Fallback to pivot models through Constants.pivotLanguage
+        // This will search for two pairs sourceLang -> en and en -> targetLang
+        // in order to build a translation pipeline for sourceLang -> targetLang
         guard let sourceToPivot = getLanguageModelFiles(records: records, from: sourceLang, to: Constants.pivotLanguage),
               let pivotToTarget = getLanguageModelFiles(records: records, from: Constants.pivotLanguage, to: targetLang) else {
             logger.log(
