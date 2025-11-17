@@ -88,7 +88,8 @@ only_rules: # Only enforce these rules, ignore all others
   - function_body_length
   - implicitly_unwrapped_optional
   - prefer_type_checking
- 
+  - attribute_name_spacing
+
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
 
