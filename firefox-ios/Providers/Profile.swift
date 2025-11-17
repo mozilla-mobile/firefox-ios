@@ -131,8 +131,8 @@ protocol Profile: AnyObject, Sendable {
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
-    func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
-    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
+    func getClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void)
+    func getCachedClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void)
 
     func cleanupHistoryIfNeeded()
 
@@ -480,16 +480,16 @@ open class BrowserProfile: Profile,
         }
     }
 
-    public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
+    public func getClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void) {
         let deferredResponse = self.getClientsAndTabs()
         deferredResponse.upon { result in
             completion(result.successValue)
         }
     }
 
-    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
-        let defferedResponse = self.retrieveTabData()
-        defferedResponse.upon { result in
+    public func getCachedClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void) {
+        let deferredResponse = self.retrieveTabData()
+        deferredResponse.upon { result in
             completion(result.successValue)
         }
     }
