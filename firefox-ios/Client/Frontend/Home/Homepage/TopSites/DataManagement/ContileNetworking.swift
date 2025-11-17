@@ -18,7 +18,7 @@ enum ContileNetworkingError: Error {
 }
 
 protocol ContileNetworking: Sendable {
-    func data(from request: URLRequest, completion: @escaping (NetworkingContileResult) -> Void)
+    func data(from request: URLRequest, completion: @escaping @Sendable (NetworkingContileResult) -> Void)
 }
 
 final class DefaultContileNetwork: ContileNetworking {
@@ -31,7 +31,7 @@ final class DefaultContileNetwork: ContileNetworking {
         self.logger = logger
     }
 
-    func data(from request: URLRequest, completion: @escaping (NetworkingContileResult) -> Void) {
+    func data(from request: URLRequest, completion: @escaping @Sendable (NetworkingContileResult) -> Void) {
         urlSession.dataTaskWith(request: request) { [weak self] data, response, error in
             guard let self = self else { return }
 

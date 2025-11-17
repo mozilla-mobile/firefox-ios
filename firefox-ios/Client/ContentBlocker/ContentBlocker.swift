@@ -242,7 +242,12 @@ class ContentBlocker {
 // no longer match. Finally, any JSON rule files that aren't in the ruleStore need to be compiled and stored in the
 // ruleStore.
 extension ContentBlocker {
-    private func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
+    private func loadJsonFromBundle(
+        forResource file: String,
+        completion: @escaping @Sendable (
+            _ jsonString: String
+        ) -> Void
+    ) {
         let logger = self.logger
         DispatchQueue.global().async {
             var source = ""
