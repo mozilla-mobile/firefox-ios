@@ -157,7 +157,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return passwordCell(tableView: tableView, indexPath: indexPath)
 
         case .website:
-            return websiteCell(tableView: tableView, forWebsite: indexPath)
+            return websiteCell(tableView: tableView, indexPath: indexPath)
 
         case .lastModifiedSeparator:
             return cell(tableView: tableView, forLastModifiedSeparator: indexPath)
@@ -243,7 +243,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
         return loginCell
     }
 
-    private func websiteCell(tableView: UITableView, forWebsite indexPath: IndexPath) -> UITableViewCell {
+    private func websiteCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
             return UITableViewCell()
         }
