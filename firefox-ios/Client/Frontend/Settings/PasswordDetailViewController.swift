@@ -163,7 +163,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return lastModifiedSeparatorCell(tableView: tableView, indexPath: indexPath)
 
         case .delete:
-            return cell(tableView: tableView, forDelete: indexPath)
+            return deleteCell(tableView: tableView, forDelete: indexPath)
         }
     }
 
@@ -291,7 +291,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
         return cell
     }
 
-    private func cell(tableView: UITableView, forDelete indexPath: IndexPath) -> UITableViewCell {
+    private func deleteCell(tableView: UITableView, forDelete indexPath: IndexPath) -> UITableViewCell {
         guard let deleteCell = tableView.dequeueReusableCell(withIdentifier: ThemedTableViewCell.cellIdentifier,
                                                              for: indexPath) as? ThemedTableViewCell else {
             return UITableViewCell()
