@@ -59,13 +59,20 @@ final class TranslationsSchemeHandler: NSObject, WKURLSchemeHandler {
     ///
     /// By serving all assets through `translations://app/`, we ensure a consistent
     /// same-origin environment inside the WebView.
-    private lazy var router: TinyRouter = {
+    private static let defaultRouter: TinyRouter = {
         TinyRouter()
             .register("models-buffer", ModelsBufferRoute())
             .register("models", ModelsRoute())
             .register("translator", TranslatorRoute())
             .setDefault(StaticFileRoute())
     }()
+    
+    private let router: TinyRouter
+
+    init(router: TinyRouter = TranslationsSchemeHandler.defaultRouter) {
+        self.router = router
+        super.init()
+    }
 
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
