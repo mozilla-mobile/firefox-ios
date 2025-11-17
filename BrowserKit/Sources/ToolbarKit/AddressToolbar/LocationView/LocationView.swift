@@ -43,7 +43,7 @@ final class LocationView: UIView,
     private var safeListedURLImageName: String?
     private var scrollAlpha: CGFloat = 1
     private var hasAlternativeLocationColor = false
-    private var isKeyboardVisible = false
+    private var config: LocationViewConfiguration?
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -109,12 +109,10 @@ final class LocationView: UIView,
     }
 
     private lazy var effectView: UIVisualEffectView = .build {
-#if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
             $0.effect = UIGlassEffect()
             $0.layer.cornerRadius = UX.effectViewCornerRadius
         }
-#endif
     }
 
     // MARK: - URL Text Field
@@ -165,9 +163,9 @@ final class LocationView: UIView,
                    isUnifiedSearchEnabled: Bool,
                    uxConfig: AddressToolbarUXConfiguration,
                    addressBarPosition: AddressToolbarPosition) {
+        self.config = config
         isURLTextFieldCentered = uxConfig.isLocationTextCentered
         hasAlternativeLocationColor = uxConfig.hasAlternativeLocationColor
-        isKeyboardVisible = config.shouldShowKeyboard
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
@@ -723,7 +721,7 @@ final class LocationView: UIView,
         let colors = theme.colors
 
         let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
-        if #available(iOS 26.0, *), scrollAlpha.isZero, !isKeyboardVisible {
+        if #available(iOS 26.0, *), scrollAlpha.isZero, config?.shouldShowKeyboard == false {
             /// We want to use system colors when the location view is fully transparent
             /// To make sure it blends well with the background when using glass effect.
             urlTextFieldColor =  .label

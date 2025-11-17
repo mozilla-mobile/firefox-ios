@@ -16,7 +16,8 @@ protocol AppStartupTelemetry {
     func sendStartupTelemetry()
 }
 
-final class DefaultAppStartupTelemetry: AppStartupTelemetry {
+// TODO: FXIOS-14115 - DefaultAppStartupTelemetry @unchecked Sendable
+final class DefaultAppStartupTelemetry: AppStartupTelemetry, @unchecked Sendable {
     let profile: Profile
 
     // MARK: Init

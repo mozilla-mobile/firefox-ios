@@ -163,7 +163,9 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     // the view bounds is incorrect causing weird shadow effect
     private func observeCardViewBounds() {
         kvoToken = cardView.observe(\.bounds, options: .new) { [weak self] _, _ in
-            self?.updateShadowPath()
+            ensureMainThread { [weak self] in
+                self?.updateShadowPath()
+            }
         }
     }
 

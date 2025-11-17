@@ -160,7 +160,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
 
-                store.dispatchLegacy(newAction)
+                store.dispatch(newAction)
             }
             if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
                 userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)

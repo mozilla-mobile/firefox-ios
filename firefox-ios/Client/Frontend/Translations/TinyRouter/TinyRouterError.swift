@@ -13,8 +13,15 @@ public enum TinyRouterError: Error, Equatable {
     case badURL
     /// URL scheme didn't match the handler's expected scheme
     case unsupportedScheme(expected: String, found: String?)
+    /// URL host didn't match the handler's expected host
+    case unsupportedHost(expected: String, found: String?)
     /// A required query parameter was missing from the request
     case missingParam(_ name: String)
     /// A query parameter value was present but invalid
     case invalidParam(_ name: String, _ value: String)
+    /// The handler built an invalid response
+    case badResponse
+    /// A catch-all wrapper for unexpected errors, storing a textual description
+    /// for logging and debugging while keeping this enum Equatable.
+    case unknown(_ description: String)
 }

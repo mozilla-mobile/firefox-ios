@@ -50,6 +50,8 @@ final class LegacyTabScrollController: NSObject,
         case visible
     }
 
+    var toolbarDisplayState: ToolbarDisplayState = .init()
+
     weak var tab: Tab? {
         willSet {
             self.scrollView?.delegate = nil
@@ -343,6 +345,7 @@ final class LegacyTabScrollController: NSObject,
         guard toolbarState != .visible else { return }
 
         toolbarState = .visible
+        toolbarDisplayState = .expanded
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * showDurationRatio)
         animateToolbarsWithOffsets(
@@ -359,6 +362,7 @@ final class LegacyTabScrollController: NSObject,
         guard toolbarState != .collapsed else { return }
 
         toolbarState = .collapsed
+        toolbarDisplayState = .collapsed
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * hideDurationRation)
         animateToolbarsWithOffsets(
@@ -665,7 +669,7 @@ private extension LegacyTabScrollController {
             self.bottomContainerOffset = bottomContainerOffset
 
             if isMinimalAddressBarEnabled && tab?.isFindInPageMode == false && tab?.url?.isReaderModeURL == false {
-                store.dispatchLegacy(
+                store.dispatch(
                     ToolbarAction(
                         scrollAlpha: Float(alpha),
                         windowUUID: windowUUID,
@@ -781,7 +785,7 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
         if (lastContentOffsetY > 0 && contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && contentOffset.y > 0) {
             lastContentOffsetY = contentOffset.y
-            store.dispatchLegacy(
+            store.dispatch(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: contentOffset,
                     windowUUID: windowUUID,
