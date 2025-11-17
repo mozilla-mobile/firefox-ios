@@ -32,12 +32,12 @@ struct TranslationRecord: Codable {
     let version: String
 }
 
-protocol TranslationModelsFetching {
+protocol TranslationModelsFetcherProtocol {
     func fetchTranslatorWASM() -> Data?
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data?
 }
 
-final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
+final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendable {
     static let shared = ASTranslationModelsFetcher()
     // Pin versions to avoid using unsupported models
     private enum Constants {
