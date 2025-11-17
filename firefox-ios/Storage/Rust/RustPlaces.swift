@@ -410,8 +410,11 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
             }
     }
 
-    public func createFolder(parentGUID: GUID, title: String,
-                             position: UInt32?) -> Deferred<Maybe<GUID>> {
+    public func createFolder(
+        parentGUID: GUID,
+        title: String,
+        position: UInt32?
+    ) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createFolder(
                 parentGUID: parentGUID,
@@ -422,9 +425,12 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     }
 
     /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
-    public func createFolder(parentGUID: GUID, title: String,
-                             position: UInt32?,
-                             completion: @Sendable @escaping (Result<GUID, any Error>) -> Void) {
+    public func createFolder(
+        parentGUID: GUID,
+        title: String,
+        position: UInt32?,
+        completion: @Sendable @escaping (Result<GUID, any Error>) -> Void
+    ) {
         withWriter({ connection in
                 return try connection.createFolder(
                     parentGUID: parentGUID,

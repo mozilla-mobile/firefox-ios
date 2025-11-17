@@ -199,14 +199,16 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         return isFeatureOn && isSettingsToggleOn && isZeroSearchState
     }
 
-    init(isPrivate: Bool, isBottomSearchBar: Bool,
-         profile: Profile,
-         model: SearchEnginesManager,
-         tabManager: TabManager,
-         trendingSearchClient: TrendingSearchClientProvider,
-         recentSearchProvider: RecentSearchProvider?,
-         logger: Logger = DefaultLogger.shared,
-         featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search
+    init(
+        isPrivate: Bool,
+        isBottomSearchBar: Bool,
+        profile: Profile,
+        model: SearchEnginesManager,
+        tabManager: TabManager,
+        trendingSearchClient: TrendingSearchClientProvider,
+        recentSearchProvider: RecentSearchProvider?,
+        logger: Logger = DefaultLogger.shared,
+        featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search
     ) {
         self.isPrivate = isPrivate
         self.isBottomSearchBar = isBottomSearchBar

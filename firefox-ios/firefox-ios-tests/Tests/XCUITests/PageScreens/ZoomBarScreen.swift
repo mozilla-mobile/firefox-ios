@@ -45,8 +45,11 @@ final class ZoomBarScreen {
         XCTAssertEqual(currentZoomPercent(), expected, file: file, line: line)
     }
 
-    func assertBookTextHeightChanged(action: () -> Void,
-                                     file: StaticString = #filePath, line: UInt = #line) {
+    func assertBookTextHeightChanged(
+        action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         let before = bookText.frame.size.height
         action()
         let after = bookText.frame.size.height
