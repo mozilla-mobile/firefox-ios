@@ -74,7 +74,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
 
     /// Fetches the wasm binary for the translator that matches the pinned version.
     func fetchTranslatorWASM() -> Data? {
-        guard let records = translatorsClient?.getRecords() else {
+        guard let records = translatorsClient?.getRecords(syncIfEmpty: true) else {
             logger.log("No translator records found", level: .warning, category: .remoteSettings)
             return nil
         }
@@ -89,8 +89,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
+    /// TODO(FXIOS-14134): Support pivoting e.g. given `fr` -> `en` and `en` -> `it` we can translate `fr` -> `it`.
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data? {
-        guard let records = modelsClient?.getRecords() else {
+        guard let records = modelsClient?.getRecords(syncIfEmpty: true) else {
             logger.log("No model records found.", level: .warning, category: .remoteSettings)
             return nil
         }
@@ -111,6 +112,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
                     "fileType": fields.fileType,
                     "version": fields.version,
                     "name": fields.name,
+                    "id": record.id
                 ]
             ]
         }
@@ -120,7 +122,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
 
     /// Fetches the buffer data for a given model by record id.
     func fetchModelBuffer(recordId: String) -> Data? {
-        guard let record = modelsClient?.getRecords()?.first(where: { $0.id == recordId }) else {
+        guard let record = modelsClient?.getRecords(syncIfEmpty: true)?.first(where: { $0.id == recordId }) else {
             logger.log("No model record found.", level: .warning, category: .remoteSettings)
             return nil
         }
