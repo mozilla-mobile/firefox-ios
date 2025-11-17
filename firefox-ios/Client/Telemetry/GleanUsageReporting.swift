@@ -65,7 +65,7 @@ final class GleanUsageReporting: GleanUsageReportingApi {
 }
 
 // TODO: FXIOS-14156 - GleanLifecycleObserver shouldn't be @unchecked Sendable
-final class GleanLifecycleObserver: Notifiable, @unchecked Sendable {
+class GleanLifecycleObserver: Notifiable, @unchecked Sendable {
     let gleanUsageReportingApi: GleanUsageReportingApi
     private var isObserving = false
     private let notificationCenter: NotificationProtocol
@@ -130,7 +130,7 @@ final class GleanLifecycleObserver: Notifiable, @unchecked Sendable {
     }
 }
 
-final class GleanUsageReportingMetricsService {
+class GleanUsageReportingMetricsService {
     private var lifecycleObserver: GleanLifecycleObserver
     let profile: Profile
 
