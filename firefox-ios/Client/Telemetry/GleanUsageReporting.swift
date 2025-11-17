@@ -16,7 +16,6 @@ enum UsageReason: String, Equatable {
 protocol GleanUsageReportingApi {
     func setEnabled(_ enabled: Bool)
     func setUsageReason(_ usageReason: UsageReason)
-    @MainActor
     func submitPing()
     func startTrackingDuration()
     func stopTrackingDuration()
@@ -49,10 +48,9 @@ final class GleanUsageReporting: GleanUsageReportingApi {
         GleanMetrics.Pings.shared.usageReporting.submit()
     }
 
-    @MainActor
     private func setUsageConstantValues() {
         GleanMetrics.Usage.os.set("iOS")
-        GleanMetrics.Usage.osVersion.set(UIDevice.current.systemVersion)
+        GleanMetrics.Usage.osVersion.set(UIDeviceDetails.systemVersion)
         GleanMetrics.Usage.appDisplayVersion.set(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
         GleanMetrics.Usage.appBuild.set(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")
         GleanMetrics.Usage.appChannel.set(AppConstants.buildChannel.rawValue)
@@ -80,7 +78,6 @@ final class GleanLifecycleObserver: Notifiable, @unchecked Sendable {
         self.notificationCenter = notificationCenter
     }
 
-    @MainActor
     func startObserving() {
         guard !isObserving else { return }
         isObserving = true
@@ -120,14 +117,12 @@ final class GleanLifecycleObserver: Notifiable, @unchecked Sendable {
         }
     }
 
-    @MainActor
     func handleForegroundEvent() {
         gleanUsageReportingApi.startTrackingDuration()
         gleanUsageReportingApi.setUsageReason(.active)
         gleanUsageReportingApi.submitPing()
     }
 
-    @MainActor
     func handleBackgroundEvent() {
         gleanUsageReportingApi.stopTrackingDuration()
         gleanUsageReportingApi.setUsageReason(.inactive)
@@ -147,7 +142,6 @@ final class GleanUsageReportingMetricsService {
         self.lifecycleObserver = lifecycleObserver
     }
 
-    @MainActor
     func start() {
         lifecycleObserver.gleanUsageReportingApi.setEnabled(true)
         checkAndSetUsageProfileId()
