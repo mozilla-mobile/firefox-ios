@@ -99,13 +99,6 @@ class DownloadsPanel: UIViewController,
         applyTheme()
     }
 
-    deinit {
-        // The view might outlive this view controller thanks to animations;
-        // explicitly nil out its references to us to avoid crashes. Bug 1218826.
-        tableView.dataSource = nil
-        tableView.delegate = nil
-    }
-
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
         let notificationWindowUUID = notification.windowUUID
