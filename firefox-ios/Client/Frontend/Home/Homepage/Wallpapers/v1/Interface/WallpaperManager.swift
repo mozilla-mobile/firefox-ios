@@ -26,7 +26,7 @@ protocol WallpaperManagerInterface {
     func checkForUpdates()
 }
 
-// TODO: FXIOS-TODO Laurie - WallpaperManager shouldn't be @unchecked Sendable
+// TODO: FXIOS-14150 - WallpaperManager shouldn't be @unchecked Sendable
 /// The primary interface for the wallpaper feature.
 final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
     enum ThumbnailFilter {

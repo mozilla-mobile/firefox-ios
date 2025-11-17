@@ -13,7 +13,7 @@ public enum WallpaperSelectorError: Error {
     case itemNotFound
 }
 
-// TODO: FXIOS-TODO Laurie - WallpaperSelectorViewModel shouldn't be @unchecked Sendable
+// TODO: FXIOS-14150 - WallpaperSelectorViewModel shouldn't be @unchecked Sendable
 final class WallpaperSelectorViewModel: @unchecked Sendable {
     enum WallpaperSelectorLayout: Equatable {
         case compact

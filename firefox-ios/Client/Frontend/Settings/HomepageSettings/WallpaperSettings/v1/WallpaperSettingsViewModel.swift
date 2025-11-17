@@ -10,7 +10,7 @@ public enum WallpaperSettingsError: Error {
     case itemNotFound
 }
 
-// TODO: FXIOS-TODO Laurie - WallpaperSettingsViewModel shouldn't be @unchecked Sendable
+// TODO: FXIOS-14150 - WallpaperSettingsViewModel shouldn't be @unchecked Sendable
 final class WallpaperSettingsViewModel: FeatureFlaggable, @unchecked Sendable {
     typealias a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper
     typealias stringIds = String.Settings.Homepage.Wallpaper
