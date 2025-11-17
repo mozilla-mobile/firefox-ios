@@ -14,12 +14,19 @@ import OnboardingKit
 class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
     var onboardingVariant: OnboardingVariant
+    private let isDefaultBrowser: Bool
+    private let isIpad: Bool
+
     init(
         onboardingVariant: OnboardingVariant,
-        with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()
+        with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
+        isDefaultBrowser: Bool = false,
+        isIpad: Bool? = nil
     ) {
         self.helperUtility = helperUtility
         self.onboardingVariant = onboardingVariant
+        self.isDefaultBrowser = isDefaultBrowser
+        self.isIpad = isIpad ?? (UIDevice.current.userInterfaceIdiom == .pad)
     }
 
     func getOnboardingModel(
@@ -70,6 +77,21 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 a11yIdRoot: "\(card.a11yIdRoot)\(index)",
                 imageID: card.imageID,
                 instructionsPopup: card.instructionsPopup)
+        }
+        // Filter out cards that are not relevant for the current device type and browser state.
+       .filter { viewModel in
+            // Filter out cards that are not relevant for the current device type.
+            if isIpad, let action = viewModel.multipleChoiceButtons.first?.action,
+               action == .toolbarTop || action == .toolbarBottom {
+                return false
+            }
+
+            // Filter out welcome cards for DMA users who already have Firefox set as default browser
+            if isDefaultBrowser && viewModel.name.localizedCaseInsensitiveContains("welcome") {
+                return false
+            }
+
+            return true
         }
     }
 
@@ -145,7 +167,8 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         from cardLink: NimbusOnboardingLink?
     ) -> OnboardingKit.OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
-              let url = URL(string: cardLink.url)
+              let url = URL(string: cardLink.url),
+              url.scheme != nil
         else { return nil }
 
         return OnboardingKit.OnboardingLinkInfoModel(title: cardLink.title, url: url)
