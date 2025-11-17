@@ -154,7 +154,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return usernameCell(tableView: tableView, indexPath: indexPath)
 
         case .password:
-            return passwordCell(tableView: tableView, forPassword: indexPath)
+            return passwordCell(tableView: tableView, indexPath: indexPath)
 
         case .website:
             return cell(tableView: tableView, forWebsite: indexPath)
@@ -222,7 +222,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
         return loginCell
     }
 
-    private func passwordCell(tableView: UITableView, forPassword indexPath: IndexPath) -> UITableViewCell {
+    private func passwordCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
             return UITableViewCell()
         }
