@@ -5,7 +5,7 @@
 /// This route handles requests to `translations://app/models-buffer?recordId=<id>`.
 /// It returns the binary data for the translation model files.
 /// NOTE: Unlike `ModelsRoute` (which returns only JSON metadata), this route returns
-/// the **binary buffer** for a *single* model file. The caller must already
+/// the binary buffer for a single model file. The caller must already
 /// know which record ID they want to fetch. This is done in two steps, because encoding/decoding 
 /// large binary blobs as base64 inside JSON is inefficient and slow.
 final class ModelsBufferRoute: TinyRoute {

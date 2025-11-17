@@ -66,7 +66,7 @@ final class TranslationsSchemeHandler: NSObject, WKURLSchemeHandler {
             .register("translator", TranslatorRoute())
             .setDefault(StaticFileRoute())
     }()
-    
+
     private let router: TinyRouter
 
     init(router: TinyRouter = TranslationsSchemeHandler.defaultRouter) {

@@ -10,11 +10,11 @@ final class ModelsRoute: TinyRoute {
 
     init(fetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher()) {
         self.fetcher = fetcher
-    }	
+    }
 
     func handle(url: URL, components: URLComponents) throws -> TinyHTTPReply? {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            throw TinyRouterError.badURL	
+            throw TinyRouterError.badURL
         }
 
         let items = components.queryItems ?? []
