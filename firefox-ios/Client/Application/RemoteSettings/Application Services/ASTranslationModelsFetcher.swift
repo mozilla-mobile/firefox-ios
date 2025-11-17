@@ -35,13 +35,14 @@ struct TranslationRecord: Codable {
 protocol TranslationModelsFetcherProtocol {
     func fetchTranslatorWASM() -> Data?
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data?
+    func fetchModelBuffer(recordId: String) -> Data?
 }
 
 final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendable {
     static let shared = ASTranslationModelsFetcher()
     // Pin versions to avoid using unsupported models
     private enum Constants {
-        static let translatorVersion = "2.0"
+        static let translatorVersion = "3.0"
         static let modelsVersion = "1.0"
         static let translatorName = "bergamot-translator"
     }
@@ -57,7 +58,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         return decoder
     }()
 
-    init?(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared) {
         let profile: Profile = AppContainer.shared.resolve()
         self.service = profile.remoteSettingsService
         self.modelsClient = ASRemoteSettingsCollection.translationsModels.makeClient()
@@ -100,17 +101,10 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             guard
                 let fields: ModelFieldsRecord = decodeRecord(record),
                 fields.fromLang == sourceLang,
-                fields.toLang == targetLang,
-                fields.version == Constants.modelsVersion
+                fields.toLang == targetLang
             else { continue }
 
-            guard let attachment = try? modelsClient?.getAttachment(record: record) else {
-                logger.log("Cannot fetch model attachment.", level: .warning, category: .remoteSettings)
-                return nil
-            }
-
             languageModelFiles[fields.fileType] = [
-                "buffer": attachment.base64EncodedString(),
                 "record": [
                     "fromLang": fields.fromLang,
                     "toLang": fields.toLang,
@@ -122,5 +116,22 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         }
 
         return try? JSONSerialization.data(withJSONObject: ["languageModelFiles": languageModelFiles])
+    }
+
+    /// Fetches the buffer data for a given model by record id.
+    func fetchModelBuffer(recordId: String) -> Data? {
+        guard let record = modelsClient?.getRecords()?.first(where: { $0.id == recordId }) else {
+            logger.log("No model record found.", level: .warning, category: .remoteSettings)
+            return nil
+        }
+
+        guard let attachment = try? modelsClient?.getAttachment(record: record) else {
+            logger.log("Failed to fetch attachment for record \(recordId).",
+                       level: .warning,
+                       category: .remoteSettings)
+            return nil
+        }
+
+        return attachment
     }
 }
