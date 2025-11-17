@@ -162,7 +162,7 @@ final class BrowserScreen {
         addressBar.typeText(text)
     }
 
-    func assertCancelButtonOnUrlBarExist() {
+    func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }
 
@@ -232,5 +232,14 @@ final class BrowserScreen {
     func assertNumberOfSuggestedLines(expectedLines: Int) {
         let suggestedLines = app.tables.firstMatch.cells
         XCTAssertEqual(suggestedLines.count, expectedLines)
+    }
+
+    func assertAddressBarExists(duration: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(addressBar, timeout: duration)
+    }
+
+    func getAddressBarElement() -> XCUIElement {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        return addressBar
     }
 }
