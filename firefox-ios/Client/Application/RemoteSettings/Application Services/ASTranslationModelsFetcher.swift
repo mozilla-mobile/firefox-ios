@@ -61,8 +61,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
 
     init(
         service: RemoteSettingsService,
-        modelsClient: RemoteSettingsClient?,
-        translatorsClient: RemoteSettingsClient?,
+        modelsClient: RemoteSettingsClientProtocol?,
+        translatorsClient: RemoteSettingsClientProtocol?,
         logger: Logger = DefaultLogger.shared
     ) {
         self.service = service
