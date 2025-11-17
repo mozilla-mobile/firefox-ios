@@ -86,6 +86,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         return hasSync
     }
 
+    @MainActor
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID) {
         availableCards.removeAll()
         for cardModel in cardModels {

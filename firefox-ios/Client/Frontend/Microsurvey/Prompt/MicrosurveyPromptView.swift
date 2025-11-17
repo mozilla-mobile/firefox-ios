@@ -97,14 +97,14 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
 
     @objc
     func closeMicroSurvey() {
-        store.dispatchLegacy(
+        store.dispatch(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.closePrompt)
         )
     }
 
     @objc
     func openMicroSurvey() {
-        store.dispatchLegacy(
+        store.dispatch(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.continueToSurvey)
         )
     }

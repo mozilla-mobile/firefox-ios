@@ -127,6 +127,7 @@ class AdsTelemetryHelper: TabContentScript {
         }
     }
 
+    @MainActor
     private func getProviderForMessage(message: WKScriptMessage) -> SearchProviderModel? {
         guard let body = message.body as? [String: Any], let url = body["url"] as? String else { return nil }
         for provider in SearchProviderModel.searchProviderList {

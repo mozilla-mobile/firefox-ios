@@ -44,9 +44,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
 
-        case .hntTopSitesVisualRefresh:
-            return checkHntTopSitesVisualRefreshFeature(from: nimbus)
-
         case .homepageRedesign:
             return checkHomepageRedesignFeature(from: nimbus)
 
@@ -59,11 +56,11 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageStoriesRedesign:
             return checkHomepageStoriesRedesignFeature(from: nimbus)
 
+        case .homepageScrim:
+            return checkHomepageScrimFeature(from: nimbus)
+
         case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
             return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
-
-        case .homepageRebuild:
-            return checkHomepageFeature(from: nimbus)
 
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
@@ -220,10 +217,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
-    private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
-    }
-
     private func checkHomepageRedesignFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().enabled
     }
@@ -240,6 +233,10 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.homepageRedesignFeature.value().storiesRedesign
     }
 
+    private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().scrim
+    }
+
     private func checkHomepageDiscoverMoreFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -254,11 +251,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         default:
             return false
         }
-    }
-
-    private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.homepageRebuildFeature.value()
-        return config.enabled
     }
 
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {

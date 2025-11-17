@@ -6,10 +6,15 @@ import Common
 import UIKit
 
 protocol LoginDetailTableViewCellDelegate: AnyObject {
+    @MainActor
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)
+    @MainActor
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool
+    @MainActor
     func canPerform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool
+    @MainActor
     func textFieldDidChange(_ cell: LoginDetailTableViewCell)
+    @MainActor
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
 

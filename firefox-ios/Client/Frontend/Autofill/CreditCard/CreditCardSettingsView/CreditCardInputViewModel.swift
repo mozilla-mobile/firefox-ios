@@ -93,9 +93,10 @@ enum CreditCardModifiedStatus {
     }
 }
 
-class CreditCardInputViewModel: ObservableObject {
+// TODO: FXIOS-14112 - Fix CreditCardInputViewModel @unchecked Sendable
+final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     typealias CreditCardText = String.CreditCard.Alert
-    var logger: Logger?
+    let logger: Logger
     let profile: Profile
     let autofill: CreditCardProvider
     var creditCard: CreditCard?
@@ -206,7 +207,8 @@ class CreditCardInputViewModel: ObservableObject {
          enteredValue: String,
          creditCard: CreditCard? = nil,
          state: CreditCardEditState,
-         creditCardValidator: CreditCardValidator = CreditCardValidator()
+         creditCardValidator: CreditCardValidator = CreditCardValidator(),
+         logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
         self.errorState = errorState
@@ -215,6 +217,7 @@ class CreditCardInputViewModel: ObservableObject {
         self.creditCard = creditCard
         self.state = state
         self.creditCardValidator = creditCardValidator
+        self.logger = logger
         self.isRightBarButtonEnabled = initialStateToEnableTopRightButton()
     }
 
@@ -253,22 +256,26 @@ class CreditCardInputViewModel: ObservableObject {
     }
 
     func removeCreditCard(creditCard: CreditCard?,
-                          completion: @escaping @Sendable (CreditCardModifiedStatus, Bool) -> Void) {
+                          completion: @escaping @MainActor @Sendable (CreditCardModifiedStatus, Bool) -> Void) {
         guard let currentCreditCard = creditCard,
               !currentCreditCard.guid.isEmpty else {
-            completion(.none, false)
+            ensureMainThread {
+                completion(.none, false)
+            }
             return
         }
 
         autofill.deleteCreditCard(id: currentCreditCard.guid) { status, error in
-            guard let error = error, status else {
-                completion(.removedCard, true)
-                return
+            ensureMainThread {
+                guard let error = error, status else {
+                    completion(.removedCard, true)
+                    return
+                }
+                self.logger.log("Unable to remove credit card: \(error)",
+                                level: .warning,
+                                category: .storage)
+                completion(.none, false)
             }
-            self.logger?.log("Unable to remove credit card: \(error)",
-                             level: .warning,
-                             category: .storage)
-            completion(.none, false)
         }
     }
 

@@ -4,6 +4,7 @@
 
 import Foundation
 
+@MainActor
 struct StoriesFeedSectionLayoutProvider {
     struct UX {
         static let cellSize = CGSize(width: 320, height: 282)
@@ -54,7 +55,6 @@ struct StoriesFeedSectionLayoutProvider {
         group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.interItemSpacing)
 
         // Horizontal insets
-        let groupWidth = containerWidth * UX.groupWidthRatio
         let horizontalInsetRatio = (1 - UX.groupWidthRatio) / 2
         let horizontalInsets = containerWidth * horizontalInsetRatio
         let section = NSCollectionLayoutSection(group: group)

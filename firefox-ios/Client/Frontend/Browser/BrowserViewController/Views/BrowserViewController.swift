@@ -299,20 +299,55 @@ class BrowserViewController: UIViewController,
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.tabTrayUIExperiments
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var isUnifiedSearchEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.unifiedSearch, checking: .buildOnly)
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.unifiedSearch
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
     }
 
     var isOneTapNewTabEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.toolbarOneTapNewTab
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
     }
 
     var isToolbarTranslucencyEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarTranslucency, checking: .buildOnly)
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.toolbarTranslucency
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
     }
 
     var isSwipingTabsEnabled: Bool {
@@ -320,15 +355,42 @@ class BrowserViewController: UIViewController,
     }
 
     var isMinimalAddressBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.toolbarMinimalAddressBar
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
     }
 
     var isToolbarNavigationHintEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.toolbarNavigationHint
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
     }
 
     var isToolbarUpdateHintEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarUpdateHint, checking: .buildOnly)
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.toolbarUpdateHint
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -360,13 +422,36 @@ class BrowserViewController: UIViewController,
     }
 
     private var isRecentOrTrendingSearchEnabled: Bool {
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [NimbusFeatureFlagID.trendingSearches.rawValue: "\(isTrendingSearchEnabled)"]
+        )
+
         let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [NimbusFeatureFlagID.recentSearches.rawValue: "\(isRecentSearchEnabled)"]
+        )
         return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
     private var isRecentSearchEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.recentSearches
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
     }
 
     // MARK: Computed vars
@@ -1317,6 +1402,40 @@ class BrowserViewController: UIViewController,
             browserDelegate?.browserHasLoaded()
         }
         AppEventQueue.signal(event: .browserIsReady)
+
+        logCurrentNimbusExperimentsState()
+    }
+
+    /// Logging current Nimbus state
+    private func logCurrentNimbusExperimentsState() {
+        var currentExperimentsDictionary = [String: String]()
+        Experiments.shared.getAvailableExperiments()
+            .enumerated()
+            .forEach { index, experiment in
+                currentExperimentsDictionary["experiment \(index)"] = mirrorToString(experiment)
+            }
+
+        logger.log(
+            "Current Nimbus available experiments configuration",
+            level: .info,
+            category: .experiments,
+            extra: currentExperimentsDictionary,
+        )
+    }
+
+    private func mirrorToString(_ object: Any) -> String {
+        let mirror = Mirror(reflecting: object)
+        var parts: [String] = []
+
+        for child in mirror.children {
+            if let label = child.label {
+                parts.append("\(label): \(child.value)")
+            } else {
+                parts.append(String(describing: child.value))
+            }
+        }
+
+        return "[\(parts.joined(separator: ", "))]"
     }
 
     func willNavigateAway(from tab: Tab?) {
@@ -1711,11 +1830,7 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
-        } else {
-            statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
-        }
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
     }
 
     /// Embed a ContentContainable inside the content container
@@ -1728,17 +1843,12 @@ class BrowserViewController: UIViewController,
         viewController.willMove(toParent: self)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
-        } else {
-            statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
-        }
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
         // for the first two layers of views other than web view and legacy homepage
         if toolbarHelper.shouldBlur() &&
-            !viewController.isKind(of: WebviewViewController.self) &&
-            !viewController.isKind(of: LegacyHomepageViewController.self) {
+            !viewController.isKind(of: WebviewViewController.self) {
             viewController.view.clipsToBounds = false
             viewController.view.subviews.forEach { $0.clipsToBounds = false }
         } else {
@@ -1762,23 +1872,12 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            browserDelegate?.showHomepage(
-                overlayManager: overlayManager,
-                isZeroSearch: inline,
-                statusBarScrollDelegate: statusBarOverlay,
-                toastContainer: contentContainer
-            )
-        } else {
-            browserDelegate?.showLegacyHomepage(
-                inline: inline,
-                toastContainer: contentContainer,
-                homepanelDelegate: self,
-                libraryPanelDelegate: self,
-                statusBarScrollDelegate: statusBarOverlay,
-                overlayManager: overlayManager
-            )
-        }
+        browserDelegate?.showHomepage(
+            overlayManager: overlayManager,
+            isZeroSearch: inline,
+            statusBarScrollDelegate: statusBarOverlay,
+            toastContainer: contentContainer
+        )
 
         if isSwipingTabsEnabled {
             // show the homepage in case it was not visible, as it is needed for screenshot purpose.
@@ -3116,6 +3215,7 @@ class BrowserViewController: UIViewController,
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+        popToBVC()
         cancelEditMode()
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
@@ -3268,13 +3368,10 @@ class BrowserViewController: UIViewController,
         guard let currentViewController = navigationController?.topViewController else { return }
         // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
         if !isShowingJSPromptAlert() {
-            (currentViewController as? ShortcutsLibraryViewController)?.recordTelemetryOnDisappear = false
             currentViewController.dismiss(animated: true, completion: nil)
         }
 
-        if currentViewController != self {
-            _ = self.navigationController?.popViewController(animated: true)
-        }
+        navigationHandler?.popToBVC()
     }
 
     private func isShowingJSPromptAlert() -> Bool {
@@ -3874,11 +3971,17 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
-        configureHomepageZeroSearchView()
+
+        if let isHomeTab = tabManager.selectedTab?.isFxHomeTab,
+           featureFlags.isFeatureEnabled(.homepageScrim, checking: .buildOnly) && isHomeTab {
+            configureHomepageZeroSearchView()
+        }
+
         if isSwipingTabsEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
         }
+
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.screenChanged,
@@ -4239,12 +4342,9 @@ extension BrowserViewController: LegacyTabDelegate {
 }
 
 // MARK: HomePanelDelegate
-extension BrowserViewController: HomePanelDelegate {
-    func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
-        showLibrary(panel: panel)
-        view.endEditing(true)
-    }
-
+// Those were methods initially created for the legacy homepage, but they need to stay since they are used
+// nowadays in other use cases in our application (they were not just triggered from the legacy homepage).
+extension BrowserViewController {
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -4292,18 +4392,6 @@ extension BrowserViewController: HomePanelDelegate {
             }
         })
         show(toast: toast)
-    }
-
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayPanelType?) {
-        showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
-    }
-
-    func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
-        navigationHandler?.show(settings: settingsPage)
-    }
-
-    func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction) {
-        showBookmarkToast(urlString: urlString, action: action)
     }
 
     func openRecentlyClosedTabs() {
@@ -4489,11 +4577,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
-            } else {
-                browserDelegate?.show(webView: webView)
-            }
+            updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
 
             if selectedTab.isFxHomeTab {
                 // Added as initial fix for WKWebView memory leak. Needs further investigation.

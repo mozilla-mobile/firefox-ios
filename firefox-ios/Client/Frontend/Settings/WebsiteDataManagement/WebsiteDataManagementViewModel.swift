@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-class WebsiteDataManagementViewModel {
+final class WebsiteDataManagementViewModel {
     enum State {
         case loading
         case displayInitial
@@ -24,6 +24,7 @@ class WebsiteDataManagementViewModel {
         }
     }
 
+    @MainActor
     func loadAllWebsiteData() {
         state = .loading
 
@@ -47,6 +48,7 @@ class WebsiteDataManagementViewModel {
         onViewModelChanged()
     }
 
+    @MainActor
     func createAlertToRemove() -> UIAlertController {
         if selectedRecords.isEmpty {
             return UIAlertController.clearAllWebsiteDataAlert { _ in self.removeAllRecords() }
@@ -59,6 +61,7 @@ class WebsiteDataManagementViewModel {
         state = .displayAll
     }
 
+    @MainActor
     private func removeSelectedRecords() {
         let previousState = state
         state = .loading
@@ -73,6 +76,7 @@ class WebsiteDataManagementViewModel {
         }
     }
 
+    @MainActor
     private func removeAllRecords() {
         let previousState = state
         state = .loading

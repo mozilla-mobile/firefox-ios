@@ -7,6 +7,7 @@ import Shared
 
 /// Public interface for contextual hint consumers
 protocol ContextualHintEligibilityUtilityProtocol {
+    @MainActor
     func canPresent(_ hint: ContextualHintType) -> Bool
 }
 
@@ -27,6 +28,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     }
 
     /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
+    @MainActor
     func canPresent(_ hintType: ContextualHintType) -> Bool {
         guard !isInOverlayMode else { return false }
 
@@ -57,7 +59,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     }
 
     // MARK: - Private helpers
-
+    @MainActor
     private var isInOverlayMode: Bool {
         guard overlayState != nil else { return false }
 

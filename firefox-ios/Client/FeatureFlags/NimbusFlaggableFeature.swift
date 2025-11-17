@@ -22,12 +22,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
-    case hntTopSitesVisualRefresh
-    case homepageRebuild
     case homepageRedesign
     case homepageSearchBar
     case homepageShortcutsLibrary
     case homepageStoriesRedesign
+    case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
     case inactiveTabs
@@ -82,13 +81,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
-                .hntTopSitesVisualRefresh,
-                .homepageRebuild,
                 .homepageStoriesRedesign,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .homepageScrim,
                 .hostedSummarizer,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -152,12 +150,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
-                .hntTopSitesVisualRefresh,
-                .homepageRebuild,
                 .homepageRedesign,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageStoriesRedesign,
+                .homepageScrim,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
                 .shouldUseJapanConfiguration,

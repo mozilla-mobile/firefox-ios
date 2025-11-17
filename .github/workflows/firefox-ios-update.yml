@@ -36,6 +36,6 @@ jobs:
         commit-message: Auto Update Bitrise.YML
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
-        title: Update Bitrise NewXcodeVersions Workflow Xcode Stack
+        title: Bump FXIOS [Bitrise] Update NewXcodeVersions Workflow Xcode Stack
         branch: update-br-new-xcode-version
         token: ${{ secrets.GITHUB_TOKEN }}

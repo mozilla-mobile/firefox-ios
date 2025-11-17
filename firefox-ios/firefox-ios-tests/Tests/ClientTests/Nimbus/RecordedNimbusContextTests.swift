@@ -154,4 +154,82 @@ class RecordedNimbusContextTests: XCTestCase {
 
         XCTAssertEqual(eventQueries, RecordedNimbusContext.EVENT_QUERIES)
     }
+
+    /// This function makes sure that the items in metrics.yaml and RecordedNimbusContext
+    /// are the same, to prevent human error forgetting to enter something somewhere
+    func testRecordedNimbusContextAndMetricsContextFieldsAreEquivalent() {
+        let recordedContext = RecordedNimbusContext(
+            isFirstRun: true,
+            isDefaultBrowser: true,
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
+            isAppleIntelligenceAvailable: true,
+            cannotUseAppleIntelligence: true
+        )
+        var recordedContextMembers = Set(Mirror(reflecting: recordedContext).children.compactMap(\.label))
+        // removing values that are not part of the metrics file
+        recordedContextMembers.remove("logger")
+        recordedContextMembers.remove("eventQueries")
+
+        let metricsObject = GleanMetrics.NimbusSystem.RecordedNimbusContextObject()
+        let metricsObjectMembers = Set(Mirror(reflecting: metricsObject).children.compactMap(\.label))
+
+        XCTAssertTrue(recordedContextMembers.symmetricDifference(metricsObjectMembers).isEmpty)
+    }
+
+    func testGetEventQueriesValuesMatchesMetricsQueriesValuesYaml() {
+        let recordedContext = RecordedNimbusContext(
+            isFirstRun: true,
+            isDefaultBrowser: true,
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
+            isAppleIntelligenceAvailable: true,
+            cannotUseAppleIntelligence: true
+        )
+
+        let eventKeys = Set(
+            recordedContext
+                .getEventQueries().keys
+                .map { snakeToCamelCase($0) }
+        )
+        let eventQueryValues = Set(
+            Mirror(
+                reflecting: GleanMetrics.NimbusSystem.RecordedNimbusContextObjectItemEventQueryValuesObject()
+            ).children.compactMap(\.label)
+        )
+
+        XCTAssertTrue(eventKeys.symmetricDifference(eventQueryValues).isEmpty)
+    }
+
+    func testSnakeToCamelCaseCovertsWithoutNumber() {
+        let snake = "snake_case_value"
+        let expectedResult = "snakeCaseValue"
+
+        XCTAssertEqual(snakeToCamelCase(snake), expectedResult)
+    }
+
+    func testSnakeToCamelCaseCovertsWithNumber() {
+        let snakeNumberAtEnd = "snake_case_value_18"
+        let expectedResultNumberAtEnd = "snakeCaseValue18"
+
+        let snakeNumberInMiddle = "snake_case_18_value"
+        let expectedResultNumberInMiddle = "snakeCase18Value"
+
+        XCTAssertEqual(snakeToCamelCase(snakeNumberAtEnd), expectedResultNumberAtEnd)
+        XCTAssertEqual(snakeToCamelCase(snakeNumberInMiddle), expectedResultNumberInMiddle)
+    }
+
+    private func snakeToCamelCase(_ string: String) -> String {
+        let parts = string.split(separator: "_")
+        guard let first = parts.first else { return string }
+
+        let rest = parts.dropFirst().map { part -> String in
+            guard let firstChar = part.first else { return "" }
+            return String(firstChar).uppercased() + part.dropFirst()
+        }
+
+        return ([String(first)] + rest).joined()
+    }
 }

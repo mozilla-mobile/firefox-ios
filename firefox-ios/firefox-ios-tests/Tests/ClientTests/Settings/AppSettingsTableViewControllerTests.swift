@@ -9,7 +9,7 @@ import Common
 @MainActor
 class AppSettingsTableViewControllerTests: XCTestCase {
     private var profile: Profile!
-    private var tabManager: TabManager!
+    private var tabManager: MockTabManager!
     private var appAuthenticator: MockAppAuthenticator!
     private var delegate: MockSettingsFlowDelegate!
     private var applicationHelper: MockApplicationHelper!
@@ -22,8 +22,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        self.tabManager = TabManagerImplementation(profile: profile,
-                                                   uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
+        self.tabManager = MockTabManager()
         self.appAuthenticator = MockAppAuthenticator()
         self.delegate = MockSettingsFlowDelegate()
         self.applicationHelper = MockApplicationHelper()
