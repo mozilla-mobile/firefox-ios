@@ -332,11 +332,12 @@ class SearchTests: FeatureFlaggedTestBase {
     // Smoketest TAE
     func testSearchStartAfterTypingTwoWords_TAE() {
         let browserScreen = BrowserScreen(app: app)
+        let fooText = "foo bar"
         app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         browserScreen.assertAddressBarExists()
-        app.typeText("foo bar")
+        app.typeText(fooText)
         app.typeText(XCUIKeyboardKey.return.rawValue)
         browserScreen.assertAddressBarContains(value: "google", timeout: TIMEOUT)
     }
