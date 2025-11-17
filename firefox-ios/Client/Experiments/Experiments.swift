@@ -284,10 +284,8 @@ enum Experiments {
                 )
             })
             .build(
-                appInfo: getAppSettings(
-                    isFirstRun: isFirstRun,
-                    remoteSettingsService: remoteSettingsService
-                )
+                appInfo: getAppSettings(isFirstRun: isFirstRun),
+                remoteSettingsService: remoteSettingsService
             )
     }
 
