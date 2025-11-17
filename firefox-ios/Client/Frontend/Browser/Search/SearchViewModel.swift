@@ -379,9 +379,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             recentSearches = []
             return
         }
-        recentSearchProvider.loadRecentSearches { [weak self] searchTerms in
-            self?.recentSearches = searchTerms
+        recentSearchProvider.loadRecentSearches { searchTerms in
             ensureMainThread { [weak self] in
+                self?.recentSearches = searchTerms
                 self?.delegate?.reloadTableView()
             }
         }

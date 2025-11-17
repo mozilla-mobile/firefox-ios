@@ -9,7 +9,7 @@ import Storage
 /// Abstraction for any search client that can return trending searches. Able to mock for testing.
 protocol RecentSearchProvider {
     func addRecentSearch(_ term: String, url: String?)
-    func loadRecentSearches(completion: @escaping ([String]) -> Void)
+    func loadRecentSearches(completion: @escaping @Sendable ([String]) -> Void)
 }
 
 /// A provider that manages recent search terms from a user's history storage.
@@ -56,7 +56,7 @@ final class DefaultRecentSearchProvider: RecentSearchProvider {
     ///
     /// Only care about returning the `maxNumberOfSuggestions`.
     /// We don't have an interface to fetch only a certain amount, so we follow what Android does for now.
-    func loadRecentSearches(completion: @escaping ([String]) -> Void) {
+    func loadRecentSearches(completion: @escaping @Sendable ([String]) -> Void) {
         historyStorage.getMostRecentHistoryMetadata(limit: maxNumberOfSuggestions) { result in
             if case .success(let historyMetadata) = result {
                 let uniqueSearchTermResult = historyMetadata.compactMap { $0.searchTerm }
