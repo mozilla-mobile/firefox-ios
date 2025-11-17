@@ -384,22 +384,24 @@ extension ContentBlocker {
 
                 self?.logger.log("Will compile list: \(filename)", level: .info, category: .adblock)
                 self?.loadJsonFromBundle(forResource: filename) { jsonString in
-                    var str = jsonString
+                    ensureMainThread {
+                        var str = jsonString
 
-                    // Here we find the closing array bracket in the JSON string
-                    // and append our safelist as a rule to the end of the JSON.
-                    guard let self, let range = str.range(of: "]", options: String.CompareOptions.backwards) else {
-                        dispatchGroup.leave()
-                        return
-                    }
-                    str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
-                    self.ruleStore?.compileContentRuleList(
-                        forIdentifier: filename,
-                        encodedContentRuleList: str
-                    ) { rule, error in
-                        listsCompiledCount += 1
-                        errorCount += (error == nil ? 0 : 1)
-                        self.compileContentRuleListCompletion(dispatchGroup: dispatchGroup, rule: rule, error: error)
+                        // Here we find the closing array bracket in the JSON string
+                        // and append our safelist as a rule to the end of the JSON.
+                        guard let self, let range = str.range(of: "]", options: String.CompareOptions.backwards) else {
+                            dispatchGroup.leave()
+                            return
+                        }
+                        str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
+                        self.ruleStore?.compileContentRuleList(
+                            forIdentifier: filename,
+                            encodedContentRuleList: str
+                        ) { rule, error in
+                            listsCompiledCount += 1
+                            errorCount += (error == nil ? 0 : 1)
+                            self.compileContentRuleListCompletion(dispatchGroup: dispatchGroup, rule: rule, error: error)
+                        }
                     }
                 }
             }
