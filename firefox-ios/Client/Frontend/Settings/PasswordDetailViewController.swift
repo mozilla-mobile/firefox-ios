@@ -151,7 +151,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             return breachCell(tableView: tableView, indexPath: indexPath)
 
         case .username:
-            return cell(tableView: tableView, forUsername: indexPath)
+            return usernameCell(tableView: tableView, forUsername: indexPath)
 
         case .password:
             return cell(tableView: tableView, forPassword: indexPath)
@@ -205,7 +205,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
         return breachCell
     }
 
-    private func cell(tableView: UITableView, forUsername indexPath: IndexPath) -> UITableViewCell {
+    private func usernameCell(tableView: UITableView, forUsername indexPath: IndexPath) -> UITableViewCell {
         guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
             return UITableViewCell()
         }
