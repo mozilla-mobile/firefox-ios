@@ -10,7 +10,8 @@ public enum WallpaperSettingsError: Error {
     case itemNotFound
 }
 
-class WallpaperSettingsViewModel: FeatureFlaggable {
+// TODO: FXIOS-TODO Laurie - WallpaperSettingsViewModel shouldn't be @unchecked Sendable
+final class WallpaperSettingsViewModel: FeatureFlaggable, @unchecked Sendable {
     typealias a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper
     typealias stringIds = String.Settings.Homepage.Wallpaper
 
@@ -121,7 +122,8 @@ class WallpaperSettingsViewModel: FeatureFlaggable {
                              indexPath: indexPath)
     }
 
-    func downloadAndSetWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Void, Error>) -> Void) {
+    func downloadAndSetWallpaper(at indexPath: IndexPath,
+                                 completion: @escaping @Sendable (Result<Void, Error>) -> Void) {
         guard let collection = wallpaperCollections[safe: indexPath.section],
               let wallpaper = collection.wallpapers[safe: indexPath.row]
         else {
@@ -129,7 +131,7 @@ class WallpaperSettingsViewModel: FeatureFlaggable {
             return
         }
 
-        let setWallpaperBlock = { [weak self] in
+        let setWallpaperBlock: @Sendable () -> ()? = { [weak self] in
             self?.updateCurrentWallpaper(for: wallpaper, in: collection) { result in
                 if case .success = result {
                     self?.selectedIndexPath = indexPath

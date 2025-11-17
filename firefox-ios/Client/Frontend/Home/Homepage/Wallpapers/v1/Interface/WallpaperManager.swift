@@ -21,13 +21,14 @@ protocol WallpaperManagerInterface {
     func canOnboardingBeShown(using: Profile) -> Bool
     func onboardingSeen()
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
-    func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
+    func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping @Sendable (Result<Void, Error>) -> Void)
     func removeUnusedAssets()
     func checkForUpdates()
 }
 
+// TODO: FXIOS-TODO Laurie - WallpaperManager shouldn't be @unchecked Sendable
 /// The primary interface for the wallpaper feature.
-class WallpaperManager: WallpaperManagerInterface {
+final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
     enum ThumbnailFilter {
         case none
         case thumbnailsAvailable
@@ -131,7 +132,7 @@ class WallpaperManager: WallpaperManagerInterface {
     ///                      with a `.failure` and passed an error.
     func fetchAssetsFor(
         _ wallpaper: Wallpaper,
-        completion: @escaping (Result<Void, Error>) -> Void
+        completion: @escaping @Sendable (Result<Void, Error>) -> Void
     ) {
         let dataService = WallpaperDataService(with: networkingModule)
         let storageUtility = WallpaperStorageUtility()
