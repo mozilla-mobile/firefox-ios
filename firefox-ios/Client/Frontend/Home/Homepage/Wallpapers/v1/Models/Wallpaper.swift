@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 enum WallpaperType: String {
     case none
@@ -90,7 +91,7 @@ struct Wallpaper: Equatable {
     /// identify that no image is selected.
     private static let noAssetID = "fxDefault"
     private var deviceVersionID: String {
-        return UIDevice.current.userInterfaceIdiom == .pad ? fileId.iPad : fileId.iPhone
+        return UIDeviceDetails.userInterfaceIdiom == .pad ? fileId.iPad : fileId.iPhone
     }
 
     // MARK: - Helper functions
