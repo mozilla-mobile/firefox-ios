@@ -1,4 +1,4 @@
-import "resource://gre/modules/shared/TranslationsHelpers.ios.mjs";
+import "Assets/CC_Script/TranslationsHelpers.mjs";
 
 import { getLanguageSampleWhenReady } from "./LanguageSampleExtractor.js";
 import { LRUCache, TranslationsDocument } from "Assets/CC_Script/translations-document.sys.mjs";

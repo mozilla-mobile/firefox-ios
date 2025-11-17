@@ -1,4 +1,4 @@
-import "Assets/CC_Script/TranslationsHelpers.ios.mjs";
+import "Assets/CC_Script/TranslationsHelpers.mjs";
 import { handleActorMessage } from "Assets/CC_Script/translations-engine.sys.mjs";
 
 /// NOTE: This sends messages from the engine to the content process.
