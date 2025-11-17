@@ -71,6 +71,7 @@ enum NewTabPage: String {
         }
     }
 
+    @MainActor
     var url: URL? {
         guard let homePanel = self.homePanelType else { return nil }
         return homePanel.internalUrl as URL

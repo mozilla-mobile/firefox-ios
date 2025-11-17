@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 /// The default app-wide queue for Firefox iOS.
-public let AppEventQueue = EventQueue<AppEvent>()
+let AppEventQueue = EventQueue<AppEvent>()
 
 /// Action taken when an event's dependencies are completed.
 typealias EventQueueAction = (() -> Void)
@@ -19,16 +19,17 @@ typealias ActionToken = UUID
 ///
 /// (Note: there is an additional implicit state, "not started", which is indicated
 /// by the event being absent from the event queue altogether.)
-public enum QueueEventState: Int {
+enum QueueEventState: Int {
     case inProgress
     case completed
     case failed
 }
 
+// TODO: FXIOS-TODO Laurie - EventQueue shouldn't be @unchecked Sendable
 /// A queue that provides synchronization between different areas of the codebase and coordinates
 /// actions that depend on one or more events or app states. For example events see: AppEvent.swift.
-public final class EventQueue<QueueEventType: Hashable & Sendable> {
-    public struct EnqueuedAction {
+final class EventQueue<QueueEventType: Hashable & Sendable>: @unchecked Sendable {
+    struct EnqueuedAction {
         let token: ActionToken
         let action: EventQueueAction
         let dependencies: [QueueEventType]
