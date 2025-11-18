@@ -117,7 +117,6 @@ struct ReadingListSelectors: ReadingListSelectorsSet {
         groups: ["reader"]
     )
 
-
     var all: [Selector] { [READER_VIEW_BUTTON, DISPLAY_SETTINGS_BUTTON, FENNEC_ALERT_TEXT, READING_TABLE,
                            DONE_BUTTON_READING_LIST, READERMODE_SETTINGS_BUTTON, EMPTY_READING_LIST_1, EMPTY_READING_LIST_2,
                            EMPTY_READING_LIST_3, MARK_AS_UNREAD_BUTTON, REMOVE_BUTTON] }
