@@ -59,22 +59,13 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     }()
 
     init(
-        modelsClient: RemoteSettingsClientProtocol?,
-        translatorsClient: RemoteSettingsClientProtocol?,
+        modelsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.translationsModels.makeClient(),
+        translatorsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.translationsWasm.makeClient(),
         logger: Logger = DefaultLogger.shared
     ) {
         self.modelsClient = modelsClient
         self.translatorsClient = translatorsClient
         self.logger = logger
-    }
-
-    // Convenience initializer for production code
-    convenience init(logger: Logger = DefaultLogger.shared) {
-        self.init(
-            modelsClient: ASRemoteSettingsCollection.translationsModels.makeClient(),
-            translatorsClient: ASRemoteSettingsCollection.translationsWasm.makeClient(),
-            logger: logger
-        )
     }
 
     /// Decodes a RemoteSettingsRecord into a specific type.
