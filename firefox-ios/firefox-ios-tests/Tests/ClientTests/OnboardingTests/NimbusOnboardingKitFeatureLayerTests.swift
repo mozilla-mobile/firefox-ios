@@ -21,9 +21,9 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         configUtility = nil
         mockHelper = nil
+       super.tearDown()
     }
 
     // MARK: - Initialization Tests
