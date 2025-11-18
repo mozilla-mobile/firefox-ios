@@ -98,7 +98,7 @@ final class RemoteTabsPanelMiddleware: Notifiable {
     }
 
     private func getTabsAndDevices(window: WindowUUID, useCache: Bool = false) {
-        let completion = { (result: [ClientAndTabs]?) in
+        let completion: @Sendable ([ClientAndTabs]?) -> Void = { (result: [ClientAndTabs]?) in
             guard let clientAndTabs = result else {
                 ensureMainThread {
                     let action = RemoteTabsPanelAction(reason: .failedToSync,
@@ -136,7 +136,7 @@ final class RemoteTabsPanelMiddleware: Notifiable {
     }
 
     private func handleFetchingMostRecentRemoteTab(windowUUID: WindowUUID) {
-        let completion = { (result: [ClientAndTabs]?) in
+        let completion: @Sendable ([ClientAndTabs]?) -> Void = { (result: [ClientAndTabs]?) in
             ensureMainThread {
                 guard let mostRecentSyncedTab = self.retrieveConfigurationForMostRecentTab(from: result) else { return }
                 store.dispatch(
