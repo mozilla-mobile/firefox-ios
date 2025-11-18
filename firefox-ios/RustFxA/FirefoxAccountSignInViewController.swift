@@ -52,6 +52,9 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     private let fxaDismissStyle: DismissType
     private let logger: Logger
 
+    /// Whether to ask for notification permission after sign in
+    private let shouldAskForNotificationPermission: Bool
+
     // UI
     private lazy var scrollView: UIScrollView = .build { view in
         view.backgroundColor = .clear
@@ -124,16 +127,19 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     ///   - parentType: FxASignInParentType is an enum parent page that presented this VC.
     ///                 Parameter used in telemetry button events.
     ///   - deepLinkParams: URL args passed in from deep link that propagate to FxA web view
+    ///   - shouldAskForNotificationPermission: Whether to ask for notification permission after sign in
     init(profile: Profile,
          parentType: FxASignInParentType,
          deepLinkParams: FxALaunchParams,
          windowUUID: WindowUUID,
+         shouldAskForNotificationPermission: Bool = false,
          logger: Logger = DefaultLogger.shared,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
         self.windowUUID = windowUUID
+        self.shouldAskForNotificationPermission = shouldAskForNotificationPermission
         switch parentType {
         case .appMenu:
             self.telemetryObject = .appMenu
@@ -264,14 +270,11 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     @objc
     func emailLoginTapped(_ sender: UIButton) {
         onSyncFlowStarted?()
-        let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
-            telemetryObj: telemetryObject
-        )
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow,
                                             profile: profile,
                                             dismissalStyle: fxaDismissStyle,
                                             deepLinkParams: deepLinkParams,
-                                            shouldAskForNotificationPermission: shouldAskForPermission)
+                                            shouldAskForNotificationPermission: shouldAskForNotificationPermission)
         fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
             self?.shouldReload?()
             self?.dismissVC()
@@ -307,10 +310,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
 // MARK: - QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
-            telemetryObj: telemetryObject
-        )
-
         // Only show the FxAWebViewController if the correct FxA pairing QR code was captured
         showFxAWebViewController(url) { [weak self] url in
             guard let self else { return }
@@ -319,7 +318,7 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
                 profile: profile,
                 dismissalStyle: fxaDismissStyle,
                 deepLinkParams: deepLinkParams,
-                shouldAskForNotificationPermission: shouldAskForPermission)
+                shouldAskForNotificationPermission: shouldAskForNotificationPermission)
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -351,7 +350,8 @@ extension FirefoxAccountSignInViewController {
         flowType: FxAPageType,
         referringPage: ReferringPage,
         profile: Profile,
-        windowUUID: WindowUUID
+        windowUUID: WindowUUID,
+        shouldAskForNotificationPermission: Bool = false
     ) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let parentType: FxASignInParentType
@@ -374,12 +374,12 @@ extension FirefoxAccountSignInViewController {
                 parentType = .library
                 object = .libraryPanel
             }
-
             let signInVC = FirefoxAccountSignInViewController(
                 profile: profile,
                 parentType: parentType,
                 deepLinkParams: deepLinkParams,
-                windowUUID: windowUUID
+                windowUUID: windowUUID,
+                shouldAskForNotificationPermission: shouldAskForNotificationPermission
             )
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC

@@ -144,12 +144,17 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         referringPage: ReferringPage = .onboarding,
         qrCodeNavigationHandler: QRCodeNavigationHandler?
     ) {
+        let shouldAskForNotificationPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
+            telemetryObj: .onboarding
+        )
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
             flowType: flowType,
             referringPage: referringPage,
             profile: viewModel.profile,
-            windowUUID: windowUUID)
+            windowUUID: windowUUID,
+            shouldAskForNotificationPermission: shouldAskForNotificationPermission
+        )
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,

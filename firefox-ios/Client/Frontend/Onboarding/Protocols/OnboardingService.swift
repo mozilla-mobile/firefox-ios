@@ -78,7 +78,7 @@ final class OnboardingService: FeatureFlaggable {
             completion(.success(.advance(numberOfPages: 3)))
 
         case .syncSignIn:
-            handleSyncSignIn(from: cardName, with: activityEventHelper) { [weak self] in
+            handleSyncSignIn(from: cardName, with: activityEventHelper, cards: cards) { [weak self] in
                 if self?.hasSyncFlowStarted == true {
                     completion(.success(.advance(numberOfPages: 1)))
                 }
@@ -167,6 +167,15 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     // MARK: - Private Methods
+
+    /// Checks if any card in the onboarding flow contains a request notifications action
+    private func hasNotificationCard(in cards: [OnboardingKitCardInfoModel]) -> Bool {
+        cards.contains {
+            $0.buttons.primary.action == .requestNotifications
+            || $0.buttons.secondary?.action == .requestNotifications
+        }
+    }
+
     private func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
         activityEventHelper.updateOnboardingUserActivationEvent()
@@ -176,13 +185,14 @@ final class OnboardingService: FeatureFlaggable {
     private func handleSyncSignIn(
         from cardName: String,
         with activityEventHelper: ActivityEventHelper,
+        cards: [OnboardingKitCardInfoModel],
         completion: @escaping () -> Void
     ) {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
         activityEventHelper.updateOnboardingUserActivationEvent()
 
         let fxaParams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
-        presentSignToSync(with: fxaParams, profile: profile, completion: completion)
+        presentSignToSync(with: fxaParams, profile: profile, cards: cards, completion: completion)
     }
 
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
@@ -239,13 +249,19 @@ final class OnboardingService: FeatureFlaggable {
         hasRegisteredForDefaultBrowserNotification = true
     }
 
-    private func presentSignToSync(with params: FxALaunchParams, profile: Profile, completion: @escaping () -> Void) {
+    private func presentSignToSync(
+        with params: FxALaunchParams,
+        profile: Profile,
+        cards: [OnboardingKitCardInfoModel],
+        completion: @escaping () -> Void
+    ) {
         guard let delegate = delegate else { return }
 
         let signInVC = createSignInViewController(
             windowUUID: windowUUID,
             params: params,
             profile: profile,
+            cards: cards,
             completion: completion
         )
 
@@ -280,17 +296,22 @@ final class OnboardingService: FeatureFlaggable {
         windowUUID: WindowUUID,
         params: FxALaunchParams,
         profile: Profile,
+        cards: [OnboardingKitCardInfoModel],
         completion: @escaping () -> Void
     ) -> UIViewController {
         // Reset sync flow started flag when creating a new sign-in view controller
         hasSyncFlowStarted = false
+        let shouldAskForNotificationPermission = !hasNotificationCard(in: cards)
 
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             params,
             flowType: .emailLoginFlow,
             referringPage: .onboarding,
             profile: profile,
-            windowUUID: windowUUID)
+            windowUUID: windowUUID,
+            shouldAskForNotificationPermission: shouldAskForNotificationPermission
+        )
+
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
