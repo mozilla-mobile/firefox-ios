@@ -19,6 +19,7 @@ import SummarizeKit
 import ActivityKit
 import Glean
 import ComponentLibrary
+import GestureKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
