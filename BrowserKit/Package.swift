@@ -198,18 +198,18 @@ let package = Package(
                 .enableExperimentalFeature("StrictConcurrency")
             ]
         ),
-        .target(
-            name: "GestureKit",
-            dependencies: ["Common", "SiteImageView"],
-            swiftSettings: [
-                .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency")
-            ]
-        ),
-        .testTarget(
-            name: "GestureKitTests",
-            dependencies: ["GestureKit"]
-        ),
+//        .target(
+//            name: "GestureKit",
+//            dependencies: ["Common", "SiteImageView"],
+//            swiftSettings: [
+//                .unsafeFlags(["-enable-testing"]),
+//                .enableExperimentalFeature("StrictConcurrency")
+//            ]
+//        ),
+//        .testTarget(
+//            name: "GestureKitTests",
+//            dependencies: ["GestureKit"]
+//        ),
         .testTarget(name: "SummarizeKitTests",
                     dependencies: ["SummarizeKit"]),
         .target(
