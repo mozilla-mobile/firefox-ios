@@ -7,26 +7,33 @@ import Common
 import Shared
 
 enum AccessoryType {
-    case standard, creditCard, address, login, passwordGenerator
+    case standard, creditCard, address, login, passwordGenerator, relayEmailMask
 }
 
-class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
+final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
     // MARK: - Constants
     private struct UX {
         static let accessoryViewHeight: CGFloat = 56
-        static let fixedSpacerWidth: CGFloat = 10
+        static let fixedSpacerWidth: CGFloat = if #available(iOS 26.0, *) { 16 } else { 10 }
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
+        static let leadingTrailingOffset: CGFloat = 12
+        static let topOffset: CGFloat = 2
+        static let bottomOffset: CGFloat = 8
+        static let backgroundViewHeight: CGFloat = 44
         static let spacerViewHeight: CGFloat = 4
         static let cornerRadius: CGFloat = 24.0
+        static let backgroundCornerRadius: CGFloat = 22
+        static let shadowRadius: CGFloat = 10
+        static let shadowOffset = CGSize(width: 0, height: 2)
     }
 
     // MARK: - Properties
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
-    private var currentAccessoryView: AutofillAccessoryViewButtonItem?
+    private var autofillAccessoryView: AutofillAccessoryViewButtonItem?
     let windowUUID: WindowUUID
 
     // Stub closures - these closures will be given as selectors in a future task
@@ -37,9 +44,10 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     var savedAddressesClosure: (() -> Void)?
     var savedLoginsClosure: (() -> Void)?
     var useStrongPasswordClosure: (() -> Void)?
+    var useRelayMaskClosure: (() -> Void)?
 
     var hasAccessoryView: Bool {
-        return currentAccessoryView != nil
+        return autofillAccessoryView != nil
     }
     private var searchBarPosition: SearchBarPosition {
         return featureFlags.getCustomState(for: .searchBarPosition) ?? .bottom
@@ -47,48 +55,52 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
     // MARK: - UI Elements
     private let toolbar: UIToolbar = .build()
-
     private let toolbarTopHeightSpacer: UIView = .build()
 
-    private lazy var previousButton: UIBarButtonItem = {
+    private lazy var previousButton: UIButton = {
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tappedPreviousButton), for: .touchUpInside)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
-        let barButton = UIBarButtonItem(customView: button)
-        barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
-        barButton.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
-        return barButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
+        button.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
+        return button
     }()
 
-    private lazy var nextButton: UIBarButtonItem = {
+    private lazy var nextButton: UIButton = {
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tappedNextButton), for: .touchUpInside)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
-        let barButton = UIBarButtonItem(customView: button)
-        barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
-        barButton.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
+        button.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
+        return button
+    }()
+
+    private lazy var navigationButtonsStackView: UIStackView = .build {
+        $0.spacing = UX.fixedSpacerWidth
+        $0.alignment = .center
+    }
+
+    /// On iOS 26+, `UIBarButtonItem` has a fixed default padding between elements that cannot be reduced.
+    /// To work around this limitation, we wrap the next and previous buttons in a `UIStackView` where
+    /// we can control the spacing between them, then add the stack view as a single `UIBarButtonItem`.
+    private lazy var navigationButtonsBarItem: UIBarButtonItem = {
+        let barButton = UIBarButtonItem(customView: navigationButtonsStackView)
+        if #available(iOS 26.0, *) { barButton.hidesSharedBackground = true }
         return barButton
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
-        button.setTitle(.CreditCard.Settings.Done, for: .normal)
+        button.setImage(UIImage(named: StandardImageIdentifiers.Large.checkmark), for: .normal)
         button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
         button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         let barButton = UIBarButtonItem(customView: button)
+        if #available(iOS 26.0, *) { barButton.hidesSharedBackground = true }
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
+        barButton.accessibilityLabel = .CreditCard.Settings.Done
         return barButton
     }()
 
-    private lazy var fixedSpacer: UIBarButtonItem = {
-        let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
-                                          target: nil,
-                                          action: nil)
-        fixedSpacer.width = CGFloat(UX.fixedSpacerWidth)
-        return fixedSpacer
-    }()
-
-    private let flexibleSpacer = UIBarButtonItem(systemItem: .flexibleSpace)
     private let leadingFixedSpacer: UIView = .build()
     private let trailingFixedSpacer: UIView = .build()
 
@@ -104,6 +116,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         accessoryView.accessibilityIdentifier =
             AccessibilityIdentifiers.Browser.KeyboardAccessory.creditCardAutofillButton
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
@@ -119,6 +132,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         accessoryView.accessibilityIdentifier =
             AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
@@ -133,6 +147,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         accessoryView.accessibilityLabel = .PasswordAutofill.UseSavedPasswordFromKeyboard
         accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Autofill.footerPrimaryAction
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
@@ -147,6 +162,22 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         accessoryView.accessibilityLabel = .PasswordGenerator.KeyboardAccessoryButtonLabel
         accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.keyboardButton
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
+        return accessoryView
+    }()
+
+    private lazy var relayMaskView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.emailMask),
+            labelText: .RelayMask.UseRelayEmailMaskFromKeyboard,
+            tappedAction: { [weak self] in
+                self?.tappedUseRelayMaskButton()
+            })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .RelayMask.UseRelayEmailMaskFromKeyboard
+        accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.relayMaskAutofillButton
+        accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
@@ -162,6 +193,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
                                  height: UX.accessoryViewHeight))
 
         setupLayout()
+        configureToolbarItems()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         startObservingNotifications(
@@ -176,33 +208,43 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard #available(iOS 26.0, *) else { return }
+        backgroundView.layer.shadowPath = UIBezierPath(
+            roundedRect: backgroundView.bounds,
+            cornerRadius: UX.backgroundCornerRadius
+        ).cgPath
+    }
+
     override func removeFromSuperview() {
         super.removeFromSuperview()
         // Reset showing of credit card when dismissing the view
         // This is required otherwise it will always show credit card view
         // even if the input isn't of type credit card
-        currentAccessoryView = nil
-        setupLayout()
+        autofillAccessoryView = nil
+        configureToolbarItems()
     }
 
-    // MARK: - Theme and Layout
-
+    // MARK: - Layout
     func reloadViewFor(_ accessoryType: AccessoryType) {
         switch accessoryType {
         case .standard:
-            currentAccessoryView = nil
+            autofillAccessoryView = nil
         case .creditCard:
-            currentAccessoryView = creditCardAutofillView
+            autofillAccessoryView = creditCardAutofillView
             sendCreditCardAutofillPromptShownTelemetry()
         case .address:
-            currentAccessoryView = addressAutofillView
+            autofillAccessoryView = addressAutofillView
         case .login:
-            currentAccessoryView = loginAutofillView
+            autofillAccessoryView = loginAutofillView
         case .passwordGenerator:
-            currentAccessoryView = passwordGeneratorView
+            autofillAccessoryView = passwordGeneratorView
+        case .relayEmailMask:
+            autofillAccessoryView = relayMaskView
         }
-
-        setupLayout()
+        configureToolbarItems()
         layoutIfNeeded()
     }
 
@@ -222,32 +264,46 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         spacer.accessibilityElementsHidden = true
     }
 
+    private lazy var backgroundView: UIView = .build {
+        $0.layer.cornerRadius = UX.backgroundCornerRadius
+        $0.layer.shadowRadius = UX.shadowRadius
+        $0.layer.shadowOffset = UX.shadowOffset
+        $0.layer.shadowOpacity = 1
+    }
+
     private func setupLayout() {
+        [previousButton, nextButton].forEach { navigationButtonsStackView.addArrangedSubview($0) }
         setupHeightSpacer(toolbarTopHeightSpacer, height: UX.spacerViewHeight)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
-        layer.cornerRadius = UX.cornerRadius
-
-        toolbar.items = [
-            currentAccessoryView,
-            flexibleSpacer,
-            previousButton,
-            fixedSpacer,
-            nextButton,
-            fixedSpacer,
-            doneButton
-        ].compactMap { $0 }
-
-        toolbar.accessibilityElements = [
-            currentAccessoryView?.customView,
-            previousButton.customView,
-            nextButton.customView,
-            doneButton.customView
-        ].compactMap { $0 }
-
         addSubview(toolbarTopHeightSpacer)
-        addSubview(toolbar)
+        if #available(iOS 26.0, *) {
+            addSubview(backgroundView)
+            backgroundView.addSubview(toolbar)
+
+            NSLayoutConstraint.activate([
+                backgroundView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                                        constant: UX.leadingTrailingOffset),
+                backgroundView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
+                                                         constant: -UX.leadingTrailingOffset),
+                backgroundView.topAnchor.constraint(lessThanOrEqualTo: topAnchor, constant: UX.topOffset),
+                backgroundView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -UX.bottomOffset),
+                backgroundView.heightAnchor.constraint(equalToConstant: UX.backgroundViewHeight),
+
+                toolbar.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor),
+                toolbar.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor),
+                toolbar.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor)
+            ])
+        } else {
+            layer.cornerRadius = UX.cornerRadius
+            addSubview(toolbar)
+            NSLayoutConstraint.activate([
+                toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
+                toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
+                toolbar.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ])
+        }
 
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
@@ -257,35 +313,50 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             toolbarTopHeightSpacer.topAnchor.constraint(equalTo: topAnchor),
             toolbarTopHeightSpacer.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
 
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
             toolbar.topAnchor.constraint(equalTo: toolbarTopHeightSpacer.bottomAnchor),
-            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
+    // MARK: - Private Methods
+    private func configureToolbarItems() {
+        toolbar.setItems([
+            navigationButtonsBarItem,
+            .flexibleSpace(),
+            autofillAccessoryView,
+            .flexibleSpace(),
+            .fixedSpace(UX.fixedSpacerWidth),
+            doneButton
+        ].compactMap { $0 }, animated: true)
+
+        toolbar.accessibilityElements = [
+            previousButton,
+            nextButton,
+            autofillAccessoryView?.customView,
+            doneButton.customView
+        ].compactMap { $0 }
+    }
+
+    // MARK: - ThemeApplicable
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let accessoryViewBackgroundColor: UIColor = if #available(iOS 26.0, *) {
-            // Use the same color that uses the toolbar
-            theme.colors.layerSurfaceLow
-        } else {
-            .clear
-        }
+        let colors = themeManager.getCurrentTheme(for: windowUUID).colors
+        let barButtonsTintColor = if #available(iOS 26.0, *) { colors.iconPrimary } else { colors.iconAccentBlue }
         let buttonsBackgroundColor: UIColor = if #available(iOS 26.0, *) {
             .clear
         } else {
-            theme.colors.layer5Hover
+            colors.layer5Hover
+        }
+        if #available(iOS 26.0, *) {
+            backgroundView.backgroundColor = colors.layerSurfaceMedium
+            backgroundView.layer.shadowColor = colors.shadowStrong.cgColor
         }
 
-        self.backgroundColor = accessoryViewBackgroundColor
-        [previousButton, nextButton, doneButton].forEach {
-            $0.tintColor = theme.colors.iconAccentBlue
-            $0.customView?.tintColor = theme.colors.iconAccentBlue
-        }
+        backgroundColor = .clear
+        doneButton.customView?.tintColor = barButtonsTintColor
+        previousButton.tintColor = barButtonsTintColor
+        nextButton.tintColor = barButtonsTintColor
 
-        [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView].forEach {
-            $0.accessoryImageViewTintColor = theme.colors.iconPrimary
+        [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView, relayMaskView].forEach {
+            $0.accessoryImageViewTintColor = colors.iconPrimary
             $0.backgroundColor = buttonsBackgroundColor
         }
     }
@@ -325,6 +396,11 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     @objc
     private func tappedUseStrongPasswordButton() {
         useStrongPasswordClosure?()
+    }
+
+    @objc
+    private func tappedUseRelayMaskButton() {
+        useRelayMaskClosure?()
     }
 
     // MARK: - Telemetry

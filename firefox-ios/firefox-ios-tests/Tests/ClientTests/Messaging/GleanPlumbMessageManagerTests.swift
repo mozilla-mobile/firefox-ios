@@ -34,6 +34,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     var applicationHelper: MockApplicationHelper!
     let messageId = "testId"
 
+    @MainActor
     override func setUp() {
         super.setUp()
         setupTelemetry(with: MockProfile())
@@ -462,7 +463,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 }
 
 // MARK: - MockGleanPlumbMessageStore
-class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
+class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol, @unchecked Sendable {
     private var metadatas = [String: GleanPlumbMessageMetaData]()
     var messageId: String
 

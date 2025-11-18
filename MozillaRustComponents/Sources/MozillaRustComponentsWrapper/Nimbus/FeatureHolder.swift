@@ -41,6 +41,8 @@ public protocol FeatureHolderInterface {
     func isUnderTest() -> Bool
 }
 
+// FIXME: FXIOS-13974 getSdk does not appear to be protected by the lock in the FeatureHolder extension, so this type may
+// not be fully `@unchecked Sendable` safe.
 /// ``FeatureHolder`` is a class that unpacks a JSON object from the Nimbus SDK and transforms it into a useful
 /// type safe object, generated from a feature manifest (a `.fml.yaml` file).
 ///
@@ -49,7 +51,7 @@ public protocol FeatureHolderInterface {
 ///
 /// There are methods useful for testing, and more advanced uses: these all start with `with`.
 ///
-public class FeatureHolder<T: FMLFeatureInterface> {
+public final class FeatureHolder<T: FMLFeatureInterface>: @unchecked Sendable {
     private let lock = NSLock()
     private var cachedValue: T?
 

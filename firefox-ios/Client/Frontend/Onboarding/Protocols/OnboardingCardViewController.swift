@@ -10,6 +10,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     // MARK: - Common UX Elements
     struct SharedUX {
         static let topStackViewSpacing: CGFloat = 24
+        @MainActor
         static let titleFont: UIFont = {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 return FXFontStyles.Bold.title1.scaledFont()

@@ -14,6 +14,8 @@ final class BrowserScreen {
     }
 
     private var addressBar: XCUIElement { sel.ADDRESS_BAR.element(in: app) }
+    private var cancelButton: XCUIElement { sel.CANCEL_BUTTON_URL_BAR.element(in: app) }
+    private var bookText: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT.element(in: app) }
 
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
@@ -154,5 +156,90 @@ final class BrowserScreen {
     func tapOnAddressBar() {
         let urlElement = addressBar
         urlElement.waitAndTap()
+    }
+
+    func typeOnSearchBar(text: String) {
+        addressBar.typeText(text)
+    }
+
+    func assertCancelButtonOnUrlBarExists() {
+        BaseTestCase().mozWaitForElementToExist(cancelButton)
+    }
+
+    func assertPrivateBrowsingLabelExist() {
+        let privateBrowsing = sel.PRIVATE_BROWSING.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(privateBrowsing)
+    }
+
+    func tapCancelButtonOnUrlBarExist() {
+        cancelButton.waitAndTap()
+    }
+
+    func tapCancelButtonIfExist() {
+        sel.CANCEL_BUTTON.element(in: app).tapIfExists()
+    }
+
+    func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.LINK_RFC_2606.element(in: app), timeout: timeout)
+    }
+
+    func addressToolbarContainValue(value: String) {
+        BaseTestCase().mozWaitForValueContains(addressBar, value: value)
+    }
+
+    func tapOnBookOfMozilla() {
+        bookText.waitAndTap()
+    }
+
+    func waitForBookOfMozillaToDisappear(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(bookText, timeout: timeout)
+    }
+
+    func assertAddressBar_LockIconExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON.element(in: app))
+    }
+
+    func assertAddressBarHasKeyboardFocus() {
+        let addressBar = sel.ADDRESS_BAR.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+
+        let hasFocus = addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false
+        XCTAssertTrue(hasFocus, "Expected the address bar to have keyboard focus, but it doesn't.")
+    }
+
+    func longPressLink(named linkName: String, duration: TimeInterval = 2.0) {
+        let link = sel.linkElement(named: linkName).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(link)
+        link.press(forDuration: duration)
+    }
+
+    func waitForLinkPreview(named preview: String) {
+        let previewLabel = sel.linkPreview(named: preview).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(previewLabel)
+    }
+
+    func longPressFirstLink() {
+        let firstLink = app.webViews.links.firstMatch
+        BaseTestCase().mozWaitForElementToExist(firstLink)
+        firstLink.press(forDuration: 1)
+    }
+
+    func assertTypeSuggestText(text: String) {
+        let suggestedText = app.tables.firstMatch.cells.staticTexts[text]
+        BaseTestCase().mozWaitForElementToExist(suggestedText)
+    }
+
+    func assertNumberOfSuggestedLines(expectedLines: Int) {
+        let suggestedLines = app.tables.firstMatch.cells
+        XCTAssertEqual(suggestedLines.count, expectedLines)
+    }
+
+    func assertAddressBarExists(duration: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(addressBar, timeout: duration)
+    }
+
+    func getAddressBarElement() -> XCUIElement {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        return addressBar
     }
 }

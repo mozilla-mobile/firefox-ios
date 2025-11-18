@@ -46,6 +46,7 @@ public protocol KeychainProtocol: Sendable {
     var loginsKeyIdentifier: String { get }
     func removeObject(key: String)
     func removeLoginsKeysForDebugMenuItem()
+    func removeAutofillKeysForDebugMenuItem()
     func removeAllKeys()
     func setLoginsKeyData(keyValue: String, canaryValue: String)
     func setCreditCardsKeyData(keyValue: String, canaryValue: String)
@@ -107,6 +108,11 @@ public final class RustKeychain: KeychainProtocol {
     public func removeLoginsKeysForDebugMenuItem() {
         removeObject(key: loginsKeyIdentifier)
         removeObject(key: loginsCanaryKeyIdentifier)
+    }
+
+    public func removeAutofillKeysForDebugMenuItem() {
+        removeObject(key: creditCardKeyIdentifier)
+        removeObject(key: creditCardCanaryKeyIdentifier)
     }
 
     public func removeAllKeys() {

@@ -58,7 +58,7 @@ class SiriOpenURLSetting: Setting {
     }
 }
 
-extension SiriSettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
+extension SiriSettingsViewController: @MainActor INUIAddVoiceShortcutViewControllerDelegate {
     func addVoiceShortcutViewController(
         _ controller: INUIAddVoiceShortcutViewController,
         didFinishWith voiceShortcut: INVoiceShortcut?,
@@ -72,7 +72,7 @@ extension SiriSettingsViewController: INUIAddVoiceShortcutViewControllerDelegate
     }
 }
 
-extension SiriSettingsViewController: INUIEditVoiceShortcutViewControllerDelegate {
+extension SiriSettingsViewController: @MainActor INUIEditVoiceShortcutViewControllerDelegate {
     func editVoiceShortcutViewController(
         _ controller: INUIEditVoiceShortcutViewController,
         didUpdate voiceShortcut: INVoiceShortcut?,

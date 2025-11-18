@@ -27,6 +27,7 @@ final class PrivateHomepageViewController: UIViewController,
         static let defaultScrollContainerPadding: CGFloat = 16
         private static let iPadScrollContainerPadding: CGFloat = 164
 
+        @MainActor
         static func scrollContainerPadding(with traitCollection: UITraitCollection) -> CGFloat {
             let isiPad = UIDevice.current.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
             return isiPad ? UX.iPadScrollContainerPadding : UX.defaultScrollContainerPadding
@@ -57,10 +58,6 @@ final class PrivateHomepageViewController: UIViewController,
     private lazy var gradient = CAGradientLayer()
 
     private let scrollView: UIScrollView = .build()
-
-    private var headerViewModel: HomepageHeaderCellViewModel {
-        return HomepageHeaderCellViewModel(showiPadSetup: shouldUseiPadSetup())
-    }
 
     private let scrollContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
@@ -133,8 +130,21 @@ final class PrivateHomepageViewController: UIViewController,
     }
 
     deinit {
-        // TODO: FXIOS-11187 - Investigate further on privateMessageCardCell memory leaking during viewing private tab.
-        scrollView.removeFromSuperview()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            DefaultLogger.shared.log(
+                "AddressToolbarContainer was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // TODO: FXIOS-11187 - Investigate further on privateMessageCardCell memory leaking during viewing private tab.
+            scrollView.removeFromSuperview()
+        }
     }
 
     private func setupLayout() {
@@ -216,7 +226,7 @@ final class PrivateHomepageViewController: UIViewController,
         guard let privateBrowsingURL = SupportUtils.URLForPrivateBrowsingLearnMore else {
             self.logger.log("Failed to retrieve URL from SupportUtils.URLForPrivateBrowsingLearnMore",
                             level: .debug,
-                            category: .legacyHomepage)
+                            category: .homepage)
             return
         }
         parentCoordinator?.homePanelDidRequestToOpenInNewTab(

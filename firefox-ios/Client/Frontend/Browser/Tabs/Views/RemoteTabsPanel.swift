@@ -67,7 +67,15 @@ class RemoteTabsPanel: UIViewController,
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     var currentWindowUUID: UUID? { return windowUUID }
@@ -88,7 +96,7 @@ class RemoteTabsPanel: UIViewController,
             RemoteTabsPanelActionType.refreshTabs
         let action = RemoteTabsPanelAction(windowUUID: windowUUID,
                                            actionType: actionType)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: - View & Layout
@@ -175,11 +183,11 @@ class RemoteTabsPanel: UIViewController,
         let showScreenAction = ScreenAction(windowUUID: windowUUID,
                                             actionType: ScreenActionType.showScreen,
                                             screen: .remoteTabsPanel)
-        store.dispatchLegacy(showScreenAction)
+        store.dispatch(showScreenAction)
 
         let didAppearAction = RemoteTabsPanelAction(windowUUID: windowUUID,
                                                     actionType: RemoteTabsPanelActionType.panelDidAppear)
-        store.dispatchLegacy(didAppearAction)
+        store.dispatch(didAppearAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -188,11 +196,11 @@ class RemoteTabsPanel: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .remoteTabsPanel)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func newState(state: RemoteTabsPanelState) {
@@ -238,7 +246,7 @@ class RemoteTabsPanel: UIViewController,
         let action = RemoteTabsPanelAction(url: url,
                                            windowUUID: windowUUID,
                                            actionType: RemoteTabsPanelActionType.openSelectedURL)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     private func handleCloseRemoteTab(_ deviceId: String, url: URL) {
@@ -246,7 +254,7 @@ class RemoteTabsPanel: UIViewController,
                                            targetDeviceId: deviceId,
                                            windowUUID: windowUUID,
                                            actionType: RemoteTabsPanelActionType.closeSelectedRemoteURL)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         // Once we add the tab to the command queue, the rust tab store will start removing it from
         // the list, so refresh the tabs
         refreshTabs(useCache: true)
@@ -257,7 +265,7 @@ class RemoteTabsPanel: UIViewController,
                                            targetDeviceId: deviceId,
                                            windowUUID: windowUUID,
                                            actionType: RemoteTabsPanelActionType.undoCloseSelectedRemoteURL)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         refreshTabs(useCache: true)
     }
@@ -266,7 +274,7 @@ class RemoteTabsPanel: UIViewController,
         let action = RemoteTabsPanelAction(targetDeviceId: deviceId,
                                            windowUUID: windowUUID,
                                            actionType: RemoteTabsPanelActionType.flushTabCommands)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         refreshTabs(useCache: true)
     }

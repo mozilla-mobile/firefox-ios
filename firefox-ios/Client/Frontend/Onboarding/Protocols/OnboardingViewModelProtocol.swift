@@ -11,6 +11,7 @@ protocol OnboardingViewModelProtocol {
     var profile: Profile { get }
     var telemetryUtility: OnboardingTelemetryProtocol { get }
 
+    @MainActor
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID)
 }
 

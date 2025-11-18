@@ -27,6 +27,9 @@ const NightModeAllFramesAtDocumentStart = glob.sync(
 const AddressFormManager = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AddressFormManager/*.{js,mjs}"
 );
+const TranslationsEngine = glob.sync(
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/TranslationsEngine/*.{js,mjs}"
+);
 
 // Ensure the first script loaded at document start is __firefox__.js
 // since it defines the `window.__firefox__` global.
@@ -75,6 +78,7 @@ module.exports = {
     NightModeAllFramesAtDocumentStart,
     AutofillAllFramesAtDocumentStart,
     AddressFormManager,
+    TranslationsEngine,
   },
   output: {
     filename: "[name].js",

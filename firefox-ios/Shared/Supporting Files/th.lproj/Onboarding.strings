@@ -88,6 +88,9 @@
 /* Option for the dark theme. */
 "Onboarding.Modern.Customization.Theme.Dark.v145" = "มืด";
 
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "เลือกชุดตกแต่งที่คุณชอบหรือให้ %@ ปรับตามอุปกรณ์ของคุณ เพื่อให้คุณควบคุมได้เต็มที่";
+
 /* Option for the light theme. */
 "Onboarding.Modern.Customization.Theme.Light.v145" = "สว่าง";
 
@@ -102,6 +105,9 @@
 
 /* Continue button on the toolbar customization card. */
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "ดำเนินการต่อ";
+
+/* Description for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "เริ่มพิมพ์เพื่อรับคำแนะนำการค้นหา เว็บไซต์ยอดนิยม ที่คั่นหน้า ประวัติ และเครื่องมือค้นหา – ทั้งหมดในที่เดียว";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "จัดวางแถบที่อยู่ของคุณ";
@@ -121,6 +127,9 @@
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "เข้าถึงที่คั่นหน้า ประวัติ และรหัสผ่านของคุณได้จากทุกอุปกรณ์";
 
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "ข้อมูลของคุณ เช่น ที่คั่นหน้า รหัสผ่าน และอื่นๆ จะซิงค์กับทุกอุปกรณ์ ทุกอย่างปลอดภัยด้วยการเข้ารหัส มีเพียงคุณเท่านั้นที่เข้าถึงได้";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "เริ่มซิงค์";
 
@@ -136,11 +145,17 @@
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Sync.Title.v140" = "ต่อยอดจากที่คุณทำค้างไว้ได้ทันที";
 
+/* Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Sync.Title.v145" = "ให้ %@ เป็นเพื่อนคู่ใจในการท่องโลกออนไลน์ของคุณ";
+
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "ดำเนินการต่อ";
 
 /* Title for the confirmation button on the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "ดำเนินการต่อ";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "ปกป้องข้อมูลส่วนบุคคลของคุณโดยอัตโนมัติ\nโหลดเว็บไซต์ได้เร็วและค้นหาอย่างชาญฉลาดขึ้น\nนำเสนอโดยองค์กรไม่แสวงหาผลกำไร %@ ที่ได้รับความไว้วางใจมานานกว่า 20 ปี";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "จัดการ";
@@ -198,6 +213,9 @@
 
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "ยกระดับประสบการณ์การท่องเว็บของคุณ";
+
+/* Title for the Terms of Service screen in the v2 onboarding flow. */
+"Onboarding.Modern.TermsOfService.Title.v145" = "จัดการอินเทอร์เน็ตของคุณ";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "เงื่อนไขการใช้งาน %@";

@@ -13,7 +13,7 @@ struct DefaultBrowserUtil {
     let locale: LocaleInterface
     let application: UIApplicationInterface
     let dmaCountries = ["BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", "HR", "IT", "CY", "LV",
-                        "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR"]
+                        "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR", "JP"]
     private let logger: Logger
     init(userDefault: UserDefaultsInterface = UserDefaults.standard,
          telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
@@ -98,6 +98,11 @@ struct DefaultBrowserUtil {
                                     method: .open,
                                     object: .defaultBrowser,
                                     extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: isDefault])
+    }
+
+    /// Checks if the application is set as the default web browser
+    var isDefault: Bool {
+        return userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
     }
 
     private func trackIfNewUserIsComingFromBrowserChoiceScreen(_ isDefault: Bool) {

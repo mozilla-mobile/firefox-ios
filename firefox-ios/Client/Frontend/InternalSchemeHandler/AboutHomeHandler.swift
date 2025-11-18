@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-class AboutHomeHandler: InternalSchemeResponse {
+final class AboutHomeHandler: InternalSchemeResponse {
     static let path = "about/home"
 
     // Return a blank page, the webview delegate will look at the current URL and load the home panel based on that
@@ -22,7 +22,7 @@ class AboutHomeHandler: InternalSchemeResponse {
     }
 }
 
-class AboutLicenseHandler: InternalSchemeResponse {
+final class AboutLicenseHandler: InternalSchemeResponse {
     static let path = "about/license"
 
     func response(forRequest request: URLRequest, useOldErrorPage: Bool = false) -> (URLResponse, Data)? {

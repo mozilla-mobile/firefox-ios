@@ -5,8 +5,10 @@
 import Foundation
 
 extension UIConstants {
+    @MainActor
     static var BottomToolbarHeight: CGFloat { return ToolbarHeight + BottomInset }
 
+    @MainActor
     static var BottomInset: CGFloat {
         var bottomInset: CGFloat = 0.0
         if let window = UIWindow.attachedKeyWindow {

@@ -14,7 +14,8 @@ private let URLBeforePathRegex = try? NSRegularExpression(pattern: "^https?://([
  * Shared data source for the SearchViewController and the URLBar domain completion.
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
-final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
+/// FIXME: FXIOS-14129 SearchLoader is not thread safe
+final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable, @unchecked Sendable {
     fileprivate let profile: Profile
     fileprivate let autocompleteView: Autocompletable
     private let logger: Logger
@@ -33,7 +34,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
     fileprivate func getBookmarksAsSites(
         matchingSearchQuery query: String,
         limit: UInt,
-        completionHandler: @escaping (([Site]) -> Void)
+        completionHandler: @escaping (@Sendable ([Site]) -> Void)
     ) {
         profile.places.searchBookmarks(query: query, limit: limit).upon { result in
             guard let bookmarkItems = result.successValue else {
@@ -49,12 +50,12 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
     private func getHistoryAsSites(
         matchingSearchQuery query: String,
         limit: Int,
-        completionHandler: @escaping (([Site]) -> Void)
+        completionHandler: @escaping (@Sendable ([Site]) -> Void)
     ) {
         profile.places.interruptReader()
-        profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).upon { result in
+        profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).upon { [logger] result in
             guard let historyItems = result.successValue else {
-                self.logger.log(
+                logger.log(
                     "Error searching history",
                     level: .warning,
                     category: .sync,
@@ -73,6 +74,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         }
     }
 
+    @MainActor
     var query = "" {
         didSet {
             let timerid = GleanMetrics.Awesomebar.queryTime.start()
@@ -88,27 +90,36 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
                 return
             }
 
-            getBookmarksAsSites(matchingSearchQuery: query, limit: 5) { [weak self] bookmarks in
-                guard let self = self else { return }
+            getBookmarksAsSites(matchingSearchQuery: query, limit: 5) { bookmarks in
+                ensureMainThread { [weak self] in
+                    guard let query = self?.query else { return }
 
-                var queries = [bookmarks]
-                let group = DispatchGroup()
-                group.enter()
-                self.getHistoryAsSites(matchingSearchQuery: self.query, limit: 100) { history in
-                    queries.append(history)
-                    group.leave()
-                }
-                _ = group.wait(timeout: .distantFuture)
+                    var queries = [bookmarks]
 
-                DispatchQueue.main.async {
-                    self.updateUIWithBookmarksAsSitesResults(queries: queries,
-                                                             timerid: timerid,
-                                                             oldValue: oldValue)
+                    let group = DispatchGroup()
+                    group.enter()
+
+                    self?.getHistoryAsSites(matchingSearchQuery: query, limit: 100) { history in
+                        ensureMainThread {
+                            // Mutate local variable on the main thread for thread safety
+                            queries.append(history)
+                            group.leave()
+                        }
+                    }
+
+                    group.notify(queue: .main) {
+                        self?.updateUIWithBookmarksAsSitesResults(
+                            queries: queries,
+                            timerid: timerid,
+                            oldValue: oldValue
+                        )
+                    }
                 }
             }
         }
     }
 
+    @MainActor
     private func updateUIWithBookmarksAsSitesResults(queries: [[Site]],
                                                      timerid: TimerId,
                                                      oldValue: String) {
@@ -144,11 +155,13 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         }
     }
 
+    @MainActor
     func setQueryWithoutAutocomplete(_ query: String) {
         skipNextAutocomplete = true
         self.query = query
     }
 
+    @MainActor
     fileprivate func completionForURL(_ url: String) -> String? {
         // Extract the pre-path substring from the URL. This should be more efficient than parsing via
         // NSURL since we need to only look at the beginning of the string.
@@ -177,6 +190,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         return completionForDomain(domain)
     }
 
+    @MainActor
     fileprivate func completionForDomain(_ domain: String) -> String? {
         let domainWithDotPrefix = ".\(domain)"
         if let range = domainWithDotPrefix.range(of: ".\(query)", options: .caseInsensitive, range: nil, locale: nil) {

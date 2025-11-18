@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class ContextualHintViewProviderTests: XCTestCase {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 

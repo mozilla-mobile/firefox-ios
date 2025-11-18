@@ -60,7 +60,7 @@ final class GleanUsageReporting: GleanUsageReportingApi {
     }
 }
 
-class GleanLifecycleObserver {
+final class GleanLifecycleObserver {
     let gleanUsageReportingApi: GleanUsageReportingApi
     let profileIdentifier = ProfileIdentifier()
     private var isObserving = false
@@ -136,7 +136,7 @@ class GleanLifecycleObserver {
     }
 }
 
-class GleanUsageReportingMetricsService {
+final class GleanUsageReportingMetricsService {
     private(set) var lifecycleObserver: GleanLifecycleObserver
 
     init(

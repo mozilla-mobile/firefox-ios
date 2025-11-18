@@ -53,7 +53,7 @@ class EditFolderViewController: UIViewController,
     private lazy var saveBarButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
             title: String.Bookmarks.Menu.EditBookmarkSave,
-            style: .done,
+            style: .plain,
             target: self,
             action: #selector(saveButtonAction)
         )
@@ -125,7 +125,7 @@ class EditFolderViewController: UIViewController,
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
@@ -158,6 +158,9 @@ class EditFolderViewController: UIViewController,
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
+        if #available(iOS 26.0, *) {
+            saveBarButton.tintColor = theme.colors.textAccent
+        }
     }
 
     // MARK: - UITableViewDataSource & UITableViewDelegate

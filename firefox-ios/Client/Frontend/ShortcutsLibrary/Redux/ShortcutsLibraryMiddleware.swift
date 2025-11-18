@@ -5,6 +5,7 @@
 import Common
 import Redux
 
+@MainActor
 final class ShortcutsLibraryMiddleware {
     private let logger: Logger
     private let shortcutsLibraryTelemetry: ShortcutsLibraryTelemetry
@@ -16,29 +17,15 @@ final class ShortcutsLibraryMiddleware {
     }
 
     lazy var shortcutsLibraryProvider: Middleware<AppState> = { state, action in
-        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
-        // because we dispatch to the main thread in the store. We will want
-        // to also isolate that to the @MainActor to remove this.
-        guard Thread.isMainThread else {
-            self.logger.log(
-                "Shortcuts Library Middleware is not being called from the main thread!",
-                level: .fatal,
-                category: .shortcutsLibrary
-            )
-            return
-        }
-
-        MainActor.assumeIsolated {
-            switch action.actionType {
-            case ShortcutsLibraryActionType.tapOnShortcutCell:
-                self.shortcutsLibraryTelemetry.sendShortcutTappedEvent()
-            case ShortcutsLibraryActionType.viewDidAppear:
-                self.handleViewDidAppearAction(state: state, action: action)
-            case ShortcutsLibraryActionType.viewDidDisappear:
-                self.shortcutsLibraryTelemetry.sendShortcutsLibraryClosedEvent()
-            default:
-                break
-            }
+        switch action.actionType {
+        case ShortcutsLibraryActionType.tapOnShortcutCell:
+            self.shortcutsLibraryTelemetry.sendShortcutTappedEvent()
+        case ShortcutsLibraryActionType.viewDidAppear:
+            self.handleViewDidAppearAction(state: state, action: action)
+        case ShortcutsLibraryActionType.viewDidDisappear:
+            self.shortcutsLibraryTelemetry.sendShortcutsLibraryClosedEvent()
+        default:
+            break
         }
     }
 

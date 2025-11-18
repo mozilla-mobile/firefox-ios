@@ -58,3 +58,15 @@
 /* This is the less descriptive text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
 "Translations.Sheet.ToLabel.v145" = "V jezik";
 
+/* This is the accessibility label for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
+"Translations.Sheet.TranslateFrom.AccessibilityLabel.v145" = "Prevedi iz jezika %@";
+
+/* This is the text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.TranslateFromLabel.v145" = "Prevedi iz jezika";
+
+/* This is the accessibility label for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
+"Translations.Sheet.TranslateTo.AccessibilityLabel.v145" = "Prevedi v jezik %@";
+
+/* This is the text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.TranslateToLabel.v145" = "Prevedi v jezik";
+

@@ -37,7 +37,7 @@ class TabTrayThemeAnimator {
     }
 
     @objc
-    private nonisolated func handleThemeAnimationTick() {
+    nonisolated private func handleThemeAnimationTick() {
         ensureMainThread {
             let elapsed = CACurrentMediaTime() - self.animationStartTime
             let progress = min(max(elapsed / UX.animationDuration, 0), 1)

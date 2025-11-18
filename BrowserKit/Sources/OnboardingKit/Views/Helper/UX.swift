@@ -41,6 +41,7 @@ enum UX {
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150
+        static let maxImageHeight: CGFloat = 250
         static let tosImageHeight: CGFloat = 70
         static let cornerRadius: CGFloat = 20
         static let secondaryButtonBottomPadding: CGFloat = 24
@@ -54,7 +55,24 @@ enum UX {
         static let bodyFontSize: CGFloat = 16
 
         static let titleFont = FXFontStyles.Bold.title1.scaledSwiftUIFont()
+        static let titleFontRegular = FXFontStyles.Regular.title1.scaledSwiftUIFont()
         static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
+        // TODO: FXIOS-14022 Check Japanese alignment depeding on the experiment branch
+        private static var isJapanLocale: Bool {
+            Locale.current.languageCode == "ja"
+        }
+        static var titleFontForCurrentLocale: DynamicFont {
+            isJapanLocale ? titleFontRegular : titleFont
+        }
+        static var textAlignmentForCurrentLocale: TextAlignment {
+            isJapanLocale ? .leading : .center
+        }
+        static var horizontalAlignmentForCurrentLocale: HorizontalAlignment {
+            isJapanLocale ? .leading : .center
+        }
+        static var frameAlignmentForCurrentLocale: Alignment {
+            isJapanLocale ? .leading : .center
+        }
         static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
         static let primaryActionGlassFont = FXFontStyles.Bold.headline.scaledSwiftUIFont()
         static let secondaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
@@ -96,10 +114,11 @@ enum UX {
 
     struct LaunchScreen {
         struct Logo {
-            static let size: CGFloat = 125
             static let rotationDuration: TimeInterval = 2.0
-            static let rotationAngle: Double = 360
+            static let rotationAngle: Double = .pi * 2.0
             static let image = "firefoxLoader"
+            static let animationKey = "rotationAnimation"
+            static let animationKeyPath = "transform.rotation.z"
         }
     }
 

@@ -21,37 +21,27 @@ patterns = [pattern]
 BITRISE_YML = 'bitrise.yml'
 WORKFLOW = 'NewXcodeVersions'
 
-resp = requests.get(BITRISE_STACK_INFO)
-resp.raise_for_status()
-resp_json = resp.json()
-
-def latest_stack():
+def get_stack_info():
     try:
-        resp = requests.get(BITRISE_STACK_INFO)
+        resp = requests.get(BITRISE_STACK_INFO)    
+        resp.raise_for_status()
         resp_json = resp.json()
-
-        stack_names = [stack.get("name").replace(".md", "") for stack in resp_json]
-        keys = sorted([stack_name for stack_name in stack_names 
-                       if pattern in stack_name], reverse=True)
-        return keys[0]
+        return resp_json
     except HTTPError as http_error:
         print('An HTTP error has occurred: {http_error}')
     except Exception as err:
         print('An exception has occurred: {err}')
+
+def latest_stack(stacks_info):
+    stack_names = [stack.get("name").replace(".md", "") for stack in stacks_info]
+    keys = sorted([stack_name for stack_name in stack_names if pattern in stack_name])
+    return keys[-1]
         
-def latest_stable_stack():
-    try:
-        resp = requests.get(BITRISE_STACK_INFO)
-        resp_json = resp.json()
-
-        stack_names = [stack.get("name").replace(".md", "") for stack in resp_json]
-        keys = sorted([stack_name for stack_name in stack_names 
-                       if pattern in stack_name and '-edge' not in stack_name], reverse=True)
-        return keys[0]
-    except HTTPError as http_error:
-        print('An HTTP error has occurred: {http_error}')
-    except Exception as err:
-        print('An exception has occurred: {err}')
+def latest_stable_stack(stacks_info):
+    stack_names = [stack.get("name").replace(".md", "") for stack in stacks_info]
+    keys = sorted([stack_name for stack_name in stack_names 
+                   if pattern in stack_name and '-edge' not in stack_name])
+    return keys[-1]
         
 def write_to_bitrise_yml(yaml, version):
     yaml['workflows'][WORKFLOW]['meta']['bitrise.io']['stack'] = '{0}{1}'.format(pattern, version)
@@ -69,8 +59,9 @@ if __name__ == '__main__':
     4. modify bitrise.yml (update stack value)
     '''
 
-    latest_stable_semver = latest_stable_stack().split(pattern)[1]
-    latest_semver = latest_stack().split(pattern)[1]
+    stacks_info = get_stack_info()
+    latest_stable_semver = latest_stable_stack(stacks_info).split(pattern)[1]
+    latest_semver = latest_stack(stacks_info).split(pattern)[1]
     tmp_file = 'tmp.yml'
 
     with open(BITRISE_YML, 'r') as infile:

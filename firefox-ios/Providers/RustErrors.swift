@@ -15,16 +15,11 @@ public func initializeRustErrors(logger: Logger) {
     setApplicationErrorReporter(errorReporter: FirefoxIOSErrorReporter(logger: logger))
 }
 
-/// The `AppServicesErrorReport` class (with its inheritance from `CustomCrashReport`) exists
+/// The `AppServicesErrorReport` (with its conformance to `CustomCrashReport`) exists
 /// to distinguish native Sentry reports from reports originating in A-S
-private class AppServicesErrorReport: Error, CustomCrashReport {
-    var typeName: String
-    var message: String
-
-    init(typeName: String, message: String) {
-        self.typeName = typeName
-        self.message = message
-    }
+private struct AppServicesErrorReport: Error, CustomCrashReport {
+    let typeName: String
+    let message: String
 }
 
 /// The `FirefoxIOSErrorReporter` class contains the callbacks A-S uses to report Sentry errors and

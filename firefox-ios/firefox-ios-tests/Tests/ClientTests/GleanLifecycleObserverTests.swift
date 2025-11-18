@@ -47,7 +47,7 @@ final class MockGleanUsageReportingApi: GleanUsageReportingApi {
     }
 }
 
-final class MockGleanLifecycleObserver: GleanLifecycleObserver {
+final class MockGleanLifecycleObserver: GleanLifecycleObserver, @unchecked Sendable {
     var startObservingCalled = false
     var stopObservingCalled = false
     var handleForegroundEventCalled = false

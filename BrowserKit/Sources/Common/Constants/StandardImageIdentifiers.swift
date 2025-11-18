@@ -39,6 +39,7 @@ public struct StandardImageIdentifiers {
         public static let starOneHalfFill = "starOneHalfFillMedium"
         public static let sun = "sunMedium"
         public static let sunFill = "sunFillMedium"
+        public static let translate = "translateMedium"
     }
 
     // Icon size 24x24
@@ -47,7 +48,8 @@ public struct StandardImageIdentifiers {
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let appMenu = "appMenuLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
-        public static let arrowTrendingLarge = "arrowTrendingLarge"
+        public static let arrowCounterClockwise = "arrowCounterClockwiseLarge"
+        public static let arrowTrending = "arrowTrendingLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let avatarWarningCircleFillMulticolorDark = "avatarWarningCircleFillMulticolorLargeDark"
         public static let avatarWarningCircleFillMulticolorLight = "avatarWarningCircleFillMulticolorLargeLight"
@@ -80,6 +82,7 @@ public struct StandardImageIdentifiers {
         public static let download = "downloadLarge"
         public static let edit = "editLarge"
         public static let ellipsis = "ellipsisLarge"
+        public static let emailMask = "emailMaskLarge"
         public static let fingerprinter = "fingerprinterLarge"
         public static let folder = "folderLarge"
         public static let forward = "forwardLarge"

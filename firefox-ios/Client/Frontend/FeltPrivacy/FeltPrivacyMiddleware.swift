@@ -24,7 +24,7 @@ final class FeltPrivacyMiddleware {
             let updateAction = PrivateModeAction(isPrivate: privateState,
                                                  windowUUID: action.windowUUID,
                                                  actionType: PrivateModeActionType.privateModeUpdated)
-            store.dispatchLegacy(updateAction)
+            store.dispatch(updateAction)
         default:
             break
         }

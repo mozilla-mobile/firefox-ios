@@ -174,7 +174,6 @@ class ToolbarTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
             mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites])
             mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
-            navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
             navigator.performAction(Action.OpenNewTabFromTabTray)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])

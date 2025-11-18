@@ -35,7 +35,7 @@ public struct ReaderModeConfiguration {
 }
 
 // TODO: FXIOS-11373 - finish handling reader mode in WebEngine - this class is to be tested
-class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
+final class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var readerModeCache: ReaderModeCache = DiskReaderModeCache()
 

@@ -38,7 +38,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showDocumentLoadingCalled = 0
     var removeDocumentLoadingCalled = 0
     var showHomepageCalled = 0
-    var showLegacyHomepageCalled = 0
     var browserHasLoadedCalled = 0
     var homepageScreenshotToolCalled = 0
     var showNativeErrorPageCalled = 0
@@ -48,8 +47,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
     var showStoriesFeedCalled = 0
+    var showStoriesWebViewCalled = 0
     var showTermsOfUseCalled = 0
     var shouldShowNewTabToastCalled = 0
+    var popToBVCCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -166,17 +167,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showWebViewCalled += 1
     }
 
-    func showLegacyHomepage(
-        inline: Bool,
-        toastContainer: UIView,
-        homepanelDelegate: any Client.HomePanelDelegate,
-        libraryPanelDelegate: any Client.LibraryPanelDelegate,
-        statusBarScrollDelegate: any Client.StatusBarScrollDelegate,
-        overlayManager: any Client.OverlayModeManager
-    ) {
-        showLegacyHomepageCalled += 1
-    }
-
     func showHomepage(
         overlayManager: any Client.OverlayModeManager,
         isZeroSearch: Bool,
@@ -215,8 +205,16 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showStoriesFeedCalled += 1
     }
 
+    func showStoriesWebView(url: URL?) {
+        showStoriesWebViewCalled += 1
+    }
+
     func shouldShowNewTabToast(tab: Client.Tab) -> Bool {
         shouldShowNewTabToastCalled += 1
         return true
+    }
+
+    func popToBVC() {
+        popToBVCCalled += 1
     }
 }

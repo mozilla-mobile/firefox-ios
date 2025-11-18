@@ -29,6 +29,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     let isEmptySearch: Bool
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
+    let translationConfiguration: TranslationConfiguration?
 
     private static let cancelEditAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
@@ -75,11 +76,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
             isEditing: false,
-            shouldShowKeyboard: true,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
             canSummarize: false,
+            translationConfiguration: nil,
             didStartTyping: false,
             isEmptySearch: true,
             alternativeSearchEngine: nil
@@ -103,6 +105,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
          isLoading: Bool,
          readerModeState: ReaderModeState?,
          canSummarize: Bool,
+         translationConfiguration: TranslationConfiguration?,
          didStartTyping: Bool,
          isEmptySearch: Bool,
          alternativeSearchEngine: SearchEngineModel?) {
@@ -126,6 +129,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.isEmptySearch = isEmptySearch
         self.alternativeSearchEngine = alternativeSearchEngine
         self.canSummarize = canSummarize
+        self.translationConfiguration = translationConfiguration
     }
 
     // swiftlint:disable:next closure_body_length
@@ -141,6 +145,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
+
+        // Translation related actions
+        case ToolbarActionType.didStartTranslatingPage,
+            ToolbarActionType.translationCompleted,
+            ToolbarActionType.receivedTranslationLanguage,
+            ToolbarActionType.didReceiveErrorTranslating,
+            ToolbarActionType.didTranslationSettingsChange:
+            return handleLeadingPageChangedAction(state: state, action: action)
 
         case ToolbarActionType.readerModeStateChanged:
             return handleReaderModeStateChangedAction(state: state, action: action)
@@ -179,8 +191,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.didSetTextInLocationView:
             return handleDidSetTextInLocationViewAction(state: state, action: action)
 
-        case ToolbarActionType.hideKeyboard:
-            return handleHideKeyboardAction(state: state)
+        case ToolbarActionType.keyboardStateDidChange:
+            return handleShouldShowKeyboardAction(state: state, action: action)
 
         case ToolbarActionType.clearSearch:
             return handleClearSearchAction(state: state, action: action)
@@ -226,17 +238,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
             isEditing: false,
-            shouldShowKeyboard: true,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
             canSummarize: false,
+            translationConfiguration: nil,
             didStartTyping: false,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -258,12 +272,47 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
+    private static func handleLeadingPageChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else {
+            return defaultState(from: state)
+        }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
+            trailingPageActions: state.trailingPageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            translationConfiguration: toolbarAction.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    @MainActor
     private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -290,12 +339,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: toolbarAction.readerModeState,
             canSummarize: toolbarAction.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -323,12 +374,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: toolbarAction.isLoading ?? state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -359,12 +412,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: toolbarAction.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -392,12 +447,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -425,12 +482,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -458,12 +517,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -491,12 +552,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleDidPasteSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -518,17 +581,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
-            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleDidStartEditingUrlAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -557,20 +622,23 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleCancelEditOnHomepageAction(state: Self, action: Action) -> Self {
         if state.url == nil {
             return handleCancelEditAction(state: state, action: action)
         } else {
-            return handleHideKeyboardAction(state: state)
+            return handleShouldShowKeyboardAction(state: state, action: action)
         }
     }
 
+    @MainActor
     private static func handleCancelEditAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -593,17 +661,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: false,
-            shouldShowKeyboard: true,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleDidSetTextInLocationViewAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -630,6 +700,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -639,7 +710,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
     /// This case can occur when scrolling on homepage or in search view
     /// and the user is still in isEditing mode (aka Cancel button is shown)
     /// But we don't show the keyboard and the cursor is not active
-    private static func handleHideKeyboardAction(state: Self) -> Self {
+    private static func handleShouldShowKeyboardAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -653,17 +726,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            shouldShowKeyboard: false,
+            shouldShowKeyboard: toolbarAction.shouldShowKeyboard ?? false,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleClearSearchAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -688,12 +763,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleDidDeleteSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -718,12 +795,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
+    @MainActor
     private static func handleDidEnterSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -748,6 +827,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: false,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -775,6 +855,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -802,6 +883,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -831,6 +913,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: selectedSearchEngine
@@ -858,6 +941,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: nil
@@ -883,6 +967,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -890,6 +975,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // MARK: - Address Toolbar Actions
+    @MainActor
     private static func navigationActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
@@ -917,6 +1003,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return actions
     }
 
+    @MainActor
     private static func leadingPageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
@@ -944,16 +1031,57 @@ struct AddressBarState: StateType, Sendable, Equatable {
                 let shareAction = shareAction(enabled: isLoading == false,
                                               hasAlternativeLocationColor: hasAlternativeLocationColor)
                 actions.append(shareAction)
+
+                if let translationAction = configureTranslationIcon(
+                    for: action,
+                    addressBarState: addressBarState,
+                    isLoading: isLoading,
+                    hasAlternativeLocationColor: hasAlternativeLocationColor
+                ) {
+                    actions.append(translationAction)
+                }
             }
         } else if !isHomepage, isShowingNavigationToolbar {
             let shareAction = shareAction(enabled: isLoading == false,
                                           hasAlternativeLocationColor: hasAlternativeLocationColor)
             actions.append(shareAction)
+
+            if let translationAction = configureTranslationIcon(
+                for: action,
+                addressBarState: addressBarState,
+                isLoading: isLoading,
+                hasAlternativeLocationColor: hasAlternativeLocationColor
+            ) {
+                actions.append(translationAction)
+            }
         }
 
         return actions
     }
 
+    // Checks whether we should show the translation icon based on the translation configuration
+    // state and setups up the configuration for the translation icon on the toolbar (for iPad and iPhone)
+    private static func configureTranslationIcon(
+        for action: ToolbarAction,
+        addressBarState: AddressBarState,
+        isLoading: Bool?,
+        hasAlternativeLocationColor: Bool
+    ) -> ToolbarActionConfiguration? {
+        // Check if action has an updated configuration, otherwise default to state.
+        let canTranslateFromAction = action.translationConfiguration?.canTranslate ?? false
+        let canTranslateFromState = addressBarState.translationConfiguration?.canTranslate ?? false
+        let shouldShowTranslationIcon = canTranslateFromAction || canTranslateFromState
+        guard shouldShowTranslationIcon else { return nil }
+        let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
+        guard let state = configuration?.state else { return nil }
+        return translateAction(
+            enabled: isLoading == false,
+            state: state,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
+    }
+
+    @MainActor
     private static func trailingPageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
@@ -992,6 +1120,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return actions
     }
 
+    @MainActor
     private static func browserActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
@@ -1048,6 +1177,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // MARK: - Helper
+    @MainActor
     private static func toolbarPosition(action: ToolbarAction) -> AddressToolbarPosition? {
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
@@ -1064,6 +1194,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
     }
 
+    @MainActor
     private static func shouldUseAlternativeLocationColor(action: ToolbarAction) -> Bool {
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return false }
@@ -1190,5 +1321,33 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yHint: .TabLocationReloadAccessibilityHint,
             a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
             a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+    }
+
+    // Sets up translation icon on the toolbar
+    //
+    // We handle tapping differently for translation button by showing a loading icon
+    // instead of a highlighted color.
+    // If we kept the highlighted color, then it will cause the translation icon to flicker
+    // when switching from inactive icon to loading icon when user taps on it. Hence, `hasHighlightedColor: false`.
+    private static func translateAction(
+        enabled: Bool,
+        state: TranslationConfiguration.IconState,
+        hasAlternativeLocationColor: Bool
+    ) -> ToolbarActionConfiguration {
+        // We do not want to use template mode for translate active icon.
+        let isActiveState = state == .active
+
+        return ToolbarActionConfiguration(
+            actionType: .translate,
+            iconName: state.buttonImageName,
+            templateModeForImage: !isActiveState,
+            isLoading: state == .loading,
+            isEnabled: enabled,
+            hasCustomColor: !hasAlternativeLocationColor,
+            hasHighlightedColor: false,
+            contextualHintType: ContextualHintType.translation.rawValue,
+            a11yLabel: state.buttonA11yLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.translateButton
+        )
     }
 }

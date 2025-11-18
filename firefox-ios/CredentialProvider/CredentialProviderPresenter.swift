@@ -4,7 +4,7 @@
 
 import UIKit
 import Common
-import AuthenticationServices
+@preconcurrency import AuthenticationServices
 
 let CredentialProviderAuthenticationDelay = 0.25
 

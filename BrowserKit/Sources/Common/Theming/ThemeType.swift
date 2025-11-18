@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
-public enum ThemeType: String {
+public enum ThemeType: String, Sendable {
     case light = "normal" // This needs to match the string used in the legacy system
     case dark
     case privateMode

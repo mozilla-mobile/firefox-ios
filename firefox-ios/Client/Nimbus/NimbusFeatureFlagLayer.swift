@@ -4,7 +4,7 @@
 
 import Foundation
 
-final class NimbusFeatureFlagLayer {
+final class NimbusFeatureFlagLayer: Sendable {
     // MARK: - Public methods
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus = FxNimbus.shared
@@ -32,6 +32,9 @@ final class NimbusFeatureFlagLayer {
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
 
+        case .firefoxJpGuideDefaultSite:
+            return checkFirefoxJpGuideDefaultSiteFeature(from: nimbus)
+
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
@@ -40,9 +43,6 @@ final class NimbusFeatureFlagLayer {
 
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
-
-        case .hntTopSitesVisualRefresh:
-            return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
         case .homepageRedesign:
             return checkHomepageRedesignFeature(from: nimbus)
@@ -56,14 +56,17 @@ final class NimbusFeatureFlagLayer {
         case .homepageStoriesRedesign:
             return checkHomepageStoriesRedesignFeature(from: nimbus)
 
+        case .homepageScrim:
+            return checkHomepageScrimFeature(from: nimbus)
+
         case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
             return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
 
-        case .homepageRebuild:
-            return checkHomepageFeature(from: nimbus)
-
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
+
+        case .shouldUseJapanConfiguration:
+            return checkShouldUseJapanConfigurationFeature(from: nimbus)
 
         case .menuDefaultBrowserBanner:
             return checkMenuDefaultBrowserBanner(from: nimbus)
@@ -214,10 +217,6 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
-    private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
-    }
-
     private func checkHomepageRedesignFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().enabled
     }
@@ -234,6 +233,10 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.homepageRedesignFeature.value().storiesRedesign
     }
 
+    private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().scrim
+    }
+
     private func checkHomepageDiscoverMoreFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -248,11 +251,6 @@ final class NimbusFeatureFlagLayer {
         default:
             return false
         }
-    }
-
-    private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.homepageRebuildFeature.value()
-        return config.enabled
     }
 
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
@@ -430,6 +428,10 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.downloadLiveActivitiesFeature.value().enabled
     }
 
+    private func checkFirefoxJpGuideDefaultSiteFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.firefoxJpGuideDefaultSite.value().enabled
+    }
+
     private func checkFirefoxSuggestFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
@@ -509,5 +511,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.webEngineIntegrationRefactor.value().enabled
+    }
+
+    private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
     }
 }

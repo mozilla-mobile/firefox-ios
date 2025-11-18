@@ -36,11 +36,11 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                                LaunchArguments.DisableAnimations]
         }
         super.setUp()
-        app.launch()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339256
     func testCheckHomeSettingsByDefault() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
 
@@ -96,6 +96,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339258
     func testClipboard() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // Check that what's in clipboard is copied
         UIPasteboard.general.string = websiteUrl1
@@ -120,6 +121,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339260
     func testSetFirefoxHomeAsHome() {
+        app.launch()
         // Go to homepage settings
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -168,6 +170,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
     func testDisableTopSitesSettingsRemovesSection() {
+        app.launch()
         mozWaitForElementToExist(
             app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
@@ -186,6 +189,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339491
     func testChangeHomeSettingsLabel() {
+        app.launch()
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
         navigator.nowAt(HomeSettings)
@@ -216,54 +220,17 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307033
-    func testJumpBackIn() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Jump back in removed from the new home panel")
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: exampleUrl))
-        waitUntilPageLoad()
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],
-                app.otherElements
-                    .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
-                    .staticTexts[urlExampleLabel]]
-        )
-        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].waitAndTap()
-        // Tab tray is open with recently open tab
-        mozWaitForElementToExist(app.otherElements.cells[urlExampleLabel])
-        app.buttons["Done"].waitAndTap()
-        // Validation for when Jump In section is not displayed
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        app.tables.cells.switches["Jump Back In"].waitAndTap()
-        app.buttons["Done"].waitAndTap()
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307033
-    func testJumpBackIn_tabTrayExperimentOn() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Jump back in removed from the new home panel")
+    func testJumpBackIn() {
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
         waitForElementsToExist(
             [
                 app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],
@@ -285,21 +252,17 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
-    func testRecentlySaved() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Recently saved was removed from the new home panel")
+    func testRecentlySaved() {
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         navigator.nowAt(BrowserTab)
         bookmarkPages()
         // iOS 15 does not have the Reader View button available (when experiment Off)
         if #available(iOS 16, *) {
-            addContentToReaderView()
+            addContentToReaderView(isHomePageOn: false)
             if iPad() {
                 app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
                 app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
@@ -308,18 +271,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                 app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             }
             mozWaitForElementToExist(app.staticTexts["Bookmarks"])
+            navigator.nowAt(NewTabScreen)
             navigator.performAction(Action.ToggleRecentlySaved)
-            if !iPad() {
-                navigator.performAction(Action.ClickSearchButton)
-                mozWaitForElementToNotExist(
-                    app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
-                )
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-                navigator.performAction(Action.CloseURLBarOpen)
-            } else {
-                navigator.nowAt(HomeSettings)
-                navigator.performAction(Action.OpenNewTabFromTabTray)
-            }
+            navigator.nowAt(HomeSettings)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
             navigator.nowAt(NewTabScreen)
             navigator.performAction(Action.ToggleRecentlySaved)
             navigator.nowAt(HomeSettings)
@@ -334,17 +289,17 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             removeContentFromReaderView()
             navigator.nowAt(LibraryPanel_ReadingList)
             navigator.performAction(Action.CloseReadingListPanel)
-            navigator.goto(NewTabScreen)
+            navigator.nowAt(BrowserTab)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
             checkBookmarksUpdated()
         }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306871
     // Smoketest
-    func testCustomizeHomepage() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Customize homepage was removed from the new home panel")
+    func testCustomizeHomepage() {
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
+        app.launch()
         if !iPad() {
             mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
             app.collectionViews["FxCollectionView"].swipeUp()
@@ -383,6 +338,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
     func testShortcutsRows() {
+        app.launch()
         addWebsitesToShortcut(website: path(forTestPage: url_1))
         addWebsitesToShortcut(website: path(forTestPage: url_2["url"]!))
         addWebsitesToShortcut(website: path(forTestPage: url_3))

@@ -96,7 +96,7 @@ protocol Profile: AnyObject, Sendable {
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
     var firefoxSuggest: RustFirefoxSuggestProtocol? { get }
-    var remoteSettingsService: RemoteSettingsService? { get }
+    var remoteSettingsService: RemoteSettingsService { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
@@ -653,7 +653,7 @@ open class BrowserProfile: Profile,
         return RustLogins(databasePath: databasePath)
     }()
 
-    lazy var remoteSettingsService: RemoteSettingsService? = {
+    lazy var remoteSettingsService: RemoteSettingsService = {
         let remoteSettingsEnvironmentKey = prefs.stringForKey(PrefsKeys.RemoteSettings.remoteSettingsEnvironment) ?? ""
         let remoteSettingsEnvironment = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
         let remoteSettingsServer = remoteSettingsEnvironment.toRemoteSettingsServer()
@@ -686,17 +686,14 @@ open class BrowserProfile: Profile,
                 appropriateFor: nil,
                 create: true
             ).appendingPathComponent("suggest.db", isDirectory: false)
-            if let rsService = remoteSettingsService {
-                return try RustFirefoxSuggest(
-                    dataPath: URL(
-                        fileURLWithPath: directory,
-                        isDirectory: true
-                    ).appendingPathComponent("suggest-data.db").path,
-                    cachePath: cacheFileURL.path,
-                    remoteSettingsService: rsService
-                )
-            }
-            return nil
+            return try RustFirefoxSuggest(
+                dataPath: URL(
+                    fileURLWithPath: directory,
+                    isDirectory: true
+                ).appendingPathComponent("suggest-data.db").path,
+                cachePath: cacheFileURL.path,
+                remoteSettingsService: remoteSettingsService
+            )
         } catch {
             logger.log("Failed to open Firefox Suggest database: \(error.localizedDescription)",
                        level: .warning,
@@ -809,8 +806,8 @@ open class BrowserProfile: Profile,
         }
     }
 
-    class NoAccountError: MaybeErrorType {
-        var description = "No account."
+    struct NoAccountError: MaybeErrorType {
+        let description = "No account."
     }
 }
 

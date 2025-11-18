@@ -80,7 +80,7 @@
 "Autocomplete.customUrlAdded" = "L’indirizzu web persunalizatu novu hè aghjuntu.";
 
 /* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Autocomplete.defaultDescriptoin" = "Attivà per chì %@ compii autumaticamente più di 450 indirizzi populari in a barra d’indirizzu.";
+"Autocomplete.defaultDescriptoin" = "Attivà per chì %@ compii autumaticamente più di 450 indirizzi pupulari in a barra d’indirizzu.";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Disattivata";
@@ -104,10 +104,10 @@
 "Autocomplete.mySitesDesc" = "Attivà per chì %@ compii autumaticamente i vostri indirizzi web favuriti.";
 
 /* Label for enabling or disabling top sites */
-"Autocomplete.topSites" = "Siti populari";
+"Autocomplete.topSites" = "Siti pupulari";
 
 /* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
-"BiometricAuthentication.UnlockButton.Title" = "Sbluccà";
+"BiometricAuthentication.UnlockButton.Title" = "Spalancà";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sessione nova";

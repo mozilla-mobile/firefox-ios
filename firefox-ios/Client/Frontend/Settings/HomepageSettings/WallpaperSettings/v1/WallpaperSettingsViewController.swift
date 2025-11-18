@@ -6,6 +6,7 @@ import Common
 import UIKit
 
 class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
+    @MainActor
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
@@ -251,26 +252,21 @@ private extension WallpaperSettingsViewController {
         viewModel.selectHomepageTab()
     }
 
-    func preferredContentSizeChanged(_ notification: Notification) {
-        // Reload the complete collection view as the section headers are not adjusting their size correctly otherwise
-        collectionView.reloadData()
-    }
-
     func downloadAndSetWallpaper(at indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? WallpaperCollectionViewCell
             else { return }
 
         cell.showDownloading(true)
 
-        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
-            ensureMainThread {
+        viewModel.downloadAndSetWallpaper(at: indexPath) { result in
+            ensureMainThread { [weak self] in
                 switch result {
                 case .success:
                     self?.showToast()
                 case .failure(let error):
                     self?.logger.log("Could not download and set wallpaper: \(error.localizedDescription)",
                                      level: .warning,
-                                     category: .legacyHomepage)
+                                     category: .homepage)
                     self?.showError(error) { _ in
                         self?.downloadAndSetWallpaper(at: indexPath)
                     }
@@ -286,7 +282,10 @@ extension WallpaperSettingsViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            preferredContentSizeChanged(notification)
+            ensureMainThread {
+                // Reload the entire collection view as the section headers are not adjusting their size correctly otherwise
+                self.collectionView.reloadData()
+            }
         default: break
         }
     }
