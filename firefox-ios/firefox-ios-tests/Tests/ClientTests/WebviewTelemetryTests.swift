@@ -7,26 +7,51 @@
 import Glean
 import XCTest
 
-// TODO: FXIOS-13747 - Migrate WebviewTelemetryTests to use mock telemetry or GleanWrapper
 class WebviewTelemetryTests: XCTestCase {
+    var mockGleanWrapper: MockGleanWrapper!
+
+    override func setUp() {
+        super.setUp()
+        mockGleanWrapper = MockGleanWrapper()
+    }
+
+    override func tearDown() {
+        mockGleanWrapper = nil
+        super.tearDown()
+    }
+
     func testLoadMeasurement() throws {
-        let subject = WebViewLoadMeasurementTelemetry()
+        let subject = createSubject()
+        let metric = GleanMetrics.Webview.pageLoad
 
         subject.start()
         subject.stop()
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Webview.pageLoad.testGetValue())
-        XCTAssertEqual(1, resultValue.count, "Should have been measured once")
-        XCTAssertEqual(0, GleanMetrics.Webview.pageLoad.testGetNumRecordedErrors(.invalidValue))
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? TimingDistributionMetricType
+        )
+        XCTAssertEqual(mockGleanWrapper.startTimingCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.cancelTimingCalled, 0)
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
     }
 
-    func testCancelLoadMeasurement() {
-        let subject = WebViewLoadMeasurementTelemetry()
+    func testCancelLoadMeasurement() throws {
+        let subject = createSubject()
+        let metric = GleanMetrics.Webview.pageLoad
 
         subject.start()
         subject.cancel()
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? TimingDistributionMetricType
+        )
+        XCTAssertEqual(mockGleanWrapper.startTimingCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.cancelTimingCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 0)
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
+    }
 
-        XCTAssertNil(GleanMetrics.Webview.pageLoad.testGetValue(), "Should not have been measured")
-        XCTAssertEqual(0, GleanMetrics.Webview.pageLoad.testGetNumRecordedErrors(.invalidValue))
+    private func createSubject() -> WebViewLoadMeasurementTelemetry {
+        return WebViewLoadMeasurementTelemetry(gleanWrapper: mockGleanWrapper)
     }
 }
