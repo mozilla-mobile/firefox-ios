@@ -413,18 +413,19 @@ class ReadingListTests: FeatureFlaggedTestBase {
         toolBarScreen.assertTabsButtonExists()
         // issue 28625: iOS 15 may not open the menu fully.
         if #available(iOS 16, *) {
+            let articleRead = "The Book of Mozilla, read"
+            let articleUnread = "The Book of Mozilla, unread"
             navigator.goto(LibraryPanel_ReadingList)
             // Swipe the article left
             // The article has been marked as Read
-            // mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, read"))
-            readingListScreen.waitForArticle("The Book of Mozilla, read")
+            readingListScreen.waitForArticle(articleRead)
             savedToReadingList.swipeLeft()
             // Two options are revealed
             readingListScreen.assertSwipeOptionsVisible()
             // Tap 'Mark as Unread'
             readingListScreen.tapMarkAsUnread()
             // The article has been marked as Unread
-            readingListScreen.waitForArticle("The Book of Mozilla, unread")
+            readingListScreen.waitForArticle(articleUnread)
             // Swipe te article left and tap 'Remove'
             savedToReadingList.swipeLeft()
             readingListScreen.tapRemoveArticle()
