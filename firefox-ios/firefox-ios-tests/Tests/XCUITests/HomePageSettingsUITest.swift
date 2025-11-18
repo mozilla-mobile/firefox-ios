@@ -106,14 +106,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             sleep(2)
         }
         let textField = app.textFields["HomeAsCustomURLTextField"]
-        textField.press(forDuration: 3)
         let pasteOption = app.menuItems["Paste"]
-        var nrOfTaps = 3
-        while !pasteOption.exists && nrOfTaps > 0 {
-            textField.press(forDuration: 3)
-            nrOfTaps -= 1
-        }
-        app.menuItems["Paste"].waitAndTap()
+        textField.pressWithRetry(duration: 2, element: pasteOption)
+        pasteOption.waitAndTap()
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         // Check that the webpage has been correctly copied into the correct field
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: websiteUrl1)

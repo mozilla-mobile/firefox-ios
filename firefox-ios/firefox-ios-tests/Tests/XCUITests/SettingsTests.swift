@@ -295,6 +295,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     func testTranslationSettingsShouldShow_translationExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
+        navigator.nowAt(NewTabScreen)
         validateTranslationSettingsUI()
         dismissSearchScreenFromTranslation()
 
@@ -358,6 +359,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
+        navigator.nowAt(BrowserTab)
 
         validateTranslationSettingsUI()
     }
@@ -572,7 +574,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     private func validateTranslationSettingsUI() {
-        navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)
