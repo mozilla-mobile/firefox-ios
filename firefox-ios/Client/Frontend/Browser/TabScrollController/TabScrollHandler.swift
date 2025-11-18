@@ -10,7 +10,6 @@ import Common
 protocol TabScrollHandlerProtocol: AnyObject {
     var tabProvider: TabProviderProtocol? { get set }
     var contentOffset: CGPoint { get }
-    var toolbarDisplayState: ToolbarDisplayState { get }
 
     func showToolbars(animated: Bool)
     func hideToolbars(animated: Bool)
@@ -19,26 +18,6 @@ protocol TabScrollHandlerProtocol: AnyObject {
     func stopObserving(scrollView: UIScrollView)
     func traitCollectionDidChange()
     func createToolbarTapHandler() -> (() -> Void)
-}
-
-enum ToolbarDisplayState {
-    case collapsed
-    case expanded
-    case transitioning
-
-    init() { self = .expanded }
-
-    var isExpanded: Bool { self == .expanded }
-    var isCollapsed: Bool { self == .collapsed }
-    var isAnimating: Bool { self == .transitioning }
-
-    /// Updates toolbar display state using move semantics for better performance.
-    /// `consuming` takes ownership to avoid copying, `consume` transfers ownership.
-    /// Performance: Eliminates defensive copying for faster updates.
-    mutating func update(displayState: consuming ToolbarDisplayState) {
-        guard self != displayState else { return }
-        self = consume displayState
-    }
 }
 
 final class TabScrollHandler: NSObject,
@@ -71,6 +50,26 @@ final class TabScrollHandler: NSObject,
     enum ScrollDirection {
         case up
         case down
+    }
+
+    enum ToolbarDisplayState {
+        case collapsed
+        case expanded
+        case transitioning
+
+        init() { self = .expanded }
+
+        var isExpanded: Bool { self == .expanded }
+        var isCollapsed: Bool { self == .collapsed }
+        var isAnimating: Bool { self == .transitioning }
+
+        /// Updates toolbar display state using move semantics for better performance.
+        /// `consuming` takes ownership to avoid copying, `consume` transfers ownership.
+        /// Performance: Eliminates defensive copying for faster updates.
+        mutating func update(displayState: consuming ToolbarDisplayState) {
+            guard self != displayState else { return }
+            self = consume displayState
+        }
     }
 
     var tabProvider: TabProviderProtocol? {

@@ -35,7 +35,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     ///   - progress: The current scroll progress used to determine the translation amount.
     /// Positive values indicate upward scrolling (collapsing), and negative values indicate downward scrolling (expanding).
     ///   - state: The target display state of the toolbar (`.collapsed` or `.expanded`).
-    func updateToolbarTransition(progress: CGFloat, towards state: ToolbarDisplayState) {
+    func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
         let isCollapsing = (state == .collapsed)
         let clampProgress = isCollapsing ? max(0, progress) : min(0, progress)
 

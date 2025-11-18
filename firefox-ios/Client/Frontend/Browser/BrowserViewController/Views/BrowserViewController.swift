@@ -699,9 +699,17 @@ class BrowserViewController: UIViewController,
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
-        let isToolbarCollapsed = if #available(iOS 26.0, *) {
-            scrollController.toolbarDisplayState.isCollapsed
-        } else { false }
+
+        var isToolbarCollapsed: Bool {
+            guard #available(iOS 26.0, *) else { return false }
+            switch scrollController {
+            case let legacy as LegacyTabScrollController:
+                return legacy.toolbarState == .collapsed
+            case let handler as TabScrollHandler:
+                return handler.toolbarDisplayState.isCollapsed
+            default: return false
+            }
+        }
 
         if isBottomSearchBar {
             header.isClearBackground = false
