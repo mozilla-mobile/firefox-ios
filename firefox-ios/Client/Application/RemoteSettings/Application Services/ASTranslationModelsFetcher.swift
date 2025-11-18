@@ -118,7 +118,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         // This will search for two pairs sourceLang -> en and en -> targetLang
         // in order to build a translation pipeline for sourceLang -> targetLang
         guard let sourceToPivot = getLanguageModelFiles(records: records, from: sourceLang, to: Constants.pivotLanguage),
-              let pivotToTarget = getLanguageModelFiles(records: records, from: Constants.pivotLanguage, to: targetLang) else {
+              let pivotToTarget = getLanguageModelFiles(records: records, from: Constants.pivotLanguage, to: targetLang)
+        else {
             logger.log(
                 "No direct or pivot models found for \(sourceLang)->\(targetLang)",
                 level: .warning,

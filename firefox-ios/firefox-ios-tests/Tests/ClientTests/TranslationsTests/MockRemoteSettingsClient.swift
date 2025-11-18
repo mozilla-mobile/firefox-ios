@@ -6,7 +6,6 @@ import Foundation
 import MozillaAppServices
 
 final class MockRemoteSettingsClient: RemoteSettingsClientProtocol {
-
     private let collectionNameValue: String
     private let records: [RemoteSettingsRecord]
     private let attachmentsById: [String: Data]
