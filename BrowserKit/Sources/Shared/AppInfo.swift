@@ -41,7 +41,7 @@ extension AppInfo {
         if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
             return true
         }
-        // FIXME: FXIOS-13960 China FxA is no longer available, do not enable ChinaEdition based on locale
+        // FIXME: FXIOS-14170 China FxA is no longer available, do not enable ChinaEdition based on locale
         // return Locale.current.identifier == "zh_CN"
         return false
     }()
