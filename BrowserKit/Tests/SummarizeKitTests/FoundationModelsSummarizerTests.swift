@@ -13,15 +13,23 @@ import Common
 import FoundationModels
 import Foundation
 
-@available(iOS 26, *)
 final class FoundationModelsSummarizerTests: XCTestCase {
+    
     func testSummarizerRespondNonStreaming() async throws {
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
+
         let subject = createSubject(respondWith: ["hello", "world"])
         let result = try await subject.summarize("t")
         XCTAssertEqual(result, "hello world")
     }
 
     func testSummarizerRespondNonStreamingThrowsRateLimited() async throws {
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
+
         let rateLimitError = LanguageModelSession.GenerationError.rateLimited(.init(debugDescription: "context"))
         let subject = createSubject(respondWithError: rateLimitError)
 
@@ -31,6 +39,10 @@ final class FoundationModelsSummarizerTests: XCTestCase {
     }
 
     func testSummarizerRespondNonStreamingThrowsUnknown() async throws {
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
+
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
 
@@ -40,6 +52,10 @@ final class FoundationModelsSummarizerTests: XCTestCase {
     }
 
     func testSummarizerRespondStreaming() async throws {
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
+
         let expectedResponse = ["a", "b", "c"]
         let subject = createSubject(respondWith: expectedResponse)
 
@@ -60,6 +76,10 @@ final class FoundationModelsSummarizerTests: XCTestCase {
     }
 
     func testSummarizerRespondStreamingThrowsGuardViolation() async throws {
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
+
         let guardViolationError = LanguageModelSession.GenerationError.guardrailViolation(.init(debugDescription: "context"))
         let subject = createSubject(respondWithError: guardViolationError)
         let stream = subject.summarizeStreamed("t")
@@ -71,6 +91,10 @@ final class FoundationModelsSummarizerTests: XCTestCase {
     }
 
     func testSummarizerRespondStreamingThrowsUnknown() async throws {
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
+
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
         let stream = subject.summarizeStreamed("t")
@@ -81,6 +105,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         }
     }
 
+    @available(iOS 26, *)
     private func createSubject(
         respondWith responses: [String]? = nil,
         respondWithError error: Error? = nil
@@ -115,5 +140,4 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         }
     }
 }
-
 #endif
