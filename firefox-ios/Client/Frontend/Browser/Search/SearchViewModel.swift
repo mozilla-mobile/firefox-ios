@@ -63,10 +63,12 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         didSet {
             querySuggestClient()
             handleShowingOrHidingQuickSearchEngines(with: oldValue, newValue: searchQuery)
-            // When clearing the search query, we want to reload the trending searches since
-            // it was set to empty previously.
-            if searchQuery.isEmpty {
+            // We want to reload showing the zero search suggestions
+            // only if the previous search term is not empty.
+            if searchQuery.isEmpty, !oldValue.isEmpty {
                 loadTrendingSearches()
+                retrieveRecentSearches()
+                searchTelemetry.clearZeroSearchSectionSeen()
             }
         }
     }
@@ -361,6 +363,16 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         }
     }
 
+    // We only care about if the section has shown at least one trending search
+    // so we check if trending searches is empty or not
+    func recordTrendingSearchesDisplayedEvent() {
+        guard !trendingSearches.isEmpty && shouldShowTrendingSearches else { return }
+        if searchTelemetry.hasSeenTrendingSearches == false {
+            searchTelemetry.trendingSearchesShown(count: trendingSearches.count)
+            searchTelemetry.hasSeenTrendingSearches = true
+        }
+    }
+
     // Loads recent searches from the default search engine and updates `recentSearches`.
     // Falls back to an empty list on error.
     @MainActor
@@ -384,6 +396,16 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
                 self?.recentSearches = searchTerms
                 self?.delegate?.reloadTableView()
             }
+        }
+    }
+
+    // We only care about if the section has shown at least one recent search
+    // so we check if recent searches is empty or not.
+    func recordRecentSearchesDisplayedEvent() {
+        guard !recentSearches.isEmpty && shouldShowRecentSearches else { return }
+        if searchTelemetry.hasSeenRecentSearches == false {
+            searchTelemetry.recentSearchesShown(count: recentSearches.count)
+            searchTelemetry.hasSeenRecentSearches = true
         }
     }
 
