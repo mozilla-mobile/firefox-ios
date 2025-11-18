@@ -47,7 +47,7 @@ final class WebViewBridgeEndpoint: BridgeEndpoint {
         let js = "\(receiveFunction)(\(json))"
         webView.evaluateJavaScript(js, in: nil, in: contentWorld)
     }
-    
+
     func registerScriptHandler(_ handler: WKScriptMessageHandler) {
         guard let webView = webView else { return }
         let userContentController = webView.configuration.userContentController

@@ -8,23 +8,23 @@ import WebKit
 
 final class FakeEndpoint: BridgeEndpoint {
     let handlerName: String
-    
+
     private(set) var receivedJSON: [String] = []
     private(set) var registerCount = 0
     private(set) var unregisterCount = 0
-    
+
     init(name: String) {
         self.handlerName = name
     }
-    
+
     func send(json: String) {
         receivedJSON.append(json)
     }
-    
+
     func registerScriptHandler(_ handler: WKScriptMessageHandler) {
         registerCount += 1
     }
-    
+
     func unregisterScriptHandler() {
         unregisterCount += 1
     }

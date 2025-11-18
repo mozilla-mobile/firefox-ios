@@ -37,7 +37,7 @@ public final class Bridge: NSObject, WKScriptMessageHandler {
             portA.send(json: json)
         }
     }
-    
+
     func teardown() {
         portA.unregisterScriptHandler()
         portB.unregisterScriptHandler()
