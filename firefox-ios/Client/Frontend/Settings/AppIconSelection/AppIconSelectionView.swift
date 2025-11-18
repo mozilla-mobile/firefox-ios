@@ -95,10 +95,12 @@ struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
                 logger.log("Failed to set an alternative app icon [\(appIcon)]", level: .fatal, category: .appIcon)
-                isShowingErrorAlert = true
+                ensureMainThread {
+                    self.isShowingErrorAlert = true
 
-                // Reset the app icon in the UI since we changed it optimistically to provide UI feedback
-                self.currentAppIcon = previousIcon
+                    // Reset the app icon in the UI since we changed it optimistically to provide UI feedback
+                    self.currentAppIcon = previousIcon
+                }
 
                 return
             }
