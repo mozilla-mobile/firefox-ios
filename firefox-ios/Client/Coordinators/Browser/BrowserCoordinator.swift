@@ -139,6 +139,7 @@ class BrowserCoordinator: BaseCoordinator,
             toastContainer: toastContainer
         )
         homepageController.termsOfUseDelegate = self
+        homepageController.view.accessibilityElementsHidden = false
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -183,6 +184,7 @@ class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             overlayManager: overlayManager
         )
+        homepageViewController?.view.accessibilityElementsHidden = true
         privateHomepageController.parentCoordinator = self
         self.privateHomepageViewController = privateHomepageController
         guard browserViewController.embedContent(privateHomepageController) else {
@@ -263,6 +265,8 @@ class BrowserCoordinator: BaseCoordinator,
             router.popViewController(animated: false)
         }
 
+        homepageViewController?.view.accessibilityElementsHidden = true
+        UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         screenshotService.screenshotableView = webviewController
     }
 
