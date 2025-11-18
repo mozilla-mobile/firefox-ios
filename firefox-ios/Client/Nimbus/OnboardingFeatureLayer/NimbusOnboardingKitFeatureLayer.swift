@@ -21,12 +21,12 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         onboardingVariant: OnboardingVariant,
         with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
         isDefaultBrowser: Bool = false,
-        isIpad: Bool? = nil
+        isIpad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     ) {
         self.helperUtility = helperUtility
         self.onboardingVariant = onboardingVariant
         self.isDefaultBrowser = isDefaultBrowser
-        self.isIpad = isIpad ?? (UIDevice.current.userInterfaceIdiom == .pad)
+        self.isIpad = isIpad
     }
 
     func getOnboardingModel(
@@ -87,7 +87,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             }
 
             // Filter out welcome cards for DMA users who already have Firefox set as default browser
-            if isDefaultBrowser && viewModel.name.localizedCaseInsensitiveContains("welcome") {
+            if isDefaultBrowser && viewModel.instructionsPopup?.buttonAction == .openIosFxSettings {
                 return false
             }
             return true

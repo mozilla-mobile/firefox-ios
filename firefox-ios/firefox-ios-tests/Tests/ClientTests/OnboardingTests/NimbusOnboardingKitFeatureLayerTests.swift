@@ -23,7 +23,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     override func tearDown() {
         configUtility = nil
         mockHelper = nil
-       super.tearDown()
+        super.tearDown()
     }
 
     // MARK: - Initialization Tests
@@ -172,8 +172,8 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
 
     // MARK: - Default Browser Filtering Tests
 
-    func testGetOnboardingModel_isDefaultBrowser_filtersOutWelcomeCards() {
-        setupNimbusWithWelcomeAndOtherCards()
+    func testGetOnboardingModel_isDefaultBrowser_filtersOutCardsWithOpenIosFxSettingsPopup() {
+        setupNimbusWithOpenIosFxSettingsPopupCards()
         let layer = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: .modern,
             with: mockHelper,
@@ -182,11 +182,11 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
 
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
-        XCTAssertFalse(subject.cards.contains { $0.name.localizedCaseInsensitiveContains("welcome") })
+        XCTAssertFalse(subject.cards.contains { $0.instructionsPopup?.buttonAction == .openIosFxSettings })
     }
 
-    func testGetOnboardingModel_isNotDefaultBrowser_includesWelcomeCards() {
-        setupNimbusWithWelcomeAndOtherCards()
+    func testGetOnboardingModel_isNotDefaultBrowser_includesCardsWithOpenIosFxSettingsPopup() {
+        setupNimbusWithOpenIosFxSettingsPopupCards()
         let layer = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: .modern,
             with: mockHelper,
@@ -195,11 +195,11 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
 
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
-        XCTAssertTrue(subject.cards.contains { $0.name.localizedCaseInsensitiveContains("welcome") })
+        XCTAssertTrue(subject.cards.contains { $0.instructionsPopup?.buttonAction == .openIosFxSettings })
     }
 
-    func testGetOnboardingModel_isDefaultBrowser_keepsNonWelcomeCards() {
-        setupNimbusWithWelcomeAndOtherCards()
+    func testGetOnboardingModel_isDefaultBrowser_keepsCardsWithoutOpenIosFxSettingsPopup() {
+        setupNimbusWithOpenIosFxSettingsPopupCards()
         let layer = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: .modern,
             with: mockHelper,
@@ -209,11 +209,11 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
         XCTAssertGreaterThan(subject.cards.count, 0)
-        XCTAssertTrue(subject.cards.allSatisfy { !$0.name.localizedCaseInsensitiveContains("welcome") })
+        XCTAssertTrue(subject.cards.allSatisfy { $0.instructionsPopup?.buttonAction != .openIosFxSettings })
     }
 
-    func testGetOnboardingModel_welcomeCardCaseInsensitive_filtersCorrectly() {
-        setupNimbusWithVariousWelcomeCards()
+    func testGetOnboardingModel_isDefaultBrowser_filtersMultipleCardsWithOpenIosFxSettingsPopup() {
+        setupNimbusWithMultipleOpenIosFxSettingsCards()
         let layer = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: .modern,
             with: mockHelper,
@@ -223,7 +223,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
         XCTAssertEqual(subject.cards.count, 1)
-        XCTAssertFalse(subject.cards.contains { $0.name.localizedCaseInsensitiveContains("welcome") })
+        XCTAssertFalse(subject.cards.contains { $0.instructionsPopup?.buttonAction == .openIosFxSettings })
     }
 
     // MARK: - Combined Filtering Tests
@@ -238,7 +238,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
 
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
-        XCTAssertFalse(subject.cards.contains { $0.name.localizedCaseInsensitiveContains("welcome") })
+        XCTAssertFalse(subject.cards.contains { $0.instructionsPopup?.buttonAction == .openIosFxSettings })
         XCTAssertFalse(subject.cards.contains { card in
             card.multipleChoiceButtons.contains { $0.action == .toolbarTop || $0.action == .toolbarBottom }
         })
@@ -332,7 +332,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
         for (index, card) in subject.cards.enumerated() {
-            XCTAssertTrue(card.a11yIdRoot.hasSuffix("\(index + 1)"))
+            XCTAssertTrue(card.a11yIdRoot.hasSuffix("\(index)"))
         }
     }
 
@@ -763,10 +763,31 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
         setupNimbus(with: cards)
     }
 
-    private func setupNimbusWithWelcomeAndOtherCards() {
+    private func setupNimbusWithOpenIosFxSettingsPopupCards() {
+        let popupWithOpenSettings = NimbusOnboardingInstructionPopup(
+            buttonAction: .openIosFxSettings,
+            buttonTitle: "Open Settings",
+            instructions: ["Step 1", "Step 2"],
+            title: "Set Firefox as Default"
+        )
         let cards: [String: NimbusOnboardingCardData] = [
-            "Welcome Card": createCard(variant: .modern, order: 1),
+            "Welcome Card": createCard(variant: .modern, order: 1, instructionsPopup: popupWithOpenSettings),
             "Sync Card": createCard(variant: .modern, order: 2)
+        ]
+        setupNimbus(with: cards)
+    }
+
+    private func setupNimbusWithMultipleOpenIosFxSettingsCards() {
+        let popupWithOpenSettings = NimbusOnboardingInstructionPopup(
+            buttonAction: .openIosFxSettings,
+            buttonTitle: "Open Settings",
+            instructions: ["Step 1", "Step 2"],
+            title: "Set Firefox as Default"
+        )
+        let cards: [String: NimbusOnboardingCardData] = [
+            "Welcome Card 1": createCard(variant: .modern, order: 1, instructionsPopup: popupWithOpenSettings),
+            "Welcome Card 2": createCard(variant: .modern, order: 2, instructionsPopup: popupWithOpenSettings),
+            "Sync Card": createCard(variant: .modern, order: 3)
         ]
         setupNimbus(with: cards)
     }
@@ -782,8 +803,14 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     }
 
     private func setupNimbusWithComplexScenario() {
+        let popupWithOpenSettings = NimbusOnboardingInstructionPopup(
+            buttonAction: .openIosFxSettings,
+            buttonTitle: "Open Settings",
+            instructions: ["Step 1", "Step 2"],
+            title: "Set Firefox as Default"
+        )
         let cards: [String: NimbusOnboardingCardData] = [
-            "Welcome Card": createCard(variant: .modern, order: 1),
+            "Welcome Card": createCard(variant: .modern, order: 1, instructionsPopup: popupWithOpenSettings),
             "Toolbar Card": createCard(
                 variant: .modern,
                 order: 2,
