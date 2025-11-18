@@ -104,8 +104,6 @@ class BaseTestCase: XCTestCase {
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
         }
-        app.launchArguments.append("\(LaunchArguments.LoadExperiment)\("homepageSearchBarOn")")
-        app.launchArguments.append("\(LaunchArguments.ExperimentFeatureName)\("homepage-redesign-feature")")
     }
 
     override func setUp() {

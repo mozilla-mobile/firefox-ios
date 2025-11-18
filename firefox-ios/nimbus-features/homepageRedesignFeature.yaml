@@ -46,7 +46,7 @@ features:
       - channel: developer
         value:
           enabled: false
-          search-bar: false
+          search-bar: true
           shortcuts-library: false
           stories-redesign: true
           discover-more-feature-configuration:
