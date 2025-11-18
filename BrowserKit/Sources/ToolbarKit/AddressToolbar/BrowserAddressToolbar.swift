@@ -304,7 +304,6 @@ public class BrowserAddressToolbar: UIView,
         } else {
             locationContainerHeightConstraint?.constant = UX.locationHeight
         }
-        setNeedsLayout()
     }
 
     // MARK: - Toolbar Actions and Layout Updates

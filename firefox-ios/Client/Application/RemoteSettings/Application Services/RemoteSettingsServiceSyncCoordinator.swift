@@ -7,7 +7,7 @@ import MozillaAppServices
 import Shared
 import Common
 
-final class RemoteSettingsServiceSyncCoordinator {
+final class RemoteSettingsServiceSyncCoordinator: Notifiable {
     private weak var service: RemoteSettingsService?
     private let prefs: Prefs
     private let prefsKey = PrefsKeys.RemoteSettings.lastRemoteSettingsServiceSyncTimestamp
@@ -22,16 +22,27 @@ final class RemoteSettingsServiceSyncCoordinator {
         self.prefs = prefs
         self.logger = logger
 
-        NotificationCenter.default.addObserver(
-            forName: UIApplication.didBecomeActiveNotification,
-            object: nil,
-            queue: nil
-        ) { [weak self] _ in self?.didBecomeActive() }
-        NotificationCenter.default.addObserver(
-            forName: UIApplication.willResignActiveNotification,
-            object: nil,
-            queue: nil
-        ) { [weak self] _ in self?.willResignActive() }
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIApplication.didBecomeActiveNotification,
+                UIApplication.willResignActiveNotification
+            ]
+        )
+    }
+
+    // MARK: - Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didBecomeActiveNotification:
+            didBecomeActive()
+        case UIApplication.willResignActiveNotification:
+            willResignActive()
+        default:
+            break
+        }
     }
 
     // This is primarily for internal testing or QA purposes.

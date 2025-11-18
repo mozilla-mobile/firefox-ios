@@ -14,9 +14,10 @@ struct NewSearchInProgressError: MaybeErrorType {
     public let description: String
 }
 
+// TODO: FXIOS-14159 - PasswordManagerViewModel shouldn't be @unchecked Sendable
 // MARK: - Main View Model
 // Login List View Model
-final class PasswordManagerViewModel {
+final class PasswordManagerViewModel: @unchecked Sendable {
     private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0
@@ -27,8 +28,8 @@ final class PasswordManagerViewModel {
     private(set) var titles = [Character]()
     private(set) var loginRecordSections = [Character: [LoginRecord]]() {
         didSet {
-            ensureMainThread {
-                self.delegate?.loginSectionsDidUpdate()
+            ensureMainThread { [weak self] in
+                self?.delegate?.loginSectionsDidUpdate()
             }
         }
     }
@@ -40,7 +41,9 @@ final class PasswordManagerViewModel {
     private(set) var userBreaches: Set<LoginRecord>?
     private(set) var breachIndexPath = Set<IndexPath>() {
         didSet {
-            delegate?.breachPathDidUpdate()
+            ensureMainThread { [weak self] in
+                self?.delegate?.breachPathDidUpdate()
+            }
         }
     }
     var hasLoadedBreaches = false
@@ -147,15 +150,17 @@ final class PasswordManagerViewModel {
             self?.titles = titles
             self?.loginRecordSections = sections
 
-            // Disable the search controller if there are no logins saved
-            if !(self?.searchController?.isActive ?? true) {
-                self?.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
-                self?.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
+            ensureMainThread { [weak self] in
+                // Disable the search controller if there are no logins saved
+                if !(self?.searchController?.isActive ?? true) {
+                    self?.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
+                    self?.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
+                }
             }
         }
     }
 
-    public func save(loginRecord: LoginEntry, completion: @escaping @Sendable ((String?) -> Void)) {
+    public func save(loginRecord: LoginEntry, completion: @escaping @Sendable (String?) -> Void) {
         loginProvider.addLogin(login: loginRecord, completionHandler: { result in
             switch result {
             case .success(let encryptedLogin):
@@ -193,6 +198,8 @@ final class PasswordManagerViewModel {
 
 // MARK: - LoginDataSourceViewModelDelegate
 protocol LoginViewModelDelegate: AnyObject {
+    @MainActor
     func loginSectionsDidUpdate()
+    @MainActor
     func breachPathDidUpdate()
 }

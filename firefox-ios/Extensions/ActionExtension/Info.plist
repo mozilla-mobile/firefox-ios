@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MozInternalURLScheme</key>
+	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
+	<key>MozDevelopmentTeam</key>
+	<string>$(DEVELOPMENT_TEAM)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Open In Firefox</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(APP_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>NSExtension</key>
+	<dict>
+		<key>CFBundleDisplayName</key>
+		<string>Open in Firefox</string>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>NSExtensionActivationRule</key>
+			<dict>
+				<key>NSExtensionActivationSupportsText</key>
+				<true/>
+				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
+				<integer>1</integer>
+				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
+				<integer>1</integer>
+			</dict>
+			<key>NSExtensionActionWantsFullScreenPresentation</key>
+			<true/>
+			<key>NSExtensionIconFile</key>
+			<string>ActionExtensionIcons</string>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.ui-services</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>$(PRODUCT_MODULE_NAME).ActionViewController</string>
+	</dict>
+</dict>
+</plist>

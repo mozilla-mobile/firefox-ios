@@ -5,6 +5,8 @@
 import XCTest
 
 class SettingsTests: FeatureFlaggedTestBase {
+    var settingsScreen: SettingScreen!
+
     override func tearDown() {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
             name.contains("testBrowsingSettingsOptionSubtitles") ||
@@ -156,6 +158,20 @@ class SettingsTests: FeatureFlaggedTestBase {
     func testSettingsOptionSubtitles() {
         app.launch()
         validateSettingsUIOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2951435
+    // Smoketest TAE
+    func testSettingsOptionSubtitles_TAE() {
+        app.launch()
+        let settingsScreen = SettingScreen(app: app)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+
+        settingsScreen.assertSettingsScreenExists()
+        settingsScreen.assertLayout()
+        settingsScreen.assertAllRowsVisible()
+        settingsScreen.closeSettingsWithDoneButton()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2989418

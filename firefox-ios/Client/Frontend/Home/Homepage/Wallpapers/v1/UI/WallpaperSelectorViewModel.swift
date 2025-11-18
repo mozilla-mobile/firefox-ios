@@ -13,7 +13,8 @@ public enum WallpaperSelectorError: Error {
     case itemNotFound
 }
 
-class WallpaperSelectorViewModel {
+// TODO: FXIOS-14150 - WallpaperSelectorViewModel shouldn't be @unchecked Sendable
+final class WallpaperSelectorViewModel: @unchecked Sendable {
     enum WallpaperSelectorLayout: Equatable {
         case compact
         case regular
@@ -78,7 +79,8 @@ class WallpaperSelectorViewModel {
                              number: indexPath.row)
     }
 
-    func downloadAndSetWallpaper(at indexPath: IndexPath, completion: @escaping (Result<Void, Error>) -> Void) {
+    func downloadAndSetWallpaper(at indexPath: IndexPath,
+                                 completion: @escaping @Sendable (Result<Void, Error>) -> Void) {
         guard let wallpaperItem = wallpaperItems[safe: indexPath.row] else {
             completion(.failure(WallpaperSelectorError.itemNotFound))
             return
@@ -86,7 +88,7 @@ class WallpaperSelectorViewModel {
 
         let wallpaper = wallpaperItem.wallpaper
 
-        let setWallpaperBlock = { [weak self] in
+        let setWallpaperBlock: @Sendable () -> ()? = { [weak self] in
             self?.updateCurrentWallpaper(for: wallpaperItem) { result in
                 if case .success = result {
                     self?.selectedIndexPath = indexPath

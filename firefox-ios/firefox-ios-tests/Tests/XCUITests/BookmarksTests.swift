@@ -580,7 +580,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private func longPressBookmarkCell() {
         let bookMarkCell = app.cells["BookmarksCell"]
         scrollToElement(bookMarkCell)
-        bookMarkCell.press(forDuration: 1.5)
+        let contextMenuTable = app.tables["Context Menu"]
+        bookMarkCell.pressWithRetry(duration: 1.5, element: contextMenuTable)
     }
 
     private func switchToTabAndValidate(nrOfTabs: String, isPrivate: Bool = false) {

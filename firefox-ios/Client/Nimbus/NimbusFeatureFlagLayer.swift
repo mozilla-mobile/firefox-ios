@@ -17,6 +17,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
+        case .appIconSelection:
+            return checkAppIconSelectionSetting(from: nimbus)
+
         case .addressBarMenu:
             return checkAddressBarMenuFeature(from: nimbus)
 
@@ -408,6 +411,11 @@ final class NimbusFeatureFlagLayer: Sendable {
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
         return config.status
+    }
+
+    private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.appIconSelectionFeature.value()
+        return config.funIconsEnabled
     }
 
     private func checkAddressBarMenuFeature(from nimbus: FxNimbus) -> Bool {

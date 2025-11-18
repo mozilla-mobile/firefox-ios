@@ -375,10 +375,10 @@ extension PasswordDetailViewController {
             }
     }
 
-    func onProfileDidFinishSyncing(completion: @escaping @Sendable () -> Void) {
+    func onProfileDidFinishSyncing(completion: @escaping @MainActor @Sendable () -> Void) {
         // Reload details after syncing.
         viewModel.profile.logins.getLogin(id: viewModel.login.id) { [weak self] result in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 switch result {
                 case .success(let successValue):
                     if let syncedLogin = successValue {
@@ -442,7 +442,7 @@ extension PasswordDetailViewController {
 
         if updatedLogin.isValid.isSuccess {
             viewModel.profile.logins.updateLogin(id: viewModel.login.id, login: updatedLogin) { [weak self] _ in
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.onProfileDidFinishSyncing {
                         // Required to get UI to reload with changed state

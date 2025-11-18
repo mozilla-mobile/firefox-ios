@@ -20,8 +20,8 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
         self.logger = logger
         self.iconDataFetcher = iconDataFetcher
         let profile = (AppContainer.shared.resolve() as Profile)
-        if selector == nil, let service = profile.remoteSettingsService {
-            self.selector = ASSearchEngineSelector(service: service)
+        if selector == nil {
+            self.selector = ASSearchEngineSelector(service: profile.remoteSettingsService )
         } else {
             self.selector = selector
         }
