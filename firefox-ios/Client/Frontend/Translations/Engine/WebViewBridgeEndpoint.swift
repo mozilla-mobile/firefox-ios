@@ -43,20 +43,20 @@ final class WebViewBridgeEndpoint: BridgeEndpoint {
 
     /// Sends the provided JSON string into the configured JavaScript function.
     func send(json: String) {
-        guard let webView = webView else { return }
+        guard let webView else { return }
         let js = "\(receiveFunction)(\(json))"
         webView.evaluateJavaScript(js, in: nil, in: contentWorld)
     }
 
     func registerScriptHandler(_ handler: WKScriptMessageHandler) {
-        guard let webView = webView else { return }
+        guard let webView else { return }
         let userContentController = webView.configuration.userContentController
         userContentController.removeScriptMessageHandler(forName: handlerName)
         userContentController.add(handler, contentWorld: contentWorld, name: handlerName)
     }
 
     func unregisterScriptHandler() {
-        guard let webView = webView else { return }
+        guard let webView else { return }
         let userContentController = webView.configuration.userContentController
         userContentController.removeScriptMessageHandler(forName: handlerName)
     }
