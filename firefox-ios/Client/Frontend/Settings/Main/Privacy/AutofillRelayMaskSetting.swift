@@ -12,7 +12,7 @@ class AutofillRelayMaskSetting: Setting, FeatureFlaggable {
     }
 
     override var accessibilityIdentifier: String? {
-        return String.RelayMask.RelayEmailMaskSettingsTitle
+        return AccessibilityIdentifiers.Settings.RelayMask.title
     }
 
     init(settings: SettingsTableViewController,

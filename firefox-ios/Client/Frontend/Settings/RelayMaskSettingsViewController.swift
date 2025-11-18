@@ -96,7 +96,7 @@ final class ManageRelayMasksSetting: Setting {
     }
 
     override var accessibilityIdentifier: String? {
-        return String.RelayMask.RelayEmailMaskSettingsManageEmailMasks
+        return AccessibilityIdentifiers.Settings.RelayMask.manageMasksButton
     }
 
     override var style: UITableViewCell.CellStyle { return .default }

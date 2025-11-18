@@ -718,6 +718,11 @@ struct AccessibilityIdentifiers {
             static let title = "AutofillsPasswordsSettings"
         }
 
+        struct RelayMask {
+            static let title = "RelayMaskSettings"
+            static let manageMasksButton = "manageEmailMasks"
+        }
+
         struct Passwords {
             static let usernameField = "usernameField"
             static let passwordField = "passwordField"
