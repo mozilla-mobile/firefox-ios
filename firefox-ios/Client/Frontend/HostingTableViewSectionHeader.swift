@@ -32,7 +32,7 @@ final class HostingTableViewSectionHeader<Content: View>: UITableViewHeaderFoote
         }
 
         MainActor.assumeIsolated {
-            // remove parent
+            // FIXME: FXIOS-14153 This doesn't seem like it should be necessary, investigate later
             removeHostingControllerFromParent()
         }
     }
