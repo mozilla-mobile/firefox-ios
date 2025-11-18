@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Glean
 
-class ShareTelemetry {
+final class ShareTelemetry {
     private let gleanWrapper: GleanWrapper
     private var openURLTimerId: TimerId?
     private let logger: Logger

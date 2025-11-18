@@ -14,7 +14,8 @@ import WebEngine
 
 let browsingActivityType = "org.mozilla.ios.firefox.browsing"
 
-private let searchableIndex = CSSearchableIndex.default()
+// TODO: Laurie - unsafe
+nonisolated(unsafe) private let searchableIndex = CSSearchableIndex.default()
 
 @MainActor
 class UserActivityHandler {
