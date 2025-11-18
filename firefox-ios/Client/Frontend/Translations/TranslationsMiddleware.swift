@@ -175,17 +175,11 @@ final class TranslationsMiddleware {
 
     // Reloads web view if user taps on translation button to view original page after translating
     private func reloadPage(for action: Action) {
-        guard let selectedTab = self.windowManager.tabManager(for: action.windowUUID).selectedTab,
-              let webView = selectedTab.webView
-        else {
-            logger.log(
-                "Unable to reload page after translating.",
-                level: .warning,
-                category: .translations
-            )
-            return
-        }
-        webView.reload()
+        let reloadAction = GeneralBrowserAction(
+            windowUUID: action.windowUUID,
+            actionType: GeneralBrowserActionType.reloadWebsite
+        )
+        store.dispatch(reloadAction)
     }
 
     // When we receive an error translating the page, we want to update the translation
