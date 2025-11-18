@@ -9,7 +9,7 @@ import Common
 let AppEventQueue = EventQueue<AppEvent>()
 
 /// Action taken when an event's dependencies are completed.
-typealias EventQueueAction = (() -> Void)
+typealias EventQueueAction = (@Sendable () -> Void)
 /// Unique ID associated with an enqueued action.
 typealias ActionToken = UUID
 
