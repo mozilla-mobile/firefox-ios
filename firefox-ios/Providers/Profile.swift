@@ -704,8 +704,7 @@ open class BrowserProfile: Profile,
 
     private func remoteSettingsAppContext() -> RemoteSettingsContext {
         let appInfo = BrowserKitInformation.shared
-        let uiDevice = UIDevice.current
-        let formFactor = switch uiDevice.userInterfaceIdiom {
+        let formFactor = switch UIDeviceDetails.userInterfaceIdiom {
         case .pad: "tablet"
         case .mac: "desktop"
         default: "phone"
@@ -722,7 +721,7 @@ open class BrowserProfile: Profile,
             /// See: https://developer.apple.com/documentation/foundation/locale/identifiertype/bcp47
             locale: getLocaleTag(),
             os: "iOS",
-            osVersion: uiDevice.systemVersion,
+            osVersion: UIDeviceDetails.systemVersion,
             formFactor: formFactor,
             country: Locale.current.regionCode)
     }
@@ -801,8 +800,11 @@ open class BrowserProfile: Profile,
                 )
             }
         }
-        if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
-            application.unregisterForRemoteNotifications()
+
+        ensureMainThread {
+            if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
+                application.unregisterForRemoteNotifications()
+            }
         }
     }
 
