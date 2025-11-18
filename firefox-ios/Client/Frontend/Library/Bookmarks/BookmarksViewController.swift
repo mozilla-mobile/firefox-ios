@@ -252,7 +252,7 @@ final class BookmarksViewController: SiteTableViewController,
     private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
                                      parentFolderGUID: String,
                                      recentBookmarkFolderGUID: String?,
-                                     completion: ((GUID) -> Void)? = nil) {
+                                     completion: (@Sendable (GUID) -> Void)? = nil) {
         guard bookmarkTreeRoot.type == .folder || bookmarkTreeRoot.type == .bookmark else { return }
         bookmarksSaver?.restoreBookmarkNode(bookmarkNode: bookmarkTreeRoot, parentFolderGUID: parentFolderGUID) { res in
             guard let guid = res else {return}
