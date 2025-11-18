@@ -182,9 +182,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
-        case .revertUnsafeContinuationsRefactor:
-            return checkRevertUnsafeContinuationsRefactor(from: nimbus)
-
         case .updatedPasswordManager:
             return checkUpdatedPasswordManagerFeature(from: nimbus)
 
@@ -472,11 +469,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
-    }
-
-    private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.revertUnsafeContinuationsRefactor.value()
-        return config.enabled
     }
 
     // MARK: - Summarizer Feature
