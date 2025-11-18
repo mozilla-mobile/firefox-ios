@@ -130,8 +130,21 @@ final class PrivateHomepageViewController: UIViewController,
     }
 
     deinit {
-        // TODO: FXIOS-11187 - Investigate further on privateMessageCardCell memory leaking during viewing private tab.
-        scrollView.removeFromSuperview()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            DefaultLogger.shared.log(
+                "AddressToolbarContainer was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // TODO: FXIOS-11187 - Investigate further on privateMessageCardCell memory leaking during viewing private tab.
+            scrollView.removeFromSuperview()
+        }
     }
 
     private func setupLayout() {

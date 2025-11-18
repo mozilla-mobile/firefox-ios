@@ -95,7 +95,14 @@ final class TranslationsSchemeHandlerTests: XCTestCase {
     }
 
     private func createSubject() -> TranslationsSchemeHandler {
-        TranslationsSchemeHandler()
+        let fetcher = MockTranslationModelsFetcher()
+        fetcher.translatorWASMResult = Data([1, 2, 3])
+        let router = TinyRouter()
+            .register("models-buffer", ModelsBufferRoute(fetcher: fetcher))
+            .register("models", ModelsRoute(fetcher: fetcher))
+            .register("translator", TranslatorRoute(fetcher: fetcher))
+            .setDefault(StaticFileRoute())
+        return TranslationsSchemeHandler(router: router)
     }
 
     private func makeWebView() -> WKWebView {

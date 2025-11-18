@@ -4,8 +4,9 @@
 
 import Foundation
 
+// TODO: FXIOS-14150 - WallpaperDataService shouldn't be @unchecked Sendable
 ///  Responsible for fetching data from the server.
-class WallpaperDataService {
+final class WallpaperDataService: @unchecked Sendable {
     // MARK: - Properties
     enum DataServiceError: Error {
         case noBundledURL

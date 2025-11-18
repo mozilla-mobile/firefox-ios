@@ -2,9 +2,20 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-// TODO(FXIOS-14106): Implement this properly. This is just a placeholder.
-struct TranslatorRoute: TinyRoute {
+/// This route handles requests to `translations://app/translator`.
+/// It returns the WASM binary for the translation engine. 
+/// (e.g. the Bergamot translator) as a raw binary response.
+final class TranslatorRoute: TinyRoute {
+    private let fetcher: TranslationModelsFetcherProtocol
+
+    init(fetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher()) {
+        self.fetcher = fetcher
+    }
+
     func handle(url: URL, components: URLComponents) throws -> TinyHTTPReply? {
-        return try? TinyRouter.ok(data: Data([1, 2, 3]), contentType: MIMEType.OctetStream, url: url)
+        guard let data = fetcher.fetchTranslatorWASM() else {
+            throw TinyRouterError.notFound
+        }
+        return try? TinyRouter.ok(data: data, contentType: MIMEType.OctetStream, url: url)
     }
 }

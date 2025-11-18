@@ -32,23 +32,24 @@ struct TranslationRecord: Codable {
     let version: String
 }
 
-protocol TranslationModelsFetching {
+protocol TranslationModelsFetcherProtocol {
     func fetchTranslatorWASM() -> Data?
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data?
+    func fetchModelBuffer(recordId: String) -> Data?
 }
 
-final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
+final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendable {
     static let shared = ASTranslationModelsFetcher()
     // Pin versions to avoid using unsupported models
     private enum Constants {
-        static let translatorVersion = "2.0"
+        static let translatorVersion = "3.0"
         static let modelsVersion = "1.0"
         static let translatorName = "bergamot-translator"
+        static let pivotLanguage = "en"
     }
 
-    private let service: RemoteSettingsService
-    private let modelsClient: RemoteSettingsClient?
-    private let translatorsClient: RemoteSettingsClient?
+    private let modelsClient: RemoteSettingsClientProtocol?
+    private let translatorsClient: RemoteSettingsClientProtocol?
     private let logger: Logger
 
     private let decoder: JSONDecoder = {
@@ -57,15 +58,13 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
         return decoder
     }()
 
-    init?(logger: Logger = DefaultLogger.shared) {
-        let profile: Profile = AppContainer.shared.resolve()
-        guard let service = profile.remoteSettingsService else {
-            logger.log("Remote Settings service unavailable.", level: .warning, category: .remoteSettings)
-            return nil
-        }
-        self.service = service
-        self.modelsClient = ASRemoteSettingsCollection.translationsModels.makeClient()
-        self.translatorsClient = ASRemoteSettingsCollection.translationsWasm.makeClient()
+    init(
+        modelsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.translationsModels.makeClient(),
+        translatorsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.translationsWasm.makeClient(),
+        logger: Logger = DefaultLogger.shared
+    ) {
+        self.modelsClient = modelsClient
+        self.translatorsClient = translatorsClient
         self.logger = logger
     }
 
@@ -77,7 +76,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
 
     /// Fetches the wasm binary for the translator that matches the pinned version.
     func fetchTranslatorWASM() -> Data? {
-        guard let records = translatorsClient?.getRecords() else {
+        guard let records = translatorsClient?.getRecords(syncIfEmpty: true) else {
             logger.log("No translator records found", level: .warning, category: .remoteSettings)
             return nil
         }
@@ -92,39 +91,102 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
+    /// If no direct model is found, attempts to find pivot models through `Constants.pivotLanguage`.
+    /// e.g. given `fr` -> `en` and `en` -> `it` we can translate `fr` -> `it`.
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data? {
-        guard let records = modelsClient?.getRecords() else {
+        guard let records = modelsClient?.getRecords(syncIfEmpty: true) else {
             logger.log("No model records found.", level: .warning, category: .remoteSettings)
             return nil
         }
 
+        // Try to find a direct model first for the pair sourceLang -> targetLang
+        if let directFiles = getLanguageModelFiles(records: records, from: sourceLang, to: targetLang) {
+            let entry = makeLanguagePairEntry(directFiles, from: sourceLang, to: targetLang)
+            return encodeModelEntries([entry])
+        }
+
+        // Fallback to pivot models through Constants.pivotLanguage
+        // This will search for two pairs sourceLang -> en and en -> targetLang
+        // in order to build a translation pipeline for sourceLang -> targetLang
+        guard let sourceToPivot = getLanguageModelFiles(records: records, from: sourceLang, to: Constants.pivotLanguage),
+              let pivotToTarget = getLanguageModelFiles(records: records, from: Constants.pivotLanguage, to: targetLang)
+        else {
+            logger.log(
+                "No direct or pivot models found for \(sourceLang)->\(targetLang)",
+                level: .warning,
+                category: .remoteSettings
+            )
+            return nil
+        }
+
+        let entries: [[String: Any]] = [
+            makeLanguagePairEntry(sourceToPivot, from: sourceLang, to: Constants.pivotLanguage),
+            makeLanguagePairEntry(pivotToTarget, from: Constants.pivotLanguage, to: targetLang)
+        ]
+        return encodeModelEntries(entries)
+    }
+
+    /// Fetches the buffer data for a given model by record id.
+    func fetchModelBuffer(recordId: String) -> Data? {
+        guard let record = modelsClient?.getRecords(syncIfEmpty: true)?.first(where: { $0.id == recordId }) else {
+            logger.log("No model record found.", level: .warning, category: .remoteSettings)
+            return nil
+        }
+
+        guard let attachment = try? modelsClient?.getAttachment(record: record) else {
+            logger.log("Failed to fetch attachment for record \(recordId).",
+                       level: .warning,
+                       category: .remoteSettings)
+            return nil
+        }
+
+        return attachment
+    }
+
+    /// Collects all files for a given language pair.
+    private func getLanguageModelFiles(
+        records: [RemoteSettingsRecord],
+        from sourceLang: String,
+        to targetLang: String
+    ) -> [String: Any]? {
         var languageModelFiles = [String: Any]()
-
         for record in records {
-            guard
-                let fields: ModelFieldsRecord = decodeRecord(record),
-                fields.fromLang == sourceLang,
-                fields.toLang == targetLang,
-                fields.version == Constants.modelsVersion
-            else { continue }
-
-            guard let attachment = try? modelsClient?.getAttachment(record: record) else {
-                logger.log("Cannot fetch model attachment.", level: .warning, category: .remoteSettings)
-                return nil
+            guard let fields: ModelFieldsRecord = decodeRecord(record),
+                  fields.fromLang == sourceLang,
+                  fields.toLang == targetLang
+            else {
+                continue
             }
 
             languageModelFiles[fields.fileType] = [
-                "buffer": attachment.base64EncodedString(),
                 "record": [
                     "fromLang": fields.fromLang,
                     "toLang": fields.toLang,
                     "fileType": fields.fileType,
                     "version": fields.version,
                     "name": fields.name,
+                    "id": record.id
                 ]
             ]
         }
 
-        return try? JSONSerialization.data(withJSONObject: ["languageModelFiles": languageModelFiles])
+        return languageModelFiles.isEmpty ? nil : languageModelFiles
+    }
+
+    /// Builds a single payload object from one fileset.
+    /// returns: ["sourceLanguage": ..., "targetLanguage": ..., "languageModelFiles": files]
+    private func makeLanguagePairEntry(_ files: [String: Any], from: String, to: String) -> [String: Any] {
+        return [
+            "sourceLanguage": from,
+            "targetLanguage": to,
+            "languageModelFiles": files
+        ]
+    }
+
+    /// Serializes the list of model entries into JSON data.
+    /// returns: [{"sourceLanguage": ..., "targetLanguage": ..., "languageModelFiles": files}]
+    private func encodeModelEntries(_ entries: [[String: Any]]) -> Data? {
+        guard !entries.isEmpty else { return nil }
+        return try? JSONSerialization.data(withJSONObject: entries, options: [])
     }
 }

@@ -455,6 +455,7 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(recentSearch)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: recentSearch)
+            searchTelemetry?.recentSearchesTapped(at: indexPath.row)
 
         case .trendingSearches:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
@@ -463,6 +464,7 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(trendingSearch)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: trendingSearch)
+            searchTelemetry?.trendingSearchesTapped(at: indexPath.row)
 
         case .searchSuggestions:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
@@ -543,10 +545,14 @@ class SearchViewController: SiteTableViewController,
         else { return nil }
 
         var title: String
+        var accessory: SiteTableHeaderAccessory = .none
         switch section {
         case SearchListSection.recentSearches.rawValue:
             guard !viewModel.recentSearches.isEmpty else { return nil }
             title = .SearchZero.RecentSearchesSectionTitle
+            accessory = .clear(action: {
+                // TODO: FXIOS-14100 - Add method to clear recent searches
+            })
 
         case SearchListSection.trendingSearches.rawValue:
             guard !viewModel.trendingSearches.isEmpty else { return nil }
@@ -566,9 +572,10 @@ class SearchViewController: SiteTableViewController,
         default:  title = ""
         }
 
-        let viewModel = SiteTableViewHeaderModel(title: title,
-                                                 isCollapsible: false,
-                                                 collapsibleState: nil)
+        let viewModel = SiteTableViewHeaderModel(
+            title: title,
+            accessory: accessory
+        )
         headerView.configure(viewModel)
         headerView.applyTheme(theme: currentTheme())
         return headerView

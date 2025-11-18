@@ -32,7 +32,7 @@ export const Cu = {
   isDeadWrapper: (node) => !node?.isConnected,
   isInAutomation: false,
 };
-globalThis.Cu = Cu;
+globalThis.Cu = { ...globalThis.Cu, ...Cu };
 
 /// Polyfill for Gecko's non-standard DOMParser.parseFromSafeString.
 /// In Gecko, this ensures the parsed document uses the same principal
@@ -69,7 +69,7 @@ globalThis.ChromeUtils.domProcessChild = {
   getActor: () => globalThis,
 };
 globalThis.ChromeUtils.now = () => performance.now();
-globalThis.Services = { intl: { getScriptDirection: () => "ltr" } };
+globalThis.Services = { ...globalThis.Services,  intl: { getScriptDirection: () => "ltr" } };
 
 
 /// NOTE: Stubs for TE_* functions used by translations-engine.js in Gecko.

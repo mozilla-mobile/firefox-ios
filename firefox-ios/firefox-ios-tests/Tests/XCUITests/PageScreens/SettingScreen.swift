@@ -114,4 +114,40 @@ final class SettingScreen {
         BaseTestCase().mozWaitForElementToExist(connectSetting)
         connectSetting.swipeUp()
     }
+
+    func assertSettingsScreenExists() {
+        let table = app.tables.element(boundBy: 0)
+        BaseTestCase().mozWaitForElementToExist(table)
+    }
+
+    func assertLayout() {
+        let title = sel.SETTINGS_TITLE.element(in: app)
+        let done = sel.DONE_BUTTON.element(in: app)
+        let defaultBrowser = sel.DEFAULT_BROWSER_CELL.element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(title)
+        XCTAssertTrue(title.isLeftOf(rightElement: done))
+        XCTAssertTrue(done.isAbove(element: defaultBrowser))
+        XCTAssertTrue(title.isAbove(element: defaultBrowser))
+    }
+
+    func assertAllRowsVisible() {
+        let table = app.tables.element(boundBy: 0)
+        BaseTestCase().mozWaitForElementToExist(table)
+
+        // Toolbar check only on iPhone
+        if !BaseTestCase().iPad() {
+            let toolbar = sel.TOOLBAR_CELL.element(in: app)
+            BaseTestCase().mozWaitForElementToExist(toolbar)
+            XCTAssertTrue(toolbar.isVisible())
+        }
+
+        // Iterate over all expected cells
+        for selector in sel.ALL_CELLS() {
+            let element = selector.element(in: app)
+            BaseTestCase().scrollToElement(element)
+            BaseTestCase().mozWaitForElementToExist(element)
+            XCTAssertTrue(element.isVisible(), "\(selector.description) is not visible")
+        }
+    }
 }
