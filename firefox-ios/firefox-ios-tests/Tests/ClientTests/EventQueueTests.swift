@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Client
-import XCTest
+import Common
 import Foundation
+import XCTest
 
 enum TestEvent: AppEventType {
     // Standard test events
@@ -320,7 +321,7 @@ final class EventQueueTests: XCTestCase {
             actionsPerformed += 1
             // As part of the enqueued action block, change the state of our dependent event out of .completed:
             self.queue.started(.activityEvent)
-            DispatchQueue.main.async { [queue = self.queue] in
+            ensureMainThread { [queue = self.queue] in
                 queue?.completed(.activityEvent)
                 if actionsPerformed > 1 {
                     // Action block was not cleaned up and was run repeatedly due
