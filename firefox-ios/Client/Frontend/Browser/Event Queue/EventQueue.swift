@@ -78,9 +78,7 @@ final class EventQueue<QueueEventType: Hashable & Sendable> {
     func wait(for events: [QueueEventType],
               token: ActionToken = ActionToken(),
               then action: @escaping EventQueueAction) -> ActionToken {
-        mainQueue.ensureMainThread { [weak self] in
-            guard let self else { return }
-
+        mainQueue.ensureMainThread { [actions, logger] in
             // If a specific ID has been provided for this action, ensure
             guard !actions.contains(where: { $0.token == token }) else {
                 logger.log("Ignoring duplicate action (ID: \(token))", level: .info, category: .library)
