@@ -114,8 +114,6 @@ final class ToolbarScreen {
     }
 
     func tapShareButton() {
-        print("Tapping share button")
-        let shareButton = sel.SHARE_BUTTON.element(in: app)
         shareButton.waitAndTap()
     }
 }
