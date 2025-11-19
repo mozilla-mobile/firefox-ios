@@ -4570,7 +4570,7 @@ extension BrowserViewController: TabManagerDelegate {
             selectedTab.webView?.applyTheme(theme: currentTheme())
         }
 
-        updateURLBarDisplayURL(selectedTab)
+        updateURLBarDisplayURL(selectedTab, selectedTab.isLoading == false)
         if addressToolbarContainer.inOverlayMode, selectedTab.url?.displayURL != nil {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
