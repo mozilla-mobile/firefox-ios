@@ -1535,6 +1535,9 @@
 		C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BEA2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift */; };
 		C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */; };
 		C2EBB68F2E8181F20029E82C /* DismissableNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */; };
+		C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335322ECE33720071588A /* translations-engine.worker.js */; };
+		C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335332ECE33720071588A /* TranslationsEngine.js */; };
+		C2F335372ECE339F0071588A /* TranslationsEngine.html in Resources */ = {isa = PBXBuildFile; fileRef = C2F335362ECE339F0071588A /* TranslationsEngine.html */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
 		C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45F44681D087DB600CB7EF0 /* TopTabsViewController.swift */; };
@@ -9910,6 +9913,9 @@
 		C2D8478BB059B9BFF018B491 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		C2E645149EB18AD0BDBB9696 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Search.strings"; sourceTree = "<group>"; };
 		C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableNavigationViewController.swift; sourceTree = "<group>"; };
+		C2F335322ECE33720071588A /* translations-engine.worker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "translations-engine.worker.js"; sourceTree = "<group>"; };
+		C2F335332ECE33720071588A /* TranslationsEngine.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TranslationsEngine.js; sourceTree = "<group>"; };
+		C2F335362ECE339F0071588A /* TranslationsEngine.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = TranslationsEngine.html; path = Client/Frontend/UserContent/UserScripts/TranslationsEngine/TranslationsEngine.html; sourceTree = "<group>"; };
 		C326435B8F6E47257506096B /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Search.strings; sourceTree = "<group>"; };
 		C3334FC58A76876D8E9F00F3 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		C34D464780B65FD5A9F3118B /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Search.strings; sourceTree = "<group>"; };
@@ -16068,6 +16074,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				C2F335362ECE339F0071588A /* TranslationsEngine.html */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -16306,6 +16313,8 @@
 		F84B21EB1A0910F600AAB793 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				C2F335322ECE33720071588A /* translations-engine.worker.js */,
+				C2F335332ECE33720071588A /* TranslationsEngine.js */,
 				ED287B732E4D4C0500527204 /* LiquidGlassAppIcons */,
 				0BD049CF2DFC4B7900614E61 /* Debug */,
 				E699220D1B94E3EF007C480D /* About */,
@@ -17486,6 +17495,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2F335372ECE339F0071588A /* TranslationsEngine.html in Resources */,
 				8A94DB962E0F16E80005FE69 /* homepageSearchBarOff.json in Resources */,
 				8A94DB972E0F16E80005FE69 /* homepageSearchBarOn.json in Resources */,
 				8A3709E42DC16531004B9350 /* defaultEnabledOn.json in Resources */,
@@ -17495,6 +17505,8 @@
 				8A1A935B2B757C7C0069C190 /* wave.json in Resources */,
 				ED9DB4202DC57DF80072FF5F /* pings.yaml in Resources */,
 				ED9DB4212DC57DF80072FF5F /* tags.yaml in Resources */,
+				C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */,
+				C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */,
 				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,
 				EDF2C05C2D6CDB6F00723609 /* AppIcons.xcassets in Resources */,
 				43F92B3829E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js in Resources */,
