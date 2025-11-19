@@ -19,6 +19,21 @@ final class SearchTelemetryTests: XCTestCase {
         super.tearDown()
     }
 
+    func test_recordEvent_whenTrendingSearchSectionShown_thenProperEventCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.SearchTrendingSearches.suggestionsShown
+        typealias EventExtrasType = GleanMetrics.SearchTrendingSearches.SuggestionsShownExtra
+
+        subject.trendingSearchesShown(count: 3)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.count, 3)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     func test_recordEvent_whenTrendingSearchTapped_thenProperEventCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.SearchTrendingSearches.suggestionTapped
@@ -31,6 +46,21 @@ final class SearchTelemetryTests: XCTestCase {
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.position, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func test_recordEvent_whenRecentSearchSectionShown_thenProperEventCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.SearchRecentSearches.suggestionsShown
+        typealias EventExtrasType = GleanMetrics.SearchRecentSearches.SuggestionsShownExtra
+
+        subject.recentSearchesShown(count: 3)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.count, 3)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
