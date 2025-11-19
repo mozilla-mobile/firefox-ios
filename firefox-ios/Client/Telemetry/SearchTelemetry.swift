@@ -540,6 +540,10 @@ class SearchTelemetry: @unchecked Sendable {
         let positionExtra = GleanMetrics.SearchRecentSearches.SuggestionTappedExtra(position: Int32(position))
         gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.suggestionTapped, extras: positionExtra)
     }
+
+    func recentSearchesClearButtonTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.clearButtonTapped)
+    }
 }
 
 private extension URLComponents {
