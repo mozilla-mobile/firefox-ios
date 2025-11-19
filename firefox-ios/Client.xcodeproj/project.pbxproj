@@ -29136,7 +29136,7 @@
 				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_$(CHANNEL)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta.ActionExtensio";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta.ActionExt";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
