@@ -2119,6 +2119,7 @@
 		ED8B49B92D6CF72700743444 /* AppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8B49B82D6CF72700743444 /* AppIcon.swift */; };
 		ED9DB4202DC57DF80072FF5F /* pings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED9DB41B2DC57DF80072FF5F /* pings.yaml */; };
 		ED9DB4212DC57DF80072FF5F /* tags.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED9DB41D2DC57DF80072FF5F /* tags.yaml */; };
+		ED9FD5DB2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */; };
 		EDADF77A2D70BD3E00C39295 /* AppIconSelectionTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF7792D70BD3E00C39295 /* AppIconSelectionTelemetry.swift */; };
 		EDADF77C2D70C58200C39295 /* SettingsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF77B2D70C58200C39295 /* SettingsTelemetry.swift */; };
 		EDADF77F2D70D35B00C39295 /* AppIconSelectionTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF77E2D70D35B00C39295 /* AppIconSelectionTelemetryTests.swift */; };
@@ -11028,6 +11029,7 @@
 		ED8B49B82D6CF72700743444 /* AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcon.swift; sourceTree = "<group>"; };
 		ED9DB41B2DC57DF80072FF5F /* pings.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = pings.yaml; sourceTree = "<group>"; };
 		ED9DB41D2DC57DF80072FF5F /* tags.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = tags.yaml; sourceTree = "<group>"; };
+		ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentFromFirefoxSetting.swift; sourceTree = "<group>"; };
 		EDA240A8BBFD0A19FB2C3D7E /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Intro.strings; sourceTree = "<group>"; };
 		EDADF7792D70BD3E00C39295 /* AppIconSelectionTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectionTelemetry.swift; sourceTree = "<group>"; };
 		EDADF77B2D70C58200C39295 /* SettingsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTelemetry.swift; sourceTree = "<group>"; };
@@ -13844,6 +13846,7 @@
 				8ADAE4252A33A13B007BF926 /* OpenSupportPageSetting.swift */,
 				8ADAE4212A33A113007BF926 /* SendDataSetting.swift */,
 				8ADAE41F2A33A0FD007BF926 /* SendFeedbackSetting.swift */,
+				ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */,
 				8ADAE41D2A33A0E2007BF926 /* ShowIntroductionSetting.swift */,
 				8A720C612A4CBB370003018A /* SupportSettingsDelegate.swift */,
 			);
@@ -18680,6 +18683,7 @@
 				5A70EF21295E3E0B00790249 /* UnitTestSceneDelegate.swift in Sources */,
 				B2999FF72B194ADE00F0FEC1 /* FormAutofillPayloadType.swift in Sources */,
 				8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */,
+				ED9FD5DB2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift in Sources */,
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
 				8AE9FD262CF66301001053EE /* UnifiedAdsProvider.swift in Sources */,
 				C25018E12ECC7A290071506F /* BridgeEndpoint.swift in Sources */,

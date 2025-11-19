@@ -431,6 +431,18 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
         ]
 
+        // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
+        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly), let profile {
+            supportSettings.append(
+                SentFromFirefoxSetting(
+                    prefs: profile.prefs,
+                    delegate: settingsDelegate,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    settingsDelegate: parentCoordinator
+                )
+            )
+        }
+
         guard let sendTechnicalDataSetting,
               let sendDailyUsagePingSetting,
               let studiesToggleSetting,
