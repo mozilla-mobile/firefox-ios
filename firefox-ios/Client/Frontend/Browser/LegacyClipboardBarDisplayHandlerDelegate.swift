@@ -111,7 +111,7 @@ final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
 
         lastDisplayedURL = url.absoluteString
 
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) {
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) { [weak self] in
             ensureMainThread { [weak self] in
                 self?.delegate?.shouldDisplay(clipBoardURL: url)
             }

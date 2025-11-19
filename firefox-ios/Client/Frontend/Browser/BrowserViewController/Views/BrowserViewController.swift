@@ -594,12 +594,12 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    fileprivate func didInit() {
+    private func didInit() {
         tabManager.addDelegate(self)
         tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
         let tabWindowUUID = tabManager.windowUUID
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) {
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             ensureMainThread { [weak self] in
                 // Ensure we call into didBecomeActive at least once during startup flow (if needed)
                 guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
@@ -1387,13 +1387,13 @@ class BrowserViewController: UIViewController,
         // Enqueues the actions only if the opposite action where not signaled, this happen when the app
         // handles a deeplink when was already opened
         if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) {
+            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
                 ensureMainThread { [weak self] in
                     self?.tabManager.restoreTabs()
                 }
             }
         } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) {
+            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
                 ensureMainThread { [weak self] in
                     self?.tabManager.restoreTabs()
                 }
@@ -3295,7 +3295,7 @@ class BrowserViewController: UIViewController,
     ) {
         // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
         guard !tabManager.isRestoringTabs else {
-            AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) {
+            AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
                 ensureMainThread { [weak self] in
                     self?.switchToTabForURLOrOpen(
                         url,

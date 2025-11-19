@@ -268,7 +268,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         var requiredEvents: [AppEvent] = [.startupFlowComplete]
         requiredEvents += windowManager.allWindowUUIDs(includingReserved: true).map { .tabRestoration($0) }
         isLoadingBackgroundTabs = true
-        AppEventQueue.wait(for: requiredEvents) {
+        AppEventQueue.wait(for: requiredEvents) { [weak self] in
             ensureMainThread { [weak self] in
                 self?.isLoadingBackgroundTabs = false
                 self?.backgroundTabLoader.loadBackgroundTabs()
