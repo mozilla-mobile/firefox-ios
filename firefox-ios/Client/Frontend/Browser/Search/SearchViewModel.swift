@@ -22,7 +22,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
     private var suggestClient: SearchSuggestClient?
-    private let recentSearchProvider: RecentSearchProvider?
+    private let recentSearchProvider: RecentSearchProvider
     private let trendingSearchClient: TrendingSearchClientProvider
     private let logger: Logger
 
@@ -208,7 +208,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         model: SearchEnginesManager,
         tabManager: TabManager,
         trendingSearchClient: TrendingSearchClientProvider,
-        recentSearchProvider: RecentSearchProvider?,
+        recentSearchProvider: RecentSearchProvider,
         logger: Logger = DefaultLogger.shared,
         featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search
     ) {
@@ -336,7 +336,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     // MARK: - Zero Search State Feature
     // The zero search state refers to when user puts focus in the address bar but does not enter any text.
-
+    @MainActor
     func loadTrendingSearches() {
         Task { @MainActor in
             await retrieveTrendingSearches()
@@ -384,15 +384,6 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             return
         }
 
-        guard let recentSearchProvider else {
-            logger.log(
-                "Recent searches provider is nil, return empty list.",
-                level: .info,
-                category: .searchEngines
-            )
-            recentSearches = []
-            return
-        }
         recentSearchProvider.loadRecentSearches { searchTerms in
             ensureMainThread { [weak self] in
                 self?.recentSearches = searchTerms
@@ -408,6 +399,24 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         if !searchTelemetry.hasSeenRecentSearches {
             searchTelemetry.recentSearchesShown(count: recentSearches.count)
             searchTelemetry.hasSeenRecentSearches = true
+        }
+    }
+
+    func clearRecentSearches() {
+        let dateProvider = SystemDateProvider()
+        recentSearchProvider.clear(with: dateProvider) { success in
+            ensureMainThread { [weak self] in
+                if success {
+                    self?.recentSearches = []
+                    self?.delegate?.reloadTableView()
+                } else {
+                    self?.logger.log(
+                        "Unable to clear recent searches.",
+                        level: .warning,
+                        category: .searchEngines
+                    )
+                }
+            }
         }
     }
 
