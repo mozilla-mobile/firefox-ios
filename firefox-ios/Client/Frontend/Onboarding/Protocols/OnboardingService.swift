@@ -191,14 +191,11 @@ final class OnboardingService: FeatureFlaggable {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
         activityEventHelper.updateOnboardingUserActivationEvent()
 
-        let notificationPermissionBehavior: NotificationPermissionRequestBehavior = !hasNotificationCard(in: cards)
-        ? .request
-        : .skip
         let fxaParams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
         presentSignToSync(
             with: fxaParams,
             profile: profile,
-            notificationPermissionBehavior: notificationPermissionBehavior,
+            notificationPermissionBehavior: !hasNotificationCard(in: cards) ? .request : .skip,
             completion: completion
         )
     }
