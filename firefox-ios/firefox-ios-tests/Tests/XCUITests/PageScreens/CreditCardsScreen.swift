@@ -71,8 +71,8 @@ final class CreditCardsScreen {
     }
 
     func openSavedCard(at index: Int = 1) {
-        let table = app.tables.firstMatch
-        let cell = table.cells.element(boundBy: index)
+        // let table = app.tables.firstMatch
+        let cell = app.tables.cells.element(boundBy: index)
         BaseTestCase().mozWaitForElementToExist(cell)
         cell.waitAndTap()
     }
