@@ -6,7 +6,6 @@ import WebKit
 
 @MainActor
 final class TranslationsEngine {
-    static let shared = TranslationsEngine()
     /// A single WKWebView managed by the engine.
     private let webView: WKWebView
     /// Keep bridges alive as long as their webviews exist.
@@ -14,7 +13,7 @@ final class TranslationsEngine {
         keyOptions: [.weakMemory],
         valueOptions: [.strongMemory]
     )
-    
+
     /// Used only for tests, to test if the bridges weak table releases objects after webviews are destroyed.
     var bridgeCount: Int {
         return bridges.objectEnumerator()?.allObjects.count ?? 0
@@ -39,7 +38,7 @@ final class TranslationsEngine {
 
         self.webView = WKWebView(frame: .zero, configuration: config)
         self.webView.isHidden = true
-        
+
         #if targetEnvironment(simulator)
         /// Allow Safari Web Inspector only when running in simulator.
         /// Requires to toggle `show features for web developers` in
@@ -86,7 +85,7 @@ final class TranslationsEngine {
         bridges.object(forKey: pageWebView)?.teardown()
         bridges.removeObject(forKey: pageWebView)
     }
-    
+
     /// Load the initial entrypoint for the engine.
     /// NOTE: This is loaded via the custom scheme defined in `TranslationsSchemeHandler` to avoid
     /// any security errors or CORS errors when loading other assets or workers.

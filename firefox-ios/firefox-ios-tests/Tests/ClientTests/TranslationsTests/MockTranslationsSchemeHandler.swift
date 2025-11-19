@@ -12,7 +12,6 @@ final class MockSchemeHandler: NSObject, WKURLSchemeHandler {
             startedURLs.append(url)
         }
 
-        // Optionally pretend the request succeeded so WebKit is satisfied.
         guard let url = urlSchemeTask.request.url else { return }
 
         let response = HTTPURLResponse(

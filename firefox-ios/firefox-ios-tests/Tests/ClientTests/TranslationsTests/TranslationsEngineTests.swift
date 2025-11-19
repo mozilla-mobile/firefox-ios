@@ -57,16 +57,16 @@ final class TranslationsEngineTests: XCTestCase {
         let engine = TranslationsEngine(schemeHandler: MockSchemeHandler())
         // We need a weak reference so we can check that WKWebView actually deallocates.
         weak var weakWebView: WKWebView?
-        
+
         // Using an autoreleasepool just to mimic a context where something gets garbage collected
         autoreleasepool {
-            var pageWebView = WKWebView()
+            let pageWebView = WKWebView()
             weakWebView = pageWebView
             // Adding the bridge stores the webview as a weak key in NSMapTable.
             _ = engine.bridge(to: pageWebView)
             XCTAssertEqual(engine.bridgeCount, 1)
         }
-        
+
         // Force the main runloop to spin. WKWebView teardown seems to happens asynchronously on the main runloop.
         // Without this, the webview may stay alive for several cycles and NSMapTable won't clear its weak key yet.
         // RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.1))
