@@ -13,6 +13,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
     case appearanceMenu
+    case appIconSelection
     case bottomSearchBar
     case deeplinkOptimizationRefactor
     case defaultZoomFeature
@@ -41,7 +42,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case recentSearches
     case reportSiteIssue
     case relayIntegration
-    case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
     case splashScreen
     case startAtHome
@@ -76,6 +76,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appearanceMenu,
+                .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
@@ -142,6 +143,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
+                .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
@@ -167,7 +169,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .noInternetConnectionErrorPage,
                 .recentSearches,
                 .reportSiteIssue,
-                .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
                 .splashScreen,
                 .appleSummarizer,

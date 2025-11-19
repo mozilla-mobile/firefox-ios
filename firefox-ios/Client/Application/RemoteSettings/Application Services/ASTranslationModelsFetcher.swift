@@ -45,11 +45,11 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         static let translatorVersion = "3.0"
         static let modelsVersion = "1.0"
         static let translatorName = "bergamot-translator"
+        static let pivotLanguage = "en"
     }
 
-    private let service: RemoteSettingsService
-    private let modelsClient: RemoteSettingsClient?
-    private let translatorsClient: RemoteSettingsClient?
+    private let modelsClient: RemoteSettingsClientProtocol?
+    private let translatorsClient: RemoteSettingsClientProtocol?
     private let logger: Logger
 
     private let decoder: JSONDecoder = {
@@ -58,11 +58,13 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         return decoder
     }()
 
-    init(logger: Logger = DefaultLogger.shared) {
-        let profile: Profile = AppContainer.shared.resolve()
-        self.service = profile.remoteSettingsService
-        self.modelsClient = ASRemoteSettingsCollection.translationsModels.makeClient()
-        self.translatorsClient = ASRemoteSettingsCollection.translationsWasm.makeClient()
+    init(
+        modelsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.translationsModels.makeClient(),
+        translatorsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.translationsWasm.makeClient(),
+        logger: Logger = DefaultLogger.shared
+    ) {
+        self.modelsClient = modelsClient
+        self.translatorsClient = translatorsClient
         self.logger = logger
     }
 
@@ -89,35 +91,39 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
-    /// TODO(FXIOS-14134): Support pivoting e.g. given `fr` -> `en` and `en` -> `it` we can translate `fr` -> `it`.
+    /// If no direct model is found, attempts to find pivot models through `Constants.pivotLanguage`.
+    /// e.g. given `fr` -> `en` and `en` -> `it` we can translate `fr` -> `it`.
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data? {
         guard let records = modelsClient?.getRecords(syncIfEmpty: true) else {
             logger.log("No model records found.", level: .warning, category: .remoteSettings)
             return nil
         }
 
-        var languageModelFiles = [String: Any]()
-
-        for record in records {
-            guard
-                let fields: ModelFieldsRecord = decodeRecord(record),
-                fields.fromLang == sourceLang,
-                fields.toLang == targetLang
-            else { continue }
-
-            languageModelFiles[fields.fileType] = [
-                "record": [
-                    "fromLang": fields.fromLang,
-                    "toLang": fields.toLang,
-                    "fileType": fields.fileType,
-                    "version": fields.version,
-                    "name": fields.name,
-                    "id": record.id
-                ]
-            ]
+        // Try to find a direct model first for the pair sourceLang -> targetLang
+        if let directFiles = getLanguageModelFiles(records: records, from: sourceLang, to: targetLang) {
+            let entry = makeLanguagePairEntry(directFiles, from: sourceLang, to: targetLang)
+            return encodeModelEntries([entry])
         }
 
-        return try? JSONSerialization.data(withJSONObject: ["languageModelFiles": languageModelFiles])
+        // Fallback to pivot models through Constants.pivotLanguage
+        // This will search for two pairs sourceLang -> en and en -> targetLang
+        // in order to build a translation pipeline for sourceLang -> targetLang
+        guard let sourceToPivot = getLanguageModelFiles(records: records, from: sourceLang, to: Constants.pivotLanguage),
+              let pivotToTarget = getLanguageModelFiles(records: records, from: Constants.pivotLanguage, to: targetLang)
+        else {
+            logger.log(
+                "No direct or pivot models found for \(sourceLang)->\(targetLang)",
+                level: .warning,
+                category: .remoteSettings
+            )
+            return nil
+        }
+
+        let entries: [[String: Any]] = [
+            makeLanguagePairEntry(sourceToPivot, from: sourceLang, to: Constants.pivotLanguage),
+            makeLanguagePairEntry(pivotToTarget, from: Constants.pivotLanguage, to: targetLang)
+        ]
+        return encodeModelEntries(entries)
     }
 
     /// Fetches the buffer data for a given model by record id.
@@ -135,5 +141,52 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         }
 
         return attachment
+    }
+
+    /// Collects all files for a given language pair.
+    private func getLanguageModelFiles(
+        records: [RemoteSettingsRecord],
+        from sourceLang: String,
+        to targetLang: String
+    ) -> [String: Any]? {
+        var languageModelFiles = [String: Any]()
+        for record in records {
+            guard let fields: ModelFieldsRecord = decodeRecord(record),
+                  fields.fromLang == sourceLang,
+                  fields.toLang == targetLang
+            else {
+                continue
+            }
+
+            languageModelFiles[fields.fileType] = [
+                "record": [
+                    "fromLang": fields.fromLang,
+                    "toLang": fields.toLang,
+                    "fileType": fields.fileType,
+                    "version": fields.version,
+                    "name": fields.name,
+                    "id": record.id
+                ]
+            ]
+        }
+
+        return languageModelFiles.isEmpty ? nil : languageModelFiles
+    }
+
+    /// Builds a single payload object from one fileset.
+    /// returns: ["sourceLanguage": ..., "targetLanguage": ..., "languageModelFiles": files]
+    private func makeLanguagePairEntry(_ files: [String: Any], from: String, to: String) -> [String: Any] {
+        return [
+            "sourceLanguage": from,
+            "targetLanguage": to,
+            "languageModelFiles": files
+        ]
+    }
+
+    /// Serializes the list of model entries into JSON data.
+    /// returns: [{"sourceLanguage": ..., "targetLanguage": ..., "languageModelFiles": files}]
+    private func encodeModelEntries(_ entries: [[String: Any]]) -> Data? {
+        guard !entries.isEmpty else { return nil }
+        return try? JSONSerialization.data(withJSONObject: entries, options: [])
     }
 }

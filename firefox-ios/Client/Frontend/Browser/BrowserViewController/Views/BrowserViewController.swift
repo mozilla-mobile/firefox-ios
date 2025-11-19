@@ -46,9 +46,6 @@ class BrowserViewController: UIViewController,
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
         static let minimalHeaderOffset: CGFloat = 14
-
-        static let topToolbarDuration: TimeInterval = 0.3
-        static let bottomToolbarDuration: TimeInterval = 0.4
     }
 
     /// Describes the state of the current search session. This state is used
@@ -202,6 +199,8 @@ class BrowserViewController: UIViewController,
             return LegacyTabScrollController(windowUUID: windowUUID)
         }
     }()
+
+    var toolbarAnimator: ToolbarAnimator?
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -1068,6 +1067,9 @@ class BrowserViewController: UIViewController,
         subscribeToRedux()
         enqueueTabRestoration()
         updateAddressToolbarContainerPosition(for: traitCollection)
+        if isTabScrollRefactoringEnabled {
+            setupToolbarAnimator()
+        }
 
         // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
         guard !AppConstants.isRunningUnitTest else { return }
@@ -1880,7 +1882,7 @@ class BrowserViewController: UIViewController,
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
-        resetDataClearanceCFRTimer()
+        resetCFRsTimer()
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)

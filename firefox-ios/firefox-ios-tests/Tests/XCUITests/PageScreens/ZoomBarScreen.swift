@@ -52,4 +52,8 @@ final class ZoomBarScreen {
         let after = bookText.frame.size.height
         XCTAssertNotEqual(before, after, "Expected book text height to change after action", file: file, line: line)
     }
+
+    func returnBookTextElement() -> XCUIElement {
+        return bookText
+    }
 }

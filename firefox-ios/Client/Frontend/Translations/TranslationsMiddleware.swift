@@ -79,6 +79,7 @@ final class TranslationsMiddleware {
             self.retrieveTranslations(for: action)
         } else if translationConfiguration.state == .active {
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
+            self.reloadPage(for: action)
         }
     }
 
@@ -170,6 +171,15 @@ final class TranslationsMiddleware {
                 self.handleErrorFromTranslatingPage(for: action)
             }
         }
+    }
+
+    // Reloads web view if user taps on translation button to view original page after translating
+    private func reloadPage(for action: Action) {
+        let reloadAction = GeneralBrowserAction(
+            windowUUID: action.windowUUID,
+            actionType: GeneralBrowserActionType.reloadWebsite
+        )
+        store.dispatch(reloadAction)
     }
 
     // When we receive an error translating the page, we want to update the translation
