@@ -82,7 +82,7 @@ final class TranslationsService: TranslationsServiceProtocol {
         let webView = try currentWebView(for: windowUUID)
         return try await isTranslationsDoneJS(on: webView)
     }
-    
+
     /// Tells the engine to discard translations for a document.
     func discardTranslations(for windowUUID: WindowUUID) async throws {
         guard let pageLanguage = try await detectPageLanguage(for: windowUUID) else {
@@ -105,7 +105,6 @@ final class TranslationsService: TranslationsServiceProtocol {
         return language
     }
 
-    
     /// Starts translations by calling into the JS bridge.
     private func startTranslationsJS(on webView: WKWebView,
                                      from: String,
@@ -130,7 +129,7 @@ final class TranslationsService: TranslationsServiceProtocol {
             throw TranslationsServiceError.jsEvaluationFailed(reason: "JS evaluation failed: \(js)")
         }
     }
-    
+
     /// Calls the JS `discardTranslations` hook.
     private func discardTranslationsJS(on webView: WKWebView, from: String, to: String) async throws {
         let jsArgs = "{from: \"\(from)\", to: \"\(to)\"}"

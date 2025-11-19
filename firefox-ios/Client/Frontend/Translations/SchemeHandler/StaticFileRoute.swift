@@ -8,15 +8,14 @@ struct StaticFileRoute: TinyRoute {
     func handle(url: URL, components: URLComponents) throws -> TinyHTTPReply? {
         let cleanPath = url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
         let fileURL = URL(fileURLWithPath: cleanPath)
-        
         let resourceName = fileURL.deletingPathExtension().lastPathComponent
         let fileExtension = fileURL.pathExtension
-        
+
         guard let bundleURL = Bundle.main.url(
             forResource: resourceName,
             withExtension: fileExtension.isEmpty ? nil : fileExtension
         ) else { throw TinyRouterError.badURL }
-        
+
         let data = try Data(contentsOf: bundleURL)
         let mime = MIMEType.mimeTypeFromFileExtension(fileExtension)
         return try? TinyRouter.ok(data: data, contentType: mime, url: url)
