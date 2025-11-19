@@ -191,8 +191,14 @@ final class OnboardingService: FeatureFlaggable {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
         activityEventHelper.updateOnboardingUserActivationEvent()
 
+        let notificationPermissionBehavior: NotificationPermissionRequestBehavior = !hasNotificationCard(in: cards) ? .request : .skip
         let fxaParams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
-        presentSignToSync(with: fxaParams, profile: profile, cards: cards, completion: completion)
+        presentSignToSync(
+            with: fxaParams,
+            profile: profile,
+            notificationPermissionBehavior: notificationPermissionBehavior,
+            completion: completion
+        )
     }
 
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
@@ -252,7 +258,7 @@ final class OnboardingService: FeatureFlaggable {
     private func presentSignToSync(
         with params: FxALaunchParams,
         profile: Profile,
-        cards: [OnboardingKitCardInfoModel],
+        notificationPermissionBehavior: NotificationPermissionRequestBehavior,
         completion: @escaping () -> Void
     ) {
         guard let delegate = delegate else { return }
@@ -261,7 +267,7 @@ final class OnboardingService: FeatureFlaggable {
             windowUUID: windowUUID,
             params: params,
             profile: profile,
-            cards: cards,
+            notificationPermissionBehavior: notificationPermissionBehavior,
             completion: completion
         )
 
@@ -296,12 +302,11 @@ final class OnboardingService: FeatureFlaggable {
         windowUUID: WindowUUID,
         params: FxALaunchParams,
         profile: Profile,
-        cards: [OnboardingKitCardInfoModel],
+        notificationPermissionBehavior: NotificationPermissionRequestBehavior,
         completion: @escaping () -> Void
     ) -> UIViewController {
         // Reset sync flow started flag when creating a new sign-in view controller
         hasSyncFlowStarted = false
-        let shouldAskForNotificationPermission = !hasNotificationCard(in: cards)
 
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             params,
@@ -309,7 +314,7 @@ final class OnboardingService: FeatureFlaggable {
             referringPage: .onboarding,
             profile: profile,
             windowUUID: windowUUID,
-            shouldAskForNotificationPermission: shouldAskForNotificationPermission
+            notificationPermissionBehavior: notificationPermissionBehavior
         )
 
         let buttonItem = UIBarButtonItem(
