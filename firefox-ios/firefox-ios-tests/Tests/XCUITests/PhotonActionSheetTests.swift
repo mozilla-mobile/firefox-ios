@@ -5,7 +5,7 @@
 import XCTest
 import Common
 
-class PhotonActionSheetTests: FeatureFlaggedTestBase {
+class PhotonActionSheetTests: BaseTestCase {
     var toolBarScreen: ToolbarScreen!
     var photonActionSheetScreen: PhotonActionSheetScreen!
 
@@ -18,9 +18,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
     // Smoketest
     func testPinToShortcuts() {
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
@@ -60,9 +57,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     }
 
     func testPinToShortcuts_andThenRemovingShortcuts() {
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -103,9 +97,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     }
 
     private func openNewShareSheet() {
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("example.com")
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
@@ -141,7 +132,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306841
     // Smoketest
     func testSharePageWithShareSheetOptions() {
-        app.launch()
         openNewShareSheet()
         waitForElementsToExist(
             [
@@ -164,7 +154,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
-        app.launch()
         openNewShareSheet()
         var attempts = 2
         let sendToDeviceButton = app.staticTexts["Send to Device"]
@@ -184,7 +173,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323204
     func testShareSheetOpenAndCancel() {
-        app.launch()
         openNewShareSheet()
         app.buttons["Cancel"].waitAndTap()
         // User is back to the BrowserTab where the sharesheet was launched

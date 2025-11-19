@@ -177,6 +177,7 @@
         "HomePageSettingsUITests\/testSetCustomURLAsHome()",
         "HomePageSettingsUITests\/testTyping()",
         "HomePageUITest",
+        "HomepageSearchBarTests",
         "InactiveTabsTest\/testInactiveTabs()",
         "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",

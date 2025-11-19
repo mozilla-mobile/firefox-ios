@@ -176,8 +176,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307357
     func testRecentlyClosedWebsiteOpen() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -191,10 +189,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307463
     func testRecentlyClosedWebsiteClosed() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -247,8 +241,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307479
     func testRemoveAllTabsButtonRecentlyClosedHistory() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -272,10 +264,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307482
     func testClearRecentlyClosedHistory() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -310,10 +298,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307483
     func testLongTapOptionsRecentlyClosedItem_tabTrayExperimentOn() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -339,10 +323,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307484
     func testOpenInNewTabRecentlyClosedItem() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -381,10 +361,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307485
     func testOpenInNewPrivateTabRecentlyClosedItem() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -469,8 +445,6 @@ class HistoryTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307025
     // Smoke
     func testTabHistory() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         openBookOfMozilla()
         let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
@@ -495,8 +469,6 @@ class HistoryTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307025
     // Smoke TAE
     func testTabHistory_TAE() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         openBookOfMozilla()
         toolbarScreen.waitUntilBackButtonHittable(timeout: 2.0)
         toolbarScreen.pressBackButton(duration: 1.5)
@@ -523,10 +495,6 @@ class HistoryTests: BaseTestCase {
     }
 
     private func navigateToPage(isTabTrayOff: Bool = true) {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL("example.com")
         waitUntilPageLoad()
         navigator.goto(TabTray)
