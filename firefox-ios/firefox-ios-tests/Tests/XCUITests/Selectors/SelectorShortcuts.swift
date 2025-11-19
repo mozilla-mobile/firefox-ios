@@ -342,6 +342,15 @@ extension Selector {
                      description: description,
                      groups: groups)
     }
+
+    static func tableById(_ value: String,
+                          description: String,
+                          groups: [String] = []) -> Selector {
+        Selector(strategy: .tableById(value),
+                 value: value,
+                 description: description,
+                 groups: groups)
+    }
 }
 
 extension XCUIElement {

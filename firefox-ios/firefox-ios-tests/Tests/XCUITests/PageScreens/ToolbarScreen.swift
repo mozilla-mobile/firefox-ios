@@ -111,4 +111,8 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitForElementToExist(settingMenuButton, timeout: TIMEOUT)
         return settingMenuButton
     }
+
+    func tapOnNewTabButton() {
+        newTabButton.waitAndTap()
+    }
 }
