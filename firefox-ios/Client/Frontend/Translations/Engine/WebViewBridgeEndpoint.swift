@@ -51,13 +51,13 @@ final class WebViewBridgeEndpoint: BridgeEndpoint {
     func registerScriptHandler(_ handler: WKScriptMessageHandler) {
         guard let webView else { return }
         let userContentController = webView.configuration.userContentController
-        userContentController.removeScriptMessageHandler(forName: handlerName)
+        userContentController.removeScriptMessageHandler(forName: handlerName, contentWorld: contentWorld)
         userContentController.add(handler, contentWorld: contentWorld, name: handlerName)
     }
 
     func unregisterScriptHandler() {
         guard let webView else { return }
         let userContentController = webView.configuration.userContentController
-        userContentController.removeScriptMessageHandler(forName: handlerName)
+        userContentController.removeScriptMessageHandler(forName: handlerName, contentWorld: contentWorld)
     }
 }
