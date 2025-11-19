@@ -367,7 +367,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     // so we check if trending searches is empty or not
     func recordTrendingSearchesDisplayedEvent() {
         guard !trendingSearches.isEmpty && shouldShowTrendingSearches else { return }
-        if searchTelemetry.hasSeenTrendingSearches == false {
+        if !searchTelemetry.hasSeenTrendingSearches {
             searchTelemetry.trendingSearchesShown(count: trendingSearches.count)
             searchTelemetry.hasSeenTrendingSearches = true
         }
