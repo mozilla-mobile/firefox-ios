@@ -72,6 +72,11 @@ public protocol HistoryHandler {
         and urlString: String,
         completion: @Sendable @escaping (Result<(), any Error>) -> Void
     )
+
+    func deleteHistoryMetadataOlderThan(
+        olderThan: Int64,
+        completion: @escaping @Sendable (Bool) -> Void
+    )
 }
 
 // TODO: FXIOS-13208 Make RustPlaces actually Sendable
@@ -598,6 +603,16 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
         return withWriter { connection in
             let response: Void = try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
             return response
+        }
+    }
+
+    public func deleteHistoryMetadataOlderThan(
+        olderThan: Int64,
+        completion: @escaping @Sendable (Bool) -> Void
+    ) {
+        let deferredResponse = deleteHistoryMetadataOlderThan(olderThan: olderThan)
+        deferredResponse.upon { result in
+            completion(result.isSuccess)
         }
     }
 
