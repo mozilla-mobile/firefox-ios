@@ -176,12 +176,12 @@ workflows:
                 exit 1
             fi
     - script@1.2.1:
-        title: Detect number of warnings
+        title: Remove cache
         is_always_run: true
         inputs:
         - content: |
             export PATH="${PATH#"$HOME/.bitrise-xcelerate/bin:"}"
-            envmand add --key PATH --value "$PATH"
+            envman add --key PATH --value "$PATH"
     - script@1.2.1:
         title: Override xctestrun file to UnitTests
         inputs:
