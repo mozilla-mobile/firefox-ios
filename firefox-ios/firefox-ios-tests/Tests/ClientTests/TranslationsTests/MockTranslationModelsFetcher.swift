@@ -22,7 +22,7 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol {
     func fetchModelBuffer(recordId: String) -> Data? {
         return modelBufferResult
     }
-    
+
     func prewarmResources(for sourceLang: String, to targetLang: String) {
         // no-op for now
     }

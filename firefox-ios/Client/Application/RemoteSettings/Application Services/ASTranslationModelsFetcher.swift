@@ -147,7 +147,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     /// Pre-warms resources by fetching models and WASM binary to cache them.
     /// Calling this method multiple times for the same language pair is safe and fast.
     func prewarmResources(for sourceLang: String, to targetLang: String) {
-        _ = fetchTranslatorWASM()        
+        _ = fetchTranslatorWASM()
         let recordsToPreWarm = getRecordsForLanguagePair(from: sourceLang, to: targetLang)
         prewarmAttachments(for: recordsToPreWarm)
     }
@@ -186,7 +186,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         // in order to build a translation pipeline for sourceLang -> targetLang
         let sourceToPivotRecords = getLanguageModelRecords(records: records, from: sourceLang, to: Constants.pivotLanguage)
         let pivotToTargetRecords = getLanguageModelRecords(records: records, from: Constants.pivotLanguage, to: targetLang)
-        
+
         return sourceToPivotRecords + pivotToTargetRecords
     }
 
