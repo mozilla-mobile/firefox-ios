@@ -722,8 +722,8 @@ final class LocationView: UIView,
 
         let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
         if #available(iOS 26.0, *), scrollAlpha.isZero, config?.shouldShowKeyboard == false {
-            /// We want to use system colors when the location view is fully transparent
-            /// To make sure it blends well with the background when using glass effect.
+            // We want to use system colors when the location view is fully transparent
+            // To make sure it blends well with the background when using glass effect.
             urlTextFieldColor =  .label
             urlTextFieldSubdomainColor = .systemGray
             lockIconButton.tintColor = .systemGray
