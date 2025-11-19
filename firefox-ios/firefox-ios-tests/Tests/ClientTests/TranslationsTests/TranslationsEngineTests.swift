@@ -15,7 +15,10 @@ final class TranslationsEngineTests: XCTestCase {
         let firstBridge = subject.bridge(to: pageWebView)
         let secondBridge = subject.bridge(to: pageWebView)
 
-        XCTAssertTrue(firstBridge === secondBridge)
+        XCTAssertTrue(
+          firstBridge === secondBridge,
+          "Expected bridge(to:) to reuse the same bridge instance for the same webview."
+        )
     }
 
     func test_bridgeTo_createsDifferentBridgesForDifferentWebViews() {
@@ -26,7 +29,10 @@ final class TranslationsEngineTests: XCTestCase {
         let firstBridge = subject.bridge(to: firstWebView)
         let secondBridge = subject.bridge(to: secondWebView)
 
-        XCTAssertFalse(firstBridge === secondBridge)
+        XCTAssertFalse(
+            firstBridge === secondBridge,
+            "Expected bridge(to:) to create different bridge instances for different webviews."
+        )
     }
 
     func test_removeBridge_removesCachedBridge() {
@@ -39,7 +45,10 @@ final class TranslationsEngineTests: XCTestCase {
 
         let secondBridge = subject.bridge(to: pageWebView)
 
-        XCTAssertFalse(firstBridge === secondBridge)
+        XCTAssertFalse(
+            firstBridge === secondBridge,
+            "Expected removeBridge(for:) to clear the cached bridge so a subsequent bridge(to:) call returns a new instance."
+        )
     }
 
     func test_removeBridge_isIdempotent() {
@@ -69,9 +78,23 @@ final class TranslationsEngineTests: XCTestCase {
 
         // Force the main runloop to spin. WKWebView teardown seems to happens asynchronously on the main runloop.
         // Without this, the webview may stay alive for several cycles and NSMapTable won't clear its weak key yet.
-        RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.1))
+        waitForDeallocation(of: { weakWebView })
         XCTAssertNil(weakWebView, "WKWebView should have been deallocated")
         XCTAssertEqual(engine.bridgeCount, 0)
+    }
+
+    /// Spins the main runloop in small increments until the given object deallocates,
+    /// or until the timeout expires. We need this because deallocation is not immediate.
+    /// This will fail immediately if the object has not deallocated by the timeout.
+    private func waitForDeallocation(of object: () -> AnyObject?, timeout: TimeInterval = 5) {
+        let end = Date().addingTimeInterval(timeout)
+        while Date() < end, object() != nil {
+            RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.05))
+        }
+
+        if object() != nil {
+            XCTFail("Object not deallocated within \(timeout) seconds")
+        }
     }
 
     private func createSubject() -> TranslationsEngine {
