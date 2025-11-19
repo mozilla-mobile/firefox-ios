@@ -44,16 +44,16 @@ final class CreditCardsScreen {
     }
 
     func assertCardSaved(containing lastDigits: String, details: [String]) {
-        let table = app.tables.firstMatch
-            BaseTestCase().mozWaitForElementToExist(table)
+        /* let table = app.tables.firstMatch
+        BaseTestCase().mozWaitForElementToExist(table)*/
 
-            let cardCellButton = table.cells.element(boundBy: 1).buttonContainingText(lastDigits)
-            BaseTestCase().mozWaitForElementToExist(cardCellButton)
+        let cardCellButton = app.tables.cells.element(boundBy: 1).buttonContainingText(lastDigits)
+        BaseTestCase().mozWaitForElementToExist(cardCellButton)
 
-            for detail in details {
-                let detailButton = table.cells.element(boundBy: 1).buttons[detail]
-                BaseTestCase().mozWaitForElementToExist(detailButton)
-            }
+        for detail in details {
+            let detailButton = app.tables.cells.element(boundBy: 1).buttons[detail]
+            BaseTestCase().mozWaitForElementToExist(detailButton)
+        }
     }
 
     func enableSaveAndFillIfDisabled() {
