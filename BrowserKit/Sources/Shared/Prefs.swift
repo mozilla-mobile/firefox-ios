@@ -253,6 +253,9 @@ public struct PrefsKeys {
     // Used to determine if cannot run the Apple Intelligence model
     public static let cannotRunAppleIntelligence = "cannotRunAppleIntelligenceKey"
 
+    // Used for enabling test data for merino stories on non-dev builds
+    public static let useMerinoTestData = "useMerinoTestData"
+
     public struct Usage {
         public static let profileId = "profileId"
     }
