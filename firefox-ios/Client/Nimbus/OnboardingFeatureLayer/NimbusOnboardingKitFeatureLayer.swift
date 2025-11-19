@@ -80,17 +80,8 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         }
         // Filter out cards that are not relevant for the current device type and browser state.
         .filter { viewModel in
-            // Filter out cards that are not relevant for the current device type.
-            if isIpad, let action = viewModel.multipleChoiceButtons.first?.action,
-               action == .toolbarTop || action == .toolbarBottom {
-                return false
-            }
-
-            // Filter out welcome cards for DMA users who already have Firefox set as default browser
-            if isDefaultBrowser && viewModel.instructionsPopup?.buttonAction == .openIosFxSettings {
-                return false
-            }
-            return true
+            return shouldShowToolbarPositionCardForIpad(viewModel) &&
+                   shouldShowWelcomeCardForDefaultBrowser(viewModel)
         }
     }
 
@@ -187,5 +178,16 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             buttonTitle: data.buttonTitle,
             buttonAction: data.buttonAction,
             a11yIdRoot: a11yID)
+    }
+
+    private func shouldShowToolbarPositionCardForIpad(_ viewModel: OnboardingKitCardInfoModel) -> Bool {
+        guard isIpad, let action = viewModel.multipleChoiceButtons.first?.action else {
+            return true
+        }
+        return action != .toolbarTop && action != .toolbarBottom
+    }
+
+    private func shouldShowWelcomeCardForDefaultBrowser(_ viewModel: OnboardingKitCardInfoModel) -> Bool {
+        return !(isDefaultBrowser && viewModel.instructionsPopup?.buttonAction == .openIosFxSettings)
     }
 }
