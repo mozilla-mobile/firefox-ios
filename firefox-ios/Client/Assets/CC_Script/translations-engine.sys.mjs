@@ -371,7 +371,7 @@ export class TranslationsEngine {
     this.languagePairKey =
       lazy.TranslationsUtils.serializeLanguagePair(languagePair);
     this.#worker = new Worker(
-      "chrome://global/content/translations/translations-engine.worker.js"
+      "translations://app/translations-engine.worker.js"
     );
 
     /** @type {Promise<void>} */
