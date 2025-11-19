@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+// TODO: FXIOS-14194 - @preconcurrency on BackgroundTasks
 @preconcurrency import BackgroundTasks
 import Common
 
