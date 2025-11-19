@@ -20,7 +20,7 @@ enum FxASignInParentType {
     case library
 }
 
-enum NotificationPermissionRequestBehavior {
+public enum NotificationPermissionRequestBehavior {
     /// Automatically determine based on the telemetry object (parent type)
     case automatic
     /// Explicitly request notification permission
