@@ -813,7 +813,7 @@ class BrowserViewController: UIViewController,
 
     func dismissVisibleMenus() {
         displayedPopoverController?.dismiss(animated: true)
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -823,7 +823,7 @@ class BrowserViewController: UIViewController,
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
 
@@ -3393,7 +3393,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func isShowingJSPromptAlert() -> Bool {
-        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
+        return navigationController?.topViewController?.presentedViewController is JSPromptAlertController
     }
 
     fileprivate func recordVisitForLocationChange(_ tab: Tab, navigation: WKNavigation?) {

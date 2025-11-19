@@ -127,7 +127,7 @@ class ToolbarButton: UIButton,
         } else {
             // Remove badge & mask icons
             imageView?.subviews.forEach { view in
-                guard view as? UIImageView != nil else { return }
+                guard view is UIImageView else { return }
                 view.removeFromSuperview()
             }
         }
