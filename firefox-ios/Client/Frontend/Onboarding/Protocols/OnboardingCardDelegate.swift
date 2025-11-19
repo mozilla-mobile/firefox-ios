@@ -149,8 +149,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             flowType: flowType,
             referringPage: referringPage,
             profile: viewModel.profile,
-            windowUUID: windowUUID
-        )
+            windowUUID: windowUUID)
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,

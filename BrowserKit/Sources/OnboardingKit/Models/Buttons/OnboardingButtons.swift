@@ -5,8 +5,8 @@
 import Foundation
 
 public struct OnboardingButtons<OnboardingActionType: Sendable>: Sendable {
-    public let primary: OnboardingButtonInfoModel<OnboardingActionType>
-    public let secondary: OnboardingButtonInfoModel<OnboardingActionType>?
+    let primary: OnboardingButtonInfoModel<OnboardingActionType>
+    let secondary: OnboardingButtonInfoModel<OnboardingActionType>?
 
     public init(
         primary: OnboardingButtonInfoModel<OnboardingActionType>,
