@@ -69,7 +69,7 @@ final class TranslationsEngineTests: XCTestCase {
 
         // Force the main runloop to spin. WKWebView teardown seems to happens asynchronously on the main runloop.
         // Without this, the webview may stay alive for several cycles and NSMapTable won't clear its weak key yet.
-        // RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.1))
+        RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.1))
         XCTAssertNil(weakWebView, "WKWebView should have been deallocated")
         XCTAssertEqual(engine.bridgeCount, 0)
     }
