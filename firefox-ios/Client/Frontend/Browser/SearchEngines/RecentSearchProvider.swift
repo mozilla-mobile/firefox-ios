@@ -10,6 +10,7 @@ import Storage
 protocol RecentSearchProvider {
     func addRecentSearch(_ term: String, url: String?)
     func loadRecentSearches(completion: @escaping @Sendable ([String]) -> Void)
+    func clear(with date: DateProvider, completion: @escaping @Sendable (Bool) -> Void)
 }
 
 /// A provider that manages recent search terms from a user's history storage.
@@ -65,6 +66,14 @@ final class DefaultRecentSearchProvider: RecentSearchProvider {
             } else {
                 completion([])
             }
+        }
+    }
+
+    func clear(with date: DateProvider = SystemDateProvider(), completion: @escaping @Sendable (Bool) -> Void) {
+        // TODO: FXIOS-14100 Update with new method
+        let dateInMilliseconds = date.now().toMillisecondsSince1970()
+        historyStorage.deleteHistoryMetadataOlderThan(olderThan: dateInMilliseconds) { result in
+            completion(result)
         }
     }
 }

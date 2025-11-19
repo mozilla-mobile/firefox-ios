@@ -21,9 +21,12 @@ final class TopSitesScreen {
         BaseTestCase().mozWaitForElementToExist(app.links[itemCellId], timeout: timeout)
     }
 
-    func assertTopSitesCount(_ expected: Int,
-                             timeout: TimeInterval = TIMEOUT,
-                             file: StaticString = #filePath, line: UInt = #line) {
+    func assertTopSitesCount(
+        _ expected: Int,
+        timeout: TimeInterval = TIMEOUT,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         // Wait at least one link is available with the id
         BaseTestCase().mozWaitForElementToExist(app.links[itemCellId], timeout: timeout)
 

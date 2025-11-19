@@ -557,8 +557,8 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.recentSearches.rawValue:
             guard !viewModel.recentSearches.isEmpty else { return nil }
             title = .SearchZero.RecentSearchesSectionTitle
-            accessory = .clear(action: {
-                // TODO: FXIOS-14100 - Add method to clear recent searches
+            accessory = .clear(action: { [weak self] in
+                self?.viewModel.clearRecentSearches()
             })
 
         case SearchListSection.trendingSearches.rawValue:

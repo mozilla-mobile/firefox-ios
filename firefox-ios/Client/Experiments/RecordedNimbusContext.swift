@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Glean
+import Shared
 
 import func MozillaAppServices.getCalculatedAttributes
 import func MozillaAppServices.getLocaleTag
@@ -69,7 +70,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
          isAppleIntelligenceAvailable: Bool,
          cannotUseAppleIntelligence: Bool,
          eventQueries: [String: String] = RecordedNimbusContext.EVENT_QUERIES,
-         isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
+         isPhone: Bool = UIDeviceDetails.userInterfaceIdiom == .phone,
          bundle: Bundle = Bundle.main,
          logger: Logger = DefaultLogger.shared) {
         self.logger = logger
