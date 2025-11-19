@@ -390,7 +390,7 @@ final class ShareManagerTests: XCTestCase {
 
         XCTAssertEqual(activityItems.count, 0)
     }
-    
+
     // MARK: - Sent from Firefox experiment - test that special treatment is only enabled when feature flag is enabled
 
     func testGetActivityItems_forTab_withSentFromFirefoxEnabled_OverridesURL_withTreatmentA() throws {

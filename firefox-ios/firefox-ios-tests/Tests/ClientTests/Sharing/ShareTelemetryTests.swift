@@ -57,7 +57,7 @@ final class ShareTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.shareType, testShareType.typeName)
         XCTAssertEqual(savedExtras.hasShareMessage, testHasShareMessage)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-        
+
         // let resultValue = try XCTUnwrap(GleanMetrics.ShareSheet.sharedTo.testGetValue())
         // XCTAssertEqual(resultValue[0].extra?[activityIdentifierKey], "unknown")
         // XCTAssertEqual(resultValue[0].extra?[shareTypeKey], testShareType.typeName)
@@ -80,7 +80,7 @@ final class ShareTelemetryTests: XCTestCase {
         subject.sharedTo(
             activityType: testActivityType,
             shareTypeName: testShareType.typeName,
-            hasShareMessage: testHasShareMessage
+            hasShareMessage: testHasShareMessage,
             isEnrolledInSentFromFirefox: testIsEnrolledInSentFromFirefox,
             isOptedInSentFromFirefox: testIsOptedInSentFromFirefox
         )
@@ -93,7 +93,7 @@ final class ShareTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.shareType, testShareType.typeName)
         XCTAssertEqual(savedExtras.hasShareMessage, testHasShareMessage)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-        
+
         // let resultValue = try XCTUnwrap(GleanMetrics.ShareSheet.sharedTo.testGetValue())
         // XCTAssertEqual(resultValue[0].extra?[activityIdentifierKey], testActivityType.rawValue)
         // XCTAssertEqual(resultValue[0].extra?[shareTypeKey], testShareType.typeName)
@@ -112,13 +112,13 @@ final class ShareTelemetryTests: XCTestCase {
 
         subject.sharedTo(
             activityType: testActivityType,
-            shareType: testShareType,
+            shareTypeName: testShareType.typeName,
             hasShareMessage: testHasShareMessage,
             isEnrolledInSentFromFirefox: testIsEnrolledInSentFromFirefox,
             isOptedInSentFromFirefox: testIsOptedInSentFromFirefox
         )
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.ShareSheet.sharedTo)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.ShareSheet.sharedTo)
 
         let resultValue = try XCTUnwrap(GleanMetrics.ShareSheet.sharedTo.testGetValue())
         XCTAssertEqual(resultValue[0].extra?[activityIdentifierKey], testActivityType.rawValue)

@@ -41,7 +41,7 @@ class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
         _ activityViewController: UIActivityViewController,
         itemForActivityType activityType: UIActivity.ActivityType?
     ) -> Any? {
-        // For excluded activites, we don't want to provide any content
+        // For excluded activities, we don't want to provide any content
         if let activityType = activityType, TitleActivityItemProvider.activityTypesToIgnore.contains(activityType) {
             return NSNull()
         } else if applySentFromFirefoxTreatment, activityType?.rawValue == ActivityIdentifiers.whatsApp {
