@@ -7,10 +7,20 @@ import UniformTypeIdentifiers
 
 /// A special `UIActivityItemProvider` which never shares additional content, but instead records telemetry based on the
 /// share activity chosen.
-class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
+class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sendable, FeatureFlaggable {
     private let shareTypeName: String
     private let shareMessage: ShareMessage?
     private let telemetry: ShareTelemetry
+
+    // FXIOS-9879 For the Sent from Firefox experiment
+    private var isEnrolledInSentFromFirefox: Bool {
+        return featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly)
+    }
+
+    // FXIOS-9879 For the Sent from Firefox experiment
+    private var isOptedInSentFromFirefox: Bool {
+        return featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .userOnly)
+    }
 
     init(
         shareTypeName: String,
@@ -31,7 +41,9 @@ class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sen
         telemetry.sharedTo(
             activityType: activityType,
             shareTypeName: shareTypeName,
-            hasShareMessage: shareMessage != nil
+            hasShareMessage: shareMessage != nil,
+            isEnrolledInSentFromFirefox: isEnrolledInSentFromFirefox,
+            isOptedInSentFromFirefox: isOptedInSentFromFirefox
         )
 
         return NSNull() // Never actually share content; we only want to record the activity type for shares
