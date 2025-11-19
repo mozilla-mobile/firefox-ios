@@ -115,16 +115,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         var recordCompleteToken: ActionToken?
         var recordCancelledToken: ActionToken?
         recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkComplete) { [weak self] in
-            self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
-            guard let recordCancelledToken, let recordCompleteToken  else { return }
-            AppEventQueue.cancelAction(token: recordCancelledToken)
-            AppEventQueue.cancelAction(token: recordCompleteToken)
+            ensureMainThread { [weak self] in
+                self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
+                guard let recordCancelledToken, let recordCompleteToken  else { return }
+                AppEventQueue.cancelAction(token: recordCancelledToken)
+                AppEventQueue.cancelAction(token: recordCompleteToken)
+            }
         }
         recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkCancelled) { [weak self] in
-            self?.shareTelemetry.cancelOpenURLTimeRecord()
-            guard let recordCancelledToken, let recordCompleteToken  else { return }
-            AppEventQueue.cancelAction(token: recordCancelledToken)
-            AppEventQueue.cancelAction(token: recordCompleteToken)
+            ensureMainThread { [weak self] in
+                self?.shareTelemetry.cancelOpenURLTimeRecord()
+                guard let recordCancelledToken, let recordCompleteToken  else { return }
+                AppEventQueue.cancelAction(token: recordCancelledToken)
+                AppEventQueue.cancelAction(token: recordCompleteToken)
+            }
         }
     }
 
@@ -265,8 +269,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         requiredEvents += windowManager.allWindowUUIDs(includingReserved: true).map { .tabRestoration($0) }
         isLoadingBackgroundTabs = true
         AppEventQueue.wait(for: requiredEvents) { [weak self] in
-            self?.isLoadingBackgroundTabs = false
-            self?.backgroundTabLoader.loadBackgroundTabs()
+            ensureMainThread { [weak self] in
+                self?.isLoadingBackgroundTabs = false
+                self?.backgroundTabLoader.loadBackgroundTabs()
+            }
         }
     }
 
