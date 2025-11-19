@@ -493,7 +493,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             DeleteAutofillKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
-            AddShortcutsSetting(settings: self, settingsDelegate: self)
+            AddShortcutsSetting(settings: self, settingsDelegate: self),
+            MerinoTestDataSetting(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
