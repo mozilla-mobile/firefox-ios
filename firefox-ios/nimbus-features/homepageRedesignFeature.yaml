@@ -41,7 +41,7 @@ features:
       - channel: beta
         value:
           enabled: false
-          search-bar: true
+          search-bar: false
           shortcuts-library: false
           stories-redesign: true
           scrim: false

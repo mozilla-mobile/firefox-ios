@@ -22,7 +22,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         navigator.openURL(url1)
         waitForTabsButton()
-        navigator.goto(BrowserTabMenu)
+        navigator.nowAt(NewTabScreen)
         // Go to History screen
         navigator.goto(LibraryPanel_History)
         waitForElementsToExist(

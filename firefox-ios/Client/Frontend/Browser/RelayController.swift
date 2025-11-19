@@ -198,6 +198,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     func handleNotifications(_ notification: Notification) {
         logger.log("[RELAY] Received notification '\(notification.name.rawValue)'.", level: .info, category: .autofill)
         Task { @MainActor in
+            guard Self.isFeatureEnabled else { return }
             if hasRelayAccount() {
                 createRelayClient()
             }
