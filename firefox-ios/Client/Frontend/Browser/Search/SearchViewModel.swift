@@ -403,7 +403,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     // so we check if recent searches is empty or not.
     func recordRecentSearchesDisplayedEvent() {
         guard !recentSearches.isEmpty && shouldShowRecentSearches else { return }
-        if searchTelemetry.hasSeenRecentSearches == false {
+        if !searchTelemetry.hasSeenRecentSearches {
             searchTelemetry.recentSearchesShown(count: recentSearches.count)
             searchTelemetry.hasSeenRecentSearches = true
         }
