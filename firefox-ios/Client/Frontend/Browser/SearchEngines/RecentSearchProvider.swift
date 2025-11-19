@@ -70,6 +70,7 @@ final class DefaultRecentSearchProvider: RecentSearchProvider {
     }
 
     func clear(with date: DateProvider = SystemDateProvider(), completion: @escaping @Sendable (Bool) -> Void) {
+        // TODO: FXIOS-14100 Update with new method
         let dateInMilliseconds = date.now().toMillisecondsSince1970()
         historyStorage.deleteHistoryMetadataOlderThan(olderThan: dateInMilliseconds) { result in
             completion(result)
