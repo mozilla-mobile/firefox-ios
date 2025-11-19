@@ -7,7 +7,7 @@ import Common
 import WebKit
 
 /// Errors thrown by `TranslationsService` when preconditions or WebView state are invalid.
-enum TranslationsServiceError: Error {
+enum TranslationsServiceError: Error, Equatable {
     case missingWebView
     case missingSourceLanguage
     case missingDeviceLanguage
