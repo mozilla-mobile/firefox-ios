@@ -25,8 +25,6 @@ final class PhotonActionSheetScreen {
             BaseTestCase().waitForElementsToExist(
                 [
                     sel.PHOTON_ACTION_SHEET_WEBSITE_TITLE.element(in: app),
-                    // URL may not be present
-                    // sel.PHOTON_ACTION_SHEET_WEBSITE_URL.element(in: app),
                     sel.PHOTON_ACTION_SHEET_COPY_BUTTON.element(in: app)
                 ]
             )
