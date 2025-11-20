@@ -7,14 +7,13 @@ protocol ConcurrencyThrottlerProtocol {
     func throttle(completion: @escaping @Sendable () async -> Void)
 }
 
-class ConcurrencyThrottler: ConcurrencyThrottlerProtocol {
+// TODO: FXIOS-14214 - ConcurrencyThrottler is not thread-safe
+final class ConcurrencyThrottler: ConcurrencyThrottlerProtocol, @unchecked Sendable {
     private var lastUpdateTime = Date.distantPast
     private var delay: Double
     private var taskComplete = true
 
-    init(
-        seconds delay: Double = 0.35
-    ) {
+    init(seconds delay: Double = 0.35) {
         self.delay = delay
     }
 
