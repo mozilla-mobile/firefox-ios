@@ -48,6 +48,9 @@ public enum LoggerCategory: String {
     /// Related to onboarding
     case onboarding
 
+    /// Related to Relay email mask
+    case relay
+
     /// Related to redux library or integration
     case redux
 
