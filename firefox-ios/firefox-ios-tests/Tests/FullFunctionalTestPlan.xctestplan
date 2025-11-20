@@ -246,6 +246,7 @@
         "OnboardingTests\/testOnboardingSignIn_TAE()",
         "PerformanceTests",
         "PhotonActionSheetTests\/testPinToShortcuts()",
+        "PhotonActionSheetTests\/testPinToShortcuts_TAE()",
         "PhotonActionSheetTests\/testPinToShortcuts_testPinToShortcuts()",
         "PhotonActionSheetTests\/testSharePageWithShareSheetOptions()",
         "PhotonActionSheetTests\/testSharePageWithShareSheetOptions_TAE()",

@@ -59,6 +59,20 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(cell)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306849
+    // Smoketest TAE
+    func testPinToShortcuts_TAE() {
+        app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+        // Open Page Action Menu Sheet and Pin the site
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
+        navigator.performAction(Action.PinToTopSitesPAM)
+    }
+
     func testPinToShortcuts_andThenRemovingShortcuts() {
         app.launch()
         navigator.nowAt(HomePanelsScreen)
