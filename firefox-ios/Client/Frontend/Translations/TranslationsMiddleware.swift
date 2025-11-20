@@ -141,8 +141,8 @@ final class TranslationsMiddleware {
         // When translation completed, we want icon to be active mode.
         Task { @MainActor in
             do {
-                try await translationsService.translateCurrentPage(for: action.windowUUID)
-                _ = try await translationsService.firstResponseReceived(for: action.windowUUID)
+                try await translationsService.translateCurrentPage(for: action.windowUUID, onLanguageIdentified: nil)
+                try await translationsService.firstResponseReceived(for: action.windowUUID)
                 dispatchAction(
                     for: ToolbarActionType.translationCompleted,
                     with: .active,

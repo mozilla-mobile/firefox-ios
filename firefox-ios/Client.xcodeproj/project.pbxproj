@@ -1499,6 +1499,7 @@
 		C27EF61A2EBA364E00BED719 /* LanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */; };
 		C27EF61C2EBA38AA00BED719 /* WebViewLanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF61B2EBA38A100BED719 /* WebViewLanguageSampleSource.swift */; };
 		C27EF61F2EBA395A00BED719 /* MockLanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF61E2EBA395000BED719 /* MockLanguageSampleSource.swift */; };
+		C28094312ECF877D0083BC16 /* TranslationsServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28094302ECF87780083BC16 /* TranslationsServiceError.swift */; };
 		C283EECC2E4D2C02008EB540 /* ASSummarizerRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */; };
 		C283EECE2E4D4DC7008EB540 /* RemoteSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */; };
 		C283EED02E4D4FE7008EB540 /* SummarizerConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */; };
@@ -9854,6 +9855,7 @@
 		C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSampleSource.swift; sourceTree = "<group>"; };
 		C27EF61B2EBA38A100BED719 /* WebViewLanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewLanguageSampleSource.swift; sourceTree = "<group>"; };
 		C27EF61E2EBA395000BED719 /* MockLanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLanguageSampleSource.swift; sourceTree = "<group>"; };
+		C28094302ECF87780083BC16 /* TranslationsServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsServiceError.swift; sourceTree = "<group>"; };
 		C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSummarizerRemoteConfig.swift; sourceTree = "<group>"; };
 		C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSummarizerConfigSource.swift; sourceTree = "<group>"; };
 		C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManager.swift; sourceTree = "<group>"; };
@@ -14453,6 +14455,7 @@
 		C2F336E92ECE44740071588A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				C28094302ECF87780083BC16 /* TranslationsServiceError.swift */,
 				C2F336EC2ECE45DB0071588A /* TranslationsService.swift */,
 				C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */,
 			);
@@ -18514,6 +18517,7 @@
 				C8DC90C72A06759E0008832B /* MarkupAttributionUtility.swift in Sources */,
 				219A0FD52ACC8506009A6D1A /* InactiveTabsCell.swift in Sources */,
 				8A1CBB992BE01839008BE4D4 /* MicrosurveyPromptState.swift in Sources */,
+				C28094312ECF877D0083BC16 /* TranslationsServiceError.swift in Sources */,
 				23D57E6E25ED6F2700883FAD /* SearchViewController.swift in Sources */,
 				C82A94F2269F68ED00624AA7 /* LegacyFeatureFlagsManager.swift in Sources */,
 				C8610DAA2A0EBF7100B79FF1 /* OnboardingCardDelegate.swift in Sources */,

@@ -11,7 +11,12 @@ protocol TranslationsServiceProtocol {
     /// the detected page language and the device's current locale.
     func shouldOfferTranslation(for windowUUID: WindowUUID) async throws -> Bool
     /// Performs translation and returns immediately.
-    func translateCurrentPage(for windowUUID: WindowUUID) async throws
+    /// TODO(FXIOS-14213): We should implement a lifecycle for the service similar to `SummarizerServiceLifecycle`.
+    /// For now `onLanguageIdentified` is used to notify caller when language detection is done.
+    func translateCurrentPage(
+        for windowUUID: WindowUUID,
+        onLanguageIdentified: ((String, String) -> Void)?
+    ) async throws
     /// This method resolves when the document receives the first translations response.
     /// NOTE: Translation is a living process ( e.g live chat in twitch ) so there is no single "done" state.
     /// In Gecko, we mark translations done when the engine is ready.
