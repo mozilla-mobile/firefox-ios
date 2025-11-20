@@ -3747,7 +3747,7 @@ extension String {
                 public static let LoadingCompletedAccessibilityLabel = MZLocalizedString(
                     key: "Translations.Sheet.LoadingCompleted.AccessibilityLabel.v147",
                     tableName: "Translations",
-                    value: "Page Translated",
+                    value: "Page translated",
                     comment: "This is the accessibility label to announce that the page is translated and loading is completed. From a user perspective, they will see the translation icon go from loading state to active state, which means we received the a valid translation response from translating the page.")
             }
 
