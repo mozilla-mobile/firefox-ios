@@ -43,7 +43,7 @@ share.open_in_firefox_extension:
     description: |
       Recorded when the user shares text from the "Open in Firefox" Action Extension.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/20805
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30796
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30142
     notification_emails:
