@@ -927,10 +927,6 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: firefox-ios/WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
@@ -940,6 +936,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1056,10 +1056,6 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: firefox-ios/WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
@@ -1069,6 +1065,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1158,10 +1158,6 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: firefox-ios/WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
@@ -1171,6 +1167,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -2319,10 +2319,6 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: firefox-ios/WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
@@ -2332,6 +2328,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
