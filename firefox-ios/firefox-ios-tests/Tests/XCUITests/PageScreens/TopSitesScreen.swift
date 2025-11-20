@@ -57,6 +57,14 @@ final class TopSitesScreen {
         site.press(forDuration: duration)
     }
 
+    // Long-presses on a pinned top site to show the context menu.
+    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 2.0) {
+        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+            .links["Pinned: \(name)"]
+        BaseTestCase().mozWaitForElementToExist(pinnedSite)
+        pinnedSite.press(forDuration: duration)
+    }
+
     func assertVisibleTopSites(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(topSiteCellGroup, timeout: timeout)
     }
@@ -88,6 +96,20 @@ final class TopSitesScreen {
         BaseTestCase().mozWaitForElementToNotExist(linkElement, timeout: timeout)
     }
 
+    // Asserts a site is pinned
+    func assertTopSitePinned(named name: String, timeout: TimeInterval = TIMEOUT) {
+        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+            .links["Pinned: \(name)"]
+        BaseTestCase().mozWaitForElementToExist(pinnedSite, timeout: timeout)
+    }
+
+    // Asserts a site is not pinned
+    func assertTopSiteNotPinned(named name: String, timeout: TimeInterval = TIMEOUT) {
+        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+            .links["Pinned: \(name)"]
+        BaseTestCase().mozWaitForElementToNotExist(pinnedSite, timeout: timeout)
+    }
+
     // Taps on a pinned top site.
     func tapOnPinnedSite(named name: String) {
         let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
@@ -95,13 +117,9 @@ final class TopSitesScreen {
         BaseTestCase().mozWaitForElementToExist(pinnedSite)
         pinnedSite.waitAndTap()
     }
-
-    // Long-presses on a pinned top site to show the context menu.
-    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 1.0) {
-        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-            .links["Pinned: \(name)"]
-        BaseTestCase().mozWaitForElementToExist(pinnedSite)
-        pinnedSite.press(forDuration: duration)
+    
+    func tapPinSlashIcon() {
+        sel.PIN_SLASH.element(in: app).waitAndTap()
     }
 
     func assertYoutubeTopSitesExist() {

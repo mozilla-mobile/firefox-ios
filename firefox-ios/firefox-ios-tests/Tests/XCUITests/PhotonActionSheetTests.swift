@@ -8,11 +8,15 @@ import Common
 class PhotonActionSheetTests: FeatureFlaggedTestBase {
     var toolBarScreen: ToolbarScreen!
     var photonActionSheetScreen: PhotonActionSheetScreen!
+    var browserScreen: BrowserScreen!
+    var topSitesScreen: TopSitesScreen!
 
     override func setUp() {
         super.setUp()
         toolBarScreen = ToolbarScreen(app: app)
         photonActionSheetScreen = PhotonActionSheetScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        topSitesScreen = TopSitesScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
@@ -36,6 +40,7 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         }
 
         // Verify that the site is pinned to top
+        
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let cell = itemCell.staticTexts["Example Domain"]
         mozWaitForElementToExist(cell)
@@ -71,6 +76,21 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenuMore)
         navigator.performAction(Action.PinToTopSitesPAM)
+
+        // Navigate to topsites to verify that the site has been pinned
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        browserScreen.tapCancelButtonIfExist()
+
+        // Verify that the site is pinned to top
+        topSitesScreen.assertTopSiteExists(named: "Example Domain")
+        topSitesScreen.assertTopSitePinned(named: "Example Domain")
+
+        // Remove pin
+        topSitesScreen.longPressOnPinnedSite(named: "Example Domain")
+        topSitesScreen.tapPinSlashIcon()
+        topSitesScreen.assertTopSiteNotPinned(named: "Example Domain")
+        topSitesScreen.assertTopSiteDoesNotExist(named: "Example Domain")
     }
 
     func testPinToShortcuts_andThenRemovingShortcuts() {
