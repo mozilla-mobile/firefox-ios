@@ -1466,7 +1466,6 @@
 		BD6CC84229CDDA3400546A5D /* ZoomLevelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6CC84129CDDA3400546A5D /* ZoomLevelStore.swift */; };
 		BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */; };
 		BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */; };
-		C21C084E2EC48D3B000C7D31 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8CB511202EC1F17D004A2320 /* Shared */; };
 		C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */; };
 		C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */; };
 		C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */; };
@@ -11450,7 +11449,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C21C084E2EC48D3B000C7D31 /* Shared in Frameworks */,
 				8CF609272EA8D46E00F069B6 /* UniformTypeIdentifiers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -16766,23 +16764,16 @@
 				8CF609212EA8D46E00F069B6 /* Sources */,
 				8CF609222EA8D46E00F069B6 /* Frameworks */,
 				8CF609232EA8D46E00F069B6 /* Resources */,
-				8CA9C3FE2EC1F1F80050D1B0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
-				2F11EE501ABCAE910083902D /* PBXTargetDependency */,
-				D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */,
-				8CB511242EC1F183004A2320 /* PBXTargetDependency */,
-				8C6FADF82EC1F3620022FB5C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				8CF609282EA8D46E00F069B6 /* ActionExtension */,
 			);
 			name = ActionExtension;
 			packageProductDependencies = (
-				8CB511202EC1F17D004A2320 /* Shared */,
 			);
 			productName = ActionExtension;
 			productReference = 8CF609252EA8D46E00F069B6 /* ActionExtension.appex */;
