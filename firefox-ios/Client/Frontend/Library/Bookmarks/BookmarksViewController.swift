@@ -265,10 +265,12 @@ final class BookmarksViewController: SiteTableViewController,
             // In the case that the node is a folder, restore its children as well
             guard let children = (bookmarkTreeRoot as? BookmarkFolderData)?.children else { return }
 
-            for child in children {
-                self.restoreBookmarkTree(bookmarkTreeRoot: child,
-                                         parentFolderGUID: guid,
-                                         recentBookmarkFolderGUID: recentBookmarkFolderGUID)
+            ensureMainThread {
+                for child in children {
+                    self.restoreBookmarkTree(bookmarkTreeRoot: child,
+                                             parentFolderGUID: guid,
+                                             recentBookmarkFolderGUID: recentBookmarkFolderGUID)
+                }
             }
         }
     }
