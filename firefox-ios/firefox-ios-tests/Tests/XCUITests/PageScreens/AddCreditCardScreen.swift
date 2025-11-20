@@ -74,21 +74,20 @@ final class AddCreditCardScreen {
     }
 
     private func fillName(_ name: String) {
-        sel.NAME_FIELD_BUTTON.element(in: app).waitAndTap()
-        // loginScreen.enterTextInField(typedText: name)
-        app.typeText(name)
+        let nameField = sel.NAME_FIELD_BUTTON.element(in: app)
+        nameField.waitAndTap()
+        nameField.typeText(name)
     }
 
     private func fillCardNumber(_ number: String) {
-        sel.CARD_NUMBER_FIELD_BUTTON.element(in: app).waitAndTap()
-        // loginScreen.enterTextInField(typedText: number)
-        app.typeText(number)
+        let cardNumber = sel.CARD_NUMBER_FIELD_BUTTON.element(in: app)
+        cardNumber.waitAndTap()
+        cardNumber.typeText(number)
     }
 
     private func fillExpiration(_ expiration: String) {
         creditCard_ExpirationFieldButton.waitAndTap()
-        // loginScreen.enterTextInField(typedText: expiration)
-        app.typeText(expiration)
+        creditCard_ExpirationFieldButton.typeText(expiration)
     }
 
     private func retryCardNumberIfInvalid(_ number: String) {
