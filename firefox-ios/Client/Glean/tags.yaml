@@ -60,6 +60,9 @@ Library:
 Microsurvey:
   description: Corresponds to the microsurveys shown to the user.
 
+Onboarding:
+  description: Corresponds to user interactions during the onboarding flow, including card views, button taps, wallpaper selection, and notification permission prompts.
+
 Passwords:
   description: Corresponds to the collection, storage, and autofilling of login passwords.
 
