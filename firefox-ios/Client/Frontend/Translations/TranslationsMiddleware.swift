@@ -12,16 +12,21 @@ final class TranslationsMiddleware {
     private let logger: Logger
     private let windowManager: WindowManager
     private let translationsService: TranslationsServiceProtocol
+    private let translationsTelemetry: TranslationsTelemetry
+
+    private var translationFlowIds: [WindowUUID: UUID] = [:]
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
-         translationsService: TranslationsServiceProtocol = TranslationsService()
+         translationsService: TranslationsServiceProtocol = TranslationsService(),
+         translationsTelemetry: TranslationsTelemetry = TranslationsTelemetry(),
     ) {
         self.profile = profile
         self.logger = logger
         self.windowManager = windowManager
         self.translationsService = translationsService
+        self.translationsTelemetry = translationsTelemetry
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -75,14 +80,35 @@ final class TranslationsMiddleware {
         // When user taps on button when in active mode,
         // then we go back to inactive mode and page should reload to original language.
 
-        // TODO: FXIOS-13844 - Only updates icon for now, connect with backend
         if translationConfiguration.state == .inactive {
+            actionType = .willTranslate
+            let newFlowId = UUID()
+            translationFlowIds[action.windowUUID] = newFlowId
+            translationsTelemetry.translateButtonTapped(
+                isPrivate: toolbarState.isPrivateMode,
+                actionType: .willTranslate,
+                translationFlowId: newFlowId
+            )
             self.handleUpdatingTranslationIcon(for: action, with: .loading)
             self.retrieveTranslations(for: action)
         } else if translationConfiguration.state == .active {
+            // TODO(Issam): Do we want to create a new UUID when it doesn't exist or just not send telemetry?
+            // or use some unknown value?
+            let existingFlowId = translationFlowIds[action.windowUUID] ?? UUID()
+            translationsTelemetry.translateButtonTapped(
+                isPrivate: toolbarState.isPrivateMode,
+                actionType: .willRestore,
+                translationFlowId: existingFlowId
+            )
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
             self.reloadPage(for: action)
         }
+
+        translationsTelemetry.translateButtonTapped(
+            isPrivate: toolbarState.isPrivateMode,
+            actionType: actionType,
+            translationFlowId: flowId
+        )
     }
 
     private func handleTappingRetryButtonOnToast(for action: TranslationsAction, and state: AppState) {
@@ -158,6 +184,12 @@ final class TranslationsMiddleware {
 
     // Reloads web view if user taps on translation button to view original page after translating
     private func reloadPage(for action: Action) {
+        // TODO(Issam): Do we want to create a new UUID when it doesn't exist or just not send telemetry?
+        // or use some <unk> value?
+        let existingFlowId = translationFlowIds[action.windowUUID] ?? UUID()
+        translationsTelemetry.webpageRestored(translationFlowId: existingFlowId)
+        // Invalidate the flow id as we are restoring the page
+        translationFlowIds[action.windowUUID] = nil
         let reloadAction = GeneralBrowserAction(
             windowUUID: action.windowUUID,
             actionType: GeneralBrowserActionType.reloadWebsite

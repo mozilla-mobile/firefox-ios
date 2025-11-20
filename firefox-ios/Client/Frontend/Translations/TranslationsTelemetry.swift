@@ -7,6 +7,11 @@ import Common
 import Shared
 import Glean
 
+enum TranslateButtonActionType: String {
+    case willTranslate = "will_translate"
+    case willRestore = "will_restore"
+}
+
 final class TranslationsTelemetry {
     private let gleanWrapper: GleanWrapper
 
@@ -56,9 +61,9 @@ final class TranslationsTelemetry {
         )
     }
 
-    func translateButtonTapped(isPrivate: Bool, actionType: String, translationFlowId: UUID) {
+    func translateButtonTapped(isPrivate: Bool, actionType: TranslateButtonActionType, translationFlowId: UUID) {
         let extras = GleanMetrics.Toolbar.TranslateButtonTappedExtra(
-            actionType: actionType,
+            actionType: actionType.rawValue,
             isPrivate: isPrivate,
             translationFlowId: translationFlowId.uuidString
         )
