@@ -28,7 +28,7 @@ struct PhotonActionSheetSelectors: PhotonActionSheetSelectorsSet {
         static let photonActionSheetWebsiteURL = "example.com"
         static let photonActionSheetCopyButton = "Copy"
         static let shareView = "ShareTo.ShareView"
-        static let fennecIcon = "XCElementSnapshotPrivilegedValuePlaceholder"
+        static let fennecIcon = "Fennec"
         static let shareViewOpenInFirefox = "Open in Firefox"
         static let shareViewLoadInBackground = "Load in Background"
         static let shareViewBookmarkThisPage = "Bookmark This Page"
@@ -72,7 +72,7 @@ struct PhotonActionSheetSelectors: PhotonActionSheetSelectorsSet {
         groups: ["photonActionSheet"]
     )
 
-    let PHOTON_ACTION_SHEET_FENNEC_ICON = Selector.anyId(
+    let PHOTON_ACTION_SHEET_FENNEC_ICON = Selector.staticTextLabelContains(
         IDs.fennecIcon,
         description: "Fennec icon from photon action sheet",
         groups: ["photonActionSheet"]

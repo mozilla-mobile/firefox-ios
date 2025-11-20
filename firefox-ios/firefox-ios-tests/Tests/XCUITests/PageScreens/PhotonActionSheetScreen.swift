@@ -32,7 +32,7 @@ final class PhotonActionSheetScreen {
     }
 
     func tapFennecIcon() {
-        var fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
+        var fennecElement = sel.PHOTON_ACTION_SHEET_FENNEC_ICON.element(in: app)
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
         if #unavailable(iOS 17) {
