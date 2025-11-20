@@ -158,6 +158,8 @@ class SearchTelemetry: @unchecked Sendable {
     var visibleFilteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     var visibleSuggestions = [String]()
     var visibleFirefoxSuggestions = [RustFirefoxSuggestion]()
+    var hasSeenRecentSearches = false
+    var hasSeenTrendingSearches = false
     var visibleData = [Site]()
 
     var searchQuery = ""
@@ -440,6 +442,11 @@ class SearchTelemetry: @unchecked Sendable {
         visibleFilteredRemoteClientTabs.removeAll()
     }
 
+    func clearZeroSearchSectionSeen() {
+        hasSeenRecentSearches = false
+        hasSeenTrendingSearches = false
+    }
+
     // Comma separated list of result types in order.
     func listResultTypes() -> String {
         var resultTypes: [String] = []
@@ -511,8 +518,9 @@ class SearchTelemetry: @unchecked Sendable {
     }
 
     // MARK: Trending Searches
-    func trendingSearchesShown(surveyId: String) {
-        // TODO: FXIOS-14082: Fix bug in loading too many times and add telemetry
+    func trendingSearchesShown(count: Int) {
+        let countExtra = GleanMetrics.SearchTrendingSearches.SuggestionsShownExtra(count: Int32(count))
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchTrendingSearches.suggestionsShown, extras: countExtra)
     }
 
     func trendingSearchesTapped(at index: Int) {
@@ -522,14 +530,19 @@ class SearchTelemetry: @unchecked Sendable {
     }
 
     // MARK: Recent Searches
-    func recentSearchesShown(surveyId: String) {
-        // TODO: FXIOS-14082: Fix bug in loading too many times and add telemetry
+    func recentSearchesShown(count: Int) {
+        let countExtra = GleanMetrics.SearchRecentSearches.SuggestionsShownExtra(count: Int32(count))
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.suggestionsShown, extras: countExtra)
     }
 
     func recentSearchesTapped(at index: Int) {
         let position = "\(index + 1)"
         let positionExtra = GleanMetrics.SearchRecentSearches.SuggestionTappedExtra(position: Int32(position))
         gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.suggestionTapped, extras: positionExtra)
+    }
+
+    func recentSearchesClearButtonTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.clearButtonTapped)
     }
 }
 

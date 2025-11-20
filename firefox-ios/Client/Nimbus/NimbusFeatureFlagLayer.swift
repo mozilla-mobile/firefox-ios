@@ -6,8 +6,10 @@ import Foundation
 
 final class NimbusFeatureFlagLayer: Sendable {
     // MARK: - Public methods
-    public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
-                                     from nimbus: FxNimbus = FxNimbus.shared
+    // swiftlint:disable:next function_body_length
+    public func checkNimbusConfigFor(
+        _ featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         // For better code readability, please keep in alphabetical order by NimbusFeatureFlagID
         switch featureID {
@@ -101,6 +103,12 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .searchEngineConsolidation:
             return checkSearchEngineConsolidationFeature(from: nimbus)
 
+        case .sentFromFirefox:
+            return checkSentFromFirefoxFeature(from: nimbus)
+
+        case .sentFromFirefoxTreatmentA:
+            return checkSentFromFirefoxFeatureTreatmentA(from: nimbus)
+
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
@@ -182,9 +190,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
-        case .revertUnsafeContinuationsRefactor:
-            return checkRevertUnsafeContinuationsRefactor(from: nimbus)
-
         case .updatedPasswordManager:
             return checkUpdatedPasswordManagerFeature(from: nimbus)
 
@@ -203,6 +208,16 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .reportSiteIssue: return config.reportSiteIssue.status
         default: return false
         }
+    }
+
+    private func checkSentFromFirefoxFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.sentFromFirefoxFeature.value()
+        return config.enabled
+    }
+
+    private func checkSentFromFirefoxFeatureTreatmentA(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.sentFromFirefoxFeature.value()
+        return config.isTreatmentA
     }
 
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
@@ -472,11 +487,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
-    }
-
-    private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.revertUnsafeContinuationsRefactor.value()
-        return config.enabled
     }
 
     // MARK: - Summarizer Feature

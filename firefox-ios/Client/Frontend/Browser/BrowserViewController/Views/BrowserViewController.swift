@@ -46,9 +46,6 @@ class BrowserViewController: UIViewController,
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
         static let minimalHeaderOffset: CGFloat = 14
-
-        static let topToolbarDuration: TimeInterval = 0.3
-        static let bottomToolbarDuration: TimeInterval = 0.4
     }
 
     /// Describes the state of the current search session. This state is used
@@ -202,6 +199,8 @@ class BrowserViewController: UIViewController,
             return LegacyTabScrollController(windowUUID: windowUUID)
         }
     }()
+
+    var toolbarAnimator: ToolbarAnimator?
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -595,15 +594,17 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    fileprivate func didInit() {
+    private func didInit() {
         tabManager.addDelegate(self)
         tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
-            // Ensure we call into didBecomeActive at least once during startup flow (if needed)
-            guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
-            self?.browserDidBecomeActive()
+            ensureMainThread { [weak self] in
+                // Ensure we call into didBecomeActive at least once during startup flow (if needed)
+                guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
+                self?.browserDidBecomeActive()
+            }
         }
 
         crashTracker.updateData()
@@ -728,6 +729,8 @@ class BrowserViewController: UIViewController,
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
+            $0.setNeedsLayout()
+            $0.layoutIfNeeded()
         }
     }
 
@@ -814,7 +817,7 @@ class BrowserViewController: UIViewController,
 
     func dismissVisibleMenus() {
         displayedPopoverController?.dismiss(animated: true)
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -824,7 +827,7 @@ class BrowserViewController: UIViewController,
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
 
@@ -1068,6 +1071,9 @@ class BrowserViewController: UIViewController,
         subscribeToRedux()
         enqueueTabRestoration()
         updateAddressToolbarContainerPosition(for: traitCollection)
+        if isTabScrollRefactoringEnabled {
+            setupToolbarAnimator()
+        }
 
         // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
         guard !AppConstants.isRunningUnitTest else { return }
@@ -1384,11 +1390,15 @@ class BrowserViewController: UIViewController,
         // handles a deeplink when was already opened
         if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
             AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
-                self?.tabManager.restoreTabs()
+                ensureMainThread { [weak self] in
+                    self?.tabManager.restoreTabs()
+                }
             }
         } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
             AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
-                self?.tabManager.restoreTabs()
+                ensureMainThread { [weak self] in
+                    self?.tabManager.restoreTabs()
+                }
             }
         }
     }
@@ -3283,17 +3293,19 @@ class BrowserViewController: UIViewController,
         _ url: URL,
         uuid: String? = nil,
         isPrivate: Bool = false,
-        completionHandler: (() -> Void)? = nil
+        completionHandler: (@Sendable () -> Void)? = nil
     ) {
         // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
         guard !tabManager.isRestoringTabs else {
             AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
-                self?.switchToTabForURLOrOpen(
-                    url,
-                    uuid: uuid,
-                    isPrivate: isPrivate,
-                    completionHandler: completionHandler
-                )
+                ensureMainThread { [weak self] in
+                    self?.switchToTabForURLOrOpen(
+                        url,
+                        uuid: uuid,
+                        isPrivate: isPrivate,
+                        completionHandler: completionHandler
+                    )
+                }
             }
             return
         }
@@ -3391,7 +3403,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func isShowingJSPromptAlert() -> Bool {
-        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
+        return navigationController?.topViewController?.presentedViewController is JSPromptAlertController
     }
 
     fileprivate func recordVisitForLocationChange(_ tab: Tab, navigation: WKNavigation?) {
