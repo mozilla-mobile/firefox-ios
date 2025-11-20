@@ -71,10 +71,9 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Translation is a living process ( e.g live chat in twitch ) so there is no single "done" state.
     /// In Gecko, we mark translations done when the engine is ready.
     /// In iOS, we will go a step further and wait for the first translation response to be received.
-    @discardableResult
-    func firstResponseReceived(for windowUUID: WindowUUID) async throws -> Bool {
+    func firstResponseReceived(for windowUUID: WindowUUID) async throws {
         let webView = try currentWebView(for: windowUUID)
-        return try await firstResponseReceivedJS(on: webView)
+        _ = try await firstResponseReceivedJS(on: webView)
     }
 
     /// Tells the engine to discard translations for a document.
@@ -121,11 +120,10 @@ final class TranslationsService: TranslationsServiceProtocol {
     }
 
     /// Evaluates the JS hook to check whether initial translation output has been produced.
-    private func firstResponseReceivedJS(on webView: WKWebView) async throws -> Bool {
+    private func firstResponseReceivedJS(on webView: WKWebView) async throws {
         let js = "return await window.__firefox__.Translations.isDone()"
         do {
-            let result = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
-            return (result as? Bool) ?? false
+            _ = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
         } catch {
             /// NOTE: It would be safe to pass in the js string directly here, but it would just add too much noise 
             /// since from and to could be any language code. We only care that firstResponseReceivedJS failed.
