@@ -149,27 +149,30 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
 
-        guard let webView = tab.webView else { return }
-        let (email, result) = generateRelayMask(for: tab.url?.baseDomain ?? "")
-        guard result != .error else { completion(.error); return }
+        guard let webView = tab.webView else { completion(.error); return }
+        guard let client else { completion(.error); return }
+        Task {
+            let (email, result) = await generateRelayMask(for: tab.url?.baseDomain ?? "", client: client)
+            guard result != .error else { completion(.error); return }
 
-        guard let jsonData = try? JSONEncoder().encode(email),
-              let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
-            logger.log("[RELAY] Couldn't encode string for Relay JS injection.", level: .warning, category: .autofill)
-            completion(.error)
-            return
-        }
-
-        let jsFunctionCall = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
-        let closureLogger = logger
-        webView.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
-            guard error == nil else {
-                closureLogger.log("[RELAY] Javascript error: \(error!)", level: .warning, category: .autofill)
+            guard let jsonData = try? JSONEncoder().encode(email),
+                  let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
+                logger.log("[RELAY] Couldn't encode string for Relay JS injection.", level: .warning, category: .autofill)
+                completion(.error)
                 return
             }
-        }
 
-        completion(result)
+            let jsFunctionCall = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
+            let closureLogger = logger
+            webView.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
+                guard error == nil else {
+                    closureLogger.log("[RELAY] Javascript error: \(error!)", level: .warning, category: .autofill)
+                    return
+                }
+            }
+
+            completion(result)
+        }
     }
 
     func emailFieldFocused(in tab: Tab) {
@@ -182,8 +185,9 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     // MARK: - Private Utilities
 
-    private func generateRelayMask(for websiteDomain: String) -> (mask: String?, result: RelayMaskGenerationResult) {
-        guard let client else { return (nil, .error) }
+    nonisolated private func generateRelayMask(for websiteDomain: String,
+                                               client: RelayClient) async -> (mask: String?,
+                                                                              result: RelayMaskGenerationResult) {
         do {
             let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
             return (relayAddress.fullAddress, .newMaskGenerated)
@@ -245,7 +249,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         // Fetch the account status (off the main thread)
         Task {
             await fetchRelayAccountAvailability(isStaging: isStaging)
-            assert(Thread.isMainThread)
             if hasRelayAccount() {
                 createRelayClientIfNeeded()
             } else {
