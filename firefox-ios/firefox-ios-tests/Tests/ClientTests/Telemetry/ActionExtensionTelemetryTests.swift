@@ -48,6 +48,6 @@ final class ActionExtensionTelemetryTests: XCTestCase {
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(resultMetricType === expectedMetricType, debugMessage.text)
     }
 }
