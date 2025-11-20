@@ -10,18 +10,18 @@ import Common
 final class TranslationsMiddleware {
     private let profile: Profile
     private let logger: Logger
-    private let languageDetector: LanguageDetectorProvider
     private let windowManager: WindowManager
+    private let translationsService: TranslationsServiceProtocol
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         languageDetector: LanguageDetectorProvider = LanguageDetector(),
          logger: Logger = DefaultLogger.shared,
-         windowManager: WindowManager = AppContainer.shared.resolve()
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         translationsService: TranslationsServiceProtocol = TranslationsService()
     ) {
         self.profile = profile
-        self.languageDetector = languageDetector
         self.logger = logger
         self.windowManager = windowManager
+        self.translationsService = translationsService
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -85,15 +85,7 @@ final class TranslationsMiddleware {
 
     private func handleTappingRetryButtonOnToast(for action: TranslationsAction, and state: AppState) {
         self.handleUpdatingTranslationIcon(for: action, with: .loading)
-        // TODO: FXIOS-13844 - Retrieve translations properly with backend, using fake call for now
-        Task { @MainActor in
-            try? await fetchData()
-            dispatchAction(
-                for: ToolbarActionType.translationCompleted,
-                with: .active,
-                and: action.windowUUID
-            )
-        }
+        retrieveTranslations(for: action)
     }
 
     @MainActor
@@ -118,38 +110,26 @@ final class TranslationsMiddleware {
         Task { @MainActor in
             guard action.translationConfiguration?.canTranslate == true else { return }
 
-            guard let selectedTab = self.windowManager.tabManager(for: action.windowUUID).selectedTab,
-                  let webView = selectedTab.webView
-            else { return }
-
-            let languageSampleSource = WebViewLanguageSampleSource(webView: webView)
-            await handleDetectingLanguage(from: languageSampleSource, with: action.windowUUID)
-        }
-    }
-
-    private func handleDetectingLanguage(from source: WebViewLanguageSampleSource, with windowUUID: WindowUUID) async {
-        do {
-            let pageLanguage = try await languageDetector.detectLanguage(from: source)
-
-            guard let pageLanguage, pageLanguage != Locale.current.languageCode else { return }
-
-            let toolbarAction = ToolbarAction(
-                translationConfiguration: TranslationConfiguration(
-                    prefs: profile.prefs,
-                    state: .inactive
-                ),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.receivedTranslationLanguage
-            )
-            store.dispatch(toolbarAction)
-        } catch {
-            // TODO: FXIOS-14043 Possibly want to add telemetry for these errors.
-            logger.log(
-                "Unable to detect language from page to determine if eligible for translations.",
-                level: .warning,
-                category: .translations,
-                extra: ["LanguageDetector error": "\(error.localizedDescription)"]
-            )
+            do {
+                guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
+                let toolbarAction = ToolbarAction(
+                    translationConfiguration: TranslationConfiguration(
+                        prefs: profile.prefs,
+                        state: .inactive
+                    ),
+                    windowUUID: action.windowUUID,
+                    actionType: ToolbarActionType.receivedTranslationLanguage
+                )
+                store.dispatch(toolbarAction)
+            } catch {
+                // TODO: FXIOS-14043 Possibly want to add telemetry for these errors.
+                logger.log(
+                    "Unable to detect language from page to determine if eligible for translations.",
+                    level: .warning,
+                    category: .translations,
+                    extra: ["LanguageDetector error": "\(error.localizedDescription)"]
+                )
+            }
         }
     }
 
@@ -161,7 +141,8 @@ final class TranslationsMiddleware {
         // When translation completed, we want icon to be active mode.
         Task { @MainActor in
             do {
-                try await fetchDataWithError()
+                try await translationsService.translateCurrentPage(for: action.windowUUID)
+                _ = try await translationsService.firstResponseReceived(for: action.windowUUID)
                 dispatchAction(
                     for: ToolbarActionType.translationCompleted,
                     with: .active,
@@ -219,15 +200,5 @@ final class TranslationsMiddleware {
             actionType: GeneralBrowserActionType.showToast
         )
         store.dispatch(toastAction)
-    }
-
-    // TODO: FXIOS-13844 - Simulate a fake asynchronous call for now
-    private func fetchDataWithError() async throws {
-        enum ExampleError: Error { case example }
-        throw ExampleError.example
-    }
-
-    private func fetchData() async throws {
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
     }
 }

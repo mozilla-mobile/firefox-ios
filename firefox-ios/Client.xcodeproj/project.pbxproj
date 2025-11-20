@@ -1532,10 +1532,14 @@
 		C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BE62AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift */; };
 		C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BEA2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift */; };
 		C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */; };
+		C2DFB1452ECE62EE004E20AB /* MockTranslationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DFB1442ECE62E8004E20AB /* MockTranslationsService.swift */; };
+		C2DFB1472ECE686E004E20AB /* TranslationsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */; };
 		C2EBB68F2E8181F20029E82C /* DismissableNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */; };
 		C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335322ECE33720071588A /* translations-engine.worker.js */; };
 		C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335332ECE33720071588A /* TranslationsEngine.js */; };
 		C2F335372ECE339F0071588A /* TranslationsEngine.html in Resources */ = {isa = PBXBuildFile; fileRef = C2F335362ECE339F0071588A /* TranslationsEngine.html */; };
+		C2F336EB2ECE44840071588A /* TranslationsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */; };
+		C2F336ED2ECE45E20071588A /* TranslationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F336EC2ECE45DB0071588A /* TranslationsService.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
 		C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45F44681D087DB600CB7EF0 /* TopTabsViewController.swift */; };
@@ -9910,11 +9914,15 @@
 		C2D80BEA2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialAutofillCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBrowserCoordinator.swift; sourceTree = "<group>"; };
 		C2D8478BB059B9BFF018B491 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
+		C2DFB1442ECE62E8004E20AB /* MockTranslationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationsService.swift; sourceTree = "<group>"; };
+		C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsServiceTests.swift; sourceTree = "<group>"; };
 		C2E645149EB18AD0BDBB9696 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Search.strings"; sourceTree = "<group>"; };
 		C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableNavigationViewController.swift; sourceTree = "<group>"; };
 		C2F335322ECE33720071588A /* translations-engine.worker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "translations-engine.worker.js"; sourceTree = "<group>"; };
 		C2F335332ECE33720071588A /* TranslationsEngine.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TranslationsEngine.js; sourceTree = "<group>"; };
 		C2F335362ECE339F0071588A /* TranslationsEngine.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = TranslationsEngine.html; path = Client/Frontend/UserContent/UserScripts/TranslationsEngine/TranslationsEngine.html; sourceTree = "<group>"; };
+		C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsServiceProtocol.swift; sourceTree = "<group>"; };
+		C2F336EC2ECE45DB0071588A /* TranslationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsService.swift; sourceTree = "<group>"; };
 		C326435B8F6E47257506096B /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Search.strings; sourceTree = "<group>"; };
 		C3334FC58A76876D8E9F00F3 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		C34D464780B65FD5A9F3118B /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Search.strings; sourceTree = "<group>"; };
@@ -14152,6 +14160,7 @@
 		AA5E81452EB12BAB00919E60 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
+				C2F336E92ECE44740071588A /* Service */,
 				C25018DD2ECC75970071506F /* Engine */,
 				C2886E022EC5DFDD007AE6C3 /* SchemeHandler */,
 				C2886BA82EC4A41E007AE6C3 /* TinyRouter */,
@@ -14173,6 +14182,8 @@
 		AAD9D6492EB25B2700BFECAF /* TranslationsTests */ = {
 			isa = PBXGroup;
 			children = (
+				C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */,
+				C2DFB1442ECE62E8004E20AB /* MockTranslationsService.swift */,
 				C25020832ECDE7550071506F /* MockTranslationsSchemeHandler.swift */,
 				C25020812ECDE31D0071506F /* TranslationsEngineTests.swift */,
 				C25017372ECBAE020071506F /* ASTranslationModelsFetcherTests.swift */,
@@ -14455,6 +14466,15 @@
 				0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */,
 			);
 			path = ThemedTableViewCells;
+			sourceTree = "<group>";
+		};
+		C2F336E92ECE44740071588A /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				C2F336EC2ECE45DB0071588A /* TranslationsService.swift */,
+				C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		C714D27C2E45388D00FC02E6 /* ShortcutsLibrary */ = {
@@ -18799,6 +18819,7 @@
 				8A5564022D23317100028CA7 /* ContextMenuAction.swift in Sources */,
 				219588942D6E519F00B8715E /* AutofillPasswordSetting.swift in Sources */,
 				8C77849F2DF33707001FB8B0 /* OnboardingService.swift in Sources */,
+				C2F336ED2ECE45E20071588A /* TranslationsService.swift in Sources */,
 				1D1418782DC92E0C004BBFAD /* ChangeRSServerSetting.swift in Sources */,
 				8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */,
 				8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */,
@@ -19296,6 +19317,7 @@
 				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeWithBackdrop.swift in Sources */,
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
+				C2F336EB2ECE44840071588A /* TranslationsServiceProtocol.swift in Sources */,
 				E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */,
 				8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */,
 				C2886BAE2EC4A62D007AE6C3 /* TinyRouterError.swift in Sources */,
@@ -19493,6 +19515,7 @@
 				C8DC90D22A067C6D0008832B /* MarkupAttributionUtilityTests.swift in Sources */,
 				BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */,
 				8A6E63CB2D4A6F230040D355 /* JumpBackInSectionStateTests.swift in Sources */,
+				C2DFB1472ECE686E004E20AB /* TranslationsServiceTests.swift in Sources */,
 				8A6B799B2CDBCF3D003C3077 /* TopSitesManagerTests.swift in Sources */,
 				21737FB72878A4BD000A9A92 /* HistoryPanelViewModelTests.swift in Sources */,
 				43B658D929CE251C00C9EF08 /* CreditCardInputViewModelTests.swift in Sources */,
@@ -19557,6 +19580,7 @@
 				0B6AB0412DCA3CB900F03AF6 /* DocumentLoggerTests.swift in Sources */,
 				215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */,
 				C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */,
+				C2DFB1452ECE62EE004E20AB /* MockTranslationsService.swift in Sources */,
 				354F8FAB2E0985B9007DFFEB /* SearchBarStateTests.swift in Sources */,
 				5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */,
 				AAD9D64B2EB25B3500BFECAF /* TranslationsMiddlewareTests.swift in Sources */,
