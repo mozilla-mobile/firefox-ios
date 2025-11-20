@@ -701,6 +701,17 @@ class BrowserViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
+        var isToolbarCollapsed: Bool {
+            guard #available(iOS 26.0, *) else { return false }
+            switch scrollController {
+            case let legacy as LegacyTabScrollController:
+                return legacy.toolbarState == .collapsed
+            case let handler as TabScrollHandler:
+                return handler.toolbarDisplayState.isCollapsed
+            default: return false
+            }
+        }
+
         if isBottomSearchBar {
             header.isClearBackground = false
 
@@ -717,7 +728,8 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
-        bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
+        bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isToolbarCollapsed
+        bottomContainer.isHidden = isToolbarCollapsed
 
         let maskView = UIView(frame: CGRect(x: 0,
                                             y: -contentContainer.frame.origin.y,
