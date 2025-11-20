@@ -9,6 +9,7 @@ public protocol SummarizerService {
     /// Generates a complete summary string from the given web view's page content.
     /// - Throws: `SummarizerError` if the content is unsuitable or summarization fails.
     /// - Returns: A fully summarized string for displaying.
+    @MainActor
     func summarize(from webView: WKWebView) async throws -> String
 
     /// Streams a summary response from the web view's page content in chunks.
@@ -16,13 +17,16 @@ public protocol SummarizerService {
     /// - Returns: An `AsyncThrowingStream` emitting summary chunks as they arrive.
     /// - Note: Due to a Swift limitation (https://github.com/swiftlang/swift/issues/64165),
     ///   the stream must use a generic `Error` type. But all errors thrown from this method are `SummarizerError`.
+    @MainActor
     func summarizeStreamed(from webView: WKWebView) -> AsyncThrowingStream<String, Error>
 
+    @MainActor
     func closeCurrentStreamedSession()
 }
 
 /// A default service that handles checking if a web page can be summarized and
 /// delegates summarization to the provided summarizer backend.
+@MainActor
 public final class DefaultSummarizerService: SummarizerService {
     private let summarizer: SummarizerProtocol
     private let checker: SummarizationCheckerProtocol
@@ -48,7 +52,6 @@ public final class DefaultSummarizerService: SummarizerService {
         self.maxWords = maxWords
     }
 
-    @MainActor
     public func summarize(from webView: WKWebView) async throws -> String {
         do {
             let text = try await extractSummarizableText(from: webView)
@@ -69,7 +72,6 @@ public final class DefaultSummarizerService: SummarizerService {
     public func summarizeStreamed(from webView: WKWebView) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in
             streamContinuation = continuation
-            // TODO: FXIOS-13418 Passing closure as a 'sending' parameter risks causing data races
             Task { @MainActor in
                 do {
                     let text = try await self.extractSummarizableText(from: webView)

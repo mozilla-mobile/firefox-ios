@@ -8,14 +8,17 @@ public protocol SummarizerServiceFactory {
     /// An object which responds to Summarize activities.
     var lifecycleDelegate: SummarizerServiceLifecycle? { get set }
 
+    @MainActor
     func make(isAppleSummarizerEnabled: Bool,
               isHostedSummarizerEnabled: Bool,
               config: SummarizerConfig?) -> SummarizerService?
 
     /// Returns the max words that the summarizer Service can handle.
+    @MainActor
     func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int
 }
 
+@MainActor
 public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
     public weak var lifecycleDelegate: SummarizerServiceLifecycle?
 
