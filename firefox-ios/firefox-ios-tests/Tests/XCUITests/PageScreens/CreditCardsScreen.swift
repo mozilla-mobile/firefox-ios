@@ -44,10 +44,7 @@ final class CreditCardsScreen {
     }
 
     func assertCardSaved(containing lastDigits: String, details: [String]) {
-        /* let table = app.tables.firstMatch
-        BaseTestCase().mozWaitForElementToExist(table)*/
-
-        let cardCellButton = app.tables.cells.element(boundBy: 1).buttonContainingText(lastDigits)
+        let cardCellButton = app.tables.cells.element(boundBy: 1).buttons.elementContainingText(lastDigits)
         BaseTestCase().mozWaitForElementToExist(cardCellButton)
 
         for detail in details {
