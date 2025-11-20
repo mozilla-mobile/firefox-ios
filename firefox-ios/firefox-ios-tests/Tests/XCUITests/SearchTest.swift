@@ -203,7 +203,7 @@ class SearchTests: FeatureFlaggedTestBase {
         // Open the list of default search engines and select the desired
         app.tables.cells.element(boundBy: 0).waitAndTap()
         let tablesQuery2 = app.tables
-        tablesQuery2.staticTexts[searchEngine].waitAndTap()
+        tablesQuery2.staticTexts.elementContainingText(searchEngine).waitAndTap()
 
         navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
