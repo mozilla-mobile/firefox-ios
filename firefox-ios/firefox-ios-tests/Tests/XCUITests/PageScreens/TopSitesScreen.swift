@@ -111,7 +111,7 @@ final class TopSitesScreen {
     }
 
     // Long-presses on a pinned top site to show the context menu.
-    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 2.0) {
+    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 1.0) {
         let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
             .links["Pinned: \(name)"]
         BaseTestCase().mozWaitForElementToExist(pinnedSite)
