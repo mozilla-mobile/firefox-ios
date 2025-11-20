@@ -158,6 +158,7 @@ public struct PrefsKeys {
         case mainMenuKey = "MainMenuHintKey"
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
+        case relayMaskKey = "ContextualHintRelayMaskKey"
         case toolbarUpdateKey = "ContextualHintToolbarUpdate"
         case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
