@@ -438,7 +438,7 @@ final class LocationView: UIView,
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let bottomAddressBarYoffset = if #available(iOS 26.0, *) {
             UX.bottomAddressBarYoffset
-        } else  {
+        } else {
             hasHomeIndicator ? UX.bottomAddressBarYoffset : UX.bottomAddressBarYoffsetForHomeButton
         }
         let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? bottomAddressBarYoffset : UX.topAddressBarYoffset
