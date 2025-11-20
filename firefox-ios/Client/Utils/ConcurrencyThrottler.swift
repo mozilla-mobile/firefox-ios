@@ -4,11 +4,11 @@
 import Foundation
 
 protocol ConcurrencyThrottlerProtocol {
+    @MainActor
     func throttle(completion: @escaping @Sendable () async -> Void)
 }
 
-// TODO: FXIOS-14214 - ConcurrencyThrottler is not thread-safe
-final class ConcurrencyThrottler: ConcurrencyThrottlerProtocol, @unchecked Sendable {
+final class ConcurrencyThrottler: ConcurrencyThrottlerProtocol {
     private var lastUpdateTime = Date.distantPast
     private var delay: Double
     private var taskComplete = true
