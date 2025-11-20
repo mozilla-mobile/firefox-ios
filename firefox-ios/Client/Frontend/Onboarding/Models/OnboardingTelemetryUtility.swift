@@ -8,16 +8,19 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Properties
     private let cardOrder: [String]
     private let flowType: String
+    private let onboardingVersion: String
 
     // MARK: - Initializer
-    init(with model: OnboardingViewModel) {
+    init(with model: OnboardingViewModel, onboardingVersion: String = "legacy") {
         self.cardOrder = model.cards.map { $0.name }
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
+        self.onboardingVersion = onboardingVersion
     }
 
-    init(with model: OnboardingKitViewModel) {
+    init(with model: OnboardingKitViewModel, onboardingVersion: String = "modern") {
         self.cardOrder = model.cards.map { $0.name }
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
+        self.onboardingVersion = onboardingVersion
     }
 
     // MARK: - Public methods
@@ -79,7 +82,8 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
             Key.cardType.rawValue: cardName,
             Key.sequenceID.rawValue: sequenceID(from: cardOrder),
             Key.sequencePosition.rawValue: sequencePosition(for: cardName, from: cardOrder),
-            Key.flowType.rawValue: flowType
+            Key.flowType.rawValue: flowType,
+            Key.onboardingVersion.rawValue: onboardingVersion
         ]
     }
 

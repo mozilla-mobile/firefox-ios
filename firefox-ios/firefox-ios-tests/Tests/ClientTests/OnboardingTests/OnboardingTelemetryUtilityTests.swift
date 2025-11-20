@@ -138,7 +138,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         nimbusConfigUtility.setupNimbus(withOrder: NimbusOnboardingTestingConfigUtility.CardOrder.allCards)
         let model = NimbusOnboardingFeatureLayer().getOnboardingModel(for: onboardingType)
 
-        let telemetryUtility = OnboardingTelemetryUtility(with: model)
+        let telemetryUtility = OnboardingTelemetryUtility(with: model, onboardingVersion: "legacy")
         trackForMemoryLeaks(telemetryUtility, file: file, line: line)
 
         return telemetryUtility

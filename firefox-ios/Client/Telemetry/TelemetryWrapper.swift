@@ -697,6 +697,7 @@ extension TelemetryWrapper {
         case flowType = "flow-type"
         case buttonAction = "button-action"
         case multipleChoiceButtonAction = "mutiple-choice-button-action"
+        case onboardingVersion = "onboarding-version"
 
         // Credit card
         case isCreditCardAutofillToggleEnabled = "is-credit-card-autofill-toggle-enabled"
@@ -1126,12 +1127,14 @@ extension TelemetryWrapper {
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
                let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
-               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String,
+               let onboardingVersion = extras?[ExtraKey.onboardingVersion.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.CardViewExtra(
                     cardType: type,
                     flowType: flowType,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition)
+                    sequencePosition: seqPosition,
+                    onboardingVersion: onboardingVersion)
                 GleanMetrics.Onboarding.cardView.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
@@ -1141,13 +1144,15 @@ extension TelemetryWrapper {
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
                let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
                let action = extras?[ExtraKey.buttonAction.rawValue] as? String,
-               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String,
+               let onboardingVersion = extras?[ExtraKey.onboardingVersion.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.PrimaryButtonTapExtra(
                     buttonAction: action,
                     cardType: type,
                     flowType: flowType,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition)
+                    sequencePosition: seqPosition,
+                    onboardingVersion: onboardingVersion)
                 GleanMetrics.Onboarding.primaryButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
@@ -1157,13 +1162,15 @@ extension TelemetryWrapper {
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
                let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
                let action = extras?[ExtraKey.buttonAction.rawValue] as? String,
-               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String,
+               let onboardingVersion = extras?[ExtraKey.onboardingVersion.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.SecondaryButtonTapExtra(
                     buttonAction: action,
                     cardType: type,
                     flowType: flowType,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition)
+                    sequencePosition: seqPosition,
+                    onboardingVersion: onboardingVersion)
                 GleanMetrics.Onboarding.secondaryButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
@@ -1173,13 +1180,15 @@ extension TelemetryWrapper {
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
                let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
                let action = extras?[ExtraKey.multipleChoiceButtonAction.rawValue] as? String,
-               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String,
+               let onboardingVersion = extras?[ExtraKey.onboardingVersion.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.MultipleChoiceButtonTapExtra(
                     buttonAction: action,
                     cardType: type,
                     flowType: flowType,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition)
+                    sequencePosition: seqPosition,
+                    onboardingVersion: onboardingVersion)
                 GleanMetrics.Onboarding.multipleChoiceButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
@@ -1188,12 +1197,14 @@ extension TelemetryWrapper {
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
                let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
                let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
-               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String,
+               let onboardingVersion = extras?[ExtraKey.onboardingVersion.rawValue] as? String {
                 let cardExtras = GleanMetrics.Onboarding.CloseTapExtra(
                     cardType: type,
                     flowType: flowType,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition)
+                    sequencePosition: seqPosition,
+                    onboardingVersion: onboardingVersion)
                 GleanMetrics.Onboarding.closeTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)

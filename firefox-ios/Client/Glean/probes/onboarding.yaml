@@ -138,6 +138,10 @@ onboarding:
         type: string
         description: |
           Whether it's a fresh install or an upgrade flow
+      onboarding_version:
+        type: string
+        description: |
+          The version of the onboarding UI (modern or legacy)
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
@@ -171,6 +175,10 @@ onboarding:
         type: string
         description: |
           The action that the button would lead to.
+      onboarding_version:
+        type: string
+        description: |
+          The version of the onboarding UI (modern or legacy)
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
@@ -205,6 +213,10 @@ onboarding:
         type: string
         description: |
           The action that the button would lead to.
+      onboarding_version:
+        type: string
+        description: |
+          The version of the onboarding UI (modern or legacy)
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
@@ -239,6 +251,10 @@ onboarding:
         type: string
         description: |
           The action that the button would lead to.
+      onboarding_version:
+        type: string
+        description: |
+          The version of the onboarding UI (modern or legacy)
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18358
     data_reviews:
@@ -267,6 +283,10 @@ onboarding:
         type: string
         description: |
           Whether it's a fresh install or an upgrade flow
+      onboarding_version:
+        type: string
+        description: |
+          The version of the onboarding UI (modern or legacy)
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14566
     data_reviews:
