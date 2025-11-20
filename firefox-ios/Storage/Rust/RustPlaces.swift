@@ -72,6 +72,11 @@ public protocol HistoryHandler {
         and urlString: String,
         completion: @Sendable @escaping (Result<(), any Error>) -> Void
     )
+
+    func deleteHistoryMetadataOlderThan(
+        olderThan: Int64,
+        completion: @escaping @Sendable (Bool) -> Void
+    )
 }
 
 // TODO: FXIOS-13208 Make RustPlaces actually Sendable
@@ -410,8 +415,11 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
             }
     }
 
-    public func createFolder(parentGUID: GUID, title: String,
-                             position: UInt32?) -> Deferred<Maybe<GUID>> {
+    public func createFolder(
+        parentGUID: GUID,
+        title: String,
+        position: UInt32?
+    ) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createFolder(
                 parentGUID: parentGUID,
@@ -422,9 +430,12 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     }
 
     /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
-    public func createFolder(parentGUID: GUID, title: String,
-                             position: UInt32?,
-                             completion: @Sendable @escaping (Result<GUID, any Error>) -> Void) {
+    public func createFolder(
+        parentGUID: GUID,
+        title: String,
+        position: UInt32?,
+        completion: @Sendable @escaping (Result<GUID, any Error>) -> Void
+    ) {
         withWriter({ connection in
                 return try connection.createFolder(
                     parentGUID: parentGUID,
@@ -592,6 +603,16 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
         return withWriter { connection in
             let response: Void = try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
             return response
+        }
+    }
+
+    public func deleteHistoryMetadataOlderThan(
+        olderThan: Int64,
+        completion: @escaping @Sendable (Bool) -> Void
+    ) {
+        let deferredResponse = deleteHistoryMetadataOlderThan(olderThan: olderThan)
+        deferredResponse.upon { result in
+            completion(result.isSuccess)
         }
     }
 

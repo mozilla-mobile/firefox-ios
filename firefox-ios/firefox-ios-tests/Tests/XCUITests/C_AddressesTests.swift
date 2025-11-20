@@ -766,8 +766,12 @@ class O_AddressesTests: BaseTestCase {
         typeEmail(email: "test2@mozilla.com", updateText: true)
     }
 
-    private func updateFieldAndValidate(field: String, newValue: String, isInfoDisplayed: Bool = false,
-                                        isPhoneField: Bool = false) {
+    private func updateFieldAndValidate(
+        field: String,
+        newValue: String,
+        isInfoDisplayed: Bool = false,
+        isPhoneField: Bool = false
+    ) {
         reachAddNewAddressScreen()
         addNewAddress()
         tapSave()

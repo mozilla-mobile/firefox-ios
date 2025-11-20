@@ -5,8 +5,8 @@
 import SnapKit
 
 extension BrowserViewController: TabScrollHandler.Delegate,
-                                ToolbarAnimatorDelegate,
-                                ToolbarViewProtocol {
+                                 ToolbarAnimator.Delegate,
+                                 ToolbarViewProtocol {
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
         updateToolbarContext()
         toolbarAnimator?.updateToolbarTransition(progress: progress, towards: state)

@@ -72,7 +72,7 @@ workflows:
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
 
-    - xcode-test-without-building@0:
+    - xcode-test-without-building@0.5.1:
         continue_on_fail: true
         timeout: 1200
         inputs:
@@ -176,6 +176,13 @@ workflows:
                 exit 1
             fi
     - script@1.2.1:
+        title: Remove cache
+        is_always_run: true
+        inputs:
+        - content: |
+            export PATH="${PATH#"$HOME/.bitrise-xcelerate/bin:"}"
+            envman add --key PATH --value "$PATH"
+    - script@1.2.1:
         title: Override xctestrun file to UnitTests
         inputs:
         - content: |-
@@ -195,7 +202,7 @@ workflows:
             envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
 
-    - xcode-test-without-building@0.4.0:
+    - xcode-test-without-building@0.5.1:
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.1
@@ -299,7 +306,7 @@ workflows:
     - 2_certificate_and_profile
     steps:
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0.4.2:
+    - xcode-test-without-building@0.5.1:
         title: Sanity check on iOS 26
         timeout: 1200
         inputs:
@@ -322,7 +329,7 @@ workflows:
     - 2_certificate_and_profile
     steps:
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0.4.2:
+    - xcode-test-without-building@0.5.1:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
@@ -929,6 +936,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1054,6 +1065,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1152,6 +1167,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1654,7 +1673,7 @@ workflows:
 
             echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
-    - xcode-test-without-building@0.4.2:
+    - xcode-test-without-building@0.5.1:
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.1
@@ -1700,7 +1719,7 @@ workflows:
         - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.1
-    - xcode-test-without-building@0.4.2:
+    - xcode-test-without-building@0.5.1:
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.1
@@ -1736,7 +1755,7 @@ workflows:
             fi
         - title: Check if build is scheduled or regular to set the test plan
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0.4.2:
+    - xcode-test-without-building@0.5.1:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
@@ -2309,6 +2328,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-

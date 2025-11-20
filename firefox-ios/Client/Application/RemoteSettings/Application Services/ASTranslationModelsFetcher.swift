@@ -36,6 +36,7 @@ protocol TranslationModelsFetcherProtocol {
     func fetchTranslatorWASM() -> Data?
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data?
     func fetchModelBuffer(recordId: String) -> Data?
+    func prewarmResources(for sourceLang: String, to targetLang: String)
 }
 
 final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendable {
@@ -141,6 +142,64 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         }
 
         return attachment
+    }
+
+    /// Pre-warms resources by fetching models and WASM binary to cache them.
+    /// Calling this method multiple times for the same language pair is safe and fast.
+    func prewarmResources(for sourceLang: String, to targetLang: String) {
+        _ = fetchTranslatorWASM()
+        let recordsToPreWarm = getRecordsForLanguagePair(from: sourceLang, to: targetLang)
+        prewarmAttachments(for: recordsToPreWarm)
+    }
+
+    /// Pre-warms attachments for a list of records by fetching them
+    /// Calling this method multiple times for the same attachment pair is safe
+    /// since attachments will be fetched from network only once and then cached.
+    private func prewarmAttachments(for records: [RemoteSettingsRecord]) {
+        for record in records {
+            _ = try? modelsClient?.getAttachment(record: record)
+        }
+    }
+
+    /// Gets all records needed for a language pair (direct or pivot)
+    /// If no direct model is found, attempts to find pivot models through `Constants.pivotLanguage`.
+    /// e.g. given `fr` -> `en` and `en` -> `it` we can translate `fr` -> `it`.
+    /// TODO(FXIOS-14188): unify with `fetchModels` with `getRecordsForLanguagePair` logic.
+    /// Both methods perform direct-vs-pivot selection.
+    private func getRecordsForLanguagePair(
+        from sourceLang: String,
+        to targetLang: String
+    ) -> [RemoteSettingsRecord] {
+        guard let records = modelsClient?.getRecords(syncIfEmpty: true) else {
+            logger.log("No model records found.", level: .warning, category: .remoteSettings)
+            return []
+        }
+
+        // Try to find a direct model first for the pair sourceLang -> targetLang
+        let directRecords = getLanguageModelRecords(records: records, from: sourceLang, to: targetLang)
+        if !directRecords.isEmpty {
+            return directRecords
+        }
+
+        // Fallback to pivot models through Constants.pivotLanguage
+        // This will search for two pairs sourceLang -> en and en -> targetLang
+        // in order to build a translation pipeline for sourceLang -> targetLang
+        let sourceToPivotRecords = getLanguageModelRecords(records: records, from: sourceLang, to: Constants.pivotLanguage)
+        let pivotToTargetRecords = getLanguageModelRecords(records: records, from: Constants.pivotLanguage, to: targetLang)
+
+        return sourceToPivotRecords + pivotToTargetRecords
+    }
+
+    /// Gets all model records for a given language pair
+    private func getLanguageModelRecords(
+        records: [RemoteSettingsRecord],
+        from sourceLang: String,
+        to targetLang: String
+    ) -> [RemoteSettingsRecord] {
+        return records.filter { record in
+            guard let fields: ModelFieldsRecord = decodeRecord(record) else { return false }
+            return fields.fromLang == sourceLang && fields.toLang == targetLang
+        }
     }
 
     /// Collects all files for a given language pair.

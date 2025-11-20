@@ -5,6 +5,7 @@
 import UIKit
 import SnapKit
 
+@MainActor
 protocol ToolbarViewProtocol: AnyObject {
     var header: BaseAlphaStackView { get }
     var topBlurView: UIVisualEffectView { get }
@@ -17,10 +18,6 @@ protocol ToolbarViewProtocol: AnyObject {
     var overKeyboardContainerConstraint: Constraint? { get }
 }
 
-protocol ToolbarAnimatorDelegate: AnyObject {
-    func dispatchScrollAlphaChange(alpha: CGFloat)
-}
-
 struct ToolbarContext {
     var overKeyboardContainerHeight: CGFloat
     var bottomContainerHeight: CGFloat
@@ -29,13 +26,19 @@ struct ToolbarContext {
 
 @MainActor
 final class ToolbarAnimator {
+    protocol Delegate: AnyObject {
+        @MainActor
+        func dispatchScrollAlphaChange(alpha: CGFloat)
+    }
+
     struct UX {
         static let transitionDuration: TimeInterval = 0.2
         static let topToolbarDuration: TimeInterval = 0.3
         static let bottomToolbarDuration: TimeInterval = 0.4
     }
+
     weak var view: ToolbarViewProtocol?
-    weak var delegate: ToolbarAnimatorDelegate?
+    weak var delegate: ToolbarAnimator.Delegate?
     private var context: ToolbarContext
 
     init(context: ToolbarContext) {
