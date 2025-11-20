@@ -6,7 +6,6 @@ import Foundation
 @testable import Client
 
 final class MockTranslationsTelemetry: TranslationsTelemetryProtocol {
-
     var pageLanguageIdentifiedCalledCount = 0
     var pageLanguageIdentificationFailedCalledCount = 0
     var translationFailedCalledCount = 0

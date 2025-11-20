@@ -1482,6 +1482,7 @@
 		C24B31272E8686460049134A /* NavigationBarMiddleButtonSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */; };
 		C24B31292E86B8470049134A /* GenericSelectableItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */; };
 		C24E2D2A2ECF960000BBCFA7 /* MockTranslationsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */; };
+		C24E2D2C2ECF9DEF00BBCFA7 /* TranslationsTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24E2D2B2ECF9DE900BBCFA7 /* TranslationsTelemetryTests.swift */; };
 		C2500D7C2ECB4A600071506F /* MockTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2500D7B2ECB4A5D0071506F /* MockTranslationModelsFetcher.swift */; };
 		C25017362ECBAD0A0071506F /* MockRemoteSettingsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25017352ECBAD000071506F /* MockRemoteSettingsClient.swift */; };
 		C25017382ECBAE030071506F /* ASTranslationModelsFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25017372ECBAE020071506F /* ASTranslationModelsFetcherTests.swift */; };
@@ -9854,6 +9855,7 @@
 		C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarMiddleButtonSelectionView.swift; sourceTree = "<group>"; };
 		C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSelectableItemCellView.swift; sourceTree = "<group>"; };
 		C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationsTelemetry.swift; sourceTree = "<group>"; };
+		C24E2D2B2ECF9DE900BBCFA7 /* TranslationsTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsTelemetryTests.swift; sourceTree = "<group>"; };
 		C2500D7B2ECB4A5D0071506F /* MockTranslationModelsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationModelsFetcher.swift; sourceTree = "<group>"; };
 		C25017352ECBAD000071506F /* MockRemoteSettingsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRemoteSettingsClient.swift; sourceTree = "<group>"; };
 		C25017372ECBAE020071506F /* ASTranslationModelsFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTranslationModelsFetcherTests.swift; sourceTree = "<group>"; };
@@ -14186,6 +14188,7 @@
 		AAD9D6492EB25B2700BFECAF /* TranslationsTests */ = {
 			isa = PBXGroup;
 			children = (
+				C24E2D2B2ECF9DE900BBCFA7 /* TranslationsTelemetryTests.swift */,
 				C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */,
 				C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */,
 				C2DFB1442ECE62E8004E20AB /* MockTranslationsService.swift */,
@@ -19446,6 +19449,7 @@
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
 				0B7B053D2D647D00007FD7AC /* TemporaryDocumentTests.swift in Sources */,
 				C714D6372E46570700FC02E6 /* ShortcutsLibraryStateTests.swift in Sources */,
+				C24E2D2C2ECF9DEF00BBCFA7 /* TranslationsTelemetryTests.swift in Sources */,
 				E16941B42C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift in Sources */,
 				0B7B05412D64C088007FD7AC /* MockURLResponse.swift in Sources */,
 				EDD334902D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift in Sources */,
