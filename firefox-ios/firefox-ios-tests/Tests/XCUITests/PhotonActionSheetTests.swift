@@ -40,7 +40,7 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         }
 
         // Verify that the site is pinned to top
-        
+
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let cell = itemCell.staticTexts["Example Domain"]
         mozWaitForElementToExist(cell)
@@ -72,6 +72,7 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
+
         // Open Page Action Menu Sheet and Pin the site
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenuMore)
