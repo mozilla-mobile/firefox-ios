@@ -93,7 +93,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     }
 
     private func openNewShareSheet_TAE() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL("example.com")
