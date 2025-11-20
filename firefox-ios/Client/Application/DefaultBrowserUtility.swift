@@ -7,19 +7,23 @@ import Shared
 import Common
 
 @MainActor
-struct DefaultBrowserUtil {
+struct DefaultBrowserUtility {
     let userDefault: UserDefaultsInterface
     let telemtryWrapper: TelemetryWrapperProtocol
     let locale: LocaleInterface
     let application: UIApplicationInterface
     let dmaCountries = ["BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", "HR", "IT", "CY", "LV",
                         "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR", "JP"]
+
     private let logger: Logger
-    init(userDefault: UserDefaultsInterface = UserDefaults.standard,
-         telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
-         locale: LocaleInterface = Locale.current,
-         application: UIApplicationInterface = UIApplication.shared,
-         logger: Logger = DefaultLogger.shared) {
+
+    init(
+        userDefault: UserDefaultsInterface = UserDefaults.standard,
+        telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+        locale: LocaleInterface = Locale.current,
+        application: UIApplicationInterface = UIApplication.shared,
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.userDefault = userDefault
         self.telemtryWrapper = telemetryWrapper
         self.locale = locale
@@ -27,13 +31,14 @@ struct DefaultBrowserUtil {
         self.logger = logger
     }
 
-    enum UserDefaultsKey: String {
-        case keyIsBrowserDefault = "com.moz.isBrowserDefault.key"
+    struct UserDefaultsKey {
+        public static let isBrowserDefault = "com.moz.isBrowserDefault.key"
+        public static let hasPerformedMigration = "com.moz.hasPerformedMigration.key"
     }
 
-    static var isBrowserDefault: Bool {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) as? Bool ?? false }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) }
+    static var isDefaultBrowser: Bool {
+        get { UserDefaults.standard.object(forKey: UserDefaultsKey.isBrowserDefault) as? Bool ?? false }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.isBrowserDefault) }
     }
 
     func processUserDefaultState(isFirstRun: Bool) {
@@ -46,22 +51,32 @@ struct DefaultBrowserUtil {
             return
         }
 
-        logger.log("Going to try UIApplicationInterface.isDefault", level: .info, category: .setup)
+        logger.log(
+            "Going to try UIApplicationInterface.isDefault",
+            level: .info,
+            category: .setup
+        )
         guard let isDefault = try? application.isDefault(.webBrowser) else {
-            logger.log("UIApplicationInterface.isDefault was not present", level: .info, category: .setup)
+            logger.log(
+                "UIApplicationInterface.isDefault was not present",
+                level: .info,
+                category: .setup
+            )
             return
         }
 
-        logger.log("UIApplicationInterface.isDefault was successful", level: .info, category: .setup)
+        logger.log(
+            "UIApplicationInterface.isDefault was successful",
+            level: .info,
+            category: .setup
+        )
         trackIfUserIsDefault(isDefault)
 
         if isFirstRun {
             trackIfNewUserIsComingFromBrowserChoiceScreen(isDefault)
 
             if isDefault {
-                // If the user is set to default don't ask on the home page later
-                // This is temporary until we can refactor set to default flows now that we have the ability to check
-                userDefault.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
+                userDefault.set(true, forKey: UserDefaultsKey.isBrowserDefault)
             }
         }
     }
@@ -100,11 +115,6 @@ struct DefaultBrowserUtil {
                                     extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: isDefault])
     }
 
-    /// Checks if the application is set as the default web browser
-    var isDefaultBrowser: Bool {
-        return userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-    }
-
     private func trackIfNewUserIsComingFromBrowserChoiceScreen(_ isDefault: Bool) {
         guard let regionCode = locale.localeRegionCode else { return }
         // User is in a DMA effective region
@@ -115,5 +125,47 @@ struct DefaultBrowserUtil {
                                         object: .choiceScreenAcquisition,
                                         extras: [key: isDefault])
         }
+    }
+
+    /// This function consolidates the two currently used states for determining
+    /// whether we are the default browser, into a single state.
+    func migrateDefaultBrowserStatusIfNeeded() {
+        guard !userDefault.bool(forKey: UserDefaultsKey.hasPerformedMigration) else {
+            logger.log(
+                "Default browser status migration has already been completed",
+                level: .info,
+                category: .setup
+            )
+            return
+        }
+
+        let appleAPIStatus = userDefault.bool(forKey: UserDefaultsKey.isBrowserDefault)
+        let preAPIStatus = userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
+
+        logger.log(
+            "Current status info",
+            level: .info,
+            category: .setup,
+            extra: [
+                "currentAppleAPIStatus": "\(appleAPIStatus)",
+                "currentPreAPIStatus": "\(preAPIStatus)"
+            ]
+        )
+
+        // Only update the status with the old status if the current API status is false
+        if !appleAPIStatus {
+            logger.log(
+                "Migrating from old status",
+                level: .info,
+                category: .setup
+            )
+
+            userDefault.set(
+                preAPIStatus,
+                forKey: UserDefaultsKey.isBrowserDefault
+            )
+        }
+
+        userDefault.set(true, forKey: UserDefaultsKey.hasPerformedMigration)
     }
 }
