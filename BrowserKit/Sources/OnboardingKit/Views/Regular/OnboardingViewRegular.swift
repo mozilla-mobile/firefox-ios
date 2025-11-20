@@ -51,11 +51,9 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         }
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
         .onAppear {
-            // Send telemetry for initial card view
             viewModel.handlePageChange()
         }
         .onChange(of: viewModel.pageCount) { _ in
-            // Send telemetry when page changes
             viewModel.handlePageChange()
         }
     }

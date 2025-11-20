@@ -268,7 +268,6 @@ final class LaunchCoordinator: BaseCoordinator,
             onboardingVersion: onboardingVersion
         )
 
-        // Create view model and wire up telemetry callbacks
         let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
             onboardingCards: onboardingModel.cards,
             skipText: .Onboarding.LaterAction,
@@ -291,13 +290,10 @@ final class LaunchCoordinator: BaseCoordinator,
                 guard let self = self else { return }
                 manager.didSeeIntroScreen()
                 SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
-                // Note: Dismiss telemetry is handled by onDismiss callback
-
                 parentCoordinator?.didFinishLaunch(from: self)
             }
         )
         
-        // Wire up telemetry callbacks
         flowViewModel.onCardView = { cardName in
             telemetryUtility.sendCardViewTelemetry(from: cardName)
         }
