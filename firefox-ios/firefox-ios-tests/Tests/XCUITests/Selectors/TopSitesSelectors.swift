@@ -40,13 +40,13 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         description: "YouTube Top Site link label inside a Link element",
         groups: ["homepage", "topsites"]
     )
-    
+
     let PIN = Selector.imageId(
         IDs.pin,
         description: "Pin icon image",
         groups: ["homepage", "topsites"]
     )
-    
+
     let PIN_SLASH = Selector.buttonId(
         IDs.pinSlash,
         description: "Unpinned button",
