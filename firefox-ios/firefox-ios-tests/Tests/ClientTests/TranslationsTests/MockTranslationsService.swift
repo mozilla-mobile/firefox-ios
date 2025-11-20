@@ -45,7 +45,10 @@ final class MockTranslationsService: TranslationsServiceProtocol {
         return shouldOfferTranslationResult
     }
 
-    func translateCurrentPage(for windowUUID: WindowUUID) async throws {
+    func translateCurrentPage(
+        for windowUUID: WindowUUID,
+        onLanguageIdentified: ((String, String) -> Void)?
+    ) async throws {
         translateCalledWith = windowUUID
         if let error = translateError { throw error }
     }

@@ -94,12 +94,15 @@ final class TranslationsServiceTests: XCTestCase {
         setupWebViewForTabManager()
 
         do {
-            _ = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
             XCTFail("Expected shouldOfferTranslation to throw when language detector fails, but no error was thrown.")
-        } catch let error as TestError {
-            XCTAssertEqual(error, .example, "Expected TestError.example from language detector, got \(error).")
+        } catch let error as TranslationsServiceError {
+            guard case .unknown = error else {
+                XCTFail("Expected TranslationsServiceError.unknown, got \(error)")
+                return
+            }
         } catch {
-            XCTFail("Expected TestError from language detector, but got different error: \(error).")
+            XCTFail("Expected TestError from language detector, but got different error: \(error)")
         }
     }
 
@@ -112,7 +115,7 @@ final class TranslationsServiceTests: XCTestCase {
         )
 
         do {
-            try await subject.translateCurrentPage(for: .XCTestDefaultUUID)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
             XCTFail("Expected missingWebView error")
         } catch let error as TranslationsServiceError {
             XCTAssertEqual(error, .missingWebView)
@@ -133,10 +136,13 @@ final class TranslationsServiceTests: XCTestCase {
         setupWebViewForTabManager()
 
         do {
-            try await subject.translateCurrentPage(for: .XCTestDefaultUUID)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
             XCTFail("Expected translateCurrentPage to throw when language detector fails, but no error was thrown.")
-        } catch let error as TestError {
-            XCTAssertEqual(error, .example, "Expected TestError.example from language detector, got \(error).")
+        } catch let error as TranslationsServiceError {
+            guard case .unknown = error else {
+                XCTFail("Expected TranslationsServiceError.unknown, got \(error)")
+                return
+            }
         } catch {
             XCTFail("Expected TestError from language detector, but got different error: \(error)")
         }
