@@ -113,6 +113,9 @@ TopSites:
 TrackingProtection:
   description: Corresponds to the enhanced tracking protection bottom sheet which can be displayed over a webpage.
   
+Translations:
+  description: Corresponds to the AI-powered feature that translates webpage content into different languages.
+
 TrendingSearches:
   description: Corresponds to the trending searches feature.
 
