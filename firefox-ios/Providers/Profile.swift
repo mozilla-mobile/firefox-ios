@@ -30,7 +30,8 @@ import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.PendingCommand
 import struct MozillaAppServices.RemoteSettingsConfig2
 
-public protocol SyncManager {
+// TODO: FXIOS-14225 - SyncManager shouldn't be Sendable
+public protocol SyncManager: Sendable {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
     var syncDisplayState: SyncDisplayState? { get }
@@ -526,12 +527,10 @@ open class BrowserProfile: Profile,
 
         // If for some reason we don't have a sync manager, just return
         // the result of setLocalTabs
-        guard self.syncManager != nil else { return res }
+        guard let syncManager = self.syncManager else { return res }
 
         // Chain syncTabs after setLocalTabs has completed
         return res.bind { result in
-            guard let syncManager = self.syncManager else { return res }
-
             // Only sync if the local tabs were successfully set
             return result.isSuccess
                 // Return the original result from setLocalTabs
