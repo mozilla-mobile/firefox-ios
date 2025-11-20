@@ -5,6 +5,7 @@
 @testable import SummarizeKit
 import XCTest
 
+@MainActor
 final class SummarizerServiceTests: XCTestCase {
     static let mockResponse = ["Summarized", "content"]
     static let maxWords = 100
