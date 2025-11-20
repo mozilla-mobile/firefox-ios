@@ -60,7 +60,7 @@ struct DefaultBrowserUtil {
 
             if isDefault {
                 // If the user is set to default don't ask on the home page later
-                // This is temporary until we can refactor set to default flows now that we have the ability to check 
+                // This is temporary until we can refactor set to default flows now that we have the ability to check
                 userDefault.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
             }
         }
