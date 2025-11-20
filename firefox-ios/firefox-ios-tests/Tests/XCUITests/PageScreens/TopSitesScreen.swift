@@ -117,7 +117,7 @@ final class TopSitesScreen {
         BaseTestCase().mozWaitForElementToExist(pinnedSite)
         pinnedSite.waitAndTap()
     }
-    
+
     func tapPinSlashIcon() {
         sel.PIN_SLASH.element(in: app).waitAndTap()
     }
