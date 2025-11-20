@@ -10,7 +10,6 @@ import XCTest
 
 class TestSQLitePinnedSites: XCTestCase {
     let files = MockFiles()
-    
     @discardableResult
     private func chainSuccess(
         _ initial: @Sendable () -> Success,
