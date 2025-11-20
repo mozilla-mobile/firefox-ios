@@ -45,7 +45,7 @@ class QRCodeViewController: UIViewController {
 
     private var state: QRCodeViewControllerState = .scanning
 
-    private nonisolated let captureSession: AVCaptureSession = {
+    nonisolated private let captureSession: AVCaptureSession = {
         let session = AVCaptureSession()
         session.sessionPreset = AVCaptureSession.Preset.high
         return session
