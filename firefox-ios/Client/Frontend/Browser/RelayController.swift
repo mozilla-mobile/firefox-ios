@@ -149,8 +149,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
 
-        guard let webView = tab.webView else { completion(.error); return }
-        guard let client else { completion(.error); return }
+        guard let webView = tab.webView, let client else { return }
         Task {
             let (email, result) = await generateRelayMask(for: tab.url?.baseDomain ?? "", client: client)
             guard result != .error else { completion(.error); return }
