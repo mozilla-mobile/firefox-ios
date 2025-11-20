@@ -142,7 +142,7 @@ final class TranslationsMiddleware {
         Task { @MainActor in
             do {
                 try await translationsService.translateCurrentPage(for: action.windowUUID)
-                _ = try await translationsService.isTranslationsDone(for: action.windowUUID)
+                _ = try await translationsService.firstResponseReceived(for: action.windowUUID)
                 dispatchAction(
                     for: ToolbarActionType.translationCompleted,
                     with: .active,

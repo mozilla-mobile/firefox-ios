@@ -78,9 +78,9 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Translation is a living process ( e.g live chat in twitch ) so there is no single "done" state.
     /// In Gecko, we mark translations done when the engine is ready.
     /// In iOS, we will go a step further and wait for the first translation response to be received.
-    func isTranslationsDone(for windowUUID: WindowUUID) async throws -> Bool {
+    func firstResponseReceived(for windowUUID: WindowUUID) async throws -> Bool {
         let webView = try currentWebView(for: windowUUID)
-        return try await isTranslationsDoneJS(on: webView)
+        return try await firstResponseReceivedJS(on: webView)
     }
 
     /// Tells the engine to discard translations for a document.
@@ -119,8 +119,8 @@ final class TranslationsService: TranslationsServiceProtocol {
         }
     }
 
-    /// Evaluates the JS `isDone()` hook to check whether initial translation output has been produced.
-    private func isTranslationsDoneJS(on webView: WKWebView) async throws -> Bool {
+    /// Evaluates the JS hook to check whether initial translation output has been produced.
+    private func firstResponseReceivedJS(on webView: WKWebView) async throws -> Bool {
         let js = "return await window.__firefox__.Translations.isDone()"
         do {
             let result = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)

@@ -13,29 +13,29 @@ final class MockTranslationsService: TranslationsServiceProtocol {
 
     private let translateError: Error?
 
-    private let isDoneResult: Bool
-    private let isDoneError: Error?
+    private let firstResponseReceivedResult: Bool
+    private let firstResponseReceivedError: Error?
 
     private let discardError: Error?
 
     private(set) var shouldOfferTranslationCalledWith: WindowUUID?
     private(set) var translateCalledWith: WindowUUID?
-    private(set) var isDoneCalledWith: WindowUUID?
+    private(set) var firstResponseReceivedCalledWith: WindowUUID?
     private(set) var discardCalledWith: WindowUUID?
 
     init(
         shouldOfferTranslationResult: Bool = false,
         shouldOfferTranslationError: Error? = nil,
         translateError: Error? = nil,
-        isDoneResult: Bool = true,
-        isDoneError: Error? = nil,
+        firstResponseReceivedResult: Bool = true,
+        firstResponseReceivedError: Error? = nil,
         discardError: Error? = nil
     ) {
         self.shouldOfferTranslationResult = shouldOfferTranslationResult
         self.shouldOfferTranslationError = shouldOfferTranslationError
         self.translateError = translateError
-        self.isDoneResult = isDoneResult
-        self.isDoneError = isDoneError
+        self.firstResponseReceivedResult = firstResponseReceivedResult
+        self.firstResponseReceivedError = firstResponseReceivedError
         self.discardError = discardError
     }
 
@@ -50,10 +50,10 @@ final class MockTranslationsService: TranslationsServiceProtocol {
         if let error = translateError { throw error }
     }
 
-    func isTranslationsDone(for windowUUID: WindowUUID) async throws -> Bool {
-        isDoneCalledWith = windowUUID
-        if let error = isDoneError { throw error }
-        return isDoneResult
+    func firstResponseReceived(for windowUUID: WindowUUID) async throws -> Bool {
+        firstResponseReceivedCalledWith = windowUUID
+        if let error = firstResponseReceivedError { throw error }
+        return firstResponseReceivedResult
     }
 
     func discardTranslations(for windowUUID: WindowUUID) async throws {
