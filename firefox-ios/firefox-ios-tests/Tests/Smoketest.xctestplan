@@ -423,6 +423,7 @@
         "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTests\/testPinToShortcuts_andThenRemovingShortcuts()",
+        "PhotonActionSheetTests\/testSharePageWithShareSheetOptions_TAE()",
         "PhotonActionSheetTests\/testShareSheetOpenAndCancel()",
         "PhotonActionSheetTests\/testShareSheetSendToDevice()",
         "PocketTest",

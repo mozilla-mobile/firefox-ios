@@ -17,6 +17,7 @@ final class ToolbarScreen {
     private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app)}
     private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app)}
     private var tabToolbarMenuButton: XCUIElement { sel.TABTOOLBAR_MENUBUTTON.element(in: app) }
+    private var shareButton: XCUIElement { sel.SHARE_BUTTON.element(in: app) }
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
@@ -110,6 +111,10 @@ final class ToolbarScreen {
         let settingMenuButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settingMenuButton, timeout: TIMEOUT)
         return settingMenuButton
+    }
+
+    func tapShareButton() {
+        shareButton.waitAndTap()
     }
 
     func tapOnNewTabButton() {

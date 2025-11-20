@@ -248,6 +248,7 @@
         "PhotonActionSheetTests\/testPinToShortcuts()",
         "PhotonActionSheetTests\/testPinToShortcuts_testPinToShortcuts()",
         "PhotonActionSheetTests\/testSharePageWithShareSheetOptions()",
+        "PhotonActionSheetTests\/testSharePageWithShareSheetOptions_TAE()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_TAE()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_tabTrayExperimentOff()",

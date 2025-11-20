@@ -6,6 +6,15 @@ import XCTest
 import Common
 
 class PhotonActionSheetTests: FeatureFlaggedTestBase {
+    var toolBarScreen: ToolbarScreen!
+    var photonActionSheetScreen: PhotonActionSheetScreen!
+
+    override func setUp() {
+        super.setUp()
+        toolBarScreen = ToolbarScreen(app: app)
+        photonActionSheetScreen = PhotonActionSheetScreen(app: app)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
     // Smoketest
     func testPinToShortcuts() {
@@ -83,6 +92,16 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(shortcutCell)
     }
 
+    private func openNewShareSheet_TAE() {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("example.com")
+        waitUntilPageLoad()
+        toolBarScreen.tapShareButton()
+        photonActionSheetScreen.assertPhotonActionSheetExists()
+        photonActionSheetScreen.tapFennecIcon()
+    }
+
     private func openNewShareSheet() {
         app.launch()
         navigator.nowAt(HomePanelsScreen)
@@ -133,6 +152,14 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
             ]
         )
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306841
+    // Smoketest TAE
+    func testSharePageWithShareSheetOptions_TAE() {
+        app.launch()
+        openNewShareSheet_TAE()
+        photonActionSheetScreen.assertShareViewExists()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323203
