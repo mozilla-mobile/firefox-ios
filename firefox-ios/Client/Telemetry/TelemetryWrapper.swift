@@ -1097,9 +1097,9 @@ extension TelemetryWrapper {
                 GleanMetrics.App.choiceScreenAcquisition.set(choiceScreen)
             }
         case(.action, .tap, .engagementNotification, _, _):
-            GleanMetrics.Onboarding.engagementNotificationTapped.record()
+            GleanMetrics.KeyCommands.engagementNotificationTapped.record()
         case(.action, .cancel, .engagementNotification, _, _):
-            GleanMetrics.Onboarding.engagementNotificationCancel.record()
+            GleanMetrics.KeyCommands.engagementNotificationCancel.record()
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
@@ -1132,9 +1132,9 @@ extension TelemetryWrapper {
                 let cardExtras = GleanMetrics.Onboarding.CardViewExtra(
                     cardType: type,
                     flowType: flowType,
+                    onboardingVersion: onboardingVersion,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition,
-                    onboardingVersion: onboardingVersion)
+                    sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.cardView.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
@@ -1150,9 +1150,9 @@ extension TelemetryWrapper {
                     buttonAction: action,
                     cardType: type,
                     flowType: flowType,
+                    onboardingVersion: onboardingVersion,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition,
-                    onboardingVersion: onboardingVersion)
+                    sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.primaryButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
@@ -1168,9 +1168,9 @@ extension TelemetryWrapper {
                     buttonAction: action,
                     cardType: type,
                     flowType: flowType,
+                    onboardingVersion: onboardingVersion,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition,
-                    onboardingVersion: onboardingVersion)
+                    sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.secondaryButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
@@ -1186,9 +1186,9 @@ extension TelemetryWrapper {
                     buttonAction: action,
                     cardType: type,
                     flowType: flowType,
+                    onboardingVersion: onboardingVersion,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition,
-                    onboardingVersion: onboardingVersion)
+                    sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.multipleChoiceButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
@@ -1202,9 +1202,9 @@ extension TelemetryWrapper {
                 let cardExtras = GleanMetrics.Onboarding.CloseTapExtra(
                     cardType: type,
                     flowType: flowType,
+                    onboardingVersion: onboardingVersion,
                     sequenceId: seqID,
-                    sequencePosition: seqPosition,
-                    onboardingVersion: onboardingVersion)
+                    sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.closeTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
