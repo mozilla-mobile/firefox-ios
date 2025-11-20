@@ -156,7 +156,7 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306841
-    // Smoketest
+    // Smoketest TAE
     func testSharePageWithShareSheetOptions_TAE() {
         app.launch()
         openNewShareSheet_TAE()

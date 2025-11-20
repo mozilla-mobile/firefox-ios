@@ -17,16 +17,17 @@ final class PhotonActionSheetScreen {
         if #unavailable(iOS 16) {
             BaseTestCase().waitForElementsToExist(
                 [
-                    app.otherElements["ActivityListView"].navigationBars["UIActivityContentView"],
-                    app.buttons["Copy"]
+                    sel.PHOTON_ACTION_SHEET_NAVIGATION_BAR.element(in: app),
+                    sel.PHOTON_ACTION_SHEET_COPY_BUTTON.element(in: app)
                 ]
             )
         } else {
             BaseTestCase().waitForElementsToExist(
                 [
-                app.otherElements["ActivityListView"].otherElements["Example Domain"],
-                app.otherElements["ActivityListView"].otherElements["example.com"],
-                app.collectionViews.cells["Copy"]
+                    sel.PHOTON_ACTION_SHEET_WEBSITE_TITLE.element(in: app),
+                    // URL may not be present
+                    // sel.PHOTON_ACTION_SHEET_WEBSITE_URL.element(in: app),
+                    sel.PHOTON_ACTION_SHEET_COPY_BUTTON.element(in: app)
                 ]
             )
         }
@@ -44,15 +45,13 @@ final class PhotonActionSheetScreen {
     }
 
     func assertShareViewExists(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])
-
         BaseTestCase().waitForElementsToExist(
             [
-                app.staticTexts["Open in Firefox"],
-                app.staticTexts["Load in Background"],
-                app.staticTexts["Bookmark This Page"],
-                app.staticTexts["Add to Reading List"],
-                app.staticTexts["Send to Device"]
+                sel.SHARE_VIEW_OPEN_IN_FIREFOX.element(in: app),
+                sel.SHARE_VIEW_LOAD_IN_BACKGROUND.element(in: app),
+                sel.SHARE_VIEW_BOOKMARK_THIS_PAGE.element(in: app),
+                sel.SHARE_VIEW_ADD_TO_READING_LIST.element(in: app),
+                sel.SHARE_VIEW_SEND_TO_DEVICE.element(in: app)
             ]
         )
     }
