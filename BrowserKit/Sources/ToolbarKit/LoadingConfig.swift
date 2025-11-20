@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 public struct LoadingConfig: Equatable {
-    let isLoading: Bool
+    public let isLoading: Bool
     let a11yLabel: String
 
     public init(isLoading: Bool, a11yLabel: String) {
