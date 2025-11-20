@@ -22,7 +22,7 @@ import struct MozillaAppServices.ScopedKey
 import struct MozillaAppServices.AccessTokenInfo
 
 // Extends NSObject so we can use timers.
-// TODO: FXIOS-TODO Laurie - RustSyncManager shouldn't be @unchecked Sendable
+// TODO: FXIOS-14225 - RustSyncManager shouldn't be @unchecked Sendable
 public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
     // We shouldn't live beyond our containing BrowserProfile, either in the main app
     // or in an extension.
