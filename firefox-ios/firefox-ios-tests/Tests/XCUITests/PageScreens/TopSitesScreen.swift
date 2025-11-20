@@ -50,21 +50,6 @@ final class TopSitesScreen {
         }
     }
 
-    func longPressOnSite(named name: String, duration: TimeInterval = 1.0) {
-        let pred = NSPredicate(format: "label == %@", name)
-        let site = collectionView.links.matching(pred).firstMatch
-        BaseTestCase().mozWaitForElementToExist(site)
-        site.press(forDuration: duration)
-    }
-
-    // Long-presses on a pinned top site to show the context menu.
-    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 2.0) {
-        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-            .links["Pinned: \(name)"]
-        BaseTestCase().mozWaitForElementToExist(pinnedSite)
-        pinnedSite.press(forDuration: duration)
-    }
-
     func assertVisibleTopSites(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(topSiteCellGroup, timeout: timeout)
     }
@@ -116,6 +101,21 @@ final class TopSitesScreen {
             .links["Pinned: \(name)"]
         BaseTestCase().mozWaitForElementToExist(pinnedSite)
         pinnedSite.waitAndTap()
+    }
+
+    func longPressOnSite(named name: String, duration: TimeInterval = 1.0) {
+        let pred = NSPredicate(format: "label == %@", name)
+        let site = collectionView.links.matching(pred).firstMatch
+        BaseTestCase().mozWaitForElementToExist(site)
+        site.press(forDuration: duration)
+    }
+
+    // Long-presses on a pinned top site to show the context menu.
+    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 2.0) {
+        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+            .links["Pinned: \(name)"]
+        BaseTestCase().mozWaitForElementToExist(pinnedSite)
+        pinnedSite.press(forDuration: duration)
     }
 
     func tapPinSlashIcon() {
