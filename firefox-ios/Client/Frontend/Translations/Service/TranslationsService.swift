@@ -6,14 +6,6 @@ import Foundation
 import Common
 import WebKit
 
-/// Errors thrown by `TranslationsService` when preconditions or WebView state are invalid.
-enum TranslationsServiceError: Error, Equatable {
-    case missingWebView
-    case missingSourceLanguage
-    case missingDeviceLanguage
-    case jsEvaluationFailed(reason: String)
-}
-
 /// Default implementation of `TranslationsServiceProtocol`
 @MainActor
 final class TranslationsService: TranslationsServiceProtocol {
