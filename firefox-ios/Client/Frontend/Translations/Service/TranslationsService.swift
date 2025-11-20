@@ -47,6 +47,8 @@ final class TranslationsService: TranslationsServiceProtocol {
     }
 
     /// Initiates translation of the current page.
+    /// TODO(FXIOS-12935): We should implement a lifecycle for the service similar to SummarizerServiceLifecycle
+    /// For now onLanguageIdentified is used to notify caller when language detection is done.
     func translateCurrentPage(
         for windowUUID: WindowUUID,
         onLanguageIdentified: ((String, String) -> Void)?

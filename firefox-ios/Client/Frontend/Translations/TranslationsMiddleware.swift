@@ -14,6 +14,8 @@ final class TranslationsMiddleware {
     private let translationsService: TranslationsServiceProtocol
     private let translationsTelemetry: TranslationsTelemetry
 
+    /// This is a map because multiple windows can be open at the same time.
+    /// For iPhone this, we will only have one entry at a time.
     private var translationFlowIds: [WindowUUID: UUID] = [:]
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -36,6 +38,7 @@ final class TranslationsMiddleware {
             guard let action = (action as? ToolbarAction) else { return }
 
             guard action.url?.isWebPage() == true else { return }
+            self.clearFlowId(for: action)
             self.checkTranslationsAreEligible(for: action)
 
         case ToolbarMiddlewareActionType.didTapButton:
@@ -81,7 +84,6 @@ final class TranslationsMiddleware {
         // then we go back to inactive mode and page should reload to original language.
 
         if translationConfiguration.state == .inactive {
-            actionType = .willTranslate
             let newFlowId = UUID()
             translationFlowIds[action.windowUUID] = newFlowId
             translationsTelemetry.translateButtonTapped(
@@ -92,23 +94,14 @@ final class TranslationsMiddleware {
             self.handleUpdatingTranslationIcon(for: action, with: .loading)
             self.retrieveTranslations(for: action)
         } else if translationConfiguration.state == .active {
-            // TODO(Issam): Do we want to create a new UUID when it doesn't exist or just not send telemetry?
-            // or use some unknown value?
-            let existingFlowId = translationFlowIds[action.windowUUID] ?? UUID()
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
                 actionType: .willRestore,
-                translationFlowId: existingFlowId
+                translationFlowId: flowId(for: action.windowUUID)
             )
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
             self.reloadPage(for: action)
         }
-
-        translationsTelemetry.translateButtonTapped(
-            isPrivate: toolbarState.isPrivateMode,
-            actionType: actionType,
-            translationFlowId: flowId
-        )
     }
 
     private func handleTappingRetryButtonOnToast(for action: TranslationsAction, and state: AppState) {
@@ -150,12 +143,9 @@ final class TranslationsMiddleware {
                 )
                 store.dispatch(toolbarAction)
             } catch {
-                // TODO: FXIOS-14043 Possibly want to add telemetry for these errors.
-                logger.log(
-                    "Unable to detect language from page to determine if eligible for translations.",
-                    level: .warning,
-                    category: .translations,
-                    extra: ["LanguageDetector error": "\(error.localizedDescription)"]
+                let serviceError = TranslationsServiceError.fromUnknown(error)
+                translationsTelemetry.pageLanguageIdentificationFailed(
+                    errorType: serviceError.telemetryDescription
                 )
             }
         }
@@ -177,6 +167,11 @@ final class TranslationsMiddleware {
                     and: action.windowUUID
                 )
             } catch {
+                let serviceError = TranslationsServiceError.fromUnknown(error)
+                translationsTelemetry.translationFailed(
+                    translationFlowId: flowId(for: action.windowUUID),
+                    errorType: serviceError.telemetryDescription
+                )
                 self.handleErrorFromTranslatingPage(for: action)
             }
         }
@@ -184,17 +179,13 @@ final class TranslationsMiddleware {
 
     // Reloads web view if user taps on translation button to view original page after translating
     private func reloadPage(for action: Action) {
-        // TODO(Issam): Do we want to create a new UUID when it doesn't exist or just not send telemetry?
-        // or use some <unk> value?
-        let existingFlowId = translationFlowIds[action.windowUUID] ?? UUID()
-        translationsTelemetry.webpageRestored(translationFlowId: existingFlowId)
-        // Invalidate the flow id as we are restoring the page
-        translationFlowIds[action.windowUUID] = nil
         let reloadAction = GeneralBrowserAction(
             windowUUID: action.windowUUID,
             actionType: GeneralBrowserActionType.reloadWebsite
         )
         store.dispatch(reloadAction)
+        translationsTelemetry.webpageRestored(translationFlowId: flowId(for: action.windowUUID))
+        clearFlowId(for: action)
     }
 
     // When we receive an error translating the page, we want to update the translation
@@ -234,5 +225,32 @@ final class TranslationsMiddleware {
             actionType: GeneralBrowserActionType.showToast
         )
         store.dispatch(toastAction)
+    }
+
+    /// Clears the flow ID for the given action's window.
+    private func clearFlowId(for action: Action) {
+        translationFlowIds[action.windowUUID] = nil
+    }
+
+    /// Returns the existing flow ID for this window, or generates a fallback one.
+    /// NOTE: Flow IDs should normally always exist by the time we need them, since they are
+    /// created when the user taps the translate button. If we ever observe
+    /// `translation_failed` or `webpage_restored` events whose flow ID does not match
+    /// any earlier `translate_button_tapped` event, that means we're losing session
+    /// correlation somewhere.
+    /// If this starts happening, we may need to revisit this logic or switch to using
+    /// a dedicated `<unknown>` sentinel ID instead of generating a random fallback UUID.
+    private func flowId(for windowUUID: WindowUUID) -> UUID {
+        if let existing = translationFlowIds[windowUUID] {
+            return existing
+        }
+
+        logger.log(
+            "Missing translationFlowId for window \(windowUUID); generating fallback UUID.",
+            level: .warning,
+            category: .translations
+        )
+
+        return UUID()
     }
 }
