@@ -1089,6 +1089,9 @@ public func FfiConverterTypeTabsStore_lower(_ value: TabsStore) -> UnsafeMutable
 
 
 public struct ClientRemoteTabs {
+    /**
+     * misnamed: this is the fxa_device_id of the client (which may or may not be the same as the corresponding ID in the `clients` collection)
+     */
     public var clientId: String
     public var clientName: String
     public var deviceType: DeviceType
@@ -1100,7 +1103,10 @@ public struct ClientRemoteTabs {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(clientId: String, clientName: String, deviceType: DeviceType, 
+    public init(
+        /**
+         * misnamed: this is the fxa_device_id of the client (which may or may not be the same as the corresponding ID in the `clients` collection)
+         */clientId: String, clientName: String, deviceType: DeviceType, 
         /**
          * Number of ms since the unix epoch (as reported by the server's clock)
          */lastModified: Int64, remoteTabs: [RemoteTabRecord]) {
@@ -1281,18 +1287,12 @@ public struct RemoteTabRecord {
     public var title: String
     public var urlHistory: [String]
     public var icon: String?
-    /**
-     * Number of ms since the unix epoch (as reported by the client's clock)
-     */
     public var lastUsed: Int64
     public var inactive: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(title: String, urlHistory: [String], icon: String?, 
-        /**
-         * Number of ms since the unix epoch (as reported by the client's clock)
-         */lastUsed: Int64, inactive: Bool = false) {
+    public init(title: String, urlHistory: [String], icon: String?, lastUsed: Int64, inactive: Bool = false) {
         self.title = title
         self.urlHistory = urlHistory
         self.icon = icon
