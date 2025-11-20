@@ -1,0 +1,130 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Search
+
+###############################################################################
+# Search
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Trending Searches
+search.trending_searches:
+  suggestions_shown:
+    type: event
+    description: |
+      Triggered when the trending search suggestions section is shown to the user.
+    extra_keys:
+      count:
+        type: quantity
+        description: |
+          The number of trending search suggestions displayed.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30661
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
+    metadata:
+      tags:
+        - TrendingSearches
+
+  suggestion_tapped:
+    type: event
+    description: |
+      Triggered when the user taps a trending search suggestion.
+    extra_keys:
+      position:
+        type: quantity
+        description: |
+          The position of the clicked trending search suggestion. The first suggestion has index of 1.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30661
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
+    metadata:
+      tags:
+        - TrendingSearches
+
+# Recent Searches
+search.recent_searches:
+  suggestions_shown:
+    type: event
+    description: |
+      Triggered when the recent search suggestions section is shown to the user.
+    extra_keys:
+      count:
+        type: quantity
+        description: |
+          The number of recent search suggestions displayed.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30661
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
+    metadata:
+      tags:
+        - RecentSearches
+
+  suggestion_tapped:
+    type: event
+    description: |
+      Triggered when the user taps a recent search suggestion.
+    extra_keys:
+      position:
+        type: quantity
+        description: |
+          The position of the clicked recent search suggestion. The first suggestion has index of 1.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30661
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
+    metadata:
+      tags:
+        - RecentSearches
+        
+  clear_button_tapped:
+    type: event
+    description: |
+      Triggered when a user taps the button to clear past recent search suggestions.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30751
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30761
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
+    metadata:
+      tags:
+        - RecentSearches

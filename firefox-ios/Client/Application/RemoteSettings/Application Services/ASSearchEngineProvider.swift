@@ -20,8 +20,8 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
         self.logger = logger
         self.iconDataFetcher = iconDataFetcher
         let profile = (AppContainer.shared.resolve() as Profile)
-        if selector == nil, let service = profile.remoteSettingsService {
-            self.selector = ASSearchEngineSelector(service: service)
+        if selector == nil {
+            self.selector = ASSearchEngineSelector(service: profile.remoteSettingsService )
         } else {
             self.selector = selector
         }
@@ -58,6 +58,7 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
         let closureLogger = logger
 
         // First load the unordered engines, based on the current locale and language
+        // swiftlint:disable closure_body_length
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { engineResults in
@@ -85,20 +86,32 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
             closureLogger.log("[SEC] Search order prefs: YES. Will apply (identifiers): \(orderedEngineNames)",
                               level: .info,
                               category: .remoteSettings)
-            let orderedEngines = unorderedEngines.sorted { engine1, engine2 in
-                let index1 = orderedEngineNames.firstIndex(of: engine1.engineID)
-                let index2 = orderedEngineNames.firstIndex(of: engine2.engineID)
+            let unorderedDbgInfo = unorderedEngines.map { $0.shortName + "(\($0.engineID))" }
+            closureLogger.log("[SEC] Unordered engines: \(unorderedDbgInfo)",
+                              level: .info,
+                              category: .remoteSettings)
 
-                if index1 == nil && index2 == nil {
-                    return engine1.shortName < engine2.shortName
-                }
+            var orderedEngines: [OpenSearchEngine] = []
+            var availableEngines = unorderedEngines
 
-                if let index1, let index2 {
-                    return index1 < index2
-                } else {
-                    // nil < N for all non-nil values of N.
-                    return index1 ?? -1 > index2 ?? -1
+            // Map the user's engine prefs in-order to the available engines we have from AS
+            for prefsEngineID in orderedEngineNames {
+                guard let idx = availableEngines.firstIndex(where: { $0.engineID == prefsEngineID }) else {
+                    closureLogger.log("[SEC] Engine ID in prefs, but no available engine. (Removed in RS?) \(prefsEngineID)",
+                                      level: .warning,
+                                      category: .remoteSettings)
+                    continue
                 }
+                orderedEngines.append(availableEngines[idx])
+                availableEngines.remove(at: idx)
+            }
+
+            // It's possible there are engines remaining that were not in the input preferences list.
+            // This can happen for example if a new engine is added to Remote Settings.
+            // Append these engines to the end of the list.
+            if !availableEngines.isEmpty {
+                closureLogger.log("[SEC] Appending remaining engines \(availableEngines)", level: .info, category: .remoteSettings)
+                orderedEngines = orderedEngines + availableEngines
             }
 
             let before = unorderedEngines.map { $0.shortName }
@@ -107,8 +120,10 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
                               level: .info,
                               category: .remoteSettings)
 
-            ensureMainThread { completion(finalEngineOrderingPrefs, orderedEngines) }
+            let finalEngineOutput = orderedEngines
+            ensureMainThread { completion(finalEngineOrderingPrefs, finalEngineOutput) }
         })
+        // swiftlint:enable closure_body_length
     }
 
     private func getUnorderedBundledEnginesFor(locale: Locale,

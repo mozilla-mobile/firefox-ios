@@ -9,17 +9,18 @@ import Storage
 /// Abstraction for any search client that can return trending searches. Able to mock for testing.
 protocol RecentSearchProvider {
     func addRecentSearch(_ term: String, url: String?)
-    func loadRecentSearches(completion: @escaping ([String]) -> Void)
+    func loadRecentSearches(completion: @escaping @Sendable ([String]) -> Void)
+    func clear(with date: DateProvider, completion: @escaping @Sendable (Bool) -> Void)
 }
 
 /// A provider that manages recent search terms from a user's history storage.
-struct DefaultRecentSearchProvider: RecentSearchProvider {
+final class DefaultRecentSearchProvider: RecentSearchProvider {
     private let historyStorage: HistoryHandler
     private let logger: Logger
     private let nimbus: FxNimbus
 
-    private var maxNumberOfSuggestions: Int {
-        return nimbus.features.recentSearchesFeature.value().maxSuggestions
+    private var maxNumberOfSuggestions: Int32 {
+        return Int32(nimbus.features.recentSearchesFeature.value().maxSuggestions)
     }
 
     init(
@@ -56,16 +57,23 @@ struct DefaultRecentSearchProvider: RecentSearchProvider {
     ///
     /// Only care about returning the `maxNumberOfSuggestions`.
     /// We don't have an interface to fetch only a certain amount, so we follow what Android does for now.
-    func loadRecentSearches(completion: @escaping ([String]) -> Void) {
-      // TODO: FXIOS-13782 Use get_most_recent method to fetch history
-      historyStorage.getHistoryMetadataSince(since: Int64.min) { result in
-          if case .success(let historyMetadata) = result {
-              let searches = historyMetadata.compactMap { $0.searchTerm }
-              let recentSearches = Array(searches.prefix(maxNumberOfSuggestions))
-              completion(recentSearches)
-          } else {
-              completion([])
-          }
-      }
+    func loadRecentSearches(completion: @escaping @Sendable ([String]) -> Void) {
+        historyStorage.getMostRecentHistoryMetadata(limit: maxNumberOfSuggestions) { result in
+            if case .success(let historyMetadata) = result {
+                let uniqueSearchTermResult = historyMetadata.compactMap { $0.searchTerm }
+                    .uniqued()
+                completion(uniqueSearchTermResult)
+            } else {
+                completion([])
+            }
+        }
+    }
+
+    func clear(with date: DateProvider = SystemDateProvider(), completion: @escaping @Sendable (Bool) -> Void) {
+        // TODO: FXIOS-14100 Update with new method
+        let dateInMilliseconds = date.now().toMillisecondsSince1970()
+        historyStorage.deleteHistoryMetadataOlderThan(olderThan: dateInMilliseconds) { result in
+            completion(result)
+        }
     }
 }

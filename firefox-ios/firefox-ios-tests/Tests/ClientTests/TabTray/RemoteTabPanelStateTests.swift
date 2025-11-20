@@ -22,6 +22,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
+    @MainActor
     func testTabsRefreshSkippedIfNotAllowed() {
         let initialState = RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID)
         XCTAssertEqual(initialState.refreshState,
@@ -39,6 +40,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
                        RemoteTabsPanelRefreshState.idle)
     }
 
+    @MainActor
     func testTabsRefreshSuccessStateChange() {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()
@@ -67,6 +69,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
         XCTAssertEqual(newState.devices[0].id, deviceId)
     }
 
+    @MainActor
     func testTabsRefreshBeginStateChange() {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()
@@ -78,6 +81,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
         XCTAssertEqual(newState.refreshState, RemoteTabsPanelRefreshState.refreshing)
     }
 
+    @MainActor
     func testTabsRefreshFailedStateChange() {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()
@@ -91,6 +95,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
         XCTAssertNotNil(newState.showingEmptyState)
     }
 
+    @MainActor
     func testRemoteDevicesChanged() {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()

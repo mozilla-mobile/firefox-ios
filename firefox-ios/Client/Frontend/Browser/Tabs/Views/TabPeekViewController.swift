@@ -33,7 +33,7 @@ final class TabPeekViewController: UIViewController,
         let action = TabPeekAction(tabUUID: tab.tabUUID,
                                    windowUUID: windowUUID,
                                    actionType: TabPeekActionType.didLoadTabPeek)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,7 +41,15 @@ final class TabPeekViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     override func viewDidLoad() {
@@ -60,7 +68,7 @@ final class TabPeekViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .tabPeek)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -69,11 +77,11 @@ final class TabPeekViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .tabPeek)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     private func setupWithScreenshot() {
@@ -104,7 +112,19 @@ final class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.addToBookmarks)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
+                return
+            })
+        }
+        if tabPeekState.showRemoveBookmark {
+            actions.append(UIAction(title: .TabPeekRemoveBookmark,
+                                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmarkFill),
+                                    identifier: nil) { [weak self] _ in
+                guard let self else { return }
+                let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
+                                           windowUUID: self.windowUUID,
+                                           actionType: TabPeekActionType.removeBookmark)
+                store.dispatch(action)
                 return
             })
         }
@@ -116,7 +136,7 @@ final class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.copyURL)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 return
             })
         }
@@ -128,7 +148,7 @@ final class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.closeTab)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 return
             })
         }

@@ -12,10 +12,12 @@ import enum MozillaAppServices.BookmarkRoots
 
 protocol AppStartupTelemetry {
     /// Send the relevant telemetry after App startup.
+    @MainActor
     func sendStartupTelemetry()
 }
 
-final class DefaultAppStartupTelemetry: AppStartupTelemetry {
+// TODO: FXIOS-14115 - DefaultAppStartupTelemetry @unchecked Sendable
+final class DefaultAppStartupTelemetry: AppStartupTelemetry, @unchecked Sendable {
     let profile: Profile
 
     // MARK: Init
@@ -24,6 +26,7 @@ final class DefaultAppStartupTelemetry: AppStartupTelemetry {
     }
 
     // MARK: Logic
+    @MainActor
     public func sendStartupTelemetry() {
         queryCreditCards()
         queryLogins()
@@ -41,6 +44,7 @@ final class DefaultAppStartupTelemetry: AppStartupTelemetry {
     }
 
     // MARK: Logins
+    @MainActor
     func queryLogins() {
         let loginsViewModel = PasswordManagerViewModel(
             profile: profile,

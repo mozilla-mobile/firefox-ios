@@ -6,7 +6,7 @@ import Foundation
 import UIHelpers
 import UIKit
 
-public class ShortcutsManager {
+public final class ShortcutsManager {
     let shortcutsKey = "Shortcuts"
 
     private var shortcuts: [Shortcut] {

@@ -7,6 +7,7 @@ import XCTest
 import Shared
 @testable import Client
 
+@MainActor
 class ContextualHintEligibilityUtilityTests: XCTestCase {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 

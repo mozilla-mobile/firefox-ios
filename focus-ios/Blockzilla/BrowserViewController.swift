@@ -13,7 +13,7 @@ import Onboarding
 import AppShortcuts
 import SwiftUI
 
-class BrowserViewController: UIViewController {
+final class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
     private lazy var trackingProtectionManager = TrackingProtectionManager(
@@ -323,7 +323,8 @@ class BrowserViewController: UIViewController {
 
     private func tooltipController(
         anchoredBy sourceView: UIView,
-        sourceRect: CGRect, title: String = "",
+        sourceRect: CGRect, 
+        title: String = "",
         body: String,
         dismiss: @escaping () -> Void ) -> UIViewController {
             let tooltipViewController = TooltipViewController()

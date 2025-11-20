@@ -124,6 +124,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2272220
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
+        app.launch()
         waitForExistence(TopSiteCellgroup)
         if iPad() {
             app.textFields.element(boundBy: 0).waitAndTap()
@@ -144,6 +145,9 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
         let topSitesCells = app.collectionViews.links["TopSitesCell"]
         if #available(iOS 16, *) {
             waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
@@ -281,6 +285,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
+        app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
@@ -417,7 +422,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(URLBarOpen)
         addWebsiteToShortcut(website: url_3)
         addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
+        cancelButton.tapWithRetry()
 
         // Verify shortcuts are displayed on the homepage
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]

@@ -49,6 +49,14 @@ class WebviewTelemetryTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.cancelTimingCalled, 1)
         XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 0)
         XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? TimingDistributionMetricType
+        )
+        XCTAssertEqual(mockGleanWrapper.startTimingCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.cancelTimingCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 0)
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
     }
 
     private func createSubject() -> WebViewLoadMeasurementTelemetry {

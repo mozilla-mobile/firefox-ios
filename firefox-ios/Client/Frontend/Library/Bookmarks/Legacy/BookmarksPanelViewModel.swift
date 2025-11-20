@@ -19,7 +19,8 @@ let LocalizedRootBookmarkFolderStrings = [
     LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
 ]
 
-final class BookmarksPanelViewModel {
+// FIXME: FXIOS-14162 Make BookmarksPanelViewModel actually Sendable
+final class BookmarksPanelViewModel: @unchecked Sendable {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }
@@ -58,7 +59,7 @@ final class BookmarksPanelViewModel {
         return true
     }
 
-    func reloadData(completion: @escaping () -> Void) {
+    func reloadData(completion: @escaping @Sendable () -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown {
             completion()
@@ -97,7 +98,7 @@ final class BookmarksPanelViewModel {
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
-    func getSiteDetails(for indexPath: IndexPath, completion: @escaping (Site?) -> Void) {
+    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @Sendable (Site?) -> Void) {
         guard let bookmarkNode = bookmarkNodes[safe: indexPath.row],
               let bookmarkItem = bookmarkNode as? BookmarkItemData
         else {
@@ -117,7 +118,7 @@ final class BookmarksPanelViewModel {
     func createPinUnpinAction(
         for site: Site,
         isPinned: Bool,
-        successHandler: @escaping (String) -> Void
+        successHandler: @MainActor @escaping @Sendable (String) -> Void
     ) -> PhotonRowActions {
         return SingleActionViewModel(
             title: isPinned ? .Bookmarks.Menu.RemoveFromShortcutsTitle : .AddToShortcutsActionTitle,
@@ -129,14 +130,16 @@ final class BookmarksPanelViewModel {
                 : profile.pinnedSites.addPinnedTopSite(site)
 
                 action.uponQueue(.main) { result in
-                    if result.isSuccess {
-                        let message: String = isPinned
-                        ? .LegacyAppMenu.RemovePinFromShortcutsConfirmMessage
-                        : .LegacyAppMenu.AddPinToShortcutsConfirmMessage
-                        successHandler(message)
-                    } else {
-                        let logMessage = isPinned ? "Could not remove pinned site" : "Could not add pinne site"
-                        logger.log(logMessage, level: .debug, category: .library)
+                    MainActor.assumeIsolated {
+                        if result.isSuccess {
+                            let message: String = isPinned
+                            ? .LegacyAppMenu.RemovePinFromShortcutsConfirmMessage
+                            : .LegacyAppMenu.AddPinToShortcutsConfirmMessage
+                            successHandler(message)
+                        } else {
+                            let logMessage = isPinned ? "Could not remove pinned site" : "Could not add pinne site"
+                            logger.log(logMessage, level: .debug, category: .library)
+                        }
                     }
                 }
             }
@@ -157,7 +160,7 @@ final class BookmarksPanelViewModel {
         return max(index - LocalDesktopFolder.numberOfRowsTaken, 0)
     }
 
-    private func setupMobileFolderData(completion: @escaping () -> Void) {
+    private func setupMobileFolderData(completion: @escaping @Sendable () -> Void) {
         bookmarksHandler
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
@@ -190,7 +193,7 @@ final class BookmarksPanelViewModel {
     }
 
     /// Subfolder data case happens when we select a folder created by a user
-    private func setupSubfolderData(completion: @escaping () -> Void) {
+    private func setupSubfolderData(completion: @escaping @Sendable () -> Void) {
         bookmarksHandler.getBookmarksTree(rootGUID: bookmarkFolderGUID,
                                           recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
@@ -217,7 +220,7 @@ final class BookmarksPanelViewModel {
 
     // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
     // subfolders
-    private func createDesktopBookmarksFolder(completion: @escaping () -> Void) {
+    private func createDesktopBookmarksFolder(completion: @escaping @Sendable () -> Void) {
         bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
             switch result {
             case .success(let bookmarkCount):
@@ -237,7 +240,11 @@ final class BookmarksPanelViewModel {
         }
     }
 
-    private func checkIfPinnedURL(_ url: String, queue: DispatchQueue = .main, completion: @escaping (Bool) -> Void ) {
+    private func checkIfPinnedURL(
+        _ url: String,
+        queue: DispatchQueue = .main,
+        completion: @escaping @Sendable  (Bool) -> Void
+    ) {
         profile.pinnedSites.isPinnedTopSite(url)
             .uponQueue(queue) { result in
                 completion(result.successValue ?? false)

@@ -61,8 +61,9 @@ public protocol BookmarksHandler {
 public protocol HistoryHandler {
     func applyObservation(visitObservation: VisitObservation,
                           completion: @escaping (Result<Void, any Error>) -> Void)
-    func getHistoryMetadataSince(
-        since startDate: Int64,
+
+    func getMostRecentHistoryMetadata(
+        limit: Int32,
         completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
     )
 
@@ -70,6 +71,11 @@ public protocol HistoryHandler {
         for searchTerm: String,
         and urlString: String,
         completion: @Sendable @escaping (Result<(), any Error>) -> Void
+    )
+
+    func deleteHistoryMetadataOlderThan(
+        olderThan: Int64,
+        completion: @escaping @Sendable (Bool) -> Void
     )
 }
 
@@ -409,8 +415,11 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
             }
     }
 
-    public func createFolder(parentGUID: GUID, title: String,
-                             position: UInt32?) -> Deferred<Maybe<GUID>> {
+    public func createFolder(
+        parentGUID: GUID,
+        title: String,
+        position: UInt32?
+    ) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createFolder(
                 parentGUID: parentGUID,
@@ -421,9 +430,12 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     }
 
     /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
-    public func createFolder(parentGUID: GUID, title: String,
-                             position: UInt32?,
-                             completion: @Sendable @escaping (Result<GUID, any Error>) -> Void) {
+    public func createFolder(
+        parentGUID: GUID,
+        title: String,
+        position: UInt32?,
+        completion: @Sendable @escaping (Result<GUID, any Error>) -> Void
+    ) {
         withWriter({ connection in
                 return try connection.createFolder(
                     parentGUID: parentGUID,
@@ -550,12 +562,12 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
 
     // MARK: History metadata
     /// Currently only used to get the recent searches from the user's history storage.
-    public func getHistoryMetadataSince(
-        since startDate: Int64,
+    public func getMostRecentHistoryMetadata(
+        limit: Int32,
         completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
     ) {
         withReader({ connection in
-            return try connection.getHistoryMetadataSince(since: startDate)
+            return try connection.getMostRecentHistoryMetadata(limit: limit)
         }, completion: completion)
     }
 
@@ -563,6 +575,8 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     /// - Parameters:
     ///   - searchTerm: The search term used to find a page.
     ///   - urlString: The url of the page.
+    ///  `referrerUrl` and `viewTime` is nil because we only care about store search terms
+    ///  `.insertPage` is passed in because if we use default, it ignores and does not save the search term
     public func noteHistoryMetadata(
         for searchTerm: String,
         and urlString: String,
@@ -575,7 +589,9 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
                         url: urlString,
                         searchTerm: searchTerm,
                         referrerUrl: nil
-                    ), viewTime: nil
+                    ),
+                    viewTime: nil,
+                    .init(ifPageMissing: .insertPage)
                 )
             },
             completion: completion)
@@ -587,6 +603,16 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
         return withWriter { connection in
             let response: Void = try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
             return response
+        }
+    }
+
+    public func deleteHistoryMetadataOlderThan(
+        olderThan: Int64,
+        completion: @escaping @Sendable (Bool) -> Void
+    ) {
+        let deferredResponse = deleteHistoryMetadataOlderThan(olderThan: olderThan)
+        deferredResponse.upon { result in
+            completion(result.isSuccess)
         }
     }
 

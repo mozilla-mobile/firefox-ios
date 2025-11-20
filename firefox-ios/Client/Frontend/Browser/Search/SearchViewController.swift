@@ -152,11 +152,15 @@ class SearchViewController: SiteTableViewController,
         super.viewWillAppear(animated)
         reloadSearchEngines()
         reloadData()
-        loadZeroSearchData()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // Sometimes `viewModel.searchQuery` is not set yet, so we wait to check if we want to
+        // show load zero search in `viewDidAppear` `instead of viewWillAppear`.
+        // i.e. we enter a search term in the address bar and land on the google web page for the term,
+        // then we tap on the address bar, we should see that search term and avoid loading zero search.
+        loadZeroSearchData()
         viewModel.searchFeature.recordExposure()
 
         searchTelemetry?.startImpressionTimer()
@@ -304,46 +308,47 @@ class SearchViewController: SiteTableViewController,
         )
 
         leftEdge = searchButton.trailingAnchor
+        if !viewModel.isZeroSearchState {
+            for engine in viewModel.quickSearchEngines {
+                let engineButton: UIButton = .build()
+                engineButton.setImage(engine.image, for: [])
+                engineButton.imageView?.contentMode = .scaleAspectFit
+                engineButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
+                engineButton.imageView?.layer.cornerRadius = 4
+                engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
+                engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
+                engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
 
-        for engine in viewModel.quickSearchEngines {
-            let engineButton: UIButton = .build()
-            engineButton.setImage(engine.image, for: [])
-            engineButton.imageView?.contentMode = .scaleAspectFit
-            engineButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
-            engineButton.imageView?.layer.cornerRadius = 4
-            engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-            engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
-            engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
+                if let imageView = engineButton.imageView {
+                    NSLayoutConstraint.activate([
+                        imageView.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
+                        imageView.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize)
+                    ])
+                }
 
-            if let imageView = engineButton.imageView {
-                NSLayoutConstraint.activate([
-                    imageView.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
-                    imageView.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize)
-                ])
+                searchEngineScrollViewContent.addSubview(engineButton)
+                NSLayoutConstraint.activate(
+                    [
+                        engineButton.widthAnchor.constraint(
+                            equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)
+                        ),
+                        engineButton.heightAnchor.constraint(
+                            equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)
+                        ),
+                        engineButton.leadingAnchor.constraint(equalTo: leftEdge),
+                        engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
+                        engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
+                    ]
+                )
+
+                if engine === self.viewModel.searchEnginesManager?.quickSearchEngines.last {
+                    engineButton.trailingAnchor.constraint(
+                        equalTo: searchEngineScrollViewContent.trailingAnchor
+                    ).isActive = true
+                }
+
+                leftEdge = engineButton.trailingAnchor
             }
-
-            searchEngineScrollViewContent.addSubview(engineButton)
-            NSLayoutConstraint.activate(
-                [
-                    engineButton.widthAnchor.constraint(
-                        equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)
-                    ),
-                    engineButton.heightAnchor.constraint(
-                        equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)
-                    ),
-                    engineButton.leadingAnchor.constraint(equalTo: leftEdge),
-                    engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
-                    engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
-                ]
-            )
-
-            if engine === self.viewModel.searchEnginesManager?.quickSearchEngines.last {
-                engineButton.trailingAnchor.constraint(
-                    equalTo: searchEngineScrollViewContent.trailingAnchor
-                ).isActive = true
-            }
-
-            leftEdge = engineButton.trailingAnchor
         }
     }
 
@@ -351,22 +356,12 @@ class SearchViewController: SiteTableViewController,
     /// In this state, we surface two types of content:
     /// - Trending searches: popular or curated terms shown to inspire discovery.
     /// - Recent searches: the user’s own past searches for quick re-access.
+    ///
+    /// We clear telemetry here since we're showing users a new set of searches.
     private func loadZeroSearchData() {
-        loadTrendingSearches()
-        loadRecentSearches()
-    }
-
-    private func loadRecentSearches() {
-        guard viewModel.shouldShowRecentSearches else { return }
+        searchTelemetry?.clearZeroSearchSectionSeen()
+        viewModel.loadTrendingSearches()
         viewModel.retrieveRecentSearches()
-    }
-
-    private func loadTrendingSearches() {
-        guard viewModel.shouldShowTrendingSearches else { return }
-        Task {
-            await viewModel.retrieveTrendingSearches()
-            reloadTableView()
-        }
     }
 
     func didSelectEngine(_ sender: UIButton) {
@@ -460,6 +455,15 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
+        case .recentSearches:
+            guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
+
+            guard let recentSearch = viewModel.recentSearches[safe: indexPath.row],
+                  let url = defaultEngine.searchURLForQuery(recentSearch)
+            else { return }
+            searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: recentSearch)
+            searchTelemetry?.recentSearchesTapped(at: indexPath.row)
+
         case .trendingSearches:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
@@ -467,6 +471,7 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(trendingSearch)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: trendingSearch)
+            searchTelemetry?.trendingSearchesTapped(at: indexPath.row)
 
         case .searchSuggestions:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
@@ -547,10 +552,26 @@ class SearchViewController: SiteTableViewController,
         else { return nil }
 
         var title: String
+        var accessory: SiteTableHeaderAccessory = .none
         switch section {
+        case SearchListSection.recentSearches.rawValue:
+            guard !viewModel.recentSearches.isEmpty else { return nil }
+            title = .SearchZero.RecentSearchesSectionTitle
+            accessory = .clear(action: { [weak self] in
+                self?.viewModel.clearRecentSearches()
+            })
+
         case SearchListSection.trendingSearches.rawValue:
-            // TODO: FXIOS-13644 - Add proper strings when finalized
-            title = "Trending Searches"
+            guard !viewModel.trendingSearches.isEmpty else { return nil }
+            if let engineName = viewModel.searchEnginesManager?.defaultEngine?.shortName {
+                title = String(
+                    format: .SearchZero.TrendingSearchesSectionTitle,
+                    engineName
+                )
+            } else {
+                title = ""
+            }
+
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
@@ -558,9 +579,10 @@ class SearchViewController: SiteTableViewController,
         default:  title = ""
         }
 
-        let viewModel = SiteTableViewHeaderModel(title: title,
-                                                 isCollapsible: false,
-                                                 collapsibleState: nil)
+        let viewModel = SiteTableViewHeaderModel(
+            title: title,
+            accessory: accessory
+        )
         headerView.configure(viewModel)
         headerView.applyTheme(theme: currentTheme())
         return headerView
@@ -594,6 +616,10 @@ class SearchViewController: SiteTableViewController,
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let section = SearchListSection(rawValue: indexPath.section) {
             switch section {
+            case .recentSearches:
+                viewModel.recordRecentSearchesDisplayedEvent()
+            case .trendingSearches:
+                viewModel.recordTrendingSearchesDisplayedEvent()
             case .searchSuggestions:
                 if let site = viewModel.suggestions?[indexPath.row] {
                     if searchTelemetry?.visibleSuggestions.contains(site) == false {
@@ -636,19 +662,21 @@ class SearchViewController: SiteTableViewController,
                         searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
                     }
                 }
-            case .trendingSearches:
-                break
             }
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
+        case .recentSearches:
+            return viewModel.shouldShowRecentSearches ? viewModel.recentSearches.count : 0
+        case .trendingSearches:
+            return viewModel.shouldShowTrendingSearches ? viewModel.trendingSearches.count : 0
         case .searchSuggestions:
             guard let count = viewModel.suggestions?.count else { return 0 }
             return count < 4 ? count : 4
         case .openedTabs:
-            return !viewModel.searchQuery.isEmpty ? viewModel.filteredOpenedTabs.count : 0
+            return !viewModel.isZeroSearchState ? viewModel.filteredOpenedTabs.count : 0
         case .remoteTabs:
             return viewModel.shouldShowSyncedTabsSuggestions ? viewModel.filteredRemoteClientTabs.count : 0
         case .history:
@@ -656,9 +684,7 @@ class SearchViewController: SiteTableViewController,
         case .bookmarks:
             return viewModel.shouldShowBookmarksSuggestions ? viewModel.bookmarkSites.count : 0
         case .firefoxSuggestions:
-            return viewModel.firefoxSuggestions.count
-        case .trendingSearches:
-            return viewModel.shouldShowTrendingSearches ? viewModel.trendingSearches.count : 0
+            return !viewModel.isZeroSearchState ? viewModel.firefoxSuggestions.count : 0
         }
     }
 
@@ -721,9 +747,20 @@ class SearchViewController: SiteTableViewController,
                                    _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
+        case .recentSearches:
+            if let recentSearch = viewModel.recentSearches[safe: indexPath.row] {
+                let oneLineCellViewModel = oneLineCellModelForSearch(
+                    with: recentSearch,
+                    and: StandardImageIdentifiers.Large.history
+                )
+                oneLineCell.configure(viewModel: oneLineCellViewModel)
+                cell = oneLineCell
+            }
+
         case .trendingSearches:
             if let trendingSearch = viewModel.trendingSearches[safe: indexPath.row] {
-                let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch)
+                let arrowImageName = StandardImageIdentifiers.Large.arrowTrending
+                let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch, and: arrowImageName)
                 oneLineCell.configure(viewModel: oneLineCellViewModel)
                 cell = oneLineCell
             }
@@ -824,6 +861,7 @@ class SearchViewController: SiteTableViewController,
 
     private func oneLineCellModelForSearch(
         with text: String,
+        and imageName: String = SearchViewControllerUX.SearchImage,
         shouldShowAccessoryView: Bool = true
     ) -> OneLineTableViewCellViewModel {
         let appendButton = UIButton(type: .roundedRect)
@@ -834,7 +872,7 @@ class SearchViewController: SiteTableViewController,
         appendButton.addAction(action, for: .touchUpInside)
         let viewModel = OneLineTableViewCellViewModel(
             title: text,
-            leftImageView: UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate),
+            leftImageView: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate),
             accessoryView: shouldShowAccessoryView ? appendButton : nil,
             accessoryType: .none,
             editingAccessoryView: nil)
@@ -878,18 +916,23 @@ class SearchViewController: SiteTableViewController,
     // MARK: - Notifiable
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            reloadData()
-        case .SearchSettingsChanged:
-            reloadSearchEngines()
-        case .SponsoredAndNonSponsoredSuggestionsChanged:
-            guard !viewModel.searchQuery.isEmpty else { return }
-            Task {
-                await viewModel.loadFirefoxSuggestions()
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                self.reloadData()
+            case .SearchSettingsChanged:
+                self.reloadSearchEngines()
+                // We fetch new list since trending searches are specific to the search engine.
+                self.viewModel.loadTrendingSearches()
+            case .SponsoredAndNonSponsoredSuggestionsChanged:
+                guard !self.viewModel.searchQuery.isEmpty else { return }
+                Task {
+                    await self.viewModel.loadFirefoxSuggestions()
+                }
+            default:
+                break
             }
-        default:
-            break
         }
     }
 

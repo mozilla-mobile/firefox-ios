@@ -15,11 +15,23 @@ private let SuggestedSite5 = "foobar burn cd"
 private let SuggestedSite6 = "foobar/ b"
 
 class SearchTests: FeatureFlaggedTestBase {
+    var toolbarScreen: ToolbarScreen!
+    var browserScreen: BrowserScreen!
+    var firefoxHomePageScreen: FirefoxHomePageScreen!
+
     private func typeOnSearchBar(text: String) {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tapAndTypeText(text)
+    }
+
+    private func typeOnSearchBar_TAE(text: String) {
+        let browserScreen = BrowserScreen(app: app)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        browserScreen.tapOnAddressBar()
+        browserScreen.getAddressBarElement().tapAndTypeText(text)
     }
 
     private func suggestionsOnOff() {
@@ -33,6 +45,17 @@ class SearchTests: FeatureFlaggedTestBase {
         // Open a new tab and start typing "text"
         navigator.createNewTab()
         typeOnSearchBar(text: typeText)
+
+        // In the search suggestion, "text" should be displayed
+        let predicate = NSPredicate(format: "label CONTAINS[c] %@", "localhost")
+        let elementQuery = app.staticTexts.containing(predicate)
+        mozWaitForElementToExist(elementQuery.element)
+    }
+
+    private func validateSearchSuggestionText_TAE(typeText: String) {
+        // Open a new tab and start typing "text"
+        navigator.createNewTab()
+        typeOnSearchBar_TAE(text: typeText)
 
         // In the search suggestion, "text" should be displayed
         let predicate = NSPredicate(format: "label CONTAINS[c] %@", "localhost")
@@ -190,6 +213,29 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForValueContains(url, value: searchEngine.lowercased())
     }
 
+    private func changeSearchEngine_TAE(searchEngine: String) {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
+
+        toolbarScreen.assertSettingsButtonExists(timeout: TIMEOUT)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
+        navigator.goto(SearchSettings)
+        // Open the list of default search engines and select the desired
+        app.tables.cells.element(boundBy: 0).waitAndTap()
+        let tablesQuery2 = app.tables
+        tablesQuery2.staticTexts[searchEngine].waitAndTap()
+
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("foo bar")
+        mozWaitForElementToExist(app.webViews.firstMatch)
+        browserScreen.addressToolbarContainValue(value: searchEngine.lowercased())
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306940
     // Smoketest
     func testSearchEngine() {
@@ -201,6 +247,19 @@ class SearchTests: FeatureFlaggedTestBase {
         changeSearchEngine(searchEngine: "Google")
         changeSearchEngine(searchEngine: "Wikipedia")
         changeSearchEngine(searchEngine: "eBay")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306940
+    // Smoketest TAE
+    func testSearchEngine_TAE() {
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        // Change to the each search engine and verify the search uses it
+        changeSearchEngine_TAE(searchEngine: "Bing")
+        changeSearchEngine_TAE(searchEngine: "DuckDuckGo")
+        changeSearchEngine_TAE(searchEngine: "Google")
+        changeSearchEngine_TAE(searchEngine: "Wikipedia")
+        changeSearchEngine_TAE(searchEngine: "eBay")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2353246
@@ -269,6 +328,20 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForValueContains(url, value: "google")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2436092
+    // Smoketest TAE
+    func testSearchStartAfterTypingTwoWords_TAE() {
+        let browserScreen = BrowserScreen(app: app)
+        let fooText = "foo bar"
+        app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        browserScreen.assertAddressBarExists()
+        app.typeText(fooText)
+        app.typeText(XCUIKeyboardKey.return.rawValue)
+        browserScreen.assertAddressBarContains(value: "google", timeout: TIMEOUT)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306943
     func testSearchIconOnAboutHome() throws {
         app.launch()
@@ -334,6 +407,32 @@ class SearchTests: FeatureFlaggedTestBase {
         validateSearchSuggestionText(typeText: "localhost")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306989
+    // Smoketest TAE
+    func testOpenTabsInSearchSuggestions_TAE() throws {
+        let browserScreen = BrowserScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        app.launch()
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Test fails intermittently for iOS 15")
+        }
+        // Go to localhost website and check the page displays correctly
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        waitUntilPageLoad()
+        // Open new tab
+        validateSearchSuggestionText_TAE(typeText: "localhost")
+        restartInBackground()
+        // Open new tab
+        browserScreen.assertCancelButtonOnUrlBarExists()
+        toolbarScreen.assertTabsButtonExists()
+        browserScreen.tapCancelButtonIfExist()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        validateSearchSuggestionText_TAE(typeText: "localhost")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306886
     // SmokeTest
     func testBottomVIewURLBar() throws {
@@ -386,6 +485,64 @@ class SearchTests: FeatureFlaggedTestBase {
             // The focused is dismissed from the URL bar
             let addressBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
             XCTAssertFalse(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306886
+    // SmokeTest TAE
+    func testBottomVIewURLBar_TAE() throws {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
+        let firefoxHomePAgeScreen = FirefoxHomePageScreen(app: app)
+
+        app.launch()
+        if iPad() {
+            throw XCTSkip("Toolbar option not available for iPad")
+        } else {
+            // Tap on toolbar bottom setting
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(ToolbarSettings)
+            navigator.performAction(Action.SelectToolbarBottom)
+            navigator.goto(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+
+            // URL bar is moved to the bottom of the screen
+            let menuSettingsButton = toolbarScreen.getToolbarSettingsMenuButtonElement()
+            let firstTopSite = app.links.element(boundBy: 0)
+            toolbarScreen.assertSettingsButtonExists()
+            let urlBar = browserScreen.getAddressBarElement()
+            XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
+            XCTAssertTrue(urlBar.isBelow(element: firstTopSite))
+
+            // In a new tab, tap on the URL bar
+            navigator.goto(NewTabScreen)
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+            urlBar.waitAndTap()
+
+            // The URL bar is focused and the keyboard is displayed
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+
+            // Open a website
+            navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+
+            // The keyboard is dismissed and page is correctly loaded
+            let keyboardCount = app.keyboards.count
+            XCTAssert(keyboardCount == 0, "The keyboard is shown")
+            waitUntilPageLoad()
+
+            // Tap on the URL bar
+            urlBar.waitAndTap()
+
+            // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+            firefoxHomePAgeScreen.assertTopSitesItemCellExist()
+
+            // Tap the back icon <
+            browserScreen.tapCancelButtonOnUrlBarExist()
+
+            // The focused is dismissed from the URL bar
+            browserScreen.assertKeyboardFocusState(isFocusedOniPad: false)
         }
     }
 
@@ -555,7 +712,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -581,7 +737,9 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -600,7 +758,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -608,7 +765,7 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.tables["SiteTable"])
     }
 
-    // MARK: - Trending Searches
+    // MARK: - Pre Search (Trending Searches + Recent Searches)
     func testTrendingSearches_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         app.launch()
@@ -618,12 +775,118 @@ class SearchTests: FeatureFlaggedTestBase {
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         // Trending Search appears
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending Searches"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Trending on Google"])
         app.tables["SiteTable"].cells.firstMatch.waitAndTap()
         waitUntilPageLoad()
 
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
         mozWaitForValueContains(url, value: "google")
+    }
+
+    func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+
+        // By default, enable trending searches
+        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        ].switches.firstMatch
+        let recentSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showRecentSearches
+        ].switches.firstMatch
+
+        mozWaitForElementToExist(trendingSearchSuggestSwitch)
+        mozWaitForElementToNotExist(recentSearchSuggestSwitch)
+
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending on Google"])
+    }
+
+    func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        // Disable general search suggests
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+        app.tables.switches["Show Search Suggestions"].waitAndTap()
+
+        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        ].switches.firstMatch
+
+        trendingSearchSuggestSwitch.waitAndTap()
+
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        mozWaitForElementToNotExist(app.tables["SiteTable"].otherElements["Trending on Google"])
+    }
+
+    func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
+        app.launch()
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+
+        // By default, enable trending searches
+        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        ].switches.firstMatch
+        let recentSearchSuggestSwitch = app.otherElements.tables.cells[
+            AccessibilityIdentifiers.Settings.Search.showRecentSearches
+        ].switches.firstMatch
+
+        mozWaitForElementToExist(trendingSearchSuggestSwitch)
+        mozWaitForElementToNotExist(recentSearchSuggestSwitch)
+
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending on Google"])
+    }
+
+    func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+        let testString = "example"
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tapAndTypeText(testString)
+
+        // Search Term suggestions appears
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])
+        app.typeText(XCUIKeyboardKey.return.rawValue)
+
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+        app.buttons["Clear text"].firstMatch.waitAndTap()
+
+        // Trending Search appears
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Trending on Google"])
+        app.tables["SiteTable"].cells.firstMatch.waitAndTap()
+        waitUntilPageLoad()
     }
 }

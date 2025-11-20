@@ -12,7 +12,6 @@ import Shared
 
 @testable import Client
 
-// TODO: FXIOS-13741 - Migrate BrowserViewControllerTests to use mock telemetry or GleanWrapper
 class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var profile: MockProfile!
     var tabManager: MockTabManager!
@@ -27,10 +26,10 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         super.setUp()
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
-        DependencyHelperMock().bootstrapDependencies()
+        tabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
 
         profile = MockProfile()
-        tabManager = MockTabManager()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
@@ -39,39 +38,22 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     override func tearDown() {
-        tearDownTelemetry()
         profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
         recordVisitManager = nil
         resetStore()
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
     func testTrackVisibleSuggestion() {
         TelemetryContextualIdentifier.setupContextId()
         let subject = createSubject()
-        let expectation = expectation(description: "The Firefox Suggest ping was sent")
-
-        GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
-            XCTAssertEqual(GleanMetrics.FxSuggest.pingType.testGetValue(), "fxsuggest-impression")
-            XCTAssertEqual(
-                GleanMetrics.FxSuggest.contextId.testGetValue()?.uuidString,
-                TelemetryContextualIdentifier.contextId
-            )
-            XCTAssertEqual(GleanMetrics.FxSuggest.isClicked.testGetValue(), false)
-            XCTAssertEqual(GleanMetrics.FxSuggest.position.testGetValue(), 3)
-            XCTAssertEqual(GleanMetrics.FxSuggest.blockId.testGetValue(), 1)
-            XCTAssertEqual(GleanMetrics.FxSuggest.advertiser.testGetValue(), "test advertiser")
-            XCTAssertEqual(GleanMetrics.FxSuggest.iabCategory.testGetValue(), "999 - Test Category")
-            XCTAssertEqual(GleanMetrics.FxSuggest.reportingUrl.testGetValue(), "https://example.com/ios_test_impression_reporting_url")
-            XCTAssertEqual(GleanMetrics.FxSuggest.country.testGetValue(), "US")
-            expectation.fulfill()
-        }
-
         let locale = Locale(identifier: "en-US")
-        let telemetry = FxSuggestTelemetry(locale: locale)
+        let gleanWrapper = MockGleanWrapper()
+        let telemetry = FxSuggestTelemetry(locale: locale, gleanWrapper: gleanWrapper)
         subject.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
             RustFirefoxSuggestionTelemetryInfo.amp(
                 blockId: 1,
@@ -84,7 +66,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
             didTap: false
         ), suggestTelemetry: telemetry)
 
-        wait(for: [expectation], timeout: 5.0)
+        guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
+            XCTFail("savedPing is not of type Ping<NoReasonCodes>")
+            return
+        }
+        XCTAssert(savedPing === GleanMetrics.Pings.shared.fxSuggest, "FxSuggest ping called")
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
     }
 
     func testAppWillResignActiveNotification_takesScreenshot_ifNoViewIsPresented() {
@@ -142,7 +129,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         testTab.url = URL(string: "internal://local/about/home")!
         let mockTabWebView = MockTabWebView(tab: testTab)
         testTab.webView = mockTabWebView
-        setupNimbusHomepageRebuildForTesting(isEnabled: true)
 
         let expectation = XCTestExpectation(description: "General browser action is dispatched")
         mockStore.dispatchCalled = {
@@ -496,7 +482,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject() -> BrowserViewController {
+    private func createSubject(file: StaticString = #filePath, line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
                                             appStartupTelemetry: appStartupTelemetry,
@@ -505,19 +491,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
         subject.browserDelegate = browserCoordinator
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(enabled: isEnabled)
-        }
-    }
-
-    private func setupNimbusHomepageRebuildForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRebuildFeature.with { _, _ in
-            return HomepageRebuildFeature(enabled: isEnabled)
         }
     }
 

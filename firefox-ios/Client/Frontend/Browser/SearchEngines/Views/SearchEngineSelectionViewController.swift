@@ -50,7 +50,15 @@ class SearchEngineSelectionViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     override func viewDidLoad() {
@@ -64,7 +72,7 @@ class SearchEngineSelectionViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        store.dispatchLegacy(
+        store.dispatch(
             SearchEngineSelectionAction(
                 windowUUID: self.windowUUID,
                 actionType: SearchEngineSelectionActionType.viewDidLoad
@@ -94,7 +102,7 @@ class SearchEngineSelectionViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatchLegacy(
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
@@ -110,8 +118,8 @@ class SearchEngineSelectionViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
-        store.dispatchLegacy(
+    func unsubscribeFromRedux() {
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,
@@ -173,7 +181,7 @@ class SearchEngineSelectionViewController: UIViewController,
     }
 
     func didTap(searchEngineModel: SearchEngineModel) {
-        store.dispatchLegacy(
+        store.dispatch(
             SearchEngineSelectionAction(
                 windowUUID: self.windowUUID,
                 actionType: SearchEngineSelectionActionType.didTapSearchEngine,

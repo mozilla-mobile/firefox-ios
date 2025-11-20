@@ -7,10 +7,14 @@ import Common
 import Shared
 import Storage
 
-protocol SearchEnginesManagerProvider: AnyObject {
+protocol SearchEnginesManagerProvider: AnyObject, Sendable {
+    @MainActor
     var defaultEngine: OpenSearchEngine? { get }
+    @MainActor
     var orderedEngines: [OpenSearchEngine] { get }
+    @MainActor
     var delegate: SearchEngineDelegate? { get set }
+    @MainActor
     func getOrderedEngines(completion: @escaping SearchEngineCompletion)
 }
 
@@ -46,6 +50,7 @@ struct SearchEngineProviderFactory {
 /// enabled quick search engines, and it is possible to disable every non-default quick search engine).
 ///
 /// This class is not thread-safe -- you should only access it on a single thread (usually, the main thread)!
+@MainActor
 class SearchEnginesManager: SearchEnginesManagerProvider {
     private let prefs: Prefs
     private let fileAccessor: FileAccessor
@@ -117,6 +122,12 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
         ) ?? false
+        shouldShowTrendingSearches = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showTrendingSearches
+        ) ?? true
+        shouldShowRecentSearches = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showRecentSearches
+        ) ?? true
     }
 
     var defaultEngine: OpenSearchEngine? {
@@ -240,6 +251,24 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         }
     }
 
+    var shouldShowTrendingSearches = true {
+        didSet {
+            prefs.setBool(
+                shouldShowTrendingSearches,
+                forKey: PrefsKeys.SearchSettings.showTrendingSearches
+            )
+        }
+    }
+
+    var shouldShowRecentSearches = true {
+        didSet {
+            prefs.setBool(
+                shouldShowRecentSearches,
+                forKey: PrefsKeys.SearchSettings.showRecentSearches
+            )
+        }
+    }
+
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
         if isSECEnabled {
             return !disabledEngines.contains(engine.engineID)
@@ -267,9 +296,9 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         }
     }
 
-    func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping () -> Void) {
+    func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @MainActor @escaping @Sendable () -> Void) {
         // We can't delete a preinstalled engine or an engine that is currently the default.
-        guard engine.isCustomEngine || isEngineDefault(engine) else { return }
+        guard engine.isCustomEngine && !isEngineDefault(engine) else { return }
 
         customEngines.remove(at: customEngines.firstIndex(of: engine)!)
         saveCustomEngines()
@@ -303,6 +332,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
                     disabledEngineIDsPrefsKey,
                     legacy_disabledEngineNamesPrefsKey]
         keys.forEach { prefs.removeObjectForKey($0) }
+        resetCustomEngines()
     }
 
     // MARK: - Private
@@ -318,6 +348,9 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
                                          engineOrderingPrefs: enginePrefs,
                                          prefsMigrator: DefaultSearchEnginePrefsMigrator(),
                                          completion: completion)
+        // After decoding our engines, ensure we save them back to disk, to ensure any
+        // defaults generated during decoding (e.g. UUIDs for custom engines) are re-saved
+        saveCustomEngines()
     }
 
     private func getSearchPrefs() -> SearchEnginePrefs {
@@ -393,6 +426,12 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
             return []
         }
     }()
+
+    private func resetCustomEngines() {
+        guard let customEngineFilePath = try? customEngineFilePath else { return }
+        let url = URL(fileURLWithPath: customEngineFilePath)
+        try? FileManager.default.removeItem(at: url)
+    }
 
     private func saveCustomEngines() {
         do {

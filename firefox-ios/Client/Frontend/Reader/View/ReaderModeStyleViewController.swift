@@ -198,10 +198,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
             switch button.fontSizeAction {
             case .bigger:
                 button.isEnabled = !viewModel.readerModeStyle.fontSize.isLargest()
-                break
             case .smaller:
                 button.isEnabled = !viewModel.readerModeStyle.fontSize.isSmallest()
-                break
             case .reset:
                 break
             }
@@ -388,7 +386,9 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustLayoutForA11ySizeCategory()
+            ensureMainThread {
+                self.adjustLayoutForA11ySizeCategory()
+            }
         default: break
         }
     }

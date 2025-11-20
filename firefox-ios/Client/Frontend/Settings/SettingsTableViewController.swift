@@ -464,7 +464,7 @@ class StringPrefSetting: StringSetting {
         placeholder: String,
         accessibilityIdentifier: String,
         settingIsValid isValueValid: ((String?) -> Bool)? = nil,
-        settingDidChange: ((String?) -> Void)? = nil
+        settingDidChange: (@MainActor (String?) -> Void)? = nil
     ) {
         super.init(defaultValue: defaultValue,
                    placeholder: placeholder,
@@ -485,7 +485,7 @@ class WebPageSetting: StringPrefSetting {
         placeholder: String,
         accessibilityIdentifier: String,
         isChecked: @escaping () -> Bool = { return false },
-        settingDidChange: ((String?) -> Void)? = nil
+        settingDidChange: (@MainActor (String?) -> Void)? = nil
     ) {
         self.isChecked = isChecked
         super.init(prefs: prefs,
@@ -539,7 +539,7 @@ class StringSetting: Setting, UITextFieldDelegate {
 
     private let defaultValue: String?
     private let placeholder: String
-    private let settingDidChange: ((String?) -> Void)?
+    private let settingDidChange: (@MainActor (String?) -> Void)?
     private let settingIsValid: ((String?) -> Bool)?
     private let persister: SettingValuePersister
 
@@ -551,7 +551,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         accessibilityIdentifier: String,
         persister: SettingValuePersister,
         settingIsValid isValueValid: ((String?) -> Bool)? = nil,
-        settingDidChange: ((String?) -> Void)? = nil
+        settingDidChange: (@MainActor (String?) -> Void)? = nil
     ) {
         self.defaultValue = defaultValue
         self.settingDidChange = settingDidChange
@@ -647,13 +647,11 @@ class StringSetting: Setting, UITextFieldDelegate {
         textField.textColor = color
     }
 
-    @objc
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return isValid(textField.text)
     }
 
-    @objc
     func textFieldDidEndEditing(_ textField: UITextField) {
         let text = textField.text
         if !isValid(text) {
@@ -974,7 +972,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
-        if setting as? DisconnectSetting != nil {
+        if setting is DisconnectSetting {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
                 for: indexPath
@@ -982,7 +980,7 @@ class SettingsTableViewController: ThemedTableViewController {
                 return ThemedCenteredTableViewCell()
             }
             return cell
-        } else if setting as? SendDataSetting != nil {
+        } else if setting is SendDataSetting {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedLearnMoreTableViewCell.cellIdentifier,
                 for: indexPath

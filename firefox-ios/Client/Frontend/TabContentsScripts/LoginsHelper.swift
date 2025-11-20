@@ -13,6 +13,7 @@ import struct MozillaAppServices.LoginEntry
 enum FocusFieldType: String, Codable {
     case username
     case password
+    case email
 }
 
 struct FieldFocusMessage: Codable {
@@ -159,7 +160,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
 
-                store.dispatchLegacy(newAction)
+                store.dispatch(newAction)
             }
             if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
                 userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
@@ -199,6 +200,10 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
         // NOTE: This is a partial stub / placeholder
         // FXIOS-3856 will further enhance the logs into actual callback
         switch message.fieldType {
+        case .email:
+            logger.log("Parsed message email",
+                       level: .debug,
+                       category: .webview)
         case .username:
             logger.log("Parsed message username",
                        level: .debug,
@@ -373,19 +378,20 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
             // Even though we don't currently use these two fields,
             // verify that they were received as additional confirmation
             // that this is a valid request from LoginsHelper.js.
-            request["formOrigin"] as? String != nil,
-            request["actionOrigin"] as? String != nil
+            request["formOrigin"] is String,
+            request["actionOrigin"] is String
         else { return }
 
         currentRequestId = requestId
     }
 
+    @MainActor
     private func clearStoredPasswordAfterGeneration(origin: String) {
         if let windowUUID = self.tab?.windowUUID {
             let action = PasswordGeneratorAction(windowUUID: windowUUID,
                                                  actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
                                                  origin: origin)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         }
     }
 

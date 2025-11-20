@@ -5,7 +5,7 @@
 "MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "დახურვა";
 
 /* The title for the certificate common name inside the certificate screen. */
-"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "საერთო სახელი";
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "ზოგადი სახელი";
 
 /* The title for the certificate issuer country inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "ქვეყანა";

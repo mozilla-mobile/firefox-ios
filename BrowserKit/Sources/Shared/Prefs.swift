@@ -33,6 +33,7 @@ public struct PrefsKeys {
     public static let TermsOfUseImpressionCount = "TermsOfUseImpressionCount"
     public static let TermsOfUseRemindMeLaterCount = "TermsOfUseRemindMeLaterCount"
     public static let TermsOfUseDismissCount = "TermsOfUseDismissCount"
+    public static let TermsOfUseRemindersCount = "TermsOfUseRemindersCount"
     public static let TermsOfUseRemindMeLaterTapDate = "TermsOfUseRemindMeLaterTapDate"
     public static let TermsOfUseLearnMoreTapDate = "TermsOfUseLearnMoreTapDate"
     public static let TermsOfUsePrivacyNoticeTapDate = "TermsOfUsePrivacyNoticeTapDate"
@@ -104,9 +105,9 @@ public struct PrefsKeys {
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
+        public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
-        public static let Translation = "translationFeatureKey"
     }
 
     public struct HomepageSettings {
@@ -123,10 +124,8 @@ public struct PrefsKeys {
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
-    }
-
-    public struct Search {
-        public static let recentSearchesCache = "recentSearchesCacheBaseKey"
+        public static let showTrendingSearches = "trendingSearchesFeatureKey"
+        public static let showRecentSearches = "recentSearchesFeatureKey"
     }
 
     public struct RemoteSettings {
@@ -159,6 +158,7 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case toolbarUpdateKey = "ContextualHintToolbarUpdate"
+        case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }
 
@@ -167,6 +167,7 @@ public struct PrefsKeys {
         public static let closePrivateTabs = "ClosePrivateTabs"
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
+        public static let translationsFeature = "settings.translationFeature"
     }
 
     // Activity Stream
@@ -251,6 +252,9 @@ public struct PrefsKeys {
     public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
     // Used to determine if cannot run the Apple Intelligence model
     public static let cannotRunAppleIntelligence = "cannotRunAppleIntelligenceKey"
+
+    // Used for enabling test data for merino stories on non-dev builds
+    public static let useMerinoTestData = "useMerinoTestData"
 
     public struct Usage {
         public static let profileId = "profileId"

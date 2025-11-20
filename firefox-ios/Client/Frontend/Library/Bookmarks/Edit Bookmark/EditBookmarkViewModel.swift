@@ -7,16 +7,18 @@ import Foundation
 import MozillaAppServices
 import Shared
 
-typealias VoidReturnCallback = () -> Void
+typealias VoidReturnCallback = @MainActor () -> Void
 
 protocol ParentFolderSelector: AnyObject {
     /// In some cases, a child `EditFolderViewController` needs to pass information to a parent `EditBookmarkViewController`
     /// to select the folder that was just created
     /// - Parameter folder: The folder that was created in the `EditFolderViewController`
+    @MainActor
     func selectFolderCreatedFromChild(folder: Folder)
 }
 
-class EditBookmarkViewModel: ParentFolderSelector {
+// FIXME: FXIOS-14161 Make EditBookmarkViewModel actually Sendable
+class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
     private let parentFolder: FxBookmarkNode
     private var node: BookmarkItemData?
     private let profile: Profile
@@ -76,6 +78,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
         return folder.indentation
     }
 
+    @MainActor
     func selectFolder(_ folder: Folder) {
         isFolderCollapsed.toggle()
         selectedFolder = folder
@@ -87,6 +90,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
         }
     }
 
+    @MainActor
     func createNewFolder() {
         bookmarkCoordinatorDelegate?.showBookmarkDetail(
             bookmarkType: .folder,
@@ -135,6 +139,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
         }
     }
 
+    @MainActor
     func didFinish() {
         bookmarkCoordinatorDelegate?.didFinish()
     }

@@ -137,7 +137,7 @@
 "Settings.DailyUsagePing.Link.v136" = "详细了解";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
-"Settings.DailyUsagePing.Message.v135" = "此数据可帮助 %@ 估算活跃用户数量。";
+"Settings.DailyUsagePing.Message.v135" = "此信息可帮助 %@ 估算活跃用户数量。";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
 "Settings.DailyUsagePing.Title.v135" = "每日使用情况报告";
@@ -242,22 +242,22 @@
 "Settings.Studies.Title.v136" = "安装并运行研究";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.FooterTitle.v142" = "允许总结页面。";
+"Settings.Summarize.FooterTitle.v142" = "提供页面摘要功能。";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.FooterTitle.v142" = "左右摇动设备以总结页面。";
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "左右摇动设备以生成页面摘要。";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "摇动以总结";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "摇动生成摘要";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "手势";
 
 /* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.SummarizePagesTitle.v142" = "总结页面";
+"Settings.Summarize.SummarizePagesTitle.v142" = "生成页面摘要";
 
 /* In the settings menu, in the General section, this is the title for the Summarize settings section. */
-"Settings.Summarize.Title.v142" = "总结页面";
+"Settings.Summarize.Title.v142" = "页面摘要";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "详细了解";
@@ -276,4 +276,19 @@
 
 /* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "新建标签页";
+
+/* This is the section title text for the the Translation feature under the Translation settings section. */
+"Settings.Translation.SectionTitle.v145" = "翻译首选项";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
+"Settings.Translation.SettingOff.v145" = "关";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
+"Settings.Translation.SettingOn.v145" = "开";
+
+/* In the settings menu, in the General section, this is the title for the Translation settings section. */
+"Settings.Translation.Title.v145" = "翻译";
+
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "启用翻译";
 

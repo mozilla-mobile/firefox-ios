@@ -1126,6 +1126,15 @@ public enum ViaductError: Swift.Error {
     case UrlError(String
     )
     case NonTlsUrl
+    case OhttpChannelNotConfigured(String
+    )
+    case OhttpConfigFetchFailed(String
+    )
+    case OhttpRequestError(String
+    )
+    case OhttpResponseError(String
+    )
+    case OhttpNotSupported
 }
 
 
@@ -1158,6 +1167,19 @@ public struct FfiConverterTypeViaductError: FfiConverterRustBuffer {
             try FfiConverterString.read(from: &buf)
             )
         case 8: return .NonTlsUrl
+        case 9: return .OhttpChannelNotConfigured(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 10: return .OhttpConfigFetchFailed(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 11: return .OhttpRequestError(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 12: return .OhttpResponseError(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 13: return .OhttpNotSupported
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -1204,6 +1226,30 @@ public struct FfiConverterTypeViaductError: FfiConverterRustBuffer {
         
         case .NonTlsUrl:
             writeInt(&buf, Int32(8))
+        
+        
+        case let .OhttpChannelNotConfigured(v1):
+            writeInt(&buf, Int32(9))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpConfigFetchFailed(v1):
+            writeInt(&buf, Int32(10))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpRequestError(v1):
+            writeInt(&buf, Int32(11))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpResponseError(v1):
+            writeInt(&buf, Int32(12))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case .OhttpNotSupported:
+            writeInt(&buf, Int32(13))
         
         }
     }
@@ -1428,11 +1474,22 @@ private func uniffiTraitInterfaceCallAsync<T>(
     handleError: @escaping (Int8, RustBuffer) -> ()
 ) -> UniffiForeignFuture {
     let task = Task {
+        // Note: it's important we call either `handleSuccess` or `handleError` exactly once.  Each
+        // call consumes an Arc reference, which means there should be no possibility of a double
+        // call.  The following code is structured so that will will never call both `handleSuccess`
+        // and `handleError`, even in the face of weird errors.
+        //
+        // On platforms that need extra machinery to make C-ABI calls, like JNA or ctypes, it's
+        // possible that we fail to make either call.  However, it doesn't seem like this is
+        // possible on Swift since swift can just make the C call directly.
+        var callResult: T
         do {
-            handleSuccess(try await makeCall())
+            callResult = try await makeCall()
         } catch {
             handleError(CALL_UNEXPECTED_ERROR, FfiConverterString.lower(String(describing: error)))
+            return
         }
+        handleSuccess(callResult)
     }
     let handle = UNIFFI_FOREIGN_FUTURE_HANDLE_MAP.insert(obj: task)
     return UniffiForeignFuture(handle: handle, free: uniffiForeignFutureFree)
@@ -1446,13 +1503,19 @@ private func uniffiTraitInterfaceCallAsyncWithError<T, E>(
     lowerError: @escaping (E) -> RustBuffer
 ) -> UniffiForeignFuture {
     let task = Task {
+        // See the note in uniffiTraitInterfaceCallAsync for details on `handleSuccess` and
+        // `handleError`.
+        var callResult: T
         do {
-            handleSuccess(try await makeCall())
+            callResult = try await makeCall()
         } catch let error as E {
             handleError(CALL_ERROR, lowerError(error))
+            return
         } catch {
             handleError(CALL_UNEXPECTED_ERROR, FfiConverterString.lower(String(describing: error)))
+            return
         }
+        handleSuccess(callResult)
     }
     let handle = UNIFFI_FOREIGN_FUTURE_HANDLE_MAP.insert(obj: task)
     return UniffiForeignFuture(handle: handle, free: uniffiForeignFutureFree)

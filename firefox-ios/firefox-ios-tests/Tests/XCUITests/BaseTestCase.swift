@@ -71,13 +71,13 @@ class BaseTestCase: XCTestCase {
         let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
         if icon.exists {
             icon.press(forDuration: 1.5)
-            springboard.buttons["Remove App"].waitAndTap()
+            springboard.buttons["Remove App"].tapWithRetry()
             mozWaitForElementToNotExist(springboard.buttons["Remove App"])
             mozWaitForElementToExist(springboard.alerts.firstMatch)
-            springboard.alerts.buttons["Delete App"].waitAndTap()
+            springboard.alerts.buttons["Delete App"].tapWithRetry()
             mozWaitForElementToNotExist(springboard.alerts.buttons["Delete App"])
             mozWaitForElementToExist(springboard.alerts.firstMatch)
-            springboard.alerts.buttons["Delete"].waitAndTap()
+            springboard.alerts.buttons["Delete"].tapWithRetry()
         }
     }
 
@@ -303,11 +303,13 @@ class BaseTestCase: XCTestCase {
         userState = navigator.userState
     }
 
-    func addContentToReaderView() {
+    func addContentToReaderView(isHomePageOn: Bool = true) {
         updateScreenGraph()
         userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        if isHomePageOn {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         app.buttons["Reader View"].waitAndTap()
@@ -457,16 +459,13 @@ class BaseTestCase: XCTestCase {
 
     func openNewTabAndValidateURLisPaste(url: String) {
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        app.buttons["Cancel"].waitAndTap()
+        app.buttons["Cancel"].tapWithRetry()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
         if !iPad() {
             homepageSearchBar.waitAndTap()
         }
-        urlBar.press(forDuration: 2)
-        if !pasteAction.exists {
-            urlBar.press(forDuration: 2)
-        }
+        urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
         mozWaitForElementToExist(app.tables["Context Menu"])
         pasteAction.waitAndTap()
         mozWaitForValueContains(urlBar, value: url)
@@ -610,17 +609,13 @@ extension XCUIElement {
     }
     /// Waits for the UI element and then taps if it exists.
     func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout ?? TIMEOUT)
-        if self.elementType == .button || self.elementType == .link {
-            BaseTestCase().mozWaitElementHittable(element: self, timeout: timeout ?? TIMEOUT)
-        }
+        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         self.tap()
     }
     /// Waits for the UI element and then taps and types the provided text if it exists.
     func tapAndTypeText(_ text: String, timeout: TimeInterval? = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         self.tap()
-        BaseTestCase().mozWaitElementEnabled(element: self, timeout: timeout ?? TIMEOUT)
         self.typeText(text)
     }
 
@@ -633,6 +628,20 @@ extension XCUIElement {
         }
         if self.isHittable {
             XCTFail("\(self) was not tapped")
+        }
+    }
+
+    func pressWithRetry(duration: TimeInterval, timeout: TimeInterval = TIMEOUT, element: XCUIElement) {
+        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        self.press(forDuration: duration)
+        var attempts = 5
+        while !element.exists && attempts > 0 {
+            self.press(forDuration: duration)
+            attempts -= 1
+        }
+
+        if !element.exists {
+            XCTFail("\(element) is not visible after \(attempts) attempts")
         }
     }
 

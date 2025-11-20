@@ -36,6 +36,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
                 style: .plain,
                 target: self,
                 action: #selector(done))
+            if #available(iOS 26.0, *) {
+                let theme = themeManager.getCurrentTheme(for: windowUUID)
+                navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+            }
         }
     }
 
@@ -213,7 +217,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            tableView.reloadData()
+            ensureMainThread {
+                self.tableView.reloadData()
+            }
         default:
             break
         }

@@ -90,6 +90,38 @@ class RustSyncManagerTests: XCTestCase {
         }
     }
 
+    func testGetEnginesWithRetrievedKeys() {
+        let enginesToSync = rustSyncManager
+            .getEnginesWithRetrievedKeys("testCCKey",
+                                         "testLoginsKey",
+                                         rustSyncManager.syncManagerAPI.rustTogglableEngines)
+        XCTAssertEqual(enginesToSync.count, 6)
+        XCTAssertTrue(enginesToSync.contains(.creditcards))
+        XCTAssertTrue(enginesToSync.contains(.passwords))
+
+        let enginesToSync2 = rustSyncManager
+            .getEnginesWithRetrievedKeys(nil, nil, rustSyncManager.syncManagerAPI.rustTogglableEngines)
+        XCTAssertEqual(enginesToSync2.count, 4)
+        XCTAssertFalse(enginesToSync2.contains(.creditcards))
+        XCTAssertFalse(enginesToSync2.contains(.passwords))
+
+        let enginesToSync3 = rustSyncManager
+            .getEnginesWithRetrievedKeys("testCCKey",
+                                         nil,
+                                         rustSyncManager.syncManagerAPI.rustTogglableEngines)
+        XCTAssertEqual(enginesToSync3.count, 5)
+        XCTAssertTrue(enginesToSync3.contains(.creditcards))
+        XCTAssertFalse(enginesToSync3.contains(.passwords))
+
+        let enginesToSync4 = rustSyncManager
+            .getEnginesWithRetrievedKeys(nil,
+                                         "testLoginsKey",
+                                         rustSyncManager.syncManagerAPI.rustTogglableEngines)
+        XCTAssertEqual(enginesToSync4.count, 5)
+        XCTAssertFalse(enginesToSync4.contains(.creditcards))
+        XCTAssertTrue(enginesToSync4.contains(.passwords))
+    }
+
     func testGetEnginesAndKeys_withOutLoginsVerified() {
         logins.loginsVerified = false
         let engines: [RustSyncManagerAPI.TogglableEngine] = [

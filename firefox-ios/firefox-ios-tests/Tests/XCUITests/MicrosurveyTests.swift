@@ -100,7 +100,9 @@ final class MicrosurveyTests: BaseTestCase {
 
     private func generateTriggerForMicrosurvey() {
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
     }

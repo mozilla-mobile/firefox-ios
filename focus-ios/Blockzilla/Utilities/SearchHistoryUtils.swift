@@ -19,7 +19,7 @@ struct textSearched {
     }
 }
 
-class SearchHistoryUtils {
+final class SearchHistoryUtils {
     static var isFromURLBar = false
     static var isNavigating = false
     static var isReload = false

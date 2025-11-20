@@ -32,11 +32,37 @@ final class ShareManagerTests: XCTestCase {
 
     // MARK: - Test sharing a file
 
-    func testGetActivityItems_forFileURL_withNoShareText() throws {
+    func testGetActivityItems_forFileURL_withNoRemoteURL_withNoShareText() throws {
         let testShareActivityType = UIActivity.ActivityType.message
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testFileURL),
+            forShareType: .file(url: testFileURL, remoteURL: nil),
+            withExplicitShareMessage: nil
+        )
+
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let itemForURLActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testShareActivityType
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 1] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testShareActivityType
+        )
+
+        XCTAssertEqual(activityItems.count, 2)
+        XCTAssertEqual(itemForURLActivity as? URL, testFileURL)
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    func testGetActivityItems_forFileURL_withRemoteURL_withNoShareText() throws {
+        let testShareActivityType = UIActivity.ActivityType.message
+
+        // Should be no difference with or without remoteURL
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .file(url: testFileURL, remoteURL: testWebURL),
             withExplicitShareMessage: nil
         )
 
@@ -62,7 +88,7 @@ final class ShareManagerTests: XCTestCase {
         let testMessage = "Test message"
         let testSubtitle = "Test subtitle"
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testFileURL),
+            forShareType: .file(url: testFileURL, remoteURL: nil),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
         )
 
@@ -109,7 +135,7 @@ final class ShareManagerTests: XCTestCase {
         let testShareActivityType = UIActivity.ActivityType.message
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testWebURL),
+            forShareType: .file(url: testWebURL, remoteURL: nil),
             withExplicitShareMessage: nil
         )
 
@@ -136,7 +162,7 @@ final class ShareManagerTests: XCTestCase {
         let testSubtitle = "Test subtitle"
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testWebURL),
+            forShareType: .file(url: testWebURL, remoteURL: nil),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
         )
 
@@ -312,9 +338,435 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertTrue(itemForShareActivity is NSNull)
     }
 
+    // MARK: - Custom SendToDeviceActivity
+
+    func testCustomApplicationActivities_forSiteShare() throws {
+        let testShareActivityType = UIActivity.ActivityType("org.mozilla.ios.Fennec.sendToDevice")
+        let testActivityTitle = "Send Link to Device"
+
+        let testShareType = ShareType.site(url: testWebURL)
+
+        let activityItems = ShareManager.getApplicationActivities(forShareType: testShareType)
+
+        let customActivityType = try XCTUnwrap(activityItems[safe: 0] as? SendToDeviceActivity)
+        XCTAssertEqual(activityItems.count, 1)
+        XCTAssertEqual(customActivityType.activityTitle, testActivityTitle)
+        XCTAssertEqual(customActivityType.activityType, testShareActivityType)
+    }
+
+    func testCustomApplicationActivities_forTabShare() throws {
+        let testShareActivityType = UIActivity.ActivityType("org.mozilla.ios.Fennec.sendToDevice")
+        let testActivityTitle = "Send Link to Device"
+
+        let testShareType = ShareType.tab(url: testWebURL, tab: testTab)
+
+        let activityItems = ShareManager.getApplicationActivities(forShareType: testShareType)
+
+        let customActivityType = try XCTUnwrap(activityItems[safe: 0] as? SendToDeviceActivity)
+        XCTAssertEqual(activityItems.count, 1)
+        XCTAssertEqual(customActivityType.activityTitle, testActivityTitle)
+        XCTAssertEqual(customActivityType.activityType, testShareActivityType)
+    }
+
+    func testCustomApplicationActivities_forFileShareWithRemoteURL_AddsSendToDevice() throws {
+        let testShareActivityType = UIActivity.ActivityType("org.mozilla.ios.Fennec.sendToDevice")
+        let testActivityTitle = "Send Link to Device"
+
+        let testShareType = ShareType.file(url: testFileURL, remoteURL: testWebURL)
+
+        let activityItems = ShareManager.getApplicationActivities(forShareType: testShareType)
+
+        let customActivityType = try XCTUnwrap(activityItems[safe: 0] as? SendToDeviceActivity)
+        XCTAssertEqual(activityItems.count, 1)
+        XCTAssertEqual(customActivityType.activityTitle, testActivityTitle)
+        XCTAssertEqual(customActivityType.activityType, testShareActivityType)
+    }
+
+    func testCustomApplicationActivities_forFileShareWithNoRemoteURL_DoesNotAddSendToDevice() throws {
+        // Simulate file share for downloaded files
+        let testShareType = ShareType.file(url: testFileURL, remoteURL: nil)
+
+        let activityItems = ShareManager.getApplicationActivities(forShareType: testShareType)
+
+        XCTAssertEqual(activityItems.count, 0)
+    }
+
+    // MARK: - Sent from Firefox experiment - test that special treatment is only enabled when feature flag is enabled
+
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_OverridesURL_withTreatmentA() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        let expectedShareContentA = "https://mozilla.org\n\nSent from Firefox 🦊 Try the mobile browser: https://mzl.la/4fOWPpd"
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
+        XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "With Sent from Firefox shares to WhatsApp, never append an additional title."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_OverridesURL_withTreatmentB() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: false)
+
+        let expectedShareContentB = "https://mozilla.org\n\nSent from Firefox 🦊 https://mzl.la/3YSUOl8"
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
+        XCTAssertEqual(itemForActivity as? String, expectedShareContentB)
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "With Sent from Firefox shares to WhatsApp, never append an additional title."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_doesNotImpactMail() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        let mailActivity = UIActivity.ActivityType.mail
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: mailActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "When no explicit share message, TitleActivityItemProvider item should not be shared to excluded activity Mail."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_doesNotImpactAirDrop() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        let mailActivity = UIActivity.ActivityType.airDrop
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: mailActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+        XCTAssertEqual(
+            itemForTitleActivity as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    func testGetActivityItems_forTab_withSentFromFirefoxDisabled_DoesNotOverride() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: false, isTreatmentA: true)
+
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+        XCTAssertEqual(
+            itemForTitleActivity as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    /// This test ensures that the `ShareManager` does not enforce Sent from Firefox treatment for users enrolled in the
+    /// experiment who have explicitly opted out (for example, using the "Include Firefox Download Link on WhatsApp Shares"
+    /// toggle on the general settings screen).
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_respectsUserPreferencesToOptOut() throws {
+        // Setup Nimbus to emulate a user enrolled in Sent from Firefox with the Treatment A branch
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        // Simulate the user having disabled the Sent from Firefox toggle in the Settings
+        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+        XCTAssertEqual(
+            itemForTitleActivity as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    /// This test ensures that the `ShareManager` applies Sent from Firefox treatment for users enrolled in the experiment
+    /// who have explicitly opted in (for example, using the "Include Firefox Download Link on WhatsApp Shares" toggle on the
+    /// general settings screen).
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_respectsUserPreferencesToOptIn() throws {
+        let expectedShareContentA = "https://mozilla.org\n\nSent from Firefox 🦊 Try the mobile browser: https://mzl.la/4fOWPpd"
+
+        // Setup Nimbus to emulate a user enrolled in Sent from Firefox with the Treatment A branch
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        // Simulate the user having enabled the Sent from Firefox toggle in the Settings
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
+        XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "With Sent from Firefox shares to WhatsApp, never append an additional title."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
     // MARK: - Helpers
 
     private func createStubActivityViewController() -> UIActivityViewController {
         return UIActivityViewController(activityItems: [], applicationActivities: [])
+    }
+
+    private func setupNimbusSentFromFirefoxTesting(isEnabled: Bool, isTreatmentA: Bool) {
+        FxNimbus.shared.features.sentFromFirefoxFeature.with { _, _ in
+            return SentFromFirefoxFeature(
+                enabled: isEnabled,
+                isTreatmentA: isTreatmentA
+            )
+        }
     }
 }

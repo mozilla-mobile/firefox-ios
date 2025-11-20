@@ -127,6 +127,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Tab #2
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
@@ -152,6 +153,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Tab #2
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
@@ -166,6 +168,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Tab #3
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
@@ -288,7 +291,8 @@ class DesktopModeTestsIphone: BaseTestCase {
 
         navigator.nowAt(BrowserTab)
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
-        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(TabTray)
+        navigator.goto(NewTabScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()

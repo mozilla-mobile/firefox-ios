@@ -43,6 +43,7 @@ enum SearchBarPosition: String, FlaggableFeatureOptions, CaseIterable {
 }
 
 protocol SearchBarPreferenceDelegate: AnyObject {
+    @MainActor
     func didUpdateSearchBarPositionPreference()
 }
 
@@ -56,7 +57,7 @@ protocol SearchBarLocationProvider: FeatureFlaggable {
 
 extension SearchBarLocationProvider {
     var isSearchBarLocationFeatureEnabled: Bool {
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isiPad = UIDeviceDetails.userInterfaceIdiom == .pad
         let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
 
         return isFeatureEnabled && !isiPad
@@ -130,6 +131,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 
 // MARK: Private
 extension SearchBarSettingsViewModel {
+    @MainActor
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
         let previousPosition: SearchBarPosition? = featureFlags.getCustomState(for: .searchBarPosition)
 

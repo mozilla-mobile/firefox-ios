@@ -13,11 +13,12 @@ import struct MozillaAppServices.Login
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
+    @MainActor
     static func handleAuthRequest(
         _ viewController: UIViewController,
         challenge: URLAuthenticationChallenge,
         loginsHelper: LoginsHelper?,
-        completionHandler: @escaping ((Result<LoginEntry, Error>) -> Void)
+        completionHandler: @escaping @Sendable (Result<LoginEntry, Error>) -> Void
     ) {
         // If there have already been too many login attempts, we'll just fail.
         if challenge.previousFailureCount >= Authenticator.MaxAuthenticationAttempts {
@@ -94,7 +95,7 @@ class Authenticator {
         _ challenge: URLAuthenticationChallenge,
         fromLoginsProvider loginsProvider: RustLogins,
         logger: Logger = DefaultLogger.shared,
-        completionHandler: @escaping (Result<URLCredential?, Error>) -> Void
+        completionHandler: @escaping @Sendable (Result<URLCredential?, Error>) -> Void
     ) {
         loginsProvider.getLoginsFor(protectionSpace: challenge.protectionSpace, withUsername: nil) { result in
             switch result {
@@ -167,10 +168,12 @@ class Authenticator {
         return credentials
     }
 
-    private static func handleUnmatchedSchemes(logins: [Login],
-                                               challenge: URLAuthenticationChallenge,
-                                               loginsProvider: RustLogins,
-                                               completionHandler: @escaping (Result<URLCredential?, Error>) -> Void) {
+    private static func handleUnmatchedSchemes(
+        logins: [Login],
+        challenge: URLAuthenticationChallenge,
+        loginsProvider: RustLogins,
+        completionHandler: @escaping @Sendable (Result<URLCredential?, Error>) -> Void
+    ) {
         let login = logins[0]
         let credentials = login.credentials
         let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
@@ -184,6 +187,7 @@ class Authenticator {
         }
     }
 
+    @MainActor
     fileprivate static func promptForUsernamePassword(
         _ viewController: UIViewController,
         credentials: URLCredential?,

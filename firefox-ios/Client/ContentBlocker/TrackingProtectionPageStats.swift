@@ -41,7 +41,8 @@ struct TPPageStats {
     }
 }
 
-class TPStatsBlocklistChecker {
+// FIXME: FXIOS-13985 Make truly thread safe
+class TPStatsBlocklistChecker: @unchecked Sendable {
     static let shared = TPStatsBlocklistChecker()
 
     // Initialized async, is non-nil when ready to be used.

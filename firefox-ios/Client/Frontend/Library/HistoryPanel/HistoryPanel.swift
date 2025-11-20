@@ -9,11 +9,13 @@ import WebKit
 import Common
 import SiteImageView
 
+// FIXME: FXIOS-13958 @objcMembers is unsafe with main actor isolation
 @objcMembers
 class HistoryPanel: UIViewController,
                     LibraryPanel,
                     LibraryPanelContextMenu,
-                    Themeable {
+                    Themeable,
+                    Notifiable {
     struct UX {
         static let WelcomeScreenItemWidth = 170
         static let IconSize = 23
@@ -165,15 +167,11 @@ class HistoryPanel: UIViewController,
 
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        viewModel.historyPanelNotifications.forEach {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(handleNotifications),
-                name: $0,
-                object: nil
-            )
-        }
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: viewModel.historyPanelNotifications
+        )
 
         handleRefreshControl()
         setupLayout()
@@ -234,8 +232,8 @@ class HistoryPanel: UIViewController,
         // Avoid refreshing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
-        viewModel.reloadData { [weak self] success in
-            DispatchQueue.main.async {
+        viewModel.reloadData { success in
+            ensureMainThread { [weak self] in
                 self?.applySnapshot(animatingDifferences: animating)
             }
         }
@@ -300,11 +298,9 @@ class HistoryPanel: UIViewController,
                 self?.viewModel.removeAllData()
             }
 
-            DispatchQueue.main.async {
-                self?.applySnapshot()
-                self?.tableView.reloadData()
-                self?.refreshRecentlyClosedCell()
-            }
+            self?.applySnapshot()
+            self?.tableView.reloadData()
+            self?.refreshRecentlyClosedCell()
         }
     }
 
@@ -328,40 +324,46 @@ class HistoryPanel: UIViewController,
     }
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
-            viewModel.removeAllData()
-            fetchDataAndUpdateLayout(animating: true)
+        let notificationName = notification.name
+        let notificationDBName = notification.object as? String
 
-            if profile.hasSyncableAccount() {
-                resyncHistory()
-            }
-            break
-        case UIContentSizeCategory.didChangeNotification:
-            if emptyStateOverlayView.superview != nil {
-                emptyStateOverlayView.removeFromSuperview()
-            }
-            emptyStateOverlayView = createEmptyStateOverlayView()
-            resyncHistory()
-            break
-        case .DatabaseWasReopened:
-            if let dbName = notification.object as? String, dbName == "browser.db" {
-                fetchDataAndUpdateLayout(animating: true)
-            }
-        case .OpenClearRecentHistory:
-            if viewModel.isSearchInProgress {
-                exitSearchState()
-            }
+        ensureMainThread {
+            switch notificationName {
+            case .FirefoxAccountChanged, .PrivateDataClearedHistory:
+                self.viewModel.removeAllData()
+                self.fetchDataAndUpdateLayout(animating: true)
 
-            showClearRecentHistory()
-            break
-        case .OpenRecentlyClosedTabs:
-            historyCoordinatorDelegate?.showRecentlyClosedTab()
-            applySnapshot(animatingDifferences: true)
-            break
-        default:
-            // no need to do anything at all
-            break
+                if self.profile.hasSyncableAccount() {
+                    self.resyncHistory()
+                }
+
+            case UIContentSizeCategory.didChangeNotification:
+                if self.emptyStateOverlayView.superview != nil {
+                    self.emptyStateOverlayView.removeFromSuperview()
+                }
+                self.emptyStateOverlayView = self.createEmptyStateOverlayView()
+                self.resyncHistory()
+
+            case .DatabaseWasReopened:
+                if let dbName = notificationDBName, dbName == "browser.db" {
+                    self.fetchDataAndUpdateLayout(animating: true)
+                }
+
+            case .OpenClearRecentHistory:
+                if self.viewModel.isSearchInProgress {
+                    self.exitSearchState()
+                }
+
+                self.showClearRecentHistory()
+
+            case .OpenRecentlyClosedTabs:
+                self.historyCoordinatorDelegate?.showRecentlyClosedTab()
+                self.applySnapshot(animatingDifferences: true)
+
+            default:
+                // no need to do anything at all
+                break
+            }
         }
     }
 
@@ -738,8 +740,7 @@ extension HistoryPanel: UITableViewDelegate {
         let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
         let headerViewModel = SiteTableViewHeaderModel(
             title: actualSection.title ?? "",
-            isCollapsible: true,
-            collapsibleState: isCollapsed ? ExpandButtonState.trailing : ExpandButtonState.down
+            accessory: .collapsible(state: isCollapsed ? ExpandButtonState.trailing : ExpandButtonState.down)
         )
         header.configure(headerViewModel)
         header.applyTheme(theme: currentTheme())

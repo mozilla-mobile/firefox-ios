@@ -27,7 +27,7 @@ struct ToolbarState: ScreenState, Sendable {
     var isTranslucent: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let toolbarState = store.state.screenState(
+        guard let toolbarState = appState.screenState(
             ToolbarState.self,
             for: .toolbar,
             window: uuid)
@@ -124,6 +124,7 @@ struct ToolbarState: ScreenState, Sendable {
         return handleReducer(state: state, action: action)
     }
 
+    @MainActor
     private static func handleReducer(state: ToolbarState, action: Action) -> ToolbarState {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
@@ -139,13 +140,18 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.cancelEditOnHomepage,
-            ToolbarActionType.hideKeyboard, ToolbarActionType.websiteLoadingStateDidChange,
+            ToolbarActionType.keyboardStateDidChange, ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
-            ToolbarActionType.scrollAlphaDidChange, ToolbarActionType.readerModeStateChanged,
-            ToolbarActionType.navigationMiddleButtonDidChange:
+            ToolbarActionType.scrollAlphaNeedsUpdate, ToolbarActionType.readerModeStateChanged,
+            ToolbarActionType.navigationMiddleButtonDidChange,
+            ToolbarActionType.didStartTranslatingPage,
+            ToolbarActionType.translationCompleted,
+            ToolbarActionType.receivedTranslationLanguage,
+            ToolbarActionType.didReceiveErrorTranslating,
+            ToolbarActionType.didTranslationSettingsChange:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -178,6 +184,7 @@ struct ToolbarState: ScreenState, Sendable {
         }
     }
 
+    @MainActor
     private static func handleDidLoadToolbars(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction,
               let toolbarPosition = toolbarAction.toolbarPosition,
@@ -208,6 +215,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleToolbarUpdates(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -233,6 +241,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleShowMenuWarningBadge(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
@@ -257,6 +266,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleNumberOfTabsChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
@@ -281,6 +291,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleToolbarPositionChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition
         else {
@@ -310,6 +321,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleBackForwardButtonStateChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
@@ -334,6 +346,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleTraitCollectionDidChange(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
@@ -358,6 +371,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleNavigationButtonDoubleTapped(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
@@ -382,6 +396,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleNavigationHintFinishedPresenting(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
@@ -406,6 +421,7 @@ struct ToolbarState: ScreenState, Sendable {
         )
     }
 
+    @MainActor
     private static func handleSearchEngineSelectionAction(state: Self, action: Action) -> ToolbarState {
         guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction else {
             return defaultState(from: state)

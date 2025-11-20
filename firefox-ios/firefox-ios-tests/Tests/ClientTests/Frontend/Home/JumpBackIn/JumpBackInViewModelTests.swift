@@ -22,11 +22,10 @@ class JumpBackInViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-
-        DependencyHelperMock().bootstrapDependencies()
+        mockTabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         adaptor = JumpBackInDataAdaptorMock()
         mockProfile = MockProfile()
-        mockTabManager = MockTabManager()
         stubBrowserViewController = BrowserViewController(
             profile: mockProfile,
             tabManager: mockTabManager
@@ -376,6 +375,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     // MARK: - Sync tab layout
 
+    @MainActor
     func testMaxDisplayedItemSyncedTab_withAccount() {
         let subject = createSubject()
 
@@ -385,6 +385,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(maxItems.syncedTabCount, 1)
     }
 
+    @MainActor
     func testMaxDisplayedItemSyncedTab_withoutAccount() {
         let subject = createSubject()
 

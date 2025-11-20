@@ -23,10 +23,11 @@ extension UIImage {
 
         // Scale proportionately to optional minimum size.
         let size: CGSize
+        var scaleRatio = 1.0
         if let minSize = minimumSize {
             let xScaleRatio = minSize.width / baseSize.width
             let yScaleRatio = minSize.height / baseSize.height
-            let scaleRatio = max(max(xScaleRatio, yScaleRatio), 1.0)
+            scaleRatio = max(max(xScaleRatio, yScaleRatio), 1.0)
             size = CGSize(width: baseSize.width * scaleRatio, height: baseSize.height * scaleRatio)
         } else {
             size = baseSize
@@ -36,12 +37,12 @@ extension UIImage {
         return renderer.image { context in
             let cgContext = context.cgContext
 
-            UIColor.white.setFill()
+            UIColor.clear.setFill()
             context.fill(CGRect(origin: .zero, size: size))
 
             // Coordinate system must be flipped to match PDF rendering
             cgContext.translateBy(x: 0, y: size.height)
-            cgContext.scaleBy(x: 1, y: -1)
+            cgContext.scaleBy(x: scaleRatio, y: -scaleRatio)
             page.draw(with: .mediaBox, to: cgContext)
         }
     }

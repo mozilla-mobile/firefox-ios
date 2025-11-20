@@ -4,20 +4,21 @@
 
 import UIKit
 import Fuzi
+import Shared
 
 /// OpenSearch XML parser.
 /// This parser accepts standards-compliant OpenSearch 1.1 XML documents in addition to
 /// the Firefox-specific search plugin format.
 ///
 /// OpenSearch spec: http://www.opensearch.org/Specifications/OpenSearch/1.1
-class OpenSearchParser {
+final class OpenSearchParser: Sendable {
     private let pluginMode: Bool
     private let userInterfaceIdiom: UIUserInterfaceIdiom
     private let typeSearch = "text/html"
     private let typeSuggest = "application/x-suggestions+json"
     private let typeTrending = "application/x-trending+json"
 
-    init(pluginMode: Bool, userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+    init(pluginMode: Bool, userInterfaceIdiom: UIUserInterfaceIdiom = UIDeviceDetails.userInterfaceIdiom) {
         self.pluginMode = pluginMode
         self.userInterfaceIdiom = userInterfaceIdiom
     }

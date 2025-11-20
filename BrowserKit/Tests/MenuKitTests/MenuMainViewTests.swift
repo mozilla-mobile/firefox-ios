@@ -5,18 +5,19 @@
 import XCTest
 @testable import MenuKit
 
+@MainActor
 final class MenuMainViewTests: XCTestCase {
     var menuView: MenuMainView!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         menuView = MenuMainView()
         menuView.frame = CGRect(x: 0, y: 0, width: 375, height: 812)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         menuView = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testShouldNotDisplayBanner_onSiteMenu() {

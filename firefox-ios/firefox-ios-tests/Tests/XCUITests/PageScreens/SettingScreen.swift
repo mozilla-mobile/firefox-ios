@@ -13,6 +13,10 @@ final class SettingScreen {
         self.sel = selectors
     }
 
+    private var clearDataCell: XCUIElement { sel.CLEAR_PRIVATE_DATA_CELL.element(in: app) }
+    private var okButton: XCUIElement { sel.ALERT_OK_BUTTON.element(in: app)}
+    private var toggle: XCUIElement { sel.BLOCK_POPUPS_SWITCH.element(in: app) }
+
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
         doneButton.waitAndTap()
@@ -49,5 +53,101 @@ final class SettingScreen {
             settingsTable.cells[sel.ADDRESS_CELL.value]
         ]
         BaseTestCase().waitForElementsToExist(requiredElements)
+    }
+
+    func clearPrivateDataAndConfirm() {
+        clearDataCell.waitAndTap()
+
+        BaseTestCase().mozWaitForElementToExist(okButton)
+        okButton.waitAndTap()
+    }
+
+    func tryTapClearPrivateDataButton() {
+        clearDataCell.waitAndTap()
+    }
+
+    func assertConfirmationAlertNotPresent() {
+        BaseTestCase().mozWaitForElementToNotExist(okButton)
+    }
+
+    func waitForClearPrivateDataCellSync() {
+        BaseTestCase().mozWaitForElementToExist(clearDataCell)
+    }
+
+    func swipeUpFromNewTabCell() {
+        let newTab = sel.NEW_TAB_CELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(newTab)
+        newTab.swipeUp()
+    }
+
+    func waitForBrowsingLinksSection() {
+        let browsingSection = sel.BROWSING_LINKS_SECTION.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(browsingSection)
+    }
+
+    func assertBlockPopUpsSwitchIsOn() {
+        BaseTestCase().mozWaitForElementToExist(toggle)
+
+        let value = toggle.value as? String
+        XCTAssertEqual(value, "1", "Expected 'Block Pop-Ups' switch to be ON (value = 1), but got \(String(describing: value))")
+    }
+
+    func tapOnBlockPopupsSwitch() {
+        toggle.waitAndTap()
+    }
+
+    func assertBlockPopUpsSwitchIsOff() {
+        let toggle = sel.BLOCK_POPUPS_SWITCH.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(toggle)
+
+        let value = toggle.value as? String
+        XCTAssertEqual(value, "0", "Expected 'Block Pop-Ups' switch to be OFF (value = 0), but got \(String(describing: value))")
+    }
+
+    func navigateBackToHomePage() {
+        sel.TITLE.element(in: app).waitAndTap()
+        sel.NAVIGATIONBAR.element(in: app).waitAndTap()
+    }
+
+    func connectSettingSwipeUp() {
+        let connectSetting = sel.CONNECT_SETTING.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(connectSetting)
+        connectSetting.swipeUp()
+    }
+
+    func assertSettingsScreenExists() {
+        let table = app.tables.element(boundBy: 0)
+        BaseTestCase().mozWaitForElementToExist(table)
+    }
+
+    func assertLayout() {
+        let title = sel.SETTINGS_TITLE.element(in: app)
+        let done = sel.DONE_BUTTON.element(in: app)
+        let defaultBrowser = sel.DEFAULT_BROWSER_CELL.element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(title)
+        XCTAssertTrue(title.isLeftOf(rightElement: done))
+        XCTAssertTrue(done.isAbove(element: defaultBrowser))
+        XCTAssertTrue(title.isAbove(element: defaultBrowser))
+    }
+
+    func assertAllRowsVisible() {
+        let table = app.tables.element(boundBy: 0)
+        BaseTestCase().mozWaitForElementToExist(table)
+
+        // Toolbar check only on iPhone
+        if !BaseTestCase().iPad() {
+            let toolbar = sel.TOOLBAR_CELL.element(in: app)
+            BaseTestCase().mozWaitForElementToExist(toolbar)
+            XCTAssertTrue(toolbar.isVisible())
+        }
+
+        // Iterate over all expected cells
+        for selector in sel.ALL_CELLS() {
+            let element = selector.element(in: app)
+            BaseTestCase().scrollToElement(element)
+            BaseTestCase().mozWaitForElementToExist(element)
+            XCTAssertTrue(element.isVisible(), "\(selector.description) is not visible")
+        }
     }
 }

@@ -319,6 +319,7 @@ class O_AddressesTests: BaseTestCase {
         addNewAddress()
         tapSave()
         let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
+        mozWaitElementEnabled(element: app.navigationBars[addresses.title], timeout: TIMEOUT)
         app.buttons[addresses.addAddress].waitAndTap()
         addNewAddress()
         tapSave()
@@ -765,8 +766,12 @@ class O_AddressesTests: BaseTestCase {
         typeEmail(email: "test2@mozilla.com", updateText: true)
     }
 
-    private func updateFieldAndValidate(field: String, newValue: String, isInfoDisplayed: Bool = false,
-                                        isPhoneField: Bool = false) {
+    private func updateFieldAndValidate(
+        field: String,
+        newValue: String,
+        isInfoDisplayed: Bool = false,
+        isPhoneField: Bool = false
+    ) {
         reachAddNewAddressScreen()
         addNewAddress()
         tapSave()

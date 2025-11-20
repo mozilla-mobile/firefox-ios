@@ -96,7 +96,7 @@ protocol Profile: AnyObject, Sendable {
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
     var firefoxSuggest: RustFirefoxSuggestProtocol? { get }
-    var remoteSettingsService: RemoteSettingsService? { get }
+    var remoteSettingsService: RemoteSettingsService { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
@@ -131,8 +131,8 @@ protocol Profile: AnyObject, Sendable {
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
-    func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
-    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
+    func getClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void)
+    func getCachedClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void)
 
     func cleanupHistoryIfNeeded()
 
@@ -480,16 +480,16 @@ open class BrowserProfile: Profile,
         }
     }
 
-    public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
+    public func getClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void) {
         let deferredResponse = self.getClientsAndTabs()
         deferredResponse.upon { result in
             completion(result.successValue)
         }
     }
 
-    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
-        let defferedResponse = self.retrieveTabData()
-        defferedResponse.upon { result in
+    public func getCachedClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void) {
+        let deferredResponse = self.retrieveTabData()
+        deferredResponse.upon { result in
             completion(result.successValue)
         }
     }
@@ -653,7 +653,7 @@ open class BrowserProfile: Profile,
         return RustLogins(databasePath: databasePath)
     }()
 
-    lazy var remoteSettingsService: RemoteSettingsService? = {
+    lazy var remoteSettingsService: RemoteSettingsService = {
         let remoteSettingsEnvironmentKey = prefs.stringForKey(PrefsKeys.RemoteSettings.remoteSettingsEnvironment) ?? ""
         let remoteSettingsEnvironment = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
         let remoteSettingsServer = remoteSettingsEnvironment.toRemoteSettingsServer()
@@ -686,17 +686,14 @@ open class BrowserProfile: Profile,
                 appropriateFor: nil,
                 create: true
             ).appendingPathComponent("suggest.db", isDirectory: false)
-            if let rsService = remoteSettingsService {
-                return try RustFirefoxSuggest(
-                    dataPath: URL(
-                        fileURLWithPath: directory,
-                        isDirectory: true
-                    ).appendingPathComponent("suggest-data.db").path,
-                    cachePath: cacheFileURL.path,
-                    remoteSettingsService: rsService
-                )
-            }
-            return nil
+            return try RustFirefoxSuggest(
+                dataPath: URL(
+                    fileURLWithPath: directory,
+                    isDirectory: true
+                ).appendingPathComponent("suggest-data.db").path,
+                cachePath: cacheFileURL.path,
+                remoteSettingsService: remoteSettingsService
+            )
         } catch {
             logger.log("Failed to open Firefox Suggest database: \(error.localizedDescription)",
                        level: .warning,
@@ -707,8 +704,7 @@ open class BrowserProfile: Profile,
 
     private func remoteSettingsAppContext() -> RemoteSettingsContext {
         let appInfo = BrowserKitInformation.shared
-        let uiDevice = UIDevice.current
-        let formFactor = switch uiDevice.userInterfaceIdiom {
+        let formFactor = switch UIDeviceDetails.userInterfaceIdiom {
         case .pad: "tablet"
         case .mac: "desktop"
         default: "phone"
@@ -725,7 +721,7 @@ open class BrowserProfile: Profile,
             /// See: https://developer.apple.com/documentation/foundation/locale/identifiertype/bcp47
             locale: getLocaleTag(),
             os: "iOS",
-            osVersion: uiDevice.systemVersion,
+            osVersion: UIDeviceDetails.systemVersion,
             formFactor: formFactor,
             country: Locale.current.regionCode)
     }
@@ -804,13 +800,16 @@ open class BrowserProfile: Profile,
                 )
             }
         }
-        if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
-            application.unregisterForRemoteNotifications()
+
+        ensureMainThread {
+            if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
+                application.unregisterForRemoteNotifications()
+            }
         }
     }
 
-    class NoAccountError: MaybeErrorType {
-        var description = "No account."
+    struct NoAccountError: MaybeErrorType {
+        let description = "No account."
     }
 }
 

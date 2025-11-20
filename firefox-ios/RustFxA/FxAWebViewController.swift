@@ -82,7 +82,9 @@ class FxAWebViewController: UIViewController {
         view = webView
         webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
         viewModel.setupFirstPage { [weak self] (request, telemetryEventMethod) in
-            self?.loadRequest(request, isPairing: telemetryEventMethod == .qrPairing)
+            ensureMainThread { [self] in
+                self?.loadRequest(request, isPairing: telemetryEventMethod == .qrPairing)
+            }
         }
 
         viewModel.onDismissController = { [weak self] in
@@ -152,7 +154,7 @@ extension FxAWebViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+        decisionHandler: @escaping @MainActor @Sendable (WKNavigationActionPolicy) -> Void
     ) {
         if let blobURL = navigationAction.request.url,
            viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webView.url) {
@@ -262,23 +264,28 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
 
 // MARK: - Observe value
 extension FxAWebViewController {
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
-                               change: [NSKeyValueChangeKey: Any]?,
-                               context: UnsafeMutableRawPointer?) {
-        guard let kp = keyPath,
-              let path = KVOConstants(rawValue: kp)
-        else {
-            sendObserveValueError(forKeyPath: keyPath)
-            return
-        }
-
-        switch path {
-        case .URL:
-            if let flow = viewModel.fxAWebViewTelemetry.getFlowFromUrl(fxaUrl: webView.url) {
-                viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
+        ensureMainThread {
+            guard let kp = keyPath,
+                  let path = KVOConstants(rawValue: kp)
+            else {
+                self.sendObserveValueError(forKeyPath: keyPath)
+                return
             }
-        default:
-            sendObserveValueError(forKeyPath: keyPath)
+
+            switch path {
+            case .URL:
+                if let flow = self.viewModel.fxAWebViewTelemetry.getFlowFromUrl(fxaUrl: self.webView.url) {
+                    self.viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
+                }
+            default:
+                self.sendObserveValueError(forKeyPath: keyPath)
+            }
         }
     }
 

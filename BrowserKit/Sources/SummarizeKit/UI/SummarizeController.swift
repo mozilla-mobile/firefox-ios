@@ -11,12 +11,13 @@ import Down
 import SwiftUI
 
 public protocol SummarizeNavigationHandler: AnyObject {
+    @MainActor
     func openURL(url: URL)
-
+    @MainActor
     func dismissSummary()
 }
 
-public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
+public final class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
     private struct UX {
         @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
         static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)

@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SubtitleCell: UITableViewCell {
+final class SubtitleCell: UITableViewCell {
     convenience init(title: String, subtitle: String, reuseIdentifier: String? = nil) {
         self.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         textLabel?.text = title
