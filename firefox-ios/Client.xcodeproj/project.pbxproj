@@ -2353,20 +2353,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		8C6FADF72EC1F3620022FB5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43BE5774278BA4D900491291;
-			remoteInfo = RustMozillaAppServices;
-		};
-		8CB511232EC1F183004A2320 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
-			remoteInfo = Storage;
-		};
 		8CF609302EA8D46F00F069B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -2503,16 +2489,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8AFD6277282C51D300451BC8 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8CA9C3FE2EC1F1F80050D1B0 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -20003,16 +19979,6 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 7BEB64421C7345600092C02E /* PBXContainerItemProxy */;
 		};
-		8C6FADF82EC1F3620022FB5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43BE5774278BA4D900491291 /* RustMozillaAppServices */;
-			targetProxy = 8C6FADF72EC1F3620022FB5C /* PBXContainerItemProxy */;
-		};
-		8CB511242EC1F183004A2320 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FCAE2191ABB51F800877008 /* Storage */;
-			targetProxy = 8CB511232EC1F183004A2320 /* PBXContainerItemProxy */;
-		};
 		8CF609312EA8D46F00F069B6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8CF609242EA8D46E00F069B6 /* ActionExtension */;
@@ -31553,10 +31519,6 @@
 		8C51ED732DE0A64D00B3E58A /* OnboardingKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OnboardingKit;
-		};
-		8CB511202EC1F17D004A2320 /* Shared */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
 		};
 		AB2AC6622BCFD0A200022AAB /* X509 */ = {
 			isa = XCSwiftPackageProductDependency;
