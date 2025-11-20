@@ -116,7 +116,7 @@ final class ToolbarScreen {
     func tapShareButton() {
         shareButton.waitAndTap()
     }
- 
+
     func tapOnNewTabButton() {
         newTabButton.waitAndTap()
     }
