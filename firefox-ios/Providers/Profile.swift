@@ -526,10 +526,14 @@ open class BrowserProfile: Profile,
 
         // If for some reason we don't have a sync manager, just return
         // the result of setLocalTabs
-        guard let syncManager = self.syncManager else { return res }
+        guard self.syncManager != nil else { return res }
 
         // Chain syncTabs after setLocalTabs has completed
         return res.bind { result in
+            // If for some reason we don't have a sync manager, just return
+            // the result of setLocalTabs
+            guard let syncManager = self.syncManager else { return res }
+
             // Only sync if the local tabs were successfully set
             return result.isSuccess
                 // Return the original result from setLocalTabs
