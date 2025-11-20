@@ -50,6 +50,20 @@ enum RelayMaskGenerationResult {
     case error
 }
 
+/// Describes the general state of Relay availability on the user's existing Mozilla account.
+/// This begins with a state of `unknown`. For Phase 1 it is checked periodically and then
+/// cached, due to the required APIs being slow to return, we cannot hit it on-demand on the MT.
+enum RelayAccountStatus {
+    /// Relay is available.
+    case available
+    /// Relay is not available on this user's Mozilla account.
+    case unavailable
+    /// Account status is unknown.
+    case unknown
+    /// The account status is actively being updated.
+    case updating
+}
+
 @MainActor
 final class RelayController: RelayControllerProtocol, Notifiable {
     private enum RelayOAuthClientID: String {
@@ -93,6 +107,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private var isCreatingClient = false
     private let notificationCenter: NotificationProtocol
     private weak var focusedTab: Tab?
+    private var accountStatus: RelayAccountStatus = .unknown
 
     // MARK: - Init
 
@@ -211,9 +226,28 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     func handleNotifications(_ notification: Notification) {
         logger.log("[RELAY] Received notification '\(notification.name.rawValue)'.", level: .info, category: .autofill)
         Task { @MainActor in
-            guard Self.isFeatureEnabled else { return }
+            updateRelayAccountStatus()
+        }
+    }
+
+    private func updateRelayAccountStatus() {
+        guard Self.isFeatureEnabled else { return }
+        guard profile.hasAccount() else {
+            accountStatus = .unavailable
+            return
+        }
+        guard accountStatus != .updating else {
+            logger.log("[RELAY] Already updating account. Will skip redundant update.", level: .info, category: .autofill)
+            return
+        }
+        accountStatus = .updating
+        let isStaging = isFxAStaging()
+        // Fetch the account status (off the main thread)
+        Task {
+            await fetchRelayAccountAvailability(isStaging: isStaging)
+            assert(Thread.isMainThread)
             if hasRelayAccount() {
-                createRelayClient()
+                createRelayClientIfNeeded()
             } else {
                 client = nil
             }
@@ -221,25 +255,26 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     /// Creates the Relay client, if needed. This is safe to call redundantly.
-    private func createRelayClient() {
+    private func createRelayClientIfNeeded() {
         guard client == nil, !isCreatingClient else { return }
         guard let acctManager = RustFirefoxAccounts.shared.accountManager else {
             logger.log("[RELAY] Couldn't create client, no account manager.", level: .debug, category: .autofill)
             return
         }
-
+        isCreatingClient = true
         acctManager.getAccessToken(scope: config.scope) { [config, weak self] result in
             switch result {
             case .failure(let error):
                 self?.logger.log("[RELAY] Error getting access token for Relay: \(error)", level: .warning, category: .autofill)
+                self?.isCreatingClient = false
             case .success(let tokenInfo):
                 do {
                     let clientResult = try RelayClient(serverUrl: config.serverURL, authToken: tokenInfo.token)
                     self?.handleRelayClientCreated(clientResult)
                 } catch {
                     self?.logger.log("[RELAY] Error creating Relay client: \(error)", level: .warning, category: .autofill)
-                    self?.isCreatingClient = false
                 }
+                self?.isCreatingClient = false
             }
         }
     }
@@ -256,16 +291,28 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     private func hasRelayAccount() -> Bool {
-        guard profile.hasAccount() else { return false }
-        guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return false }
+        return accountStatus == .available
+    }
 
-        switch result {
-        case .success(let clients):
-            let OAuthID = isFxAStaging() ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
-            return clients.contains(where: { $0.clientId == OAuthID })
-        case .failure(let error):
-            logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
-            return false
+    /// Checks the current OAuth client status to determine Relay availability, and then updates the internal
+    /// account status back on the main actor.
+    /// - Parameter isStaging: whether we should use Staging servers.
+    nonisolated private func fetchRelayAccountAvailability(isStaging: Bool) async {
+        guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return }
+
+        logger.log("[RELAY] Will check OAuth clients.", level: .info, category: .autofill)
+        let hasRelayOAuth = {
+            switch result {
+            case .success(let clients):
+                let OAuthID = isStaging ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
+                return clients.contains(where: { $0.clientId == OAuthID })
+            case .failure(let error):
+                logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
+                return false
+            }
+        }()
+        Task { @MainActor in
+            accountStatus = hasRelayOAuth ? .available : .unavailable
         }
     }
 }
