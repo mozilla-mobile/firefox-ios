@@ -254,7 +254,7 @@ class TabsTests: BaseTestCase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        browserScreen.assertCancelButtonOnUrlBarExist()
+        browserScreen.assertCancelButtonOnUrlBarExists()
         navigator.back()
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)

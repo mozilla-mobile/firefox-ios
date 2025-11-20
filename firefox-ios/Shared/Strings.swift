@@ -3068,12 +3068,6 @@ extension String {
                     value: "Blue",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background.")
 
-                public static let Cute = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Cute.Title.v139",
-                    tableName: "AppIconSelection",
-                    value: "Cute",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon.")
-
                 public static let Cyan = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Cyan.Title.v137",
                     tableName: "AppIconSelection",
@@ -3085,18 +3079,6 @@ extension String {
                     tableName: "AppIconSelection",
                     value: "Green",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background.")
-
-                public static let Hug = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
-                    tableName: "AppIconSelection",
-                    value: "Hug",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
-
-                public static let Lazy = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136",
-                    tableName: "AppIconSelection",
-                    value: "Lazy",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
 
                 public static let Minimal = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Minimal.Title.v139",
@@ -3117,10 +3099,10 @@ extension String {
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background.")
 
                 public static let Pixelated = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
-                    tableName: "AppIconSelection",
-                    value: "Pixelated",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
+                        key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
+                        tableName: "AppIconSelection",
+                        value: "Pixelated",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
 
                 public static let Pride = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
@@ -3207,12 +3189,33 @@ extension String {
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green.")
 
                 /// Names and subtitles for approved icons added by contributors.
-                struct FromContributors {
+                public struct FromContributors {
                     public static let Momo = MZLocalizedString(
                         key: "Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139",
                         tableName: "AppIconSelection",
                         value: "Momo",
                         comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe.")
+                }
+
+                /// Names and subtitles for approved icons considered "fun".
+                public struct Fun {
+                    public static let Cool = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Cool.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Cool",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with sunglasses.")
+
+                    public static let Cuddling = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Cuddling.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Cuddling",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a fox cuddling a globe.")
+
+                    public static let Flaming = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Flaming.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Flaming",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with flames.")
                 }
             }
 
@@ -8446,6 +8449,23 @@ extension String {
                 tableName: "Menu",
                 value: "Close All Tabs",
                 comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
+        }
+        struct v145 {
+            public static let Cute = MZLocalizedString(
+                key: "Settings.AppIconSelection.AppIconNames.Cute.Title.v139",
+                tableName: "AppIconSelection",
+                value: "Cute",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon.")
+            public static let Hug = MZLocalizedString(
+                key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
+                tableName: "AppIconSelection",
+                value: "Hug",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
+            public static let Lazy = MZLocalizedString(
+                key: "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136",
+                tableName: "AppIconSelection",
+                value: "Lazy",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
         }
     }
 }

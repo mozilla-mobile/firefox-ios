@@ -456,6 +456,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(shouldShowHeader)
     }
 
+    @MainActor
     func test_retrieveTrendingSearches_withSuccess_hasExpectedList() {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let expectation = XCTestExpectation(description: "reload table view called")
@@ -559,14 +560,6 @@ final class SearchViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    func test_retrieveRecentSearches_withNilProvider_hasEmptyList() {
-        setupNimbusRecentSearchesTesting(isEnabled: true)
-        enum TestError: Error { case example }
-        let subject = createSubject(mockRecentSearchProvider: nil)
-        subject.retrieveRecentSearches()
-        XCTAssertEqual(subject.recentSearches, [])
-    }
-
     func test_retrieveRecentSearches_withoutFFEnabled_hasEmptyList() {
         setupNimbusRecentSearchesTesting(isEnabled: false)
         let mockRecentSearchProvider = MockRecentSearchProvider()
@@ -575,11 +568,18 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(subject.recentSearches, [])
     }
 
+    func test_clearRecentSearches_withFFEnabled_clearsSuccessfully() {
+        let mockRecentSearchProvider = MockRecentSearchProvider()
+        let subject = createSubject(mockRecentSearchProvider: mockRecentSearchProvider)
+        subject.clearRecentSearches()
+        XCTAssertEqual(mockRecentSearchProvider.clearRecentSearchCalledCount, 1)
+    }
+
     private func createSubject(
         isPrivate: Bool = false,
         isBottomSearchBar: Bool = false,
         mockTrendingClient: TrendingSearchClientProvider = MockTrendingSearchClient(),
-        mockRecentSearchProvider: RecentSearchProvider? = MockRecentSearchProvider(),
+        mockRecentSearchProvider: RecentSearchProvider = MockRecentSearchProvider(),
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> SearchViewModel {

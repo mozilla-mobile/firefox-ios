@@ -106,14 +106,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             sleep(2)
         }
         let textField = app.textFields["HomeAsCustomURLTextField"]
-        textField.press(forDuration: 3)
         let pasteOption = app.menuItems["Paste"]
-        var nrOfTaps = 3
-        while !pasteOption.exists && nrOfTaps > 0 {
-            textField.press(forDuration: 3)
-            nrOfTaps -= 1
-        }
-        app.menuItems["Paste"].waitAndTap()
+        textField.pressWithRetry(duration: 2, element: pasteOption)
+        pasteOption.waitAndTap()
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         // Check that the webpage has been correctly copied into the correct field
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: websiteUrl1)
@@ -271,18 +266,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                 app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             }
             mozWaitForElementToExist(app.staticTexts["Bookmarks"])
+            navigator.nowAt(NewTabScreen)
             navigator.performAction(Action.ToggleRecentlySaved)
-            if !iPad() {
-                navigator.performAction(Action.ClickSearchButton)
-                mozWaitForElementToNotExist(
-                    app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
-                )
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-                navigator.performAction(Action.CloseURLBarOpen)
-            } else {
-                navigator.nowAt(HomeSettings)
-                navigator.performAction(Action.OpenNewTabFromTabTray)
-            }
+            navigator.nowAt(HomeSettings)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
             navigator.nowAt(NewTabScreen)
             navigator.performAction(Action.ToggleRecentlySaved)
             navigator.nowAt(HomeSettings)

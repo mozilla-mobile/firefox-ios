@@ -6,7 +6,7 @@ import UIKit
 import Common
 import ComponentLibrary
 
-class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
+final class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     @MainActor
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -223,8 +223,8 @@ private extension WallpaperSelectorViewController {
 
         cell.showDownloading(true)
 
-        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
-            ensureMainThread {
+        viewModel.downloadAndSetWallpaper(at: indexPath) { result in
+            ensureMainThread { [weak self] in
                 cell.showDownloading(false)
 
                 guard case .failure(let error) = result else { return }

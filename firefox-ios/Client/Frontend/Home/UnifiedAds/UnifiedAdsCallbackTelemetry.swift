@@ -71,8 +71,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.get.rawValue
 
-        networking.data(from: request) { [weak self] result in
-            guard let self = self else { return }
+        networking.data(from: request) { [logger] result in
             switch result {
             case .success:
                 break // We only want to know if it failed

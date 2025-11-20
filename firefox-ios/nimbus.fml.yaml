@@ -14,6 +14,7 @@ channels:
   - release
 include:
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/appleSummarizerFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/defaultZoomFeature.yaml
@@ -35,10 +36,10 @@ include:
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
-  - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/rustFxAKeychainEnabled.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
+  - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml

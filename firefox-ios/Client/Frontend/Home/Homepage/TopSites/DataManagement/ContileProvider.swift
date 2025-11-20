@@ -13,11 +13,11 @@ protocol ContileProviderInterface: Sendable {
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
     ///   - completion: Returns an array of Contile, can be empty
-    func fetchContiles(timestamp: Timestamp, completion: @escaping (ContileResult) -> Void)
+    func fetchContiles(timestamp: Timestamp, completion: @escaping @Sendable (ContileResult) -> Void)
 }
 
 extension ContileProviderInterface {
-    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
+    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping @Sendable (ContileResult) -> Void) {
         fetchContiles(timestamp: timestamp, completion: completion)
     }
 }
@@ -48,7 +48,7 @@ final class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlagga
         case noDataAvailable
     }
 
-    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
+    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping @Sendable (ContileResult) -> Void) {
         guard let resourceEndpoint = resourceEndpoint else {
             logger.log("The Contile resource URL is invalid: \(String(describing: resourceEndpoint))",
                        level: .warning,
@@ -68,7 +68,7 @@ final class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlagga
         }
     }
 
-    private func fetchContiles(request: URLRequest, completion: @escaping (ContileResult) -> Void) {
+    private func fetchContiles(request: URLRequest, completion: @escaping @Sendable (ContileResult) -> Void) {
         networking.data(from: request) { [weak self] result in
             guard let self = self else { return }
             switch result {

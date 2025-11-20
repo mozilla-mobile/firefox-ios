@@ -46,9 +46,6 @@ class BrowserViewController: UIViewController,
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
         static let minimalHeaderOffset: CGFloat = 14
-
-        static let topToolbarDuration: TimeInterval = 0.3
-        static let bottomToolbarDuration: TimeInterval = 0.4
     }
 
     /// Describes the state of the current search session. This state is used
@@ -202,6 +199,8 @@ class BrowserViewController: UIViewController,
             return LegacyTabScrollController(windowUUID: windowUUID)
         }
     }()
+
+    var toolbarAnimator: ToolbarAnimator?
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -595,15 +594,17 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    fileprivate func didInit() {
+    private func didInit() {
         tabManager.addDelegate(self)
         tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
-            // Ensure we call into didBecomeActive at least once during startup flow (if needed)
-            guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
-            self?.browserDidBecomeActive()
+            ensureMainThread { [weak self] in
+                // Ensure we call into didBecomeActive at least once during startup flow (if needed)
+                guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
+                self?.browserDidBecomeActive()
+            }
         }
 
         crashTracker.updateData()
@@ -617,14 +618,13 @@ class BrowserViewController: UIViewController,
 
     /// If user manually opens the keyboard and presses undo, the app switches to the last
     /// open tab, and because of that we need to leave overlay state
-    func didTapUndoCloseAllTabToast(notification: Notification) {
-        guard windowUUID == notification.windowUUID else { return }
+    func didTapUndoCloseAllTabToast(notificationWindowUUID: WindowUUID?) {
+        guard let notificationWindowUUID, windowUUID == notificationWindowUUID else { return }
         overlayManager.switchTab(shouldCancelLoading: true)
     }
 
-    func didFinishAnnouncement(notification: Notification) {
-        if let userInfo = notification.userInfo,
-           let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
+    func didFinishAnnouncement(announcementText: String?) {
+        if let announcementText {
             let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
             let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
             if announcementText == saveSuccessMessage || announcementText == updateSuccessMessage {
@@ -636,10 +636,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func searchBarPositionDidChange(notification: Notification) {
-        guard let dict = notification.object as? NSDictionary,
-              let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
-        else { return }
+    func searchBarPositionDidChange(newSearchBarPosition: SearchBarPosition?) {
+        guard let newSearchBarPosition else { return }
 
         let searchBarView: TopBottomInterchangeable = addressToolbarContainer
         let newPositionIsBottom = newSearchBarPosition == .bottom
@@ -671,6 +669,7 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
+        updateSwipingTabs()
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
@@ -779,7 +778,6 @@ class BrowserViewController: UIViewController,
 
         updateToolbarStateTraitCollectionIfNecessary(newCollection)
         appMenuBadgeUpdate()
-        updateSwipingTabs(showNavToolbar: showNavToolbar)
         updateTopTabs(showTopTabs: showTopTabs)
 
         header.setNeedsLayout()
@@ -788,15 +786,15 @@ class BrowserViewController: UIViewController,
         updateToolbarDisplay()
     }
 
-    private func updateSwipingTabs(showNavToolbar: Bool) {
+    private func updateSwipingTabs() {
         guard isSwipingTabsEnabled else { return }
 
-        if showNavToolbar,
+        if isBottomSearchBar,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            !toolbarState.addressToolbar.isEditing {
             addressBarPanGestureHandler?.enablePanGestureRecognizer()
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-        } else if showNavToolbar == false {
+        } else {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
         }
@@ -819,7 +817,7 @@ class BrowserViewController: UIViewController,
 
     func dismissVisibleMenus() {
         displayedPopoverController?.dismiss(animated: true)
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -829,7 +827,7 @@ class BrowserViewController: UIViewController,
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
 
@@ -844,11 +842,11 @@ class BrowserViewController: UIViewController,
         scrollController.showToolbars(animated: true)
     }
 
-    func sceneDidEnterBackgroundNotification(notification: Notification) {
+    func sceneDidEnterBackgroundNotification(windowScene: UIWindowScene?) {
         // Ensure the notification is for the current window scene
         guard let currentWindowScene = view.window?.windowScene,
-              let notificationWindowScene = notification.object as? UIWindowScene,
-              currentWindowScene === notificationWindowScene else { return }
+              let windowScene,
+              currentWindowScene === windowScene else { return }
         guard canShowPrivacyWindow else { return }
 
         privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
@@ -1072,6 +1070,10 @@ class BrowserViewController: UIViewController,
         setupEssentialUI()
         subscribeToRedux()
         enqueueTabRestoration()
+        updateAddressToolbarContainerPosition(for: traitCollection)
+        if isTabScrollRefactoringEnabled {
+            setupToolbarAnimator()
+        }
 
         // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
         guard !AppConstants.isRunningUnitTest else { return }
@@ -1183,26 +1185,49 @@ class BrowserViewController: UIViewController,
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
+        let windowScene = notification.object as? UIWindowScene
+        let announcementText = notification.userInfo?[UIAccessibility.announcementStringValueUserInfoKey] as? String
+        let dictionary = notification.object as? NSDictionary
+        let searchBarPosition = dictionary?[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
+        let windowUUID = notification.windowUUID
+        let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel
+        // swiftlint:disable:next closure_body_length
         Task { @MainActor in
             switch notificationName {
-            case UIApplication.willResignActiveNotification: appWillResignActiveNotification()
-            case UIApplication.didBecomeActiveNotification: appDidBecomeActiveNotification()
-            case UIApplication.didEnterBackgroundNotification: appDidEnterBackgroundNotification()
-            case UIScene.didEnterBackgroundNotification: sceneDidEnterBackgroundNotification(notification: notification)
-            case UIScene.didActivateNotification: sceneDidActivateNotification()
-            case UIAccessibility.announcementDidFinishNotification: didFinishAnnouncement(notification: notification)
+            case UIApplication.willResignActiveNotification:
+                appWillResignActiveNotification()
+            case UIApplication.didBecomeActiveNotification:
+                appDidBecomeActiveNotification()
+            case UIApplication.didEnterBackgroundNotification:
+                appDidEnterBackgroundNotification()
+            case UIScene.didEnterBackgroundNotification:
+                sceneDidEnterBackgroundNotification(windowScene: windowScene)
+            case UIScene.didActivateNotification:
+                sceneDidActivateNotification()
+            case UIAccessibility.announcementDidFinishNotification:
+                didFinishAnnouncement(announcementText: announcementText)
             case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
-                onReduceTransparencyStatusDidChange(notification)
-            case .FirefoxAccountStateChange: appMenuBadgeUpdate()
-            case .SearchBarPositionDidChange: searchBarPositionDidChange(notification: notification)
-            case .DidTapUndoCloseAllTabToast: didTapUndoCloseAllTabToast(notification: notification)
-            case .PendingBlobDownloadAddedToQueue: didAddPendingBlobDownloadToQueue()
-            case .SearchSettingsDidUpdateDefaultSearchEngine: updateForDefaultSearchEngineDidChange(notification)
-            case .PageZoomLevelUpdated: handlePageZoomLevelUpdated(notification)
-            case .PageZoomSettingsChanged: handlePageZoomSettingsChanged(notification)
-            case .RemoteTabNotificationTapped: openRecentlyClosedTabs()
-            case .StopDownloads: onStopDownloads(notification)
-            case .SettingsDismissed: onSettingsDismissed()
+                onReduceTransparencyStatusDidChange()
+            case .FirefoxAccountStateChange:
+                appMenuBadgeUpdate()
+            case .SearchBarPositionDidChange:
+                searchBarPositionDidChange(newSearchBarPosition: searchBarPosition)
+            case .DidTapUndoCloseAllTabToast:
+                didTapUndoCloseAllTabToast(notificationWindowUUID: windowUUID)
+            case .PendingBlobDownloadAddedToQueue:
+                didAddPendingBlobDownloadToQueue()
+            case .SearchSettingsDidUpdateDefaultSearchEngine:
+                updateForDefaultSearchEngineDidChange()
+            case .PageZoomLevelUpdated:
+                handlePageZoomLevelUpdated(notificationWindowUUID: windowUUID, zoomSetting: zoomSetting)
+            case .PageZoomSettingsChanged:
+                handlePageZoomSettingsChanged()
+            case .RemoteTabNotificationTapped:
+                openRecentlyClosedTabs()
+            case .StopDownloads:
+                onStopDownloads(notificationWindowUUID: windowUUID)
+            case .SettingsDismissed:
+                onSettingsDismissed()
             default: break
             }
         }
@@ -1245,16 +1270,14 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func onStopDownloads(_ notification: Notification) {
-        ensureMainThread {
-            guard let notiWindowUUID = notification.userInfo?["windowUUID"] as? String,
-                  notiWindowUUID == self.windowUUID.uuidString else {return}
-            self.downloadToast?.dismiss(true)
-            self.stopDownload(buttonPressed: true)
-        }
+    private func onStopDownloads(notificationWindowUUID: WindowUUID?) {
+        guard let notificationWindowUUID,
+              notificationWindowUUID == windowUUID else { return }
+        downloadToast?.dismiss(true)
+        stopDownload(buttonPressed: true)
     }
 
-    private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
+    private func onReduceTransparencyStatusDidChange() {
         updateToolbarDisplay()
 
         store.dispatch(
@@ -1367,11 +1390,15 @@ class BrowserViewController: UIViewController,
         // handles a deeplink when was already opened
         if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
             AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
-                self?.tabManager.restoreTabs()
+                ensureMainThread { [weak self] in
+                    self?.tabManager.restoreTabs()
+                }
             }
         } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
             AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
-                self?.tabManager.restoreTabs()
+                ensureMainThread { [weak self] in
+                    self?.tabManager.restoreTabs()
+                }
             }
         }
     }
@@ -1387,7 +1414,6 @@ class BrowserViewController: UIViewController,
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         updateToolbarStateForTraitCollection(traitCollection)
-        updateAddressToolbarContainerPosition(for: traitCollection)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1864,7 +1890,7 @@ class BrowserViewController: UIViewController,
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
-        resetDataClearanceCFRTimer()
+        resetCFRsTimer()
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
@@ -3267,17 +3293,19 @@ class BrowserViewController: UIViewController,
         _ url: URL,
         uuid: String? = nil,
         isPrivate: Bool = false,
-        completionHandler: (() -> Void)? = nil
+        completionHandler: (@Sendable () -> Void)? = nil
     ) {
         // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
         guard !tabManager.isRestoringTabs else {
             AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
-                self?.switchToTabForURLOrOpen(
-                    url,
-                    uuid: uuid,
-                    isPrivate: isPrivate,
-                    completionHandler: completionHandler
-                )
+                ensureMainThread { [weak self] in
+                    self?.switchToTabForURLOrOpen(
+                        url,
+                        uuid: uuid,
+                        isPrivate: isPrivate,
+                        completionHandler: completionHandler
+                    )
+                }
             }
             return
         }
@@ -3375,7 +3403,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func isShowingJSPromptAlert() -> Bool {
-        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
+        return navigationController?.topViewController?.presentedViewController is JSPromptAlertController
     }
 
     fileprivate func recordVisitForLocationChange(_ tab: Tab, navigation: WKNavigation?) {
@@ -3742,15 +3770,15 @@ class BrowserViewController: UIViewController,
 
     // MARK: Page Zoom
 
-    func handlePageZoomSettingsChanged(_ notification: Notification) {
+    func handlePageZoomSettingsChanged() {
         zoomManager.updateZoomChangedInOtherWindow()
         zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomLevel())
     }
 
-    func handlePageZoomLevelUpdated(_ notification: Notification) {
-        guard let uuid = notification.windowUUID,
-              let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel,
-              uuid != windowUUID else { return }
+    func handlePageZoomLevelUpdated(notificationWindowUUID: WindowUUID?, zoomSetting: DomainZoomLevel?) {
+        guard let notificationWindowUUID,
+              let zoomSetting,
+              notificationWindowUUID != windowUUID else { return }
         updateForZoomChangedInOtherIPadWindow(zoom: zoomSetting)
     }
 
@@ -4008,7 +4036,6 @@ class BrowserViewController: UIViewController,
             let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
             if showNavToolbar {
                 addressBarPanGestureHandler?.enablePanGestureRecognizer()
-                addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
             }
         }
         if searchSessionState == .active {
@@ -4436,7 +4463,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         self.present(navController, animated: true, completion: nil)
     }
 
-    func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
+    func updateForDefaultSearchEngineDidChange() {
         // Update search icon when the search engine changes
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
         store.dispatch(action)
@@ -4897,25 +4924,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {
-        guard isSwipingTabsEnabled else { return }
-        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-    }
-
     private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
-        guard shouldCancelEditing else {
-            guard isSwipingTabsEnabled,
-                  let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-                  toolbarState.addressToolbar.url == nil,
-                  toolbarState.isShowingNavigationToolbar == true
-            else { return }
+        if isSwipingTabsEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-            return
         }
+        guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
-        guard isSwipingTabsEnabled else { return }
-        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
     }
 
     private var shouldCancelEditing: Bool {

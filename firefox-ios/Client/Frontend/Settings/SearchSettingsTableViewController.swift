@@ -778,11 +778,21 @@ extension SearchSettingsTableViewController {
     @objc
     func didToggleShowTrendingSearches(_ toggle: ThemedSwitch) {
         model.shouldShowTrendingSearches = toggle.isOn
+        SettingsTelemetry().changedSetting(
+            "TrendingSearches",
+            to: "\(toggle.isOn)",
+            from: "\(!toggle.isOn)"
+        )
     }
 
     @objc
     func didToggleShowRecentSearches(_ toggle: ThemedSwitch) {
         model.shouldShowRecentSearches = toggle.isOn
+        SettingsTelemetry().changedSetting(
+            "RecentSearches",
+            to: "\(toggle.isOn)",
+            from: "\(!toggle.isOn)"
+        )
     }
 
     @objc

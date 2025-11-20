@@ -106,6 +106,7 @@ firefox-ios/Client/Assets/WebcompatAllFramesAtDocumentStart.js
 firefox-ios/Client/Assets/addressFormLayout.js
 firefox-ios/Client/Assets/AddressFormManager.js
 firefox-ios/Client/Assets/TranslationsEngine.js
+firefox-ios/Client/Assets/translations-engine.worker.js
 firefox-ios/Client/Assets/*.js.LICENSE.txt
 
 # L10n

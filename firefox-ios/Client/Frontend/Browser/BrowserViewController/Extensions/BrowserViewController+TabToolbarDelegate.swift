@@ -145,6 +145,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: summarizeToolbarEntryContextHintVC)
     }
 
+    // Reset the CFR timer for the data clearance button to avoid presenting the CFR
+    // In cases, such as if user navigates to homepage
+    func resetSummarizeToolbarCFRTimer() {
+        summarizeToolbarEntryContextHintVC.stopTimer()
+    }
+
     // MARK: - Translation CFR
     func configureTranslationContextualHint(for view: UIView) {
         guard let state = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
@@ -181,6 +187,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             resetTranslationCFRTimer()
         }
     }
+
+    func resetCFRsTimer() {
+        resetDataClearanceCFRTimer()
+        resetSummarizeToolbarCFRTimer()
+    }
+
     // Reset the CFR timer for the translation button to avoid presenting the CFR
     // In cases, such as if translation icon is not available
     private func resetTranslationCFRTimer() {

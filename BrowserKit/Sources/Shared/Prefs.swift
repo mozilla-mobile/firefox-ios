@@ -105,6 +105,7 @@ public struct PrefsKeys {
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
+        public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
     }
@@ -251,6 +252,9 @@ public struct PrefsKeys {
     public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
     // Used to determine if cannot run the Apple Intelligence model
     public static let cannotRunAppleIntelligence = "cannotRunAppleIntelligenceKey"
+
+    // Used for enabling test data for merino stories on non-dev builds
+    public static let useMerinoTestData = "useMerinoTestData"
 
     public struct Usage {
         public static let profileId = "profileId"
