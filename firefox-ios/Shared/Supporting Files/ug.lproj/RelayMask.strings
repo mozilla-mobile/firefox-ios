@@ -1,0 +1,12 @@
+/* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "يېڭى! ھازىردىن باشلاپ %@ Relay ئېلخەت نىقابىنى كۆچمە ئۈسكۈنىدىمۇ ئىشلەتكىلى بولىدۇ.";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "سىز 5 ھەقسىز ئېلخەت نىقابىنى ئىشلىتىۋاتىسز، شۇڭا سىزگە بىرنى تاللايلى.";
+
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "ھازىر ئىلخەت نىقابىنى ئىشلەتكىلى بولمايدۇ. بىر قانچە مىنۇتتىن كېيىن قايتا سىناڭ.";
+
+/* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
+"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "ئېلخەت نىقابى ئىشلىتىش";
+
