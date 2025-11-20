@@ -132,6 +132,7 @@ class ToolbarButton: UIButton,
                 view.removeFromSuperview()
             }
         }
+        layoutIfNeeded()
     }
 
     public required init?(coder aDecoder: NSCoder) {
