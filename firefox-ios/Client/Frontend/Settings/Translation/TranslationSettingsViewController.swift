@@ -32,8 +32,15 @@ final class TranslationSettingsViewController: SettingsTableViewController {
             prefKey: PrefsKeys.Settings.translationsFeature,
             defaultValue: true,
             titleText: .Settings.Translation.ToggleTitle
-        ) { [weak self] _ in
+        ) { [weak self] isOn in
             guard let self else { return }
+
+            SettingsTelemetry().changedSetting(
+                PrefsKeys.Settings.translationsFeature,
+                to: "\(isOn)",
+                from: "\(!isOn)"
+            )
+
             store.dispatch(
                 ToolbarAction(
                     translationConfiguration: TranslationConfiguration(prefs: self.prefs),
