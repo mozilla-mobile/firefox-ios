@@ -11,7 +11,7 @@ class MockLoginProvider: LoginProvider, SyncLoginProvider {
     var getStoredKeyCalledCount = 0
     var registerWithSyncManagerCalled = 0
     var verifyLoginsCalled = 0
-    var loginsVerified = false
+    var loginsVerified = true
     var reportPreSyncKeyRetrievalFailureCalled = 0
 
     func searchLoginsWithQuery(

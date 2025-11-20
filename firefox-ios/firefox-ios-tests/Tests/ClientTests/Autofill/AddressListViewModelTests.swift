@@ -275,6 +275,8 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
     var getStoredKeyCalledCount = 0
     var registerWithSyncManagerCalled = 0
     var reportPreSyncKeyRetrievalFailureCalled = 0
+    var verifyCreditCardsCalled = 0
+    var creditCardsVerified = true
 
     func deleteAddress(
         id: String,
@@ -325,5 +327,10 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
 
     func reportPreSyncKeyRetrievalFailure(err: String) {
         reportPreSyncKeyRetrievalFailureCalled += 1
+    }
+
+    func verifyCreditCards(key: String, completionHandler: @escaping @Sendable (Bool) -> Void) {
+        verifyCreditCardsCalled += 1
+        completionHandler(creditCardsVerified)
     }
 }
