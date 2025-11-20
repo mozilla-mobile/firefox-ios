@@ -10,6 +10,22 @@ import XCTest
 
 class TestSQLitePinnedSites: XCTestCase {
     let files = MockFiles()
+    
+    @discardableResult
+    private func chainSuccess(
+        _ initial: @Sendable () -> Success,
+        _ steps: @Sendable () -> Success...
+    ) -> Success {
+        return steps.reduce(initial()) { current, next in
+            current.bind { result in
+                if result.isSuccess {
+                    return next()
+                }
+
+                return deferMaybe(result.failureValue!)
+            }
+        }
+    }
 
     fileprivate func deleteDatabases() {
         do {
@@ -107,11 +123,13 @@ class TestSQLitePinnedSites: XCTestCase {
             }
         }
 
-        addPinnedSites()
-            >>> checkPinnedSites
-            >>> removePinnedSites
-            >>> dupePinnedSite
-            >>> done
+        chainSuccess(
+            addPinnedSites,
+            checkPinnedSites,
+            removePinnedSites,
+            dupePinnedSite,
+            done
+        )
 
         waitForExpectations(timeout: 3) { error in
             return
@@ -177,11 +195,13 @@ class TestSQLitePinnedSites: XCTestCase {
             }
         }
 
-        addPinnedSites()
-            >>> checkPinnedSites
-            >>> checkPinnedSites
-            >>> removePinnedSites
-            >>> done
+        chainSuccess(
+            addPinnedSites,
+            checkPinnedSites,
+            checkPinnedSites,
+            removePinnedSites,
+            done
+        )
 
         waitForExpectations(timeout: 3) { error in
             return
@@ -244,10 +264,12 @@ class TestSQLitePinnedSites: XCTestCase {
             }
         }
 
-        addPinnedSite()
-            >>> checkPinnedSite
-            >>> removePinnedSite
-            >>> done
+        chainSuccess(
+            addPinnedSite,
+            checkPinnedSite,
+            removePinnedSite,
+            done
+        )
 
         waitForExpectations(timeout: 3) { error in
             return
