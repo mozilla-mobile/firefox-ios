@@ -3744,6 +3744,11 @@ extension String {
                     tableName: "Translations",
                     value: "Translate To %@",
                     comment: "This is the accessibility label for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English).")
+                public static let LoadingCompletedAccessibilityLabel = MZLocalizedString(
+                    key: "Translations.Sheet.LoadingCompleted.AccessibilityLabel.v147",
+                    tableName: "Translations",
+                    value: "Page translated",
+                    comment: "This is the accessibility label to announce that the page is translated and loading is completed. From a user perspective, they will see the translation icon go from loading state to active state, which means we received the a valid translation response from translating the page.")
             }
 
             public struct Error {
