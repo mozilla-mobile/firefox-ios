@@ -92,6 +92,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedPasswords() {}
 
+    func pressedRelayMask() {}
+
     func pressedNotifications() {}
 
     func pressedAddressAutofill() {}

@@ -73,12 +73,12 @@ class RustSyncManagerTests: XCTestCase {
         rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
             XCTAssertEqual(engines.count, 6)
 
-            XCTAssertTrue(engines.contains("bookmarks"))
-            XCTAssertTrue(engines.contains("history"))
-            XCTAssertTrue(engines.contains("passwords"))
-            XCTAssertTrue(engines.contains("tabs"))
-            XCTAssertTrue(engines.contains("addresses"))
-            XCTAssertTrue(engines.contains("creditcards"))
+            XCTAssertEqual(engines[safe: 0], "bookmarks")
+            XCTAssertEqual(engines[safe: 1], "creditcards")
+            XCTAssertEqual(engines[safe: 2], "history")
+            XCTAssertEqual(engines[safe: 3], "passwords")
+            XCTAssertEqual(engines[safe: 4], "tabs")
+            XCTAssertEqual(engines[safe: 5], "addresses")
             XCTAssertFalse(keys.isEmpty)
 
             XCTAssertNotNil(keys["creditcards"])
@@ -136,11 +136,11 @@ class RustSyncManagerTests: XCTestCase {
         rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
             XCTAssertEqual(engines.count, 5)
 
-            XCTAssertTrue(engines.contains("bookmarks"))
-            XCTAssertTrue(engines.contains("history"))
-            XCTAssertTrue(engines.contains("tabs"))
-            XCTAssertTrue(engines.contains("addresses"))
-            XCTAssertTrue(engines.contains("creditcards"))
+            XCTAssertEqual(engines[safe: 0], "bookmarks")
+            XCTAssertEqual(engines[safe: 1], "creditcards")
+            XCTAssertEqual(engines[safe: 2], "history")
+            XCTAssertEqual(engines[safe: 3], "tabs")
+            XCTAssertEqual(engines[safe: 4], "addresses")
             XCTAssertFalse(keys.isEmpty)
 
             XCTAssertNotNil(keys["creditcards"])

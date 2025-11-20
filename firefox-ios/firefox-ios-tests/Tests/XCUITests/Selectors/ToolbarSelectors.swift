@@ -12,6 +12,7 @@ protocol ToolbarSelectorsSet {
     var FORWARD_BUTTON: Selector { get }
     var TABTOOLBAR_MENUBUTTON: Selector { get }
     var RELOAD_BUTTON: Selector { get }
+    var SHARE_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -24,6 +25,7 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let forwardButton = AccessibilityIdentifiers.Toolbar.forwardButton
         static let tabToolbar_MenuButton = "TabToolbar.menuButton"
         static let reloadButton = AccessibilityIdentifiers.Toolbar.reloadButton
+        static let shareButton = AccessibilityIdentifiers.Toolbar.shareButton
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -68,6 +70,13 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["browser", "toolbar"]
     )
 
-    var all: [Selector] { [SETTINGS_MENU_BUTTON, TABS_BUTTON, NEW_TAB_BUTTON, BACK_BUTTON, FORWARD_BUTTON,
-                           TABTOOLBAR_MENUBUTTON, RELOAD_BUTTON] }
+    let SHARE_BUTTON = Selector.buttonId(
+        IDs.shareButton,
+        description: "Share button on browser toolbar",
+        groups: ["browser", "toolbar"]
+    )
+
+    var all: [Selector] { [SETTINGS_MENU_BUTTON, TABS_BUTTON, NEW_TAB_BUTTON,
+                           BACK_BUTTON, FORWARD_BUTTON, TABTOOLBAR_MENUBUTTON,
+                           RELOAD_BUTTON, SHARE_BUTTON] }
 }
