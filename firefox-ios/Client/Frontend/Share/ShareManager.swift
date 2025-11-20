@@ -7,7 +7,7 @@ import MobileCoreServices
 import WebKit
 import UniformTypeIdentifiers
 
-class ShareManager: NSObject {
+class ShareManager: NSObject, FeatureFlaggable {
     private struct ActivityIdentifiers {
         static let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
         static let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
@@ -70,9 +70,14 @@ class ShareManager: NSObject {
             }
 
         case .tab(let siteURL, let tab):
+            let isSentFromFirefoxEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(
+                .sentFromFirefox,
+                checking: .buildAndUser
+            )
             activityItems.append(
                 URLActivityItemProvider(
-                    url: siteURL
+                    url: siteURL,
+                    allowSentFromFirefoxTreatment: isSentFromFirefoxEnabled
                 )
             )
 
@@ -103,7 +108,8 @@ class ShareManager: NSObject {
                 // share a display title and/or subject line
                 activityItems.append(
                     TitleActivityItemProvider(
-                        title: tab.displayTitle
+                        title: tab.displayTitle,
+                        applySentFromFirefoxTreatment: isSentFromFirefoxEnabled
                     )
                 )
             }

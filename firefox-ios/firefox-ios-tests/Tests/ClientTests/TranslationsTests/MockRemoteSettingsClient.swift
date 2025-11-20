@@ -5,10 +5,11 @@
 import Foundation
 import MozillaAppServices
 
-final class MockRemoteSettingsClient: RemoteSettingsClientProtocol {
+final class MockRemoteSettingsClient: RemoteSettingsClientProtocol, @unchecked Sendable {
     private let collectionNameValue: String
     private let records: [RemoteSettingsRecord]
     private let attachmentsById: [String: Data]
+    private(set) var fetchedAttachmentIds: [String] = []
 
     init(
         collectionName: String = "test-collection",
@@ -25,6 +26,7 @@ final class MockRemoteSettingsClient: RemoteSettingsClientProtocol {
     }
 
     func getAttachment(record: RemoteSettingsRecord) throws -> Data {
+        fetchedAttachmentIds.append(record.id)
         return attachmentsById[record.id] ?? Data()
     }
 

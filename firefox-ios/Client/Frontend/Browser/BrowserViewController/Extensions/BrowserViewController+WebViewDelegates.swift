@@ -1344,8 +1344,9 @@ private extension BrowserViewController {
                 return
             }
 
+            let credential = URLCredential(trust: trust)
             ensureMainThread {
-                completionHandler(.useCredential, URLCredential(trust: trust))
+                completionHandler(.useCredential, credential)
             }
         }
     }

@@ -388,10 +388,11 @@ class TestHistory: XCTestCase {
     }
 
     // Calls numCmds random methods on this database. val is a counter used by
-    // this interally (i.e. always pass zero for it). Calls cb when finished.
+    // this internally (i.e. always pass zero for it). Calls cb when finished.
     private func runMultiRandom(
         _ places: inout RustPlaces,
-        val: Int, numCmds: Int,
+        val: Int,
+        numCmds: Int,
         completion: @escaping () -> Void
     ) {
         if val == numCmds {

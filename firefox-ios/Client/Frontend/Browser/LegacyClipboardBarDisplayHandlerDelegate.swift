@@ -12,7 +12,6 @@ protocol LegacyClipboardBarDisplayHandlerDelegate: AnyObject {
     func shouldDisplay(clipBoardURL url: URL)
 }
 
-@preconcurrency
 final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
     struct UX {
         static let toastDelay = DispatchTimeInterval.milliseconds(10000)
@@ -113,7 +112,9 @@ final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
         lastDisplayedURL = url.absoluteString
 
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) { [weak self] in
-            self?.delegate?.shouldDisplay(clipBoardURL: url)
+            ensureMainThread { [weak self] in
+                self?.delegate?.shouldDisplay(clipBoardURL: url)
+            }
         }
     }
 }

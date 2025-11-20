@@ -76,19 +76,78 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         XCTAssertNil(data, "Expected nil when neither direct nor pivot models exist")
     }
 
+    func testPrewarmResources_directModel_fetchesDirectAttachment() {
+        let record = makeModelRecord(
+            id: "direct-fr-de",
+            fileType: "model",
+            from: "fr",
+            to: "de"
+        )
+
+        let mock = MockRemoteSettingsClient(records: [record], attachmentsById: ["direct-fr-de": Data([0x01])])
+        let subject = createSubject(modelsClient: mock)
+        subject.prewarmResources(for: "fr", to: "de")
+
+        XCTAssertEqual(
+            mock.fetchedAttachmentIds,
+            ["direct-fr-de"],
+            "Expected direct model attachment to be fetched"
+        )
+    }
+
+    func testPrewarmResources_pivotModels_fetchesBothAttachments() {
+        let frEn = makeModelRecord(id: "fr-en", fileType: "model", from: "fr", to: "en")
+        let enIt = makeModelRecord(id: "en-it", fileType: "model", from: "en", to: "it")
+
+        let mock = MockRemoteSettingsClient(
+            records: [frEn, enIt],
+            attachmentsById: ["fr-en": Data([0x01]), "en-it": Data([0x02])]
+        )
+
+        let subject = createSubject(modelsClient: mock)
+
+        subject.prewarmResources(for: "fr", to: "it")
+
+        XCTAssertEqual(
+            Set(mock.fetchedAttachmentIds),
+            Set(["fr-en", "en-it"]),
+            "Expected pivot prewarm to fetch both attachments"
+        )
+    }
+
+    func testPrewarmResources_noModels_doesNotFetchAnything() {
+        let unrelated = makeModelRecord(
+            id: "es-pt",
+            fileType: "model",
+            from: "es",
+            to: "pt"
+        )
+
+        let mock = MockRemoteSettingsClient(
+            records: [unrelated],
+            attachmentsById: ["es-pt": Data([0x01])]
+        )
+
+        let subject = createSubject(modelsClient: mock)
+
+        subject.prewarmResources(for: "fr", to: "it")
+
+        XCTAssertTrue(
+            mock.fetchedAttachmentIds.isEmpty,
+            "Expected no attachments to be fetched when no direct or pivot exists"
+        )
+    }
+
     private func createSubject(
         records: [RemoteSettingsRecord] = [],
-        attachmentsById: [String: Data] = [:]
+        attachmentsById: [String: Data] = [:],
+        modelsClient: MockRemoteSettingsClient? = nil
     ) -> ASTranslationModelsFetcher {
-        let modelsClient = MockRemoteSettingsClient(
+        let client = modelsClient ?? MockRemoteSettingsClient(
             records: records,
             attachmentsById: attachmentsById
         )
-
-        return ASTranslationModelsFetcher(
-            modelsClient: modelsClient,
-            translatorsClient: nil
-        )
+        return ASTranslationModelsFetcher(modelsClient: client, translatorsClient: nil)
     }
 
     /// Helper to build a RemoteSettingsRecord.

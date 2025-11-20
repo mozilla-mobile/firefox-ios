@@ -34,7 +34,7 @@ class SearchViewControllerTest: XCTestCase {
             model: searchEnginesManager,
             tabManager: MockTabManager(),
             trendingSearchClient: MockTrendingSearchClient(),
-            recentSearchProvider: nil
+            recentSearchProvider: MockRecentSearchProvider()
         )
 
         searchViewController = SearchViewController(
