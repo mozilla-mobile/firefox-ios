@@ -151,7 +151,6 @@ public extension Nimbus {
             androidSdkVersion: nil,
             debugTag: "Nimbus.rs",
             installationDate: installationDateSinceEpoch,
-            homeDirectory: nil,
             customTargetingAttributes: try? appSettings.customTargetingAttributes.stringify()
         )
     }
