@@ -436,10 +436,12 @@ final class LocationView: UIView,
     // MARK: - LocationView Scaling
     private func shrinkLocationView(barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let bottomAddresssBarYoffset = hasHomeIndicator ?
-                                       UX.bottomAddressBarYoffset :
-                                       UX.bottomAddressBarYoffsetForHomeButton
-        let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? bottomAddresssBarYoffset : UX.topAddressBarYoffset
+        let bottomAddressBarYoffset = if #available(iOS 26.0, *) {
+            UX.bottomAddressBarYoffset
+        } else  {
+            hasHomeIndicator ? UX.bottomAddressBarYoffset : UX.bottomAddressBarYoffsetForHomeButton
+        }
+        let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? bottomAddressBarYoffset : UX.topAddressBarYoffset
         let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
         transform = isKeyboardVisible ? CGAffineTransform(
             translationX: 0,
