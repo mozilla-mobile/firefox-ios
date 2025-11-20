@@ -12,7 +12,15 @@ enum TranslateButtonActionType: String {
     case willRestore = "will_restore"
 }
 
-final class TranslationsTelemetry {
+protocol TranslationsTelemetryProtocol {
+    func pageLanguageIdentified(identifiedLanguage: String, deviceLanguage: String)
+    func pageLanguageIdentificationFailed(errorType: String)
+    func translationFailed(translationFlowId: UUID, errorType: String)
+    func webpageRestored(translationFlowId: UUID)
+    func translateButtonTapped(isPrivate: Bool, actionType: TranslateButtonActionType, translationFlowId: UUID)
+}
+
+final class TranslationsTelemetry: TranslationsTelemetryProtocol {
     private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {

@@ -12,7 +12,7 @@ final class TranslationsMiddleware {
     private let logger: Logger
     private let windowManager: WindowManager
     private let translationsService: TranslationsServiceProtocol
-    private let translationsTelemetry: TranslationsTelemetry
+    private let translationsTelemetry: TranslationsTelemetryProtocol
 
     /// This is a map because multiple windows can be open at the same time.
     /// For iPhone this, we will only have one entry at a time.
@@ -22,7 +22,7 @@ final class TranslationsMiddleware {
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          translationsService: TranslationsServiceProtocol = TranslationsService(),
-         translationsTelemetry: TranslationsTelemetry = TranslationsTelemetry(),
+         translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
     ) {
         self.profile = profile
         self.logger = logger
@@ -146,6 +146,12 @@ final class TranslationsMiddleware {
                 let serviceError = TranslationsServiceError.fromUnknown(error)
                 translationsTelemetry.pageLanguageIdentificationFailed(
                     errorType: serviceError.telemetryDescription
+                )
+                logger.log(
+                    "Unable to detect language from page to determine if eligible for translations.",
+                    level: .warning,
+                    category: .translations,
+                    extra: ["LanguageDetector error": "\(error.localizedDescription)"]
                 )
             }
         }
