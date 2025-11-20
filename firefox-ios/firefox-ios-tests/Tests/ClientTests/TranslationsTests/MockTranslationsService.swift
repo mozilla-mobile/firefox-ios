@@ -53,10 +53,9 @@ final class MockTranslationsService: TranslationsServiceProtocol {
         if let error = translateError { throw error }
     }
 
-    func firstResponseReceived(for windowUUID: WindowUUID) async throws -> Bool {
+    func firstResponseReceived(for windowUUID: WindowUUID) async throws {
         firstResponseReceivedCalledWith = windowUUID
         if let error = firstResponseReceivedError { throw error }
-        return firstResponseReceivedResult
     }
 
     func discardTranslations(for windowUUID: WindowUUID) async throws {

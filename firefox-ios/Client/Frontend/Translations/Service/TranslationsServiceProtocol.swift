@@ -21,7 +21,7 @@ protocol TranslationsServiceProtocol {
     /// NOTE: Translation is a living process ( e.g live chat in twitch ) so there is no single "done" state.
     /// In Gecko, we mark translations done when the engine is ready.
     /// In iOS, we will go a step further and wait for the first translation response to be received.
-    func firstResponseReceived(for windowUUID: WindowUUID) async throws -> Bool
+    func firstResponseReceived(for windowUUID: WindowUUID) async throws
     /// Asks the engine to discard translations and tear down state for the current document.
     func discardTranslations(for windowUUID: WindowUUID) async throws
 }
