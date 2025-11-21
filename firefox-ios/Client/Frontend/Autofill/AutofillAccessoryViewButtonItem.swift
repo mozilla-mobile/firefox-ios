@@ -33,7 +33,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     // MARK: - Properties
     private let accessoryImageView: UIImageView
     private let useAccessoryTextLabel: UILabel
-    private let tappedAccessoryButtonAction: (() -> Void)?
+    private let tappedAccessoryButtonAction: (@MainActor () -> Void)?
 
     /// Tint color for the accessory image view.
     var accessoryImageViewTintColor: UIColor? {
