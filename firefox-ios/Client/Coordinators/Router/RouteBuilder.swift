@@ -153,7 +153,7 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             prefs?.setTimestamp(Date.now(), forKey: PrefsKeys.LastOpenedAsDefaultBrowser)
             GleanMetrics.App.lastOpenedAsDefaultBrowser.set(Date())
-            DefaultBrowserUtility.isDefaultBrowser = true
+            DefaultBrowserUtility().isDefaultBrowser = true
             // Use the last browsing mode the user was in
             return .search(url: url, isPrivate: isPrivate, options: [.focusLocationField])
         } else {

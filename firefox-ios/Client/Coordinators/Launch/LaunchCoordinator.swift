@@ -253,7 +253,7 @@ final class LaunchCoordinator: BaseCoordinator,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: manager.onboardingVariant,
-            isDefaultBrowser: DefaultBrowserUtility.isDefaultBrowser,
+            isDefaultBrowser: DefaultBrowserUtility().isDefaultBrowser,
             isIpad: UIDevice.current.userInterfaceIdiom == .pad
         ).getOnboardingModel(
             for: .freshInstall

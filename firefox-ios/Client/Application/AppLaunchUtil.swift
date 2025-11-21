@@ -36,7 +36,7 @@ final class AppLaunchUtil: Sendable {
         }
 
         DefaultBrowserUtility().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
-        DefaultBrowserUtility().migrateDefaultBrowserStatusIfNeeded()
+        DefaultBrowserUtility().migrateDefaultBrowserStatusIfNeeded(isFirstRun: introScreenManager.shouldShowIntroScreen)
         if #available(iOS 26, *) {
             #if canImport(FoundationModels)
                 AppleIntelligenceUtil().processAvailabilityState()

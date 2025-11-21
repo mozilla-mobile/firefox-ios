@@ -7,7 +7,7 @@ import Shared
 import Common
 
 @MainActor
-struct DefaultBrowserUtility {
+class DefaultBrowserUtility {
     let userDefault: UserDefaultsInterface
     let telemtryWrapper: TelemetryWrapperProtocol
     let locale: LocaleInterface
@@ -33,12 +33,12 @@ struct DefaultBrowserUtility {
 
     struct UserDefaultsKey {
         public static let isBrowserDefault = "com.moz.isBrowserDefault.key"
-        public static let hasPerformedMigration = "com.moz.hasPerformedMigration.key"
+        public static let shouldNotPerformMigration = "com.moz.shouldNotPerformMigration.key"
     }
 
-    static var isDefaultBrowser: Bool {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.isBrowserDefault) as? Bool ?? false }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.isBrowserDefault) }
+    var isDefaultBrowser: Bool {
+        get { userDefault.bool(forKey: UserDefaultsKey.isBrowserDefault) }
+        set { userDefault.set(newValue, forKey: UserDefaultsKey.isBrowserDefault) }
     }
 
     func processUserDefaultState(isFirstRun: Bool) {
@@ -129,10 +129,17 @@ struct DefaultBrowserUtility {
 
     /// This function consolidates the two currently used states for determining
     /// whether we are the default browser, into a single state.
-    func migrateDefaultBrowserStatusIfNeeded() {
-        guard !userDefault.bool(forKey: UserDefaultsKey.hasPerformedMigration) else {
+    func migrateDefaultBrowserStatusIfNeeded(isFirstRun: Bool) {
+        // If this is the first run of the app, all of our information will be fresh,
+        // and correct values will already be up to date, so no migration is required.
+        if isFirstRun {
+            userDefault.set(true, forKey: UserDefaultsKey.shouldNotPerformMigration)
+            return
+        }
+
+        guard !userDefault.bool(forKey: UserDefaultsKey.shouldNotPerformMigration) else {
             logger.log(
-                "Default browser status migration has already been completed",
+                "Default browser status migration doesn't need to be performed",
                 level: .info,
                 category: .setup
             )
@@ -141,11 +148,11 @@ struct DefaultBrowserUtility {
 
         // This comes from deeplinks
         let preAPIStatus = userDefault.bool(forKey: UserDefaultsKey.isBrowserDefault)
-        // This comes from API OR user having previously set the browser to true
+        // This comes from API OR the user having previously set the browser to true
         let postAPIStatus = userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
 
         logger.log(
-            "Current status info",
+            "Performing migration - current status info",
             level: .info,
             category: .setup,
             extra: [
@@ -154,15 +161,13 @@ struct DefaultBrowserUtility {
             ]
         )
 
-        // If one of these statuses are true, meaning we have been set to default,
-        // then simply
-        // We don't care what the previous status was, as the migration's real purpose
-        // is to merge the two together.
+        // If either one of these statuses are true, meaning we have been set to default,
+        // then we simply have to make sure that the new source of truth has this value
         userDefault.set(
             preAPIStatus || postAPIStatus,
             forKey: UserDefaultsKey.isBrowserDefault
         )
 
-        userDefault.set(true, forKey: UserDefaultsKey.hasPerformedMigration)
+        userDefault.set(true, forKey: UserDefaultsKey.shouldNotPerformMigration)
     }
 }

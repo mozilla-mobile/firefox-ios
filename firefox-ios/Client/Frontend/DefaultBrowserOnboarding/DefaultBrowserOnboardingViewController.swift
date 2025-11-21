@@ -245,7 +245,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
         // By clicking this card, we assume that the user will have set us
         // as the default browser
-        DefaultBrowserUtility.isDefaultBrowser = true
+        DefaultBrowserUtility().isDefaultBrowser = true
 
         TelemetryWrapper.recordEvent(
             category: .action,

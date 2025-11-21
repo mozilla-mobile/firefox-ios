@@ -7,13 +7,17 @@ import Shared
 @testable import Client
 
 final class DefaultBrowserUtilityTests: XCTestCase {
+    typealias DefaultKeys = DefaultBrowserUtility.UserDefaultsKey
+
     var subject: DefaultBrowserUtility!
     var telemetryWrapper: MockTelemetryWrapper!
     var userDefaults: MockUserDefaults!
     var application: MockUIApplication!
     var locale: MockLocale!
 
-    typealias DefaultKeys = DefaultBrowserUtility.UserDefaultsKey
+    // For testing migration more legibly
+    let deeplinkValueKey = DefaultKeys.isBrowserDefault
+    let apiOrUserSetToDefaultKey = PrefsKeys.DidDismissDefaultBrowserMessage
 
     override func setUp() {
         super.setUp()
@@ -84,116 +88,153 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertEqual(userDefaults.setCalledCount, 1)
     }
 
+    // MARK: - Migration Flag Tests
     @MainActor
-    func testMigration_ForNonUpdatingValues_WithNonDMAUser() {
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
+    func testMigration_migrationFlag_setDuringFirstLaunch() {
+        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.shouldNotPerformMigration))
 
-        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: false)
-        subject.migrateDefaultBrowserStatusIfNeeded()
+        let isFirstRun = true
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
 
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.shouldNotPerformMigration))
     }
 
     @MainActor
-    func testMigration_ForUpdatingValues_NonDMAUser_DefaultOldValueIsTrue_DefaultNewValueIsFalse() {
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+    func testMigration_migrationFlag_setPostFirstLaunch() {
+        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.shouldNotPerformMigration))
 
-        userDefaults.set(true, forKey: DefaultKeys.isBrowserDefault)
+        let isFirstRun = false
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
 
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-
-        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: false)
-        subject.migrateDefaultBrowserStatusIfNeeded()
-
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.shouldNotPerformMigration))
     }
 
     @MainActor
-    func testMigration_ForUpdatingValues_NonDMAUser_DefaultOldValueIsFalse_DefaultNewValueIsTrue() {
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+    func testMigration_noMigrationHappensIfFlagIsSet() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
+        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.shouldNotPerformMigration))
 
-        userDefaults.set(false, forKey: DefaultKeys.isBrowserDefault)
-        userDefaults.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
+        userDefaults.set(true, forKey: DefaultKeys.shouldNotPerformMigration)
+        userDefaults.set(true, forKey: apiOrUserSetToDefaultKey)
 
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
+        let isFirstRun = false
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
 
-        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: false)
-        subject.migrateDefaultBrowserStatusIfNeeded()
+        XCTAssertTrue(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
+        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.shouldNotPerformMigration))
+    }
 
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+    // MARK: - Migration Value Tests for DMA & NonDMA users
+    @MainActor
+    func testMigration_nonDMA_firstRun_isNotDefaultBrowser() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
+
+        let isFirstRun = true
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
+
+        XCTAssertFalse(subject.isDefaultBrowser)
     }
 
     @MainActor
-    func testMigration_ForNonUpdatingValues_WithDMAUser() {
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
+    func testMigration_nonDMA_postFirstRun_isNotDefaultBrowser() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
 
-        setupSubjectForTesting(region: "IT", setToDefault: true, isFirstRun: false)
-        subject.migrateDefaultBrowserStatusIfNeeded()
+        let isFirstRun = false
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
 
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+        XCTAssertFalse(subject.isDefaultBrowser)
     }
 
     @MainActor
-    func testMigration_ForUpdatingValues_DMAUser_DefaultOldValueIsTrue_DefaultNewValueIsFalse() {
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+    func testMigration_DMA_firstRun_isSetToDefaultBrowser() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
 
-        userDefaults.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
+        let isFirstRun = true
+        setupSubjectForTesting(region: "IT", setToDefault: true, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
 
-        XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-
-        setupSubjectForTesting(region: "IT", setToDefault: true, isFirstRun: false)
-        subject.migrateDefaultBrowserStatusIfNeeded()
-
-        XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+        XCTAssertTrue(subject.isDefaultBrowser)
     }
 
     @MainActor
-    func testMigration_ForUpdatingValues_DMAUser_DefaultOldValueIsFalse_DefaultNewValueIsTrue() {
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+    func testMigration_DMA_postFirstRun_isNotDefaultBrowser() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
 
-        userDefaults.set(false, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-        userDefaults.set(true, forKey: DefaultKeys.isBrowserDefault)
+        let isFirstRun = false
+        setupSubjectForTesting(region: "IT", setToDefault: true, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
 
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-
-        setupSubjectForTesting(region: "IT", setToDefault: true, isFirstRun: false)
-        subject.migrateDefaultBrowserStatusIfNeeded()
-
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
-        XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
+        XCTAssertFalse(subject.isDefaultBrowser)
     }
 
+    // MARK: - Migration tests for any type of user post first run
+    @MainActor
+    func testMigration_postFirstRun_isNotDefaultBrowser() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
+
+        let isFirstRun = false
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
+
+        XCTAssertFalse(subject.isDefaultBrowser)
+    }
+
+    @MainActor
+    func testMigration_postFirstRun_deeplinkIsTrue_isSetToDefaultBrowser() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
+
+        userDefaults.set(true, forKey: deeplinkValueKey)
+
+        let isFirstRun = false
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
+
+        XCTAssertTrue(subject.isDefaultBrowser)
+    }
+
+    @MainActor
+    func testMigration_postFirstRun_apiOrUserSetToDefaultIsTrue_isSetToDefaultBrowser() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
+
+        userDefaults.set(true, forKey: apiOrUserSetToDefaultKey)
+
+        let isFirstRun = false
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
+
+        XCTAssertTrue(subject.isDefaultBrowser)
+    }
+
+    @MainActor
+    func testMigration_postFirstRun_bothKeysAreTrue_isSetToDefaultBrowser() {
+        XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
+        XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
+
+        userDefaults.set(true, forKey: apiOrUserSetToDefaultKey)
+        userDefaults.set(true, forKey: deeplinkValueKey)
+
+        let isFirstRun = false
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+        subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
+
+        XCTAssertTrue(subject.isDefaultBrowser)
+    }
+
+    // MARK: - Helpers
     @MainActor
     private func setupSubjectForTesting(
         region: String,
