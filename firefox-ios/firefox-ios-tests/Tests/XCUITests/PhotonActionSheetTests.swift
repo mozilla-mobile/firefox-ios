@@ -8,11 +8,15 @@ import Common
 class PhotonActionSheetTests: BaseTestCase {
     var toolBarScreen: ToolbarScreen!
     var photonActionSheetScreen: PhotonActionSheetScreen!
+    var browserScreen: BrowserScreen!
+    var topSitesScreen: TopSitesScreen!
 
     override func setUp() {
         super.setUp()
         toolBarScreen = ToolbarScreen(app: app)
         photonActionSheetScreen = PhotonActionSheetScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        topSitesScreen = TopSitesScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
@@ -54,6 +58,36 @@ class PhotonActionSheetTests: BaseTestCase {
         }
 
         mozWaitForElementToNotExist(cell)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306849
+    // Smoketest TAE
+    func testPinToShortcuts_TAE() {
+        app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+
+        // Open Page Action Menu Sheet and Pin the site
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
+        navigator.performAction(Action.PinToTopSitesPAM)
+
+        // Navigate to topsites to verify that the site has been pinned
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        browserScreen.tapCancelButtonIfExist()
+
+        // Verify that the site is pinned to top
+        topSitesScreen.assertTopSiteExists(named: "Example Domain")
+        topSitesScreen.assertTopSitePinned(named: "Example Domain")
+
+        // Remove pin
+        topSitesScreen.longPressOnPinnedSite(named: "Example Domain")
+        topSitesScreen.tapPinSlashIcon()
+        topSitesScreen.assertTopSiteNotPinned(named: "Example Domain")
+        topSitesScreen.assertTopSiteDoesNotExist(named: "Example Domain")
     }
 
     func testPinToShortcuts_andThenRemovingShortcuts() {

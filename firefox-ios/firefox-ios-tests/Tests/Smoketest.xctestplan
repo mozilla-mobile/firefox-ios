@@ -428,6 +428,7 @@
         "OnboardingTests\/testWhatsNewPage()",
         "OpeningScreenTests",
         "PerformanceTests",
+        "PhotonActionSheetTests\/testPinToShortcuts_TAE()",
         "PhotonActionSheetTests\/testPinToShortcuts_andThenRemovingShortcuts()",
         "PhotonActionSheetTests\/testSharePageWithShareSheetOptions_TAE()",
         "PhotonActionSheetTests\/testShareSheetOpenAndCancel()",
