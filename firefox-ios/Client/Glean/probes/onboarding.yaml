@@ -23,6 +23,9 @@ $tags:
 # - Card views and navigation
 # - Button taps (primary, secondary, multiple choice)
 # - Onboarding dismissal
+#
+# These metrics are under the modern_onboarding namespace to distinguish
+# them from the legacy onboarding metrics in metrics.yaml
 ###############################################################################
 
 # Modern onboarding metrics
