@@ -23,7 +23,6 @@ final class MockSummarizerServiceLifecycle: SummarizerServiceLifecycle, @uncheck
     }
 }
 
-@MainActor
 final class SummarizeServiceFactoryTests: XCTestCase {
     var serviceLifecycle: MockSummarizerServiceLifecycle!
 

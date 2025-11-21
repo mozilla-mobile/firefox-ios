@@ -5,7 +5,6 @@
 @testable import SummarizeKit
 import XCTest
 
-@MainActor
 final class SummarizerServiceTests: XCTestCase {
     static let mockResponse = ["Summarized", "content"]
     static let maxWords = 100
@@ -33,6 +32,7 @@ final class SummarizerServiceTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testSummarizerServiceReturnsStreamedSummary() async throws {
         let subject = createSubject()
         var streamedChunks: [String] = []
@@ -44,6 +44,7 @@ final class SummarizerServiceTests: XCTestCase {
         XCTAssertEqual(streamedChunks, ["Summarized", "content"] )
     }
 
+    @MainActor
     func testSummarizerServiceThrowsWhenSummarizerFails() async {
         let summarizer = MockSummarizer(
             shouldRespond: [],
