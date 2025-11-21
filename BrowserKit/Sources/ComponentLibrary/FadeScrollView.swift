@@ -6,7 +6,7 @@ import UIKit
 
 /// A scroll view that adds a fade at top or bottom when it scroll
 /// to indicate more content is available to user
-final class FadeScrollView: UIScrollView, UIScrollViewDelegate {
+public final class FadeScrollView: UIScrollView, UIScrollViewDelegate {
     private let fadePercentage = 0.1
     private let gradientLayer = CAGradientLayer()
     private let opaqueColor = UIColor.black.cgColor
@@ -33,7 +33,7 @@ final class FadeScrollView: UIScrollView, UIScrollViewDelegate {
         return UIColor(white: 0, alpha: alpha).cgColor
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
 
         self.delegate = self
@@ -54,7 +54,7 @@ final class FadeScrollView: UIScrollView, UIScrollViewDelegate {
         layer.mask = maskLayer
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         gradientLayer.colors = [topOpacity, opaqueColor, opaqueColor, bottomOpacity]
     }
 }
