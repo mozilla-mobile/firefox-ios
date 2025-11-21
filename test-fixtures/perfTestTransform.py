@@ -21,3 +21,6 @@ with open('test.json') as json_file:
         PERFHERDER_DATA["suites"].append(suite)
 
 print("PERFHERDER_DATA:", json.dumps(PERFHERDER_DATA))
+
+with open("perfherder-data.json", "w") as f:
+    f.write(json.dumps(PERFHERDER_DATA))
