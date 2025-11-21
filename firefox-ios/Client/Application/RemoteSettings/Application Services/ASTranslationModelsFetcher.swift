@@ -152,6 +152,27 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         prewarmAttachments(for: recordsToPreWarm)
     }
 
+    /// Prewarm translation resources during startup. This fetches both the translator WASM
+    /// and model attachments for `Constants.pivotLanguage` -> deviceLanguage (e.g. `en` -> `fr`).
+    /// NOTE: We don't fetch the reverse direction since for phase 1 we only support translating into device language.
+    func prewarmResourcesForStartup() {
+        guard let deviceLanguage = Locale.current.languageCode,
+          !deviceLanguage.isEmpty else {
+            logger.log("Device language code is unavailable.", level: .warning, category: .translations)
+            return
+        }
+
+        guard deviceLanguage != Constants.pivotLanguage else {
+            logger.log(
+                "Device language \(deviceLanguage) matches pivot language; skipping prewarm.",
+                level: .info,
+                category: .translations
+            )
+            return
+        }
+        prewarmResources(for: Constants.pivotLanguage, to: deviceLanguage)
+    }
+
     /// Pre-warms attachments for a list of records by fetching them
     /// Calling this method multiple times for the same attachment pair is safe
     /// since attachments will be fetched from network only once and then cached.
