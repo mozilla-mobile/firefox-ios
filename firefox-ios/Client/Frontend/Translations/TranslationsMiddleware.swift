@@ -260,9 +260,10 @@ final class TranslationsMiddleware {
         }
 
         logger.log(
-            "Missing translationFlowId for window \(windowUUID); generating fallback UUID.",
+            "Missing translationFlowId for this window; generating fallback UUID.",
             level: .warning,
-            category: .translations
+            category: .translations,
+            extra: ["windowUUID": "\(windowUUID)"]
         )
 
         return UUID()
