@@ -13,10 +13,15 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
     private var isPrivate = false
     private var prefs: Prefs?
     private var mainQueue: DispatchQueueInterface
+    private let actionExtensionTelemetry: ActionExtensionTelemetry
     var shouldOpenNewTab = true
 
-    init(mainQueue: DispatchQueueInterface = DispatchQueue.main) {
+    init(
+        mainQueue: DispatchQueueInterface = DispatchQueue.main,
+        actionExtensionTelemetry: ActionExtensionTelemetry = ActionExtensionTelemetry()
+    ) {
         self.mainQueue = mainQueue
+        self.actionExtensionTelemetry = actionExtensionTelemetry
     }
 
     func configure(isPrivate: Bool,
@@ -72,12 +77,20 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
                 )
 
             case .openUrl:
+                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
+                if isOpeningWithFirefoxExtension {
+                    actionExtensionTelemetry.shareURL()
+                }
                 return .search(url: urlQuery, isPrivate: isPrivate)
 
             case .openText:
                 let queryValue = urlScanner.value(query: "text") ?? ""
                 let queryURL = URIFixup.getURL(queryValue)
                 let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
+                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
+                if isOpeningWithFirefoxExtension {
+                    actionExtensionTelemetry.shareText()
+                }
                 return .searchQuery(query: safeQuery, isPrivate: isPrivate)
 
             case .glean:
