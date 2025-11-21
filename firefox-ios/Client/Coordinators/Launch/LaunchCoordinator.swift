@@ -262,11 +262,7 @@ final class LaunchCoordinator: BaseCoordinator,
             for: .freshInstall
         )
         let activityEventHelper = ActivityEventHelper()
-        let onboardingVersion = manager.isModernOnboardingEnabled ? "modern" : "legacy"
-        let telemetryUtility = OnboardingTelemetryUtility(
-            with: onboardingModel,
-            onboardingVersion: onboardingVersion
-        )
+        let telemetryUtility = ModernOnboardingTelemetryUtility(with: onboardingModel)
 
         let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
             onboardingCards: onboardingModel.cards,
@@ -338,10 +334,7 @@ final class LaunchCoordinator: BaseCoordinator,
                                         isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
 
-        let telemetryUtility = OnboardingTelemetryUtility(
-            with: onboardingModel,
-            onboardingVersion: "legacy"
-        )
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let introViewModel = IntroViewModel(introScreenManager: manager,
                                             profile: profile,
                                             model: onboardingModel,

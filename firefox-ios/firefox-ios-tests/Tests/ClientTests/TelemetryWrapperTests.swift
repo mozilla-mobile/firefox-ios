@@ -136,7 +136,7 @@ class TelemetryWrapperTests: XCTestCase {
                                      method: .tap,
                                      object: .engagementNotification)
 
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationTapped)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.KeyCommands.engagementNotificationTapped)
     }
 
     func test_onboardingEngagementNotificationCancel_GleanIsCalled() throws {
@@ -144,7 +144,7 @@ class TelemetryWrapperTests: XCTestCase {
                                      method: .cancel,
                                      object: .engagementNotification)
 
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationCancel)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.KeyCommands.engagementNotificationCancel)
     }
 
     // MARK: Wallpapers

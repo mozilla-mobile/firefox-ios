@@ -36,7 +36,6 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.cardType, CardNames.welcome.rawValue)
-        XCTAssertEqual(savedExtras.onboardingVersion, "legacy")
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -224,7 +223,6 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
 
         let telemetryUtility = OnboardingTelemetryUtility(
             with: model,
-            onboardingVersion: "legacy",
             gleanWrapper: mockGleanWrapper
         )
         trackForMemoryLeaks(telemetryUtility, file: file, line: line)

@@ -5,7 +5,7 @@
 import Foundation
 import Glean
 
-final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
+final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Properties
     private let cardOrder: [String]
     private let flowType: String
@@ -13,7 +13,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
 
     // MARK: - Initializer
     init(
-        with model: OnboardingViewModel,
+        with model: OnboardingKitViewModel,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.cardOrder = model.cards.map { $0.name }
@@ -23,13 +23,13 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
 
     // MARK: - Public methods
     func sendCardViewTelemetry(from cardName: String) {
-        let extras = GleanMetrics.Onboarding.CardViewExtra(
+        let extras = GleanMetrics.ModernOnboarding.CardViewExtra(
             cardType: cardName,
             flowType: flowType,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.cardView, extras: extras)
+        gleanWrapper.recordEvent(for: GleanMetrics.ModernOnboarding.cardView, extras: extras)
     }
 
     func sendButtonActionTelemetry(
@@ -41,23 +41,23 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         let buttonAction = action.rawValue
 
         if primaryButton {
-            let extras = GleanMetrics.Onboarding.PrimaryButtonTapExtra(
+            let extras = GleanMetrics.ModernOnboarding.PrimaryButtonTapExtra(
                 buttonAction: buttonAction,
                 cardType: baseExtras.cardType,
                 flowType: baseExtras.flowType,
                 sequenceId: baseExtras.sequenceId,
                 sequencePosition: baseExtras.sequencePosition
             )
-            gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.primaryButtonTap, extras: extras)
+            gleanWrapper.recordEvent(for: GleanMetrics.ModernOnboarding.primaryButtonTap, extras: extras)
         } else {
-            let extras = GleanMetrics.Onboarding.SecondaryButtonTapExtra(
+            let extras = GleanMetrics.ModernOnboarding.SecondaryButtonTapExtra(
                 buttonAction: buttonAction,
                 cardType: baseExtras.cardType,
                 flowType: baseExtras.flowType,
                 sequenceId: baseExtras.sequenceId,
                 sequencePosition: baseExtras.sequencePosition
             )
-            gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.secondaryButtonTap, extras: extras)
+            gleanWrapper.recordEvent(for: GleanMetrics.ModernOnboarding.secondaryButtonTap, extras: extras)
         }
     }
 
@@ -66,24 +66,24 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         with action: OnboardingMultipleChoiceAction
     ) {
         let baseExtras = buildBaseExtras(using: cardName)
-        let extras = GleanMetrics.Onboarding.MultipleChoiceButtonTapExtra(
+        let extras = GleanMetrics.ModernOnboarding.MultipleChoiceButtonTapExtra(
             buttonAction: action.rawValue,
             cardType: baseExtras.cardType,
             flowType: baseExtras.flowType,
             sequenceId: baseExtras.sequenceId,
             sequencePosition: baseExtras.sequencePosition
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.multipleChoiceButtonTap, extras: extras)
+        gleanWrapper.recordEvent(for: GleanMetrics.ModernOnboarding.multipleChoiceButtonTap, extras: extras)
     }
 
     func sendDismissOnboardingTelemetry(from cardName: String) {
-        let extras = GleanMetrics.Onboarding.CloseTapExtra(
+        let extras = GleanMetrics.ModernOnboarding.CloseTapExtra(
             cardType: cardName,
             flowType: flowType,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.closeTap, extras: extras)
+        gleanWrapper.recordEvent(for: GleanMetrics.ModernOnboarding.closeTap, extras: extras)
     }
 
     // MARK: - Private functions
