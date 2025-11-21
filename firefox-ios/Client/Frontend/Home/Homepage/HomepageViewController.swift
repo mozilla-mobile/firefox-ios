@@ -564,9 +564,7 @@ final class HomepageViewController: UIViewController,
             return bookmarksCell
 
         case .merino(let story):
-            let isHomepageStoriesCardsEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign,
-                                                                              checking: .buildOnly)
-            let cellType: ReusableCell.Type = isHomepageStoriesCardsEnabled ? StoryCell.self : MerinoStandardCell.self
+            let cellType: ReusableCell.Type = isAnyStoriesRedesignEnabled ? StoryCell.self : MerinoStandardCell.self
 
             guard let storyCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
