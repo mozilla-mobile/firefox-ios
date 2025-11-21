@@ -320,6 +320,37 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+  translate_button_tapped:
+    type: event
+    description: |
+        Recorded when the user taps the translate button in the toolbar.
+        The outcome of tapping the button depends on the button's current state.
+        The user either wants to trigger a full-page translation request or
+        restore the page back to its original content.
+    extra_keys:
+      is_private:
+        type: boolean
+        description: Whether the user is in private mode or not
+      action_type:
+        type: string
+        description: |
+          A key describing the action that will be taken when the user taps
+          this button. Either `will_translate` (if the user is about to send
+          a translation request for the current webpage) or `will_restore`
+          (if the user is about to restore the webpage's original content).
+      translation_flow_id:
+        type: string
+        description: |
+          A UUID used to link together events associated with a single
+          translations session. A new translation session begins whenever the
+          user triggers a new webpage translation.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30441
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30820
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
 
 # Awesomebar related telemetry
 awesomebar:

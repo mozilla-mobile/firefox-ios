@@ -1481,6 +1481,8 @@
 		C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */; };
 		C24B31272E8686460049134A /* NavigationBarMiddleButtonSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */; };
 		C24B31292E86B8470049134A /* GenericSelectableItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */; };
+		C24E2D2A2ECF960000BBCFA7 /* MockTranslationsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */; };
+		C24E2D2C2ECF9DEF00BBCFA7 /* TranslationsTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24E2D2B2ECF9DE900BBCFA7 /* TranslationsTelemetryTests.swift */; };
 		C2500D7C2ECB4A600071506F /* MockTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2500D7B2ECB4A5D0071506F /* MockTranslationModelsFetcher.swift */; };
 		C25017362ECBAD0A0071506F /* MockRemoteSettingsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25017352ECBAD000071506F /* MockRemoteSettingsClient.swift */; };
 		C25017382ECBAE030071506F /* ASTranslationModelsFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25017372ECBAE020071506F /* ASTranslationModelsFetcherTests.swift */; };
@@ -1525,6 +1527,7 @@
 		C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A662A76938C002ACCE2 /* DownloadsCoordinator.swift */; };
 		C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A682A769460002ACCE2 /* ReadingListCoordinator.swift */; };
 		C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */; };
+		C2B065512ECF37F000C479CA /* TranslationsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */; };
 		C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */; };
 		C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */; };
 		C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */; };
@@ -9851,6 +9854,8 @@
 		C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLibraryCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarMiddleButtonSelectionView.swift; sourceTree = "<group>"; };
 		C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSelectableItemCellView.swift; sourceTree = "<group>"; };
+		C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationsTelemetry.swift; sourceTree = "<group>"; };
+		C24E2D2B2ECF9DE900BBCFA7 /* TranslationsTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsTelemetryTests.swift; sourceTree = "<group>"; };
 		C2500D7B2ECB4A5D0071506F /* MockTranslationModelsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationModelsFetcher.swift; sourceTree = "<group>"; };
 		C25017352ECBAD000071506F /* MockRemoteSettingsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRemoteSettingsClient.swift; sourceTree = "<group>"; };
 		C25017372ECBAE020071506F /* ASTranslationModelsFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTranslationModelsFetcherTests.swift; sourceTree = "<group>"; };
@@ -9898,6 +9903,7 @@
 		C2A72A682A769460002ACCE2 /* ReadingListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCoordinator.swift; sourceTree = "<group>"; };
 		C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2A943CF800ADCD8E96ACA5B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsTelemetry.swift; sourceTree = "<group>"; };
 		C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2BD4AC2A2935AE48BEB94B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C2CB4D369C756DA6836BC4A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -14159,6 +14165,7 @@
 		AA5E81452EB12BAB00919E60 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
+				C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */,
 				C2F336E92ECE44740071588A /* Service */,
 				C25018DD2ECC75970071506F /* Engine */,
 				C2886E022EC5DFDD007AE6C3 /* SchemeHandler */,
@@ -14181,6 +14188,8 @@
 		AAD9D6492EB25B2700BFECAF /* TranslationsTests */ = {
 			isa = PBXGroup;
 			children = (
+				C24E2D2B2ECF9DE900BBCFA7 /* TranslationsTelemetryTests.swift */,
+				C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */,
 				C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */,
 				C2DFB1442ECE62E8004E20AB /* MockTranslationsService.swift */,
 				C25020832ECDE7550071506F /* MockTranslationsSchemeHandler.swift */,
@@ -18798,6 +18807,7 @@
 				8A454D302CB81697009436D9 /* MerinoMiddleware.swift in Sources */,
 				C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */,
 				8A7835352D5100970052E328 /* BookmarksAction.swift in Sources */,
+				C2B065512ECF37F000C479CA /* TranslationsTelemetry.swift in Sources */,
 				8A46F5AE2C9E4389005B6422 /* RemoteSettingsUtils.swift in Sources */,
 				8A3EF8012A2FCFC900796E3A /* FasterInactiveTabs.swift in Sources */,
 				CA7FC7D324A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift in Sources */,
@@ -19439,6 +19449,7 @@
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
 				0B7B053D2D647D00007FD7AC /* TemporaryDocumentTests.swift in Sources */,
 				C714D6372E46570700FC02E6 /* ShortcutsLibraryStateTests.swift in Sources */,
+				C24E2D2C2ECF9DEF00BBCFA7 /* TranslationsTelemetryTests.swift in Sources */,
 				E16941B42C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift in Sources */,
 				0B7B05412D64C088007FD7AC /* MockURLResponse.swift in Sources */,
 				EDD334902D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift in Sources */,
@@ -19824,6 +19835,7 @@
 				8CFBBFDC2ECE17AA00E5B22B /* NimbusOnboardingKitFeatureLayerTests.swift in Sources */,
 				0B6153E22E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift in Sources */,
 				8A4EA0D42C01100200E4E4F1 /* MicrosurveySurfaceManagerTests.swift in Sources */,
+				C24E2D2A2ECF960000BBCFA7 /* MockTranslationsTelemetry.swift in Sources */,
 				8ADEC6832A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift in Sources */,
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
 				0B5CAF0D2E40DA89008B5D5A /* MockSummarizationChecker.swift in Sources */,
