@@ -86,6 +86,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject(shouldOfferTranslationResult: true)
         let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
@@ -115,6 +116,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         let subject = createSubject(shouldOfferTranslationError: TestError.example)
         let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
