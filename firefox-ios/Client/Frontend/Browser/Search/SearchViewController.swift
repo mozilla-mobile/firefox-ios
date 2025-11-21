@@ -866,6 +866,7 @@ class SearchViewController: SiteTableViewController,
     ) -> OneLineTableViewCellViewModel {
         let appendButton = UIButton(type: .roundedRect)
         appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        appendButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
         let action = UIAction { [weak self] _ in
             self?.appendSearch(with: text)
         }
