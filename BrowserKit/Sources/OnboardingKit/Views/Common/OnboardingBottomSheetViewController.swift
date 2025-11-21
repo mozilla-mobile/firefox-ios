@@ -138,6 +138,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
     }
 
     private func calculateAndUpdateDetentsHeight() {
+        guard #available(iOS 16.0, *) else { return }
         let targetSize = CGSize(
             width: view.bounds.width,
             height: UIView.layoutFittingCompressedSize.height
@@ -152,12 +153,11 @@ public class OnboardingBottomSheetViewController: UIViewController,
         let calculatedHeight = fittingSize.height
                                 + closeButton.frame.height
                                 + UX.closeButtonPadding * 2.0
-        if #available(iOS 16.0, *) {
-            lastCalculatedHeight = calculatedHeight
-            sheetPresentationController?.animateChanges { [weak self] in
-                self?.sheetPresentationController?.invalidateDetents()
-            }
-        }
+        
+        lastCalculatedHeight = calculatedHeight
+        sheetPresentationController?.animateChanges { [weak self] in
+            self?.sheetPresentationController?.invalidateDetents()
+        }        
     }
 
     // MARK: - Notifiable
