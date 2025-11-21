@@ -13,7 +13,7 @@
 $schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 $tags:
-  - Onboarding
+  - ModernOnboarding
 
 ###############################################################################
 # Modern Onboarding Telemetry Metrics

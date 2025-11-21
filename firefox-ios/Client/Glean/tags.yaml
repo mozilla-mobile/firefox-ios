@@ -60,6 +60,9 @@ Library:
 Microsurvey:
   description: Corresponds to the microsurveys shown to the user.
 
+ModernOnboarding:
+  description: Corresponds to user interactions during the modern (SwiftUI-based) onboarding flow, including card views, button taps, and onboarding dismissal.
+
 Onboarding:
   description: Corresponds to user interactions during the onboarding flow, including card views, button taps, wallpaper selection, and notification permission prompts.
 
