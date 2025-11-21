@@ -52,10 +52,9 @@ modern_onboarding:
         description: |
           Whether it's a fresh install or an upgrade flow
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -85,11 +84,9 @@ modern_onboarding:
         description: |
           The action that the button would lead to.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -119,11 +116,9 @@ modern_onboarding:
         description: |
           The action that the button would lead to.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -153,9 +148,9 @@ modern_onboarding:
         description: |
           The action that the button would lead to.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/18358
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/19678
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -181,11 +176,9 @@ modern_onboarding:
         description: |
           Whether it's a fresh install or an upgrade flow
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
