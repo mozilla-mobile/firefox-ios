@@ -26,7 +26,6 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
-    private let defaultBrowserUtil: DefaultBrowserUtil
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -34,12 +33,10 @@ final class LaunchCoordinator: BaseCoordinator,
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
-         defaultBrowserUtil: DefaultBrowserUtil = DefaultBrowserUtil()) {
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.profile = profile
         self.isIphone = isIphone
         self.windowUUID = windowUUID
-        self.defaultBrowserUtil = defaultBrowserUtil
         super.init(router: router)
     }
 
@@ -256,7 +253,7 @@ final class LaunchCoordinator: BaseCoordinator,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: manager.onboardingVariant,
-            isDefaultBrowser: defaultBrowserUtil.isDefaultBrowser,
+            isDefaultBrowser: DefaultBrowserUtility().isDefaultBrowser,
             isIpad: UIDevice.current.userInterfaceIdiom == .pad
         ).getOnboardingModel(
             for: .freshInstall

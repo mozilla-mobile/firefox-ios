@@ -35,7 +35,8 @@ final class AppLaunchUtil: Sendable {
             logger.copyLogsToDocuments()
         }
 
-        DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
+        DefaultBrowserUtility().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
+        DefaultBrowserUtility().migrateDefaultBrowserStatusIfNeeded(isFirstRun: introScreenManager.shouldShowIntroScreen)
         if #available(iOS 26, *) {
             #if canImport(FoundationModels)
                 AppleIntelligenceUtil().processAvailabilityState()
