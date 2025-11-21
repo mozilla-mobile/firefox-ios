@@ -2541,8 +2541,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Update UI
 
-    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false, navigationFinished: Bool = false) {
-        updateURLBarDisplayURL(tab, navigationFinished)
+    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false) {
+        updateURLBarDisplayURL(tab)
         scrollController.showToolbars(animated: false)
 
         if let url = tab.url {

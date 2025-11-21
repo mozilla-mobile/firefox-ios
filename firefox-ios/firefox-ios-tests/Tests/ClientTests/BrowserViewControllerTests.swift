@@ -196,7 +196,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
-        subject.updateUIForReaderHomeStateForTab(tab, navigationFinished: false)
+        subject.updateURLBarDisplayURL(tab, false)
         wait(for: [expectation])
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
@@ -214,7 +214,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
-        subject.updateUIForReaderHomeStateForTab(tab, navigationFinished: true)
+        subject.updateURLBarDisplayURL(tab, true)
         wait(for: [expectation])
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
