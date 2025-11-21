@@ -36,6 +36,7 @@ final class ModernOnboardingTelemetryUtilityTests: XCTestCase {
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.cardType, CardNames.welcome.rawValue)
+        XCTAssertEqual(savedExtras.onboardingVariant, "global")
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -208,19 +209,42 @@ final class ModernOnboardingTelemetryUtilityTests: XCTestCase {
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.cardType, CardNames.notifications.rawValue)
+        XCTAssertEqual(savedExtras.onboardingVariant, "global")
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    // MARK: - Onboarding Variant Tests
+    func testOnboardingVariant_Modern_ReturnsGlobal() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, variant: .modern)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CardViewExtra
+
+        subject.sendCardViewTelemetry(from: CardNames.welcome.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingVariant, "global")
+    }
+
+    func testOnboardingVariant_Japan_ReturnsJapan() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, variant: .japan)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CardViewExtra
+
+        subject.sendCardViewTelemetry(from: CardNames.welcome.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingVariant, "japan")
     }
 
     // MARK: Private
     private func createTelemetryUtility(
         for onboardingType: OnboardingType,
+        variant: OnboardingVariant = .modern,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> ModernOnboardingTelemetryUtility {
         let nimbusConfigUtility = NimbusOnboardingTestingConfigUtility()
         nimbusConfigUtility.setupNimbus(withOrder: NimbusOnboardingTestingConfigUtility.CardOrder.allCards)
         let layer = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: .modern,
+            onboardingVariant: variant,
             isDefaultBrowser: false,
             isIpad: false
         )
@@ -228,6 +252,7 @@ final class ModernOnboardingTelemetryUtilityTests: XCTestCase {
 
         let telemetryUtility = ModernOnboardingTelemetryUtility(
             with: model,
+            onboardingVariant: variant,
             gleanWrapper: mockGleanWrapper
         )
         trackForMemoryLeaks(telemetryUtility, file: file, line: line)

@@ -9,15 +9,18 @@ final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Properties
     private let cardOrder: [String]
     private let flowType: String
+    private let onboardingVariant: String
     private let gleanWrapper: GleanWrapper
 
     // MARK: - Initializer
     init(
         with model: OnboardingKitViewModel,
+        onboardingVariant: OnboardingVariant,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.cardOrder = model.cards.map { $0.name }
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
+        self.onboardingVariant = onboardingVariant == .modern ? "global" : onboardingVariant.rawValue
         self.gleanWrapper = gleanWrapper
     }
 
@@ -26,6 +29,7 @@ final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         let extras = GleanMetrics.ModernOnboarding.CardViewExtra(
             cardType: cardName,
             flowType: flowType,
+            onboardingVariant: onboardingVariant,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )
@@ -45,6 +49,7 @@ final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                 buttonAction: buttonAction,
                 cardType: baseExtras.cardType,
                 flowType: baseExtras.flowType,
+                onboardingVariant: baseExtras.onboardingVariant,
                 sequenceId: baseExtras.sequenceId,
                 sequencePosition: baseExtras.sequencePosition
             )
@@ -54,6 +59,7 @@ final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                 buttonAction: buttonAction,
                 cardType: baseExtras.cardType,
                 flowType: baseExtras.flowType,
+                onboardingVariant: baseExtras.onboardingVariant,
                 sequenceId: baseExtras.sequenceId,
                 sequencePosition: baseExtras.sequencePosition
             )
@@ -70,6 +76,7 @@ final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
             buttonAction: action.rawValue,
             cardType: baseExtras.cardType,
             flowType: baseExtras.flowType,
+            onboardingVariant: baseExtras.onboardingVariant,
             sequenceId: baseExtras.sequenceId,
             sequencePosition: baseExtras.sequencePosition
         )
@@ -80,6 +87,7 @@ final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         let extras = GleanMetrics.ModernOnboarding.CloseTapExtra(
             cardType: cardName,
             flowType: flowType,
+            onboardingVariant: onboardingVariant,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )
@@ -90,6 +98,7 @@ final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     private struct BaseExtras {
         let cardType: String
         let flowType: String
+        let onboardingVariant: String
         let sequenceId: String
         let sequencePosition: String
     }
@@ -98,6 +107,7 @@ final class ModernOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         return BaseExtras(
             cardType: cardName,
             flowType: flowType,
+            onboardingVariant: onboardingVariant,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )

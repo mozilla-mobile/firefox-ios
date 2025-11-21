@@ -39,6 +39,14 @@ modern_onboarding:
         type: string
         description: |
           The name of the presented card.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (global or japan).
       sequence_id:
         type: string
         description: |
@@ -47,10 +55,6 @@ modern_onboarding:
         type: string
         description: |
           The position of the card in the current branch.
-      flow_type:
-        type: string
-        description: |
-          Whether it's a fresh install or an upgrade flow
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
@@ -63,10 +67,22 @@ modern_onboarding:
     description: |
       Records when the primary button is tapped during the modern onboarding
     extra_keys:
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
       card_type:
         type: string
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (global or japan).
       sequence_id:
         type: string
         description: |
@@ -75,14 +91,6 @@ modern_onboarding:
         type: string
         description: |
           The position of the card in the current branch.
-      flow_type:
-        type: string
-        description: |
-          Whether it's a fresh install or an upgrade flow
-      button_action:
-        type: string
-        description: |
-          The action that the button would lead to.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
@@ -95,10 +103,22 @@ modern_onboarding:
     description: |
       Records when the secondary button is tapped during the modern onboarding
     extra_keys:
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
       card_type:
         type: string
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (global or japan).
       sequence_id:
         type: string
         description: |
@@ -107,14 +127,6 @@ modern_onboarding:
         type: string
         description: |
           The position of the card in the current branch.
-      flow_type:
-        type: string
-        description: |
-          Whether it's a fresh install or an upgrade flow
-      button_action:
-        type: string
-        description: |
-          The action that the button would lead to.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
@@ -127,10 +139,22 @@ modern_onboarding:
     description: |
       Records when a multiple choice button is tapped during the modern onboarding
     extra_keys:
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
       card_type:
         type: string
         description: |
           Presented onboarding card
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (global or japan).
       sequence_id:
         type: string
         description: |
@@ -139,14 +163,6 @@ modern_onboarding:
         type: string
         description: |
           The position of the card in the current branch.
-      flow_type:
-        type: string
-        description: |
-          Whether it's a fresh install or an upgrade flow
-      button_action:
-        type: string
-        description: |
-          The action that the button would lead to.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
@@ -163,6 +179,14 @@ modern_onboarding:
         type: string
         description: |
           The card presented when the onboarding was closed
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (global or japan).
       sequence_id:
         type: string
         description: |
@@ -171,10 +195,6 @@ modern_onboarding:
         type: string
         description: |
           The position of the card in the current branch.
-      flow_type:
-        type: string
-        description: |
-          Whether it's a fresh install or an upgrade flow
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
     data_reviews:
