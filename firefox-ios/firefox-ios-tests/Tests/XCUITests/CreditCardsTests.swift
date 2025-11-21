@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Foundation
 
 class CreditCardsTests: BaseTestCase {
     let creditCardsStaticTexts = AccessibilityIdentifiers.Settings.CreditCards.self
@@ -87,7 +88,7 @@ class CreditCardsTests: BaseTestCase {
         creditCardScreen.waitForSectionVisible()
         creditCardScreen.openAddCreditCardForm()
         // Add Credit Card page is displayed
-        creditCardScreen.waitForSectionVisible()
+        creditCardScreen.waitForAddCreditCardValues()
         // Add and save a valid credit card
         addCreditCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
 

@@ -9,7 +9,10 @@
     }
   ],
   "defaultOptions" : {
-    "testTimeoutsEnabled" : true
+    "codeCoverage" : false,
+    "language" : "en-US",
+    "region" : "US",
+    "testRepetitionMode" : "retryOnFailure"
   },
   "testTargets" : [
     {

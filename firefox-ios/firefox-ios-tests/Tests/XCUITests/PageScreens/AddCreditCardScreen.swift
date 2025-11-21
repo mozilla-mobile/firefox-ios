@@ -74,28 +74,35 @@ final class AddCreditCardScreen {
     }
 
     private func fillName(_ name: String) {
-        sel.NAME_FIELD_BUTTON.element(in: app).waitAndTap()
-        loginScreen.enterTextInField(typedText: name)
+        let nameField = sel.NAME_FIELD_BUTTON.element(in: app)
+        nameField.waitAndTap()
+        nameField.typeText(name)
     }
 
     private func fillCardNumber(_ number: String) {
-        sel.CARD_NUMBER_FIELD_BUTTON.element(in: app).waitAndTap()
-        loginScreen.enterTextInField(typedText: number)
+        let cardNumber = sel.CARD_NUMBER_FIELD_BUTTON.element(in: app)
+        cardNumber.waitAndTap()
+        cardNumber.typeTextWithDelay(number, delay: 0.1)
     }
 
     private func fillExpiration(_ expiration: String) {
         creditCard_ExpirationFieldButton.waitAndTap()
-        loginScreen.enterTextInField(typedText: expiration)
+        creditCard_ExpirationFieldButton.typeText(expiration)
     }
 
     private func retryCardNumberIfInvalid(_ number: String) {
         if creditCard_InvalidCardNumberMessage.exists {
+            let cardNumber = sel.CARD_NUMBER_FIELD_BUTTON.element(in: app)
+            cardNumber.waitAndTap()
+            pressDelete()
             fillCardNumber(number)
+            sel.EXPIRATION_FIELD_BUTTON.element(in: app).waitAndTap()
         }
     }
 
     private func retryExpirationIfInvalid(_ expiration: String) {
         if creditCard_InvalidExpirationMessage.exists {
+            pressDelete()
             fillExpiration(expiration)
         }
     }
@@ -105,14 +112,18 @@ final class AddCreditCardScreen {
 
         fillName(name)
         fillCardNumber(cardNumber)
+
+        sel.EXPIRATION_FIELD_BUTTON.element(in: app).waitAndTap()
+        retryCardNumberIfInvalid(cardNumber)
+
         fillExpiration(expirationDate)
 
-        retryCardNumberIfInvalid(cardNumber)
         retryExpirationIfInvalid(expirationDate)
 
         if !creditCard_SaveButton.isEnabled {
-            fillCardNumber(cardNumber)
+            retryCardNumberIfInvalid(cardNumber)
             fillExpiration(expirationDate)
+            retryExpirationIfInvalid(expirationDate)
             BaseTestCase().mozWaitForElementToExist(creditCard_SaveButton)
         }
 
@@ -145,5 +156,15 @@ final class AddCreditCardScreen {
             creditCard_UseSavedCardButton,
             creditCard_ManageCardButton
         ])
+    }
+
+    private func pressDelete() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            BaseTestCase().mozWaitForElementToExist(app.keyboards.keys["delete"])
+            app.keyboards.keys["delete"].press(forDuration: 2.2)
+        } else {
+            BaseTestCase().mozWaitForElementToExist(app.keyboards.keys["Delete"])
+            app.keyboards.keys["Delete"].press(forDuration: 2.2)
+        }
     }
 }
