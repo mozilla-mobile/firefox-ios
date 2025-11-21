@@ -21,8 +21,6 @@ final class CookiePersistenceTests: BaseTestCase {
 
     func testCookiePersistenceBasic() {
         // Open URL for Cookie login
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         openCookieSite()
         let webview = app.webViews.firstMatch
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
@@ -35,16 +33,12 @@ final class CookiePersistenceTests: BaseTestCase {
         // Relaunch app
         relaunchApp()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_IN"])
     }
 
     func testCookiePersistenceOpenNewTab() {
         // Open URL for Cookie login
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         openCookieSite()
         let webview = app.webViews.firstMatch
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
@@ -67,8 +61,6 @@ final class CookiePersistenceTests: BaseTestCase {
         relaunchApp()
 
         // Open a new tab for cookie website and check login status
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_IN"])
     }
@@ -102,8 +94,6 @@ final class CookiePersistenceTests: BaseTestCase {
         }
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
     }

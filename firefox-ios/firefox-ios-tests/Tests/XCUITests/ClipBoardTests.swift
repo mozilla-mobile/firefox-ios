@@ -15,8 +15,6 @@ class ClipBoardTests: BaseTestCase {
 
     // Copy url from the browser
     func copyUrl() {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
         urlBarAddress.waitAndTap()
         if iPad() {
             urlBarAddress.waitAndTap()
@@ -62,8 +60,6 @@ class ClipBoardTests: BaseTestCase {
     // This test is disabled in release, but can still run on master
     // https://mozilla.testrail.io/index.php?/cases/view/2325688
     func testClipboard() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(url)
         waitUntilPageLoad()
         checkUrl()
@@ -91,8 +87,6 @@ class ClipBoardTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307051
     func testCopyLink() {
         // Tap on "Copy Link
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(url_3)
         waitForTabsButton()
         // Menu Refactor: No "Copy Link" from browser tab menu

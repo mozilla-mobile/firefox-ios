@@ -256,8 +256,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
@@ -299,8 +297,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         validateTranslationSettingsUI()
         dismissSearchScreenFromTranslation()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-translation.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
@@ -341,8 +337,6 @@ class SettingsTests: FeatureFlaggedTestBase {
                        "Translation feature - toggle is enabled by default")
         dismissSearchScreenFromTranslation()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
@@ -355,8 +349,6 @@ class SettingsTests: FeatureFlaggedTestBase {
                        "Translation feature - toggle is enabled by default")
         dismissSearchScreenFromTranslation()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
         navigator.nowAt(BrowserTab)

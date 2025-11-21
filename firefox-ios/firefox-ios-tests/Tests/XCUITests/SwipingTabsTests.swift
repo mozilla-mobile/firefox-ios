@@ -29,8 +29,6 @@ class SwipingTabsTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)

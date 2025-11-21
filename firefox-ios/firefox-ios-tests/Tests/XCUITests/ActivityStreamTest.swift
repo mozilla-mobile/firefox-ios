@@ -130,8 +130,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             app.textFields.element(boundBy: 0).waitAndTap()
             app.typeText("mozilla.org\n")
         } else {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
             navigator.openURL("mozilla.org")
         }
         waitUntilPageLoad()
@@ -215,7 +213,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
     func testTopSitesOpenInNewPrivateTab_HomepageOff() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
         addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -244,7 +241,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest TAE
     func testTopSitesOpenInNewPrivateTab_HomepageOff_TAE() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
         addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
 
@@ -391,8 +387,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2855325
     func testSiteCanBeAddedToShortcuts() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         addWebsiteToShortcut(website: url_3)
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let cell = itemCell.staticTexts["Example Domain"]

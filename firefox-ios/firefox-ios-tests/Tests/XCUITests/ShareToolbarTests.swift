@@ -170,8 +170,6 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)

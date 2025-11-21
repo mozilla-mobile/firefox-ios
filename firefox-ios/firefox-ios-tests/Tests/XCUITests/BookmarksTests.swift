@@ -49,10 +49,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testBookmarkingUI() {
         app.launch()
         // Go to a webpage, and add to bookmarks, check it's added
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -65,8 +61,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
             navigator.performAction(Action.CloseURLBarOpen)
         }
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
 
         navigator.nowAt(BrowserTab)
@@ -129,8 +123,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testValidateBookmarksOptions() {
         app.launch()
         // Add a bookmark
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -146,8 +138,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // Smoketest
     func testBookmarksAwesomeBar() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         XCTExpectFailure("The app was not launched", strict: false) {
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                      timeout: TIMEOUT_LONG)
@@ -162,8 +152,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "https://mozilla.org")
 
         // Site table exists but is empty
@@ -190,8 +178,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // SmokeTest TAE
     func testBookmarksAwesomeBar_TAE() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         XCTExpectFailure("The app was not launched", strict: false) {
             topSitesScreen.assertVisible()
         }
@@ -205,8 +191,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Enter new url
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "https://mozilla.org")
 
@@ -372,8 +356,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306911
     func testRecentlyBookmarked() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -394,8 +376,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306866
     func testEditBookmark() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -429,8 +409,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307054
     func testBookmark() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(url_3)
         waitForTabsButton()
         navigator.nowAt(BrowserTab)

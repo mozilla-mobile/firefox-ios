@@ -20,16 +20,12 @@ class SearchTests: FeatureFlaggedTestBase {
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
     private func typeOnSearchBar(text: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tapAndTypeText(text)
     }
 
     private func typeOnSearchBar_TAE(text: String) {
         let browserScreen = BrowserScreen(app: app)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         browserScreen.tapOnAddressBar()
         browserScreen.getAddressBarElement().tapAndTypeText(text)
     }
@@ -273,10 +269,6 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
     func testSearchWithFirefoxOption() {
         app.launch()
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["cloud"])
@@ -318,9 +310,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // Smoketest
     func testSearchStartAfterTypingTwoWords() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         app.typeText("foo bar")
         app.typeText(XCUIKeyboardKey.return.rawValue)
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -334,9 +324,7 @@ class SearchTests: FeatureFlaggedTestBase {
         let browserScreen = BrowserScreen(app: app)
         let fooText = "foo bar"
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        browserScreen.assertAddressBarExists()
         app.typeText(fooText)
         app.typeText(XCUIKeyboardKey.return.rawValue)
         browserScreen.assertAddressBarContains(value: "google", timeout: TIMEOUT)
@@ -389,8 +377,6 @@ class SearchTests: FeatureFlaggedTestBase {
             throw XCTSkip("Test fails intermittently for iOS 15")
         }
         // Go to localhost website and check the page displays correctly
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         // Open new tab
@@ -402,8 +388,6 @@ class SearchTests: FeatureFlaggedTestBase {
         )
         waitForTabsButton()
         app.buttons["Cancel"].tap()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         validateSearchSuggestionText(typeText: "localhost")
     }
 
@@ -417,8 +401,6 @@ class SearchTests: FeatureFlaggedTestBase {
             throw XCTSkip("Test fails intermittently for iOS 15")
         }
         // Go to localhost website and check the page displays correctly
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         // Open new tab
@@ -428,8 +410,6 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertCancelButtonOnUrlBarExists()
         toolbarScreen.assertTabsButtonExists()
         browserScreen.tapCancelButtonIfExist()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         validateSearchSuggestionText_TAE(typeText: "localhost")
     }
 
@@ -595,15 +575,11 @@ class SearchTests: FeatureFlaggedTestBase {
     func testFirefoxSuggest() {
         // In history: mozilla.org
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("https://www.mozilla.org/en-US/")
         waitUntilPageLoad()
 
         // Bookmark The Book of Mozilla (on localhost)
         navigator.createNewTab()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
