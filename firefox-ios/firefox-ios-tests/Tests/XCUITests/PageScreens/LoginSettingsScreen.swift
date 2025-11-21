@@ -84,19 +84,6 @@ final class LoginSettingsScreen {
         BaseTestCase().mozWaitForElementToExist(sel.SAVED_PASSWORDS_LABEL.element(in: app))
     }
 
-    /*func enterTextInField(typedText: String) {
-        BaseTestCase().mozWaitForElementToExist(app.keyboards.firstMatch)
-        // The keyboard does not expand automatically sometimes
-        if app.keyboards.buttons["Continue"].exists {
-            app.keyboards.buttons["Continue"].waitAndTap()
-            BaseTestCase().mozWaitForElementToNotExist(app.keyboards.buttons["Continue"])
-            BaseTestCase().mozWaitForElementToExist(app.keyboards.keys.firstMatch)
-        }
-        for letter in typedText {
-            app.keyboards.keys["\(letter)"].waitAndTap()
-        }
-    }*/
-
     func enterTextInField(typedText: String) {
         if app.keyboards.element.exists {
             if app.keyboards.buttons["Continue"].exists {
