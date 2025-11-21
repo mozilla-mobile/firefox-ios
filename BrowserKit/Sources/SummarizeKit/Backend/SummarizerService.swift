@@ -20,13 +20,11 @@ public protocol SummarizerService {
     @MainActor
     func summarizeStreamed(from webView: WKWebView) -> AsyncThrowingStream<String, Error>
 
-    @MainActor
     func closeCurrentStreamedSession()
 }
 
 /// A default service that handles checking if a web page can be summarized and
 /// delegates summarization to the provided summarizer backend.
-@MainActor
 public final class DefaultSummarizerService: SummarizerService {
     private let summarizer: SummarizerProtocol
     private let checker: SummarizationCheckerProtocol
@@ -106,6 +104,7 @@ public final class DefaultSummarizerService: SummarizerService {
     ///  `.check()` by design is async since we need to wait for the document to load before we start summarizing.
     /// - Throws: `SummarizerError` if the content is not suitable or parsing fails.
     /// - Returns: Cleaned text ready for summarization.
+    @MainActor
     private func extractSummarizableText(from webView: WKWebView) async throws -> String {
         let result = await checker.check(on: webView, maxWords: maxWords)
         guard result.canSummarize else { throw SummarizerError(reason: result.reason) }
