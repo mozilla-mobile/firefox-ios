@@ -234,6 +234,244 @@ final class ModernOnboardingTelemetryUtilityTests: XCTestCase {
         XCTAssertEqual(savedExtras.onboardingVariant, "japan")
     }
 
+    func testOnboardingVariant_Japan_InPrimaryButtonTap() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, variant: .japan)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.PrimaryButtonTapExtra
+
+        subject.sendButtonActionTelemetry(from: CardNames.welcome.rawValue,
+                                          with: .forwardOneCard,
+                                          and: true)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingVariant, "japan")
+    }
+
+    func testOnboardingVariant_Global_InSecondaryButtonTap() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, variant: .modern)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.SecondaryButtonTapExtra
+
+        subject.sendButtonActionTelemetry(from: CardNames.sync.rawValue,
+                                          with: .forwardOneCard,
+                                          and: false)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingVariant, "global")
+    }
+
+    func testOnboardingVariant_Japan_InMultipleChoiceButtonTap() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, variant: .japan)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.MultipleChoiceButtonTapExtra
+
+        subject.sendMultipleChoiceButtonActionTelemetry(from: CardNames.welcome.rawValue,
+                                                        with: .themeDark)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingVariant, "japan")
+    }
+
+    // MARK: - Flow Type Tests
+    func testFlowType_FreshInstall_IsSetCorrectly() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CardViewExtra
+
+        subject.sendCardViewTelemetry(from: CardNames.welcome.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let flowType = try XCTUnwrap(savedExtras.flowType)
+        XCTAssertEqual(flowType, "fresh-install")
+    }
+
+    func testFlowType_Upgrade_IsSetCorrectly() throws {
+        let subject = createTelemetryUtility(for: .upgrade)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CardViewExtra
+
+        subject.sendCardViewTelemetry(from: CardNames.updateWelcome.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let flowType = try XCTUnwrap(savedExtras.flowType)
+        XCTAssertEqual(flowType, "upgrade")
+    }
+
+    // MARK: - Sequence ID and Position Tests
+    func testSequenceId_IsCorrectlyFormatted() throws {
+        let (subject, model) = createTelemetryUtilityWithModel(for: .freshInstall)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CardViewExtra
+
+        let firstCardName = model.cards.first?.name ?? CardNames.welcome.rawValue
+        subject.sendCardViewTelemetry(from: firstCardName)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let sequenceId = try XCTUnwrap(savedExtras.sequenceId)
+        XCTAssertTrue(sequenceId.contains(firstCardName))
+        XCTAssertTrue(sequenceId.contains("_"))
+    }
+
+    func testSequencePosition_FirstCard_IsOne() throws {
+        let (subject, model) = createTelemetryUtilityWithModel(for: .freshInstall)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CardViewExtra
+
+        let firstCardName = model.cards.first?.name ?? CardNames.welcome.rawValue
+        subject.sendCardViewTelemetry(from: firstCardName)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let sequencePosition = try XCTUnwrap(savedExtras.sequencePosition)
+        XCTAssertEqual(sequencePosition, "1")
+    }
+
+    func testSequencePosition_IsValidNumber() throws {
+        let (subject, model) = createTelemetryUtilityWithModel(for: .freshInstall)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CardViewExtra
+
+        mockGleanWrapper.savedExtras.removeAll()
+        mockGleanWrapper.savedEvents.removeAll()
+        mockGleanWrapper.recordEventCalled = 0
+
+        let cardName = (
+            model.cards.first(where: { $0.name == CardNames.notifications.rawValue })?.name
+            ?? CardNames.notifications.rawValue
+        )
+        subject.sendCardViewTelemetry(from: cardName)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let sequencePosition = try XCTUnwrap(savedExtras.sequencePosition)
+        let position = try XCTUnwrap(Int(sequencePosition))
+        XCTAssertGreaterThan(position, 0)
+    }
+
+    // MARK: - All Extra Fields Tests
+    func testCardViewTelemetry_AllExtraFieldsAreSet() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, variant: .japan)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CardViewExtra
+
+        subject.sendCardViewTelemetry(from: CardNames.sync.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.cardType, CardNames.sync.rawValue)
+        let flowType = try XCTUnwrap(savedExtras.flowType)
+        XCTAssertEqual(flowType, "fresh-install")
+        XCTAssertEqual(savedExtras.onboardingVariant, "japan")
+        let sequenceId = try XCTUnwrap(savedExtras.sequenceId)
+        XCTAssertFalse(sequenceId.isEmpty)
+        let sequencePosition = try XCTUnwrap(savedExtras.sequencePosition)
+        XCTAssertFalse(sequencePosition.isEmpty)
+    }
+
+    func testPrimaryButtonTap_AllExtraFieldsAreSet() throws {
+        let subject = createTelemetryUtility(for: .upgrade, variant: .modern)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.PrimaryButtonTapExtra
+
+        subject.sendButtonActionTelemetry(from: CardNames.updateSync.rawValue,
+                                          with: .setDefaultBrowser,
+                                          and: true)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.buttonAction, OnboardingActions.setDefaultBrowser.rawValue)
+        XCTAssertEqual(savedExtras.cardType, CardNames.updateSync.rawValue)
+        let flowType = try XCTUnwrap(savedExtras.flowType)
+        XCTAssertEqual(flowType, "upgrade")
+        XCTAssertEqual(savedExtras.onboardingVariant, "global")
+        let sequenceId = try XCTUnwrap(savedExtras.sequenceId)
+        XCTAssertFalse(sequenceId.isEmpty)
+        let sequencePosition = try XCTUnwrap(savedExtras.sequencePosition)
+        XCTAssertFalse(sequencePosition.isEmpty)
+    }
+
+    func testSecondaryButtonTap_AllExtraFieldsAreSet() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, variant: .japan)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.SecondaryButtonTapExtra
+
+        subject.sendButtonActionTelemetry(from: CardNames.notifications.rawValue,
+                                          with: .syncSignIn,
+                                          and: false)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.buttonAction, OnboardingActions.syncSignIn.rawValue)
+        XCTAssertEqual(savedExtras.cardType, CardNames.notifications.rawValue)
+        let flowType = try XCTUnwrap(savedExtras.flowType)
+        XCTAssertEqual(flowType, "fresh-install")
+        XCTAssertEqual(savedExtras.onboardingVariant, "japan")
+        let sequenceId = try XCTUnwrap(savedExtras.sequenceId)
+        XCTAssertFalse(sequenceId.isEmpty)
+        let sequencePosition = try XCTUnwrap(savedExtras.sequencePosition)
+        XCTAssertFalse(sequencePosition.isEmpty)
+    }
+
+    func testMultipleChoiceButtonTap_AllExtraFieldsAreSet() throws {
+        let subject = createTelemetryUtility(for: .upgrade, variant: .modern)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.MultipleChoiceButtonTapExtra
+
+        subject.sendMultipleChoiceButtonActionTelemetry(from: CardNames.updateWelcome.rawValue,
+                                                        with: .themeLight)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.buttonAction, OnboardingMultipleChoiceAction.themeLight.rawValue)
+        XCTAssertEqual(savedExtras.cardType, CardNames.updateWelcome.rawValue)
+        let flowType = try XCTUnwrap(savedExtras.flowType)
+        XCTAssertEqual(flowType, "upgrade")
+        XCTAssertEqual(savedExtras.onboardingVariant, "global")
+        let sequenceId = try XCTUnwrap(savedExtras.sequenceId)
+        XCTAssertFalse(sequenceId.isEmpty)
+        let sequencePosition = try XCTUnwrap(savedExtras.sequencePosition)
+        XCTAssertFalse(sequencePosition.isEmpty)
+    }
+
+    func testCloseTap_AllExtraFieldsAreSet() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, variant: .japan)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.CloseTapExtra
+
+        subject.sendDismissOnboardingTelemetry(from: CardNames.sync.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.cardType, CardNames.sync.rawValue)
+        let flowType = try XCTUnwrap(savedExtras.flowType)
+        XCTAssertEqual(flowType, "fresh-install")
+        XCTAssertEqual(savedExtras.onboardingVariant, "japan")
+        let sequenceId = try XCTUnwrap(savedExtras.sequenceId)
+        XCTAssertFalse(sequenceId.isEmpty)
+        let sequencePosition = try XCTUnwrap(savedExtras.sequencePosition)
+        XCTAssertFalse(sequencePosition.isEmpty)
+    }
+
+    // MARK: - Different Actions Tests
+    func testPrimaryButtonTap_DifferentActions() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.PrimaryButtonTapExtra
+
+        let actions: [OnboardingActions] = [.forwardOneCard, .forwardTwoCard, .setDefaultBrowser, .syncSignIn]
+
+        for action in actions {
+            mockGleanWrapper.savedExtras.removeAll()
+            mockGleanWrapper.savedEvents.removeAll()
+            mockGleanWrapper.recordEventCalled = 0
+
+            subject.sendButtonActionTelemetry(from: CardNames.welcome.rawValue,
+                                              with: action,
+                                              and: true)
+
+            let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+            XCTAssertEqual(savedExtras.buttonAction, action.rawValue)
+        }
+    }
+
+    func testMultipleChoiceButtonTap_DifferentActions() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+        typealias EventExtrasType = GleanMetrics.ModernOnboarding.MultipleChoiceButtonTapExtra
+
+        let actions: [OnboardingMultipleChoiceAction] = [.themeDark, .themeLight, .themeSystemDefault]
+
+        for action in actions {
+            mockGleanWrapper.savedExtras.removeAll()
+            mockGleanWrapper.savedEvents.removeAll()
+            mockGleanWrapper.recordEventCalled = 0
+
+            subject.sendMultipleChoiceButtonActionTelemetry(from: CardNames.welcome.rawValue,
+                                                            with: action)
+
+            let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+            XCTAssertEqual(savedExtras.buttonAction, action.rawValue)
+        }
+    }
+
     // MARK: Private
     private func createTelemetryUtility(
         for onboardingType: OnboardingType,
@@ -241,8 +479,26 @@ final class ModernOnboardingTelemetryUtilityTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> ModernOnboardingTelemetryUtility {
+        let (utility, _) = createTelemetryUtilityWithModel(for: onboardingType, variant: variant, file: file, line: line)
+        return utility
+    }
+
+    private func createTelemetryUtilityWithModel(
+        for onboardingType: OnboardingType,
+        variant: OnboardingVariant = .modern,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (ModernOnboardingTelemetryUtility, OnboardingKitViewModel) {
         let nimbusConfigUtility = NimbusOnboardingTestingConfigUtility()
-        nimbusConfigUtility.setupNimbus(withOrder: NimbusOnboardingTestingConfigUtility.CardOrder.allCards)
+        let cardOrder: [NimbusOnboardingTestingConfigUtility.CardOrder] = {
+            switch onboardingType {
+            case .freshInstall:
+                return [.welcome, .notifications, .sync]
+            case .upgrade:
+                return [.updateWelcome, .updateSync]
+            }
+        }()
+        nimbusConfigUtility.setupNimbus(withOrder: cardOrder, uiVariant: variant)
         let layer = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: variant,
             isDefaultBrowser: false,
@@ -257,6 +513,6 @@ final class ModernOnboardingTelemetryUtilityTests: XCTestCase {
         )
         trackForMemoryLeaks(telemetryUtility, file: file, line: line)
 
-        return telemetryUtility
+        return (telemetryUtility, model)
     }
 }
