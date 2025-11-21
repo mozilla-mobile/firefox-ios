@@ -144,4 +144,17 @@ final class CreditCardsScreen {
 
         BaseTestCase().mozWaitForElementToExist(useSavedCardButton)
     }
+
+    func waitForAddCreditCardValues() {
+        BaseTestCase().waitForElementsToExist(
+            [
+                sel.ADD_CREDIT_CARD.element(in: app),
+                sel.ADD_CREDIT_CARD_NAME_ON_CARD.element(in: app),
+                sel.ADD_CREDIT_CARD_CARD_NUMBER.element(in: app),
+                sel.ADD_CREDIT_CARD_EXPIRATION.element(in: app),
+                sel.ADD_CREDIT_CARD_CLOSE.element(in: app),
+                sel.ADD_CREDIT_CARD_SAVE.element(in: app)
+            ]
+        )
+    }
 }
