@@ -30,7 +30,8 @@ import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.PendingCommand
 import struct MozillaAppServices.RemoteSettingsConfig2
 
-public protocol SyncManager {
+// TODO: FXIOS-14225 - SyncManager shouldn't be Sendable
+public protocol SyncManager: Sendable {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
     var syncDisplayState: SyncDisplayState? { get }

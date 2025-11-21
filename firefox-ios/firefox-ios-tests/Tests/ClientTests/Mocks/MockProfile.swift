@@ -17,7 +17,7 @@ import class MozillaAppServices.RemoteSettingsService
 
 public typealias ClientSyncManager = Client.SyncManager
 
-open class ClientSyncManagerSpy: ClientSyncManager {
+open class ClientSyncManagerSpy: ClientSyncManager, @unchecked Sendable {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
