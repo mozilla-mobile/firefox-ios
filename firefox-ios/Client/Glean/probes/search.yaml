@@ -111,3 +111,20 @@ search.recent_searches:
     metadata:
       tags:
         - RecentSearches
+        
+  clear_button_tapped:
+    type: event
+    description: |
+      Triggered when a user taps the button to clear past recent search suggestions.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30751
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30761
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
+    metadata:
+      tags:
+        - RecentSearches

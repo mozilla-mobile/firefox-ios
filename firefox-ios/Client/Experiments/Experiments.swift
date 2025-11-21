@@ -99,7 +99,7 @@ enum Experiments {
     static var dbPath: String? {
         let profilePath: String?
         if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
-            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
+            profilePath = UITestAppDelegate.dirForTestProfile
         } else if AppConstants.isRunningUnitTest {
             let dir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             profilePath = dir.path

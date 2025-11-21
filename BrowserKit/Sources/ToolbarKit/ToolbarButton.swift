@@ -71,8 +71,9 @@ class ToolbarButton: UIButton,
         self.notificationCenter = notificationCenter
 
         // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
-        if element.isLoading {
+        if let isLoading = element.loadingConfig?.isLoading, isLoading {
             makeLoadingButton()
+            loadingA11yLabel = element.loadingConfig?.a11yLabel
         } else {
             hideLoadingIcon()
         }
@@ -131,6 +132,7 @@ class ToolbarButton: UIButton,
                 view.removeFromSuperview()
             }
         }
+        layoutIfNeeded()
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -240,6 +242,7 @@ class ToolbarButton: UIButton,
     // MARK: - Loading Icon for Translation Button
     // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
     private var spinner: UIActivityIndicatorView?
+    private var loadingA11yLabel: String?
 
     private func makeLoadingButton(style: UIActivityIndicatorView.Style = .medium) {
         if spinner == nil {
@@ -256,6 +259,9 @@ class ToolbarButton: UIButton,
     }
 
     private func hideLoadingIcon() {
+        if let loadingA11yLabel, spinner != nil && UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .announcement, argument: loadingA11yLabel)
+        }
         spinner?.stopAnimating()
         spinner?.removeFromSuperview()
         spinner = nil

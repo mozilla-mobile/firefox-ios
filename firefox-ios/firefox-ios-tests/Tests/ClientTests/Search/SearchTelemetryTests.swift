@@ -79,6 +79,18 @@ final class SearchTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
+    func test_recordEvent_whenRecentSearchClearButtonTapped_thenProperEventCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.SearchRecentSearches.clearButtonTapped
+
+        subject.recentSearchesClearButtonTapped()
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     private func createSubject() -> SearchTelemetry {
         return SearchTelemetry(tabManager: MockTabManager(), gleanWrapper: mockGleanWrapper)
     }

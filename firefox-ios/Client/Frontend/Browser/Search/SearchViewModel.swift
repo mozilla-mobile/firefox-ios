@@ -403,6 +403,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     }
 
     func clearRecentSearches() {
+        searchTelemetry.recentSearchesClearButtonTapped()
+
         let dateProvider = SystemDateProvider()
         recentSearchProvider.clear(with: dateProvider) { success in
             ensureMainThread { [weak self] in

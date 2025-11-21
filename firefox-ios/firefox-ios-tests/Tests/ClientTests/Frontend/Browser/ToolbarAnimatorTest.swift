@@ -112,7 +112,7 @@ final class MockToolbarView: ToolbarViewProtocol {
 }
 
 // MARK: - Mock Delegate
-final class MockToolbarAnimatorDelegate: ToolbarAnimatorDelegate {
+final class MockToolbarAnimatorDelegate: ToolbarAnimator.Delegate {
     var receivedAlphaValue: CGFloat = 0
 
     func dispatchScrollAlphaChange(alpha: CGFloat) {

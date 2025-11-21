@@ -25,8 +25,6 @@ class URLValidationTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2460854
     // Smoketest
     func testDifferentURLTypes() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
@@ -48,8 +46,6 @@ class URLValidationTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2460854
     // Smoketest TAE
     func testDifferentURLTypes_TAE() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()

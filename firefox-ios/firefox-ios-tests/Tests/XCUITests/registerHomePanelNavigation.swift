@@ -26,10 +26,6 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
             }
         }
 
-        if !isTablet {
-            screenState.tap(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell], to: URLBarOpen)
-        }
-
         // Workaround to bug Bug 1417522
         if isTablet {
             screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
