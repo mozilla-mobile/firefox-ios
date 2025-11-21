@@ -126,7 +126,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
 
-        if !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) {
+        if !isAnyStoriesRedesignEnabled {
             snapshot.appendSections([.customizeHomepage])
             snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
         }

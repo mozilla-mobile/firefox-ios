@@ -23,7 +23,14 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let isStoriesRedesignEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesign,
                                                                                          checking: .buildOnly)
-        let isBookmarksSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection) ?? true
+        let isStoriesRedesignV2Enabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesignV2,
+                                                                                           checking: .buildOnly)
+
+        // Bookmarks section default value without nimbus is true
+        let bookmarksSectionDefaultValue = !isStoriesRedesignV2Enabled
+        let isBookmarksSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection)
+                                            ?? bookmarksSectionDefaultValue
+
         let shouldShowSection = isStoriesRedesignEnabled ? false : isBookmarksSectionPrefEnabled
 
         self.init(

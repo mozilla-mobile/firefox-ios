@@ -108,7 +108,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func shouldShowSpacer(for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
-        return device == .phone && featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+        return device == .phone && isAnyStoriesRedesignEnabled
     }
 
     // MARK: - Notifications
