@@ -139,32 +139,29 @@ struct DefaultBrowserUtility {
             return
         }
 
-        let appleAPIStatus = userDefault.bool(forKey: UserDefaultsKey.isBrowserDefault)
-        let preAPIStatus = userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
+        // This comes from deeplinks
+        let preAPIStatus = userDefault.bool(forKey: UserDefaultsKey.isBrowserDefault)
+        // This comes from API OR user having previously set the browser to true
+        let postAPIStatus = userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
 
         logger.log(
             "Current status info",
             level: .info,
             category: .setup,
             extra: [
-                "currentAppleAPIStatus": "\(appleAPIStatus)",
-                "currentPreAPIStatus": "\(preAPIStatus)"
+                "currentDeeplink": "\(preAPIStatus)",
+                "currentAPIOrUserSetToDefaultStatus": "\(postAPIStatus)"
             ]
         )
 
-        // Only update the status with the old status if the current API status is false
-        if !appleAPIStatus {
-            logger.log(
-                "Migrating from old status",
-                level: .info,
-                category: .setup
-            )
-
-            userDefault.set(
-                preAPIStatus,
-                forKey: UserDefaultsKey.isBrowserDefault
-            )
-        }
+        // If one of these statuses are true, meaning we have been set to default,
+        // then simply
+        // We don't care what the previous status was, as the migration's real purpose
+        // is to merge the two together.
+        userDefault.set(
+            preAPIStatus || postAPIStatus,
+            forKey: UserDefaultsKey.isBrowserDefault
+        )
 
         userDefault.set(true, forKey: UserDefaultsKey.hasPerformedMigration)
     }

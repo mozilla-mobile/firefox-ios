@@ -104,16 +104,16 @@ final class DefaultBrowserUtilityTests: XCTestCase {
     func testMigration_ForUpdatingValues_NonDMAUser_DefaultOldValueIsTrue_DefaultNewValueIsFalse() {
         XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
 
-        userDefaults.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
+        userDefaults.set(true, forKey: DefaultKeys.isBrowserDefault)
 
-        XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
+        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
+        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
 
         setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: false)
         subject.migrateDefaultBrowserStatusIfNeeded()
 
-        XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
+        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
         XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
         XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
@@ -123,8 +123,8 @@ final class DefaultBrowserUtilityTests: XCTestCase {
     func testMigration_ForUpdatingValues_NonDMAUser_DefaultOldValueIsFalse_DefaultNewValueIsTrue() {
         XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.hasPerformedMigration))
 
-        userDefaults.set(false, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-        userDefaults.set(true, forKey: DefaultKeys.isBrowserDefault)
+        userDefaults.set(false, forKey: DefaultKeys.isBrowserDefault)
+        userDefaults.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
 
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
         XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
