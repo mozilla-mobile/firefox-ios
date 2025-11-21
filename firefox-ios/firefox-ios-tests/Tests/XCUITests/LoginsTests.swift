@@ -591,6 +591,8 @@ class LoginTest: BaseTestCase {
             navigator.goto(TabTray)
         }
         navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.secureTextFields.firstMatch.waitAndTap()
@@ -635,6 +637,8 @@ class LoginTest: BaseTestCase {
             navigator.goto(TabTray)
         }
         navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         let passworField = app.secureTextFields.firstMatch
