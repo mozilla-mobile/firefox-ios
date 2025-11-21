@@ -118,12 +118,10 @@ final class AddCreditCardScreen {
 
         fillExpiration(expirationDate)
 
-        // retryCardNumberIfInvalid(cardNumber)
         retryExpirationIfInvalid(expirationDate)
 
         if !creditCard_SaveButton.isEnabled {
             retryCardNumberIfInvalid(cardNumber)
-            // fillCardNumber(cardNumber)
             fillExpiration(expirationDate)
             retryExpirationIfInvalid(expirationDate)
             BaseTestCase().mozWaitForElementToExist(creditCard_SaveButton)
