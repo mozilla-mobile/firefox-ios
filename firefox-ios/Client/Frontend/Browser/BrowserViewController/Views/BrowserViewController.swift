@@ -2576,7 +2576,7 @@ class BrowserViewController: UIViewController,
 
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
-    fileprivate func updateURLBarDisplayURL(_ tab: Tab, _ navigationFinished: Bool = false) {
+    func updateURLBarDisplayURL(_ tab: Tab, _ navigationFinished: Bool = false) {
         var safeListedURLImageName: String? {
             return (tab.contentBlocker?.status == .safelisted) ?
             StandardImageIdentifiers.Small.notificationDotFill : nil
