@@ -1097,9 +1097,9 @@ extension TelemetryWrapper {
                 GleanMetrics.App.choiceScreenAcquisition.set(choiceScreen)
             }
         case(.action, .tap, .engagementNotification, _, _):
-            GleanMetrics.KeyCommands.engagementNotificationTapped.record()
+            GleanMetrics.Onboarding.engagementNotificationTapped.record()
         case(.action, .cancel, .engagementNotification, _, _):
-            GleanMetrics.KeyCommands.engagementNotificationCancel.record()
+            GleanMetrics.Onboarding.engagementNotificationCancel.record()
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):

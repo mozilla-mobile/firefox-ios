@@ -293,11 +293,11 @@ final class LaunchCoordinator: BaseCoordinator,
                 parentCoordinator?.didFinishLaunch(from: self)
             }
         )
-        
+
         flowViewModel.onCardView = { cardName in
             telemetryUtility.sendCardViewTelemetry(from: cardName)
         }
-        
+
         flowViewModel.onButtonTap = { cardName, action, isPrimary in
             telemetryUtility.sendButtonActionTelemetry(
                 from: cardName,
@@ -305,14 +305,14 @@ final class LaunchCoordinator: BaseCoordinator,
                 and: isPrimary
             )
         }
-        
+
         flowViewModel.onMultipleChoiceTap = { cardName, action in
             telemetryUtility.sendMultipleChoiceButtonActionTelemetry(
                 from: cardName,
                 with: action
             )
         }
-        
+
         flowViewModel.onDismiss = { cardName in
             telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
         }

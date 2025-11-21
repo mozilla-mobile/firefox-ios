@@ -754,31 +754,6 @@ key_commands:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
 
-  engagement_notification_tapped:
-    type: event
-    description: |
-      Records the users interaction with the engagement notification.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  engagement_notification_cancel:
-    type: event
-    description: |
-      Records the cancelation of a scheduled engagement notification.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-
 # Top Site
 top_sites:
   tile_pressed:

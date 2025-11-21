@@ -3,34 +3,48 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 
-class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
+final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Properties
     private let cardOrder: [String]
     private let flowType: String
     private let onboardingVersion: String
+    private let gleanWrapper: GleanWrapper
 
     // MARK: - Initializer
-    init(with model: OnboardingViewModel, onboardingVersion: String = "legacy") {
+    init(
+        with model: OnboardingViewModel,
+        onboardingVersion: String = "legacy",
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
+    ) {
         self.cardOrder = model.cards.map { $0.name }
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
         self.onboardingVersion = onboardingVersion
+        self.gleanWrapper = gleanWrapper
     }
 
-    init(with model: OnboardingKitViewModel, onboardingVersion: String = "modern") {
+    init(
+        with model: OnboardingKitViewModel,
+        onboardingVersion: String = "modern",
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
+    ) {
         self.cardOrder = model.cards.map { $0.name }
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
         self.onboardingVersion = onboardingVersion
+        self.gleanWrapper = gleanWrapper
     }
 
     // MARK: - Public methods
     func sendCardViewTelemetry(from cardName: String) {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .onboardingCardView,
-            value: nil,
-            extras: buildBaseTelemetryExtras(using: cardName))
+        let extras = GleanMetrics.Onboarding.CardViewExtra(
+            cardType: cardName,
+            flowType: flowType,
+            onboardingVersion: onboardingVersion,
+            sequenceId: sequenceID(from: cardOrder),
+            sequencePosition: sequencePosition(for: cardName, from: cardOrder)
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.cardView, extras: extras)
     }
 
     func sendButtonActionTelemetry(
@@ -38,53 +52,76 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         with action: OnboardingActions,
         and primaryButton: Bool
     ) {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: primaryButton ? .onboardingPrimaryButton : .onboardingSecondaryButton,
-            value: nil,
-            extras: buildBaseTelemetryExtras(using: cardName)
-                .merging(
-                    buildAdditioalButtonTelemetryExtras(using: action),
-                    uniquingKeysWith: { (first, _) in first }))
+        let baseExtras = buildBaseExtras(using: cardName)
+        let buttonAction = action.rawValue
+
+        if primaryButton {
+            let extras = GleanMetrics.Onboarding.PrimaryButtonTapExtra(
+                buttonAction: buttonAction,
+                cardType: baseExtras.cardType,
+                flowType: baseExtras.flowType,
+                onboardingVersion: baseExtras.onboardingVersion,
+                sequenceId: baseExtras.sequenceId,
+                sequencePosition: baseExtras.sequencePosition
+            )
+            gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.primaryButtonTap, extras: extras)
+        } else {
+            let extras = GleanMetrics.Onboarding.SecondaryButtonTapExtra(
+                buttonAction: buttonAction,
+                cardType: baseExtras.cardType,
+                flowType: baseExtras.flowType,
+                onboardingVersion: baseExtras.onboardingVersion,
+                sequenceId: baseExtras.sequenceId,
+                sequencePosition: baseExtras.sequencePosition
+            )
+            gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.secondaryButtonTap, extras: extras)
+        }
     }
 
     func sendMultipleChoiceButtonActionTelemetry(
         from cardName: String,
         with action: OnboardingMultipleChoiceAction
     ) {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .onboardingMultipleChoiceButton,
-            value: nil,
-            extras: buildBaseTelemetryExtras(using: cardName)
-                .merging(
-                    buildAdditionalMultipleChoiceButtonTelemetryExtras(using: action),
-                    uniquingKeysWith: { (first, _) in first }))
+        let baseExtras = buildBaseExtras(using: cardName)
+        let extras = GleanMetrics.Onboarding.MultipleChoiceButtonTapExtra(
+            buttonAction: action.rawValue,
+            cardType: baseExtras.cardType,
+            flowType: baseExtras.flowType,
+            onboardingVersion: baseExtras.onboardingVersion,
+            sequenceId: baseExtras.sequenceId,
+            sequencePosition: baseExtras.sequencePosition
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.multipleChoiceButtonTap, extras: extras)
     }
 
     func sendDismissOnboardingTelemetry(from cardName: String) {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .onboardingClose,
-            value: nil,
-            extras: buildBaseTelemetryExtras(using: cardName))
+        let extras = GleanMetrics.Onboarding.CloseTapExtra(
+            cardType: cardName,
+            flowType: flowType,
+            onboardingVersion: onboardingVersion,
+            sequenceId: sequenceID(from: cardOrder),
+            sequencePosition: sequencePosition(for: cardName, from: cardOrder)
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.closeTap, extras: extras)
     }
 
     // MARK: - Private functions
-    private func buildBaseTelemetryExtras(
-        using cardName: String
-    ) -> [String: String] {
-        typealias Key = TelemetryWrapper.EventExtraKey
-        return [
-            Key.cardType.rawValue: cardName,
-            Key.sequenceID.rawValue: sequenceID(from: cardOrder),
-            Key.sequencePosition.rawValue: sequencePosition(for: cardName, from: cardOrder),
-            Key.flowType.rawValue: flowType,
-            Key.onboardingVersion.rawValue: onboardingVersion
-        ]
+    private struct BaseExtras {
+        let cardType: String
+        let flowType: String
+        let onboardingVersion: String
+        let sequenceId: String
+        let sequencePosition: String
+    }
+
+    private func buildBaseExtras(using cardName: String) -> BaseExtras {
+        return BaseExtras(
+            cardType: cardName,
+            flowType: flowType,
+            onboardingVersion: onboardingVersion,
+            sequenceId: sequenceID(from: cardOrder),
+            sequencePosition: sequencePosition(for: cardName, from: cardOrder)
+        )
     }
 
     private func sequenceID(from sequence: [String]) -> String {
@@ -97,17 +134,5 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     ) -> String {
         let index = sequence.firstIndex { $0 == cardName } ?? -1
         return String(index + 1)
-    }
-
-    private func buildAdditioalButtonTelemetryExtras(
-        using buttonAction: OnboardingActions
-    ) -> [String: String] {
-        return [TelemetryWrapper.EventExtraKey.buttonAction.rawValue: buttonAction.rawValue]
-    }
-
-    private func buildAdditionalMultipleChoiceButtonTelemetryExtras(
-        using buttonAction: OnboardingMultipleChoiceAction
-    ) -> [String: String] {
-        return [TelemetryWrapper.EventExtraKey.multipleChoiceButtonAction.rawValue: buttonAction.rawValue]
     }
 }

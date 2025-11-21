@@ -26,7 +26,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
 
     public let onComplete: (String) -> Void
     public private(set) var multipleChoiceSelections: [String: ViewModel.OnboardingMultipleChoiceActionType] = [:]
-    
+
     public var onCardView: ((String) -> Void)?
     public var onButtonTap: ((String, ViewModel.OnboardingActionType, Bool) -> Void)?
     public var onMultipleChoiceTap: ((String, ViewModel.OnboardingMultipleChoiceActionType) -> Void)?
@@ -56,9 +56,15 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         action: ViewModel.OnboardingActionType,
         cardName: String
     ) {
-        let isPrimaryButton = onboardingCards.first(where: { $0.name == cardName })?.buttons.primary.action == action ?? true
+        let card = onboardingCards.first(where: { $0.name == cardName })
+        let isPrimaryButton: Bool
+        if let card = card {
+            isPrimaryButton = card.buttons.primary.action.rawValue == action.rawValue
+        } else {
+            isPrimaryButton = false
+        }
         onButtonTap?(cardName, action, isPrimaryButton)
-        
+
         onActionTap(action, cardName) { [weak self] result in
             switch result {
             case .success(let tabAction):
@@ -118,7 +124,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         guard previous != pageCount else { return }
         pageCount = previous
     }
-    
+
     func handlePageChange() {
         guard pageCount >= 0 && pageCount < onboardingCards.count else { return }
         onCardView?(onboardingCards[pageCount].name)
