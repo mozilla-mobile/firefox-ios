@@ -14,8 +14,8 @@ final class TranslationsMiddleware {
     private let translationsService: TranslationsServiceProtocol
     private let translationsTelemetry: TranslationsTelemetryProtocol
 
-    /// This is a map because multiple windows can be open at the same time.
-    /// For iPhone this, we will only have one entry at a time.
+    /// Multiple windows can be open simultaneously, so we track IDs in a map.
+    /// On iPhone, only a single window exists, so this will contain at most one entry.
     private var translationFlowIds: [WindowUUID: UUID] = [:]
 
     init(profile: Profile = AppContainer.shared.resolve(),
