@@ -29,6 +29,8 @@ final class TranslationsMiddleware {
         switch action.actionType {
         case ToolbarActionType.urlDidChange:
             guard let action = (action as? ToolbarAction) else { return }
+
+            guard action.url?.isWebPage() == true else { return }
             self.checkTranslationsAreEligible(for: action)
 
         case ToolbarMiddlewareActionType.didTapButton:
