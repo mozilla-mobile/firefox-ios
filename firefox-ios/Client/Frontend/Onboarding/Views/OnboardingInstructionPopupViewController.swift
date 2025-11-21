@@ -147,6 +147,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         primaryButton.setContentHuggingPriority(.required, for: .vertical)
         primaryButton.setContentCompressionResistancePriority(.required, for: .vertical)
     }
+
     private func addViewsToView() {
         contentContainerView.addSubviews(titleLabel, descriptionLabel, primaryButton)
         view.addSubview(contentContainerView)
@@ -196,6 +197,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         case UIContentSizeCategory.didChangeNotification:
             ensureMainThread { [self] in
                 configureDescriptionLabel(from: viewModel.instructionSteps)
+                applyTheme()
             }
         default:
             break
