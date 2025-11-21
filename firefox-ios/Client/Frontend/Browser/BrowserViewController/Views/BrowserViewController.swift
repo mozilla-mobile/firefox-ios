@@ -701,6 +701,17 @@ class BrowserViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
+        var isToolbarCollapsed: Bool {
+            guard #available(iOS 26.0, *) else { return false }
+            switch scrollController {
+            case let legacy as LegacyTabScrollController:
+                return legacy.toolbarState == .collapsed
+            case let handler as TabScrollHandler:
+                return handler.toolbarDisplayState.isCollapsed
+            default: return false
+            }
+        }
+
         if isBottomSearchBar {
             header.isClearBackground = false
 
@@ -717,7 +728,8 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
-        bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
+        bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isToolbarCollapsed
+        bottomContainer.isHidden = isToolbarCollapsed
 
         let maskView = UIView(frame: CGRect(x: 0,
                                             y: -contentContainer.frame.origin.y,
@@ -4684,12 +4696,12 @@ extension BrowserViewController: TabManagerDelegate {
     /// - Parameters:
     ///   - isHomeTab: A Boolean value indicating whether the current tab is the home page.
     ///   - webView: The `WKWebView` instance to be displayed.
-    ///   - previousTab: The previously selected tab, used to dispatch action only if opening a new homepage
-    ///   after viewing a homepage. We want to dispatch an action that triggers impression telemetry.
+    ///   - previousTab: The previously selected tab. We check if this is not nil to dispatch an action that
+    ///   triggers impression telemetry, indicating a  tab change to the Home tab has occurred.
     private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView, previousTab: Tab?) {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
-            guard previousTab?.isFxHomeTab ?? false else { return }
+            guard previousTab != nil else { return }
             store.dispatch(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,

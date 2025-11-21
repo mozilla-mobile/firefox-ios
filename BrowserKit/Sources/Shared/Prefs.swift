@@ -13,6 +13,7 @@ public struct PrefsKeys {
     // Global sync state for rust sync manager
     public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
     public static let LoginsHaveBeenVerified = "loginsHaveBeenVerified"
+    public static let CreditCardsHaveBeenVerified = "creditCardsHaveBeenVerified"
 
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
@@ -49,6 +50,7 @@ public struct PrefsKeys {
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let ShowClipboardBar = "showClipboardBar"
+    public static let ShowRelayMaskSuggestions = "showRelayMaskSuggestions"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"

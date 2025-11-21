@@ -108,7 +108,7 @@ final class RemoteTabsPanelMiddleware: Notifiable {
                 }
                 return
             }
-            var action: RemoteTabsPanelAction
+            let action: RemoteTabsPanelAction
 
             if let constellation = self.profile.rustFxA.accountManager?.deviceConstellation() {
                 constellation.refreshState()

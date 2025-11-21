@@ -7,7 +7,8 @@ import MozillaAppServices
 import Shared
 import Common
 
-final class RemoteSettingsServiceSyncCoordinator: Notifiable {
+// TODO: FXIOS-14203 RemoteSettingsServiceSyncCoordinator is not sendable
+final class RemoteSettingsServiceSyncCoordinator: @unchecked Sendable, Notifiable {
     private weak var service: RemoteSettingsService?
     private let prefs: Prefs
     private let prefsKey = PrefsKeys.RemoteSettings.lastRemoteSettingsServiceSyncTimestamp

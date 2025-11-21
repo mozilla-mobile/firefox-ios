@@ -7,7 +7,6 @@ import XCTest
 class FirefoxSuggestTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2360075
     func testFirefoxSuggestExists() {
-        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("sho")
         // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/28166
