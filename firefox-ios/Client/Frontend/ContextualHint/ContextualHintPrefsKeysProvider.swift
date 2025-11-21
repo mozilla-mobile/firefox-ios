@@ -20,6 +20,7 @@ extension ContextualHintPrefsKeysProvider {
         case .jumpBackInSyncedTab: return CFRPrefsKeys.jumpBackInSyncedTabKey.rawValue
         case .mainMenu: return CFRPrefsKeys.mainMenuRedesignKey.rawValue
         case .navigation: return CFRPrefsKeys.navigationKey.rawValue
+        case .relay: return CFRPrefsKeys.relayMaskKey.rawValue
         case .toolbarUpdate: return CFRPrefsKeys.toolbarUpdateKey.rawValue
         case .translation: return CFRPrefsKeys.translationKey.rawValue
         case .summarizeToolbarEntry: return CFRPrefsKeys.summarizerToolbarEntryKey.rawValue

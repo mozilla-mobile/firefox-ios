@@ -262,6 +262,11 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
     }()
 
+    private(set) lazy var relayMaskContextHintVC: ContextualHintViewController = {
+        let relayProvider = ContextualHintViewProvider(forHintType: .relay, with: profile)
+        return ContextualHintViewController(with: relayProvider, windowUUID: windowUUID)
+    }()
+
     private(set) lazy var summarizeToolbarEntryContextHintVC: ContextualHintViewController = {
         let summarizeViewProvider = ContextualHintViewProvider(forHintType: .summarizeToolbarEntry, with: profile)
         return ContextualHintViewController(with: summarizeViewProvider, windowUUID: windowUUID)
@@ -4073,6 +4078,8 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
 
+    // MARK: - Relay Additions
+
     private func handleEmailFieldDetected(for tab: Tab?) {
         guard let tab, let tabURL = tab.url else { return }
         guard RelayController.isFeatureEnabled else { return }
@@ -4081,6 +4088,10 @@ class BrowserViewController: UIViewController,
             RelayController.shared.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
+            Task { @MainActor [weak self] in
+                guard let targetView = tab.webView?.accessoryView else { return }
+                self?.configureRelayContextualHint(for: targetView)
+            }
         }
     }
 
@@ -4104,6 +4115,23 @@ class BrowserViewController: UIViewController,
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         }
     }
+
+    private func presentRelayContextualHint() {
+        present(relayMaskContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: relayMaskContextHintVC)
+    }
+
+    private func configureRelayContextualHint(for view: UIView) {
+         relayMaskContextHintVC.configure(
+             anchor: view,
+             withArrowDirection: .down,
+             andDelegate: self,
+             presentedUsing: { [weak self] in
+                 self?.presentRelayContextualHint()
+             },
+             andActionForButton: { },
+             overlayState: overlayManager)
+     }
 }
 
 extension BrowserViewController: LegacyClipboardBarDisplayHandlerDelegate {
