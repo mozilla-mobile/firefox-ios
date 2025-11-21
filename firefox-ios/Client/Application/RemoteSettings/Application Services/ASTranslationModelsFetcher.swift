@@ -170,7 +170,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             )
             return
         }
-        prewarmResources(for: Constants.pivotLanguage, to: pivotLanguage)
+        prewarmResources(for: Constants.pivotLanguage, to: deviceLanguage)
     }
 
     /// Pre-warms attachments for a list of records by fetching them
