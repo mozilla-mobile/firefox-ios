@@ -37,11 +37,13 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertTrue(!queue.isEmpty)
     }
 
+    @MainActor
     func testEnqueueDownloadShouldAppendDownloadAndTriggerResume() {
         queue.enqueue(download)
         XCTAssertTrue(download.downloadTriggered)
     }
 
+    @MainActor
     func testEnqueueDownloadShouldCallDownloadQueueDidStartDownload() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)

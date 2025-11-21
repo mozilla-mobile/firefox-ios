@@ -6,8 +6,8 @@ import Foundation
 import WidgetKit
 import Common
 
+@MainActor
 protocol WindowSimpleTabsProvider {
-    @MainActor
     func windowSimpleTabs() -> [String: SimpleTab]
 }
 

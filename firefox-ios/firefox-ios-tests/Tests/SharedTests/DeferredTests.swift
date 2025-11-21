@@ -56,7 +56,9 @@ class DeferredTests: XCTestCase {
         }
 
         // Type signatures:
-        let combined: () -> Deferred<Maybe<String>> = { f1() >>== f2 }
+        let combined: () -> Deferred<Maybe<String>> = {
+            chainDeferred(f1(), f: f2)
+        }
         let result: Deferred<Maybe<String>> = combined()
 
         result.upon {

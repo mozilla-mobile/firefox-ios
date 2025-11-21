@@ -718,7 +718,7 @@ final class TabTrayViewController: UIViewController,
             currentToast.dismiss(false)
         }
 
-        if toastType.reduxAction(for: windowUUID) as? TabPanelViewAction != nil {
+        if toastType.reduxAction(for: windowUUID) is TabPanelViewAction {
             let viewModel = ButtonToastViewModel(labelText: toastType.title, buttonText: toastType.buttonText)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: retrieveTheme(),

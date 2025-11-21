@@ -99,7 +99,7 @@ enum Experiments {
     static var dbPath: String? {
         let profilePath: String?
         if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
-            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
+            profilePath = UITestAppDelegate.dirForTestProfile
         } else if AppConstants.isRunningUnitTest {
             let dir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             profilePath = dir.path
@@ -250,8 +250,10 @@ enum Experiments {
             cannotUseAppleIntelligence: cannotUseAppleIntelligence()
         )
 
+        let profile: Profile = AppContainer.shared.resolve()
+        let remoteSettingsService = profile.remoteSettingsService
+
         return NimbusBuilder(dbPath: dbPath)
-            .with(url: remoteSettingsURL)
             .using(previewCollection: usePreviewCollection())
             .with(errorReporter: errorReporter)
             .with(initialExperiments: initialExperiments)
@@ -281,7 +283,10 @@ enum Experiments {
                     category: .experiments
                 )
             })
-            .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
+            .build(
+                appInfo: getAppSettings(isFirstRun: isFirstRun),
+                remoteSettingsService: remoteSettingsService
+            )
     }
 
     /// A convenience method to initialize the `NimbusApi` object at startup.

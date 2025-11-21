@@ -101,7 +101,7 @@ struct DefaultBrowserUtil {
     }
 
     /// Checks if the application is set as the default web browser
-    var isDefault: Bool {
+    var isDefaultBrowser: Bool {
         return userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
     }
 

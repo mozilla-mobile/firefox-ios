@@ -128,7 +128,7 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     public let files: FileAccessor
     public let syncManager: ClientSyncManager?
     public let firefoxSuggest: RustFirefoxSuggestProtocol?
-    public let remoteSettingsService: RemoteSettingsService?
+    public let remoteSettingsService: RemoteSettingsService
     public let mockNotificationCenter: NotificationProtocol = MockNotificationCenter()
 
     fileprivate let name = "mockaccount"
@@ -140,7 +140,7 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     init(
         databasePrefix: String = "mock",
         firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
-        remoteSettingsService: RemoteSettingsService? = nil,
+        remoteSettingsService: RemoteSettingsService = RemoteSettingsService(noPointer: .init()),
         injectedPinnedSites: MockablePinnedSites? = nil
     ) {
         files = MockFiles()
