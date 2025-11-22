@@ -3,14 +3,17 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Client
+import Common
 
-class MockThrottler: GCDThrottlerProtocol {
+class MockThrottler: MainThreadThrottlerProtocol {
     private(set) var didCallThrottle = false
 
     init() {}
 
-    func throttle(completion: @escaping @Sendable () -> Void) {
+    func throttle(completion: @escaping @MainActor @Sendable () -> Void) {
         didCallThrottle = true
-        completion()
+        ensureMainThread {
+            completion()
+        }
     }
 }

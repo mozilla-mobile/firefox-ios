@@ -6,23 +6,11 @@ import XCTest
 
 @testable import Client
 
-class GCDThrottlerTests: XCTestCase {
+class MainThreadThrottlerTests: XCTestCase {
     struct Timing {
         static let veryLongDelay: Double = 100_000
         static let defaultTestMaxWaitTime: Double = 2
         static let shortenTestMaxWaitTime = 0.5
-    }
-
-    private var testQueue: DispatchQueue!
-
-    override func setUp() {
-        super.setUp()
-        testQueue = DispatchQueue(label: "tests.gcdthrottler.serial")
-    }
-
-    override func tearDown() {
-        testQueue = nil
-        super.tearDown()
     }
 
     func testMultipleFastConsecutiveCallsAreThrottledAndExecutedAtMostOneTime() {
@@ -79,7 +67,7 @@ class GCDThrottlerTests: XCTestCase {
     }
 
     // MARK: - Utility
-    private func createSubject(timeout: Double) -> GCDThrottler {
-        return GCDThrottler(seconds: timeout, on: testQueue)
+    private func createSubject(timeout: Double) -> MainThreadThrottler {
+        return MainThreadThrottler(seconds: timeout)
     }
 }

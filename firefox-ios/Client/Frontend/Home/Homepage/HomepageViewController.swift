@@ -70,7 +70,7 @@ final class HomepageViewController: UIViewController,
     // Telemetry related
     private var alreadyTrackedSections = Set<HomepageSection>()
     private var alreadyTrackedTopSites = Set<HomepageItem>()
-    private let trackingImpressionsThrottler: GCDThrottlerProtocol
+    private let trackingImpressionsThrottler: MainThreadThrottlerProtocol
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -81,7 +81,7 @@ final class HomepageViewController: UIViewController,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         throttler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.5)
+         throttler: MainThreadThrottlerProtocol = MainThreadThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager

@@ -301,6 +301,7 @@ final class WindowManagerImplementation: WindowManager {
         reservedUUIDs.remove(at: reservedUUIDIdx)
     }
 
+    @MainActor
     private func saveSimpleTabs() {
         let providers = allWindowTabManagers() as? [WindowSimpleTabsProvider] ?? []
         widgetSimpleTabsCoordinator.saveSimpleTabs(for: providers)

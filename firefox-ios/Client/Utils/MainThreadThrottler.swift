@@ -5,29 +5,26 @@
 import Foundation
 import Common
 
-protocol GCDThrottlerProtocol {
-    func throttle(completion: @escaping @Sendable () -> Void)
+protocol MainThreadThrottlerProtocol {
+    func throttle(completion: @escaping @MainActor @Sendable () -> Void)
 }
 
 /// For any work that needs to be delayed, you can wrap it inside a throttler
 /// and specify the delay time, in seconds, and queue.
-class GCDThrottler: GCDThrottlerProtocol {
+class MainThreadThrottler: MainThreadThrottlerProtocol {
     private let defaultDelay = 0.35
 
     private let threshold: Double
-    private var queue: DispatchQueueInterface
     private var lastExecutionTime = Date.distantPast
 
-    init(seconds delay: Double? = nil,
-         on queue: DispatchQueueInterface = DispatchQueue.main) {
+    init(seconds delay: Double? = nil) {
         self.threshold = delay ?? defaultDelay
-        self.queue = queue
     }
 
     // This debounces; the task will not happen unless a duration of delay passes since the function was called
-    func throttle(completion: @escaping @Sendable () -> Void) {
+    func throttle(completion: @escaping @MainActor @Sendable () -> Void) {
         guard threshold <= 0 || lastExecutionTime.timeIntervalSinceNow < -threshold else { return }
         lastExecutionTime = Date()
-        queue.async(execute: completion)
+        DispatchQueue.main.async(execute: completion)
     }
 }
