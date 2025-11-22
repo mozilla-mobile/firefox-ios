@@ -10,7 +10,8 @@ import UIKit
 class StoriesFeedViewController: UIViewController,
                                  UICollectionViewDelegate,
                                  StoreSubscriber,
-                                 Themeable {
+                                 Themeable,
+                                 DismissalNotifiable {
     // MARK: - Themeable Properties
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -27,10 +28,11 @@ class StoriesFeedViewController: UIViewController,
     }
 
     // Telemetry related
-    private let telemetry: StoriesFeedTelemetry
+    private let telemetry: StoriesFeedTelemetryProtocol
     private let scrollThrottler: GCDThrottlerProtocol
     private let impressionsThrottler: GCDThrottlerProtocol
     private let impressionsTracker: ImpressionTrackingUtility
+    private var recordTelemetryOnDisappear = true
 
     // MARK: - Private constants
     private let logger: Logger
@@ -40,7 +42,7 @@ class StoriesFeedViewController: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         telemetry: StoriesFeedTelemetry = StoriesFeedTelemetry(),
+         telemetry: StoriesFeedTelemetryProtocol = StoriesFeedTelemetry(),
          impressionsThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
          scrollThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
          impressionsTracker: ImpressionTrackingUtility = ImpressionTrackingUtility()
@@ -74,7 +76,9 @@ class StoriesFeedViewController: UIViewController,
         }
 
         MainActor.assumeIsolated {
-            telemetry.storiesFeedClosed()
+            if recordTelemetryOnDisappear {
+                telemetry.storiesFeedClosed()
+            }
             impressionsTracker.reset()
             unsubscribeFromRedux()
         }
@@ -88,7 +92,7 @@ class StoriesFeedViewController: UIViewController,
         setupLayout()
         configureDataSource()
 
-        store.dispatchLegacy(
+        store.dispatch(
             StoriesFeedAction(
                 windowUUID: windowUUID,
                 actionType: StoriesFeedActionType.initialize
@@ -117,7 +121,7 @@ class StoriesFeedViewController: UIViewController,
             actionType: ScreenActionType.showScreen,
             screen: .storiesFeed
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -142,7 +146,7 @@ class StoriesFeedViewController: UIViewController,
             actionType: ScreenActionType.closeScreen,
             screen: .storiesFeed
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: Helper functions
@@ -319,5 +323,11 @@ class StoriesFeedViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         collectionView?.backgroundColor = .clear
+    }
+
+    // MARK: - DismissalNotifiable
+
+    func willBeDismissed(reason: DismissalReason) {
+        recordTelemetryOnDisappear = false
     }
 }

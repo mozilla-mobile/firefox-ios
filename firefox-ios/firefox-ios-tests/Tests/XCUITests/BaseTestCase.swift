@@ -462,13 +462,7 @@ class BaseTestCase: XCTestCase {
         app.buttons["Cancel"].tapWithRetry()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
-        if !iPad() {
-            homepageSearchBar.waitAndTap()
-        }
-        urlBar.press(forDuration: 2)
-        if !pasteAction.exists {
-            urlBar.press(forDuration: 2)
-        }
+        urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
         mozWaitForElementToExist(app.tables["Context Menu"])
         pasteAction.waitAndTap()
         mozWaitForValueContains(urlBar, value: url)
@@ -631,6 +625,20 @@ extension XCUIElement {
         }
         if self.isHittable {
             XCTFail("\(self) was not tapped")
+        }
+    }
+
+    func pressWithRetry(duration: TimeInterval, timeout: TimeInterval = TIMEOUT, element: XCUIElement) {
+        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        self.press(forDuration: duration)
+        var attempts = 5
+        while !element.exists && attempts > 0 {
+            self.press(forDuration: duration)
+            attempts -= 1
+        }
+
+        if !element.exists {
+            XCTFail("\(element) is not visible after \(attempts) attempts")
         }
     }
 

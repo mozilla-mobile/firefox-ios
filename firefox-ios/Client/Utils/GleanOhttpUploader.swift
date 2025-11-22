@@ -34,7 +34,8 @@ enum OhttpEnvironment {
     }
 }
 
-struct GleanOhttpUploader: PingUploaderProtocol {
+// TODO: FXIOS-14157 - GleanOhttpUploader shouldn't be @unchecked Sendable
+struct GleanOhttpUploader: PingUploaderProtocol, @unchecked Sendable {
     let connectionTimeout = TimeInterval(10)
     let logger: Logger
     private let manager: ASOhttpManager
@@ -47,7 +48,7 @@ struct GleanOhttpUploader: PingUploaderProtocol {
 
     /// Build the request and create upload operation using the `OhttpManager`
     func uploadOhttpRequest(request: GleanPingUploadRequest,
-                            callback: @escaping (UploadResult) -> Void) {
+                            callback: @escaping @Sendable (UploadResult) -> Void) {
         var body = Data(capacity: request.data.count)
         body.append(contentsOf: request.data)
 

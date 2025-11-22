@@ -15,7 +15,8 @@ let SearchSuggestClientErrorInvalidResponse = 1
  *
  * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
  */
-class SearchSuggestClient {
+// TODO: FXIOS-14199 - SearchSuggestClient shouldn't be @unchecked Sendable
+final class SearchSuggestClient: @unchecked Sendable {
     fileprivate let searchEngine: OpenSearchEngine
     fileprivate let userAgent: String
     fileprivate var task: URLSessionTask?
@@ -32,7 +33,7 @@ class SearchSuggestClient {
 
     func query(
         _ query: String,
-        callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void
+        callback: @escaping @Sendable (_ response: [String]?, _ error: NSError?) -> Void
     ) {
         let url = searchEngine.suggestURLForQuery(query)
         if url == nil {
@@ -45,7 +46,7 @@ class SearchSuggestClient {
             return
         }
 
-        task = urlSession.dataTask(with: url!) { (data, response, error) in
+        task = urlSession.dataTask(with: url!) { [weak self] (data, response, error) in
             if let error = error {
                 callback(nil, error as NSError?)
                 return
@@ -54,7 +55,7 @@ class SearchSuggestClient {
             guard let data = data,
                   validatedHTTPResponse(response, statusCode: 200..<300) != nil
             else {
-                self.handleInvalidResponseError(callback: callback)
+                self?.handleInvalidResponseError(callback: callback)
                 return
             }
 
@@ -66,12 +67,12 @@ class SearchSuggestClient {
             // That is, an array of at least two elements: the search term and an array of suggestions.
 
             if array?.count ?? 0 < 2 {
-                self.handleInvalidResponseError(callback: callback)
+                self?.handleInvalidResponseError(callback: callback)
                 return
             }
 
             guard let suggestions = array?[1] as? [String] else {
-                self.handleInvalidResponseError(callback: callback)
+                self?.handleInvalidResponseError(callback: callback)
                 return
             }
 

@@ -33,10 +33,6 @@ class DragAndDropTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest
     func testRearrangeTabsTabTray() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
@@ -52,10 +48,6 @@ class DragAndDropTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
     func testRearrangeMoreThan3TabsTabTraytab() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // Arranging more than 3 to check that it works moving tabs between lines
         let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
 
@@ -179,12 +171,7 @@ private extension BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        if XCUIDevice.shared.orientation == UIDeviceOrientation.portrait && !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        } else {
-            navigator.nowAt(BrowserTab)
-        }
+        navigator.nowAt(BrowserTab)
         navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()

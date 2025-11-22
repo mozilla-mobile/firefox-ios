@@ -11,8 +11,9 @@ import Down
 import SwiftUI
 
 public protocol SummarizeNavigationHandler: AnyObject {
+    @MainActor
     func openURL(url: URL)
-
+    @MainActor
     func dismissSummary()
 }
 

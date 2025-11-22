@@ -589,6 +589,13 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
+    public func reportPreSyncKeyRetrievalFailure(err: String) {
+        GleanMetrics
+            .PreSyncKeyRetrievalFailure
+            .logins
+            .record(GleanMetrics .PreSyncKeyRetrievalFailure .LoginsExtra(errorMessage: err))
+    }
+
     private func resetLoginsAndKey(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
         self.wipeLocalEngine().upon { result in
             guard result.isSuccess else {

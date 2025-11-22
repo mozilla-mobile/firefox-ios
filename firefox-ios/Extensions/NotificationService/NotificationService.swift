@@ -151,7 +151,6 @@ class SyncDataDisplay {
             displayThisDeviceDisconnectedNotification()
         default:
             displayUnknownMessageNotification(debugInfo: "Unknown: \(message)")
-            break
         }
     }
 

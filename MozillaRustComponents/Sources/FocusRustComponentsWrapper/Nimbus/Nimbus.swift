@@ -5,8 +5,9 @@
 import Foundation
 import Glean
 
-public class Nimbus: NimbusInterface {
-    private let _userDefaults: UserDefaults?
+public final class Nimbus: NimbusInterface {
+    // FIXME: FXIOS-14119 Should be thread safe
+    private nonisolated(unsafe) let _userDefaults: UserDefaults?
 
     private let nimbusClient: NimbusClientProtocol
 
@@ -14,14 +15,14 @@ public class Nimbus: NimbusInterface {
 
     private let errorReporter: NimbusErrorReporter
 
-    lazy var fetchQueue: OperationQueue = {
+    let fetchQueue: OperationQueue = {
         var queue = OperationQueue()
         queue.name = "Nimbus fetch queue"
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
 
-    lazy var dbQueue: OperationQueue = {
+    let dbQueue: OperationQueue = {
         var queue = OperationQueue()
         queue.name = "Nimbus database queue"
         queue.maxConcurrentOperationCount = 1
@@ -442,7 +443,8 @@ extension Nimbus: NimbusMessagingProtocol {
     }
 }
 
-public class NimbusDisabled: NimbusApi {
+// FIXME: FXIOS-14118 Not thread safe because of mutable state
+public class NimbusDisabled: NimbusApi, @unchecked Sendable {
     public static let shared = NimbusDisabled()
 
     public var experimentParticipation: Bool = false

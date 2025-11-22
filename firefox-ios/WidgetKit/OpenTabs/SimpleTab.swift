@@ -7,8 +7,7 @@ import Shared
 import TabDataStore
 import Foundation
 
-// TODO: FXIOS-12589 UserDefaults is not sendable
-nonisolated(unsafe) private let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+private let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
 struct SimpleTab: Hashable, Codable {
     var title: String?

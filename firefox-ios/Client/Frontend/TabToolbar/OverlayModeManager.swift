@@ -5,6 +5,7 @@
 import Foundation
 
 protocol OverlayStateProtocol {
+    @MainActor
     var inOverlayMode: Bool { get }
 }
 

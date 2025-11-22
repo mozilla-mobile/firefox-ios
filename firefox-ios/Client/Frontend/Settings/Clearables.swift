@@ -17,8 +17,9 @@ protocol Clearable {
     var label: String { get }
 }
 
+// TODO: FXIOS-14152 - HistoryClearable shouldn't be @unchecked Sendable
 // Clears our browsing history, including favicons and thumbnails.
-class HistoryClearable: Clearable {
+final class HistoryClearable: Clearable, @unchecked Sendable {
     let profile: Profile
     let tabManager: TabManager
     let siteImageHandler: SiteImageHandler

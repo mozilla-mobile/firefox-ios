@@ -1115,13 +1115,14 @@ fi
 // completely removed.
 aland.fi
 
-// fj : http://domains.fj/
-// Submitted by registry <garth.miller@cocca.org.nz> 2020-02-11
+// fj : https://www.iana.org/domains/root/db/fj.html
 fj
 ac.fj
 biz.fj
 com.fj
+edu.fj
 gov.fj
+id.fj
 info.fj
 mil.fj
 name.fj
@@ -4514,8 +4515,6 @@ bievat.no
 bievát.no
 bindal.no
 birkenes.no
-bjarkoy.no
-bjarkøy.no
 bjerkreim.no
 bjugn.no
 bodo.no
@@ -4792,7 +4791,6 @@ herøy.møre-og-romsdal.no
 sande.møre-og-romsdal.no
 moskenes.no
 moss.no
-mosvik.no
 muosat.no
 muosát.no
 naamesjevuemie.no
@@ -6813,7 +6811,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-10-24T15:19:14Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-11-08T15:16:38Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -10979,7 +10977,7 @@ xin
 // https://www.iana.org/domains/root/db/xn--fhbei.html
 كوم
 
-// xn--fiq228c5hs : TLD REGISTRY LIMITED OY
+// xn--fiq228c5hs : Beijing TLD Registry Technology Limited
 // https://www.iana.org/domains/root/db/xn--fiq228c5hs.html
 中文网
 
@@ -11587,7 +11585,7 @@ emrstudio-prod.us-west-2.amazonaws.com
 
 // Amazon Managed Workflows for Apache Airflow
 // Submitted by AWS Security <psl-maintainers@amazon.com>
-// Reference: 2f697e23-58d6-4b97-be6b-77a26e811dad
+// Reference: bfd043cc-2816-451d-894e-612c6b61a438
 *.airflow.af-south-1.on.aws
 *.airflow.ap-east-1.on.aws
 *.airflow.ap-northeast-1.on.aws
@@ -11634,6 +11632,7 @@ emrstudio-prod.us-west-2.amazonaws.com
 *.ap-southeast-3.airflow.amazonaws.com
 *.ap-southeast-4.airflow.amazonaws.com
 *.ap-southeast-5.airflow.amazonaws.com
+*.ap-southeast-7.airflow.amazonaws.com
 *.ca-central-1.airflow.amazonaws.com
 *.ca-west-1.airflow.amazonaws.com
 *.eu-central-1.airflow.amazonaws.com
@@ -11652,6 +11651,46 @@ emrstudio-prod.us-west-2.amazonaws.com
 *.us-east-2.airflow.amazonaws.com
 *.us-west-1.airflow.amazonaws.com
 *.us-west-2.airflow.amazonaws.com
+
+// Amazon Relational Database Service
+// Submitted by: AWS Security <psl-maintainers@amazon.com>
+// Reference: 5aa87906-fd4f-4831-8727-4ffca6094159
+*.rds.cn-north-1.amazonaws.com.cn
+*.rds.cn-northwest-1.amazonaws.com.cn
+*.af-south-1.rds.amazonaws.com
+*.ap-east-1.rds.amazonaws.com
+*.ap-east-2.rds.amazonaws.com
+*.ap-northeast-1.rds.amazonaws.com
+*.ap-northeast-2.rds.amazonaws.com
+*.ap-northeast-3.rds.amazonaws.com
+*.ap-south-1.rds.amazonaws.com
+*.ap-south-2.rds.amazonaws.com
+*.ap-southeast-1.rds.amazonaws.com
+*.ap-southeast-2.rds.amazonaws.com
+*.ap-southeast-3.rds.amazonaws.com
+*.ap-southeast-4.rds.amazonaws.com
+*.ap-southeast-5.rds.amazonaws.com
+*.ap-southeast-6.rds.amazonaws.com
+*.ap-southeast-7.rds.amazonaws.com
+*.ca-central-1.rds.amazonaws.com
+*.ca-west-1.rds.amazonaws.com
+*.eu-central-1.rds.amazonaws.com
+*.eu-central-2.rds.amazonaws.com
+*.eu-west-1.rds.amazonaws.com
+*.eu-west-2.rds.amazonaws.com
+*.eu-west-3.rds.amazonaws.com
+*.il-central-1.rds.amazonaws.com
+*.me-central-1.rds.amazonaws.com
+*.me-south-1.rds.amazonaws.com
+*.mx-central-1.rds.amazonaws.com
+*.sa-east-1.rds.amazonaws.com
+*.us-east-1.rds.amazonaws.com
+*.us-east-2.rds.amazonaws.com
+*.us-gov-east-1.rds.amazonaws.com
+*.us-gov-west-1.rds.amazonaws.com
+*.us-northeast-1.rds.amazonaws.com
+*.us-west-1.rds.amazonaws.com
+*.us-west-2.rds.amazonaws.com
 
 // Amazon S3
 // Submitted by AWS Security <psl-maintainers@amazon.com>
@@ -12163,7 +12202,7 @@ awsapps.com
 
 // AWS Elastic Beanstalk
 // Submitted by AWS Security <psl-maintainers@amazon.com>
-// Reference: bb5a965c-dec3-4967-aa22-e306ad064797
+// Reference: e4e02a54-eaf9-4fe7-b662-39ccbc011a04
 cn-north-1.eb.amazonaws.com.cn
 cn-northwest-1.eb.amazonaws.com.cn
 elasticbeanstalk.com
@@ -12176,14 +12215,18 @@ ap-south-1.elasticbeanstalk.com
 ap-southeast-1.elasticbeanstalk.com
 ap-southeast-2.elasticbeanstalk.com
 ap-southeast-3.elasticbeanstalk.com
+ap-southeast-5.elasticbeanstalk.com
+ap-southeast-7.elasticbeanstalk.com
 ca-central-1.elasticbeanstalk.com
 eu-central-1.elasticbeanstalk.com
 eu-north-1.elasticbeanstalk.com
 eu-south-1.elasticbeanstalk.com
+eu-south-2.elasticbeanstalk.com
 eu-west-1.elasticbeanstalk.com
 eu-west-2.elasticbeanstalk.com
 eu-west-3.elasticbeanstalk.com
 il-central-1.elasticbeanstalk.com
+me-central-1.elasticbeanstalk.com
 me-south-1.elasticbeanstalk.com
 sa-east-1.elasticbeanstalk.com
 us-east-1.elasticbeanstalk.com
@@ -12203,6 +12246,32 @@ us-west-2.elasticbeanstalk.com
 // Submitted by Daniel Massaguer <psl-maintainers@amazon.com>
 // Reference: d916759d-a08b-4241-b536-4db887383a6a
 awsglobalaccelerator.com
+
+// AWS Lambda Function URLs
+// Submitted by AWS Security <psl-maintainers@amazon.com>
+// Reference: 57df74ca-0820-46a5-89ea-0f0d0c4714b7
+lambda-url.af-south-1.on.aws
+lambda-url.ap-east-1.on.aws
+lambda-url.ap-northeast-1.on.aws
+lambda-url.ap-northeast-2.on.aws
+lambda-url.ap-northeast-3.on.aws
+lambda-url.ap-south-1.on.aws
+lambda-url.ap-southeast-1.on.aws
+lambda-url.ap-southeast-2.on.aws
+lambda-url.ap-southeast-3.on.aws
+lambda-url.ca-central-1.on.aws
+lambda-url.eu-central-1.on.aws
+lambda-url.eu-north-1.on.aws
+lambda-url.eu-south-1.on.aws
+lambda-url.eu-west-1.on.aws
+lambda-url.eu-west-2.on.aws
+lambda-url.eu-west-3.on.aws
+lambda-url.me-south-1.on.aws
+lambda-url.sa-east-1.on.aws
+lambda-url.us-east-1.on.aws
+lambda-url.us-east-2.on.aws
+lambda-url.us-west-1.on.aws
+lambda-url.us-west-2.on.aws
 
 // AWS re:Post Private
 // Submitted by AWS Security <psl-maintainers@amazon.com>
@@ -12786,6 +12855,15 @@ dedyn.io
 deta.app
 deta.dev
 
+// Developed Methods LLC : https://methods.dev
+// Submitted by Patrick Lorio <security@playit.gg>
+*.at.ply.gg
+d6.ply.gg
+joinmc.link
+playit.plus
+*.at.playit.plus
+with.playit.plus
+
 // Dfinity Foundation: https://dfinity.org/
 // Submitted by Dfinity Team <domains@dfinity.org>
 icp0.io
@@ -12825,6 +12903,10 @@ discordsez.com
 // DNS Africa Ltd : https://dns.business
 // Submitted by Calvin Browne <calvin@dns.business>
 jozi.biz
+
+// DNSHE : https://de5.net
+// Submitted by DNSHE Team <support@dnshe.com>
+de5.net
 
 // DNShome : https://www.dnshome.de/
 // Submitted by Norbert Auler <mail@dnshome.de>
@@ -13198,6 +13280,11 @@ rt.ht
 elementor.cloud
 elementor.cool
 
+// Emergent : https://emergent.sh
+// Submitted by Emergent Security Team <security@emergent.sh>
+emergent.cloud
+emergent.host
+
 // En root‽ : https://en-root.org
 // Submitted by Emmanuel Raviart <emmanuel@raviart.com>
 en-root.fr
@@ -13438,6 +13525,7 @@ fh-muenster.io
 // Figma : https://www.figma.com
 // Submitted by Nick Frost <psl@figma.com>
 figma.site
+figma-gov.site
 preview.site
 
 // Filegear Inc. : https://www.filegear.com
@@ -14028,6 +14116,10 @@ test-iserv.de
 iserv.dev
 iserv.host
 
+// Ispmanager : https://www.ispmanager.com/
+// Submitted by Ispmanager infrastructure team <infrastructure@ispmanager.com>
+ispmanager.name
+
 // Jelastic, Inc. : https://jelastic.com/
 // Submitted by Ihor Kolodyuk <ik@jelastic.com>
 mel.cloudlets.com.au
@@ -14464,6 +14556,12 @@ mittwaldserver.info
 typo3server.info
 project.space
 
+// Mocha : https://getmocha.com
+// Submitted by Ben Reinhart <security@getmocha.com>
+mocha.app
+mochausercontent.com
+mocha-sandbox.dev
+
 // MODX Systems LLC : https://modx.com
 // Submitted by Elizabeth Southwell <elizabeth@modx.com>
 modx.dev
@@ -14502,6 +14600,10 @@ ui.nabu.casa
 // Submitted by Felix Herbst <security@needle.tools>
 needle.run
 
+// Neo : https://www.neo.space
+// Submitted by Ankit Kulkarni <devops@co.site>
+co.site
+
 // Net at Work Gmbh : https://www.netatwork.de
 // Submitted by Jan Jaeschke <jan.jaeschke@netatwork.de>
 cloud.nospamproxy.com
@@ -14510,10 +14612,6 @@ o365.cloud.nospamproxy.com
 // Net libre : https://www.netlib.re
 // Submitted by Philippe PITTOLI <security@netlib.re>
 netlib.re
-
-// Netfy Domains : https://netfy.domains
-// Submitted by Suranga Ranasinghe <security@mavicsoft.com>
-netfy.app
 
 // Netlify : https://www.netlify.com
 // Submitted by Jessica Parsons <jessica@netlify.com>
@@ -15719,6 +15817,10 @@ lima.zone
 site.transip.me
 *.transurl.nl
 
+// Tunnelmole: https://tunnelmole.com
+// Submitted by Robbie Cahill <support@tunnelmole.com>
+tunnelmole.net
+
 // TuxFamily : http://tuxfamily.org
 // Submitted by TuxFamily administrators <adm@staff.tuxfamily.org>
 tuxfamily.org
@@ -15761,6 +15863,10 @@ hk.org
 // UK Intis Telecom LTD : https://it.com
 // Submitted by ITComdomains <to@it.com>
 it.com
+
+// Umso Software Inc. : https://www.umso.com
+// Submitted by Alexis Taylor <security@umso.com>
+umso.co
 
 // Unison Computing, PBC : https://unison.cloud
 // Submitted by Simon Højberg <security@unison.cloud>

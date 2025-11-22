@@ -32,8 +32,6 @@ class NavigationTest: BaseTestCase {
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         mozWaitForElementToExist(app.textFields[searchTextField])
         let defaultValuePlaceholder = app.textFields[searchTextField].placeholderValue!
 
@@ -57,11 +55,6 @@ class NavigationTest: BaseTestCase {
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
-        if !iPad() {
-            navigator.nowAt(BrowserTab)
-            navigator.goto(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: "localhost")
@@ -393,10 +386,6 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         // Check that there are no pop ups
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(popUpTestUrl)
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "localhost")
@@ -450,10 +439,6 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         // Check that there are no pop ups
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(popUpTestUrl)
         browserScreen.addressToolbarContainValue(value: "localhost")
         mozWaitForElementToExist(app.webViews.staticTexts["Blocked Element"])
@@ -485,8 +470,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
     func testSSL() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("https://expired.badssl.com/")
         mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
         XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
@@ -507,8 +490,6 @@ class NavigationTest: BaseTestCase {
     func testSSL_TAE() {
         let sslScreen = SSLWarningScreen(app: app)
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("https://expired.badssl.com/")
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
@@ -539,8 +520,6 @@ class NavigationTest: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(HomePanelsScreen)
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         mozWaitForElementToExist(app.links["link-created-by-parent"])
     }
@@ -577,8 +556,6 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testURLBar() {
         let text = "example.com\n"
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         urlBar.waitAndTap()
 
@@ -596,8 +573,6 @@ class NavigationTest: BaseTestCase {
     // Smoketest TAE
     func testURLBar_TAE() {
         let browserScreen = BrowserScreen(app: app)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         browserScreen.tapOnAddressBar()
 
         browserScreen.assertAddressBarHasKeyboardFocus()
@@ -621,7 +596,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
         let numTabs = app.otherElements[tabsTray].cells.count
-        XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
+        XCTAssertEqual(numTabs, 3, "Total number of opened tabs should be 3")
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
     }
 
@@ -633,7 +608,7 @@ class NavigationTest: BaseTestCase {
         // The article is loaded in a new private tab
         navigator.goto(TabTray)
         var numTabs = app.otherElements[tabsTray].cells.count
-        XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")
+        XCTAssertEqual(numTabs, 2, "Total number of regulat opened tabs should be 2")
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
         if iPad() {
             app.buttons["Private"].waitAndTap()
@@ -671,8 +646,6 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         closeFromAppSwitcherAndRelaunch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.links[website_2["link"]!].waitAndTap()
@@ -708,10 +681,6 @@ class NavigationTest: BaseTestCase {
         // Open website and tap on one of the external article links
         navigator.nowAt(BrowsingSettings)
         navigator.goto(NewTabScreen)
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         validateExternalLink()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)

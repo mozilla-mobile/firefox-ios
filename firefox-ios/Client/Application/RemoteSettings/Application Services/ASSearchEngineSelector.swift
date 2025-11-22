@@ -58,7 +58,7 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
             let remoteSettingsEnv = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
             let isProd = remoteSettingsEnv == .prod
             if !isProd {
-                _ = try? profile.remoteSettingsService?.sync()
+                _ = try? profile.remoteSettingsService.sync()
             }
 
             var searchResultsConfig = try engineSelector.filterEngineConfiguration(userEnvironment: env)

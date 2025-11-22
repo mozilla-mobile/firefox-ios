@@ -160,7 +160,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
 
-                store.dispatchLegacy(newAction)
+                store.dispatch(newAction)
             }
             if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
                 userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
@@ -378,8 +378,8 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
             // Even though we don't currently use these two fields,
             // verify that they were received as additional confirmation
             // that this is a valid request from LoginsHelper.js.
-            request["formOrigin"] as? String != nil,
-            request["actionOrigin"] as? String != nil
+            request["formOrigin"] is String,
+            request["actionOrigin"] is String
         else { return }
 
         currentRequestId = requestId

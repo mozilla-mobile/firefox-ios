@@ -50,7 +50,7 @@ final class GleanUsageReporting: GleanUsageReportingApi {
 
     private func setUsageConstantValues() {
         GleanMetrics.Usage.os.set("iOS")
-        GleanMetrics.Usage.osVersion.set(UIDevice.current.systemVersion)
+        GleanMetrics.Usage.osVersion.set(UIDeviceDetails.systemVersion)
         GleanMetrics.Usage.appDisplayVersion.set(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
         GleanMetrics.Usage.appBuild.set(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")
         GleanMetrics.Usage.appChannel.set(AppConstants.buildChannel.rawValue)
@@ -64,14 +64,15 @@ final class GleanUsageReporting: GleanUsageReportingApi {
     }
 }
 
-class GleanLifecycleObserver {
+// TODO: FXIOS-14156 - GleanLifecycleObserver shouldn't be @unchecked Sendable
+class GleanLifecycleObserver: Notifiable, @unchecked Sendable {
     let gleanUsageReportingApi: GleanUsageReportingApi
     private var isObserving = false
-    private let notificationCenter: NotificationCenter
+    private let notificationCenter: NotificationProtocol
 
     init(
         gleanUsageReportingApi: GleanUsageReportingApi = GleanUsageReporting(),
-        notificationCenter: NotificationCenter = .default
+        notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.gleanUsageReportingApi = gleanUsageReportingApi
         self.notificationCenter = notificationCenter
@@ -81,19 +82,10 @@ class GleanLifecycleObserver {
         guard !isObserving else { return }
         isObserving = true
 
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appWillEnterForeground),
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
-
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appDidEnterBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
+        startObservingNotifications(withNotificationCenter: notificationCenter,
+                                    forObserver: self,
+                                    observing: [UIApplication.willEnterForegroundNotification,
+                                                UIApplication.didEnterBackgroundNotification])
 
         // Handle the case where the app is already in the foreground when the observer is started
         handleForegroundEvent()
@@ -103,27 +95,26 @@ class GleanLifecycleObserver {
         guard isObserving else { return }
         isObserving = false
 
-        notificationCenter.removeObserver(
-            self,
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
-
-        notificationCenter.removeObserver(
-            self,
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
+        stopObservingNotifications(withNotificationCenter: notificationCenter,
+                                   forObserver: self,
+                                   observing: [UIApplication.willEnterForegroundNotification,
+                                               UIApplication.didEnterBackgroundNotification])
     }
 
-    @objc
-    private func appWillEnterForeground(notification: NSNotification) {
-        handleForegroundEvent()
-    }
+    // MARK: Notifiable
 
-    @objc
-    private func appDidEnterBackground(notification: NSNotification) {
-        handleBackgroundEvent()
+    func handleNotifications(_ notification: Notification) {
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIApplication.willEnterForegroundNotification:
+                self.handleForegroundEvent()
+            case UIApplication.didEnterBackgroundNotification:
+                self.handleBackgroundEvent()
+            default:
+                break
+            }
+        }
     }
 
     func handleForegroundEvent() {

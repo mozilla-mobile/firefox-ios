@@ -59,9 +59,8 @@ class NewTabSettingsTest: BaseTestCase {
             let keyboardCount = app.keyboards.count
             XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
         }
-        // With swiping tabs on, the homepage is cached so it should be having those elements
-        mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        mozWaitForElementToExist(app.links.staticTexts["YouTube"])
+        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToNotExist(app.links.staticTexts["YouTube"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027

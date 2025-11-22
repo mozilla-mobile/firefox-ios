@@ -231,7 +231,9 @@ final class WindowManagerImplementation: WindowManager {
                                level: .fatal,
                                category: .window)
                     let uuidsToDelete = Array(onDiskUUIDs.dropFirst())
-                    Task { await tabDataStore.removeWindowData(forUUIDs: uuidsToDelete) }
+                    Task { [tabDataStore] in
+                        await tabDataStore.removeWindowData(forUUIDs: uuidsToDelete)
+                    }
                 }
             }
         } else {

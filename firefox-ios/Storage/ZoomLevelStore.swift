@@ -10,7 +10,7 @@ public struct ZoomSettings: Codable {
     var zoomLevels: [DomainZoomLevel]
 }
 
-public struct DomainZoomLevel: Codable, Equatable {
+public struct DomainZoomLevel: Codable, Equatable, Sendable {
     public let host: String
     public let zoomLevel: CGFloat
 

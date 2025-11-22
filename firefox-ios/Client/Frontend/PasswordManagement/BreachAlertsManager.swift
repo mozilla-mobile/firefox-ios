@@ -24,7 +24,8 @@ struct BreachRecord: Codable, Equatable, Hashable {
 }
 
 /// A manager for the user's breached login information, if any.
-final class BreachAlertsManager {
+/// FIXME: FXIOS-14141 class is not Sendable / thread safe
+final class BreachAlertsManager: @unchecked Sendable {
     static let monitorAboutUrl = URL(string: "https://monitor.firefox.com/about")
     var breaches = Set<BreachRecord>()
     var client: BreachAlertsClientProtocol
@@ -43,7 +44,7 @@ final class BreachAlertsManager {
     /// Loads breaches from Monitor endpoint using BreachAlertsClient.
     ///    - Parameters:
     ///         - completion: a completion handler for the processed breaches
-    func loadBreaches(completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
+    func loadBreaches(completion: @escaping @Sendable (Maybe<Set<BreachRecord>>) -> Void) {
         guard let cacheURL = self.cacheURL else {
             self.fetchAndSaveBreaches(completion)
             return
@@ -174,7 +175,7 @@ final class BreachAlertsManager {
         return result
     }
 
-    private func fetchAndSaveBreaches(_ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
+    private func fetchAndSaveBreaches(_ completion: @escaping @Sendable (Maybe<Set<BreachRecord>>) -> Void) {
         guard let cacheURL = self.cacheURL else { return }
         self.client.fetchData(endpoint: .breachedAccounts, profile: self.profile) { maybeData in
             guard let fetchedData = maybeData.successValue else { return }

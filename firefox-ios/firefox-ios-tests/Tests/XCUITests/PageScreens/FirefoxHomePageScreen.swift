@@ -18,4 +18,14 @@ final class FirefoxHomePageScreen {
 
         BaseTestCase().mozWaitForElementToExist(topSites_ItemCell, timeout: timeout)
     }
+
+    func assertBookmarksItemCellToNotExist(timeout: TimeInterval = TIMEOUT) {
+        let bookmarks_ItemCell = sel.BOOKMARKS_ITEMCELL.element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(bookmarks_ItemCell, timeout: timeout)
+    }
+
+    func assertBookmarksItemCellExist(timeout: TimeInterval = TIMEOUT) {
+        let bookmarks_ItemCell = sel.BOOKMARKS_ITEMCELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(bookmarks_ItemCell, timeout: timeout)
+    }
 }

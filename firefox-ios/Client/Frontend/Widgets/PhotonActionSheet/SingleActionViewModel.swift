@@ -51,7 +51,7 @@ struct SingleActionViewModel: Sendable {
     let isFlipped: Bool
 
     // Enable title customization beyond what the interface provides,
-    let customRender: (@Sendable @MainActor(_ title: UILabel, _ contentView: UIView) -> Void)?
+    let customRender: (@Sendable @MainActor (_ title: UILabel, _ contentView: UIView) -> Void)?
 
     // Enable height customization
     let customHeight: (@Sendable @MainActor (SingleActionViewModel) -> CGFloat)?

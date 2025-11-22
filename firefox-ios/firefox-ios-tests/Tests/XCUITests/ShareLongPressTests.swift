@@ -180,8 +180,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressLinkAndSelectShareOption(option: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.webViews["contentView"].links.element(boundBy: 0).press(forDuration: 1.5)
@@ -196,8 +194,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressReadingListAndReachShareOptions(option: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -221,8 +217,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     private func longPressHistoryAndReachShareOptions(option: String) {
         // Go to a webpage and navigate to history
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -242,8 +236,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     private func longPressBookmarkAndReachShareOptions(option: String) {
         // Go to a webpage, and add to bookmarks
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()

@@ -7,12 +7,14 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var mockProfile: MockProfile!
     private var mockLogger: MockLogger!
     private var mockWindowManager: MockWindowManager!
     private var mockTabManager: MockTabManager!
+    private var mockTranslationsTelemetry: MockTranslationsTelemetry!
 
     override func setUp() {
         super.setUp()
@@ -23,6 +25,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             wrappedManager: WindowManagerImplementation(),
             tabManager: mockTabManager
         )
+        mockTranslationsTelemetry = MockTranslationsTelemetry()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
@@ -36,6 +39,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockLogger = nil
         mockTabManager = nil
         mockWindowManager = nil
+        mockTranslationsTelemetry = nil
         DependencyHelperMock().reset()
         resetStore()
         super.tearDown()
@@ -83,9 +87,9 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_urlDidChangeAction_withTranslationConfiguration_doesDispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        setupWebViewForTabManager()
-        let subject = createSubject()
+        let subject = createSubject(shouldOfferTranslationResult: true)
         let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
@@ -111,13 +115,11 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_urlDidChangeAction_withError_doesNotDispatchActionAndLogsError() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        setupWebViewForTabManager()
         enum TestError: Error { case example }
-        let languageDetector = MockLanguageDetector()
-        languageDetector.mockError = TestError.example
 
-        let subject = createSubject(with: languageDetector)
+        let subject = createSubject(shouldOfferTranslationError: TestError.example)
         let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
@@ -144,12 +146,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_urlDidChangeAction_withSamePageLanguage_doesNotDispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        setupWebViewForTabManager()
 
-        let languageDetector = MockLanguageDetector()
-        languageDetector.detectedLanguage = "en"
-
-        let subject = createSubject(with: languageDetector)
+        let subject = createSubject(shouldOfferTranslationResult: false)
         let action = ToolbarAction(
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
@@ -172,11 +170,20 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     // MARK: - Helpers
     private func createSubject(
-        with mockLanguageDetector: MockLanguageDetector = MockLanguageDetector()
+        shouldOfferTranslationResult: Bool = false,
+        shouldOfferTranslationError: Error? = nil
     ) -> TranslationsMiddleware {
+        let translationsService = MockTranslationsService(
+            shouldOfferTranslationResult: shouldOfferTranslationResult,
+            shouldOfferTranslationError: shouldOfferTranslationError
+        )
+
         return TranslationsMiddleware(
-            languageDetector: mockLanguageDetector,
-            logger: mockLogger
+            profile: mockProfile,
+            logger: mockLogger,
+            windowManager: mockWindowManager,
+            translationsService: translationsService,
+            translationsTelemetry: mockTranslationsTelemetry
         )
     }
 

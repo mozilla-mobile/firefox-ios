@@ -5,24 +5,22 @@
 import Foundation
 import Common
 
-class TabPrintPageRenderer: UIPrintPageRenderer {
+final class TabPrintPageRenderer: UIPrintPageRenderer {
     private struct UX {
         static let insets = CGFloat(36.0)
         static let textFont = FXFontStyles.Regular.caption1.scaledFont()
         static let marginScale = CGFloat(0.5)
     }
 
-    fileprivate var tabDisplayTitle: String
-    fileprivate var tabURL: URL?
-    fileprivate weak var webView: TabWebView?
+    private let tabDisplayTitle: String
+    private let tabURL: URL?
 
     let textAttributes = [NSAttributedString.Key.font: UX.textFont]
     let dateString: String
 
-    required init(tabDisplayTitle: String, tabURL: URL?, webView: TabWebView?) {
+    required init(tabDisplayTitle: String, tabURL: URL?, viewPrintFormatter: UIViewPrintFormatter?) {
         self.tabDisplayTitle = tabDisplayTitle
         self.tabURL = tabURL
-        self.webView = webView
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
@@ -33,7 +31,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         self.footerHeight = UX.marginScale * UX.insets
         self.headerHeight = UX.marginScale * UX.insets
 
-        if let formatter = webView?.viewPrintFormatter() {
+        if let formatter = viewPrintFormatter {
             formatter.perPageContentInsets = UIEdgeInsets(equalInset: UX.insets)
             addPrintFormatter(formatter, startingAtPageAt: 0)
         }

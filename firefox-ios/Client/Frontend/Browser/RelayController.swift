@@ -10,6 +10,11 @@ import Shared
 /// Describes public protocol for Relay component to track state and facilitate
 /// messaging between the BVC, keyboard accessory, and A~S Relay APIs.
 protocol RelayControllerProtocol {
+    /// Returns whether Relay Settings should be available. For Phase 1 this is true if the
+    /// user is logged into Mozilla sync and already has Relay enabled on their account.
+    @MainActor
+    func shouldDisplayRelaySettings() -> Bool
+
     /// Whether to present the UI for a Relay mask after focusing on an email field.
     /// This should account for all logic necessary for Relay display, which includes:
     ///    - User account status (signed into Mozilla / Relay active)
@@ -19,8 +24,44 @@ protocol RelayControllerProtocol {
     @MainActor
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool
 
+    /// Requests the RelayController to populate the email tab for the actively focused field
+    /// in the given tab. A safety check is performed internally to make sure this tab is the
+    /// same one that was focused originally in `emailFieldFocused`. If the two differ, the
+    /// operation is cancelled.
+    /// - Parameter tab: the tab to populate. The email field is expected to be focused, otherwise a JS error will be logged.
     @MainActor
-    func populateEmailFieldWithRelayMask(for tab: Tab)
+    func populateEmailFieldWithRelayMask(for tab: Tab,
+                                         completion: @Sendable @MainActor @escaping (RelayMaskGenerationResult) -> Void)
+
+    /// Notifies the RelayController which tab is currently focused for the purposes of generating a Relay mask.
+    /// - Parameter tab: the current tab.
+    @MainActor
+    func emailFieldFocused(in tab: Tab)
+}
+
+/// Describes the result of an attempt to generate a Relay mask for an email field.
+enum RelayMaskGenerationResult {
+    /// A new mask was generated successfully.
+    case newMaskGenerated
+    /// User is on a free plan and their limit has been reached.
+    /// For Phase 1, one of the user's existing masks will be randomly picked.
+    case freeTierLimitReached
+    /// A problem occurred.
+    case error
+}
+
+/// Describes the general state of Relay availability on the user's existing Mozilla account.
+/// This begins with a state of `unknown`. For Phase 1 it is checked periodically and then
+/// cached, due to the required APIs being slow to return, we cannot hit it on-demand on the MT.
+enum RelayAccountStatus {
+    /// Relay is available.
+    case available
+    /// Relay is not available on this user's Mozilla account.
+    case unavailable
+    /// Account status is unknown.
+    case unknown
+    /// The account status is actively being updated.
+    case updating
 }
 
 @MainActor
@@ -37,7 +78,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         var serverURL: String {
             switch self {
             case .prod: return "https://relay.firefox.com"
-            case .staging: assertionFailure("ToDo."); return "<invalid>"  // TBD.
+            case .staging: return "https://relay.allizom.org"
             }
         }
 
@@ -65,6 +106,12 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private var client: RelayClient?
     private var isCreatingClient = false
     private let notificationCenter: NotificationProtocol
+    private weak var focusedTab: Tab?
+    private var accountStatus: RelayAccountStatus = .unknown {
+        didSet {
+            logger.log("Updated Relay account status from \(oldValue) to: \(accountStatus)", level: .info, category: .relay)
+        }
+    }
 
     // MARK: - Init
 
@@ -84,51 +131,93 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     // MARK: - RelayControllerProtocol
 
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool {
-        guard Self.isFeatureEnabled, let relayRSClient, hasRelayAccount() else { return false }
+        // Note: the prefs key defaults to On. No value (nil) should be treated as true.
+        guard Self.isFeatureEnabled, profile.prefs.boolForKey(PrefsKeys.ShowRelayMaskSuggestions) ?? true else {
+            return false
+        }
+        guard let relayRSClient, hasRelayAccount() else { return false }
         guard let domain = url.baseDomain, let host = url.normalizedHost else { return false }
         let shouldShow = relayRSClient.shouldShowRelay(host: host, domain: domain, isRelayUser: true)
         return shouldShow
     }
 
-    func populateEmailFieldWithRelayMask(for tab: Tab) {
-        guard let webView = tab.webView else { return }
-        guard let email = generateRelayMask(for: tab.url?.baseDomain ?? "") else { return }
-
-        guard let jsonData = try? JSONEncoder().encode(email),
-              let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
-            logger.log("[RELAY] Couldn't encode string for Relay JS injection.", level: .warning, category: .autofill)
+    func populateEmailFieldWithRelayMask(for tab: Tab,
+                                         completion: @escaping @MainActor @Sendable (RelayMaskGenerationResult) -> Void) {
+        guard focusedTab == nil || focusedTab === tab else {
+            logger.log("Attempting to populate Relay mask after tab has changed. Bailing.",
+                       level: .warning,
+                       category: .relay)
+            focusedTab = nil
+            // Note: this is an edge case error and in this scenario we will not call the completion at
+            // all, given that we're no longer on the correct tab.
             return
         }
 
-        let jsFunctionCall = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
-        let closureLogger = logger
-        webView.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
-            guard error == nil else {
-                closureLogger.log("[RELAY] Javascript error: \(error!)", level: .warning, category: .autofill)
+        guard let webView = tab.webView, let client else { return }
+        Task {
+            let (email, result) = await generateRelayMask(for: tab.url?.baseDomain ?? "", client: client)
+            guard result != .error else { completion(.error); return }
+
+            guard let jsonData = try? JSONEncoder().encode(email),
+                  let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
+                logger.log("Couldn't encode string for Relay JS injection.", level: .warning, category: .relay)
+                completion(.error)
                 return
             }
+
+            let jsFunctionCall = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
+            let closureLogger = logger
+            webView.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
+                guard error == nil else {
+                    closureLogger.log("Javascript error: \(error!)", level: .warning, category: .relay)
+                    return
+                }
+            }
+
+            completion(result)
         }
+    }
+
+    func emailFieldFocused(in tab: Tab) {
+        focusedTab = tab
+    }
+
+    func shouldDisplayRelaySettings() -> Bool {
+        return Self.isFeatureEnabled && hasRelayAccount()
     }
 
     // MARK: - Private Utilities
 
-    private func generateRelayMask(for websiteDomain: String) -> String? {
-        guard let client else { return nil }
+    nonisolated private func generateRelayMask(for websiteDomain: String,
+                                               client: RelayClient) async -> (mask: String?,
+                                                                              result: RelayMaskGenerationResult) {
         do {
-            let relayAddress = try client.createAddress(description: "", generatedFor: "TODO", usedOn: "")
-            return relayAddress.address
+            let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
+            return (relayAddress.fullAddress, .newMaskGenerated)
         } catch {
-            logger.log("[RELAY] Error creating Relay address", level: .warning, category: .autofill)
+            // Certain errors we need to custom-handle
+            if case let RelayApiError.Api(_, code, _) = error, code == "free_tier_limit" {
+                // For Phase 1, we return a random email from the user's list
+                logger.log("Free tier limit reached. Using random mask.", level: .info, category: .relay)
+                do {
+                    let fullList = try client.fetchAddresses()
+                    if let relayMask = fullList.randomElement() {
+                        return (relayMask.fullAddress, .freeTierLimitReached)
+                    } else {
+                        logger.log("Couldn't fetch random mask", level: .warning, category: .relay)
+                    }
+                } catch {
+                    logger.log("Error fetching address list: \(error)", level: .warning, category: .relay)
+                }
+            } else {
+                logger.log("API error creating Relay address: \(error)", level: .warning, category: .relay)
+            }
         }
-        return nil
+        return (nil, .error)
     }
 
     private func configureRelayRSClient() {
-        guard let rsService = profile.remoteSettingsService else {
-            logger.log("[RELAY] No RS service available on profile.", level: .warning, category: .autofill)
-            return
-        }
-        relayRSClient = RelayRemoteSettingsClient(rsService: rsService)
+        relayRSClient = RelayRemoteSettingsClient(rsService: profile.remoteSettingsService)
     }
 
     private func beginObserving() {
@@ -142,34 +231,56 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     func handleNotifications(_ notification: Notification) {
-        logger.log("[RELAY] Received notification '\(notification.name.rawValue)'.", level: .info, category: .autofill)
+        logger.log("Received notification '\(notification.name.rawValue)'.", level: .info, category: .relay)
         Task { @MainActor in
+            updateRelayAccountStatus()
+        }
+    }
+
+    private func updateRelayAccountStatus() {
+        guard Self.isFeatureEnabled else { return }
+        guard profile.hasAccount() else {
+            accountStatus = .unavailable
+            return
+        }
+        guard accountStatus != .updating else {
+            logger.log("Already updating account. Will skip redundant update.", level: .info, category: .relay)
+            return
+        }
+        accountStatus = .updating
+        let isStaging = isFxAStaging()
+        // Fetch the account status (off the main thread)
+        Task {
+            await fetchRelayAccountAvailability(isStaging: isStaging)
             if hasRelayAccount() {
-                createRelayClient()
+                createRelayClientIfNeeded()
+            } else {
+                client = nil
             }
         }
     }
 
     /// Creates the Relay client, if needed. This is safe to call redundantly.
-    private func createRelayClient() {
+    private func createRelayClientIfNeeded() {
         guard client == nil, !isCreatingClient else { return }
         guard let acctManager = RustFirefoxAccounts.shared.accountManager else {
-            logger.log("[RELAY] Couldn't create client, no account manager.", level: .debug, category: .autofill)
+            logger.log("Couldn't create client, no account manager.", level: .debug, category: .relay)
             return
         }
-
+        isCreatingClient = true
         acctManager.getAccessToken(scope: config.scope) { [config, weak self] result in
             switch result {
             case .failure(let error):
-                self?.logger.log("[RELAY] Error getting access token for Relay: \(error)", level: .warning, category: .autofill)
+                self?.logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)
+                self?.isCreatingClient = false
             case .success(let tokenInfo):
                 do {
                     let clientResult = try RelayClient(serverUrl: config.serverURL, authToken: tokenInfo.token)
                     self?.handleRelayClientCreated(clientResult)
                 } catch {
-                    self?.logger.log("[RELAY] Error creating Relay client: \(error)", level: .warning, category: .autofill)
-                    self?.isCreatingClient = false
+                    self?.logger.log("Error creating Relay client: \(error)", level: .warning, category: .relay)
                 }
+                self?.isCreatingClient = false
             }
         }
     }
@@ -177,7 +288,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private func handleRelayClientCreated(_ client: RelayClient) {
         self.client = client
         isCreatingClient = false
-        logger.log("[RELAY] Relay client created.", level: .info, category: .autofill)
+        logger.log("Relay client created.", level: .info, category: .relay)
     }
 
     private func isFxAStaging() -> Bool {
@@ -186,16 +297,28 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     private func hasRelayAccount() -> Bool {
-        guard profile.hasAccount() else { return false }
-        guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return false }
+        return accountStatus == .available
+    }
 
-        switch result {
-        case .success(let clients):
-            let OAuthID = isFxAStaging() ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
-            return clients.contains(where: { $0.clientId == OAuthID })
-        case .failure(let error):
-            logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
-            return false
+    /// Checks the current OAuth client status to determine Relay availability, and then updates the internal
+    /// account status back on the main actor.
+    /// - Parameter isStaging: whether we should use Staging servers.
+    nonisolated private func fetchRelayAccountAvailability(isStaging: Bool) async {
+        guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return }
+
+        logger.log("Will check OAuth clients.", level: .info, category: .relay)
+        let hasRelayOAuth = {
+            switch result {
+            case .success(let clients):
+                let OAuthID = isStaging ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
+                return clients.contains(where: { $0.clientId == OAuthID })
+            case .failure(let error):
+                logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .relay)
+                return false
+            }
+        }()
+        Task { @MainActor in
+            accountStatus = hasRelayOAuth ? .available : .unavailable
         }
     }
 }

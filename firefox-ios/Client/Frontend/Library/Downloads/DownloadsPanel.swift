@@ -99,13 +99,6 @@ class DownloadsPanel: UIViewController,
         applyTheme()
     }
 
-    deinit {
-        // The view might outlive this view controller thanks to animations;
-        // explicitly nil out its references to us to avoid crashes. Bug 1218826.
-        tableView.dataSource = nil
-        tableView.delegate = nil
-    }
-
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
         let notificationWindowUUID = notification.windowUUID
@@ -324,9 +317,10 @@ class DownloadsPanel: UIViewController,
 
         let title = viewModel.headerTitle(for: section) ?? ""
 
-        let headerViewModel = SiteTableViewHeaderModel(title: title,
-                                                       isCollapsible: false,
-                                                       collapsibleState: nil)
+        let headerViewModel = SiteTableViewHeaderModel(
+            title: title,
+            accessory: .none
+        )
         headerView.configure(headerViewModel)
         headerView.showBorder(for: .top, !viewModel.isFirstSection(section))
         headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

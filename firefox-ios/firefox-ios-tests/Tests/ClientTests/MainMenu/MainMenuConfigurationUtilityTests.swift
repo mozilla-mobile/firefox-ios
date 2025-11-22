@@ -9,6 +9,7 @@ import SummarizeKit
 
 @testable import Client
 
+@MainActor
 final class MainMenuConfigurationUtilityTests: XCTestCase {
     var configUtility: MainMenuConfigurationUtility!
     let windowUUID: WindowUUID = .XCTestDefaultUUID

@@ -26,6 +26,7 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
+    private let defaultBrowserUtil: DefaultBrowserUtil
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -33,10 +34,12 @@ final class LaunchCoordinator: BaseCoordinator,
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
+         defaultBrowserUtil: DefaultBrowserUtil = DefaultBrowserUtil()) {
         self.profile = profile
         self.isIphone = isIphone
         self.windowUUID = windowUUID
+        self.defaultBrowserUtil = defaultBrowserUtil
         super.init(router: router)
     }
 
@@ -188,6 +191,7 @@ final class LaunchCoordinator: BaseCoordinator,
     private func presentLink(with url: URL?) {
         guard let url else { return }
         let presentLinkVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
+
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
@@ -251,28 +255,20 @@ final class LaunchCoordinator: BaseCoordinator,
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: manager.onboardingVariant
+            onboardingVariant: manager.onboardingVariant,
+            isDefaultBrowser: defaultBrowserUtil.isDefaultBrowser,
+            isIpad: UIDevice.current.userInterfaceIdiom == .pad
         ).getOnboardingModel(
             for: .freshInstall
         )
         let activityEventHelper = ActivityEventHelper()
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let onboardingCards = onboardingModel.cards.filter { viewModel in
-            // Filter out cards that are not relevant for the current device type.
-            if isPad, let action = viewModel.multipleChoiceButtons.first?.action,
-               action == .toolbarTop || action == .toolbarBottom {
-                return false
-            }
-            return true
-        }
-
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
             viewModel: OnboardingFlowViewModel(
-                onboardingCards: onboardingCards,
+                onboardingCards: onboardingModel.cards,
                 skipText: .Onboarding.LaterAction,
                 onActionTap: { @MainActor [weak self] action, cardName, completion in
                     self?.onboardingService.handleAction(

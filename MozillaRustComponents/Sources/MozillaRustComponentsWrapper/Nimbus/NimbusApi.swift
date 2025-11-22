@@ -177,7 +177,7 @@ public protocol NimbusUserConfiguration {
     func getAvailableExperiments() -> [AvailableExperiment]
 }
 
-public protocol NimbusEventStore {
+public protocol NimbusEventStore: Sendable {
     /// Records an event to the Nimbus event store.
     ///
     /// The method obtains the event counters for the `eventId` that is passed in, advances them if
@@ -242,12 +242,12 @@ public extension Notification.Name {
 /// This struct is used during in the `create` method to point `Nimbus` at the given `RemoteSettings` server.
 ///
 public struct NimbusServerSettings {
-    public init(url: URL, collection: String = remoteSettingsCollection) {
-        self.url = url
+    public init(remoteSettingsService: RemoteSettingsService, collection: String = remoteSettingsCollection) {
+        self.remoteSettingsService = remoteSettingsService
         self.collection = collection
     }
 
-    public let url: URL
+    public let remoteSettingsService: RemoteSettingsService
     public let collection: String
 }
 

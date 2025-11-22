@@ -283,7 +283,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
             else { return }
             let expanded = tabState.isInactiveTabsExpanded
             inactiveTabTelemetry.sectionToggled(hasExpanded: expanded)
-            break
 
         default:
             break

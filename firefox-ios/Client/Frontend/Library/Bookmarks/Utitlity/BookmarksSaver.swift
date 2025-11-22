@@ -15,7 +15,7 @@ protocol BookmarksSaver {
     func createBookmark(url: String, title: String?, position: UInt32?) async
     func restoreBookmarkNode(bookmarkNode: BookmarkNodeData,
                              parentFolderGUID: String,
-                             completion: @escaping (GUID?) -> Void)
+                             completion: @escaping @Sendable(GUID?) -> Void)
 }
 
 struct DefaultBookmarksSaver: BookmarksSaver {
@@ -40,7 +40,7 @@ struct DefaultBookmarksSaver: BookmarksSaver {
 
     func restoreBookmarkNode(bookmarkNode: BookmarkNodeData,
                              parentFolderGUID: String,
-                             completion: @escaping (GUID?) -> Void) {
+                             completion: @escaping @Sendable (GUID?) -> Void) {
         switch bookmarkNode.type {
         case .bookmark:
             guard let bookmark = bookmarkNode as? BookmarkItemData else {

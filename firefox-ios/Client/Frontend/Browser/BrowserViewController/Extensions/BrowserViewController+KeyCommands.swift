@@ -56,8 +56,8 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
-        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                  actionType: GeneralBrowserActionType.reloadWebsite))
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.reloadWebsite))
     }
 
     @objc
@@ -66,8 +66,8 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
-        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                  actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
     }
 
     @objc
@@ -78,8 +78,8 @@ extension BrowserViewController {
                                      extras: ["action": "go-back"])
         guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
 
-        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                  actionType: GeneralBrowserActionType.navigateBack))
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.navigateBack))
     }
 
     @objc
@@ -90,8 +90,8 @@ extension BrowserViewController {
                                      extras: ["action": "go-forward"])
         guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
 
-        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                  actionType: GeneralBrowserActionType.navigateForward))
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.navigateForward))
     }
 
     @objc
@@ -123,7 +123,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "select-location-bar"])
         scrollController.showToolbars(animated: true)
-        store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl))
+        store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl))
     }
 
     @objc
@@ -133,8 +133,8 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
 
-        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                  actionType: GeneralBrowserActionType.addNewTab))
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.addNewTab))
     }
 
     @objc

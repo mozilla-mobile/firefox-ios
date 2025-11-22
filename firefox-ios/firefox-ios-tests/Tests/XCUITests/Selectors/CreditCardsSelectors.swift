@@ -14,6 +14,12 @@ protocol CreditCardsSelectorsSet {
     var DONE_KEYBOARD_BUTTON: Selector { get }
     var EXPIRATION_MONTH_FIELD: Selector { get }
     var EXPIRATION_YEAR_FIELD: Selector { get }
+    var ADD_CREDIT_CARD: Selector { get }
+    var ADD_CREDIT_CARD_NAME_ON_CARD: Selector { get }
+    var ADD_CREDIT_CARD_CARD_NUMBER: Selector { get }
+    var ADD_CREDIT_CARD_EXPIRATION: Selector { get }
+    var ADD_CREDIT_CARD_CLOSE: Selector { get }
+    var ADD_CREDIT_CARD_SAVE: Selector { get }
     func savedCardButton(containing text: String) -> Selector
     var all: [Selector] { get }
 }
@@ -27,6 +33,12 @@ struct CreditCardsSelectors: CreditCardsSelectorsSet {
         static let cardNumber = "Card Number:"
         static let useSavedCard = AccessibilityIdentifiers.Browser.KeyboardAccessory.creditCardAutofillButton
         static let doneButton = "KeyboardAccessory.doneButton"
+        static let addCreditCard = AccessibilityIdentifiers.Settings.CreditCards.AddCreditCard.addCreditCard
+        static let addCreditCardNameOnCard = AccessibilityIdentifiers.Settings.CreditCards.AddCreditCard.nameOnCard
+        static let addCreditCardCardNumber = AccessibilityIdentifiers.Settings.CreditCards.AddCreditCard.cardNumber
+        static let addCreditCardExpiration = AccessibilityIdentifiers.Settings.CreditCards.AddCreditCard.expiration
+        static let addCreditCardClose = AccessibilityIdentifiers.Settings.CreditCards.AddCreditCard.close
+        static let addCreditCardSave = AccessibilityIdentifiers.Settings.CreditCards.AddCreditCard.save
     }
 
     let ADD_CARD_BUTTON = Selector.buttonId(
@@ -83,6 +95,41 @@ struct CreditCardsSelectors: CreditCardsSelectorsSet {
         groups: ["creditcards"]
     )
 
+    let ADD_CREDIT_CARD = Selector.staticTextId(
+        IDs.addCreditCard,
+        description: "Add Credit Card on Credit Card Page",
+        groups: ["creditcards"]
+    )
+
+    let ADD_CREDIT_CARD_NAME_ON_CARD = Selector.staticTextId(
+        IDs.addCreditCardNameOnCard,
+        description: "Name on Card on Credit Card Page",
+        groups: ["creditcards"]
+    )
+
+    let ADD_CREDIT_CARD_CARD_NUMBER = Selector.staticTextId(
+        IDs.addCreditCardCardNumber,
+        description: "Card number on Credit Card Page",
+        groups: ["creditcards"]
+    )
+
+    let ADD_CREDIT_CARD_EXPIRATION = Selector.staticTextId(
+        IDs.addCreditCardExpiration,
+        description: "Credit Card Expiration on Credit Card Page",
+        groups: ["creditcards"]
+    )
+
+    let ADD_CREDIT_CARD_CLOSE = Selector.buttonId(
+        IDs.addCreditCardClose,
+        description: "Close option on Credit Card Page",
+        groups: ["creditcards"]
+    )
+    let ADD_CREDIT_CARD_SAVE = Selector.buttonId(
+        IDs.addCreditCardSave,
+        description: "Save option on Credit Card Page",
+        groups: ["creditcards"]
+    )
+
     func savedCardButton(containing text: String) -> Selector {
         Selector.buttonByLabel(
             text,
@@ -93,5 +140,7 @@ struct CreditCardsSelectors: CreditCardsSelectorsSet {
 
     var all: [Selector] { [ADD_CARD_BUTTON, AUTOFILL_TITLE, SAVE_AUTOFILL_SWITCH, SAVED_CARD,
                            CARD_NUMBER_STATIC_TEXT, USE_SAVED_CARD_BUTTON, DONE_KEYBOARD_BUTTON,
-                           EXPIRATION_MONTH_FIELD, EXPIRATION_YEAR_FIELD] }
+                           EXPIRATION_MONTH_FIELD, EXPIRATION_YEAR_FIELD, ADD_CREDIT_CARD, ADD_CREDIT_CARD_NAME_ON_CARD,
+                           ADD_CREDIT_CARD_CARD_NUMBER, ADD_CREDIT_CARD_EXPIRATION, ADD_CREDIT_CARD_CLOSE,
+                           ADD_CREDIT_CARD_SAVE] }
 }

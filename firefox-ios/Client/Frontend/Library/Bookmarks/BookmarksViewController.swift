@@ -135,8 +135,21 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     deinit {
-        // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
-        a11yEmptyStateScrollView.removeFromSuperview()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            DefaultLogger.shared.log(
+                "AddressToolbarContainer was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
+            a11yEmptyStateScrollView.removeFromSuperview()
+        }
     }
 
     // MARK: - Lifecycle
@@ -239,7 +252,7 @@ final class BookmarksViewController: SiteTableViewController,
     private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
                                      parentFolderGUID: String,
                                      recentBookmarkFolderGUID: String?,
-                                     completion: ((GUID) -> Void)? = nil) {
+                                     completion: (@Sendable (GUID) -> Void)? = nil) {
         guard bookmarkTreeRoot.type == .folder || bookmarkTreeRoot.type == .bookmark else { return }
         bookmarksSaver?.restoreBookmarkNode(bookmarkNode: bookmarkTreeRoot, parentFolderGUID: parentFolderGUID) { res in
             guard let guid = res else {return}
@@ -252,10 +265,12 @@ final class BookmarksViewController: SiteTableViewController,
             // In the case that the node is a folder, restore its children as well
             guard let children = (bookmarkTreeRoot as? BookmarkFolderData)?.children else { return }
 
-            for child in children {
-                self.restoreBookmarkTree(bookmarkTreeRoot: child,
-                                         parentFolderGUID: guid,
-                                         recentBookmarkFolderGUID: recentBookmarkFolderGUID)
+            ensureMainThread {
+                for child in children {
+                    self.restoreBookmarkTree(bookmarkTreeRoot: child,
+                                             parentFolderGUID: guid,
+                                             recentBookmarkFolderGUID: recentBookmarkFolderGUID)
+                }
             }
         }
     }

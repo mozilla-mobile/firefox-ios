@@ -162,7 +162,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
     /// Returns the trending search URL for the specific search engine.
     func trendingURLForEngine() -> URL? {
         guard let trendingTemplate else { return nil }
-        return URL(string: trendingTemplate)
+        return getURLFromTemplate(trendingTemplate, query: "")
     }
 
     /// Returns the query that was used to construct a given search URL

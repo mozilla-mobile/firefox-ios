@@ -218,10 +218,10 @@
 "MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Subtitle.v132" = "Mod de noapte";
 
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Subtitle.v132" = "Tipărește";
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Subtitle.v132" = "Printează";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Print module in the application. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "Tipărește";
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "Printează";
 
 /* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "Închide modul de lectură";
@@ -269,10 +269,10 @@
 "MainMenu.Submenus.Tools.PageZoomV2.Title.v141" = "Zoom pagină";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
-"MainMenu.Submenus.Tools.Print.Subtitle.v131" = "Tipărește";
+"MainMenu.Submenus.Tools.Print.Subtitle.v131" = "Printează";
 
 /* On the main menu, the title for the action that will take the user to the Print module in the application. */
-"MainMenu.Submenus.Tools.Print.Title.v131" = "Tipărește";
+"MainMenu.Submenus.Tools.Print.Title.v131" = "Printează";
 
 /* On the main menu, the title for the action that will turn the reader view on for the current website. */
 "MainMenu.Submenus.Tools.ReaderView.Off.Title.v131" = "Închide modul de lectură";

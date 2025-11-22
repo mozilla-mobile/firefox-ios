@@ -17,6 +17,7 @@ class BottomSheetChildViewController: UIViewController, BottomSheetChild, Themea
     """
 
     var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
@@ -36,7 +37,7 @@ class BottomSheetChildViewController: UIViewController, BottomSheetChild, Themea
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         contentLabel.text = String(repeating: "\(loremIpsum)", count: 1)

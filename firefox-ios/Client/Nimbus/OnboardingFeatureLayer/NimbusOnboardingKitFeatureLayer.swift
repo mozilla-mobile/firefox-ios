@@ -14,12 +14,19 @@ import OnboardingKit
 class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
     var onboardingVariant: OnboardingVariant
+    private let isDefaultBrowser: Bool
+    private let isIpad: Bool
+
     init(
         onboardingVariant: OnboardingVariant,
-        with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()
+        with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
+        isDefaultBrowser: Bool = false,
+        isIpad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     ) {
         self.helperUtility = helperUtility
         self.onboardingVariant = onboardingVariant
+        self.isDefaultBrowser = isDefaultBrowser
+        self.isIpad = isIpad
     }
 
     func getOnboardingModel(
@@ -70,6 +77,11 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 a11yIdRoot: "\(card.a11yIdRoot)\(index)",
                 imageID: card.imageID,
                 instructionsPopup: card.instructionsPopup)
+        }
+        // Filter out cards that are not relevant for the current device type and browser state.
+        .filter { viewModel in
+            return shouldShowToolbarPositionCardForIpad(viewModel) &&
+                   shouldShowWelcomeCardForDefaultBrowser(viewModel)
         }
     }
 
@@ -145,7 +157,8 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         from cardLink: NimbusOnboardingLink?
     ) -> OnboardingKit.OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
-              let url = URL(string: cardLink.url)
+              let url = URL(string: cardLink.url),
+              url.scheme != nil
         else { return nil }
 
         return OnboardingKit.OnboardingLinkInfoModel(title: cardLink.title, url: url)
@@ -165,5 +178,16 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             buttonTitle: data.buttonTitle,
             buttonAction: data.buttonAction,
             a11yIdRoot: a11yID)
+    }
+
+    private func shouldShowToolbarPositionCardForIpad(_ viewModel: OnboardingKitCardInfoModel) -> Bool {
+        guard isIpad, let action = viewModel.multipleChoiceButtons.first?.action else {
+            return true
+        }
+        return action != .toolbarTop && action != .toolbarBottom
+    }
+
+    private func shouldShowWelcomeCardForDefaultBrowser(_ viewModel: OnboardingKitCardInfoModel) -> Bool {
+        return !(isDefaultBrowser && viewModel.instructionsPopup?.buttonAction == .openIosFxSettings)
     }
 }

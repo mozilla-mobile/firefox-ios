@@ -54,11 +54,8 @@ class MultiWindowTests: IpadOnlyTestCase {
         // A new tab is opened in the same window
         app.links.matching(identifier: topSites).element(boundBy: 7).waitAndTap()
         waitUntilPageLoad()
-        app.buttons[newTab].firstMatch.waitAndTap()
         let tabButtonFirstWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 1)
-        // Automation issue - action performed in window A is mirrored in window B
-        // Workaround until the automation issue is fixed
-        XCTAssertEqual(tabButtonFirstWindow.value as? String, "3", "Number of tabs opened should be equal to 3")
+        XCTAssertEqual(tabButtonFirstWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
     }
 
     func testOpenWindowFromTabSwitcher() {

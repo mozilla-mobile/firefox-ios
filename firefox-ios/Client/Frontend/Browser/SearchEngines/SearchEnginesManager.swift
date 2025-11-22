@@ -7,7 +7,7 @@ import Common
 import Shared
 import Storage
 
-protocol SearchEnginesManagerProvider: AnyObject {
+protocol SearchEnginesManagerProvider: AnyObject, Sendable {
     @MainActor
     var defaultEngine: OpenSearchEngine? { get }
     @MainActor

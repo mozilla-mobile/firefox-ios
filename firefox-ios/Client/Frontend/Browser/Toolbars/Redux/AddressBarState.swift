@@ -581,7 +581,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
-            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -1341,7 +1341,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actionType: .translate,
             iconName: state.buttonImageName,
             templateModeForImage: !isActiveState,
-            isLoading: state == .loading,
+            loadingConfig: LoadingConfig(
+                isLoading: state == .loading,
+                a11yLabel: .Translations.Sheet.AccessibilityLabels.LoadingCompletedAccessibilityLabel
+            ),
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,

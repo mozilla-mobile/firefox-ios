@@ -1450,27 +1450,6 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  recently_saved_bookmark_view:
-    type: event
-    description: |
-      Counts the number of bookmarked items appearing
-      in the Recently Saved section on the home page.
-    extra_keys:
-      bookmark_count:
-        type: string
-        description: |
-          The number of bookmarked items in the
-          Recently Saved section.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8656
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8656
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
   reading_list_view:
     type: event
     description: |
@@ -1745,24 +1724,6 @@ firefox_home_page:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9405
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9405
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  firefox_homepage_origin:
-    type: labeled_counter
-    description: |
-      The number of times a user sees the Firefox Homepage,
-      with a home page origin.
-    labels:
-      - zero-search
-      - origin-other
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9494
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9494
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102

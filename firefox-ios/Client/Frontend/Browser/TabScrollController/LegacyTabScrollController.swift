@@ -37,7 +37,7 @@ final class LegacyTabScrollController: NSObject,
     }
 
     private var isMinimalAddressBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
+        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildAndUser)
     }
 
     enum ScrollDirection {
@@ -167,8 +167,12 @@ final class LegacyTabScrollController: NSObject,
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
         let topInset = safeAreaInsets?.top ?? .zero
-
-        return hasHomeIndicator ? .zero : containerHeight - topInset
+        let containerHeightAdjusted: CGFloat = if #available(iOS 26.0, *) {
+            .zero
+        } else {
+            hasHomeIndicator ? .zero : containerHeight - topInset
+        }
+        return containerHeightAdjusted
     }
 
     private var overKeyboardScrollHeight: CGFloat {
@@ -585,7 +589,7 @@ private extension LegacyTabScrollController {
     /// - Parameter delta: The amount by which to scroll, where a positive delta scrolls down and
     ///   a negative delta scrolls up.
     func scrollWithDelta(_ delta: CGFloat) {
-        guard hasScrollableContent else { return }
+        guard isMinimalAddressBarEnabled, hasScrollableContent else { return }
 
         let updatedOffset = headerTopOffset - delta
         headerTopOffset = clamp(offset: updatedOffset, min: headerOffset, max: 0)
@@ -664,7 +668,7 @@ private extension LegacyTabScrollController {
             self.bottomContainerOffset = bottomContainerOffset
 
             if isMinimalAddressBarEnabled && tab?.isFindInPageMode == false && tab?.url?.isReaderModeURL == false {
-                store.dispatchLegacy(
+                store.dispatch(
                     ToolbarAction(
                         scrollAlpha: Float(alpha),
                         windowUUID: windowUUID,
@@ -780,7 +784,7 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
         if (lastContentOffsetY > 0 && contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && contentOffset.y > 0) {
             lastContentOffsetY = contentOffset.y
-            store.dispatchLegacy(
+            store.dispatch(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: contentOffset,
                     windowUUID: windowUUID,
