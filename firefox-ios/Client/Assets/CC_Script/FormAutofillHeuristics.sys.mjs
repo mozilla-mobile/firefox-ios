@@ -1015,7 +1015,8 @@ export const FormAutofillHeuristics = {
     // needs to find the field name.
     if (
       autocompleteInfo?.fieldName &&
-      !["on", "off"].includes(autocompleteInfo.fieldName)
+      !["on", "off"].includes(autocompleteInfo.fieldName) &&
+      !lazy.FormAutofillUtils.isUnsupportedField(autocompleteInfo.fieldName)
     ) {
       inferredInfo.autocompleteInfo = autocompleteInfo;
       return [autocompleteInfo.fieldName, inferredInfo];

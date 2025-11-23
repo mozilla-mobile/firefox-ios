@@ -43,7 +43,7 @@ DEFAULT_RULES.set(REQUIRED, [UPPER, LOWER, DIGIT, SPECIAL]);
 
 export const PasswordGenerator = {
   /**
-   * @param {Object} options
+   * @param {object} options
    * @param {number} options.length - length of the generated password if there are no rules that override the length
    * @param {Map} options.rules - map of password rules
    * @returns {string} password that was generated
