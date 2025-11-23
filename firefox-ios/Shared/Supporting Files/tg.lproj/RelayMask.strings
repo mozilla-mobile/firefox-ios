@@ -1,3 +1,12 @@
+/* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "Нав! Акнун ниқобҳои почтаи электронии «%@ Relay» дар дастгоҳҳои мобилӣ дастрасанд.";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Шумо аллакай дар истифода дорои 5 ниқоби почтаи электронии ройгон мебошед, аз ин рӯ барои шумо яке аз онҳо интихоб карда шуд.";
+
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Дар айни ҳол ниқобҳои почтаи электронӣ дастнорасанд. Пас аз чанд дақиқа аз нав кӯшиш кунед.";
+
 /* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
 "RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "Истифодаи ниқоби муҳофизатии почтаи электронӣ";
 

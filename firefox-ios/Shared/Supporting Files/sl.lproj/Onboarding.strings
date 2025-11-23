@@ -136,6 +136,9 @@
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Sync.Title.v140" = "Hitro nadaljujte, kjer ste ostali";
 
+/* Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Sync.Title.v145" = "Vzemite %@ s seboj na vse spletne pustolovščine";
+
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "Nadaljuj";
 
