@@ -92,11 +92,11 @@ class Logic {
    *
    * @param {Element} element
    *                  the field we want to check.
-   * @param {Object} options
+   * @param {object} options
    * @param {bool} [options.ignoreConnect] - Whether to ignore checking isConnected
    *                                         of the element.
    *
-   * @returns {Boolean} true if the field type is one
+   * @returns {boolean} true if the field type is one
    *                    of the username types.
    */
   static isUsernameFieldType(element, { ignoreConnect = false } = {}) {
@@ -142,11 +142,11 @@ class Logic {
    *
    * @param {Element} element
    *                  the field we want to check.
-   * @param {Object} options
+   * @param {object} options
    * @param {bool} [options.ignoreConnect] - Whether to ignore checking isConnected
    *                                         of the element.
    *
-   * @returns {Boolean} true if the field can
+   * @returns {boolean} true if the field can
    *                    be treated as a password input
    */
   static isPasswordFieldType(element, { ignoreConnect = false } = {}) {
@@ -261,7 +261,7 @@ class Logic {
    * @example
    * // Returns a Map with a key-value pair of "allowed": "ascii-printable"
    * transformRulesToMap([{ _name: "allowed", value: [{ _name: "ascii-printable" }] }])
-   * @param {Object[]} rules rules from PasswordRulesParser.parsePasswordRules
+   * @param {object[]} rules rules from PasswordRulesParser.parsePasswordRules
    * @return {Map} mapped rules
    */
   static transformRulesToMap(rules) {

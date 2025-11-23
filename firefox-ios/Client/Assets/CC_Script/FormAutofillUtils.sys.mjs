@@ -167,6 +167,13 @@ FormAutofillUtils = {
     "cc-csc": "creditCard",
   },
 
+  // This list includes autocomplete attributes that indicate that the field
+  // is an address or credit-card field, but the field name is not one we
+  // currently support for autofill. In these cases, we ignore the field
+  // name so that our heuristic can still classify the field using a
+  // supported field name.
+  _unsupportedFieldNameInfo: ["address-level4"],
+
   _collators: {},
   _reAlternativeCountryNames: {},
 
@@ -178,6 +185,12 @@ FormAutofillUtils = {
 
   isCreditCardField(fieldName) {
     return this._fieldNameInfo?.[fieldName] == "creditCard";
+  },
+
+  // Returns true if the field is one we don't fill handle via the autocomplete
+  // attribute. It should be identified using heuristics.
+  isUnsupportedField(fieldName) {
+    return this._unsupportedFieldNameInfo.includes(fieldName);
   },
 
   isCCNumber(ccNumber) {
