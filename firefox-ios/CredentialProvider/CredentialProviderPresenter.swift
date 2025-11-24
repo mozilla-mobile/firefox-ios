@@ -111,6 +111,7 @@ final class CredentialProviderPresenter: @unchecked Sendable {
         }
     }
 
+    @MainActor
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         // Force a short delay before we trigger authentication.
         // See https://github.com/mozilla-mobile/firefox-ios/issues/9354
@@ -118,10 +119,7 @@ final class CredentialProviderPresenter: @unchecked Sendable {
             self.appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
                 switch result {
                 case .success:
-                    // Move to the main thread because a state update triggers UI changes.
-                    DispatchQueue.main.async { [unowned self] in
-                        self.showCredentialList(for: serviceIdentifiers)
-                    }
+                    self.showCredentialList(for: serviceIdentifiers)
                 case .failure:
                     self.cancel(with: .userCanceled)
                 }
