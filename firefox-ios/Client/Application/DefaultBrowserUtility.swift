@@ -38,7 +38,14 @@ class DefaultBrowserUtility {
 
     var isDefaultBrowser: Bool {
         get { userDefault.bool(forKey: UserDefaultsKey.isBrowserDefault) }
-        set { userDefault.set(newValue, forKey: UserDefaultsKey.isBrowserDefault) }
+        set {
+            logger.log(
+                "Setting browser default status from \(self.isDefaultBrowser) to \(newValue)",
+                level: .info,
+                category: .setup
+            )
+            userDefault.set(newValue, forKey: UserDefaultsKey.isBrowserDefault)
+        }
     }
 
     func processUserDefaultState(isFirstRun: Bool) {
@@ -76,7 +83,7 @@ class DefaultBrowserUtility {
             trackIfNewUserIsComingFromBrowserChoiceScreen(isDefault)
 
             if isDefault {
-                userDefault.set(true, forKey: UserDefaultsKey.isBrowserDefault)
+                isDefaultBrowser = true
             }
         }
     }
@@ -162,11 +169,8 @@ class DefaultBrowserUtility {
         )
 
         // If either one of these statuses are true, meaning we have been set to default,
-        // then we simply have to make sure that the new source of truth has this value
-        userDefault.set(
-            preAPIStatus || postAPIStatus,
-            forKey: UserDefaultsKey.isBrowserDefault
-        )
+        // then we simply have to make sure that the source of truth has this value
+        isDefaultBrowser = preAPIStatus || postAPIStatus
 
         userDefault.set(true, forKey: UserDefaultsKey.shouldNotPerformMigration)
     }
