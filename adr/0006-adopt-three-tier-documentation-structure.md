@@ -33,15 +33,13 @@ We will **adopt a three-tier documentation structure** using Confluence, Google 
 
 - **Google Drive** will continue to serve as the workspace for in-progress, exploratory, and collaborative work.  
   It will include:
-- Meeting notes and collaborative planning documents  
-- Early-stage proposals or design explorations  
-- Research spikes and technical investigations  
-- Presentations and learning summaries shared within the team  
-- Cross-team collaboration documents  
+  - Meeting notes and collaborative planning documents  
+  - Early-stage proposals or design explorations  
+  - Research spikes and technical investigations  
+  - Presentations and learning summaries shared within the team  
+  - Cross-team collaboration documents  
 
-  When an investigation or proposal results in a technical decision, the responsible engineer will author an **ADR in GitHub** to record that decision.  
-  After a decision is made, any resulting documentation that becomes part of long-term knowledge (e.g., implementation guides, architecture updates) will be written in **Confluence**, with optional links back to the relevant Drive documents for historical context.
-
+  When an investigation or proposal results in a technical decision, the responsible engineer will author an **ADR in GitHub** to record that decision. After a decision is made, any resulting documentation that becomes part of long-term knowledge (e.g., implementation guides, architecture updates) will be written in **Confluence**, with optional links back to the relevant Drive documents for historical context. 
   Google Drive will therefore remain the home for **exploration and discovery**, while **GitHub ADRs** and **Confluence** represent **decision** and **documentation**, respectively.
 
 - **GitHub Wiki** will focus on **contributor enablement** — documentation that helps new or external contributors build, test, and submit changes to this repository.  
@@ -52,7 +50,7 @@ We will **adopt a three-tier documentation structure** using Confluence, Google 
   - How to test, run, and validate changes locally  
 
   The Wiki must remain self-contained so contributors can successfully engage without internal access.  
-  Internal Confluence pages may be referenced in name only (e.g., “For Mozilla staff, see the internal Confluence page on Swift Concurrency for more details”) but should never be linked directly.
+  Internal Confluence pages may be referenced in name only (e.g., “For Mozilla staff, see the internal Confluence page on Swift Concurrency for more details”) but should never be linked directly to ensure a good user experience for our contributors who can't access those documents.
 
 We will retire outdated or redundant Drive folders (e.g., Vision-Strategy, Test-Artifacts, Ops-Docs) and archive them appropriately.  
 Drive will only retain folders necessary for collaboration, planning, and interviewing.
