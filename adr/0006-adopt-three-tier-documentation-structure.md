@@ -31,11 +31,18 @@ We will **adopt a three-tier documentation structure** using Confluence, Google 
   - Strategic and finalized proposals  
   - References to key external documents  
 
-- **Google Drive** will remain the workspace for in-progress and collaborative materials, including:
-  - Meeting notes and action items  
-  - Planning and OKR documents  
-  - Interviewing resources  
-  - Drafts and active collaboration documents (Finalized documents will be moved into confluence)
+- **Google Drive** will continue to serve as the workspace for in-progress, exploratory, and collaborative work.  
+  It will include:
+- Meeting notes and collaborative planning documents  
+- Early-stage proposals or design explorations  
+- Research spikes and technical investigations  
+- Presentations and learning summaries shared within the team  
+- Cross-team collaboration documents  
+
+  When an investigation or proposal results in a technical decision, the responsible engineer will author an **ADR in GitHub** to record that decision.  
+  After a decision is made, any resulting documentation that becomes part of long-term knowledge (e.g., implementation guides, architecture updates) will be written in **Confluence**, with optional links back to the relevant Drive documents for historical context.
+
+  Google Drive will therefore remain the home for **exploration and discovery**, while **GitHub ADRs** and **Confluence** represent **decision** and **documentation**, respectively.
 
 - **GitHub Wiki** will focus on **contributor enablement** — documentation that helps new or external contributors build, test, and submit changes to this repository.  
   It will include:
