@@ -17845,6 +17845,7 @@
 		};
 		C31224262EB9944500683849 /* Strip Symbols */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -17884,6 +17885,7 @@
 		};
 		D48146712E26CB3300231244 /* Populate test-fixtures script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
