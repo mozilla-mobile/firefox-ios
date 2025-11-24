@@ -53,14 +53,14 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
                                                        engineOrderingPrefs: SearchEnginePrefs,
                                                        prefsMigrator: SearchEnginePreferencesMigrator,
                                                        completion: @escaping SearchEngineCompletion) {
-        let locale = Locale.current
+        let locale = SystemLocaleProvider()
         let prefsVersion = preferencesVersion
         let closureLogger = logger
 
         // First load the unordered engines, based on the current locale and language
         // swiftlint:disable closure_body_length
         getUnorderedBundledEnginesFor(locale: locale,
-                                      possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
+                                      possibleLanguageIdentifier: locale.possibleLanguageIdentifier,
                                       completion: { engineResults in
             let unorderedEngines = customEngines + engineResults
             let finalEngineOrderingPrefs = prefsMigrator.migratePrefsIfNeeded(engineOrderingPrefs,
@@ -126,11 +126,11 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
         // swiftlint:enable closure_body_length
     }
 
-    private func getUnorderedBundledEnginesFor(locale: Locale,
+    private func getUnorderedBundledEnginesFor(locale: LocaleProvider,
                                                possibleLanguageIdentifier: [String],
                                                completion: @escaping ([OpenSearchEngine]) -> Void ) {
-        let localeCode = localeCode(from: locale)
-        let region = locale.regionCode()
+        let localeCode = ASSearchEngineUtilities.localeCode(from: locale)
+        let region = locale.regionCode
         let logger = self.logger
         guard let iconPopulator = iconDataFetcher, let selector else {
             let logExtra1 = iconDataFetcher == nil ? "nil" : "ok"
@@ -167,26 +167,6 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
                 }
                 completion(openSearchEngines)
             }
-        }
-    }
-
-    private func localeCode(from locale: Locale) -> String {
-        // Per updated discussions with AS team, for now we are using the `preferredLanguages`
-        // codes for the locale parameter as long as it's available
-
-        let languages = Locale.preferredLanguages
-        if let langCode = languages.first {
-            return langCode
-        } else {
-            // Per feedback from AS team, we want to pass in the 2-component BCP 47 code. In some
-            // rare cases this may include a script with the region, if so we remove that.
-            // See also: Locale+possibilitiesForLanguageIdentifier.swift
-            let identifier = locale.identifier
-            let components = identifier.components(separatedBy: "-")
-            if components.count == 3, let first = components.first, let last = components.last {
-                return "\(first)-\(last)"
-            }
-            return identifier
         }
     }
 }
