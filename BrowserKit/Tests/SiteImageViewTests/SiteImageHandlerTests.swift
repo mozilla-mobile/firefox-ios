@@ -184,7 +184,6 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "image handler should only be called once")
     }
 
-    @MainActor
     func createSubject(urlHandler: FaviconURLHandler,
                        imageHandler: ImageHandler,
                        file: StaticString = #filePath,
