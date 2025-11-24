@@ -23,7 +23,7 @@ struct TopSitesProvider: TimelineProvider {
         return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
+    func getSnapshot(in context: Context, completion: @escaping @Sendable (TopSitesEntry) -> Void) {
         let topSites = getStoredTopSites()
         let siteImageFetcher = DefaultSiteImageHandler.factory()
 

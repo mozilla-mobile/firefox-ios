@@ -17,7 +17,7 @@ struct TabProvider: TimelineProvider {
         OpenTabsEntry(date: Date(), favicons: [String: Image](), tabs: [])
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (OpenTabsEntry) -> Void) {
+    func getSnapshot(in context: Context, completion: @escaping @Sendable (OpenTabsEntry) -> Void) {
         let openTabs = SimpleTab.getSimpleTabs().values.filter {
             !$0.isPrivate
         }
