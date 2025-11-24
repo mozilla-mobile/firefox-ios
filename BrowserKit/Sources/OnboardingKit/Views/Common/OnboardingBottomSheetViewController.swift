@@ -79,14 +79,14 @@ public class OnboardingBottomSheetViewController: UIViewController,
             sheetPresentationController?.detents = [.large(), .medium()]
         }
     }
-    
+
     /// Configure the bottom sheet with the required models and view to show.
     ///
     /// Make sure to call this methid just once, otherwise it won't update the new child.
     public func configure(closeButtonModel: CloseButtonViewModel, child: UIViewController) {
         closeButton.accessibilityLabel = closeButtonModel.a11yLabel
         closeButton.accessibilityIdentifier = closeButtonModel.a11yIdentifier
-        
+
         // Add the child only if it wasn't added yet.
         guard child.view.superview == nil else { return }
         self.child = child
