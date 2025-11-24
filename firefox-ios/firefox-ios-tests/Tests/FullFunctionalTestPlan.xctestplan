@@ -150,6 +150,7 @@
         "DownloadsTests\/testToastButtonToGoToDownloads_TAE()",
         "DragAndDropTestIpad\/testTryDragAndDropBookmarkToURLBar()",
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
+        "DragAndDropTests\/testRearrangeTabsTabTray_TAE()",
         "DragAndDropTests\/testRearrangeTabsTabTray_tabTrayExperimentOff()",
         "ExperimentIntegrationTests",
         "FindInPageTests\/testFindFromMenu()",

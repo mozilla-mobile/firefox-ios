@@ -246,6 +246,7 @@
         "DragAndDropTests\/testRearrangeTabsTabTrayLandscape()",
         "DragAndDropTests\/testRearrangeTabsTabTrayLandscape_tabTrayExperimentOff()",
         "DragAndDropTests\/testRearrangeTabsTabTrayLandscape_tabTrayExperimentOn()",
+        "DragAndDropTests\/testRearrangeTabsTabTray_TAE()",
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
         "FindInPageTests\/testBarDisappearsWhenOpeningTabsTray()",
