@@ -120,7 +120,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.updateBannerVisibility,
-                isBrowserDefault: DefaultBrowserUtil.isBrowserDefault
+                isBrowserDefault: DefaultBrowserUtility().isDefaultBrowser
             )
         )
     }
