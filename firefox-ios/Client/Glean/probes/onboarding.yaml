@@ -24,7 +24,9 @@ $tags:
 # - Button taps (primary, secondary, multiple choice)
 # - Onboarding dismissal
 #
-# The onboarding_variant extra key distinguishes between "modern" and "legacy" flows
+# The onboarding_variant extra key distinguishes between different flow UIs.
+# For all possible options, see onboardingFrameworkFeature.yaml's `OnboardingVariant`
+# enumeration (e.g. "legacy", "modern", "japan").
 ###############################################################################
 
 # Onboarding metrics

@@ -128,10 +128,14 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         return sequence.joined(separator: "_")
     }
 
+    /// If the card is not available in the original card order, return 0 (zero) to indicate an error in telemetry. Given how
+    /// `NimbusOnboardingFeatureLayer` is built & tested, this should never happen, but we want eyes on it, in the case that
+    /// it does.
     private func sequencePosition(
         for cardName: String,
         from sequence: [String]
     ) -> String {
+        // We add 1 to a regular index for a DataScience requested sequence starting at 1, rather than 0.
         let index = sequence.firstIndex { $0 == cardName } ?? -1
         return String(index + 1)
     }
