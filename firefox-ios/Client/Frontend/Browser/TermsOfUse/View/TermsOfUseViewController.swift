@@ -17,8 +17,8 @@ final class TermsOfUseViewController: UIViewController,
         static let sheetContainerSidePadding: CGFloat = 40
         static let logoSize: CGFloat = 40
         static let acceptButtonHeight: CGFloat = 44
-        static let acceptButtonCornerRadius: CGFloat = 12
         static let remindMeLaterButtonHeight: CGFloat = 44
+        static let buttonCornerRadius: CGFloat = 12
         static let grabberWidth: CGFloat = 36
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
@@ -96,7 +96,7 @@ final class TermsOfUseViewController: UIViewController,
         button.setTitle(TermsOfUseStrings.acceptButtonTitle, for: .normal)
         button.titleLabel?.font = UX.buttonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.layer.cornerRadius = UX.acceptButtonCornerRadius
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.acceptButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.acceptTapped), for: .touchUpInside)
@@ -106,6 +106,7 @@ final class TermsOfUseViewController: UIViewController,
         button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
         button.titleLabel?.font = UX.buttonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.remindMeLaterTapped), for: .touchUpInside)
@@ -332,7 +333,6 @@ final class TermsOfUseViewController: UIViewController,
         titleLabel.textColor = currentTheme().colors.textPrimary
         acceptButton.tintColor = currentTheme().colors.textOnDark
         acceptButton.backgroundColor = currentTheme().colors.actionPrimary
-        remindMeLaterButton.layer.cornerRadius = UX.acceptButtonCornerRadius
         remindMeLaterButton.backgroundColor = currentTheme().colors.actionSecondary
         remindMeLaterButton.setTitleColor(currentTheme().colors.textPrimary, for: .normal)
         descriptionTextView.linkTextAttributes = [
