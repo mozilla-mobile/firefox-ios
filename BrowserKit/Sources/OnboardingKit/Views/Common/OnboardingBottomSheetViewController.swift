@@ -25,11 +25,10 @@ public class OnboardingBottomSheetViewController: UIViewController,
     public var currentWindowUUID: Common.WindowUUID?
 
     private var notificationCenter: NotificationProtocol
-    private let child: UIViewController
     /// The last calculated height for the bottom sheet custom detent.
     private var lastCalculatedHeight: CGFloat = 0
+    private var child: UIViewController?
 
-    private let closeButtonModel: CloseButtonViewModel
     private lazy var closeButton: UIButton = .build {
         $0.addAction(UIAction(handler: { [weak self] _ in
             self?.dismiss(animated: true)
@@ -55,8 +54,6 @@ public class OnboardingBottomSheetViewController: UIViewController,
     }
 
     public init(
-        child: UIViewController,
-        closeButtonModel: CloseButtonViewModel,
         windowUUID: WindowUUID,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
@@ -64,8 +61,6 @@ public class OnboardingBottomSheetViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
-        self.child = child
-        self.closeButtonModel = closeButtonModel
         super.init(nibName: nil, bundle: nil)
         setupDetents()
     }
@@ -84,11 +79,23 @@ public class OnboardingBottomSheetViewController: UIViewController,
             sheetPresentationController?.detents = [.large(), .medium()]
         }
     }
+    
+    /// Configure the bottom sheet with the required models and view to show.
+    ///
+    /// Make sure to call this methid just once, otherwise it won't update the new child.
+    public func configure(closeButtonModel: CloseButtonViewModel, child: UIViewController) {
+        closeButton.accessibilityLabel = closeButtonModel.a11yLabel
+        closeButton.accessibilityIdentifier = closeButtonModel.a11yIdentifier
+        
+        // Add the child only if it wasn't added yet.
+        guard child.view.superview == nil else { return }
+        self.child = child
+        setupLayout(child: child)
+    }
 
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
-        setupLayout()
         applyTheme()
         calculateAndUpdateDetentsHeight()
 
@@ -101,9 +108,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
         UIAccessibility.post(notification: .screenChanged, argument: closeButton)
     }
 
-    private func setupLayout() {
-        closeButton.accessibilityLabel = closeButtonModel.a11yLabel
-        closeButton.accessibilityIdentifier = closeButtonModel.a11yIdentifier
+    private func setupLayout(child: UIViewController) {
         closeButton.scalesLargeContentImage = true
 
         addChild(child)
@@ -153,11 +158,11 @@ public class OnboardingBottomSheetViewController: UIViewController,
         let calculatedHeight = fittingSize.height
                                 + closeButton.frame.height
                                 + UX.closeButtonPadding * 2.0
-        
+
         lastCalculatedHeight = calculatedHeight
         sheetPresentationController?.animateChanges { [weak self] in
             self?.sheetPresentationController?.invalidateDetents()
-        }        
+        }
     }
 
     // MARK: - Notifiable

@@ -118,15 +118,14 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             }
         )
 
-        let bottomSheetVC = OnboardingBottomSheetViewController(
-            child: instructionsVC,
+        let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
+        bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: .CloseButtonTitle,
                 a11yIdentifier: AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
             ),
-            windowUUID: windowUUID
+            child: instructionsVC
         )
-
         present(bottomSheetVC, animated: true)
     }
 
