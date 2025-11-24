@@ -18,7 +18,7 @@ final class TermsOfUseViewController: UIViewController,
         static let logoSize: CGFloat = 40
         static let acceptButtonHeight: CGFloat = 44
         static let acceptButtonCornerRadius: CGFloat = 12
-        static let remindMeLaterButtonHeight: CGFloat = 30
+        static let remindMeLaterButtonHeight: CGFloat = 44
         static let grabberWidth: CGFloat = 36
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
@@ -31,10 +31,9 @@ final class TermsOfUseViewController: UIViewController,
         static let initialSpringVelocity: CGFloat = 1
         static let backgroundAlpha: CGFloat = 0.6
 
-        static let titleFont = FXFontStyles.Regular.headline.scaledFont()
+        static let titleFont = FXFontStyles.Bold.title3.scaledFont()
         static let descriptionFont = FXFontStyles.Regular.body.scaledFont()
-        static let acceptButtonFont = FXFontStyles.Regular.callout.scaledFont()
-        static let remindMeLaterFont = FXFontStyles.Regular.body.scaledFont()
+        static let buttonFont = FXFontStyles.Bold.callout.scaledFont()
     }
     typealias SubscriberStateType = TermsOfUseState
     weak var coordinator: TermsOfUseCoordinatorDelegate?
@@ -95,7 +94,7 @@ final class TermsOfUseViewController: UIViewController,
 
     private lazy var acceptButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.acceptButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.acceptButtonFont
+        button.titleLabel?.font = UX.buttonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.layer.cornerRadius = UX.acceptButtonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
@@ -105,7 +104,7 @@ final class TermsOfUseViewController: UIViewController,
 
     private lazy var remindMeLaterButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.remindMeLaterFont
+        button.titleLabel?.font = UX.buttonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.remindMeLaterButtonHeight).isActive = true
@@ -203,8 +202,8 @@ final class TermsOfUseViewController: UIViewController,
         stackView.addArrangedSubview(self.logoImageView)
         stackView.addArrangedSubview(self.titleLabel)
         stackView.addArrangedSubview(self.descriptionTextView)
-        stackView.addArrangedSubview(self.acceptButton)
         stackView.addArrangedSubview(self.remindMeLaterButton)
+        stackView.addArrangedSubview(self.acceptButton)
     }
 
     private func setupConstraints() {
@@ -333,7 +332,9 @@ final class TermsOfUseViewController: UIViewController,
         titleLabel.textColor = currentTheme().colors.textPrimary
         acceptButton.tintColor = currentTheme().colors.textOnDark
         acceptButton.backgroundColor = currentTheme().colors.actionPrimary
-        remindMeLaterButton.setTitleColor(currentTheme().colors.actionPrimary, for: .normal)
+        remindMeLaterButton.layer.cornerRadius = UX.acceptButtonCornerRadius
+        remindMeLaterButton.backgroundColor = currentTheme().colors.actionSecondary
+        remindMeLaterButton.setTitleColor(currentTheme().colors.textPrimary, for: .normal)
         descriptionTextView.linkTextAttributes = [
             .foregroundColor: currentTheme().colors.textAccent,
             .underlineStyle: NSUnderlineStyle.single.rawValue
