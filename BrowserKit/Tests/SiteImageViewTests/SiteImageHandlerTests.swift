@@ -5,20 +5,21 @@
 import XCTest
 @testable import SiteImageView
 
-final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
+@MainActor
+final class SiteImageHandlerTests: XCTestCase {
     private var urlHandler: MockFaviconURLHandler!
     private var imageHandler: MockImageHandler!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.urlHandler = MockFaviconURLHandler()
         self.imageHandler = MockImageHandler()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.urlHandler = nil
         self.imageHandler = nil
+        try await super.tearDown()
     }
 
     // MARK: - Favicon
@@ -26,7 +27,7 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
         let faviconURLString = "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png"
         urlHandler.faviconURL = URL(string: faviconURLString)!
         let siteURL = URL(string: "https://www.mozilla.com")!
-        let subject = await createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
@@ -40,7 +41,7 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
         let faviconURLString = "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png"
         let faviconURL = URL(string: faviconURLString)!
         let siteURL = URL(string: "https://www.mozilla.com")!
-        let subject = await createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
@@ -52,7 +53,7 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
 
     func testGetImage_favicon_noURL_stillCallsImageHandler_fetchFavicon() async {
         let siteURL = URL(string: "https://www.mozilla.com")!
-        let subject = await createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
@@ -67,7 +68,7 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
         let faviconURLString = "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png"
         let faviconURL = URL(string: faviconURLString)!
         let siteURL = URL(string: "https://www.mozilla.com")!
-        let subject = await createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
@@ -80,7 +81,7 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
     func testGetImage_heroImage_hasHeroImage_fetchesHeroImage() async {
         let siteURL = URL(string: "https://www.mozilla.com")!
         imageHandler.heroImage = UIImage()
-        let subject = await createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
         let model = SiteImageModel(id: UUID(),
                                    imageType: .heroImage,
                                    siteURL: siteURL)
@@ -95,7 +96,7 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
         let faviconURLString = "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png"
         urlHandler.faviconURL = URL(string: faviconURLString)!
 
-        let subject = await createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
         let siteURL = URL(string: "https://www.mozilla.com")!
         let model = SiteImageModel(id: UUID(),
                                    imageType: .heroImage,
@@ -108,8 +109,8 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
     }
 
     // Test cache
-    func testCacheFavicon() async {
-        let subject = await createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+    func testCacheFavicon() {
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
         let siteURL = URL(string: "https://firefox.com")!
         let faviconURL = URL(string: "https://firefox.com/favicon.ico")!
         subject.cacheFaviconURL(siteURL: siteURL,
@@ -119,8 +120,8 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(urlHandler.cacheKey, "firefox")
     }
 
-    func testClearCache() async {
-        let subject = await createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
+    func testClearCache() {
+        let subject = createSubject(urlHandler: urlHandler, imageHandler: imageHandler)
         subject.clearAllCaches()
 
         XCTAssertEqual(urlHandler.clearCacheCalled, 1)
@@ -143,9 +144,9 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
         urlHandler1.faviconURL = URL(string: "https://firefox.com/favicon.ico")!
 
         let siteURL = URL(string: "https://www.example.hello.com")!
-        let subject1 = await createSubject(urlHandler: urlHandler1, imageHandler: imageHandler)
-        let subject2 = await createSubject(urlHandler: urlHandler2, imageHandler: imageHandler)
-        let subject3 = await createSubject(urlHandler: urlHandler3, imageHandler: imageHandler)
+        let subject1 = createSubject(urlHandler: urlHandler1, imageHandler: imageHandler)
+        let subject2 = createSubject(urlHandler: urlHandler2, imageHandler: imageHandler)
+        let subject3 = createSubject(urlHandler: urlHandler3, imageHandler: imageHandler)
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL)
@@ -183,13 +184,14 @@ final class SiteImageHandlerTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "image handler should only be called once")
     }
 
+    @MainActor
     func createSubject(urlHandler: FaviconURLHandler,
                        imageHandler: ImageHandler,
                        file: StaticString = #filePath,
-                       line: UInt = #line) async -> DefaultSiteImageHandler {
+                       line: UInt = #line) -> DefaultSiteImageHandler {
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        await trackForMemoryLeaks(subject, file: file, line: line)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }
