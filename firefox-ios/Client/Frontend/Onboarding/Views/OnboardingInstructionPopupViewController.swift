@@ -12,7 +12,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
     private enum UX {
         static let contentStackViewSpacing: CGFloat = 20.0
         static let textStackViewSpacing: CGFloat = 24
-        static let verticalPadding: CGFloat = 50
+        static let verticalPadding: CGFloat = 30
         static let horizontalPadding: CGFloat = 40
         static let descriptionTextViewParagraphSpacing: CGFloat = 40.0
     }
@@ -106,10 +106,10 @@ class OnboardingInstructionPopupViewController: UIViewController,
                     constant: UX.verticalPadding
                 ),
                 contentContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                              constant: UX.verticalPadding),
+                                                              constant: UX.horizontalPadding),
                 contentContainerView.bottomAnchor.constraint(
                     equalTo: view.bottomAnchor,
-                    constant: -UX.verticalPadding
+                    constant: -50.0
                 ),
                 contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                                constant: -UX.horizontalPadding),

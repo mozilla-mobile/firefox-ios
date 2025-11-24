@@ -91,13 +91,13 @@ public class OnboardingBottomSheetViewController: UIViewController,
         guard child.view.superview == nil else { return }
         self.child = child
         setupLayout(child: child)
+        calculateAndUpdateDetentsHeight(child: child)
     }
 
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
-        calculateAndUpdateDetentsHeight()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         startObservingNotifications(
@@ -142,7 +142,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
         closeButton.setContentHuggingPriority(.required, for: .vertical)
     }
 
-    private func calculateAndUpdateDetentsHeight() {
+    private func calculateAndUpdateDetentsHeight(child: UIViewController) {
         guard #available(iOS 16.0, *) else { return }
         let targetSize = CGSize(
             width: view.bounds.width,
@@ -169,7 +169,8 @@ public class OnboardingBottomSheetViewController: UIViewController,
     nonisolated public func handleNotifications(_ notification: Notification) {
         guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
         DispatchQueue.main.async { [self] in
-            calculateAndUpdateDetentsHeight()
+            guard let child else { return }
+            calculateAndUpdateDetentsHeight(child: child)
         }
     }
 
