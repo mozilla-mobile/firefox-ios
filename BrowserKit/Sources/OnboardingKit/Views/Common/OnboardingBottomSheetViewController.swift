@@ -162,6 +162,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
 
     // MARK: - Notifiable
     nonisolated public func handleNotifications(_ notification: Notification) {
+        guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
         DispatchQueue.main.async { [self] in
             calculateAndUpdateDetentsHeight()
         }
