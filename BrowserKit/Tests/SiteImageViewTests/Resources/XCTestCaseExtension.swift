@@ -5,7 +5,8 @@
 import XCTest
 
 public extension XCTestCase {
-    func trackForMemoryLeaks(_ object: AnyObject?, file: StaticString = #filePath, line: UInt = #line) {
+    @MainActor
+    func trackForMemoryLeaks(_ object: AnyObject?, file: StaticString = #filePath, line: UInt = #line) async {
         addTeardownBlock { [weak object] in
             XCTAssertNil(object, "Memory leak detected in \(file):\(line)")
         }

@@ -5,7 +5,7 @@
 import XCTest
 @testable import SiteImageView
 
-class FaviconURLCacheTests: XCTestCase {
+class FaviconURLCacheTests: XCTestCase, @unchecked Sendable {
     var mockFileManager: MockURLCacheFileManager!
 
     override func setUp() {
@@ -19,14 +19,14 @@ class FaviconURLCacheTests: XCTestCase {
     }
 
     func testGetURLFromCacheWithEmptyCache() async {
-        let subject = createSubject(fileManager: mockFileManager)
+        let subject = await createSubject(fileManager: mockFileManager)
         let cacheKey = "firefox.com"
         let result = try? await subject.getURLFromCache(cacheKey: cacheKey)
         XCTAssertNil(result)
     }
 
     func testGetURLFromCacheWithValuePresent() async throws {
-        let subject = createSubject(fileManager: MockURLCacheFileManager())
+        let subject = await createSubject(fileManager: MockURLCacheFileManager())
         let cacheKey = "firefox.com"
         await subject.cacheURL(cacheKey: cacheKey, faviconURL: URL(string: "www.firefox.com")!)
         let result = try? await subject.getURLFromCache(cacheKey: cacheKey)
@@ -42,7 +42,7 @@ class FaviconURLCacheTests: XCTestCase {
         let testFavicons = [FaviconURL(cacheKey: cacheKey, faviconURL: "www.google.com", createdAt: Date())]
         await fileManager.saveURLCache(data: getTestData(items: testFavicons))
 
-        let subject = createSubject(fileManager: fileManager)
+        let subject = await createSubject(fileManager: fileManager)
 
         try await Task.sleep(nanoseconds: 1_000_000_000)
 
@@ -60,7 +60,7 @@ class FaviconURLCacheTests: XCTestCase {
                             FaviconURL(cacheKey: "firefox", faviconURL: "www.firefox.com", createdAt: expiredDate)]
         await fileManager.saveURLCache(data: getTestData(items: testFavicons))
 
-        let subject = createSubject(fileManager: fileManager)
+        let subject = await createSubject(fileManager: fileManager)
 
         try await Task.sleep(nanoseconds: 1_000_000_000)
 
@@ -85,9 +85,9 @@ class FaviconURLCacheTests: XCTestCase {
 
     func createSubject(fileManager: URLCacheFileManager,
                        file: StaticString = #filePath,
-                       line: UInt = #line) -> DefaultFaviconURLCache {
+                       line: UInt = #line) async -> DefaultFaviconURLCache {
         let subject = DefaultFaviconURLCache(fileManager: fileManager)
-        trackForMemoryLeaks(subject, file: file, line: line)
+        await trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }
