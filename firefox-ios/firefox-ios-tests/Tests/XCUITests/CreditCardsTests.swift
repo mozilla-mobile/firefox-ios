@@ -46,6 +46,9 @@ class CreditCardsTests: BaseTestCase {
         )
         addCardButton.waitAndTap()
         // Add Credit Card page is displayed
+        if #available(iOS 26, *) {
+            tapCardName()
+        }
         waitForElementsToExist(
             [
                 app.staticTexts[creditCardsStaticTexts.AddCreditCard.addCreditCard],
