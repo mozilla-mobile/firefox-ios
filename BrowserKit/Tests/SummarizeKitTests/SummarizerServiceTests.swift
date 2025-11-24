@@ -32,6 +32,7 @@ final class SummarizerServiceTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testSummarizerServiceReturnsStreamedSummary() async throws {
         let subject = createSubject()
         var streamedChunks: [String] = []
@@ -43,6 +44,7 @@ final class SummarizerServiceTests: XCTestCase {
         XCTAssertEqual(streamedChunks, ["Summarized", "content"] )
     }
 
+    @MainActor
     func testSummarizerServiceThrowsWhenSummarizerFails() async {
         let summarizer = MockSummarizer(
             shouldRespond: [],
