@@ -37,7 +37,7 @@ struct NimbusOnboardingTestingConfigUtility {
     }
 
     // MARK: - Order-based setups
-    func setupNimbus(withOrder order: [CardOrder], uiVariant: Client.OnboardingVariant? = nil) {
+    func setupNimbus(withOrder order: [CardOrder], uiVariant: OnboardingVariant? = nil) {
         var dictionary = [String: NimbusOnboardingCardData]()
 
         for (index, item) in order.enumerated() {
@@ -122,7 +122,7 @@ struct NimbusOnboardingTestingConfigUtility {
     private func createCard(
         withID id: CardOrder,
         andOrder order: Int,
-        uiVariant: Client.OnboardingVariant? = nil
+        uiVariant: OnboardingVariant? = nil
     ) -> NimbusOnboardingCardData {
         let shouldAddLink: [CardOrder] = [.welcome, .updateWelcome]
         let isUpdate: [CardOrder] = [.updateWelcome, .updateSync]

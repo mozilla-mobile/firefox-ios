@@ -4,20 +4,35 @@
 
 import Foundation
 import Glean
+import Shared
 
 final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Properties
     private let cardOrder: [String]
     private let flowType: String
+    private let onboardingVariant: OnboardingVariant
     private let gleanWrapper: GleanWrapper
 
-    // MARK: - Initializer
+    // MARK: - Initializer (Legacy)
     init(
         with model: OnboardingViewModel,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.cardOrder = model.cards.map { $0.name }
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
+        self.onboardingVariant = .legacy
+        self.gleanWrapper = gleanWrapper
+    }
+
+    // MARK: - Initializer (Modern)
+    init(
+        with model: OnboardingKitViewModel,
+        onboardingVariant: OnboardingVariant,
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
+    ) {
+        self.cardOrder = model.cards.map { $0.name }
+        self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
+        self.onboardingVariant = onboardingVariant
         self.gleanWrapper = gleanWrapper
     }
 
@@ -26,6 +41,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         let extras = GleanMetrics.Onboarding.CardViewExtra(
             cardType: cardName,
             flowType: flowType,
+            onboardingVariant: onboardingVariant.rawValue,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )
@@ -45,6 +61,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                 buttonAction: buttonAction,
                 cardType: baseExtras.cardType,
                 flowType: baseExtras.flowType,
+                onboardingVariant: baseExtras.onboardingVariant,
                 sequenceId: baseExtras.sequenceId,
                 sequencePosition: baseExtras.sequencePosition
             )
@@ -54,6 +71,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                 buttonAction: buttonAction,
                 cardType: baseExtras.cardType,
                 flowType: baseExtras.flowType,
+                onboardingVariant: baseExtras.onboardingVariant,
                 sequenceId: baseExtras.sequenceId,
                 sequencePosition: baseExtras.sequencePosition
             )
@@ -70,6 +88,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
             buttonAction: action.rawValue,
             cardType: baseExtras.cardType,
             flowType: baseExtras.flowType,
+            onboardingVariant: baseExtras.onboardingVariant,
             sequenceId: baseExtras.sequenceId,
             sequencePosition: baseExtras.sequencePosition
         )
@@ -80,16 +99,17 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         let extras = GleanMetrics.Onboarding.CloseTapExtra(
             cardType: cardName,
             flowType: flowType,
+            onboardingVariant: onboardingVariant.rawValue,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.closeTap, extras: extras)
     }
 
-    // MARK: - Private functions
     private struct BaseExtras {
         let cardType: String
         let flowType: String
+        let onboardingVariant: String
         let sequenceId: String
         let sequencePosition: String
     }
@@ -98,6 +118,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         return BaseExtras(
             cardType: cardName,
             flowType: flowType,
+            onboardingVariant: onboardingVariant.rawValue,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )

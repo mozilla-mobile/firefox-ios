@@ -262,7 +262,7 @@ final class LaunchCoordinator: BaseCoordinator,
             for: .freshInstall
         )
         let activityEventHelper = ActivityEventHelper()
-        let telemetryUtility = ModernOnboardingTelemetryUtility(
+        let telemetryUtility = OnboardingTelemetryUtility(
             with: onboardingModel,
             onboardingVariant: manager.onboardingVariant
         )
