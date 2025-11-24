@@ -1529,10 +1529,6 @@ class BrowserViewController: UIViewController,
         checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
-        // when toolbars are hidden/shown the mask on the content view that is used for
-        // toolbar translucency needs to be updated
-        updateToolbarDisplay()
-
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
     }
