@@ -191,7 +191,7 @@
 "NewOnboarding.Button.Title.V2" = "Начать";
 
 /* Text for a label that indicates the subtitle for the onboarding screen version 2. */
-"NewOnboarding.Subtitle.V2" = "Быстро. Приватный. Никаких отвлечений.";
+"NewOnboarding.Subtitle.V2" = "Быстрый. Приватный. Никаких отвлечений.";
 
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Начать веб-сёрфинг";
