@@ -46,6 +46,20 @@ class DragAndDropTests: BaseTestCase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2362645
+    // Smoketest TAE
+    func testRearrangeTabsTabTray_TAE() {
+        let tabTrayScreen = TabTrayScreen(app: app)
+        openTwoWebsites_TAE()
+        navigator.goto(TabTray)
+        checkTabsOrder_TAE(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        if #available(iOS 17, *) {
+            tabTrayScreen.dragTab(from: firstWebsite.tabName, to: secondWebsite.tabName)
+            tabTrayScreen.waitForTab(named: firstWebsite.tabName)
+            checkTabsOrder_TAE(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
     func testRearrangeMoreThan3TabsTabTraytab() {
         // Arranging more than 3 to check that it works moving tabs between lines
@@ -177,19 +191,27 @@ private extension BaseTestCase {
         waitForTabsButton()
     }
 
-    func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
-        var nrOfAttempts = 0
-        mozWaitForElementToExist(dropOnElement)
-        let startCoordinate = dragElement.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
-        let endCoordinate = dropOnElement.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        startCoordinate.press(forDuration: 2.0, thenDragTo: endCoordinate)
-        mozWaitForElementToExist(dragElement)
-        // Repeat the action in case the first drag and drop attempt was not successful
-        while dragElement.isLeftOf(rightElement: dropOnElement) && nrOfAttempts < 5 {
-            dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
-            nrOfAttempts = nrOfAttempts + 1
-            mozWaitForElementToExist(dragElement)
+    func openTwoWebsites_TAE() {
+        let tabTrayScreen = TabTrayScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+
+        // Open two tabs
+        if !userState.isPrivate && iPad() {
+            navigator.nowAt(NewTabScreen)
+        } else {
+            navigator.nowAt(BrowserTab)
         }
+        if userState.isPrivate {
+            tabTrayScreen.tapOnNewTabButton()
+        }
+        navigator.openURL(firstWebsite.url)
+        waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(secondWebsite.url)
+        waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
     }
 
     func checkTabsOrder(dragAndDropTab: Bool,
@@ -230,6 +252,31 @@ private extension BaseTestCase {
             XCTAssertEqual(firstTabCell, firstTab, "first tab before is not correct", file: file, line: line)
             XCTAssertEqual(secondTabCell, secondTab, "second tab before is not correct", file: file, line: line)
         }
+    }
+
+    func checkTabsOrder_TAE(dragAndDropTab: Bool,
+                            firstTab: String,
+                            secondTab: String,
+                            file: StaticString = #filePath,
+                            line: UInt = #line) {
+        // Determine which collection view to use based on the current screen
+        let tabTrayScreen = TabTrayScreen(app: app)
+        tabTrayScreen.waitForTabCells()
+
+        guard let collectionView = tabTrayScreen.getVisibleCollectionView() else {
+            XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
+            return
+        }
+        let firstTabCell = collectionView.cells.element(boundBy: 0).label
+        let secondTabCell = collectionView.cells.element(boundBy: 1).label
+
+        if dragAndDropTab {
+            sleep(2)
+        }
+
+        let context = dragAndDropTab ? "after" : "before"
+        XCTAssertEqual(firstTabCell, firstTab, "first tab \(context) is not correct", file: file, line: line)
+        XCTAssertEqual(secondTabCell, secondTab, "second tab \(context) is not correct", file: file, line: line)
     }
 }
 
