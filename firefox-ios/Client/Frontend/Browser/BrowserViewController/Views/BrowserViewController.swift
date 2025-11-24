@@ -2593,7 +2593,7 @@ class BrowserViewController: UIViewController,
 
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
-    fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
+    func updateURLBarDisplayURL(_ tab: Tab, _ navigationFinished: Bool = false) {
         var safeListedURLImageName: String? {
             return (tab.contentBlocker?.status == .safelisted) ?
             StandardImageIdentifiers.Small.notificationDotFill : nil
@@ -2608,7 +2608,7 @@ class BrowserViewController: UIViewController,
                 StandardImageIdentifiers.Small.shieldSlashFillMulticolor
             lockIconNeedsTheming = hasSecureContent
             let isWebsiteMode = tab.url?.isReaderModeURL == false
-            lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+            lockIconImageName = isWebsiteMode && navigationFinished ? lockIconImageName : nil
         }
 
         let action = ToolbarAction(
@@ -4620,7 +4620,7 @@ extension BrowserViewController: TabManagerDelegate {
             selectedTab.webView?.applyTheme(theme: currentTheme())
         }
 
-        updateURLBarDisplayURL(selectedTab)
+        updateURLBarDisplayURL(selectedTab, selectedTab.isLoading == false)
         if addressToolbarContainer.inOverlayMode, selectedTab.url?.displayURL != nil {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
