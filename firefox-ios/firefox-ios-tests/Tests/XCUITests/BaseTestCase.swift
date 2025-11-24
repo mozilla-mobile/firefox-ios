@@ -484,6 +484,21 @@ class BaseTestCase: XCTestCase {
         let result = XCTWaiter.wait(for: expectations, timeout: timeout)
         if result == .timedOut { XCTFail(message ?? expectations.description) }
     }
+
+    func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
+        var nrOfAttempts = 0
+        mozWaitForElementToExist(dropOnElement)
+        let startCoordinate = dragElement.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let endCoordinate = dropOnElement.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        startCoordinate.press(forDuration: 2.0, thenDragTo: endCoordinate)
+        mozWaitForElementToExist(dragElement)
+        // Repeat the action in case the first drag and drop attempt was not successful
+        while dragElement.isLeftOf(rightElement: dropOnElement) && nrOfAttempts < 5 {
+            dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
+            nrOfAttempts = nrOfAttempts + 1
+            mozWaitForElementToExist(dragElement)
+        }
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {
