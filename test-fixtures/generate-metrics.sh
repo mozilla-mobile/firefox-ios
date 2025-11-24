@@ -7,9 +7,12 @@ TYPE_LOG_FILE="$2"
 THRESHOLD_UNIT_TEST=12
 THRESHOLD_XCUITEST=12
 
-WARNINGS=$(grep -E -v 'SourcePackages/checkouts' "$BUILD_LOG_FILE" \
+WARNINGS=$(
+  grep -E -v 'SourcePackages/checkouts' "$BUILD_LOG_FILE" \
   | grep -E '^[^ ]+:[0-9]+:[0-9]+: warning:' \
-  | uniq)
+  | grep -Ev '/Tests/' \
+  | uniq
+)
 
 WARNING_COUNT=$(printf '%s\n' "$WARNINGS" | wc -l)
 
