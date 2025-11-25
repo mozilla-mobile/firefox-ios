@@ -7,7 +7,6 @@ import Glean
 
 struct RelayMaskTelemetry {
     private let gleanWrapper: GleanWrapper
-    static let defaultZoomExtraKey = "autofill.email_mask"
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
