@@ -25,12 +25,14 @@ public struct HS256AlgorithmStrategy: JWTAlgorithmStrategy {
             for: Data(message.utf8),
             using: key
         )
-        return base64URLEncode(Data(mac))
+        return Bytes.base64urlSafeEncodeData(Data(mac))
     }
 
     /// Verifies that the provided signature matches the expected one.
     public func verify(message: String, signature: String) throws {
-        guard let actualSigData = base64URLDecode(signature) else { throw JWTError.base64Decoding }
+        guard let actualSigData = Bytes.base64urlSafeDecodedData(signature) else {
+            throw JWTError.base64Decoding
+        }
 
         let key = SymmetricKey(data: Data(secret.utf8))
         let mac = HMAC<SHA256>.authenticationCode(
