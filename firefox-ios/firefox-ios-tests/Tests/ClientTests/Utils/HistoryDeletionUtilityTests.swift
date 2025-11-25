@@ -370,6 +370,8 @@ private extension HistoryDeletionUtilityTests {
     func deletionWithExpectation(
         for siteEntries: [String],
         using profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line,
         completion: @escaping (Bool) -> Void
     ) {
         let deletionUtility = HistoryDeletionUtility(with: profile)
@@ -388,10 +390,12 @@ private extension HistoryDeletionUtilityTests {
     func deletionWithExpectation(
         since dateOption: HistoryDeletionUtilityDateOptions,
         using profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line,
         completion: @escaping (HistoryDeletionUtilityDateOptions?) -> Void
     ) {
         let deletionUtility = HistoryDeletionUtility(with: profile)
-        trackForMemoryLeaks(deletionUtility)
+        trackForMemoryLeaks(deletionUtility, file: file, line: line)
         let expectation = expectation(description: "HistoryDeletionUtilityTest")
 
         deletionUtility.deleteHistoryFrom(dateOption) { time in
@@ -403,9 +407,11 @@ private extension HistoryDeletionUtilityTests {
     }
 
     func deleteHistoryMetadataOlderThan(dateOption: HistoryDeletionUtilityDateOptions,
-                                        using profile: MockProfile) {
+                                        using profile: MockProfile,
+                                        file: StaticString = #filePath,
+                                        line: UInt = #line) {
         let deletionUtility = HistoryDeletionUtility(with: profile)
-        trackForMemoryLeaks(deletionUtility)
+        trackForMemoryLeaks(deletionUtility, file: file, line: line)
         deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
     }
 
