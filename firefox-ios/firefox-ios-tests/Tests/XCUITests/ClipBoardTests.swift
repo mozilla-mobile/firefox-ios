@@ -17,15 +17,19 @@ class ClipBoardTests: BaseTestCase {
     func copyUrl() {
         urlBarAddress.waitAndTap()
         if iPad() {
-            urlBarAddress.waitAndTap()
+            var attemptsiPad = 2
+            while !app.menuItems["Select All"].exists && attemptsiPad > 0 {
+                urlBarAddress.waitAndTap()
+                attemptsiPad -= 1
+            }
             app.menuItems["Select All"].waitAndTap()
         }
         // Retry tapping urlBarAddress if "Copy" is not visible
-        var attempts = 2
+        var attemptsiPhone = 2
         if !iPad() {
-            while !app.menuItems["Copy"].exists && attempts > 0 {
+            while !app.menuItems["Copy"].exists && attemptsiPhone > 0 {
                 urlBarAddress.waitAndTap()
-                attempts -= 1
+                attemptsiPhone -= 1
             }
         }
         app.menuItems["Copy"].waitAndTap()

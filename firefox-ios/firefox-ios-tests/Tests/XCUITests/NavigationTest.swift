@@ -596,7 +596,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
         let numTabs = app.otherElements[tabsTray].cells.count
-        XCTAssertEqual(numTabs, 3, "Total number of opened tabs should be 3")
+        XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
     }
 
@@ -608,7 +608,7 @@ class NavigationTest: BaseTestCase {
         // The article is loaded in a new private tab
         navigator.goto(TabTray)
         var numTabs = app.otherElements[tabsTray].cells.count
-        XCTAssertEqual(numTabs, 2, "Total number of regulat opened tabs should be 2")
+        XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
         if iPad() {
             app.buttons["Private"].waitAndTap()
@@ -704,9 +704,7 @@ class NavigationTest: BaseTestCase {
     }
 
     private func openContextMenuForArticleLink() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-        }
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-example.html"))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)

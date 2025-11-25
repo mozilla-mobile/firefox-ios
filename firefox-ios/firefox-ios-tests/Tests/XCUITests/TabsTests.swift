@@ -301,7 +301,6 @@ class TabsTests: BaseTestCase {
     func testOpenNewTabLandscape() {
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
-        homepageSearchBar.tapIfExists()
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -319,7 +318,6 @@ class TabsTests: BaseTestCase {
         toolBarScreen = ToolbarScreen(app: app)
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
-        homepageSearchBar.tapIfExists()
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -550,6 +548,7 @@ class TabsTests: BaseTestCase {
 
     private func validateToastWhenClosingMultipleTabs() {
         // Have multiple tabs opened in the tab tray
+        navigator.nowAt(BrowserTab)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
         for _ in 1...4 {
