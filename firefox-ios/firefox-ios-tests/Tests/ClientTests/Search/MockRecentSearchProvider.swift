@@ -20,7 +20,7 @@ final class MockRecentSearchProvider: RecentSearchProvider {
         completion(searchTerms)
     }
 
-    func clear(with date: DateProvider, completion: @escaping @Sendable (Bool) -> Void) {
+    func clear(completion: @escaping @Sendable (Result<(), any Error>) -> Void) {
         clearRecentSearchCalledCount += 1
     }
 }
