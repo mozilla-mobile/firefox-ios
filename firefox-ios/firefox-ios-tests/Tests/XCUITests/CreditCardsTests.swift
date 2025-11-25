@@ -95,7 +95,7 @@ class CreditCardsTests: BaseTestCase {
         // Add and save a valid credit card
         addCreditCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
 
-        creditCardScreen.assertCardSaved(containing: "1252", details: ["test", "Expires", "5/40"])
+        creditCardScreen.assertCardSaved(containing: "1252", details: ["Test", "Expires", "5/40"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306978
@@ -876,7 +876,7 @@ class CreditCardsTests: BaseTestCase {
         addCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         creditCardsScreen.openSavedCard(at: 1)
         viewCardScreen.waitForViewCardScreen(containing: "1252")
-        viewCardScreen.assertCardDetails(["test", "05 / 40"])
+        viewCardScreen.assertCardDetails(["Test", "05 / 40"])
     }
 
     private func addCreditCard(name: String, cardNumber: String, expirationDate: String) {
