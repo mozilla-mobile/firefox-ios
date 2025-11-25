@@ -73,11 +73,9 @@ class ClearHistorySheetProvider {
             let action = UIAlertAction(title: name, style: .destructive) { _ in
                 let deletionUtility = HistoryDeletionUtility(with: self.profile)
                 deletionUtility.deleteHistoryFrom(timeRange) { dateOption in
-                    DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
-                        didComplete(dateOption)
-                        deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
-                    }
+                    NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
+                    didComplete(dateOption)
+                    deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
                 }
             }
 
@@ -93,17 +91,15 @@ class ClearHistorySheetProvider {
                                       style: .destructive) { _ in
             let deletionUtility = HistoryDeletionUtility(with: self.profile)
             deletionUtility.deleteHistoryFrom(.allTime) { dateOption in
-                DispatchQueue.main.async {
-                    // Clear and reset tab history for all windows / tab managers
-                    self.windowManager.allWindowTabManagers().forEach { $0.clearAllTabsHistory() }
+                // Clear and reset tab history for all windows / tab managers
+                self.windowManager.allWindowTabManagers().forEach { $0.clearAllTabsHistory() }
 
-                    NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
-                    didComplete(dateOption)
+                NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
+                didComplete(dateOption)
 
-                    // perform history metadata deletion that sends a notification and updates
-                    // the data and the UI for recently visited section, which can only happen on main thread
-                    deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
-                }
+                // perform history metadata deletion that sends a notification and updates
+                // the data and the UI for recently visited section, which can only happen on main thread
+                deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
             }
         })
     }
