@@ -297,6 +297,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         validateTranslationSettingsUI()
         dismissSearchScreenFromTranslation()
 
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-translation.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
@@ -337,6 +338,7 @@ class SettingsTests: FeatureFlaggedTestBase {
                        "Translation feature - toggle is enabled by default")
         dismissSearchScreenFromTranslation()
 
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
@@ -349,6 +351,7 @@ class SettingsTests: FeatureFlaggedTestBase {
                        "Translation feature - toggle is enabled by default")
         dismissSearchScreenFromTranslation()
 
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
         navigator.nowAt(BrowserTab)

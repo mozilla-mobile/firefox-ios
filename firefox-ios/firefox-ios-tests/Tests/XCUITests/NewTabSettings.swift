@@ -92,7 +92,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         // homepage has to be still there since it is cached when swiping tabs is on
-        mozWaitForElementToExist(
+        mozWaitForElementToNotExist(
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
 
