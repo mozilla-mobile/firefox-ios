@@ -121,8 +121,8 @@ final class TopSitesScreen {
         sel.PIN_SLASH.element(in: app).waitAndTap()
     }
 
-    func assertYoutubeTopSitesExist() {
-        BaseTestCase().mozWaitForElementToExist(sel.COLLECTION_VIEW.element(in: app))
-        BaseTestCase().mozWaitForElementToExist(sel.TOPSITE_YOUTUBE.element(in: app))
+    func assertYoutubeTopSitesNotExist() {
+        BaseTestCase().mozWaitForElementToNotExist(sel.COLLECTION_VIEW.element(in: app))
+        BaseTestCase().mozWaitForElementToNotExist(sel.TOPSITE_YOUTUBE.element(in: app))
     }
 }

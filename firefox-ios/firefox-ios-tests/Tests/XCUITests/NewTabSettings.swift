@@ -68,7 +68,6 @@ class NewTabSettingsTest: BaseTestCase {
     func testChangeNewTabSettingsShowBlankPage_TAE() {
         topSiteScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
-
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -81,7 +80,7 @@ class NewTabSettingsTest: BaseTestCase {
         // For iPad the keyboard is shown
         browserScreen.assertKeyboardFocusState(isFocusedOniPad: true)
         // With swiping tabs on, the homepage is cached so it should be having those elements
-        topSiteScreen.assertYoutubeTopSitesExist()
+        topSiteScreen.assertYoutubeTopSitesNotExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
