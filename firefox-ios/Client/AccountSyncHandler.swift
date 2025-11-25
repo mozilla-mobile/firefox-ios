@@ -9,17 +9,22 @@ import Storage
 @MainActor
 final class Debouncer {
     private let delay: TimeInterval
-    private var workItem: DispatchWorkItem?
+    private var task: Task<Void, Never>?
+    private let nanosecondsPerSecond: UInt64 = 1_000_000_000
 
     init(delay: TimeInterval) {
         self.delay = delay
     }
 
     func call(action: @escaping @MainActor @Sendable () -> Void) {
-        workItem?.cancel()  // Cancel any previously scheduled work
-        workItem = DispatchWorkItem(block: action)
-        DispatchQueue.main.asyncAfter(
-            deadline: .now() + delay, execute: workItem!)
+        task?.cancel()
+
+        task = Task { [delay] in
+            let nanos = UInt64(delay) * nanosecondsPerSecond
+            try? await Task.sleep(nanoseconds: nanos)
+            guard !Task.isCancelled else { return }
+            action()
+        }
     }
 }
 
