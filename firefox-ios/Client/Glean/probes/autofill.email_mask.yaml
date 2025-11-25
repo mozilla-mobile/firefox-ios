@@ -26,7 +26,7 @@ email_mask:
   prompt_shown:
     type: event
     description: |
-      Recorded when our CFR prompt is shown to instruct users about Relay email mask availability.
+      Recorded when the keyboard accessory is shown to allow Relay email mask generation.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/30866
     data_reviews:

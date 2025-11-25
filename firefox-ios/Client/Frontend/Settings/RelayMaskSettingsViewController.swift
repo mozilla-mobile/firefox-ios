@@ -75,6 +75,7 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
         let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForRelayMaskLearnMoreArticle
         navigationController?.pushViewController(viewController, animated: true)
+        RelayController.shared.telemetry.learnMoreTapped()
     }
 
     // MARK: - ThemeApplicable
@@ -111,6 +112,7 @@ final class ManageRelayMasksSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        RelayController.shared.telemetry.manageMasksTapped()
         let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForRelayAccountManagement
         parentNav?.pushViewController(viewController, animated: true)

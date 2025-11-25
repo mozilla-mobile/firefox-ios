@@ -91,6 +91,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     static let shared = RelayController()
 
+    let telemetry: RelayMaskTelemetry
+
     static let isFeatureEnabled = {
 #if targetEnvironment(simulator) && MOZ_CHANNEL_developer
         return true
@@ -101,7 +103,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     private let logger: Logger
     private let profile: Profile
-    private let telemetry: RelayMaskTelemetry
     private let config: RelayClientConfiguration
     private var relayRSClient: RelayRemoteSettingsClient?
     private var client: RelayClient?
@@ -196,6 +197,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                                                                               result: RelayMaskGenerationResult) {
         do {
             let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
+            telemetry.autofilled(newMask: true)
             return (relayAddress.fullAddress, .newMaskGenerated)
         } catch {
             // Certain errors we need to custom-handle
@@ -205,14 +207,17 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                 do {
                     let fullList = try client.fetchAddresses()
                     if let relayMask = fullList.randomElement() {
+                        telemetry.autofilled(newMask: false)
                         return (relayMask.fullAddress, .freeTierLimitReached)
                     } else {
                         logger.log("Couldn't fetch random mask", level: .warning, category: .relay)
                     }
                 } catch {
+                    telemetry.autofillFailed(error: error.localizedDescription)
                     logger.log("Error fetching address list: \(error)", level: .warning, category: .relay)
                 }
             } else {
+                telemetry.autofillFailed(error: error.localizedDescription)
                 logger.log("API error creating Relay address: \(error)", level: .warning, category: .relay)
             }
         }

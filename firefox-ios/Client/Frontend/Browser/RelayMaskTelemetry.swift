@@ -13,7 +13,27 @@ struct RelayMaskTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
+    // MARK: - Events
+
     func showPrompt() {
         gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.promptShown)
+    }
+
+    func autofilled(newMask: Bool) {
+        let extra = GleanMetrics.EmailMask.AutofilledExtra(isNewEmailMask: newMask)
+        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.autofilled, extras: extra)
+    }
+
+    func autofillFailed(error: String) {
+        let extra = GleanMetrics.EmailMask.AutofillFailedExtra(error: error)
+        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.autofillFailed, extras: extra)
+    }
+
+    func learnMoreTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.emailMaskLearnMoreTapped)
+    }
+
+    func manageMasksTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.manageEmailMaskTapped)
     }
 }
