@@ -26,7 +26,8 @@ class NotificationService: UNNotificationServiceExtension {
         Viaduct.shared.useReqwestBackend()
         MozillaAppServices.initialize()
 
-        let userInfo = request.content.userInfo
+        // FIXME: FXIOS-14273 Dictionaries are non-Sendable
+        nonisolated(unsafe) let userInfo = request.content.userInfo
 
         guard let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
             contentHandler(request.content)
