@@ -69,7 +69,6 @@ class NewTabSettingsTest: BaseTestCase {
         topSiteScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
-        
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
