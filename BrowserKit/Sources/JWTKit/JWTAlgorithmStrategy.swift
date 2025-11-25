@@ -16,7 +16,7 @@ import Foundation
 /// For more context on how JWTs work, see: https://jwt.io/introduction
 public protocol JWTAlgorithmStrategy {
     /// The value to be used in the JWT header `alg` field.
-    var algorithmID: JWTAlgorithmName { get }
+    var algorithmName: JWTAlgorithmName { get }
     /// Produces a Base64URL-encoded signature for the given message.
     func sign(message: String) throws -> String
     /// Verifies the Base64URL-encoded signature for the given message.

@@ -16,7 +16,7 @@ import Foundation
 public struct JWTNoneAlgorithm: JWTAlgorithmStrategy {
     public init() {}
 
-    public var algorithmID: JWTAlgorithmName { .none }
+    public var algorithmName: JWTAlgorithmName { .none }
 
     /// Produces an empty signature to indicate an unsecured JWT.
     public func sign(message: String) throws -> String {
