@@ -409,10 +409,6 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
-    var isStoriesRedesignEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
-    }
-
     var isHomepageSearchBarEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
@@ -3122,7 +3118,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchAvailableContentHeightChangedAction() {
-        guard isStoriesRedesignEnabled, let browserViewControllerState,
+        guard isAnyStoriesRedesignEnabled, let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
            homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }

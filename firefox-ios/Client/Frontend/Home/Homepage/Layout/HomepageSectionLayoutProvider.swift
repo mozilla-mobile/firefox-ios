@@ -140,9 +140,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
    /// of the inputs differ between layout passes.
    private var measurementsCache = HomepageLayoutMeasurementCache()
     private var headerHeightCache: [HeaderMeasurementKey: CGFloat] = [:]
-    private var isStoriesRedesignEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
-    }
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
@@ -178,8 +175,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 config: configuration
             )
         case .pocket:
-            return isStoriesRedesignEnabled ? createStoriesSectionLayout(for: environment)
-                                            : createPocketSectionLayout(for: traitCollection)
+            return isAnyStoriesRedesignEnabled ? createStoriesSectionLayout(for: environment)
+                                               : createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
             return createSingleItemSectionLayout(
                 for: traitCollection,
@@ -328,8 +325,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let bottomInset = isStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
-                                                   : UX.spacingBetweenSections - UX.interGroupSpacing
+        let bottomInset = isAnyStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
+                                                      : UX.spacingBetweenSections - UX.interGroupSpacing
         section.contentInsets.top = 0
         section.contentInsets.bottom = bottomInset
 
@@ -717,7 +714,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             cellWidth: normalizedDimension(cellWidth),
             containerWidth: normalizedDimension(environment.container.contentSize.width),
             shouldShowSection: storiesState.shouldShowSection,
-            isStoriesRedesignEnabled: isStoriesRedesignEnabled,
+            isStoriesRedesignEnabled: isAnyStoriesRedesignEnabled,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
             )
 

@@ -24,9 +24,8 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     }
 
     func fetchHomepageStories() async -> [MerinoStory] {
-        let isStoriesRedesignEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
         let numberOfStoriesIfRedesignEnabled = 9
-        let numberOfStories = isStoriesRedesignEnabled
+        let numberOfStories = isAnyStoriesRedesignEnabled
             ? numberOfStoriesIfRedesignEnabled
             : Constants.defaultNumberOfHomepageStories
         return await fetchStories(numberOfStories)
