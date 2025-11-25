@@ -183,6 +183,7 @@
 		1D5CBF4A2B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
 		1D6ECD2F2EC2CDC10017EC7A /* AutofillRelayMaskSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6ECD2E2EC2CDB90017EC7A /* AutofillRelayMaskSetting.swift */; };
 		1D6ED1C52EC3C43A0017EC7A /* RelayMaskSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */; };
+		1D6EDA4A2ED65DB40017EC7A /* RelayMaskTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6EDA492ED65DB00017EC7A /* RelayMaskTelemetry.swift */; };
 		1D74FF502B2797EA00FF01D0 /* WindowManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */; };
 		1D7B78972ADF32590011E9F2 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
 		1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
@@ -2878,6 +2879,7 @@
 		1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPayloads.swift; sourceTree = "<group>"; };
 		1D6ECD2E2EC2CDB90017EC7A /* AutofillRelayMaskSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillRelayMaskSetting.swift; sourceTree = "<group>"; };
 		1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayMaskSettingsViewController.swift; sourceTree = "<group>"; };
+		1D6EDA492ED65DB00017EC7A /* RelayMaskTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayMaskTelemetry.swift; sourceTree = "<group>"; };
 		1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManagerTests.swift; sourceTree = "<group>"; };
 		1D774B3D9C6E21B77FB7B38F /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		1D7B78962ADF32590011E9F2 /* EventQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventQueue.swift; sourceTree = "<group>"; };
@@ -15340,6 +15342,7 @@
 				D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */,
 				DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */,
 				1D5A0F5B2EA2FB4800DD27F7 /* RelayController.swift */,
+				1D6EDA492ED65DB00017EC7A /* RelayMaskTelemetry.swift */,
 				D34510871ACF415700EC27F0 /* SearchLoader.swift */,
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				8A9B87A92C1B30340042B894 /* Search */,
@@ -18846,6 +18849,7 @@
 				0BC57FE92D48E9CF0049C2B9 /* Metrics.swift in Sources */,
 				8A4EA0DD2C0117F200E4E4F1 /* MicrosurveyModel.swift in Sources */,
 				63F7A9AA2C7529ED005846F5 /* NativeErrorPageModel.swift in Sources */,
+				1D6EDA4A2ED65DB40017EC7A /* RelayMaskTelemetry.swift in Sources */,
 				8A6E63CF2D4A7FB70040D355 /* SectionHeaderConfiguration.swift in Sources */,
 				63F7A9AC2C752BB0005846F5 /* NativeErrorPageViewController.swift in Sources */,
 				8A1AB6BB2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift in Sources */,

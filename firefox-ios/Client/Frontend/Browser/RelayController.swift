@@ -101,6 +101,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     private let logger: Logger
     private let profile: Profile
+    private let telemetry: RelayMaskTelemetry
     private let config: RelayClientConfiguration
     private var relayRSClient: RelayRemoteSettingsClient?
     private var client: RelayClient?
@@ -117,12 +118,14 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     private init(logger: Logger = DefaultLogger.shared,
                  profile: Profile = AppContainer.shared.resolve(),
+                 gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
                  config: RelayClientConfiguration = .prod,
                  notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.logger = logger
         self.profile = profile
         self.config = config
         self.notificationCenter = notificationCenter
+        self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
 
         configureRelayRSClient()
         beginObserving()
