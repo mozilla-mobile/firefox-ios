@@ -19,7 +19,11 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     override func generateSettings() -> [SettingSection] {
-        return [generateFeatureFlagToggleSettings(), generateFeatureFlagList()]
+        return [
+            generateFeatureFlagToggleSettings(),
+            generateDefaultBrowserStatusDisplay(),
+            generateFeatureFlagList()
+        ]
     }
 
     // swiftlint:disable:next function_body_length
@@ -272,6 +276,15 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         return SettingSection(
             title: nil,
             children: children
+        )
+    }
+
+    private func generateDefaultBrowserStatusDisplay() -> SettingSection {
+        return SettingSection(
+            title: NSAttributedString(string: "Default Browser Status"),
+            children: [Setting(
+                title: format(string: "isDefaultBrowser: \(DefaultBrowserUtility().isDefaultBrowser)")
+            )]
         )
     }
 
