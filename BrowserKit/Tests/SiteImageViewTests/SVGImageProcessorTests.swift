@@ -134,6 +134,7 @@ class SVGImageProcessorTests: XCTestCase {
         await fulfillment(of: [exp], timeout: 2.0)
     }
 
+    @MainActor
     func testDownloadingEmptyImage_withKingfisherProcessor() async {
         let emptyData = Data()
 
