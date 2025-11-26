@@ -60,7 +60,7 @@ public protocol BookmarksHandler {
 
 public protocol HistoryHandler {
     func applyObservation(visitObservation: VisitObservation,
-                          completion: @escaping (Result<Void, any Error>) -> Void)
+                          completion: @Sendable @escaping (Result<Void, any Error>) -> Void)
 
     func getMostRecentHistoryMetadata(
         limit: Int32,
@@ -724,7 +724,7 @@ extension RustPlaces {
 
     public func applyObservation(
         visitObservation: VisitObservation,
-        completion: @escaping (Result<Void, any Error>) -> Void
+        completion: @Sendable @escaping (Result<Void, any Error>) -> Void
     ) {
         withWriter { connection in
             return try connection.applyObservation(visitObservation: visitObservation)

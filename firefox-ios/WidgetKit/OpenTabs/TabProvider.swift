@@ -51,7 +51,7 @@ struct TabProvider: TimelineProvider {
         }
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<OpenTabsEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @Sendable @escaping (Timeline<OpenTabsEntry>) -> Void) {
         getSnapshot(in: context, completion: { openTabsEntry in
             let timeline = Timeline(entries: [openTabsEntry], policy: .atEnd)
             completion(timeline)
