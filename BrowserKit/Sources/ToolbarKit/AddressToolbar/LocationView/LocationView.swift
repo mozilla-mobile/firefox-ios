@@ -464,7 +464,7 @@ final class LocationView: UIView,
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
         if #available(iOS 26.0, *) {
-            effectView.effect = scrollAlpha.isZero && barPosition == .bottom ? glassEffect : nil
+            effectView.effect = scrollAlpha.isZero && barPosition == .bottom && !isKeyboardVisible ? glassEffect : nil
         }
         if scrollAlpha.isZero {
             shrinkLocationView(barPosition: barPosition, isKeyboardVisible: isKeyboardVisible)
