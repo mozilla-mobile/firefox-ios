@@ -26,6 +26,7 @@ struct HomepageLayoutMeasurementCache {
         struct Key: Equatable {
             let syncedTabConfig: JumpBackInSyncedTabConfiguration?
             let maxNumberOfLocalTabs: Int
+            let numberOfLocalTabsToShow: Int
             let headerState: SectionHeaderConfiguration
             let containerWidth: Double
             let shouldShowSection: Bool

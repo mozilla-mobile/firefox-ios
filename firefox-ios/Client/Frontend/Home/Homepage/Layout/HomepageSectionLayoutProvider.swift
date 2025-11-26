@@ -628,10 +628,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let jumpBackInConfig = HomepageDimensionCalculator.retrieveJumpBackInDisplayInfo(
             traitCollection: environment.traitCollection
         )
+        let numberOfLocalTabsToShow = min(
+            jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
+            jumpBackInState.jumpBackInTabs.count
+        )
 
         let key = HomepageLayoutMeasurementCache.JumpBackInMeasurement.Key(
             syncedTabConfig: jumpBackInState.mostRecentSyncedTab,
             maxNumberOfLocalTabs: jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
+            numberOfLocalTabsToShow: numberOfLocalTabsToShow,
             headerState: jumpBackInState.sectionHeaderState,
             containerWidth: containerWidth,
             shouldShowSection: jumpBackInState.shouldShowSection,
