@@ -405,10 +405,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     func clearRecentSearches() {
         searchTelemetry.recentSearchesClearButtonTapped()
 
-        let dateProvider = SystemDateProvider()
-        recentSearchProvider.clear(with: dateProvider) { success in
+        recentSearchProvider.clear { result in
             ensureMainThread { [weak self] in
-                if success {
+                if case .success = result {
                     self?.recentSearches = []
                     self?.delegate?.reloadTableView()
                 } else {
