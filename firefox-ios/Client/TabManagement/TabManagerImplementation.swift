@@ -346,7 +346,8 @@ class TabManagerImplementation: NSObject,
         guard !tabsToRemove.isEmpty else { return }
 
         for tab in tabsToRemove {
-            removeTab(tab.tabUUID)
+            // Remove each tab without persisting changes
+            removeTab(tab, flushToDisk: false)
         }
         commitChanges()
     }
