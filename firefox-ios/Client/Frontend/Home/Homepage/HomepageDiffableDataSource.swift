@@ -101,16 +101,6 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
         }
 
-        if state.shouldShowSpacer {
-            snapshot.appendSections([.spacer])
-            snapshot.appendItems([.spacer], toSection: .spacer)
-        }
-
-        if state.searchState.shouldShowSearchBar {
-            snapshot.appendSections([.searchBar])
-            snapshot.appendItems([.searchBar], toSection: .searchBar)
-        }
-
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
             snapshot.appendSections([.jumpBackIn(textColor, configuration)])
             snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor, configuration))
@@ -119,6 +109,16 @@ final class HomepageDiffableDataSource:
         if let bookmarks = getBookmarks(with: state.bookmarkState) {
             snapshot.appendSections([.bookmarks(textColor)])
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
+        }
+
+        if state.shouldShowSpacer {
+            snapshot.appendSections([.spacer])
+            snapshot.appendItems([.spacer], toSection: .spacer)
+        }
+
+        if state.searchState.shouldShowSearchBar {
+            snapshot.appendSections([.searchBar])
+            snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
         if let stories = getPocketStories(with: state.merinoState) {
