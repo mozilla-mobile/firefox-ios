@@ -645,6 +645,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Calculate jump back in sections new height
         var totalHeight: CGFloat = 0
+        var totalCells = 0
 
         // Add height of synced tab cell (if it exists)
         if let syncedTabConfig = jumpBackInState.mostRecentSyncedTab {
@@ -655,6 +656,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                                     onOpenSyncedTabAction: nil)
             let syncedTabCellHeight = HomepageDimensionCalculator.fittingHeight(for: syncedTabCell,
                                                                                 width: containerWidth)
+            totalCells += 1
             totalHeight += syncedTabCellHeight
         }
 
@@ -665,12 +667,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 jumpBackInCell.configure(config: tabConfig, theme: LightTheme())
                 let jumpBackInCellHeight = HomepageDimensionCalculator.fittingHeight(for: jumpBackInCell,
                                                                                      width: containerWidth)
+                totalCells += 1
                 totalHeight += jumpBackInCellHeight
             }
         }
 
         // Add group spacing
-        totalHeight += UX.interGroupSpacing
+        totalHeight += UX.interGroupSpacing * CGFloat(totalCells - 1)
 
         // Add header height
         totalHeight += getHeaderHeight(headerState: jumpBackInState.sectionHeaderState, environment: environment)
