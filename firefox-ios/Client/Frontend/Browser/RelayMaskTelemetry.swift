@@ -15,24 +15,24 @@ struct RelayMaskTelemetry {
     // MARK: - Events
 
     func showPrompt() {
-        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.promptShown)
+        gleanWrapper.recordEvent(for: GleanMetrics.AutofillEmailMask.promptShown)
     }
 
     func autofilled(newMask: Bool) {
-        let extra = GleanMetrics.EmailMask.AutofilledExtra(isNewEmailMask: newMask)
-        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.autofilled, extras: extra)
+        let extra = GleanMetrics.AutofillEmailMask.AutofilledExtra(isNewEmailMask: newMask)
+        gleanWrapper.recordEvent(for: GleanMetrics.AutofillEmailMask.autofilled, extras: extra)
     }
 
     func autofillFailed(error: String) {
-        let extra = GleanMetrics.EmailMask.AutofillFailedExtra(error: error)
-        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.autofillFailed, extras: extra)
+        let extra = GleanMetrics.AutofillEmailMask.AutofillFailedExtra(error: error)
+        gleanWrapper.recordEvent(for: GleanMetrics.AutofillEmailMask.autofillFailed, extras: extra)
     }
 
     func learnMoreTapped() {
-        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.emailMaskLearnMoreTapped)
+        gleanWrapper.recordEvent(for: GleanMetrics.AutofillEmailMask.emailMaskLearnMoreTapped)
     }
 
     func manageMasksTapped() {
-        gleanWrapper.recordEvent(for: GleanMetrics.EmailMask.manageEmailMaskTapped)
+        gleanWrapper.recordEvent(for: GleanMetrics.AutofillEmailMask.manageEmailMaskTapped)
     }
 }

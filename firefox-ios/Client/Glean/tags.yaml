@@ -30,7 +30,7 @@ AppIconSelection:
 AppMenu:
   description: Corresponds to the app's main menu.
 
-Autofill.EmailMask:
+EmailMask:
   description: Corresponds to the the email mask autofill feature for website forms.
 
 Autofill:
