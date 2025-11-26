@@ -31,7 +31,7 @@ AppMenu:
   description: Corresponds to the app's main menu.
 
 Autofill.EmailMask:
-  description: Relay email mask support in iOS
+  description: Corresponds to the the email mask autofill feature for website forms.
 
 Autofill:
   description: "Corresponds to the website form autofill feature within the app: addresses autofill, credit cards autofill, and passwords autofill."
