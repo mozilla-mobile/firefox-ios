@@ -173,6 +173,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
                 mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites])
                 mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
             }
+            mozWaitElementHittable(element: app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)
             navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
             navigator.performAction(Action.OpenNewTabFromTabTray)
