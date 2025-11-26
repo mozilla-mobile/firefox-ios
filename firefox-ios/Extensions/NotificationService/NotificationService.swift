@@ -59,7 +59,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    func handleEncryptedPushMessage(userInfo: [AnyHashable: Any],
+    func handleEncryptedPushMessage(userInfo: sending [AnyHashable: Any],
                                     profile: BrowserProfile,
                                     completion: @escaping @Sendable (Result<PushMessage, PushMessageError>) -> Void
     ) {
