@@ -87,7 +87,6 @@ final class LocationView: UIView,
     private lazy var containerView: UIView = .build()
 
     private var containerViewConstraints: [NSLayoutConstraint] = []
-    private var effectViewBottomConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
     private var urlTextFieldTrailingConstraint: NSLayoutConstraint?
     private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
@@ -108,11 +107,9 @@ final class LocationView: UIView,
         button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
     }
 
+    private lazy var glassEffect: UIVisualEffect? = if #available(iOS 26.0, *) { UIGlassEffect() } else { nil }
     private lazy var effectView: UIVisualEffectView = .build {
-        if #available(iOS 26.0, *) {
-            $0.effect = UIGlassEffect()
-            $0.layer.cornerRadius = UX.effectViewCornerRadius
-        }
+        $0.layer.cornerRadius = UX.effectViewCornerRadius
     }
 
     // MARK: - URL Text Field
@@ -262,21 +259,20 @@ final class LocationView: UIView,
     private func setupLayout() {
         if #available(iOS 26.0, *) {
             addSubview(effectView)
-            effectView.contentView.addSubview(urlTextField)
+            effectView.contentView.addSubview(containerView)
         } else {
-            containerView.addSubview(urlTextField)
+            addSubview(containerView)
         }
-        addSubview(containerView)
-        containerView.addSubviews(iconContainerStackView, gradientView)
+        containerView.addSubviews(urlTextField, iconContainerStackView, gradientView)
         if #available(iOS 26.0, *) {
             NSLayoutConstraint.activate([
                 effectView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
                 effectView.leadingAnchor.constraint(equalTo: iconContainerStackView.leadingAnchor,
                                                     constant: UX.effectViewLeadingPadding),
                 effectView.trailingAnchor.constraint(equalTo: urlTextField.trailingAnchor,
-                                                     constant: UX.effectViewTrailingPadding)
+                                                     constant: UX.effectViewTrailingPadding),
+                effectView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor)
             ])
-            effectViewBottomConstraint = effectView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor)
         }
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
@@ -468,7 +464,7 @@ final class LocationView: UIView,
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
         if #available(iOS 26.0, *) {
-            effectViewBottomConstraint?.isActive = scrollAlpha.isZero && barPosition == .bottom && !isKeyboardVisible
+            effectView.effect = scrollAlpha.isZero && barPosition == .bottom && !isKeyboardVisible ? glassEffect : nil
         }
         if scrollAlpha.isZero {
             shrinkLocationView(barPosition: barPosition, isKeyboardVisible: isKeyboardVisible)
