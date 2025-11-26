@@ -20,10 +20,10 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
         middleware = nil
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testMiddleware_termsAccepted_updatesAcceptedPref() {

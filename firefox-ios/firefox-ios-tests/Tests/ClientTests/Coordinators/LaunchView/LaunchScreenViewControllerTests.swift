@@ -23,11 +23,11 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
         viewModel = nil
         profile = nil
         coordinatorDelegate = nil
+        super.tearDown()
     }
 
     func testNotLoaded_notCalled() {
