@@ -678,7 +678,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         // Add group spacing
-        totalHeight += UX.interGroupSpacing * CGFloat(totalCells - 1)
+        totalHeight += totalCells > 1 ? UX.interGroupSpacing : 0
 
         // Add header height
         totalHeight += getHeaderHeight(headerState: jumpBackInState.sectionHeaderState, environment: environment)
