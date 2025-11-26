@@ -45,7 +45,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     // MARK: - Test url based deletion
-    @MainActor
     func testDeletingSingleItem() {
         let profile = profileSetup(named: "hsd_deleteSingleItem")
         let testSites = [SiteElements(domain: "mozilla")]
@@ -58,7 +57,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    @MainActor
     func testDeletingMultipleItemsEmptyingDatabase() {
         let profile = profileSetup(named: "hsd_deleteMultipleItemsEmptyingDB")
         let sitesToDelete = [SiteElements(domain: "mozilla"),
@@ -76,7 +74,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    @MainActor
     func testDeletingMultipleTopLevelItems() {
         let profile = profileSetup(named: "hsd_deleteMultipleItemsTopLevelItems")
         let sitesToRemain = [SiteElements(domain: "cnn")]
@@ -95,7 +92,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    @MainActor
     func testDeletingMultipleSpecificItems() {
         let profile = profileSetup(named: "hsd_deleteMultipleSpecificItems")
         let sitesToRemain = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
@@ -372,7 +368,7 @@ private extension HistoryDeletionUtilityTests {
         using profile: MockProfile,
         file: StaticString = #filePath,
         line: UInt = #line,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         let deletionUtility = HistoryDeletionUtility(with: profile)
         trackForMemoryLeaks(deletionUtility)
