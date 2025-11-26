@@ -22,7 +22,7 @@ $tags:
 # Add your new metrics and/or events here.
 # Relay Email Mask
 
-email_mask:
+autofill.email_mask:
   prompt_shown:
     type: event
     description: |
