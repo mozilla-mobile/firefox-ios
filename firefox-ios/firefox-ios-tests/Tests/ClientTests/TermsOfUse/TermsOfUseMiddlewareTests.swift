@@ -20,9 +20,9 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
     }
 
     override func tearDown() {
+        DependencyHelperMock().reset()
         profile = nil
         middleware = nil
-        DependencyHelperMock().reset()
         super.tearDown()
     }
 
