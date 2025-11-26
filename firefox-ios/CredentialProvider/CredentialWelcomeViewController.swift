@@ -6,7 +6,9 @@ import UIKit
 import Common
 
 protocol CredentialWelcomeViewControllerDelegate: AnyObject {
+    @MainActor
     func credentialWelcomeViewControllerDidCancel()
+    @MainActor
     func credentialWelcomeViewControllerDidProceed()
 }
 
