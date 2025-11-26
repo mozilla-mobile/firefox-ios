@@ -29,13 +29,7 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
                                                    theme: theme,
                                                    prefKey: PrefsKeys.ShowRelayMaskSuggestions,
                                                    defaultValue: true,
-                                                   titleText: .RelayMask.RelayEmailMaskSuggestMasksToggle) { newValue in
-            SettingsTelemetry().changedSetting(
-                "SuggestEmailMasks",
-                to: "\(newValue)",
-                from: "\(!newValue)"
-            )
-        }
+                                                   titleText: .RelayMask.RelayEmailMaskSuggestMasksToggle)
         let manageMaskSetting = ManageRelayMasksSetting(theme: theme,
                                                         prefs: profile.prefs,
                                                         windowUUID: windowUUID,
