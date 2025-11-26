@@ -4082,6 +4082,7 @@ class BrowserViewController: UIViewController,
         guard RelayController.isFeatureEnabled else { return }
 
         if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            RelayController.shared.telemetry.showPrompt()
             RelayController.shared.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
