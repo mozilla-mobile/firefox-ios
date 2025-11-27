@@ -88,14 +88,19 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
                 fields.version == Constants.translatorVersion
         }
 
+        guard let record = matchingRecord else {
+            logger.log("No matching translator found", level: .warning, category: .translations)
+            return nil
+        }
+
         logger.log(
             "Translator record selected",
             level: .info,
             category: .translations,
-            extra: ["recordId": "\(record.id)"]
+            extra: ["recordId": record.id]
         )
 
-        return matchingRecord.flatMap { record in try? translatorsClient?.getAttachment(record: record) }
+        return try? translatorsClient?.getAttachment(record: record)
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
