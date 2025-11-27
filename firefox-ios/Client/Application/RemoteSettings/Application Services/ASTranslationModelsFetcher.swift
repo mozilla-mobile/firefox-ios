@@ -88,6 +88,13 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
                 fields.version == Constants.translatorVersion
         }
 
+        logger.log(
+            "Translator record selected",
+            level: .info,
+            category: .translations,
+            extra: ["recordId": "\(record.id)"]
+        )
+
         return matchingRecord.flatMap { record in try? translatorsClient?.getAttachment(record: record) }
     }
 
@@ -237,6 +244,13 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             else {
                 continue
             }
+
+            logger.log(
+                "Model record selected",
+                level: .info,
+                category: .translations,
+                extra: ["recordId": "\(record.id)"]
+            )
 
             languageModelFiles[fields.fileType] = [
                 "record": [
