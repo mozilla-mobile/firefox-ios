@@ -13,10 +13,6 @@ protocol ReaderModeHandlersProtocol {
     func register(_ webServer: WebServerProtocol, profile: Profile)
 }
 
-// Laurie - To remove
-// extension GCDWebServerRequest: @unchecked @retroactive Sendable {}
-// extension GCDWebServerResponse: @unchecked @retroactive Sendable {}
-
 @MainActor
 struct ReaderModeHandlers: ReaderModeHandlersProtocol {
     static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
@@ -28,12 +24,10 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
     func register(_ webServer: WebServerProtocol, profile: Profile) {
         // Temporary hacky casting to allow for gradual movement to protocol oriented programming
         guard let webServer = webServer as? WebServer else { return }
-        ReaderModeRegisterer.register(webServer,
-                                      profile: profile)
+        ReaderModeHandlers.register(webServer,
+                                    profile: profile)
     }
-}
 
-struct ReaderModeRegisterer {
     static func register(_ webServer: WebServer, profile: Profile) {
         // Register our fonts and css, which we want to expose to web content that we present in the WebView
         webServer.registerMainBundleResourcesOfType("otf", module: "reader-mode/fonts")
@@ -42,47 +36,27 @@ struct ReaderModeRegisterer {
         // Register a handler that simply lets us know if a document is in the cache or not. This is called from the
         // reader view interstitial page to find out when it can stop showing the 'Loading...' page and instead load
         // the readerized content.
-        webServer.registerHandlerForMethod(
-            "GET",
-            module: "reader-mode",
-            resource: "page-exists"
-        ) { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
-            var response: GCDWebServerResponse?
-            let semaphore = DispatchSemaphore(value: 0)
-
-            ensureMainThread {
-                response = pageExistsResponse(request: request,
+        webServer.registerHandlerForMethod("GET",
+                                           module: "reader-mode",
+                                           resource: "page-exists") { request, completion in
+            let response = pageExistsResponse(request: request,
                                               cache: ReaderModeHandlers.readerModeCache)
-                semaphore.signal()
-            }
-
-            semaphore.wait()
-            return response
+            completion(response)
         }
 
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.
-        webServer.registerHandlerForMethod(
-            "GET",
-            module: "reader-mode",
-            resource: "page"
-        ) { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
-            var response: GCDWebServerResponse?
-            let semaphore = DispatchSemaphore(value: 0)
-
-            ensureMainThread {
-                // Initialize ReaderModeStyle here to ensure it is initialized on the main thread.
-                let readerModeStyle = ReaderModeStyle.defaultStyle()
-                response = pageResponse(
-                    request: request,
-                    cache: ReaderModeHandlers.readerModeCache,
-                    baseStyle: readerModeStyle,
-                    profile: profile
-                )
-                semaphore.signal()
-            }
-
-            semaphore.wait()
-            return response
+        webServer.registerHandlerForMethod("GET",
+                                           module: "reader-mode",
+                                           resource: "page") { request, completion in
+            // Initialize ReaderModeStyle here to ensure it is initialized on the main thread.
+            let readerModeStyle = ReaderModeStyle.defaultStyle()
+            let response = pageResponse(
+                request: request,
+                cache: ReaderModeHandlers.readerModeCache,
+                baseStyle: readerModeStyle,
+                profile: profile
+            )
+            completion(response)
         }
     }
 
@@ -102,7 +76,7 @@ struct ReaderModeRegisterer {
 
     @MainActor
     private static func pageResponse(
-        request: sending GCDWebServerRequest?,
+        request: GCDWebServerRequest?,
         cache: ReaderModeCache,
         baseStyle: ReaderModeStyle,
         profile: Profile
