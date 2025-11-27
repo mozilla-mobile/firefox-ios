@@ -401,7 +401,7 @@ class TabsTests: BaseTestCase {
         newTabsScreen.assertLargeAndCrossIconsExist()
         // Open New Tab
         newTabsScreen.tapOnPlusIconScreen()
-        navigator.performAction(Action.CloseURLBarOpen)
+        browserScreen.tapCancelButtonOnUrlWithRetry()
 
         toolBarScreen.assertTabsButtonExists()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
@@ -428,7 +428,8 @@ class TabsTests: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.pressTabsButton(duration: 1)
         newTabsScreen.tapNewPrivateTab()
-        browserScreen.tapCancelButtonOnUrlBarExist()
+        // browserScreen.tapCancelButtonOnUrlBarExist()
+        browserScreen.tapCancelButtonOnUrlWithRetry()
         toolBarScreen.assertTabsButtonExists()
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
