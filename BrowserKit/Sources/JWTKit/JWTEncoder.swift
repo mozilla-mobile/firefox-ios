@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
+import Shared
 
 /// Encodes a payload into a JSON Web Token (JWT).
 ///
@@ -41,7 +43,7 @@ public final class JWTEncoder {
         let encodedHeader = Bytes.base64urlSafeEncodeData(headerData)
         let encodedPayload = Bytes.base64urlSafeEncodeData(payloadData)
 
-        let signingInput = "\(headerPart).\(payloadPart)"
+        let signingInput = "\(encodedHeader).\(encodedPayload)"
         let signature = try algorithm.sign(message: signingInput)
         return "\(signingInput).\(signature)"
     }

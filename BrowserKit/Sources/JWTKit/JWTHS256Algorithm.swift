@@ -4,11 +4,12 @@
 
 import Foundation
 import CryptoKit
+import Common
 
 /// A JWT algorithm strategy implementing HMAC-SHA256 (`HS256`).
 ///
 /// This is a symmetric signing algorithm: the same shared secret is used for both signing and verifying tokens.
-public struct HS256AlgorithmStrategy: JWTAlgorithmStrategy {
+public struct JWTHS256Algorithm: JWTAlgorithmStrategy {
     /// The shared secret key used for HMAC-SHA256 signing.
     private let secret: String
 
