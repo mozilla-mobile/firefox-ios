@@ -2492,7 +2492,7 @@ class BrowserViewController: UIViewController,
         tab.url = url
 
         if tab === tabManager.selectedTab {
-            updateUIForReaderHomeStateForTab(tab)
+            updateUIForReaderHomeStateForTab(tab, shouldShowLockIcon: true)
         }
         // Catch history pushState navigation, but ONLY for same origin navigation,
         // for reasons above about URL spoofing risk.
@@ -2555,8 +2555,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Update UI
 
-    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false) {
-        updateURLBarDisplayURL(tab)
+    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false, shouldShowLockIcon: Bool = false) {
+        updateURLBarDisplayURL(tab, shouldShowLockIcon)
         scrollController.showToolbars(animated: false)
 
         if let url = tab.url {
@@ -2590,7 +2590,7 @@ class BrowserViewController: UIViewController,
 
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
-    func updateURLBarDisplayURL(_ tab: Tab, _ navigationFinished: Bool = false) {
+    func updateURLBarDisplayURL(_ tab: Tab, _ shouldShowLockIcon: Bool = false) {
         var safeListedURLImageName: String? {
             return (tab.contentBlocker?.status == .safelisted) ?
             StandardImageIdentifiers.Small.notificationDotFill : nil
@@ -2605,7 +2605,7 @@ class BrowserViewController: UIViewController,
                 StandardImageIdentifiers.Small.shieldSlashFillMulticolor
             lockIconNeedsTheming = hasSecureContent
             let isWebsiteMode = tab.url?.isReaderModeURL == false
-            lockIconImageName = isWebsiteMode && navigationFinished ? lockIconImageName : nil
+            lockIconImageName = isWebsiteMode && shouldShowLockIcon ? lockIconImageName : nil
         }
 
         let action = ToolbarAction(
@@ -3463,6 +3463,9 @@ class BrowserViewController: UIViewController,
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
+        if tab == tabManager.selectedTab {
+            updateURLBarDisplayURL(tab, true)
+        }
         if webViewStatus == .finishedNavigation {
             let isSelectedTab = (tab == tabManager.selectedTab)
             let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
