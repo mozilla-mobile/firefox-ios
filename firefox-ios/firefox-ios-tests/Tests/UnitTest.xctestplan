@@ -236,6 +236,13 @@
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "JWTKitTests",
+        "name" : "JWTKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "SiteImageViewTests",
         "name" : "SiteImageViewTests"
       }
