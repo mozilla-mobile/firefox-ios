@@ -40,11 +40,8 @@ func registerTabTrayNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         screenState.tap(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton],
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
-        if isTablet {
-            screenState.tap(app.navigationBars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
-        } else {
-            screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
-        }
+
+        screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
 
         var regularModeSelector: XCUIElement
         var privateModeSelector: XCUIElement
