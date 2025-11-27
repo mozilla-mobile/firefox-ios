@@ -88,7 +88,19 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
                 fields.version == Constants.translatorVersion
         }
 
-        return matchingRecord.flatMap { record in try? translatorsClient?.getAttachment(record: record) }
+        guard let record = matchingRecord else {
+            logger.log("No matching translator found", level: .warning, category: .translations)
+            return nil
+        }
+
+        logger.log(
+            "Translator record selected",
+            level: .info,
+            category: .translations,
+            extra: ["recordId": record.id]
+        )
+
+        return try? translatorsClient?.getAttachment(record: record)
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
@@ -237,6 +249,13 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             else {
                 continue
             }
+
+            logger.log(
+                "Model record selected",
+                level: .info,
+                category: .translations,
+                extra: ["recordId": "\(record.id)"]
+            )
 
             languageModelFiles[fields.fileType] = [
                 "record": [
