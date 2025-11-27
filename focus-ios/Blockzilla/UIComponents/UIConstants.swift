@@ -200,8 +200,10 @@ struct UIConstants {
         static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
         static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”).")
-        static let labelStudies = NSLocalizedString("Settings.toggleStudies", value: "Studies", comment: "Label for Studies toggle on the settings screen")
-        static let detailTextStudies = NSLocalizedString("Settings.detailTextStudies", value: "%@ may install and run studies from time to time.", comment: "Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”).")
+        static let labelStudies = NSLocalizedString("Settings.toggleStudies.v2", value: "Allow Feature Studies", comment: "Label for Studies toggle on the settings screen")
+        static let detailTextStudies = NSLocalizedString("Settings.detailTextStudies.v2", value: "%@ randomly selects users to test features, which improves quality for everyone.", comment: "Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar").")
+        static let labelRollouts = NSLocalizedString("Settings.toggleRollouts", value: "Allow Remote Improvements", comment: "Label for Rollouts toggle on the settings screen")
+        static let detailTextRollouts = NSLocalizedString("Settings.detailTextRollouts", value: "%@ will improve features, performance, and stability between updates. Changes rolled out remotely.", comment: "Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar").")
         static let labelCrashReports = NSLocalizedString(
             "Settings.toggleCrashReports",
             value: "Automatically Send Crash Reports",
