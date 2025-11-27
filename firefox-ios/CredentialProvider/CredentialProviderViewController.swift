@@ -10,10 +10,14 @@ import Shared
 import Storage
 
 protocol CredentialProviderViewProtocol: AnyObject {
+    @MainActor
     var extensionContext: ASCredentialProviderExtensionContext { get }
 
+    @MainActor
     func showWelcome()
+    @MainActor
     func showPasscodeRequirement()
+    @MainActor
     func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
 }
 
