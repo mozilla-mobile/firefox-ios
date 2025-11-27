@@ -13,9 +13,6 @@ protocol WebServerProtocol {
     func start() throws -> Bool
 }
 
-extension GCDWebServerRequest: @unchecked @retroactive Sendable {}
-extension GCDWebServerResponse: @unchecked @retroactive Sendable {}
-
 // FIXME: FXIOS-13989 Make truly thread safe
 final class WebServer: WebServerProtocol, @unchecked Sendable {
     private let logger: Logger
