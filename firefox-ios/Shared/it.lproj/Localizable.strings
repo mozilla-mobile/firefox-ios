@@ -521,7 +521,7 @@
 "Hotkeys.SelectLocationBar.DiscoveryTitle" = "Seleziona barra degli indirizzi";
 
 /* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.ShowNextTab.DiscoveryTitle" = "Visualizza nuova scheda";
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Mostra scheda successiva";
 
 /* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Visualizza scheda precedente";
@@ -1625,7 +1625,7 @@
 "Show Search Suggestions" = "Visualizza suggerimenti";
 
 /* Accessibility label for the tabs button in the (top) tab toolbar */
-"Show Tabs" = "Visualizza schede";
+"Show Tabs" = "Mostra schede";
 
 /* Show the on-boarding screen again from the settings */
 "Show Tour" = "Mostra schermate introduttive";
