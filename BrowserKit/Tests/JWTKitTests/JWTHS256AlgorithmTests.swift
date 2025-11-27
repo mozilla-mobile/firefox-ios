@@ -50,7 +50,7 @@ final class JWTHS256AlgorithmTests: XCTestCase {
             XCTAssertEqual(error as? JWTError, .invalidSignature, "expected signature to be invalid")
         }
     }
-    
+
     private func createSubject(secret: String) -> JWTHS256Algorithm {
         return JWTHS256Algorithm(secret: secret)
     }
