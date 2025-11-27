@@ -8,7 +8,8 @@ import Shared
 import UserNotifications
 import MozillaAppServices
 
-class NotificationService: UNNotificationServiceExtension {
+// FIXME: FXIOS-14295 Make NotificationService thread safe
+class NotificationService: UNNotificationServiceExtension, @unchecked Sendable {
     var display: SyncDataDisplay?
     var profile: BrowserProfile?
 
@@ -59,7 +60,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    func handleEncryptedPushMessage(userInfo: [AnyHashable: Any],
+    func handleEncryptedPushMessage(userInfo: sending [AnyHashable: Any],
                                     profile: BrowserProfile,
                                     completion: @escaping @Sendable (Result<PushMessage, PushMessageError>) -> Void
     ) {
