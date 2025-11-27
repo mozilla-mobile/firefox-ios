@@ -14,7 +14,7 @@ import DesignSystem
 
 final class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case defaultBrowser, general, privacy, usageData, crashReports, studies, dailyUsagePing, search, siri, integration, mozilla, secret
+        case defaultBrowser, general, privacy, usageData, crashReports, studies, rollouts, dailyUsagePing, search, siri, integration, mozilla, secret
 
         var headerText: String? {
             switch self {
@@ -23,6 +23,7 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
             case .usageData: return nil
             case .studies: return nil
+            case .rollouts: return nil
             case .search: return UIConstants.strings.settingsSearchTitle
             case .siri: return UIConstants.strings.siriShortcutsTitle
             case .integration: return UIConstants.strings.toggleSectionSafari
@@ -45,6 +46,7 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             }
 
             sections.append(contentsOf: [
+                .rollouts,
                 .dailyUsagePing,
                 .crashReports,
                 .search,
@@ -126,6 +128,8 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
         let blockFontsToggle = BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts)
         let studiesSubtitle = String(format: UIConstants.strings.detailTextStudies, AppInfo.productName)
         let studiesToggle = BlockerToggle(label: UIConstants.strings.labelStudies, setting: SettingsToggle.studies, subtitle: studiesSubtitle)
+        let rolloutsSubtitle = String(format: UIConstants.strings.detailTextRollouts, AppInfo.productName)
+        let rolloutsToggle = BlockerToggle(label: UIConstants.strings.labelRollouts, setting: SettingsToggle.rollouts, subtitle: rolloutsSubtitle)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
         let crashToggle = BlockerToggle(
@@ -155,6 +159,9 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
         }
         if let studiesIndex = getSectionIndex(Section.studies) {
             toggles[studiesIndex] = [0: studiesToggle]
+        }
+        if let rolloutsIndex = getSectionIndex(Section.rollouts) {
+            toggles[rolloutsIndex] = [0: rolloutsToggle]
         }
         if let dailyUsageIndex = getSectionIndex(.dailyUsagePing) {
             toggles[dailyUsageIndex] = [0: dailyUsageToggle]
@@ -342,6 +349,8 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .studies:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
+        case .rollouts:
+            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .search:
             if indexPath.row < 2 {
                 let searchCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "accessoryCell")
@@ -422,6 +431,7 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             return 2
         case .usageData: return 1
         case .studies: return 1
+        case .rollouts: return 1
         case .search: return 3
         case .siri: return 3
         case .integration: return 1
@@ -455,6 +465,7 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
                 (getSectionIndex(.usageData), #selector(tappedLearnMoreFooter)),
                 (getSectionIndex(.search), #selector(tappedLearnMoreSearchSuggestionsFooter)),
                 (getSectionIndex(.studies), #selector(tappedLearnMoreStudies)),
+                (getSectionIndex(.rollouts), #selector(tappedLearnMoreRollouts)),
                 (getSectionIndex(.crashReports), #selector(tappedLearnMoreCrashReports)),
                 (getSectionIndex(.dailyUsagePing), #selector(tappedLearnMoreDailyUsagePing))
             ]
@@ -581,6 +592,11 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     @objc
+    func tappedLearnMoreRollouts(gestureRecognizer: UIGestureRecognizer) {
+        tappedFooter(forSupportTopic: .rollouts)
+    }
+
+    @objc
     func tappedLearnMoreCrashReports() {
         tappedFooter(forSupportTopic: .mobileCrashReports)
     }
@@ -621,7 +637,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             sender.isEnabled = false
             sender.alpha = 0.5
             NimbusWrapper.shared.nimbus.experimentParticipation = false
-            NimbusWrapper.shared.nimbus.rolloutParticipation = false
             updateSetting(false, forToggle: .studies)
         }
 
@@ -659,10 +674,12 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             // Ensure 'studies' is disabled if 'sendAnonymousUsageData' is turned off, even when 'studies' is being enabled.
             if sendAnonymousUsageDataToggle?.isOn == true {
                 NimbusWrapper.shared.nimbus.experimentParticipation = sender.isOn
-                NimbusWrapper.shared.nimbus.rolloutParticipation = sender.isOn
             } else {
                 disableAndTurnOffStudiesToggle(sender)
             }
+        } else if toggle.setting == .rollouts {
+            // Rollouts have their own independent toggle
+            NimbusWrapper.shared.nimbus.rolloutParticipation = sender.isOn
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
         } else if toggle.setting == .dailyUsagePing {
