@@ -35,10 +35,7 @@ public struct JWTHS256Algorithm: JWTAlgorithmStrategy {
         }
 
         let key = SymmetricKey(data: Data(secret.utf8))
-        let mac = HMAC<SHA256>.authenticationCode(
-            for: Data(message.utf8),
-            using: key
-        )
+        let mac = HMAC<SHA256>.authenticationCode(for: Data(message.utf8), using: key)
         let expectedSigData = Data(mac)
         /// NOTE: The comparison below uses a normal Swift equality check, i.e. a
         /// non-constant-time comparison. This means:
@@ -48,7 +45,7 @@ public struct JWTHS256Algorithm: JWTAlgorithmStrategy {
         /// This behavior can theoretically leak timing information to an attacker
         /// who is able to precisely measure how long verification takes.
         ///
-        /// For this our use case, this is acceptable.
+        /// For our use case, this is acceptable.
         /// For a detailed explanation of timing attacks, see:
         ///
         /// https://paragonie.com/blog/2015/11/preventing-timing-attacks-on-string-comparison-with-double-hmac-strategy
