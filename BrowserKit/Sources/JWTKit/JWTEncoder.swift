@@ -19,17 +19,17 @@ import Shared
 /// ```
 public final class JWTEncoder {
     /// The algorithm strategy used to sign the token.
-    private let algorithm: JWTAlgorithmStrategy
+    private let algorithm: JWTAlgorithm
 
     /// Creates a new encoder with the given algorithm strategy.
-    public init(algorithm: JWTAlgorithmStrategy) {
+    public init(algorithm: JWTAlgorithm) {
         self.algorithm = algorithm
     }
 
     /// Encodes the given payload into a JWT string.
     public func encode(payload: [String: Any]) throws -> String {
         let header: [String: Any] = [
-            "alg": algorithm.algorithmName.rawValue,
+            "alg": algorithm.name,
             "typ": "JWT"
         ]
 
@@ -44,7 +44,8 @@ public final class JWTEncoder {
         let encodedPayload = Bytes.base64urlSafeEncodeData(payloadData)
 
         let signingInput = "\(encodedHeader).\(encodedPayload)"
-        let signature = try algorithm.sign(message: signingInput)
+        let strategy = algorithm.makeStrategy()
+        let signature = try strategy.sign(message: signingInput)
         return "\(signingInput).\(signature)"
     }
 }

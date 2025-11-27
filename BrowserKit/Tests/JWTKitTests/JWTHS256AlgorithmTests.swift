@@ -9,11 +9,6 @@ final class JWTHS256AlgorithmTests: XCTestCase {
     private static let mockSecret = "super-secret"
     private static let mockMessage = "header.payload"
 
-    func test_algorithmName_isHS256() {
-        let subject = createSubject(secret: Self.mockSecret)
-        XCTAssertEqual(subject.algorithmName, .hs256, "algorithm name must be \(JWTAlgorithmName.hs256)")
-    }
-
     func test_signAndVerify_roundTrip() throws {
         let subject = createSubject(secret: Self.mockSecret)
         let signature = try subject.sign(message: Self.mockMessage)

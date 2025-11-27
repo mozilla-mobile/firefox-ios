@@ -21,7 +21,7 @@ final class JWTEncoderTests: XCTestCase {
     ]
 
     func testEncodeWithHS256ProducesThreePartsAndValidHeaderAndPayload() throws {
-        let subject = createSubjectHS256(secret: Self.mockSecret)
+        let subject = createSubject(algorithm: .hs256(secret: Self.mockSecret))
 
         let token = try subject.encode(payload: Self.mockPayload)
         let parts = token.split(separator: ".")
@@ -39,7 +39,7 @@ final class JWTEncoderTests: XCTestCase {
             "Header must be valid JSON"
         )
 
-        XCTAssertEqual(headerJSON["alg"] as? String, JWTAlgorithmName.hs256.rawValue)
+        XCTAssertEqual(headerJSON["alg"] as? String, JWTAlgorithm.hs256(secret: "").name)
         XCTAssertEqual(headerJSON["typ"] as? String, "JWT")
 
         // Decode payload and inspect JSON
@@ -62,7 +62,7 @@ final class JWTEncoderTests: XCTestCase {
     }
 
     func testEncodeWithNoneAlgorithmProducesEmptySignature() throws {
-        let subject = createSubjectNone()
+        let subject = createSubject(algorithm: .none)
 
         let token = try subject.encode(payload: Self.mockPayload)
         let parts = token.split(separator: ".", omittingEmptySubsequences: false)
@@ -81,7 +81,7 @@ final class JWTEncoderTests: XCTestCase {
             "Header must be valid JSON"
         )
 
-        XCTAssertEqual(headerJSON["alg"] as? String, JWTAlgorithmName.none.rawValue)
+        XCTAssertEqual(headerJSON["alg"] as? String, JWTAlgorithm.none.name)
         XCTAssertEqual(headerJSON["typ"] as? String, "JWT")
 
         let payloadData = try XCTUnwrap(Bytes.base64urlSafeDecodedData(payloadPart), "Payload must be valid base64url")
@@ -96,20 +96,14 @@ final class JWTEncoderTests: XCTestCase {
     }
 
     func testEncodeThrowsOnInvalidJSONPayload() throws {
-        let subject = createSubjectHS256(secret: Self.mockSecret)
+        let subject = createSubject(algorithm: .hs256(secret: Self.mockSecret))
 
         XCTAssertThrowsError(try subject.encode(payload: Self.invalidPayload)) { error in
             XCTAssertEqual(error as? JWTError, .jsonEncoding)
         }
     }
 
-    private func createSubjectHS256(secret: String) -> JWTEncoder {
-        let subject = JWTEncoder(algorithm: JWTHS256Algorithm(secret: secret))
-        return subject
-    }
-
-    private func createSubjectNone() -> JWTEncoder {
-        let subject = JWTEncoder(algorithm: JWTNoneAlgorithm())
-        return subject
+    private func createSubject(algorithm: JWTAlgorithm) -> JWTEncoder {
+        return JWTEncoder(algorithm: algorithm)
     }
 }

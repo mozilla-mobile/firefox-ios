@@ -17,7 +17,6 @@ public struct JWTHS256Algorithm: JWTAlgorithmStrategy {
         self.secret = secret
     }
 
-    public var algorithmName: JWTAlgorithmName { .hs256 }
 
     /// Computes a Base64URL-encoded HMAC-SHA256 signature for a string.
     public func sign(message: String) throws -> String {
