@@ -50,7 +50,7 @@ struct TopSitesProvider: TimelineProvider {
         }
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<TopSitesEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @Sendable @escaping (Timeline<TopSitesEntry>) -> Void) {
         getSnapshot(in: context, completion: { topSitesEntry in
             let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
             completion(timeline)
