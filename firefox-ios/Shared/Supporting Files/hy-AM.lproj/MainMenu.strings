@@ -65,7 +65,7 @@
 "MainMenu.HeaderBanner.Subtitle.v142" = "Վայրկյաններ է տևում։ Կարող եք փոխել ցանկացած պահի։";
 
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
-"MainMenu.HeaderBanner.Title.v142" = "Դարձրեք %@-ը ձեր սկզբնադիրը";
+"MainMenu.HeaderBanner.Title.v142" = "Դարձրեք Ձեր սկզբնադիրը %@";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "Անջ.";
