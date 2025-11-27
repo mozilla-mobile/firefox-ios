@@ -60,7 +60,7 @@ final class WebServer: WebServerProtocol, @unchecked Sendable {
         _ method: String,
         module: String,
         resource: String,
-        handler: @escaping (_ request: GCDWebServerRequest?) -> GCDWebServerResponse?
+        handler: @escaping @Sendable (_ request: GCDWebServerRequest?) -> GCDWebServerResponse?
     ) {
         // Prevent serving content if the requested host isn't a safelisted local host.
         let wrappedHandler = {(request: GCDWebServerRequest?) -> GCDWebServerResponse? in
