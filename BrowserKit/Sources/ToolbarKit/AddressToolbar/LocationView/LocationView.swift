@@ -461,10 +461,13 @@ final class LocationView: UIView,
     }
 
     private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+        // We want to make sure the effect is removed before applying a new one.
+        effectView.effect = nil
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
         if #available(iOS 26.0, *) {
-            effectView.effect = scrollAlpha.isZero && barPosition == .bottom && !isKeyboardVisible ? glassEffect : nil
+            let shouldSetGlassEffect = scrollAlpha.isZero && barPosition == .bottom && !isKeyboardVisible
+            effectView.effect = shouldSetGlassEffect ? glassEffect : nil
         }
         if scrollAlpha.isZero {
             shrinkLocationView(barPosition: barPosition, isKeyboardVisible: isKeyboardVisible)
