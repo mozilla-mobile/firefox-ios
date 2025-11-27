@@ -40,6 +40,7 @@ public final class AppConstants {
     public static let prefSendCrashReports = "settings.sendCrashReports"
     public static let prefSendDailyUsagePing = "settings.sendDailyUsagePing"
     public static let prefStudiesToggle = "settings.studiesToggle"
+    public static let prefRolloutsToggle = "settings.rolloutsToggle"
 
     /// Build Channel.
     public static let buildChannel: AppBuildChannel = {
