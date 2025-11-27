@@ -37,7 +37,7 @@ final class LegacyTabScrollController: NSObject,
     }
 
     private var isMinimalAddressBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildAndUser)
+        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
     }
 
     enum ScrollDirection {
@@ -167,12 +167,8 @@ final class LegacyTabScrollController: NSObject,
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
         let topInset = safeAreaInsets?.top ?? .zero
-        let containerHeightAdjusted: CGFloat = if #available(iOS 26.0, *) {
-            .zero
-        } else {
-            hasHomeIndicator ? .zero : containerHeight - topInset
-        }
-        return containerHeightAdjusted
+
+        return hasHomeIndicator ? .zero : containerHeight - topInset
     }
 
     private var overKeyboardScrollHeight: CGFloat {
@@ -589,7 +585,7 @@ private extension LegacyTabScrollController {
     /// - Parameter delta: The amount by which to scroll, where a positive delta scrolls down and
     ///   a negative delta scrolls up.
     func scrollWithDelta(_ delta: CGFloat) {
-        guard isMinimalAddressBarEnabled, hasScrollableContent else { return }
+        guard hasScrollableContent else { return }
 
         let updatedOffset = headerTopOffset - delta
         headerTopOffset = clamp(offset: updatedOffset, min: headerOffset, max: 0)
