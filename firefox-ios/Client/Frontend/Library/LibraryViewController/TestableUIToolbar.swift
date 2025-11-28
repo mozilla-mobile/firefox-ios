@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 import UIKit
 import Common
 
@@ -43,7 +47,6 @@ import Common
 ///
 /// TODO(FXIOS-xxx): add test that fails if `UIToolbar` starts exposing its customViews again.
 final class TestableUIToolbar: UIView {
-
     private let realToolbar: UIToolbar?
     private let contentView: UIView
     private var storedItems: [UIBarButtonItem]?
@@ -79,12 +82,17 @@ final class TestableUIToolbar: UIView {
         }
     }
 
+    // UIKit declares `tintColor` as an implicitly-unwrapped optional (`UIColor!`).
+    // To override it, we must use the exact same type signature. 
+    // This is why we disable and enable the swiftlint rule.
+    // swiftlint:disable implicitly_unwrapped_optional
     override var tintColor: UIColor! {
         didSet {
             realToolbar?.tintColor = tintColor
             contentView.tintColor = tintColor
         }
     }
+    // swiftlint:enable implicitly_unwrapped_optional
 
     var barTintColor: UIColor? {
         get { realToolbar?.barTintColor }
@@ -124,7 +132,7 @@ final class TestableUIToolbar: UIView {
             contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
-        
+
         if AppConstants.isRunningUITests {
             let heightConstraint = heightAnchor.constraint(equalToConstant: fallbackToolbarHeight)
             heightConstraint.priority = UILayoutPriority(999)
