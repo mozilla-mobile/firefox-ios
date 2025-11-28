@@ -130,9 +130,7 @@ class TestSQLitePinnedSites: XCTestCase {
             done
         )
 
-        waitForExpectations(timeout: 3) { error in
-            return
-        }
+        wait(for: [expectation], timeout: 3)
     }
 
     func testPinnedTopSitesDuplicateDomains() {
@@ -202,9 +200,7 @@ class TestSQLitePinnedSites: XCTestCase {
             done
         )
 
-        waitForExpectations(timeout: 3) { error in
-            return
-        }
+        wait(for: [expectation], timeout: 3)
     }
 
     func testPinnedTopSites_idOfMaxSizeInt64() {
@@ -270,8 +266,6 @@ class TestSQLitePinnedSites: XCTestCase {
             done
         )
 
-        waitForExpectations(timeout: 3) { error in
-            return
-        }
+        wait(for: [expectation], timeout: 3)
     }
 }
