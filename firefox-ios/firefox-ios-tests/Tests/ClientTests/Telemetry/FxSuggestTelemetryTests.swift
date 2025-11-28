@@ -12,15 +12,16 @@ final class FxSuggestTelemetryTests: XCTestCase {
     private var gleanWrapper: MockGleanWrapper!
 
     @MainActor
-    override func setUp() {
-        super.setUp()
-        setupTelemetry(with: MockProfile())
+    override func setUp() async throws {
+        try await super.setUp()
+
+        Self.setupTelemetry(with: MockProfile())
         TelemetryContextualIdentifier.clearUserDefaults()
         gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
-        tearDownTelemetry()
+        Self.tearDownTelemetry()
         TelemetryContextualIdentifier.clearUserDefaults()
         gleanWrapper = nil
         super.tearDown()
