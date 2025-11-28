@@ -28,19 +28,14 @@ public final class JWTEncoder {
 
     /// Encodes the given payload into a JWT string.
     public func encode(payload: [String: Any]) throws -> String {
-        let header: [String: Any] = [
-            "alg": algorithm.name,
-            "typ": "JWT"
-        ]
+        let header = JWTHeader(algorithm: algorithm)
 
-        guard JSONSerialization.isValidJSONObject(header),
+        guard let encodedHeader = try? header.encoded(),
               JSONSerialization.isValidJSONObject(payload),
-              let headerData = try? JSONSerialization.data(withJSONObject: header, options: []),
               let payloadData = try? JSONSerialization.data(withJSONObject: payload, options: []) else {
             throw JWTError.jsonEncoding
         }
 
-        let encodedHeader = Bytes.base64urlSafeEncodeData(headerData)
         let encodedPayload = Bytes.base64urlSafeEncodeData(payloadData)
 
         let signingInput = "\(encodedHeader).\(encodedPayload)"
