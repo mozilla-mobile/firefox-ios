@@ -113,14 +113,14 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// A card is not viable without buttons.
     private func getOnboardingCardButtons(
         from cardButtons: NimbusOnboardingButtons
-    ) -> OnboardingButtons {
-        return OnboardingButtons(
-            primary: OnboardingButtonInfoModel(
+    ) -> OnboardingKit.OnboardingButtons<OnboardingActions> {
+        return OnboardingKit.OnboardingButtons(
+            primary: OnboardingKit.OnboardingButtonInfoModel(
                 title: String(format: cardButtons.primary.title,
                               AppName.shortName.rawValue),
                 action: cardButtons.primary.action),
             secondary: cardButtons.secondary.map {
-                OnboardingButtonInfoModel(title: $0.title, action: $0.action)
+                OnboardingKit.OnboardingButtonInfoModel(title: $0.title, action: $0.action)
             })
     }
 

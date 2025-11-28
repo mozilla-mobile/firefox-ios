@@ -13,7 +13,7 @@ protocol OnboardingCardInfoModelProtocol {
     var body: String { get set }
     var instructionsPopup: OnboardingInstructionsPopupInfoModel? { get set }
     var link: OnboardingKit.OnboardingLinkInfoModel? { get set }
-    var buttons: OnboardingButtons { get set }
+    var buttons: OnboardingKit.OnboardingButtons<OnboardingActions> { get set }
     var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel] { get set }
     var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
@@ -28,7 +28,7 @@ protocol OnboardingCardInfoModelProtocol {
         title: String,
         body: String,
         link: OnboardingKit.OnboardingLinkInfoModel?,
-        buttons: OnboardingButtons,
+        buttons: OnboardingKit.OnboardingButtons<OnboardingActions>,
         multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
