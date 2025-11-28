@@ -40,9 +40,8 @@ class LibraryViewController: UIViewController, Themeable {
         librarySegmentControl.selectedSegmentIndex = 1
     }
 
-    private lazy var segmentControlToolbar: UIToolbar = .build { [weak self] toolbar in
-        guard let self = self else { return }
-        toolbar.delegate = self
+    private lazy var segmentControlContainer: UIView = .build { view in
+        view.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private lazy var topLeftButton: UIBarButtonItem =  {
@@ -112,16 +111,18 @@ class LibraryViewController: UIViewController, Themeable {
         newSegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
         newSegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+
+        librarySegmentControl.removeFromSuperview()
         librarySegmentControl = newSegmentControl
 
-        let newItem = UIBarButtonItem(customView: newSegmentControl)
-
-        librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
-        segmentControlToolbar.setItems([newItem], animated: false)
+        segmentControlContainer.addSubview(librarySegmentControl)
 
         NSLayoutConstraint.activate([
+            librarySegmentControl.centerXAnchor.constraint(equalTo: segmentControlContainer.centerXAnchor),
+            librarySegmentControl.topAnchor.constraint(equalTo: segmentControlContainer.topAnchor, constant: 8),
+            librarySegmentControl.bottomAnchor.constraint(equalTo: segmentControlContainer.bottomAnchor, constant: -8),
             librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
-            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
+            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height)
         ])
     }
 
@@ -133,17 +134,21 @@ class LibraryViewController: UIViewController, Themeable {
 
     private func viewSetup() {
         navigationItem.rightBarButtonItem = topRightButton
-        view.addSubviews(controllerContainerView, segmentControlToolbar)
+        view.addSubviews(segmentControlContainer, controllerContainerView)
+        segmentControlContainer.addSubview(librarySegmentControl)
 
         NSLayoutConstraint.activate([
-            segmentControlToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            segmentControlToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            segmentControlToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            segmentControlContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            segmentControlContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            segmentControlContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
+            librarySegmentControl.centerXAnchor.constraint(equalTo: segmentControlContainer.centerXAnchor),
+            librarySegmentControl.topAnchor.constraint(equalTo: segmentControlContainer.topAnchor, constant: 8),
+            librarySegmentControl.bottomAnchor.constraint(equalTo: segmentControlContainer.bottomAnchor, constant: -8),
             librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
 
-            controllerContainerView.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
+            controllerContainerView.topAnchor.constraint(equalTo: segmentControlContainer.bottomAnchor),
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -257,7 +262,7 @@ class LibraryViewController: UIViewController, Themeable {
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
-        view.bringSubviewToFront(segmentControlToolbar)
+        view.bringSubviewToFront(segmentControlContainer)
         libraryPanel.endAppearanceTransition()
 
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
@@ -419,9 +424,8 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.backgroundColor = theme.colors.layer1
         navigationController?.toolbar.barTintColor = theme.colors.layer1
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
-        segmentControlToolbar.barTintColor = theme.colors.layer1
-        segmentControlToolbar.tintColor = theme.colors.textPrimary
-        segmentControlToolbar.isTranslucent = false
+        segmentControlContainer.backgroundColor = theme.colors.layer1
+        segmentControlContainer.tintColor = theme.colors.textPrimary
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
@@ -430,9 +434,12 @@ class LibraryViewController: UIViewController, Themeable {
     func setNavigationBarHidden(_ value: Bool) {
         navigationController?.setToolbarHidden(value, animated: true)
         navigationController?.setNavigationBarHidden(value, animated: false)
-        let controlbarHeight = segmentControlToolbar.frame.height
-        segmentControlToolbar.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
-        controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
+
+        let controlbarHeight = segmentControlContainer.frame.height
+        let transform = CGAffineTransform(translationX: 0.0, y: -controlbarHeight)
+
+        segmentControlContainer.transform = value ? transform : .identity
+        controllerContainerView.transform = value ? transform : .identity
 
         // Reload the current panel
         guard let index = viewModel.selectedPanel?.rawValue,

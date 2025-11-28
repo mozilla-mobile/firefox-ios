@@ -64,6 +64,15 @@ class HistoryTests: BaseTestCase {
         historyScreen = HistoryScreen(app: app)
     }
 
+    func testDummyHistoryToReadingList() {
+        app.launch()
+        waitForTabsButton()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_History)
+        print(app.debugDescription)
+        navigator.goto(LibraryPanel_ReadingList)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307300
     func testEmptyHistoryListFirstTime() {
         navigator.nowAt(NewTabScreen)
