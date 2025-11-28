@@ -428,7 +428,6 @@ class TabsTests: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.pressTabsButton(duration: 1)
         newTabsScreen.tapNewPrivateTab()
-        // browserScreen.tapCancelButtonOnUrlBarExist()
         browserScreen.tapCancelButtonOnUrlWithRetry()
         toolBarScreen.assertTabsButtonExists()
         navigator.nowAt(NewTabScreen)

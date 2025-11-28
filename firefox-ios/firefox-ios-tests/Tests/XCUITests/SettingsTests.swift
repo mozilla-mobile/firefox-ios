@@ -153,6 +153,35 @@ class SettingsTests: FeatureFlaggedTestBase {
         checkShowImages(showImages: true)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307058
+    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
+    // SmokeTest TAE
+    func testImageOnOff_TAE() {
+        let settingsScreen = SettingScreen(app: app)
+        // Select no images or hide images, check it's hidden or not
+        app.launch()
+        waitUntilPageLoad()
+
+        // Select hide images under Browsing Settings page
+
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        settingsScreen.openBrowsingSettings()
+        settingsScreen.waitForBrowsingLinksSection()
+
+        _ = settingsScreen.waitForBlockImagesSwitch()
+        app.swipeUp()
+        navigator.performAction(Action.ToggleNoImageMode)
+        settingsScreen.assertShowImagesState(showImages: false)
+
+        // Select show images
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        settingsScreen.waitForBrowsingLinksSection()
+        navigator.performAction(Action.ToggleNoImageMode)
+        settingsScreen.assertShowImagesState(showImages: true)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2951435
     // Smoketest
     func testSettingsOptionSubtitles() {

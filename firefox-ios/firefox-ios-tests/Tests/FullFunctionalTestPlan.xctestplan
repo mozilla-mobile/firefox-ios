@@ -282,6 +282,7 @@
         "SearchTests\/testSearchStartAfterTypingTwoWords()",
         "SearchTests\/testSearchStartAfterTypingTwoWords_TAE()",
         "SettingsTests\/testImageOnOff()",
+        "SettingsTests\/testImageOnOff_TAE()",
         "SettingsTests\/testImageOnOff_tabTrayExperimentOff()",
         "SettingsTests\/testImageOnOff_tabTrayExperimentOn()",
         "SettingsTests\/testSettingsOptionSubtitles()",
