@@ -57,8 +57,6 @@ class DownloadsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306897
     func testDownloadFileContextMenu() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(testURL)
         waitUntilPageLoad()
         // Verify that the context menu prior to download a file is correct
@@ -218,8 +216,6 @@ class DownloadsTests: BaseTestCase {
      }
 
     private func downloadFile(fileName: String, numberOfDownloads: Int) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(testURL)
         waitUntilPageLoad()
         app.webViews.firstMatch.swipeLeft()
@@ -235,8 +231,6 @@ class DownloadsTests: BaseTestCase {
     }
 
     private func downloadBLOBFile() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(testBLOBURL)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Download Text"])

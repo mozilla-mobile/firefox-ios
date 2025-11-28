@@ -42,6 +42,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
     }
 
+    @MainActor
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         and uuid: WindowUUID,
@@ -53,6 +54,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
     // MARK: - Main Menu
 
+    @MainActor
     private func getMainMenuElements(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo,
@@ -211,6 +213,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // Site Section
+    @MainActor
     private func getSiteSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo, isExpanded: Bool) -> MenuSection {
         var options: [MenuElement] = [
             configureBookmarkPageItem(with: uuid, and: tabInfo),

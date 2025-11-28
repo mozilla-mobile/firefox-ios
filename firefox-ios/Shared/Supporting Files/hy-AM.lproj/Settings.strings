@@ -47,7 +47,7 @@
 "CreditCard.Settings.Yes.v122" = "Թարմացնել";
 
 /* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
-"CreditCards.Settings.Done.v114" = "Պատրաստ է";
+"CreditCards.Settings.Done.v114" = "Ավարտ";
 
 /* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
 "CreditCards.Settings.ManageCards.v112" = "Կառավարել պիտակները";
@@ -164,7 +164,7 @@
 "Settings.Notifications.Title.v112" = "Ծանուցումներ";
 
 /* This is the title informing the user that they need to turn on notifications in iOS Settings. %@ is the app name (e.g. Firefox). */
-"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Անցեք ձեր սարքի Կարգավորումներ՝ %@-ում ծանուցումները միացնելու համար";
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Գնացեք դեպի Ձեր սարքի կարգավորումներ՝ %@-ում ծանուցումները միացնելու համար";
 
 /* This is the title informing the user that they need to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Միացնել ծանուցումները";

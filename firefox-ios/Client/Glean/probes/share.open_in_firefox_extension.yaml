@@ -1,0 +1,55 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Share
+  - OpenInFirefoxActionExtension
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+
+share.open_in_firefox_extension:
+  url_shared:
+    type: event
+    description: |
+      Recorded when the user shares a URL from the "Open in Firefox" Action Extension.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - OpenInFirefoxActionExtension
+  text_shared:
+    type: event
+    description: |
+      Recorded when the user shares text from the "Open in Firefox" Action Extension.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - OpenInFirefoxActionExtension

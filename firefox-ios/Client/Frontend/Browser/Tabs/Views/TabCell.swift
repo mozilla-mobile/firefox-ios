@@ -29,10 +29,6 @@ final class TabCell: UICollectionViewCell,
                                                                   leading: 12,
                                                                   bottom: 12,
                                                                   trailing: 12)
-
-        // Using the same sizes for fallback favicon as the top sites on the homepage
-        static let imageBackgroundSize = TopSiteItemCell.UX.imageBackgroundSize
-        static let topSiteIconSize = TopSiteItemCell.UX.iconSize
     }
     // MARK: - Properties
 
@@ -54,10 +50,10 @@ final class TabCell: UICollectionViewCell,
     }
 
     private lazy var faviconBG: UIView = .build { view in
-        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
-        view.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        view.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        view.layer.cornerRadius = HomepageUX.generalCornerRadius
+        view.layer.borderWidth = HomepageUX.generalBorderWidth
+        view.layer.shadowOffset = HomepageUX.shadowOffset
+        view.layer.shadowRadius = HomepageUX.shadowRadius
         view.isHidden = true
     }
 
@@ -288,11 +284,11 @@ final class TabCell: UICollectionViewCell,
 
             faviconBG.centerYAnchor.constraint(equalTo: backgroundHolder.centerYAnchor, constant: UX.faviconYOffset),
             faviconBG.centerXAnchor.constraint(equalTo: backgroundHolder.centerXAnchor),
-            faviconBG.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
-            faviconBG.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
+            faviconBG.heightAnchor.constraint(equalToConstant: HomepageUX.imageBackgroundSize.height),
+            faviconBG.widthAnchor.constraint(equalToConstant: HomepageUX.imageBackgroundSize.width),
 
-            smallFaviconView.heightAnchor.constraint(equalToConstant: UX.topSiteIconSize.height),
-            smallFaviconView.widthAnchor.constraint(equalToConstant: UX.topSiteIconSize.width),
+            smallFaviconView.heightAnchor.constraint(equalToConstant: HomepageUX.topSiteIconSize.height),
+            smallFaviconView.widthAnchor.constraint(equalToConstant: HomepageUX.topSiteIconSize.width),
             smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
             smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
         ])

@@ -15,7 +15,7 @@ class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeAppli
         static let buttonBottomOffset: CGFloat = 24
     }
     // MARK: - Properties
-    var buttonClosure: (() -> Void)?
+    var buttonClosure: (@MainActor () -> Void)?
 
     // MARK: - UI Elements
     private lazy var roundedButton: PrimaryRoundedButton = .build { button in

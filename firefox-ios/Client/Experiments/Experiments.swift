@@ -99,7 +99,7 @@ enum Experiments {
     static var dbPath: String? {
         let profilePath: String?
         if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
-            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
+            profilePath = UITestAppDelegate.dirForTestProfile
         } else if AppConstants.isRunningUnitTest {
             let dir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             profilePath = dir.path
@@ -170,7 +170,7 @@ enum Experiments {
     }()
 
     private static func getAppSettings(isFirstRun: Bool) -> NimbusAppSettings {
-        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+        let isPhone = UIDeviceDetails.userInterfaceIdiom == .phone
 
         let customTargetingAttributes: [String: Any] = [
             "isFirstRun": "\(isFirstRun)",
@@ -250,8 +250,10 @@ enum Experiments {
             cannotUseAppleIntelligence: cannotUseAppleIntelligence()
         )
 
+        let profile: Profile = AppContainer.shared.resolve()
+        let remoteSettingsService = profile.remoteSettingsService
+
         return NimbusBuilder(dbPath: dbPath)
-            .with(url: remoteSettingsURL)
             .using(previewCollection: usePreviewCollection())
             .with(errorReporter: errorReporter)
             .with(initialExperiments: initialExperiments)
@@ -260,7 +262,31 @@ enum Experiments {
             .with(featureManifest: FxNimbus.shared)
             .with(commandLineArgs: CommandLine.arguments)
             .with(recordedContext: nimbusRecordedContext)
-            .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
+            .onCreate(callback: { _ in
+                    DefaultLogger.shared.log(
+                        "Nimbus is ready",
+                        level: .info,
+                        category: .experiments
+                    )
+            })
+            .onApply(callback: { _ in
+                    DefaultLogger.shared.log(
+                        "Nimbus enrollment and experiments application complete",
+                        level: .info,
+                        category: .experiments
+                    )
+            })
+            .onFetch(callback: { _ in
+                DefaultLogger.shared.log(
+                    "Nimbus fetch of new experiments has completed",
+                    level: .info,
+                    category: .experiments
+                )
+            })
+            .build(
+                appInfo: getAppSettings(isFirstRun: isFirstRun),
+                remoteSettingsService: remoteSettingsService
+            )
     }
 
     /// A convenience method to initialize the `NimbusApi` object at startup.
@@ -277,7 +303,7 @@ enum Experiments {
         // Getting the singleton first time initializes it.
         let nimbus = Experiments.shared
 
-        DefaultLogger.shared.log("Nimbus is ready!",
+        DefaultLogger.shared.log("Nimbus singleton initialized successfully",
                                  level: .info,
                                  category: .experiments)
 

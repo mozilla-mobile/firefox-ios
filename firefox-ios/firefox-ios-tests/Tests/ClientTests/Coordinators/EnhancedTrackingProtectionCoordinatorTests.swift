@@ -22,10 +22,10 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
-        self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.routeBuilder = RouteBuilder()
         self.tabManager = MockTabManager()
         self.glean = MockGleanWrapper()
@@ -33,7 +33,6 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.routeBuilder = nil
         self.mockRouter = nil
         self.profile = nil
@@ -41,6 +40,7 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
         self.glean = nil
         self.delegate = nil
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testParentCoordinatorDelegate_calledWithPage() {

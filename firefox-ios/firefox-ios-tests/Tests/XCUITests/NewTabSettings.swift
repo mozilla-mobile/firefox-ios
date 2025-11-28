@@ -59,9 +59,8 @@ class NewTabSettingsTest: BaseTestCase {
             let keyboardCount = app.keyboards.count
             XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
         }
-        // With swiping tabs on, the homepage is cached so it should be having those elements
-        mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        mozWaitForElementToExist(app.links.staticTexts["YouTube"])
+        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToNotExist(app.links.staticTexts["YouTube"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
@@ -69,7 +68,6 @@ class NewTabSettingsTest: BaseTestCase {
     func testChangeNewTabSettingsShowBlankPage_TAE() {
         topSiteScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
-
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -82,7 +80,7 @@ class NewTabSettingsTest: BaseTestCase {
         // For iPad the keyboard is shown
         browserScreen.assertKeyboardFocusState(isFocusedOniPad: true)
         // With swiping tabs on, the homepage is cached so it should be having those elements
-        topSiteScreen.assertYoutubeTopSitesExist()
+        topSiteScreen.assertYoutubeTopSitesNotExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
@@ -94,7 +92,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         // homepage has to be still there since it is cached when swiping tabs is on
-        mozWaitForElementToExist(
+        mozWaitForElementToNotExist(
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
 

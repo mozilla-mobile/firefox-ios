@@ -1181,6 +1181,10 @@ extension BrowserViewController: WKNavigationDelegate {
                     }
                 }
             }
+
+            if tabManager.selectedTab === tab {
+                updateURLBarDisplayURL(tab, true)
+            }
         }
     }
 }
@@ -1340,8 +1344,9 @@ private extension BrowserViewController {
                 return
             }
 
+            let credential = URLCredential(trust: trust)
             ensureMainThread {
-                completionHandler(.useCredential, URLCredential(trust: trust))
+                completionHandler(.useCredential, credential)
             }
         }
     }

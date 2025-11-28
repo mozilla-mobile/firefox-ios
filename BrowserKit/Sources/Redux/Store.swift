@@ -71,21 +71,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         }
     }
 
-    nonisolated public func dispatchLegacy(_ action: Action) {
-        logger.log("Legacy dispatched action: \(action.debugDescription)", level: .info, category: .redux)
-
-        guard Thread.isMainThread else {
-            Task { @MainActor in
-                dispatch(action)
-            }
-            return
-        }
-
-        MainActor.assumeIsolated {
-            dispatch(action)
-        }
-    }
-
     public func dispatch(_ action: Action) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)

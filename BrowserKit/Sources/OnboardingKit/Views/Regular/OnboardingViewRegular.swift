@@ -45,11 +45,18 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 Text(viewModel.skipText)
                     .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
             }
+            .padding(.top, UX.Onboarding.Spacing.standard)
             .padding(.trailing, UX.Onboarding.Spacing.standard)
             .skipButtonStyle(theme: theme)
             .accessibilityLabel(viewModel.skipText)
         }
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+        .onAppear {
+            viewModel.handlePageChange()
+        }
+        .onChange(of: viewModel.pageCount) { _ in
+            viewModel.handlePageChange()
+        }
     }
 
     private var tabView: some View {

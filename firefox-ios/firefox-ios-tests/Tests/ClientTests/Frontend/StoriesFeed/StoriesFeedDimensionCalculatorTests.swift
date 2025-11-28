@@ -27,7 +27,7 @@ final class StoriesFeedDimensionCalculatorTests: XCTestCase {
     func test_numberOfCellsThatFit_withIphone17Landscape_returnsExpectedCellCount() {
         let deviceSize = DeviceSize.iPhone17LandscapeSafeAreaWidth
         let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: deviceSize)
-        XCTAssertEqual(cellCount, 1)
+        XCTAssertEqual(cellCount, 2)
     }
 
     func test_numberOfCellsThatFit_withIphone17ProMaxPortrait_returnsExpectedCellCount() {
@@ -48,7 +48,7 @@ final class StoriesFeedDimensionCalculatorTests: XCTestCase {
         XCTAssertEqual(cellCount, 1)
     }
 
-    func test_numberOfCellsThatFit_witIhphoneSeLandscape_returnsExpectedCellCount() {
+    func test_numberOfCellsThatFit_withIphoneSeLandscape_returnsExpectedCellCount() {
         let deviceSize = DeviceSize.iPhoneSELandscapeWidth
         let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: deviceSize)
         XCTAssertEqual(cellCount, 1)
@@ -64,53 +64,5 @@ final class StoriesFeedDimensionCalculatorTests: XCTestCase {
         let deviceSize = DeviceSize.iPadPro13InLandscape
         let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: deviceSize)
         XCTAssertEqual(cellCount, 3)
-    }
-
-    func test_horizontalInset_withIphone17Portrait_returnsExpectedValue() {
-        let deviceSize = DeviceSize.iPhone17PortraitWidth
-        let horizontalInset = StoriesFeedDimensionCalculator.horizontalInset(for: deviceSize, cellCount: 1)
-        XCTAssertEqual(horizontalInset, 20.5)
-    }
-
-    func test_horizontalInset_withIphone17Landscape_returnsExpectedValue() {
-        let deviceSize = DeviceSize.iPhone17LandscapeSafeAreaWidth
-        let horizontalInset = StoriesFeedDimensionCalculator.horizontalInset(for: deviceSize, cellCount: 1)
-        XCTAssertEqual(horizontalInset, 194.5)
-    }
-
-    func test_horizontalInset_withIphone17ProMaxPortrait_returnsExpectedValue() {
-        let deviceSize = DeviceSize.iPhone17ProMaxPortraitWidth
-        let horizontalInset = StoriesFeedDimensionCalculator.horizontalInset(for: deviceSize, cellCount: 1)
-        XCTAssertEqual(horizontalInset, 39.5)
-    }
-
-    func test_horizontalInset_withIphone17ProMaxLandscape_returnsExpectedValue() {
-        let deviceSize = DeviceSize.iPhone17ProMaxLandscapeSafeAreaWidth
-        let horizontalInset = StoriesFeedDimensionCalculator.horizontalInset(for: deviceSize, cellCount: 2)
-        XCTAssertEqual(horizontalInset, 45)
-    }
-
-    func test_horizontalInset_withIphoneSePortrait_returnsExpectedValue() {
-        let deviceSize = DeviceSize.iPhoneSEPortraitWidth
-        let horizontalInset = StoriesFeedDimensionCalculator.horizontalInset(for: deviceSize, cellCount: 1)
-        XCTAssertEqual(horizontalInset, 16)
-    }
-
-    func test_horizontalInset_witIhphoneSeLandscape_returnsExpectedValue() {
-        let deviceSize = DeviceSize.iPhoneSELandscapeWidth
-        let horizontalInset = StoriesFeedDimensionCalculator.horizontalInset(for: deviceSize, cellCount: 1)
-        XCTAssertEqual(horizontalInset, 103.5)
-    }
-
-    func test_horizontalInset_withIpad13InPortrait_returnsExpectedValue() {
-        let deviceSize = DeviceSize.iPadPro13InPortrait
-        let horizontalInset = StoriesFeedDimensionCalculator.horizontalInset(for: deviceSize, cellCount: 2)
-        XCTAssertEqual(horizontalInset, 145)
-    }
-
-    func test_horizontalInset_withIpad13InLandscape_returnsExpectedValue() {
-        let deviceSize = DeviceSize.iPadPro13InLandscape
-        let horizontalInset = StoriesFeedDimensionCalculator.horizontalInset(for: deviceSize, cellCount: 3)
-        XCTAssertEqual(horizontalInset, 126.5)
     }
 }

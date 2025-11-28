@@ -7,8 +7,6 @@ import Foundation
 class PrintTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/3082504
     func testValidatePrintOption() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         openUrlAndValidatePrintOptions()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         openUrlAndValidatePrintOptions()

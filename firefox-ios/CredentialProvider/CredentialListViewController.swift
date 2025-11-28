@@ -7,7 +7,9 @@ import AuthenticationServices
 import Common
 
 protocol CredentialListViewProtocol: AnyObject {
+    @MainActor
     var credentialExtensionContext: ASCredentialProviderExtensionContext? { get }
+    @MainActor
     var searchIsActive: Bool { get }
 }
 

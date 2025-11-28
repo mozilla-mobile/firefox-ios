@@ -8,7 +8,7 @@ import Common
 
 import class MozillaAppServices.BookmarkItemData
 
-protocol CanRemoveQuickActionBookmark {
+protocol CanRemoveQuickActionBookmark: Sendable {
     @MainActor
     var bookmarksHandler: BookmarksHandler { get }
 

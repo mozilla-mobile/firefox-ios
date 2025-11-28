@@ -26,10 +26,10 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         super.setUp()
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
-        DependencyHelperMock().bootstrapDependencies()
+        tabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
 
         profile = MockProfile()
-        tabManager = MockTabManager()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
@@ -129,7 +129,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         testTab.url = URL(string: "internal://local/about/home")!
         let mockTabWebView = MockTabWebView(tab: testTab)
         testTab.webView = mockTabWebView
-        setupNimbusHomepageRebuildForTesting(isEnabled: true)
 
         let expectation = XCTestExpectation(description: "General browser action is dispatched")
         mockStore.dispatchCalled = {
@@ -185,6 +184,42 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 //        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
 //        XCTAssertEqual(action.readerModeState, .active)
 //    }
+
+    func testUpdateURLBarDisplayURL_whenNavigationNotFinished_shouldHideLockIcon() throws {
+        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: "https://google.com")
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.updateURLBarDisplayURL(tab, false)
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertEqual(action.lockIconImageName, nil)
+    }
+
+    func testUpdateURLBarDisplayURL_whenNavigationIsFinished_shouldShowLockIcon() throws {
+        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: "https://google.com")
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.updateURLBarDisplayURL(tab, true)
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertEqual(action.lockIconImageName, StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+    }
 
     // MARK: - Handle PDF
 
@@ -483,7 +518,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject() -> BrowserViewController {
+    private func createSubject(file: StaticString = #filePath, line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
                                             appStartupTelemetry: appStartupTelemetry,
@@ -492,19 +527,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
         subject.browserDelegate = browserCoordinator
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(enabled: isEnabled)
-        }
-    }
-
-    private func setupNimbusHomepageRebuildForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRebuildFeature.with { _, _ in
-            return HomepageRebuildFeature(enabled: isEnabled)
         }
     }
 

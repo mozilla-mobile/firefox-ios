@@ -427,7 +427,6 @@
         "TabsTests\/testOpenTabsViewCurrentTabThumbnail()",
         "TabsTests\/testSwitchBetweenTabs()",
         "TabsTests\/testTabTrayCloseMultipleTabs()",
-        "TabsTests\/testTabTrayContextMenuCloseTab()",
         "TabsTestsIpad",
         "TabsTestsIpad\/testUpdateTabCounter()",
         "TabsTestsIphone",

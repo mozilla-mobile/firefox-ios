@@ -4,6 +4,7 @@
 
 import Foundation
 
+// TODO: FXIOS-14268 - Clean up locale interfaces + extensions
 extension Locale {
     func possibilitiesForLanguageIdentifier() -> [String] {
         var possibilities: [String] = []

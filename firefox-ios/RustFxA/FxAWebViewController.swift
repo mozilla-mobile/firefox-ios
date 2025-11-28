@@ -264,9 +264,12 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
 
 // MARK: - Observe value
 extension FxAWebViewController {
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
-                               change: [NSKeyValueChangeKey: Any]?,
-                               context: UnsafeMutableRawPointer?) {
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
         ensureMainThread {
             guard let kp = keyPath,
                   let path = KVOConstants(rawValue: kp)

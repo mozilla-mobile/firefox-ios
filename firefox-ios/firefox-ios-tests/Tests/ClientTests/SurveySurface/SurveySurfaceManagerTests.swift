@@ -42,6 +42,7 @@ class SurveySurfaceManagerTests: XCTestCase {
         XCTAssertTrue(subject.shouldShowSurveySurface)
     }
 
+    @MainActor
     func testManager_surveySurfaceIsNotNil() {
         let manager = setupStandardConditions()
         XCTAssertTrue(manager.shouldShowSurveySurface)
@@ -50,6 +51,7 @@ class SurveySurfaceManagerTests: XCTestCase {
         XCTAssertNotNil(subject)
     }
 
+    @MainActor
     func testManager_surveySurfaceInfoIsExpected() {
         let manager = setupStandardConditions()
         XCTAssertTrue(manager.shouldShowSurveySurface)

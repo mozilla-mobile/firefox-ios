@@ -62,16 +62,16 @@
 "Addresses.EditAddress.AutofillAddressOrganization.v129" = "Organizzazione";
 
 /* Label for the parish field, significant in places where parishes are used for local administration and addressing. Ensures users can specify parish details for better autofill accuracy. */
-"Addresses.EditAddress.AutofillAddressParish.v129" = "Parish";
+"Addresses.EditAddress.AutofillAddressParish.v129" = "Parrocchia (parish)";
 
 /* Label for the PIN (Postal Index Number) field, used in India. It's a code representing a specific area, crucial for accurate mail delivery and autofill functionality. */
-"Addresses.EditAddress.AutofillAddressPin.v129" = "Pin";
+"Addresses.EditAddress.AutofillAddressPin.v129" = "Codice postale (PIN)";
 
 /* Label for the postal code field, universally used in address forms to specify the area code for mail sorting. Essential for autofill to ensure mail and services are accurately routed. */
 "Addresses.EditAddress.AutofillAddressPostalCode.v129" = "Codice postale";
 
 /* Label for the post town field, used primarily in the UK and some other regions for mail sorting. Essential for users in applicable areas to specify for correct mail delivery through autofill. */
-"Addresses.EditAddress.AutofillAddressPostTown.v129" = "Post town";
+"Addresses.EditAddress.AutofillAddressPostTown.v129" = "Località postale (post town)";
 
 /* Label for the prefecture field, essential for addresses in countries like Japan where prefectures are a major administrative division. Aids in precise location specification for autofill. */
 "Addresses.EditAddress.AutofillAddressPrefecture.v129" = "Prefettura";
@@ -83,13 +83,13 @@
 "Addresses.EditAddress.AutofillAddressState.v129" = "Stato";
 
 /* Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality. */
-"Addresses.EditAddress.AutofillAddressSuburb.v129" = "Suburb";
+"Addresses.EditAddress.AutofillAddressSuburb.v129" = "Sobborgo (suburb)";
 
 /* Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly. */
 "Addresses.EditAddress.AutofillAddressTel.v129" = "Telefono";
 
 /* Label for the input field for the townland, a specific type of land division used in rural areas. Enhances address detail for users in regions where townlands are a common addressing component. */
-"Addresses.EditAddress.AutofillAddressTownland.v129" = "Townland";
+"Addresses.EditAddress.AutofillAddressTownland.v129" = "Territorio (townland)";
 
 /* Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details. */
 "Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Villaggio o township";

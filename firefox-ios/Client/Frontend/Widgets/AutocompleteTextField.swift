@@ -427,6 +427,8 @@ class AutocompleteTextField: UITextField,
     }
 
     func menuHelperPasteAndGo() {
-        autocompleteDelegate?.autocompletePasteAndGo(self)
+        ensureMainThread {
+            self.autocompleteDelegate?.autocompletePasteAndGo(self)
+        }
     }
 }

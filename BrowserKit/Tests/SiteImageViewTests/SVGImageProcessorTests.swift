@@ -8,7 +8,7 @@ import SwiftDraw
 import Kingfisher
 import GCDWebServers
 
-class SVGImageProcessorTests: XCTestCase {
+class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
     func testDownloadingSVGImage_withKingfisherProcessor_forStandardSVGCase() async {
         let assetType: AssetType = .svgCase1
         let expectedRasterSize = CGSize(width: 360, height: 360)
@@ -211,6 +211,8 @@ extension SVGImageProcessorTests {
         throw MockImageServerError.noAssetData
     }
 
+    // GDCWebServer must be initialized for the first time on the main thread
+    // So this @MainActor ensures that if this test file is run alone it will not crash
     @MainActor
     func startMockImageServer(imageData: Data, forAssetType assetType: AssetType) throws -> URL {
         let webServer = GCDWebServer()

@@ -110,7 +110,8 @@ extension WKEngineWebView {
     ///   - completion: Tuple containing optional data and an optional error.
     func evaluateJavascriptInDefaultContentWorld(
         _ javascript: String,
-        _ frame: WKFrameInfo? = nil, _ completion: @escaping (Any?, Error?) -> Void
+        _ frame: WKFrameInfo? = nil,
+        _ completion: @escaping (Any?, Error?) -> Void
     ) {
         evaluateJavaScript(javascript, in: frame, in: .defaultClient) { result in
             switch result {

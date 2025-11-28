@@ -72,7 +72,7 @@ class SearchEngineSelectionViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        store.dispatchLegacy(
+        store.dispatch(
             SearchEngineSelectionAction(
                 windowUUID: self.windowUUID,
                 actionType: SearchEngineSelectionActionType.viewDidLoad
@@ -102,7 +102,7 @@ class SearchEngineSelectionViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatchLegacy(
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
@@ -181,7 +181,7 @@ class SearchEngineSelectionViewController: UIViewController,
     }
 
     func didTap(searchEngineModel: SearchEngineModel) {
-        store.dispatchLegacy(
+        store.dispatch(
             SearchEngineSelectionAction(
                 windowUUID: self.windowUUID,
                 actionType: SearchEngineSelectionActionType.didTapSearchEngine,

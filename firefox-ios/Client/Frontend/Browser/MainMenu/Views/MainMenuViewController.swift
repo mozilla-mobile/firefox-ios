@@ -298,12 +298,14 @@ class MainMenuViewController: UIViewController,
             menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
 
-        menuContent.setupDetails(title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
-                                 subtitle: .MainMenu.HeaderBanner.Subtitle,
-                                 image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
-                                 isBannerFlagEnabled: isMenuDefaultBrowserBanner,
-                                 isBrowserDefault: isBrowserDefault,
-                                 bannerShown: bannerShown)
+        menuContent.setupDetails(
+            title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
+            subtitle: .MainMenu.HeaderBanner.Subtitle,
+            image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
+            isBannerFlagEnabled: isMenuDefaultBrowserBanner,
+            isBrowserDefault: isBrowserDefault,
+            bannerShown: bannerShown
+        )
     }
 
     private func setupMenuOrientation() {
@@ -390,6 +392,7 @@ class MainMenuViewController: UIViewController,
         menuState = state
 
         isBrowserDefault = menuState.isBrowserDefault
+        menuContent.updateDefaultBrowserStatus(to: isBrowserDefault)
         isPhoneLandscape = menuState.isPhoneLandscape
 
         if let siteProtectionsData = menuState.siteProtectionsData {

@@ -11,7 +11,7 @@
 "Translations.Banner.Loading.Button.AccessibilityLabel.v145" = "Թարգմանել էջը";
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the chevron button that navigates the user to the translation settings page. */
-"Translations.Banner.OpenSettings.Button.AccessibilityLabel.v145" = "Բացել Սինքի կարգավորումները";
+"Translations.Banner.OpenSettings.Button.AccessibilityLabel.v145" = "Բացել լեզվի նախապատվությունները";
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error. */
 "Translations.Banner.RetryButton.v145" = "Կրկնել";

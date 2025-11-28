@@ -9,6 +9,7 @@ public protocol WKJavascriptPromptAlertControllerDelegate: AnyObject {
     func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController)
 }
 
+@MainActor
 public protocol WKJavaScriptPromptAlertController: UIViewController {
     var alertInfo: WKJavaScriptAlertInfo? { get }
     var delegate: WKJavascriptPromptAlertControllerDelegate? { get set }

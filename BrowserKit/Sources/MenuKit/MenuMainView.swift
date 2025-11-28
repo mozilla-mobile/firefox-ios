@@ -111,16 +111,22 @@ public final class MenuMainView: UIView, ThemeApplicable {
         siteProtectionHeader.accessibilityIdentifier = siteProtectionHeaderIdentifier
     }
 
-    public func setupDetails(title: String,
-                             subtitle: String,
-                             image: UIImage?,
-                             isBannerFlagEnabled: Bool,
-                             isBrowserDefault: Bool,
-                             bannerShown: Bool) {
+    public func setupDetails(
+        title: String,
+        subtitle: String,
+        image: UIImage?,
+        isBannerFlagEnabled: Bool,
+        isBrowserDefault: Bool,
+        bannerShown: Bool
+    ) {
         headerBanner.setupDetails(title: title, subtitle: subtitle, image: image)
         isMenuDefaultBrowserBanner = isBannerFlagEnabled
         self.isBrowserDefault = isBrowserDefault
         self.bannerShown = bannerShown
+    }
+
+    public func updateDefaultBrowserStatus(to newStatus: Bool) {
+        isBrowserDefault = newStatus
     }
 
     public func setupMenuMenuOrientation(isPhoneLandscape: Bool) {

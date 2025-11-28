@@ -38,7 +38,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
-    var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
 
@@ -127,30 +126,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - BrowserDelegate
 
-    func showLegacyHomepage(
-        inline: Bool,
-        toastContainer: UIView,
-        homepanelDelegate: HomePanelDelegate,
-        libraryPanelDelegate: LibraryPanelDelegate,
-        statusBarScrollDelegate: StatusBarScrollDelegate,
-        overlayManager: OverlayModeManager
-    ) {
-        let legacyHomepageViewController = getHomepage(
-            inline: inline,
-            toastContainer: toastContainer,
-            homepanelDelegate: homepanelDelegate,
-            libraryPanelDelegate: libraryPanelDelegate,
-            statusBarScrollDelegate: statusBarScrollDelegate,
-            overlayManager: overlayManager
-        )
-
-        guard browserViewController.embedContent(legacyHomepageViewController) else { return }
-        self.legacyHomepageViewController = legacyHomepageViewController
-        legacyHomepageViewController.scrollToTop()
-        // We currently don't support full page screenshot of the homepage
-        screenshotService.screenshotableView = nil
-    }
-
     func showHomepage(
         overlayManager: OverlayModeManager,
         isZeroSearch: Bool,
@@ -164,6 +139,7 @@ class BrowserCoordinator: BaseCoordinator,
             toastContainer: toastContainer
         )
         homepageController.termsOfUseDelegate = self
+        homepageController.view.accessibilityElementsHidden = false
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -184,13 +160,12 @@ class BrowserCoordinator: BaseCoordinator,
             if tabManager.selectedTab?.isPrivate == true {
                 return privateHomepageViewController
             }
-            return homepageViewController ?? legacyHomepageViewController
+            return homepageViewController
         }
     }
 
     func setHomepageVisibility(isVisible: Bool) {
-        let homepage = homepageViewController ?? legacyHomepageViewController
-        guard let homepage else { return }
+        guard let homepage = homepageViewController else { return }
         homepage.view.isHidden = !isVisible
     }
 
@@ -209,6 +184,7 @@ class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             overlayManager: overlayManager
         )
+        homepageViewController?.view.accessibilityElementsHidden = true
         privateHomepageController.parentCoordinator = self
         self.privateHomepageViewController = privateHomepageController
         guard browserViewController.embedContent(privateHomepageController) else {
@@ -289,6 +265,8 @@ class BrowserCoordinator: BaseCoordinator,
             router.popViewController(animated: false)
         }
 
+        homepageViewController?.view.accessibilityElementsHidden = true
+        UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         screenshotService.screenshotableView = webviewController
     }
 
@@ -303,32 +281,6 @@ class BrowserCoordinator: BaseCoordinator,
                            category: .coordinator)
                 findAndHandle(route: savedRoute)
             }
-        }
-    }
-
-    private func getHomepage(inline: Bool,
-                             toastContainer: UIView,
-                             homepanelDelegate: HomePanelDelegate,
-                             libraryPanelDelegate: LibraryPanelDelegate,
-                             statusBarScrollDelegate: StatusBarScrollDelegate,
-                             overlayManager: OverlayModeManager) -> LegacyHomepageViewController {
-        if let legacyHomepageViewController = legacyHomepageViewController {
-            legacyHomepageViewController.configure(isZeroSearch: inline)
-            return legacyHomepageViewController
-        } else {
-            let legacyHomepageViewController = LegacyHomepageViewController(
-                profile: profile,
-                isZeroSearch: inline,
-                toastContainer: toastContainer,
-                tabManager: tabManager,
-                overlayManager: overlayManager)
-            legacyHomepageViewController.homePanelDelegate = homepanelDelegate
-            legacyHomepageViewController.libraryPanelDelegate = libraryPanelDelegate
-            legacyHomepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
-            legacyHomepageViewController.browserNavigationHandler = self
-            legacyHomepageViewController.termsOfUseDelegate = self
-
-            return legacyHomepageViewController
         }
     }
 
@@ -781,7 +733,7 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
             if isEditing {
-                store.dispatchLegacy(
+                store.dispatch(
                     ToolbarAction(
                         shouldShowKeyboard: false,
                         windowUUID: windowUUID,
@@ -812,6 +764,7 @@ class BrowserCoordinator: BaseCoordinator,
             selectNewTab: selectNewTab
         )
     }
+
     func showShareSheet(
         shareType: ShareType,
         shareMessage: ShareMessage?,
@@ -1161,6 +1114,10 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(webviewViewController)
     }
 
+    func popToBVC() {
+        _ = router.popToViewController(browserViewController, reason: .deeplink)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {
@@ -1213,7 +1170,7 @@ class BrowserCoordinator: BaseCoordinator,
             return // route is handled with existing child coordinator
         }
 
-        let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
+        let presenter = homepageViewController ?? browserViewController
 
         let router = DefaultRouter(navigationController: presenter.navigationController ?? UINavigationController())
 
@@ -1298,9 +1255,6 @@ class BrowserCoordinator: BaseCoordinator,
             // Clean up views and ensure BVC for the window is freed
             browserViewController.view.endEditing(true)
             browserViewController.dismissUrlBar()
-            legacyHomepageViewController?.view.removeFromSuperview()
-            legacyHomepageViewController?.removeFromParent()
-            legacyHomepageViewController = nil
             browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
             browserViewController.removeFromParent()
         case .libraryOpened:

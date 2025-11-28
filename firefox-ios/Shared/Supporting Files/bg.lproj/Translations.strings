@@ -49,6 +49,9 @@
 /* This is the text on the secondary button used to indicate that page is being translated and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.LoadingButton.v145" = "Превеждаща страница";
 
+/* This is the accessibility label to announce that the page is translated and loading is completed. From a user perspective, they will see the translation icon go from loading state to active state, which means we received the a valid translation response from translating the page. */
+"Translations.Sheet.LoadingCompleted.AccessibilityLabel.v147" = "Страницата е преведена";
+
 /* This is the text on the secondary button used to restore the translated page to its original language and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.ShowOriginalButton.v145" = "Показване на оригинала";
 

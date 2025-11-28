@@ -4,17 +4,16 @@
 import Foundation
 
 protocol ConcurrencyThrottlerProtocol {
+    @MainActor
     func throttle(completion: @escaping @Sendable () async -> Void)
 }
 
-class ConcurrencyThrottler: ConcurrencyThrottlerProtocol {
+final class ConcurrencyThrottler: ConcurrencyThrottlerProtocol {
     private var lastUpdateTime = Date.distantPast
     private var delay: Double
     private var taskComplete = true
 
-    init(
-        seconds delay: Double = 0.35
-    ) {
+    init(seconds delay: Double = 0.35) {
         self.delay = delay
     }
 

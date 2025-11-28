@@ -5,20 +5,21 @@
 import XCTest
 @testable import SiteImageView
 
+@MainActor
 final class SiteImageHandlerTests: XCTestCase {
     private var urlHandler: MockFaviconURLHandler!
     private var imageHandler: MockImageHandler!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.urlHandler = MockFaviconURLHandler()
         self.imageHandler = MockImageHandler()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.urlHandler = nil
         self.imageHandler = nil
+        try await super.tearDown()
     }
 
     // MARK: - Favicon

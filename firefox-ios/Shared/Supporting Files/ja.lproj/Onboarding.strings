@@ -218,7 +218,7 @@
 "Onboarding.Modern.TermsOfService.Title.v145" = "インターネットを導く";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ 利用規約。";
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ 利用規約";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "デフォルトブラウザーに設定";

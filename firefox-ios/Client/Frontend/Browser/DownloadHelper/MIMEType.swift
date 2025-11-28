@@ -11,6 +11,7 @@ struct MIMEType {
     static let GIF = "image/gif"
     static let JavaScript = "text/javascript"
     static let JPEG = "image/jpeg"
+    static let JSON = "application/json"
     static let HTML = "text/html"
     static let OctetStream = "application/octet-stream"
     static let Passbook = "application/vnd.apple.pkpass"
@@ -23,6 +24,7 @@ struct MIMEType {
     static let Reality = "model/vnd.reality"
     static let OpenDocument = "application/msword"
     static let MicrosoftWord = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    static let WASM = "application/wasm"
 
     private static let webViewViewableTypes: [String] = [
         MIMEType.Bitmap,

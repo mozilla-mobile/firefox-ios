@@ -7,13 +7,17 @@ import Common
 
 protocol DownloadQueueDelegate: AnyObject {
     var windowUUID: WindowUUID { get }
+    @MainActor
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download)
+    @MainActor
     func downloadQueue(
         _ downloadQueue: DownloadQueue,
         didDownloadCombinedBytes combinedBytesDownloaded: Int64,
         combinedTotalBytesExpected: Int64?
     )
+    @MainActor
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL)
+    @MainActor
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?)
 }
 
@@ -52,6 +56,7 @@ class DownloadQueue: DownloadDelegate {
         delegates.removeAll(where: { $0.delegate === delegate || $0.delegate == nil })
     }
 
+    @MainActor
     func enqueue(_ download: Download) {
         // Clear the download stats if the queue was empty at the start.
         let uuid = download.originWindow
@@ -87,6 +92,7 @@ class DownloadQueue: DownloadDelegate {
         }
     }
 
+    @MainActor
     func resumeAll(for window: WindowUUID) {
         for download in downloads where !download.isComplete && download.originWindow == window {
             download.resume()

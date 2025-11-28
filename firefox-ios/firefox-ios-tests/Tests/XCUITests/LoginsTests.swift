@@ -136,8 +136,6 @@ class LoginTest: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         saveLogin(givenUrl: testLoginPage)
         // Make sure you can access populated Login List from Browser Tab Menu
         // issue 28625: iOS 15 may not open the menu fully.
@@ -591,6 +589,8 @@ class LoginTest: BaseTestCase {
             navigator.goto(TabTray)
         }
         navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.secureTextFields.firstMatch.waitAndTap()
@@ -635,6 +635,8 @@ class LoginTest: BaseTestCase {
             navigator.goto(TabTray)
         }
         navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         let passworField = app.secureTextFields.firstMatch

@@ -122,7 +122,7 @@
 "BreachAlerts.BreachDate" = "Această încălcare a securității datelor a avut loc la data de";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Parolele au fost divulgate sau furate de când ți-ai schimbat ultima dată parola. Pentru a proteja acest cont, autentifică-te pe site și schimbă-ți parola.";
+"BreachAlerts.Description" = "Parolele au fost divulgate sau furate de când ți-ai schimbat ultima dată parola. Pentru a proteja acest cont, intră în cont pe site și schimbă-ți parola.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Află mai multe";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "Filele tale de pe celelalte dispozitive apar aici.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Autentifică-te pentru a vedea o listă de file de pe celelalte dispozitive.";
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Intră în cont ca să vezi o listă de file de pe celelalte dispozitive.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -641,7 +641,7 @@
 "Loading content…" = "Se încarcă conținut…";
 
 /* Authentication prompt log in button */
-"Log in" = "Autentifică-te";
+"Log in" = "Intră în cont";
 
 /* Toggle logins syncing setting */
 "Logins" = "Autentificări";
@@ -1079,7 +1079,7 @@
 "SendTo.NoDevicesFound.Message" = "Nu mai ai niciun alt dispozitiv conectat la acest cont Firefox disponibil pentru sincronizare.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Te rugăm să deschizi Firefox, intră în Setări și autentifică-te pentru a continua.";
+"SendTo.NotSignedIn.Message" = "Te rugăm să deschizi Firefox, intră în Setări și intră în cont pentru a continua.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Nu ești autentificat(ă) în contul tău Firefox.";

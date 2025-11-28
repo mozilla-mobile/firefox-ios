@@ -92,20 +92,15 @@ public extension Nimbus {
         }
 
         let context = Nimbus.buildExperimentContext(appSettings)
-        let remoteSettings = server.map { server -> RemoteSettingsConfig in
-            RemoteSettingsConfig(
-                collectionName: server.collection,
-                server: .custom(url: server.url.absoluteString)
-            )
-        }
         let nimbusClient = try NimbusClient(
             appCtx: context,
             recordedContext: recordedContext,
             coenrollingFeatureIds: coenrollingFeatureIds,
             dbpath: dbPath,
-            remoteSettingsConfig: remoteSettings,
             metricsHandler: GleanMetricsHandler(),
-            geckoPrefHandler: nil
+            geckoPrefHandler: nil,
+            remoteSettingsService: server?.remoteSettingsService,
+            collectionName: server?.collection
         )
 
         return Nimbus(
@@ -164,7 +159,6 @@ public extension Nimbus {
             androidSdkVersion: nil,
             debugTag: "Nimbus.rs",
             installationDate: installationDateSinceEpoch,
-            homeDirectory: nil,
             customTargetingAttributes: try? appSettings.customTargetingAttributes.stringify()
         )
     }

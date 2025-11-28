@@ -5,12 +5,14 @@
 import Foundation
 @testable import Client
 
-final class MockTrendingSearchClient: TrendingSearchClientProvider, Sendable {
+final class MockTrendingSearchClient: TrendingSearchClientProvider, @unchecked Sendable {
     let result: Result<[String], Error>
+    var getTrendingSearchesCalledCount = 0
     init(result: Result<[String], Error> = .success([])) {
         self.result = result
     }
     func getTrendingSearches(for searchEngine: TrendingSearchEngine?) async throws -> [String] {
-        try result.get()
+        getTrendingSearchesCalledCount += 1
+        return try result.get()
     }
 }

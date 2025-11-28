@@ -21,8 +21,7 @@ final class ASSummarizerRemoteConfig: Sendable {
 
     init?(profile: Profile = AppContainer.shared.resolve()) {
         self.profile = profile
-        guard let service = profile.remoteSettingsService else { return nil }
-        self.service = service
+        self.service = profile.remoteSettingsService
         self.rsClient = ASRemoteSettingsCollection.summarizerModelsConfig.makeClient()
     }
 

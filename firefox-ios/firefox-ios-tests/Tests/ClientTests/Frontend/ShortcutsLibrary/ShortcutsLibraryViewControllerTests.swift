@@ -47,7 +47,7 @@ final class ShortcutsLibraryViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_viewDidDisappear_triggersShortcutsLibraryAction() throws {
+    func test_viewDidDisappear_whenRecordTelemetryOnDisappearIsTrue_triggersShortcutsLibraryAction() throws {
         let subject = createSubject()
 
         subject.viewDidDisappear(false)
@@ -58,6 +58,19 @@ final class ShortcutsLibraryViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? ShortcutsLibraryActionType)
         XCTAssertEqual(actionType, ShortcutsLibraryActionType.viewDidDisappear)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_viewDidDisappear_whenRecordTelemetryOnDisappearIsTrue_doesNotTriggerShortcutsLibraryAction() throws {
+        let subject = createSubject()
+
+        subject.willBeDismissed(reason: .deeplink)
+
+        subject.viewDidDisappear(false)
+
+        let dispatchedActions = mockStore.dispatchedActions
+            .compactMap { $0 as? ShortcutsLibraryAction }
+
+        XCTAssertTrue(dispatchedActions.isEmpty)
     }
 
     private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> ShortcutsLibraryViewController {

@@ -18,6 +18,7 @@ protocol BrowserSelectorsSet {
     var LINK_RFC_2606: Selector { get }
     var BOOK_OF_MOZILLA_TEXT: Selector { get }
     var ADDRESSTOOLBAR_LOCKICON: Selector { get }
+    var TOPTABS_COLLECTIONVIEW: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     var all: [Selector] { get }
@@ -35,6 +36,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let cancelButton = "Cancel"
         static let rfc = "RFC 2606"
         static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon
+        static let topTabsCollectionView = AccessibilityIdentifiers.Browser.TopTabs.collectionView
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -115,6 +117,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser"]
     )
 
+    let TOPTABS_COLLECTIONVIEW = Selector.collectionViewIdOrLabel(
+        IDs.topTabsCollectionView,
+        description: "Collection View of Top tabs",
+        groups: ["browser"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -134,6 +142,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
     var all: [Selector] { [ADDRESS_BAR, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
-                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON]
+                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, TOPTABS_COLLECTIONVIEW]
     }
 }

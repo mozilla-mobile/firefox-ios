@@ -10,6 +10,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class RatingPromptManagerTests: XCTestCase {
     var urlOpenerSpy: URLOpenerSpy!
     var prefs: MockProfilePrefs!

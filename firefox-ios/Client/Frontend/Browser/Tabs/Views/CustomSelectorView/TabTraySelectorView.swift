@@ -59,7 +59,7 @@ class TabTraySelectorView: UIView,
 
     private lazy var visualEffectView: UIVisualEffectView = .build { view in
 #if canImport(FoundationModels)
-        if #available(iOS 26, *), !DefaultBrowserUtil.isRunningLiquidGlassEarlyBeta {
+        if #available(iOS 26, *), !DefaultBrowserUtility.isRunningLiquidGlassEarlyBeta {
             view.effect = UIGlassEffect(style: .regular)
         } else {
             view.effect = UIBlurEffect(style: .systemUltraThinMaterial)

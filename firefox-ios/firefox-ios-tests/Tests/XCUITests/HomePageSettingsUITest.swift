@@ -106,14 +106,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             sleep(2)
         }
         let textField = app.textFields["HomeAsCustomURLTextField"]
-        textField.press(forDuration: 3)
         let pasteOption = app.menuItems["Paste"]
-        var nrOfTaps = 3
-        while !pasteOption.exists && nrOfTaps > 0 {
-            textField.press(forDuration: 3)
-            nrOfTaps -= 1
-        }
-        app.menuItems["Paste"].waitAndTap()
+        textField.pressWithRetry(duration: 2, element: pasteOption)
+        pasteOption.waitAndTap()
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         // Check that the webpage has been correctly copied into the correct field
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: websiteUrl1)
@@ -133,8 +128,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.tables.cells["HomeAsFirefoxHome"].isSelected, "Firefox Home is not selected by default")
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabScreen)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -271,18 +264,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                 app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             }
             mozWaitForElementToExist(app.staticTexts["Bookmarks"])
+            navigator.nowAt(NewTabScreen)
             navigator.performAction(Action.ToggleRecentlySaved)
-            if !iPad() {
-                navigator.performAction(Action.ClickSearchButton)
-                mozWaitForElementToNotExist(
-                    app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
-                )
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-                navigator.performAction(Action.CloseURLBarOpen)
-            } else {
-                navigator.nowAt(HomeSettings)
-                navigator.performAction(Action.OpenNewTabFromTabTray)
-            }
+            navigator.nowAt(HomeSettings)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
             navigator.nowAt(NewTabScreen)
             navigator.performAction(Action.ToggleRecentlySaved)
             navigator.nowAt(HomeSettings)
@@ -344,6 +329,32 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306871
+    // Smoketest TAE
+    func testCustomizeHomepage_TAE() {
+        let fxHomePageScreen = FirefoxHomePageScreen(app: app)
+        let homePageScreen = HomePageScreen(app: app)
+        let settingHomePageScreen = SettingsHomepageScreen(app: app)
+
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
+        app.launch()
+        homePageScreen.swipeToCustomizeHomeOption()
+        fxHomePageScreen.tapOnCustomizeHomePageOption(timeout: TIMEOUT)
+        // Verify default settings
+        settingHomePageScreen.assertDefaultOptionsVisible()
+        // Commented due to experimental features
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
+//            "1"
+//        )
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
+//            "1"
+//        )
+
+        settingHomePageScreen.assertStoriesSwitch(isOn: true)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
     func testShortcutsRows() {
         app.launch()
@@ -382,8 +393,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     private func addWebsitesToShortcut(website: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(website)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)

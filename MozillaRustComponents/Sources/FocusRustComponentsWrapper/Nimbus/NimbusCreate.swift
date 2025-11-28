@@ -85,7 +85,9 @@ public extension Nimbus {
         enabled: Bool = true,
         userDefaults: UserDefaults? = nil,
         errorReporter: @escaping NimbusErrorReporter = defaultErrorReporter,
-        recordedContext: RecordedContext? = nil
+        recordedContext: RecordedContext? = nil,
+        remoteSettingsService: RemoteSettingsService? = nil,
+        collectionName: String? = nil
     ) throws -> NimbusInterface {
         guard enabled else {
             return NimbusDisabled.shared
@@ -103,9 +105,10 @@ public extension Nimbus {
             recordedContext: recordedContext,
             coenrollingFeatureIds: coenrollingFeatureIds,
             dbpath: dbPath,
-            remoteSettingsConfig: remoteSettings,
             metricsHandler: GleanMetricsHandler(),
-            geckoPrefHandler: nil
+            geckoPrefHandler: nil,
+            remoteSettingsService: remoteSettingsService,
+            collectionName: collectionName
         )
 
         return Nimbus(
@@ -148,7 +151,6 @@ public extension Nimbus {
             androidSdkVersion: nil,
             debugTag: "Nimbus.rs",
             installationDate: installationDateSinceEpoch,
-            homeDirectory: nil,
             customTargetingAttributes: try? appSettings.customTargetingAttributes.stringify()
         )
     }

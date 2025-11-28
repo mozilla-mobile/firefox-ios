@@ -127,15 +127,21 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
-        let shouldHideSections = featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly)
-                              && featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+        let shouldHideSections = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+        let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
 
         if let profile, !shouldHideSections {
+            let bookmarksAndJBIDefaultValue = !isStoriesRedesignV2Enabled
+            let isBookmarksSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection)
+                                                ?? bookmarksAndJBIDefaultValue
+            let isJumpBackInSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.JumpBackInSection)
+                                                ?? bookmarksAndJBIDefaultValue
+
             let jumpBackInSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
-                defaultValue: true,
+                defaultValue: isJumpBackInSectionPrefEnabled,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatch(
@@ -152,7 +158,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: true,
+                defaultValue: isBookmarksSectionPrefEnabled,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatch(

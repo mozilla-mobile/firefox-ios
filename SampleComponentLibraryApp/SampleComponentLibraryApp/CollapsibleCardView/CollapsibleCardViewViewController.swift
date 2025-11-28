@@ -17,6 +17,7 @@ class CollapsibleCardViewViewController: UIViewController, Themeable {
     """
 
     var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
@@ -36,7 +37,7 @@ class CollapsibleCardViewViewController: UIViewController, Themeable {
         super.viewDidLoad()
         setupView()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         contentView.contentLabel.text = loremIpsum

@@ -16,3 +16,6 @@
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
 "Send to Device" = "기기로 보내기";
 
+/* Label for preview action on Tab Tray Tab to remove current tab from Bookmarks */
+"TabPeek.RemoveBookmark.v146" = "북마크 삭제";
+

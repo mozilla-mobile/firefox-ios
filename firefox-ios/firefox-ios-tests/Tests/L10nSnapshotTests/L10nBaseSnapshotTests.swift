@@ -149,4 +149,18 @@ extension XCUIElement {
         self.tap()
         self.typeText(text)
     }
+
+    func pressWithRetry(duration: TimeInterval, timeout: TimeInterval = TIMEOUT, element: XCUIElement) {
+        L10nBaseSnapshotTests().mozWaitForElementToExist(self, timeout: timeout)
+        self.press(forDuration: duration)
+        var attempts = 5
+        while !element.exists && attempts > 0 {
+            self.press(forDuration: duration)
+            attempts -= 1
+        }
+
+        if !element.exists {
+            XCTFail("\(element) is not visible after \(attempts) attempts")
+        }
+    }
 }

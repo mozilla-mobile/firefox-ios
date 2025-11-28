@@ -13,6 +13,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
     case appearanceMenu
+    case appIconSelection
     case bottomSearchBar
     case deeplinkOptimizationRefactor
     case defaultZoomFeature
@@ -22,12 +23,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
-    case hntTopSitesVisualRefresh
-    case homepageRebuild
     case homepageRedesign
     case homepageSearchBar
     case homepageShortcutsLibrary
     case homepageStoriesRedesign
+    case homepageStoriesRedesignV2
+    case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
     case inactiveTabs
@@ -42,8 +43,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case recentSearches
     case reportSiteIssue
     case relayIntegration
-    case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
+    case sentFromFirefox
+    case sentFromFirefoxTreatmentA
     case splashScreen
     case startAtHome
     case appleSummarizer
@@ -77,18 +79,19 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appearanceMenu,
+                .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
-                .hntTopSitesVisualRefresh,
-                .homepageRebuild,
                 .homepageStoriesRedesign,
+                .homepageStoriesRedesignV2,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .homepageScrim,
                 .hostedSummarizer,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -99,6 +102,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .recentSearches,
                 .searchEngineConsolidation,
                 .tabScrollRefactorFeature,
+                .sentFromFirefox,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .touFeature,
@@ -140,10 +144,13 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SponsoredShortcuts
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
+        case .sentFromFirefox:
+            return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
+                .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
@@ -152,12 +159,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
-                .hntTopSitesVisualRefresh,
-                .homepageRebuild,
                 .homepageRedesign,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageStoriesRedesign,
+                .homepageStoriesRedesignV2,
+                .homepageScrim,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
                 .shouldUseJapanConfiguration,
@@ -170,8 +177,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .noInternetConnectionErrorPage,
                 .recentSearches,
                 .reportSiteIssue,
-                .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
+                .sentFromFirefoxTreatmentA,
                 .splashScreen,
                 .appleSummarizer,
                 .appleSummarizerToolbarEntrypoint,

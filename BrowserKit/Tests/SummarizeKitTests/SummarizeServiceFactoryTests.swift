@@ -35,8 +35,12 @@ final class SummarizeServiceFactoryTests: XCTestCase {
         serviceLifecycle = nil
         super.tearDown()
     }
+
     #if canImport(FoundationModels)
     func test_make_whenAppleIntelligenceAvailable() throws {
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only test on earlier OS versions")
+        }
         let subject = createSubject()
 
         let result = subject.make(isAppleSummarizerEnabled: true, isHostedSummarizerEnabled: false, config: nil)

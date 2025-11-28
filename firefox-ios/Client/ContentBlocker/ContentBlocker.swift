@@ -242,10 +242,15 @@ class ContentBlocker {
 // no longer match. Finally, any JSON rule files that aren't in the ruleStore need to be compiled and stored in the
 // ruleStore.
 extension ContentBlocker {
-    private func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
+    private func loadJsonFromBundle(
+        forResource file: String,
+        completion: @escaping @Sendable (
+            _ jsonString: String
+        ) -> Void
+    ) {
         let logger = self.logger
         DispatchQueue.global().async {
-            var source = ""
+            let source: String
             do {
                 let jsonSuffix = ".json"
                 let suffixLength = jsonSuffix.count
@@ -255,12 +260,15 @@ extension ContentBlocker {
                 if fileTrimmed.hasPrefix(BlocklistFileName.customBlocklistJSONFilePrefix) {
                     if let path = Bundle.main.path(forResource: fileTrimmed, ofType: "json") {
                         source = try String(contentsOfFile: path, encoding: .utf8)
+                    } else {
+                        source = ""
                     }
                 } else {
                     let json = try RemoteDataType.contentBlockingLists.loadLocalSettingsFileAsJSON(fileName: fileTrimmed)
                     source = String(data: json, encoding: .utf8) ?? ""
                 }
             } catch let error {
+                source = ""
                 logger.log("Error loading content-blocking JSON: \(error)", level: .warning, category: .adblock)
                 assertionFailure("Error loading JSON from bundle.")
             }
@@ -379,22 +387,24 @@ extension ContentBlocker {
 
                 self?.logger.log("Will compile list: \(filename)", level: .info, category: .adblock)
                 self?.loadJsonFromBundle(forResource: filename) { jsonString in
-                    var str = jsonString
+                    ensureMainThread {
+                        var str = jsonString
 
-                    // Here we find the closing array bracket in the JSON string
-                    // and append our safelist as a rule to the end of the JSON.
-                    guard let self, let range = str.range(of: "]", options: String.CompareOptions.backwards) else {
-                        dispatchGroup.leave()
-                        return
-                    }
-                    str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
-                    self.ruleStore?.compileContentRuleList(
-                        forIdentifier: filename,
-                        encodedContentRuleList: str
-                    ) { rule, error in
-                        listsCompiledCount += 1
-                        errorCount += (error == nil ? 0 : 1)
-                        self.compileContentRuleListCompletion(dispatchGroup: dispatchGroup, rule: rule, error: error)
+                        // Here we find the closing array bracket in the JSON string
+                        // and append our safelist as a rule to the end of the JSON.
+                        guard let self, let range = str.range(of: "]", options: String.CompareOptions.backwards) else {
+                            dispatchGroup.leave()
+                            return
+                        }
+                        str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
+                        self.ruleStore?.compileContentRuleList(
+                            forIdentifier: filename,
+                            encodedContentRuleList: str
+                        ) { rule, error in
+                            listsCompiledCount += 1
+                            errorCount += (error == nil ? 0 : 1)
+                            self.compileContentRuleListCompletion(dispatchGroup: dispatchGroup, rule: rule, error: error)
+                        }
                     }
                 }
             }

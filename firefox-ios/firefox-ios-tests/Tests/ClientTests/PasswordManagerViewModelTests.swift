@@ -10,6 +10,7 @@ import Glean
 
 @testable import Client
 
+@MainActor
 class PasswordManagerViewModelTests: XCTestCase {
     var viewModel: PasswordManagerViewModel!
     var dataSource: LoginDataSource!

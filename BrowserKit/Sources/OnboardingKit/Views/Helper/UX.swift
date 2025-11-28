@@ -41,6 +41,7 @@ enum UX {
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150
+        static let maxImageHeight: CGFloat = 250
         static let tosImageHeight: CGFloat = 70
         static let cornerRadius: CGFloat = 20
         static let secondaryButtonBottomPadding: CGFloat = 24

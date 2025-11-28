@@ -248,7 +248,7 @@
 "Don’t Send" = "Չուղարկել";
 
 /* Done button on left side of the Settings view controller title bar */
-"Done" = "Պատրաստ է";
+"Done" = "Ավարտ";
 
 /* Panel accessibility label */
 "Downloads" = "Ներբեռնումներ";
@@ -338,7 +338,7 @@
 "FirefoxHome.Pocket.DiscoverMore" = "Բացահայտեք ավելին";
 
 /* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
-"FirefoxHome.Pocket.Minutes.v99" = "%d րոպե";
+"FirefoxHome.Pocket.Minutes.v99" = "%d րոպ";
 
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle" = "Մտահանգման պատմություններով";
@@ -404,7 +404,7 @@
 "FxA.SyncNow" = "Համաժամեցնել";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox֊ի համաժամեցումը միացվել է %@-ին";
+"FxAPush_DeviceConnected_body" = "Firefox Sync-ը միացավ %@-ին";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Համաժամեցումը միացվեց";
@@ -1256,7 +1256,7 @@
 "Settings.FxA.DeviceName" = "Սարքի անունը";
 
 /* Label used as a section title in the Firefox Accounts Settings screen. */
-"Settings.FxA.Sync.SectionName" = "Սինքի կարգավորումներ";
+"Settings.FxA.Sync.SectionName" = "Հ․-ժամեցման կարգավորումներ";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title" = "Firefox հաշիվ";
