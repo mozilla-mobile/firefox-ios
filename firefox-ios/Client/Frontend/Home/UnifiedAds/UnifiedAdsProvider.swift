@@ -4,7 +4,9 @@
 
 import Common
 import Foundation
+import MozillaAppServices
 import Shared
+import Storage
 
 typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
 
@@ -15,19 +17,20 @@ protocol UnifiedAdsProviderInterface: Sendable {
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
     ///   - completion: Returns an array of Tiles, can be empty
-    func fetchTiles(timestamp: Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void)
+    func fetchTiles(timestamp: Shared.Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void)
 }
 
 extension UnifiedAdsProviderInterface {
-    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
+    func fetchTiles(timestamp: Shared.Timestamp = Date.now(), completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
         fetchTiles(timestamp: timestamp, completion: completion)
     }
 }
 
 final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable, Sendable {
+    private let adsClient: MozAdsClientProtocol
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
-    let maxCacheAge: Timestamp = OneMinuteInMilliseconds * 30
+    let maxCacheAge: Shared.Timestamp = OneMinuteInMilliseconds * 30
     let urlCache: URLCache
     private let logger: Logger
     private let networking: ContileNetworking
@@ -42,10 +45,12 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     init(
+        adsClient: MozAdsClientProtocol = RustAdsClient.shared,
         networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {
+        self.adsClient = adsClient
         self.logger = logger
         self.networking = networking
         self.urlCache = urlCache
@@ -61,8 +66,11 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         let placements: [AdPlacement]
     }
 
-    func fetchTiles(timestamp: Timestamp = Date.now(),
+    func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
                     completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
+                        if featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly) {
+            fetchTilesWithAdsClient(completion: completion)
+        } else {
         guard let request = buildRequest() else {
             completion(.failure(Error.noDataAvailable))
             return
@@ -75,6 +83,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             decode(data: cachedData, completion: completion)
         } else {
             fetchTiles(request: request, completion: completion)
+        }
         }
     }
 
@@ -131,6 +140,25 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             case .failure:
                 completion(.failure(Error.noDataAvailable))
             }
+        }
+    }
+
+    private func fetchTilesWithAdsClient(completion: @escaping (UnifiedTileResult) -> Void) {
+        self.logger.log("Fetching tiles with ads client", level: .info, category: .homepage)
+        let mozAdRequests = [
+            MozAdsPlacementRequest(placementId: TileOrder.position1.rawValue, iabContent: nil),
+            MozAdsPlacementRequest(placementId: TileOrder.position2.rawValue, iabContent: nil)
+        ]
+        do {
+            let mozAdsImages = try self.adsClient.requestImageAds(mozAdRequests: mozAdRequests, options: nil)
+            let unifiedTiles: [UnifiedTile] = mozAdsImages.map { name, mozAdsImage in
+                UnifiedTile.from(name: name, mozAdsImage: mozAdsImage)
+            }
+            self.logger.log("Ads client request successful", level: .info, category: .homepage)
+            completion(.success(unifiedTiles))
+        } catch let error {
+            self.logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
+            completion(.failure(Error.noDataAvailable))
         }
     }
 
