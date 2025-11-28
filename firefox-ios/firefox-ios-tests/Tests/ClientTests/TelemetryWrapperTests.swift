@@ -15,15 +15,15 @@ class TelemetryWrapperTests: XCTestCase {
     var profile: Profile!
 
     @MainActor
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         Experiments.events.clearEvents()
-        setupTelemetry(with: profile)
+        Self.setupTelemetry(with: profile)
     }
 
     override func tearDown() {
-        tearDownTelemetry()
+        Self.tearDownTelemetry()
         Experiments.events.clearEvents()
         profile = nil
         super.tearDown()

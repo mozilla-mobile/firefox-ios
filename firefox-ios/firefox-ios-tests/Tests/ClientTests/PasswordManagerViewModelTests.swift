@@ -17,10 +17,11 @@ class PasswordManagerViewModelTests: XCTestCase {
     var mockDelegate: MockLoginViewModelDelegate!
     var mockLoginProvider: MockLoginProvider!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         let mockProfile = MockProfile()
+        Self.setupTelemetry(with: mockProfile)
         self.mockLoginProvider = MockLoginProvider()
         let searchController = UISearchController()
         self.viewModel = PasswordManagerViewModel(
@@ -34,17 +35,16 @@ class PasswordManagerViewModelTests: XCTestCase {
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
     }
 
-    override func tearDown() {
-        tearDownTelemetry()
+    override func tearDown() async throws {
+        Self.tearDownTelemetry()
         viewModel = nil
         mockLoginProvider = nil
         mockDelegate = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     @MainActor
-    func testAddLoginWithEmptyString() {
-        setupTelemetry(with: MockProfile())
+    func testAddLoginWithEmptyString() async {
         let login = LoginEntry(fromJSONDict: [
                         "hostname": "https://example.com",
                         "formSubmitUrl": "https://example.com",
@@ -56,13 +56,12 @@ class PasswordManagerViewModelTests: XCTestCase {
             XCTAssertEqual(self.mockLoginProvider.addLoginCalledCount, 1)
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 1)
+        await fulfillment(of: [expectation], timeout: 1)
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Logins.saved)
     }
 
     @MainActor
-    func testaddLoginWithString() {
-        setupTelemetry(with: MockProfile())
+    func testAddLoginWithString() async {
         let login = LoginEntry(fromJSONDict: [
                         "hostname": "https://example.com",
                         "formSubmitUrl": "https://example.com",
@@ -74,7 +73,7 @@ class PasswordManagerViewModelTests: XCTestCase {
             XCTAssertEqual(self.mockLoginProvider.addLoginCalledCount, 1)
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 1)
+        await fulfillment(of: [expectation], timeout: 1)
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Logins.saved)
     }
 

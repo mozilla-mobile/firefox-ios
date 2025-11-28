@@ -46,7 +46,7 @@ extension XCTestCase {
     /// This should not be called in new code:
     /// - We should us GleanWrapper or mock objects instead of concrete type testing for Glean
     @MainActor
-    func setupTelemetry(with profile: Profile) {
+    static func setupTelemetry(with profile: Profile) {
         TelemetryWrapper.hasTelemetryOverride = true
 
         DependencyHelperMock().bootstrapDependencies()
@@ -60,7 +60,7 @@ extension XCTestCase {
     }
 
     /// Helper function to ensure Glean telemetry is properly teardown for unit tests
-    func tearDownTelemetry() {
+    static func tearDownTelemetry() {
         TelemetryWrapper.hasTelemetryOverride = false
         DependencyHelperMock().reset()
     }
