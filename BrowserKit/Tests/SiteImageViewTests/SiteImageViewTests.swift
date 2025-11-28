@@ -33,6 +33,7 @@ final class SiteImageViewTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    @MainActor
     func testHeroImageSetup() {
         let expectation = expectation(description: "Completed image setup")
         let url = "https://www.firefox.com"
