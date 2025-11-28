@@ -4,32 +4,6 @@
 
 import Foundation
 
-precedencegroup MonadicDoPrecedence {
-    associativity: left
-    higherThan: MultiplicationPrecedence
-}
-
-infix operator >>> : MonadicDoPrecedence
-// Monadic `do` for Deferred.
-@discardableResult
-public func >>> <T, U>(x: Deferred<Maybe<T>>, f: @escaping @Sendable () -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
-    return x.bind { res in
-        if res.isSuccess {
-            return f()
-        }
-        return deferMaybe(res.failureValue!)
-    }
-}
-
-// Another termination case.
-public func >>> <T>(x: Deferred<Maybe<T>>, f: @escaping @Sendable () -> Void) {
-    return x.upon { res in
-        if res.isSuccess {
-            f()
-        }
-    }
-}
-
 public func deferMaybe<T>(_ s: T) -> Deferred<Maybe<T>> {
     return Deferred(value: Maybe(success: s))
 }
