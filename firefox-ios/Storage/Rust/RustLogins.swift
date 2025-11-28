@@ -534,14 +534,22 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
 
     public func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void) {
+        var results: [Result<Bool?, Error>] = []
+        let syncQueue = DispatchQueue(label: "delete logins queue")
+        let group = DispatchGroup()
+
         for id in ids {
+            group.enter()
             deleteLogin(id: id) { result in
-                var results: [Result<Bool?, Error>] = []
-                results.append(result)
-                if results.count == ids.count {
-                    completionHandler(results)
+                syncQueue.async {
+                    results.append(result)
+                    group.leave()
                 }
             }
+        }
+
+        group.notify(queue: .main) {
+            completionHandler(results)
         }
     }
 
