@@ -5,20 +5,23 @@
 import Foundation
 import Shared
 
-public final class ReadingListStorageError: MaybeErrorType {
+public struct ReadingListStorageError: MaybeErrorType, Sendable {
     let message: String
-    public init(_ message: String) {
+
+    public init(message: String) {
         self.message = message
     }
+
     public var description: String {
         return message
     }
 }
 
-public final class SQLiteReadingList: Sendable {
-    let db: BrowserDB
+public struct SQLiteReadingList: Sendable {
+    private let db: BrowserDB
+    private let notificationCenter: NotificationCenter
 
-    let allColumns = [
+    private let allColumns = [
         "client_id",
         "client_last_modified",
         "id",
@@ -30,10 +33,11 @@ public final class SQLiteReadingList: Sendable {
         "favorite",
         "unread"
     ].joined(separator: ",")
-    let notificationCenter: NotificationCenter
 
-    public required init(db: BrowserDB,
-                         notificationCenter: NotificationCenter = NotificationCenter.default) {
+    public init(
+        db: BrowserDB,
+        notificationCenter: NotificationCenter = NotificationCenter.default
+    ) {
         self.db = db
         self.notificationCenter = notificationCenter
     }
@@ -83,7 +87,7 @@ extension SQLiteReadingList: ReadingList {
             try connection.executeChange(insertSQL, withArgs: insertArgs)
 
             if connection.lastInsertedRowID == lastInsertedRowID {
-                throw ReadingListStorageError("Unable to insert ReadingListItem")
+                throw ReadingListStorageError(message: "Unable to insert ReadingListItem")
             }
 
             let querySQL = "SELECT \(self.allColumns) FROM items WHERE client_id = ? LIMIT 1"
@@ -100,7 +104,7 @@ extension SQLiteReadingList: ReadingList {
                 self.notificationCenter.post(name: .ReadingListUpdated, object: self)
                 return item
             } else {
-                throw ReadingListStorageError("Unable to get inserted ReadingListItem")
+                throw ReadingListStorageError(message: "Unable to get inserted ReadingListItem")
             }
         }
     }
@@ -113,7 +117,7 @@ extension SQLiteReadingList: ReadingList {
             if let item = items.first {
                 return Maybe(success: item)
             } else {
-                return Maybe(failure: ReadingListStorageError("Can't create RLCR from row"))
+                return Maybe(failure: ReadingListStorageError(message: "Can't create RLCR from row"))
             }
         }
         }
@@ -140,12 +144,12 @@ extension SQLiteReadingList: ReadingList {
                 self.notificationCenter.post(name: .ReadingListUpdated, object: self)
                 return item
             } else {
-                throw ReadingListStorageError("Unable to get updated ReadingListItem")
+                throw ReadingListStorageError(message: "Unable to get updated ReadingListItem")
             }
         }
     }
 
-    fileprivate class func ReadingListItemFactory(_ row: SDRow) -> ReadingListItem {
+    fileprivate static func ReadingListItemFactory(_ row: SDRow) -> ReadingListItem {
         guard let id = row["client_id"] as? Int,
               let url = row["url"] as? String,
               let title = row["title"] as? String,
