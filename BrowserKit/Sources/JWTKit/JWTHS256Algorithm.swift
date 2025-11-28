@@ -34,8 +34,12 @@ public struct JWTHS256Algorithm: JWTAlgorithmStrategy {
         }
 
         let key = SymmetricKey(data: Data(secret.utf8))
-        let mac = HMAC<SHA256>.authenticationCode(for: Data(message.utf8), using: key)
+        let mac = HMAC<SHA256>.authenticationCode(
+            for: Data(message.utf8),
+            using: key
+        )
         let expectedSigData = Data(mac)
+
         /// NOTE: The comparison below uses a normal Swift equality check, i.e. a
         /// non-constant-time comparison. This means:
         /// - It returns as soon as a mismatch is found
