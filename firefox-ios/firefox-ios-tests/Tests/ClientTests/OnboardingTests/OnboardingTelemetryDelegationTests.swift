@@ -27,7 +27,8 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
     func testOnboardingCard_viewDidAppear_viewSendsCardView() throws {
         let subject = createSubject()
-        guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
+        guard let firstVC = subject.pageController.viewControllers?.first
+            as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -38,7 +39,8 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
     func testOnboardingCard_callsPrimaryButtonTap() throws {
         let subject = createSubject()
-        guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
+        guard let firstVC = subject.pageController.viewControllers?.first
+            as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -50,7 +52,8 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
     func testOnboardingCard_callsSecondaryButtonTap() throws {
         let subject = createSubject()
-        guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
+        guard let firstVC = subject.pageController.viewControllers?.first
+            as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -60,7 +63,8 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
             completionIfLastCard: { })
         subject.pageChanged(from: firstVC.viewModel.name)
         guard let result = subject.pageController
-            .viewControllers?[subject.pageControl.currentPage] as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
+            .viewControllers?[subject.pageControl.currentPage]
+            as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
