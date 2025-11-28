@@ -13,7 +13,7 @@ let ReadingListDefaultUnread = true
 let ReadingListDefaultArchived = false
 let ReadingListDefaultFavorite = false
 
-public protocol ReadingList {
+public protocol ReadingList: Sendable {
     func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>>
     func getAvailableRecords(completion: @escaping @Sendable ([ReadingListItem]) -> Void)
     func deleteRecord(_ record: ReadingListItem, completion: (@Sendable (Bool) -> Void)?)
