@@ -1532,6 +1532,7 @@
 		C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */; };
 		C2B065512ECF37F000C479CA /* TranslationsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */; };
 		C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */; };
+		C2C6FF8E2ED9A79100B833D4 /* TestableUIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */; };
 		C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */; };
 		C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */; };
 		C2D71B952A384F11003DEC7A /* ThemedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B942A384F11003DEC7A /* ThemedTableViewCell.swift */; };
@@ -9915,6 +9916,7 @@
 		C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsTelemetry.swift; sourceTree = "<group>"; };
 		C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2BD4AC2A2935AE48BEB94B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
+		C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableUIToolbar.swift; sourceTree = "<group>"; };
 		C2CB4D369C756DA6836BC4A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinator.swift; sourceTree = "<group>"; };
 		C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -12054,6 +12056,7 @@
 		274A36D1239EBAD600A21587 /* LibraryViewController */ = {
 			isa = PBXGroup;
 			children = (
+				C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */,
 				F84B22221A09122500AAB793 /* LibraryViewController.swift */,
 				C8417D212657F0600010B877 /* LibraryViewModel.swift */,
 				274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */,
@@ -18659,6 +18662,7 @@
 				8A3EF8132A2FD07A00796E3A /* ResetContextualHints.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
 				94D3DD172D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */,
+				C2C6FF8E2ED9A79100B833D4 /* TestableUIToolbar.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				1DCEC3F42D600AE000129966 /* ASSearchEngineProvider.swift in Sources */,
 				C88E7A592A0553440072E638 /* OnboardingCardInfoModel.swift in Sources */,
