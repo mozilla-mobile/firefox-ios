@@ -106,7 +106,7 @@ class OnboardingButtonActionTests: XCTestCase {
         twoButtons: Bool = true,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> OnboardingBasicCardViewController {
+    ) -> OnboardingBasicCardViewController<OnboardingCardInfoModel> {
         var buttons: OnboardingKit.OnboardingButtons<OnboardingActions>
         if twoButtons {
             buttons = OnboardingKit.OnboardingButtons(

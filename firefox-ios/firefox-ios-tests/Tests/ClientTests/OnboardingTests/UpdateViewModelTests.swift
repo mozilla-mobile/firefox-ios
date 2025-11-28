@@ -224,6 +224,7 @@ class UpdateViewModelTests: XCTestCase {
             onboardingType: .upgrade,
             a11yIdRoot: "A11y id \(index)",
             imageID: "Image id \(index)",
-            instructionsPopup: nil)
+            instructionsPopup: nil,
+            embededLinkText: [])
     }
 }

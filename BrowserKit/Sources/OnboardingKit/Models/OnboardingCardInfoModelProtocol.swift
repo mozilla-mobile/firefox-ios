@@ -42,7 +42,7 @@ public protocol OnboardingCardInfoModelProtocol: Sendable {
 }
 
 extension OnboardingCardInfoModelProtocol {
-    var image: UIImage? {
+    public var image: UIImage? {
         // Try to load from the SPM module's bundle first
         if let image = UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) {
             return image

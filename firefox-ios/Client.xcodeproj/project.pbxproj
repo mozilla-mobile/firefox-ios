@@ -1690,7 +1690,6 @@
 		C8B41E0F29F0357300FE218A /* NimbusOnboardingFeatureLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */; };
 		C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */; };
 		C8BA0E7627F20B8E00DD8214 /* HistoryDeletionUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */; };
-		C8BD87622A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD87612A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift */; };
 		C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */; };
 		C8C1880F287608BF00BF3735 /* DateExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C1880E287608BF00BF3735 /* DateExtensionsTests.swift */; };
 		C8C3FE9D29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C3FE9C29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift */; };
@@ -10098,7 +10097,6 @@
 		C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayerTests.swift; sourceTree = "<group>"; };
 		C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionUpdateCheckerProtocol.swift; sourceTree = "<group>"; };
 		C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDeletionUtility.swift; sourceTree = "<group>"; };
-		C8BD87612A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardInfoModelProtocol.swift; sourceTree = "<group>"; };
 		C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceInfoModel.swift; sourceTree = "<group>"; };
 		C8C1880E287608BF00BF3735 /* DateExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionsTests.swift; sourceTree = "<group>"; };
 		C8C3FE9C29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSearchHandlerRouteCoordinator.swift; sourceTree = "<group>"; };
@@ -14912,7 +14910,6 @@
 			children = (
 				8C77849E2DF33707001FB8B0 /* OnboardingService.swift */,
 				8C2447EB2DFADF6800BD2C91 /* OnboardingNavigationDelegate.swift */,
-				C8BD87612A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift */,
 				8C2447E92DFADF6300BD2C91 /* OnboardingServiceDelegate.swift */,
 				8C2447E72DFADF3D00BD2C91 /* ActivityEventHelper.swift */,
 				2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */,
@@ -18593,7 +18590,6 @@
 				E17798982BD6B44B00F6F0EB /* AddressToolbarContainer.swift in Sources */,
 				21D151262AFC28960062D891 /* TabManagerMiddleware.swift in Sources */,
 				C84266752728462900382274 /* AccessibilityIdentifiers.swift in Sources */,
-				C8BD87622A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift in Sources */,
 				DA27EEDB28BADF4700DD6F5D /* MenuBuilderHelper.swift in Sources */,
 				B2999FF12B194A5800F0FEC1 /* CreditCardPayload.swift in Sources */,
 				E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */,

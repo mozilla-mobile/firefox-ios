@@ -5,31 +5,34 @@
 import UIKit
 import Common
 import ComponentLibrary
+import OnboardingKit
 
-class OnboardingBasicCardViewController: OnboardingCardViewController {
-    struct UX {
-        static let stackViewSpacingWithLink: CGFloat = 15
-        static let stackViewSpacingWithoutLink: CGFloat = 24
-        static let stackViewSpacingButtons: CGFloat = 16
-        static let topStackViewPaddingPad: CGFloat = 70
-        static let topStackViewPaddingPhone: CGFloat = 90
-        static let bottomStackViewPaddingPad: CGFloat = 32
-        static let bottomStackViewPaddingPhone: CGFloat = 0
-        static let horizontalTopStackViewPaddingPad: CGFloat = 100
-        static let horizontalTopStackViewPaddingPhone: CGFloat = 24
-        static let scrollViewVerticalPadding: CGFloat = 62
-        static let descriptionBoldFontSize: CGFloat = 20
-        static let imageViewSize = CGSize(width: 240, height: 300)
+// MARK: - Basic Card UX Constants
+struct OnboardingBasicCardViewControllerUX {
+    static let stackViewSpacingWithLink: CGFloat = 15
+    static let stackViewSpacingWithoutLink: CGFloat = 24
+    static let stackViewSpacingButtons: CGFloat = 16
+    static let topStackViewPaddingPad: CGFloat = 70
+    static let topStackViewPaddingPhone: CGFloat = 90
+    static let bottomStackViewPaddingPad: CGFloat = 32
+    static let bottomStackViewPaddingPhone: CGFloat = 0
+    static let horizontalTopStackViewPaddingPad: CGFloat = 100
+    static let horizontalTopStackViewPaddingPhone: CGFloat = 24
+    static let scrollViewVerticalPadding: CGFloat = 62
+    static let descriptionBoldFontSize: CGFloat = 20
+    static let imageViewSize = CGSize(width: 240, height: 300)
 
-        // small device
-        static let smallImageViewSize = CGSize(width: 240, height: 280)
-        static let smallTopStackViewPadding: CGFloat = 40
+    // small device
+    static let smallImageViewSize = CGSize(width: 240, height: 280)
+    static let smallTopStackViewPadding: CGFloat = 40
 
-        // tiny device (SE 1st gen)
-        static let tinyImageViewSize = CGSize(width: 144, height: 180)
+    // tiny device (SE 1st gen)
+    static let tinyImageViewSize = CGSize(width: 144, height: 180)
 
-        static let baseImageHeight: CGFloat = 211
-    }
+    static let baseImageHeight: CGFloat = 211
+}
+
+class OnboardingBasicCardViewController<CardModel: OnboardingKit.OnboardingCardInfoModelProtocol>: OnboardingCardViewController<CardModel> {
 
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
@@ -49,7 +52,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     // version based on constrains of some kind. The ticket above ensures this work
     // should get addressed.
     private var imageViewHeight: CGFloat {
-        return UX.baseImageHeight * scalingCoefficient()
+        return OnboardingBasicCardViewControllerUX.baseImageHeight * scalingCoefficient()
     }
 
     private func scalingCoefficient() -> CGFloat {
@@ -64,7 +67,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
 
     // MARK: - Initializers
     init(
-        viewModel: OnboardingCardInfoModelProtocol,
+        viewModel: CardModel,
         delegate: OnboardingCardDelegate?,
         windowUUID: WindowUUID
     ) {
@@ -106,37 +109,37 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         addViewsToView()
 
         // Adapt layout for smaller screens
-        var scrollViewVerticalPadding = UX.scrollViewVerticalPadding
-        var topPadding = UX.topStackViewPaddingPhone
-        var horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
-        var bottomStackViewPadding = UX.bottomStackViewPaddingPhone
+        var scrollViewVerticalPadding = OnboardingBasicCardViewControllerUX.scrollViewVerticalPadding
+        var topPadding = OnboardingBasicCardViewControllerUX.topStackViewPaddingPhone
+        var horizontalTopStackViewPadding = OnboardingBasicCardViewControllerUX.horizontalTopStackViewPaddingPhone
+        var bottomStackViewPadding = OnboardingBasicCardViewControllerUX.bottomStackViewPaddingPhone
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             topStackView.spacing = stackViewSpacing()
-            buttonStackView.spacing = UX.stackViewSpacingButtons
+            buttonStackView.spacing = OnboardingBasicCardViewControllerUX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
-                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
-                topPadding = UX.topStackViewPaddingPad
-                horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPad
-                bottomStackViewPadding = -UX.bottomStackViewPaddingPad
+                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                topPadding = OnboardingBasicCardViewControllerUX.topStackViewPaddingPad
+                horizontalTopStackViewPadding = OnboardingBasicCardViewControllerUX.horizontalTopStackViewPaddingPad
+                bottomStackViewPadding = -OnboardingBasicCardViewControllerUX.bottomStackViewPaddingPad
             } else {
-                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
-                topPadding = UX.topStackViewPaddingPhone
-                horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
-                bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
+                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                topPadding = OnboardingBasicCardViewControllerUX.topStackViewPaddingPhone
+                horizontalTopStackViewPadding = OnboardingBasicCardViewControllerUX.horizontalTopStackViewPaddingPhone
+                bottomStackViewPadding = -OnboardingBasicCardViewControllerUX.bottomStackViewPaddingPhone
             }
         } else if UIDevice.current.userInterfaceIdiom == .phone {
-            horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
-            bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
+            horizontalTopStackViewPadding = OnboardingBasicCardViewControllerUX.horizontalTopStackViewPaddingPhone
+            bottomStackViewPadding = -OnboardingBasicCardViewControllerUX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
-                topStackView.spacing = SharedUX.smallStackViewSpacing
-                buttonStackView.spacing = SharedUX.smallStackViewSpacing
-                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
-                topPadding = UX.smallTopStackViewPadding
+                topStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
+                buttonStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
+                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                topPadding = OnboardingBasicCardViewControllerUX.smallTopStackViewPadding
             } else {
                 topStackView.spacing = stackViewSpacing()
-                buttonStackView.spacing = UX.stackViewSpacingButtons
-                scrollViewVerticalPadding = UX.scrollViewVerticalPadding
+                buttonStackView.spacing = OnboardingBasicCardViewControllerUX.stackViewSpacingButtons
+                scrollViewVerticalPadding = OnboardingBasicCardViewControllerUX.scrollViewVerticalPadding
                 topPadding = view.frame.height * 0.1
             }
         }
@@ -227,10 +230,10 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
 
     private func stackViewSpacing() -> CGFloat {
         guard viewModel.link?.title != nil else {
-            return UX.stackViewSpacingWithoutLink
+            return OnboardingBasicCardViewControllerUX.stackViewSpacingWithoutLink
         }
 
-        return UX.stackViewSpacingWithLink
+        return OnboardingBasicCardViewControllerUX.stackViewSpacingWithLink
     }
 
     private func setupLinkButton() {
@@ -252,15 +255,16 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     // MARK: - Button Actions
     @objc
     override func primaryAction() {
+        guard let action = viewModel.buttons.primary.action as? OnboardingActions else { return }
         delegate?.handleBottomButtonActions(
-            for: viewModel.buttons.primary.action,
+            for: action,
             from: viewModel.name,
             isPrimaryButton: true)
     }
 
     @objc
     override func secondaryAction() {
-        guard let buttonAction = viewModel.buttons.secondary?.action else { return }
+        guard let buttonAction = viewModel.buttons.secondary?.action as? OnboardingActions else { return }
 
         delegate?.handleBottomButtonActions(
             for: buttonAction,
