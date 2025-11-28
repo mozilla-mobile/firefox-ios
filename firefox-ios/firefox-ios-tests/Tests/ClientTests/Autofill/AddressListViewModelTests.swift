@@ -72,8 +72,8 @@ final class AddressListViewModelTests: XCTestCase {
         )
     ]
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         mockLogger = MockLogger()
         mockAutofill = MockAutofill()
@@ -87,11 +87,11 @@ final class AddressListViewModelTests: XCTestCase {
         )
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         viewModel = nil
         mockProfile = nil
         mockLogger = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testFetchAddressesSuccess() {
