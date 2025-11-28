@@ -28,7 +28,7 @@ public struct JWTHS256Algorithm: JWTAlgorithmStrategy {
     }
 
     /// Verifies that the provided signature matches the expected one.
-    public func verify(message: String, signature: String) throws {
+    public func verify(message: String, hasSignature signature: String) throws {
         guard let actualSigData = Bytes.base64urlSafeDecodedData(signature) else {
             throw JWTError.base64Decoding
         }

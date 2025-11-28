@@ -22,7 +22,7 @@ public struct JWTNoneAlgorithm: JWTAlgorithmStrategy {
     }
 
     /// Verifies that the provided signature is empty. For unsecured JWTs, any non-empty signature is invalid.
-    public func verify(message: String, signature: String) throws {
+    public func verify(message: String, hasSignature signature: String) throws {
         if !signature.isEmpty {
             throw JWTError.invalidSignature
         }

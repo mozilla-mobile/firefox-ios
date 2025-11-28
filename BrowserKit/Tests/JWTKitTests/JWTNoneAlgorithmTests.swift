@@ -14,12 +14,12 @@ final class JWTNoneAlgorithmTests: XCTestCase {
 
     func test_verify_acceptsEmptySignature() throws {
         let subject = JWTNoneAlgorithm()
-        XCTAssertNoThrow(try subject.verify(message: "msg", signature: ""))
+        XCTAssertNoThrow(try subject.verify(message: "msg", hasSignature: ""))
     }
 
     func test_verify_rejectsNonEmptySignature() throws {
         let subject = JWTNoneAlgorithm()
-        XCTAssertThrowsError(try subject.verify(message: "msg", signature: "not-empty")) { error in
+        XCTAssertThrowsError(try subject.verify(message: "msg", hasSignature: "not-empty")) { error in
             XCTAssertEqual(error as? JWTError, .invalidSignature)
         }
     }

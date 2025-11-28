@@ -12,7 +12,7 @@ final class JWTHS256AlgorithmTests: XCTestCase {
     func test_signAndVerify_roundTrip() throws {
         let subject = createSubject(secret: Self.mockSecret)
         let signature = try subject.sign(message: Self.mockMessage)
-        XCTAssertNoThrow(try subject.verify(message: Self.mockMessage, signature: signature), "expected verify to not throw")
+        XCTAssertNoThrow(try subject.verify(message: Self.mockMessage, hasSignature: signature), "expected verify to not throw")
     }
 
     func test_verify_failsForTamperedMessage() throws {
@@ -21,7 +21,7 @@ final class JWTHS256AlgorithmTests: XCTestCase {
 
         let signature = try subject.sign(message: Self.mockMessage)
 
-        XCTAssertThrowsError(try subject.verify(message: tamperedMessage, signature: signature)) { error in
+        XCTAssertThrowsError(try subject.verify(message: tamperedMessage, hasSignature: signature)) { error in
             XCTAssertEqual(error as? JWTError, .invalidSignature, "expected signature to be invalid")
         }
     }
@@ -30,7 +30,7 @@ final class JWTHS256AlgorithmTests: XCTestCase {
         let subject = createSubject(secret: Self.mockSecret)
         let malformedSignature = "!!!!"
 
-        XCTAssertThrowsError(try subject.verify(message: Self.mockMessage, signature: malformedSignature)) { error in
+        XCTAssertThrowsError(try subject.verify(message: Self.mockMessage, hasSignature: malformedSignature)) { error in
             XCTAssertEqual(error as? JWTError, .base64Decoding, "expected a decoding error")
         }
     }
@@ -46,7 +46,7 @@ final class JWTHS256AlgorithmTests: XCTestCase {
         }
         let modifiedSignature = String(chars)
 
-        XCTAssertThrowsError(try subject.verify(message: Self.mockMessage, signature: modifiedSignature)) { error in
+        XCTAssertThrowsError(try subject.verify(message: Self.mockMessage, hasSignature: modifiedSignature)) { error in
             XCTAssertEqual(error as? JWTError, .invalidSignature, "expected signature to be invalid")
         }
     }

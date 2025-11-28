@@ -18,5 +18,5 @@ public protocol JWTAlgorithmStrategy {
     /// Produces a Base64URL-encoded signature for the given message.
     func sign(message: String) throws -> String
     /// Verifies the Base64URL-encoded signature for the given message.
-    func verify(message: String, signature: String) throws
+    func verify(message: String, hasSignature signature: String) throws
 }
