@@ -40,7 +40,7 @@ class LibraryViewController: UIViewController, Themeable {
         librarySegmentControl.selectedSegmentIndex = 1
     }
 
-    private lazy var segmentControlToolbar: UIToolbar = .build { [weak self] toolbar in
+    private lazy var segmentControlToolbar: TestableUIToolbar = .build { [weak self] toolbar in
         guard let self = self else { return }
         toolbar.delegate = self
     }
