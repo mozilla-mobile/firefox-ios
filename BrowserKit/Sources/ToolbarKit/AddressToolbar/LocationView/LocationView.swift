@@ -162,8 +162,7 @@ final class LocationView: UIView,
 
         applyToolbarAlphaIfNeeded(
             alpha: uxConfig.scrollAlpha,
-            barPosition: addressBarPosition,
-            isKeyboardVisible: config.shouldShowKeyboard
+            barPosition: addressBarPosition
         )
         configureLockIconButton(config)
         configureURLTextField(config)
@@ -400,14 +399,11 @@ final class LocationView: UIView,
     }
 
     // MARK: - LocationView Scaling
-    private func shrinkLocationView(barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+    private func shrinkLocationView(barPosition: AddressToolbarPosition) {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? UX.bottomAddressBarYoffset : UX.topAddressBarYoffset
         let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
-        transform = isKeyboardVisible ? CGAffineTransform(
-            translationX: 0,
-            y: UX.bottomAddressBarYoffsetForDefaultScale
-        ) : scaledTransformation
+        transform = scaledTransformation
         urlTextField.isUserInteractionEnabled = false
     }
 
@@ -425,11 +421,11 @@ final class LocationView: UIView,
         )
     }
 
-    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
         if scrollAlpha.isZero {
-            shrinkLocationView(barPosition: barPosition, isKeyboardVisible: isKeyboardVisible)
+            shrinkLocationView(barPosition: barPosition)
         } else {
             restoreLocationViewSize()
         }
