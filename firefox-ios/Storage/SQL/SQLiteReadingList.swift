@@ -8,6 +8,10 @@ import Shared
 public struct ReadingListStorageError: MaybeErrorType, Sendable {
     let message: String
 
+    public init(message: String) {
+        self.message = message
+    }
+
     public var description: String {
         return message
     }
@@ -29,6 +33,14 @@ public struct SQLiteReadingList: Sendable {
         "favorite",
         "unread"
     ].joined(separator: ",")
+
+    public init(
+        db: BrowserDB,
+        notificationCenter: NotificationCenter = NotificationCenter.default
+    ) {
+        self.db = db
+        self.notificationCenter = notificationCenter
+    }
 }
 
 extension SQLiteReadingList: ReadingList {
