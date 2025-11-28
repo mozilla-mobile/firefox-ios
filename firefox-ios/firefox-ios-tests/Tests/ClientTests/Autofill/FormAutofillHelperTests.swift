@@ -45,23 +45,22 @@ class FormAutofillHelperTests: XCTestCase {
         }
     """
 
-    @MainActor
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        tab = Tab(profile: profile, windowUUID: windowUUID)
+        tab = await Tab(profile: profile, windowUUID: windowUUID)
         formAutofillHelper = FormAutofillHelper(tab: tab)
-        secureWebviewMock = WKWebViewMock(URL(string: "https://foo.com")!)
-        secureFrameMock = WKFrameInfoMock(webView: secureWebviewMock, frameURL: URL(string: "https://foo.com")!)
+        secureWebviewMock = await WKWebViewMock(URL(string: "https://foo.com")!)
+        secureFrameMock = await WKFrameInfoMock(webView: secureWebviewMock, frameURL: URL(string: "https://foo.com")!)
         guard let jsonData = validMockPayloadJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(
                 with: jsonData,
                 options: []) as? [String: Any] else {
             fatalError("Unable to convert JSON to dictionary")
         }
-        validMockWKMessage = WKScriptMessageMock(
+        validMockWKMessage = await WKScriptMessageMock(
             name: "creditCardFormMessageHandler",
             body: dictionary,
             frameInfo: secureFrameMock)
@@ -71,7 +70,7 @@ class FormAutofillHelperTests: XCTestCase {
                 options: []) as? [String: Any] else {
             fatalError("Unable to convert JSON to dictionary")
         }
-        validPayloadCaptureMockWKMessage =  WKScriptMessageMock(
+        validPayloadCaptureMockWKMessage = await WKScriptMessageMock(
             name: "validPayloadCaptureMockWKMessage",
             body: dictionaryCapture,
             frameInfo: secureFrameMock)
@@ -237,8 +236,8 @@ class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
     }
 
-    func test_parseFieldType_valid() {
-        let messageFields = validMockWKMessage.decodeBody(as: FillCreditCardForm.self)
+    func test_parseFieldType_valid() async {
+        let messageFields = await validMockWKMessage.decodeBody(as: FillCreditCardForm.self)
         XCTAssertNotNil(messageFields)
         XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formInput.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
@@ -247,8 +246,8 @@ class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(messageFields!.creditCardPayload.ccNumber, "4520 2991 2039 6788")
     }
 
-    func test_parseFieldCaptureJsonType_valid() {
-        let messageFields = validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
+    func test_parseFieldCaptureJsonType_valid() async {
+        let messageFields = await validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
 
         XCTAssertNotNil(messageFields)
         XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formSubmit.rawValue)
@@ -260,8 +259,8 @@ class FormAutofillHelperTests: XCTestCase {
 
     // MARK: Retrieval
 
-    func test_getFieldTypeValues() {
-        let messageFields = validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
+    func test_getFieldTypeValues() async {
+        let messageFields = await validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
 
         XCTAssertNotNil(messageFields)
         if let fieldValues = formAutofillHelper.getFieldTypeValues(
