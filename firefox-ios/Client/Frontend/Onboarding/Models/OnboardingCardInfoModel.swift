@@ -11,10 +11,10 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var order: Int
     var title: String
     var body: String
-    var instructionsPopup: OnboardingInstructionsPopupInfoModel?
+    var instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
     var link: OnboardingKit.OnboardingLinkInfoModel?
     var buttons: OnboardingKit.OnboardingButtons<OnboardingActions>
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel]
+    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
     var onboardingType: OnboardingType
     var a11yIdRoot: String
 
@@ -32,11 +32,11 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         body: String,
         link: OnboardingKit.OnboardingLinkInfoModel?,
         buttons: OnboardingKit.OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel],
+        multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingInstructionsPopupInfoModel?
+        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
     ) {
         self.cardType = cardType
         self.name = name

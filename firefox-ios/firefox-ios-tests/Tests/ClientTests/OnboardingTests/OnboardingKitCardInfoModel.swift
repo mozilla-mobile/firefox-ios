@@ -105,7 +105,7 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
 
     private func createMockButtons() -> OnboardingKit.OnboardingButtons<Client.OnboardingActions> {
         return OnboardingKit.OnboardingButtons<Client.OnboardingActions>(
-            primary: OnboardingButtonInfoModel<Client.OnboardingActions>(
+            primary: OnboardingKit.OnboardingButtonInfoModel<Client.OnboardingActions>(
                 title: "Primary",
                 action: .forwardOneCard
             ),
