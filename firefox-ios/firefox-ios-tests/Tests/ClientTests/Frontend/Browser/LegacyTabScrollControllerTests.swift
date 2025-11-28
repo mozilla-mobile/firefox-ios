@@ -182,7 +182,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
             isBottomSearchBar: true
         )
 
-        let expectedResult = containerHeight - topInset
+        let expectedResult: CGFloat = if #available(iOS 26.0, *) { .zero } else { containerHeight - topInset }
         XCTAssertEqual(result, expectedResult)
     }
 
@@ -213,6 +213,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
             isBottomSearchBar: true
         )
 
+        let expectedResult: CGFloat = if #available(iOS 26.0, *) { .zero } else { containerHeight }
         XCTAssertEqual(result, containerHeight)
     }
 
@@ -227,6 +228,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
             isBottomSearchBar: true
         )
 
+        let expectedResult: CGFloat = if #available(iOS 26.0, *) { .zero } else { containerHeight }
         XCTAssertEqual(result, containerHeight)
     }
 
