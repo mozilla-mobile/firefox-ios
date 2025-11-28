@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import OnboardingKit
 
 import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 
@@ -137,12 +138,12 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getOnboardingLink(
         from cardLink: NimbusOnboardingLink?
-    ) -> OnboardingLinkInfoModel? {
+    ) -> OnboardingKit.OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url)
         else { return nil }
 
-        return OnboardingLinkInfoModel(title: cardLink.title, url: url)
+        return OnboardingKit.OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
     private func getOnboardingMultipleChoiceButtonImageID(

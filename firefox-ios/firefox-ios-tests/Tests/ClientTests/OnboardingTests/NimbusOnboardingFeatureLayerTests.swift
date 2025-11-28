@@ -4,6 +4,7 @@
 
 import MozillaAppServices
 import XCTest
+import OnboardingKit
 
 @testable import Client
 
@@ -97,8 +98,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             order: 10,
             title: CardElementNames.title + " 1",
             body: CardElementNames.body + " 1",
-            link: OnboardingLinkInfoModel(title: CardElementNames.linkTitle,
-                                          url: URL(string: CardElementNames.linkURL)!),
+            link: OnboardingKit.OnboardingLinkInfoModel(title: CardElementNames.linkTitle,
+                                                        url: URL(string: CardElementNames.linkURL)!),
             buttons: OnboardingButtons(
                 primary: OnboardingButtonInfoModel(
                     title: CardElementNames.primaryButtonTitle,
