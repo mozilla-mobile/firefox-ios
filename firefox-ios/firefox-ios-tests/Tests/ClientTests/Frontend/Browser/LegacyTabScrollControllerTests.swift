@@ -214,7 +214,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         )
 
         let expectedResult: CGFloat = if #available(iOS 26.0, *) { .zero } else { containerHeight }
-        XCTAssertEqual(result, containerHeight)
+        XCTAssertEqual(result, expectedResult)
     }
 
     func testOverKeyboardScrollHeight_zeroSafeAreaInsets_returnsContainerHeight() {
@@ -229,7 +229,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         )
 
         let expectedResult: CGFloat = if #available(iOS 26.0, *) { .zero } else { containerHeight }
-        XCTAssertEqual(result, containerHeight)
+        XCTAssertEqual(result, expectedResult)
     }
 
     func testOverKeyboardScrollHeight_minimalEnabledIsNotBottomSearchBar_returnsContainerHeight() {
