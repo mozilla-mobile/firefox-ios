@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import OnboardingKit
 
 import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 
@@ -112,7 +113,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// A card is not viable without buttons.
     private func getOnboardingCardButtons(
         from cardButtons: NimbusOnboardingButtons
-    ) -> OnboardingButtons {
+    ) -> OnboardingButtons<OnboardingActions> {
         return OnboardingButtons(
             primary: OnboardingButtonInfoModel(
                 title: String(format: cardButtons.primary.title,

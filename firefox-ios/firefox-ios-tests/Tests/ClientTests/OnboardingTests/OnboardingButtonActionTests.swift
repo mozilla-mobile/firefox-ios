@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import OnboardingKit
 
 @testable import Client
 
@@ -106,18 +107,18 @@ class OnboardingButtonActionTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> OnboardingBasicCardViewController {
-        var buttons: OnboardingButtons
+        var buttons: OnboardingButtons<OnboardingActions>
         if twoButtons {
             buttons = OnboardingButtons(
-                primary: OnboardingButtonInfoModel(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SignInAction,
                     action: firstAction),
-                secondary: OnboardingButtonInfoModel(
+                secondary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SkipAction,
                     action: .forwardOneCard))
         } else {
             buttons = OnboardingButtons(
-                primary: OnboardingButtonInfoModel(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SignInAction,
                     action: firstAction))
         }

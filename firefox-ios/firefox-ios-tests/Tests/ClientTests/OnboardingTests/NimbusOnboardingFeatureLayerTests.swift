@@ -4,6 +4,7 @@
 
 import MozillaAppServices
 import XCTest
+import OnboardingKit
 
 @testable import Client
 
@@ -99,11 +100,11 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             body: CardElementNames.body + " 1",
             link: OnboardingLinkInfoModel(title: CardElementNames.linkTitle,
                                           url: URL(string: CardElementNames.linkURL)!),
-            buttons: OnboardingButtons(
-                primary: OnboardingButtonInfoModel(
+            buttons: OnboardingButtons<OnboardingActions>(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: CardElementNames.primaryButtonTitle,
                     action: .forwardOneCard),
-                secondary: OnboardingButtonInfoModel(
+                secondary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: CardElementNames.secondaryButtonTitle,
                     action: .forwardOneCard)),
             multipleChoiceButtons: [],
