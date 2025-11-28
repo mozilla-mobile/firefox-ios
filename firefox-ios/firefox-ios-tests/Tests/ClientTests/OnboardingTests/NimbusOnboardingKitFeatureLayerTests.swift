@@ -919,7 +919,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     }
 
     private func setupNimbusCardsFromActions(
-        _ actions: [Client.OnboardingActions],
+        _ actions: [OnboardingActions],
         variant: OnboardingVariant,
         onboardingType: Client.OnboardingType = .freshInstall,
         multipleChoiceButtons: [NimbusOnboardingMultipleChoiceButton] = [],
