@@ -37,6 +37,8 @@ let package = Package(
             targets: ["MenuKit"]),
         .library(name: "SummarizeKit",
                  targets: ["SummarizeKit"]),
+        .library(name: "JWTKit",
+                 targets: ["JWTKit"]),
         .library(
             name: "UnifiedSearchKit",
             targets: ["UnifiedSearchKit"]),
@@ -219,6 +221,17 @@ let package = Package(
         ),
         .testTarget(name: "SummarizeKitTests",
                     dependencies: ["SummarizeKit"]),
+        .target(
+            name: "JWTKit",
+            dependencies: ["Common", "Shared"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableExperimentalFeature("RegionBasedIsolation")
+            ]
+        ),
+        .testTarget(name: "JWTKitTests",
+                    dependencies: ["JWTKit"]),
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],
