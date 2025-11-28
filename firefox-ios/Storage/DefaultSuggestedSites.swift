@@ -88,13 +88,6 @@ open class DefaultSuggestedSites {
         ],
         "zh_CN": [ // FXIOS-11064 Do we still want this as a special case localization? Android doesn't compile this anymore
             Site.createSuggestedSite(
-                url: "http://mozilla.com.cn",
-                title: "火狐社区",
-                trackingId: 700,
-                // FXIOS-11064 We need a higher quality favicon link
-                faviconResource: .remoteURL(url: URL(string: "http://mozilla.com.cn/favicon.ico")!)
-            ),
-            Site.createSuggestedSite(
                 url: "https://m.baidu.com/",
                 title: "百度",
                 trackingId: 701,
@@ -129,8 +122,14 @@ open class DefaultSuggestedSites {
                 trackingId: 705,
                 // FXIOS-11064 We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "https://corporate.jd.com/favicon.ico")!)
+            ),
+            Site.createSuggestedSite(
+                url: "http://douyin.com",
+                title: "抖音",
+                trackingId: 706,
+                faviconResource: .remoteURL(url: URL(string: "https://lf-douyin-pc-web.douyinstatic.com/obj/douyin-pc-web/2025_0313_logo.png")!)
             )
-         ],
+        ],
         "ja_JP": [
             Site.createSuggestedSite(
                 url: firefoxJpGuideURL,
