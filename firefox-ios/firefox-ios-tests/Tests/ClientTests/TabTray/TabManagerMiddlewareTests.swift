@@ -15,9 +15,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var appState: AppState!
 
-    @MainActor
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         setIsHostedSummaryEnabled(false)
         mockProfile = MockProfile()
@@ -34,13 +33,13 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         mockWindowManager = nil
         summarizationChecker = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_screenshotAction_triggersRefresh() throws {
