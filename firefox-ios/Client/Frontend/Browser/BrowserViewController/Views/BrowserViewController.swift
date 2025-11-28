@@ -212,7 +212,7 @@ class BrowserViewController: UIViewController,
 
     private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
-        if #available(iOS 26, *), !DefaultBrowserUtility.isRunningLiquidGlassEarlyBeta {
+        if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             return UIGlassEffect(style: .regular)
         } else {
             return UIBlurEffect(style: .systemUltraThinMaterial)

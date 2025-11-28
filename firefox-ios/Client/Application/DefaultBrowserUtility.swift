@@ -95,24 +95,6 @@ class DefaultBrowserUtility {
         return betaBlockLists.contains { systemVersion.contains($0) }
     }
 
-    /// Returns true for devices running iOS 26 Beta 1 to 3 (developer betas). These betas have an Apple bug with
-    /// `UIGlassEffect`. See FXIOS-13528 for details. This workaround can probably be removed soon after iOS 26 official
-    /// release and user adoption.
-    static var isRunningLiquidGlassEarlyBeta: Bool {
-        let systemVersion = ProcessInfo.processInfo.operatingSystemVersionString
-
-        // Note: Info collected from https://betawiki.net/wiki/IOS_26. Beta 4 was the first public build.
-        let betaBlockLists: [String] = [
-            "23A257a",  // Unconfirmed early release
-            "23A5260n", // Developer Beta 1
-            "23A5260u", // Developer Beta 1 Update for iPhone 15 and 16 series
-            "23A5276f", // Developer Beta 2
-            "23A5287g", // Developer Beta 3
-        ]
-
-        return betaBlockLists.contains { systemVersion.contains($0) }
-    }
-
     private func trackIfUserIsDefault(_ isDefault: Bool) {
         userDefault.set(isDefault, forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser)
 
