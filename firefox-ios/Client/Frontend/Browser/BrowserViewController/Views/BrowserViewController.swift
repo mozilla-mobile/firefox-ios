@@ -212,7 +212,7 @@ class BrowserViewController: UIViewController,
 
     private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
-        if #available(iOS 26, *), !DefaultBrowserUtil.isRunningLiquidGlassEarlyBeta {
+        if #available(iOS 26, *), !DefaultBrowserUtility.isRunningLiquidGlassEarlyBeta {
             return UIGlassEffect(style: .regular)
         } else {
             return UIBlurEffect(style: .systemUltraThinMaterial)
@@ -260,6 +260,11 @@ class BrowserViewController: UIViewController,
     private(set) lazy var translationContextHintVC: ContextualHintViewController = {
         let translationProvider = ContextualHintViewProvider(forHintType: .translation, with: profile)
         return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
+    }()
+
+    private(set) lazy var relayMaskContextHintVC: ContextualHintViewController = {
+        let relayProvider = ContextualHintViewProvider(forHintType: .relay, with: profile)
+        return ContextualHintViewController(with: relayProvider, windowUUID: windowUUID)
     }()
 
     private(set) lazy var summarizeToolbarEntryContextHintVC: ContextualHintViewController = {
@@ -402,10 +407,6 @@ class BrowserViewController: UIViewController,
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
-    }
-
-    var isStoriesRedesignEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
 
     var isHomepageSearchBarEnabled: Bool {
@@ -701,17 +702,6 @@ class BrowserViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
-        var isToolbarCollapsed: Bool {
-            guard #available(iOS 26.0, *) else { return false }
-            switch scrollController {
-            case let legacy as LegacyTabScrollController:
-                return legacy.toolbarState == .collapsed
-            case let handler as TabScrollHandler:
-                return handler.toolbarDisplayState.isCollapsed
-            default: return false
-            }
-        }
-
         if isBottomSearchBar {
             header.isClearBackground = false
 
@@ -728,8 +718,7 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
-        bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isToolbarCollapsed
-        bottomContainer.isHidden = isToolbarCollapsed
+        bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
 
         let maskView = UIView(frame: CGRect(x: 0,
                                             y: -contentContainer.frame.origin.y,
@@ -1526,6 +1515,7 @@ class BrowserViewController: UIViewController,
 
         // when toolbars are hidden/shown the mask on the content view that is used for
         // toolbar translucency needs to be updated
+        // This also required for iPad rotation
         updateToolbarDisplay()
 
         // Update available height for the homepage
@@ -2490,7 +2480,7 @@ class BrowserViewController: UIViewController,
         tab.url = url
 
         if tab === tabManager.selectedTab {
-            updateUIForReaderHomeStateForTab(tab)
+            updateUIForReaderHomeStateForTab(tab, shouldShowLockIcon: true)
         }
         // Catch history pushState navigation, but ONLY for same origin navigation,
         // for reasons above about URL spoofing risk.
@@ -2553,8 +2543,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Update UI
 
-    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false) {
-        updateURLBarDisplayURL(tab)
+    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false, shouldShowLockIcon: Bool = false) {
+        updateURLBarDisplayURL(tab, shouldShowLockIcon)
         scrollController.showToolbars(animated: false)
 
         if let url = tab.url {
@@ -2588,7 +2578,7 @@ class BrowserViewController: UIViewController,
 
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
-    fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
+    func updateURLBarDisplayURL(_ tab: Tab, _ shouldShowLockIcon: Bool = false) {
         var safeListedURLImageName: String? {
             return (tab.contentBlocker?.status == .safelisted) ?
             StandardImageIdentifiers.Small.notificationDotFill : nil
@@ -2603,7 +2593,7 @@ class BrowserViewController: UIViewController,
                 StandardImageIdentifiers.Small.shieldSlashFillMulticolor
             lockIconNeedsTheming = hasSecureContent
             let isWebsiteMode = tab.url?.isReaderModeURL == false
-            lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+            lockIconImageName = isWebsiteMode && shouldShowLockIcon ? lockIconImageName : nil
         }
 
         let action = ToolbarAction(
@@ -2875,7 +2865,11 @@ class BrowserViewController: UIViewController,
         generator.impactOccurred()
 
         let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let style: UIModalPresentationStyle = if #available(iOS 26.0, *) {
+            .overCurrentContext
+        } else {
+            !shouldSuppress ? .popover : .overCurrentContext
+        }
         let viewModel = PhotonActionSheetViewModel(
             actions: [actions],
             closeButtonTitle: .CloseButtonTitle,
@@ -3121,7 +3115,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchAvailableContentHeightChangedAction() {
-        guard isStoriesRedesignEnabled, let browserViewControllerState,
+        guard isAnyStoriesRedesignEnabled, let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
            homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
@@ -3457,6 +3451,9 @@ class BrowserViewController: UIViewController,
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
+        if tab == tabManager.selectedTab {
+            updateURLBarDisplayURL(tab, true)
+        }
         if webViewStatus == .finishedNavigation {
             let isSelectedTab = (tab == tabManager.selectedTab)
             let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
@@ -4073,14 +4070,21 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
 
+    // MARK: - Relay Additions
+
     private func handleEmailFieldDetected(for tab: Tab?) {
         guard let tab, let tabURL = tab.url else { return }
         guard RelayController.isFeatureEnabled else { return }
 
         if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            RelayController.shared.telemetry.showPrompt()
             RelayController.shared.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
+            Task { @MainActor [weak self] in
+                guard let targetView = tab.webView?.accessoryView else { return }
+                self?.configureRelayContextualHint(for: targetView)
+            }
         }
     }
 
@@ -4104,6 +4108,23 @@ class BrowserViewController: UIViewController,
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         }
     }
+
+    private func presentRelayContextualHint() {
+        present(relayMaskContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: relayMaskContextHintVC)
+    }
+
+    private func configureRelayContextualHint(for view: UIView) {
+         relayMaskContextHintVC.configure(
+             anchor: view,
+             withArrowDirection: .down,
+             andDelegate: self,
+             presentedUsing: { [weak self] in
+                 self?.presentRelayContextualHint()
+             },
+             andActionForButton: { },
+             overlayState: overlayManager)
+     }
 }
 
 extension BrowserViewController: LegacyClipboardBarDisplayHandlerDelegate {
@@ -4592,7 +4613,7 @@ extension BrowserViewController: TabManagerDelegate {
             selectedTab.webView?.applyTheme(theme: currentTheme())
         }
 
-        updateURLBarDisplayURL(selectedTab)
+        updateURLBarDisplayURL(selectedTab, selectedTab.isLoading == false)
         if addressToolbarContainer.inOverlayMode, selectedTab.url?.displayURL != nil {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
@@ -4696,12 +4717,12 @@ extension BrowserViewController: TabManagerDelegate {
     /// - Parameters:
     ///   - isHomeTab: A Boolean value indicating whether the current tab is the home page.
     ///   - webView: The `WKWebView` instance to be displayed.
-    ///   - previousTab: The previously selected tab, used to dispatch action only if opening a new homepage
-    ///   after viewing a homepage. We want to dispatch an action that triggers impression telemetry.
+    ///   - previousTab: The previously selected tab. We check if this is not nil to dispatch an action that
+    ///   triggers impression telemetry, indicating a  tab change to the Home tab has occurred.
     private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView, previousTab: Tab?) {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
-            guard previousTab?.isFxHomeTab ?? false else { return }
+            guard previousTab != nil else { return }
             store.dispatch(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,

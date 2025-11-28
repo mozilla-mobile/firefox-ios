@@ -254,4 +254,8 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(addressBar)
         return addressBar
     }
+
+    func tapCancelButtonOnUrlWithRetry() {
+        cancelButton.tapWithRetry()
+    }
 }

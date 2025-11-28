@@ -42,7 +42,8 @@ class ThirdPartySearchTest: BaseTestCase {
         // Go to settings and set MDN as the default
         app.tables.staticTexts["Google"].waitAndTap()
         app.tables.staticTexts["Mozilla Engine"].waitAndTap()
-        dismissSearchScreen()
+        navigator.nowAt(SearchSettings)
+        navigator.goto(NewTabScreen)
 
         // Perform a search to check
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
@@ -79,7 +80,8 @@ class ThirdPartySearchTest: BaseTestCase {
         navigator.goto(SearchSettings)
 
         navigator.performAction(Action.RemoveCustomSearchEngine)
-        dismissSearchScreen()
+        navigator.nowAt(SearchSettings)
+        navigator.goto(NewTabScreen)
 
         // Perform a search to check
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
@@ -98,11 +100,6 @@ class ThirdPartySearchTest: BaseTestCase {
             // Wait for "Fennec pasted from XCUITests-Runner" banner to disappear
             sleep(2)
         }
-    }
-
-    private func dismissSearchScreen() {
-        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2444333

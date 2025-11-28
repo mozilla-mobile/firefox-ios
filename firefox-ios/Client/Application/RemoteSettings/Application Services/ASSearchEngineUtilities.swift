@@ -25,8 +25,11 @@ struct ASSearchEngineUtilities {
         return converted
     }
 
-    static func convertASSearchURLToOpenSearchURL(_ searchURL: SearchEngineUrl?,
-                                                  for engine: SearchEngineDefinition) -> String? {
+    static func convertASSearchURLToOpenSearchURL(
+        _ searchURL: SearchEngineUrl?,
+        for engine: SearchEngineDefinition,
+        with localeProvider: LocaleProvider = SystemLocaleProvider()
+    ) -> String? {
         guard let searchURL else { return nil }
         guard var components = URLComponents(string: searchURL.base) else { return nil }
         var queryItems: [URLQueryItem] = searchURL.params.compactMap {
@@ -42,6 +45,8 @@ struct ASSearchEngineUtilities {
             let value: String
             if $0.value == "{partnerCode}" {
                 value = engine.partnerCode
+            } else if $0.value == "{acceptLanguages}" {
+                value = localeCode(from: localeProvider)
             } else {
                 value = $0.value ?? ""
             }
@@ -57,5 +62,25 @@ struct ASSearchEngineUtilities {
         }
 
         return components.url?.absoluteString.removingPercentEncoding
+    }
+
+    static func localeCode(from locale: LocaleProvider) -> String {
+        // Per updated discussions with AS team, for now we are using the `preferredLanguages`
+        // codes for the locale parameter as long as it's available
+
+        let languages = locale.preferredLanguages
+        if let langCode = languages.first {
+            return langCode
+        } else {
+            // Per feedback from AS team, we want to pass in the 2-component BCP 47 code. In some
+            // rare cases this may include a script with the region, if so we remove that.
+            // See also: Locale+possibilitiesForLanguageIdentifier.swift
+            let identifier = locale.current.identifier
+            let components = identifier.components(separatedBy: "-")
+            if components.count == 3, let first = components.first, let last = components.last {
+                return "\(first)-\(last)"
+            }
+            return identifier
+        }
     }
 }

@@ -8,7 +8,8 @@ import Shared
 import UserNotifications
 import MozillaAppServices
 
-class NotificationService: UNNotificationServiceExtension {
+// FIXME: FXIOS-14295 Make NotificationService thread safe
+class NotificationService: UNNotificationServiceExtension, @unchecked Sendable {
     var display: SyncDataDisplay?
     var profile: BrowserProfile?
 
@@ -26,7 +27,8 @@ class NotificationService: UNNotificationServiceExtension {
         Viaduct.shared.useReqwestBackend()
         MozillaAppServices.initialize()
 
-        let userInfo = request.content.userInfo
+        // FIXME: FXIOS-14273 Dictionaries are non-Sendable
+        nonisolated(unsafe) let userInfo = request.content.userInfo
 
         guard let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
             contentHandler(request.content)
@@ -58,7 +60,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    func handleEncryptedPushMessage(userInfo: [AnyHashable: Any],
+    func handleEncryptedPushMessage(userInfo: sending [AnyHashable: Any],
                                     profile: BrowserProfile,
                                     completion: @escaping @Sendable (Result<PushMessage, PushMessageError>) -> Void
     ) {

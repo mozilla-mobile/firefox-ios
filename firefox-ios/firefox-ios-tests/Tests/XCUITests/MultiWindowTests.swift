@@ -82,8 +82,8 @@ class MultiWindowTests: IpadOnlyTestCase {
 
     // Param windowToClose - 0 for the first window, 1 for the second window
     func closeSplitViewWindow(windowToClose: Int) {
-        dotMenuIdentifier.element(boundBy: windowToClose).waitAndTap()
-        springboard.buttons["top-affordance-close-window"].waitAndTap()
+        dotMenuIdentifier.element(boundBy: windowToClose).tapWithRetry()
+        springboard.buttons["top-affordance-close-window"].tapWithRetry()
     }
 
     // Coudn't find a way to select a tab from switcher

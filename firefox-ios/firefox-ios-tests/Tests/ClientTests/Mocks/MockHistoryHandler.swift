@@ -16,9 +16,9 @@ final class MockHistoryHandler: HistoryHandler {
     var onApply: (() -> Void)?
 
     // MARK: History Metadata
-    var getMostRecentHistoryMetadataCallCount = 0
+    var getMostRecentSearchHistoryMetadataCallCount = 0
     var noteHistoryMetadataCallCount = 0
-    var deleteHistoryMetadataCallCount = 0
+    var deleteSearchHistoryMetadataCallCount = 0
     var result: Result<[MozillaAppServices.HistoryMetadata], Error> = .success(
         [
             HistoryMetadata(
@@ -45,10 +45,10 @@ final class MockHistoryHandler: HistoryHandler {
             )
         ]
     )
-    let clearResult: Bool
+    let clearResult: Result<(), Error>
     var searchTermList: [String] = []
 
-    init(clearResult: Bool = true) {
+    init(clearResult: Result<(), Error> = .success(())) {
         self.clearResult = clearResult
     }
 
@@ -59,11 +59,11 @@ final class MockHistoryHandler: HistoryHandler {
         onApply?()
     }
 
-    func getMostRecentHistoryMetadata(
+    func getMostRecentSearchHistoryMetadata(
         limit: Int32,
         completion: @escaping @Sendable (Result<[MozillaAppServices.HistoryMetadata], any Error>) -> Void
     ) {
-        getMostRecentHistoryMetadataCallCount += 1
+        getMostRecentSearchHistoryMetadataCallCount += 1
         completion(result)
     }
 
@@ -76,8 +76,8 @@ final class MockHistoryHandler: HistoryHandler {
         searchTermList.append(searchTerm)
     }
 
-    func deleteHistoryMetadataOlderThan(olderThan: Int64, completion: @escaping @Sendable (Bool) -> Void) {
-        deleteHistoryMetadataCallCount += 1
+    func deleteSearchHistoryMetadata(completion: @escaping @Sendable (Result<(), any Error>) -> Void) {
+        deleteSearchHistoryMetadataCallCount += 1
         completion(clearResult)
     }
 }

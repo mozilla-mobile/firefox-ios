@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Foundation
 
 class CreditCardsTests: BaseTestCase {
     let creditCardsStaticTexts = AccessibilityIdentifiers.Settings.CreditCards.self
@@ -45,6 +46,9 @@ class CreditCardsTests: BaseTestCase {
         )
         addCardButton.waitAndTap()
         // Add Credit Card page is displayed
+        if #available(iOS 26, *) {
+            tapCardName()
+        }
         waitForElementsToExist(
             [
                 app.staticTexts[creditCardsStaticTexts.AddCreditCard.addCreditCard],
@@ -87,11 +91,11 @@ class CreditCardsTests: BaseTestCase {
         creditCardScreen.waitForSectionVisible()
         creditCardScreen.openAddCreditCardForm()
         // Add Credit Card page is displayed
-        creditCardScreen.waitForSectionVisible()
+        creditCardScreen.waitForAddCreditCardValues()
         // Add and save a valid credit card
         addCreditCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
 
-        creditCardScreen.assertCardSaved(containing: "1252", details: ["test", "Expires", "5/40"])
+        creditCardScreen.assertCardSaved(containing: "1252", details: ["Test", "Expires", "5/40"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306978
@@ -872,7 +876,7 @@ class CreditCardsTests: BaseTestCase {
         addCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         creditCardsScreen.openSavedCard(at: 1)
         viewCardScreen.waitForViewCardScreen(containing: "1252")
-        viewCardScreen.assertCardDetails(["test", "05 / 40"])
+        viewCardScreen.assertCardDetails(["Test", "05 / 40"])
     }
 
     private func addCreditCard(name: String, cardNumber: String, expirationDate: String) {

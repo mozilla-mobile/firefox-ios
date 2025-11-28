@@ -441,10 +441,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         XCTAssertEqual(bookmarksToggle.value! as? String, "0", "Bookmark toogle is not disabled")
         navigator.nowAt(HomeSettings)
-        navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapIfExists()
         mozWaitForElementToNotExist(app.cells["BookmarksCell"])
-        navigator.nowAt(BrowserTab)
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
             app.swipeUp()
@@ -456,7 +456,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         XCTAssertEqual(bookmarksToggle.value! as? String, "1", "Bookmark toogle is not enabled")
         navigator.nowAt(HomeSettings)
-        navigator.goto(BrowserTab)
+        navigator.goto(HomePanelsScreen)
         mozWaitForElementToExist(app.cells["BookmarksCell"])
     }
 

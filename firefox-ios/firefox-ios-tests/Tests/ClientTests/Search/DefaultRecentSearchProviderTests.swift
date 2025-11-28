@@ -61,7 +61,7 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(mockHistoryStorage.getMostRecentHistoryMetadataCallCount, 1)
+        XCTAssertEqual(mockHistoryStorage.getMostRecentSearchHistoryMetadataCallCount, 1)
     }
 
     func test_loadRecentSearches_withError_returnsEmptyList() {
@@ -76,36 +76,41 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(mockHistoryStorage.getMostRecentHistoryMetadataCallCount, 1)
+        XCTAssertEqual(mockHistoryStorage.getMostRecentSearchHistoryMetadataCallCount, 1)
     }
 
     func test_clear_returnsSuccess() {
-        /// 9 Sep 2024 8:00 pm GMT + 0
-        let testDate = Date(timeIntervalSince1970: 1_725_912_000)
         let sut = createSubject()
         let expectation = XCTestExpectation(description: "Recent searches have been cleared successfully")
 
-        sut.clear(with: MockDateProvider(fixedDate: testDate)) { success in
-            XCTAssertTrue(success)
-            expectation.fulfill()
+        sut.clear { result in
+            if case .success = result {
+                expectation.fulfill()
+            } else {
+                XCTFail("Expected success, got \(result)")
+                expectation.fulfill()
+            }
         }
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(mockHistoryStorage.deleteHistoryMetadataCallCount, 1)
+        XCTAssertEqual(mockHistoryStorage.deleteSearchHistoryMetadataCallCount, 1)
     }
 
     func test_clear_withError_returnsFail() {
-        /// 9 Sep 2024 8:00 pm GMT + 0
-        let testDate = Date(timeIntervalSince1970: 1_725_912_000)
-        let injectedHistoryStorage = MockHistoryHandler(clearResult: false)
+        enum TestError: Error { case example }
+        let injectedHistoryStorage = MockHistoryHandler(clearResult: .failure(TestError.example))
         let sut = createSubject(with: injectedHistoryStorage)
         let expectation = XCTestExpectation(description: "Recent searches have not been cleared")
 
-        sut.clear(with: MockDateProvider(fixedDate: testDate)) { success in
-            XCTAssertFalse(success)
-            expectation.fulfill()
+        sut.clear { result in
+            if case .success = result {
+                XCTFail("Expected failure, got \(result)")
+                expectation.fulfill()
+            } else {
+                expectation.fulfill()
+            }
         }
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(mockHistoryStorage.deleteHistoryMetadataCallCount, 0)
+        XCTAssertEqual(mockHistoryStorage.deleteSearchHistoryMetadataCallCount, 0)
     }
 
     func createSubject(with injectedHistoryStorage: MockHistoryHandler? = nil) -> RecentSearchProvider {

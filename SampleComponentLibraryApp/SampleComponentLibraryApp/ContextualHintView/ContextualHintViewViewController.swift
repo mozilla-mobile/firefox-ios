@@ -15,6 +15,7 @@ class ContextualHintViewViewController: UIViewController, Themeable {
     }
 
     var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
@@ -29,7 +30,7 @@ class ContextualHintViewViewController: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         var viewModel = ContextualHintViewModel(

@@ -29,8 +29,8 @@ class StoriesFeedViewController: UIViewController,
 
     // Telemetry related
     private let telemetry: StoriesFeedTelemetryProtocol
-    private let scrollThrottler: GCDThrottlerProtocol
-    private let impressionsThrottler: GCDThrottlerProtocol
+    private let scrollThrottler: MainThreadThrottlerProtocol
+    private let impressionsThrottler: MainThreadThrottlerProtocol
     private let impressionsTracker: ImpressionTrackingUtility
     private var recordTelemetryOnDisappear = true
 
@@ -43,8 +43,8 @@ class StoriesFeedViewController: UIViewController,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
          telemetry: StoriesFeedTelemetryProtocol = StoriesFeedTelemetry(),
-         impressionsThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
-         scrollThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
+         impressionsThrottler: MainThreadThrottlerProtocol = MainThreadThrottler(seconds: 0.2),
+         scrollThrottler: MainThreadThrottlerProtocol = MainThreadThrottler(seconds: 0.2),
          impressionsTracker: ImpressionTrackingUtility = ImpressionTrackingUtility()
     ) {
         self.windowUUID = windowUUID

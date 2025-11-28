@@ -14,9 +14,9 @@ final class ContentContainerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         setIsSwipingTabsEnabled(false)
-        DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.profile = MockProfile()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.overlayModeManager = MockOverlayModeManager()
     }
 

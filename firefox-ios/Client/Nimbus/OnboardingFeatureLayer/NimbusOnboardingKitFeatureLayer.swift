@@ -21,7 +21,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         onboardingVariant: OnboardingVariant,
         with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
         isDefaultBrowser: Bool = false,
-        isIpad: Bool = UIDevice.current.userInterfaceIdiom == .pad
+        isIpad: Bool = UIDeviceDetails.userInterfaceIdiom == .pad
     ) {
         self.helperUtility = helperUtility
         self.onboardingVariant = onboardingVariant

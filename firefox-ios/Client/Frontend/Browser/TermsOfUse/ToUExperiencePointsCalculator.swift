@@ -40,7 +40,12 @@ struct ToUExperiencePointsCalculator {
         let enabledKey = ProfilePrefsReader.prefix + ContentBlockingConfig.Prefs.EnabledKey
         let strengthKey = ProfilePrefsReader.prefix + ContentBlockingConfig.Prefs.StrengthKey
 
-        guard userDefaults.bool(forKey: enabledKey) else { return false }
+        if let storedEnabledKey = userDefaults.object(forKey: enabledKey) as? Bool,
+           storedEnabledKey == false {
+            // Checking if the EnabledKey is false,
+            // meaning that user explicitly disabled tracking protection
+            return false
+        }
         return userDefaults.string(forKey: strengthKey) == BlockingStrength.strict.rawValue
     }
 

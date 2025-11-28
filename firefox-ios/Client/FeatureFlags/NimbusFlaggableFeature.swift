@@ -27,6 +27,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageSearchBar
     case homepageShortcutsLibrary
     case homepageStoriesRedesign
+    case homepageStoriesRedesignV2
     case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
@@ -85,6 +86,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .defaultZoomFeature,
                 .downloadLiveActivities,
                 .homepageStoriesRedesign,
+                .homepageStoriesRedesignV2,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
@@ -161,6 +163,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageStoriesRedesign,
+                .homepageStoriesRedesignV2,
                 .homepageScrim,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,

@@ -19,4 +19,22 @@ enum TranslationsServiceError: Error, Equatable {
         let ns = error as NSError
         return .unknown(domain: ns.domain, code: ns.code)
     }
+    /// Stable, telemetry-safe description for this error.
+    /// We don't strictly need this since the enum cases are already not using any raws error messages,
+    /// but this makes it explicit and easier to control.
+    var telemetryDescription: String {
+        switch self {
+        case .missingWebView:
+            return "missing_webview"
+        case .deviceLanguageUnavailable:
+            return "device_language_unavailable"
+        case .jsEvaluationFailed(let reason):
+            /// reason is already a stable token like "JS evaluation failed: startTranslationsJS"
+            return "js_evaluation_failed(\(reason))"
+        case .pageLanguageDetectionFailed(let description):
+            return "page_language_detection_failed(\(description))"
+        case .unknown(let domain, let code):
+            return "unknown(domain:\(domain),code:\(code))"
+        }
+    }
 }

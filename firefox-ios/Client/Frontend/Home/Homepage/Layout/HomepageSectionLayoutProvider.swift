@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Storage
 import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
@@ -140,9 +141,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
    /// of the inputs differ between layout passes.
    private var measurementsCache = HomepageLayoutMeasurementCache()
     private var headerHeightCache: [HeaderMeasurementKey: CGFloat] = [:]
-    private var isStoriesRedesignEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
-    }
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
@@ -178,8 +176,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 config: configuration
             )
         case .pocket:
-            return isStoriesRedesignEnabled ? createStoriesSectionLayout(for: environment)
-                                            : createPocketSectionLayout(for: traitCollection)
+            return isAnyStoriesRedesignEnabled ? createStoriesSectionLayout(for: environment)
+                                               : createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
             return createSingleItemSectionLayout(
                 for: traitCollection,
@@ -328,8 +326,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let bottomInset = isStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
-                                                   : UX.spacingBetweenSections - UX.interGroupSpacing
+        let bottomInset = isAnyStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
+                                                      : UX.spacingBetweenSections - UX.interGroupSpacing
         section.contentInsets.top = 0
         section.contentInsets.bottom = bottomInset
 
@@ -512,9 +510,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
+        let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
+        let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
         let storiesHeight = getStoriesSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
-        let spacerHeight = max(0.1, availableContentHeight - topSitesHeight - storiesHeight - searchBarHeight)
+        let spacerHeight = max(
+            0.1,
+            availableContentHeight - topSitesHeight - jumpBackInHeight - bookmarksHeight - storiesHeight - searchBarHeight
+        )
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .absolute(spacerHeight))
@@ -609,6 +612,123 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // Add section insets
         totalHeight += UX.TopSitesConstants.getBottomInset()
         measurementsCache.setHeight(totalHeight, for: measurementKey)
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" jump back in section and returns its height
+    private func getJumpBackInSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        // Ensures we have at least 1 jump back in tab to show
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        let jumpBackInState = state.jumpBackInState
+        guard jumpBackInState.shouldShowSection,
+              jumpBackInState.mostRecentSyncedTab != nil || !jumpBackInState.jumpBackInTabs.isEmpty else { return 0 }
+
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let jumpBackInConfig = HomepageDimensionCalculator.retrieveJumpBackInDisplayInfo(
+            traitCollection: environment.traitCollection
+        )
+        let numberOfLocalTabsToShow = min(
+            jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
+            jumpBackInState.jumpBackInTabs.count
+        )
+
+        let key = HomepageLayoutMeasurementCache.JumpBackInMeasurement.Key(
+            syncedTabConfig: jumpBackInState.mostRecentSyncedTab,
+            maxNumberOfLocalTabs: jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
+            numberOfLocalTabsToShow: numberOfLocalTabsToShow,
+            headerState: jumpBackInState.sectionHeaderState,
+            containerWidth: containerWidth,
+            shouldShowSection: jumpBackInState.shouldShowSection,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches
+        if let cachedHeight = measurementsCache.height(for: key) {
+            return cachedHeight
+        }
+
+        // Calculate jump back in sections new height
+        var totalHeight: CGFloat = 0
+        var totalCells = 0
+
+        // Add height of synced tab cell (if it exists)
+        if let syncedTabConfig = jumpBackInState.mostRecentSyncedTab {
+            let syncedTabCell = SyncedTabCell()
+            syncedTabCell.configure(configuration: syncedTabConfig,
+                                    theme: LightTheme(),
+                                    onTapShowAllAction: nil,
+                                    onOpenSyncedTabAction: nil)
+            let syncedTabCellHeight = HomepageDimensionCalculator.fittingHeight(for: syncedTabCell,
+                                                                                width: containerWidth)
+            totalCells += 1
+            totalHeight += syncedTabCellHeight
+        }
+
+        // Add height of local tab cell(s) (if they exists)
+        for i in 0...jumpBackInConfig.getMaxNumberOfLocalTabsLayout {
+            if let tabConfig = jumpBackInState.jumpBackInTabs[safe: i] {
+                let jumpBackInCell = JumpBackInCell()
+                jumpBackInCell.configure(config: tabConfig, theme: LightTheme())
+                let jumpBackInCellHeight = HomepageDimensionCalculator.fittingHeight(for: jumpBackInCell,
+                                                                                     width: containerWidth)
+                totalCells += 1
+                totalHeight += jumpBackInCellHeight
+            }
+        }
+
+        // Add group spacing
+        totalHeight += totalCells > 1 ? UX.interGroupSpacing : 0
+
+        // Add header height
+        totalHeight += getHeaderHeight(headerState: jumpBackInState.sectionHeaderState, environment: environment)
+
+        // Add section insets
+        totalHeight += UX.spacingBetweenSections
+
+        // Save cached section height
+        measurementsCache.setHeight(totalHeight, for: key)
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" bookmarks section and returns its height
+    private func getBookmarksSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        let bookmarkState = state.bookmarkState
+        guard bookmarkState.shouldShowSection, let firstBookmark = bookmarkState.bookmarks.first else { return 0 }
+
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+
+        let key = HomepageLayoutMeasurementCache.BookmarksMeasurement.Key(
+            headerState: bookmarkState.sectionHeaderState,
+            containerWidth: containerWidth,
+            shouldShowSection: bookmarkState.shouldShowSection,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches
+        if let cachedHeight = measurementsCache.height(for: key) {
+            return cachedHeight
+        }
+
+        // Calculate bookmark sections new height
+        var totalHeight: CGFloat = 0
+
+        // Add height of bookmark cell
+        let cell = BookmarksCell()
+        cell.configure(config: firstBookmark, theme: LightTheme())
+        let bookmarksCellHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: containerWidth)
+        totalHeight += bookmarksCellHeight
+
+        // Add header height
+        totalHeight += getHeaderHeight(headerState: bookmarkState.sectionHeaderState, environment: environment)
+
+        // Add section insets
+        totalHeight += UX.spacingBetweenSections
+
+        // Save cached section height
+        measurementsCache.setHeight(totalHeight, for: key)
 
         return totalHeight
     }
@@ -717,7 +837,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             cellWidth: normalizedDimension(cellWidth),
             containerWidth: normalizedDimension(environment.container.contentSize.width),
             shouldShowSection: storiesState.shouldShowSection,
-            isStoriesRedesignEnabled: isStoriesRedesignEnabled,
+            isStoriesRedesignEnabled: isAnyStoriesRedesignEnabled,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
             )
 
@@ -759,6 +879,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return result
     }
 
+    // Round to the nearest thousandth
     private func normalizedDimension(_ value: CGFloat) -> Double {
         return Double((value * 1000).rounded() / 1000)
     }

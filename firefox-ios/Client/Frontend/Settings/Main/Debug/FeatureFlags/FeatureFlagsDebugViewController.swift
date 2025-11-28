@@ -19,7 +19,11 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     override func generateSettings() -> [SettingSection] {
-        return [generateFeatureFlagToggleSettings(), generateFeatureFlagList()]
+        return [
+            generateFeatureFlagToggleSettings(),
+            generateDefaultBrowserStatusDisplay(),
+            generateFeatureFlagList()
+        ]
     }
 
     // swiftlint:disable:next function_body_length
@@ -140,6 +144,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .relayIntegration,
+                titleText: format(string: "Relay Email Masks"),
+                statusText: format(string: "Toggle to enable Relay mask feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .recentSearches,
                 titleText: format(string: "Search - Recent"),
                 statusText: format(string: "Toggle to enable the recent searches feature")
@@ -171,6 +182,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .homepageStoriesRedesign,
                 titleText: format(string: "Stories Redesign"),
                 statusText: format(string: "Toggle to enable homepage stories section redesign")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepageStoriesRedesignV2,
+                titleText: format(string: "Stories Redesign V2"),
+                statusText: format(string: "Toggle to enable homepage stories section redesign V2")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -265,6 +283,15 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         return SettingSection(
             title: nil,
             children: children
+        )
+    }
+
+    private func generateDefaultBrowserStatusDisplay() -> SettingSection {
+        return SettingSection(
+            title: NSAttributedString(string: "Default Browser Status"),
+            children: [Setting(
+                title: format(string: "isDefaultBrowser: \(DefaultBrowserUtility().isDefaultBrowser)")
+            )]
         )
     }
 

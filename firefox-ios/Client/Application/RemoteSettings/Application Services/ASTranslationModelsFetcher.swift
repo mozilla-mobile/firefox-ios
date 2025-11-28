@@ -88,7 +88,19 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
                 fields.version == Constants.translatorVersion
         }
 
-        return matchingRecord.flatMap { record in try? translatorsClient?.getAttachment(record: record) }
+        guard let record = matchingRecord else {
+            logger.log("No matching translator found", level: .warning, category: .translations)
+            return nil
+        }
+
+        logger.log(
+            "Translator record selected",
+            level: .info,
+            category: .translations,
+            extra: ["recordId": record.id]
+        )
+
+        return try? translatorsClient?.getAttachment(record: record)
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
@@ -150,6 +162,27 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         _ = fetchTranslatorWASM()
         let recordsToPreWarm = getRecordsForLanguagePair(from: sourceLang, to: targetLang)
         prewarmAttachments(for: recordsToPreWarm)
+    }
+
+    /// Prewarm translation resources during startup. This fetches both the translator WASM
+    /// and model attachments for `Constants.pivotLanguage` -> deviceLanguage (e.g. `en` -> `fr`).
+    /// NOTE: We don't fetch the reverse direction since for phase 1 we only support translating into device language.
+    func prewarmResourcesForStartup() {
+        guard let deviceLanguage = Locale.current.languageCode,
+          !deviceLanguage.isEmpty else {
+            logger.log("Device language code is unavailable.", level: .warning, category: .translations)
+            return
+        }
+
+        guard deviceLanguage != Constants.pivotLanguage else {
+            logger.log(
+                "Device language \(deviceLanguage) matches pivot language; skipping prewarm.",
+                level: .info,
+                category: .translations
+            )
+            return
+        }
+        prewarmResources(for: Constants.pivotLanguage, to: deviceLanguage)
     }
 
     /// Pre-warms attachments for a list of records by fetching them
@@ -216,6 +249,13 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             else {
                 continue
             }
+
+            logger.log(
+                "Model record selected",
+                level: .info,
+                category: .translations,
+                extra: ["recordId": "\(record.id)"]
+            )
 
             languageModelFiles[fields.fileType] = [
                 "record": [

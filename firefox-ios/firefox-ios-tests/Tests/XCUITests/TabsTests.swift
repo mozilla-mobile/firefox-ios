@@ -301,7 +301,6 @@ class TabsTests: BaseTestCase {
     func testOpenNewTabLandscape() {
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
-        homepageSearchBar.tapIfExists()
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -319,7 +318,6 @@ class TabsTests: BaseTestCase {
         toolBarScreen = ToolbarScreen(app: app)
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
-        homepageSearchBar.tapIfExists()
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -348,7 +346,7 @@ class TabsTests: BaseTestCase {
 
         // Open New Tab
         app.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
-        navigator.performAction(Action.CloseURLBarOpen)
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapWithRetry()
 
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
@@ -379,7 +377,7 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
         app.tables.cells.buttons["New Private Tab"].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapWithRetry()
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
         navigator.nowAt(NewTabScreen)
@@ -403,7 +401,7 @@ class TabsTests: BaseTestCase {
         newTabsScreen.assertLargeAndCrossIconsExist()
         // Open New Tab
         newTabsScreen.tapOnPlusIconScreen()
-        navigator.performAction(Action.CloseURLBarOpen)
+        browserScreen.tapCancelButtonOnUrlWithRetry()
 
         toolBarScreen.assertTabsButtonExists()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
@@ -430,7 +428,7 @@ class TabsTests: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.pressTabsButton(duration: 1)
         newTabsScreen.tapNewPrivateTab()
-        browserScreen.tapCancelButtonOnUrlBarExist()
+        browserScreen.tapCancelButtonOnUrlWithRetry()
         toolBarScreen.assertTabsButtonExists()
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
@@ -550,6 +548,7 @@ class TabsTests: BaseTestCase {
 
     private func validateToastWhenClosingMultipleTabs() {
         // Have multiple tabs opened in the tab tray
+        navigator.nowAt(BrowserTab)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
         for _ in 1...4 {

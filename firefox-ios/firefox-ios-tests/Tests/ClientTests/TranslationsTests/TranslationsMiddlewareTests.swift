@@ -14,6 +14,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     private var mockLogger: MockLogger!
     private var mockWindowManager: MockWindowManager!
     private var mockTabManager: MockTabManager!
+    private var mockTranslationsTelemetry: MockTranslationsTelemetry!
 
     override func setUp() {
         super.setUp()
@@ -24,6 +25,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             wrappedManager: WindowManagerImplementation(),
             tabManager: mockTabManager
         )
+        mockTranslationsTelemetry = MockTranslationsTelemetry()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
@@ -37,6 +39,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockLogger = nil
         mockTabManager = nil
         mockWindowManager = nil
+        mockTranslationsTelemetry = nil
         DependencyHelperMock().reset()
         resetStore()
         super.tearDown()
@@ -86,6 +89,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject(shouldOfferTranslationResult: true)
         let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
@@ -115,6 +119,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         let subject = createSubject(shouldOfferTranslationError: TestError.example)
         let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
@@ -177,7 +182,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             profile: mockProfile,
             logger: mockLogger,
             windowManager: mockWindowManager,
-            translationsService: translationsService
+            translationsService: translationsService,
+            translationsTelemetry: mockTranslationsTelemetry
         )
     }
 

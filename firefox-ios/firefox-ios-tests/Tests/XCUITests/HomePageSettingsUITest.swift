@@ -329,6 +329,32 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306871
+    // Smoketest TAE
+    func testCustomizeHomepage_TAE() {
+        let fxHomePageScreen = FirefoxHomePageScreen(app: app)
+        let homePageScreen = HomePageScreen(app: app)
+        let settingHomePageScreen = SettingsHomepageScreen(app: app)
+
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
+        app.launch()
+        homePageScreen.swipeToCustomizeHomeOption()
+        fxHomePageScreen.tapOnCustomizeHomePageOption(timeout: TIMEOUT)
+        // Verify default settings
+        settingHomePageScreen.assertDefaultOptionsVisible()
+        // Commented due to experimental features
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
+//            "1"
+//        )
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
+//            "1"
+//        )
+
+        settingHomePageScreen.assertStoriesSwitch(isOn: true)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
     func testShortcutsRows() {
         app.launch()

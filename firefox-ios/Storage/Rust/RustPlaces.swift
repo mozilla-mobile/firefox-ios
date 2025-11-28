@@ -60,9 +60,9 @@ public protocol BookmarksHandler {
 
 public protocol HistoryHandler {
     func applyObservation(visitObservation: VisitObservation,
-                          completion: @escaping (Result<Void, any Error>) -> Void)
+                          completion: @Sendable @escaping (Result<Void, any Error>) -> Void)
 
-    func getMostRecentHistoryMetadata(
+    func getMostRecentSearchHistoryMetadata(
         limit: Int32,
         completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
     )
@@ -73,9 +73,8 @@ public protocol HistoryHandler {
         completion: @Sendable @escaping (Result<(), any Error>) -> Void
     )
 
-    func deleteHistoryMetadataOlderThan(
-        olderThan: Int64,
-        completion: @escaping @Sendable (Bool) -> Void
+    func deleteSearchHistoryMetadata(
+        completion: @escaping @Sendable (Result<(), any Error>) -> Void
     )
 }
 
@@ -561,13 +560,13 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     }
 
     // MARK: History metadata
-    /// Currently only used to get the recent searches from the user's history storage.
-    public func getMostRecentHistoryMetadata(
+    /// Fetches recent searches from the user's history storage.
+    public func getMostRecentSearchHistoryMetadata(
         limit: Int32,
         completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
     ) {
         withReader({ connection in
-            return try connection.getMostRecentHistoryMetadata(limit: limit)
+            return try connection.getMostRecentSearchHistoryMetadata(limit: limit)
         }, completion: completion)
     }
 
@@ -606,14 +605,15 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
         }
     }
 
-    public func deleteHistoryMetadataOlderThan(
-        olderThan: Int64,
-        completion: @escaping @Sendable (Bool) -> Void
+    public func deleteSearchHistoryMetadata(
+        completion: @escaping @Sendable (Result<(), any Error>) -> Void
     ) {
-        let deferredResponse = deleteHistoryMetadataOlderThan(olderThan: olderThan)
-        deferredResponse.upon { result in
-            completion(result.isSuccess)
-        }
+        withWriter(
+            { connection in
+                return try connection.deleteSearchHistoryMetadata()
+            },
+            completion: completion
+        )
     }
 
     private func deleteHistoryMetadata(since startDate: Int64) -> Deferred<Maybe<Void>> {
@@ -724,7 +724,7 @@ extension RustPlaces {
 
     public func applyObservation(
         visitObservation: VisitObservation,
-        completion: @escaping (Result<Void, any Error>) -> Void
+        completion: @Sendable @escaping (Result<Void, any Error>) -> Void
     ) {
         withWriter { connection in
             return try connection.applyObservation(visitObservation: visitObservation)
