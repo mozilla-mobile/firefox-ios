@@ -4,6 +4,7 @@
 
 import Foundation
 
+// TODO: - FXIOS-14071 Remove all the duplicate Onboarding Protocols which are already implemented in OnboardingKit
 protocol OnboardingDefaultBrowserModelProtocol {
     var title: String { get set }
     var instructionSteps: [String] { get set }
