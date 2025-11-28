@@ -126,9 +126,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getOnboardingMultipleChoiceButtons(
         from cardButtons: [NimbusOnboardingMultipleChoiceButton]
-    ) -> [OnboardingMultipleChoiceButtonModel] {
+    ) -> [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
         return cardButtons.map { button in
-            return OnboardingMultipleChoiceButtonModel(
+            return OnboardingKit.OnboardingMultipleChoiceButtonModel(
                 title: button.title,
                 action: button.action,
                 imageID: getOnboardingMultipleChoiceButtonImageID(from: button.image)
@@ -166,10 +166,10 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func getPopupInfoModel(
         from data: NimbusOnboardingInstructionPopup?,
         withA11yID a11yID: String
-    ) -> OnboardingInstructionsPopupInfoModel? {
+    ) -> OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
         guard let data else { return nil }
 
-        return OnboardingInstructionsPopupInfoModel(
+        return OnboardingKit.OnboardingInstructionsPopupInfoModel(
             title: data.title,
             instructionSteps: data.instructions
                 .map { String(format: $0, AppName.shortName.rawValue) },

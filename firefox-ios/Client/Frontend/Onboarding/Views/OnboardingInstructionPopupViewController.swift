@@ -5,6 +5,7 @@
 import Common
 import ComponentLibrary
 import UIKit
+import OnboardingKit
 
 class OnboardingInstructionPopupViewController: UIViewController,
                                                 Themeable,
@@ -65,7 +66,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
-    var viewModel: OnboardingDefaultBrowserModelProtocol
+    var viewModel: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -76,7 +77,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: - Initializers
-    init(viewModel: OnboardingDefaultBrowserModelProtocol,
+    init(viewModel: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
          windowUUID: WindowUUID,
          buttonTappedFinishFlow: (() -> Void)?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -267,4 +268,11 @@ class OnboardingInstructionPopupViewController: UIViewController,
 
 extension OnboardingInstructionPopupViewController: BottomSheetChild {
     func willDismiss() { }
+}
+
+extension OnboardingKit.OnboardingInstructionsPopupInfoModel {
+    func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
+        let markupUtility = MarkupAttributeUtility(baseFont: font)
+        return instructionSteps.map { markupUtility.addAttributesTo(text: $0) }
+    }
 }
