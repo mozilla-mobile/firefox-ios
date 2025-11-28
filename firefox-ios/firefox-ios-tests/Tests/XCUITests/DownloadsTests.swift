@@ -34,7 +34,7 @@ class DownloadsTests: BaseTestCase {
             for _ in 0...list-1 {
                 mozWaitForElementToExist(app.tables["DownloadsTable"].cells.element(boundBy: 0))
                 app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft(velocity: 200)
-                app.tables.cells.buttons["Delete"].waitAndTap()
+                app.tables["DownloadsTable"].buttons["Delete"].waitAndTap()
             }
         }
         super.tearDown()

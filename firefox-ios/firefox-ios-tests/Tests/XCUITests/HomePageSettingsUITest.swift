@@ -323,10 +323,12 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 //            "1"
 //        )
 
-        XCTAssertEqual(
-            app.cells.switches["Stories"].value as? String,
-            "1"
-        )
+        if #available(iOS 17, *) {
+            XCTAssertEqual(
+                app.cells.switches["Stories"].value as? String,
+                "1"
+            )
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306871
