@@ -22,10 +22,10 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
         profile = nil
         syncContentSettingsVC = nil
+        super.tearDown()
     }
 
     func test_syncContentSettingsViewController_generateSettingsCount() {

@@ -39,7 +39,7 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
         self.tabManager = nil
         self.glean = nil
         self.delegate = nil
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 

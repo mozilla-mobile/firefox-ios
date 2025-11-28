@@ -20,8 +20,8 @@ final class MicrosurveyCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
+        DependencyHelperMock().reset()
         super.tearDown()
-        AppContainer.shared.reset()
     }
 
     func testInitialState() {
