@@ -56,10 +56,11 @@ enum Experiments {
     // TODO: FXIOS-12587 This global property is not concurrency safe
     nonisolated(unsafe) private static var studiesSetting: Bool?
     nonisolated(unsafe) private static var telemetrySetting: Bool?
+    nonisolated(unsafe) private static var rolloutsSetting: Bool?
 
     static func setStudiesSetting(_ setting: Bool) {
         studiesSetting = setting
-        updateUserParticipation()
+        updateExperimentParticipation()
     }
 
     static func setTelemetrySetting(_ setting: Bool) {
@@ -67,19 +68,29 @@ enum Experiments {
         if !setting {
             shared.resetTelemetryIdentifiers()
         }
-        updateUserParticipation()
+        updateExperimentParticipation()
     }
 
-    private static func updateUserParticipation() {
-        // we only want to reset the participation flags if both settings have been
+    static func setRolloutsSetting(_ setting: Bool) {
+        rolloutsSetting = setting
+        updateRolloutParticipation()
+    }
+
+    private static func updateExperimentParticipation() {
+        // we only want to reset the experiment participation flag if both settings have been
         // initialized.
         if let studiesSetting = studiesSetting, let telemetrySetting = telemetrySetting {
-            // we only enable experiments and rollouts if users are opting in BOTH
+            // we only enable experiments if users are opting in BOTH
             // telemetry and studies. If either is opted-out, we make
-            // sure users are not enrolled in any experiments or rollouts
-            let participationEnabled = studiesSetting && telemetrySetting
-            shared.experimentParticipation = participationEnabled
-            shared.rolloutParticipation = participationEnabled
+            // sure users are not enrolled in any experiments
+            shared.experimentParticipation = studiesSetting && telemetrySetting
+        }
+    }
+
+    private static func updateRolloutParticipation() {
+        // Rollout participation is controlled independently by its own toggle
+        if let rolloutsSetting = rolloutsSetting {
+            shared.rolloutParticipation = rolloutsSetting
         }
     }
 

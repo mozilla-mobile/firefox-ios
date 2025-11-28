@@ -17,6 +17,7 @@ enum SettingsToggle: String, Equatable {
     case sendAnonymousUsageData = "SendAnonymousUsageData"
     case dailyUsagePing = "DailyUsagePing"
     case studies = "Studies"
+    case rollouts = "Rollouts"
     case crashToggle = "CrashToggle"
     case enableDomainAutocomplete = "enableDomainAutocomplete"
     case enableCustomDomainAutocomplete = "enableCustomDomainAutocomplete"
@@ -62,6 +63,7 @@ struct Settings {
         case .safari: return true
         case .sendAnonymousUsageData: return AppInfo.isKlar ? false : true
         case .studies: return AppInfo.isKlar ? false : true
+        case .rollouts: return AppInfo.isKlar ? false : true
         case .enableDomainAutocomplete: return true
         case .enableCustomDomainAutocomplete: return true
         case .enableSearchSuggestions: return false
