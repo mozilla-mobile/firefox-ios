@@ -11,10 +11,14 @@ protocol OnboardingCardInfoModelProtocol {
     var order: Int { get set }
     var title: String { get set }
     var body: String { get set }
-    var instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? { get set }
+    var instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
+        get set
+    }
     var link: OnboardingKit.OnboardingLinkInfoModel? { get set }
     var buttons: OnboardingKit.OnboardingButtons<OnboardingActions> { get set }
-    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] { get set }
+    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
+        get set
+    }
     var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
