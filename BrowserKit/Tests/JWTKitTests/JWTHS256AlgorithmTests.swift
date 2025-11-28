@@ -12,7 +12,10 @@ final class JWTHS256AlgorithmTests: XCTestCase {
     func test_signAndVerify_roundTrip() throws {
         let subject = createSubject(secret: Self.mockSecret)
         let signature = try subject.sign(message: Self.mockMessage)
-        XCTAssertNoThrow(try subject.verify(message: Self.mockMessage, hasSignature: signature), "expected verify to not throw")
+        XCTAssertNoThrow(
+            try subject.verify(message: Self.mockMessage, hasSignature: signature),
+            "expected verify to not throw"
+        )
     }
 
     func test_verify_failsForTamperedMessage() throws {
