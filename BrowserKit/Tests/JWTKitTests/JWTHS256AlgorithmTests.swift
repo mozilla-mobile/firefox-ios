@@ -39,12 +39,14 @@ final class JWTHS256AlgorithmTests: XCTestCase {
         let subject = createSubject(secret: Self.mockSecret)
         let signature = try subject.sign(message: Self.mockMessage)
 
-        // Flip the last character (just ensure it actually changes)
+        // Flip the last character (just to ensure it actually changes)
         var chars = Array(signature)
         if let last = chars.last {
             chars[chars.count - 1] = last == "A" ? "B" : "A"
         }
         let modifiedSignature = String(chars)
+
+        XCTAssertNotEqual(signature, modifiedSignature)
 
         XCTAssertThrowsError(try subject.verify(message: Self.mockMessage, hasSignature: modifiedSignature)) { error in
             XCTAssertEqual(error as? JWTError, .invalidSignature, "expected signature to be invalid")

@@ -21,7 +21,8 @@ final class JWTEncoderTests: XCTestCase {
     ]
 
     func testEncodeWithHS256ProducesThreePartsAndValidHeaderAndPayload() throws {
-        let subject = createSubject(algorithm: .hs256(secret: Self.mockSecret))
+        let algorithm: JWTAlgorithm = .hs256(secret: Self.mockSecret)
+        let subject = createSubject(algorithm: algorithm)
 
         let token = try subject.encode(payload: Self.mockPayload)
         let parts = token.split(separator: ".")
@@ -39,7 +40,7 @@ final class JWTEncoderTests: XCTestCase {
             "Header must be valid JSON"
         )
 
-        XCTAssertEqual(headerJSON["alg"] as? String, JWTAlgorithm.hs256(secret: "").name)
+        XCTAssertEqual(headerJSON["alg"] as? String, algorithm.name)
         XCTAssertEqual(headerJSON["typ"] as? String, "JWT")
 
         // Decode payload and inspect JSON
@@ -49,9 +50,9 @@ final class JWTEncoderTests: XCTestCase {
             "Payload must be valid JSON"
         )
 
-        XCTAssertEqual(decodedPayload["sub"] as? String, "1234567890")
-        XCTAssertEqual(decodedPayload["name"] as? String, "John Doe")
-        XCTAssertEqual(decodedPayload["admin"] as? Bool, true)
+        XCTAssertEqual(decodedPayload["sub"] as? String, Self.mockPayload["sub"] as? String)
+        XCTAssertEqual(decodedPayload["name"] as? String, Self.mockPayload["name"] as? String)
+        XCTAssertEqual(decodedPayload["admin"] as? Bool, Self.mockPayload["admin"] as? Bool)
 
         // Recompute expected signature using the same algorithm
         let signingInput = "\(headerPart).\(payloadPart)"
@@ -62,7 +63,8 @@ final class JWTEncoderTests: XCTestCase {
     }
 
     func testEncodeWithNoneAlgorithmProducesEmptySignature() throws {
-        let subject = createSubject(algorithm: .none)
+        let algorithm: JWTAlgorithm = .none
+        let subject = createSubject(algorithm: algorithm)
 
         let token = try subject.encode(payload: Self.mockPayload)
         let parts = token.split(separator: ".", omittingEmptySubsequences: false)
@@ -81,7 +83,7 @@ final class JWTEncoderTests: XCTestCase {
             "Header must be valid JSON"
         )
 
-        XCTAssertEqual(headerJSON["alg"] as? String, JWTAlgorithm.none.name)
+        XCTAssertEqual(headerJSON["alg"] as? String, algorithm.name)
         XCTAssertEqual(headerJSON["typ"] as? String, "JWT")
 
         let payloadData = try XCTUnwrap(Bytes.base64urlSafeDecodedData(payloadPart), "Payload must be valid base64url")
@@ -90,13 +92,14 @@ final class JWTEncoderTests: XCTestCase {
             "Payload must be valid JSON"
         )
 
-        XCTAssertEqual(decodedPayload["sub"] as? String, "1234567890")
-        XCTAssertEqual(decodedPayload["name"] as? String, "John Doe")
-        XCTAssertEqual(decodedPayload["admin"] as? Bool, true)
+        XCTAssertEqual(decodedPayload["sub"] as? String, Self.mockPayload["sub"] as? String)
+        XCTAssertEqual(decodedPayload["name"] as? String, Self.mockPayload["name"] as? String)
+        XCTAssertEqual(decodedPayload["admin"] as? Bool, Self.mockPayload["admin"] as? Bool)
     }
 
     func testEncodeThrowsOnInvalidJSONPayload() throws {
-        let subject = createSubject(algorithm: .hs256(secret: Self.mockSecret))
+        let algorithm: JWTAlgorithm = .hs256(secret: Self.mockSecret)
+        let subject = createSubject(algorithm: algorithm)
 
         XCTAssertThrowsError(try subject.encode(payload: Self.invalidPayload)) { error in
             XCTAssertEqual(error as? JWTError, .jsonEncoding)
