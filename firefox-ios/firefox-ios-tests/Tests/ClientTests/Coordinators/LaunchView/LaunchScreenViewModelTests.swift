@@ -5,6 +5,7 @@
 import Common
 import Shared
 import XCTest
+import OnboardingKit
 @testable import Client
 
 final class LaunchScreenViewModelTests: XCTestCase {
@@ -180,8 +181,10 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {
-        let buttons = OnboardingButtons(primary: OnboardingButtonInfoModel(title: "Button title \(index)",
-                                                                           action: .forwardOneCard))
+        let buttons = OnboardingButtons<OnboardingActions>(
+            primary: OnboardingButtonInfoModel<OnboardingActions>(
+                title: "Button title \(index)",
+                action: .forwardOneCard))
         return OnboardingCardInfoModel(cardType: .basic,
                                        name: "Name \(index)",
                                        order: index,
