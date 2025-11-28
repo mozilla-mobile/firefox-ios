@@ -25,7 +25,6 @@ struct OnboardingCardViewControllerSharedUX {
 }
 
 class OnboardingCardViewController<CardModel: OnboardingKit.OnboardingCardInfoModelProtocol>: UIViewController, Themeable {
-
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -75,7 +74,9 @@ class OnboardingCardViewController<CardModel: OnboardingKit.OnboardingCardInfoMo
     lazy var titleLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.font = self.shouldUseSmallDeviceLayout ? FXFontStyles.Bold.title3.scaledFont() : OnboardingCardViewControllerSharedUX.titleFont
+        label.font = self.shouldUseSmallDeviceLayout
+            ? FXFontStyles.Bold.title3.scaledFont()
+            : OnboardingCardViewControllerSharedUX.titleFont
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
         label.accessibilityTraits.insert(.header)
