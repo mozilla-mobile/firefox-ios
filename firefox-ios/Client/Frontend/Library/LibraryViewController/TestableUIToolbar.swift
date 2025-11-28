@@ -45,7 +45,7 @@ import Common
 /// When Apple fixes this regression and `UIToolbar` starts exposing its customViews
 /// again in the accessibility tree on iOS 26+, this wrapper should be removed.
 ///
-/// TODO(FXIOS-xxx): add test that fails if `UIToolbar` starts exposing its customViews again.
+/// TODO(FXIOS-14318): add test that fails if `UIToolbar` starts exposing its customViews again.
 final class TestableUIToolbar: UIView {
     private let realToolbar: UIToolbar?
     private let contentView: UIView
@@ -82,10 +82,10 @@ final class TestableUIToolbar: UIView {
         }
     }
 
-    // UIKit declares `tintColor` as an implicitly-unwrapped optional (`UIColor!`).
-    // To override it, we must use the exact same type signature. 
-    // This is why we disable and enable the swiftlint rule.
     // swiftlint:disable implicitly_unwrapped_optional
+    /// NOTE: UIKit declares `tintColor` as an implicitly-unwrapped optional (`UIColor!`).
+    /// To override it, we must use the exact same type signature.
+    /// This is why the swiftlint rule is disabled for this block.
     override var tintColor: UIColor! {
         didSet {
             realToolbar?.tintColor = tintColor
@@ -109,7 +109,6 @@ final class TestableUIToolbar: UIView {
 
     init() {
         if AppConstants.isRunningUITests {
-        // if false {
             self.realToolbar = nil
             self.contentView = UIView()
         } else {
