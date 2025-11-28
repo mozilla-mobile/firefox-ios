@@ -8,7 +8,8 @@ import XCTest
 
 @testable import Storage
 
-class RustLoginsTests: XCTestCase {
+// FIXME: FXIOS-14312 Class is not thread safe
+class RustLoginsTests: XCTestCase, @unchecked Sendable {
     var files: FileAccessor!
     var logins: RustLogins!
     let login = LoginEntry(fromJSONDict: [
