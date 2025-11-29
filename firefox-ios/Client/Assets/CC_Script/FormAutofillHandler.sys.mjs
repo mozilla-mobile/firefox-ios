@@ -17,6 +17,8 @@ ChromeUtils.defineESModuleGetters(lazy, {
   FormAutofillNameUtils:
     "resource://gre/modules/shared/FormAutofillNameUtils.sys.mjs",
   LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
+  clearTimeout: "resource://gre/modules/Timer.sys.mjs",
+  setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
 
 const { FIELD_STATES } = FormAutofillUtils;
@@ -24,6 +26,7 @@ const { FIELD_STATES } = FormAutofillUtils;
 export const FORM_CHANGE_REASON = {
   NODES_ADDED: "nodes-added",
   NODES_REMOVED: "nodes-removed",
+  SELECT_OPTIONS_CHANGED: "select-options-changed",
   ELEMENT_INVISIBLE: "visible-element-became-invisible",
   ELEMENT_VISIBLE: "invisible-element-became-visible",
 };
@@ -67,13 +70,14 @@ export class FormAutofillHandler {
 
   #formMutationObserver = null;
 
+  #visibilityObserver = null;
   #visibilityStateObserverByElement = new WeakMap();
 
   /**
    *
    * fillOnFormChangeData.isWithinDynamicFormChangeThreshold:
    *              Flags if a "form-change" event is received within the timeout threshold
-   *              (see lazy.FormAutofill.fillOnDynamicFormChangeTimeout), that we set
+   *              (see FormAutofill.fillOnDynamicFormChangeTimeout), that we set
    *              in order to consider newly detected fields for filling.
    * fillOnFormChangeData.previouslyUsedProfile
    *              The previously used profile from the latest autocompletion.
@@ -81,9 +85,15 @@ export class FormAutofillHandler {
    *              The previously focused element id from the latest autocompletion
    *
    * This is used for any following form changes and is cleared after a time threshold
-   * set by lazy.FormAutofill.fillOnDynamicFormChangeTimeout.
+   * set by FormAutofill.fillOnDynamicFormChangeTimeout.
    */
   #fillOnFormChangeData = new Map();
+
+  /**
+   * Caching the refill timeout id to cancel it once we know that we're about to fill
+   * on form change, because this sets up another refill timeout.
+   */
+  #refillTimeoutId = null;
 
   /**
    * Flag to indicate whethere there is an ongoing autofilling/clearing process.
@@ -212,20 +222,10 @@ export class FormAutofillHandler {
     return this.#filledStateByElement.get(element);
   }
 
-  isVisiblityStateObserverSetUpByElement(element) {
-    return this.#visibilityStateObserverByElement.has(element);
-  }
-
-  setVisibilityStateObserverByElement(element, observer) {
-    this.#visibilityStateObserverByElement.set(element, observer);
-  }
-
-  clearVisibilityStateObserverByElement(element) {
-    if (this.isVisiblityStateObserverSetUpByElement(element)) {
-      const observer = this.#visibilityStateObserverByElement.get(element);
-      observer.disconnect();
-      this.#visibilityStateObserverByElement.delete(element);
-    }
+  #clearVisibilityObserver() {
+    this.#visibilityObserver.disconnect();
+    this.#visibilityObserver = null;
+    this.#visibilityStateObserverByElement = new WeakMap();
   }
 
   /**
@@ -266,6 +266,11 @@ export class FormAutofillHandler {
     }
 
     return false;
+  }
+
+  updateFormByElement(element) {
+    const formLike = lazy.AutofillFormFactory.createFromField(element);
+    this._updateForm(formLike);
   }
 
   /**
@@ -344,7 +349,7 @@ export class FormAutofillHandler {
   }
 
   /**
-   * Resetting the state element's fieldDetail after it was removed from the form
+   * Resetting the filled state after an element was removed from the form
    * Todo: We'll need to update this.filledResult in FormAutofillParent (Bug 1948077).
    *
    * @param {HTMLElement} element that was removed
@@ -353,8 +358,7 @@ export class FormAutofillHandler {
     if (this.getFilledStateByElement(element) != FIELD_STATES.AUTO_FILLED) {
       return;
     }
-    const fieldDetail = this.getFieldDetailByElement(element);
-    this.#filledStateByElement.delete(fieldDetail);
+    this.#filledStateByElement.delete(element);
   }
 
   /**
@@ -414,7 +418,11 @@ export class FormAutofillHandler {
 
       let value = this.getFilledValueFromProfile(fieldDetail, profile);
       if (!value) {
-        this.changeFieldState(fieldDetail, FIELD_STATES.NORMAL);
+        // A field could have been filled by a previous fill, so only
+        // clear when in the preview state.
+        if (element.autofillState == FIELD_STATES.PREVIEW) {
+          this.changeFieldState(fieldDetail, FIELD_STATES.NORMAL);
+        }
         continue;
       }
 
@@ -450,9 +458,12 @@ export class FormAutofillHandler {
    *        The data profile containing the values to be autofilled into the form fields.
    */
   fillFields(focusedId, elementIds, profile) {
+    this.cancelRefillOnSiteClearingFieldsAction();
+
     this.#isAutofillInProgress = true;
     this.getAdaptedProfiles([profile]);
 
+    const filledValuesByElement = new Map();
     for (const fieldDetail of this.fieldDetails) {
       const { element, elementId } = fieldDetail;
 
@@ -489,10 +500,19 @@ export class FormAutofillHandler {
         ) {
           FormAutofillHandler.fillFieldValue(element, value);
           this.changeFieldState(fieldDetail, FIELD_STATES.AUTO_FILLED);
+          filledValuesByElement.set(element, value);
         }
       } else if (HTMLSelectElement.isInstance(element)) {
         const option = this.matchSelectOptions(fieldDetail, profile);
         if (!option) {
+          if (
+            this.getFilledStateByElement(element) == FIELD_STATES.AUTO_FILLED
+          ) {
+            // The select element was previously autofilled, but there
+            // is no matching option under the current set of options anymore.
+            // Changing the state will also remove the highlighting from the element
+            this.changeFieldState(fieldDetail, FIELD_STATES.NORMAL);
+          }
           continue;
         }
 
@@ -504,6 +524,7 @@ export class FormAutofillHandler {
         }
         // Autofill highlight appears regardless if value is changed or not
         this.changeFieldState(fieldDetail, FIELD_STATES.AUTO_FILLED);
+        filledValuesByElement.set(element, option.value);
       } else {
         continue;
       }
@@ -513,6 +534,8 @@ export class FormAutofillHandler {
     this.#isAutofillInProgress = false;
 
     this.registerFormChangeHandler();
+
+    this.reassignValuesIfModified(filledValuesByElement, false);
   }
 
   registerFormChangeHandler() {
@@ -527,6 +550,7 @@ export class FormAutofillHandler {
         return;
       }
       if (e.type == "reset") {
+        this.cancelRefillOnSiteClearingFieldsAction();
         for (const fieldDetail of this.fieldDetails) {
           const element = fieldDetail.element;
           element.removeEventListener("input", this, { mozSystemGroup: true });
@@ -568,6 +592,59 @@ export class FormAutofillHandler {
   }
 
   /**
+   * After a refill or clear action, the website might adjust the value of an
+   * element immediately afterwards. If this happens, fill or clear the value
+   * a second time to avoid having elements that are empty but highlighted, or
+   * vice versa.
+   *
+   * @param {Map<HTMLElement,string>} filledValuesByElement
+   * @param {boolean} onClear true for a clear action
+   */
+  reassignValuesIfModified(filledValuesByElement, onClear) {
+    if (!FormAutofill.refillOnSiteClearingFields) {
+      return;
+    }
+
+    this.#refillTimeoutId = lazy.setTimeout(() => {
+      for (let [e, v] of filledValuesByElement) {
+        if (onClear) {
+          if (e.autofillState != FIELD_STATES.NORMAL || e.value !== v) {
+            // Only reclear if the value was changed back to the original value.
+            continue;
+          }
+        } else if (e.autofillState == FIELD_STATES.NORMAL || e.value) {
+          // Nothing to do if the autofilled value wasn't cleared or the
+          // element's autofill state has changed to NORMAL in the meantime
+          continue;
+        }
+
+        this.#isAutofillInProgress = true;
+        FormAutofillHandler.fillFieldValue(e, onClear ? "" : v, {
+          ignoreFocus: true,
+        });
+        // Although the field should already be in the autofilled state at this point,
+        // still setting autofilled state to re-highlight the element.
+        e.autofillState = onClear
+          ? FIELD_STATES.NORMAL
+          : FIELD_STATES.AUTO_FILLED;
+        this.#isAutofillInProgress = false;
+      }
+
+      this.#refillTimeoutId = null;
+    }, FormAutofill.refillOnSiteClearingFieldsTimeout);
+  }
+
+  cancelRefillOnSiteClearingFieldsAction() {
+    if (!FormAutofill.refillOnSiteClearingFields) {
+      return;
+    }
+    if (this.#refillTimeoutId) {
+      lazy.clearTimeout(this.#refillTimeoutId);
+      this.#refillTimeoutId = null;
+    }
+  }
+
+  /**
    * Listens for dynamic form changes by setting up two observer types:
    *      1. IntersectionObserver(s) that observe(s) intersections between
    *         (in-)visibile elements and an intersection target (the form/document of interest).
@@ -586,87 +663,93 @@ export class FormAutofillHandler {
     this.setUpFormNodesMutationObserver();
   }
 
+  #initializeIntersectionObserver() {
+    this.#visibilityObserver ??= new this.window.IntersectionObserver(
+      (entries, _observer) => {
+        const nowVisible = [];
+        const nowInvisible = [];
+        entries.forEach(entry => {
+          let observedElement = entry.target;
+
+          let oldState =
+            this.#visibilityStateObserverByElement.get(observedElement);
+          let newState = FormAutofillUtils.isFieldVisible(observedElement);
+          if (oldState == newState) {
+            return;
+          }
+
+          if (newState) {
+            nowVisible.push(observedElement);
+          } else {
+            nowInvisible.push(observedElement);
+          }
+        });
+
+        if (!nowVisible.length && !nowInvisible.length) {
+          return;
+        }
+
+        let changes = {};
+        if (nowVisible.length) {
+          changes[FORM_CHANGE_REASON.ELEMENT_VISIBLE] = nowVisible;
+        }
+        if (nowInvisible.length) {
+          changes[FORM_CHANGE_REASON.ELEMENT_INVISIBLE] = nowInvisible;
+        }
+
+        // Clear all of the observer state. The notification will add a new
+        // observer if needed.
+        this.#clearVisibilityObserver();
+
+        const formChangedEvent = new CustomEvent("form-changed", {
+          detail: {
+            form: this.form.rootElement,
+            changes,
+          },
+          bubbles: true,
+        });
+        this.form.ownerDocument.dispatchEvent(formChangedEvent);
+      },
+      {
+        root: this.form.rootElement,
+        // intersection ratio between 0.0 (invisible element) and 1.0 (visible element)
+        threshold: [0, 1],
+      }
+    );
+  }
+
   /**
-   * Iterates through handler.form.elements and sets up an IntersectionObserver for each (in-)visible
-   * address/cc input element that is not observed yet (see handler.#visibilityStateObserverByElement).
-   * The observer notifies of intersections between the (in-)visible element and the intersection target (handler.form).
-   * This is the case if e.g. a visible element becomes invisible or an invisible element becomes visible.
-   * If a visibility state change is observed, a "form-changes" event is dispatched.
+   * Sets up an IntersectionObserver to handle each (in-)visible address/cc input element
+   * in a form. The observer notifies of intersections between the (in-)visible element and
+   * the intersection target (handler.form). This is the case if e.g. a visible element becomes
+   * invisible or an invisible element becomes visible. If a visibility state change is observed,
+   * a "form-changes" event is dispatched.
    */
   setUpElementVisibilityObserver() {
-    const VISIBILITY_STATE = {
-      VISIBLE: true,
-      INVISIBLE: false,
-    };
-
-    // Setting up an observer for an element's changing visibility state
-    const setUpIntersectionObserver = (element, visibilityState) => {
-      const visibilityStateObserver = new this.window.IntersectionObserver(
-        (entries, observer) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting != visibilityState) {
-              return;
-            }
-            if (
-              entry.target.checkVisibility({
-                checkOpacity: true,
-                checkVisibilityCSS: true,
-              }) != visibilityState
-            ) {
-              // The observer notified that the element reached the intersection threshold
-              // (meaning the element's visibility state changed to either visible or invisible.
-              // But checkVisibility doesn't confirm that.
-              // For these mismatches we disconnect the observer to avoid an infinite loop.
-              observer.disconnect();
-              return;
-            }
-            const changes = {};
-            const reason =
-              visibilityState == VISIBILITY_STATE.VISIBLE
-                ? FORM_CHANGE_REASON.ELEMENT_VISIBLE
-                : FORM_CHANGE_REASON.ELEMENT_INVISIBLE;
-            changes[reason] = [entry.target];
-
-            const formChangedEvent = new CustomEvent("form-changed", {
-              detail: {
-                form: this.form.rootElement,
-                changes,
-              },
-              bubbles: true,
-            });
-            this.form.ownerDocument.dispatchEvent(formChangedEvent);
-
-            this.clearVisibilityStateObserverByElement(element);
-            observer.disconnect();
-          });
-        },
-        {
-          root: this.form.rootElement,
-          // intersection reatio between 0.0 (invisible element) and 1.0 (visible element)
-          threshold: visibilityState === VISIBILITY_STATE.INVISIBLE ? 0 : 1,
-        }
-      );
-      visibilityStateObserver.observe(element);
-      this.setVisibilityStateObserverByElement(
-        element,
-        visibilityStateObserver
-      );
-    };
-
     for (let element of this.form.elements) {
       if (!FormAutofillUtils.isCreditCardOrAddressFieldType(element)) {
         continue;
       }
-      if (this.isVisiblityStateObserverSetUpByElement(element)) {
+
+      if (this.#visibilityStateObserverByElement.has(element)) {
         continue;
       }
-      if (FormAutofillUtils.isFieldVisible(element)) {
-        // Setting up an observer that notifies when the visible element becomes invisible
-        setUpIntersectionObserver(element, VISIBILITY_STATE.INVISIBLE);
-      } else {
-        // Setting up an observer that notifies when the invisible element becomes visible
-        setUpIntersectionObserver(element, VISIBILITY_STATE.VISIBLE);
+
+      let state = FormAutofillUtils.isFieldVisible(element);
+      if (state) {
+        // We don't care about visibility state changes for fields that are not recognized
+        // by our heuristics. We only handle this for visible fields because we currently
+        // don't run field detection heuristics for invisible fields.
+        const fieldDetail = this.getFieldDetailByElement(element);
+        if (!fieldDetail.fieldName) {
+          continue;
+        }
       }
+
+      this.#initializeIntersectionObserver();
+
+      this.#visibilityObserver.observe(element);
+      this.#visibilityStateObserverByElement.set(element, state);
     }
   }
 
@@ -684,18 +767,21 @@ export class FormAutofillHandler {
     const mutationObserver = new this.window.MutationObserver(
       (mutations, _) => {
         const collectMutatedNodes = mutations => {
-          let removedNodes = [];
-          let addedNodes = [];
+          let removedNodes = new Set();
+          let addedNodes = new Set();
+          let changedSelectElements = new Set();
           mutations.forEach(mutation => {
             if (mutation.type == "childList") {
-              if (mutation.addedNodes.length) {
-                addedNodes.push(...mutation.addedNodes);
+              if (HTMLSelectElement.isInstance(mutation.target)) {
+                changedSelectElements.add(mutation.target);
+              } else if (mutation.addedNodes.length) {
+                addedNodes.add(...mutation.addedNodes);
               } else if (mutation.removedNodes.length) {
-                removedNodes.push(...mutation.removedNodes);
+                removedNodes.add(...mutation.removedNodes);
               }
             }
           });
-          return [addedNodes, removedNodes];
+          return [addedNodes, removedNodes, changedSelectElements];
         };
 
         const collectAllSubtreeElements = node => {
@@ -715,22 +801,35 @@ export class FormAutofillHandler {
             );
         };
 
-        let [addedNodes, removedNodes] = collectMutatedNodes(mutations);
-        let relevantAddedElements = getCCAndAddressElements(addedNodes);
-        // We only care about removed elements that might change the
-        // currently detected fieldDetails
-        let relevantRemovedElements = getCCAndAddressElements(
-          removedNodes
-        ).filter(
+        const [addedNodes, removedNodes, changedSelectElements] =
+          collectMutatedNodes(mutations);
+        let relevantAddedElements = getCCAndAddressElements([...addedNodes]);
+        // We only care about removed elements and changed select options
+        // from the current set of detected fieldDetails
+        let relevantRemovedElements = getCCAndAddressElements([
+          ...removedNodes,
+        ]).filter(
+          element =>
+            this.#fieldDetails && !!this.getFieldDetailByElement(element)
+        );
+        let relevantChangedSelectElements = [...changedSelectElements].filter(
           element =>
             this.#fieldDetails && !!this.getFieldDetailByElement(element)
         );
 
-        if (!relevantRemovedElements.length && !relevantAddedElements.length) {
+        if (
+          !relevantRemovedElements.length &&
+          !relevantAddedElements.length &&
+          !relevantChangedSelectElements.length
+        ) {
           return;
         }
 
         let changes = {};
+        if (relevantChangedSelectElements.length) {
+          changes[FORM_CHANGE_REASON.SELECT_OPTIONS_CHANGED] =
+            relevantChangedSelectElements;
+        }
         if (relevantRemovedElements.length) {
           changes[FORM_CHANGE_REASON.NODES_REMOVED] = relevantRemovedElements;
         }
@@ -764,9 +863,7 @@ export class FormAutofillHandler {
       return;
     }
     // Disconnect intersection observers
-    for (let element of this.form.elements) {
-      this.clearVisibilityStateObserverByElement(element);
-    }
+    this.#clearVisibilityObserver();
     // Disconnect mutation observer
     this.#formMutationObserver.disconnect();
     this.#isObservingFormMutations = false;
@@ -825,29 +922,6 @@ export class FormAutofillHandler {
     return value;
   }
 
-  /*
-   * Apply both address and credit card related transformers.
-   *
-   * @param {Object} profile
-   *        A profile for adjusting credit card related value.
-   * @override
-   */
-  applyTransformers(profile) {
-    this.addressTransformer(profile);
-    this.telTransformer(profile);
-    this.creditCardExpiryDateTransformer(profile);
-    this.creditCardExpMonthAndYearTransformer(profile);
-    this.creditCardNameTransformer(profile);
-    this.adaptFieldMaxLength(profile);
-  }
-
-  getAdaptedProfiles(originalProfiles) {
-    for (let profile of originalProfiles) {
-      this.applyTransformers(profile);
-    }
-    return originalProfiles;
-  }
-
   /**
    * Match the select option for a field if we autofill with the given profile.
    * This function caches the matching result in the `#matchingSelectionOption`
@@ -875,7 +949,8 @@ export class FormAutofillHandler {
     const value = profile[fieldName];
 
     let option = cache[value]?.deref();
-    if (!option) {
+
+    if (!option || !option.isConnected) {
       option = FormAutofillUtils.findSelectOption(element, profile, fieldName);
 
       if (option) {
@@ -890,8 +965,270 @@ export class FormAutofillHandler {
     return option;
   }
 
-  adaptFieldMaxLength(profile) {
-    for (let key in profile) {
+  getAdaptedProfiles(originalProfiles) {
+    for (let profile of originalProfiles) {
+      let transformer = new ProfileTransformer(this, profile);
+      transformer.applyTransformers();
+    }
+    return originalProfiles;
+  }
+
+  /**
+   *
+   * @param {object} fieldDetail A fieldDetail of the related element.
+   * @param {object} profile The profile to fill.
+   * @returns {string} The value to fill for the given field.
+   */
+  getFilledValueFromProfile(fieldDetail, profile) {
+    let value =
+      profile[`${fieldDetail.fieldName}-formatted`] ||
+      profile[fieldDetail.fieldName];
+
+    if (fieldDetail.fieldName == "cc-number" && fieldDetail.part != null) {
+      const part = fieldDetail.part;
+      return value.slice((part - 1) * 4, part * 4);
+    }
+    return value;
+  }
+  /**
+   * Fills the provided element with the specified value.
+   *
+   * @param {HTMLElement} element - The form field element to be filled.
+   * @param {string} value - The value to be filled into the form field.
+   * @param {object} options
+   * @param {boolean} [options.ignoreFocus] - Whether to ignore focusing the field that is filled.
+   *                                          True  - When an autofilled field get's refilled after
+   *                                                  its value was cleared
+   *                                          False - Default
+   */
+  static fillFieldValue(element, value, { ignoreFocus = false } = {}) {
+    // Ignoring to focus the field if it gets refilled (after the site cleared its value),
+    // because it was already focused on the previous autofill action and we want to avoid
+    // re-triggering any event listener callbacks or autocomplete dropdowns
+    if (FormAutofillUtils.focusOnAutofill && !ignoreFocus) {
+      element.focus({ preventScroll: true });
+    }
+    if (FormAutofillUtils.isTextControl(element)) {
+      element.setUserInput(value);
+    } else if (HTMLSelectElement.isInstance(element)) {
+      // Set the value of the select element so that web event handlers can react accordingly
+      element.value = value;
+      element.dispatchEvent(
+        new element.ownerGlobal.Event("input", { bubbles: true })
+      );
+      element.dispatchEvent(
+        new element.ownerGlobal.Event("change", { bubbles: true })
+      );
+    }
+  }
+
+  clearPreviewedFields(elementIds) {
+    for (const elementId of elementIds) {
+      const fieldDetail = this.getFieldDetailByElementId(elementId);
+      const element = fieldDetail?.element;
+      if (!element) {
+        this.log.warn(fieldDetail.fieldName, "is unreachable");
+        continue;
+      }
+
+      element.previewValue = "";
+      if (element.autofillState == FIELD_STATES.AUTO_FILLED) {
+        continue;
+      }
+      this.changeFieldState(fieldDetail, FIELD_STATES.NORMAL);
+    }
+  }
+
+  clearFilledFields(focusedId, elementIds) {
+    this.cancelRefillOnSiteClearingFieldsAction();
+    this.#isAutofillInProgress = true;
+    const fieldDetails = elementIds.map(id =>
+      this.getFieldDetailByElementId(id)
+    );
+
+    const filledValuesByElement = new Map();
+
+    for (const fieldDetail of fieldDetails) {
+      const element = fieldDetail?.element;
+      if (!element) {
+        this.log.warn(fieldDetail?.fieldName, "is unreachable");
+        continue;
+      }
+
+      if (element.autofillState == FIELD_STATES.AUTO_FILLED) {
+        let value = "";
+        if (HTMLSelectElement.isInstance(element)) {
+          if (!element.options.length) {
+            continue;
+          }
+          // Resets a <select> element to its selected option or the first
+          // option if there is none selected.
+          const selected = [...element.options].find(option =>
+            option.hasAttribute("selected")
+          );
+          value = selected ? selected.value : element.options[0].value;
+        } else {
+          filledValuesByElement.set(element, element.value);
+        }
+
+        FormAutofillHandler.fillFieldValue(element, value);
+        this.changeFieldState(fieldDetail, FIELD_STATES.NORMAL);
+      }
+    }
+
+    this.focusPreviouslyFocusedElement(focusedId);
+    this.#isAutofillInProgress = false;
+
+    this.reassignValuesIfModified(filledValuesByElement, true);
+  }
+
+  focusPreviouslyFocusedElement(focusedId) {
+    let focusedElement = FormAutofillUtils.getElementByIdentifier(focusedId);
+    if (FormAutofillUtils.focusOnAutofill && focusedElement) {
+      focusedElement.focus({ preventScroll: true });
+    }
+  }
+
+  /**
+   * Return the record that is keyed by element id and value is the normalized value
+   * done by computeFillingValue
+   *
+   * @returns {object} An object keyed by element id, and the value is
+   *                   an object that includes the following properties:
+   * filledState: The autofill state of the element
+   * filledvalue: The value of the element
+   */
+  collectFormFilledData() {
+    const filledData = new Map();
+
+    for (const fieldDetail of this.fieldDetails) {
+      const element = fieldDetail.element;
+      filledData.set(fieldDetail.elementId, {
+        filledState: element.autofillState,
+        filledValue: this.computeFillingValue(fieldDetail),
+      });
+    }
+    return filledData;
+  }
+
+  isFieldAutofillable(fieldDetail, profile) {
+    if (FormAutofillUtils.isTextControl(fieldDetail.element)) {
+      return !!profile[fieldDetail.fieldName];
+    }
+    return !!this.matchSelectOptions(fieldDetail, profile);
+  }
+}
+
+/**
+ * Apply some transformations to the fields on the profile based
+ *  on the fields that appear in the form. The original values are
+ *  saved and used if the transformer is used again.
+ */
+class ProfileTransformer {
+  // The FormAutofillHandler
+  #handler = null;
+
+  // A profile for adjusting credit card and address related values.
+  #profile = null;
+
+  constructor(handler, profile) {
+    this.#handler = handler;
+    this.#profile = profile;
+  }
+
+  // Get the original unmodified value of a field if it exists.
+  getField(fieldName) {
+    if (this.#profile._original) {
+      let value = this.#profile._original[fieldName];
+      if (value) {
+        return value;
+      }
+    }
+
+    return this.#profile[fieldName];
+  }
+
+  // Get the modified value of a field if it exists, or the
+  // original value.
+  getUpdatedField(fieldName) {
+    return this.#profile[fieldName];
+  }
+
+  // Modify a field's value, but store the original value for
+  // use later.
+  setField(fieldName, value) {
+    let originalValue = this.#profile[fieldName];
+    if (originalValue) {
+      if (!this.#profile._original) {
+        this.#profile._original = {};
+      }
+      if (!this.#profile._original[fieldName]) {
+        this.#profile._original[fieldName] = originalValue;
+      }
+    }
+
+    this.#profile[fieldName] = value;
+  }
+
+  // Delete the modified value of a field, but leave the stored
+  // original value.
+  deleteField(fieldName) {
+    delete this.#profile[fieldName];
+  }
+
+  getFieldDetailByName(fieldName) {
+    return this.#handler.getFieldDetailByName(fieldName);
+  }
+
+  applyTransformers() {
+    this.#addressTransformer();
+    this.#telTransformer();
+    this.#creditCardExpiryDateTransformer();
+    this.#creditCardExpMonthAndYearTransformer();
+    this.#creditCardNameTransformer();
+    this.#addressLevelOneTransformer();
+    this.#adaptFieldMaxLength();
+  }
+
+  /**
+   * Replaces an abbreviated address-level1 code (e.g. "B") with the full
+   * region name (e.g. "Buenos Aires") if the target field is a text input.
+   */
+  #addressLevelOneTransformer() {
+    const fieldName = "address-level1";
+    const fieldDetail = this.getFieldDetailByName(fieldName);
+    if (!fieldDetail || !FormAutofillUtils.isTextControl(fieldDetail.element)) {
+      return;
+    }
+
+    const element = fieldDetail.element;
+    const abbreviatedValue = this.getField(fieldName);
+    const country = this.getField("country");
+
+    const fullSubregionName = FormAutofillUtils.getFullSubregionName(
+      abbreviatedValue,
+      country
+    );
+
+    if (!fullSubregionName || fullSubregionName === abbreviatedValue) {
+      return;
+    }
+
+    // No point in using full subregion name if allowed string length is too small.
+    if (
+      element.maxLength !== -1 &&
+      fullSubregionName.length > element.maxLength
+    ) {
+      return;
+    }
+
+    this.setField(fieldName, fullSubregionName);
+  }
+
+  // This function mostly uses getUpdatedField as it relies on the modified
+  // values of fields from the previous functions.
+  #adaptFieldMaxLength() {
+    for (let key in this.#profile) {
       let detail = this.getFieldDetailByName(key);
       if (!detail || detail.part) {
         continue;
@@ -906,13 +1243,13 @@ export class FormAutofillHandler {
       if (
         maxLength === undefined ||
         maxLength < 0 ||
-        profile[key].toString().length <= maxLength
+        this.getUpdatedField(key).toString().length <= maxLength
       ) {
         continue;
       }
 
       if (maxLength) {
-        switch (typeof profile[key]) {
+        switch (typeof this.getUpdatedField(key)) {
           case "string":
             // If this is an expiration field and our previous
             // adaptations haven't resulted in a string that is
@@ -922,20 +1259,24 @@ export class FormAutofillHandler {
             // form "MMYY" or "MM/YY".
             if (key == "cc-exp" && (maxLength == 4 || maxLength == 5)) {
               const month2Digits = (
-                "0" + profile["cc-exp-month"].toString()
+                "0" + this.getField("cc-exp-month").toString()
               ).slice(-2);
-              const year2Digits = profile["cc-exp-year"].toString().slice(-2);
+              const year2Digits = this.getField("cc-exp-year")
+                .toString()
+                .slice(-2);
               const separator = maxLength == 5 ? "/" : "";
-              profile[key] = `${month2Digits}${separator}${year2Digits}`;
+              this.setField(key, `${month2Digits}${separator}${year2Digits}`);
             } else if (key == "cc-number") {
               // We want to show the last four digits of credit card so that
               // the masked credit card previews correctly and appears correctly
               // in the autocomplete menu
-              profile[key] = profile[key].substr(
-                profile[key].length - maxLength
-              );
+              let value = this.getField(key);
+              this.setField(key, value.substr(value.length - maxLength));
             } else {
-              profile[key] = profile[key].substr(0, maxLength);
+              this.setField(
+                key,
+                this.getUpdatedField(key).substr(0, maxLength)
+              );
             }
             break;
           case "number":
@@ -947,13 +1288,18 @@ export class FormAutofillHandler {
             // The only numbers we store are expiration month/year,
             // and if they truncate, we want the final digits, not
             // the initial ones.
-            profile[key] = profile[key] % Math.pow(10, maxLength);
+            this.setField(
+              key,
+              this.getUpdatedField(key) % Math.pow(10, maxLength)
+            );
             break;
           default:
         }
       } else {
-        delete profile[key];
-        delete profile[`${key}-formatted`];
+        // This code only seems to run when maxlength = 0, an edge case which
+        // hardly seems worth handling.
+        this.deleteField(key);
+        this.deleteField(`${key}-formatted`);
       }
     }
   }
@@ -961,11 +1307,9 @@ export class FormAutofillHandler {
   /**
    * Handles credit card expiry date transformation when
    * the expiry date exists in a cc-exp field.
-   *
-   * @param {object} profile
    */
-  creditCardExpiryDateTransformer(profile) {
-    if (!profile["cc-exp"]) {
+  #creditCardExpiryDateTransformer() {
+    if (!this.getField("cc-exp")) {
       return;
     }
 
@@ -1018,8 +1362,8 @@ export class FormAutofillHandler {
     }
 
     let newExpiryString = null;
-    const month = profile["cc-exp-month"].toString();
-    const year = profile["cc-exp-year"].toString();
+    const month = this.getField("cc-exp-month").toString();
+    const year = this.getField("cc-exp-year").toString();
     if (element.localName == "input") {
       // Use the placeholder or label to determine the expiry string format.
       const possibleExpiryStrings = [];
@@ -1043,16 +1387,17 @@ export class FormAutofillHandler {
 
     // Bug 1688576: Change YYYY-MM to MM/YYYY since MM/YYYY is the
     // preferred presentation format for credit card expiry dates.
-    profile["cc-exp"] = newExpiryString ?? `${month.padStart(2, "0")}/${year}`;
+    this.setField(
+      "cc-exp",
+      newExpiryString ?? `${month.padStart(2, "0")}/${year}`
+    );
   }
 
   /**
    * Handles credit card expiry date transformation when the expiry date exists in
    * the separate cc-exp-month and cc-exp-year fields
-   *
-   * @param {object} profile
    */
-  creditCardExpMonthAndYearTransformer(profile) {
+  #creditCardExpMonthAndYearTransformer() {
     const getInputElementByField = (field, self) => {
       if (!field) {
         return null;
@@ -1067,9 +1412,10 @@ export class FormAutofillHandler {
     const month = getInputElementByField("cc-exp-month", this);
     if (month) {
       // Transform the expiry month to MM since this is a common format needed for filling.
-      profile["cc-exp-month-formatted"] = profile["cc-exp-month"]
-        ?.toString()
-        .padStart(2, "0");
+      this.setField(
+        "cc-exp-month-formatted",
+        this.getField("cc-exp-month")?.toString().padStart(2, "0")
+      );
     }
     const year = getInputElementByField("cc-exp-year", this);
     // If the expiration year element is an input,
@@ -1081,9 +1427,10 @@ export class FormAutofillHandler {
       // Checks for 'YY'|'AA'|'JJ'|'RR' placeholder and converts the year to a two digit string using the last two digits.
       const result = /\b(yy|aa|jj|rr)\b/i.test(placeholder);
       if (result) {
-        profile["cc-exp-year-formatted"] = profile["cc-exp-year"]
-          ?.toString()
-          .substring(2);
+        this.setField(
+          "cc-exp-year-formatted",
+          this.getField("cc-exp-year")?.toString().substring(2)
+        );
       }
     }
   }
@@ -1091,11 +1438,9 @@ export class FormAutofillHandler {
   /**
    * Handles credit card name transformation when the name exists in
    * the separate cc-given-name, cc-middle-name, and cc-family name fields
-   *
-   * @param {object} profile
    */
-  creditCardNameTransformer(profile) {
-    const name = profile["cc-name"];
+  #creditCardNameTransformer() {
+    const name = this.getField("cc-name");
     if (!name) {
       return;
     }
@@ -1106,37 +1451,43 @@ export class FormAutofillHandler {
     if (given || middle || family) {
       const nameParts = lazy.FormAutofillNameUtils.splitName(name);
       if (given && nameParts.given) {
-        profile["cc-given-name"] = nameParts.given;
+        this.setField("cc-given-name", nameParts.given);
       }
       if (middle && nameParts.middle) {
-        profile["cc-middle-name"] = nameParts.middle;
+        this.setField("cc-middle-name", nameParts.middle);
       }
       if (family && nameParts.family) {
-        profile["cc-family-name"] = nameParts.family;
+        this.setField("cc-family-name", nameParts.family);
       }
     }
   }
 
-  addressTransformer(profile) {
-    if (profile["street-address"]) {
+  #addressTransformer() {
+    let streetAddress = this.getField("street-address");
+    if (streetAddress) {
       // "-moz-street-address-one-line" is used by the labels in
       // ProfileAutoCompleteResult.
-      profile["-moz-street-address-one-line"] =
-        FormAutofillUtils.toOneLineAddress(profile["street-address"]);
+      this.setField(
+        "-moz-street-address-one-line",
+        FormAutofillUtils.toOneLineAddress(streetAddress)
+      );
       let streetAddressDetail = this.getFieldDetailByName("street-address");
       if (
         streetAddressDetail &&
         FormAutofillUtils.isTextControl(streetAddressDetail.element)
       ) {
-        profile["street-address"] = profile["-moz-street-address-one-line"];
+        this.setField(
+          "street-address",
+          this.getField("-moz-street-address-one-line")
+        );
       }
 
       let waitForConcat = [];
       for (let f of ["address-line3", "address-line2", "address-line1"]) {
-        waitForConcat.unshift(profile[f]);
+        waitForConcat.unshift(this.getField(f));
         if (this.getFieldDetailByName(f)) {
           if (waitForConcat.length > 1) {
-            profile[f] = FormAutofillUtils.toOneLineAddress(waitForConcat);
+            this.setField(f, FormAutofillUtils.toOneLineAddress(waitForConcat));
           }
           waitForConcat = [];
         }
@@ -1147,14 +1498,14 @@ export class FormAutofillHandler {
     // and street name.
     if (this.getFieldDetailByName("address-housenumber")) {
       let address = lazy.AddressParser.parseStreetAddress(
-        profile["street-address"]
+        this.getField("street-address")
       );
       if (address) {
-        profile["address-housenumber"] = address.street_number;
+        this.setField("address-housenumber", address.street_number);
         let field = this.getFieldDetailByName("address-line1")
           ? "address-line1"
           : "street-address";
-        profile[field] = address.street_name;
+        this.setField(field, address.street_name);
       }
     }
   }
@@ -1162,12 +1513,11 @@ export class FormAutofillHandler {
   /**
    * Replace tel with tel-national if tel violates the input element's
    * restriction.
-   *
-   * @param {object} profile
-   *        A profile to be converted.
    */
-  telTransformer(profile) {
-    if (!profile.tel || !profile["tel-national"]) {
+  #telTransformer() {
+    let tel = this.getField("tel");
+    let telNational = this.getField("tel-national");
+    if (!tel || !telNational) {
       return;
     }
 
@@ -1186,14 +1536,11 @@ export class FormAutofillHandler {
       return _pattern.test(str);
     };
     if (element.pattern) {
-      if (testPattern(profile.tel)) {
+      if (testPattern(tel)) {
         return;
       }
     } else if (element.maxLength) {
-      if (
-        detail.reason == "autocomplete" &&
-        profile.tel.length <= element.maxLength
-      ) {
+      if (detail.reason == "autocomplete" && tel.length <= element.maxLength) {
         return;
       }
     }
@@ -1205,143 +1552,15 @@ export class FormAutofillHandler {
       // determine which one is better.
       // TODO: [Bug 1407545] This should be improved once more countries are
       // supported.
-      profile.tel = profile["tel-national"];
+      this.setField("tel", telNational);
     } else if (element.pattern) {
-      if (testPattern(profile["tel-national"])) {
-        profile.tel = profile["tel-national"];
+      if (testPattern(telNational)) {
+        this.setField("tel", telNational);
       }
     } else if (element.maxLength) {
-      if (profile["tel-national"].length <= element.maxLength) {
-        profile.tel = profile["tel-national"];
+      if (telNational.length <= element.maxLength) {
+        this.setField("tel", telNational);
       }
     }
-  }
-
-  /**
-   *
-   * @param {object} fieldDetail A fieldDetail of the related element.
-   * @param {object} profile The profile to fill.
-   * @returns {string} The value to fill for the given field.
-   */
-  getFilledValueFromProfile(fieldDetail, profile) {
-    let value =
-      profile[`${fieldDetail.fieldName}-formatted`] ||
-      profile[fieldDetail.fieldName];
-
-    if (fieldDetail.fieldName == "cc-number" && fieldDetail.part != null) {
-      const part = fieldDetail.part;
-      return value.slice((part - 1) * 4, part * 4);
-    }
-    return value;
-  }
-  /**
-   * Fills the provided element with the specified value.
-   *
-   * @param {HTMLElement} element - The form field element to be filled.
-   * @param {string} value - The value to be filled into the form field.
-   */
-  static fillFieldValue(element, value) {
-    if (FormAutofillUtils.focusOnAutofill) {
-      element.focus({ preventScroll: true });
-    }
-    if (FormAutofillUtils.isTextControl(element)) {
-      element.setUserInput(value);
-    } else if (HTMLSelectElement.isInstance(element)) {
-      // Set the value of the select element so that web event handlers can react accordingly
-      element.value = value;
-      element.dispatchEvent(
-        new element.ownerGlobal.Event("input", { bubbles: true })
-      );
-      element.dispatchEvent(
-        new element.ownerGlobal.Event("change", { bubbles: true })
-      );
-    }
-  }
-
-  clearPreviewedFields(elementIds) {
-    for (const elementId of elementIds) {
-      const fieldDetail = this.getFieldDetailByElementId(elementId);
-      const element = fieldDetail?.element;
-      if (!element) {
-        this.log.warn(fieldDetail.fieldName, "is unreachable");
-        continue;
-      }
-
-      element.previewValue = "";
-      if (element.autofillState == FIELD_STATES.AUTO_FILLED) {
-        continue;
-      }
-      this.changeFieldState(fieldDetail, FIELD_STATES.NORMAL);
-    }
-  }
-
-  clearFilledFields(focusedId, elementIds) {
-    this.#isAutofillInProgress = true;
-    const fieldDetails = elementIds.map(id =>
-      this.getFieldDetailByElementId(id)
-    );
-    for (const fieldDetail of fieldDetails) {
-      const element = fieldDetail?.element;
-      if (!element) {
-        this.log.warn(fieldDetail?.fieldName, "is unreachable");
-        continue;
-      }
-
-      if (element.autofillState == FIELD_STATES.AUTO_FILLED) {
-        let value = "";
-        if (HTMLSelectElement.isInstance(element)) {
-          if (!element.options.length) {
-            continue;
-          }
-          // Resets a <select> element to its selected option or the first
-          // option if there is none selected.
-          const selected = [...element.options].find(option =>
-            option.hasAttribute("selected")
-          );
-          value = selected ? selected.value : element.options[0].value;
-        }
-        FormAutofillHandler.fillFieldValue(element, value);
-        this.changeFieldState(fieldDetail, FIELD_STATES.NORMAL);
-      }
-    }
-
-    this.focusPreviouslyFocusedElement(focusedId);
-    this.#isAutofillInProgress = false;
-  }
-
-  focusPreviouslyFocusedElement(focusedId) {
-    let focusedElement = FormAutofillUtils.getElementByIdentifier(focusedId);
-    if (FormAutofillUtils.focusOnAutofill && focusedElement) {
-      focusedElement.focus({ preventScroll: true });
-    }
-  }
-
-  /**
-   * Return the record that is keyed by element id and value is the normalized value
-   * done by computeFillingValue
-   *
-   * @returns {object} An object keyed by element id, and the value is
-   *                   an object that includes the following properties:
-   * filledState: The autofill state of the element
-   * filledvalue: The value of the element
-   */
-  collectFormFilledData() {
-    const filledData = new Map();
-
-    for (const fieldDetail of this.fieldDetails) {
-      const element = fieldDetail.element;
-      filledData.set(fieldDetail.elementId, {
-        filledState: element.autofillState,
-        filledValue: this.computeFillingValue(fieldDetail),
-      });
-    }
-    return filledData;
-  }
-
-  isFieldAutofillable(fieldDetail, profile) {
-    if (FormAutofillUtils.isTextControl(fieldDetail.element)) {
-      return !!profile[fieldDetail.fieldName];
-    }
-    return !!this.matchSelectOptions(fieldDetail, profile);
   }
 }
