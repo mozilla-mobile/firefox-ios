@@ -324,7 +324,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         }
 
         let versions = Array(buckets.keys)
-        guard let bestVersion = versionHelper.best(from: versions, maxAllowed: Constants.translatorVersion) 
+        guard let bestVersion = versionHelper.best(from: versions, maxAllowed: Constants.translatorVersion)
             else { return [] }
 
         logger.log(
