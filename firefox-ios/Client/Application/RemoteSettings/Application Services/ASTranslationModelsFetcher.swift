@@ -114,7 +114,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         }
 
         // Try to find a direct model first for the pair sourceLang -> targetLang
-        let directRecords = recordsForBestVersion(in: records, from: sourceLang, to: targetLang)
+        let directRecords = recordsForBestVersion(records, from: sourceLang, to: targetLang)
         if let directFiles = getLanguageModelFiles(directRecords, from: sourceLang, to: targetLang) {
             let entry = makeLanguagePairEntry(directFiles, from: sourceLang, to: targetLang)
             return encodeModelEntries([entry])
@@ -123,8 +123,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         // Fallback to pivot models through Constants.pivotLanguage
         // This will search for two pairs sourceLang -> en and en -> targetLang
         // in order to build a translation pipeline for sourceLang -> targetLang
-        let sourceRecords = recordsForBestVersion(in: records, from: sourceLang, to: Constants.pivotLanguage)
-        let targetRecords = recordsForBestVersion(in: records, from: Constants.pivotLanguage, to: targetLang)
+        let sourceRecords = recordsForBestVersion(records, from: sourceLang, to: Constants.pivotLanguage)
+        let targetRecords = recordsForBestVersion(records, from: Constants.pivotLanguage, to: targetLang)
         guard let sourceToPivot = getLanguageModelFiles(sourceRecords, from: sourceLang, to: Constants.pivotLanguage),
               let pivotToTarget = getLanguageModelFiles(targetRecords, from: Constants.pivotLanguage, to: targetLang)
         else {
@@ -296,7 +296,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     /// Returns all records for the given language pair that match the best
     /// stable version (<= Constants.translatorVersion), or an empty array if none.
     private func recordsForBestVersion(
-        in records: [RemoteSettingsRecord],
+        _ records: [RemoteSettingsRecord],
         from sourceLang: String,
         to targetLang: String
     ) -> [RemoteSettingsRecord] {
