@@ -7812,8 +7812,8 @@ extension String {
             tableName: "RelayMask",
             value: "Manage Email Masks",
             comment: "Button title which takes users to a webpage to manage their Relay email masks and related settings.")
-        public static let RelayEmailMaskInsertedAXAnnouncement = MZLocalizedString(
-            key: "RelayMask.RelayEmailMaskInsertedAXAnnouncement.v147",
+        public static let RelayEmailMaskInsertedA11yAnnouncement = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147",
             tableName: "RelayMask",
             value: "Email mask inserted",
             comment: "VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully.")

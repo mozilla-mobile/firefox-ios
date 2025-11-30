@@ -4102,7 +4102,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleRelayMaskResult(_ result: RelayMaskGenerationResult) {
-        let axAnnounce = String.RelayMask.RelayEmailMaskInsertedAXAnnouncement
+        let axAnnounce = String.RelayMask.RelayEmailMaskInsertedA11yAnnouncement
         switch result {
         case .newMaskGenerated:
             UIAccessibility.post(notification: .announcement, argument: axAnnounce)
