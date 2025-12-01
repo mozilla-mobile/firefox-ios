@@ -15,13 +15,13 @@ let testBLOBFileSize = "35 bytes"
 class DownloadsTests: BaseTestCase {
     var downloadsScreen: DownloadsScreen!
     var browserScreen: BrowserScreen!
-    override func tearDown() {
-        defer { super.tearDown() }
 
-            guard let navigator = navigator else {
-                print("⚠️ Navigator is nil in tearDown — skipping cleanup.")
-                return
-            }
+    override func tearDown() async throws {
+        guard let navigator = navigator else {
+            print("⚠️ Navigator is nil in tearDown — skipping cleanup.")
+            return
+        }
+        
         // The downloaded file has to be removed between tests
         app.terminate()
         app.launch()
@@ -37,7 +37,7 @@ class DownloadsTests: BaseTestCase {
                 app.tables["DownloadsTable"].buttons["Delete"].waitAndTap()
             }
         }
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func deleteItem(itemName: String) {

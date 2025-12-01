@@ -6,9 +6,9 @@ import Foundation
 import XCTest
 
 class SwipingTabsTests: BaseTestCase {
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     let addressBar = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
