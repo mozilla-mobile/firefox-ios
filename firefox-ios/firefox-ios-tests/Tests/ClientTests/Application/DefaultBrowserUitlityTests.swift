@@ -156,6 +156,8 @@ final class DefaultBrowserUtilityTests: XCTestCase {
 
     @MainActor
     func testMigration_DMA_firstRun_isSetToDefaultBrowser() {
+        guard #available(iOS 18.2, *) else { return }
+
         XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
         XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
 
