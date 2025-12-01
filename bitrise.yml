@@ -12,7 +12,8 @@ pipelines:
         - determine_apps_affected
       focus_configure_build:
         run_if:
-          expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+          #expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+          expression: false
         depends_on:
         - determine_apps_affected
         # We don't build klar for new PR now, bu we can still 
@@ -618,16 +619,16 @@ workflows:
             # created when trying to find a diff on a commit that doesn't exist on origin/main
             # First check destination branch for PRs and then check $BITRISE_GIT_BRANCH for
             # merges to origin/main since the destination branch changes back to origin/main
-            if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
-                FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
-            elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
-                echo "Skipping Blacklist check for Merging into $BITRISE_GIT_BRANCH..."
-                exit 0
-                FILES_CHANGED=$(git diff --name-only $BITRISE_GIT_BRANCH..."$BITRISE_GIT_COMMIT")
-            else
-                FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
-            fi
-
+            #if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
+            #    FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
+            #elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
+            #    echo "Skipping Blacklist check for Merging into $BITRISE_GIT_BRANCH..."
+            #    exit 0
+            #    FILES_CHANGED=$(git diff --name-only $BITRISE_GIT_BRANCH..."$BITRISE_GIT_COMMIT")
+            #else
+            #    FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
+            #fi
+            FILES_CHANGED=""
             # Manual triggers leave empty commits.
             # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
             echo "Files changed in commit/PR: $FILES_CHANGED"
