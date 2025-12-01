@@ -13,8 +13,9 @@ class O_AddressesTests: BaseTestCase {
     private var settingsScreen: SettingScreen!
     private var browserScreen: BrowserScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
+
         if #available(iOS 16, *) {
             if !name.contains("testAddressOptionIsAvailableInSettingsMenu") {
                 navigator.nowAt(NewTabScreen)
@@ -34,13 +35,13 @@ class O_AddressesTests: BaseTestCase {
         browserScreen = BrowserScreen(app: app)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         if name.contains("testAddressOptionIsAvailableInSettingsMenu") {
             switchThemeToDarkOrLight(theme: "Light")
             XCUIDevice.shared.orientation = .portrait
         }
         app.terminate()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618637

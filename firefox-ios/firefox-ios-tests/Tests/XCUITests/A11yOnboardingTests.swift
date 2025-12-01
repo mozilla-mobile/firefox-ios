@@ -11,17 +11,17 @@ class A11yOnboardingTests: BaseTestCase {
         return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)"
     }
 
-    override func setUp() {
+    override func setUp() async throws {
         launchArguments = [LaunchArguments.ClearProfile,
                            LaunchArguments.DisableAnimations,
                            LaunchArguments.SkipSplashScreenExperiment]
         currentScreen = 0
-        super.setUp()
+        try await super.setUp()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         app.terminate()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testA11yFirstRunTour() throws {

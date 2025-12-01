@@ -123,31 +123,38 @@ let allHomePanels = [
     LibraryPanel_Downloads
 ]
 
+@MainActor
 let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+@MainActor
 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 
+@MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 }
 
+@MainActor
 func cancelBackAction(for app: XCUIApplication) -> () -> Void {
     return {
         app.otherElements["PopoverDismissRegion"].waitAndTap()
     }
 }
 
+@MainActor
 func dismissContextMenuAction(app: XCUIApplication) -> () -> Void {
     return {
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
     }
 }
 
+@MainActor
 func select(rows: Int, in app: XCUIApplication) {
     app.staticTexts[String(rows)].firstMatch.waitAndTap()
 }
 
+@MainActor
 func type(text: String, in app: XCUIApplication) {
      text.forEach { char in
          app.keys[String(char)].waitAndTap()
