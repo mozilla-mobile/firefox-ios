@@ -836,19 +836,23 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         app.tables.cells.element(boundBy: 1).waitAndTap()
         // The "View card" page is displayed with all the details of the card
+        // iOS 26 only: "Edit Card" heading may not be displayed without a restart
+        // during automated testing.
+        if #available(iOS 26, *) {
+            restartInBackground()
+            unlockLoginsView()
+        }
         waitForElementsToExist(
             [
                 app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard],
-                app.tables.cells.element(
-                    boundBy: 1
-                ).buttons.elementContainingText(
-                    "1252"
-                )
+                app.buttons.elementContainingText("1252")
             ]
         )
         let cardDetails = ["Test", "05 / 40"]
         for index in cardDetails {
-            if #available(iOS 16, *) {
+            if #available(iOS 26, *) {
+                mozWaitForElementToExist(app.textFields[index])
+            } else if #available(iOS 16, *) {
                 mozWaitForElementToExist(app.buttons[index])
                 XCTAssertTrue(app.buttons[index].exists, "\(index) does not exists")
             } else {
