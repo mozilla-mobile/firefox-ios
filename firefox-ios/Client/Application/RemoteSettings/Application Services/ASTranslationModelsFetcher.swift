@@ -114,8 +114,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         }
 
         // Try to find a direct model first for the pair sourceLang -> targetLang
-        let directRecords = recordsForBestVersion(records, from: sourceLang, to: targetLang)
-        if let directFiles = getLanguageModelFiles(directRecords, from: sourceLang, to: targetLang) {
+        if let directFiles = getModelFilesForBestVersion(in: records, from: sourceLang, to: targetLang) {
             let entry = makeLanguagePairEntry(directFiles, from: sourceLang, to: targetLang)
             return encodeModelEntries([entry])
         }
@@ -123,10 +122,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         // Fallback to pivot models through Constants.pivotLanguage
         // This will search for two pairs sourceLang -> en and en -> targetLang
         // in order to build a translation pipeline for sourceLang -> targetLang
-        let sourceRecords = recordsForBestVersion(records, from: sourceLang, to: Constants.pivotLanguage)
-        let targetRecords = recordsForBestVersion(records, from: Constants.pivotLanguage, to: targetLang)
-        guard let sourceToPivot = getLanguageModelFiles(sourceRecords, from: sourceLang, to: Constants.pivotLanguage),
-              let pivotToTarget = getLanguageModelFiles(targetRecords, from: Constants.pivotLanguage, to: targetLang)
+        guard let sourceToPivot = getModelFilesForBestVersion(in: records, from: sourceLang, to: Constants.pivotLanguage),
+              let pivotToTarget = getModelFilesForBestVersion(in: records, from: Constants.pivotLanguage, to: targetLang)
         else {
             logger.log(
                 "No direct or pivot models found for \(sourceLang)->\(targetLang)",
@@ -291,6 +288,26 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     private func encodeModelEntries(_ entries: [[String: Any]]) -> Data? {
         guard !entries.isEmpty else { return nil }
         return try? JSONSerialization.data(withJSONObject: entries, options: [])
+    }
+
+    /// Convenience method that selects the best-version records and then
+    /// produces the appropriate model files. Returns nil if no suitable version or no files are found.
+    private func getModelFilesForBestVersion(
+        in records: [RemoteSettingsRecord],
+        from sourceLang: String,
+        to targetLang: String
+    ) -> [String: Any]? {
+        let bestVersionRecords = recordsForBestVersion(
+            records,
+            from: sourceLang,
+            to: targetLang
+        )
+
+        return getLanguageModelFiles(
+            bestVersionRecords,
+            from: sourceLang,
+            to: targetLang
+        )
     }
 
     /// Returns all records for the given language pair that match the best
