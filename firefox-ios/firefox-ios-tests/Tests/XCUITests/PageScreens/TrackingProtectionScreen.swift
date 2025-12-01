@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class TrackingProtectionScreen {
     private let app: XCUIApplication
     private let sel: TrackingProtectionSelectorsSet

@@ -5,6 +5,7 @@
 import XCTest
 import Common
 
+@MainActor
 final class ContextMenuScreen {
     private let app: XCUIApplication
     private let sel: ContextMenuSelectorsSet
