@@ -1861,7 +1861,6 @@
 		D815A3A824A53F3200AAB221 /* TabToolbarHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D815A3A724A53F3200AAB221 /* TabToolbarHelperTests.swift */; };
 		D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */; };
 		D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */; };
-		D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */; };
 		D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */; };
 		D87F84AC20B891160091F2DA /* TopTabDisplayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87F84AB20B891160091F2DA /* TopTabDisplayManager.swift */; };
 		D88C01B722B29EC200936951 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
@@ -10652,7 +10651,6 @@
 		D81E377D2242FF61006AC72D /* Client-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Client-Bridging-Header.h"; path = "Client/Client-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabContentSettingsViewController.swift; sourceTree = "<group>"; };
 		D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiriSettingsViewController.swift; sourceTree = "<group>"; };
-		D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSearchPrefsTests.swift; sourceTree = "<group>"; };
 		D84C455F8028E9B48004E77F /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		D87F84AB20B891160091F2DA /* TopTabDisplayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabDisplayManager.swift; sourceTree = "<group>"; };
@@ -16208,7 +16206,6 @@
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */,
 				431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */,
-				D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */,
 				814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */,
 				5A70EF17295E2DF400790249 /* DependencyInjection */,
 				8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */,
@@ -19814,7 +19811,6 @@
 				8A7AF0C72C9A119A009691B5 /* TabPeekStateTests.swift in Sources */,
 				0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */,
 				EDADF77F2D70D35B00C39295 /* AppIconSelectionTelemetryTests.swift in Sources */,
-				D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */,
 				1D74FF502B2797EA00FF01D0 /* WindowManagerTests.swift in Sources */,
 				CA24B53B24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift in Sources */,
 				8AD803332EBB039600FDFD78 /* ContileProviderMock.swift in Sources */,
