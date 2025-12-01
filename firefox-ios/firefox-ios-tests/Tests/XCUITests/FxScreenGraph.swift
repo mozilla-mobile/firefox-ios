@@ -7,6 +7,7 @@ import Foundation
 import MappaMundi
 import XCTest
 
+@MainActor
 func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<FxUserState> {
     let map = MMScreenGraph(for: test, with: FxUserState.self)
 
