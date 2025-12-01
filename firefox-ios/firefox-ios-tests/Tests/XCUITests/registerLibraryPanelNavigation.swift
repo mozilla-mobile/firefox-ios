@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     let doneButton = app.buttons["Done"]
 

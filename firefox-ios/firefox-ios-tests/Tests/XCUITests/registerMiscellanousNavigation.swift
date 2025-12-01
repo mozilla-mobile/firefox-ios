@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerMiscellanousNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(Shortcuts) { screenState in
         let homePage = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
