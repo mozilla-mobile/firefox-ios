@@ -19,7 +19,6 @@ protocol LocaleProvider {
     var current: Locale { get }
     var preferredLanguages: [String] { get }
     var regionCode: String { get }
-    var possibleLanguageIdentifier: [String] { get }
 }
 
 struct SystemLocaleProvider: LocaleProvider {
@@ -33,9 +32,5 @@ struct SystemLocaleProvider: LocaleProvider {
 
     var regionCode: String {
         Locale.current.regionCode()
-    }
-
-    var possibleLanguageIdentifier: [String] {
-        Locale.current.possibilitiesForLanguageIdentifier()
     }
 }
