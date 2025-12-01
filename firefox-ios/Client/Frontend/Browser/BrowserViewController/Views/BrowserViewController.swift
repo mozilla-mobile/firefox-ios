@@ -4094,13 +4094,15 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleRelayMaskResult(_ result: RelayMaskGenerationResult) {
+        let a11yAnnounce = String.RelayMask.RelayEmailMaskInsertedA11yAnnouncement
         switch result {
         case .newMaskGenerated:
-            break
+            UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
         case .error:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         case .freeTierLimitReached:
+            UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
             let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         }
