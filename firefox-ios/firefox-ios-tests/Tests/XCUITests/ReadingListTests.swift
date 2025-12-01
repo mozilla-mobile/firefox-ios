@@ -28,8 +28,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         if #available(iOS 26, *) {
-            mozWaitForElementToExist(app.buttons["TabLocationView.summarizeButton"])
-            app.buttons["TabLocationView.summarizeButton"].press(forDuration: 2.0)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.summarizeButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.summarizeButton].press(forDuration: 2.0)
         } else {
             mozWaitForElementToExist(app.buttons["Reader View"])
             app.buttons["Reader View"].tapOnApp()
