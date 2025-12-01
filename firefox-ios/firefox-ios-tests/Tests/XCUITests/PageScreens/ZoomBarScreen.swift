@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class ZoomBarScreen {
     private let app: XCUIApplication
     private let sel: ZoomBarSelectorsSet
