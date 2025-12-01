@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 class A11yHomePageTests: BaseTestCase {
     func testA11yHomePageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }

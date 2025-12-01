@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 class A11ySettingsTests: BaseTestCase {
     func testSettingsMenuPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
