@@ -7,14 +7,15 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class TabTrayViewControllerTests: XCTestCase {
     var delegate: MockTabTrayViewControllerDelegate!
     var navigationController: DismissableNavigationViewController!
     private var tabManager: MockTabManager!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         let mockTabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         delegate = MockTabTrayViewControllerDelegate()
@@ -23,8 +24,8 @@ final class TabTrayViewControllerTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         delegate = nil
         navigationController = nil
         DependencyHelperMock().reset()

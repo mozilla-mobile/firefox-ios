@@ -7,13 +7,14 @@ import Shared
 
 @testable import Client
 
+@MainActor
 final class HomePageSettingViewControllerTests: XCTestCase {
     private var profile: MockProfile!
     private var wallpaperManager: WallpaperManagerMock!
     private var delegate: MockSettingsDelegate!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies()
@@ -22,8 +23,8 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         self.wallpaperManager = WallpaperManagerMock()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         DependencyHelperMock().reset()
         self.profile = nil
         self.delegate = nil
@@ -34,7 +35,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         trackForMemoryLeaks(subject)
     }
 
-    @MainActor
     func testHomepageSettings_containsBookmark_whenStoriesRedesignIsDisabled() throws {
         disableStoriesRedesignFlags()
         let subject = createSubject()
@@ -58,7 +58,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertTrue(bookmarkSettingValue)
     }
 
-    @MainActor
     func testHomepageSettings_containsJumpBackIn_whenStoriesRedesignIsDisabled() throws {
         disableStoriesRedesignFlags()
         let subject = createSubject()
@@ -82,7 +81,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertTrue(jumpBackInSettingValue)
     }
 
-    @MainActor
     func testHomepageSettings_doesNotContainsBookmark_whenStoriesRedesignIsEnabled() {
         enableStoriesRedesign()
         let subject = createSubject()
@@ -102,7 +100,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertFalse(hasBookmarkSetting)
     }
 
-    @MainActor
     func testHomepageSettings_doesNotContainsJumpBackIn_whenStoriesRedesignIsEnabled() {
         enableStoriesRedesign()
         let subject = createSubject()
@@ -122,7 +119,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertFalse(hasJumpBackInSetting)
     }
 
-    @MainActor
     func testHomepageSettings_containsBookmark_whenStoriesRedesignV2IsEnabled() throws {
         enableStoriesRedesignV2()
         let subject = createSubject()
@@ -146,7 +142,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertFalse(bookmarkSettingValue)
     }
 
-    @MainActor
     func testHomepageSettings_containsJumpBackIn_whenStoriesRedesignV2IsEnabled() throws {
         enableStoriesRedesignV2()
         let subject = createSubject()
@@ -171,6 +166,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     }
 
     // MARK: - Helper
+
     private func createSubject() -> HomePageSettingViewController {
         let subject = HomePageSettingViewController(prefs: profile.prefs,
                                                     wallpaperManager: wallpaperManager,
