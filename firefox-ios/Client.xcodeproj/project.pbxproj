@@ -1773,7 +1773,6 @@
 		D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */; };
 		D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8041FE4772D004A7995 /* MainFrameAtDocumentEnd.js */; };
 		D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8051FE4772D004A7995 /* MainFrameAtDocumentStart.js */; };
-		D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D30684F01C84F12A002D8D82 /* SearchPlugins */; };
 		D308EE561CBF0BF5006843F2 /* CertError.css in Resources */ = {isa = PBXBuildFile; fileRef = D308EE551CBF0BF5006843F2 /* CertError.css */; };
 		D313BE981B2F5096009EF241 /* DomainAutocompleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D313BE971B2F5096009EF241 /* DomainAutocompleteTests.swift */; };
 		D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D314E7F51A37B98700426A76 /* TabToolbar.swift */; };
@@ -10250,7 +10249,6 @@
 		D2EA4DEEBCE9C10CA2CF53F9 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Today.strings; sourceTree = "<group>"; };
 		D2F947A28CF4E9B81898E68A /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = te.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		D3024F988AFC5EF8EC2878D0 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/ErrorPages.strings; sourceTree = "<group>"; };
-		D30684F01C84F12A002D8D82 /* SearchPlugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SearchPlugins; path = Search/SearchPlugins; sourceTree = "<group>"; };
 		D308EE551CBF0BF5006843F2 /* CertError.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = CertError.css; sourceTree = "<group>"; };
 		D30B101D1AA7F9C600C01CA3 /* LibraryPanelHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryPanelHelper.swift; sourceTree = "<group>"; };
 		D313BE971B2F5096009EF241 /* DomainAutocompleteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DomainAutocompleteTests.swift; sourceTree = "<group>"; };
@@ -16363,7 +16361,6 @@
 				0BA1E00D1B03FB0B007675AF /* NetError.html */,
 				BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */,
 				8AF4E76A2C41D60A00BAD91C /* RemoteSettingsData */,
-				D30684F01C84F12A002D8D82 /* SearchPlugins */,
 				39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */,
 				D37524861C6E8B5A00A5F6C2 /* topdomains.txt */,
 				4336FAD1264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js */,
@@ -17576,7 +17573,6 @@
 				8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */,
 				43175DB626B8774D00C41C31 /* Ads.js in Resources */,
 				D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */,
-				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
 				8A1A93582B757C7C0069C190 /* gradient.json in Resources */,
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
