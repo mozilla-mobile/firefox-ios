@@ -312,7 +312,13 @@ class BaseTestCase: XCTestCase {
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        app.buttons["Reader View"].waitAndTap()
+        if #available(iOS 26, *) {
+            mozWaitForElementToExist(app.buttons["TabLocationView.summarizeButton"])
+            app.buttons["TabLocationView.summarizeButton"].press(forDuration: 2.0)
+        } else {
+            mozWaitForElementToExist(app.buttons["Reader View"])
+            app.buttons["Reader View"].tapOnApp()
+        }
         waitUntilPageLoad()
         app.buttons["Add to Reading List"].waitAndTap()
     }

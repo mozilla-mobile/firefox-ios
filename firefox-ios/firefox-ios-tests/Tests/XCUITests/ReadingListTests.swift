@@ -27,8 +27,13 @@ class ReadingListTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        mozWaitForElementToExist(app.buttons["Reader View"])
-        app.buttons["Reader View"].tapOnApp()
+        if #available(iOS 26, *) {
+            mozWaitForElementToExist(app.buttons["TabLocationView.summarizeButton"])
+            app.buttons["TabLocationView.summarizeButton"].press(forDuration: 2.0)
+        } else {
+            mozWaitForElementToExist(app.buttons["Reader View"])
+            app.buttons["Reader View"].tapOnApp()
+        }
         // The settings of reader view are shown as well as the content of the web site
         waitForElementsToExist(
             [
@@ -352,17 +357,17 @@ class ReadingListTests: FeatureFlaggedTestBase {
             // Two options are revealed
             waitForElementsToExist(
                 [
-                    app.tables.cells.buttons.staticTexts["Mark as  Unread"],
-                    app.tables.cells.buttons.staticTexts["Remove"]
+                    app.buttons.staticTexts["Mark as  Unread"],
+                    app.buttons.staticTexts["Remove"]
                 ]
             )
             // Tap 'Mark as Unread'
-            app.tables.cells.buttons.staticTexts["Mark as  Unread"].tap(force: true)
+            app.buttons.staticTexts["Mark as  Unread"].tap(force: true)
             // The article has been marked as Unread
             mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, unread"))
             // Swipe te article left and tap 'Remove'
             savedToReadingList.swipeLeft()
-            app.tables.cells.buttons.staticTexts["Remove"].tap(force: true)
+            app.buttons.staticTexts["Remove"].tap(force: true)
             // The article is deleted from the Reading List
             checkReadingListNumberOfItems(items: 0)
             waitForElementsToExist(
