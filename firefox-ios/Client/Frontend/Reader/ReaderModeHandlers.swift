@@ -48,7 +48,6 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         webServer.registerHandlerForMethod("GET",
                                            module: "reader-mode",
                                            resource: "page") { request, completion in
-            // Initialize ReaderModeStyle here to ensure it is initialized on the main thread.
             let readerModeStyle = ReaderModeStyle.defaultStyle()
             let response = pageResponse(
                 request: request,
@@ -95,6 +94,13 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                                    style: baseStyle,
                                    profile: profile)
         } catch {
+            // This page has not been converted to reader mode yet. This happens when you for example add an
+            // item via the app extension and the application has not yet had a change to readerize that
+            // page in the background.
+            //
+            // What we do is simply queue the page in the ReadabilityService and then show our loading
+            // screen, which will periodically call page-exists to see if the readerized content has
+            // become available.
             ReadabilityService().process(url, cache: cache, with: profile)
             if let readerViewLoadingPath = Bundle.main.path(
                 forResource: "ReaderViewLoading",
