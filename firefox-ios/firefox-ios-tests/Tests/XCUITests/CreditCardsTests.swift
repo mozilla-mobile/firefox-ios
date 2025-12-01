@@ -229,35 +229,36 @@ class CreditCardsTests: BaseTestCase {
         formatter.dateFormat = "MMyy"
         let futureExpiryMonthYear = formatter.string(from: dateFiveYearsFromNow!)
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: futureExpiryMonthYear)
-        if #available(iOS 16, *) {
-            navigator.goto(NewTabScreen)
-            navigator.openURL(url_fill_form)
-            waitUntilPageLoad()
-            // The autofill option (Use saved card prompt) is not displayed
-            var cardNumber = app.webViews["Web content"].textFields["Card Number:"]
-            if #unavailable(iOS 17) {
-                cardNumber = app.webViews["Web content"].staticTexts["Card Number:"]
-            }
-            cardNumber.waitAndTap()
-            mozWaitForElementToNotExist(app.buttons[useSavedCard])
-            // If Keyboard is open, hit return button
-            app.buttons["KeyboardAccessory.doneButton"].tapIfExists()
 
-            navigator.goto(CreditCardsSettings)
-            unlockLoginsView()
-            mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-            // Enable the "Save and Fill Payment Methods" toggle
-            app.switches.element(boundBy: 1).waitAndTap()
-            XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as? String, "1")
-            navigator.goto(NewTabScreen)
-            cardNumber.waitAndTap()
-            // The autofill option (Use saved card prompt) is displayed
-            if iPad() {
-                app.webViews["Web content"].textFields["Expiration month:"].waitAndTap()
-                app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
-            }
-            app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
-            app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
+        navigator.goto(NewTabScreen)
+        navigator.openURL(url_fill_form)
+        waitUntilPageLoad()
+        // The autofill option (Use saved card prompt) is not displayed
+        var cardNumber = app.webViews["Web content"].textFields["Card Number:"]
+        if #unavailable(iOS 17) {
+            cardNumber = app.webViews["Web content"].staticTexts["Card Number:"]
+        }
+        cardNumber.waitAndTap()
+        mozWaitForElementToNotExist(app.buttons[useSavedCard])
+        // If Keyboard is open, hit return button
+        app.buttons["KeyboardAccessory.doneButton"].tapIfExists()
+
+        navigator.goto(CreditCardsSettings)
+        unlockLoginsView()
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+        // Enable the "Save and Fill Payment Methods" toggle
+        app.switches.element(boundBy: 1).waitAndTap()
+        XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as? String, "1")
+        navigator.goto(NewTabScreen)
+        cardNumber.waitAndTap()
+        // The autofill option (Use saved card prompt) is displayed
+        if iPad() {
+            app.webViews["Web content"].textFields["Expiration month:"].waitAndTap()
+            app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
+        }
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
+        app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
+        if #unavailable(iOS 26) {
             mozWaitForElementToExist(app.buttons[useSavedCard])
         }
     }
@@ -845,7 +846,7 @@ class CreditCardsTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard],
-                app.buttons.elementContainingText("1252")
+                app.buttons.elementContainingText(String("1252"))
             ]
         )
         let cardDetails = ["Test", "05 / 40"]
