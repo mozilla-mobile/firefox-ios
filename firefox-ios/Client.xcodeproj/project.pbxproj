@@ -2084,8 +2084,6 @@
 		EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE26B4E220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift */; };
 		EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */; };
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
-		ED07C0E62CCACD7E006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0E52CCACD7E006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift */; };
-		ED07C0E72CCACE18006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0E52CCACD7E006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift */; };
 		ED07C0EB2CCADCD5006C0627 /* SearchEngineSelectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */; };
 		ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */; };
 		ED07C0EF2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */; };
@@ -11008,7 +11006,6 @@
 		EC734AD49E5483F11375E891 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		EC934F7BB2F8B247BC714BE2 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		ECDA4593850BA4E08FDAC5AF /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
-		ED07C0E52CCACD7E006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Locale+possibilitiesForLanguageIdentifier.swift"; sourceTree = "<group>"; };
 		ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionState.swift; sourceTree = "<group>"; };
 		ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionAction.swift; sourceTree = "<group>"; };
 		ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionMiddleware.swift; sourceTree = "<group>"; };
@@ -12134,7 +12131,6 @@
 				E1442FC9294782D8003680B0 /* URL+Mail.swift */,
 				1BE7A48F2C636AC800460798 /* URLSession+sharedMPTCP.swift */,
 				1BE7A4912C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift */,
-				ED07C0E52CCACD7E006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift */,
 				0A686B3D2CE253AB0090E146 /* PDFDocument+Extension.swift */,
 			);
 			path = Extensions;
@@ -19043,7 +19039,6 @@
 				8A4490952BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift in Sources */,
 				1DA6F6512B48B42900BB5AD6 /* WindowEventCoordinator.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
-				ED07C0E62CCACD7E006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift in Sources */,
 				437A857827E43FE100E42764 /* FxAWebViewTelemetry.swift in Sources */,
 				613489A32D942A020009AF01 /* ToastTelemetry.swift in Sources */,
 				C7F051692DB2F38000EC52C0 /* ContextMenuPreviewViewController.swift in Sources */,
@@ -19868,7 +19863,6 @@
 				D04CD74D216CF86F004FF5B0 /* DevicePickerViewController.swift in Sources */,
 				6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
-				ED07C0E72CCACE18006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift in Sources */,
 				E1CD81C3290C670A00124B27 /* HostingTableViewCell.swift in Sources */,
 				DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				F8B710A02ABE38980029726E /* RustErrors.swift in Sources */,

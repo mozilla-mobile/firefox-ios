@@ -60,7 +60,6 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
         // First load the unordered engines, based on the current locale and language
         // swiftlint:disable closure_body_length
         getUnorderedBundledEnginesFor(locale: locale,
-                                      possibleLanguageIdentifier: locale.possibleLanguageIdentifier,
                                       completion: { engineResults in
             let unorderedEngines = customEngines + engineResults
             let finalEngineOrderingPrefs = prefsMigrator.migratePrefsIfNeeded(engineOrderingPrefs,
@@ -127,7 +126,6 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
     }
 
     private func getUnorderedBundledEnginesFor(locale: LocaleProvider,
-                                               possibleLanguageIdentifier: [String],
                                                completion: @escaping ([OpenSearchEngine]) -> Void ) {
         let localeCode = ASSearchEngineUtilities.localeCode(from: locale)
         let region = locale.regionCode
