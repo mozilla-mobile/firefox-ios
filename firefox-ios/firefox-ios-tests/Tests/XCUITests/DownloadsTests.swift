@@ -21,7 +21,7 @@ class DownloadsTests: BaseTestCase {
             print("⚠️ Navigator is nil in tearDown — skipping cleanup.")
             return
         }
-        
+
         // The downloaded file has to be removed between tests
         app.terminate()
         app.launch()
