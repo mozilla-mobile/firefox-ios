@@ -5,7 +5,6 @@
 import XCTest
 import Common
 
-@MainActor
 class A11ySearchTest: BaseTestCase {
     private func typeTextAndValidateSearchSuggestions(text: String, isSwitchOn: Bool) {
         typeOnSearchBar(text: text)
