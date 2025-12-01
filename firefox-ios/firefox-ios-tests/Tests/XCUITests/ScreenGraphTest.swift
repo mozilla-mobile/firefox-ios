@@ -119,6 +119,7 @@ private class TestActions {
     static let LoadURLByPasting = "LoadURLByPasting"
 }
 
+@MainActor
 public var isTablet: Bool {
     // There is more value in a variable having the same name,
     // so it can be used in both predicates and in code
@@ -126,6 +127,7 @@ public var isTablet: Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
 }
 
+@MainActor
 private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<TestUserState> {
     let map = MMScreenGraph(for: test, with: TestUserState.self)
 
