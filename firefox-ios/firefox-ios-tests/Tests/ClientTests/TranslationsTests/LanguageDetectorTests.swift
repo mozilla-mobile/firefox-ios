@@ -70,11 +70,8 @@ final class LanguageDetectorTests: XCTestCase {
         mockLanguageSampleSource.mockError = FakeError.foo
         let subject = createSubject()
 
-        do {
+        await assertAsyncThrowsEqual(FakeError.foo) {
             _ = try await subject.detectLanguage(from: mockLanguageSampleSource)
-            XCTFail("expected error")
-        } catch {
-            XCTAssertEqual(error as? FakeError, .foo)
         }
     }
 
