@@ -19,7 +19,6 @@ class PasswordManagerViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
         let mockProfile = MockProfile()
         Self.setupTelemetry(with: mockProfile)
         self.mockLoginProvider = MockLoginProvider()
