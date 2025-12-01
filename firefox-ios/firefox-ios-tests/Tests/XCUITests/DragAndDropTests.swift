@@ -24,10 +24,10 @@ let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
 class DragAndDropTests: BaseTestCase {
-//  Disable test suite since in theory it does not make sense with Chron tabs implementation
-    override func tearDown() {
+    // Disable test suite since in theory it does not make sense with Chron tabs implementation
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
