@@ -403,7 +403,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             borderPosition: state.borderPosition,
             url: toolbarAction.url,
             searchTerm: nil,
-            lockIconImageName: toolbarAction.lockIconImageName,
+            lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
             lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
             safeListedURLImageName: toolbarAction.safeListedURLImageName,
             isEditing: state.isEditing,
