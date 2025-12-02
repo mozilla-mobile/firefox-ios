@@ -110,25 +110,6 @@ class TabTests: XCTestCase {
         XCTAssertTrue(tab.isDownloadingDocument())
     }
 
-    // MARK: - isActive, isInactive
-    @MainActor
-    func testTabIsActive_within14Days() {
-        // Tabs use the current date by default, so this one should be considered recent and active on initialization
-        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
-
-        XCTAssertTrue(tab.isActive)
-        XCTAssertFalse(tab.isInactive)
-    }
-
-    @MainActor
-    func testTabIsInactive_outside14Days() {
-        let lastMonthDate = Date().lastMonth
-        let tab = Tab(profile: mockProfile, windowUUID: windowUUID, tabCreatedTime: lastMonthDate)
-
-        XCTAssertFalse(tab.isActive)
-        XCTAssertTrue(tab.isInactive)
-    }
-
     // MARK: - isSameTypeAs
     @MainActor
     func testIsSameTypeAs_trueForTwoPrivateTabs_oneActive_oneInactive() {

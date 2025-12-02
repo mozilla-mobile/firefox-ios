@@ -50,15 +50,13 @@ final class RemoteTabPanelTests: XCTestCase {
                              title: "Mozilla Homepage",
                              history: [],
                              lastUsed: 0,
-                             icon: nil,
-                             inactive: false)
+                             icon: nil)
         let tab2 = RemoteTab(clientGUID: "123",
                              URL: URL(string: "https://google.com")!,
                              title: "Google Homepage",
                              history: [],
                              lastUsed: 0,
-                             icon: nil,
-                             inactive: false)
+                             icon: nil)
         let fakeTabs: [RemoteTab] = [tab1, tab2]
         let client = RemoteClient(guid: "123",
                                   name: "Client",
