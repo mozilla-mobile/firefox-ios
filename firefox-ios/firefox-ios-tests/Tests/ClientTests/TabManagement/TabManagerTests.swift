@@ -1620,6 +1620,46 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
 
+    @MainActor
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsInTheMiddle_thenOrderIsProper() {
+        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
+        let inactiveTabs2 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
+        let tabManager = createSubject(tabs: inactiveTabs1 + normalTabs + inactiveTabs2)
+        tabManager.selectTab(normalTabs[safe: 0])
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 3)
+        XCTAssertEqual(tabManager.selectedIndex, 0)
+    }
+
+    @MainActor
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsLast_thenOrderIsProper() {
+        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
+        let tabManager = createSubject(tabs: inactiveTabs1 + normalTabs)
+        tabManager.selectTab(normalTabs[safe: 2])
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 3)
+        XCTAssertEqual(tabManager.selectedIndex, 2)
+    }
+
+    @MainActor
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsFirst_thenOrderIsProper() {
+        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
+        let tabManager = createSubject(tabs: normalTabs + inactiveTabs1)
+        tabManager.selectTab(normalTabs[safe: 0])
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 3)
+        XCTAssertEqual(tabManager.selectedIndex, 0)
+    }
+
     // MARK: - removeAllInactiveTabs (removing unselected tabs at array bounds)
 
     @MainActor
