@@ -682,7 +682,7 @@ class O_AddressesTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[addressAutofillButton])
             app.buttons[addressAutofillButton].waitAndTap()
             // Choose the address added
-            app.otherElements.buttons.elementContainingText("Address").waitAndTap()
+            app.otherElements.buttons.elementContainingText(String("Address")).waitAndTap()
             // All fields are correctly autofilled
             validateAutofillAddressInfo()
         }
