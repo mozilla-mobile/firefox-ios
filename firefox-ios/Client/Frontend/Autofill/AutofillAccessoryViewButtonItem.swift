@@ -27,7 +27,6 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         static let accessoryImageViewSize: CGFloat = 24
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4
-        static let padding: CGFloat = 4
         static let iPadPadding: CGFloat = 80
     }
 
@@ -120,8 +119,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         } else {
             accessoryView.leadingAnchor
                 .constraint(
-                greaterThanOrEqualTo: containerView.leadingAnchor,
-                constant: UX.padding
+                greaterThanOrEqualTo: containerView.leadingAnchor
             )
         }
 
@@ -134,8 +132,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         } else {
             accessoryView.trailingAnchor
                 .constraint(
-                lessThanOrEqualTo: containerView.trailingAnchor,
-                constant: -UX.padding
+                lessThanOrEqualTo: containerView.trailingAnchor
             )
         }
 
