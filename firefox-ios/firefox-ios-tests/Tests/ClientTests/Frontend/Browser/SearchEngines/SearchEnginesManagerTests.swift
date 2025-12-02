@@ -20,6 +20,7 @@ class SearchEnginesManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         mockSearchEngineProvider = MockSearchEngineProvider()
         searchEnginesManager = SearchEnginesManager(
