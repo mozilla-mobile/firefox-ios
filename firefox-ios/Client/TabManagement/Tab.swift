@@ -834,6 +834,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     // MARK: - Static Helpers
 
+    // TODO: Laurie - Adjust documentation
     /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
     /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
     func isSameTypeAs(_ otherTab: Tab) -> Bool {
