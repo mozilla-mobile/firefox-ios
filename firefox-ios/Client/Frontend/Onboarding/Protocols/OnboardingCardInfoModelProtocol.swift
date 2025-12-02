@@ -11,12 +11,12 @@ protocol OnboardingCardInfoModelProtocol {
     var order: Int { get set }
     var title: String { get set }
     var body: String { get set }
-    var instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
+    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
         get set
     }
-    var link: OnboardingKit.OnboardingLinkInfoModel? { get set }
-    var buttons: OnboardingKit.OnboardingButtons<OnboardingActions> { get set }
-    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
+    var link: OnboardingLinkInfoModel? { get set }
+    var buttons: OnboardingButtons<OnboardingActions> { get set }
+    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
         get set
     }
     var onboardingType: OnboardingType { get set }
@@ -31,12 +31,12 @@ protocol OnboardingCardInfoModelProtocol {
         order: Int,
         title: String,
         body: String,
-        link: OnboardingKit.OnboardingLinkInfoModel?,
-        buttons: OnboardingKit.OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
+        link: OnboardingLinkInfoModel?,
+        buttons: OnboardingButtons<OnboardingActions>,
+        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
     )
 }

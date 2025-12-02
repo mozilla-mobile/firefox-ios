@@ -251,7 +251,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     ///   the default selected button.
     ///   For other layouts, the first button in the multiple choice buttons list is used as the default.
     private func isSelectedButton<T: OnboardingCardInfoModelProtocol>(
-        buttonModel: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>,
+        buttonModel: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>,
         viewModel: T) -> Bool {
         let isToolbarBottomAction = buttonModel.action == .toolbarBottom
         let isToolbarTopAction = buttonModel.action == .toolbarTop

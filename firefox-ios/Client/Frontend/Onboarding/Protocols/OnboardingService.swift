@@ -202,7 +202,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenInstructionsPopup(
-        from popupViewModel: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping () -> Void
     ) {
         presentDefaultBrowserPopup(from: popupViewModel, completion: completion)
@@ -268,7 +268,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func presentDefaultBrowserPopup(
-        from popupViewModel: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping @MainActor () -> Void
     ) {
         let popupVC = createDefaultBrowserPopupViewController(
@@ -333,7 +333,7 @@ final class OnboardingService: FeatureFlaggable {
 
     private func createDefaultBrowserPopupViewController(
         windowUUID: WindowUUID,
-        from popupViewModel: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping () -> Void
     ) -> UIViewController {
         let instructionsVC = OnboardingInstructionPopupViewController(

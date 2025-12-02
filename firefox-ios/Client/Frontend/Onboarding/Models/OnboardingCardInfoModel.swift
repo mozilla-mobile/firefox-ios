@@ -11,10 +11,10 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var order: Int
     var title: String
     var body: String
-    var instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
-    var link: OnboardingKit.OnboardingLinkInfoModel?
-    var buttons: OnboardingKit.OnboardingButtons<OnboardingActions>
-    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
+    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
+    var link: OnboardingLinkInfoModel?
+    var buttons: OnboardingButtons<OnboardingActions>
+    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
     var onboardingType: OnboardingType
     var a11yIdRoot: String
 
@@ -30,13 +30,13 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         order: Int,
         title: String,
         body: String,
-        link: OnboardingKit.OnboardingLinkInfoModel?,
-        buttons: OnboardingKit.OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
+        link: OnboardingLinkInfoModel?,
+        buttons: OnboardingButtons<OnboardingActions>,
+        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
     ) {
         self.cardType = cardType
         self.name = name
