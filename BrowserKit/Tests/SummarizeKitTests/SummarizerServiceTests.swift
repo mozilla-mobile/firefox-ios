@@ -6,24 +6,21 @@
 import XCTest
 import Common
 
-final class SummarizerServiceTests: XCTestCase, @unchecked Sendable {
+@MainActor
+final class SummarizerServiceTests: XCTestCase {
     static let mockResponse = ["Summarized", "content"]
     static let maxWords = 100
     static let maxWordCount = 50
     private var mockWebView: MockWebView!
 
-    override func setUp() {
-        super.setUp()
-        ensureMainThread {
-            self.mockWebView = MockWebView(URL(string: "https://foo.com")!)
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        mockWebView = MockWebView(URL(string: "https://foo.com")!)
     }
 
-    override func tearDown() {
-        ensureMainThread {
-            self.mockWebView = nil
-        }
-        super.tearDown()
+    override func tearDown() async throws {
+        mockWebView = nil
+        try await super.tearDown()
     }
 
     func testSummarizerServiceReturnsSummary() async throws {
