@@ -33,7 +33,6 @@ public struct RemoteTab: Equatable, Sendable {
     public let history: [Foundation.URL]
     public let lastUsed: Timestamp
     public let icon: Foundation.URL?
-    public let inactive: Bool
 
     public static func shouldIncludeURL(_ url: Foundation.URL) -> Bool {
         if InternalURL(url) != nil {
@@ -53,8 +52,7 @@ public struct RemoteTab: Equatable, Sendable {
         title: String,
         history: [Foundation.URL],
         lastUsed: Timestamp,
-        icon: Foundation.URL?,
-        inactive: Bool
+        icon: Foundation.URL?
     ) {
         self.clientGUID = clientGUID
         self.URL = URL
@@ -62,7 +60,6 @@ public struct RemoteTab: Equatable, Sendable {
         self.history = history
         self.lastUsed = lastUsed
         self.icon = icon
-        self.inactive = inactive
     }
 
     public func withClientGUID(_ clientGUID: String?) -> RemoteTab {
@@ -72,8 +69,7 @@ public struct RemoteTab: Equatable, Sendable {
             title: title,
             history: history,
             lastUsed: lastUsed,
-            icon: icon,
-            inactive: inactive
+            icon: icon
         )
     }
 
@@ -87,8 +83,7 @@ public struct RemoteTab: Equatable, Sendable {
             title: self.title,
             urlHistory: history,
             icon: icon,
-            lastUsed: Int64(self.lastUsed),
-            inactive: self.inactive
+            lastUsed: Int64(self.lastUsed)
         )
     }
 }
@@ -99,6 +94,5 @@ public func == (lhs: RemoteTab, rhs: RemoteTab) -> Bool {
         lhs.title == rhs.title &&
         lhs.history == rhs.history &&
         lhs.lastUsed == rhs.lastUsed &&
-        lhs.icon == rhs.icon &&
-        lhs.inactive == rhs.inactive
+        lhs.icon == rhs.icon
 }

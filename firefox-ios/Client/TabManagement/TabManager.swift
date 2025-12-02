@@ -28,9 +28,7 @@ protocol TabManager: AnyObject {
     var backupCloseTab: BackupCloseTab? { get set }
 
     var tabs: [Tab] { get }
-    var normalTabs: [Tab] { get } // Includes active and inactive tabs
-    var normalActiveTabs: [Tab] { get }
-    var inactiveTabs: [Tab] { get }
+    var normalTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
 
     subscript(index: Int) -> Tab? { get }
@@ -72,20 +70,6 @@ protocol TabManager: AnyObject {
     func undoCloseTab()
     /// Undo close all tabs, it will restore the tabs that were backed up when the close action was called.
     func undoCloseAllTabs()
-
-    // MARK: Inactive Tabs
-
-    /// Get inactive tabs from the list of tabs based on the time condition to be considered inactive.
-    /// Replaces LegacyInactiveTabModel and related classes
-    ///
-    /// - Returns: Return list of tabs considered inactive
-    func getInactiveTabs() -> [Tab]
-
-    /// Remove all inactive tabs, used when user closes all inactive tabs
-    func removeAllInactiveTabs()
-
-    /// Undo all inactive tabs closure. All inactive tabs are added back to the list of tabs
-    func undoCloseInactiveTabs()
 
     // MARK: Get Tab
     func getTabForUUID(uuid: TabUUID) -> Tab?

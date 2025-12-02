@@ -42,7 +42,6 @@ final class TabDisplayView: UIView,
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
     private let windowUUID: WindowUUID
-    private let inactiveTabsTelemetry = InactiveTabsTelemetry()
     var theme: Theme?
     weak var dragAndDropDelegate: TabDisplayViewDragAndDropInteraction?
 
@@ -360,7 +359,6 @@ final class TabDisplayView: UIView,
         if let selectedItem = dataSource.itemIdentifier(for: indexPath) {
             switch selectedItem {
             case .inactiveTab(let inactiveTabsModel):
-                inactiveTabsTelemetry.tabOpened()
                 let tabUUID = inactiveTabsModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,

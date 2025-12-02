@@ -29,8 +29,6 @@ class MockTabManager: TabManager {
     var delaySelectingNewPopupTab: TimeInterval = 0
     var count = 0
     var normalTabs = [Tab]()
-    var normalActiveTabs = [Tab]()
-    var inactiveTabs = [Tab]()
     var privateTabs = [Tab]()
 
     var addTabsForURLsCalled = 0
@@ -158,15 +156,6 @@ class MockTabManager: TabManager {
     func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab? {
         return nil
     }
-
-    // MARK: - Inactive tabs
-    func getInactiveTabs() -> [Tab] {
-        return inactiveTabs
-    }
-
-    func removeAllInactiveTabs() {}
-
-    func undoCloseInactiveTabs() {}
 
     func notifyCurrentTabDidFinishLoading() {
         notifyCurrentTabDidFinishLoadingCalled += 1

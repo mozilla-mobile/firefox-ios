@@ -43,8 +43,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = canPresentJumpBackInSyncedTab
         case .mainMenu:
             hintTypeShouldBePresented = canMenuRedesignCFRBePresented
-        case .inactiveTabs:
-            hintTypeShouldBePresented = true
         case .navigation:
             hintTypeShouldBePresented = true
         case .relay:
