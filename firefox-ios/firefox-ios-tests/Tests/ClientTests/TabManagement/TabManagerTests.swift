@@ -640,8 +640,8 @@ class TabManagerTests: XCTestCase {
         XCTAssertNotNil(rightOrLeftTab)
         XCTAssertEqual(
             rightOrLeftTab,
-            tabManager.privateTabs[safe: 1],
-            "Should choose the second inactive tab as the nearest neighbour on the right"
+            tabManager.privateTabs[safe: 0],
+            "Should choose the second private tab as the nearest neighbour on the right"
         )
     }
 

@@ -834,17 +834,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     // MARK: - Static Helpers
 
-    // TODO: Laurie - Adjust documentation
-    /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
-    /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
+    /// Returns true if the tabs both have the same type of private or normal.
+    /// Simply checks the `isPrivate` of both tabs.
     func isSameTypeAs(_ otherTab: Tab) -> Bool {
         switch (self.isPrivate, otherTab.isPrivate) {
         case (true, true):
-            // Two private tabs are always lumped together in the same type regardless of their last execution time
-            return true
-        case (false, false):
-            // Two normal tabs are only the same type if they're both active, or both inactive
-            // TODO: Laurie - what's the required behavior here
+            // Two private tabs are always lumped together in the same type
             return true
         default:
             return false
