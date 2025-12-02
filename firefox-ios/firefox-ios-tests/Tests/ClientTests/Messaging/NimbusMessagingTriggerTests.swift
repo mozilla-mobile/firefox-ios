@@ -17,7 +17,7 @@ final class NimbusMessagingTriggerTests: XCTestCase {
     }
 
     override func tearDown() {
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
