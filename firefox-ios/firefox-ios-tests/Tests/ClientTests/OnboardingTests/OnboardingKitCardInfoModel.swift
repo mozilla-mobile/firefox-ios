@@ -103,9 +103,9 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
 
     // MARK: - Test Helpers
 
-    private func createMockButtons() -> OnboardingKit.OnboardingButtons<Client.OnboardingActions> {
-        return OnboardingKit.OnboardingButtons<Client.OnboardingActions>(
-            primary: OnboardingButtonInfoModel<Client.OnboardingActions>(
+    private func createMockButtons() -> OnboardingKit.OnboardingButtons<OnboardingActions> {
+        return OnboardingKit.OnboardingButtons<OnboardingActions>(
+            primary: OnboardingButtonInfoModel<OnboardingActions>(
                 title: "Primary",
                 action: .forwardOneCard
             ),

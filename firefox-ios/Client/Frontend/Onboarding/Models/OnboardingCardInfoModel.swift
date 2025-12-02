@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import OnboardingKit
 
 struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var cardType: OnboardingCardType
@@ -12,7 +13,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var body: String
     var instructionsPopup: OnboardingInstructionsPopupInfoModel?
     var link: OnboardingLinkInfoModel?
-    var buttons: OnboardingButtons
+    var buttons: OnboardingButtons<OnboardingActions>
     var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel]
     var onboardingType: OnboardingType
     var a11yIdRoot: String
@@ -30,7 +31,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         title: String,
         body: String,
         link: OnboardingLinkInfoModel?,
-        buttons: OnboardingButtons,
+        buttons: OnboardingButtons<OnboardingActions>,
         multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
