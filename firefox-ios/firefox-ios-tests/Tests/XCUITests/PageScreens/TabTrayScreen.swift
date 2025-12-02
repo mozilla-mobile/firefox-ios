@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class TabTrayScreen {
     private let app: XCUIApplication
     private let sel: TabTraySelectorsSet

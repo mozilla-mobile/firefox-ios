@@ -45,7 +45,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     // MARK: - Test url based deletion
-    @MainActor
     func testDeletingSingleItem() {
         let profile = profileSetup(named: "hsd_deleteSingleItem")
         let testSites = [SiteElements(domain: "mozilla")]
@@ -58,7 +57,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    @MainActor
     func testDeletingMultipleItemsEmptyingDatabase() {
         let profile = profileSetup(named: "hsd_deleteMultipleItemsEmptyingDB")
         let sitesToDelete = [SiteElements(domain: "mozilla"),
@@ -76,7 +74,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    @MainActor
     func testDeletingMultipleTopLevelItems() {
         let profile = profileSetup(named: "hsd_deleteMultipleItemsTopLevelItems")
         let sitesToRemain = [SiteElements(domain: "cnn")]
@@ -95,7 +92,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    @MainActor
     func testDeletingMultipleSpecificItems() {
         let profile = profileSetup(named: "hsd_deleteMultipleSpecificItems")
         let sitesToRemain = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
@@ -370,7 +366,9 @@ private extension HistoryDeletionUtilityTests {
     func deletionWithExpectation(
         for siteEntries: [String],
         using profile: MockProfile,
-        completion: @escaping (Bool) -> Void
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         let deletionUtility = HistoryDeletionUtility(with: profile)
         trackForMemoryLeaks(deletionUtility)
@@ -388,10 +386,12 @@ private extension HistoryDeletionUtilityTests {
     func deletionWithExpectation(
         since dateOption: HistoryDeletionUtilityDateOptions,
         using profile: MockProfile,
+        file: StaticString = #filePath,
+        line: UInt = #line,
         completion: @escaping (HistoryDeletionUtilityDateOptions?) -> Void
     ) {
         let deletionUtility = HistoryDeletionUtility(with: profile)
-        trackForMemoryLeaks(deletionUtility)
+        trackForMemoryLeaks(deletionUtility, file: file, line: line)
         let expectation = expectation(description: "HistoryDeletionUtilityTest")
 
         deletionUtility.deleteHistoryFrom(dateOption) { time in
@@ -403,9 +403,11 @@ private extension HistoryDeletionUtilityTests {
     }
 
     func deleteHistoryMetadataOlderThan(dateOption: HistoryDeletionUtilityDateOptions,
-                                        using profile: MockProfile) {
+                                        using profile: MockProfile,
+                                        file: StaticString = #filePath,
+                                        line: UInt = #line) {
         let deletionUtility = HistoryDeletionUtility(with: profile)
-        trackForMemoryLeaks(deletionUtility)
+        trackForMemoryLeaks(deletionUtility, file: file, line: line)
         deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
     }
 

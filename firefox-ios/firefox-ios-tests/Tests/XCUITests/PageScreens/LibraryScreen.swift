@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class LibraryScreen {
     private let app: XCUIApplication
     private let sel: LibrarySelectorsSet

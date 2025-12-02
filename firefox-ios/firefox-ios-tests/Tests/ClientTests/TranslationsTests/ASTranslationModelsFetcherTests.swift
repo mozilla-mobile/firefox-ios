@@ -138,6 +138,41 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         )
     }
 
+    func testFetchModels_picksHighestStableVersionBelowMax() throws {
+        let v1Model = makeModelRecord(id: "model-v1", fileType: "model", from: "fr", to: "de", version: "1.0")
+        let v1Lex = makeModelRecord(id: "lex-v1", fileType: "lex", from: "fr", to: "de", version: "1.0")
+        let v2Model = makeModelRecord(id: "model-v2", fileType: "model", from: "fr", to: "de", version: "2.0")
+        let v2Lex = makeModelRecord(id: "lex-v2", fileType: "lex", from: "fr", to: "de", version: "2.0")
+
+        let subject = createSubject(records: [v1Model, v2Lex, v2Model, v1Lex])
+        let data = subject.fetchModels(from: "fr", to: "de")
+        XCTAssertNotNil(data, "Expected fetchModels to return data")
+
+        let json = try XCTUnwrap(data).toJSONObject() as? [[String: Any]]
+        let entry = try XCTUnwrap(json?.first)
+
+        let files = try XCTUnwrap(entry["languageModelFiles"] as? [String: Any])
+        XCTAssertFalse(files.isEmpty, "Expected some language model files")
+
+        // Extract all versions seen in returned fileTypes
+        var versionSet = Set<String>()
+        for value in files.values {
+            guard
+                let fileDict = value as? [String: Any],
+                let record = fileDict["record"] as? [String: Any],
+                let version = record["version"] as? String
+            else {
+                XCTFail("Malformed returned record structure")
+                continue
+            }
+
+            versionSet.insert(version)
+        }
+
+        XCTAssertEqual(versionSet.count, 1, "Expected all fileTypes to use the same version")
+        XCTAssertEqual(versionSet.first, "2.0", "Expected version to be best highest version below max")
+    }
+
     private func createSubject(
         records: [RemoteSettingsRecord] = [],
         attachmentsById: [String: Data] = [:],

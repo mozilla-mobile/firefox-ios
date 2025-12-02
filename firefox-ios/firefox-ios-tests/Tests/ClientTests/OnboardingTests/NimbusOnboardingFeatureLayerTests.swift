@@ -98,13 +98,13 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             order: 10,
             title: CardElementNames.title + " 1",
             body: CardElementNames.body + " 1",
-            link: OnboardingKit.OnboardingLinkInfoModel(title: CardElementNames.linkTitle,
-                                                        url: URL(string: CardElementNames.linkURL)!),
-            buttons: OnboardingKit.OnboardingButtons<Client.OnboardingActions>(
-                primary: OnboardingKit.OnboardingButtonInfoModel<Client.OnboardingActions>(
+            link: OnboardingLinkInfoModel(title: CardElementNames.linkTitle,
+                                          url: URL(string: CardElementNames.linkURL)!),
+            buttons: OnboardingButtons<OnboardingActions>(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: CardElementNames.primaryButtonTitle,
                     action: .forwardOneCard),
-                secondary: OnboardingKit.OnboardingButtonInfoModel<Client.OnboardingActions>(
+                secondary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: CardElementNames.secondaryButtonTitle,
                     action: .forwardOneCard)),
             multipleChoiceButtons: [],

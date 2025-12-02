@@ -14,7 +14,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
     var link: OnboardingLinkInfoModel?
     var buttons: OnboardingButtons<OnboardingActions>
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
+    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel]
     var onboardingType: OnboardingType
     var a11yIdRoot: String
 
@@ -32,7 +32,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         body: String,
         link: OnboardingLinkInfoModel?,
         buttons: OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
+        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,

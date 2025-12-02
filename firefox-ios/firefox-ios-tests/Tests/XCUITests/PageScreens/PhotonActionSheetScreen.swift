@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class PhotonActionSheetScreen {
     private let app: XCUIApplication
     private let sel: PhotonActionSheetSelectorsSet

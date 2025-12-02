@@ -1528,7 +1528,10 @@
 		C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A682A769460002ACCE2 /* ReadingListCoordinator.swift */; };
 		C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */; };
 		C2B065512ECF37F000C479CA /* TranslationsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */; };
+		C2B31EC92EDCE79100D53FF5 /* TranslationsVersionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B31EC82EDCE78600D53FF5 /* TranslationsVersionHelper.swift */; };
+		C2B31ECD2EDCEB1B00D53FF5 /* TranslationsVersionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B31ECC2EDCEB0D00D53FF5 /* TranslationsVersionHelperTests.swift */; };
 		C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */; };
+		C2C6FF8E2ED9A79100B833D4 /* TestableUIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */; };
 		C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */; };
 		C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */; };
 		C2D71B952A384F11003DEC7A /* ThemedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B942A384F11003DEC7A /* ThemedTableViewCell.swift */; };
@@ -9904,8 +9907,11 @@
 		C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2A943CF800ADCD8E96ACA5B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsTelemetry.swift; sourceTree = "<group>"; };
+		C2B31EC82EDCE78600D53FF5 /* TranslationsVersionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsVersionHelper.swift; sourceTree = "<group>"; };
+		C2B31ECC2EDCEB0D00D53FF5 /* TranslationsVersionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsVersionHelperTests.swift; sourceTree = "<group>"; };
 		C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2BD4AC2A2935AE48BEB94B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
+		C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableUIToolbar.swift; sourceTree = "<group>"; };
 		C2CB4D369C756DA6836BC4A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinator.swift; sourceTree = "<group>"; };
 		C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -11732,6 +11738,7 @@
 		1DCEC3EF2D5C1BA700129966 /* Application Services */ = {
 			isa = PBXGroup;
 			children = (
+				C2B31EC82EDCE78600D53FF5 /* TranslationsVersionHelper.swift */,
 				C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */,
 				BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */,
 				1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */,
@@ -12042,6 +12049,7 @@
 		274A36D1239EBAD600A21587 /* LibraryViewController */ = {
 			isa = PBXGroup;
 			children = (
+				C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */,
 				F84B22221A09122500AAB793 /* LibraryViewController.swift */,
 				C8417D212657F0600010B877 /* LibraryViewModel.swift */,
 				274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */,
@@ -14186,6 +14194,7 @@
 		AAD9D6492EB25B2700BFECAF /* TranslationsTests */ = {
 			isa = PBXGroup;
 			children = (
+				C2B31ECC2EDCEB0D00D53FF5 /* TranslationsVersionHelperTests.swift */,
 				C24E2D2B2ECF9DE900BBCFA7 /* TranslationsTelemetryTests.swift */,
 				C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */,
 				C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */,
@@ -14895,6 +14904,7 @@
 			isa = PBXGroup;
 			children = (
 				21A7C44D283539170071D996 /* IntroViewModel.swift */,
+				81055B552BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift */,
 				C88E7A582A0553440072E638 /* OnboardingCardInfoModel.swift */,
 				8C51ED6F2DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift */,
 				C88E7A542A0553180072E638 /* OnboardingViewModel.swift */,
@@ -18640,6 +18650,7 @@
 				8A3EF8132A2FD07A00796E3A /* ResetContextualHints.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
 				94D3DD172D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */,
+				C2C6FF8E2ED9A79100B833D4 /* TestableUIToolbar.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				1DCEC3F42D600AE000129966 /* ASSearchEngineProvider.swift in Sources */,
 				C88E7A592A0553440072E638 /* OnboardingCardInfoModel.swift in Sources */,
@@ -19292,6 +19303,7 @@
 				810FF3582B1784E7009F062C /* PrivateModeAction.swift in Sources */,
 				C7F5331E2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift in Sources */,
 				21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */,
+				C2B31EC92EDCE79100D53FF5 /* TranslationsVersionHelper.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
 				C2886BAC2EC4A5C4007AE6C3 /* TinyHTTPReply.swift in Sources */,
 				C2886E042EC5DFF7007AE6C3 /* TranslatorRoute.swift in Sources */,
@@ -19505,6 +19517,7 @@
 				E1EAA5F32D4A705500D3039C /* ToolbarMiddlewareTests.swift in Sources */,
 				8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */,
 				E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */,
+				C2B31ECD2EDCEB1B00D53FF5 /* TranslationsVersionHelperTests.swift in Sources */,
 				8CFBC18A2ECF44C400E5B22B /* ActionExtensionTelemetryTests.swift in Sources */,
 				21872A232E3CFEA500241A8A /* TabScrollHandlerTests.swift in Sources */,
 				39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */,
@@ -27943,6 +27956,7 @@
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
@@ -28436,6 +28450,7 @@
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
@@ -29719,6 +29734,7 @@
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
@@ -30021,6 +30037,7 @@
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
@@ -30327,6 +30344,7 @@
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
@@ -30853,6 +30871,7 @@
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;

@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class LoginSettingsScreen {
     private let app: XCUIApplication
     private let sel: LoginSettingsSelectorsSet

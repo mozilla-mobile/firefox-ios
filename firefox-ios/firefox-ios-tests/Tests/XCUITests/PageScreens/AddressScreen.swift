@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class AddressScreen {
     private let app: XCUIApplication
     private let sel: AddressSelectorsSet

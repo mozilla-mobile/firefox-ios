@@ -181,8 +181,8 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {
-        let buttons = OnboardingKit.OnboardingButtons<Client.OnboardingActions>(
-            primary: OnboardingKit.OnboardingButtonInfoModel<Client.OnboardingActions>(
+        let buttons = OnboardingButtons<OnboardingActions>(
+            primary: OnboardingButtonInfoModel<OnboardingActions>(
                 title: "Button title \(index)",
                 action: .forwardOneCard))
         return OnboardingCardInfoModel(cardType: .basic,

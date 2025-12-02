@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class PDFScreen {
     private let app: XCUIApplication
     private let sel: PDFSelectorsSet
