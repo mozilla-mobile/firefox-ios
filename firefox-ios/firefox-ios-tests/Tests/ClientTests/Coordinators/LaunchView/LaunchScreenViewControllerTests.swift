@@ -28,6 +28,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         viewModel = nil
         profile = nil
         coordinatorDelegate = nil
+
         try await super.tearDown()
     }
 

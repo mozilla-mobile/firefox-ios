@@ -25,10 +25,11 @@ final class TabTrayViewControllerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         delegate = nil
         navigationController = nil
         DependencyHelperMock().reset()
+
+        try await super.tearDown()
     }
 
     // MARK: Compact layout
