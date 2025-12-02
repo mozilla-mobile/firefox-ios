@@ -255,9 +255,10 @@ class CreditCardsTests: BaseTestCase {
         if iPad() {
             app.webViews["Web content"].textFields["Expiration month:"].waitAndTap()
             app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
+        } else {
+            app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
+            app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
         }
-        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
-        app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
         if #unavailable(iOS 26) {
             mozWaitForElementToExist(app.buttons[useSavedCard])
         }
