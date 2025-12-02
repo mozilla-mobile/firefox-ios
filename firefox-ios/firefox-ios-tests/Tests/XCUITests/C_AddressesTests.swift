@@ -600,7 +600,7 @@ class O_AddressesTests: BaseTestCase {
         }
         let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
         let manageAddresses = AccessibilityIdentifiers.Autofill.footerPrimaryAction
-        if #available(iOS 26, *) {
+        if #unavailable(iOS 26) {
             app.buttons[addressAutofillButton].waitAndTap()
             // Tap the "Manage addresses" link
             app.otherElements.buttons[manageAddresses].waitAndTap()
