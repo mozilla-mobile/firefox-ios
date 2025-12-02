@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class BrowserScreen {
     private let app: XCUIApplication
     private let sel: BrowserSelectorsSet

@@ -22,6 +22,7 @@ let TIMEOUT: TimeInterval = 20
 let TIMEOUT_LONG: TimeInterval = 45
 let MAX_SWIPE = 5
 
+@MainActor
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     let app = XCUIApplication()
