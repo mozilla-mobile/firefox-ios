@@ -26,13 +26,12 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
+        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
         profile = nil
         messageManager = nil
         delegate = nil
-
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        super.tearDown()
     }
 
     func testLaunchDoesntCallLoadedIfNotStarted() {
