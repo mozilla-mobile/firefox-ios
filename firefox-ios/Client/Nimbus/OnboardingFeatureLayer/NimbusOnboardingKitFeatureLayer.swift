@@ -100,7 +100,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return cardData.compactMap { cardName, cardData in
             if cardIsValid(with: cardData, using: conditionTable, and: helper) {
                 return OnboardingKitCardInfoModel(
-                    cardType: OnboardingCardType(rawValue: cardData.cardType.rawValue) ?? .basic,
+                    cardType: OnboardingKit.OnboardingCardType(rawValue: cardData.cardType.rawValue) ?? .basic,
                     name: cardName,
                     order: cardData.order,
                     title: String(

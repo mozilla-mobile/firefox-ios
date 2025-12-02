@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol OnboardingDefaultBrowserModelProtocol: Sendable {
+public protocol OnboardingDefaultBrowserModelProtocol: Sendable {
     associatedtype OnboardingPopupActionType
     var title: String { get }
     var instructionSteps: [String] { get }

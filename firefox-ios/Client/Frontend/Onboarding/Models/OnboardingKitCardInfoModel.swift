@@ -90,4 +90,4 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
 extension OnboardingInstructionsPopupActions: @unchecked Sendable {}
 extension OnboardingActions: @unchecked Sendable {}
 extension OnboardingMultipleChoiceAction: @unchecked Sendable {}
-extension OnboardingKit.OnboardingType: @unchecked Sendable {}
+extension OnboardingType: @unchecked Sendable {}
