@@ -18,7 +18,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
-    private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -277,12 +276,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
 
         case TabPanelViewActionType.toggleInactiveTabs:
-            guard let tabState = state.screenState(TabsPanelState.self,
-                                                   for: .tabsPanel,
-                                                   window: action.windowUUID)
-            else { return }
-            let expanded = tabState.isInactiveTabsExpanded
-            inactiveTabTelemetry.sectionToggled(hasExpanded: expanded)
+            // Laurie - This will be deleted in the next PR
+            break
 
         default:
             break
@@ -382,8 +377,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         var tabs = [TabModel]()
         let tabManager = tabManager(for: uuid)
         let selectedTab = tabManager.selectedTab
-        // Be careful to use active tabs and not inactive tabs
-        let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalActiveTabs
+        let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: tab.tabUUID == selectedTab?.tabUUID,
@@ -409,13 +403,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
         let tabManager = tabManager(for: uuid)
         var inactiveTabs = [InactiveTabsModel]()
-        for tab in tabManager.getInactiveTabs() {
-            let inactiveTab = InactiveTabsModel(tabUUID: tab.tabUUID,
-                                                title: tab.displayTitle,
-                                                url: tab.url,
-                                                favIconURL: tab.faviconURL)
-            inactiveTabs.append(inactiveTab)
-        }
+        // Laurie - This will be deleted in the next PR
         return inactiveTabs
     }
 
@@ -483,7 +471,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         // then we want to close the tray.
         let isLastActiveTab = isPrivate
                             ? tabManager.privateTabs.count == 1
-                            : (tabManager.normalActiveTabs.count <= 1 || tabManager.normalTabs.count == 1)
+                            : tabManager.normalTabs.count == 1
         tabManager.removeTab(tabUUID)
         return isLastActiveTab
     }
@@ -668,10 +656,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
     /// Close all inactive tabs, removing them from the tabs array on `TabManager`.
     /// Makes a backup of tabs to be deleted in case the undo option is selected.
     private func closeAllInactiveTabs(state: AppState, uuid: WindowUUID) {
+        // Laurie - This will be deleted in the next PR
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
-        inactiveTabTelemetry.closedAllTabs()
-        let tabManager = tabManager(for: uuid)
-        tabManager.removeAllInactiveTabs()
         let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: [InactiveTabsModel](),
                                                      windowUUID: uuid,
                                                      actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
@@ -694,8 +680,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
     /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
     private func undoCloseAllInactiveTabs(uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        tabManager.undoCloseInactiveTabs()
+        // Laurie - This will be deleted in the next PR
         let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
                                                      windowUUID: uuid,
@@ -704,8 +689,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
     }
 
     private func closeInactiveTab(for tabUUID: String, state: AppState, uuid: WindowUUID) {
+        // Laurie - This will be deleted in the next PR
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
-        inactiveTabTelemetry.tabSwipedToClose()
         let tabManager = tabManager(for: uuid)
         if let tabToClose = tabManager.getTabForUUID(uuid: tabUUID) {
             let index = tabsState.inactiveTabs.firstIndex { $0.tabUUID == tabUUID }
@@ -729,6 +714,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
     }
 
     private func undoCloseInactiveTab(uuid: WindowUUID) {
+        // Laurie - This will be deleted in the next PR
         let windowTabManager = self.tabManager(for: uuid)
         guard windowTabManager.backupCloseTab != nil else { return }
 
@@ -761,10 +747,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let action = TabTrayAction(windowUUID: uuid,
                                    actionType: TabTrayActionType.dismissTabTray)
         store.dispatch(action)
-
-        if isInactiveTab {
-            inactiveTabTelemetry.tabOpened()
-        }
     }
 
     private func tabManager(for uuid: WindowUUID) -> TabManager {

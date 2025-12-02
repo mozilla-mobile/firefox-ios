@@ -105,7 +105,6 @@ public struct PrefsKeys {
     public struct FeatureFlags {
         public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
-        public static let InactiveTabs = "InactiveTabsUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
@@ -155,7 +154,6 @@ public struct PrefsKeys {
         case jumpBackInConfiguredKey = "JumpBackInConfigured"
         case jumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"
         case jumpBackInSyncedTabConfiguredKey = "JumpBackInSyncedTabConfigured"
-        case inactiveTabsKey = "ContextualHintInactiveTabs"
         case mainMenuKey = "MainMenuHintKey"
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
@@ -219,9 +217,6 @@ public struct PrefsKeys {
 
     // Only used in unit tests to override the user's setting for nimbus features
     public static let NimbusUserEnabledFeatureTestsOverride = "NimbusUserEnabledFeatureTestsOverride"
-
-    // Only used to force faster transition of tabs to the inactive state (10 seconds)
-    public static let FasterInactiveTabsOverride = "FasterInactiveTabsOverride"
 
     // Only used to force faster Terms of Use timeout for debugging purposes
     public static let FasterTermsOfUseTimeoutOverride = "FasterTermsOfUseTimeoutOverride"

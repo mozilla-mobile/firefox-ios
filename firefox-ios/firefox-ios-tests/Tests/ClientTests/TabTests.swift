@@ -26,9 +26,6 @@ class TabTests: XCTestCase {
         mockDispatchQueue = MockDispatchQueue()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         DependencyHelperMock().bootstrapDependencies()
-
-        // Disable debug flag for faster inactive tabs and perform tests based on the real 14 day time to inactive
-        UserDefaults.standard.set(nil, forKey: PrefsKeys.FasterInactiveTabsOverride)
     }
 
     override func tearDown() {
