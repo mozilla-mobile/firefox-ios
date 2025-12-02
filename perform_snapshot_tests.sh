@@ -434,7 +434,7 @@ combined_result_path="$results_dir/all_tests.xcresult"
 
 # Define the Xcode path based on the CI environment variable
 if [ "${CI:-false}" = "true" ]; then
-    xcresulttool_path="/Applications/Xcode_15.4.app/Contents/Developer/usr/bin/xcresulttool"
+    xcresulttool_path="/Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcresulttool"
 else
     xcresulttool_path="/Applications/Xcode.app/Contents/Developer/usr/bin/xcresulttool"
 fi
@@ -452,6 +452,14 @@ xcresult_files=($(find "$results_dir" -name "*.xcresult"))
 if [ "${#xcresult_files[@]}" -eq 0 ]; then
   echo "Error: No xcresult files found in $results_dir to combine."
   exit 1
+fi
+
+# Check if xcresult is one
+if [ "${#xcresult_files[@]}" -eq 1 ]; then
+  echo "Only one xcresult file found. Copying to combined result path."
+  cp -R "${xcresult_files[0]}" "$combined_result_path"
+  echo "Combined xcresult created at: $combined_result_path"
+  exit 0
 fi
 
 # Merge the xcresult files into one

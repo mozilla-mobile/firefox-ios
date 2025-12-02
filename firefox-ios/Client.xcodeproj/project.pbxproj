@@ -9563,6 +9563,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				SnapshotTests/DeviceType.swift,
+				SnapshotTests/environment.json,
 				SnapshotTests/LocaleRetriever.swift,
 				SnapshotTests/LocalizationOverrideTestingBundle.swift,
 				SnapshotTests/NTP/NTPComponentTests.swift,
@@ -9583,6 +9584,7 @@
 				Mocks/EcosiaMockThemeManager.swift,
 				Mocks/MockWelcomeDelegate.swift,
 				SnapshotTests/DeviceType.swift,
+				SnapshotTests/environment.json,
 				SnapshotTests/LocaleRetriever.swift,
 				SnapshotTests/LocalizationOverrideTestingBundle.swift,
 				SnapshotTests/NTP/NTPComponentTests.swift,

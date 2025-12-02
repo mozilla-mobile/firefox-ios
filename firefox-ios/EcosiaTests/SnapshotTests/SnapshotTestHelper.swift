@@ -139,7 +139,7 @@ final class SnapshotTestHelper {
 
     /// Swaps the main bundle to use a custom bundle for localization override during testing.
     private static func swizzleMainBundle() {
-        object_setClass(Bundle.main, LocalizationOverrideTestingBundle.self)
+        object_setClass(Bundle.ecosia, LocalizationOverrideTestingBundle.self)
     }
 
     /// Updates the window with newly initialized content and makes it visible.

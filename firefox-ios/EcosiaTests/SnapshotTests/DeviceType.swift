@@ -9,10 +9,10 @@ import UIKit
 enum DeviceType: String, CaseIterable {
     case iPhoneSE_Portrait
     case iPhoneSE_Landscape
-    case iPhone15Pro_Portrait
-    case iPhone15Pro_Landscape
-    case iPhone15ProMax_Portrait
-    case iPhone15ProMax_Landscape
+    case iPhone16Pro_Portrait
+    case iPhone16Pro_Landscape
+    case iPhone16ProMax_Portrait
+    case iPhone16ProMax_Landscape
     case iPadPro_Portrait
     case iPadPro_Landscape
 
@@ -22,13 +22,13 @@ enum DeviceType: String, CaseIterable {
             return ViewImageConfig.iPhone8(.portrait)
         case .iPhoneSE_Landscape:
             return ViewImageConfig.iPhone8(.landscape)
-        case .iPhone15Pro_Portrait:
+        case .iPhone16Pro_Portrait:
             return ViewImageConfig.iPhone13Pro(.portrait)
-        case .iPhone15Pro_Landscape:
+        case .iPhone16Pro_Landscape:
             return ViewImageConfig.iPhone13Pro(.landscape)
-        case .iPhone15ProMax_Portrait:
+        case .iPhone16ProMax_Portrait:
             return ViewImageConfig.iPhone13ProMax(.portrait)
-        case .iPhone15ProMax_Landscape:
+        case .iPhone16ProMax_Landscape:
             return ViewImageConfig.iPhone13ProMax(.landscape)
         case .iPadPro_Portrait:
             return ViewImageConfig.iPadPro11(.portrait)
@@ -41,10 +41,10 @@ enum DeviceType: String, CaseIterable {
         switch self {
         case .iPhoneSE_Portrait, .iPhoneSE_Landscape:
             return "iPhone SE (3rd generation)"
-        case .iPhone15Pro_Portrait, .iPhone15Pro_Landscape:
-            return "iPhone 15 Pro"
-        case .iPhone15ProMax_Portrait, .iPhone15ProMax_Landscape:
-            return "iPhone 15 Pro Max"
+        case .iPhone16Pro_Portrait, .iPhone16Pro_Landscape:
+            return "iPhone 16 Pro"
+        case .iPhone16ProMax_Portrait, .iPhone16ProMax_Landscape:
+            return "iPhone 16 Pro Max"
         case .iPadPro_Portrait, .iPadPro_Landscape:
             return "iPad Pro 11-inch (M4)"
         }
@@ -62,14 +62,14 @@ enum DeviceType: String, CaseIterable {
             return .iPhoneSE_Portrait
         case ("iPhone SE (3rd generation)", "landscape"):
             return .iPhoneSE_Landscape
-        case ("iPhone 15 Pro", "portrait"):
-            return .iPhone15Pro_Portrait
-        case ("iPhone 15 Pro", "landscape"):
-            return .iPhone15Pro_Landscape
-        case ("iPhone 15 Pro Max", "portrait"):
-            return .iPhone15ProMax_Portrait
-        case ("iPhone 15 Pro Max", "landscape"):
-            return .iPhone15ProMax_Landscape
+        case ("iPhone 16 Pro", "portrait"):
+            return .iPhone16Pro_Portrait
+        case ("iPhone 16 Pro", "landscape"):
+            return .iPhone16Pro_Landscape
+        case ("iPhone 16 Pro Max", "portrait"):
+            return .iPhone16ProMax_Portrait
+        case ("iPhone 16 Pro Max", "landscape"):
+            return .iPhone16ProMax_Landscape
         case ("iPad Pro 11-inch (M4)", "portrait"):
             return .iPadPro_Portrait
         case ("iPad Pro 11-inch (M4)", "landscape"):

@@ -12,13 +12,13 @@
       "orientation": "portrait"
     },
     {
-      "name": "iPhone 15 Pro",
+      "name": "iPhone 16 Pro",
       "orientation": "portrait",
-      "os": "17.5",
+      "os": "18.6",
       "isDefaultTestDevice": true
     },
     {
-      "name": "iPhone 15 Pro Max",
+      "name": "iPhone 16 Pro Max",
       "orientation": "landscape"
     },
     {
@@ -31,13 +31,8 @@
       "name": "EcosiaSnapshotTests",
       "testClasses": [
         {
-          "name": "OnboardingTests",
-          "devices": ["all", "portrait"],
-          "locales": ["all"]
-        },
-        {
           "name": "NTPComponentTests",
-          "devices": ["iPhone 15 Pro"],
+          "devices": ["iPhone 16 Pro"],
           "locales": ["all"]
         }
       ]

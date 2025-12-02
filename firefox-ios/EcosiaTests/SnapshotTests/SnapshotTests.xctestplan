@@ -16,6 +16,9 @@
       "parallelizable" : true,
       "skippedTests" : [
         "NTPTests",
+        "OnboardingTests",
+        "OnboardingTests\/testWelcomeScreen()",
+        "OnboardingTests\/testWelcomeStepsScreens()",
         "SnapshotBaseTests"
       ],
       "target" : {

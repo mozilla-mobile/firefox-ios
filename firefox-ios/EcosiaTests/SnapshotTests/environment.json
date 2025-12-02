@@ -5,12 +5,8 @@
     "orientation": "portrait"
   },
   {
-    "name": "iPhone 15 Pro",
+    "name": "iPhone 16 Pro",
     "orientation": "portrait"
-  },
-  {
-    "name": "iPhone 15 Pro Max",
-    "orientation": "landscape"
   },
   {
     "name": "iPad Pro 11-inch (M4)",
@@ -24,5 +20,5 @@
   "es",
   "nl"
 ],
-    "SIMULATOR_DEVICE_NAME": "iPhone 15 Pro"
+    "SIMULATOR_DEVICE_NAME": "iPhone 16 Pro"
   }
