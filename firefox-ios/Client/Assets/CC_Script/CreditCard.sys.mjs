@@ -217,6 +217,7 @@ export class CreditCard {
 
   /**
    * Normalizes a credit card number.
+   *
    * @param {string} number
    * @return {string | null}
    * @memberof CreditCard
@@ -346,8 +347,8 @@ export class CreditCard {
   }
 
   /**
-   *
    * Please use getLabelInfo above, as it allows for localization.
+   *
    * @deprecated
    */
   static getLabel({ number, name }) {

@@ -43,7 +43,7 @@ DEFAULT_RULES.set(REQUIRED, [UPPER, LOWER, DIGIT, SPECIAL]);
 
 export const PasswordGenerator = {
   /**
-   * @param {Object} options
+   * @param {object} options
    * @param {number} options.length - length of the generated password if there are no rules that override the length
    * @param {Map} options.rules - map of password rules
    * @returns {string} password that was generated
@@ -126,6 +126,7 @@ export const PasswordGenerator = {
 
   /**
    * Adds special characters and/or other required characters to the requiredCharacters array.
+   *
    * @param {Map} rules
    * @param {string[]} requiredClasses
    */
@@ -171,6 +172,7 @@ export const PasswordGenerator = {
 
   /**
    * Shuffle the order of characters in a string.
+   *
    * @param {string} str to shuffle
    * @returns {string} shuffled string
    */
@@ -193,6 +195,7 @@ export const PasswordGenerator = {
    * Determine the number of consecutive characters in a string.
    * This is primarily used to validate the "max-consecutive" rule
    * of a generated password.
+   *
    * @param {string} generatedPassword
    * @param {number} value the number of consecutive characters allowed
    * @return {boolean} `true` if the generatePassword has less than the value argument number of characters, `false` otherwise

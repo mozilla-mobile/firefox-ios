@@ -36,112 +36,15 @@ class Logic {
   }
 
   /**
-   * Infer whether a form is a sign-in form by searching keywords
-   * in its attributes
-   *
-   * @param {Element} element
-   *                  the form we want to check.
-   *
-   * @returns {boolean} True if any of the rules matches
-   */
-  static isInferredLoginForm(formElement) {
-    // This is copied from 'loginFormAttrRegex' in NewPasswordModel.sys.mjs
-    const loginExpr =
-      /login|log in|log on|log-on|sign in|sigin|sign\/in|sign-in|sign on|sign-on/i;
-
-    if (Logic.elementAttrsMatchRegex(formElement, loginExpr)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Search for keywords that indicates the input field is not likely a
-   * field of a username login form.
-   *
-   * @param {Element} element
-   *                  the input field we want to check.
-   *
-   * @returns {boolean} True if any of the rules matches
-   */
-  static isInferredNonUsernameField(element) {
-    const expr = /\b(search|code|add)\b/i;
-
-    if (
-      Logic.elementAttrsMatchRegex(element, expr) ||
-      Logic.hasLabelMatchingRegex(element, expr)
-    ) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Infer whether an input field is a username field by searching
-   * 'username' keyword in its attributes
-   *
-   * @param {Element} element
-   *                  the field we want to check.
-   *
-   * @returns {boolean} True if any of the rules matches
-   */
-  static isInferredUsernameField(element) {
-    const expr = /username/i;
-
-    let ac = element.getAutocompleteInfo()?.fieldName;
-    if (ac && ac == "username") {
-      return true;
-    }
-
-    if (
-      Logic.elementAttrsMatchRegex(element, expr) ||
-      Logic.hasLabelMatchingRegex(element, expr)
-    ) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Infer whether an input field is an email field by searching
-   * 'email' keyword in its attributes.
-   *
-   * @param {Element} element
-   *                  the field we want to check.
-   *
-   * @returns {boolean} True if any of the rules matches
-   */
-  static isInferredEmailField(element) {
-    const expr = /email|邮箱/i;
-
-    if (element.type == "email") {
-      return true;
-    }
-
-    let ac = element.getAutocompleteInfo()?.fieldName;
-    if (ac && ac == "email") {
-      return true;
-    }
-
-    if (
-      Logic.elementAttrsMatchRegex(element, expr) ||
-      Logic.hasLabelMatchingRegex(element, expr)
-    ) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
    * Test whether associated labels of the element have the keyword.
    * This is a simplified rule of hasLabelMatchingRegex in NewPasswordModel.sys.mjs
    */
   static hasLabelMatchingRegex(element, regex) {
     return regex.test(element.labels?.[0]?.textContent);
+  }
+
+  static hasTextContentMatchingRegex(element, regex) {
+    return regex.test(element.textContent);
   }
 
   /**
@@ -189,11 +92,11 @@ class Logic {
    *
    * @param {Element} element
    *                  the field we want to check.
-   * @param {Object} options
+   * @param {object} options
    * @param {bool} [options.ignoreConnect] - Whether to ignore checking isConnected
    *                                         of the element.
    *
-   * @returns {Boolean} true if the field type is one
+   * @returns {boolean} true if the field type is one
    *                    of the username types.
    */
   static isUsernameFieldType(element, { ignoreConnect = false } = {}) {
@@ -239,11 +142,11 @@ class Logic {
    *
    * @param {Element} element
    *                  the field we want to check.
-   * @param {Object} options
+   * @param {object} options
    * @param {bool} [options.ignoreConnect] - Whether to ignore checking isConnected
    *                                         of the element.
    *
-   * @returns {Boolean} true if the field can
+   * @returns {boolean} true if the field can
    *                    be treated as a password input
    */
   static isPasswordFieldType(element, { ignoreConnect = false } = {}) {
@@ -354,10 +257,11 @@ class Logic {
   /**
    * Transforms the parsed rules returned from PasswordRulesParser into a Map for easier access.
    * The returned Map could have the following keys: "allowed", "required", "maxlength", "minlength", and "max-consecutive"
+   *
    * @example
    * // Returns a Map with a key-value pair of "allowed": "ascii-printable"
    * transformRulesToMap([{ _name: "allowed", value: [{ _name: "ascii-printable" }] }])
-   * @param {Object[]} rules rules from PasswordRulesParser.parsePasswordRules
+   * @param {object[]} rules rules from PasswordRulesParser.parsePasswordRules
    * @return {Map} mapped rules
    */
   static transformRulesToMap(rules) {
