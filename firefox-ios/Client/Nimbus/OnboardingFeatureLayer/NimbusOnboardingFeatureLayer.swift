@@ -113,22 +113,22 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// A card is not viable without buttons.
     private func getOnboardingCardButtons(
         from cardButtons: NimbusOnboardingButtons
-    ) -> OnboardingKit.OnboardingButtons<OnboardingActions> {
-        return OnboardingKit.OnboardingButtons(
-            primary: OnboardingKit.OnboardingButtonInfoModel(
+    ) -> OnboardingButtons<OnboardingActions> {
+        return OnboardingButtons(
+            primary: OnboardingButtonInfoModel(
                 title: String(format: cardButtons.primary.title,
                               AppName.shortName.rawValue),
                 action: cardButtons.primary.action),
             secondary: cardButtons.secondary.map {
-                OnboardingKit.OnboardingButtonInfoModel(title: $0.title, action: $0.action)
+                OnboardingButtonInfoModel(title: $0.title, action: $0.action)
             })
     }
 
     private func getOnboardingMultipleChoiceButtons(
         from cardButtons: [NimbusOnboardingMultipleChoiceButton]
-    ) -> [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
+    ) -> [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
         return cardButtons.map { button in
-            return OnboardingKit.OnboardingMultipleChoiceButtonModel(
+            return OnboardingMultipleChoiceButtonModel(
                 title: button.title,
                 action: button.action,
                 imageID: getOnboardingMultipleChoiceButtonImageID(from: button.image)
@@ -138,12 +138,12 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getOnboardingLink(
         from cardLink: NimbusOnboardingLink?
-    ) -> OnboardingKit.OnboardingLinkInfoModel? {
+    ) -> OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url)
         else { return nil }
 
-        return OnboardingKit.OnboardingLinkInfoModel(title: cardLink.title, url: url)
+        return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
     private func getOnboardingMultipleChoiceButtonImageID(
@@ -166,10 +166,10 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func getPopupInfoModel(
         from data: NimbusOnboardingInstructionPopup?,
         withA11yID a11yID: String
-    ) -> OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
+    ) -> OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
         guard let data else { return nil }
 
-        return OnboardingKit.OnboardingInstructionsPopupInfoModel(
+        return OnboardingInstructionsPopupInfoModel(
             title: data.title,
             instructionSteps: data.instructions
                 .map { String(format: $0, AppName.shortName.rawValue) },

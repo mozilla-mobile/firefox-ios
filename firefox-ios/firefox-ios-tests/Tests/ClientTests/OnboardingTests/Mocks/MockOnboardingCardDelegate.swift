@@ -34,7 +34,7 @@ class MockOnboardingCardDelegateController: UIViewController,
     var multipleChoiceAction: OnboardingMultipleChoiceAction?
 
     func handleBottomButtonActions(
-        for action: Client.OnboardingActions,
+        for action: OnboardingActions,
         from cardName: String,
         isPrimaryButton: Bool
     ) {
