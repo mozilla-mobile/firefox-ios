@@ -473,7 +473,6 @@ class TabManagerImplementation: NSObject,
         restoreTabs()
     }
 
-    // Laurie - Adjust documentation here
     private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
         assert(Thread.isMainThread)
         // If the currently selected tab has been deleted, try to select the next most reasonable tab.
