@@ -726,8 +726,8 @@ final class LocationView: UIView,
             // We want to use system colors when the location view is fully transparent
             // To make sure it blends well with the background when using glass effect.
             urlTextFieldColor =  .label
-            urlTextFieldSubdomainColor = .systemGray
-            lockIconButton.tintColor = .systemGray
+            urlTextFieldSubdomainColor = .label
+            lockIconButton.tintColor = .label
         } else {
             urlTextFieldColor = colors.textPrimary
             urlTextFieldSubdomainColor = colors.textSecondary
@@ -748,7 +748,6 @@ final class LocationView: UIView,
         )
 
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = colors.textSecondary
         lockIconImageColor = colors.textSecondary
 
         setLockIconImage()
