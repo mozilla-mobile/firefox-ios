@@ -15,10 +15,20 @@ final class ViewCreditCardScreen {
     }
 
     func waitForViewCardScreen(containing lastDigits: String) {
-        BaseTestCase().waitForElementsToExist([
-            sel.NAVBAR_VIEW_CARD.element(in: app),
-            sel.savedCardButton(containing: lastDigits).element(in: app)
-        ])
+        if #available(iOS 26, *) {
+            // https://github.com/mozilla-mobile/firefox-ios/issues/31079
+            BaseTestCase().restartInBackground()
+            BaseTestCase().unlockLoginsView()
+            BaseTestCase().waitForElementsToExist([
+                sel.NAVBAR_VIEW_CARD.element(in: app),
+                sel.savedCardButton(containing: lastDigits).element(in: app)
+            ])
+        } else {
+            BaseTestCase().waitForElementsToExist([
+                sel.NAVBAR_VIEW_CARD.element(in: app),
+                sel.savedCardButton(containing: lastDigits).element(in: app)
+            ])
+        }
     }
 
     func assertCardDetails(_ details: [String]) {

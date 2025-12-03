@@ -91,6 +91,7 @@ class CreditCardsTests: BaseTestCase {
         creditCardScreen.waitForSectionVisible()
         creditCardScreen.openAddCreditCardForm()
         // Add Credit Card page is displayed
+        addCreditCardScreen.tapCreditCardForm()
         creditCardScreen.waitForAddCreditCardValues()
         // Add and save a valid credit card
         addCreditCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
