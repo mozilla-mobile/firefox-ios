@@ -1922,12 +1922,11 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
-        // for the first two layers of views other than web view and legacy homepage
-        if toolbarHelper.shouldBlur() &&
-            !viewController.isKind(of: WebviewViewController.self) {
+        // for the first two layers of views other than a web view
+        if toolbarHelper.shouldBlur() && !viewController.isKind(of: WebviewViewController.self) {
             viewController.view.clipsToBounds = false
             viewController.view.subviews.forEach { $0.clipsToBounds = false }
-        } else {
+        } else if !isToolbarTranslucencyRefactorEnabled {
             contentContainer.mask = nil
         }
 
