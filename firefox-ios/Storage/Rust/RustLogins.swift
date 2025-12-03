@@ -219,7 +219,7 @@ protocol LoginsProtocol {
     func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func use(login: Login, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void)
-    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void)
+    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable (Result<[Result<Bool?, Error>], Error>) -> Void)
     func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Bool?, Error>) -> Void)
 }
 
@@ -533,23 +533,29 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
         }
 
-    public func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void) {
-        var results: [Result<Bool?, Error>] = []
-        let syncQueue = DispatchQueue(label: "delete logins queue")
-        let group = DispatchGroup()
+    public func deleteLogins(
+        ids: [String],
+        completionHandler: @escaping @Sendable (Result<[Result<Bool?, Error>], Error>) -> Void
+    ) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
 
-        for id in ids {
-            group.enter()
-            deleteLogin(id: id) { result in
-                syncQueue.async {
-                    results.append(result)
-                    group.leave()
+            var results: [Result<Bool?, Error>] = []
+
+            for id in ids {
+                do {
+                    let existed = try self.storage?.delete(id: id)
+                    results.append(.success(existed))
+                } catch {
+                    results.append(.failure(error))
                 }
             }
-        }
 
-        group.notify(queue: .main) {
-            completionHandler(results)
+            completionHandler(.success(results))
         }
     }
 
