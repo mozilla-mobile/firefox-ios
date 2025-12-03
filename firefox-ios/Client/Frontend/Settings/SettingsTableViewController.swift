@@ -916,6 +916,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     @objc
+    nonisolated
     private func syncDidChangeState() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
