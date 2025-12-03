@@ -789,6 +789,11 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
         updateTopTabs(showTopTabs: showTopTabs)
 
+        if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            header.setNeedsLayout()
+            view.layoutSubviews()
+        }
+
         updateToolbarDisplay()
     }
 
@@ -1919,8 +1924,12 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
 
-        // Only update blur views when we are not in zero search mode
-        if inline {
+        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            // Only update blur views when we are not in zero search mode
+            if inline {
+                updateToolbarDisplay()
+            }
+        } else {
             updateToolbarDisplay()
         }
     }
@@ -4900,9 +4909,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        // When animation duration is zero the keyboard is already showing and we don't need
-        // to update the toolbar again. This is the case when we are moving between fields in a form.
-        if state.animationDuration > 0 {
+        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            // When animation duration is zero the keyboard is already showing and we don't need
+            // to update the toolbar again. This is the case when we are moving between fields in a form.
+            if state.animationDuration > 0 {
+                updateToolbarDisplay()
+            }
+        } else {
             updateToolbarDisplay()
         }
     }
