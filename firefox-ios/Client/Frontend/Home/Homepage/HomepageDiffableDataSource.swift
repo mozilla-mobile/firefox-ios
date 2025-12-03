@@ -53,6 +53,7 @@ final class HomepageDiffableDataSource:
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 SearchBarCell.self,
+                LegacyJumpBackInCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
                 BookmarksCell.self,
