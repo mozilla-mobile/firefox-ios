@@ -7,12 +7,13 @@ import WebKit
 import XCTest
 @testable import Client
 
+@MainActor
 final class ContentContainerTests: XCTestCase {
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         setIsSwipingTabsEnabled(false)
         self.profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
@@ -20,11 +21,11 @@ final class ContentContainerTests: XCTestCase {
         self.overlayModeManager = MockOverlayModeManager()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         self.profile = nil
         self.overlayModeManager = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - canAddHomepage

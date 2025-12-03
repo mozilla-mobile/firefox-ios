@@ -6,14 +6,15 @@ import Common
 import XCTest
 @testable import Client
 
+@MainActor
 final class LaunchScreenViewControllerTests: XCTestCase {
     private var viewModel: MockLaunchScreenViewModel!
     private var profile: MockProfile!
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -22,12 +23,13 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         viewModel = nil
         profile = nil
         coordinatorDelegate = nil
-        super.tearDown()
+
+        try await super.tearDown()
     }
 
     func testNotLoaded_notCalled() {
