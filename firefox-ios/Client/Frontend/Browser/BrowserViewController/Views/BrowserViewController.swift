@@ -676,6 +676,9 @@ class BrowserViewController: UIViewController,
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            addOrUpdateMaskViewIfNeeded()
+        }
 
         let action = GeneralBrowserMiddlewareAction(
             scrollOffset: scrollController.contentOffset,
@@ -748,8 +751,6 @@ class BrowserViewController: UIViewController,
                                                 height: view.frame.height))
             maskView.backgroundColor = .black
             contentContainer.mask = maskView
-        } else {
-            addOrUpdateMaskViewIfNeeded()
         }
 
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
@@ -1327,7 +1328,12 @@ class BrowserViewController: UIViewController,
     }
 
     private func onReduceTransparencyStatusDidChange() {
-        updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
+        } else {
+            updateToolbarDisplay()
+        }
 
         store.dispatch(
             ToolbarAction(
