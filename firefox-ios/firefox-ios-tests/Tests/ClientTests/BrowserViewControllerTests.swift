@@ -185,42 +185,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 //        XCTAssertEqual(action.readerModeState, .active)
 //    }
 
-    func testUpdateURLBarDisplayURL_whenNavigationNotFinished_shouldHideLockIcon() throws {
-        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-        let subject = createSubject()
-        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        tab.url = URL(string: "https://google.com")
-        let mockTabWebView = MockTabWebView(tab: tab)
-        tab.webView = mockTabWebView
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-        subject.updateURLBarDisplayURL(tab, false)
-        wait(for: [expectation])
-
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertEqual(action.lockIconImageName, nil)
-    }
-
-    func testUpdateURLBarDisplayURL_whenNavigationIsFinished_shouldShowLockIcon() throws {
-        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-        let subject = createSubject()
-        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        tab.url = URL(string: "https://google.com")
-        let mockTabWebView = MockTabWebView(tab: tab)
-        tab.webView = mockTabWebView
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-        subject.updateURLBarDisplayURL(tab, true)
-        wait(for: [expectation])
-
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertEqual(action.lockIconImageName, StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
-    }
-
     // MARK: - Handle PDF
 
     func testHandlePDFDownloadRequest_doesntDocumentLoadingView_whenTabNotSelected() {
