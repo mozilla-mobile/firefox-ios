@@ -354,6 +354,19 @@ class BrowserViewController: UIViewController,
         return featureFlagStatus
     }
 
+    var isToolbarTranslucencyRefactorEnabled: Bool {
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.toolbarTranslucencyRefactor
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
+    }
+
     var isSwipingTabsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
     }
@@ -728,18 +741,42 @@ class BrowserViewController: UIViewController,
         bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isScrollAlphaZero
         bottomContainer.isHidden = isScrollAlphaZero
 
-        let maskView = UIView(frame: CGRect(x: 0,
-                                            y: -contentContainer.frame.origin.y,
-                                            width: view.frame.width,
-                                            height: view.frame.height))
-        maskView.backgroundColor = .black
-        contentContainer.mask = maskView
+        if !isToolbarTranslucencyRefactorEnabled {
+            let maskView = UIView(frame: CGRect(x: 0,
+                                                y: -contentContainer.frame.origin.y,
+                                                width: view.frame.width,
+                                                height: view.frame.height))
+            maskView.backgroundColor = .black
+            contentContainer.mask = maskView
+        } else {
+            addOrUpdateMaskViewIfNeeded()
+        }
 
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
             $0.setNeedsLayout()
             $0.layoutIfNeeded()
+        }
+    }
+
+    // Adds or updates the mask for the content container that ensures the content is extending
+    // under the toolbars but not leading and trailing (would show during swiping tabs)
+    private func addOrUpdateMaskViewIfNeeded() {
+        guard toolbarHelper.shouldBlur() else { return }
+
+        let frame = CGRect(x: 0,
+                           y: -contentContainer.frame.origin.y,
+                           width: view.frame.width,
+                           height: view.frame.height)
+
+        // if we already have a mask update the frame
+        if let mask = contentContainer.mask {
+            mask.frame = frame
+        } else {
+            let maskView = UIView(frame: frame)
+            maskView.backgroundColor = .black
+            contentContainer.mask = maskView
         }
     }
 
