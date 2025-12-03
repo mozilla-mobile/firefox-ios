@@ -700,7 +700,6 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
-        let enableBlur = isToolbarTranslucencyEnabled
         guard toolbarHelper.shouldBlur() else {
             topBlurView.alpha = 0
             bottomBlurView.isHidden = true
@@ -711,6 +710,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        let enableBlur = isToolbarTranslucencyEnabled
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
