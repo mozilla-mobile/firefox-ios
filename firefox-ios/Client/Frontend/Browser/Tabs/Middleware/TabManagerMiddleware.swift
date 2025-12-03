@@ -401,8 +401,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private func refreshInactiveTabs(for isPrivateMode: Bool = false, uuid: WindowUUID) -> [InactiveTabsModel] {
         guard !isPrivateMode else { return [InactiveTabsModel]() }
 
-        let tabManager = tabManager(for: uuid)
-        var inactiveTabs = [InactiveTabsModel]()
+        let inactiveTabs = [InactiveTabsModel]()
         // TODO: FXIOS-14317 - This will be deleted in the next PR
         return inactiveTabs
     }
