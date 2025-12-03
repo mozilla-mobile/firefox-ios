@@ -67,6 +67,7 @@ final class AddressToolbarContainer: UIView,
         static let addNewTabFadeAnimationDuration: TimeInterval = 0.2
         static let addNewTabPercentageAnimationThreshold: CGFloat = 0.3
         static let keyboardAccessoryViewOffset: CGFloat = 22
+        static let accessoryViewGradientOffset: CGFloat = 74
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -234,7 +235,7 @@ final class AddressToolbarContainer: UIView,
         )
 
         if shouldAdjustForAccessory {
-            let height = frame.height + 66
+            let height = frame.height + UX.accessoryViewGradientOffset
             accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
             store.dispatch(

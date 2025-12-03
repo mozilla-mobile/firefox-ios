@@ -712,8 +712,14 @@ class BrowserViewController: UIViewController,
         if isBottomSearchBar {
             header.isClearBackground = false
 
+            // Prevent homepage from showing behind the keyboard when content isn't scrollable.
+            // Only clear background if content exceeds viewport height.
+            let shouldClearBackground: Bool = {
+                guard let webView = tabManager.selectedTab?.webView else { return false }
+                return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
+            }()
             // we disable the translucency when the keyboard is getting displayed
-            overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || isScrollAlphaZero
+            overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || shouldClearBackground
 
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
@@ -1654,14 +1660,12 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Constraints
-    private var contentContainerBottomConstraint = NSLayoutConstraint()
     private func setupConstraints() {
-        contentContainerBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         NSLayoutConstraint.activate([
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentContainerBottomConstraint
+            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         ])
 
         if isSwipingTabsEnabled {
@@ -1828,7 +1832,6 @@ class BrowserViewController: UIViewController,
         let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
 
         guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
-            contentContainerBottomConstraint.constant = 0
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
@@ -1837,9 +1840,6 @@ class BrowserViewController: UIViewController,
         )
         let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
         let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
-        if toolbarHeightOffset > 0 {
-            contentContainerBottomConstraint.constant = effectiveKeyboardHeight + toolbarHeightOffset
-        }
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
         // make sure the keyboard spacer has the right color/translucency
