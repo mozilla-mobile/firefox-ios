@@ -40,6 +40,7 @@ struct Selector {
 // Resolver
 extension Selector {
     // Return an element from the selector.
+    @MainActor
     func element(in app: XCUIApplication) -> XCUIElement {
         switch strategy {
         case .buttonById:
@@ -72,6 +73,7 @@ extension Selector {
         }
     }
 
+    @MainActor
     func query(in app: XCUIApplication) -> XCUIElementQuery {
         switch strategy {
         case .buttonById:

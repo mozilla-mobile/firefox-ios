@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class FirefoxHomePageScreen {
     private let app: XCUIApplication
     private let sel: FirefoxHomePageSelectorsSet

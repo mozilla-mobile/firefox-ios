@@ -1181,10 +1181,6 @@ extension BrowserViewController: WKNavigationDelegate {
                     }
                 }
             }
-
-            if tabManager.selectedTab === tab {
-                updateURLBarDisplayURL(tab, true)
-            }
         }
     }
 }

@@ -8,6 +8,7 @@ import Common
 
 @testable import Client
 
+@MainActor
 class AccountSyncHandlerTests: XCTestCase {
     private var profile: MockProfile!
     private var syncManager: ClientSyncManagerSpy!
@@ -15,9 +16,8 @@ class AccountSyncHandlerTests: XCTestCase {
     private var mockWindowManager: MockWindowManager!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    @MainActor
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.profile = MockProfile()
         self.syncManager = profile.syncManager as? ClientSyncManagerSpy
         self.queue = MockDispatchQueue()
@@ -33,16 +33,15 @@ class AccountSyncHandlerTests: XCTestCase {
         )
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         self.syncManager = nil
         self.profile = nil
         self.queue = nil
         self.mockWindowManager = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
-    @MainActor
     func testTabDidGainFocus_doesntSyncWithoutAccount() {
         let expectation = XCTestExpectation(description: "sync is not called without an account")
         expectation.isInverted = true
@@ -57,7 +56,6 @@ class AccountSyncHandlerTests: XCTestCase {
         XCTAssertEqual(profile.storeAndSyncTabsCalled, 0)
     }
 
-    @MainActor
     func testTabDidGainFocus_syncWithAccount() {
         let expectation = XCTestExpectation(description: "storeAndSyncTabs called after listed time of tab gaining focus")
         let subject = AccountSyncHandler(with: profile, debounceTime: 0.1, queue: queue, queueDelay: 0.1, onSyncCompleted: {
@@ -70,7 +68,6 @@ class AccountSyncHandlerTests: XCTestCase {
         XCTAssertEqual(profile.storeAndSyncTabsCalled, 1)
     }
 
-    @MainActor
     func testTabDidGainFocus_multipleActions_executedAtMostOnce() {
         let expectation = XCTestExpectation(
             description: "storeAndSyncTabs only called once from multiple tab actions")
@@ -87,7 +84,6 @@ class AccountSyncHandlerTests: XCTestCase {
         XCTAssertEqual(profile.storeAndSyncTabsCalled, 1)
     }
 
-    @MainActor
     func testTabDidGainFocus_multipleDebounce_withWithMultipleSyncs() {
         let expectation = XCTestExpectation(
             description: "storeAndSyncTabs called multiple times if outside of debounce time")
@@ -111,7 +107,6 @@ class AccountSyncHandlerTests: XCTestCase {
 
 // MARK: - Helper methods
 private extension AccountSyncHandlerTests {
-    @MainActor
     func createTab(profile: MockProfile,
                    urlString: String? = "www.website.com") -> Tab {
         let tab = Tab(profile: profile, windowUUID: windowUUID)

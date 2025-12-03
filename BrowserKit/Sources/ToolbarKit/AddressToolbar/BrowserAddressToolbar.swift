@@ -126,6 +126,9 @@ public class BrowserAddressToolbar: UIView,
         [navigationActionStack, leadingPageActionStack, pageActionStack, browserActionStack].forEach {
             $0.isHidden = config.uxConfiguration.scrollAlpha.isZero
         }
+        if #available(iOS 26.0, *) {
+            toolbarTopBorderView.isHidden = config.uxConfiguration.scrollAlpha.isZero
+        }
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         addressBarPosition = toolbarPosition

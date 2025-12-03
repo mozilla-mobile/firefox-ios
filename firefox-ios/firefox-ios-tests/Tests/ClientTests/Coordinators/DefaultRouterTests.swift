@@ -8,10 +8,9 @@ import XCTest
 final class DefaultRouterTests: XCTestCase {
     var navigationController: MockNavigationController!
 
-    @MainActor
-    override func setUp() {
-        super.setUp()
-        navigationController = MockNavigationController()
+    override func setUp() async throws {
+        try await super.setUp()
+        navigationController = await MockNavigationController()
     }
 
     override func tearDown() {
@@ -53,6 +52,7 @@ final class DefaultRouterTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    @MainActor
     func testRunCompletion_DoesNotRunForNonExistingCompletion() {
         let subject = DefaultRouter(navigationController: navigationController)
 

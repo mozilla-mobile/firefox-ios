@@ -353,6 +353,9 @@ class SettingsTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
         navigator.nowAt(HomePanelsScreen)
+        navigator.openURL(path(forTestPage: "test-translation.html"))
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
+
         navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)
@@ -368,7 +371,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         dismissSearchScreenFromTranslation()
 
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
         navigator.goto(SettingsScreen)
@@ -381,7 +383,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         dismissSearchScreenFromTranslation()
 
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-translation.html"))
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
         navigator.nowAt(BrowserTab)
 
