@@ -841,6 +841,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         case (true, true):
             // Two private tabs are always lumped together in the same type
             return true
+        case (false, false):
+            // Two normal tabs are always lumped together in the same type
+            return true
         default:
             return false
         }
