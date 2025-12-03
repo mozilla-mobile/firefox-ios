@@ -522,14 +522,17 @@ final class HomepageViewController: UIViewController,
             return searchBar
 
         case .jumpBackIn(let tab):
-            guard let jumpBackInCell = collectionView?.dequeueReusableCell(
-                cellType: JumpBackInCell.self,
-                for: indexPath
-            ) else {
+
+            let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
+            let cellType: (UICollectionViewCell & JumpBackInCellProtocol).Type =
+                isStoriesRedesignV2Enabled ? JumpBackInCell.self : LegacyJumpBackInCell.self
+
+            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            jumpBackInCell.configure(config: tab, theme: currentTheme)
-            return jumpBackInCell
+
+            cell.configure(config: tab, theme: currentTheme)
+            return cell
 
         case .jumpBackInSyncedTab(let config):
             guard let syncedTabCell = collectionView?.dequeueReusableCell(

@@ -5,17 +5,25 @@
 import Common
 import SiteImageView
 
+@MainActor
+protocol JumpBackInCellProtocol: ReusableCell {
+    func configure(config: JumpBackInTabConfiguration, theme: Theme)
+}
+
 /// A cell used in Home page Jump Back In section
-final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable, Notifiable {
+final class JumpBackInCell: UICollectionViewCell,
+                            JumpBackInCellProtocol,
+                            ThemeApplicable,
+                            Blurrable {
     struct UX {
-        @MainActor
-        static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
-        static let interGroupSpacing: CGFloat = 8
-        static let generalCornerRadius: CGFloat = 12
+        static let generalCornerRadius: CGFloat = 16
         static let cellSpacing: CGFloat = 16
+        static let heroImageInsets: CGFloat = 4
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
-        static let websiteIconSize = CGSize(width: 24, height: 24)
+        static let websiteIconSize = CGSize(width: 16, height: 16)
+        static let contentSpacing: CGFloat = 12
+        static let heroImageCornerRadius: CGFloat = 13
     }
 
     // MARK: - Variables
@@ -25,43 +33,36 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
 
     // MARK: - UI Elements
 
-    // contains imageContainer and textContainer
-    private let contentStack: UIStackView = .build { stackView in
-        stackView.backgroundColor = .clear
-        stackView.spacing = UX.cellSpacing
-        stackView.axis = .horizontal
-        stackView.alignment = .leading
-    }
-
-    // Contains the heroImage and fallbackFaviconImage
-    private var imageContainer: UIView = .build { view in
+    private let imageContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
 
-    private var heroImage: HeroImageView = .build { _ in }
-    private let websiteImage: FaviconImageView = .build { _ in }
+    private let heroImage: HeroImageView = .build()
 
-    // contains itemTitle and websiteContainer
     private let textContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
 
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 2
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.setContentHuggingPriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    // Contains the websiteImage and websiteLabel
-    private var websiteContainer: UIView = .build { view in
+    private let websiteContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
 
-    private var websiteLabel: UILabel = .build { label in
+    private let websiteImage: FaviconImageView = .build()
+
+    private let websiteLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 2
-        label.font = FXFontStyles.Bold.caption1.scaledFont()
-        label.textColor = .label
+        label.numberOfLines = 1
+        label.font = FXFontStyles.Regular.caption2.scaledFont()
+        label.setContentHuggingPriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     // MARK: - Inits
@@ -72,11 +73,6 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell
 
-        startObservingNotifications(
-            withNotificationCenter: notificationCenter,
-            forObserver: self,
-            observing: [UIContentSizeCategory.didChangeNotification]
-        )
         setupLayout()
     }
 
@@ -95,7 +91,7 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
 
         contentView.layer.shadowPath = UIBezierPath(
             roundedRect: contentView.bounds,
-            cornerRadius: HomepageUX.generalCornerRadius
+            cornerRadius: UX.generalCornerRadius
         ).cgPath
     }
 
@@ -103,6 +99,7 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
 
     func configure(config: JumpBackInTabConfiguration, theme: Theme) {
         let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: config.siteURL,
+                                                            generalCornerRadius: UX.heroImageCornerRadius,
                                                             heroImageSize: UX.heroImageSize)
         heroImage.setHeroImage(heroImageViewModel)
 
@@ -112,86 +109,72 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
         itemTitle.text = config.titleText
         websiteLabel.text = config.descriptionText
         accessibilityLabel = config.accessibilityLabel
-        adjustLayout()
 
         applyTheme(theme: theme)
     }
 
     private func setupLayout() {
-        imageContainer.addSubviews(heroImage)
-        textContainer.addSubviews(itemTitle, websiteContainer)
-        websiteContainer.addSubviews(websiteImage, websiteLabel)
-        contentStack.addArrangedSubview(imageContainer)
-        contentStack.addArrangedSubview(textContainer)
-        contentView.addSubview(contentStack)
+        contentView.addSubview(imageContainer)
+        contentView.addSubview(textContainer)
+
+        imageContainer.addSubview(heroImage)
+
+        textContainer.addSubview(itemTitle)
+        textContainer.addSubview(websiteContainer)
+
+        websiteContainer.addSubview(websiteImage)
+        websiteContainer.addSubview(websiteLabel)
 
         NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.cellSpacing),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.cellSpacing),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.cellSpacing),
-            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.cellSpacing),
+            imageContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.heroImageInsets),
+            imageContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.heroImageInsets),
+            imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.heroImageInsets),
+            imageContainer.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
 
-            // Image container, hero image
-            heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
-            heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
-
-            heroImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
+            heroImage.topAnchor.constraint(greaterThanOrEqualTo: imageContainer.topAnchor),
             heroImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
-            heroImage.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
-            heroImage.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
+            heroImage.bottomAnchor.constraint(lessThanOrEqualTo: imageContainer.bottomAnchor),
+            heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
+            heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
 
+            textContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            textContainer.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: UX.contentSpacing),
+            textContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            textContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+
+            itemTitle.topAnchor.constraint(equalTo: textContainer.topAnchor),
             itemTitle.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
             itemTitle.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
-            itemTitle.topAnchor.constraint(equalTo: textContainer.topAnchor),
 
-            websiteLabel.topAnchor.constraint(equalTo: websiteContainer.firstBaselineAnchor),
-            websiteLabel.leadingAnchor.constraint(equalTo: websiteImage.trailingAnchor, constant: 8),
-            websiteLabel.trailingAnchor.constraint(equalTo: websiteContainer.trailingAnchor),
-            websiteLabel.bottomAnchor.constraint(equalTo: websiteContainer.bottomAnchor, constant: -4),
-
-            // Website container, it's image and label
-            websiteContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
+            websiteContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 16),
             websiteContainer.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
             websiteContainer.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
             websiteContainer.bottomAnchor.constraint(equalTo: textContainer.bottomAnchor),
 
-            websiteImage.heightAnchor.constraint(equalToConstant: UX.websiteIconSize.height),
+            websiteImage.centerYAnchor.constraint(equalTo: websiteLabel.centerYAnchor),
+            websiteImage.leadingAnchor.constraint(equalTo: websiteContainer.leadingAnchor),
             websiteImage.widthAnchor.constraint(equalToConstant: UX.websiteIconSize.width),
-            websiteImage.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
+            websiteImage.heightAnchor.constraint(equalToConstant: UX.websiteIconSize.height),
 
-            textContainer.heightAnchor.constraint(greaterThanOrEqualTo: imageContainer.heightAnchor)
+            websiteLabel.topAnchor.constraint(equalTo: websiteContainer.topAnchor),
+            websiteLabel.leadingAnchor.constraint(equalTo: websiteImage.trailingAnchor, constant: 8),
+            websiteLabel.trailingAnchor.constraint(equalTo: websiteContainer.trailingAnchor),
+            websiteLabel.bottomAnchor.constraint(equalTo: websiteContainer.bottomAnchor),
         ])
 
-        websiteIconCenterConstraint = websiteLabel.centerYAnchor.constraint(
-            equalTo: websiteImage.centerYAnchor
-        ).priority(UILayoutPriority(999))
-        websiteIconFirstBaselineConstraint = websiteLabel.firstBaselineAnchor.constraint(
-            equalTo: websiteImage.bottomAnchor,
-            constant: -UX.websiteIconSize.height / 2)
+        let heroImageCenterY = heroImage.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor)
+        heroImageCenterY.priority = .defaultLow
+        heroImageCenterY.isActive = true
 
-        websiteLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
-
-        adjustLayout()
-    }
-
-    private func adjustLayout() {
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-
-        if contentSizeCategory.isAccessibilityCategory {
-            contentStack.axis = .vertical
-        } else {
-            contentStack.axis = .horizontal
-        }
-
-        // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
-        websiteIconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
-        websiteIconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
+        let preferredContentSpacing = websiteContainer.topAnchor.constraint(equalTo: itemTitle.bottomAnchor, constant: 16)
+        preferredContentSpacing.priority = .defaultLow
+        preferredContentSpacing.isActive = true
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.cornerRadius = HomepageUX.generalCornerRadius
+        contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: HomepageUX.generalCornerRadius).cgPath
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageUX.shadowRadius
         contentView.layer.shadowOffset = HomepageUX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
@@ -202,7 +185,7 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-            contentView.layer.cornerRadius = HomepageUX.generalCornerRadius
+            contentView.layer.cornerRadius = UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5
@@ -219,17 +202,5 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
                                                  faviconBackgroundColor: theme.colors.layer1,
                                                  faviconBorderColor: theme.colors.layer1)
         heroImage.updateHeroImageTheme(with: heroImageColors)
-    }
-
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        let name = notification.name
-        ensureMainThread { [weak self] in
-            switch name {
-            case UIContentSizeCategory.didChangeNotification:
-                self?.adjustLayout()
-            default: break
-            }
-        }
     }
 }
