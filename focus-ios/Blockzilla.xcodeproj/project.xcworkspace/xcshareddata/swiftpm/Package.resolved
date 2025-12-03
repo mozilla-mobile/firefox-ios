@@ -1,0 +1,97 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Dip",
+        "repositoryURL": "https://github.com/AliSoftware/Dip.git",
+        "state": {
+          "branch": null,
+          "revision": "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
+          "version": "7.1.1"
+        }
+      },
+      {
+        "package": "Down",
+        "repositoryURL": "https://github.com/johnxnguyen/Down.git",
+        "state": {
+          "branch": null,
+          "revision": "f34b166be1f1db4aa8f573067e901d72f2a6be57",
+          "version": "0.11.0"
+        }
+      },
+      {
+        "package": "Fuzi",
+        "repositoryURL": "https://github.com/nbhasin2/Fuzi.git",
+        "state": {
+          "branch": "master",
+          "revision": "04170682baf5c013a41270963c689c87ba0d1374",
+          "version": null
+        }
+      },
+      {
+        "package": "GCDWebServer",
+        "repositoryURL": "https://github.com/nbhasin2/GCDWebServer.git",
+        "state": {
+          "branch": "master",
+          "revision": "7674c93e79ee5aac17681acace324761325e7346",
+          "version": null
+        }
+      },
+      {
+        "package": "Glean",
+        "repositoryURL": "https://github.com/mozilla/glean-swift",
+        "state": {
+          "branch": null,
+          "revision": "ee355a445d475c5c4d21e2d4ad14e46a0a600606",
+          "version": "66.0.1"
+        }
+      },
+      {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": null,
+          "revision": "3db26ab625d194c38e68c1a40e43d1bc12743fe0",
+          "version": "8.2.0"
+        }
+      },
+      {
+        "package": "Sentry",
+        "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
+        "state": {
+          "branch": null,
+          "revision": "5575af93efb776414f243e93d6af9f6258dc539a",
+          "version": "8.36.0"
+        }
+      },
+      {
+        "package": "SnapKit",
+        "repositoryURL": "https://github.com/SnapKit/SnapKit",
+        "state": {
+          "branch": null,
+          "revision": "e74fe2a978d1216c3602b129447c7301573cc2d8",
+          "version": "5.7.0"
+        }
+      },
+      {
+        "package": "SwiftDraw",
+        "repositoryURL": "https://github.com/swhitty/SwiftDraw",
+        "state": {
+          "branch": null,
+          "revision": "2cfd97c753feafe23c767ad3cb4daaf5c5415272",
+          "version": "0.18.3"
+        }
+      },
+      {
+        "package": "SwiftyBeaver",
+        "repositoryURL": "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
+        "state": {
+          "branch": null,
+          "revision": "1080914828ef1c9ca9cd2bad50667b3d847dabff",
+          "version": "2.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

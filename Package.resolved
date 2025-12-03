@@ -1,0 +1,68 @@
+{
+  "pins" : [
+    {
+      "identity" : "danger-swift-coverage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/f-meloni/danger-swift-coverage",
+      "state" : {
+        "revision" : "6a21a6e595e2b13443428942ce128b3ba6b827ee",
+        "version" : "1.2.1"
+      }
+    },
+    {
+      "identity" : "logger",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/shibapm/Logger",
+      "state" : {
+        "revision" : "53c3ecca5abe8cf46697e33901ee774236d94cce",
+        "version" : "0.2.3"
+      }
+    },
+    {
+      "identity" : "octokit.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nerdishbynature/octokit.swift",
+      "state" : {
+        "revision" : "44192458beb89180c3a3a1245d904aacac8be0ae",
+        "version" : "0.13.0"
+      }
+    },
+    {
+      "identity" : "requestkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nerdishbynature/RequestKit.git",
+      "state" : {
+        "revision" : "e4d905fed938807e36d87f28375f88b7c1c26840",
+        "version" : "3.3.0"
+      }
+    },
+    {
+      "identity" : "swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danger/swift.git",
+      "state" : {
+        "revision" : "2dc204311befdf33eae93dec92a1f059ca673425",
+        "version" : "3.22.0"
+      }
+    },
+    {
+      "identity" : "swiftformat",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/SwiftFormat",
+      "state" : {
+        "revision" : "c4d0bc2ec8aa41d4fe622771935247d74ff2e718",
+        "version" : "0.55.1"
+      }
+    },
+    {
+      "identity" : "version",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mxcl/Version",
+      "state" : {
+        "revision" : "1fe824b80d89201652e7eca7c9252269a1d85e25",
+        "version" : "2.0.1"
+      }
+    }
+  ],
+  "version" : 2
+}

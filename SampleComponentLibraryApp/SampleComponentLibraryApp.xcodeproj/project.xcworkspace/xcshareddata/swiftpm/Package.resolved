@@ -1,0 +1,59 @@
+{
+  "pins" : [
+    {
+      "identity" : "dip",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/Dip.git",
+      "state" : {
+        "revision" : "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
+        "version" : "7.1.1"
+      }
+    },
+    {
+      "identity" : "fuzi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nbhasin2/Fuzi.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "04170682baf5c013a41270963c689c87ba0d1374"
+      }
+    },
+    {
+      "identity" : "gcdwebserver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nbhasin2/GCDWebServer.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "7674c93e79ee5aac17681acace324761325e7346"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "2ef543ee21d63734e1c004ad6c870255e8716c50",
+        "version" : "7.12.0"
+      }
+    },
+    {
+      "identity" : "sentry-cocoa",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/getsentry/sentry-cocoa.git",
+      "state" : {
+        "revision" : "5575af93efb776414f243e93d6af9f6258dc539a",
+        "version" : "8.36.0"
+      }
+    },
+    {
+      "identity" : "swiftybeaver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
+      "state" : {
+        "revision" : "1080914828ef1c9ca9cd2bad50667b3d847dabff",
+        "version" : "2.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}
