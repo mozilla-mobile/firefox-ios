@@ -84,7 +84,6 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     /// - Returns: The calculated scroll height.
     private func calculateOverKeyboardScrollHeight(safeAreaInsets: UIEdgeInsets?) -> CGFloat {
         let containerHeight = getOverKeyboardContainerSize().height
-
         let isReaderModeActive = tabManager.selectedTab?.url?.isReaderModeURL == true
 
         // Return full height if conditions aren't met for adjustment.
@@ -92,14 +91,16 @@ extension BrowserViewController: TabScrollHandler.Delegate,
                                   && isBottomSearchBar
                                   && zoomPageBar == nil
                                   && !isReaderModeActive
-
         guard shouldAdjustHeight else { return containerHeight }
 
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
-
         let topInset = safeAreaInsets?.top ?? .zero
-
-        return hasHomeIndicator ? .zero : containerHeight - topInset
+        let containerHeightAdjusted: CGFloat = if #available(iOS 26.0, *) {
+            .zero
+        } else {
+            hasHomeIndicator ? .zero : containerHeight - topInset
+        }
+        return containerHeightAdjusted
     }
 }
