@@ -123,7 +123,7 @@ final class ToolbarAnimator {
             animateBottomToolbar(alpha: alpha)
             return
         }
-                         
+
         let overKeyboardContainerOffset = alpha == 1 ? 0 : context.overKeyboardContainerHeight
         let bottomContainerOffset = alpha == 1 ? 0 : context.bottomContainerHeight
         view.overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
@@ -139,13 +139,13 @@ final class ToolbarAnimator {
         guard let view else { return }
 
         let isShowing = alpha == 1
+        let headerOffset = isShowing ? 0 : context.headerHeight
         UIView.animate(withDuration: UX.topToolbarDuration,
                        delay: 0,
                        options: [.curveEaseOut]) {
             if !isShowing {
-                view.header.transform = .identity.translatedBy(x: 0, y: -view.topBlurView.frame.height)
-                view.topBlurView.transform = .identity.translatedBy(x: 0,
-                                                                    y: -view.topBlurView.frame.height)
+                view.header.transform = .identity.translatedBy(x: 0, y: headerOffset)
+                view.topBlurView.transform = .identity.translatedBy(x: 0, y: headerOffset)
             } else {
                 view.header.transform = .identity
                 view.topBlurView.transform = .identity
