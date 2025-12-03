@@ -59,4 +59,3 @@ public extension Notifiable {
         }
     }
 }
-
