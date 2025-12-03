@@ -755,8 +755,11 @@ class BrowserViewController: UIViewController,
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
-            $0.setNeedsLayout()
-            $0.layoutIfNeeded()
+
+            if !isToolbarTranslucencyRefactorEnabled {
+                $0.setNeedsLayout()
+                $0.layoutIfNeeded()
+            }
         }
     }
 
