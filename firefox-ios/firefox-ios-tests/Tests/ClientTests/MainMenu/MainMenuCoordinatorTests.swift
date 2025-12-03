@@ -18,7 +18,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 

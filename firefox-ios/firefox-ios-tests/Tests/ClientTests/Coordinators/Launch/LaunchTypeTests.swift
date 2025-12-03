@@ -15,8 +15,8 @@ final class LaunchTypeTests: XCTestCase {
     }
 
     override func tearDown() {
+        DependencyHelperMock().reset()
         super.tearDown()
-        AppContainer.shared.reset()
     }
 
     func testCanLaunch_surveyFromBrowserCoordinator() {

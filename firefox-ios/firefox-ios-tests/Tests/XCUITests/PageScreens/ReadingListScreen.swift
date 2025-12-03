@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class ReadingListScreen {
     private let app: XCUIApplication
     private let sel: ReadingListSelectorsSet

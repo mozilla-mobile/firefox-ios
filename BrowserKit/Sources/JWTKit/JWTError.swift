@@ -4,7 +4,11 @@
 
 import Foundation
 
-struct OnboardingButtonInfoModel {
-    let title: String
-    let action: OnboardingActions
+/// All error types for JWT encoding and decoding flows.
+public enum JWTError: Error, Equatable {
+    case jsonEncoding
+    case invalidFormat
+    case base64Decoding
+    case jsonDecoding
+    case invalidSignature
 }

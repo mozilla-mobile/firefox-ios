@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class NewTabSettingsScreen {
     private let app: XCUIApplication
     private let sel: NewTabSettingsSelectorsSet

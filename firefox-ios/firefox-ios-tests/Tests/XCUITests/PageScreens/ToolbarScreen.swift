@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class ToolbarScreen {
     private let app: XCUIApplication
     private let sel: ToolbarSelectorsSet

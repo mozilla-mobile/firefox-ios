@@ -100,7 +100,11 @@ class FxAWebViewController: UIViewController {
         if dismissType == .dismiss {
             super.dismiss(animated: animated, completion: completion)
         } else if dismissType == .popToTabTray {
-            shouldDismissFxASignInViewController?()
+            if let shouldDismissFxASignInViewController {
+                shouldDismissFxASignInViewController()
+            } else {
+                super.dismiss(animated: animated, completion: completion)
+            }
         } else {
             // Pop to settings view controller
             navigationController?.popToRootViewController(animated: true)

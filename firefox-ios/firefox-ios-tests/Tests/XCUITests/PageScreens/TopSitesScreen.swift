@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class TopSitesScreen {
     private let app: XCUIApplication
     private let sel: TopSitesSelectorsSet
