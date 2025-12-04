@@ -203,7 +203,8 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441496
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
+        let searchBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        searchBar.pressWithRetry(duration: 2, element: app.tables["Context Menu"])
 
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()

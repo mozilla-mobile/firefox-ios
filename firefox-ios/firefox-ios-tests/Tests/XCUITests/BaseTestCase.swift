@@ -466,6 +466,7 @@ class BaseTestCase: XCTestCase {
         urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
         mozWaitForElementToExist(app.tables["Context Menu"])
         pasteAction.waitAndTap()
+        mozWaitForElementToExist(urlBar)
         mozWaitForValueContains(urlBar, value: url)
     }
 
@@ -647,6 +648,7 @@ extension XCUIElement {
     func pressWithRetry(duration: TimeInterval, timeout: TimeInterval = TIMEOUT, element: XCUIElement) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         self.press(forDuration: duration)
+        sleep(1)
         var attempts = 5
         while !element.exists && attempts > 0 {
             self.press(forDuration: duration)
