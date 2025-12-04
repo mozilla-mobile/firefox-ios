@@ -1139,7 +1139,7 @@ extension BrowserViewController: WKNavigationDelegate {
             // Because we are not calling updateInContentHomePanel in updateUIForReaderHomeStateForTab we need to
             // call it here so that we can load the webpage from tapping a link on the homepage
             // TODO: FXIOS-14355 Remove this call in favor of newState update
-            if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            if isToolbarTranslucencyRefactorEnabled {
                 updateInContentHomePanel(tab.url, focusUrlBar: true)
             }
         }

@@ -2629,7 +2629,7 @@ class BrowserViewController: UIViewController,
                 hideReaderModeBar(animated: false)
             }
 
-            if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            if !isToolbarTranslucencyRefactorEnabled {
                 updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar)
             }
         }
@@ -4131,7 +4131,7 @@ class BrowserViewController: UIViewController,
             }
         }
         destroySearchController()
-        if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+        if !isToolbarTranslucencyRefactorEnabled {
             updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
         }
 
@@ -4715,7 +4715,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            if !isToolbarTranslucencyRefactorEnabled {
                 updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
             } else {
                 if previousTab != nil {
