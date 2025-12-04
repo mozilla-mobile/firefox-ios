@@ -300,7 +300,10 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         cardNumber.waitAndTap()
         // The autofill option (Use saved card prompt) is displayed
-        creditCardScreen.prepareForSavedCardPrompt()
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
+        if #unavailable(iOS 26) {
+            creditCardScreen.prepareForSavedCardPrompt()
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306971
