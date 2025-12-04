@@ -838,7 +838,7 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
         updateTopTabs(showTopTabs: showTopTabs)
 
-        if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+        if !isToolbarTranslucencyRefactorEnabled {
             header.setNeedsLayout()
             view.layoutSubviews()
         }
@@ -1982,7 +1982,7 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
 
-        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+        if isToolbarTranslucencyRefactorEnabled {
             // Only update blur views when we are not in zero search mode
             if inline {
                 updateToolbarDisplay()
@@ -4967,7 +4967,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+        if isToolbarTranslucencyRefactorEnabled {
             // When animation duration is zero the keyboard is already showing and we don't need
             // to update the toolbar again. This is the case when we are moving between fields in a form.
             if state.animationDuration > 0 {
