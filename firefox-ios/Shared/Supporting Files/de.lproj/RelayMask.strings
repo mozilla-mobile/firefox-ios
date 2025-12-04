@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Ihre fünf kostenlosen E-Mail-Masken werden bereits verwendet, daher haben wir eine für Sie ausgewählt.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Sie haben Ihre 5 kostenlosen E-Mail-Masken aufgebraucht, daher haben wir eine zur Wiederverwendung ausgewählt.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "E-Mail-Masken sind derzeit nicht verfügbar. Versuchen Sie es in ein paar Minuten erneut.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "E-Mail-Maske eingefügt";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Verbergen Sie Ihre echte E-Mail-Adresse, um Ihren Posteingang vor Spam zu schützen. Einige Websites unterstützen dies nicht.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Verbergen Sie Ihre echte E-Mail-Adresse, um Ihren Posteingang vor Spam zu schützen. Einige Websites unterstützen keine E-Mail-Masken.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Weitere Informationen";

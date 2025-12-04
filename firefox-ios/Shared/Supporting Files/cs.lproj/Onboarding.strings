@@ -203,16 +203,16 @@
 "Onboarding.Modern.TermsOfService.Subtitle.v140" = "Bleskově rychlé načítání stránek\nAutomatická ochrana proti sledování\nSynchronizace na všech vašich zařízeních";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
-"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Pokračováním souhlasíte s %@";
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Pokračováním souhlasíte s dokumentem %@";
 
 /* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
-"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Pokračováním souhlasíte s %@";
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Pokračováním souhlasíte s dokumentem %@";
 
 /* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "Podmínky používání aplikace %@.";
 
 /* Title for the Terms of Service screen in the onboarding process. */
-"Onboarding.Modern.TermsOfService.Title.v140" = "Aktualizujte své prohlížení";
+"Onboarding.Modern.TermsOfService.Title.v140" = "Vylepšete své prohlížení";
 
 /* Title for the Terms of Service screen in the v2 onboarding flow. */
 "Onboarding.Modern.TermsOfService.Title.v145" = "Převezměte kontrolu nad internetem";
@@ -308,7 +308,7 @@
 "Onboarding.TermsOfService.Subtitle.v136" = "Rychlé a bezpečné prohlížení webu";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
-"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Pokračováním souhlasíte s %@";
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Pokračováním souhlasíte s dokumentem %@";
 
 /* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "Vítá vás %@";

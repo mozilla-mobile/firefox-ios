@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Ձեր 5 անվճար էլփոստի դիմակներն օգտագործվում են, ուստի մենք ձեզ համար մեկը ընտրեցինք։";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Դուք օգտագործել եք ձեր 5 անվճար էլփոստի դիմակները, ուստի մենք ընտրեցինք մեկը, որպեսզի կարողանաք վերօգտագործել։";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Էլ․ փոստի դիմակները այս պահին հասանելի չեն։ Փորձեք կրկին մի քանի րոպեից։";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Էլ․ փոստի դիմակը տեղադրված է";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Թաքցրեք ձեր իրական էլ. փոստը՝ ձեր էլ. փոստարկղը սպամից պաշտպանելու համար: Որոշ կայքեր դա չեն աջակցում:";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Թաքցրեք ձեր իրական էլ. փոստը՝ ձեր էլ. փոստի արկղը սպամից պաշտպանելու համար: Որոշ կայքեր չեն աջակցում էլ. փոստի դիմակներ:";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Իմանալ ավելին";
