@@ -56,6 +56,7 @@ final class HomepageDiffableDataSource:
                 LegacyJumpBackInCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
+                LegacyBookmarksCell.self,
                 BookmarksCell.self,
                 MerinoStandardCell.self,
                 StoryCell.self,
