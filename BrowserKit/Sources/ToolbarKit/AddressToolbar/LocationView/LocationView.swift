@@ -22,7 +22,6 @@ final class LocationView: UIView,
         static let iconAnimationDelay: CGFloat = 0.03
         static let bottomAddressBarYoffset: CGFloat = -16
         static let bottomAddressBarYoffsetForHomeButton: CGFloat = -28
-        static let bottomAddressBarYoffsetForDefaultScale: CGFloat = -10
         static let topAddressBarYoffset: CGFloat = 26
         static let smallScale: CGFloat = 0.7
         static let identityResetAnimationDuration: TimeInterval = 0.2
@@ -178,8 +177,7 @@ final class LocationView: UIView,
 
         applyToolbarAlphaIfNeeded(
             alpha: uxConfig.scrollAlpha,
-            barPosition: addressBarPosition,
-            isKeyboardVisible: config.shouldShowKeyboard
+            barPosition: addressBarPosition
         )
         configureLockIconButton(config)
         configureURLTextField(config)
@@ -431,7 +429,7 @@ final class LocationView: UIView,
     }
 
     // MARK: - LocationView Scaling
-    private func shrinkLocationView(barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+    private func shrinkLocationView(barPosition: AddressToolbarPosition) {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let bottomAddressBarYoffset = if #available(iOS 26.0, *) {
             UX.bottomAddressBarYoffset
@@ -440,10 +438,7 @@ final class LocationView: UIView,
         }
         let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? bottomAddressBarYoffset : UX.topAddressBarYoffset
         let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
-        transform = isKeyboardVisible ? CGAffineTransform(
-            translationX: 0,
-            y: UX.bottomAddressBarYoffsetForDefaultScale
-        ) : scaledTransformation
+        transform = scaledTransformation
         urlTextField.isUserInteractionEnabled = false
     }
 
@@ -461,15 +456,12 @@ final class LocationView: UIView,
         )
     }
 
-    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
         if scrollAlpha.isZero {
-            shrinkLocationView(barPosition: barPosition, isKeyboardVisible: isKeyboardVisible)
-            if #available(iOS 26.0, *) {
-                let shouldSetGlassEffect = barPosition == .bottom && !isKeyboardVisible
-                effectView.effect = shouldSetGlassEffect ? glassEffect : nil
-            }
+            shrinkLocationView(barPosition: barPosition)
+            if #available(iOS 26.0, *) { effectView.effect = barPosition == .bottom ? glassEffect : nil }
         } else {
             restoreLocationViewSize()
             effectView.effect = nil
@@ -722,7 +714,7 @@ final class LocationView: UIView,
         let colors = theme.colors
 
         let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
-        if #available(iOS 26.0, *), scrollAlpha.isZero, config?.shouldShowKeyboard == false {
+        if #available(iOS 26.0, *), scrollAlpha.isZero {
             // We want to use system colors when the location view is fully transparent
             // To make sure it blends well with the background when using glass effect.
             urlTextFieldColor =  .label
