@@ -4715,7 +4715,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
                 updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
             } else {
                 if previousTab != nil {
