@@ -112,62 +112,62 @@ class TabTests: XCTestCase {
 
     // MARK: - isSameTypeAs
     @MainActor
-    func testIsSameTypeAs_trueForTwoPrivateTabs_oneActive_oneInactive() {
+    func testIsSameTypeAs_trueForTwoPrivateTabs_oneNormal_oneOlder() {
         let lastMonthDate = Date().lastMonth
 
-        let privateActiveTab = Tab(
+        let privateTab = Tab(
             profile: mockProfile,
             isPrivate: true,
             windowUUID: windowUUID
         )
-        let privateInactiveTab = Tab(
+        let privateOlderTab = Tab(
             profile: mockProfile,
             isPrivate: true,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
 
-        // We do not want to differentiate between inactive and active for private tabs. They are all grouped together.
-        XCTAssertTrue(privateActiveTab.isSameTypeAs(privateInactiveTab))
-        XCTAssertTrue(privateInactiveTab.isSameTypeAs(privateActiveTab))
+        // We do not want to differentiate between older and normal for private tabs. They are all grouped together.
+        XCTAssertTrue(privateTab.isSameTypeAs(privateOlderTab))
+        XCTAssertTrue(privateOlderTab.isSameTypeAs(privateTab))
     }
 
     @MainActor
-    func testIsSameTypeAs_trueForTwoPrivateTabs_bothActive() {
-        let privateActiveTab1 = Tab(
+    func testIsSameTypeAs_trueForTwoPrivateTabs_bothNormal() {
+        let privateTab1 = Tab(
             profile: mockProfile,
             isPrivate: true,
             windowUUID: windowUUID
         )
-        let privateActiveTab2 = Tab(
+        let privateTab2 = Tab(
             profile: mockProfile,
             isPrivate: true,
             windowUUID: windowUUID
         )
 
-        XCTAssertTrue(privateActiveTab1.isSameTypeAs(privateActiveTab2))
-        XCTAssertTrue(privateActiveTab2.isSameTypeAs(privateActiveTab1))
+        XCTAssertTrue(privateTab1.isSameTypeAs(privateTab2))
+        XCTAssertTrue(privateTab2.isSameTypeAs(privateTab1))
     }
 
     @MainActor
-    func testIsSameTypeAs_trueForTwoPrivateTabs_bothInactive() {
+    func testIsSameTypeAs_trueForTwoPrivateTabs_bothOlder() {
         let lastMonthDate = Date().lastMonth
 
-        let privateInactiveTab1 = Tab(
+        let privateOlderTab1 = Tab(
             profile: mockProfile,
             isPrivate: true,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
-        let privateInactiveTab2 = Tab(
+        let privateOlderTab2 = Tab(
             profile: mockProfile,
             isPrivate: true,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
 
-        XCTAssertTrue(privateInactiveTab1.isSameTypeAs(privateInactiveTab2))
-        XCTAssertTrue(privateInactiveTab2.isSameTypeAs(privateInactiveTab1))
+        XCTAssertTrue(privateOlderTab1.isSameTypeAs(privateOlderTab2))
+        XCTAssertTrue(privateOlderTab2.isSameTypeAs(privateOlderTab1))
     }
 
     @MainActor
@@ -179,74 +179,74 @@ class TabTests: XCTestCase {
             isPrivate: true,
             windowUUID: windowUUID
         )
-        let normalActiveTab = Tab(
+        let normalTab = Tab(
             profile: mockProfile,
             windowUUID: windowUUID
         )
-        let normalInactiveTab = Tab(
+        let normalOlderTab = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
 
-        // A normal tab and a private tab should never be the same, regardless of the normal tab's inactive/active state.
-        XCTAssertFalse(privateTab.isSameTypeAs(normalActiveTab))
-        XCTAssertFalse(privateTab.isSameTypeAs(normalInactiveTab))
-        XCTAssertFalse(normalActiveTab.isSameTypeAs(privateTab))
-        XCTAssertFalse(normalInactiveTab.isSameTypeAs(privateTab))
+        // A normal tab and a private tab should never be the same.
+        XCTAssertFalse(privateTab.isSameTypeAs(normalTab))
+        XCTAssertFalse(privateTab.isSameTypeAs(normalOlderTab))
+        XCTAssertFalse(normalTab.isSameTypeAs(privateTab))
+        XCTAssertFalse(normalOlderTab.isSameTypeAs(privateTab))
     }
 
     @MainActor
-    func testIsSameTypeAs_falseForNormalActiveTab_andNormalInactiveTab() {
+    func testIsSameTypeAs_trueForNormalTab_andNormalOlderTab() {
         let lastMonthDate = Date().lastMonth
 
-        let normalActiveTab = Tab(
+        let normalTab = Tab(
             profile: mockProfile,
             windowUUID: windowUUID
         )
-        let normalInactiveTab = Tab(
+        let normalOlderTab = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
 
-        // In the app, a normal active tab is a different type of tab than a normal inactive tab.
-        XCTAssertFalse(normalActiveTab.isSameTypeAs(normalInactiveTab))
-        XCTAssertFalse(normalInactiveTab.isSameTypeAs(normalActiveTab))
+        // In the app, a normal tab is the same type of tab than a normal older tab.
+        XCTAssertTrue(normalTab.isSameTypeAs(normalOlderTab))
+        XCTAssertTrue(normalOlderTab.isSameTypeAs(normalTab))
     }
 
     @MainActor
-    func testIsSameTypeAs_trueForTwoNormalTabs_bothActive() {
-        let normalActiveTab1 = Tab(
+    func testIsSameTypeAs_trueForTwoNormalTabs_bothNormal() {
+        let normalTab1 = Tab(
             profile: mockProfile,
             windowUUID: windowUUID
         )
-        let normalActiveTab2 = Tab(
+        let normalTab2 = Tab(
             profile: mockProfile,
             windowUUID: windowUUID
         )
 
-        XCTAssertTrue(normalActiveTab1.isSameTypeAs(normalActiveTab2))
-        XCTAssertTrue(normalActiveTab2.isSameTypeAs(normalActiveTab1))
+        XCTAssertTrue(normalTab1.isSameTypeAs(normalTab2))
+        XCTAssertTrue(normalTab2.isSameTypeAs(normalTab1))
     }
 
     @MainActor
-    func testIsSameTypeAs_trueForTwoNormalTabs_bothInactive() {
+    func testIsSameTypeAs_trueForTwoNormalTabs_bothOlder() {
         let lastMonthDate = Date().lastMonth
 
-        let normalInactiveTab1 = Tab(
+        let normalOlderTab1 = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
-        let normalInactiveTab2 = Tab(
+        let normalOlderTab2 = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
 
-        XCTAssertTrue(normalInactiveTab1.isSameTypeAs(normalInactiveTab2))
-        XCTAssertTrue(normalInactiveTab2.isSameTypeAs(normalInactiveTab1))
+        XCTAssertTrue(normalOlderTab1.isSameTypeAs(normalOlderTab2))
+        XCTAssertTrue(normalOlderTab2.isSameTypeAs(normalOlderTab1))
     }
 
     // MARK: - Document Handling
