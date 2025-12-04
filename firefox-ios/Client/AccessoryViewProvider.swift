@@ -44,8 +44,31 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     var hasAccessoryView: Bool {
         return autofillAccessoryView != nil
     }
+
     private var searchBarPosition: SearchBarPosition {
         return featureFlags.getCustomState(for: .searchBarPosition) ?? .bottom
+    }
+
+    private var toolbarItems: [UIBarButtonItem] {
+        guard #available(iOS 26.0, *) else {
+            return [
+                navigationButtonsBarItem,
+                .flexibleSpace(),
+                autofillAccessoryView,
+                .flexibleSpace(),
+                .fixedSpace(UX.fixedSpacerWidth),
+                doneButton
+            ].compactMap { $0 }
+        }
+
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        if isiPad {
+            return [.flexibleSpace(), autofillAccessoryView].compactMap { $0 }
+        } else if let autofillAccessoryView {
+            return [navigationButtonsBarItem, autofillAccessoryView, doneButton]
+        } else {
+            return [navigationButtonsBarItem, .flexibleSpace(), doneButton]
+        }
     }
 
     // MARK: - UI Elements
@@ -269,29 +292,6 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
             toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
             toolbar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomOffset),
         ])
-    }
-
-    private var toolbarItems: [UIBarButtonItem] {
-        guard #available(iOS 26.0, *) else {
-            return [
-                navigationButtonsBarItem,
-                .flexibleSpace(),
-                autofillAccessoryView,
-                .flexibleSpace(),
-                .fixedSpace(UX.fixedSpacerWidth),
-                doneButton
-            ].compactMap { $0 }
-        }
-
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        if isiPad {
-            return [.flexibleSpace(), autofillAccessoryView].compactMap { $0 }
-        }
-        if let autofillAccessoryView {
-            return [navigationButtonsBarItem, autofillAccessoryView, doneButton]
-        } else {
-            return [navigationButtonsBarItem, .flexibleSpace(), doneButton]
-        }
     }
 
     // MARK: - Private Methods

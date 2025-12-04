@@ -22,7 +22,6 @@ final class LocationView: UIView,
         static let iconAnimationDelay: CGFloat = 0.03
         static let bottomAddressBarYoffset: CGFloat = -16
         static let bottomAddressBarYoffsetForHomeButton: CGFloat = -28
-        static let bottomAddressBarYoffsetForDefaultScale: CGFloat = -10
         static let topAddressBarYoffset: CGFloat = 26
         static let smallScale: CGFloat = 0.7
         static let identityResetAnimationDuration: TimeInterval = 0.2
