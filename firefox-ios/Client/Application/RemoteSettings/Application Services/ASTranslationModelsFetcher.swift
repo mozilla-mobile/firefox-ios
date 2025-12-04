@@ -235,7 +235,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             guard let fields: ModelFieldsRecord = decodeRecord(record) else { return false }
             return fields.fromLang == sourceLang
                     && fields.toLang == targetLang
-                    && ignoreLexFiles(fields.fileType)
+                    && isNotLexFile(fields.fileType)
         }
     }
 
@@ -327,7 +327,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             guard let fields: ModelFieldsRecord = decodeRecord(record),
                   fields.fromLang == sourceLang,
                   fields.toLang == targetLang,
-                  ignoreLexFiles(fields.fileType)
+                  isNotLexFile(fields.fileType)
             else {
                 continue
             }
@@ -367,7 +367,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     /// We may re-enable lex files in the future, but doing so would require non-trivial
     /// code changes. An idea is to generate lex files dynamically based on the full
     /// document context, which could improve accuracy and performance.
-    private func ignoreLexFiles(_ fileType: String) -> Bool {
+    private func isNotLexFile(_ fileType: String) -> Bool {
         return fileType != Constants.lexFileType
     }
 }
