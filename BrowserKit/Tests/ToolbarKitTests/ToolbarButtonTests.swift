@@ -27,7 +27,7 @@ final class ToolbarButtonTests: XCTestCase {
         button.accessibilityLabel = "Modified"
         button.configure(element: element)
 
-        // Then: The configuration should be skipped, leaving the modified state.
+        // The configuration should be skipped, leaving the modified state.
         XCTAssertEqual(button.accessibilityLabel, "Modified", "Configuration should be skipped when element hasn't changed.")
     }
 
@@ -80,7 +80,7 @@ final class ToolbarButtonTests: XCTestCase {
         button.configure(element: element)
         button.configure(element: element)
 
-        // Then: The label should remain modified (proving no reconfiguration).
+        // The label should remain modified (proving no reconfiguration).
         XCTAssertEqual(button.accessibilityLabel, "Modified", "Multiple configurations with same element should be skipped.")
     }
 
@@ -94,7 +94,7 @@ final class ToolbarButtonTests: XCTestCase {
         button.configure(element: element1)
         button.configure(element: element2)
 
-        // Then: The button should be reconfigured (we can verify by checking subviews for spinner).
+        // The button should be reconfigured (we can verify by checking subviews for spinner).
         let hasSpinner = button.subviews.contains { $0 is UIActivityIndicatorView }
         XCTAssertTrue(hasSpinner, "Loading state change should trigger reconfiguration.")
     }
