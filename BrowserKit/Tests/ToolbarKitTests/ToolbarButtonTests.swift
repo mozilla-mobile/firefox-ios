@@ -7,17 +7,17 @@ import XCTest
 
 final class ToolbarButtonTests: XCTestCase {
     private var button: ToolbarButton!
-    
+
     override func setUp() {
         super.setUp()
         button = ToolbarButton()
     }
-    
+
     override func tearDown() {
         button = nil
         super.tearDown()
     }
-    
+
     // MARK: - Configuration Caching Tests
     func testConfigureWithSameElement_SkipsReconfiguration() {
         let element = createToolbarElement(iconName: "icon1", a11yLabel: "Test")
@@ -28,7 +28,7 @@ final class ToolbarButtonTests: XCTestCase {
         button.configure(element: element)
 
         // Then: The configuration should be skipped, leaving the modified state.
-        XCTAssertEqual(button.accessibilityLabel, "Modified",  "Configuration should be skipped when element hasn't changed.")
+        XCTAssertEqual(button.accessibilityLabel, "Modified", "Configuration should be skipped when element hasn't changed.")
     }
 
     func testConfigureWithDifferentEnabled_ReconfiguresButton() {
@@ -56,7 +56,7 @@ final class ToolbarButtonTests: XCTestCase {
         XCTAssertFalse(firstSelectedState)
         XCTAssertTrue(secondSelectedState)
     }
-    
+
     func testConfigureWithDifferentTitle_ReconfiguresButton() {
         let element1 = createToolbarElement(iconName: "icon1", title: "Title1", a11yLabel: "Test")
         let element2 = createToolbarElement(iconName: "icon1", title: "Title2", a11yLabel: "Test")
@@ -69,7 +69,7 @@ final class ToolbarButtonTests: XCTestCase {
         XCTAssertEqual(firstTitle, "Title1")
         XCTAssertEqual(secondTitle, "Title2")
     }
-    
+
     func testConfigureMultipleTimes_WithSameElement_OnlyConfiguresOnce() {
         let element = createToolbarElement(iconName: "icon1", a11yLabel: "Test")
 
