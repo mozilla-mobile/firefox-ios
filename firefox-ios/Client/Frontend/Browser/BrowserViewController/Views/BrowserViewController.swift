@@ -689,7 +689,7 @@ class BrowserViewController: UIViewController,
         updateSwipingTabs()
     }
 
-    private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
+    private func updateToolbarDisplay(scrollOffset: CGFloat? = nil, shouldUpdateBlurViews: Bool = true) {
         // move views to the front so the address toolbar shadow doesn't get clipped
         if isBottomSearchBar {
             overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
@@ -699,7 +699,9 @@ class BrowserViewController: UIViewController,
             view.bringSubviewToFront(header)
         }
 
-        updateBlurViews(scrollOffset: scrollOffset)
+        if shouldUpdateBlurViews {
+            updateBlurViews(scrollOffset: scrollOffset)
+        }
     }
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
@@ -4976,7 +4978,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateToolbarDisplay()
+
+        if isToolbarTranslucencyRefactorEnabled {
+            // Only correct the order of views to not cut off the shadow
+            updateToolbarDisplay(shouldUpdateBlurViews: false)
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
