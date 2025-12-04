@@ -25,14 +25,15 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private var browserViewController: MockBrowserViewController!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() async throws {
-        try await super.setUp()
+    override func setUp() {
+        super.setUp()
         let mockTabManager = MockTabManager()
         self.tabManager = mockTabManager
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsAppleSummarizerEnabled(false)
+        setIsHostedSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         overlayModeManager = MockOverlayModeManager()
@@ -43,7 +44,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
     }
 
-    override func tearDown() async throws {
+    override func tearDown() {
         profile.shutdown()
         mockRouter = nil
         profile = nil
@@ -55,7 +56,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         scrollDelegate = nil
         browserViewController = nil
         DependencyHelperMock().reset()
-        try await super.tearDown()
+        super.tearDown()
     }
 
     func testInitialState() {
@@ -609,7 +610,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testShowSummarizePanel_whenSummarizeFeatureIsDisabled_doesntShowPanel() {
-        setIsHostedSummarizerEnabled(false)
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
