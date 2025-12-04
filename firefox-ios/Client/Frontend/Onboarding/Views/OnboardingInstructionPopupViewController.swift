@@ -66,7 +66,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
-    var viewModel: OnboardingDefaultBrowserModelProtocol<OnboardingInstructionsPopupActions>
+    var viewModel: any OnboardingDefaultBrowserModelProtocol<OnboardingInstructionsPopupActions>
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -77,7 +77,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: - Initializers
-    init(viewModel: OnboardingDefaultBrowserModelProtocol<OnboardingInstructionsPopupActions>,
+    init(viewModel: any OnboardingDefaultBrowserModelProtocol<OnboardingInstructionsPopupActions>,
          windowUUID: WindowUUID,
          buttonTappedFinishFlow: (() -> Void)?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
