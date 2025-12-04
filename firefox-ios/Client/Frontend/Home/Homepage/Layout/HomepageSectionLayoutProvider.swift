@@ -130,6 +130,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         struct BookmarksConstants {
             static let cellHeight: CGFloat = 110
             static let cellWidth: CGFloat = 150
+            static let redesignedCellWidth: CGFloat = 134
         }
     }
 
@@ -185,7 +186,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 bottomInsets: UX.spacingBetweenSections
             )
         case .bookmarks:
-            return createBookmarksSectionLayout(for: traitCollection)
+            return createBookmarksSectionLayout(for: environment)
         case .spacer:
             return createSpacerSectionLayout(for: environment)
         }
@@ -456,16 +457,22 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
-    private func createBookmarksSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    private func createBookmarksSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let cellWidth = isAnyStoriesRedesignEnabled ? UX.BookmarksConstants.redesignedCellWidth
+                                                    : UX.BookmarksConstants.cellWidth
+
+        let bookmarksMeasurement = getBookmarksMeasurement(environment: environment, cellWidth: cellWidth)
+        let tallestCellHeight = bookmarksMeasurement.tallestCellHeight
+
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(UX.BookmarksConstants.cellWidth),
-            heightDimension: .estimated(UX.BookmarksConstants.cellHeight)
+            widthDimension: .absolute(cellWidth),
+            heightDimension: .absolute(tallestCellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(UX.BookmarksConstants.cellWidth),
-            heightDimension: .estimated(UX.BookmarksConstants.cellHeight)
+            widthDimension: .absolute(cellWidth),
+            heightDimension: .absolute(tallestCellHeight)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
@@ -482,7 +489,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: leadingInset,
@@ -694,43 +701,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" bookmarks section and returns its height
     private func getBookmarksSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
-        let bookmarkState = state.bookmarkState
-        guard bookmarkState.shouldShowSection, let firstBookmark = bookmarkState.bookmarks.first else { return 0 }
-
-        let containerWidth = normalizedDimension(environment.container.contentSize.width)
-
-        let key = HomepageLayoutMeasurementCache.BookmarksMeasurement.Key(
-            headerState: bookmarkState.sectionHeaderState,
-            containerWidth: containerWidth,
-            shouldShowSection: bookmarkState.shouldShowSection,
-            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
-        )
-
-        // Reuse the cached result when the key matches
-        if let cachedHeight = measurementsCache.height(for: key) {
-            return cachedHeight
-        }
-
-        // Calculate bookmark sections new height
-        var totalHeight: CGFloat = 0
-
-        // Add height of bookmark cell
-        let cell = BookmarksCell()
-        cell.configure(config: firstBookmark, theme: LightTheme())
-        let bookmarksCellHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: containerWidth)
-        totalHeight += bookmarksCellHeight
-
-        // Add header height
-        totalHeight += getHeaderHeight(headerState: bookmarkState.sectionHeaderState, environment: environment)
-
-        // Add section insets
-        totalHeight += UX.spacingBetweenSections
-
-        // Save cached section height
-        measurementsCache.setHeight(totalHeight, for: key)
-
-        return totalHeight
+        let cellWidth = UX.BookmarksConstants.redesignedCellWidth
+        let bookmarksMeasurement = getBookmarksMeasurement(environment: environment, cellWidth: cellWidth)
+        return bookmarksMeasurement.totalHeight
     }
 
     /// Creates a "dummy" stories section and returns its height
@@ -812,6 +785,68 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         headerHeightCache[cacheKey] = headerHeight
         return headerHeight
+    }
+
+    /// Gets the bookmarks measurement (tallest cell height and section height)
+    private func getBookmarksMeasurement(environment: NSCollectionLayoutEnvironment,
+                                         cellWidth: CGFloat) -> HomepageLayoutMeasurementCache.BookmarksMeasurement.Result {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return HomepageLayoutMeasurementCache.BookmarksMeasurement.Result(
+                tallestCellHeight: 0,
+                totalHeight: 0
+            )
+        }
+        let bookmarkState = state.bookmarkState
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let key = HomepageLayoutMeasurementCache.BookmarksMeasurement.Key(
+            bookmarks: bookmarkState.bookmarks,
+            headerState: bookmarkState.sectionHeaderState,
+            containerWidth: containerWidth,
+            shouldShowSection: bookmarkState.shouldShowSection,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedResult = measurementsCache.result(for: key) {
+            return cachedResult
+        }
+
+        // If we're not showing the section, or don't have any bookmarks, cache and return 0 for the results
+        guard bookmarkState.shouldShowSection, bookmarkState.bookmarks.first != nil else {
+            let result = HomepageLayoutMeasurementCache.BookmarksMeasurement.Result(
+                tallestCellHeight: 0,
+                totalHeight: 0
+            )
+            measurementsCache.setResult(result, for: key)
+            return result
+        }
+
+        // Create a cell for each bookmark to be used to calculate the tallest cell height so that we ensure all cells
+        // remain uniform
+        // TODO: FXIOS-12727 - Investigate replacing this code with `uniformAcrossSiblings` API in iOS 17+
+        let bookmarkCells: [BookmarksCellProtocol] = bookmarkState.bookmarks.map { bookmark in
+            let cell: BookmarksCellProtocol = isAnyStoriesRedesignEnabled ? BookmarksCell() : LegacyBookmarksCell()
+            cell.configure(config: bookmark, theme: LightTheme())
+            return cell
+        }
+
+        let tallestCellHeight = HomepageDimensionCalculator.getTallestViewHeight(
+            views: bookmarkCells,
+            viewWidth: cellWidth
+        )
+
+        // Get the rest of the section's height and cache and return the results
+        let headerHeight = getHeaderHeight(headerState: bookmarkState.sectionHeaderState, environment: environment)
+        let totalHeight = headerHeight
+            + tallestCellHeight
+            + UX.spacingBetweenSections
+
+        let result = HomepageLayoutMeasurementCache.BookmarksMeasurement.Result(
+            tallestCellHeight: tallestCellHeight,
+            totalHeight: totalHeight
+        )
+        measurementsCache.setResult(result, for: key)
+        return result
     }
 
     // Determines the tallest story cell so that all story cells can have a uniform height. This is accomplished by creating
