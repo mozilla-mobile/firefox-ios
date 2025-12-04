@@ -1283,6 +1283,8 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
+            mkdir -p "$BITRISE_DEPLOY_DIR"
+            mv perfherder-data.json $BITRISE_DEPLOY_DIR
     - deploy-to-bitrise-io@2.10.0: {}
     before_run:
     - 1_git_clone_and_post_clone
@@ -1613,6 +1615,9 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
+            mkdir -p "$BITRISE_DEPLOY_DIR"
+            mv perfherder-data.json $BITRISE_DEPLOY_DIR
+    - deploy-to-bitrise-io@2.10.0: {}
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
