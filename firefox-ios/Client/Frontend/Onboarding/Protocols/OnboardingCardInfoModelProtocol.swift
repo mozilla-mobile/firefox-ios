@@ -11,10 +11,12 @@ protocol OnboardingCardInfoModelProtocol {
     var order: Int { get set }
     var title: String { get set }
     var body: String { get set }
-    var instructionsPopup: OnboardingInstructionsPopupInfoModel? { get set }
+    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
+        get set
+    }
     var link: OnboardingLinkInfoModel? { get set }
     var buttons: OnboardingButtons<OnboardingActions> { get set }
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel] { get set }
+    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] { get set }
     var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
@@ -29,10 +31,10 @@ protocol OnboardingCardInfoModelProtocol {
         body: String,
         link: OnboardingLinkInfoModel?,
         buttons: OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel],
+        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingInstructionsPopupInfoModel?
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
     )
 }
