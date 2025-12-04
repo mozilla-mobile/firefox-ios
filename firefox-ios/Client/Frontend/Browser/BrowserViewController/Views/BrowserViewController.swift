@@ -212,7 +212,7 @@ class BrowserViewController: UIViewController,
 
     private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
-        if #available(iOS 26, *), !DefaultBrowserUtility.isRunningLiquidGlassEarlyBeta {
+        if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             return UIGlassEffect(style: .regular)
         } else {
             return UIBlurEffect(style: .systemUltraThinMaterial)
@@ -702,6 +702,13 @@ class BrowserViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
+        let isScrollAlphaZero = if #available(iOS 26.0, *) {
+            store.state.screenState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: windowUUID
+            )?.scrollAlpha == 0 } else { false }
+
         if isBottomSearchBar {
             header.isClearBackground = false
 
@@ -718,7 +725,8 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
-        bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
+        bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isScrollAlphaZero
+        bottomContainer.isHidden = isScrollAlphaZero
 
         let maskView = UIView(frame: CGRect(x: 0,
                                             y: -contentContainer.frame.origin.y,
@@ -2480,7 +2488,7 @@ class BrowserViewController: UIViewController,
         tab.url = url
 
         if tab === tabManager.selectedTab {
-            updateUIForReaderHomeStateForTab(tab, shouldShowLockIcon: true)
+            updateUIForReaderHomeStateForTab(tab)
         }
         // Catch history pushState navigation, but ONLY for same origin navigation,
         // for reasons above about URL spoofing risk.
@@ -2543,8 +2551,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Update UI
 
-    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false, shouldShowLockIcon: Bool = false) {
-        updateURLBarDisplayURL(tab, shouldShowLockIcon)
+    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false) {
+        updateURLBarDisplayURL(tab)
         scrollController.showToolbars(animated: false)
 
         if let url = tab.url {
@@ -2578,7 +2586,7 @@ class BrowserViewController: UIViewController,
 
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
-    func updateURLBarDisplayURL(_ tab: Tab, _ shouldShowLockIcon: Bool = false) {
+    fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         var safeListedURLImageName: String? {
             return (tab.contentBlocker?.status == .safelisted) ?
             StandardImageIdentifiers.Small.notificationDotFill : nil
@@ -2593,7 +2601,7 @@ class BrowserViewController: UIViewController,
                 StandardImageIdentifiers.Small.shieldSlashFillMulticolor
             lockIconNeedsTheming = hasSecureContent
             let isWebsiteMode = tab.url?.isReaderModeURL == false
-            lockIconImageName = isWebsiteMode && shouldShowLockIcon ? lockIconImageName : nil
+            lockIconImageName = isWebsiteMode ? lockIconImageName : nil
         }
 
         let action = ToolbarAction(
@@ -3451,9 +3459,6 @@ class BrowserViewController: UIViewController,
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
-        if tab == tabManager.selectedTab {
-            updateURLBarDisplayURL(tab, true)
-        }
         if webViewStatus == .finishedNavigation {
             let isSelectedTab = (tab == tabManager.selectedTab)
             let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
@@ -4097,13 +4102,15 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleRelayMaskResult(_ result: RelayMaskGenerationResult) {
+        let a11yAnnounce = String.RelayMask.RelayEmailMaskInsertedA11yAnnouncement
         switch result {
         case .newMaskGenerated:
-            break
+            UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
         case .error:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         case .freeTierLimitReached:
+            UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
             let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         }
@@ -4613,7 +4620,7 @@ extension BrowserViewController: TabManagerDelegate {
             selectedTab.webView?.applyTheme(theme: currentTheme())
         }
 
-        updateURLBarDisplayURL(selectedTab, selectedTab.isLoading == false)
+        updateURLBarDisplayURL(selectedTab)
         if addressToolbarContainer.inOverlayMode, selectedTab.url?.displayURL != nil {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }

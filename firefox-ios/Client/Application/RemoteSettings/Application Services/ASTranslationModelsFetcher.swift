@@ -44,7 +44,6 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     // Pin versions to avoid using unsupported models
     private enum Constants {
         static let translatorVersion = "3.0"
-        static let modelsVersion = "1.0"
         static let translatorName = "bergamot-translator"
         static let pivotLanguage = "en"
     }
@@ -58,6 +57,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
+
+    private let versionHelper = TranslationsVersionHelper()
 
     init(
         modelsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.translationsModels.makeClient(),
@@ -113,7 +114,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         }
 
         // Try to find a direct model first for the pair sourceLang -> targetLang
-        if let directFiles = getLanguageModelFiles(records: records, from: sourceLang, to: targetLang) {
+        if let directFiles = getModelFilesForBestVersion(in: records, from: sourceLang, to: targetLang) {
             let entry = makeLanguagePairEntry(directFiles, from: sourceLang, to: targetLang)
             return encodeModelEntries([entry])
         }
@@ -121,8 +122,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         // Fallback to pivot models through Constants.pivotLanguage
         // This will search for two pairs sourceLang -> en and en -> targetLang
         // in order to build a translation pipeline for sourceLang -> targetLang
-        guard let sourceToPivot = getLanguageModelFiles(records: records, from: sourceLang, to: Constants.pivotLanguage),
-              let pivotToTarget = getLanguageModelFiles(records: records, from: Constants.pivotLanguage, to: targetLang)
+        guard let sourceToPivot = getModelFilesForBestVersion(in: records, from: sourceLang, to: Constants.pivotLanguage),
+              let pivotToTarget = getModelFilesForBestVersion(in: records, from: Constants.pivotLanguage, to: targetLang)
         else {
             logger.log(
                 "No direct or pivot models found for \(sourceLang)->\(targetLang)",
@@ -237,7 +238,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
 
     /// Collects all files for a given language pair.
     private func getLanguageModelFiles(
-        records: [RemoteSettingsRecord],
+        _ records: [RemoteSettingsRecord],
         from sourceLang: String,
         to targetLang: String
     ) -> [String: Any]? {
@@ -287,5 +288,69 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     private func encodeModelEntries(_ entries: [[String: Any]]) -> Data? {
         guard !entries.isEmpty else { return nil }
         return try? JSONSerialization.data(withJSONObject: entries, options: [])
+    }
+
+    /// Convenience method that selects the best-version records and then
+    /// produces the appropriate model files. Returns nil if no suitable version or no files are found.
+    private func getModelFilesForBestVersion(
+        in records: [RemoteSettingsRecord],
+        from sourceLang: String,
+        to targetLang: String
+    ) -> [String: Any]? {
+        let bestVersionRecords = recordsForBestVersion(
+            records,
+            from: sourceLang,
+            to: targetLang
+        )
+
+        return getLanguageModelFiles(
+            bestVersionRecords,
+            from: sourceLang,
+            to: targetLang
+        )
+    }
+
+    /// Returns all records for the given language pair that match the best
+    /// stable version (<= Constants.translatorVersion), or an empty array if none.
+    private func recordsForBestVersion(
+        _ records: [RemoteSettingsRecord],
+        from sourceLang: String,
+        to targetLang: String
+    ) -> [RemoteSettingsRecord] {
+        // Bucket candidate records by version.
+        var buckets: [String: [RemoteSettingsRecord]] = [:]
+
+        for record in records {
+            guard let fields: ModelFieldsRecord = decodeRecord(record),
+                  fields.fromLang == sourceLang,
+                  fields.toLang == targetLang
+            else {
+                continue
+            }
+            buckets[fields.version, default: []].append(record)
+        }
+
+        guard !buckets.isEmpty else {
+            logger.log(
+                "No model records found",
+                level: .warning,
+                category: .translations,
+                extra: ["sourceLang": sourceLang, "targetLang": targetLang]
+            )
+            return []
+        }
+
+        let versions = Array(buckets.keys)
+        guard let bestVersion = versionHelper.best(from: versions, maxAllowed: Constants.translatorVersion)
+            else { return [] }
+
+        logger.log(
+            "Selected model version",
+            level: .info,
+            category: .translations,
+            extra: ["version": bestVersion, "sourceLang": sourceLang, "targetLang": targetLang]
+        )
+
+        return buckets[bestVersion] ?? []
     }
 }

@@ -26,13 +26,12 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
+        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
         profile = nil
         messageManager = nil
         delegate = nil
-
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        super.tearDown()
     }
 
     func testLaunchDoesntCallLoadedIfNotStarted() {
@@ -181,8 +180,8 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {
-        let buttons = OnboardingKit.OnboardingButtons<Client.OnboardingActions>(
-            primary: OnboardingKit.OnboardingButtonInfoModel<Client.OnboardingActions>(
+        let buttons = OnboardingButtons<OnboardingActions>(
+            primary: OnboardingButtonInfoModel<OnboardingActions>(
                 title: "Button title \(index)",
                 action: .forwardOneCard))
         return OnboardingCardInfoModel(cardType: .basic,
@@ -196,7 +195,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
                                        onboardingType: .upgrade,
                                        a11yIdRoot: "A11y id \(index)",
                                        imageID: "Image id \(index)",
-                                       instructionsPopup: nil,
-                                       embededLinkText: [])
+                                       instructionsPopup: nil)
     }
 }

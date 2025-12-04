@@ -42,11 +42,7 @@ final class ToolbarHelper: ToolbarHelperInterface {
     @MainActor
     var glassEffectAlpha: CGFloat {
         guard shouldBlur() else { return 1 }
-        #if canImport(FoundationModels)
         if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
-        #else
-            return UX.backgroundAlphaForBlur
-        #endif
     }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {

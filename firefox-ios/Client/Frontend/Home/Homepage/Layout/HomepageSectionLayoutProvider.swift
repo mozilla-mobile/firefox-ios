@@ -666,7 +666,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         // Add height of local tab cell(s) (if they exists)
-        for i in 0...jumpBackInConfig.getMaxNumberOfLocalTabsLayout {
+        for i in 0..<jumpBackInConfig.getMaxNumberOfLocalTabsLayout {
             if let tabConfig = jumpBackInState.jumpBackInTabs[safe: i] {
                 let jumpBackInCell = JumpBackInCell()
                 jumpBackInCell.configure(config: tabConfig, theme: LightTheme())

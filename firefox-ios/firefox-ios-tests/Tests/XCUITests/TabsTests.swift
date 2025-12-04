@@ -346,7 +346,7 @@ class TabsTests: BaseTestCase {
 
         // Open New Tab
         app.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapWithRetry()
+        navigator.performAction(Action.CloseURLBarOpen)
 
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
@@ -377,7 +377,7 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
         app.tables.cells.buttons["New Private Tab"].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapWithRetry()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
         navigator.nowAt(NewTabScreen)

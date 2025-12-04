@@ -22,8 +22,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var appState: AppState!
     var recordVisitManager: MockRecordVisitObservationManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
         tabManager = MockTabManager()
@@ -37,7 +37,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile.shutdown()
         profile = nil
         tabManager = nil
@@ -45,7 +45,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         recordVisitManager = nil
         resetStore()
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testTrackVisibleSuggestion() {
@@ -184,42 +184,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 //        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
 //        XCTAssertEqual(action.readerModeState, .active)
 //    }
-
-    func testUpdateURLBarDisplayURL_whenNavigationNotFinished_shouldHideLockIcon() throws {
-        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-        let subject = createSubject()
-        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        tab.url = URL(string: "https://google.com")
-        let mockTabWebView = MockTabWebView(tab: tab)
-        tab.webView = mockTabWebView
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-        subject.updateURLBarDisplayURL(tab, false)
-        wait(for: [expectation])
-
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertEqual(action.lockIconImageName, nil)
-    }
-
-    func testUpdateURLBarDisplayURL_whenNavigationIsFinished_shouldShowLockIcon() throws {
-        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-        let subject = createSubject()
-        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        tab.url = URL(string: "https://google.com")
-        let mockTabWebView = MockTabWebView(tab: tab)
-        tab.webView = mockTabWebView
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-        subject.updateURLBarDisplayURL(tab, true)
-        wait(for: [expectation])
-
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertEqual(action.lockIconImageName, StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
-    }
 
     // MARK: - Handle PDF
 

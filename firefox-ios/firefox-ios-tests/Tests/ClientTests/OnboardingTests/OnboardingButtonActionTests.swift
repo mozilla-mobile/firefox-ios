@@ -106,19 +106,19 @@ class OnboardingButtonActionTests: XCTestCase {
         twoButtons: Bool = true,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> OnboardingBasicCardViewController<OnboardingCardInfoModel> {
-        var buttons: OnboardingKit.OnboardingButtons<OnboardingActions>
+    ) -> OnboardingBasicCardViewController {
+        var buttons: OnboardingButtons<OnboardingActions>
         if twoButtons {
-            buttons = OnboardingKit.OnboardingButtons(
-                primary: OnboardingKit.OnboardingButtonInfoModel<OnboardingActions>(
+            buttons = OnboardingButtons(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SignInAction,
                     action: firstAction),
-                secondary: OnboardingKit.OnboardingButtonInfoModel<OnboardingActions>(
+                secondary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SkipAction,
                     action: .forwardOneCard))
         } else {
-            buttons = OnboardingKit.OnboardingButtons(
-                primary: OnboardingKit.OnboardingButtonInfoModel<OnboardingActions>(
+            buttons = OnboardingButtons(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SignInAction,
                     action: firstAction))
         }

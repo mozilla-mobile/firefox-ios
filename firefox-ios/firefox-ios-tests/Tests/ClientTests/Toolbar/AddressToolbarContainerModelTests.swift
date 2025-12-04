@@ -12,13 +12,12 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     private var searchEnginesManager: SearchEnginesManagerProvider!
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    @MainActor
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
 
         mockProfile = MockProfile()
-        searchEnginesManager = SearchEnginesManager(
+        searchEnginesManager = await SearchEnginesManager(
             prefs: mockProfile.prefs,
             files: mockProfile.files,
             engineProvider: MockSearchEngineProvider()

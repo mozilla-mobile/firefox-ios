@@ -1166,6 +1166,15 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Terms of Use
 
     func showTermsOfUse(context: TriggerContext = .appLaunch) {
+        /// For .appLaunch and .appBecameActive, we show ToU
+        /// on top of standard homepage or any website
+        /// For case .homepageOpened, ToU should be displayed only on
+        /// standard  homepage or blank page
+        /// (not on custom URL homepage/new tab, not on regular websites)
+        if let selectedTab = tabManager.selectedTab, context == .homepageOpened {
+            guard selectedTab.isFxHomeTab || selectedTab.url == nil else { return }
+        }
+
         guard !childCoordinators.contains(where: { $0 is TermsOfUseCoordinator }) else {
             return // route is handled with existing child coordinator
         }

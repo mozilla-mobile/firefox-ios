@@ -14,7 +14,10 @@ class FxAWebViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         deeplinkParams = FxALaunchParams(entrypoint: .browserMenu, query: ["test_key": "test_value"])
-        viewModel = FxAWebViewModel(pageType: .settingsPage, profile: MockProfile(), deepLinkParams: deeplinkParams)
+        viewModel = FxAWebViewModel(pageType: .settingsPage,
+                                    profile: MockProfile(),
+                                    deepLinkParams: deeplinkParams,
+                                    telemetry: FxAWebViewTelemetry(telemetryWrapper: MockTelemetryWrapper()))
     }
 
     override func tearDown() {

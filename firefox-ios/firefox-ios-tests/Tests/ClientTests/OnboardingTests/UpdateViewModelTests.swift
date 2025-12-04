@@ -208,8 +208,8 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {
-        let buttons = OnboardingKit.OnboardingButtons<Client.OnboardingActions>(
-            primary: OnboardingKit.OnboardingButtonInfoModel<Client.OnboardingActions>(
+        let buttons = OnboardingButtons<OnboardingActions>(
+            primary: OnboardingButtonInfoModel<OnboardingActions>(
                 title: "Button title \(index)",
                 action: .forwardOneCard))
         return OnboardingCardInfoModel(
@@ -224,7 +224,6 @@ class UpdateViewModelTests: XCTestCase {
             onboardingType: .upgrade,
             a11yIdRoot: "A11y id \(index)",
             imageID: "Image id \(index)",
-            instructionsPopup: nil,
-            embededLinkText: [])
+            instructionsPopup: nil)
     }
 }

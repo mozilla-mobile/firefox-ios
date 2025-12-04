@@ -4,7 +4,7 @@
 
 import WebKit
 
-class MockWebView: WKWebView {
+final class MockWebView: WKWebView, @unchecked Sendable {
     var overridenURL: URL
 
     init(_ url: URL) {

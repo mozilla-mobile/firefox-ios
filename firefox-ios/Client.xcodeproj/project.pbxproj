@@ -1000,7 +1000,7 @@
 		8A6B79A02CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B799F2CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift */; };
 		8A6CDB472DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */; };
 		8A6E13982A71BA4E00A88FA8 /* TabWebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */; };
-		8A6E63C52D4946760040D355 /* JumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E63C42D49466C0040D355 /* JumpBackInCell.swift */; };
+		8A6E63C52D4946760040D355 /* LegacyJumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E63C42D49466C0040D355 /* LegacyJumpBackInCell.swift */; };
 		8A6E63C72D4946B90040D355 /* JumpBackInSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E63C62D4946B40040D355 /* JumpBackInSectionState.swift */; };
 		8A6E63C92D4948BE0040D355 /* JumpBackInTabConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E63C82D4948BE0040D355 /* JumpBackInTabConfiguration.swift */; };
 		8A6E63CB2D4A6F230040D355 /* JumpBackInSectionStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E63CA2D4A6F230040D355 /* JumpBackInSectionStateTests.swift */; };
@@ -1528,7 +1528,10 @@
 		C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A682A769460002ACCE2 /* ReadingListCoordinator.swift */; };
 		C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */; };
 		C2B065512ECF37F000C479CA /* TranslationsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */; };
+		C2B31EC92EDCE79100D53FF5 /* TranslationsVersionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B31EC82EDCE78600D53FF5 /* TranslationsVersionHelper.swift */; };
+		C2B31ECD2EDCEB1B00D53FF5 /* TranslationsVersionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B31ECC2EDCEB0D00D53FF5 /* TranslationsVersionHelperTests.swift */; };
 		C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */; };
+		C2C6FF8E2ED9A79100B833D4 /* TestableUIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */; };
 		C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */; };
 		C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */; };
 		C2D71B952A384F11003DEC7A /* ThemedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B942A384F11003DEC7A /* ThemedTableViewCell.swift */; };
@@ -1572,6 +1575,7 @@
 		C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */; };
 		C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */; };
 		C796E22A2E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */; };
+		C79CEE5E2EDF3C4B004C4EB8 /* JumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79CEE5D2EDF3C48004C4EB8 /* JumpBackInCell.swift */; };
 		C7A48CF72EBA98A70098845C /* StoriesWebviewViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A48CF62EBA98A00098845C /* StoriesWebviewViewControllerTests.swift */; };
 		C7A492722EBE45D50098845C /* MockStoriesFeedTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A492712EBE45CD0098845C /* MockStoriesFeedTelemetry.swift */; };
 		C7A492742EBE78D00098845C /* DismissalNotifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A492732EBE78CA0098845C /* DismissalNotifiable.swift */; };
@@ -1690,6 +1694,7 @@
 		C8B41E0F29F0357300FE218A /* NimbusOnboardingFeatureLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */; };
 		C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */; };
 		C8BA0E7627F20B8E00DD8214 /* HistoryDeletionUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */; };
+		C8BD87622A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD87612A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift */; };
 		C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */; };
 		C8C1880F287608BF00BF3735 /* DateExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C1880E287608BF00BF3735 /* DateExtensionsTests.swift */; };
 		C8C3FE9D29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C3FE9C29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift */; };
@@ -8973,7 +8978,7 @@
 		8A6B799F2CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGoogleTopSiteManager.swift; sourceTree = "<group>"; };
 		8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabDisplayViewDragAndDropInteraction.swift; sourceTree = "<group>"; };
 		8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewTests.swift; sourceTree = "<group>"; };
-		8A6E63C42D49466C0040D355 /* JumpBackInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInCell.swift; sourceTree = "<group>"; };
+		8A6E63C42D49466C0040D355 /* LegacyJumpBackInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyJumpBackInCell.swift; sourceTree = "<group>"; };
 		8A6E63C62D4946B40040D355 /* JumpBackInSectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInSectionState.swift; sourceTree = "<group>"; };
 		8A6E63C82D4948BE0040D355 /* JumpBackInTabConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInTabConfiguration.swift; sourceTree = "<group>"; };
 		8A6E63CA2D4A6F230040D355 /* JumpBackInSectionStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInSectionStateTests.swift; sourceTree = "<group>"; };
@@ -9903,8 +9908,11 @@
 		C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2A943CF800ADCD8E96ACA5B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C2B065502ECF37E900C479CA /* TranslationsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsTelemetry.swift; sourceTree = "<group>"; };
+		C2B31EC82EDCE78600D53FF5 /* TranslationsVersionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsVersionHelper.swift; sourceTree = "<group>"; };
+		C2B31ECC2EDCEB0D00D53FF5 /* TranslationsVersionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsVersionHelperTests.swift; sourceTree = "<group>"; };
 		C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2BD4AC2A2935AE48BEB94B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
+		C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableUIToolbar.swift; sourceTree = "<group>"; };
 		C2CB4D369C756DA6836BC4A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinator.swift; sourceTree = "<group>"; };
 		C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -9978,6 +9986,7 @@
 		C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxAccountSignInViewControllerTests.swift; sourceTree = "<group>"; };
 		C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewControllerTests.swift; sourceTree = "<group>"; };
 		C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewController.swift; sourceTree = "<group>"; };
+		C79CEE5D2EDF3C48004C4EB8 /* JumpBackInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInCell.swift; sourceTree = "<group>"; };
 		C7A48CF62EBA98A00098845C /* StoriesWebviewViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesWebviewViewControllerTests.swift; sourceTree = "<group>"; };
 		C7A492712EBE45CD0098845C /* MockStoriesFeedTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStoriesFeedTelemetry.swift; sourceTree = "<group>"; };
 		C7A492732EBE78CA0098845C /* DismissalNotifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissalNotifiable.swift; sourceTree = "<group>"; };
@@ -10097,6 +10106,7 @@
 		C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayerTests.swift; sourceTree = "<group>"; };
 		C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionUpdateCheckerProtocol.swift; sourceTree = "<group>"; };
 		C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDeletionUtility.swift; sourceTree = "<group>"; };
+		C8BD87612A0C257C00CD803A /* OnboardingCardInfoModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardInfoModelProtocol.swift; sourceTree = "<group>"; };
 		C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceInfoModel.swift; sourceTree = "<group>"; };
 		C8C1880E287608BF00BF3735 /* DateExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionsTests.swift; sourceTree = "<group>"; };
 		C8C3FE9C29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSearchHandlerRouteCoordinator.swift; sourceTree = "<group>"; };
@@ -11730,6 +11740,7 @@
 		1DCEC3EF2D5C1BA700129966 /* Application Services */ = {
 			isa = PBXGroup;
 			children = (
+				C2B31EC82EDCE78600D53FF5 /* TranslationsVersionHelper.swift */,
 				C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */,
 				BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */,
 				1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */,
@@ -12040,6 +12051,7 @@
 		274A36D1239EBAD600A21587 /* LibraryViewController */ = {
 			isa = PBXGroup;
 			children = (
+				C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */,
 				F84B22221A09122500AAB793 /* LibraryViewController.swift */,
 				C8417D212657F0600010B877 /* LibraryViewModel.swift */,
 				274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */,
@@ -13429,11 +13441,12 @@
 		8A6E63C32D4946600040D355 /* JumpBackIn */ = {
 			isa = PBXGroup;
 			children = (
+				C79CEE5D2EDF3C48004C4EB8 /* JumpBackInCell.swift */,
 				8A5435552D53CB6600501214 /* JumpBackInAction.swift */,
 				8A89046C2D52874200A5BB29 /* SyncedTabCell.swift */,
 				8A6E63C62D4946B40040D355 /* JumpBackInSectionState.swift */,
 				8A6E63C82D4948BE0040D355 /* JumpBackInTabConfiguration.swift */,
-				8A6E63C42D49466C0040D355 /* JumpBackInCell.swift */,
+				8A6E63C42D49466C0040D355 /* LegacyJumpBackInCell.swift */,
 			);
 			path = JumpBackIn;
 			sourceTree = "<group>";
@@ -14184,6 +14197,7 @@
 		AAD9D6492EB25B2700BFECAF /* TranslationsTests */ = {
 			isa = PBXGroup;
 			children = (
+				C2B31ECC2EDCEB0D00D53FF5 /* TranslationsVersionHelperTests.swift */,
 				C24E2D2B2ECF9DE900BBCFA7 /* TranslationsTelemetryTests.swift */,
 				C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */,
 				C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */,
@@ -14893,6 +14907,7 @@
 			isa = PBXGroup;
 			children = (
 				21A7C44D283539170071D996 /* IntroViewModel.swift */,
+				81055B552BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift */,
 				C88E7A582A0553440072E638 /* OnboardingCardInfoModel.swift */,
 				8C51ED6F2DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift */,
 				C88E7A542A0553180072E638 /* OnboardingViewModel.swift */,
@@ -18636,6 +18651,7 @@
 				8A3EF8132A2FD07A00796E3A /* ResetContextualHints.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
 				94D3DD172D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */,
+				C2C6FF8E2ED9A79100B833D4 /* TestableUIToolbar.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				1DCEC3F42D600AE000129966 /* ASSearchEngineProvider.swift in Sources */,
 				C88E7A592A0553440072E638 /* OnboardingCardInfoModel.swift in Sources */,
@@ -18645,7 +18661,7 @@
 				AB9CBC032C53B64C00102610 /* TrackingProtectionMiddleware.swift in Sources */,
 				D87F84AC20B891160091F2DA /* TopTabDisplayManager.swift in Sources */,
 				D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
-				8A6E63C52D4946760040D355 /* JumpBackInCell.swift in Sources */,
+				8A6E63C52D4946760040D355 /* LegacyJumpBackInCell.swift in Sources */,
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
 				8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */,
 				BD0D407A2D83124E00C38511 /* TabWebViewPreview.swift in Sources */,
@@ -18984,6 +19000,7 @@
 				AB9CBC042C53B64C00102610 /* TrackingProtectionModel.swift in Sources */,
 				C8DC90C52A066B6A0008832B /* MarkupTokenizingUtility.swift in Sources */,
 				AA02D5EB2EB3D83200814F4C /* TranslationsAction.swift in Sources */,
+				C79CEE5E2EDF3C4B004C4EB8 /* JumpBackInCell.swift in Sources */,
 				0EBD66922DBFE41000A78532 /* ConcurrencyThrottler.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */,
@@ -19288,6 +19305,7 @@
 				810FF3582B1784E7009F062C /* PrivateModeAction.swift in Sources */,
 				C7F5331E2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift in Sources */,
 				21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */,
+				C2B31EC92EDCE79100D53FF5 /* TranslationsVersionHelper.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
 				C2886BAC2EC4A5C4007AE6C3 /* TinyHTTPReply.swift in Sources */,
 				C2886E042EC5DFF7007AE6C3 /* TranslatorRoute.swift in Sources */,
@@ -19501,6 +19519,7 @@
 				E1EAA5F32D4A705500D3039C /* ToolbarMiddlewareTests.swift in Sources */,
 				8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */,
 				E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */,
+				C2B31ECD2EDCEB1B00D53FF5 /* TranslationsVersionHelperTests.swift in Sources */,
 				8CFBC18A2ECF44C400E5B22B /* ActionExtensionTelemetryTests.swift in Sources */,
 				21872A232E3CFEA500241A8A /* TabScrollHandlerTests.swift in Sources */,
 				39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */,
@@ -27901,7 +27920,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -27935,16 +27954,19 @@
 				STRIP_PNG_TEXT = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
 				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				SWIFT_UPCOMING_FEATURE_NONFROZEN_ENUM_EXHAUSTIVITY = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "iPhone, iPad";
 				TEST_TARGET_NAME = Client;
@@ -28424,20 +28446,23 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_developer";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = TESTING;
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
 				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				SWIFT_UPCOMING_FEATURE_NONFROZEN_ENUM_EXHAUSTIVITY = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Testing;
@@ -29704,23 +29729,26 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Xlinker",
 					"-no_application_extension",
 				);
 				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
 				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				SWIFT_UPCOMING_FEATURE_NONFROZEN_ENUM_EXHAUSTIVITY = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Firefox;
@@ -30006,23 +30034,26 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Xlinker",
 					"-no_application_extension",
 				);
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
 				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				SWIFT_UPCOMING_FEATURE_NONFROZEN_ENUM_EXHAUSTIVITY = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Enterprise;
@@ -30311,7 +30342,7 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				MACOSX_DEPLOYMENT_TARGET = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -30319,16 +30350,19 @@
 					"-no_application_extension",
 				);
 				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
 				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				SWIFT_UPCOMING_FEATURE_NONFROZEN_ENUM_EXHAUSTIVITY = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = FirefoxBeta;
@@ -30843,18 +30877,21 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
 				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION = YES;
 				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
 				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
 				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				SWIFT_UPCOMING_FEATURE_NONFROZEN_ENUM_EXHAUSTIVITY = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;

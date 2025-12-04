@@ -12,17 +12,17 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingTestingConfigUtility!
     typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
-    override func setUp() {
-        super.setUp()
-        setupTelemetry(with: MockProfile())
+    override func setUp() async throws {
+        try await super.setUp()
+        Self.setupTelemetry(with: MockProfile())
         nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         nimbusUtility = nil
-        tearDownTelemetry()
-        super.tearDown()
+        Self.tearDownTelemetry()
+        try await super.tearDown()
     }
 
     func testOnboardingCard_viewDidAppear_viewSendsCardView() throws {
@@ -32,7 +32,13 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
             XCTFail("expected a view controller, but got nothing")
             return
         }
-        firstVC.viewDidAppear(true)
+
+        // On iOS 17 and earlier, the system already triggers a viewDidAppear call,
+        // so calling it manually would cause the expected count to fail.
+        // In iOS 18 and later, this behavior changed and we must call viewDidAppear manually.
+        if #available(iOS 18, *) {
+            firstVC.viewDidAppear(true)
+        }
 
         try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }

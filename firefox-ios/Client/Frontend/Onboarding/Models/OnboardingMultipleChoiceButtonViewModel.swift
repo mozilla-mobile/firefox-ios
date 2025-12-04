@@ -8,12 +8,12 @@ import OnboardingKit
 class OnboardingMultipleChoiceButtonViewModel {
     var presentingCardName: String
     var isSelected: Bool
-    let info: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>
+    let info: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>
     let a11yIDRoot: String
 
     init(
         isSelected: Bool,
-        info: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>,
+        info: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>,
         presentingCardName: String,
         a11yIDRoot: String
     ) {

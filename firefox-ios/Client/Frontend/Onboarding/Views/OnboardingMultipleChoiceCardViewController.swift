@@ -7,28 +7,26 @@ import Common
 import ComponentLibrary
 import OnboardingKit
 
-// MARK: - Multiple Choice Card UX Constants
-struct OnboardingMultipleChoiceCardViewControllerUX {
-    static let stackViewSpacingWithoutLink: CGFloat = 5
-    static let stackViewSpacingButtons: CGFloat = 16
-    static let topStackViewPaddingPad: CGFloat = 70
-    static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 15
-    static let topStackViewSpacingBetweenDescriptionAndButtons: CGFloat = 20
-    static let topStackViewPaddingPhone: CGFloat = 90
-    static let choiceButtonStackViewSpacing: CGFloat = 26
-    static let bottomStackViewPaddingPad: CGFloat = 32
-    static let bottomStackViewPaddingPhone: CGFloat = 0
-    static let horizontalTopStackViewPaddingPad: CGFloat = 100
-    static let horizontalTopStackViewPaddingPhone: CGFloat = 24
-    static let scrollViewVerticalPadding: CGFloat = 62
+class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
+    struct UX {
+        static let stackViewSpacingWithoutLink: CGFloat = 5
+        static let stackViewSpacingButtons: CGFloat = 16
+        static let topStackViewPaddingPad: CGFloat = 70
+        static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 15
+        static let topStackViewSpacingBetweenDescriptionAndButtons: CGFloat = 20
+        static let topStackViewPaddingPhone: CGFloat = 90
+        static let choiceButtonStackViewSpacing: CGFloat = 26
+        static let bottomStackViewPaddingPad: CGFloat = 32
+        static let bottomStackViewPaddingPhone: CGFloat = 0
+        static let horizontalTopStackViewPaddingPad: CGFloat = 100
+        static let horizontalTopStackViewPaddingPhone: CGFloat = 24
+        static let scrollViewVerticalPadding: CGFloat = 62
 
-    static let smallTopStackViewPadding: CGFloat = 40
+        static let smallTopStackViewPadding: CGFloat = 40
 
-    static let baseImageHeight: CGFloat = 200
-}
+        static let baseImageHeight: CGFloat = 200
+    }
 
-class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingKit.OnboardingCardInfoModelProtocol>:
-    OnboardingCardViewController<CardModel> {
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
     private var multipleChoiceButtons: [OnboardingMultipleChoiceButtonView]
@@ -51,7 +49,7 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingKit.Onboar
     // version based on constrains of some kind. The ticket above ensures this work
     // should get addressed.
     private var imageViewHeight: CGFloat {
-        return OnboardingMultipleChoiceCardViewControllerUX.baseImageHeight * scalingCoefficient()
+        return UX.baseImageHeight * scalingCoefficient()
     }
 
     private func scalingCoefficient() -> CGFloat {
@@ -66,7 +64,7 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingKit.Onboar
 
     // MARK: - Initializers
     init(
-        viewModel: CardModel,
+        viewModel: OnboardingCardInfoModelProtocol,
         delegate: OnboardingCardDelegate?,
         windowUUID: WindowUUID
     ) {
@@ -104,67 +102,58 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingKit.Onboar
     // MARK: - View setup
     func setupView() {
         view.backgroundColor = .clear
-        contentStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
+        contentStackView.spacing = UX.stackViewSpacingWithoutLink
         choiceButtonStackView.spacing = 0
-        bottomButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
+        bottomButtonStackView.spacing = UX.stackViewSpacingWithoutLink
         addViewsToView()
 
         // Adapt layout for smaller screens
-        var scrollViewVerticalPadding = OnboardingMultipleChoiceCardViewControllerUX.scrollViewVerticalPadding
-        var topPadding = OnboardingMultipleChoiceCardViewControllerUX.topStackViewPaddingPhone
-        var horizontalTopStackViewPadding = OnboardingMultipleChoiceCardViewControllerUX.horizontalTopStackViewPaddingPhone
-        var bottomStackViewPadding = OnboardingMultipleChoiceCardViewControllerUX.bottomStackViewPaddingPhone
+        var scrollViewVerticalPadding = UX.scrollViewVerticalPadding
+        var topPadding = UX.topStackViewPaddingPhone
+        var horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
+        var bottomStackViewPadding = UX.bottomStackViewPaddingPhone
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            topStackView.setCustomSpacing(
-                OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
-                after: imageView)
-            topStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
-            topStackView.setCustomSpacing(
-                OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
-                after: descriptionLabel)
-            choiceButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
-            bottomButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingButtons
+            topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                          after: imageView)
+            topStackView.spacing = UX.stackViewSpacingWithoutLink
+            topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                          after: descriptionLabel)
+            choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
+            bottomButtonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
-                topPadding = OnboardingMultipleChoiceCardViewControllerUX.topStackViewPaddingPad
-                horizontalTopStackViewPadding =
-                    OnboardingMultipleChoiceCardViewControllerUX.horizontalTopStackViewPaddingPad
-                bottomStackViewPadding = -OnboardingMultipleChoiceCardViewControllerUX.bottomStackViewPaddingPad
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
+                topPadding = UX.topStackViewPaddingPad
+                horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPad
+                bottomStackViewPadding = -UX.bottomStackViewPaddingPad
             } else {
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
-                topPadding = OnboardingMultipleChoiceCardViewControllerUX.topStackViewPaddingPhone
-                horizontalTopStackViewPadding =
-                    OnboardingMultipleChoiceCardViewControllerUX.horizontalTopStackViewPaddingPhone
-                bottomStackViewPadding = -OnboardingMultipleChoiceCardViewControllerUX.bottomStackViewPaddingPhone
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
+                topPadding = UX.topStackViewPaddingPhone
+                horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
+                bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             }
         } else if UIDevice.current.userInterfaceIdiom == .phone {
-            horizontalTopStackViewPadding =
-                OnboardingMultipleChoiceCardViewControllerUX.horizontalTopStackViewPaddingPhone
-            bottomStackViewPadding = -OnboardingMultipleChoiceCardViewControllerUX.bottomStackViewPaddingPhone
+            horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
+            bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
-                topStackView.setCustomSpacing(
-                    OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
-                    after: imageView)
-                topStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
-                topStackView.setCustomSpacing(
-                    OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
-                    after: descriptionLabel)
-                choiceButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
-                bottomButtonStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
-                topPadding = OnboardingMultipleChoiceCardViewControllerUX.smallTopStackViewPadding
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                              after: imageView)
+                topStackView.spacing = SharedUX.smallStackViewSpacing
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                              after: descriptionLabel)
+                choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
+                bottomButtonStackView.spacing = SharedUX.smallStackViewSpacing
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
+                topPadding = UX.smallTopStackViewPadding
             } else {
-                topStackView.setCustomSpacing(
-                    OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
-                    after: imageView)
-                topStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
-                topStackView.setCustomSpacing(
-                    OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
-                    after: descriptionLabel)
-                choiceButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.choiceButtonStackViewSpacing
-                bottomButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingButtons
-                scrollViewVerticalPadding = OnboardingMultipleChoiceCardViewControllerUX.scrollViewVerticalPadding
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                              after: imageView)
+                topStackView.spacing = UX.stackViewSpacingWithoutLink
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                              after: descriptionLabel)
+                choiceButtonStackView.spacing = UX.choiceButtonStackViewSpacing
+                bottomButtonStackView.spacing = UX.stackViewSpacingButtons
+                scrollViewVerticalPadding = UX.scrollViewVerticalPadding
                 topPadding = view.frame.height * 0.1
             }
         }
@@ -261,39 +250,27 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingKit.Onboar
     /// - Description: For the `version1` or `version2` experiment, the bottom toolbar button is set as
     ///   the default selected button.
     ///   For other layouts, the first button in the multiple choice buttons list is used as the default.
-    private func isSelectedButton(
-        buttonModel: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>,
-        viewModel: CardModel) -> Bool {
+    private func isSelectedButton<T: OnboardingCardInfoModelProtocol>(
+        buttonModel: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>,
+        viewModel: T) -> Bool {
         let isToolbarBottomAction = buttonModel.action == .toolbarBottom
         let isToolbarTopAction = buttonModel.action == .toolbarTop
         if isToolbarBottomAction {
             return true
         } else {
-            // Compare by properties since we can't directly compare generic types with different type parameters
-            guard let firstButton = viewModel.multipleChoiceButtons.first,
-                  let firstButtonAction = firstButton.action as? OnboardingMultipleChoiceAction else {
-                return false
-            }
-            return !isToolbarTopAction && buttonModel.action == firstButtonAction && buttonModel.title == firstButton.title
+            return !isToolbarTopAction && buttonModel == viewModel.multipleChoiceButtons.first
         }
     }
 
     private func buildButtonViews() {
         multipleChoiceButtons.removeAll()
-        multipleChoiceButtons = viewModel.multipleChoiceButtons.compactMap({ buttonModel in
-            // Convert generic button model to concrete type
-            guard let action = buttonModel.action as? OnboardingMultipleChoiceAction else { return nil }
-            let concreteButtonModel = OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
-                title: buttonModel.title,
-                action: action,
-                imageID: buttonModel.imageID
-            )
-            let isSelectedButton = isSelectedButton(buttonModel: concreteButtonModel, viewModel: viewModel)
+        multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
+            let isSelectedButton = isSelectedButton(buttonModel: buttonModel, viewModel: viewModel)
             return OnboardingMultipleChoiceButtonView(
                 windowUUID: windowUUID,
                 viewModel: OnboardingMultipleChoiceButtonViewModel(
                     isSelected: isSelectedButton,
-                    info: concreteButtonModel,
+                    info: buttonModel,
                     presentingCardName: viewModel.name,
                     a11yIDRoot: viewModel.a11yIdRoot
                 ),
@@ -305,16 +282,15 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingKit.Onboar
     // MARK: - Button Actions
     @objc
     override func primaryAction() {
-        guard let action = viewModel.buttons.primary.action as? OnboardingActions else { return }
         delegate?.handleBottomButtonActions(
-            for: action,
+            for: viewModel.buttons.primary.action,
             from: viewModel.name,
             isPrimaryButton: true)
     }
 
     @objc
     override func secondaryAction() {
-        guard let buttonAction = viewModel.buttons.secondary?.action as? OnboardingActions else { return }
+        guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
         delegate?.handleBottomButtonActions(
             for: buttonAction,

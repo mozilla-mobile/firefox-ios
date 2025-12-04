@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class CreditCardsScreen {
     private let app: XCUIApplication
     private let sel: CreditCardsSelectorsSet
