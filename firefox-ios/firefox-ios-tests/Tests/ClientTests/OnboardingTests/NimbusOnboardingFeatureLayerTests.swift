@@ -111,7 +111,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             onboardingType: .freshInstall,
             a11yIdRoot: CardElementNames.a11yIDOnboarding,
             imageID: ImageIdentifiers.Onboarding.HeaderImages.welcomev106,
-            instructionsPopup: nil)
+            instructionsPopup: nil,
+            embededLinkText: [])
 
         XCTAssertEqual(subject.name, expectedCard.name)
         XCTAssertEqual(subject.title, expectedCard.title)
