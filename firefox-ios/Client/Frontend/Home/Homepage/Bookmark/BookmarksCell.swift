@@ -36,8 +36,6 @@ final class BookmarksCell: UICollectionViewCell, BookmarksCellProtocol, ThemeApp
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
-        label.setContentCompressionResistancePriority(.required, for: .vertical)
-        label.setContentHuggingPriority(.defaultLow, for: .vertical)
     }
 
     // MARK: - Inits
