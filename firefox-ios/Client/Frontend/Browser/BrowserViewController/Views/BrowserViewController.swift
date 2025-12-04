@@ -1930,8 +1930,14 @@ class BrowserViewController: UIViewController,
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
         // for the first two layers of views other than a web view
         if toolbarHelper.shouldBlur() && !viewController.isKind(of: WebviewViewController.self) {
-            viewController.view.clipsToBounds = false
-            viewController.view.subviews.forEach { $0.clipsToBounds = false }
+            // Only update clipsToBounds if the first view layer has it turned on currently
+            if isToolbarTranslucencyRefactorEnabled, viewController.view.clipsToBounds {
+                viewController.view.clipsToBounds = false
+                viewController.view.subviews.forEach { $0.clipsToBounds = false }
+            } else if !isToolbarTranslucencyRefactorEnabled {
+                viewController.view.clipsToBounds = false
+                viewController.view.subviews.forEach { $0.clipsToBounds = false }
+            }
         } else if !isToolbarTranslucencyRefactorEnabled {
             contentContainer.mask = nil
         }
