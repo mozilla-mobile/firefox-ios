@@ -37,9 +37,6 @@ final class TabScrollHandler: NSObject,
 
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
-        static let toolbarBaseAnimationDuration: CGFloat = 0.2
-        static let minimalAddressBarAnimationDuration: CGFloat = 0.4
-        static let heightOffset: CGFloat = 14
         static let minimumScrollThreshold: CGFloat = 20
     }
 
