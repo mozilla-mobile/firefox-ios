@@ -795,8 +795,10 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
         updateTopTabs(showTopTabs: showTopTabs)
 
-        header.setNeedsLayout()
-        view.layoutSubviews()
+        if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            header.setNeedsLayout()
+            view.layoutSubviews()
+        }
 
         updateToolbarDisplay()
     }
@@ -1927,7 +1929,14 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
 
-        updateToolbarDisplay()
+        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            // Only update blur views when we are not in zero search mode
+            if inline {
+                updateToolbarDisplay()
+            }
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func showEmbeddedWebview() {
@@ -4905,7 +4914,15 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        updateToolbarDisplay()
+        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            // When animation duration is zero the keyboard is already showing and we don't need
+            // to update the toolbar again. This is the case when we are moving between fields in a form.
+            if state.animationDuration > 0 {
+                updateToolbarDisplay()
+            }
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
