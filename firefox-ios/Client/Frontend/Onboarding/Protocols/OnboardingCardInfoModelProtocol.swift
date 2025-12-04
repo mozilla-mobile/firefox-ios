@@ -17,7 +17,9 @@ protocol OnboardingCardInfoModelProtocol {
     }
     var link: OnboardingKit.OnboardingLinkInfoModel? { get set }
     var buttons: OnboardingKit.OnboardingButtons<OnboardingActions> { get set }
-    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] { get set }
+    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
+        get set
+    }
     var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }

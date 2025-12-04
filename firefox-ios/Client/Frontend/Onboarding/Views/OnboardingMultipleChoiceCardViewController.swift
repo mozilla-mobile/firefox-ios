@@ -29,7 +29,6 @@ struct OnboardingMultipleChoiceCardViewControllerUX {
 
 class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoModelProtocol>:
     OnboardingCardViewController<CardModel> {
-
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
     private var multipleChoiceButtons: [OnboardingMultipleChoiceButtonView]
@@ -117,11 +116,13 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
         var bottomStackViewPadding = OnboardingMultipleChoiceCardViewControllerUX.bottomStackViewPaddingPhone
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            topStackView.setCustomSpacing(OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
-                                          after: imageView)
+            topStackView.setCustomSpacing(
+                OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
+                after: imageView)
             topStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
-            topStackView.setCustomSpacing(OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
-                                          after: descriptionLabel)
+            topStackView.setCustomSpacing(
+                OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
+                after: descriptionLabel)
             choiceButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
             bottomButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
@@ -132,28 +133,33 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
             } else {
                 scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
                 topPadding = OnboardingMultipleChoiceCardViewControllerUX.topStackViewPaddingPhone
-                horizontalTopStackViewPadding = OnboardingMultipleChoiceCardViewControllerUX.horizontalTopStackViewPaddingPhone
+                horizontalTopStackViewPadding =
+                    OnboardingMultipleChoiceCardViewControllerUX.horizontalTopStackViewPaddingPhone
                 bottomStackViewPadding = -OnboardingMultipleChoiceCardViewControllerUX.bottomStackViewPaddingPhone
             }
         } else if UIDevice.current.userInterfaceIdiom == .phone {
             horizontalTopStackViewPadding = OnboardingMultipleChoiceCardViewControllerUX.horizontalTopStackViewPaddingPhone
             bottomStackViewPadding = -OnboardingMultipleChoiceCardViewControllerUX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
-                topStackView.setCustomSpacing(OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
-                                              after: imageView)
+                topStackView.setCustomSpacing(
+                    OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
+                    after: imageView)
                 topStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
-                topStackView.setCustomSpacing(OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
-                                              after: descriptionLabel)
+                topStackView.setCustomSpacing(
+                    OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
+                    after: descriptionLabel)
                 choiceButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
                 bottomButtonStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
                 scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
                 topPadding = OnboardingMultipleChoiceCardViewControllerUX.smallTopStackViewPadding
             } else {
-                topStackView.setCustomSpacing(OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
-                                              after: imageView)
+                topStackView.setCustomSpacing(
+                    OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenImageAndTitle,
+                    after: imageView)
                 topStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingWithoutLink
-                topStackView.setCustomSpacing(OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
-                                              after: descriptionLabel)
+                topStackView.setCustomSpacing(
+                    OnboardingMultipleChoiceCardViewControllerUX.topStackViewSpacingBetweenDescriptionAndButtons,
+                    after: descriptionLabel)
                 choiceButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.choiceButtonStackViewSpacing
                 bottomButtonStackView.spacing = OnboardingMultipleChoiceCardViewControllerUX.stackViewSpacingButtons
                 scrollViewVerticalPadding = OnboardingMultipleChoiceCardViewControllerUX.scrollViewVerticalPadding
@@ -265,7 +271,9 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
             guard let firstButton = viewModel.multipleChoiceButtons.first else {
                 return false
             }
-            return !isToolbarTopAction && buttonModel.title == firstButton.title && buttonModel.imageID == firstButton.imageID
+            return !isToolbarTopAction
+                && buttonModel.title == firstButton.title
+                && buttonModel.imageID == firstButton.imageID
         }
     }
 
