@@ -22,11 +22,13 @@ final class SearchEngineSelectionViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testSearchEngineSelectionViewController_simpleCreation_hasNoLeaks() {
         let controller = SearchEngineSelectionViewController(windowUUID: windowUUID)
         trackForMemoryLeaks(controller)
     }
 
+    @MainActor
     func testDidTapOpenSettings_callsCoordinatorShowSettings() {
         let controller = SearchEngineSelectionViewController(windowUUID: windowUUID)
         controller.coordinator = mockCoordinator
@@ -36,6 +38,7 @@ final class SearchEngineSelectionViewControllerTests: XCTestCase {
         XCTAssertEqual(mockCoordinator.navigateToSearchSettingsCalled, 1)
     }
 
+    @MainActor
     func testPresentationControllerDidDismiss_callsCoordinatorDismissModal() {
         let controller = SearchEngineSelectionViewController(windowUUID: windowUUID)
         controller.coordinator = mockCoordinator

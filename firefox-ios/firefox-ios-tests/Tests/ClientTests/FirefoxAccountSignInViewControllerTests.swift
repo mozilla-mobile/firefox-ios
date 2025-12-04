@@ -24,6 +24,7 @@ final class FirefoxAccountSignInViewControllerTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
+    @MainActor
     func testFirefoxAccountSignInViewController_simpleCreation_hasNoLeaks() {
         let testFirefoxAccountSignInViewController = FirefoxAccountSignInViewController(
             profile: mockProfile,
