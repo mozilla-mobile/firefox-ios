@@ -3,20 +3,21 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 import OnboardingKit
 
 protocol OnboardingCardInfoModelProtocol {
-    var cardType: OnboardingCardType { get set }
+    var cardType: OnboardingKit.OnboardingCardType { get set }
     var name: String { get set }
     var order: Int { get set }
     var title: String { get set }
     var body: String { get set }
-    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
+    var instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
         get set
     }
-    var link: OnboardingLinkInfoModel? { get set }
-    var buttons: OnboardingButtons<OnboardingActions> { get set }
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] { get set }
+    var link: OnboardingKit.OnboardingLinkInfoModel? { get set }
+    var buttons: OnboardingKit.OnboardingButtons<OnboardingActions> { get set }
+    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] { get set }
     var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
@@ -24,17 +25,17 @@ protocol OnboardingCardInfoModelProtocol {
     var image: UIImage? { get }
 
     init(
-        cardType: OnboardingCardType,
+        cardType: OnboardingKit.OnboardingCardType,
         name: String,
         order: Int,
         title: String,
         body: String,
-        link: OnboardingLinkInfoModel?,
-        buttons: OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
+        link: OnboardingKit.OnboardingLinkInfoModel?,
+        buttons: OnboardingKit.OnboardingButtons<OnboardingActions>,
+        multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
+        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
     )
 }

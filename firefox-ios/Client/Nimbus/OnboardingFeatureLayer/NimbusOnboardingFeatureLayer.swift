@@ -64,7 +64,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 onboardingType: card.onboardingType,
                 a11yIdRoot: "\(card.a11yIdRoot)\(index)",
                 imageID: card.imageID,
-                instructionsPopup: card.instructionsPopup)
+                instructionsPopup: card.instructionsPopup,
+                embededLinkText: card.embededLinkText)
         }
     }
 
@@ -83,7 +84,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return cardData.compactMap { cardName, cardData in
             if cardIsValid(with: cardData, using: conditionTable, and: helper) {
                 return OnboardingCardInfoModel(
-                    cardType: cardData.cardType,
+                    cardType: OnboardingKit.OnboardingCardType(rawValue: cardData.cardType.rawValue) ?? .basic,
                     name: cardName,
                     order: cardData.order,
                     title: String(
@@ -101,7 +102,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                     imageID: getOnboardingHeaderImageID(from: cardData.image),
                     instructionsPopup: getPopupInfoModel(
                         from: cardData.instructionsPopup,
-                        withA11yID: "")
+                        withA11yID: ""),
+                    embededLinkText: []
                 )
             }
 
