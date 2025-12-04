@@ -100,8 +100,8 @@ final class LaunchCoordinator: BaseCoordinator,
                 order: 20,
                 title: .Onboarding.Modern.TermsOfService.Title,
                 body: .Onboarding.Modern.TermsOfService.Subtitle,
-                buttons: OnboardingKit.OnboardingButtons(
-                    primary: OnboardingKit.OnboardingButtonInfoModel(
+                buttons: OnboardingButtons(
+                    primary: OnboardingButtonInfoModel(
                         title: .Onboarding.Modern.TermsOfService.AgreementButtonTitleV3,
                         action: OnboardingActions.syncSignIn
                     )

@@ -31,7 +31,13 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
             XCTFail("expected a view controller, but got nothing")
             return
         }
-        firstVC.viewDidAppear(true)
+
+        // On iOS 17 and earlier, the system already triggers a viewDidAppear call,
+        // so calling it manually would cause the expected count to fail.
+        // In iOS 18 and later, this behavior changed and we must call viewDidAppear manually.
+        if #available(iOS 18, *) {
+            firstVC.viewDidAppear(true)
+        }
 
         try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
