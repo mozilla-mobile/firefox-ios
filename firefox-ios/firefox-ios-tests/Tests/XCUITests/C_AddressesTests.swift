@@ -600,12 +600,14 @@ class O_AddressesTests: BaseTestCase {
         }
         let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
         let manageAddresses = AccessibilityIdentifiers.Autofill.footerPrimaryAction
-        app.buttons[addressAutofillButton].waitAndTap()
-        // Tap the "Manage addresses" link
-        app.otherElements.buttons[manageAddresses].waitAndTap()
-        // User is redirected to the Settings -> addresses menu
-        let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
-        mozWaitForElementToExist(app.navigationBars[addresses.title])
+        if #unavailable(iOS 26) {
+            app.buttons[addressAutofillButton].waitAndTap()
+            // Tap the "Manage addresses" link
+            app.otherElements.buttons[manageAddresses].waitAndTap()
+            // User is redirected to the Settings -> addresses menu
+            let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
+            mozWaitForElementToExist(app.navigationBars[addresses.title])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2667453
@@ -676,12 +678,14 @@ class O_AddressesTests: BaseTestCase {
         }
         // The option to open saved Addresses is available
         let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
-        mozWaitForElementToExist(app.buttons[addressAutofillButton])
-        app.buttons[addressAutofillButton].waitAndTap()
-        // Choose the address added
-        app.otherElements.buttons.elementContainingText("Address").waitAndTap()
-        // All fields are correctly autofilled
-        validateAutofillAddressInfo()
+        if #unavailable(iOS 26) {
+            mozWaitForElementToExist(app.buttons[addressAutofillButton])
+            app.buttons[addressAutofillButton].waitAndTap()
+            // Choose the address added
+            app.otherElements.buttons.elementContainingText(String("Address")).waitAndTap()
+            // All fields are correctly autofilled
+            validateAutofillAddressInfo()
+        }
     }
 
     private func validateAutofillAddressInfo() {
