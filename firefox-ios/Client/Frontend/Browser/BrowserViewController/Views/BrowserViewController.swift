@@ -730,8 +730,14 @@ class BrowserViewController: UIViewController,
         if isBottomSearchBar {
             header.isClearBackground = false
 
+            // Prevent homepage from showing behind the keyboard when content isn't scrollable.
+            // Only clear background if content exceeds viewport height.
+            let shouldClearBackground: Bool = {
+                guard let webView = tabManager.selectedTab?.webView else { return false }
+                return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
+            }()
             // we disable the translucency when the keyboard is getting displayed
-            overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
+            overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || shouldClearBackground
 
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
@@ -832,8 +838,10 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
         updateTopTabs(showTopTabs: showTopTabs)
 
-        header.setNeedsLayout()
-        view.layoutSubviews()
+        if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            header.setNeedsLayout()
+            view.layoutSubviews()
+        }
 
         updateToolbarDisplay()
     }
@@ -1882,7 +1890,6 @@ class BrowserViewController: UIViewController,
         )
         let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
         let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
-
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
         // make sure the keyboard spacer has the right color/translucency
@@ -1975,7 +1982,14 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
 
-        updateToolbarDisplay()
+        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            // Only update blur views when we are not in zero search mode
+            if inline {
+                updateToolbarDisplay()
+            }
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func showEmbeddedWebview() {
@@ -4953,7 +4967,15 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        updateToolbarDisplay()
+        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+            // When animation duration is zero the keyboard is already showing and we don't need
+            // to update the toolbar again. This is the case when we are moving between fields in a form.
+            if state.animationDuration > 0 {
+                updateToolbarDisplay()
+            }
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {

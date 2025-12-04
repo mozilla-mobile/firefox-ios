@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Common
 
-class OpenWithSettingsViewController: ThemedTableViewController {
+class OpenWithSettingsViewController: ThemedTableViewController, Notifiable {
     struct MailtoProviderEntry {
         let name: String
         let scheme: String
@@ -35,10 +35,13 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(appDidBecomeActive),
-                                               name: UIApplication.didBecomeActiveNotification,
-                                               object: nil)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIApplication.didBecomeActiveNotification
+            ]
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,7 +54,6 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         self.prefs.setString(currentChoice, forKey: PrefsKeys.KeyMailToOption)
     }
 
-    @objc
     func appDidBecomeActive() {
         reloadMailProviderSource()
         updateCurrentChoice()
@@ -154,5 +156,18 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         }
 
         return NSAttributedString(string: string, attributes: color)
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didBecomeActiveNotification:
+            ensureMainThread {
+                self.appDidBecomeActive
+            }
+        default:
+            return
+        }
     }
 }

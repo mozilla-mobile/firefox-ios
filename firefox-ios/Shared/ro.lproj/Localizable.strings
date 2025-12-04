@@ -1583,10 +1583,10 @@
 "Settings.WebsiteData.ButtonShowMore" = "Afișează mai multe";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "Această acțiune va șterge toate datele site-urilor web și este ireversibilă.";
+"Settings.WebsiteData.ConfirmPrompt" = "Va șterge toate datele site-urilor web. Acțiunea este ireversibilă.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
-"Settings.WebsiteData.SelectedConfirmPrompt" = "Acțiunea va elimina elementele selectate. Nu poate fi anulată.";
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Acțiunea va elimina elementele selectate. Este ireversibilă.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Date ale site-urilor web";
