@@ -173,6 +173,8 @@ final class ToolbarAnimator {
 
         let isShowing = alpha == 1
         let customOffset = context.bottomContainerHeight + context.overKeyboardContainerHeight
+        let bottomOffset = isShowing ? 0 :  context.bottomContainerHeight
+        let overkeyBoardOffset = isShowing ? 0 : context.overKeyboardContainerHeight
         UIView.animate(withDuration: UX.bottomToolbarDuration,
                        delay: 0,
                        options: [.curveEaseOut],
@@ -187,9 +189,8 @@ final class ToolbarAnimator {
                 view.bottomBlurView.transform = .identity
             }
         }, completion: { _ in
-            let offset = isShowing ? 0 : customOffset
-            self.updateBottomToolbarConstraints(bottomContainerOffset: offset,
-                                                overKeyboardContainerOffset: offset)
+            self.updateBottomToolbarConstraints(bottomContainerOffset: bottomOffset,
+                                                overKeyboardContainerOffset: overkeyBoardOffset)
         })
 
         self.delegate?.dispatchScrollAlphaChange(alpha: alpha)
