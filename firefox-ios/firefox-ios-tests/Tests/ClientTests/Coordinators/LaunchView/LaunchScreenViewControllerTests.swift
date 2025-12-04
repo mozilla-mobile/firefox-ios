@@ -32,11 +32,13 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         try await super.tearDown()
     }
 
+    @MainActor
     func testNotLoaded_notCalled() {
         _ = createSubject()
         XCTAssertEqual(viewModel.startLoadingCalled, 0)
     }
 
+    @MainActor
     func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() {
         viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
         let subject = createSubject()
@@ -51,6 +53,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
+    @MainActor
     func testViewDidLoad_whenNilLaunchType_callsCoordinatorBrowser() {
         viewModel.mockLaunchType = nil
         let subject = createSubject()
@@ -61,6 +64,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
+    @MainActor
     func testAddLaunchView_whenViewWillAppear() {
         let subject = LaunchScreenViewController(windowUUID: windowUUID,
                                                  coordinator: coordinatorDelegate,
@@ -71,6 +75,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     }
 
     // MARK: - Helpers
+    @MainActor
     private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchScreenViewController {
         let subject = LaunchScreenViewController(windowUUID: windowUUID,

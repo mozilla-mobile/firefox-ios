@@ -44,8 +44,8 @@ final class SummarizeCoordinatorTests: XCTestCase {
     private var gleanWrapper: MockGleanWrapper!
     private let url = URL(string: "https://example.com")!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         setIsHostedSummarizerEnabled(true)
         DependencyHelperMock().bootstrapDependencies()
         browserViewController = MockBrowserViewController(profile: MockProfile(), tabManager: MockTabManager())
@@ -55,14 +55,14 @@ final class SummarizeCoordinatorTests: XCTestCase {
         gleanWrapper = MockGleanWrapper()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         browserViewController = nil
         router = nil
         prefs = nil
         parentCoordinator = nil
         gleanWrapper = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_start_showsSummarizeController() throws {
