@@ -630,9 +630,12 @@ class O_AddressesTests: BaseTestCase {
         navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
         app.webViews.textFields.element(boundBy: 1).waitAndTap()
         addressScreen.handleiPadNavigationKeys()
-        addressScreen.openAutofillMenuAndManageAddresses()
-        // User is redirected to the Settings -> addresses menu
-        addressScreen.assertAddressesSettingsScreenVisible()
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
+        if #unavailable(iOS 26) {
+            addressScreen.openAutofillMenuAndManageAddresses()
+            // User is redirected to the Settings -> addresses menu
+            addressScreen.assertAddressesSettingsScreenVisible()
+        }
     }
 
     private func validateNightModeOnOff() {
