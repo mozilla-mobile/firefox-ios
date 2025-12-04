@@ -95,7 +95,7 @@ final class TabScrollHandler: NSObject,
     var toolbarDisplayState = ToolbarDisplayState()
     var lastValidState: ToolbarDisplayState = .expanded
     private var isStatusBarScrollToTop = false
-    private var isTabChangeScrollToTop = false
+    private var didTapChangePreventScrollToTop = false
 
     private weak var delegate: TabScrollHandler.Delegate?
     private let windowUUID: WindowUUID
@@ -287,13 +287,11 @@ final class TabScrollHandler: NSObject,
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        isStatusBarScrollToTop = true
         if toolbarDisplayState.isCollapsed { showToolbars(animated: true) }
-        if isTabChangeScrollToTop {
-            isTabChangeScrollToTop = false
-            return false
-        }
-        return true
+
+        isStatusBarScrollToTop = !didTapChangePreventScrollToTop
+        didTapChangePreventScrollToTop = false
+        return isStatusBarScrollToTop
     }
 
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
@@ -308,7 +306,7 @@ final class TabScrollHandler: NSObject,
     }
 
     func didChangeTopTab() {
-        isTabChangeScrollToTop = true
+        didTapChangePreventScrollToTop = true
     }
 
     // MARK: - Private
