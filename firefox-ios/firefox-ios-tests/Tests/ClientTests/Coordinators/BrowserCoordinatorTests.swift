@@ -33,7 +33,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsAppleSummarizerEnabled(false)
-        setIsHostedSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         overlayModeManager = MockOverlayModeManager()
@@ -610,6 +609,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testShowSummarizePanel_whenSummarizeFeatureIsDisabled_doesntShowPanel() {
+        setIsHostedSummarizerEnabled(false)
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
