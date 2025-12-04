@@ -60,7 +60,7 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
 
     private func findHighestPriorityButton()
     -> OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
-        if let _ = multipleChoiceButtons.first(where: { $0.action.isThemeAction }),
+        if multipleChoiceButtons.contains(where: { $0.action.isThemeAction }),
            let savedAction = savedThemeAction(),
            let matchedButton = multipleChoiceButtons.first(where: { $0.action == savedAction }) {
             return matchedButton
