@@ -38,7 +38,7 @@ final class AddCreditCardScreen {
     }
 
     func tapCreditCardForm() {
-        // iOS 26 only: https://github.com/mozilla-mobile/firefox-ios/issues/31079
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31079
         if #available(iOS 26, *) {
             sel.CARD_NUMBER_FIELD_BUTTON.element(in: app).waitAndTap()
         }
@@ -116,6 +116,7 @@ final class AddCreditCardScreen {
     }
 
     func addCreditCard(name: String, cardNumber: String, expirationDate: String) {
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31079
         if #available(iOS 26, *) {
             tapCreditCardForm()
         }
