@@ -354,6 +354,19 @@ class BrowserViewController: UIViewController,
         return featureFlagStatus
     }
 
+    var isToolbarTranslucencyRefactorEnabled: Bool {
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.toolbarTranslucencyRefactor
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
+    }
+
     var isSwipingTabsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
     }
@@ -663,6 +676,9 @@ class BrowserViewController: UIViewController,
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            addOrUpdateMaskViewIfNeeded()
+        }
 
         let action = GeneralBrowserMiddlewareAction(
             scrollOffset: scrollController.contentOffset,
@@ -673,7 +689,7 @@ class BrowserViewController: UIViewController,
         updateSwipingTabs()
     }
 
-    private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
+    private func updateToolbarDisplay(scrollOffset: CGFloat? = nil, shouldUpdateBlurViews: Bool = true) {
         // move views to the front so the address toolbar shadow doesn't get clipped
         if isBottomSearchBar {
             overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
@@ -683,11 +699,12 @@ class BrowserViewController: UIViewController,
             view.bringSubviewToFront(header)
         }
 
-        updateBlurViews(scrollOffset: scrollOffset)
+        if shouldUpdateBlurViews {
+            updateBlurViews(scrollOffset: scrollOffset)
+        }
     }
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
-        let enableBlur = isToolbarTranslucencyEnabled
         guard toolbarHelper.shouldBlur() else {
             topBlurView.alpha = 0
             bottomBlurView.isHidden = true
@@ -698,6 +715,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        let enableBlur = isToolbarTranslucencyEnabled
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
@@ -734,18 +752,43 @@ class BrowserViewController: UIViewController,
         bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isScrollAlphaZero
         bottomContainer.isHidden = isScrollAlphaZero
 
-        let maskView = UIView(frame: CGRect(x: 0,
-                                            y: -contentContainer.frame.origin.y,
-                                            width: view.frame.width,
-                                            height: view.frame.height))
-        maskView.backgroundColor = .black
-        contentContainer.mask = maskView
+        if !isToolbarTranslucencyRefactorEnabled {
+            let maskView = UIView(frame: CGRect(x: 0,
+                                                y: -contentContainer.frame.origin.y,
+                                                width: view.frame.width,
+                                                height: view.frame.height))
+            maskView.backgroundColor = .black
+            contentContainer.mask = maskView
+        }
 
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
-            $0.setNeedsLayout()
-            $0.layoutIfNeeded()
+
+            if !isToolbarTranslucencyRefactorEnabled {
+                $0.setNeedsLayout()
+                $0.layoutIfNeeded()
+            }
+        }
+    }
+
+    // Adds or updates the mask for the content container that ensures the content is extending
+    // under the toolbars but not leading and trailing (would show during swiping tabs)
+    private func addOrUpdateMaskViewIfNeeded() {
+        guard toolbarHelper.shouldBlur() else { return }
+
+        let frame = CGRect(x: 0,
+                           y: -contentContainer.frame.origin.y,
+                           width: view.frame.width,
+                           height: view.frame.height)
+
+        // if we already have a mask update the frame
+        if let mask = contentContainer.mask {
+            mask.frame = frame
+        } else {
+            let maskView = UIView(frame: frame)
+            maskView.backgroundColor = .black
+            contentContainer.mask = maskView
         }
     }
 
@@ -795,7 +838,7 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
         updateTopTabs(showTopTabs: showTopTabs)
 
-        if !featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+        if !isToolbarTranslucencyRefactorEnabled {
             header.setNeedsLayout()
             view.layoutSubviews()
         }
@@ -1295,7 +1338,12 @@ class BrowserViewController: UIViewController,
     }
 
     private func onReduceTransparencyStatusDidChange() {
-        updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
+        } else {
+            updateToolbarDisplay()
+        }
 
         store.dispatch(
             ToolbarAction(
@@ -1889,12 +1937,17 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
-        // for the first two layers of views other than web view and legacy homepage
-        if toolbarHelper.shouldBlur() &&
-            !viewController.isKind(of: WebviewViewController.self) {
-            viewController.view.clipsToBounds = false
-            viewController.view.subviews.forEach { $0.clipsToBounds = false }
-        } else {
+        // for the first two layers of views other than a web view
+        if toolbarHelper.shouldBlur() && !viewController.isKind(of: WebviewViewController.self) {
+            // Only update clipsToBounds if the first view layer has it turned on currently
+            if isToolbarTranslucencyRefactorEnabled, viewController.view.clipsToBounds {
+                viewController.view.clipsToBounds = false
+                viewController.view.subviews.forEach { $0.clipsToBounds = false }
+            } else if !isToolbarTranslucencyRefactorEnabled {
+                viewController.view.clipsToBounds = false
+                viewController.view.subviews.forEach { $0.clipsToBounds = false }
+            }
+        } else if !isToolbarTranslucencyRefactorEnabled {
             contentContainer.mask = nil
         }
 
@@ -1929,7 +1982,7 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
 
-        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+        if isToolbarTranslucencyRefactorEnabled {
             // Only update blur views when we are not in zero search mode
             if inline {
                 updateToolbarDisplay()
@@ -4914,7 +4967,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        if featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly) {
+        if isToolbarTranslucencyRefactorEnabled {
             // When animation duration is zero the keyboard is already showing and we don't need
             // to update the toolbar again. This is the case when we are moving between fields in a form.
             if state.animationDuration > 0 {
@@ -4947,7 +5000,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateToolbarDisplay()
+
+        if isToolbarTranslucencyRefactorEnabled {
+            // Only correct the order of views to not cut off the shadow
+            updateToolbarDisplay(shouldUpdateBlurViews: false)
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
