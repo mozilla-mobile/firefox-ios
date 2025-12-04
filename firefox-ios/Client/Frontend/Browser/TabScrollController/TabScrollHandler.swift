@@ -41,8 +41,6 @@ final class TabScrollHandler: NSObject,
         static let minimalAddressBarAnimationDuration: CGFloat = 0.4
         static let heightOffset: CGFloat = 14
         static let minimumScrollThreshold: CGFloat = 20
-        // Setting a very high number to use translation mainly
-        static let minimumScrollVelocity: CGFloat = 1000
     }
 
     private var isMinimalAddressBarEnabled: Bool {

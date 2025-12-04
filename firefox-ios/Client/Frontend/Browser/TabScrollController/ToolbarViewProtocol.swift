@@ -109,30 +109,41 @@ final class ToolbarAnimator {
         }
 
         let topOffset = alpha == 1 ? context.headerHeight : 0
-        view.headerTopConstraint?.update(offset: topOffset)
-        view.header.superview?.setNeedsLayout()
-
+        updateTopToolbarConstraints(topContainerOffset: topOffset)
         view.header.updateAlphaForSubviews(alpha)
         delegate?.dispatchScrollAlphaChange(alpha: alpha)
     }
 
-    private func updateBottomToolbar(/*bottomContainerOffset: CGFloat,
-                                     overKeyboardContainerOffset: CGFloat,*/
-                                     alpha: CGFloat) {
-        guard let view, UIAccessibility.isReduceMotionEnabled else {
+    private func updateTopToolbarConstraints(topContainerOffset: CGFloat) {
+        guard let view else { return }
+
+        view.headerTopConstraint?.update(offset: topContainerOffset)
+        view.header.superview?.setNeedsLayout()
+    }
+
+    private func updateBottomToolbar(alpha: CGFloat) {
+        guard UIAccessibility.isReduceMotionEnabled else {
             animateBottomToolbar(alpha: alpha)
             return
         }
 
         let overKeyboardContainerOffset = alpha == 1 ? 0 : context.overKeyboardContainerHeight
         let bottomContainerOffset = alpha == 1 ? 0 : context.bottomContainerHeight
+        updateBottomToolbarConstraints(bottomContainerOffset: bottomContainerOffset,
+                                       overKeyboardContainerOffset: overKeyboardContainerOffset)
+
+        delegate?.dispatchScrollAlphaChange(alpha: alpha)
+    }
+
+    private func updateBottomToolbarConstraints(bottomContainerOffset: CGFloat,
+                                                overKeyboardContainerOffset: CGFloat) {
+        guard let view else { return }
+
         view.overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
         view.overKeyboardContainer.superview?.setNeedsLayout()
 
         view.bottomContainerConstraint?.update(offset: bottomContainerOffset)
         view.bottomContainer.superview?.setNeedsLayout()
-
-        delegate?.dispatchScrollAlphaChange(alpha: alpha)
     }
 
     private func animateTopToolbar(alpha: CGFloat) {
@@ -142,7 +153,8 @@ final class ToolbarAnimator {
         let headerOffset = isShowing ? 0 : context.headerHeight
         UIView.animate(withDuration: UX.topToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut]) {
+                       options: [.curveEaseOut],
+                       animations: {
             if !isShowing {
                 view.header.transform = .identity.translatedBy(x: 0, y: headerOffset)
                 view.topBlurView.transform = .identity.translatedBy(x: 0, y: headerOffset)
@@ -150,7 +162,9 @@ final class ToolbarAnimator {
                 view.header.transform = .identity
                 view.topBlurView.transform = .identity
             }
-        }
+        }, completion: { _ in
+            self.updateTopToolbarConstraints(topContainerOffset: headerOffset)
+        })
         delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }
 
@@ -158,10 +172,11 @@ final class ToolbarAnimator {
         guard let view else { return }
 
         let isShowing = alpha == 1
-        let customOffset: CGFloat = context.bottomContainerHeight + context.overKeyboardContainerHeight
+        let customOffset = context.bottomContainerHeight + context.overKeyboardContainerHeight
         UIView.animate(withDuration: UX.bottomToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut]) {
+                       options: [.curveEaseOut],
+                       animations: {
             if !isShowing {
                 view.bottomContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
                 view.overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
@@ -171,7 +186,12 @@ final class ToolbarAnimator {
                 view.overKeyboardContainer.transform = .identity
                 view.bottomBlurView.transform = .identity
             }
-        }
-        delegate?.dispatchScrollAlphaChange(alpha: alpha)
+        }, completion: { _ in
+            let offset = isShowing ? 0 : customOffset
+            self.updateBottomToolbarConstraints(bottomContainerOffset: offset,
+                                                overKeyboardContainerOffset: offset)
+        })
+
+        self.delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }
 }
