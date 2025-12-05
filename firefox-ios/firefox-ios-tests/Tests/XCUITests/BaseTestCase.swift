@@ -648,10 +648,15 @@ extension XCUIElement {
     func pressWithRetry(duration: TimeInterval, timeout: TimeInterval = TIMEOUT, element: XCUIElement) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         self.press(forDuration: duration)
-        sleep(1)
+        if element.waitForExistence(timeout: 1.0) {
+            return
+        }
         var attempts = 5
         while !element.exists && attempts > 0 {
             self.press(forDuration: duration)
+            if element.waitForExistence(timeout: 1.0) {
+                return
+            }
             attempts -= 1
         }
 
