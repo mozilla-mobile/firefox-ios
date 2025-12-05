@@ -41,7 +41,9 @@ extension AppInfo {
         if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
             return true
         }
-        return Locale.current.identifier == "zh_CN"
+        // FIXME: FXIOS-14170 China FxA is no longer available, do not enable ChinaEdition based on locale
+        // return Locale.current.identifier == "zh_CN"
+        return false
     }()
 
     // The App Store page identifier for the Firefox iOS application
