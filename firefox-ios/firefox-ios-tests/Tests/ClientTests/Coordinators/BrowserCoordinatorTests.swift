@@ -593,12 +593,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let childCoordinator = subject.childCoordinators.first
         XCTAssertTrue(childCoordinator is SummarizeCoordinator)
 
-        /// Yield the main actor for one run loop, which will ensure the animations on `snapshot` finish.
-        /// This is because the `UIGraphicsImageRenderer`'s `drawHierarchy(in: bounds, afterScreenUpdates: true)` call has
-        /// `afterScreenUpdates` set to `true`, which causes UIKit to hold onto the `MockBrowserViewController` for an extra
-        /// run loop after this `@MainActor` test function and `@MainActor` tearDown() have completed, causing a crash
-        /// after the BVC's `deinit` runs and tries to unsubscribe from Redux *after* all our dependencies have been
-        /// deallocated.
+        /// Yield the main actor for one run loop, ensuring the animations on the mock BVC's `view.snapshot` can complete.
+        /// See PR #31137 for more details.
         await Task.yield()
     }
 
@@ -644,12 +640,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
         XCTAssertEqual(numberOfSummarizeCoordinators, 1)
 
-        /// Yield the main actor for one run loop, which will ensure the animations on `snapshot` finish.
-        /// This is because the `UIGraphicsImageRenderer`'s `drawHierarchy(in: bounds, afterScreenUpdates: true)` call has
-        /// `afterScreenUpdates` set to `true`, which causes UIKit to hold onto the `MockBrowserViewController` for an extra
-        /// run loop after this `@MainActor` test function and `@MainActor` tearDown() have completed, causing a crash
-        /// after the BVC's `deinit` runs and tries to unsubscribe from Redux *after* all our dependencies have been
-        /// deallocated.
+        /// Yield the main actor for one run loop, ensuring the animations on the mock BVC's `view.snapshot` can complete.
+        /// See PR #31137 for more details.
         await Task.yield()
     }
 
