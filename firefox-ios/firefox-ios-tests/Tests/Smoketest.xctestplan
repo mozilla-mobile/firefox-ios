@@ -307,8 +307,6 @@
         "HomePageSettingsUITests\/testTopSitesCustomNumberOfRows()",
         "HomePageSettingsUITests\/testTyping()",
         "HomepageSearchBarTests",
-        "InactiveTabsTest\/testInactiveTabs()",
-        "InactiveTabsTest\/testInactiveTabs_tabTrayExperimentOff()",
         "IntegrationTests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",

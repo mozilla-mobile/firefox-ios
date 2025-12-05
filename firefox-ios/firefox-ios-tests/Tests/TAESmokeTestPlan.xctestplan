@@ -298,8 +298,6 @@
         "HomepageSearchBarTests\/testTappingOnSearchButtonForNavigationToolbarForBottomToolbarShowsZeroSearchState_homepageSearchBarExperimentOn()",
         "HomepageSearchBarTests\/testTappingOnSearchButtonForNavigationToolbarShowsZeroSearchState_homepageSearchBarExperimentOn()",
         "HomepageSearchBarTests\/testTappingOnShowsZeroSearchState_homepageSearchBarExperimentOn()",
-        "InactiveTabsTest",
-        "InactiveTabsTest\/testInactiveTabs_tabTrayExperimentOff()",
         "IntegrationTests",
         "IntegrationTests\/testFxADisconnectConnect()",
         "IntegrationTests\/testFxASyncBookmark()",
