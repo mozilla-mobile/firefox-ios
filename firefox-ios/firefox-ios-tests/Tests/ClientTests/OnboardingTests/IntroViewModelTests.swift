@@ -20,8 +20,8 @@ class IntroViewModelTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         nimbusUtility = nil
+        try await super.tearDown()
     }
 
     func testModel_whenInitialized_hasNoViewControllers() {

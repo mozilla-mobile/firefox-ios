@@ -18,8 +18,8 @@ class IntroViewControllerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         mockNotificationCenter = nil
+        try await super.tearDown()
     }
 
     // Temp. Disabled: https://mozilla-hub.atlassian.net/browse/FXIOS-7505

@@ -19,9 +19,9 @@ class HistoryPanelTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         DependencyHelperMock().reset()
         notificationCenter = nil
+        try await super.tearDown()
     }
 
     func testHistoryButtons() {
