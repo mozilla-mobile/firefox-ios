@@ -1434,10 +1434,10 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveNormalsTabsOlderThan_whenSelectedTabIsInTheMiddle_thenOrderIsProper() {
-        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
-        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
-        let inactiveTabs2 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
-        let tabManager = createSubject(tabs: inactiveTabs1 + normalTabs + inactiveTabs2)
+        let olderTabs1 = generateTabs(ofType: .normalOlder2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normal, count: 3)
+        let olderTabs2 = generateTabs(ofType: .normalOlder2Weeks, count: 10)
+        let tabManager = createSubject(tabs: olderTabs1 + normalTabs + olderTabs2)
         tabManager.selectTab(normalTabs[safe: 0])
 
         tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
@@ -1448,9 +1448,9 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveNormalsTabsOlderThan_whenSelectedTabIsLast_thenOrderIsProper() {
-        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
-        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
-        let tabManager = createSubject(tabs: inactiveTabs1 + normalTabs)
+        let olderTabs1 = generateTabs(ofType: .normalOlder2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normal, count: 3)
+        let tabManager = createSubject(tabs: olderTabs1 + normalTabs)
         tabManager.selectTab(normalTabs[safe: 2])
 
         tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
@@ -1461,9 +1461,9 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveNormalsTabsOlderThan_whenSelectedTabIsFirst_thenOrderIsProper() {
-        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
-        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
-        let tabManager = createSubject(tabs: normalTabs + inactiveTabs1)
+        let olderTabs1 = generateTabs(ofType: .normalOlder2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normal, count: 3)
+        let tabManager = createSubject(tabs: normalTabs + olderTabs1)
         tabManager.selectTab(normalTabs[safe: 0])
 
         tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
