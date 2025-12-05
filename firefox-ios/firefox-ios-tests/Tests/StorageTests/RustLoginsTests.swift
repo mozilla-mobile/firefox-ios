@@ -155,4 +155,58 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
         }
         wait(for: [expectation])
     }
+
+    func testDeleteMultipleLogins() {
+        // Add three logins to delete, one after another to avoid crashing (FIXME: FXIOS-14323 / Github #31023)
+        for i in 0..<3 {
+            let expectation = XCTestExpectation(description: "Add login \(i)")
+            let login = RustLoginsTests.loginFactory(number: i)
+
+            logins.addLogin(login: login) { result in
+                switch result {
+                case .success(let login):
+                    XCTAssertNotNil(login)
+                    expectation.fulfill()
+                case .failure:
+                    XCTFail("Add login \(i) failed")
+                }
+            }
+
+            wait(for: [expectation], timeout: 2)
+        }
+
+        let deleteExpectation = XCTestExpectation(description: "Deleting all entries")
+
+        // Fetch all the logins and then delete them
+        self.logins.listLogins { [logins] listLoginsResult in
+            switch listLoginsResult {
+            case .success(let allLogins):
+                XCTAssertEqual(allLogins.count, 3, "Three logins must have been added")
+
+                // Now try to delete multiple logins
+                logins?.deleteLogins(ids: allLogins.map(\.id)) { deleteLoginsResult in
+                    switch deleteLoginsResult {
+                    case .success(let deletedLogins):
+                        XCTAssertEqual(deletedLogins.count, 3, "Three results should have been deleted")
+                        deleteExpectation.fulfill()
+                    case .failure:
+                        XCTFail("Deleting all logins failed")
+                    }
+                }
+            case .failure:
+                XCTFail()
+            }
+        }
+
+        wait(for: [deleteExpectation], timeout: 2)
+    }
+
+    static func loginFactory(number: Int) -> LoginEntry {
+        return LoginEntry(fromJSONDict: [
+            "hostname": "https://example\(number).com",
+            "formSubmitUrl": "https://example\(number).com",
+            "username": "username\(number)",
+            "password": "password\(number)"
+        ])
+    }
 }

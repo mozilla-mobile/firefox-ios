@@ -357,8 +357,8 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             do {
                 let record = try self.storage?.get(id: id)
                 completionHandler(.success(record))
-            } catch let err as NSError {
-                completionHandler(.failure(err))
+            } catch {
+                completionHandler(.failure(error))
             }
         }
     }
