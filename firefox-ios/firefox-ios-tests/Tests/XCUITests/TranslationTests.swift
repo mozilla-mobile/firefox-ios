@@ -26,6 +26,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         app.launch()
 
         navigateToTranslationTestPage()
+        mozWaitForElementToExist(app.webViews.staticTexts["例示用ドメイン"])
 
         // Check that translation icon exists in inactive mode
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
@@ -34,11 +35,13 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         // Check that translation icon switches to loading (spinner) and eventually active mode (blue button)
         toolBarScreen.assertTranslateButtonExists(with: .loading)
         toolBarScreen.assertTranslateButtonExists(with: .active)
+        mozWaitForElementToExist(app.webViews.staticTexts["Example domain"])
 
         toolBarScreen.tapTranslateButton(with: .active)
 
         // Check that when tapping on translation button in active mode returns to inactive
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
+        mozWaitForElementToExist(app.webViews.staticTexts["例示用ドメイン"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3240821
