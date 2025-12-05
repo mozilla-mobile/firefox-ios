@@ -2629,7 +2629,9 @@ class BrowserViewController: UIViewController,
                 hideReaderModeBar(animated: false)
             }
 
-            updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar)
+            if !isToolbarTranslucencyRefactorEnabled {
+                updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar)
+            }
         }
     }
 
@@ -4129,7 +4131,9 @@ class BrowserViewController: UIViewController,
             }
         }
         destroySearchController()
-        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+        if !isToolbarTranslucencyRefactorEnabled {
+            updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+        }
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
     }
@@ -4711,7 +4715,18 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
+            if !isToolbarTranslucencyRefactorEnabled {
+                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
+            } else {
+                if selectedTab.isFxHomeTab && previousTab != nil {
+                    store.dispatch(
+                        GeneralBrowserAction(
+                            windowUUID: windowUUID,
+                            actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+                        )
+                    )
+                }
+            }
 
             if selectedTab.isFxHomeTab {
                 // Added as initial fix for WKWebView memory leak. Needs further investigation.
@@ -4787,6 +4802,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
+    // TODO: FXIOS-14347 This function will be removed when toolbarTranslucencyRefactor is on for everyone
     /// Updates the embedded content in the browser view controller (BVC) based on whether its a home page or web page.
     /// - Parameters:
     ///   - isHomeTab: A Boolean value indicating whether the current tab is the home page.
