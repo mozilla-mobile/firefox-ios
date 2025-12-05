@@ -50,3 +50,18 @@ extension UIColor {
         return Color(self)
     }
 }
+
+extension UIColor {
+    /// Use this for glass buttons and translucent UI elements to ensure optimal contrast
+    /// and readability on backgrounds that adapt to content behind them. The color inverts
+    /// based on the current interface style (dark mode uses light label, light mode uses dark label)
+    public static let invertedLabel = UIColor { traitCollection in
+        return traitCollection.userInterfaceStyle == .dark
+        ? .label.resolvedColor(
+            with: UITraitCollection(userInterfaceStyle: .light)
+        )
+        : .label.resolvedColor(
+            with: UITraitCollection(userInterfaceStyle: .dark)
+        )
+    }
+}
