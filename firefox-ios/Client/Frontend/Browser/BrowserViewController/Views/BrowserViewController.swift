@@ -824,8 +824,18 @@ class BrowserViewController: UIViewController,
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else { return }
+
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
+
+        let isShowingNavigationToolbar = toolbarState.isShowingNavigationToolbar
+        let needsUpdate = toolbarState.isShowingTopTabs != showTopTabs || isShowingNavigationToolbar != showNavToolbar
+
+        // Only update the UI when the value of top tabs being shown is different from what is saved in the state
+        guard (isToolbarTranslucencyRefactorEnabled && needsUpdate) || !isToolbarTranslucencyRefactorEnabled
+        else { return }
 
         if showNavToolbar {
             navigationToolbarContainer.isHidden = false
@@ -1968,7 +1978,11 @@ class BrowserViewController: UIViewController,
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
-            updateToolbarDisplay()
+
+            // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
+            if !isToolbarTranslucencyRefactorEnabled {
+                updateToolbarDisplay()
+            }
             return
         }
 
@@ -1986,12 +2000,8 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
 
-        if isToolbarTranslucencyRefactorEnabled {
-            // Only update blur views when we are not in zero search mode
-            if inline {
-                updateToolbarDisplay()
-            }
-        } else {
+        // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
+        if !isToolbarTranslucencyRefactorEnabled {
             updateToolbarDisplay()
         }
     }
