@@ -456,15 +456,27 @@ final class LocationView: UIView,
         )
     }
 
+    private func removeGlassEffectImmediately() {
+        guard #available(iOS 26.0, *) else { return }
+        /// Workaround for iOS 26.0 bug: Setting `effectView.effect` to `nil` doesn't remove the glass effect.
+        /// We work around this by first setting it to `UIBlurEffect()` and then to `nil`, which forces an immediate removal.
+        effectView.effect = UIBlurEffect()
+        effectView.effect = nil
+    }
+
     private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
         if scrollAlpha.isZero {
             shrinkLocationView(barPosition: barPosition)
-            if #available(iOS 26.0, *) { effectView.effect = barPosition == .bottom ? glassEffect : nil }
+            if #available(iOS 26.0, *), barPosition == .bottom {
+                effectView.effect = glassEffect
+            } else {
+                removeGlassEffectImmediately()
+            }
         } else {
             restoreLocationViewSize()
-            effectView.effect = nil
+            removeGlassEffectImmediately()
         }
         if let theme { applyTheme(theme: theme) }
     }
