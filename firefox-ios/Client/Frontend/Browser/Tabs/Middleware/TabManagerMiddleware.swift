@@ -393,12 +393,12 @@ final class TabManagerMiddleware: FeatureFlaggable,
         return tabs
     }
 
+    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
     /// Gets the list of inactive tabs from `TabManager` and builds the array of InactiveTabsModel
     /// to use in TabDisplayView
     ///
     /// - Parameter isPrivateMode: is on Private mode or not
     /// - Returns: Array of InactiveTabsModel used to configure collection view
-    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
     private func refreshInactiveTabs(for isPrivateMode: Bool = false, uuid: WindowUUID) -> [InactiveTabsModel] {
         guard !isPrivateMode else { return [InactiveTabsModel]() }
 
@@ -652,9 +652,9 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
     // MARK: - Inactive tabs helper
 
+    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
     /// Close all inactive tabs, removing them from the tabs array on `TabManager`.
     /// Makes a backup of tabs to be deleted in case the undo option is selected.
-    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
     private func closeAllInactiveTabs(state: AppState, uuid: WindowUUID) {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
         let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: [InactiveTabsModel](),
@@ -677,8 +677,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
         store.dispatch(toastAction)
     }
 
-    /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
     // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
+    /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
     private func undoCloseAllInactiveTabs(uuid: WindowUUID) {
         let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
