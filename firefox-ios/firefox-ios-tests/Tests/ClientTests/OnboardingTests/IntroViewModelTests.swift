@@ -13,14 +13,14 @@ class IntroViewModelTests: XCTestCase {
     typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         nimbusUtility = NimbusOnboardingTestingConfigUtility()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         nimbusUtility = nil
     }
 

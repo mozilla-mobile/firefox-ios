@@ -7,6 +7,7 @@ import Common
 
 @testable import Client
 
+@MainActor
 final class NativeErrorPageViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
