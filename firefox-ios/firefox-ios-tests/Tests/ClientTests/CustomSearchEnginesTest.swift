@@ -19,6 +19,7 @@ class CustomSearchEnginesTest: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testgetSearchTemplate() {
         let profile = MockBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController(windowUUID: windowUUID)
