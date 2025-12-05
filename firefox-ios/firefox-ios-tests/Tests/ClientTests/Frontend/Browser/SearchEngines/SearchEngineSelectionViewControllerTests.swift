@@ -7,28 +7,27 @@ import Common
 
 @testable import Client
 
+@MainActor
 final class SearchEngineSelectionViewControllerTests: XCTestCase {
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
     private var mockCoordinator: MockSearchEngineSelectionCoordinator!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockCoordinator = MockSearchEngineSelectionCoordinator()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
-    @MainActor
     func testSearchEngineSelectionViewController_simpleCreation_hasNoLeaks() {
         let controller = SearchEngineSelectionViewController(windowUUID: windowUUID)
         trackForMemoryLeaks(controller)
     }
 
-    @MainActor
     func testDidTapOpenSettings_callsCoordinatorShowSettings() {
         let controller = SearchEngineSelectionViewController(windowUUID: windowUUID)
         controller.coordinator = mockCoordinator
@@ -38,7 +37,6 @@ final class SearchEngineSelectionViewControllerTests: XCTestCase {
         XCTAssertEqual(mockCoordinator.navigateToSearchSettingsCalled, 1)
     }
 
-    @MainActor
     func testPresentationControllerDidDismiss_callsCoordinatorDismissModal() {
         let controller = SearchEngineSelectionViewController(windowUUID: windowUUID)
         controller.coordinator = mockCoordinator

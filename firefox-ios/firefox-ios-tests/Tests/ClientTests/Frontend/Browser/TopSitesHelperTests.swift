@@ -241,7 +241,7 @@ private class SiteCursorMock: Cursor<Site>, @unchecked Sendable {
 
 // MARK: - MockablePinnedSites
 private class PinnedSitesMock: MockablePinnedSites, @unchecked Sendable {
-    final class Error: MaybeErrorType {
+    struct Error: MaybeErrorType {
         let description = "Error"
     }
 
