@@ -20,7 +20,7 @@ protocol ContentBlockerTab: AnyObject {
 }
 
 @MainActor
-class TabContentBlocker {
+class TabContentBlocker: Notifiable {
     weak var tab: ContentBlockerTab?
     let logger: Logger
 
@@ -28,7 +28,6 @@ class TabContentBlocker {
         return false
     }
 
-    @objc
     nonisolated func notifiedTabSetupRequired() {}
 
     func currentlyEnabledLists() -> [String] {
@@ -60,11 +59,12 @@ class TabContentBlocker {
     init(tab: ContentBlockerTab, logger: Logger = DefaultLogger.shared) {
         self.tab = tab
         self.logger = logger
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(notifiedTabSetupRequired),
-            name: .contentBlockerTabSetupRequired,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                .contentBlockerTabSetupRequired
+            ]
         )
     }
 
@@ -79,5 +79,18 @@ class TabContentBlocker {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didBecomeActiveNotification:
+            ensureMainThread {
+                self.notifiedTabSetupRequired
+            }
+        default:
+            return
+        }
     }
 }
