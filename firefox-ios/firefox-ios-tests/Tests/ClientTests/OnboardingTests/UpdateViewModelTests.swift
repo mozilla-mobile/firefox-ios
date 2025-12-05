@@ -33,6 +33,7 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: Enable cards
+    @MainActor
     func testEnabledCards_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
         let subject = createSubject()
@@ -50,6 +51,7 @@ class UpdateViewModelTests: XCTestCase {
         waitForExpectations(timeout: 2.0)
     }
 
+    @MainActor
     func testEnabledCards_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()
@@ -68,6 +70,7 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: Has Single card
+    @MainActor
     func testHasSingleCard_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
         let subject = createSubject()

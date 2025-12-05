@@ -11,16 +11,16 @@ class ReaderModeStyleTests: XCTestCase {
     var themeManager: ThemeManager!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         themeManager = AppContainer.shared.resolve()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         themeManager = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_initWithProperties_succeeds() {

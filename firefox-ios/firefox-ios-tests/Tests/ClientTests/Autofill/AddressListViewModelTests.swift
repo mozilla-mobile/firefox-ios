@@ -266,7 +266,7 @@ final class AddressListViewModelTests: XCTestCase {
     }
 }
 
-final class MockAutofill: AddressProvider, SyncAutofillProvider {
+final class MockAutofill: AddressProvider, SyncAutofillProvider, @unchecked Sendable {
     var mockListAllAddressesResult: Result<[Address], Error>?
     var mockSaveAddressResult: Result<Address, Error>?
     var mockEditAddressResult: Result<Void, Error>?
