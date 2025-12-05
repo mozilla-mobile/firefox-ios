@@ -4718,7 +4718,7 @@ extension BrowserViewController: TabManagerDelegate {
             if !isToolbarTranslucencyRefactorEnabled {
                 updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
             } else {
-                if previousTab != nil {
+                if selectedTab.isFxHomeTab && previousTab != nil {
                     store.dispatch(
                         GeneralBrowserAction(
                             windowUUID: windowUUID,
