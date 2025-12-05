@@ -305,7 +305,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         view.addSubview(privateModeButton)
 
         NSLayoutConstraint.activate([
-            view.heightAnchor.constraint(equalToConstant: UX.topTabsViewHeight),
+            view.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.topTabsViewHeight),
 
             newTab.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             newTab.widthAnchor.constraint(equalTo: view.heightAnchor),
