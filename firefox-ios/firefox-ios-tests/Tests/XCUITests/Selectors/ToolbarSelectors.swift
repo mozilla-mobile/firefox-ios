@@ -97,7 +97,7 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
     let TRANSLATE_ACTIVE_BUTTON = Selector.buttonId(
         IDs.translateActiveButton,
         description: "Translate active button on browser toolbar",
-        groups: ["browser", "toolbar"]
+        groups: ["browser", "toolbar", "translation"]
     )
 
     var all: [Selector] { [
