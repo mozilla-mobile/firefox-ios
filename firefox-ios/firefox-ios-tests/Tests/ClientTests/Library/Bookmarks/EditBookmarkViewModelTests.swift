@@ -31,18 +31,18 @@ class EditBookmarkViewModelTests: XCTestCase {
     var bookmarksSaver: MockBookmarksSaver!
     var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         folderFetcher = MockFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
         profile = MockProfile()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         folderFetcher = nil
         bookmarksSaver = nil
         profile = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testInit() {

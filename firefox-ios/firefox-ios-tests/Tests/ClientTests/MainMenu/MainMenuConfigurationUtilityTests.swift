@@ -14,16 +14,16 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
     var configUtility: MainMenuConfigurationUtility!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         configUtility = MainMenuConfigurationUtility()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         configUtility = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testGenerateMenuElements_returnsHomepageSections_whenIsHomepageTrue() {

@@ -6,7 +6,7 @@ import Foundation
 import UserNotifications
 @testable import Client
 
-class MockUserNotificationCenter: UserNotificationCenterProtocol {
+class MockUserNotificationCenter: UserNotificationCenterProtocol, @unchecked Sendable {
     var pendingRequests = [UNNotificationRequest]()
 
     var getSettingsWasCalled = false
