@@ -91,7 +91,11 @@ class BrowserCoordinator: BaseCoordinator,
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         } else {
-            showTermsOfUse()
+            // Defer ToU presentation to avoid race condition with deep link processing
+            // This prevents ToU from being dismissed when deep link navigation starts
+            DispatchQueue.main.async { [weak self] in
+                self?.showTermsOfUse()
+            }
         }
     }
 
