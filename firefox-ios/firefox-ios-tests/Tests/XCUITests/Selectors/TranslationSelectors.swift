@@ -23,7 +23,7 @@ struct TranslationSettingsSelectors: TranslationSettingsSelectorsSet {
     let NAVBAR = Selector.navigationBarId(
         IDs.navBar,
         description: "Translation settings navigation bar",
-        groups: ["settings", "homepage"]
+        groups: ["settings", "translation"]
     )
 
     let BACK_BUTTON_iOS26 = Selector.buttonId(
