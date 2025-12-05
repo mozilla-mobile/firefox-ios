@@ -14,7 +14,7 @@ protocol RecordVisitObserving: AnyObject {
     func resetRecording()
 }
 
-// TODO: FXIOS-TODO: RecordVisitObservationManager should not be @unchecked Sendable
+// TODO: FXIOS-14364: RecordVisitObservationManager should not be @unchecked Sendable
 class RecordVisitObservationManager: RecordVisitObserving, @unchecked Sendable {
     private var historyHandler: HistoryHandler
     let logger: Logger
