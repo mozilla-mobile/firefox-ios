@@ -39,6 +39,9 @@ protocol SettingsSelectorsSet {
     var BROWSING_CELL_TITLE: Selector { get }
     var BLOCK_IMAGES_SWITCH_TITLE: Selector { get }
 
+    // Translation
+    var TRANSLATION_CELL_TITLE: Selector { get }
+
     var NO_IMAGE_MODE_STATUS_SWITCH: Selector { get }
 
     func ALL_CELLS() -> [Selector]
@@ -68,6 +71,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let browsingCellTitle = AccessibilityIdentifiers.Settings.Browsing.title
         static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
         static let noImageModeStatus = "NoImageModeStatus"
+        static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
     }
 
     // Core Element Selector
@@ -227,6 +231,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings"]
     )
 
+    let TRANSLATION_CELL_TITLE = Selector.tableCellById(
+        IDs.translationCellTitle,
+        description: "Translation settings cell",
+        groups: ["settings", "browsing"]
+    )
+
     func ALL_CELLS() -> [Selector] {
         let s = AccessibilityIdentifiers.Settings.self
         return [
@@ -244,6 +254,9 @@ struct SettingsSelectors: SettingsSelectorsSet {
                                    groups: ["settings"]),
             Selector.tableCellById(s.Browsing.title,
                                    description: "Browsing setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Translation.title,
+                                   description: "Translation setting",
                                    groups: ["settings"]),
             Selector.tableCellById(s.Theme.title,
                                    description: "Theme setting",
@@ -314,6 +327,6 @@ struct SettingsSelectors: SettingsSelectorsSet {
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
          CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, DEFAULT_BROWSER_CELL,
-         BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH]
+         BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH, TRANSLATION_CELL_TITLE]
     }
 }
