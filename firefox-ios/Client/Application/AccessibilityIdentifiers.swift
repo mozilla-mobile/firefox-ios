@@ -31,6 +31,8 @@ struct AccessibilityIdentifiers {
         static let stopButton = "TabToolbar.stopButton"
         static let bookmarksButton = "TabToolbar.libraryButton"
         static let translateButton = "TabToolbar.translateButton"
+        static let translateLoadingButton = "TabToolbar.translateLoadingButton"
+        static let translateActiveButton = "TabToolbar.translateActiveButton"
     }
 
     struct Browser {
@@ -708,6 +710,11 @@ struct AccessibilityIdentifiers {
 
         struct Translation {
             static let title = "Settings.Translation.Title"
+            // This is based on `PrefsKeys.Settings.translationsFeature`
+            static let toggleSwitch = "settings.translationFeature"
+            static let navigationBar = "Settings.Translation.navigationBar"
+            static let backButtoniOS26 = "BackButton"
+            static let backButton = "Settings"
         }
 
         struct BlockImages {
