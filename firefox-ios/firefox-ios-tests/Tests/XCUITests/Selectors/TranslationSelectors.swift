@@ -34,10 +34,10 @@ struct TranslationSettingsSelectors: TranslationSettingsSelectorsSet {
 
     let BACK_BUTTON = Selector.buttonByLabel(
         IDs.backButton,
-        description: "Translation settings back button for iOS 18",
+        description: "Translation settings back button (< iOS 26)",
         groups: ["settings", "translation"]
     )
-    
+
     let TRANSLATION_SWITCH = Selector.switchById(
         IDs.translationSwitch,
         description: "Switch for 'Translation Enabled' in Settings → Translation",
