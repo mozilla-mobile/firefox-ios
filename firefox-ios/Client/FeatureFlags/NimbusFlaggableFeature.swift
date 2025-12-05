@@ -106,6 +106,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .sentFromFirefox,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
+                .toolbarTranslucencyRefactor,
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
