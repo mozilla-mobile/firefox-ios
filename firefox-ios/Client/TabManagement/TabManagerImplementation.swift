@@ -34,10 +34,6 @@ class TabManagerImplementation: NSObject,
     var notificationCenter: NotificationProtocol
     private(set) var tabs: [Tab]
 
-    var isInactiveTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
-    }
-
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
         && UIDevice.current.userInterfaceIdiom != .pad
@@ -58,18 +54,8 @@ class TabManagerImplementation: NSObject,
         return tabs[selectedIndex]
     }
 
-    var normalActiveTabs: [Tab] {
-        let inactiveTabs = getInactiveTabs()
-        let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
-        return activeTabs
-    }
-
     var normalTabs: [Tab] {
         return tabs.filter { !$0.isPrivate }
-    }
-
-    var inactiveTabs: [Tab] {
-        return normalTabs.filter({ $0.isInactive })
     }
 
     var privateTabs: [Tab] {
@@ -77,8 +63,7 @@ class TabManagerImplementation: NSObject,
     }
 
     var recentlyAccessedNormalTabs: [Tab] {
-        // If inactive tabs are enabled, do not include inactive tabs, as they are not "recently" accessed
-        var eligibleTabs = isInactiveTabsEnabled ? normalActiveTabs : normalTabs
+        var eligibleTabs = normalTabs
 
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
@@ -98,7 +83,6 @@ class TabManagerImplementation: NSObject,
         return eligibleTabs
     }
 
-    private let inactiveTabsManager: InactiveTabsManagerProtocol
     private let logger: Logger
     nonisolated private let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
@@ -135,7 +119,6 @@ class TabManagerImplementation: NSObject,
          tabDataStore: TabDataStore? = nil,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          tabs: [Tab] = []
     ) {
@@ -144,7 +127,6 @@ class TabManagerImplementation: NSObject,
         self.tabSessionStore = tabSessionStore
         self.imageStore = imageStore
         self.notificationCenter = notificationCenter
-        self.inactiveTabsManager = inactiveTabsManager
         self.windowManager = windowManager
         self.windowIsNew = uuid.isNew
         self.windowUUID = uuid.uuid
@@ -258,9 +240,9 @@ class TabManagerImplementation: NSObject,
             if tab == currentModeTabs.last {
                 // Select tab calls preserve tabs so we don't need to call it again
                 if tab.isPrivate,
-                   let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
+                   let mostRecentTab = mostRecentTab(inTabs: normalTabs) {
                     // We remove all private tabs so select most recent normal tab
-                    selectTab(mostRecentActiveTab)
+                    selectTab(mostRecentTab)
                 } else {
                     // For normal tabs create a new tab and select it
                     selectTab(addTab())
@@ -496,16 +478,16 @@ class TabManagerImplementation: NSObject,
         // If the currently selected tab has been deleted, try to select the next most reasonable tab.
         if deletedIndex == selectedIndex {
             // First, check if the user has closed the last viable tab of the current browsing mode: private or normal.
-            // If so, handle this gracefully (i.e. close the last private tab should open the most recent normal active tab).
+            // If so, handle this gracefully (i.e. close the last private tab should open the most recent normal tab).
             let viableTabs = removedTab.isPrivate
                                  ? privateTabs
-                                 : normalActiveTabs // We never want to surface an inactive tab, if inactive tabs enabled
+                                 : normalTabs
             guard !viableTabs.isEmpty else {
-                // If the selected tab is closed, and is private browsing, try to select a recent normal active tab. For all
-                // other cases, open a new normal active tab.
+                // If the selected tab is closed, and is private browsing, try to select a recent normal tab. For all
+                // other cases, open a new normal tab.
                 if removedTab.isPrivate,
-                   let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
-                    selectTab(mostRecentActiveTab, previous: removedTab)
+                   let mostRecentTab = mostRecentTab(inTabs: normalTabs) {
+                    selectTab(mostRecentTab, previous: removedTab)
                 } else {
                     selectTab(addTab(), previous: removedTab)
                 }
@@ -515,14 +497,11 @@ class TabManagerImplementation: NSObject,
             if let mostRecentViableTab = mostRecentTab(inTabs: viableTabs), mostRecentViableTab == removedTab.parent {
                 // 1. Try to select the most recently used viable tab, if it's the removed tab's parent.
                 selectTab(mostRecentViableTab, previous: removedTab)
-            } else if !removedTab.isNormalAndInactive,
-                      let rightOrLeftTab = findRightOrLeftTab(forRemovedTab: removedTab, withDeletedIndex: deletedIndex) {
-                // 2. Try to select an array neighbour of the same tab type, except if the removed tab is inactive (unlikely
-                // edge case).
+            } else if let rightOrLeftTab = findRightOrLeftTab(forRemovedTab: removedTab, withDeletedIndex: deletedIndex) {
+                // 2. Try to select an array neighbour of the same tab type
                 selectTab(rightOrLeftTab, previous: removedTab)
             } else {
-                // 3. If there are no suitable active tabs to select, create a new normal active tab.
-                // (Note: It's possible to fall into here when all tabs have become inactive, especially when debugging.)
+                // 3. If there are no suitable tabs to select, create a new normal tab.
                 selectTab(addTab(), previous: removedTab)
             }
         } else if deletedIndex < selectedIndex {
@@ -545,7 +524,7 @@ class TabManagerImplementation: NSObject,
             buildTabRestore(window: windowData)
             TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 
@@ -714,13 +693,13 @@ class TabManagerImplementation: NSObject,
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {
-            // If `tabToSelect` is nil after restoration, force selection of the most recent normal active tab if one exists.
-            guard let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) else {
+            // If `tabToSelect` is nil after restoration, force selection of the most recent normal tab if one exists.
+            guard let mostRecentTab = mostRecentTab(inTabs: normalTabs) else {
                 selectTab(addTab())
                 return
             }
 
-            selectTab(mostRecentActiveTab)
+            selectTab(mostRecentTab)
         }
     }
 
@@ -1011,29 +990,6 @@ class TabManagerImplementation: NSObject,
         }
     }
 
-    // MARK: - Inactive tabs
-    func getInactiveTabs() -> [Tab] {
-        let inactiveTabsPrefEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs) ?? true
-        let inactiveTabsEnabled = inactiveTabsPrefEnabled && !isTabTrayUIExperimentsEnabled
-        guard inactiveTabsEnabled else { return [] }
-        return inactiveTabsManager.getInactiveTabs(tabs: tabs)
-    }
-
-    func removeAllInactiveTabs() {
-        let currentModeTabs = getInactiveTabs()
-        backupCloseTabs = currentModeTabs
-        for tab in currentModeTabs {
-            self.removeTab(tab.tabUUID)
-        }
-        commitChanges()
-    }
-
-    func undoCloseInactiveTabs() {
-        tabs.append(contentsOf: backupCloseTabs)
-        commitChanges()
-        backupCloseTabs = [Tab]()
-    }
-
     func clearAllTabsHistory() {
         assert(Thread.isMainThread)
         guard let selectedTab = selectedTab, let url = selectedTab.url else { return }
@@ -1058,7 +1014,7 @@ class TabManagerImplementation: NSObject,
     }
 
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
-        let currentTabs = privateMode ? privateTabs : normalActiveTabs
+        let currentTabs = privateMode ? privateTabs : normalTabs
 
         guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else { return }
 
@@ -1207,17 +1163,17 @@ class TabManagerImplementation: NSObject,
         // neighbouring tab of the same type, we need to map this index into a subarray containing only tabs of that type.
         //
         // Example:
-        //          An array with private tabs (P), inactive normal tabs (I), and active normal tabs (A) is as follows. The
-        //          deleted index is 7, indicating normal active tab A3 was previously removed.
-        //          [P1, P2, A1, I1, A2, I2, P3, A3, A4, P4]
+        //          An array with private tabs (P) and normal tabs (N) is as follows. The
+        //          deleted index is 7, indicating normal tab N5 was previously removed.
+        //          [P1, P2, N1, N2, N3, N4, P3, N5, N6, P4]
         //                                       ^ deletedIndex is 7
         //
-        //          We can map this deletedIndex to an index into a filtered subarray containing only normal active tabs.
-        //          To do this, we count the number of normal active tabs in the `tabs` array in the range 0..<deletedIndex.
+        //          We can map this deletedIndex to an index into a filtered subarray containing only normal tabs.
+        //          To do this, we count the number of normal tabs in the `tabs` array in the range 0..<deletedIndex.
         //          In this case, there are two: A1 and A2.
         //
-        //          [A1, A2, _, A4]
-        //                   ^ deletedIndex mapped to subarray of normal active tabs is 2
+        //          [N1, N2, N3, N4, _, N6]
+        //                           ^ deletedIndex mapped to subarray of normal tabs is 4
         //
         let arraySlice = tabs[0..<deletedIndex]
 

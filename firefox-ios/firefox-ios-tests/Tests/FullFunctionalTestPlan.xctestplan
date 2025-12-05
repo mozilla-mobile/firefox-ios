@@ -179,7 +179,6 @@
         "HomePageSettingsUITests\/testTyping()",
         "HomePageUITest",
         "HomepageSearchBarTests",
-        "InactiveTabsTest\/testInactiveTabs()",
         "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",
         "JumpBackInTests\/testGroupedTabs()",

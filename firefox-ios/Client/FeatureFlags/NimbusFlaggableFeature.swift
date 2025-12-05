@@ -31,7 +31,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
-    case inactiveTabs
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
     case menuRefactor
@@ -144,8 +143,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.FirefoxSuggest
         case .hntSponsoredShortcuts:
             return FlagKeys.SponsoredShortcuts
-        case .inactiveTabs:
-            return FlagKeys.InactiveTabs
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
         case .startAtHome:

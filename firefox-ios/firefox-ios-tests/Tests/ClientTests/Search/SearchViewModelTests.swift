@@ -151,8 +151,7 @@ final class SearchViewModelTests: XCTestCase {
             title: "Mozilla 1",
             history: [],
             lastUsed: UInt64(1),
-            icon: nil,
-            inactive: false
+            icon: nil
         )
         let remoteTab2 = RemoteTab(
             clientGUID: "2",
@@ -160,8 +159,7 @@ final class SearchViewModelTests: XCTestCase {
             title: "Mozilla 2",
             history: [],
             lastUsed: UInt64(2),
-            icon: nil,
-            inactive: false
+            icon: nil
         )
         let remoteTab3 = RemoteTab(
             clientGUID: "3",
@@ -169,8 +167,7 @@ final class SearchViewModelTests: XCTestCase {
             title: "Mozilla 3",
             history: [],
             lastUsed: UInt64(3),
-            icon: nil,
-            inactive: false
+            icon: nil
         )
         let subject = createSubject()
         subject.remoteClientTabs = [ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab1),
@@ -189,8 +186,7 @@ final class SearchViewModelTests: XCTestCase {
             title: "Mozilla 1",
             history: [],
             lastUsed: UInt64(1),
-            icon: nil,
-            inactive: false
+            icon: nil
         )
         let remoteTab2 = RemoteTab(
             clientGUID: "2",
@@ -198,8 +194,7 @@ final class SearchViewModelTests: XCTestCase {
             title: "Mozilla 2",
             history: [],
             lastUsed: UInt64(2),
-            icon: nil,
-            inactive: false
+            icon: nil
         )
         let remoteTab3 = RemoteTab(
             clientGUID: "3",
@@ -207,8 +202,7 @@ final class SearchViewModelTests: XCTestCase {
             title: "Mozilla 3",
             history: [],
             lastUsed: UInt64(3),
-            icon: nil,
-            inactive: false
+            icon: nil
         )
         let subject = createSubject()
         subject.remoteClientTabs = [ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab1),

@@ -39,15 +39,8 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
 
     // MARK: - Test should Present cases
 
-    func test_shouldPresentInactiveTabsHint() {
-        let result = subject.canPresent(.inactiveTabs)
-        XCTAssertTrue(result)
-    }
-
-    func test_shouldPresentInactiveTabsHint_WithNilOverlayMode() {
-        subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: nil)
-        let result = subject.canPresent(.inactiveTabs)
+    func test_shouldPresentNavigationHint() {
+        let result = subject.canPresent(.navigation)
         XCTAssertTrue(result)
     }
 
@@ -92,13 +85,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     // MARK: - Test should NOT Present cases
-
-    func test_shouldNotPresentInactiveTabsHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.inactiveTabsKey.rawValue)
-
-        let result = subject.canPresent(.inactiveTabs)
-        XCTAssertFalse(result)
-    }
 
     func test_shouldNotPresentDataClearanceHint() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.dataClearanceKey.rawValue)
