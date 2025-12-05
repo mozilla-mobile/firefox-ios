@@ -580,7 +580,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     // MARK: - Summarize Panel
 
-    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() {
+    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async {
         setIsHostedSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
@@ -592,6 +592,14 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         let childCoordinator = subject.childCoordinators.first
         XCTAssertTrue(childCoordinator is SummarizeCoordinator)
+
+        /// Yield the main actor for one run loop, which will ensure the animations on `snapshot` finish.
+        /// This is because the `UIGraphicsImageRenderer`'s `drawHierarchy(in: bounds, afterScreenUpdates: true)` call has
+        /// `afterScreenUpdates` set to `true`, which causes UIKit to hold onto the `MockBrowserViewController` for an extra
+        /// run loop after this `@MainActor` test function and `@MainActor` tearDown() have completed, causing a crash
+        /// after the BVC's `deinit` runs and tries to unsubscribe from Redux *after* all our dependencies have been
+        /// deallocated.
+        await Task.yield()
     }
 
     func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
@@ -619,7 +627,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }))
     }
 
-    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() {
+    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async {
         setIsHostedSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
@@ -635,6 +643,14 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
             $0 is SummarizeCoordinator
         }
         XCTAssertEqual(numberOfSummarizeCoordinators, 1)
+
+        /// Yield the main actor for one run loop, which will ensure the animations on `snapshot` finish.
+        /// This is because the `UIGraphicsImageRenderer`'s `drawHierarchy(in: bounds, afterScreenUpdates: true)` call has
+        /// `afterScreenUpdates` set to `true`, which causes UIKit to hold onto the `MockBrowserViewController` for an extra
+        /// run loop after this `@MainActor` test function and `@MainActor` tearDown() have completed, causing a crash
+        /// after the BVC's `deinit` runs and tries to unsubscribe from Redux *after* all our dependencies have been
+        /// deallocated.
+        await Task.yield()
     }
 
     // MARK: - Shortcuts Library
