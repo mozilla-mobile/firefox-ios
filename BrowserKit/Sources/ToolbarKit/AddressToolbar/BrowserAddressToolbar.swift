@@ -384,6 +384,7 @@ public class BrowserAddressToolbar: UIView,
         stackView.removeAllArrangedViews()
 
         buttons.forEach { button in
+            button.removeConstraints(button.constraints)
             stackView.addArrangedSubview(button)
 
             if button.configuration?.title == nil {
@@ -397,6 +398,10 @@ public class BrowserAddressToolbar: UIView,
                     button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.height),
                 ])
                 button.setContentCompressionResistancePriority(.required, for: .horizontal)
+            }
+
+            if let tabButton = button as? TabNumberButton {
+                tabButton.addCountLabelConstraints()
             }
         }
     }

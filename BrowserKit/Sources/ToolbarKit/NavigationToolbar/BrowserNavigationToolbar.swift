@@ -104,12 +104,17 @@ public final class BrowserNavigationToolbar: UIView,
         actionStack.removeAllArrangedViews()
 
         buttons.forEach { button in
+            button.removeConstraints(button.constraints)
             actionStack.addArrangedSubview(button)
 
             NSLayoutConstraint.activate([
                 button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
                 button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
             ])
+
+            if let tabButton = button as? TabNumberButton {
+                tabButton.addCountLabelConstraints()
+            }
         }
     }
 

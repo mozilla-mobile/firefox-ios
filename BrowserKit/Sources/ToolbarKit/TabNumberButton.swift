@@ -69,6 +69,10 @@ final class TabNumberButton: ToolbarButton {
     // MARK: - Layout
     private func setupLayout() {
         addSubview(countLabel)
+        addCountLabelConstraints()
+    }
+
+    func addCountLabelConstraints() {
         NSLayoutConstraint.activate([
             countLabel.topAnchor.constraint(equalTo: topAnchor),
             countLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
