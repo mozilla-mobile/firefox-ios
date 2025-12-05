@@ -16,8 +16,8 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     var urlBar: MockURLBarView!
     var overlayState: MockOverlayModeManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         profile = MockProfile()
         urlBar = MockURLBarView()
@@ -28,14 +28,13 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
                                                    overlayState: nil)
     }
 
-    override func tearDown() {
-        super.tearDown()
-
+    override func tearDown() async throws {
         profile.shutdown()
         profile = nil
         urlBar = nil
         overlayState = nil
         subject = nil
+        try await super.tearDown()
     }
 
     // MARK: - Test should Present cases

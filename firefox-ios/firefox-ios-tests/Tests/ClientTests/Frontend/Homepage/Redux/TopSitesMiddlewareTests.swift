@@ -16,19 +16,19 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var appState: AppState!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         mockGleanWrapper = MockGleanWrapper()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockGleanWrapper = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_homepageInitializeAction_returnsTopSitesSection() throws {

@@ -7,6 +7,7 @@ import Common
 
 @testable import Client
 
+@MainActor
 final class PrivateHomepageViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
