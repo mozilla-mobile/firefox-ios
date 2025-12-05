@@ -156,6 +156,7 @@ class BrowserViewController: UIViewController,
     var headerTopConstraint: Constraint?
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
+    var topTouchAreaHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -1715,8 +1716,16 @@ class BrowserViewController: UIViewController,
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
+            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
+
+            topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
+            topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+
+        let topTouchAreaHeight = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
+        topTouchAreaHeightConstraint = topTouchArea.heightAnchor.constraint(equalToConstant: topTouchAreaHeight)
+        topTouchAreaHeightConstraint?.isActive = true
 
         if isSwipingTabsEnabled {
             NSLayoutConstraint.activate([
@@ -1788,12 +1797,7 @@ class BrowserViewController: UIViewController,
     }
 
     override func updateViewConstraints() {
-        NSLayoutConstraint.activate([
-            topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
-            topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight)
-        ])
+        topTouchAreaHeightConstraint?.constant = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
 
         readerModeBar?.snp.remakeConstraints { make in
             make.height.equalTo(UIConstants.ToolbarHeight)
