@@ -42,8 +42,16 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         let rateLimitError = LanguageModelSession.GenerationError.rateLimited(.init(debugDescription: "context"))
         let subject = createSubject(respondWithError: rateLimitError)
 
-        await assertSummarizeThrows(.rateLimited) {
+        await assertAsyncThrows(ofType: SummarizerError.self) {
+            // Consume the stream but do nothing
             _ = try await subject.summarize("t")
+        } verify: { err in
+            guard case .rateLimited = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "rateLimited")
         }
     }
 
@@ -52,8 +60,17 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
 
-        await assertSummarizeThrows(.unknown(randomError)) {
+        await assertAsyncThrows(ofType: SummarizerError.self) {
+            // Consume the stream but do nothing
             _ = try await subject.summarize("t")
+        } verify: { err in
+            guard case .unknown(let randomError) = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(randomError.localizedDescription, "The operation couldn’t be completed. (Random error error 1.)")
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "unknown(domain: Random error, code: 1)")
         }
     }
 
@@ -84,9 +101,16 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         let subject = createSubject(respondWithError: guardViolationError)
         let stream = subject.summarizeStreamed("t")
 
-        await assertSummarizeThrows(.safetyBlocked) {
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             // Consume the stream but do nothing
             for try await _ in stream { }
+        } verify: { err in
+            guard case .safetyBlocked = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "safetyBlocked")
         }
     }
 
@@ -96,9 +120,17 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         let subject = createSubject(respondWithError: randomError)
         let stream = subject.summarizeStreamed("t")
 
-        await assertSummarizeThrows(.unknown(randomError)) {
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             // Consume the stream but do nothing
             for try await _ in stream { }
+        } verify: { err in
+            guard case .unknown(let randomError) = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(randomError.localizedDescription, "The operation couldn’t be completed. (Random error error 1.)")
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "unknown(domain: Random error, code: 1)")
         }
     }
 
@@ -118,23 +150,6 @@ final class FoundationModelsSummarizerTests: XCTestCase {
             makeSession: { _ in mockSession },
             config: SummarizerConfig(instructions: "instructions", options: [:])
         )
-    }
-
-    /// Convenience method to simplify error checking in the test cases
-    private func assertSummarizeThrows(
-        _ expected: SummarizerError,
-        when running: @escaping () async throws -> Void
-    ) async {
-        do {
-            try await running()
-            XCTFail("Expected summarize to throw, but it returned normally")
-        } catch let error as SummarizerError {
-            if error != expected {
-                XCTFail("Expected \(expected) to be thrown, but got \(error) instead")
-            }
-        } catch {
-            XCTFail("Expected SummarizerError, but got non SummarizerError: \(error)")
-        }
     }
 }
 #endif

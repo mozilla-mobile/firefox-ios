@@ -59,7 +59,10 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
         subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let error = try? XCTUnwrap(result.failure())
 
-            XCTAssertEqual(error, .tosConsentMissing)
+            guard case .tosConsentMissing = error else {
+                XCTFail("Should not have been a different error, got \(String(describing: error))")
+                return
+            }
             newDataExpectation.fulfill()
         }
         wait(for: [newDataExpectation], timeout: 0.5)
@@ -187,7 +190,11 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
         subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.failure())
 
-            XCTAssertEqual(response, .unknown(error))
+            guard case .unknown(let error) = response else {
+                XCTFail("Should not have been a different error, got \(String(describing: response))")
+                return
+            }
+            XCTAssertEqual(error.localizedDescription, "The operation couldn’t be completed. ( error 0.)")
             newDataExpectation.fulfill()
         }
         wait(for: [newDataExpectation], timeout: 0.5)
@@ -204,7 +211,11 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
         subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.failure())
 
-            XCTAssertEqual(response, error)
+            guard case .cancelled = response else {
+                XCTFail("Should not have been a different error, got \(String(describing: response))")
+                return
+            }
+
             newDataExpectation.fulfill()
         }
         wait(for: [newDataExpectation], timeout: 0.5)

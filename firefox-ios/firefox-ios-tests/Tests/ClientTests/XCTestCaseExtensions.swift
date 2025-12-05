@@ -64,4 +64,35 @@ extension XCTestCase {
         TelemetryWrapper.hasTelemetryOverride = false
         DependencyHelperMock().reset()
     }
+
+    // MARK: Error Handling
+    /// Convenience method to simplify error checking in the test cases for non Equatable types.
+    func assertAsyncThrows<E: Error, T>(
+        ofType expectedType: E.Type,
+        _ expression: () async throws -> T,
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        verify: ((E) -> Void)? = nil
+    ) async {
+        do {
+            _ = try await expression()
+            XCTFail("Expected error \(expectedType), but no error thrown.", file: file, line: line)
+        } catch let error as E {
+            verify?(error)
+        } catch {
+            XCTFail("Expected error \(expectedType), but got \(error)", file: file, line: line)
+        }
+    }
+
+    /// Convenience method to simplify error checking in the test cases for Equatable types.
+    func assertAsyncThrowsEqual<E: Error & Equatable, T>(
+        _ expected: E,
+        _ expression: () async throws -> T,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        await assertAsyncThrows(ofType: E.self, expression, file: file, line: line) { error in
+            XCTAssertEqual(error, expected, file: file, line: line)
+        }
+    }
 }
