@@ -234,7 +234,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
     let TRANSLATION_CELL_TITLE = Selector.tableCellById(
         IDs.translationCellTitle,
         description: "Translation settings cell",
-        groups: ["settings", "browsing"]
+        groups: ["settings", "translation"]
     )
 
     func ALL_CELLS() -> [Selector] {
