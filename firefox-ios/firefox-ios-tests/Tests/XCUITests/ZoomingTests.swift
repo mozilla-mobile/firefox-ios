@@ -7,17 +7,17 @@ import XCTest
 final class ZoomingTests: BaseTestCase {
     private var zoomBar: ZoomBarScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = false
         setUpApp() // prepares launch arguments
         setUpScreenGraph() // builds the MappaMundi navigator
         zoomBar = ZoomBarScreen(app: app)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306947
