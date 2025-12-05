@@ -230,7 +230,9 @@ public class BrowserAddressToolbar: UIView,
             equalTo: toolbarContainerView.trailingAnchor)
         trailingBrowserActionStackConstraint?.isActive = true
 
-        locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
+        locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(
+            greaterThanOrEqualToConstant: UX.locationHeight
+        )
         locationContainerHeightConstraint?.isActive = true
 
         toolbarBottomConstraint = toolbarContainerView.bottomAnchor.constraint(
@@ -388,8 +390,8 @@ public class BrowserAddressToolbar: UIView,
 
             if button.configuration?.title == nil {
                 NSLayoutConstraint.activate([
-                    button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                    button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+                    button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
+                    button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.height),
                 ])
             } else {
                 NSLayoutConstraint.activate([
