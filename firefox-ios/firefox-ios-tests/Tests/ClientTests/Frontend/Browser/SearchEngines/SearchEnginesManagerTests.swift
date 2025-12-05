@@ -20,6 +20,7 @@ class SearchEnginesManagerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
+        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         mockSearchEngineProvider = MockSearchEngineProvider()
         searchEnginesManager = SearchEnginesManager(
