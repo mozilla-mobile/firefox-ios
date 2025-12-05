@@ -16,9 +16,14 @@ protocol WebsiteDataSelectorsSet {
     var EXAMPLE_CONTAINS: Selector { get }
     var CIRCLE_IMAGE_ANYWHERE: Selector { get }
     var STATIC_TEXT_EXAMPLE_IN_CELL: Selector { get }
+
+    @MainActor
     func clearAllLabel(in app: XCUIApplication) -> XCUIElement
+    @MainActor
     func circleImageInsideCells(_ app: XCUIApplication) -> XCUIElement
+    @MainActor
     func anyTableButton(_ app: XCUIApplication) -> XCUIElement
+
     var all: [Selector] { get }
 }
 
@@ -102,14 +107,17 @@ struct WebsiteDataSelectors: WebsiteDataSelectorsSet {
         groups: ["settings", "websitedata"]
     )
 
+    @MainActor
     func clearAllLabel(in app: XCUIApplication) -> XCUIElement {
         app.tables.cells[IDs.clearAllCell].staticTexts[IDs.clearAllLabel]
     }
 
+    @MainActor
     func circleImageInsideCells(_ app: XCUIApplication) -> XCUIElement {
         return app.cells.images.matching(identifier: IDs.circleImageId).firstMatch
     }
 
+    @MainActor
     func anyTableButton(_ app: XCUIApplication) -> XCUIElement {
         return app.tables.buttons.firstMatch
     }

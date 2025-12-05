@@ -293,6 +293,7 @@ extension MMNavigator where T == FxUserState {
         performAction(Action.LoadURLByTyping)
     }
 
+    @MainActor
     func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
         let startTime = Date()
 
@@ -306,6 +307,7 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Opens a URL in a new tab.
+    @MainActor
     func openNewURL(urlString: String) {
         let app = XCUIApplication()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
@@ -315,6 +317,7 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Add a new Tab from the New Tab option in Browser Tab Menu
+    @MainActor
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
@@ -323,6 +326,7 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Add Tab(s) from the Tab Tray
+    @MainActor
     func createSeveralTabsFromTabTray(numberTabs: Int) {
         let app = XCUIApplication()
         for _ in 1...numberTabs {

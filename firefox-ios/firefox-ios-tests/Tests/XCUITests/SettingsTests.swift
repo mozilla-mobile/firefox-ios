@@ -7,7 +7,7 @@ import XCTest
 class SettingsTests: FeatureFlaggedTestBase {
     var settingsScreen: SettingScreen!
 
-    override func tearDown() {
+    override func tearDown() async throws {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
             name.contains("testBrowsingSettingsOptionSubtitles") ||
             name.contains("testSettingsOptionSubtitlesDarkMode") ||
@@ -15,7 +15,7 @@ class SettingsTests: FeatureFlaggedTestBase {
             switchThemeToDarkOrLight(theme: "Light")
         }
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func checkShowImages(showImages: Bool = true) {
