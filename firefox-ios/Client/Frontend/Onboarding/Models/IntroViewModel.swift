@@ -23,11 +23,11 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     var introScreenManager: IntroScreenManagerProtocol?
     var chosenOptions: OnboardingOptions = []
 
-    var availableCards: [OnboardingCardViewController]
+    var availableCards: [OnboardingCardViewController<OnboardingCardInfoModel>]
     var isDismissible: Bool
     var profile: Profile
     var telemetryUtility: OnboardingTelemetryProtocol
-    private var cardModels: [OnboardingCardInfoModelProtocol]
+    private var cardModels: [OnboardingCardInfoModel]
 
     // MARK: - Initializer
     init(
@@ -51,7 +51,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     /// as we want the address bar to always be on top for iPads.
     @MainActor
     private func addCardIfNeeded(
-        for cardModel: OnboardingCardInfoModelProtocol,
+        for cardModel: OnboardingCardInfoModel,
         delegate: OnboardingCardDelegate?,
         windowUUID: WindowUUID
     ) {
@@ -59,7 +59,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
         if !(card?.action == .toolbarBottom || card?.action == .toolbarTop) || !isPad {
-            availableCards.append(OnboardingMultipleChoiceCardViewController(
+            availableCards.append(OnboardingMultipleChoiceCardViewController<OnboardingCardInfoModel>(
                 viewModel: cardModel,
                 delegate: delegate,
                 windowUUID: windowUUID))
@@ -72,7 +72,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             if cardModel.cardType == .multipleChoice {
                 addCardIfNeeded(for: cardModel, delegate: delegate, windowUUID: window)
             } else {
-                availableCards.append(OnboardingBasicCardViewController(
+                availableCards.append(OnboardingBasicCardViewController<OnboardingCardInfoModel>(
                     viewModel: cardModel,
                     delegate: delegate,
                     windowUUID: window))

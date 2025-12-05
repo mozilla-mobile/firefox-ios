@@ -6,7 +6,7 @@ import Foundation
 import OnboardingKit
 
 struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
-    var cardType: OnboardingCardType
+    var cardType: OnboardingKit.OnboardingCardType
     var name: String
     var order: Int
     var title: String
@@ -17,6 +17,8 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
     var onboardingType: OnboardingType
     var a11yIdRoot: String
+    var embededLinkText: [OnboardingKit.EmbeddedLink]
+    var defaultSelectedButton: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>?
 
     var imageID: String
 
@@ -25,30 +27,32 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     }
 
     init(
-        cardType: OnboardingCardType,
+        cardType: OnboardingKit.OnboardingCardType,
         name: String,
         order: Int,
         title: String,
         body: String,
-        link: OnboardingLinkInfoModel?,
-        buttons: OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
+        link: OnboardingKit.OnboardingLinkInfoModel?,
+        buttons: OnboardingKit.OnboardingButtons<OnboardingActions>,
+        multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
+        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?,
+        embededLinkText: [OnboardingKit.EmbeddedLink]
     ) {
         self.cardType = cardType
         self.name = name
         self.order = order
         self.title = title
         self.body = body
-        self.imageID = imageID
         self.link = link
         self.buttons = buttons
         self.multipleChoiceButtons = multipleChoiceButtons
         self.onboardingType = onboardingType
         self.a11yIdRoot = a11yIdRoot
+        self.imageID = imageID
         self.instructionsPopup = instructionsPopup
+        self.embededLinkText = embededLinkText
     }
 }
