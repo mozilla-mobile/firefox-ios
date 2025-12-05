@@ -823,8 +823,18 @@ class BrowserViewController: UIViewController,
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else { return }
+
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
+
+        let isShowingNavigationToolbar = toolbarState.isShowingNavigationToolbar
+        let needsUpdate = toolbarState.isShowingTopTabs != showTopTabs || isShowingNavigationToolbar != showNavToolbar
+
+        // Only update the UI when the value of top tabs being shown is different from what is saved in the state
+        guard (isToolbarTranslucencyRefactorEnabled && needsUpdate) || !isToolbarTranslucencyRefactorEnabled
+        else { return }
 
         if showNavToolbar {
             navigationToolbarContainer.isHidden = false
