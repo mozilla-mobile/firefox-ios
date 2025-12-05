@@ -20,7 +20,7 @@ public final class PrimaryRoundedGlassButton: PrimaryRoundedButton {
 
     // MARK: ThemeApplicable
 
-    public override func applyTheme(theme: Theme) {
+    override public func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
         foregroundColor = .invertedLabel
         setNeedsUpdateConfiguration()
