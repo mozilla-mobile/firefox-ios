@@ -95,7 +95,7 @@ final class TabScrollHandler: NSObject,
     var toolbarDisplayState = ToolbarDisplayState()
     var lastValidState: ToolbarDisplayState = .expanded
     private var isStatusBarScrollToTop = false
-    private var didTapChangePreventScrollToTop = false
+    var didTapChangePreventScrollToTop = false
 
     private weak var delegate: TabScrollHandler.Delegate?
     private let windowUUID: WindowUUID
