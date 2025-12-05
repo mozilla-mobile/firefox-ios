@@ -25,8 +25,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private var browserViewController: MockBrowserViewController!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         let mockTabManager = MockTabManager()
         self.tabManager = mockTabManager
         profile = MockProfile()
@@ -44,7 +44,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile.shutdown()
         mockRouter = nil
         profile = nil
@@ -56,7 +56,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         scrollDelegate = nil
         browserViewController = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testInitialState() {
