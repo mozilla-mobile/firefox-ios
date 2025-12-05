@@ -17,8 +17,8 @@ final class ToolbarAnimatorTests: XCTestCase {
     var context: ToolbarContext!
     var delegate: MockToolbarAnimatorDelegate!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockView = MockToolbarView()
         context = ToolbarContext(overKeyboardContainerHeight: 20,
                                  bottomContainerHeight: 80,
@@ -26,11 +26,11 @@ final class ToolbarAnimatorTests: XCTestCase {
         delegate = MockToolbarAnimatorDelegate()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockView = nil
         context = nil
         delegate = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_updateToolbarTransition_collapsed_hidesTopToolbar() {
