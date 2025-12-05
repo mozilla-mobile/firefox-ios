@@ -179,4 +179,15 @@ final class SettingScreen {
             line: line
         )
     }
+
+    func openTranslationSettings() {
+        let cell = sel.TRANSLATION_CELL_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(cell)
+        cell.waitAndTap()
+    }
+
+    func assertTranslationSettingsDoesNotExist() {
+        let cell = sel.TRANSLATION_CELL_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(cell)
+    }
 }

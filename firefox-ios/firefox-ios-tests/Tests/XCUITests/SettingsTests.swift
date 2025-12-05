@@ -318,78 +318,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(summarizeContentMenuOption)
     }
 
-    // MARK: Translation
-    // https://mozilla.testrail.io/index.php?/cases/view/3240821
-    func testTranslationSettingsShouldShow_translationExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        validateTranslationSettingsUI()
-        dismissSearchScreenFromTranslation()
-
-        navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-translation.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
-    }
-
-    func testTranslationSettingsDoesNotAppear_translationExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "translations-feature")
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        let table = app.tables.element(boundBy: 0)
-        mozWaitForElementToExist(table)
-        let translateSettings = table.cells[AccessibilityIdentifiers.Settings.Translation.title]
-        mozWaitForElementToNotExist(translateSettings)
-
-        navigator.goto(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-translation.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
-    }
-    // https://mozilla.testrail.io/index.php?/cases/edit/3210769
-    func testTranslationSettingsWithToggleOnOff_translationExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.openURL(path(forTestPage: "test-translation.html"))
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
-
-        navigator.goto(SettingsScreen)
-        let table = app.tables.element(boundBy: 0)
-        mozWaitForElementToExist(table)
-        let generalSection = table.staticTexts["GENERAL"]
-        let translationSettings = table.cells[AccessibilityIdentifiers.Settings.Translation.title]
-        XCTAssertTrue(translationSettings.isBelow(element: generalSection))
-        translationSettings.waitAndTap()
-        let translationSwitch = app.switches["Enable Translations"].firstMatch
-        translationSwitch.waitAndTap()
-        XCTAssertEqual(translationSwitch.value as? String,
-                       "0",
-                       "Translation feature - toggle is enabled by default")
-        dismissSearchScreenFromTranslation()
-
-        navigator.nowAt(BrowserTab)
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
-
-        navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(table)
-        translationSettings.waitAndTap()
-        translationSwitch.waitAndTap()
-        XCTAssertEqual(translationSwitch.value as? String,
-                       "1",
-                       "Translation feature - toggle is enabled by default")
-        dismissSearchScreenFromTranslation()
-
-        navigator.nowAt(BrowserTab)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
-        navigator.nowAt(BrowserTab)
-
-        validateTranslationSettingsUI()
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2951992
     func testAutofillPasswordSettingsOptionSubtitles() {
         app.launch()
@@ -597,26 +525,5 @@ class SettingsTests: FeatureFlaggedTestBase {
             XCTAssertTrue(i.isVisible())
         }
         app.buttons["Done"].waitAndTap()
-    }
-
-    private func validateTranslationSettingsUI() {
-        navigator.goto(SettingsScreen)
-        let table = app.tables.element(boundBy: 0)
-        mozWaitForElementToExist(table)
-        let generalSection = table.staticTexts["GENERAL"]
-        let translationSettings = table.cells[AccessibilityIdentifiers.Settings.Translation.title]
-        XCTAssertTrue(translationSettings.isBelow(element: generalSection))
-        translationSettings.waitAndTap()
-        let translationSwitch = app.switches["Enable Translations"].firstMatch
-        mozWaitForElementToExist(translationSwitch)
-        XCTAssertEqual(translationSwitch.value as? String,
-                       "1",
-                       "Translation feature - toggle is enabled by default")
-        navigator.goto(SettingsScreen)
-    }
-
-    private func dismissSearchScreenFromTranslation() {
-        app.navigationBars["Translation"].buttons["Settings"].waitAndTap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
     }
 }

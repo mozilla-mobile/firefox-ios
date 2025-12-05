@@ -38,6 +38,17 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
                 return .Toolbars.Translation.ButtonActiveAccessibilityLabel
             }
         }
+
+        var buttonA11yIdentifier: String {
+            switch self {
+            case .inactive:
+                return AccessibilityIdentifiers.Toolbar.translateButton
+            case .loading:
+                return AccessibilityIdentifiers.Toolbar.translateLoadingButton
+            case .active:
+                return AccessibilityIdentifiers.Toolbar.translateActiveButton
+            }
+        }
     }
 
     let prefs: Prefs
