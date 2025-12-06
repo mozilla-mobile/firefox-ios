@@ -80,7 +80,7 @@ export let FormLikeFactory = {
    * "forms" (e.g. registration and login) on one page with a <form>.
    *
    * @param {HTMLElement} aDocumentRoot
-   * @param {Object} aOptions
+   * @param {object} aOptions
    * @param {boolean} [aOptions.ignoreForm = false]
    *        True to always use owner document as the `form`
    * @return {formLike}
@@ -136,7 +136,7 @@ export let FormLikeFactory = {
    *
    * @param {HTMLInputElement|HTMLSelectElement} aField
    *        an <input>, <select> or <iframe> field in a document
-   * @param {Object} aOptions
+   * @param {object} aOptions
    * @param {boolean} [aOptions.ignoreForm = false]
    *        True to always use owner document as the `form`
    * @return {FormLike}
