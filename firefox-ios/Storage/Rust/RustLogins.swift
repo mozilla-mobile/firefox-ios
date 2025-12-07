@@ -328,21 +328,23 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
 
             self.getStoredKey { result in
                 // `getStoredKey` can invoke its completion on an arbitrary queue. Hop back to our
-                                // serial queue before touching storage/FFI to avoid racing with other operations.
-                                self.queue.async {
-                                    switch result {
-                                    case .success:
-                                        do {
-                                            try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
-                                            completionHandler(true)
-                                        } catch let err as NSError {
-                                            self.logger.log("Error verifying logins",
-                                                            level: .warning,
-                                                            category: .storage,
-                                                            description: err.localizedDescription)
-                                            completionHandler(false)
-                                        }
-                                    case .failure:
+                // serial queue before touching storage/FFI to avoid racing with other operations.
+                self.queue.async {
+                    switch result {
+                    case .success:
+                        do {
+                            try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
+                            completionHandler(true)
+                        } catch let err as NSError {
+                            self.logger.log(
+                                "Error verifying logins",
+                                level: .warning,
+                                category: .storage,
+                                description: err.localizedDescription
+                            )
+                            completionHandler(false)
+                        }
+                    case .failure:
                         completionHandler(false)
                     }
                 }
@@ -479,17 +481,17 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
 
             self.getStoredKey { result in
                 // `getStoredKey` may call back on a background queue. Dispatch to the serial queue
-                                // before calling into storage/FFI to maintain queue confinement.
-                                self.queue.async {
-                                    switch result {
-                                    case .success:
-                                        do {
-                                            let login = try self.storage?.add(login: login)
-                                            completionHandler(.success(login))
-                                        } catch let err as NSError {
-                                            completionHandler(.failure(err))
-                                        }
-                                    case .failure(let err):
+                // before calling into storage/FFI to maintain queue confinement.
+                self.queue.async {
+                    switch result {
+                    case .success:
+                        do {
+                            let login = try self.storage?.add(login: login)
+                            completionHandler(.success(login))
+                        } catch let err as NSError {
+                            completionHandler(.failure(err))
+                        }
+                    case .failure(let err):
                         completionHandler(.failure(err))
                     }
                 }
