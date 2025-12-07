@@ -17,8 +17,7 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
         "formSubmitUrl": "https://example.com",
         "username": "username",
         "password": "password"
-    ])
-    
+    ])    
     static func loginFactory(number: Int) -> LoginEntry {
         LoginEntry(fromJSONDict: [
             "hostname": "https://example\(number).com",
