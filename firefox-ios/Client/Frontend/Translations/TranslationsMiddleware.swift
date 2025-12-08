@@ -129,7 +129,7 @@ final class TranslationsMiddleware {
     /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
         Task { @MainActor in
-            guard action.translationConfiguration?.canTranslate == true else { return }
+            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
 
             do {
                 guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
@@ -157,7 +157,6 @@ final class TranslationsMiddleware {
         }
     }
 
-    // TODO: FXIOS-13844 - Start translation a page and dispatch action after completion
     @MainActor
     private func retrieveTranslations(for action: Action) {
         // We dispatch an action for now, but eventually we want to inject a script
@@ -185,6 +184,12 @@ final class TranslationsMiddleware {
                 translationsTelemetry.translationFailed(
                     translationFlowId: flowId(for: action.windowUUID),
                     errorType: serviceError.telemetryDescription
+                )
+                logger.log(
+                    "Unable to translate page, so translation failed.",
+                    level: .warning,
+                    category: .translations,
+                    extra: ["Translations error": "\(error.localizedDescription)"]
                 )
                 self.handleErrorFromTranslatingPage(for: action)
             }
