@@ -316,6 +316,7 @@ class CodeUsageDetector {
         case deferred
         case swiftUIText
         case task
+        case notifiable
 
         var message: String {
             switch self {
@@ -336,6 +337,9 @@ class CodeUsageDetector {
                 New `Task {}` added in file %@ at line %d.
                 Please add a concurrency reviewer on your PR: \(contacts)
                 """
+            case .notifiable:
+                let usage = "Please prefer Notifiable over `NotificationCenter` unless specific circumstances."
+                return "`NotificationCenter.default.addObserver` detected in file %@ at line %d. \(usage)"
             }
         }
 
@@ -353,9 +357,12 @@ class CodeUsageDetector {
                 return " Text(\""
             case .task:
                 return " Task {"
+            case .notifiable:
+                return "NotificationCenter.default.addObserver("
             }
         }
 
+        // Comment with `markdown` instead of `warn` or `fail`. Has precedence over `shouldWarn`.
         var shouldComment: Bool {
             switch self {
             case .task:
@@ -365,9 +372,10 @@ class CodeUsageDetector {
             }
         }
 
+        // Decide if we want to `warn` instead of `fail` on the pull request.
         var shouldWarn: Bool {
             switch self {
-            case .deferred:
+            case .deferred, .notifiable:
                 return true
             default:
                 return false
