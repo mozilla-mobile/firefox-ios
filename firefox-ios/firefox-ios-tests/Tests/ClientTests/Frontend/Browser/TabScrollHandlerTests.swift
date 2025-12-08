@@ -95,6 +95,18 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.showCount, 1, "scrollToTop should call show if collapsed")
     }
 
+    func test_scrollToTop_whenDidTapChangePreventScrollToTop_isTrue_returnsFalse() {
+        let subject = createSubject()
+        subject.hideToolbars(animated: true)
+
+        subject.didTapChangePreventScrollToTop = true
+
+        let should = subject.scrollViewShouldScrollToTop(tab.webView!.scrollView)
+
+        XCTAssertFalse(should, "scrollToTop should return false when didTapChangePreventScrollToTop is true")
+        XCTAssertFalse(subject.didTapChangePreventScrollToTop, "Flag should reset to false after method call")
+    }
+
     // MARK: - Transitioning state
 
     /// From expanded → user starts a small downward drag (transitioning),
