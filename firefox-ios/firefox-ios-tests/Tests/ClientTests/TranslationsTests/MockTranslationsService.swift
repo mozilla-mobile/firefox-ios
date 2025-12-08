@@ -8,58 +8,43 @@ import Common
 
 /// Test helper that simulates the translations service.
 final class MockTranslationsService: TranslationsServiceProtocol {
-    private let shouldOfferTranslationResult: Bool
-    private let shouldOfferTranslationError: Error?
+    // MARK: - Results
+    private let shouldOfferTranslationResult: Result<Bool, Error>
+    private let translateResult: Result<Void, Error>
+    private let firstResponseReceivedResult: Result<Void, Error>
+    private let discardResult: Result<Void, Error>
 
-    private let translateError: Error?
-
-    private let firstResponseReceivedResult: Bool
-    private let firstResponseReceivedError: Error?
-
-    private let discardError: Error?
-
-    private(set) var shouldOfferTranslationCalledWith: WindowUUID?
-    private(set) var translateCalledWith: WindowUUID?
-    private(set) var firstResponseReceivedCalledWith: WindowUUID?
-    private(set) var discardCalledWith: WindowUUID?
-
+    // MARK: - Init
     init(
-        shouldOfferTranslationResult: Bool = false,
-        shouldOfferTranslationError: Error? = nil,
-        translateError: Error? = nil,
-        firstResponseReceivedResult: Bool = true,
-        firstResponseReceivedError: Error? = nil,
-        discardError: Error? = nil
+        shouldOfferTranslationResult: Result<Bool, Error> = .success(false),
+        translateResult: Result<Void, Error> = .success(()),
+        firstResponseReceivedResult: Result<Void, Error> = .success(()),
+        discardResult: Result<Void, Error> = .success(())
     ) {
         self.shouldOfferTranslationResult = shouldOfferTranslationResult
-        self.shouldOfferTranslationError = shouldOfferTranslationError
-        self.translateError = translateError
+        self.translateResult = translateResult
         self.firstResponseReceivedResult = firstResponseReceivedResult
-        self.firstResponseReceivedError = firstResponseReceivedError
-        self.discardError = discardError
+        self.discardResult = discardResult
     }
 
+    // MARK: - TranslationsServiceProtocol
     func shouldOfferTranslation(for windowUUID: WindowUUID) async throws -> Bool {
-        shouldOfferTranslationCalledWith = windowUUID
-        if let error = shouldOfferTranslationError { throw error }
-        return shouldOfferTranslationResult
+        return try shouldOfferTranslationResult.get()
     }
 
     func translateCurrentPage(
         for windowUUID: WindowUUID,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
-        translateCalledWith = windowUUID
-        if let error = translateError { throw error }
+        try translateResult.get()
+        onLanguageIdentified?("en", "de")
     }
 
     func firstResponseReceived(for windowUUID: WindowUUID) async throws {
-        firstResponseReceivedCalledWith = windowUUID
-        if let error = firstResponseReceivedError { throw error }
+        try firstResponseReceivedResult.get()
     }
 
     func discardTranslations(for windowUUID: WindowUUID) async throws {
-        discardCalledWith = windowUUID
-        if let error = discardError { throw error }
+        try discardResult.get()
     }
 }
