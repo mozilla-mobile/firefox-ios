@@ -52,8 +52,11 @@ extension String {
 }
 
 protocol ShareControllerDelegate: AnyObject {
+    @MainActor
     func finish(afterDelay: TimeInterval)
+    @MainActor
     func getValidExtensionContext() -> NSExtensionContext?
+    @MainActor
     func hidePopupWhenShowingAlert()
 }
 

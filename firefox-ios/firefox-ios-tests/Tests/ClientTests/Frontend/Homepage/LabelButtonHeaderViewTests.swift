@@ -7,6 +7,7 @@ import Common
 
 @testable import Client
 
+@MainActor
 final class LabelButtonHeaderViewTests: XCTestCase {
     let theme = DarkTheme()
     let sectionHeaderState = SectionHeaderConfiguration(title: "test title", a11yIdentifier: "test a11y identifier")

@@ -10,7 +10,7 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import class MozillaAppServices.BookmarkNodeData
 
-final class BookmarksHandlerMock: BookmarksHandler {
+final class BookmarksHandlerMock: BookmarksHandler, @unchecked Sendable {
     private let bookmarkFolderData = BookmarkFolderData(
         guid: "1",
         dateAdded: Int64(Date().toTimestamp()),

@@ -43,7 +43,7 @@ class FeatureFlaggedTestSuite: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: jsonFileName, featureName: featureName)
     }
 
-    override func setUp() {
+    override func setUp() async throws {
         continueAfterFailure = false
         setUpExperimentVariables()
         setUpApp()

@@ -166,6 +166,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         addObservers()
 
+        /// Prewarm translation resources off the main thread
+        /// This will fetch the translator WASM and model attachments for the device language.
+        /// Running this on a utility QoS to avoid impacting app launch time.
+        if TranslationConfiguration(prefs: profile.prefs).canTranslate {
+            DispatchQueue.global(qos: .utility).async {
+                ASTranslationModelsFetcher().prewarmResourcesForStartup()
+            }
+        }
+
         logger.log("didFinishLaunchingWithOptions end",
                    level: .info,
                    category: .lifecycle)

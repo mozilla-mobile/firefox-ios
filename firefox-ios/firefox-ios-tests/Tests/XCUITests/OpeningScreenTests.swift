@@ -7,8 +7,6 @@ class OpeningScreenTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307039
     func testLastOpenedTab() {
         // Open a web page
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
         waitUntilPageLoad()
         // Close the app from app switcher. Relaunch the app

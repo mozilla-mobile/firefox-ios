@@ -39,6 +39,11 @@ features:
           Enables translucency for toolbars.
         type: Boolean
         default: true
+      translucency-refactor:
+        description: >
+          Enables translucency refactor for toolbars.
+        type: Boolean
+        default: false
       minimal_address_bar:
         description: >
           Enables minimal address bar mode on scroll to ensure the url is always visible.
@@ -65,6 +70,7 @@ features:
           toolbar_update_hint: false
           swiping_tabs: true
           translucency: true
+          translucency-refactor: false
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1
@@ -77,6 +83,7 @@ features:
           toolbar_update_hint: false
           swiping_tabs: true
           translucency: true
+          translucency-refactor: false
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1

@@ -13,8 +13,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockNotificationCenter: MockNotificationCenter!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockGleanWrapper = MockGleanWrapper()
         mockNotificationCenter = MockNotificationCenter()
         DependencyHelperMock().bootstrapDependencies()
@@ -22,12 +22,12 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         mockGleanWrapper = nil
         mockNotificationCenter = nil
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_init_setsUpNotifications() {

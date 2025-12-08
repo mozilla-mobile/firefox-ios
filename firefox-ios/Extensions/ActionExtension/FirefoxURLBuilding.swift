@@ -48,8 +48,9 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
 
     func findURLInItems(_ items: [NSExtensionItem], completion: @escaping (Result<ShareItem, Error>) -> Void) {
         let group = DispatchGroup()
-        var foundShareItem: ShareItem?
-        var lastError: Error?
+        // TODO: FXIOS-14296 These should be made actually threadsafe
+        nonisolated(unsafe) var foundShareItem: ShareItem?
+        nonisolated(unsafe) var lastError: Error?
 
         for item in items {
             guard let attachments = item.attachments else { continue }
@@ -84,8 +85,9 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
 
     func findTextInItems(_ items: [NSExtensionItem], completion: @escaping (Result<ExtractedShareItem, Error>) -> Void) {
         let group = DispatchGroup()
-        var foundItem: ExtractedShareItem?
-        var lastError: Error?
+        // TODO: FXIOS-14296 These should be made actually threadsafe
+        nonisolated(unsafe) var foundItem: ExtractedShareItem?
+        nonisolated(unsafe) var lastError: Error?
 
         for item in items {
             guard let attachments = item.attachments else { continue }

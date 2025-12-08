@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Storage
 import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
@@ -129,6 +130,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         struct BookmarksConstants {
             static let cellHeight: CGFloat = 110
             static let cellWidth: CGFloat = 150
+            static let redesignedCellWidth: CGFloat = 134
         }
     }
 
@@ -140,9 +142,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
    /// of the inputs differ between layout passes.
    private var measurementsCache = HomepageLayoutMeasurementCache()
     private var headerHeightCache: [HeaderMeasurementKey: CGFloat] = [:]
-    private var isStoriesRedesignEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
-    }
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
@@ -178,8 +177,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 config: configuration
             )
         case .pocket:
-            return isStoriesRedesignEnabled ? createStoriesSectionLayout(for: environment)
-                                            : createPocketSectionLayout(for: traitCollection)
+            return isAnyStoriesRedesignEnabled ? createStoriesSectionLayout(for: environment)
+                                               : createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
             return createSingleItemSectionLayout(
                 for: traitCollection,
@@ -187,7 +186,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 bottomInsets: UX.spacingBetweenSections
             )
         case .bookmarks:
-            return createBookmarksSectionLayout(for: traitCollection)
+            return createBookmarksSectionLayout(for: environment)
         case .spacer:
             return createSpacerSectionLayout(for: environment)
         }
@@ -328,8 +327,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let bottomInset = isStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
-                                                   : UX.spacingBetweenSections - UX.interGroupSpacing
+        let bottomInset = isAnyStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
+                                                      : UX.spacingBetweenSections - UX.interGroupSpacing
         section.contentInsets.top = 0
         section.contentInsets.bottom = bottomInset
 
@@ -458,16 +457,22 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
-    private func createBookmarksSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    private func createBookmarksSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let cellWidth = isAnyStoriesRedesignEnabled ? UX.BookmarksConstants.redesignedCellWidth
+                                                    : UX.BookmarksConstants.cellWidth
+
+        let bookmarksMeasurement = getBookmarksMeasurement(environment: environment, cellWidth: cellWidth)
+        let tallestCellHeight = bookmarksMeasurement.tallestCellHeight
+
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(UX.BookmarksConstants.cellWidth),
-            heightDimension: .estimated(UX.BookmarksConstants.cellHeight)
+            widthDimension: .absolute(cellWidth),
+            heightDimension: .absolute(tallestCellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(UX.BookmarksConstants.cellWidth),
-            heightDimension: .estimated(UX.BookmarksConstants.cellHeight)
+            widthDimension: .absolute(cellWidth),
+            heightDimension: .absolute(tallestCellHeight)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
@@ -484,7 +489,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: leadingInset,
@@ -512,9 +517,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
+        let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
+        let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
         let storiesHeight = getStoriesSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
-        let spacerHeight = max(0.1, availableContentHeight - topSitesHeight - storiesHeight - searchBarHeight)
+        let spacerHeight = max(
+            0.1,
+            availableContentHeight - topSitesHeight - jumpBackInHeight - bookmarksHeight - storiesHeight - searchBarHeight
+        )
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .absolute(spacerHeight))
@@ -613,6 +623,89 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return totalHeight
     }
 
+    /// Creates a "dummy" jump back in section and returns its height
+    private func getJumpBackInSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        // Ensures we have at least 1 jump back in tab to show
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        let jumpBackInState = state.jumpBackInState
+        guard jumpBackInState.shouldShowSection,
+              jumpBackInState.mostRecentSyncedTab != nil || !jumpBackInState.jumpBackInTabs.isEmpty else { return 0 }
+
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let jumpBackInConfig = HomepageDimensionCalculator.retrieveJumpBackInDisplayInfo(
+            traitCollection: environment.traitCollection
+        )
+        let numberOfLocalTabsToShow = min(
+            jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
+            jumpBackInState.jumpBackInTabs.count
+        )
+
+        let key = HomepageLayoutMeasurementCache.JumpBackInMeasurement.Key(
+            syncedTabConfig: jumpBackInState.mostRecentSyncedTab,
+            maxNumberOfLocalTabs: jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
+            numberOfLocalTabsToShow: numberOfLocalTabsToShow,
+            headerState: jumpBackInState.sectionHeaderState,
+            containerWidth: containerWidth,
+            shouldShowSection: jumpBackInState.shouldShowSection,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches
+        if let cachedHeight = measurementsCache.height(for: key) {
+            return cachedHeight
+        }
+
+        // Calculate jump back in sections new height
+        var totalHeight: CGFloat = 0
+        var totalCells = 0
+
+        // Add height of synced tab cell (if it exists)
+        if let syncedTabConfig = jumpBackInState.mostRecentSyncedTab {
+            let syncedTabCell = SyncedTabCell()
+            syncedTabCell.configure(configuration: syncedTabConfig,
+                                    theme: LightTheme(),
+                                    onTapShowAllAction: nil,
+                                    onOpenSyncedTabAction: nil)
+            let syncedTabCellHeight = HomepageDimensionCalculator.fittingHeight(for: syncedTabCell,
+                                                                                width: containerWidth)
+            totalCells += 1
+            totalHeight += syncedTabCellHeight
+        }
+
+        // Add height of local tab cell(s) (if they exists)
+        for i in 0..<jumpBackInConfig.getMaxNumberOfLocalTabsLayout {
+            if let tabConfig = jumpBackInState.jumpBackInTabs[safe: i] {
+                let jumpBackInCell = JumpBackInCell()
+                jumpBackInCell.configure(config: tabConfig, theme: LightTheme())
+                let jumpBackInCellHeight = HomepageDimensionCalculator.fittingHeight(for: jumpBackInCell,
+                                                                                     width: containerWidth)
+                totalCells += 1
+                totalHeight += jumpBackInCellHeight
+            }
+        }
+
+        // Add group spacing
+        totalHeight += totalCells > 1 ? UX.interGroupSpacing : 0
+
+        // Add header height
+        totalHeight += getHeaderHeight(headerState: jumpBackInState.sectionHeaderState, environment: environment)
+
+        // Add section insets
+        totalHeight += UX.spacingBetweenSections
+
+        // Save cached section height
+        measurementsCache.setHeight(totalHeight, for: key)
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" bookmarks section and returns its height
+    private func getBookmarksSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        let cellWidth = UX.BookmarksConstants.redesignedCellWidth
+        let bookmarksMeasurement = getBookmarksMeasurement(environment: environment, cellWidth: cellWidth)
+        return bookmarksMeasurement.totalHeight
+    }
+
     /// Creates a "dummy" stories section and returns its height
     private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
@@ -694,6 +787,68 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return headerHeight
     }
 
+    /// Gets the bookmarks measurement (tallest cell height and section height)
+    private func getBookmarksMeasurement(environment: NSCollectionLayoutEnvironment,
+                                         cellWidth: CGFloat) -> HomepageLayoutMeasurementCache.BookmarksMeasurement.Result {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return HomepageLayoutMeasurementCache.BookmarksMeasurement.Result(
+                tallestCellHeight: 0,
+                totalHeight: 0
+            )
+        }
+        let bookmarkState = state.bookmarkState
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let key = HomepageLayoutMeasurementCache.BookmarksMeasurement.Key(
+            bookmarks: bookmarkState.bookmarks,
+            headerState: bookmarkState.sectionHeaderState,
+            containerWidth: containerWidth,
+            shouldShowSection: bookmarkState.shouldShowSection,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedResult = measurementsCache.result(for: key) {
+            return cachedResult
+        }
+
+        // If we're not showing the section, or don't have any bookmarks, cache and return 0 for the results
+        guard bookmarkState.shouldShowSection, bookmarkState.bookmarks.first != nil else {
+            let result = HomepageLayoutMeasurementCache.BookmarksMeasurement.Result(
+                tallestCellHeight: 0,
+                totalHeight: 0
+            )
+            measurementsCache.setResult(result, for: key)
+            return result
+        }
+
+        // Create a cell for each bookmark to be used to calculate the tallest cell height so that we ensure all cells
+        // remain uniform
+        // TODO: FXIOS-12727 - Investigate replacing this code with `uniformAcrossSiblings` API in iOS 17+
+        let bookmarkCells: [BookmarksCellProtocol] = bookmarkState.bookmarks.map { bookmark in
+            let cell: BookmarksCellProtocol = isAnyStoriesRedesignEnabled ? BookmarksCell() : LegacyBookmarksCell()
+            cell.configure(config: bookmark, theme: LightTheme())
+            return cell
+        }
+
+        let tallestCellHeight = HomepageDimensionCalculator.getTallestViewHeight(
+            views: bookmarkCells,
+            viewWidth: cellWidth
+        )
+
+        // Get the rest of the section's height and cache and return the results
+        let headerHeight = getHeaderHeight(headerState: bookmarkState.sectionHeaderState, environment: environment)
+        let totalHeight = headerHeight
+            + tallestCellHeight
+            + UX.spacingBetweenSections
+
+        let result = HomepageLayoutMeasurementCache.BookmarksMeasurement.Result(
+            tallestCellHeight: tallestCellHeight,
+            totalHeight: totalHeight
+        )
+        measurementsCache.setResult(result, for: key)
+        return result
+    }
+
     // Determines the tallest story cell so that all story cells can have a uniform height. This is accomplished by creating
     // "dummy" (never rendered) cells to determine the height of the tallest cell.
     // Although this calculation occurs every time the layout is updated (with each new HomepageState), no noticeable
@@ -717,7 +872,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             cellWidth: normalizedDimension(cellWidth),
             containerWidth: normalizedDimension(environment.container.contentSize.width),
             shouldShowSection: storiesState.shouldShowSection,
-            isStoriesRedesignEnabled: isStoriesRedesignEnabled,
+            isStoriesRedesignEnabled: isAnyStoriesRedesignEnabled,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
             )
 
@@ -759,6 +914,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return result
     }
 
+    // Round to the nearest thousandth
     private func normalizedDimension(_ value: CGFloat) -> Double {
         return Double((value * 1000).rounded() / 1000)
     }

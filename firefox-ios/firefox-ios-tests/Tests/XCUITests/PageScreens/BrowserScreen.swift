@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class BrowserScreen {
     private let app: XCUIApplication
     private let sel: BrowserSelectorsSet
@@ -253,5 +254,9 @@ final class BrowserScreen {
     func getAddressBarElement() -> XCUIElement {
         BaseTestCase().mozWaitForElementToExist(addressBar)
         return addressBar
+    }
+
+    func tapCancelButtonOnUrlWithRetry() {
+        cancelButton.tapWithRetry()
     }
 }

@@ -22,7 +22,6 @@ final class LocationView: UIView,
         static let iconAnimationDelay: CGFloat = 0.03
         static let bottomAddressBarYoffset: CGFloat = -16
         static let bottomAddressBarYoffsetForHomeButton: CGFloat = -28
-        static let bottomAddressBarYoffsetForDefaultScale: CGFloat = -10
         static let topAddressBarYoffset: CGFloat = 26
         static let smallScale: CGFloat = 0.7
         static let identityResetAnimationDuration: TimeInterval = 0.2
@@ -87,7 +86,6 @@ final class LocationView: UIView,
     private lazy var containerView: UIView = .build()
 
     private var containerViewConstraints: [NSLayoutConstraint] = []
-    private var effectViewBottomConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
     private var urlTextFieldTrailingConstraint: NSLayoutConstraint?
     private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
@@ -108,11 +106,9 @@ final class LocationView: UIView,
         button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
     }
 
+    private lazy var glassEffect: UIVisualEffect? = if #available(iOS 26.0, *) { UIGlassEffect() } else { nil }
     private lazy var effectView: UIVisualEffectView = .build {
-        if #available(iOS 26.0, *) {
-            $0.effect = UIGlassEffect()
-            $0.layer.cornerRadius = UX.effectViewCornerRadius
-        }
+        $0.layer.cornerRadius = UX.effectViewCornerRadius
     }
 
     // MARK: - URL Text Field
@@ -166,6 +162,7 @@ final class LocationView: UIView,
         self.config = config
         isURLTextFieldCentered = uxConfig.isLocationTextCentered
         hasAlternativeLocationColor = uxConfig.hasAlternativeLocationColor
+
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
@@ -180,8 +177,7 @@ final class LocationView: UIView,
 
         applyToolbarAlphaIfNeeded(
             alpha: uxConfig.scrollAlpha,
-            barPosition: addressBarPosition,
-            isKeyboardVisible: config.shouldShowKeyboard
+            barPosition: addressBarPosition
         )
         configureLockIconButton(config)
         configureURLTextField(config)
@@ -262,21 +258,20 @@ final class LocationView: UIView,
     private func setupLayout() {
         if #available(iOS 26.0, *) {
             addSubview(effectView)
-            effectView.contentView.addSubview(urlTextField)
+            effectView.contentView.addSubview(containerView)
         } else {
-            containerView.addSubview(urlTextField)
+            addSubview(containerView)
         }
-        addSubview(containerView)
-        containerView.addSubviews(iconContainerStackView, gradientView)
+        containerView.addSubviews(urlTextField, iconContainerStackView, gradientView)
         if #available(iOS 26.0, *) {
             NSLayoutConstraint.activate([
                 effectView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
                 effectView.leadingAnchor.constraint(equalTo: iconContainerStackView.leadingAnchor,
                                                     constant: UX.effectViewLeadingPadding),
                 effectView.trailingAnchor.constraint(equalTo: urlTextField.trailingAnchor,
-                                                     constant: UX.effectViewTrailingPadding)
+                                                     constant: UX.effectViewTrailingPadding),
+                effectView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor)
             ])
-            effectViewBottomConstraint = effectView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor)
         }
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
@@ -434,7 +429,7 @@ final class LocationView: UIView,
     }
 
     // MARK: - LocationView Scaling
-    private func shrinkLocationView(barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+    private func shrinkLocationView(barPosition: AddressToolbarPosition) {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let bottomAddressBarYoffset = if #available(iOS 26.0, *) {
             UX.bottomAddressBarYoffset
@@ -443,10 +438,7 @@ final class LocationView: UIView,
         }
         let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? bottomAddressBarYoffset : UX.topAddressBarYoffset
         let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
-        transform = isKeyboardVisible ? CGAffineTransform(
-            translationX: 0,
-            y: UX.bottomAddressBarYoffsetForDefaultScale
-        ) : scaledTransformation
+        transform = scaledTransformation
         urlTextField.isUserInteractionEnabled = false
     }
 
@@ -464,16 +456,27 @@ final class LocationView: UIView,
         )
     }
 
-    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+    private func removeGlassEffectImmediately() {
+        guard #available(iOS 26.0, *) else { return }
+        /// Workaround for iOS 26.0 bug: Setting `effectView.effect` to `nil` doesn't remove the glass effect.
+        /// We work around this by first setting it to `UIBlurEffect()` and then to `nil`, which forces an immediate removal.
+        effectView.effect = UIBlurEffect()
+        effectView.effect = nil
+    }
+
+    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
-        if #available(iOS 26.0, *) {
-            effectViewBottomConstraint?.isActive = scrollAlpha.isZero && barPosition == .bottom && !isKeyboardVisible
-        }
         if scrollAlpha.isZero {
-            shrinkLocationView(barPosition: barPosition, isKeyboardVisible: isKeyboardVisible)
+            shrinkLocationView(barPosition: barPosition)
+            if #available(iOS 26.0, *), barPosition == .bottom {
+                effectView.effect = glassEffect
+            } else {
+                removeGlassEffectImmediately()
+            }
         } else {
             restoreLocationViewSize()
+            removeGlassEffectImmediately()
         }
         if let theme { applyTheme(theme: theme) }
     }
@@ -723,12 +726,12 @@ final class LocationView: UIView,
         let colors = theme.colors
 
         let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
-        if #available(iOS 26.0, *), scrollAlpha.isZero, config?.shouldShowKeyboard == false {
+        if #available(iOS 26.0, *), scrollAlpha.isZero {
             // We want to use system colors when the location view is fully transparent
             // To make sure it blends well with the background when using glass effect.
             urlTextFieldColor =  .label
-            urlTextFieldSubdomainColor = .systemGray
-            lockIconButton.tintColor = .systemGray
+            urlTextFieldSubdomainColor = .label
+            lockIconButton.tintColor = .label
         } else {
             urlTextFieldColor = colors.textPrimary
             urlTextFieldSubdomainColor = colors.textSecondary

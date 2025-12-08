@@ -26,7 +26,6 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
-    private let defaultBrowserUtil: DefaultBrowserUtil
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -34,12 +33,10 @@ final class LaunchCoordinator: BaseCoordinator,
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
-         defaultBrowserUtil: DefaultBrowserUtil = DefaultBrowserUtil()) {
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.profile = profile
         self.isIphone = isIphone
         self.windowUUID = windowUUID
-        self.defaultBrowserUtil = defaultBrowserUtil
         super.init(router: router)
     }
 
@@ -103,8 +100,8 @@ final class LaunchCoordinator: BaseCoordinator,
                 order: 20,
                 title: .Onboarding.Modern.TermsOfService.Title,
                 body: .Onboarding.Modern.TermsOfService.Subtitle,
-                buttons: OnboardingKit.OnboardingButtons(
-                    primary: OnboardingKit.OnboardingButtonInfoModel(
+                buttons: OnboardingButtons(
+                    primary: OnboardingButtonInfoModel(
                         title: .Onboarding.Modern.TermsOfService.AgreementButtonTitleV3,
                         action: OnboardingActions.syncSignIn
                     )
@@ -256,44 +253,70 @@ final class LaunchCoordinator: BaseCoordinator,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: manager.onboardingVariant,
-            isDefaultBrowser: defaultBrowserUtil.isDefaultBrowser,
+            isDefaultBrowser: DefaultBrowserUtility().isDefaultBrowser,
             isIpad: UIDevice.current.userInterfaceIdiom == .pad
         ).getOnboardingModel(
             for: .freshInstall
         )
         let activityEventHelper = ActivityEventHelper()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(
+            with: onboardingModel,
+            onboardingVariant: manager.onboardingVariant
+        )
+
+        let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
+            onboardingCards: onboardingModel.cards,
+            skipText: .Onboarding.LaterAction,
+            onActionTap: { @MainActor [weak self] action, cardName, completion in
+                self?.onboardingService.handleAction(
+                    action,
+                    from: cardName,
+                    cards: onboardingModel.cards,
+                    with: activityEventHelper,
+                    completion: completion
+                )
+            },
+            onMultipleChoiceActionTap: { [weak self] action, cardName in
+                self?.onboardingService.handleMultipleChoiceAction(
+                    action,
+                    from: cardName
+                )
+            },
+            onComplete: { [weak self] currentCardName in
+                guard let self = self else { return }
+                manager.didSeeIntroScreen()
+                SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+                parentCoordinator?.didFinishLaunch(from: self)
+            }
+        )
+
+        flowViewModel.onCardView = { cardName in
+            telemetryUtility.sendCardViewTelemetry(from: cardName)
+        }
+
+        flowViewModel.onButtonTap = { cardName, action, isPrimary in
+            telemetryUtility.sendButtonActionTelemetry(
+                from: cardName,
+                with: action,
+                and: isPrimary
+            )
+        }
+
+        flowViewModel.onMultipleChoiceTap = { cardName, action in
+            telemetryUtility.sendMultipleChoiceButtonActionTelemetry(
+                from: cardName,
+                with: action
+            )
+        }
+
+        flowViewModel.onDismiss = { cardName in
+            telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
+        }
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: OnboardingFlowViewModel(
-                onboardingCards: onboardingModel.cards,
-                skipText: .Onboarding.LaterAction,
-                onActionTap: { @MainActor [weak self] action, cardName, completion in
-                    self?.onboardingService.handleAction(
-                        action,
-                        from: cardName,
-                        cards: onboardingModel.cards,
-                        with: activityEventHelper,
-                        completion: completion
-                    )
-                },
-                onMultipleChoiceActionTap: { [weak self] action, cardName in
-                    self?.onboardingService.handleMultipleChoiceAction(
-                        action,
-                        from: cardName
-                    )
-                },
-                onComplete: { [weak self] currentCardName in
-                    guard let self = self else { return }
-                    manager.didSeeIntroScreen()
-                    SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
-                    telemetryUtility.sendDismissOnboardingTelemetry(from: currentCardName)
-
-                    parentCoordinator?.didFinishLaunch(from: self)
-                }
-            )
+            viewModel: flowViewModel
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)

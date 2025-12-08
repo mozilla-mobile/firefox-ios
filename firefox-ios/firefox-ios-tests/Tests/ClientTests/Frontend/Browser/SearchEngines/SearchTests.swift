@@ -56,6 +56,7 @@ class SearchTests: XCTestCase {
         checkValidURL(" 创业咖啡.中国 ", afterFixup: "http://xn--vhq70hq9bhxa.xn--fiqs8s")
     }
 
+    @MainActor
     func testSuggestClient() {
         let webServerBase = startMockSuggestServer()
         let engine = OpenSearchEngine(

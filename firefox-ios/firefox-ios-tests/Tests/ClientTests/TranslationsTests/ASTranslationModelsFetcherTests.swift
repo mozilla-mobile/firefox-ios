@@ -76,6 +76,40 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         XCTAssertNil(data, "Expected nil when neither direct nor pivot models exist")
     }
 
+    func testFetchModels_ignoresLexFiles() throws {
+        let modelRecord = makeModelRecord(
+            id: "fr-de-model",
+            fileType: "model",
+            from: "fr",
+            to: "de"
+        )
+        let vocabRecord = makeModelRecord(
+            id: "fr-de-vocab",
+            fileType: "vocab",
+            from: "fr",
+            to: "de"
+        )
+
+        let subject = createSubject(records: [modelRecord, vocabRecord])
+
+        let data = subject.fetchModels(from: "fr", to: "de")
+        XCTAssertNotNil(data, "Expected fetchModels to return data when model exists")
+
+        let json = try XCTUnwrap(data).toJSONObject() as? [[String: Any]]
+        let entry = try XCTUnwrap(json?.first)
+
+        let files = try XCTUnwrap(entry["languageModelFiles"] as? [String: Any])
+
+        XCTAssertTrue(
+            files.keys.contains("model"),
+            "Expected model fileType to be present"
+        )
+        XCTAssertFalse(
+            files.keys.contains("lex"),
+            "Expected lex fileType to be ignored"
+        )
+    }
+
     func testPrewarmResources_directModel_fetchesDirectAttachment() {
         let record = makeModelRecord(
             id: "direct-fr-de",
@@ -136,6 +170,74 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
             mock.fetchedAttachmentIds.isEmpty,
             "Expected no attachments to be fetched when no direct or pivot exists"
         )
+    }
+
+    func testPrewarmResources_ignoresLexFiles() {
+        let modelRecord = makeModelRecord(
+            id: "fr-de-model",
+            fileType: "model",
+            from: "fr",
+            to: "de"
+        )
+        let lexRecord = makeModelRecord(
+            id: "fr-de-lex",
+            fileType: "lex",
+            from: "fr",
+            to: "de"
+        )
+
+        let mock = MockRemoteSettingsClient(
+            records: [modelRecord, lexRecord],
+            attachmentsById: [
+                "fr-de-model": Data([0x01]),
+                "fr-de-lex": Data([0x02])
+            ]
+        )
+
+        let subject = createSubject(modelsClient: mock)
+
+        subject.prewarmResources(for: "fr", to: "de")
+
+        XCTAssertEqual(
+            mock.fetchedAttachmentIds,
+            ["fr-de-model"],
+            "Expected only model attachment to be fetched and lex to be ignored"
+        )
+    }
+
+    func testFetchModels_picksHighestStableVersionBelowMax() throws {
+        let v1Model = makeModelRecord(id: "model-v1", fileType: "model", from: "fr", to: "de", version: "1.0")
+        let v1Vocab = makeModelRecord(id: "vocab-v1", fileType: "vocab", from: "fr", to: "de", version: "1.0")
+        let v2Model = makeModelRecord(id: "model-v2", fileType: "model", from: "fr", to: "de", version: "2.0")
+        let v2Vocab = makeModelRecord(id: "vocab-v2", fileType: "vocab", from: "fr", to: "de", version: "2.0")
+
+        let subject = createSubject(records: [v1Model, v2Vocab, v2Model, v1Vocab])
+        let data = subject.fetchModels(from: "fr", to: "de")
+        XCTAssertNotNil(data, "Expected fetchModels to return data")
+
+        let json = try XCTUnwrap(data).toJSONObject() as? [[String: Any]]
+        let entry = try XCTUnwrap(json?.first)
+
+        let files = try XCTUnwrap(entry["languageModelFiles"] as? [String: Any])
+        XCTAssertFalse(files.isEmpty, "Expected some language model files")
+
+        // Extract all versions seen in returned fileTypes
+        var versionSet = Set<String>()
+        for value in files.values {
+            guard
+                let fileDict = value as? [String: Any],
+                let record = fileDict["record"] as? [String: Any],
+                let version = record["version"] as? String
+            else {
+                XCTFail("Malformed returned record structure")
+                continue
+            }
+
+            versionSet.insert(version)
+        }
+
+        XCTAssertEqual(versionSet.count, 1, "Expected all fileTypes to use the same version")
+        XCTAssertEqual(versionSet.first, "2.0", "Expected version to be best highest version below max")
     }
 
     private func createSubject(

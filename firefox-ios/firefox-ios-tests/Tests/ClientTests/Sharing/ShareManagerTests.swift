@@ -704,7 +704,6 @@ final class ShareManagerTests: XCTestCase {
     func testGetActivityItems_forTab_withSentFromFirefoxEnabled_respectsUserPreferencesToOptIn() throws {
         let expectedShareContentA =
             "https://mozilla.org\n\nSent from Firefox 🦊 Try the mobile browser: https://mzl.la/4fOWPpd"
-
         // Setup Nimbus to emulate a user enrolled in Sent from Firefox with the Treatment A branch
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
 

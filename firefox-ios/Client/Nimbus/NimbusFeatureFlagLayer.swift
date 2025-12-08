@@ -61,6 +61,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageStoriesRedesign:
             return checkHomepageStoriesRedesignFeature(from: nimbus)
 
+        case .homepageStoriesRedesignV2:
+            return checkHomepageStoriesRedesignV2Feature(from: nimbus)
+
         case .homepageScrim:
             return checkHomepageScrimFeature(from: nimbus)
 
@@ -163,6 +166,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .toolbarTranslucency:
             return checkToolbarTranslucencyFeature(from: nimbus)
 
+        case .toolbarTranslucencyRefactor:
+            return checkToolbarTranslucencyRefactorFeature(from: nimbus)
+
         case .toolbarMinimalAddressBar:
             return checkToolbarMinimalAddressBarFeature(from: nimbus)
 
@@ -251,6 +257,10 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.homepageRedesignFeature.value().storiesRedesign
     }
 
+    private func checkHomepageStoriesRedesignV2Feature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().storiesRedesignV2
+    }
+
     private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().scrim
     }
@@ -313,6 +323,11 @@ final class NimbusFeatureFlagLayer: Sendable {
     private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.translucency
+    }
+
+    private func checkToolbarTranslucencyRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.translucencyRefactor
     }
 
     private func checkToolbarMinimalAddressBarFeature(from nimbus: FxNimbus) -> Bool {

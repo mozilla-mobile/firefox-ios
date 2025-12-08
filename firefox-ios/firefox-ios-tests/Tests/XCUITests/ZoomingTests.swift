@@ -7,17 +7,17 @@ import XCTest
 final class ZoomingTests: BaseTestCase {
     private var zoomBar: ZoomBarScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = false
         setUpApp() // prepares launch arguments
         setUpScreenGraph() // builds the MappaMundi navigator
         zoomBar = ZoomBarScreen(app: app)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306947
@@ -123,17 +123,7 @@ final class ZoomingTests: BaseTestCase {
                                   "www.mozilla.org",
                                   "www.google.com"
         ]
-        if XCUIDevice.shared.orientation != .landscapeLeft && !iPad() && userState.isPrivate == false {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        } else if XCUIDevice.shared.orientation == .landscapeLeft && userState.isPrivate == false {
-            homepageSearchBar.tapIfExists()
-            navigator.nowAt(BrowserTab)
-        } else if iPad() && userState.isPrivate == false {
-            navigator.nowAt(BrowserTab)
-        } else {
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-        }
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(websites[index])
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -190,32 +180,38 @@ final class ZoomingTests: BaseTestCase {
         zoomBar.tapZoomIn(times: 4)
         zoomBar.assertZoomPercent("175%")
 
-        if !userState.isPrivate {
-            openNewTab()
-        }
         openURLAndNavigateToZoom(index: 1)
         zoomBar.tapZoomIn(times: 1)
         zoomBar.assertZoomPercent("110%")
 
         // Open a new tab from the TabTray → website[2] → keep 100%
-        if !userState.isPrivate {
-            openNewTab()
-        }
         openURLAndNavigateToZoom(index: 2)
         zoomBar.assertZoomPercent("100%")
 
         // Reopen the tab 0 (should be in 175%), then zoom out to 100%
-        selectTabTrayWebsites(tab: 0)
+        if userState.isPrivate == true {
+            selectTabTrayWebsites(tab: 0)
+        } else {
+            selectTabTrayWebsites(tab: 1)
+        }
         zoomBar.assertZoomPercent("175%")
         zoomBar.tapZoomOut(times: 4)
 
         // Open the tab 1 (should be in 110%), zoom out to 100%
-        selectTabTrayWebsites(tab: 1)
+        if userState.isPrivate == true {
+            selectTabTrayWebsites(tab: 1)
+        } else {
+            selectTabTrayWebsites(tab: 2)
+        }
         zoomBar.assertZoomPercent("110%")
         zoomBar.tapZoomOut(times: 1)
 
         // Open the tab 2 (should be in 100%)
-        selectTabTrayWebsites(tab: 2)
+        if userState.isPrivate == true {
+            selectTabTrayWebsites(tab: 2)
+        } else {
+            selectTabTrayWebsites(tab: 3)
+        }
         zoomBar.assertZoomPercent("100%")
     }
 

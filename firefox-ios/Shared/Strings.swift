@@ -7778,9 +7778,9 @@ extension String {
             value: "New! %@ Relay email masks are now available on mobile.",
             comment: "Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox')")
         public static let RelayEmailMaskFreeTierLimitReached = MZLocalizedString(
-            key: "RelayMask.RelayEmailMaskFreeTierLimitReached.v146",
+            key: "RelayMask.RelayEmailMaskFreeTierLimitReached.v147",
             tableName: "RelayMask",
-            value: "Your 5 free email masks are in use, so we picked one for you.",
+            value: "You’ve used your 5 free email masks, so we picked one for you to reuse.",
             comment: "Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly.")
         public static let RelayEmailMaskGenericErrorMessage = MZLocalizedString(
             key: "RelayMask.RelayEmailMaskGenericErrorMessage.v146",
@@ -7798,9 +7798,9 @@ extension String {
             value: "Email Masks",
             comment: "Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay.")
         public static let RelayEmailMaskSettingsDetailInfo = MZLocalizedString(
-            key: "RelayMask.RelayEmailMaskSettingsDetailInfo.v146",
+            key: "RelayMask.RelayEmailMaskSettingsDetailInfo.v147",
             tableName: "RelayMask",
-            value: "Hide your real email to protect your inbox from spam. Some sites don’t support it.",
+            value: "Hide your real email to protect your inbox from spam. Some sites don’t support email masks.",
             comment: "Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality.")
         public static let RelayEmailMaskSettingsLearnMore = MZLocalizedString(
             key: "RelayMask.RelayEmailMaskSettingsLearnMore.v146",
@@ -7812,6 +7812,11 @@ extension String {
             tableName: "RelayMask",
             value: "Manage Email Masks",
             comment: "Button title which takes users to a webpage to manage their Relay email masks and related settings.")
+        public static let RelayEmailMaskInsertedA11yAnnouncement = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147",
+            tableName: "RelayMask",
+            value: "Email mask inserted",
+            comment: "VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully.")
     }
 }
 
@@ -8471,6 +8476,18 @@ extension String {
                 tableName: "AppIconSelection",
                 value: "Lazy",
                 comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
+        }
+        struct v146 {
+            public static let RelayEmailMaskFreeTierLimitReached = MZLocalizedString(
+                key: "RelayMask.RelayEmailMaskFreeTierLimitReached.v146",
+                tableName: "RelayMask",
+                value: "Your 5 free email masks are in use, so we picked one for you.",
+                comment: "Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly.")
+            public static let RelayEmailMaskSettingsDetailInfo = MZLocalizedString(
+                key: "RelayMask.RelayEmailMaskSettingsDetailInfo.v146",
+                tableName: "RelayMask",
+                value: "Hide your real email to protect your inbox from spam. Some sites don’t support it.",
+                comment: "Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality.")
         }
     }
 }

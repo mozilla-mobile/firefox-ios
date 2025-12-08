@@ -211,13 +211,6 @@ class TabManagerImplementation: NSObject,
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
-        tab.cancelDocumentDownload()
-
-        backupCloseTab = BackupCloseTab(
-            tab: tab,
-            restorePosition: index,
-            isSelected: selectedTab?.tabUUID == tab.tabUUID)
-
         self.removeTab(tab, flushToDisk: true)
         self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
     }
@@ -296,6 +289,7 @@ class TabManagerImplementation: NSObject,
             saveSessionData(forTab: tab)
         }
 
+        tab.cancelDocumentDownload()
         backupCloseTab = BackupCloseTab(tab: tab,
                                         restorePosition: removalIndex,
                                         isSelected: selectedTab?.tabUUID == tab.tabUUID)
@@ -345,9 +339,15 @@ class TabManagerImplementation: NSObject,
 
         guard !tabsToRemove.isEmpty else { return }
 
+        let selectedTab = selectedTab
         for tab in tabsToRemove {
-            removeTab(tab.tabUUID)
+            // Remove each tab without persisting changes
+            removeTab(tab, flushToDisk: false)
         }
+        // We need to reselect the tab and adjust the selected index after tabs removal.
+        // The selected tab will not be removed with `removeNormalTabsOlderThan` since it's
+        // `lastExecutedTime` won't be less than the `cutoffDate`.
+        selectTab(selectedTab)
         commitChanges()
     }
 

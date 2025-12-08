@@ -57,6 +57,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertTrue(download.downloadCanceled)
     }
 
+    @MainActor
     func testDidDownloadBytes() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -65,6 +66,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, didDownloadCombinedBytes)
     }
 
+    @MainActor
     func testDidFinishDownloadingToWithOneElementsInQueue() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -73,6 +75,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, didCompleteWithError)
     }
 
+    @MainActor
     func testDidFinishDownloadingToWithTwoElementsInQueue() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -81,6 +84,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, didFinishDownloadingTo)
     }
 
+    @MainActor
     func testDidFinishDownloadingToWithNoElementsInQueue() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -88,6 +92,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, "noneOfMethodWasCalled")
     }
 
+    @MainActor
     func testDidCompleteWithError() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)

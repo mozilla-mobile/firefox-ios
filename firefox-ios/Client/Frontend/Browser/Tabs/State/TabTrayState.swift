@@ -186,7 +186,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: tabCount,
-                                privateTabsCount: state.privateTabsCount,
+                                privateTabsCount: tabDisplayModel.privateTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount,
                                 enableDeleteTabsButton: tabDisplayModel.enableDeleteTabsButton)
 

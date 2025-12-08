@@ -13,14 +13,14 @@ let website1: [String: String] = [
 let website2 = path(forTestPage: "test-example.html")
 
 class ToolbarTests: FeatureFlaggedTestBase {
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2344428
@@ -29,7 +29,6 @@ class ToolbarTests: FeatureFlaggedTestBase {
      */
     func testLandscapeNavigationWithTabSwitch() {
         app.launch()
-        homepageSearchBar.tapIfExists()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
         XCTAssert(app.textFields[searchTextField].exists)
@@ -84,7 +83,6 @@ class ToolbarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2344430
     func testClearURLTextUsingBackspace() {
         app.launch()
-        homepageSearchBar.tapIfExists()
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
@@ -146,7 +144,6 @@ class ToolbarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3197644
     func testOpenNewTabButtonOnToolbar() throws {
         app.launch()
-        homepageSearchBar.tapIfExists()
         if iPad() {
             throw XCTSkip("iPhone only test")
         } else {
@@ -172,8 +169,12 @@ class ToolbarTests: FeatureFlaggedTestBase {
             closeFromAppSwitcherAndRelaunch()
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-            mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites])
-            mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+            if !isPrivate {
+                mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites])
+                mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+            }
+            navigator.nowAt(BrowserTab)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
             navigator.goto(TabTray)
             navigator.performAction(Action.OpenNewTabFromTabTray)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])

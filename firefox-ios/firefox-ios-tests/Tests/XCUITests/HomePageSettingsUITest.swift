@@ -22,7 +22,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     let testWithDB = ["testTopSitesCustomNumberOfRows"]
     let prefilledTopSites = "testBookmarksDatabase1000-browser.db"
 
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
@@ -35,7 +35,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                                LaunchArguments.SkipContextualHints,
                                LaunchArguments.DisableAnimations]
         }
-        super.setUp()
+        try await super.setUp()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339256
@@ -128,8 +128,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.tables.cells["HomeAsFirefoxHome"].isSelected, "Firefox Home is not selected by default")
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabScreen)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -325,10 +323,38 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 //            "1"
 //        )
 
-        XCTAssertEqual(
-            app.cells.switches["Stories"].value as? String,
-            "1"
-        )
+        if #available(iOS 17, *) {
+            XCTAssertEqual(
+                app.cells.switches["Stories"].value as? String,
+                "1"
+            )
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306871
+    // Smoketest TAE
+    func testCustomizeHomepage_TAE() {
+        let fxHomePageScreen = FirefoxHomePageScreen(app: app)
+        let homePageScreen = HomePageScreen(app: app)
+        let settingHomePageScreen = SettingsHomepageScreen(app: app)
+
+        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
+        app.launch()
+        homePageScreen.swipeToCustomizeHomeOption()
+        fxHomePageScreen.tapOnCustomizeHomePageOption(timeout: TIMEOUT)
+        // Verify default settings
+        settingHomePageScreen.assertDefaultOptionsVisible()
+        // Commented due to experimental features
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
+//            "1"
+//        )
+//        XCTAssertEqual(
+//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
+//            "1"
+//        )
+
+        settingHomePageScreen.assertStoriesSwitch(isOn: true)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
@@ -369,8 +395,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     private func addWebsitesToShortcut(website: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(website)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)

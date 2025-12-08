@@ -14,9 +14,10 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     private var mockLogger: MockLogger!
     private var mockWindowManager: MockWindowManager!
     private var mockTabManager: MockTabManager!
+    private var mockTranslationsTelemetry: MockTranslationsTelemetry!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         mockLogger = MockLogger()
         mockTabManager = MockTabManager()
@@ -24,6 +25,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             wrappedManager: WindowManagerImplementation(),
             tabManager: mockTabManager
         )
+        mockTranslationsTelemetry = MockTranslationsTelemetry()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
@@ -32,14 +34,15 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         mockLogger = nil
         mockTabManager = nil
         mockWindowManager = nil
+        mockTranslationsTelemetry = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_urlDidChangeAction_withoutTranslationConfiguration_doesNotDispatchAction() throws {
@@ -86,6 +89,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject(shouldOfferTranslationResult: true)
         let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
@@ -115,6 +119,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         let subject = createSubject(shouldOfferTranslationError: TestError.example)
         let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
             translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
@@ -177,7 +182,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             profile: mockProfile,
             logger: mockLogger,
             windowManager: mockWindowManager,
-            translationsService: translationsService
+            translationsService: translationsService,
+            translationsTelemetry: mockTranslationsTelemetry
         )
     }
 

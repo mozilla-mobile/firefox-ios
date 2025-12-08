@@ -303,12 +303,10 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         customEngines.remove(at: customEngines.firstIndex(of: engine)!)
         saveCustomEngines()
 
-        getOrderedEngines { enginePreferences, orderedEngines in
-            self.orderedEngines = orderedEngines
-            self.delegate?.searchEnginesDidUpdate()
+        orderedEngines.removeAll(where: { $0.engineID == engine.engineID })
+        delegate?.searchEnginesDidUpdate()
 
-            completion()
-        }
+        completion()
     }
 
     /// Adds an engine to the front of the search engines list.

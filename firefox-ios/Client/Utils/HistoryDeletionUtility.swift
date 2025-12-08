@@ -19,7 +19,7 @@ protocol HistoryDeletionProtocol {
     func delete(_ sites: [String], completion: @Sendable @escaping (Bool) -> Void)
     @MainActor
     func deleteHistoryFrom(_ dateOption: HistoryDeletionUtilityDateOptions,
-                           completion: @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void)
+                           completion: @Sendable @escaping @MainActor (HistoryDeletionUtilityDateOptions) -> Void)
 }
 
 final class HistoryDeletionUtility: HistoryDeletionProtocol, Sendable {
@@ -45,14 +45,16 @@ final class HistoryDeletionUtility: HistoryDeletionProtocol, Sendable {
     @MainActor
     func deleteHistoryFrom(
         _ dateOption: HistoryDeletionUtilityDateOptions,
-        completion: @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void
+        completion: @Sendable @escaping @MainActor (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
         // For efficiency, we'll delete data in parallel, which is why closures are
         // not encloning each subsequent call
         deleteProfileHistorySince(dateOption) { result in
             self.clearRecentlyClosedTabs(using: dateOption)
-            completion(dateOption)
+            DispatchQueue.main.async {
+                completion(dateOption)
+            }
         }
 
         deleteProfileMetadataSince(dateOption)

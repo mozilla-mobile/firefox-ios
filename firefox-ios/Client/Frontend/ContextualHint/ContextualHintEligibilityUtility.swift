@@ -47,6 +47,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         case .navigation:
             hintTypeShouldBePresented = true
+        case .relay:
+            hintTypeShouldBePresented = canRelayMaskCFRBePresented
         case .toolbarUpdate:
             hintTypeShouldBePresented = canToolbarUpdateCFRBePresented
         case .translation:
@@ -84,6 +86,11 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
     private var canTranslationCFRBePresented: Bool {
         return featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) ? true : false
+    }
+
+    @MainActor
+    private var canRelayMaskCFRBePresented: Bool {
+        return RelayController.isFeatureEnabled
     }
 
     /// We present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been

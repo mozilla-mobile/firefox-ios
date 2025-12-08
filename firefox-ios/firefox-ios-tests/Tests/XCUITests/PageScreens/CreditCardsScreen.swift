@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class CreditCardsScreen {
     private let app: XCUIApplication
     private let sel: CreditCardsSelectorsSet
@@ -44,16 +45,13 @@ final class CreditCardsScreen {
     }
 
     func assertCardSaved(containing lastDigits: String, details: [String]) {
-        let table = app.tables.firstMatch
-            BaseTestCase().mozWaitForElementToExist(table)
+        BaseTestCase().waitForElementsToExist([
+                app.tables.cells.element(boundBy: 1).buttons.elementContainingText(lastDigits)
+            ])
 
-            let cardCellButton = table.cells.element(boundBy: 1).buttonContainingText(lastDigits)
-            BaseTestCase().mozWaitForElementToExist(cardCellButton)
-
-            for detail in details {
-                let detailButton = table.cells.element(boundBy: 1).buttons[detail]
-                BaseTestCase().mozWaitForElementToExist(detailButton)
-            }
+        for detail in details {
+            BaseTestCase().mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[detail])
+        }
     }
 
     func enableSaveAndFillIfDisabled() {
@@ -71,8 +69,7 @@ final class CreditCardsScreen {
     }
 
     func openSavedCard(at index: Int = 1) {
-        let table = app.tables.firstMatch
-        let cell = table.cells.element(boundBy: index)
+        let cell = app.tables.cells.element(boundBy: index)
         BaseTestCase().mozWaitForElementToExist(cell)
         cell.waitAndTap()
     }
@@ -147,5 +144,18 @@ final class CreditCardsScreen {
         }
 
         BaseTestCase().mozWaitForElementToExist(useSavedCardButton)
+    }
+
+    func waitForAddCreditCardValues() {
+        BaseTestCase().waitForElementsToExist(
+            [
+                sel.ADD_CREDIT_CARD.element(in: app),
+                sel.ADD_CREDIT_CARD_NAME_ON_CARD.element(in: app),
+                sel.ADD_CREDIT_CARD_CARD_NUMBER.element(in: app),
+                sel.ADD_CREDIT_CARD_EXPIRATION.element(in: app),
+                sel.ADD_CREDIT_CARD_CLOSE.element(in: app),
+                sel.ADD_CREDIT_CARD_SAVE.element(in: app)
+            ]
+        )
     }
 }

@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class SettingScreen {
     private let app: XCUIApplication
     private let sel: SettingsSelectorsSet
@@ -149,5 +150,33 @@ final class SettingScreen {
             BaseTestCase().mozWaitForElementToExist(element)
             XCTAssertTrue(element.isVisible(), "\(selector.description) is not visible")
         }
+    }
+
+    func openBrowsingSettings() {
+        let cell = sel.BROWSING_CELL_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(cell)
+        cell.waitAndTap()
+    }
+
+    func waitForBlockImagesSwitch() -> XCUIElement {
+        let sw = app.otherElements.tables.cells.switches[sel.BLOCK_IMAGES_SWITCH_TITLE.value]
+        BaseTestCase().mozWaitForElementToExist(sw)
+        return sw
+    }
+
+    func assertShowImagesState(showImages: Bool = true, file: StaticString = #filePath, line: UInt = #line) {
+        let noImageStatusSwitch = app.otherElements.tables.cells.switches[sel.NO_IMAGE_MODE_STATUS_SWITCH.value]
+        BaseTestCase().mozWaitForElementToExist(noImageStatusSwitch)
+
+        let expectedValue = showImages ? "0" : "1"
+        let actualValue = noImageStatusSwitch.value as? String
+
+        XCTAssertEqual(
+            actualValue,
+            expectedValue,
+            "Image display state is incorrect. Expected \(expectedValue) but got \(actualValue ?? "nil")",
+            file: file,
+            line: line
+        )
     }
 }

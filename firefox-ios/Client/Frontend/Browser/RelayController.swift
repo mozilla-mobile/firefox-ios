@@ -91,6 +91,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     static let shared = RelayController()
 
+    let telemetry: RelayMaskTelemetry
+
     static let isFeatureEnabled = {
 #if targetEnvironment(simulator) && MOZ_CHANNEL_developer
         return true
@@ -107,18 +109,24 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private var isCreatingClient = false
     private let notificationCenter: NotificationProtocol
     private weak var focusedTab: Tab?
-    private var accountStatus: RelayAccountStatus = .unknown
+    private var accountStatus: RelayAccountStatus = .unknown {
+        didSet {
+            logger.log("Updated Relay account status from \(oldValue) to: \(accountStatus)", level: .info, category: .relay)
+        }
+    }
 
     // MARK: - Init
 
     private init(logger: Logger = DefaultLogger.shared,
                  profile: Profile = AppContainer.shared.resolve(),
+                 gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
                  config: RelayClientConfiguration = .prod,
                  notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.logger = logger
         self.profile = profile
         self.config = config
         self.notificationCenter = notificationCenter
+        self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
 
         configureRelayRSClient()
         beginObserving()
@@ -140,9 +148,9 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     func populateEmailFieldWithRelayMask(for tab: Tab,
                                          completion: @escaping @MainActor @Sendable (RelayMaskGenerationResult) -> Void) {
         guard focusedTab == nil || focusedTab === tab else {
-            logger.log("[RELAY] Attempting to populate Relay mask after tab has changed. Bailing.",
+            logger.log("Attempting to populate Relay mask after tab has changed. Bailing.",
                        level: .warning,
-                       category: .autofill)
+                       category: .relay)
             focusedTab = nil
             // Note: this is an edge case error and in this scenario we will not call the completion at
             // all, given that we're no longer on the correct tab.
@@ -156,7 +164,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
             guard let jsonData = try? JSONEncoder().encode(email),
                   let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
-                logger.log("[RELAY] Couldn't encode string for Relay JS injection.", level: .warning, category: .autofill)
+                logger.log("Couldn't encode string for Relay JS injection.", level: .warning, category: .relay)
                 completion(.error)
                 return
             }
@@ -165,7 +173,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             let closureLogger = logger
             webView.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
                 guard error == nil else {
-                    closureLogger.log("[RELAY] Javascript error: \(error!)", level: .warning, category: .autofill)
+                    closureLogger.log("Javascript error: \(error!)", level: .warning, category: .relay)
                     return
                 }
             }
@@ -189,24 +197,28 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                                                                               result: RelayMaskGenerationResult) {
         do {
             let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
+            telemetry.autofilled(newMask: true)
             return (relayAddress.fullAddress, .newMaskGenerated)
         } catch {
             // Certain errors we need to custom-handle
             if case let RelayApiError.Api(_, code, _) = error, code == "free_tier_limit" {
                 // For Phase 1, we return a random email from the user's list
-                logger.log("[RELAY] Free tier limit reached. Using random mask.", level: .info, category: .autofill)
+                logger.log("Free tier limit reached. Using random mask.", level: .info, category: .relay)
                 do {
                     let fullList = try client.fetchAddresses()
                     if let relayMask = fullList.randomElement() {
+                        telemetry.autofilled(newMask: false)
                         return (relayMask.fullAddress, .freeTierLimitReached)
                     } else {
-                        logger.log("[RELAY] Couldn't fetch random mask", level: .warning, category: .autofill)
+                        logger.log("Couldn't fetch random mask", level: .warning, category: .relay)
                     }
                 } catch {
-                    logger.log("[RELAY] Error fetching address list: \(error)", level: .warning, category: .autofill)
+                    telemetry.autofillFailed(error: error.localizedDescription)
+                    logger.log("Error fetching address list: \(error)", level: .warning, category: .relay)
                 }
             } else {
-                logger.log("[RELAY] API error creating Relay address: \(error)", level: .warning, category: .autofill)
+                telemetry.autofillFailed(error: error.localizedDescription)
+                logger.log("API error creating Relay address: \(error)", level: .warning, category: .relay)
             }
         }
         return (nil, .error)
@@ -227,7 +239,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     func handleNotifications(_ notification: Notification) {
-        logger.log("[RELAY] Received notification '\(notification.name.rawValue)'.", level: .info, category: .autofill)
+        logger.log("Received notification '\(notification.name.rawValue)'.", level: .info, category: .relay)
         Task { @MainActor in
             updateRelayAccountStatus()
         }
@@ -240,7 +252,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
         guard accountStatus != .updating else {
-            logger.log("[RELAY] Already updating account. Will skip redundant update.", level: .info, category: .autofill)
+            logger.log("Already updating account. Will skip redundant update.", level: .info, category: .relay)
             return
         }
         accountStatus = .updating
@@ -260,21 +272,21 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private func createRelayClientIfNeeded() {
         guard client == nil, !isCreatingClient else { return }
         guard let acctManager = RustFirefoxAccounts.shared.accountManager else {
-            logger.log("[RELAY] Couldn't create client, no account manager.", level: .debug, category: .autofill)
+            logger.log("Couldn't create client, no account manager.", level: .debug, category: .relay)
             return
         }
         isCreatingClient = true
         acctManager.getAccessToken(scope: config.scope) { [config, weak self] result in
             switch result {
             case .failure(let error):
-                self?.logger.log("[RELAY] Error getting access token for Relay: \(error)", level: .warning, category: .autofill)
+                self?.logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)
                 self?.isCreatingClient = false
             case .success(let tokenInfo):
                 do {
                     let clientResult = try RelayClient(serverUrl: config.serverURL, authToken: tokenInfo.token)
                     self?.handleRelayClientCreated(clientResult)
                 } catch {
-                    self?.logger.log("[RELAY] Error creating Relay client: \(error)", level: .warning, category: .autofill)
+                    self?.logger.log("Error creating Relay client: \(error)", level: .warning, category: .relay)
                 }
                 self?.isCreatingClient = false
             }
@@ -284,7 +296,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private func handleRelayClientCreated(_ client: RelayClient) {
         self.client = client
         isCreatingClient = false
-        logger.log("[RELAY] Relay client created.", level: .info, category: .autofill)
+        logger.log("Relay client created.", level: .info, category: .relay)
     }
 
     private func isFxAStaging() -> Bool {
@@ -302,14 +314,14 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     nonisolated private func fetchRelayAccountAvailability(isStaging: Bool) async {
         guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return }
 
-        logger.log("[RELAY] Will check OAuth clients.", level: .info, category: .autofill)
+        logger.log("Will check OAuth clients.", level: .info, category: .relay)
         let hasRelayOAuth = {
             switch result {
             case .success(let clients):
                 let OAuthID = isStaging ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
                 return clients.contains(where: { $0.clientId == OAuthID })
             case .failure(let error):
-                logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
+                logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .relay)
                 return false
             }
         }()

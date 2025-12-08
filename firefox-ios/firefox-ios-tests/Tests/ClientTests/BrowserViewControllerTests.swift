@@ -22,8 +22,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var appState: AppState!
     var recordVisitManager: MockRecordVisitObservationManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
         tabManager = MockTabManager()
@@ -37,7 +37,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile.shutdown()
         profile = nil
         tabManager = nil
@@ -45,7 +45,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         recordVisitManager = nil
         resetStore()
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testTrackVisibleSuggestion() {

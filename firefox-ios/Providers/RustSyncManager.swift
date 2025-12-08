@@ -22,7 +22,8 @@ import struct MozillaAppServices.ScopedKey
 import struct MozillaAppServices.AccessTokenInfo
 
 // Extends NSObject so we can use timers.
-public class RustSyncManager: NSObject, SyncManager {
+// TODO: FXIOS-14225 - RustSyncManager shouldn't be @unchecked Sendable
+public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
     // We shouldn't live beyond our containing BrowserProfile, either in the main app
     // or in an extension.
     // But it's possible that we'll finish a side-effect sync after we've ditched the
@@ -250,7 +251,7 @@ public class RustSyncManager: NSObject, SyncManager {
         notificationCenter.post(name: notification)
     }
 
-    func doInBackgroundAfter(_ millis: Int64, _ block: @escaping () -> Void) {
+    func doInBackgroundAfter(_ millis: Int64, _ block: @Sendable @escaping () -> Void) {
         let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
         queue.asyncAfter(
             deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)),
@@ -399,7 +400,6 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     private func registerSyncEngines(engines: [RustSyncManagerAPI.TogglableEngine],
-                                     dispatchGroup: DispatchGroupInterface,
                                      loginKey: String?,
                                      creditCardKey: String?,
                                      completion: @escaping @Sendable (([String], [String: String])) -> Void) {
@@ -466,7 +466,6 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
-                           dispatchGroup: DispatchGroupInterface = DispatchGroup(),
                            completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         logins.getStoredKey { loginResult in
             let loginKey: String?
@@ -503,7 +502,6 @@ public class RustSyncManager: NSObject, SyncManager {
                 // the encryption key is missing
                 let enginesToSync = self.getEnginesWithRetrievedKeys(creditCardKey, loginKey, engines)
                 self.registerSyncEngines(engines: enginesToSync,
-                                         dispatchGroup: dispatchGroup,
                                          loginKey: loginKey,
                                          creditCardKey: creditCardKey,
                                          completion: completion)

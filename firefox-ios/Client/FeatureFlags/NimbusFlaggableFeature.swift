@@ -27,6 +27,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageSearchBar
     case homepageShortcutsLibrary
     case homepageStoriesRedesign
+    case homepageStoriesRedesignV2
     case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
@@ -62,6 +63,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarRefactor
     case toolbarSwipingTabs
     case toolbarTranslucency
+    case toolbarTranslucencyRefactor
     case toolbarMinimalAddressBar
     case toolbarMiddleButtonCustomization
     case tosFeature
@@ -85,6 +87,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .defaultZoomFeature,
                 .downloadLiveActivities,
                 .homepageStoriesRedesign,
+                .homepageStoriesRedesignV2,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
@@ -103,6 +106,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .sentFromFirefox,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
+                .toolbarTranslucencyRefactor,
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
@@ -161,6 +165,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageStoriesRedesign,
+                .homepageStoriesRedesignV2,
                 .homepageScrim,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
@@ -193,6 +198,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarRefactor,
                 .toolbarSwipingTabs,
                 .toolbarTranslucency,
+                .toolbarTranslucencyRefactor,
                 .toolbarMinimalAddressBar,
                 .toolbarMiddleButtonCustomization,
                 .tosFeature,

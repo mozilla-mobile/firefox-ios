@@ -21,8 +21,8 @@ final class TabScrollHandlerTests: XCTestCase {
     var overKeyboardContainer: BaseAlphaStackView = .build()
     var bottomContainer: BaseAlphaStackView = .build()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
@@ -31,13 +31,13 @@ final class TabScrollHandlerTests: XCTestCase {
         delegate = MockTabScrollHandlerDelegate()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile?.shutdown()
         mockProfile = nil
         tab = nil
         delegate = nil
         tabProvider = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_scrollDown_hidesToolbar_whenSignificant() {

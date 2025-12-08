@@ -134,7 +134,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Домой";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Добавить на домашний экран";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "На домашний экран";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Ярлык";
@@ -173,7 +173,7 @@
 "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Домой";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
-"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Добавить на домашний экран";
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "На домашний экран";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
 "MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Ярлык";
@@ -236,7 +236,7 @@
 "MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Subtitle.v132" = "Сообщить";
 
 /* On the main menu, the accessibility label for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Title.v132" = "Сообщить о неработающем сайте";
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Title.v132" = "Сообщить о сломанном сайте";
 
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Share tool and is indicating that under the Tools submenu, a Share (to someone else) action is available. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Share.Subtitle.v132" = "Поделиться";

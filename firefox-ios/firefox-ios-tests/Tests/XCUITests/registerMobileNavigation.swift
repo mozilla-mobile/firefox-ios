@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerMobileNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(MobileBookmarks) { screenState in
         let bookmarksMenuNavigationBar = app.navigationBars["Mobile Bookmarks"]

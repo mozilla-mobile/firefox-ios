@@ -4,12 +4,16 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THRESHOLD_UNIT_TEST=38
-THRESHOLD_XCUITEST=38
+THRESHOLD_UNIT_TEST=13
+THRESHOLD_XCUITEST=13
 
-WARNINGS=$(grep -E -v 'SourcePackages/checkouts' "$BUILD_LOG_FILE" \
+
+WARNINGS=$(
+  grep -E -v 'SourcePackages/checkouts' "$BUILD_LOG_FILE" \
   | grep -E '^[^ ]+:[0-9]+:[0-9]+: warning:' \
-  | uniq)
+  | grep -Ev '/Tests/' \
+  | uniq
+)
 
 WARNING_COUNT=$(printf '%s\n' "$WARNINGS" | wc -l)
 

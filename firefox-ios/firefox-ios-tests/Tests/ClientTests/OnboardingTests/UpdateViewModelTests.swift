@@ -7,6 +7,7 @@ import Foundation
 import XCTest
 import Shared
 import Common
+import OnboardingKit
 
 class UpdateViewModelTests: XCTestCase {
     private var profile: MockProfile!
@@ -32,6 +33,7 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: Enable cards
+    @MainActor
     func testEnabledCards_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
         let subject = createSubject()
@@ -49,6 +51,7 @@ class UpdateViewModelTests: XCTestCase {
         waitForExpectations(timeout: 2.0)
     }
 
+    @MainActor
     func testEnabledCards_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()
@@ -67,6 +70,7 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: Has Single card
+    @MainActor
     func testHasSingleCard_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
         let subject = createSubject()
@@ -207,8 +211,10 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {
-        let buttons = OnboardingButtons(primary: OnboardingButtonInfoModel(title: "Button title \(index)",
-                                                                           action: .forwardOneCard))
+        let buttons = OnboardingButtons<OnboardingActions>(
+            primary: OnboardingButtonInfoModel<OnboardingActions>(
+                title: "Button title \(index)",
+                action: .forwardOneCard))
         return OnboardingCardInfoModel(
             cardType: .basic,
             name: "Name \(index)",

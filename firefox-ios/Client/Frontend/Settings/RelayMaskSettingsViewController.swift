@@ -47,8 +47,6 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
         ) as? ThemedTableSectionHeaderFooterView
         guard let defaultFooter = _defaultFooter else { return nil }
 
-        // TODO: [FXIOS-14197] Once we have a SUMO link for Learn More, we can enable this button.
-        /*
         if section == 0 {
             let linkButtonViewModel = LinkButtonViewModel(
                 title: String.RelayMask.RelayEmailMaskSettingsLearnMore,
@@ -64,7 +62,6 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
 
             return defaultFooter
         }
-         */
 
         return defaultFooter
     }
@@ -76,9 +73,9 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
     @objc
     func learnMoreTapped() {
         let viewController = SettingsContentViewController(windowUUID: windowUUID)
-        // TODO: [FXIOS-14197] Need to update this with the final SUMO link provided by CS team.
-        viewController.url = SupportUtils.URLForRelayAccountManagement
+        viewController.url = SupportUtils.URLForRelayMaskLearnMoreArticle
         navigationController?.pushViewController(viewController, animated: true)
+        RelayController.shared.telemetry.learnMoreTapped()
     }
 
     // MARK: - ThemeApplicable
@@ -115,6 +112,7 @@ final class ManageRelayMasksSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        RelayController.shared.telemetry.manageMasksTapped()
         let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForRelayAccountManagement
         parentNav?.pushViewController(viewController, animated: true)

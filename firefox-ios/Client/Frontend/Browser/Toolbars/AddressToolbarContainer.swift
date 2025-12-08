@@ -67,6 +67,7 @@ final class AddressToolbarContainer: UIView,
         static let addNewTabFadeAnimationDuration: TimeInterval = 0.2
         static let addNewTabPercentageAnimationThreshold: CGFloat = 0.3
         static let keyboardAccessoryViewOffset: CGFloat = 22
+        static let accessoryViewGradientOffset: CGFloat = 74
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -113,6 +114,8 @@ final class AddressToolbarContainer: UIView,
         bar.clipsToBounds = false
     }
     private lazy var addNewTabView: AddressToolbarAddTabView = .build()
+    private lazy var accessoryViewGradient = CAGradientLayer()
+
     private var addNewTabTrailingConstraint: NSLayoutConstraint?
     private var addNewTabLeadingConstraint: NSLayoutConstraint?
     private var addNewTabTopConstraint: NSLayoutConstraint?
@@ -232,6 +235,9 @@ final class AddressToolbarContainer: UIView,
         )
 
         if shouldAdjustForAccessory {
+            let height = frame.height + UX.accessoryViewGradientOffset
+            accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
+            accessoryViewGradient.opacity = 1
             store.dispatch(
                 ToolbarAction(
                     scrollAlpha: 0,
@@ -326,6 +332,9 @@ final class AddressToolbarContainer: UIView,
         guard self.model != newModel else { return }
 
         updateSkeletonAddressBarsAlpha(to: CGFloat(newModel.scrollAlpha))
+        if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.scrollAlpha.isZero {
+            accessoryViewGradient.opacity = 0
+        }
         // in case we are in edit mode but overlay is not active yet we have to activate it
         // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
         if newModel.isEditing, !inOverlayMode {
@@ -398,6 +407,7 @@ final class AddressToolbarContainer: UIView,
         addGestureRecognizer(tapGesture)
 
         addSubview(progressBar)
+        setupAccessoryViewGradient()
 
         NSLayoutConstraint.activate([
             progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -468,6 +478,13 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
+    private func setupAccessoryViewGradient() {
+        guard #available(iOS 26.0, *) else { return }
+        accessoryViewGradient.startPoint = CGPoint(x: 0.5, y: 0)
+        accessoryViewGradient.endPoint = CGPoint(x: 0.5, y: 1)
+        layer.insertSublayer(accessoryViewGradient, at: 0)
+    }
+
     func applyTransform(_ transform: CGAffineTransform, shouldAddNewTab: Bool) {
         regularToolbar.transform = transform
         leftSkeletonAddressBar.transform = transform
@@ -501,6 +518,12 @@ final class AddressToolbarContainer: UIView,
             addNewTabView.applyTheme(theme: theme)
         }
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false, theme: theme)
+
+        guard #available(iOS 26.0, *) else { return }
+        accessoryViewGradient.colors = [
+            theme.colors.layer3.withAlphaComponent(0).cgColor,
+            theme.colors.layer3.cgColor
+        ]
     }
 
     // MARK: - GestureRecognizer

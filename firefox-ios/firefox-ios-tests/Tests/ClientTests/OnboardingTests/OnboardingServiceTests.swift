@@ -108,8 +108,8 @@ final class OnboardingServiceTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockThemeManager: MockThemeManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         mockDelegate = MockOnboardingServiceDelegate()
         mockNavigationDelegate = MockOnboardingNavigationDelegate()
@@ -137,8 +137,7 @@ final class OnboardingServiceTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         sut = nil
         mockDelegate = nil
@@ -150,7 +149,7 @@ final class OnboardingServiceTests: XCTestCase {
         mockSearchBarLocationSaver = nil
         mockProfile = nil
         mockThemeManager = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Request Notifications Tests

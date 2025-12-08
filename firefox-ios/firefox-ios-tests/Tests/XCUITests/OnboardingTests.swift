@@ -13,23 +13,23 @@ class OnboardingTests: BaseTestCase {
     var onboardingScreen: OnboardingScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         launchArguments = [LaunchArguments.ClearProfile,
                            LaunchArguments.DisableAnimations,
                            LaunchArguments.SkipSplashScreenExperiment,
                            LaunchArguments.SkipTermsOfUse]
         currentScreen = 0
-        super.setUp()
+        try await super.setUp()
         onboardingScreen = OnboardingScreen(app: app)
         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         if #available(iOS 17.0, *) {
             switchThemeToDarkOrLight(theme: "Light")
         }
         app.terminate()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // Smoketest

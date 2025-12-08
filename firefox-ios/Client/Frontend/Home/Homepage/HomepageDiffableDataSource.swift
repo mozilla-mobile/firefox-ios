@@ -53,8 +53,10 @@ final class HomepageDiffableDataSource:
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 SearchBarCell.self,
+                LegacyJumpBackInCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
+                LegacyBookmarksCell.self,
                 BookmarksCell.self,
                 MerinoStandardCell.self,
                 StoryCell.self,
@@ -101,16 +103,6 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
         }
 
-        if state.shouldShowSpacer {
-            snapshot.appendSections([.spacer])
-            snapshot.appendItems([.spacer], toSection: .spacer)
-        }
-
-        if state.searchState.shouldShowSearchBar {
-            snapshot.appendSections([.searchBar])
-            snapshot.appendItems([.searchBar], toSection: .searchBar)
-        }
-
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
             snapshot.appendSections([.jumpBackIn(textColor, configuration)])
             snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor, configuration))
@@ -121,12 +113,22 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
+        if state.shouldShowSpacer {
+            snapshot.appendSections([.spacer])
+            snapshot.appendItems([.spacer], toSection: .spacer)
+        }
+
+        if state.searchState.shouldShowSearchBar {
+            snapshot.appendSections([.searchBar])
+            snapshot.appendItems([.searchBar], toSection: .searchBar)
+        }
+
         if let stories = getPocketStories(with: state.merinoState) {
             snapshot.appendSections([.pocket(textColor)])
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
 
-        if !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) {
+        if !isAnyStoriesRedesignEnabled {
             snapshot.appendSections([.customizeHomepage])
             snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
         }

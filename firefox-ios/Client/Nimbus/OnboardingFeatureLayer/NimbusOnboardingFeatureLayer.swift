@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import OnboardingKit
 
 import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 
@@ -112,7 +113,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// A card is not viable without buttons.
     private func getOnboardingCardButtons(
         from cardButtons: NimbusOnboardingButtons
-    ) -> OnboardingButtons {
+    ) -> OnboardingButtons<OnboardingActions> {
         return OnboardingButtons(
             primary: OnboardingButtonInfoModel(
                 title: String(format: cardButtons.primary.title,
@@ -125,7 +126,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getOnboardingMultipleChoiceButtons(
         from cardButtons: [NimbusOnboardingMultipleChoiceButton]
-    ) -> [OnboardingMultipleChoiceButtonModel] {
+    ) -> [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
         return cardButtons.map { button in
             return OnboardingMultipleChoiceButtonModel(
                 title: button.title,
@@ -165,7 +166,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func getPopupInfoModel(
         from data: NimbusOnboardingInstructionPopup?,
         withA11yID a11yID: String
-    ) -> OnboardingInstructionsPopupInfoModel? {
+    ) -> OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
         guard let data else { return nil }
 
         return OnboardingInstructionsPopupInfoModel(

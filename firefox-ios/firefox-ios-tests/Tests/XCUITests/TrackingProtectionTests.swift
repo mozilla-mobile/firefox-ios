@@ -85,11 +85,6 @@ class TrackingProtectionTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307059
     // Smoketest
     func testStandardProtectionLevel() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
-        mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
-        navigator.back()
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
             navigator.goto(BrowserTabMenu)
@@ -104,8 +99,6 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
-        navigator.goto(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
@@ -150,11 +143,6 @@ class TrackingProtectionTests: BaseTestCase {
         trackingProtectionScreen = TrackingProtectionScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
         settingsScreen = SettingScreen(app: app)
-
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        browserScreen.assertCancelButtonOnUrlBarExists()
-        navigator.back()
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
             navigator.goto(BrowserTabMenu)
@@ -169,8 +157,6 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
-        navigator.goto(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
@@ -234,7 +220,6 @@ class TrackingProtectionTests: BaseTestCase {
         // Enable Strict Protection Level
         enableStrictMode()
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(trackingProtectionTestUrl)
         waitUntilPageLoad()
 

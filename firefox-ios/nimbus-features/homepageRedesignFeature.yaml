@@ -24,6 +24,11 @@ features:
           If true, enables the stories section redesign on homepage, which also includes the removal of other sections (i.e. jump back in, bookmarks)
         type: Boolean
         default: false
+      stories-redesign-v2:
+        description: >
+          If true, enables the redesigned story cards and homepage layout, and disables the bookmarks and jump-back-in homepage sections by default.
+        type: Boolean
+        default: false
       scrim:
         description: >
           If true, enables the scrim on the homepage when searching.
@@ -44,6 +49,7 @@ features:
           search-bar: false
           shortcuts-library: false
           stories-redesign: true
+          stories-redesign-v2: false
           scrim: false
           discover-more-feature-configuration:
             discover-more-v1-experience: false
@@ -52,9 +58,10 @@ features:
       - channel: developer
         value:
           enabled: false
-          search-bar: true
+          search-bar: false
           shortcuts-library: false
           stories-redesign: true
+          stories-redesign-v2: false
           scrim: true
           discover-more-feature-configuration:
             discover-more-v1-experience: false

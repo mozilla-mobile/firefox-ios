@@ -121,4 +121,12 @@ struct HomepageDimensionCalculator {
         }
         return maxHeight
     }
+
+    static func fittingHeight(for view: UIView, width: CGFloat) -> CGFloat {
+        return view.systemLayoutSizeFitting(
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+    }
 }

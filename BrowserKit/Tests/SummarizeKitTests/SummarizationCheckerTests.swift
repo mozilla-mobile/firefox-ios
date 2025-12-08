@@ -5,6 +5,7 @@
 @testable import SummarizeKit
 import XCTest
 
+@MainActor
 final class SummarizationCheckerTests: XCTestCase {
     func jsStubBuilder(
         canSummarize: Bool,
