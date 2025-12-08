@@ -25,12 +25,8 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
     /// documents. Post-consolidation we send the engineID + suffix (if available)
     var telemetryID: String {
         guard !isCustomEngine else { return "custom" }
-        if SearchEngineFlagManager.isSECEnabled {
-            if let suffix = telemetrySuffix, !suffix.isEmpty {
-                return engineID + "-" + suffix
-            } else {
-                return engineID
-            }
+        if let suffix = telemetrySuffix, !suffix.isEmpty {
+            return engineID + "-" + suffix
         } else {
             return engineID
         }
@@ -41,11 +37,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
     private let searchTermComponent = "{searchTerms}"
     private let searchQueryComponentKey: String?
     private let googleEngineID = {
-        if SearchEngineFlagManager.isSECEnabled {
-            return "google"
-        } else {
-            return "google-b-1-m"
-        }
+        return "google"
     }()
 
     var headerSearchTitle: String {
