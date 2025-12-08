@@ -99,6 +99,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .recentSearches,
+                .relayIntegration,
+                .searchEngineConsolidation,
                 .tabScrollRefactorFeature,
                 .sentFromFirefox,
                 .tabTrayUIExperiments,
