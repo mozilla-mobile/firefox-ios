@@ -5,6 +5,7 @@
 import Common
 import ComponentLibrary
 import UIKit
+import OnboardingKit
 
 class OnboardingInstructionPopupViewController: UIViewController,
                                                 Themeable,
@@ -43,7 +44,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
-    var viewModel: OnboardingDefaultBrowserModelProtocol
+    var viewModel: any OnboardingDefaultBrowserModelProtocol<OnboardingInstructionsPopupActions>
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -54,7 +55,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: - Initializers
-    init(viewModel: OnboardingDefaultBrowserModelProtocol,
+    init(viewModel: any OnboardingDefaultBrowserModelProtocol<OnboardingInstructionsPopupActions>,
          windowUUID: WindowUUID,
          buttonTappedFinishFlow: (() -> Void)?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -156,7 +157,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
     // MARK: - Helper methods
     private func configureDescriptionLabel(from descriptionTexts: [String]) {
         let font = FXFontStyles.Regular.subheadline.scaledFont()
-        let attributedParagraphs = viewModel.getAttributedStrings(with: font)
+        let attributedParagraphs = getAttributedStrings(with: font)
 
         let combinedString = NSMutableAttributedString()
 
@@ -228,6 +229,11 @@ class OnboardingInstructionPopupViewController: UIViewController,
         // Call applyTheme() on primaryButton to let it handle theme-specific styling
         primaryButton.applyTheme(theme: theme)
         view.backgroundColor = .clear
+    }
+
+    func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
+        let markupUtility = MarkupAttributeUtility(baseFont: font)
+        return viewModel.instructionSteps.map { markupUtility.addAttributesTo(text: $0) }
     }
 }
 
