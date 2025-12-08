@@ -207,9 +207,9 @@ class TabManagerTests: XCTestCase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs] in
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, mockTabStore] in
             XCTAssertEqual(tabs.count, 4)
-            XCTAssertEqual(self.mockTabStore.fetchWindowDataCalledCount, 1)
+            XCTAssertEqual(mockTabStore?.fetchWindowDataCalledCount, 1)
             expectation.fulfill()
         }
         wait(for: [expectation])
@@ -226,9 +226,9 @@ class TabManagerTests: XCTestCase {
                                                      tabData: getMockTabData(count: 3))
         subject.restoreTabs(true)
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs] in
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, mockTabStore] in
             XCTAssertEqual(tabs.count, 3)
-            XCTAssertEqual(self.mockTabStore.fetchWindowDataCalledCount, 1)
+            XCTAssertEqual(mockTabStore?.fetchWindowDataCalledCount, 1)
             expectation.fulfill()
         }
         wait(for: [expectation])

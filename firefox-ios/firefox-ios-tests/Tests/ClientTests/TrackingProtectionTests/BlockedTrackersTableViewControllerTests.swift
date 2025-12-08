@@ -26,6 +26,7 @@ class BlockedTrackersTableViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testBlockedTrackersViewController_simpleCreation_hasNoLeaks() {
         let blockedTrackersViewController = BlockedTrackersTableViewController(
             with: blockedTrackersMockModel,

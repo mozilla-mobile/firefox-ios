@@ -123,14 +123,14 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testActionsAlwaysRunOnMainThread() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.queue.wait(for: .startingEvent) {
+        DispatchQueue.global(qos: .userInitiated).async { [queue] in
+            queue?.wait(for: .startingEvent) {
                 // Currently we always expect actions to be called on main thread
                 XCTAssert(Thread.isMainThread)
             }
         }
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.queue.signal(event: .startingEvent)
+        DispatchQueue.global(qos: .userInitiated).async { [queue] in
+            queue?.signal(event: .startingEvent)
         }
         wait(1)
     }
@@ -297,8 +297,8 @@ final class EventQueueTests: XCTestCase {
     // This tests an edge case bug that can cause actions to not be executed correctly.
     func testEnqueuingActionDuringProcessingWhoseDependenciesAreSatisfiedWillBeRunCorrectly() {
         let expectation = XCTestExpectation(description: "Nested action expectation.")
-        queue.wait(for: [.startingEvent, .laterEvent], then: {
-            self.queue.wait(for: [.startingEvent, .laterEvent], then: {
+        queue.wait(for: [.startingEvent, .laterEvent], then: { [queue] in
+            queue?.wait(for: [.startingEvent, .laterEvent], then: {
                 expectation.fulfill()
             })
         })
@@ -317,11 +317,11 @@ final class EventQueueTests: XCTestCase {
     func testChangingAnEventAsPartOfAnActionStillRemovesTheActionAfterPerformingIt() {
         let expectation = XCTestExpectation(description: "Action block cleaned up.")
         nonisolated(unsafe) var actionsPerformed = 0
-        queue.wait(for: [.startingEvent, .activityEvent], then: {
+        queue.wait(for: [.startingEvent, .activityEvent], then: { [queue] in
             actionsPerformed += 1
             // As part of the enqueued action block, change the state of our dependent event out of .completed:
-            self.queue.started(.activityEvent)
-            ensureMainThread { [queue = self.queue] in
+            queue?.started(.activityEvent)
+            ensureMainThread {
                 queue?.completed(.activityEvent)
                 if actionsPerformed > 1 {
                     // Action block was not cleaned up and was run repeatedly due
