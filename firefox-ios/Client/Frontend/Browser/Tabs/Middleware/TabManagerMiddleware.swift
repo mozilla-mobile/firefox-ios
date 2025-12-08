@@ -276,7 +276,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
 
         case TabPanelViewActionType.toggleInactiveTabs:
-            // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
+            // TODO: FXIOS-14327- This will be deleted in the next PR to remove inactive tabs
             break
 
         default:
@@ -393,7 +393,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         return tabs
     }
 
-    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
+    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
     /// Gets the list of inactive tabs from `TabManager` and builds the array of InactiveTabsModel
     /// to use in TabDisplayView
     ///
@@ -652,7 +652,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
     // MARK: - Inactive tabs helper
 
-    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
+    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
     /// Close all inactive tabs, removing them from the tabs array on `TabManager`.
     /// Makes a backup of tabs to be deleted in case the undo option is selected.
     private func closeAllInactiveTabs(state: AppState, uuid: WindowUUID) {
@@ -677,7 +677,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         store.dispatch(toastAction)
     }
 
-    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
+    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
     /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
     private func undoCloseAllInactiveTabs(uuid: WindowUUID) {
         let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
@@ -687,7 +687,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         store.dispatch(refreshAction)
     }
 
-    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
+    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
     private func closeInactiveTab(for tabUUID: String, state: AppState, uuid: WindowUUID) {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
         let tabManager = tabManager(for: uuid)
@@ -712,7 +712,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         store.dispatch(toastAction)
     }
 
-    // TODO: FXIOS-14317 - This will be deleted in the next PR to remove inactive tabs
+    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
     private func undoCloseInactiveTab(uuid: WindowUUID) {
         let windowTabManager = self.tabManager(for: uuid)
         guard windowTabManager.backupCloseTab != nil else { return }
