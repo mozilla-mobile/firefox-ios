@@ -86,6 +86,7 @@ public final class BrowserNavigationToolbar: UIView,
 
     private func updateActionStack(toolbarElements: [ToolbarElement]) {
         let buttons = toolbarElements.map { toolbarElement in
+            let hasCachedButton = hasCachedButton(for: toolbarElement)
             let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
 
@@ -98,6 +99,14 @@ public final class BrowserNavigationToolbar: UIView,
                 toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType)
             }
 
+            // Only add the constraints to new buttons
+            if !hasCachedButton {
+                NSLayoutConstraint.activate([
+                    button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+                    button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+                ])
+            }
+
             return button
         }
 
@@ -105,11 +114,6 @@ public final class BrowserNavigationToolbar: UIView,
 
         buttons.forEach { button in
             actionStack.addArrangedSubview(button)
-
-            NSLayoutConstraint.activate([
-                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
-            ])
         }
     }
 

@@ -364,6 +364,7 @@ public class BrowserAddressToolbar: UIView,
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
         let buttons = toolbarElements.map { toolbarElement in
+            let hasCachedButton = hasCachedButton(for: toolbarElement)
             let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
             if !stackView.arrangedSubviews.contains(button) {
@@ -378,6 +379,22 @@ public class BrowserAddressToolbar: UIView,
             if let contextualHintType = toolbarElement.contextualHintType {
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
+
+            // Only add the constraints to new buttons
+            if !hasCachedButton {
+                if button.configuration?.title == nil {
+                    NSLayoutConstraint.activate([
+                        button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+                        button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+                    ])
+                } else {
+                    NSLayoutConstraint.activate([
+                        button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
+                        button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.height),
+                    ])
+                    button.setContentCompressionResistancePriority(.required, for: .horizontal)
+                }
+            }
             return button
         }
 
@@ -385,19 +402,6 @@ public class BrowserAddressToolbar: UIView,
 
         buttons.forEach { button in
             stackView.addArrangedSubview(button)
-
-            if button.configuration?.title == nil {
-                NSLayoutConstraint.activate([
-                    button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                    button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
-                ])
-            } else {
-                NSLayoutConstraint.activate([
-                    button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
-                    button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.height),
-                ])
-                button.setContentCompressionResistancePriority(.required, for: .horizontal)
-            }
         }
     }
 
