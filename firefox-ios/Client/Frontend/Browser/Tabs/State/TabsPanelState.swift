@@ -9,14 +9,11 @@ import Common
 struct TabsPanelState: ScreenState, Equatable {
     struct ScrollState: Equatable {
         let toIndex: Int
-        let isInactiveTabSection: Bool
         let withAnimation: Bool
     }
 
     var isPrivateMode: Bool
     var tabs: [TabModel]
-    var inactiveTabs: [InactiveTabsModel]
-    var isInactiveTabsExpanded: Bool
     var windowUUID: WindowUUID
     var scrollState: ScrollState?
     var didTapAddTab: Bool
@@ -40,8 +37,6 @@ struct TabsPanelState: ScreenState, Equatable {
         self.init(windowUUID: panelState.windowUUID,
                   isPrivateMode: panelState.isPrivateMode,
                   tabs: panelState.tabs,
-                  inactiveTabs: panelState.inactiveTabs,
-                  isInactiveTabsExpanded: panelState.isInactiveTabsExpanded,
                   scrollState: panelState.scrollState,
                   didTapAddTab: panelState.didTapAddTab,
                   urlRequest: panelState.urlRequest)
@@ -52,8 +47,6 @@ struct TabsPanelState: ScreenState, Equatable {
             windowUUID: windowUUID,
             isPrivateMode: isPrivateMode,
             tabs: [TabModel](),
-            inactiveTabs: [InactiveTabsModel](),
-            isInactiveTabsExpanded: false,
             toastType: nil,
             scrollState: nil,
             didTapAddTab: false,
@@ -63,16 +56,12 @@ struct TabsPanelState: ScreenState, Equatable {
     init(windowUUID: WindowUUID,
          isPrivateMode: Bool,
          tabs: [TabModel],
-         inactiveTabs: [InactiveTabsModel],
-         isInactiveTabsExpanded: Bool,
          toastType: ToastType? = nil,
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
          urlRequest: URLRequest? = nil) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
-        self.inactiveTabs = inactiveTabs
-        self.isInactiveTabsExpanded = isInactiveTabsExpanded
         self.windowUUID = windowUUID
         self.scrollState = scrollState
         self.didTapAddTab = didTapAddTab
@@ -103,9 +92,7 @@ struct TabsPanelState: ScreenState, Equatable {
 
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: tabsModel.isPrivateMode,
-                                  tabs: tabsModel.tabs,
-                                  inactiveTabs: tabsModel.inactiveTabs,
-                                  isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded)
+                                  tabs: tabsModel.tabs)
 
         case TabPanelMiddlewareActionType.willAppearTabPanel:
             let scrollModel = createTabScrollBehavior(
@@ -115,25 +102,13 @@ struct TabsPanelState: ScreenState, Equatable {
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded,
                                   scrollState: scrollModel)
 
         case TabPanelMiddlewareActionType.refreshTabs:
             guard let tabModel = action.tabDisplayModel else { return defaultState(from: state) }
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
-                                  tabs: tabModel.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded)
-
-        case TabPanelMiddlewareActionType.refreshInactiveTabs:
-            guard let inactiveTabs = action.inactiveTabModels else { return defaultState(from: state) }
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  inactiveTabs: inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+                                  tabs: tabModel.tabs)
 
         case TabPanelMiddlewareActionType.scrollToTab:
             guard let scrollBehavior = action.scrollBehavior else { return defaultState(from: state) }
@@ -141,8 +116,6 @@ struct TabsPanelState: ScreenState, Equatable {
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded,
                                   scrollState: scrollModel)
 
         default:
@@ -153,13 +126,6 @@ struct TabsPanelState: ScreenState, Equatable {
     static func reduceTabsPanelViewAction(action: TabPanelViewAction,
                                           state: TabsPanelState) -> TabsPanelState {
         switch action.actionType {
-        case TabPanelViewActionType.toggleInactiveTabs:
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
-
         default:
             return defaultState(from: state)
         }
@@ -168,31 +134,27 @@ struct TabsPanelState: ScreenState, Equatable {
     static func defaultState(from state: TabsPanelState) -> TabsPanelState {
         return TabsPanelState(windowUUID: state.windowUUID,
                               isPrivateMode: state.isPrivateMode,
-                              tabs: state.tabs,
-                              inactiveTabs: state.inactiveTabs,
-                              isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+                              tabs: state.tabs)
     }
 
     static func createTabScrollBehavior(
         forState state: TabsPanelState,
         withScrollBehavior scrollBehavior: TabScrollBehavior
     ) -> TabsPanelState.ScrollState? {
-        guard !(state.tabs.isEmpty && state.inactiveTabs.isEmpty) else { return nil }
+        guard !(state.tabs.isEmpty) else { return nil }
 
         if case .scrollToSelectedTab(let shouldAnimate) = scrollBehavior {
             if let selectedTabIndex = state.tabs.firstIndex(where: { $0.isSelected }) {
-                return ScrollState(toIndex: selectedTabIndex, isInactiveTabSection: false, withAnimation: shouldAnimate)
+                return ScrollState(toIndex: selectedTabIndex, withAnimation: shouldAnimate)
             } else if !state.tabs.isEmpty {
                 // If the user switches between the normal and private tab panels, there's a chance this subset of tabs does
                 // not contain a selected tab. In that case, we should scroll to the bottom of the panel.
                 // Note: Could optimize further by scrolling to the most recent tab if we had `lastExecutedTime` in our model
-                return ScrollState(toIndex: state.tabs.count - 1, isInactiveTabSection: false, withAnimation: shouldAnimate)
+                return ScrollState(toIndex: state.tabs.count - 1, withAnimation: shouldAnimate)
             }
         } else if case .scrollToTab(let tabUUID, let shouldAnimate) = scrollBehavior {
             if let tabIndex = state.tabs.firstIndex(where: { $0.tabUUID == tabUUID }) {
-                return ScrollState(toIndex: tabIndex, isInactiveTabSection: false, withAnimation: shouldAnimate)
-            } else if let tabIndex = state.inactiveTabs.firstIndex(where: { $0.tabUUID == tabUUID }) {
-                return ScrollState(toIndex: tabIndex, isInactiveTabSection: true, withAnimation: shouldAnimate)
+                return ScrollState(toIndex: tabIndex, withAnimation: shouldAnimate)
             } else {
                 // This can happen if the user closes a tab, switches to a different tab panel, and then taps "undo"
                 return nil
