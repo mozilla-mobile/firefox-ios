@@ -8,6 +8,7 @@ import Common
 import Shared
 @testable import Client
 
+@MainActor
 class TabTests: XCTestCase {
     var mockProfile: MockProfile!
     private var tabDelegate: MockLegacyTabDelegate!
@@ -17,8 +18,8 @@ class TabTests: XCTestCase {
     private let url = URL(string: "file://test.pdf")!
     private var mockDispatchQueue: MockDispatchQueue!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         mockTabWebView = MockTabWebView(frame: .zero, configuration: .init(), windowUUID: windowUUID)
         mockTabWebView.loadedURL = url
@@ -28,14 +29,14 @@ class TabTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         tabDelegate = nil
         mockProfile = nil
         mockTabWebView = nil
         mockFileManager = nil
         mockDispatchQueue = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testShareURL_RemovingReaderModeComponents() {

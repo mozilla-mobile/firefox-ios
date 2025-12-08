@@ -289,7 +289,7 @@ class TestHistory: XCTestCase {
         )
     }
 
-    private func innerCheckSites(_ places: RustPlaces, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
+    private func innerCheckSites(_ places: RustPlaces, callback: @escaping @Sendable (_ cursor: Cursor<Site>) -> Void) {
         // Retrieve the entry
         places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).upon {
             do {
@@ -362,7 +362,7 @@ class TestHistory: XCTestCase {
     private func runRandom(
         _ places: inout RustPlaces,
         cmdIn: Int,
-        completion: @escaping () -> Void
+        completion: @escaping @Sendable () -> Void
     ) {
         var cmd = cmdIn
         if cmd < 0 {
@@ -393,7 +393,7 @@ class TestHistory: XCTestCase {
         _ places: inout RustPlaces,
         val: Int,
         numCmds: Int,
-        completion: @escaping () -> Void
+        completion: @escaping @Sendable () -> Void
     ) {
         if val == numCmds {
             completion()
@@ -410,12 +410,12 @@ class TestHistory: XCTestCase {
     private func runRandom(
         _ places: inout RustPlaces,
         queue: DispatchQueue,
-        completion: @escaping () -> Void
+        completion: @escaping @Sendable () -> Void
     ) {
-        queue.async { [places] in
+        queue.async { [weak self, places, numCmds] in
             var places = places
             // Each thread creates its own history provider
-            self.runMultiRandom(&places, val: 0, numCmds: self.numCmds) {
+            self?.runMultiRandom(&places, val: 0, numCmds: numCmds) {
                 DispatchQueue.main.async(execute: completion)
             }
         }

@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 import XCTest
 @testable import Client
 
+@MainActor
 final class URLActivityItemProviderTests: XCTestCase {
     let testFileURL = URL(string: "file://some/file/url")!
     let testWebURL = URL(string: "https://mozilla.org")!

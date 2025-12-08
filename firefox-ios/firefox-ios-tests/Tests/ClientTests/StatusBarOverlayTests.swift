@@ -17,16 +17,16 @@ final class StatusBarOverlayTests: XCTestCase {
 
     private var expectedAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.85 }
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.wallpaperManager = WallpaperManagerMock()
         self.notificationCenter = MockNotificationCenter()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         self.profile = nil
         self.wallpaperManager = nil
         self.notificationCenter = nil
