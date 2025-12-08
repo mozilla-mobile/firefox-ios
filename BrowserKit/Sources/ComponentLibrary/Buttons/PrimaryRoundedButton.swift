@@ -28,7 +28,7 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     private var backgroundColorNormal: UIColor = .clear
     private var backgroundColorHighlighted: UIColor = .clear
     private var backgroundColorDisabled: UIColor = .clear
-    private var foregroundColor: UIColor = .black
+    internal var foregroundColor: UIColor = .black
     private var foregroundColorDisabled: UIColor = .clear
 
     override init(frame: CGRect) {
