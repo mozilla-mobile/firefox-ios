@@ -264,30 +264,19 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
         if isToolbarBottomAction {
             return true
         } else {
-            // Compare by properties since we can't directly compare generic types with different type parameters
-            guard let firstButton = viewModel.multipleChoiceButtons.first else {
-                return false
-            }
-            return !isToolbarTopAction
-                && buttonModel.title == firstButton.title
-                && buttonModel.imageID == firstButton.imageID
+            return !isToolbarTopAction && buttonModel == viewModel.multipleChoiceButtons.first
         }
     }
 
     private func buildButtonViews() {
         multipleChoiceButtons.removeAll()
         multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
-            let concreteButtonModel = OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
-                title: buttonModel.title,
-                action: buttonModel.action,
-                imageID: buttonModel.imageID
-            )
-            let isSelectedButton = isSelectedButton(buttonModel: concreteButtonModel, viewModel: viewModel)
+            let isSelectedButton = isSelectedButton(buttonModel: buttonModel, viewModel: viewModel)
             return OnboardingMultipleChoiceButtonView(
                 windowUUID: windowUUID,
                 viewModel: OnboardingMultipleChoiceButtonViewModel(
                     isSelected: isSelectedButton,
-                    info: concreteButtonModel,
+                    info: buttonModel,
                     presentingCardName: viewModel.name,
                     a11yIDRoot: viewModel.a11yIdRoot
                 ),
@@ -299,9 +288,8 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
     // MARK: - Button Actions
     @objc
     override func primaryAction() {
-        let action = viewModel.buttons.primary.action
         delegate?.handleBottomButtonActions(
-            for: action,
+            for: viewModel.buttons.primary.action,
             from: viewModel.name,
             isPrimaryButton: true)
     }
