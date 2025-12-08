@@ -12,18 +12,18 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockMicrosurveyTelemetry: MockMicrosurveyTelemetry!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockMicrosurveyTelemetry = MockMicrosurveyTelemetry()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockMicrosurveyTelemetry = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testDismissSurveyAction() throws {
