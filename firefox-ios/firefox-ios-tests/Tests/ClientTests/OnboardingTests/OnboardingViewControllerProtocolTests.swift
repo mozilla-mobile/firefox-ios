@@ -28,7 +28,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         let subject = createSubject()
 
         guard let result = subject.pageController.viewControllers?.first
-            as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
+            as? OnboardingBasicCardViewController<OnboardingKitCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -126,7 +126,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         let subject = createSubject()
 
         guard let result = subject.pageController.viewControllers?.first
-            as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
+            as? OnboardingBasicCardViewController<OnboardingKitCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -140,7 +140,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
 
         subject.moveForward(numberOfPages: 1, from: cards.welcome.rawValue)
         guard let result = subject.pageController.viewControllers?.first
-            as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
+            as? OnboardingBasicCardViewController<OnboardingKitCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -154,7 +154,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
 
         subject.moveForward(numberOfPages: 1, from: cards.notifications.rawValue)
         guard let result = subject.pageController.viewControllers?.first
-            as? OnboardingBasicCardViewController<OnboardingCardInfoModel> else {
+            as? OnboardingBasicCardViewController<OnboardingKitCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }

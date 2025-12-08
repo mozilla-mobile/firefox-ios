@@ -5,36 +5,34 @@
 import OnboardingKit
 
 struct OnboardingKitCardInfoModel: OnboardingCardInfoModelProtocol {
-    // MARK: Protocol properties
     let cardType: OnboardingKit.OnboardingCardType
     let name: String
     let order: Int
     let title: String
     let body: String
-    let instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
-    let link: OnboardingKit.OnboardingLinkInfoModel?
-    let buttons: OnboardingKit.OnboardingButtons<OnboardingActions>
-    let multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
+    let instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
+    let link: OnboardingLinkInfoModel?
+    let buttons: OnboardingButtons<OnboardingActions>
+    let multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
     let onboardingType: OnboardingType
     let a11yIdRoot: String
     let imageID: String
-    let embededLinkText: [OnboardingKit.EmbeddedLink]
+    let embededLinkText: [EmbeddedLink]
 
-    // Required initializer
     init(
         cardType: OnboardingKit.OnboardingCardType,
         name: String,
         order: Int,
         title: String,
         body: String,
-        link: OnboardingKit.OnboardingLinkInfoModel? = nil,
-        buttons: OnboardingKit.OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] = [],
+        link: OnboardingLinkInfoModel? = nil,
+        buttons: OnboardingButtons<OnboardingActions>,
+        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] = [],
         onboardingType: OnboardingType = .freshInstall,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? = nil,
-        embededLinkText: [OnboardingKit.EmbeddedLink] = []
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? = nil,
+        embededLinkText: [EmbeddedLink] = []
     ) {
         self.cardType = cardType
         self.name = name

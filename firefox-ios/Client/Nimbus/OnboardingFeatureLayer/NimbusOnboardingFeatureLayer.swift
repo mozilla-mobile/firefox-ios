@@ -40,7 +40,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         for onboardingType: OnboardingType,
         from cardData: [String: NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
-    ) -> [OnboardingCardInfoModel] {
+    ) -> [OnboardingKitCardInfoModel] {
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
@@ -52,7 +52,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // We have to update the a11yIdRoot using the correct order of the cards
         .enumerated()
         .map { index, card in
-            return OnboardingCardInfoModel(
+            return OnboardingKitCardInfoModel(
                 cardType: card.cardType,
                 name: card.name,
                 order: card.order,
@@ -72,7 +72,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func getOnboardingCards(
         from cardData: [String: NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
-    ) -> [OnboardingCardInfoModel] {
+    ) -> [OnboardingKitCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
 
@@ -83,7 +83,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
         return cardData.compactMap { cardName, cardData in
             if cardIsValid(with: cardData, using: conditionTable, and: helper) {
-                return OnboardingCardInfoModel(
+                return OnboardingKitCardInfoModel(
                     cardType: OnboardingKit.OnboardingCardType(rawValue: cardData.cardType.rawValue) ?? .basic,
                     name: cardName,
                     order: cardData.order,

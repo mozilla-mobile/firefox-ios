@@ -248,7 +248,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         _ pageViewController: UIPageViewController,
         viewControllerBefore viewController: UIViewController
     ) -> UIViewController? {
-        guard let onboardingVC = viewController as? OnboardingCardViewController<OnboardingCardInfoModel>,
+        guard let onboardingVC = viewController as? OnboardingCardViewController<OnboardingKitCardInfoModel>,
               let index = getCardIndex(viewController: onboardingVC)
         else { return nil }
 
@@ -265,7 +265,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         _ pageViewController: UIPageViewController,
         viewControllerAfter viewController: UIViewController
     ) -> UIViewController? {
-        guard let onboardingVC = viewController as? OnboardingCardViewController<OnboardingCardInfoModel>,
+        guard let onboardingVC = viewController as? OnboardingCardViewController<OnboardingKitCardInfoModel>,
               let index = getCardIndex(viewController: onboardingVC)
         else { return nil }
 

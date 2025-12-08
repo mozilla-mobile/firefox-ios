@@ -92,7 +92,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        let expectedCard = OnboardingCardInfoModel(
+        let expectedCard = OnboardingKitCardInfoModel(
             cardType: .basic,
             name: CardElementNames.name + " 1",
             order: 10,
