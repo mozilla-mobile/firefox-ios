@@ -350,7 +350,7 @@ class CodeUsageDetector {
             case .deferred:
                 return "Deferred<"
             case .swiftUIText:
-                return "Text(\""
+                return " Text(\""
             case .task:
                 return " Task {"
             }
