@@ -26,7 +26,7 @@ final class TabDisplayDiffableDataSourceTests: XCTestCase {
         let subject = createSubject(isPrivateMode: false,
                                     numberActiveTabs: 2)
 
-        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        XCTAssertEqual(subject.collectionView.numberOfSections, 1)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 2)
     }
 
@@ -34,7 +34,7 @@ final class TabDisplayDiffableDataSourceTests: XCTestCase {
         let subject = createSubject(isPrivateMode: true,
                                     numberActiveTabs: 9)
 
-        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        XCTAssertEqual(subject.collectionView.numberOfSections, 1)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 9)
     }
 
@@ -42,18 +42,8 @@ final class TabDisplayDiffableDataSourceTests: XCTestCase {
         let subject = createSubject(isPrivateMode: true,
                                     numberActiveTabs: 0)
 
-        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        XCTAssertEqual(subject.collectionView.numberOfSections, 1)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
-        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 0)
-    }
-
-    func testAmountOfSections_ForPrivateTabs() {
-        let subject = createSubject(isPrivateMode: true,
-                                    numberActiveTabs: 4)
-
-        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
-        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
-        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 4)
     }
 
     // MARK: - Private
