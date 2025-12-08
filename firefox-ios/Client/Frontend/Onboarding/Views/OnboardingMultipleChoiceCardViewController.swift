@@ -30,7 +30,9 @@ struct OnboardingMultipleChoiceCardViewControllerUX {
 }
 
 class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoModelProtocol>:
-    OnboardingCardViewController<CardModel> {
+    OnboardingCardViewController<CardModel>
+    where CardModel.OnboardingActionType == OnboardingActions,
+          CardModel.OnboardingMultipleChoiceActionType == OnboardingMultipleChoiceAction {
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
     private var multipleChoiceButtons: [OnboardingMultipleChoiceButtonView]
@@ -281,12 +283,10 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
 
     private func buildButtonViews() {
         multipleChoiceButtons.removeAll()
-        multipleChoiceButtons = viewModel.multipleChoiceButtons.compactMap({ buttonModel in
-            // Convert generic button model to concrete type
-            guard let action = buttonModel.action as? OnboardingMultipleChoiceAction else { return nil }
+        multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
             let concreteButtonModel = OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
                 title: buttonModel.title,
-                action: action,
+                action: buttonModel.action,
                 imageID: buttonModel.imageID
             )
             let isSelectedButton = isSelectedButton(buttonModel: concreteButtonModel, viewModel: viewModel)
@@ -306,7 +306,7 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
     // MARK: - Button Actions
     @objc
     override func primaryAction() {
-        guard let action = viewModel.buttons.primary.action as? OnboardingActions else { return }
+        let action = viewModel.buttons.primary.action
         delegate?.handleBottomButtonActions(
             for: action,
             from: viewModel.name,
@@ -315,7 +315,7 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
 
     @objc
     override func secondaryAction() {
-        guard let buttonAction = viewModel.buttons.secondary?.action as? OnboardingActions else { return }
+        guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
         delegate?.handleBottomButtonActions(
             for: buttonAction,

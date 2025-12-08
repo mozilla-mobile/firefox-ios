@@ -35,7 +35,7 @@ struct OnboardingBasicCardViewControllerUX {
 }
 
 class OnboardingBasicCardViewController<CardModel: OnboardingCardInfoModelProtocol>:
-    OnboardingCardViewController<CardModel> {
+    OnboardingCardViewController<CardModel> where CardModel.OnboardingActionType == OnboardingActions {
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
 
@@ -257,16 +257,15 @@ class OnboardingBasicCardViewController<CardModel: OnboardingCardInfoModelProtoc
     // MARK: - Button Actions
     @objc
     override func primaryAction() {
-        guard let action = viewModel.buttons.primary.action as? OnboardingActions else { return }
         delegate?.handleBottomButtonActions(
-            for: action,
+            for: viewModel.buttons.primary.action,
             from: viewModel.name,
             isPrimaryButton: true)
     }
 
     @objc
     override func secondaryAction() {
-        guard let buttonAction = viewModel.buttons.secondary?.action as? OnboardingActions else { return }
+        guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
         delegate?.handleBottomButtonActions(
             for: buttonAction,
