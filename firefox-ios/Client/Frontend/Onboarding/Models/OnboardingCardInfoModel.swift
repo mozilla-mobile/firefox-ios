@@ -6,7 +6,7 @@ import Foundation
 import OnboardingKit
 
 struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
-    var cardType: OnboardingKit.OnboardingCardType
+    var cardType: OnboardingCardType
     var name: String
     var order: Int
     var title: String
@@ -17,8 +17,8 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
     var onboardingType: OnboardingType
     var a11yIdRoot: String
-    var embededLinkText: [OnboardingKit.EmbeddedLink]
-    var defaultSelectedButton: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>?
+    var embededLinkText: [EmbeddedLink]
+    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>?
 
     var imageID: String
 
@@ -27,19 +27,19 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     }
 
     init(
-        cardType: OnboardingKit.OnboardingCardType,
+        cardType: OnboardingCardType,
         name: String,
         order: Int,
         title: String,
         body: String,
-        link: OnboardingKit.OnboardingLinkInfoModel?,
-        buttons: OnboardingKit.OnboardingButtons<OnboardingActions>,
-        multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
+        link: OnboardingLinkInfoModel?,
+        buttons: OnboardingButtons<OnboardingActions>,
+        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?,
-        embededLinkText: [OnboardingKit.EmbeddedLink]
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?,
+        embededLinkText: [EmbeddedLink]
     ) {
         self.cardType = cardType
         self.name = name

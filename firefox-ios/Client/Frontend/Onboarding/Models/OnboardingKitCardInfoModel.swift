@@ -4,7 +4,7 @@
 
 import OnboardingKit
 
-struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol {
+struct OnboardingKitCardInfoModel: OnboardingCardInfoModelProtocol {
     // MARK: Protocol properties
     let cardType: OnboardingKit.OnboardingCardType
     let name: String

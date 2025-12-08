@@ -32,7 +32,7 @@ struct OnboardingBasicCardViewControllerUX {
     static let baseImageHeight: CGFloat = 211
 }
 
-class OnboardingBasicCardViewController<CardModel: OnboardingKit.OnboardingCardInfoModelProtocol>:
+class OnboardingBasicCardViewController<CardModel: OnboardingCardInfoModelProtocol>:
     OnboardingCardViewController<CardModel> {
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?

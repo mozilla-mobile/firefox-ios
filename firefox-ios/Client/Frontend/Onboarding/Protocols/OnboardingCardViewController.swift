@@ -24,7 +24,7 @@ struct OnboardingCardViewControllerSharedUX {
     static let smallScrollViewVerticalPadding: CGFloat = 20
 }
 
-class OnboardingCardViewController<CardModel: OnboardingKit.OnboardingCardInfoModelProtocol>: UIViewController, Themeable {
+class OnboardingCardViewController<CardModel: OnboardingCardInfoModelProtocol>: UIViewController, Themeable {
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
