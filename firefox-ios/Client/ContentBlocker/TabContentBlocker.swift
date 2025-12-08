@@ -28,7 +28,7 @@ class TabContentBlocker: Notifiable {
         return false
     }
 
-    nonisolated func notifiedTabSetupRequired() {}
+    func notifiedTabSetupRequired() {}
 
     func currentlyEnabledLists() -> [String] {
         return []
