@@ -4855,7 +4855,6 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             updateToolbarTabCount(count)
-            topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
 
