@@ -100,7 +100,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .noInternetConnectionErrorPage,
                 .recentSearches,
                 .relayIntegration,
-                .searchEngineConsolidation,
                 .tabScrollRefactorFeature,
                 .sentFromFirefox,
                 .tabTrayUIExperiments,
