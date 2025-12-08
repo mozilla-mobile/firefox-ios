@@ -162,8 +162,8 @@ final class ToolbarAnimator {
                 view.header.transform = .identity
                 view.topBlurView.transform = .identity
             }
-        }, completion: { _ in
-            self.updateTopToolbarConstraints(topContainerOffset: headerOffset)
+        }, completion: { [weak self] _ in
+            self?.updateTopToolbarConstraints(topContainerOffset: headerOffset)
         })
         delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }
@@ -188,9 +188,9 @@ final class ToolbarAnimator {
                 view.overKeyboardContainer.transform = .identity
                 view.bottomBlurView.transform = .identity
             }
-        }, completion: { _ in
-            self.updateBottomToolbarConstraints(bottomContainerOffset: bottomOffset,
-                                                overKeyboardContainerOffset: overkeyBoardOffset)
+        }, completion: { [weak self] _ in
+            self?.updateBottomToolbarConstraints(bottomContainerOffset: bottomOffset,
+                                                 overKeyboardContainerOffset: overkeyBoardOffset)
         })
 
         self.delegate?.dispatchScrollAlphaChange(alpha: alpha)
