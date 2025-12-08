@@ -8,6 +8,7 @@ import ComponentLibrary
 import OnboardingKit
 
 // MARK: - Basic Card UX Constants
+private typealias UX = OnboardingBasicCardViewControllerUX
 struct OnboardingBasicCardViewControllerUX {
     static let stackViewSpacingWithLink: CGFloat = 15
     static let stackViewSpacingWithoutLink: CGFloat = 24
@@ -52,7 +53,7 @@ class OnboardingBasicCardViewController<CardModel: OnboardingCardInfoModelProtoc
     // version based on constrains of some kind. The ticket above ensures this work
     // should get addressed.
     private var imageViewHeight: CGFloat {
-        return OnboardingBasicCardViewControllerUX.baseImageHeight * scalingCoefficient()
+        return UX.baseImageHeight * scalingCoefficient()
     }
 
     private func scalingCoefficient() -> CGFloat {
@@ -109,37 +110,37 @@ class OnboardingBasicCardViewController<CardModel: OnboardingCardInfoModelProtoc
         addViewsToView()
 
         // Adapt layout for smaller screens
-        var scrollViewVerticalPadding = OnboardingBasicCardViewControllerUX.scrollViewVerticalPadding
-        var topPadding = OnboardingBasicCardViewControllerUX.topStackViewPaddingPhone
-        var horizontalTopStackViewPadding = OnboardingBasicCardViewControllerUX.horizontalTopStackViewPaddingPhone
-        var bottomStackViewPadding = OnboardingBasicCardViewControllerUX.bottomStackViewPaddingPhone
+        var scrollViewVerticalPadding = UX.scrollViewVerticalPadding
+        var topPadding = UX.topStackViewPaddingPhone
+        var horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
+        var bottomStackViewPadding = UX.bottomStackViewPaddingPhone
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             topStackView.spacing = stackViewSpacing()
-            buttonStackView.spacing = OnboardingBasicCardViewControllerUX.stackViewSpacingButtons
+            buttonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
                 scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
-                topPadding = OnboardingBasicCardViewControllerUX.topStackViewPaddingPad
-                horizontalTopStackViewPadding = OnboardingBasicCardViewControllerUX.horizontalTopStackViewPaddingPad
-                bottomStackViewPadding = -OnboardingBasicCardViewControllerUX.bottomStackViewPaddingPad
+                topPadding = UX.topStackViewPaddingPad
+                horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPad
+                bottomStackViewPadding = -UX.bottomStackViewPaddingPad
             } else {
                 scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
-                topPadding = OnboardingBasicCardViewControllerUX.topStackViewPaddingPhone
-                horizontalTopStackViewPadding = OnboardingBasicCardViewControllerUX.horizontalTopStackViewPaddingPhone
-                bottomStackViewPadding = -OnboardingBasicCardViewControllerUX.bottomStackViewPaddingPhone
+                topPadding = UX.topStackViewPaddingPhone
+                horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
+                bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             }
         } else if UIDevice.current.userInterfaceIdiom == .phone {
-            horizontalTopStackViewPadding = OnboardingBasicCardViewControllerUX.horizontalTopStackViewPaddingPhone
-            bottomStackViewPadding = -OnboardingBasicCardViewControllerUX.bottomStackViewPaddingPhone
+            horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
+            bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
                 topStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
                 buttonStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
                 scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
-                topPadding = OnboardingBasicCardViewControllerUX.smallTopStackViewPadding
+                topPadding = UX.smallTopStackViewPadding
             } else {
                 topStackView.spacing = stackViewSpacing()
-                buttonStackView.spacing = OnboardingBasicCardViewControllerUX.stackViewSpacingButtons
-                scrollViewVerticalPadding = OnboardingBasicCardViewControllerUX.scrollViewVerticalPadding
+                buttonStackView.spacing = UX.stackViewSpacingButtons
+                scrollViewVerticalPadding = UX.scrollViewVerticalPadding
                 topPadding = view.frame.height * 0.1
             }
         }
@@ -230,10 +231,10 @@ class OnboardingBasicCardViewController<CardModel: OnboardingCardInfoModelProtoc
 
     private func stackViewSpacing() -> CGFloat {
         guard viewModel.link?.title != nil else {
-            return OnboardingBasicCardViewControllerUX.stackViewSpacingWithoutLink
+            return UX.stackViewSpacingWithoutLink
         }
 
-        return OnboardingBasicCardViewControllerUX.stackViewSpacingWithLink
+        return UX.stackViewSpacingWithLink
     }
 
     private func setupLinkButton() {
