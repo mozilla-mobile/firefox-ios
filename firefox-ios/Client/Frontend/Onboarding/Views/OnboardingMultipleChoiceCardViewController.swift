@@ -9,6 +9,7 @@ import OnboardingKit
 
 // MARK: - Multiple Choice Card UX Constants
 private typealias UX = OnboardingMultipleChoiceCardViewControllerUX
+private typealias SharedUX = OnboardingCardViewControllerSharedUX
 struct OnboardingMultipleChoiceCardViewControllerUX {
     static let stackViewSpacingWithoutLink: CGFloat = 5
     static let stackViewSpacingButtons: CGFloat = 16
@@ -127,12 +128,12 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
             choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
             bottomButtonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPad
                 horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPad
                 bottomStackViewPadding = -UX.bottomStackViewPaddingPad
             } else {
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPhone
                 horizontalTopStackViewPadding =
                     UX.horizontalTopStackViewPaddingPhone
@@ -145,13 +146,13 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
                 topStackView.setCustomSpacing(
                     UX.topStackViewSpacingBetweenImageAndTitle,
                     after: imageView)
-                topStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
+                topStackView.spacing = SharedUX.smallStackViewSpacing
                 topStackView.setCustomSpacing(
                     UX.topStackViewSpacingBetweenDescriptionAndButtons,
                     after: descriptionLabel)
                 choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
-                bottomButtonStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                bottomButtonStackView.spacing = SharedUX.smallStackViewSpacing
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.smallTopStackViewPadding
             } else {
                 topStackView.setCustomSpacing(

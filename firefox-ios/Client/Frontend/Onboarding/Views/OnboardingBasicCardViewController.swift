@@ -9,6 +9,7 @@ import OnboardingKit
 
 // MARK: - Basic Card UX Constants
 private typealias UX = OnboardingBasicCardViewControllerUX
+private typealias SharedUX = OnboardingCardViewControllerSharedUX
 struct OnboardingBasicCardViewControllerUX {
     static let stackViewSpacingWithLink: CGFloat = 15
     static let stackViewSpacingWithoutLink: CGFloat = 24
@@ -119,12 +120,12 @@ class OnboardingBasicCardViewController<CardModel: OnboardingCardInfoModelProtoc
             topStackView.spacing = stackViewSpacing()
             buttonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPad
                 horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPad
                 bottomStackViewPadding = -UX.bottomStackViewPaddingPad
             } else {
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPhone
                 horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
                 bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
@@ -133,9 +134,9 @@ class OnboardingBasicCardViewController<CardModel: OnboardingCardInfoModelProtoc
             horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
             bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
-                topStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
-                buttonStackView.spacing = OnboardingCardViewControllerSharedUX.smallStackViewSpacing
-                scrollViewVerticalPadding = OnboardingCardViewControllerSharedUX.smallScrollViewVerticalPadding
+                topStackView.spacing = SharedUX.smallStackViewSpacing
+                buttonStackView.spacing = SharedUX.smallStackViewSpacing
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.smallTopStackViewPadding
             } else {
                 topStackView.spacing = stackViewSpacing()

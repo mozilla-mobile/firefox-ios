@@ -8,6 +8,7 @@ import ComponentLibrary
 import OnboardingKit
 
 // MARK: - Common UX Elements
+private typealias SharedUX = OnboardingCardViewControllerSharedUX
 struct OnboardingCardViewControllerSharedUX {
     static let topStackViewSpacing: CGFloat = 24
     @MainActor
@@ -56,7 +57,7 @@ class OnboardingCardViewController<CardModel: OnboardingCardInfoModelProtocol>: 
         stack.backgroundColor = .clear
         stack.alignment = .center
         stack.distribution = .fill
-        stack.spacing = OnboardingCardViewControllerSharedUX.topStackViewSpacing
+        stack.spacing = SharedUX.topStackViewSpacing
         stack.axis = .vertical
     }
 
@@ -76,7 +77,7 @@ class OnboardingCardViewController<CardModel: OnboardingCardInfoModelProtocol>: 
         label.textAlignment = .center
         label.font = self.shouldUseSmallDeviceLayout
             ? FXFontStyles.Bold.title3.scaledFont()
-            : OnboardingCardViewControllerSharedUX.titleFont
+            : SharedUX.titleFont
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
         label.accessibilityTraits.insert(.header)
