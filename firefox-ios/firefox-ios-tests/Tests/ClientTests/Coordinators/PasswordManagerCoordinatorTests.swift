@@ -13,18 +13,18 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
     private var mockParentCoordinator: PasswordManagerCoordinatorDelegateMock!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.mockParentCoordinator = PasswordManagerCoordinatorDelegateMock()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.mockRouter = nil
         self.mockParentCoordinator = nil
         DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testStart_withShowOnboarding() {

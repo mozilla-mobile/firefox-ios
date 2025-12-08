@@ -11,8 +11,8 @@ class PhotonActionSheetTests: BaseTestCase {
     var browserScreen: BrowserScreen!
     var topSitesScreen: TopSitesScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         toolBarScreen = ToolbarScreen(app: app)
         photonActionSheetScreen = PhotonActionSheetScreen(app: app)
         browserScreen = BrowserScreen(app: app)

@@ -26,10 +26,12 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertTrue(initialState.tabs.isEmpty)
         let reducer = tabsPanelReducer()
         let tabs = createTabs()
+        let privateTabs = createTabs(isPrivate: true)
         let inactiveTabs = createInactiveTabs()
         let tabDisplayModel = TabDisplayModel(isPrivateMode: true,
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
+                                              privateTabsCount: "\(privateTabs.count)",
                                               inactiveTabs: inactiveTabs,
                                               isInactiveTabsExpanded: false,
                                               enableDeleteTabsButton: true)
@@ -49,10 +51,12 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertTrue(initialState.tabs.isEmpty)
         let reducer = tabsPanelReducer()
         let tabs = createTabs()
+        let privateTabs = createTabs(isPrivate: true)
         let inactiveTabs = createInactiveTabs()
         let tabDisplayModel = TabDisplayModel(isPrivateMode: true,
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
+                                              privateTabsCount: "\(privateTabs.count)",
                                               inactiveTabs: inactiveTabs,
                                               isInactiveTabsExpanded: false,
                                               enableDeleteTabsButton: true)
@@ -91,9 +95,11 @@ final class TabPanelStateTests: XCTestCase {
         let initialState = createInitialState()
         let reducer = tabsPanelReducer()
         let tabs = createOneSelectedTab()
+        let privateTabs = createTabs(isPrivate: true)
         let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
+                                              privateTabsCount: "\(privateTabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
                                               isInactiveTabsExpanded: false,
                                               enableDeleteTabsButton: true)
@@ -113,10 +119,12 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertTrue(initialState.inactiveTabs.isEmpty)
         let reducer = tabsPanelReducer()
         let tabs = createTabs()
+        let privateTabs = createTabs(isPrivate: true)
         let inactiveTabs = createInactiveTabs()
         let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
+                                              privateTabsCount: "\(privateTabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
                                               isInactiveTabsExpanded: false,
                                               enableDeleteTabsButton: true)

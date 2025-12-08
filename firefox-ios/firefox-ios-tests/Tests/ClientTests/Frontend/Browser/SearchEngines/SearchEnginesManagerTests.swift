@@ -17,8 +17,8 @@ class SearchEnginesManagerTests: XCTestCase {
     private var orderedEngines: [OpenSearchEngine]!
     private var mockSearchEngineProvider: MockSearchEngineProvider!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         profile = MockProfile()
         mockSearchEngineProvider = MockSearchEngineProvider()
@@ -29,12 +29,11 @@ class SearchEnginesManagerTests: XCTestCase {
         )
     }
 
-    override func tearDown() {
-        super.tearDown()
-
+    override func tearDown() async throws {
         profile = nil
         mockSearchEngineProvider = nil
         searchEnginesManager = nil
+        try await super.tearDown()
     }
 
     func testIncludesExpectedEngines() {

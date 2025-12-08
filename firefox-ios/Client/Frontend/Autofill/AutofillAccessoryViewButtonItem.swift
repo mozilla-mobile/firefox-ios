@@ -27,7 +27,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         static let accessoryImageViewSize: CGFloat = 24
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4
-        static let padding: CGFloat = 4
+        static let iPadPadding: CGFloat = 80
     }
 
     // MARK: - Properties
@@ -103,11 +103,42 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
 
         // Add constraints to provide padding
         accessoryView.translatesAutoresizingMaskIntoConstraints = false
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+
+        if #available(iOS 26.0, *) {
+            sharesBackground = false
+            accessoryView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        }
+
+        let leadingConstraint = if #available(iOS 26.0, *), isiPad {
+            accessoryView.leadingAnchor
+                .constraint(
+                    equalTo: containerView.leadingAnchor,
+                    constant: UX.iPadPadding
+                )
+        } else {
+            accessoryView.leadingAnchor
+                .constraint(
+                greaterThanOrEqualTo: containerView.leadingAnchor
+            )
+        }
+
+        let trailingConstraint = if #available(iOS 26.0, *), isiPad {
+            accessoryView.trailingAnchor
+                .constraint(
+                    equalTo: containerView.trailingAnchor,
+                    constant: -UX.iPadPadding
+                )
+        } else {
+            accessoryView.trailingAnchor
+                .constraint(
+                lessThanOrEqualTo: containerView.trailingAnchor
+            )
+        }
+
         NSLayoutConstraint.activate([
-            accessoryView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                   constant: UX.padding),
-            accessoryView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                    constant: -UX.padding),
+            leadingConstraint,
+            trailingConstraint,
             accessoryView.topAnchor.constraint(equalTo: containerView.topAnchor),
             accessoryView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
@@ -131,7 +162,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     }
 
     private func updateBackgroundColor() {
-        if let backgroundColor = backgroundColor {
+        if let backgroundColor {
             customView?.backgroundColor = backgroundColor
         }
     }

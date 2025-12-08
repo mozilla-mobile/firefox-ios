@@ -632,10 +632,10 @@ class TabsTestsIphone: BaseTestCase {
     var newTabsScreen: NewTabsScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .phone
         if !iPad() {
-            super.setUp()
+            try await super.setUp()
         }
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)

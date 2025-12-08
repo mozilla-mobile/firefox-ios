@@ -522,7 +522,6 @@ final class HomepageViewController: UIViewController,
             return searchBar
 
         case .jumpBackIn(let tab):
-
             let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
             let cellType: (UICollectionViewCell & JumpBackInCellProtocol).Type =
                 isStoriesRedesignV2Enabled ? JumpBackInCell.self : LegacyJumpBackInCell.self
@@ -557,14 +556,16 @@ final class HomepageViewController: UIViewController,
             return syncedTabCell
 
         case .bookmark(let item):
-            guard let bookmarksCell = collectionView?.dequeueReusableCell(
-                cellType: BookmarksCell.self,
-                for: indexPath
-            ) else {
+            let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
+            let cellType: (UICollectionViewCell & BookmarksCellProtocol).Type =
+                isStoriesRedesignV2Enabled ? BookmarksCell.self : LegacyBookmarksCell.self
+
+            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            bookmarksCell.configure(config: item, theme: currentTheme)
-            return bookmarksCell
+
+            cell.configure(config: item, theme: currentTheme)
+            return cell
 
         case .merino(let story):
             let cellType: ReusableCell.Type = isAnyStoriesRedesignEnabled ? StoryCell.self : MerinoStandardCell.self

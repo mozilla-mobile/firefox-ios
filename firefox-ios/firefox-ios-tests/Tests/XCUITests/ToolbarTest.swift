@@ -13,14 +13,14 @@ let website1: [String: String] = [
 let website2 = path(forTestPage: "test-example.html")
 
 class ToolbarTests: FeatureFlaggedTestBase {
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2344428

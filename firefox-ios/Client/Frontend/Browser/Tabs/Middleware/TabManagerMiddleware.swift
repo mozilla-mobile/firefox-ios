@@ -367,6 +367,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
             isPrivateMode: isPrivateMode,
             tabs: tabs,
             normalTabsCount: normalTabsCountTextForTabTray(for: uuid),
+            privateTabsCount: privateTabsCountTextForTabTray(for: uuid),
             inactiveTabs: inactiveTabs,
             isInactiveTabsExpanded: false,
             enableDeleteTabsButton: shouldEnableDeleteTabsButton(for: uuid, isPrivateMode: isPrivateMode)

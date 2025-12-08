@@ -19,8 +19,8 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
         return mockSearchEngines.map({ $0.generateModel() })
     }
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
@@ -30,10 +30,10 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testViewDidLoad_dispatchesDidLoadSearchEngines() throws {

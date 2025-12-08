@@ -201,6 +201,7 @@ class SearchTests: FeatureFlaggedTestBase {
         let tablesQuery2 = app.tables
         tablesQuery2.staticTexts.elementContainingText(searchEngine).waitAndTap()
 
+        mozWaitForElementToNotExist(app.navigationBars["Default Search Engine"])
         navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL("foo bar")

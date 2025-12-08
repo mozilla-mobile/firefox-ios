@@ -46,6 +46,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         static let translatorVersion = "3.0"
         static let translatorName = "bergamot-translator"
         static let pivotLanguage = "en"
+        static let lexFileType = "lex"
     }
 
     private let modelsClient: RemoteSettingsClientProtocol?
@@ -232,7 +233,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     ) -> [RemoteSettingsRecord] {
         return records.filter { record in
             guard let fields: ModelFieldsRecord = decodeRecord(record) else { return false }
-            return fields.fromLang == sourceLang && fields.toLang == targetLang
+            return fields.fromLang == sourceLang
+                    && fields.toLang == targetLang
+                    && ignoreLexFiles(fields.fileType)
         }
     }
 
@@ -323,7 +326,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         for record in records {
             guard let fields: ModelFieldsRecord = decodeRecord(record),
                   fields.fromLang == sourceLang,
-                  fields.toLang == targetLang
+                  fields.toLang == targetLang,
+                  ignoreLexFiles(fields.fileType)
             else {
                 continue
             }
@@ -352,5 +356,18 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
         )
 
         return buckets[bestVersion] ?? []
+    }
+
+    /// NOTE: Lex files contain the most common tokens from
+    /// training data. Using them limits the search space and improves performance, but
+    /// also introduces accuracy issues: if a required token isn't present, the system
+    /// has to compose words from other tokens, sometimes producing incorrect or invented
+    /// words.
+    ///
+    /// We may re-enable lex files in the future, but doing so would require non-trivial
+    /// code changes. An idea is to generate lex files dynamically based on the full
+    /// document context, which could improve accuracy and performance.
+    private func ignoreLexFiles(_ fileType: String) -> Bool {
+        return fileType != Constants.lexFileType
     }
 }

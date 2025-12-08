@@ -21,7 +21,7 @@ class PerformanceTests: BaseTestCase {
                     "testPerfBookmarks1000openMenu": "testBookmarksDatabase1000-places.db",
                     "testPerfBookmarks1000startUp": "testBookmarksDatabase1000-places.db"]
 
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let functionName = String(parts[1])
@@ -39,7 +39,7 @@ class PerformanceTests: BaseTestCase {
             launchArguments.append(LaunchArguments.LoadTabsStateArchive + fixtures[functionName]!)
             launchArguments.append(LaunchArguments.LoadDatabasePrefix + fixtures[functionName]!)
         }
-        super.setUp()
+        try await super.setUp()
     }
 
     // This test run first to install the app in the device

@@ -18,8 +18,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private var homepageSettingsScreen: HomepageSettingsScreen!
     private var firefoxHomeScreen: FirefoxHomePageScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         topSitesScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
@@ -28,9 +28,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
         firefoxHomeScreen = FirefoxHomePageScreen(app: app)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func checkBookmarked() {
