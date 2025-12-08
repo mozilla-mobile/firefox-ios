@@ -194,8 +194,7 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
                                 title: "Mozilla \(index)",
                                 history: [],
                                 lastUsed: UInt64(index),
-                                icon: nil,
-                                inactive: false)
+                                icon: nil)
             remoteTabs.append(tab)
         }
         return remoteTabs

@@ -198,7 +198,6 @@ final class JumpBackInSectionStateTests: XCTestCase {
                          title: "Mozilla",
                          history: [],
                          lastUsed: UInt64(1),
-                         icon: nil,
-                         inactive: false)
+                         icon: nil)
     }
 }
