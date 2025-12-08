@@ -6,27 +6,22 @@ import XCTest
 @testable import Client
 
 final class ContentBlockerTests: XCTestCase {
-    @MainActor
-    override func setUp() {
-        super.setUp()
-        ensureAllRulesAreRemovedFromStore()
-    }
+    override func setUp() async throws {
+        try await super.setUp()
 
-    @MainActor
-    private func ensureAllRulesAreRemovedFromStore() {
+        // Ensure all rules are removed from the global store prior to each test
         let expectation = XCTestExpectation()
-        ContentBlocker.shared.removeAllRulesInStore {
+        await ContentBlocker.shared.removeAllRulesInStore {
             expectation.fulfill()
         }
-        wait(for: [expectation])
+        await fulfillment(of: [expectation])
     }
 
-    @MainActor
-    func testCompileListsNotInStore_callsCompletionHandlerSuccessfully() {
+    func testCompileListsNotInStore_callsCompletionHandlerSuccessfully() async {
         let expectation = XCTestExpectation()
-        ContentBlocker.shared.compileListsNotInStore {
+        await ContentBlocker.shared.compileListsNotInStore {
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 5.0)
+        await fulfillment(of: [expectation], timeout: 2)
     }
 }

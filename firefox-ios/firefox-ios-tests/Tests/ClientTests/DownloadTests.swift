@@ -51,6 +51,7 @@ class DownloadTests: XCTestCase {
         download = nil
     }
 
+    @MainActor
     func testResumeDoesNotLeak() {
         let mockDownloadDelegate = MockDownloadDelegate()
         download.delegate = mockDownloadDelegate

@@ -179,9 +179,9 @@ struct CreditCardInputView: ThemeableView {
                                 viewModel.dismiss?(.updatedCard, true)
                                 return
                             }
-                            viewModel.logger?.log("Unable to update card with error: \(error)",
-                                                  level: .fatal,
-                                                  category: .autofill)
+                            viewModel.logger.log("Unable to update card with error: \(error)",
+                                                 level: .fatal,
+                                                 category: .autofill)
                             viewModel.dismiss?(.none, false)
                         }
                     }
@@ -193,9 +193,9 @@ struct CreditCardInputView: ThemeableView {
                                 viewModel.dismiss?(.savedCard, true)
                                 return
                             }
-                            viewModel.logger?.log("Unable to save credit card with error: \(error)",
-                                                  level: .fatal,
-                                                  category: .autofill)
+                            viewModel.logger.log("Unable to save credit card with error: \(error)",
+                                                 level: .fatal,
+                                                 category: .autofill)
                             viewModel.dismiss?(.savedCard, false)
                         }
                     }

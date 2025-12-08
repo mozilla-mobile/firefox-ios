@@ -87,6 +87,10 @@ only_rules: # Only enforce these rules, ignore all others
   - closure_body_length
   - function_body_length
   - implicitly_unwrapped_optional
+  - prefer_type_checking
+  - attribute_name_spacing
+  - unneeded_break_in_switch
+  - multiline_parameters
 
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
@@ -96,6 +100,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - prohibited_interface_builder
   # - prohibited_super_call
   # - protocol_property_accessors_order
+
 
 line_length:
   warning: 125
@@ -107,8 +112,8 @@ closure_body_length:
   error: 34
 
 function_body_length:
-  warning: 125
-  error: 125
+  warning: 122
+  error: 122
 
 file_header:
   required_string: |

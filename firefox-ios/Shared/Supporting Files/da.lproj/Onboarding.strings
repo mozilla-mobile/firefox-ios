@@ -79,44 +79,107 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Spring over";
 
+/* Option for the automatic theme. */
+"Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automatisk";
+
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
 "Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "Fortsæt";
+
+/* Option for the dark theme. */
+"Onboarding.Modern.Customization.Theme.Dark.v145" = "Mørk";
+
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Vælg dit favorit-tema eller få %@ til at følge temaet på din enhed - du bestemmer.";
+
+/* Option for the light theme. */
+"Onboarding.Modern.Customization.Theme.Light.v145" = "Lys";
+
+/* Title for the theme selection card. */
+"Onboarding.Modern.Customization.Theme.Title.v145" = "Vælg dit tema";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "Bund";
 
+/* Action to set the toolbar to the bottom. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "Bund";
+
+/* Continue button on the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Fortsæt";
+
+/* Description for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Begynd at skrive for at få søgeforslag og se dine mest besøgte websteder, bogmærker, historik og søgetjenester - alt på samme sted.";
+
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Vælg, hvor du vil have vist adressefeltet";
+
+/* Title for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "Vælg din adresselinje";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Top";
 
+/* Action to set the toolbar to the top. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "Top";
+
+/* Button to skip the entire onboarding flow. */
+"Onboarding.Modern.General.Skip.v145" = "Spring over";
+
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "Få adgang til dine bogmærker, historik og adgangskoder på alle dine enheder.";
+
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "Dine bogmærker, adgangskoder med mere synkroniseres mellem alle dine enheder. Alt er krypteret, så bare du har adgang.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "Start synkronisering";
 
+/* Button to start the Sync setup process. */
+"Onboarding.Modern.Sync.SignIn.Action.v145" = "Start synkronisering";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.Skip.Action.v140" = "Ikke nu";
+
+/* Button to skip the Sync setup during onboarding. */
+"Onboarding.Modern.Sync.Skip.Action.v145" = "Ikke nu";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Sync.Title.v140" = "Fortsæt hurtigt hvor du slap";
 
+/* Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Sync.Title.v145" = "Tag %@ med overalt";
+
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "Fortsæt";
+
+/* Title for the confirmation button on the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Fortsæt";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "Automatisk beskyttelse af dine personlige oplysninger\nIndlæs sider hurtigere og søg smartere\nLavet af nonprofit-organisationen %@, betroet i mere end 20 år";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Håndter";
 
+/* The text for the Manage settings link button. */
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Håndter indstillinger";
+
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "For at hjælpe med at forbedre browseren sender %1$@ diagnosticeringsdata og data om brug til %2$@. %3$@";
+
+/* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "For at hjælpe med at forbedre browseren sender %1$@ diagnosticeringsdata og data om brug til %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ passer på dit privatliv. Læs mere i vores %2$@";
 
+/* Agreement text for Privacy Notice. %1$@ is the app name (e.g. Firefox), %2$@ is the placeholder for the Privacy Notice link. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "%1$@ passer på dit privatliv. Læs mere i vores %2$@";
+
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "privatlivserklæring.";
+
+/* The text for the Privacy Notice link button. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "privatlivserklæring.";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Læs mere";
@@ -142,8 +205,17 @@
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Ved at fortsætte accepterer du %@";
 
+/* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Ved at fortsætte accepterer du %@";
+
+/* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "betingelser for brug af %@.";
+
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "Opgrader din browsing";
+
+/* Title for the Terms of Service screen in the v2 onboarding flow. */
+"Onboarding.Modern.TermsOfService.Title.v145" = "Tag kontrol over internettet";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "Betingelser for brug af %@.";
@@ -151,14 +223,26 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Angiv som standardbrowser";
 
+/* Action button to set the app as the default browser. */
+"Onboarding.Modern.Welcome.ActionTreatmentA.v145" = "Angiv som standardbrowser";
+
 /* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Welcome.Description.v140" = "Én beslutning beskytter dig overalt på internettet. Du kan altid ændre dig senere.";
+
+/* Description for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Description.v145" = "Én beslutning beskytter dig overalt på internettet. Du kan altid ændre dig senere.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Modern.Welcome.Skip.v140" = "Ikke nu";
 
+/* Button to skip the welcome card. */
+"Onboarding.Modern.Welcome.Skip.v145" = "Ikke nu";
+
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Welcome.Title.v140" = "Sig farvel til skumle reklamer";
+
+/* Title for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Title.v145" = "Sig farvel til skumle sporings-mekanismer";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Fortsæt";

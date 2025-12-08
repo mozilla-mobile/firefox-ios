@@ -244,6 +244,9 @@
 /* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v132" = "Comparteix";
 
+/* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v144" = "Comparteix";
+
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool and is indicating that under the Tools submenu, a Zoom (apply zoom on a page) action is available. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "Zoom";
 
@@ -291,6 +294,9 @@
 
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v131" = "Comparteix";
+
+/* On the main menu, the title for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.Share.Title.v144" = "Comparteix";
 
 /* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "Desactiva el mode fosc dels llocs web";
@@ -405,6 +411,18 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Eines";
+
+/* On the main menu, the accessibility label for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145" = "Pàgina traduïda";
+
+/* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "S’ha traduït a %@";
+
+/* On the main menu, the title for the action that will translate the content of the webpage. */
+"MainMenu.ToolsSection.Translation.Title.v145" = "Tradueix la pàgina";
+
+/* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Traduït";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
 "MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Desactivat";

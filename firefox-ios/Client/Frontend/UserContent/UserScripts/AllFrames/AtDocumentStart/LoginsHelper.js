@@ -478,6 +478,15 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     LoginManagerContent.fromFill = false
   }
 
+  function fillRelayEmail(email) {
+      /* TODO: Do we need this fromFill set for Relay? */
+      LoginManagerContent.fromFill = true
+      this.yieldFocusBackToField();
+      const emailField = LoginManagerContent.activeField;
+      emailField?.setUserInput(email);
+      LoginManagerContent.fromFill = false
+  }
+
   function isUpdatedPasswordManagerEnabled(enabled) {
     LoginManagerContent.updatedPasswordManagerEnabled = enabled
   }
@@ -490,7 +499,8 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   // define the field types for focus events
   const FocusFieldType = {
     username: "username",
-    password: "password"
+    password: "password",
+    email: "email"
   };
 
   function getUsernameAndPassword(field, isSubmission) {
@@ -539,6 +549,11 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         fieldType:
           field === username ? FocusFieldType.username : FocusFieldType.password,
       });
+    } else if (Logic.isInferredEmailField(field)) {
+        webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
+            type: "fieldType",
+            fieldType: FocusFieldType.email,
+        });
     }
   }
 
@@ -588,6 +603,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     this.yieldFocusBackToField = yieldFocusBackToField;
     this.generatePassword = generatePassword;
     this.fillGeneratedPassword = fillGeneratedPassword;
+    this.fillRelayEmail = fillRelayEmail;
     this.isUpdatedPasswordManagerEnabled = isUpdatedPasswordManagerEnabled;
   }
 

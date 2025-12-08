@@ -254,6 +254,7 @@ final class AddressToolbarContainerModel: Equatable {
         return searchEnginesManager.queryForSearchURL(searchURL)
     }
 
+    @MainActor
     private static func mapActions(_ actions: [ToolbarActionConfiguration],
                                    isShowingTopTabs: Bool,
                                    windowUUID: UUID) -> [ToolbarElement] {
@@ -264,7 +265,7 @@ final class AddressToolbarContainerModel: Equatable {
                 badgeImageName: action.badgeImageName,
                 maskImageName: action.maskImageName,
                 templateModeForImage: action.templateModeForImage,
-                isLoading: action.isLoading,
+                loadingConfig: action.loadingConfig,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
@@ -285,42 +286,39 @@ final class AddressToolbarContainerModel: Equatable {
         }
     }
 
+    @MainActor
     private static func getA11yCustomAction(action: ToolbarActionConfiguration, windowUUID: UUID) -> (() -> Void)? {
         return action.a11yCustomActionName != nil ? {
-            ensureMainThread {
-                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                     windowUUID: windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.customA11yAction)
-                store.dispatch(action)
-            }
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.customA11yAction)
+            store.dispatch(action)
         } : nil
     }
 
+    @MainActor
     private static func getOnSelected(action: ToolbarActionConfiguration, windowUUID: UUID) -> ((UIButton) -> Void)? {
         return { button in
-            ensureMainThread {
-                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                     buttonTapped: button,
-                                                     gestureType: .tap,
-                                                     windowUUID: windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
-                store.dispatch(action)
-            }
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 buttonTapped: button,
+                                                 gestureType: .tap,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
+            store.dispatch(action)
         }
     }
 
+    @MainActor
     private static func getOnLongPress(action: ToolbarActionConfiguration,
                                        windowUUID: UUID,
                                        isShowingTopTabs: Bool) -> ((UIButton) -> Void)? {
         return action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs) ? { button in
-            ensureMainThread {
-                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                     buttonTapped: button,
-                                                     gestureType: .longPress,
-                                                     windowUUID: windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
-                store.dispatch(action)
-            }
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 buttonTapped: button,
+                                                 gestureType: .longPress,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
+            store.dispatch(action)
         } : nil
     }
 

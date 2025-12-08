@@ -22,7 +22,8 @@ import struct MozillaAppServices.ScopedKey
 import struct MozillaAppServices.AccessTokenInfo
 
 // Extends NSObject so we can use timers.
-public class RustSyncManager: NSObject, SyncManager {
+// TODO: FXIOS-14225 - RustSyncManager shouldn't be @unchecked Sendable
+public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
     // We shouldn't live beyond our containing BrowserProfile, either in the main app
     // or in an extension.
     // But it's possible that we'll finish a side-effect sync after we've ditched the
@@ -250,7 +251,7 @@ public class RustSyncManager: NSObject, SyncManager {
         notificationCenter.post(name: notification)
     }
 
-    func doInBackgroundAfter(_ millis: Int64, _ block: @escaping () -> Void) {
+    func doInBackgroundAfter(_ millis: Int64, _ block: @Sendable @escaping () -> Void) {
         let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
         queue.asyncAfter(
             deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)),
@@ -356,7 +357,11 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get token server endpoint url."
     }
 
-    func shouldSyncLogins(completion: @escaping (Bool) -> Void) {
+    func shouldSyncLogins(_ passwordEngineIncluded: Bool, completion: @escaping @Sendable (Bool) -> Void) {
+        guard passwordEngineIncluded else {
+            completion(false)
+            return
+        }
         if !(self.prefs.boolForKey(PrefsKeys.LoginsHaveBeenVerified) ?? false) {
             // We should only sync logins when the verification step has completed successfully.
             // Otherwise logins could exist in the database that can't be decrypted and would
@@ -372,33 +377,68 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
+    func shouldSyncCreditCards(_ creditCardEngineIncluded: Bool,
+                               key: String?,
+                               completion: @escaping @Sendable (Bool) -> Void) {
+        guard creditCardEngineIncluded, let encKey = key else {
+            completion(false)
+            return
+        }
+        if !(self.prefs.boolForKey(PrefsKeys.CreditCardsHaveBeenVerified) ?? false) {
+            // We should only sync credit cards when the verification step has completed
+            // successfully. Otherwise records could exist in the database that can't be decrypted
+            // and would prevent credit cards from syncing if they are not scrubbed.
+
+            self.autofill.verifyCreditCards(key: encKey) { successfullyVerified in
+                self.prefs.setBool(successfullyVerified, forKey: PrefsKeys.CreditCardsHaveBeenVerified)
+                completion(successfullyVerified)
+            }
+        } else {
+            // Successful credit cards verification already occurred so credit card syncing can proceed
+            completion(true)
+        }
+    }
+
     private func registerSyncEngines(engines: [RustSyncManagerAPI.TogglableEngine],
-                                     dispatchGroup: DispatchGroupInterface,
                                      loginKey: String?,
                                      creditCardKey: String?,
                                      completion: @escaping @Sendable (([String], [String: String])) -> Void) {
+        let passwordEngineIncluded = engines.contains(.passwords)
+        let creditCardEngineIncluded = engines.contains(.creditcards)
+        self.shouldSyncLogins(passwordEngineIncluded) { syncLogins in
+            self.shouldSyncCreditCards(creditCardEngineIncluded, key: creditCardKey) { syncCreditCards in
+                self.doRegisterSyncEngines(engines,
+                                           syncLogins,
+                                           loginKey,
+                                           syncCreditCards,
+                                           creditCardKey) { registeredEngineData in completion(registeredEngineData) }
+            }
+        }
+    }
+
+    private func doRegisterSyncEngines(_ engines: [RustSyncManagerAPI.TogglableEngine],
+                                       _ syncLogins: Bool,
+                                       _ loginKey: String?,
+                                       _ syncCreditCards: Bool,
+                                       _ creditCardKey: String?,
+                                       completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
-        var registeredPlaces = false
         var registeredAutofill = false
+        var registeredPlaces = false
 
-        for engine in engines.filter({
-            self.syncManagerAPI.rustTogglableEngines.contains($0) }) {
-             switch engine {
-             case .tabs:
-                 self.tabs.registerWithSyncManager()
-                 rustEngines.append(engine.rawValue)
-             case .passwords:
-                 dispatchGroup.enter()
-                 self.shouldSyncLogins { shouldSync in
-                     defer { dispatchGroup.leave() }
-                     if shouldSync, loginKey != nil {
-                         self.logins.registerWithSyncManager()
-                         rustEngines.append(engine.rawValue)
-                     }
-                 }
-             case .creditcards:
-                if let key = creditCardKey {
+        for engine in engines.filter({ self.syncManagerAPI.rustTogglableEngines.contains($0) }) {
+            switch engine {
+            case .tabs:
+                self.tabs.registerWithSyncManager()
+                rustEngines.append(engine.rawValue)
+            case .passwords:
+                if syncLogins, loginKey != nil {
+                    self.logins.registerWithSyncManager()
+                    rustEngines.append(engine.rawValue)
+                }
+            case .creditcards:
+                if syncCreditCards, let key = creditCardKey {
                     // checking if autofill was already registered with addresses
                     if !registeredAutofill {
                         self.autofill.registerWithSyncManager()
@@ -406,31 +446,26 @@ public class RustSyncManager: NSObject, SyncManager {
                     }
                     localEncryptionKeys[engine.rawValue] = key
                     rustEngines.append(engine.rawValue)
-                 }
-             case .addresses:
-                 // checking if autofill was already registered with credit cards
-                 if !registeredAutofill {
-                     self.autofill.registerWithSyncManager()
-                     registeredAutofill = true
-                 }
-                 rustEngines.append(engine.rawValue)
-             case .bookmarks, .history:
-                 if !registeredPlaces {
-                     self.places.registerWithSyncManager()
-                     registeredPlaces = true
-                 }
-                 rustEngines.append(engine.rawValue)
-             }
+                }
+            case .addresses:
+                // checking if autofill was already registered with credit cards
+                if !registeredAutofill {
+                    self.autofill.registerWithSyncManager()
+                    registeredAutofill = true
+                }
+                rustEngines.append(engine.rawValue)
+            case .bookmarks, .history:
+                if !registeredPlaces {
+                    self.places.registerWithSyncManager()
+                    registeredPlaces = true
+                }
+                rustEngines.append(engine.rawValue)
+            }
         }
-        // FXIOS-13954 - This is to be revisited once we are on Swift 6.2 with default main actor isolation.
-        // This isn't updating any UI elements within the completion block, so not touching it for now
-        dispatchGroup.notify(queue: .global()) {
-            completion((rustEngines, localEncryptionKeys))
-        }
+        completion((rustEngines, localEncryptionKeys))
     }
 
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
-                           dispatchGroup: DispatchGroupInterface = DispatchGroup(),
                            completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         logins.getStoredKey { loginResult in
             let loginKey: String?
@@ -445,6 +480,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     category: .sync
                 )
                 loginKey = nil
+                self.logins.reportPreSyncKeyRetrievalFailure(err: err.localizedDescription)
             }
 
             self.autofill.getStoredKey { creditCardResult in
@@ -458,9 +494,14 @@ public class RustSyncManager: NSObject, SyncManager {
                         level: .warning,
                         category: .sync
                     )
+                    creditCardKey = nil
+                    self.autofill.reportPreSyncKeyRetrievalFailure(err: err.localizedDescription)
                 }
-                self.registerSyncEngines(engines: engines,
-                                         dispatchGroup: dispatchGroup,
+
+                // calling `getEnginesWithRetrievedKeys` to remove engines that will fail to sync because
+                // the encryption key is missing
+                let enginesToSync = self.getEnginesWithRetrievedKeys(creditCardKey, loginKey, engines)
+                self.registerSyncEngines(engines: enginesToSync,
                                          loginKey: loginKey,
                                          creditCardKey: creditCardKey,
                                          completion: completion)
@@ -468,7 +509,24 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    private func doSync(params: SyncParams, completion: @escaping (SyncResult) -> Void) {
+   func getEnginesWithRetrievedKeys(_ creditCardKey: String?,
+                                    _ loginKey: String?,
+                                    _ engines: [RustSyncManagerAPI.TogglableEngine]
+                                   ) -> [RustSyncManagerAPI.TogglableEngine] {
+       var enginesToSync = engines
+
+       if loginKey == nil {
+           enginesToSync = enginesToSync.filter { $0 != RustSyncManagerAPI.TogglableEngine.passwords }
+       }
+
+       if creditCardKey == nil {
+           enginesToSync = enginesToSync.filter { $0 != RustSyncManagerAPI.TogglableEngine.creditcards }
+       }
+
+       return enginesToSync
+    }
+
+    private func doSync(params: SyncParams, completion: @escaping @Sendable (SyncResult) -> Void) {
         beginSyncing()
         syncManagerAPI.sync(params: params) { syncResult in
             // Save the persisted state

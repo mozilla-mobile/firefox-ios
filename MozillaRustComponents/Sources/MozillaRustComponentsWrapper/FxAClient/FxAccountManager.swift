@@ -145,7 +145,7 @@ open class FxAccountManager: @unchecked Sendable {
         pairingUrl: String,
         entrypoint: String,
         scopes: [String] = [],
-        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
+        completionHandler: @Sendable @MainActor @escaping (Result<URL, Error>) -> Void
     ) {
         // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
         nonisolated(unsafe) var scopes = scopes
@@ -201,7 +201,7 @@ open class FxAccountManager: @unchecked Sendable {
     public func getAccessToken(
         scope: String,
         ttl: UInt64? = nil,
-        completionHandler: @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
+        completionHandler: @MainActor @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {

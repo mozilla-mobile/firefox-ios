@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 @testable import SummarizeKit
 
 extension Result {
@@ -25,7 +26,7 @@ class MockDateProvider: DateProvider {
 }
 
 @MainActor
-final class SummarizeViewModelTests: XCTestCase {
+final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
     private var tosAcceptor: MockSummarizeToSAcceptor!
     private var summarizerService: MockSummarizerService!
     private var webView: MockWebView!
@@ -33,20 +34,20 @@ final class SummarizeViewModelTests: XCTestCase {
     private let maxWords = 5000
     private let url = URL(string: "https://example.com")!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         webView = MockWebView(url)
         dateProvider = MockDateProvider()
         summarizerService = MockSummarizerService()
         tosAcceptor = MockSummarizeToSAcceptor()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         tosAcceptor = nil
         dateProvider = nil
         summarizerService = nil
         webView = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_summarize_whenTosNotAccepted_whenTriggerIsShake_showsToSScreen() {

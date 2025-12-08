@@ -9,7 +9,7 @@ import Storage
 import struct MozillaAppServices.Device
 
 /// Defines actions sent to Redux for Sync tab in tab tray
-struct RemoteTabsPanelAction: Action {
+struct RemoteTabsPanelAction: Action, Sendable {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let clientAndTabs: [ClientAndTabs]?

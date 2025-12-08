@@ -250,6 +250,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -278,6 +279,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleLeadingPageChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else {
             return defaultState(from: state)
@@ -310,6 +312,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -343,6 +346,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -377,6 +381,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -414,6 +419,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -448,6 +454,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -482,6 +489,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -516,6 +524,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -550,6 +559,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleDidPasteSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -571,7 +581,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
-            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -583,6 +593,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleDidStartEditingUrlAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -618,6 +629,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleCancelEditOnHomepageAction(state: Self, action: Action) -> Self {
         if state.url == nil {
             return handleCancelEditAction(state: state, action: action)
@@ -626,6 +638,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
     }
 
+    @MainActor
     private static func handleCancelEditAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -660,6 +673,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleDidSetTextInLocationViewAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -724,6 +738,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleClearSearchAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -755,6 +770,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleDidDeleteSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -786,6 +802,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func handleDidEnterSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -958,6 +975,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // MARK: - Address Toolbar Actions
+    @MainActor
     private static func navigationActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
@@ -985,6 +1003,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return actions
     }
 
+    @MainActor
     private static func leadingPageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
@@ -1062,6 +1081,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    @MainActor
     private static func trailingPageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
@@ -1100,6 +1120,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return actions
     }
 
+    @MainActor
     private static func browserActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
@@ -1156,6 +1177,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // MARK: - Helper
+    @MainActor
     private static func toolbarPosition(action: ToolbarAction) -> AddressToolbarPosition? {
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
@@ -1172,6 +1194,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
     }
 
+    @MainActor
     private static func shouldUseAlternativeLocationColor(action: ToolbarAction) -> Bool {
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return false }
@@ -1318,7 +1341,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actionType: .translate,
             iconName: state.buttonImageName,
             templateModeForImage: !isActiveState,
-            isLoading: state == .loading,
+            loadingConfig: LoadingConfig(
+                isLoading: state == .loading,
+                a11yLabel: .Translations.Sheet.AccessibilityLabels.LoadingCompletedAccessibilityLabel
+            ),
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,

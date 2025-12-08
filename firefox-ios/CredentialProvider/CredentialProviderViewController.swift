@@ -10,10 +10,14 @@ import Shared
 import Storage
 
 protocol CredentialProviderViewProtocol: AnyObject {
+    @MainActor
     var extensionContext: ASCredentialProviderExtensionContext { get }
 
+    @MainActor
     func showWelcome()
+    @MainActor
     func showPasscodeRequirement()
+    @MainActor
     func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
 }
 
@@ -33,6 +37,16 @@ struct CredentialProvider {
     }
 }
 
+/// The `ASCredentialProviderViewController` overrides in this class are required
+/// parts of the AuthenticationServices extension lifecycle. 
+/// 
+/// The password manager extension depends on these hooks for Firefox to behave correctly 
+/// when used as an external password manager.
+///
+/// NOTE: The `AS` in `ASCredentialProviderViewController` refers to Apple’s AuthenticationServices framework
+/// and not our internal Application Services module.
+/// For Reference:  
+/// - https://developer.apple.com/documentation/authenticationservices/ascredentialproviderviewcontroller
 class CredentialProviderViewController: ASCredentialProviderViewController {
     private var presenter: CredentialProviderPresenter?
     private let appAuthenticator = AppAuthenticator()
@@ -64,6 +78,27 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     override func prepareInterfaceForExtensionConfiguration() {
         if appAuthenticator.canAuthenticateDeviceOwner {
             self.presenter?.extensionConfigurationRequested()
+        } else {
+            self.presenter?.showPasscodeRequirement()
+        }
+    }
+
+    /**
+    Prepares the interface to display a list of credentials from which the user can select.
+
+    - Parameter serviceIdentifiers: An array of service identifiers that provide a
+     hint about the service for which the user needs credentials.
+
+    The system calls this method to tell your extension’s view controller to prepare to present a list of credentials.
+    After calling this method, the system presents the view controller to the user.
+
+    Use the given `serviceIdentifiers` array to filter or prioritize the credentials to display.
+    The service identifier array might be empty,
+    but your extension should still show credentials from which the user can pick.
+    */
+    override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+        if appAuthenticator.canAuthenticateDeviceOwner {
+            self.presenter?.credentialList(for: serviceIdentifiers)
         } else {
             self.presenter?.showPasscodeRequirement()
         }

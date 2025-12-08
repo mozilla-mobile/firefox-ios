@@ -135,8 +135,21 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     deinit {
-        // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
-        a11yEmptyStateScrollView.removeFromSuperview()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            DefaultLogger.shared.log(
+                "AddressToolbarContainer was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
+            a11yEmptyStateScrollView.removeFromSuperview()
+        }
     }
 
     // MARK: - Lifecycle
@@ -181,8 +194,8 @@ final class BookmarksViewController: SiteTableViewController,
     // MARK: - Data
 
     override func reloadData() {
-        viewModel.reloadData { [weak self] in
-            ensureMainThread {
+        viewModel.reloadData {
+            ensureMainThread { [weak self] in
                 self?.tableView.reloadData()
                 if self?.viewModel.shouldFlashRow ?? false {
                     self?.flashRow()
@@ -239,7 +252,7 @@ final class BookmarksViewController: SiteTableViewController,
     private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
                                      parentFolderGUID: String,
                                      recentBookmarkFolderGUID: String?,
-                                     completion: ((GUID) -> Void)? = nil) {
+                                     completion: (@Sendable (GUID) -> Void)? = nil) {
         guard bookmarkTreeRoot.type == .folder || bookmarkTreeRoot.type == .bookmark else { return }
         bookmarksSaver?.restoreBookmarkNode(bookmarkNode: bookmarkTreeRoot, parentFolderGUID: parentFolderGUID) { res in
             guard let guid = res else {return}
@@ -252,10 +265,12 @@ final class BookmarksViewController: SiteTableViewController,
             // In the case that the node is a folder, restore its children as well
             guard let children = (bookmarkTreeRoot as? BookmarkFolderData)?.children else { return }
 
-            for child in children {
-                self.restoreBookmarkTree(bookmarkTreeRoot: child,
-                                         parentFolderGUID: guid,
-                                         recentBookmarkFolderGUID: recentBookmarkFolderGUID)
+            ensureMainThread {
+                for child in children {
+                    self.restoreBookmarkTree(bookmarkTreeRoot: child,
+                                             parentFolderGUID: guid,
+                                             recentBookmarkFolderGUID: recentBookmarkFolderGUID)
+                }
             }
         }
     }
@@ -668,16 +683,19 @@ final class BookmarksViewController: SiteTableViewController,
 
 extension BookmarksViewController: LibraryPanelContextMenu {
     func presentContextMenu(for indexPath: IndexPath) {
-        viewModel.getSiteDetails(for: indexPath) { [weak self] site in
-            guard let self else { return }
-            if let site {
-                presentContextMenu(for: site, with: indexPath, completionHandler: {
-                    return self.contextMenu(for: site, with: indexPath)
-                })
-            } else if let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row],
-                      bookmarkNode.type == .folder,
-                      isCurrentFolderEditable(at: indexPath) {
-                presentContextMenu(for: bookmarkNode, indexPath: indexPath)
+        viewModel.getSiteDetails(for: indexPath) { site in
+            ensureMainThread { [weak self] in
+                guard let self else { return }
+
+                if let site {
+                    self.presentContextMenu(for: site, with: indexPath, completionHandler: {
+                        return self.contextMenu(for: site, with: indexPath)
+                    })
+                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                          bookmarkNode.type == .folder,
+                          self.isCurrentFolderEditable(at: indexPath) {
+                    self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
+                }
             }
         }
     }

@@ -71,7 +71,7 @@
 "Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "Հետագծվող բովանդակություն. %@";
 
 /* Text to let users know how many cross-site tracking cookies were blocked on the current website. %@ is the number of cookies of this type detected. */
-"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Միջակայքային հետևող նշոցիկներ` %@";
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Միջկայքային հետևող թխուկներ՝ %@";
 
 /* Text to let users know how many fingerprinters were blocked on the current website. %@ is the number of fingerprinters detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Մատնահետքեր` %@";

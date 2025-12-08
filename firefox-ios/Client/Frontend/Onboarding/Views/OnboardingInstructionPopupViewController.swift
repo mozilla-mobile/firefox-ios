@@ -5,6 +5,7 @@
 import Common
 import ComponentLibrary
 import UIKit
+import OnboardingKit
 
 class OnboardingInstructionPopupViewController: UIViewController,
                                                 Themeable,
@@ -65,7 +66,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
-    var viewModel: OnboardingDefaultBrowserModelProtocol
+    var viewModel: any OnboardingDefaultBrowserModelProtocol<OnboardingInstructionsPopupActions>
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -76,7 +77,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: - Initializers
-    init(viewModel: OnboardingDefaultBrowserModelProtocol,
+    init(viewModel: any OnboardingDefaultBrowserModelProtocol<OnboardingInstructionsPopupActions>,
          windowUUID: WindowUUID,
          buttonTappedFinishFlow: (() -> Void)?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -202,8 +203,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
     // MARK: - Helper methods
     private func createLabels(from descriptionTexts: [String]) {
         numeratedLabels.removeAll()
-        let attributedStrings = viewModel.getAttributedStrings(
-            with: FXFontStyles.Regular.subheadline.scaledFont())
+        let attributedStrings = getAttributedStrings(with: FXFontStyles.Regular.subheadline.scaledFont())
         attributedStrings.forEach { attributedText in
             let index = attributedStrings.firstIndex(of: attributedText)! as Int
             let label: UILabel = .build { label in
@@ -262,6 +262,11 @@ class OnboardingInstructionPopupViewController: UIViewController,
         } else {
             view.backgroundColor = theme.colors.layer1
         }
+    }
+
+    func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
+        let markupUtility = MarkupAttributeUtility(baseFont: font)
+        return viewModel.instructionSteps.map { markupUtility.addAttributesTo(text: $0) }
     }
 }
 

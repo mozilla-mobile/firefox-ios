@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(BrowserTabMenuMore) { screenState in
         screenState.tap(
@@ -80,7 +81,7 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
 
     map.addScreenState(CloseTabMenu) { screenState in
         screenState.tap(
-            app.scrollViews.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton],
+            app.scrollViews.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].firstMatch,
             forAction: Action.AcceptRemovingAllTabs,
             transitionTo: HomePanelsScreen
         )

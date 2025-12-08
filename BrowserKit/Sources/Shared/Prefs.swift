@@ -13,6 +13,7 @@ public struct PrefsKeys {
     // Global sync state for rust sync manager
     public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
     public static let LoginsHaveBeenVerified = "loginsHaveBeenVerified"
+    public static let CreditCardsHaveBeenVerified = "creditCardsHaveBeenVerified"
 
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
@@ -49,6 +50,7 @@ public struct PrefsKeys {
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let ShowClipboardBar = "showClipboardBar"
+    public static let ShowRelayMaskSuggestions = "showRelayMaskSuggestions"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
@@ -105,6 +107,7 @@ public struct PrefsKeys {
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
+        public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
     }
@@ -156,6 +159,7 @@ public struct PrefsKeys {
         case mainMenuKey = "MainMenuHintKey"
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
+        case relayMaskKey = "ContextualHintRelayMaskKey"
         case toolbarUpdateKey = "ContextualHintToolbarUpdate"
         case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
@@ -251,6 +255,9 @@ public struct PrefsKeys {
     public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
     // Used to determine if cannot run the Apple Intelligence model
     public static let cannotRunAppleIntelligence = "cannotRunAppleIntelligenceKey"
+
+    // Used for enabling test data for merino stories on non-dev builds
+    public static let useMerinoTestData = "useMerinoTestData"
 
     public struct Usage {
         public static let profileId = "profileId"

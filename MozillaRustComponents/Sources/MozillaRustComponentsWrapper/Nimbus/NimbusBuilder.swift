@@ -187,18 +187,15 @@ public class NimbusBuilder {
      * network. This is to allow the networking stack to be initialized after this method is called
      * and the networking stack to be involved in experiments.
      */
-    public func build(appInfo: NimbusAppSettings) -> NimbusInterface {
+    public func build(
+        appInfo: NimbusAppSettings,
+        remoteSettingsService: RemoteSettingsService
+    ) -> NimbusInterface {
         let serverSettings: NimbusServerSettings?
-        if let string = url,
-           let url = URL(string: string)
-        {
-            if usePreviewCollection {
-                serverSettings = NimbusServerSettings(url: url, collection: remoteSettingsPreviewCollection)
-            } else {
-                serverSettings = NimbusServerSettings(url: url, collection: remoteSettingsCollection)
-            }
+        if usePreviewCollection {
+            serverSettings = NimbusServerSettings(remoteSettingsService: remoteSettingsService, collection: remoteSettingsPreviewCollection)
         } else {
-            serverSettings = nil
+            serverSettings = NimbusServerSettings(remoteSettingsService: remoteSettingsService, collection: remoteSettingsCollection)
         }
 
         do {
@@ -259,7 +256,10 @@ public class NimbusBuilder {
         featureManifest?.getCoenrollingFeatureIds() ?? []
     }
 
-    func newNimbus(_ appInfo: NimbusAppSettings, serverSettings: NimbusServerSettings?) throws -> NimbusInterface {
+    func newNimbus(
+        _ appInfo: NimbusAppSettings,
+        serverSettings: NimbusServerSettings?
+    ) throws -> NimbusInterface {
         try Nimbus.create(serverSettings,
                           appSettings: appInfo,
                           coenrollingFeatureIds: getCoenrollingFeatureIds(),

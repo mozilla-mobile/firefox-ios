@@ -14,8 +14,7 @@ open class UserAgent {
     public static let platform = "AppleWebKit/605.1.15"
     public static let platformDetails = "(KHTML, like Gecko)"
 
-    // FIXME: FXIOS-13197 UserDefaults is not thread safe
-    nonisolated(unsafe) private static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+    private static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
         let versionStr: String

@@ -117,3 +117,36 @@ class WKScriptMessageMock: WKScriptMessage {
         return overridenFrameInfo
     }
 }
+
+// MARK: - WKURLSchemeTaskMock
+
+/// Minimal fake WKURLSchemeTask used to capture callbacks.
+final class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
+    private let _request: URLRequest
+    var request: URLRequest { _request }
+
+    init(request: URLRequest) {
+        self._request = request
+    }
+
+    private(set) var receivedResponses: [URLResponse] = []
+    private(set) var receivedBodies: [Data] = []
+    private(set) var finishCallCount = 0
+    private(set) var failedErrors: [Error] = []
+
+    func didReceive(_ response: URLResponse) {
+        receivedResponses.append(response)
+    }
+
+    func didReceive(_ data: Data) {
+        receivedBodies.append(data)
+    }
+
+    func didFinish() {
+        finishCallCount += 1
+    }
+
+    func didFailWithError(_ error: Error) {
+        failedErrors.append(error)
+    }
+}

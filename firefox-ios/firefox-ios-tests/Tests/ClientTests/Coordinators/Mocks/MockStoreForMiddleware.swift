@@ -61,13 +61,4 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
         dispatchedActions.append(action)
         dispatchCalled?()
     }
-
-    /// We implemented the lock to ensure that this is thread safe
-    /// since actions can be dispatch in concurrent tasks
-    func dispatchLegacy(_ action: Redux.Action) {
-        lock.lock()
-        defer { lock.unlock() }
-        dispatchedActions.append(action)
-        dispatchCalled?()
-    }
 }

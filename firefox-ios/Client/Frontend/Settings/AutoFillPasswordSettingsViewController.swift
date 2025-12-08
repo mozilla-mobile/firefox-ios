@@ -33,6 +33,10 @@ class AutoFillPasswordSettingsViewController: SettingsTableViewController, Featu
                                                        settingsDelegate: parentCoordinator))
         }
 
+        if RelayController.shared.shouldDisplayRelaySettings() {
+            sectionItems.append(AutofillRelayMaskSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         return [SettingSection(children: sectionItems)]
     }
 }

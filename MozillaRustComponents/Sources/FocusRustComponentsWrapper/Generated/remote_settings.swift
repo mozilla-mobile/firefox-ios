@@ -940,6 +940,8 @@ public func FfiConverterTypeRemoteSettingsClient_lower(_ value: RemoteSettingsCl
  */
 public protocol RemoteSettingsServiceProtocol: AnyObject, Sendable {
     
+    func clientUrl()  -> String
+    
     /**
      * Create a new Remote Settings client
      *
@@ -1042,6 +1044,13 @@ public convenience init(storageDir: String, config: RemoteSettingsConfig2) {
 
     
 
+    
+open func clientUrl() -> String  {
+    return try!  FfiConverterString.lift(try! rustCall() {
+    uniffi_remote_settings_fn_method_remotesettingsservice_client_url(self.uniffiClonePointer(),$0
+    )
+})
+}
     
     /**
      * Create a new Remote Settings client
@@ -2367,6 +2376,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsclient_sync() != 29749) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_client_url() != 35003) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_make_client() != 46337) {

@@ -14,12 +14,19 @@ import OnboardingKit
 class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
     var onboardingVariant: OnboardingVariant
+    private let isDefaultBrowser: Bool
+    private let isIpad: Bool
+
     init(
         onboardingVariant: OnboardingVariant,
-        with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()
+        with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
+        isDefaultBrowser: Bool = false,
+        isIpad: Bool = UIDeviceDetails.userInterfaceIdiom == .pad
     ) {
         self.helperUtility = helperUtility
         self.onboardingVariant = onboardingVariant
+        self.isDefaultBrowser = isDefaultBrowser
+        self.isIpad = isIpad
     }
 
     func getOnboardingModel(
@@ -71,6 +78,11 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 imageID: card.imageID,
                 instructionsPopup: card.instructionsPopup)
         }
+        // Filter out cards that are not relevant for the current device type and browser state.
+        .filter { viewModel in
+            return shouldShowToolbarPositionCardForIpad(viewModel) &&
+                   shouldShowWelcomeCardForDefaultBrowser(viewModel)
+        }
     }
 
     private func getOnboardingCards(
@@ -118,22 +130,22 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// A card is not viable without buttons.
     private func getOnboardingCardButtons(
         from cardButtons: NimbusOnboardingButtons
-    ) -> OnboardingKit.OnboardingButtons<OnboardingActions> {
-        return OnboardingKit.OnboardingButtons(
-            primary: OnboardingKit.OnboardingButtonInfoModel(
+    ) -> OnboardingButtons<OnboardingActions> {
+        return OnboardingButtons(
+            primary: OnboardingButtonInfoModel(
                 title: String(format: cardButtons.primary.title,
                               AppName.shortName.rawValue),
                 action: cardButtons.primary.action),
             secondary: cardButtons.secondary.map {
-                OnboardingKit.OnboardingButtonInfoModel(title: $0.title, action: $0.action)
+                OnboardingButtonInfoModel(title: $0.title, action: $0.action)
             })
     }
 
     private func getOnboardingMultipleChoiceButtons_(
         from cardButtons: [NimbusOnboardingMultipleChoiceButton]
-    ) -> [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
+    ) -> [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
         return cardButtons.map { button in
-            return OnboardingKit.OnboardingMultipleChoiceButtonModel(
+            return OnboardingMultipleChoiceButtonModel(
                 title: button.title,
                 action: button.action,
                 imageID: getOnboardingMultipleChoiceButtonImageID(from: button.image)
@@ -143,21 +155,22 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getOnboardingLink(
         from cardLink: NimbusOnboardingLink?
-    ) -> OnboardingKit.OnboardingLinkInfoModel? {
+    ) -> OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
-              let url = URL(string: cardLink.url)
+              let url = URL(string: cardLink.url),
+              url.scheme != nil
         else { return nil }
 
-        return OnboardingKit.OnboardingLinkInfoModel(title: cardLink.title, url: url)
+        return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
     private func getPopupInfoModel(
         from data: NimbusOnboardingInstructionPopup?,
         withA11yID a11yID: String
-    ) -> OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
+    ) -> OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
         guard let data else { return nil }
 
-        return OnboardingKit.OnboardingInstructionsPopupInfoModel(
+        return OnboardingInstructionsPopupInfoModel(
             title: data.title,
             instructionSteps: data.instructions
                 .map { String(format: $0, AppName.shortName.rawValue)
@@ -165,5 +178,16 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             buttonTitle: data.buttonTitle,
             buttonAction: data.buttonAction,
             a11yIdRoot: a11yID)
+    }
+
+    private func shouldShowToolbarPositionCardForIpad(_ viewModel: OnboardingKitCardInfoModel) -> Bool {
+        guard isIpad, let action = viewModel.multipleChoiceButtons.first?.action else {
+            return true
+        }
+        return action != .toolbarTop && action != .toolbarBottom
+    }
+
+    private func shouldShowWelcomeCardForDefaultBrowser(_ viewModel: OnboardingKitCardInfoModel) -> Bool {
+        return !(isDefaultBrowser && viewModel.instructionsPopup?.buttonAction == .openIosFxSettings)
     }
 }

@@ -1,0 +1,36 @@
+/* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "Nyhet! %@ Relay e-postalias är nu tillgängliga för mobila enheter.";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Dina 5 gratis e-postalias används, så vi valde ut en åt dig.";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Du har använt dina 5 gratis e-postalias, så vi valde ut en som du kan återanvända.";
+
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "E-postalias är inte tillgängliga just nu. Försök igen om några minuter.";
+
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "E-postalias infogat";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Dölj din riktiga e-post för att skydda din inkorg från skräppost. Vissa webbplatser stöder inte det.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Dölj din riktiga e-postadress för att skydda din inkorg från skräppost. Vissa webbplatser stöder inte e-postalias.";
+
+/* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
+"RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Läs mer";
+
+/* Button title which takes users to a webpage to manage their Relay email masks and related settings. */
+"RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146" = "Hantera e-postalias";
+
+/* Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay. */
+"RelayMask.RelayEmailMaskSettingsTitle.v146" = "E-postalias";
+
+/* Label for settings toggle which allows users to enable or disable the suggestion of Relay email masks on registration forms, to provide anonymous email masking. */
+"RelayMask.RelayEmailMaskSuggestMasksToggle.v146" = "Föreslå e-postalias";
+
+/* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
+"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "Använd e-postalias";
+

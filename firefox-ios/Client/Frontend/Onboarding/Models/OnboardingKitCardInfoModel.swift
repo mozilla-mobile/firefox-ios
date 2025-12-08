@@ -51,14 +51,14 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
         self.embededLinkText = embededLinkText
     }
 
-    var defaultSelectedButton: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
+    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
         guard !multipleChoiceButtons.isEmpty else { return nil }
 
         return findHighestPriorityButton() ?? multipleChoiceButtons.first
     }
 
     private func findHighestPriorityButton()
-    -> OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
+    -> OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
         let selectableButtons = multipleChoiceButtons
             .filter { hasDefaultSelection($0.action) }
             .map { ($0, defaultSelectionPriority($0.action)) }

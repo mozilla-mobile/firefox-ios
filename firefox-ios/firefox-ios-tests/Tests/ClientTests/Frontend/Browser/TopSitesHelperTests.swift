@@ -240,9 +240,9 @@ private class SiteCursorMock: Cursor<Site>, @unchecked Sendable {
 }
 
 // MARK: - MockablePinnedSites
-private class PinnedSitesMock: MockablePinnedSites {
-    class Error: MaybeErrorType {
-        var description = "Error"
+private class PinnedSitesMock: MockablePinnedSites, @unchecked Sendable {
+    struct Error: MaybeErrorType {
+        let description = "Error"
     }
 
     var pinnedResponse: Maybe<Cursor<Site>> = Maybe(failure: Error())

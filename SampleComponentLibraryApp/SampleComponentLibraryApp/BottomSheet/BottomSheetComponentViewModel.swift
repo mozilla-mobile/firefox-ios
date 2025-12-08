@@ -13,9 +13,9 @@ struct BottomSheetComponentViewModel: ComponentViewModel {
 
     init() {
         viewModel = BottomSheetViewModel(
+            shouldDismissForTapOutside: true,
             closeButtonA11yLabel: "Close button",
             closeButtonA11yIdentifier: "a11yCloseButton")
-        viewModel.shouldDismissForTapOutside = true
 
         viewController = BottomSheetViewController(
             viewModel: viewModel,

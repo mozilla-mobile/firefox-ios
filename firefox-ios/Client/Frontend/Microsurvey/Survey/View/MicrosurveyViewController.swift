@@ -125,9 +125,11 @@ final class MicrosurveyViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(model: MicrosurveyModel, windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default
+    init(
+        model: MicrosurveyModel,
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -160,7 +162,7 @@ final class MicrosurveyViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .microsurvey)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -190,7 +192,7 @@ final class MicrosurveyViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatchLegacy(
+        store.dispatch(
             MicrosurveyAction(surveyId: model.id, windowUUID: windowUUID, actionType: MicrosurveyActionType.surveyDidAppear)
         )
     }
@@ -330,7 +332,7 @@ final class MicrosurveyViewController: UIViewController,
     }
 
     private func sendTelemetry() {
-        store.dispatchLegacy(
+        store.dispatch(
             MicrosurveyAction(
                 surveyId: model.id,
                 userSelection: selectedOption,
@@ -356,7 +358,7 @@ final class MicrosurveyViewController: UIViewController,
         )
         confirmationView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         UIAccessibility.post(notification: .screenChanged, argument: nil)
-        store.dispatchLegacy(
+        store.dispatch(
             MicrosurveyAction(
                 surveyId: model.id,
                 windowUUID: windowUUID,
@@ -367,7 +369,7 @@ final class MicrosurveyViewController: UIViewController,
 
     @objc
     private func didTapClose() {
-        store.dispatchLegacy(
+        store.dispatch(
             MicrosurveyAction(
                 surveyId: model.id,
                 windowUUID: windowUUID,
@@ -378,7 +380,7 @@ final class MicrosurveyViewController: UIViewController,
 
     @objc
     private func didTapPrivacyPolicy() {
-        store.dispatchLegacy(
+        store.dispatch(
             MicrosurveyAction(
                 surveyId: model.id,
                 windowUUID: windowUUID,

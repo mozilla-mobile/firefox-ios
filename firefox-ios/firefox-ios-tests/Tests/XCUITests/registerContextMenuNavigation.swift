@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerContextMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(HistoryPanelContextMenu) { screenState in
         screenState.dismissOnUse = true

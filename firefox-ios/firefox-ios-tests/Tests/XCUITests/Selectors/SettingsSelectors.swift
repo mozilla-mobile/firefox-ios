@@ -7,6 +7,7 @@ import XCTest
 protocol SettingsSelectorsSet {
     var SETTINGS_TABLE: Selector { get }
     var DONE_BUTTON: Selector { get }
+    var SETTINGS_TITLE: Selector { get }
 
     // Privacy Options
     var AUTOFILLS_PASSWORDS_CELL: Selector { get }
@@ -28,10 +29,19 @@ protocol SettingsSelectorsSet {
     var TITLE: Selector { get }
     var NAVIGATIONBAR: Selector { get }
     var CONNECT_SETTING: Selector { get }
+    var TABLE: Selector { get }
 
     // Browsing
     var BROWSING_LINKS_SECTION: Selector { get }
     var BLOCK_POPUPS_SWITCH: Selector { get }
+    var TOOLBAR_CELL: Selector { get }
+    var DEFAULT_BROWSER_CELL: Selector { get }
+    var BROWSING_CELL_TITLE: Selector { get }
+    var BLOCK_IMAGES_SWITCH_TITLE: Selector { get }
+
+    var NO_IMAGE_MODE_STATUS_SWITCH: Selector { get }
+
+    func ALL_CELLS() -> [Selector]
 
     var all: [Selector] { get }
 }
@@ -52,6 +62,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let title = AccessibilityIdentifiers.Settings.title
         static let navigationBarItem = AccessibilityIdentifiers.Settings.navigationBarItem
         static let connectSetting = AccessibilityIdentifiers.Settings.ConnectSetting.title
+        static let settingTitle = "Settings"
+        static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
+        static let defaultBrowserSettings = AccessibilityIdentifiers.Settings.DefaultBrowser.defaultBrowser
+        static let browsingCellTitle = AccessibilityIdentifiers.Settings.Browsing.title
+        static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
+        static let noImageModeStatus = "NoImageModeStatus"
     }
 
     // Core Element Selector
@@ -63,6 +79,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
     let DONE_BUTTON = Selector.buttonId(
         "Done",
         description: "Done button to close settings",
+        groups: ["settings"]
+    )
+
+    let SETTINGS_TITLE = Selector.staticTextId(
+        IDs.settingTitle,
+        description: "Settings Screen Title Label",
         groups: ["settings"]
     )
 
@@ -158,6 +180,11 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings"]
     )
 
+    let TABLE = Selector.tableFirstMatch(
+        description: "Main Settings table",
+        groups: ["settings"]
+    )
+
     let BROWSING_LINKS_SECTION = Selector.tableOtherById(
         IDs.browsingLinks,
         description: "Browsing Links section in Settings table",
@@ -170,11 +197,123 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "browsing"]
     )
 
+    let TOOLBAR_CELL = Selector.tableCellById(
+        IDs.toolbarCellSettings,
+        description: "Toolbar Search Bar Setting",
+        groups: ["settings"]
+    )
+
+    let DEFAULT_BROWSER_CELL = Selector.tableCellById(
+        IDs.defaultBrowserSettings,
+        description: "Default browser cell in Settings",
+        groups: ["settings"]
+    )
+
+    let BROWSING_CELL_TITLE = Selector.tableCellById(
+        IDs.browsingCellTitle,
+        description: "Browsing settings cell",
+        groups: ["settings", "browsing"]
+    )
+
+    let BLOCK_IMAGES_SWITCH_TITLE = Selector.anyId(
+        IDs.blockImages,
+        description: "Block Images switch in Browsing settings",
+        groups: ["settings", "browsing"]
+    )
+
+    let NO_IMAGE_MODE_STATUS_SWITCH = Selector.anyId(
+        IDs.noImageModeStatus,
+        description: "No Image Mode Status switch",
+        groups: ["settings"]
+    )
+
+    func ALL_CELLS() -> [Selector] {
+        let s = AccessibilityIdentifiers.Settings.self
+        return [
+            Selector.tableCellById(s.ConnectSetting.title,
+                                   description: "Connect setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Search.title,
+                                   description: "Search setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.NewTab.title,
+                                   description: "New Tab setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Homepage.homeSettings,
+                                   description: "Homepage setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Browsing.title,
+                                   description: "Browsing setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Theme.title,
+                                   description: "Theme setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.AppIconSelection.settingsRowTitle,
+                                   description: "App Icon row",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Siri.title,
+                                   description: "Siri setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.AutofillsPasswords.title,
+                                   description: "Autofills/Passwords setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.ClearData.title,
+                                   description: "Clear Data setting",
+                                   groups: ["settings"]),
+            Selector.switchByIdOrLabel(s.ClosePrivateTabs.title,
+                                       description: "Close Private Tabs switch",
+                                       groups: ["settings"]),
+            Selector.tableCellById(s.ContentBlocker.title,
+                                   description: "Content Blocker setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Notifications.title,
+                                   description: "Notifications setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.PrivacyPolicy.title,
+                                   description: "Privacy Policy setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.SendFeedback.title,
+                                   description: "Send Feedback setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.ShowIntroduction.title,
+                                   description: "Show Introduction setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.SendData.sendTechnicalDataTitle,
+                                   description: "Send Technical Data setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.SendData.sendDailyUsagePingTitle,
+                                   description: "Send Daily Usage Ping setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.SendData.sendCrashReportsTitle,
+                                   description: "Send Crash Reports setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.SendData.studiesTitle,
+                                   description: "Studies setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Version.title,
+                                   description: "Version cell",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Help.title,
+                                   description: "Help cell",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.RateOnAppStore.title,
+                                   description: "Rate App Store cell",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Licenses.title,
+                                   description: "Licenses cell",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.YourRights.title,
+                                   description: "Your Rights cell",
+                                   groups: ["settings"])
+        ]
+    }
+
     var all: [Selector] {
-        [SETTINGS_TABLE, DONE_BUTTON, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
+        [SETTINGS_TABLE, DONE_BUTTON, SETTINGS_TITLE, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
-         CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, BROWSING_LINKS_SECTION,
-         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH]
+         CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
+         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, DEFAULT_BROWSER_CELL,
+         BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH]
     }
 }

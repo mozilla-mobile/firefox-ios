@@ -17,6 +17,8 @@ final class ShareTelemetryTests: XCTestCase {
     let activityIdentifierKey = "activity_identifier"
     let shareTypeKey = "share_type"
     let hasShareMessageKey = "has_share_message"
+    let hasIsEnrolledInSentFromFirefoxKey = "is_enrolled_in_sent_from_firefox"
+    let hasIsOptedInSentFromFirefoxKey = "is_opted_in_sent_from_firefox"
 
     override func setUp() {
         super.setUp()
@@ -30,17 +32,21 @@ final class ShareTelemetryTests: XCTestCase {
 
     @MainActor
     func testSharedTo_withNoActivityType() throws {
-        setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: MockProfile())
         let subject = createSubject()
         let event = GleanMetrics.ShareSheet.sharedTo
         let testActivityType: UIActivity.ActivityType? = nil
         let testShareType: ShareType = .site(url: testWebURL)
         let testHasShareMessage = true
+        let testIsEnrolledInSentFromFirefox = false
+        let testIsOptedInSentFromFirefox = false
 
         subject.sharedTo(
             activityType: testActivityType,
             shareTypeName: testShareType.typeName,
-            hasShareMessage: testHasShareMessage
+            hasShareMessage: testHasShareMessage,
+            isEnrolledInSentFromFirefox: testIsEnrolledInSentFromFirefox,
+            isOptedInSentFromFirefox: testIsOptedInSentFromFirefox
         )
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
@@ -51,21 +57,32 @@ final class ShareTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.shareType, testShareType.typeName)
         XCTAssertEqual(savedExtras.hasShareMessage, testHasShareMessage)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        // let resultValue = try XCTUnwrap(GleanMetrics.ShareSheet.sharedTo.testGetValue())
+        // XCTAssertEqual(resultValue[0].extra?[activityIdentifierKey], "unknown")
+        // XCTAssertEqual(resultValue[0].extra?[shareTypeKey], testShareType.typeName)
+        // XCTAssertEqual(resultValue[0].extra?[hasShareMessageKey], String(testHasShareMessage))
+        // XCTAssertEqual(resultValue[0].extra?[hasIsEnrolledInSentFromFirefoxKey], String(testIsEnrolledInSentFromFirefox))
+        // XCTAssertEqual(resultValue[0].extra?[hasIsOptedInSentFromFirefoxKey], String(testIsOptedInSentFromFirefox))
     }
 
     @MainActor
     func testSharedTo_withActivityType() throws {
-        setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: MockProfile())
         let subject = createSubject()
         let event = GleanMetrics.ShareSheet.sharedTo
         let testActivityType = UIActivity.ActivityType("com.some.activity.identifier")
         let testShareType: ShareType = .site(url: testWebURL)
         let testHasShareMessage = true
+        let testIsEnrolledInSentFromFirefox = false
+        let testIsOptedInSentFromFirefox = false
 
         subject.sharedTo(
             activityType: testActivityType,
             shareTypeName: testShareType.typeName,
-            hasShareMessage: testHasShareMessage
+            hasShareMessage: testHasShareMessage,
+            isEnrolledInSentFromFirefox: testIsEnrolledInSentFromFirefox,
+            isOptedInSentFromFirefox: testIsOptedInSentFromFirefox
         )
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
@@ -76,6 +93,39 @@ final class ShareTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.shareType, testShareType.typeName)
         XCTAssertEqual(savedExtras.hasShareMessage, testHasShareMessage)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        // let resultValue = try XCTUnwrap(GleanMetrics.ShareSheet.sharedTo.testGetValue())
+        // XCTAssertEqual(resultValue[0].extra?[activityIdentifierKey], testActivityType.rawValue)
+        // XCTAssertEqual(resultValue[0].extra?[shareTypeKey], testShareType.typeName)
+        // XCTAssertEqual(resultValue[0].extra?[hasShareMessageKey], String(testHasShareMessage))
+        // XCTAssertEqual(resultValue[0].extra?[hasIsEnrolledInSentFromFirefoxKey], String(testIsEnrolledInSentFromFirefox))
+        // XCTAssertEqual(resultValue[0].extra?[hasIsOptedInSentFromFirefoxKey], String(testIsOptedInSentFromFirefox))
+    }
+
+    func testSharedTo_enrolledAndOptedInSentFromFirefox() throws {
+        let subject = createSubject()
+        let testActivityType = UIActivity.ActivityType("com.some.activity.identifier")
+        let testShareType: ShareType = .site(url: testWebURL)
+        let testHasShareMessage = true
+        let testIsEnrolledInSentFromFirefox = true
+        let testIsOptedInSentFromFirefox = true
+
+        subject.sharedTo(
+            activityType: testActivityType,
+            shareTypeName: testShareType.typeName,
+            hasShareMessage: testHasShareMessage,
+            isEnrolledInSentFromFirefox: testIsEnrolledInSentFromFirefox,
+            isOptedInSentFromFirefox: testIsOptedInSentFromFirefox
+        )
+
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.ShareSheet.sharedTo)
+
+        let resultValue = try XCTUnwrap(GleanMetrics.ShareSheet.sharedTo.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?[activityIdentifierKey], testActivityType.rawValue)
+        XCTAssertEqual(resultValue[0].extra?[shareTypeKey], testShareType.typeName)
+        XCTAssertEqual(resultValue[0].extra?[hasShareMessageKey], String(testHasShareMessage))
+        XCTAssertEqual(resultValue[0].extra?[hasIsEnrolledInSentFromFirefoxKey], String(testIsEnrolledInSentFromFirefox))
+        XCTAssertEqual(resultValue[0].extra?[hasIsOptedInSentFromFirefoxKey], String(testIsOptedInSentFromFirefox))
     }
 
     // MARK: - Deeplink test

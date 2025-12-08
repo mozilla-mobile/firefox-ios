@@ -32,10 +32,6 @@ class TabsTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
@@ -64,10 +60,6 @@ class TabsTests: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         // The tabs counter shows the correct number
@@ -88,10 +80,6 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354300
     func testAddTabFromContext() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(urlExample)
         // Initially there is only one tab open
         let tabsOpenInitially = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
@@ -112,15 +100,11 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354447
     func testSwitchBetweenTabs() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -212,11 +196,6 @@ class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
     // Smoketest
     func testCloseAllTabsPrivateModeUndo() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
-        mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
-        navigator.back()
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -233,8 +212,6 @@ class TabsTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         }
 
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
         if iPad() {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         } else {
@@ -251,11 +228,6 @@ class TabsTests: BaseTestCase {
         browserScreen = BrowserScreen(app: app)
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
-
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        browserScreen.assertCancelButtonOnUrlBarExist()
-        navigator.back()
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -272,8 +244,6 @@ class TabsTests: BaseTestCase {
             toolBarScreen.assertTabsButtonExists()
         }
 
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
         if iPad() {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         } else {
@@ -286,10 +256,6 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354579
     func testCloseAllTabs() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -335,7 +301,6 @@ class TabsTests: BaseTestCase {
     func testOpenNewTabLandscape() {
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
-        homepageSearchBar.tapIfExists()
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -353,16 +318,15 @@ class TabsTests: BaseTestCase {
         toolBarScreen = ToolbarScreen(app: app)
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
-        homepageSearchBar.tapIfExists()
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        toolBarScreen.assertNewTabButtonExist()
+        toolBarScreen.assertNewTabButtonExists()
 
         // Go back to portrait mode
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is displayed
-        toolBarScreen.assertNewTabButtonExist()
+        toolBarScreen.assertNewTabButtonExists()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
@@ -437,7 +401,7 @@ class TabsTests: BaseTestCase {
         newTabsScreen.assertLargeAndCrossIconsExist()
         // Open New Tab
         newTabsScreen.tapOnPlusIconScreen()
-        navigator.performAction(Action.CloseURLBarOpen)
+        browserScreen.tapCancelButtonOnUrlWithRetry()
 
         toolBarScreen.assertTabsButtonExists()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
@@ -464,7 +428,7 @@ class TabsTests: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.pressTabsButton(duration: 1)
         newTabsScreen.tapNewPrivateTab()
-        browserScreen.tapCancelButtonOnUrlBarExist()
+        browserScreen.tapCancelButtonOnUrlWithRetry()
         toolBarScreen.assertTabsButtonExists()
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
@@ -513,21 +477,6 @@ class TabsTests: BaseTestCase {
         } else {
             XCTAssertEqual(tabsTrayCell.element(boundBy: 6).label, "Homepage. Currently selected tab.")
         }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306869
-    func testTabTrayContextMenuCloseTab() throws {
-        if !iPad() {
-            let shouldSkipTest = true
-            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
-        }
-        // Have multiple tabs opened in the tab tray
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        addTabsAndUndoCloseTabAction(nrOfTabs: 3)
-        // Repeat steps for private browsing mode
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        addTabsAndUndoCloseTabAction(nrOfTabs: 4)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306868
@@ -599,6 +548,7 @@ class TabsTests: BaseTestCase {
 
     private func validateToastWhenClosingMultipleTabs() {
         // Have multiple tabs opened in the tab tray
+        navigator.nowAt(BrowserTab)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
         for _ in 1...4 {
@@ -682,10 +632,10 @@ class TabsTestsIphone: BaseTestCase {
     var newTabsScreen: NewTabsScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .phone
         if !iPad() {
-            super.setUp()
+            try await super.setUp()
         }
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
@@ -697,9 +647,6 @@ class TabsTestsIphone: BaseTestCase {
     // Smoketest
     func testCloseTabFromLongPressTabsButton() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.back()
         waitForTabsButton()
         // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -723,9 +670,6 @@ class TabsTestsIphone: BaseTestCase {
     // Smoketest TAE
     func testCloseTabFromLongPressTabsButton_TAE() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.back()
 
         // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -809,8 +753,6 @@ class TabsTestsIphone: BaseTestCase {
     // Smoketest
     func testSwitchBetweenTabsToastButton() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
 
@@ -833,8 +775,6 @@ class TabsTestsIphone: BaseTestCase {
     // Smoketest TAE
     func testSwitchBetweenTabsToastButton_TAE() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
 
@@ -855,8 +795,6 @@ class TabsTestsIphone: BaseTestCase {
     // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
 
@@ -880,8 +818,6 @@ class TabsTestsIphone: BaseTestCase {
     // Smoketest TAE
     func testSwitchBetweenTabsNoPrivatePrivateToastButton_TAE() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
 

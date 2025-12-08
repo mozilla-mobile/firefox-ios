@@ -114,6 +114,7 @@ struct NavigationBarState: StateType, Equatable {
         }
     }
 
+    @MainActor
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction,
               let displayBorder = toolbarAction.displayNavBorder,
@@ -130,6 +131,7 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    @MainActor
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -141,6 +143,7 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    @MainActor
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -152,6 +155,7 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -163,6 +167,7 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    @MainActor
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -188,6 +193,7 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    @MainActor
     private static func handleNavigationMiddleButtonDidChange(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction,
               let middleButton = toolbarAction.middleButton
@@ -211,6 +217,7 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     // MARK: - Navigation Toolbar Actions
+    @MainActor
     private static func navigationActions(
         action: ToolbarAction,
         navigationBarState: NavigationBarState)

@@ -7,6 +7,7 @@ import Shared
 
 /// Public interface for contextual hint consumers
 protocol ContextualHintEligibilityUtilityProtocol {
+    @MainActor
     func canPresent(_ hint: ContextualHintType) -> Bool
 }
 
@@ -27,6 +28,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     }
 
     /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
+    @MainActor
     func canPresent(_ hintType: ContextualHintType) -> Bool {
         guard !isInOverlayMode else { return false }
 
@@ -45,6 +47,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         case .navigation:
             hintTypeShouldBePresented = true
+        case .relay:
+            hintTypeShouldBePresented = canRelayMaskCFRBePresented
         case .toolbarUpdate:
             hintTypeShouldBePresented = canToolbarUpdateCFRBePresented
         case .translation:
@@ -57,7 +61,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     }
 
     // MARK: - Private helpers
-
+    @MainActor
     private var isInOverlayMode: Bool {
         guard overlayState != nil else { return false }
 
@@ -82,6 +86,11 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
     private var canTranslationCFRBePresented: Bool {
         return featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) ? true : false
+    }
+
+    @MainActor
+    private var canRelayMaskCFRBePresented: Bool {
+        return RelayController.isFeatureEnabled
     }
 
     /// We present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been

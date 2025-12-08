@@ -27,6 +27,11 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
     public let onComplete: (String) -> Void
     public private(set) var multipleChoiceSelections: [String: ViewModel.OnboardingMultipleChoiceActionType] = [:]
 
+    public var onCardView: ((String) -> Void)?
+    public var onButtonTap: ((String, ViewModel.OnboardingActionType, Bool) -> Void)?
+    public var onMultipleChoiceTap: ((String, ViewModel.OnboardingMultipleChoiceActionType) -> Void)?
+    public var onDismiss: ((String) -> Void)?
+
     public init(
         onboardingCards: [ViewModel],
         skipText: String,
@@ -51,6 +56,15 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         action: ViewModel.OnboardingActionType,
         cardName: String
     ) {
+        let card = onboardingCards.first(where: { $0.name == cardName })
+        let isPrimaryButton: Bool
+        if let card = card {
+            isPrimaryButton = card.buttons.primary.action.rawValue == action.rawValue
+        } else {
+            isPrimaryButton = false
+        }
+        onButtonTap?(cardName, action, isPrimaryButton)
+
         onActionTap(action, cardName) { [weak self] result in
             switch result {
             case .success(let tabAction):
@@ -74,12 +88,14 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
                 pageCount = nextIndex
             }
         } else {
+            onDismiss?(cardName)
             onComplete(cardName)
         }
     }
 
     public func handleMultipleChoiceAction(action: ViewModel.OnboardingMultipleChoiceActionType, cardName: String) {
         multipleChoiceSelections[cardName] = action
+        onMultipleChoiceTap?(cardName, action)
         onMultipleChoiceActionTap(action, cardName)
     }
 
@@ -90,6 +106,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
 
         let currentIndex = min(max(pageCount, 0), onboardingCards.count - 1)
         let currentCardName = onboardingCards[currentIndex].name
+        onDismiss?(currentCardName)
         onComplete(currentCardName)
     }
 
@@ -106,5 +123,10 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         let previous = max(pageCount - 1, 0)
         guard previous != pageCount else { return }
         pageCount = previous
+    }
+
+    func handlePageChange() {
+        guard pageCount >= 0 && pageCount < onboardingCards.count else { return }
+        onCardView?(onboardingCards[pageCount].name)
     }
 }

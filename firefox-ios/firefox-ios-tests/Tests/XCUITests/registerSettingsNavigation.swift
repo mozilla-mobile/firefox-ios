@@ -5,7 +5,7 @@
 import XCTest
 import MappaMundi
 
-// swiftlint:disable:next function_body_length
+@MainActor // swiftlint:disable:next function_body_length
 func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     let table = app.tables.element(boundBy: 0)
 
@@ -175,10 +175,11 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
             let searchEngineUrl = "https://developer.mozilla.org/search?q=%s"
             let tablesQuery = app.tables
             let customengineurlTextView = tablesQuery.textViews["customEngineUrl"]
+            let pasteAction = app.staticTexts["Paste"]
             sleep(1)
             UIPasteboard.general.string = searchEngineUrl
-            customengineurlTextView.press(forDuration: 1.0)
-            app.staticTexts["Paste"].waitAndTap()
+            customengineurlTextView.pressWithRetry(duration: 1.5, element: pasteAction)
+            pasteAction.waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction(for: app)
     }

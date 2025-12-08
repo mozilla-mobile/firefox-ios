@@ -41,16 +41,16 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Скасувати";
 
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Очистити";
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Стерти";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. %@ is the currently visited website. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Вилучення файлів cookie та даних для %@ може призвести до виходу на вебсайтах і очищення кошиків для покупок.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Вилучення файлів cookie та даних для %@ може призвести до виходу з облікового запису на вебсайтах і очищення кошиків для покупок.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Стерти файли cookie та дані сайтів";
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Стерти файли cookie та дані сайту";
 
 /* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Стерти файли cookie та дані сайтів";
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Стерти файли cookie та дані сайту";
 
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
 "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Файли cookie та дані сайтів вилучено";

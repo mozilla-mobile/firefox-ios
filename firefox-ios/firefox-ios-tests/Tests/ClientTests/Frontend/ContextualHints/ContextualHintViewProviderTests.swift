@@ -7,20 +7,21 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class ContextualHintViewProviderTests: XCTestCase {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 
     private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        try await super.setUp()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         profile = nil
+        try await super.tearDown()
     }
 
     // MARK: Mark Contextual Hint Configuration

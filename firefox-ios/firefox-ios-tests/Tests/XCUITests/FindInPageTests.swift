@@ -9,8 +9,6 @@ class FindInPageTests: BaseTestCase {
     var findInPageScreen: FindInPageScreen!
 
     private func navigateToOpenFindInPage(openSite: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(openSite)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -20,8 +18,6 @@ class FindInPageTests: BaseTestCase {
     }
 
     private func openFindInPageFromMenu(openSite: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(openSite)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -44,8 +40,6 @@ class FindInPageTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323463
     func testFindInLargeDoc() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -163,8 +157,6 @@ class FindInPageTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323714
     func testFindInPageTwoWordsSearchLargeDoc() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)

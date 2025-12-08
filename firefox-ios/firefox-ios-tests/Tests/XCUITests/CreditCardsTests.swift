@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Foundation
 
 class CreditCardsTests: BaseTestCase {
     let creditCardsStaticTexts = AccessibilityIdentifiers.Settings.CreditCards.self
@@ -12,6 +13,14 @@ class CreditCardsTests: BaseTestCase {
     var nameOnCard: XCUIElement!
     var cardNr: XCUIElement!
     var expiration: XCUIElement!
+    let url_fill_form = "https://mozilla.github.io/form-fill-examples/basic_cc.html"
+
+    var toolbarScreen: ToolbarScreen!
+    var creditCardScreen: CreditCardsScreen!
+    var addCreditCardScreen: AddCreditCardScreen!
+    var loginSettingsScreen: LoginSettingsScreen!
+    var editCardScreen: EditCreditCardScreen!
+    var viewCardScreen: ViewCreditCardScreen!
 
     func initCardFields() {
         nameOnCard = app.buttons["name"]
@@ -37,6 +46,9 @@ class CreditCardsTests: BaseTestCase {
         )
         addCardButton.waitAndTap()
         // Add Credit Card page is displayed
+        if #available(iOS 26, *) {
+            tapCardName()
+        }
         waitForElementsToExist(
             [
                 app.staticTexts[creditCardsStaticTexts.AddCreditCard.addCreditCard],
@@ -62,6 +74,29 @@ class CreditCardsTests: BaseTestCase {
         for index in cardDetails {
             mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[index])
         }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306967
+    // SmokeTest TAE
+    func testAccessingTheCreditCardsSection_TAE() {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let creditCardScreen = CreditCardsScreen(app: app)
+        let addCreditCardScreen = AddCreditCardScreen(app: app)
+
+        navigator.nowAt(NewTabScreen)
+        toolbarScreen.assertTabsButtonExists()
+        navigator.goto(CreditCardsSettings)
+        creditCardScreen.unlockIfNeeded()
+        // Autofill Credit cards section displays
+        creditCardScreen.waitForSectionVisible()
+        creditCardScreen.openAddCreditCardForm()
+        // Add Credit Card page is displayed
+        addCreditCardScreen.tapCreditCardForm()
+        creditCardScreen.waitForAddCreditCardValues()
+        // Add and save a valid credit card
+        addCreditCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
+
+        creditCardScreen.assertCardSaved(containing: "1252", details: ["Test", "Expires", "5/40"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306978
@@ -102,6 +137,27 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.tables.cells.element(boundBy: 1))
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306978
+    // SmokeTest TAE
+    func testDeleteButtonFromEditCard_TAE() {
+        addCardAndReachViewCardPage_TAE()
+        // Tap on the "Remove card" button
+        let editCreditCardScreen = EditCreditCardScreen(app: app)
+
+        editCreditCardScreen.openEditMode()
+
+        editCreditCardScreen.tapRemoveCard()
+
+        editCreditCardScreen.waitForRemoveCardAlert()
+
+        editCreditCardScreen.cancelRemoval()
+
+        editCreditCardScreen.tapRemoveCard()
+        editCreditCardScreen.confirmRemoval()
+
+        editCreditCardScreen.assertCardDeleted()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306975
     // SmokeTest
     func testEditSavedCardsUI() {
@@ -116,6 +172,16 @@ class CreditCardsTests: BaseTestCase {
                 app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306975
+    // SmokeTest TAE
+    func testEditSavedCardsUI_TAE() {
+        let viewCardScreen = ViewCreditCardScreen(app: app)
+        addCardAndReachViewCardPage_TAE()
+
+        // Go back to saved cards section
+        viewCardScreen.goBackToSavedCardsSection()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306972
@@ -164,8 +230,9 @@ class CreditCardsTests: BaseTestCase {
         formatter.dateFormat = "MMyy"
         let futureExpiryMonthYear = formatter.string(from: dateFiveYearsFromNow!)
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: futureExpiryMonthYear)
+
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         // The autofill option (Use saved card prompt) is not displayed
         var cardNumber = app.webViews["Web content"].textFields["Card Number:"]
@@ -176,11 +243,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[useSavedCard])
         // If Keyboard is open, hit return button
         app.buttons["KeyboardAccessory.doneButton"].tapIfExists()
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            navigator.goto(BrowserTabMenu)
-            app.swipeUp()
-        }
+
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -193,12 +256,54 @@ class CreditCardsTests: BaseTestCase {
         if iPad() {
             app.webViews["Web content"].textFields["Expiration month:"].waitAndTap()
             app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
-        }
-        if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
+        } else {
             app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
             app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
         }
-        mozWaitForElementToExist(app.buttons[useSavedCard])
+        if #unavailable(iOS 26) {
+            mozWaitForElementToExist(app.buttons[useSavedCard])
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306969
+    // Smoketest TAE
+    func testAutofillCreditCardsToggleOnOff_TAE() {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let creditCardScreen = CreditCardsScreen(app: app)
+
+        navigator.nowAt(NewTabScreen)
+        toolbarScreen.assertTabsButtonExists()
+        navigator.goto(CreditCardsSettings)
+        creditCardScreen.unlockIfNeeded()
+
+        creditCardScreen.disableSaveAndFillAndOpenAddCardForm()
+
+        let futureExpiryMonthYear = creditCardScreen.expirationDateFiveYearsFromNow()
+        creditCardScreen.addNewCreditCard(name: "Test", cardNumber: cards[0], expirationDate: futureExpiryMonthYear)
+        navigator.goto(NewTabScreen)
+        navigator.openURL(url_fill_form)
+        waitUntilPageLoad()
+        // The autofill option (Use saved card prompt) is not displayed
+        let cardNumber = creditCardScreen.getCardNumberField()
+        creditCardScreen.assertNoAutofillPromptWhenEnteringCard()
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
+        navigator.goto(CreditCardsSettings)
+        creditCardScreen.unlockIfNeeded()
+        creditCardScreen.assertAutofillCreditCardExists()
+        // Enable the "Save and Fill Payment Methods" toggle
+        app.switches.element(boundBy: 1).waitAndTap()
+        XCTAssertEqual(creditCardScreen.getSaveAndFillSwitchValue(), "1")
+        navigator.goto(NewTabScreen)
+        cardNumber.waitAndTap()
+        // The autofill option (Use saved card prompt) is displayed
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
+        if #unavailable(iOS 26) {
+            creditCardScreen.prepareForSavedCardPrompt()
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306971
@@ -410,7 +515,7 @@ class CreditCardsTests: BaseTestCase {
             throw XCTSkip("testSaveThisCardPrompt() does not work on iOS 15 and 16")
         }
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         // Fill in the form with the card details of a new (unsaved) credit card.
         fillCardDetailsOnWebsite(fillNewInfo: true)
@@ -438,7 +543,7 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         // Fill in the form with the card details of a new (unsaved) credit card.
         fillCardDetailsOnWebsite(fillNewInfo: true)
@@ -508,7 +613,7 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         if iPad() {
             app.webViews["Web content"].textFields["Card Number:"].waitAndTap()
@@ -653,7 +758,7 @@ class CreditCardsTests: BaseTestCase {
     private func reachAutofillWebsite() {
         // Reach autofill website
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         app.textFields.element(boundBy: 1).waitAndTap()
         if iPad() {
@@ -679,7 +784,7 @@ class CreditCardsTests: BaseTestCase {
         app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        navigator.openURL(url_fill_form)
         waitUntilPageLoad()
         var cardNumber = app.webViews["Web content"].textFields["Card Number:"]
         if #unavailable(iOS 17) {
@@ -702,6 +807,29 @@ class CreditCardsTests: BaseTestCase {
         )
     }
 
+    private func addCreditCardAndReachAutofillWebsite_TAE() {
+        let creditCards = CreditCardsScreen(app: app)
+        let addCreditCardScreen = AddCreditCardScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+
+        navigator.nowAt(NewTabScreen)
+        toolbarScreen.assertTabsButtonExists()
+        navigator.goto(CreditCardsSettings)
+        creditCards.unlockIfNeeded()
+
+        creditCards.enableSaveAndFillIfDisabled()
+
+        creditCards.addNewCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
+
+        navigator.goto(NewTabScreen)
+        navigator.openURL(url_fill_form)
+        waitUntilPageLoad()
+
+        addCreditCardScreen.interactWithCreditCardForm()
+
+        addCreditCardScreen.useSavedCardPrompt()
+    }
+
     private func addCardAndReachViewCardPage() {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -714,19 +842,23 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         app.tables.cells.element(boundBy: 1).waitAndTap()
         // The "View card" page is displayed with all the details of the card
+        // iOS 26 only: "Edit Card" heading may not be displayed without a restart
+        // during automated testing.
+        if #available(iOS 26, *) {
+            restartInBackground()
+            unlockLoginsView()
+        }
         waitForElementsToExist(
             [
                 app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard],
-                app.tables.cells.element(
-                    boundBy: 1
-                ).buttons.elementContainingText(
-                    "1252"
-                )
+                app.buttons.elementContainingText(String("1252"))
             ]
         )
         let cardDetails = ["Test", "05 / 40"]
         for index in cardDetails {
-            if #available(iOS 16, *) {
+            if #available(iOS 26, *) {
+                mozWaitForElementToExist(app.textFields[index])
+            } else if #available(iOS 16, *) {
                 mozWaitForElementToExist(app.buttons[index])
                 XCTAssertTrue(app.buttons[index].exists, "\(index) does not exists")
             } else {
@@ -735,7 +867,51 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
+    private func addCardAndReachViewCardPage_TAE() {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let loginSettingsScreen = LoginSettingsScreen(app: app)
+        let creditCardsScreen = CreditCardsScreen(app: app)
+        let addCardScreen = AddCreditCardScreen(app: app)
+        let viewCardScreen = ViewCreditCardScreen(app: app)
+
+        navigator.nowAt(NewTabScreen)
+        toolbarScreen.assertTabsButtonExists()
+        navigator.goto(CreditCardsSettings)
+        loginSettingsScreen.unlockLoginsView()
+        creditCardsScreen.openAddCreditCardForm()
+        addCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
+        creditCardsScreen.openSavedCard(at: 1)
+        viewCardScreen.waitForViewCardScreen(containing: "1252")
+        viewCardScreen.assertCardDetails(["Test", "05 / 40"])
+    }
+
     private func addCreditCard(name: String, cardNumber: String, expirationDate: String) {
+        tapCardName()
+        typeCardName(name: name)
+        tapCardNr()
+        typeCardNr(cardNo: cardNumber)
+        tapExpiration()
+        // Retry adding card number if first attempt failed
+        if app.staticTexts["Enter a valid card number"].exists {
+            retryOnCardNumber(cardNumber: cardNumber)
+        }
+        typeExpirationDate(exprDate: expirationDate)
+        // Retry adding expiration date if first attempt failed
+        if app.staticTexts["Enter a valid expiration date"].exists {
+            retryExpirationNumber(expirationDate: expirationDate)
+        }
+        let saveButton = app.buttons[creditCardsStaticTexts.AddCreditCard.save]
+        if !saveButton.isEnabled {
+            retryOnCardNumber(cardNumber: cardNumber)
+            mozWaitForElementToExist(expiration)
+            expiration.typeText(expirationDate)
+            retryExpirationNumber(expirationDate: expirationDate)
+            mozWaitForElementToExist(saveButton)
+        }
+        saveButton.waitAndTap()
+    }
+
+    private func addCreditCard_TAE(name: String, cardNumber: String, expirationDate: String) {
         tapCardName()
         typeCardName(name: name)
         tapCardNr()

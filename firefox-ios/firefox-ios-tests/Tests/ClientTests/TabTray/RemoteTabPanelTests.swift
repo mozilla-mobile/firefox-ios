@@ -19,6 +19,7 @@ final class RemoteTabPanelTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
+    @MainActor
     func testTableView_emptyStateNoRows() {
         let remotePanel = createSubject(state: generateEmptyState())
         let tableView = remotePanel.tabsDisplayViewController.tableView
@@ -27,6 +28,7 @@ final class RemoteTabPanelTests: XCTestCase {
         XCTAssertEqual(tableView.numberOfSections, 0)
     }
 
+    @MainActor
     func testTableView_oneClientTwoRows() {
         let remotePanel = createSubject(state: generateStateOneClientTwoTabs())
         let tableView = remotePanel.tabsDisplayViewController.tableView
@@ -75,6 +77,7 @@ final class RemoteTabPanelTests: XCTestCase {
                                     devices: [])
     }
 
+    @MainActor
     private func createSubject(state: RemoteTabsPanelState,
                                file: StaticString = #filePath,
                                line: UInt = #line) -> RemoteTabsPanel {

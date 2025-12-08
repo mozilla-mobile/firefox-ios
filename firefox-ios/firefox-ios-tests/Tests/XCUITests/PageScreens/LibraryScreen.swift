@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class LibraryScreen {
     private let app: XCUIApplication
     private let sel: LibrarySelectorsSet
@@ -21,5 +22,39 @@ final class LibraryScreen {
             bookmarksTable,
             bookmarksTable.staticTexts[name]
         ], timeout: timeout)
+    }
+
+    func assertBookmarkList() {
+        let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(bookmarksTable)
+    }
+
+    func assertBookmarkListCount(numberOfEntries: Int) {
+        let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
+        XCTAssertEqual(bookmarksTable.cells.count, numberOfEntries)
+    }
+
+    func swipeBookmarkEntry(entryName: String) {
+        let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
+        bookmarksTable.cells.staticTexts[entryName].swipeLeft()
+    }
+
+    func tapDeleteBookmarkButton() {
+        let deleteButton = sel.DELETE_BUTTON.element(in: app)
+        deleteButton.waitAndTap()
+    }
+
+    func swipeAndDeleteBookmark(entryName: String) {
+        swipeBookmarkEntry(entryName: entryName)
+        tapDeleteBookmarkButton()
+    }
+
+    func assertEmptyStateSignInButtonExists() {
+        BaseTestCase().mozWaitForElementToExist(sel.SIGN_IN_BUTTON.element(in: app))
+    }
+
+    func assertBookmarkListLabel(label: String) {
+        let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
+        XCTAssertEqual(bookmarksTable.label, "Empty list")
     }
 }

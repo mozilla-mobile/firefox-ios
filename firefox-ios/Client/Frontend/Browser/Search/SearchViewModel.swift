@@ -22,7 +22,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
     private var suggestClient: SearchSuggestClient?
-    private let recentSearchProvider: RecentSearchProvider?
+    private let recentSearchProvider: RecentSearchProvider
     private let trendingSearchClient: TrendingSearchClientProvider
     private let logger: Logger
 
@@ -47,8 +47,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     @MainActor
     var historySites: [Site] {
-        delegate?.searchData.compactMap { $0 }
-            .filter { $0.isBookmarked == false } ?? []
+        let bookmarkURLs = Set(bookmarkSites.map { $0.url })
+
+        return delegate?.searchData.compactMap { $0 }
+            .filter { $0.isBookmarked == false && !bookmarkURLs.contains($0.url) } ?? []
     }
 
     private let maxNumOfFirefoxSuggestions: Int32 = 1
@@ -61,10 +63,12 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         didSet {
             querySuggestClient()
             handleShowingOrHidingQuickSearchEngines(with: oldValue, newValue: searchQuery)
-            // When clearing the search query, we want to reload the trending searches since
-            // it was set to empty previously.
-            if searchQuery.isEmpty {
+            // We want to reload showing the zero search suggestions
+            // only if the previous search term is not empty.
+            if searchQuery.isEmpty, !oldValue.isEmpty {
                 loadTrendingSearches()
+                retrieveRecentSearches()
+                searchTelemetry.clearZeroSearchSectionSeen()
             }
         }
     }
@@ -197,14 +201,16 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         return isFeatureOn && isSettingsToggleOn && isZeroSearchState
     }
 
-    init(isPrivate: Bool, isBottomSearchBar: Bool,
-         profile: Profile,
-         model: SearchEnginesManager,
-         tabManager: TabManager,
-         trendingSearchClient: TrendingSearchClientProvider,
-         recentSearchProvider: RecentSearchProvider?,
-         logger: Logger = DefaultLogger.shared,
-         featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search
+    init(
+        isPrivate: Bool,
+        isBottomSearchBar: Bool,
+        profile: Profile,
+        model: SearchEnginesManager,
+        tabManager: TabManager,
+        trendingSearchClient: TrendingSearchClientProvider,
+        recentSearchProvider: RecentSearchProvider,
+        logger: Logger = DefaultLogger.shared,
+        featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search
     ) {
         self.isPrivate = isPrivate
         self.isBottomSearchBar = isBottomSearchBar
@@ -330,7 +336,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     // MARK: - Zero Search State Feature
     // The zero search state refers to when user puts focus in the address bar but does not enter any text.
-
+    @MainActor
     func loadTrendingSearches() {
         Task { @MainActor in
             await retrieveTrendingSearches()
@@ -359,6 +365,16 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         }
     }
 
+    // We only care about if the section has shown at least one trending search
+    // so we check if trending searches is empty or not
+    func recordTrendingSearchesDisplayedEvent() {
+        guard !trendingSearches.isEmpty && shouldShowTrendingSearches else { return }
+        if !searchTelemetry.hasSeenTrendingSearches {
+            searchTelemetry.trendingSearchesShown(count: trendingSearches.count)
+            searchTelemetry.hasSeenTrendingSearches = true
+        }
+    }
+
     // Loads recent searches from the default search engine and updates `recentSearches`.
     // Falls back to an empty list on error.
     @MainActor
@@ -368,19 +384,39 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             return
         }
 
-        guard let recentSearchProvider else {
-            logger.log(
-                "Recent searches provider is nil, return empty list.",
-                level: .info,
-                category: .searchEngines
-            )
-            recentSearches = []
-            return
-        }
-        recentSearchProvider.loadRecentSearches { [weak self] searchTerms in
-            self?.recentSearches = searchTerms
+        recentSearchProvider.loadRecentSearches { searchTerms in
             ensureMainThread { [weak self] in
+                self?.recentSearches = searchTerms
                 self?.delegate?.reloadTableView()
+            }
+        }
+    }
+
+    // We only care about if the section has shown at least one recent search
+    // so we check if recent searches is empty or not.
+    func recordRecentSearchesDisplayedEvent() {
+        guard !recentSearches.isEmpty && shouldShowRecentSearches else { return }
+        if !searchTelemetry.hasSeenRecentSearches {
+            searchTelemetry.recentSearchesShown(count: recentSearches.count)
+            searchTelemetry.hasSeenRecentSearches = true
+        }
+    }
+
+    func clearRecentSearches() {
+        searchTelemetry.recentSearchesClearButtonTapped()
+
+        recentSearchProvider.clear { result in
+            ensureMainThread { [weak self] in
+                if case .success = result {
+                    self?.recentSearches = []
+                    self?.delegate?.reloadTableView()
+                } else {
+                    self?.logger.log(
+                        "Unable to clear recent searches.",
+                        level: .warning,
+                        category: .searchEngines
+                    )
+                }
             }
         }
     }

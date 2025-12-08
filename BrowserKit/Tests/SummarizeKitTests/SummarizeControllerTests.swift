@@ -33,7 +33,7 @@ final class MockSummarizeNavigationHandler: SummarizeNavigationHandler {
 }
 
 @MainActor
-final class SummarizeControllerTests: XCTestCase {
+final class SummarizeControllerTests: XCTestCase, @unchecked Sendable {
     private var summarizer: MockSummarizer!
     private var navigationHandler: MockSummarizeNavigationHandler!
     private var webView: MockWebView!
@@ -87,8 +87,8 @@ final class SummarizeControllerTests: XCTestCase {
     )
     private let maxWords = 5000
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         UIView.setAnimationsEnabled(false)
         summarizer = MockSummarizer(shouldRespond: ["Response"], shouldThrowError: nil)
         navigationHandler = MockSummarizeNavigationHandler()
@@ -97,14 +97,14 @@ final class SummarizeControllerTests: XCTestCase {
         AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         UIView.setAnimationsEnabled(true)
         summarizer = nil
         navigationHandler = nil
         webView = nil
         viewModel = nil
         AppContainer.shared.reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_viewDidLoad_startSummarizing() async {

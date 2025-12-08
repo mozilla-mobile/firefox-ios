@@ -5,5 +5,6 @@
 import Foundation
 
 protocol OnboardingMultipleChoiceSelectionDelegate: AnyObject {
+    @MainActor
     func updateSelectedButton(to buttonName: String)
 }

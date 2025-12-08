@@ -39,11 +39,7 @@ class DependencyHelperMock {
         // FIXME: FXIOS-13151 We need to handle main actor synchronized state in this setup method used across all unit tests
         if Thread.isMainThread {
             MainActor.assumeIsolated {
-                tabManager = injectedTabManager ?? TabManagerImplementation(
-                    profile: profile,
-                    uuid: ReservedWindowUUID(uuid: windowUUID, isNew: false),
-                    windowManager: windowManager
-                )
+                tabManager = injectedTabManager ?? MockTabManager()
                 AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
 
                 let searchEnginesManager = SearchEnginesManager(
@@ -55,11 +51,7 @@ class DependencyHelperMock {
             }
         } else {
             DispatchQueue.main.sync {
-                tabManager = injectedTabManager ?? TabManagerImplementation(
-                    profile: profile,
-                    uuid: ReservedWindowUUID(uuid: windowUUID, isNew: false),
-                    windowManager: windowManager
-                )
+                tabManager = injectedTabManager ??  MockTabManager()
                 AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
 
                 let searchEnginesManager = SearchEnginesManager(

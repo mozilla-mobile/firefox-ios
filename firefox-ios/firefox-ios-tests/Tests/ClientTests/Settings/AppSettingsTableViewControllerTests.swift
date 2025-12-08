@@ -9,7 +9,7 @@ import Common
 @MainActor
 class AppSettingsTableViewControllerTests: XCTestCase {
     private var profile: Profile!
-    private var tabManager: TabManager!
+    private var tabManager: MockTabManager!
     private var appAuthenticator: MockAppAuthenticator!
     private var delegate: MockSettingsFlowDelegate!
     private var applicationHelper: MockApplicationHelper!
@@ -17,13 +17,12 @@ class AppSettingsTableViewControllerTests: XCTestCase {
     private var mockParentCoordinator: MockSettingsFlowDelegate!
     private var mockGleanUsageReportingMetricsService: MockGleanUsageReportingMetricsService!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        self.tabManager = TabManagerImplementation(profile: profile,
-                                                   uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
+        self.tabManager = MockTabManager()
         self.appAuthenticator = MockAppAuthenticator()
         self.delegate = MockSettingsFlowDelegate()
         self.applicationHelper = MockApplicationHelper()
@@ -32,8 +31,8 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         self.mockGleanUsageReportingMetricsService = MockGleanUsageReportingMetricsService(profile: MockProfile())
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         DependencyHelperMock().reset()
         self.profile = nil
         self.tabManager = nil

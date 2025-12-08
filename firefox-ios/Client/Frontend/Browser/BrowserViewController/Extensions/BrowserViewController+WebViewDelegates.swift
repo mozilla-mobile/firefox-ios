@@ -744,7 +744,8 @@ extension BrowserViewController: WKNavigationDelegate {
            let request = request {
             // Certain files are too large to download before the preview presents, so block until we have something to show
             let group = DispatchGroup()
-            var url: URL?
+            // FIXME: FXIOS-14054 Should not mutate local properties in concurrent code
+            nonisolated(unsafe) var url: URL?
             group.enter()
             let temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
             temporaryDocument.download { docURL in
@@ -1031,8 +1032,8 @@ extension BrowserViewController: WKNavigationDelegate {
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
 
-                if isNativeErrorPageEnabled {
-                    guard isNICErrorPageEnabled && error.code == noInternetErrorCode else { return }
+                // Only handle No internet access because other cases show about:blank page
+                if isNICErrorPageEnabled && error.code == noInternetErrorCode {
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
@@ -1135,6 +1136,12 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
+            // Because we are not calling updateInContentHomePanel in updateUIForReaderHomeStateForTab we need to
+            // call it here so that we can load the webpage from tapping a link on the homepage
+            // TODO: FXIOS-14355 Remove this call in favor of newState update
+            if isToolbarTranslucencyRefactorEnabled {
+                updateInContentHomePanel(tab.url, focusUrlBar: true)
+            }
         }
     }
 
@@ -1339,8 +1346,9 @@ private extension BrowserViewController {
                 return
             }
 
+            let credential = URLCredential(trust: trust)
             ensureMainThread {
-                completionHandler(.useCredential, URLCredential(trust: trust))
+                completionHandler(.useCredential, credential)
             }
         }
     }

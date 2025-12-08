@@ -43,7 +43,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         button.addTarget(self, action: #selector(self.refreshOnClick), for: .touchUpInside)
     }
 
-    var refreshPasswordButtonOnClick: (() -> Void)?
+    var refreshPasswordButtonOnClick: (@MainActor () -> Void)?
 
     convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.init(frame: frame)

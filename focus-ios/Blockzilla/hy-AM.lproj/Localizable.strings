@@ -34,6 +34,9 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Օգտագործել որպես Safari-ի ընդլայնում.";
 
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@-ի մասին";
+
 /* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@-ը տալիս է ձեզ կառավարում:";
 
@@ -148,6 +151,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Փակել";
 
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Կրկին փորձել";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Սկսել";
 
@@ -156,6 +162,21 @@
 
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Բաց թողնել";
+
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "Գաղտնիության դրույթներ";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "Համաձայնել և շարունակել";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Շարունակել";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "Պատրաստ է";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "Բարի գալուստ %@";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Բարի գալու՜ստ Firefox %@";
@@ -283,11 +304,23 @@
 /* Text for a share button */
 "share" = "Տարածել";
 
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Հավելել դյուրանցումներին";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Ավելացված է դյուրանցումներին";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Պատճենել հասցեն";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Գտնել էջում";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Հանել դյուրանցումներից";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Դյուրանցումը հեռացվեց";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Պահանջել աշխատասեղանային կայք";

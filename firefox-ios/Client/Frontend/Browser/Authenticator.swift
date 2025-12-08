@@ -18,7 +18,7 @@ class Authenticator {
         _ viewController: UIViewController,
         challenge: URLAuthenticationChallenge,
         loginsHelper: LoginsHelper?,
-        completionHandler: @escaping @Sendable ((Result<LoginEntry, Error>) -> Void)
+        completionHandler: @escaping @Sendable (Result<LoginEntry, Error>) -> Void
     ) {
         // If there have already been too many login attempts, we'll just fail.
         if challenge.previousFailureCount >= Authenticator.MaxAuthenticationAttempts {

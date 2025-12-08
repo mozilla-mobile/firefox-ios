@@ -8,6 +8,7 @@ import Shared
 
 // MARK: - PhotonActionSheetViewDelegate
 protocol PhotonActionSheetViewDelegate: AnyObject {
+    @MainActor
     func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void)
 }
 

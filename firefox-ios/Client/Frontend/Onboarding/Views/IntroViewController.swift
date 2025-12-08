@@ -147,7 +147,7 @@ class IntroViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .onboardingViewController)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -161,7 +161,7 @@ class IntroViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .onboardingViewController)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func newState(state: OnboardingViewControllerState) {
@@ -363,13 +363,13 @@ extension IntroViewController: OnboardingCardDelegate {
             let action = ThemeSettingsViewAction(manualThemeType: .dark,
                                                  windowUUID: windowUUID,
                                                  actionType: ThemeSettingsViewActionType.switchManualTheme)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         case .themeLight:
             turnSystemTheme(on: false)
             let action = ThemeSettingsViewAction(manualThemeType: .light,
                                                  windowUUID: windowUUID,
                                                  actionType: ThemeSettingsViewActionType.switchManualTheme)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         case .themeSystemDefault:
             turnSystemTheme(on: true)
         case .toolbarBottom:
@@ -391,7 +391,7 @@ extension IntroViewController: OnboardingCardDelegate {
         let action = ThemeSettingsViewAction(useSystemAppearance: state,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.toggleUseSystemAppearance)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func sendCardViewTelemetry(from cardName: String) {

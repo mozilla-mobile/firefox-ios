@@ -5,17 +5,18 @@
 import XCTest
 @testable import SiteImageView
 
+@MainActor
 class FaviconURLCacheTests: XCTestCase {
     var mockFileManager: MockURLCacheFileManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockFileManager = MockURLCacheFileManager()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         mockFileManager = nil
+        try await super.tearDown()
     }
 
     func testGetURLFromCacheWithEmptyCache() async {

@@ -6,8 +6,8 @@ import Foundation
 
 extension URL {
     /// Returns a shorter displayable string for a domain
-    /// E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
-    /// https://accounts.foo.com/bar/baz?noo=abc#123  => accounts.foo
+    /// E.g., https://m.foo.com/bar/baz?no=abc#123  => foo
+    /// https://accounts.foo.com/bar/baz?no=abc#123  => accounts.foo
     public var shortDisplayString: String {
         guard let publicSuffix = self.publicSuffix, let baseDomain = self.normalizedHost else {
             return self.normalizedHost ?? self.absoluteString
@@ -16,7 +16,7 @@ extension URL {
     }
 
     /// Returns just the domain, but with the same scheme, and a trailing '/'.
-    /// E.g., https://m.foo.com/bar/baz?noo=abc#123  => https://foo.com/
+    /// E.g., https://m.foo.com/bar/baz?no=abc#123  => https://foo.com/
     /// Any failure? Return this URL.
     public var domainURL: URL {
         if let normalized = self.normalizedHost {
@@ -299,7 +299,7 @@ extension URL {
         return scheme.map { schemes.contains($0) } ?? false
     }
 
-    /// Returns the standard location of the website's favicon. (This is the base directoy path with
+    /// Returns the standard location of the website's favicon. (This is the base directory path with
     /// favicon.ico appended).
     public func faviconUrl() -> URL? {
         if let host = host, let rootDirectoryURL = URL(string: (scheme ?? "https") + "://" + host) {

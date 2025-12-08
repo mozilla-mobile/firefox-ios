@@ -22,5 +22,5 @@ features:
           no_internet_connection_error: false
       - channel: developer
         value:
-          enabled: false
-          no_internet_connection_error: false
+          enabled: true
+          no_internet_connection_error: true

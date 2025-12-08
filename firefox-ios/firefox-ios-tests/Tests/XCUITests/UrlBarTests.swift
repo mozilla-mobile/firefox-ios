@@ -9,15 +9,13 @@ class UrlBarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306888
     func testNewTabUrlBar() {
         // Visit any website and select the URL bar
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         // The keyboard is brought up.
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        // Scroll on the page
-        app.swipeUp()
+        // Tap cancel button
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         // The keyboard is dismissed
         XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? true)
         // Select the tab tray and add a new tab
@@ -25,17 +23,11 @@ class UrlBarTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         // The URL bar is empty on the new tab
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        if !isTablet {
-            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
-        }
         XCTAssertEqual(url.value as? String, "Search or enter address")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306887
     func testSearchEngineLogo() {
-        if !isTablet {
-            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
-        }
         tapUrlBarValidateKeyboardAndIcon()
         // Type a search term and hit "go"
         typeSearchTermAndHitGo(searchTerm: "Firefox")

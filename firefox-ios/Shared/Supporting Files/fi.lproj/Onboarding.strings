@@ -127,6 +127,9 @@
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "Hanki kirjanmerkit, historia ja salasanat mille tahansa laitteelle.";
 
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "Kirjanmerkkisi, salasanasi ja muut tiedot synkronoituna millä tahansa laitteella. Kaikki on suojattu salauksella, joten vain sinä voit käyttää niitä.";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "Aloita synkronointi";
 
@@ -150,6 +153,9 @@
 
 /* Title for the confirmation button on the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Jatka";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "Henkilötietojesi automaattinen suojaus\nLataa sivustot nopeasti ja hae fiksummin\nTarjoaa voittoa tavoittelematon %@, johon on luotettu yli 20 vuotta";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Hallitse";
@@ -198,6 +204,12 @@
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Jatkamalla hyväksyt %@";
+
+/* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Jatkamalla hyväksyt %@";
+
+/* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "%@in käyttöehdot.";
 
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "Päivitä selailukokemuksesi";

@@ -210,8 +210,8 @@ class TabManagerTests: XCTestCase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
-            XCTAssertEqual(subject.tabs.count, 4)
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs] in
+            XCTAssertEqual(tabs.count, 4)
             XCTAssertEqual(self.mockTabStore.fetchWindowDataCalledCount, 1)
             expectation.fulfill()
         }
@@ -229,8 +229,8 @@ class TabManagerTests: XCTestCase {
                                                      tabData: getMockTabData(count: 3))
         subject.restoreTabs(true)
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
-            XCTAssertEqual(subject.tabs.count, 3)
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs] in
+            XCTAssertEqual(tabs.count, 3)
             XCTAssertEqual(self.mockTabStore.fetchWindowDataCalledCount, 1)
             expectation.fulfill()
         }
@@ -254,10 +254,10 @@ class TabManagerTests: XCTestCase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, selectedTab = subject.selectedTab] in
             // Tabs count has to be same as restoration data, since deeplink tab has same of URL of a restored tab.
-            XCTAssertEqual(subject.tabs.count, tabData.count)
-            XCTAssertEqual(subject.selectedTab, deeplinkTab)
+            XCTAssertEqual(tabs.count, tabData.count)
+            XCTAssertEqual(selectedTab, deeplinkTab)
             expectation.fulfill()
         }
         wait(for: [expectation])
@@ -280,9 +280,9 @@ class TabManagerTests: XCTestCase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
-            XCTAssertEqual(subject.tabs.count, tabData.count)
-            XCTAssertEqual(subject.selectedTab?.tabUUID, previouslySelectedTabData.id.uuidString)
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, tabUUID = subject.selectedTab?.tabUUID] in
+            XCTAssertEqual(tabs.count, tabData.count)
+            XCTAssertEqual(tabUUID, previouslySelectedTabData.id.uuidString)
             expectation.fulfill()
         }
         wait(for: [expectation])
@@ -306,9 +306,9 @@ class TabManagerTests: XCTestCase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
-            XCTAssertEqual(subject.tabs.count, tabData.count + 1)
-            XCTAssertEqual(subject.selectedTab, deeplinkTab)
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, selectedTab = subject.selectedTab] in
+            XCTAssertEqual(tabs.count, tabData.count + 1)
+            XCTAssertEqual(selectedTab, deeplinkTab)
             expectation.fulfill()
         }
         wait(for: [expectation])
@@ -330,10 +330,10 @@ class TabManagerTests: XCTestCase {
             tabData: getMockTabData(count: 4)
         )
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs] in
             // Tabs count has to be the sum of deeplink and restored tabs, since the deeplink tab is not present in
             // the restored once.
-            XCTAssertEqual(subject.tabs.count, 5)
+            XCTAssertEqual(tabs.count, 5)
             expectation.fulfill()
         }
 
@@ -360,12 +360,14 @@ class TabManagerTests: XCTestCase {
         )
 
         AppEventQueue.wait(for: .tabRestoration(testUUID)) {
-            let filteredTabs = subject.tabs.filter {
-                $0.tabUUID == deeplinkTab.tabUUID
+            ensureMainThread {
+                let filteredTabs = subject.tabs.filter {
+                    $0.tabUUID == deeplinkTab.tabUUID
+                }
+                // There has to be only one tab present
+                XCTAssertEqual(filteredTabs.count, 1)
+                expectation.fulfill()
             }
-            // There has to be only one tab present
-            XCTAssertEqual(filteredTabs.count, 1)
-            expectation.fulfill()
         }
 
         subject.restoreTabs()
@@ -1616,6 +1618,46 @@ class TabManagerTests: XCTestCase {
         tabManager.removeNormalTabsOlderThan(period: .oneMonth, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
+    }
+
+    @MainActor
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsInTheMiddle_thenOrderIsProper() {
+        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
+        let inactiveTabs2 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
+        let tabManager = createSubject(tabs: inactiveTabs1 + normalTabs + inactiveTabs2)
+        tabManager.selectTab(normalTabs[safe: 0])
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 3)
+        XCTAssertEqual(tabManager.selectedIndex, 0)
+    }
+
+    @MainActor
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsLast_thenOrderIsProper() {
+        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
+        let tabManager = createSubject(tabs: inactiveTabs1 + normalTabs)
+        tabManager.selectTab(normalTabs[safe: 2])
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 3)
+        XCTAssertEqual(tabManager.selectedIndex, 2)
+    }
+
+    @MainActor
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsFirst_thenOrderIsProper() {
+        let inactiveTabs1 = generateTabs(ofType: .normalInactive2Weeks, count: 10)
+        let normalTabs = generateTabs(ofType: .normalActive, count: 3)
+        let tabManager = createSubject(tabs: normalTabs + inactiveTabs1)
+        tabManager.selectTab(normalTabs[safe: 0])
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 3)
+        XCTAssertEqual(tabManager.selectedIndex, 0)
     }
 
     // MARK: - removeAllInactiveTabs (removing unselected tabs at array bounds)

@@ -33,7 +33,7 @@ class LoginTest: BaseTestCase {
     var webFormScreen: WebFormScreen!
     var saveLoginAlertScreen: SaveLoginAlertScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         // Fresh install the app
         // removeApp() does not work on iOS 15 and 16 intermittently
         if name.contains("testLoginFreshInstallMessage") {
@@ -42,7 +42,7 @@ class LoginTest: BaseTestCase {
             }
         }
         // The app is correctly installed
-        super.setUp()
+        try await super.setUp()
         toolBarScreen = ToolbarScreen(app: app)
         loginSettingsScreen = LoginSettingsScreen(app: app)
         mainMenuScreen = MainMenuScreen(app: app)
@@ -108,7 +108,7 @@ class LoginTest: BaseTestCase {
     }
 
     private func openLoginsSettingsFromBrowserTab_TAE() {
-        toolBarScreen.assertTabToolbarMenuExist()
+        toolBarScreen.assertTabToolbarMenuExists()
         navigator.goto(BrowserTabMenu)
         mainMenuScreen.assertMainMenuSettingsExist()
         navigator.goto(LoginsSettings)
@@ -136,8 +136,6 @@ class LoginTest: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         saveLogin(givenUrl: testLoginPage)
         // Make sure you can access populated Login List from Browser Tab Menu
         // issue 28625: iOS 15 may not open the menu fully.
@@ -165,20 +163,19 @@ class LoginTest: BaseTestCase {
         // Initially the login list should be empty
         openLoginsSettingsFromBrowserTab()
         XCTAssertEqual(app.tables[loginList].cells.count, defaultNumRowsLoginsList)
-        // Save a login and check that it appears on the list from BrowserTabMenu
-        navigator.goto(HomePanelsScreen)
-        navigator.nowAt(HomePanelsScreen)
-
-        saveLogin(givenUrl: testLoginPage)
-        openLoginsSettings()
-        mozWaitForElementToExist(app.tables[loginList])
-        mozWaitForElementToExist(app.staticTexts[domain])
-        // XCTAssertTrue(app.staticTexts[domainLogin].exists)
-        XCTAssertEqual(app.tables[loginList].cells.count, defaultNumRowsLoginsList + 1)
-
-        // iOS 15 may show "Toolbar" instead of "Settings" intermittently.
-        // I can't reproduce the issue manually. The issue occurs only during test automation.
+        // iOS 15 does not exit from the settings page intermittently
         if #available(iOS 16, *) {
+            // Save a login and check that it appears on the list from BrowserTabMenu
+            navigator.goto(HomePanelsScreen)
+            navigator.nowAt(HomePanelsScreen)
+
+            saveLogin(givenUrl: testLoginPage)
+            openLoginsSettings()
+            mozWaitForElementToExist(app.tables[loginList])
+            mozWaitForElementToExist(app.staticTexts[domain])
+            // XCTAssertTrue(app.staticTexts[domainLogin].exists)
+            XCTAssertEqual(app.tables[loginList].cells.count, defaultNumRowsLoginsList + 1)
+
             // Check to see how it works with multiple entries in the list- in this case, two for now
             navigator.goto(HomePanelsScreen)
             navigator.nowAt(HomePanelsScreen)
@@ -392,7 +389,11 @@ class LoginTest: BaseTestCase {
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
         XCTAssertTrue(app.buttons["Add"].isEnabled)
         createLoginManually()
-        mozWaitForElementToExist(app.tables[loginList].staticTexts["https://testweb"])
+        if #unavailable(iOS 16) {
+            mozWaitForElementToExist(app.tables[loginList].staticTexts.firstMatch)
+        } else {
+            mozWaitForElementToExist(app.tables[loginList].staticTexts["https://testweb"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306953
@@ -473,7 +474,10 @@ class LoginTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798597
     // Smoketest
-    func testVerifyUpdatedPasswordIsSaved() {
+    func testVerifyUpdatedPasswordIsSaved() throws {
+        guard #available(iOS 16, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
+        }
         validateChangedPasswordSavedState()
     }
 
@@ -585,12 +589,9 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
                        "1",
                        "Save passwords toggle in not enabled by default")
-        // iOS 15 may not clear the URL bar before entering the new URL.
-        // Open a fresh tab is a safer way to open the page for sure.
-        if #unavailable(iOS 16) {
-            navigator.goto(TabTray)
-        }
         navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.secureTextFields.firstMatch.waitAndTap()
@@ -635,6 +636,8 @@ class LoginTest: BaseTestCase {
             navigator.goto(TabTray)
         }
         navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         let passworField = app.secureTextFields.firstMatch
