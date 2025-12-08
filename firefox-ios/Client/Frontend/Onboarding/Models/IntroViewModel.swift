@@ -66,6 +66,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
+    @MainActor
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID) {
         availableCards.removeAll()
         cardModels.forEach { cardModel in
