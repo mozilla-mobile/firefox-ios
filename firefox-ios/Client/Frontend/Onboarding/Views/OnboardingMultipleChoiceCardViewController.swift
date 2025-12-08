@@ -120,13 +120,11 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
         var bottomStackViewPadding = UX.bottomStackViewPaddingPhone
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            topStackView.setCustomSpacing(
-                UX.topStackViewSpacingBetweenImageAndTitle,
-                after: imageView)
+            topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                          after: imageView)
             topStackView.spacing = UX.stackViewSpacingWithoutLink
-            topStackView.setCustomSpacing(
-                UX.topStackViewSpacingBetweenDescriptionAndButtons,
-                after: descriptionLabel)
+            topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                          after: descriptionLabel)
             choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
             bottomButtonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
@@ -137,33 +135,28 @@ class OnboardingMultipleChoiceCardViewController<CardModel: OnboardingCardInfoMo
             } else {
                 scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPhone
-                horizontalTopStackViewPadding =
-                    UX.horizontalTopStackViewPaddingPhone
+                horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
                 bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             }
         } else if UIDevice.current.userInterfaceIdiom == .phone {
             horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
             bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
-                topStackView.setCustomSpacing(
-                    UX.topStackViewSpacingBetweenImageAndTitle,
-                    after: imageView)
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                              after: imageView)
                 topStackView.spacing = SharedUX.smallStackViewSpacing
-                topStackView.setCustomSpacing(
-                    UX.topStackViewSpacingBetweenDescriptionAndButtons,
-                    after: descriptionLabel)
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                              after: descriptionLabel)
                 choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
                 bottomButtonStackView.spacing = SharedUX.smallStackViewSpacing
                 scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.smallTopStackViewPadding
             } else {
-                topStackView.setCustomSpacing(
-                    UX.topStackViewSpacingBetweenImageAndTitle,
-                    after: imageView)
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                              after: imageView)
                 topStackView.spacing = UX.stackViewSpacingWithoutLink
-                topStackView.setCustomSpacing(
-                    UX.topStackViewSpacingBetweenDescriptionAndButtons,
-                    after: descriptionLabel)
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                              after: descriptionLabel)
                 choiceButtonStackView.spacing = UX.choiceButtonStackViewSpacing
                 bottomButtonStackView.spacing = UX.stackViewSpacingButtons
                 scrollViewVerticalPadding = UX.scrollViewVerticalPadding
