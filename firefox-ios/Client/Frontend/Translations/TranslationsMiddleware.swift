@@ -129,7 +129,7 @@ final class TranslationsMiddleware {
     /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
         Task { @MainActor in
-            guard action.translationConfiguration?.canTranslate == true else { return }
+            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
 
             do {
                 guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
