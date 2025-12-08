@@ -4,6 +4,7 @@
 
 import Common
 import ComponentLibrary
+import OnboardingKit
 import Foundation
 
 /// The ``OnboardingCardDelegate`` is responsible for handling a variety of
@@ -116,21 +117,16 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
                 )
             }
         )
-        let bottomSheetViewModel = BottomSheetViewModel(
-            shouldDismissForTapOutside: true,
-            closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier:
-                AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
+
+        let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
+        bottomSheetVC.configure(
+            closeButtonModel: CloseButtonViewModel(
+                a11yLabel: .CloseButtonTitle,
+                a11yIdentifier: AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
+            ),
+            child: instructionsVC
         )
-        let bottomSheetVC = BottomSheetViewController(
-            viewModel: bottomSheetViewModel,
-            childViewController: instructionsVC,
-            usingDimmedBackground: true,
-            windowUUID: windowUUID)
-
-        instructionsVC.dismissDelegate = bottomSheetVC
-
-        self.present(bottomSheetVC, animated: false, completion: nil)
+        present(bottomSheetVC, animated: true)
     }
 
     // MARK: - Sync sign in

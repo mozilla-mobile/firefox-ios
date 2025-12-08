@@ -11,37 +11,16 @@ class OnboardingInstructionPopupViewController: UIViewController,
                                                 Themeable,
                                                 Notifiable {
     private enum UX {
-        static let contentStackViewSpacing: CGFloat = 40
+        static let contentStackViewSpacing: CGFloat = 20.0
         static let textStackViewSpacing: CGFloat = 24
-
-        static let buttonVerticalInset: CGFloat = 12
-        static let buttonHorizontalInset: CGFloat = 16
-        static let buttonCornerRadius: CGFloat = 13
-
-        static let cardShadowHeight: CGFloat = 14
-
-        static let scrollViewVerticalPadding: CGFloat = 30
-        static let topPaddingPhone: CGFloat = 30
-        static let topPaddingPad: CGFloat = 60
-        static let leadingPaddingPhone: CGFloat = 40
-        static let leadingPaddingPad: CGFloat = 100
-        static let trailingPaddingPhone: CGFloat = 40
-        static let trailingPaddingPad: CGFloat = 100
-        static let bottomPaddingPhone: CGFloat = 20
-        static let bottomPaddingPad: CGFloat = 60
+        static let verticalPadding: CGFloat = 30
+        static let horizontalPadding: CGFloat = 40
+        static let descriptionTextViewParagraphSpacing: CGFloat = 40.0
     }
 
     // MARK: - Properties
     lazy var contentContainerView: UIView = .build { stack in
         stack.backgroundColor = .clear
-    }
-
-    private lazy var contentStackView: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.alignment = .center
-        stack.distribution = .fill
-        stack.spacing = UX.contentStackViewSpacing
-        stack.axis = .vertical
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -52,14 +31,13 @@ class OnboardingInstructionPopupViewController: UIViewController,
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.TitleLabel"
     }
 
-    private lazy var numeratedLabels = [UILabel]()
-
-    private lazy var textStackView: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.alignment = .leading
-        stack.distribution = .fill
-        stack.axis = .vertical
-        stack.spacing = UX.textStackViewSpacing
+    private lazy var descriptionLabel: UITextView = .build { label in
+        label.textAlignment = .left
+        label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.NumeratedLabels"
+        label.isScrollEnabled = false
+        label.isEditable = false
+        label.isSelectable = false
     }
 
     private lazy var primaryButton: PrimaryRoundedGlassButton = .build { button in
@@ -102,7 +80,8 @@ class OnboardingInstructionPopupViewController: UIViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [UIApplication.didEnterBackgroundNotification]
+            observing: [UIApplication.didEnterBackgroundNotification,
+                        UIContentSizeCategory.didChangeNotification]
         )
 
         setupView()
@@ -120,60 +99,36 @@ class OnboardingInstructionPopupViewController: UIViewController,
     func setupView() {
         addViewsToView()
 
-        var topPadding = UX.topPaddingPhone
-        var leadingPadding = UX.leadingPaddingPhone
-        var trailingPadding = UX.trailingPaddingPhone
-        var bottomPadding = UX.bottomPaddingPhone
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            if traitCollection.horizontalSizeClass == .regular {
-                topPadding = UX.topPaddingPad
-                leadingPadding = UX.leadingPaddingPad
-                trailingPadding = UX.leadingPaddingPad
-                bottomPadding = UX.bottomPaddingPad
-            } else {
-                topPadding = UX.topPaddingPhone
-                leadingPadding = UX.leadingPaddingPhone
-                trailingPadding = UX.leadingPaddingPhone
-                bottomPadding = UX.bottomPaddingPhone
-            }
-        } else if UIDevice.current.userInterfaceIdiom == .phone {
-            topPadding = UX.topPaddingPhone
-            leadingPadding = UX.leadingPaddingPhone
-            trailingPadding = UX.leadingPaddingPhone
-            bottomPadding = UX.bottomPaddingPhone
-        }
-
         NSLayoutConstraint.activate(
             [
                 // Content view wrapper around text
                 contentContainerView.topAnchor.constraint(
                     equalTo: view.topAnchor,
-                    constant: UX.scrollViewVerticalPadding
+                    constant: UX.verticalPadding
                 ),
-                contentContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                contentContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                              constant: UX.horizontalPadding),
                 contentContainerView.bottomAnchor.constraint(
                     equalTo: view.bottomAnchor,
-                    constant: -UX.scrollViewVerticalPadding
+                    constant: -50.0
                 ),
-                contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                contentContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                               constant: -UX.horizontalPadding),
 
-                contentStackView.topAnchor.constraint(equalTo: contentContainerView.topAnchor, constant: topPadding),
-                contentStackView.leadingAnchor.constraint(
-                    equalTo: contentContainerView.leadingAnchor,
-                    constant: leadingPadding
-                ),
-                contentStackView.trailingAnchor.constraint(
-                    equalTo: contentContainerView.trailingAnchor,
-                    constant: -trailingPadding
-                ),
-                contentStackView.bottomAnchor.constraint(
-                    equalTo: contentContainerView.bottomAnchor,
-                    constant: -bottomPadding
-                ),
-                textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                primaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+                titleLabel.topAnchor.constraint(equalTo: contentContainerView.topAnchor),
+                titleLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+                titleLabel.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+
+                descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                                      constant: UX.contentStackViewSpacing),
+                descriptionLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+                descriptionLabel.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+
+                primaryButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
+                                                   constant: UX.contentStackViewSpacing),
+                primaryButton.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+                primaryButton.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+                primaryButton.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor)
             ]
         )
     }
@@ -184,38 +139,49 @@ class OnboardingInstructionPopupViewController: UIViewController,
             title: viewModel.buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
         )
+
+        configureDescriptionLabel(from: viewModel.instructionSteps)
+
+        titleLabel.setContentHuggingPriority(.required, for: .vertical)
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         primaryButton.configure(viewModel: buttonViewModel)
+        primaryButton.setContentHuggingPriority(.required, for: .vertical)
+        primaryButton.setContentCompressionResistancePriority(.required, for: .vertical)
     }
+
     private func addViewsToView() {
-        createLabels(from: viewModel.instructionSteps)
-
-        contentStackView.addArrangedSubview(titleLabel)
-        numeratedLabels.forEach { textStackView.addArrangedSubview($0) }
-        contentStackView.addArrangedSubview(textStackView)
-        contentStackView.addArrangedSubview(primaryButton)
-
-        contentContainerView.addSubview(contentStackView)
+        contentContainerView.addSubviews(titleLabel, descriptionLabel, primaryButton)
         view.addSubview(contentContainerView)
-
-        view.backgroundColor = .white
     }
 
     // MARK: - Helper methods
-    private func createLabels(from descriptionTexts: [String]) {
-        numeratedLabels.removeAll()
-        let attributedStrings = getAttributedStrings(with: FXFontStyles.Regular.subheadline.scaledFont())
-        attributedStrings.forEach { attributedText in
-            let index = attributedStrings.firstIndex(of: attributedText)! as Int
-            let label: UILabel = .build { label in
-                label.textAlignment = .left
-                label.font = FXFontStyles.Regular.subheadline.scaledFont()
-                label.adjustsFontForContentSizeCategory = true
-                label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.NumeratedLabel\(index)"
-                label.attributedText = attributedText
-                label.numberOfLines = 0
+    private func configureDescriptionLabel(from descriptionTexts: [String]) {
+        let font = FXFontStyles.Regular.subheadline.scaledFont()
+        let attributedParagraphs = getAttributedStrings(with: font)
+
+        let combinedString = NSMutableAttributedString()
+
+        let isRTL = view.effectiveUserInterfaceLayoutDirection == .rightToLeft
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.paragraphSpacing = UX.descriptionTextViewParagraphSpacing
+        paragraphStyle.alignment = isRTL ? .right : .left
+
+        for (index, attributedText) in attributedParagraphs.enumerated() {
+            let paragraphString = NSMutableAttributedString(attributedString: attributedText)
+            paragraphString.addAttribute(
+                .paragraphStyle,
+                value: paragraphStyle,
+                range: NSRange(location: 0, length: paragraphString.length)
+            )
+            combinedString.append(paragraphString)
+
+            if index < attributedParagraphs.count - 1 {
+                // Add paragragh separator charachter
+                combinedString.append(NSAttributedString(string: "\u{2029}"))
             }
-            numeratedLabels.append(label)
         }
+
+        descriptionLabel.attributedText = combinedString
     }
 
     // MARK: - Notifiable
@@ -228,6 +194,11 @@ class OnboardingInstructionPopupViewController: UIViewController,
                     self.dismiss(animated: false)
                     self.buttonTappedFinishFlow?()
                 }
+            }
+        case UIContentSizeCategory.didChangeNotification:
+            ensureMainThread { [self] in
+                configureDescriptionLabel(from: viewModel.instructionSteps)
+                applyTheme()
             }
         default:
             break
@@ -252,16 +223,12 @@ class OnboardingInstructionPopupViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         titleLabel.textColor = theme.colors.textPrimary
-        numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
+        descriptionLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.backgroundColor = .clear
 
         // Call applyTheme() on primaryButton to let it handle theme-specific styling
         primaryButton.applyTheme(theme: theme)
-
-        if #available(iOS 26.0, *) {
-            view.backgroundColor = .clear
-        } else {
-            view.backgroundColor = theme.colors.layer1
-        }
+        view.backgroundColor = .clear
     }
 
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
