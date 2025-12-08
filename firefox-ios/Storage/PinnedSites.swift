@@ -5,7 +5,7 @@
 import Shared
 
 /// A protocol to manage pinned sites in BrowserDB
-public protocol PinnedSites {
+public protocol PinnedSites: Sendable {
     // Pinning top sites
     // Without Deferred
     func remove(pinnedSite site: Site) async throws

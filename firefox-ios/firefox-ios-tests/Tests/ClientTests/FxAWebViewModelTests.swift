@@ -11,16 +11,19 @@ class FxAWebViewModelTests: XCTestCase {
     var viewModel: FxAWebViewModel!
     var deeplinkParams: FxALaunchParams!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         deeplinkParams = FxALaunchParams(entrypoint: .browserMenu, query: ["test_key": "test_value"])
-        viewModel = FxAWebViewModel(pageType: .settingsPage, profile: MockProfile(), deepLinkParams: deeplinkParams)
+        viewModel = FxAWebViewModel(pageType: .settingsPage,
+                                    profile: MockProfile(),
+                                    deepLinkParams: deeplinkParams,
+                                    telemetry: FxAWebViewTelemetry(telemetryWrapper: MockTelemetryWrapper()))
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         deeplinkParams = nil
         viewModel = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testCreateOutputURLWithValidFileNameAndExtension() {

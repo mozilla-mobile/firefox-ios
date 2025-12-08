@@ -893,7 +893,7 @@
 "Open Settings" = "環境設定を開く";
 
 /* Toggle tabs syncing setting */
-"Open Tabs" = "タブを開く";
+"Open Tabs" = "開いたタブ";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
 "OpenURL.Error.Message" = "アドレスが正しくないため、Firefox はこのページを開けません。";

@@ -79,7 +79,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: update-bitrise-steps-${{ env.next_version }}
-          title: "Bump [v${{ env.next_version }}] Update outdated Bitrise steps ${{ env.current_date }}"
+          title: "Bump FXIOS [Bitrise] Update outdated Bitrise steps ${{ env.current_date }} for v${{ env.next_version }}"
           delete-branch: true
           body: |
             This PR updates the outdated Bitrise steps to their latest versions.

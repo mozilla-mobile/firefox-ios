@@ -1093,6 +1093,14 @@ extension String {
                     value: "All Stories",
                     comment: "This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles")
             }
+
+            public struct StoriesWebview {
+                public static let ReloadPageAccessibilityLabel = MZLocalizedString(
+                    key: "FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
+                    tableName: "FirefoxHomepage",
+                    value: "Reload page",
+                    comment: "Accessibility label for the page reload button in the navigation toolbar of the stories webview")
+            }
         }
 
         public struct RecentlySaved { }
@@ -3060,12 +3068,6 @@ extension String {
                     value: "Blue",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background.")
 
-                public static let Cute = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Cute.Title.v139",
-                    tableName: "AppIconSelection",
-                    value: "Cute",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon.")
-
                 public static let Cyan = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Cyan.Title.v137",
                     tableName: "AppIconSelection",
@@ -3077,18 +3079,6 @@ extension String {
                     tableName: "AppIconSelection",
                     value: "Green",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background.")
-
-                public static let Hug = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
-                    tableName: "AppIconSelection",
-                    value: "Hug",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
-
-                public static let Lazy = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136",
-                    tableName: "AppIconSelection",
-                    value: "Lazy",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
 
                 public static let Minimal = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Minimal.Title.v139",
@@ -3109,10 +3099,10 @@ extension String {
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background.")
 
                 public static let Pixelated = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
-                    tableName: "AppIconSelection",
-                    value: "Pixelated",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
+                        key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
+                        tableName: "AppIconSelection",
+                        value: "Pixelated",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
 
                 public static let Pride = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
@@ -3199,12 +3189,33 @@ extension String {
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green.")
 
                 /// Names and subtitles for approved icons added by contributors.
-                struct FromContributors {
+                public struct FromContributors {
                     public static let Momo = MZLocalizedString(
                         key: "Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139",
                         tableName: "AppIconSelection",
                         value: "Momo",
                         comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe.")
+                }
+
+                /// Names and subtitles for approved icons considered "fun".
+                public struct Fun {
+                    public static let Cool = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Cool.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Cool",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with sunglasses.")
+
+                    public static let Cuddling = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Cuddling.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Cuddling",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a fox cuddling a globe.")
+
+                    public static let Flaming = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.Fun.Flaming.Title.146",
+                        tableName: "AppIconSelection",
+                        value: "Flaming",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with flames.")
                 }
             }
 
@@ -3733,6 +3744,11 @@ extension String {
                     tableName: "Translations",
                     value: "Translate To %@",
                     comment: "This is the accessibility label for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English).")
+                public static let LoadingCompletedAccessibilityLabel = MZLocalizedString(
+                    key: "Translations.Sheet.LoadingCompleted.AccessibilityLabel.v147",
+                    tableName: "Translations",
+                    value: "Page translated",
+                    comment: "This is the accessibility label to announce that the page is translated and loading is completed. From a user perspective, they will see the translation icon go from loading state to active state, which means we received the a valid translation response from translating the page.")
             }
 
             public struct Error {
@@ -7748,6 +7764,62 @@ extension String {
         comment: "Title label displayed for the cancel action in an alert when the password autofill fails and needs user interaction.")
 }
 
+// MARK: - Relay Masks
+extension String {
+    public struct RelayMask {
+        public static let UseRelayEmailMaskFromKeyboard = MZLocalizedString(
+            key: "RelayMask.UseRelayEmailMaskFromKeyboard.v146",
+            tableName: "RelayMask",
+            value: "Use email mask",
+            comment: "Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically.")
+        public static let RelayEmailMaskAvailableCFR = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskAvailableCFR.v146",
+            tableName: "RelayMask",
+            value: "New! %@ Relay email masks are now available on mobile.",
+            comment: "Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox')")
+        public static let RelayEmailMaskFreeTierLimitReached = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskFreeTierLimitReached.v147",
+            tableName: "RelayMask",
+            value: "You’ve used your 5 free email masks, so we picked one for you to reuse.",
+            comment: "Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly.")
+        public static let RelayEmailMaskGenericErrorMessage = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskGenericErrorMessage.v146",
+            tableName: "RelayMask",
+            value: "Email masks aren’t available right now. Try again in a few minutes.",
+            comment: "Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask.")
+        public static let RelayEmailMaskSuggestMasksToggle = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSuggestMasksToggle.v146",
+            tableName: "RelayMask",
+            value: "Suggest Email Masks",
+            comment: "Label for settings toggle which allows users to enable or disable the suggestion of Relay email masks on registration forms, to provide anonymous email masking.")
+        public static let RelayEmailMaskSettingsTitle = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSettingsTitle.v146",
+            tableName: "RelayMask",
+            value: "Email Masks",
+            comment: "Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay.")
+        public static let RelayEmailMaskSettingsDetailInfo = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSettingsDetailInfo.v147",
+            tableName: "RelayMask",
+            value: "Hide your real email to protect your inbox from spam. Some sites don’t support email masks.",
+            comment: "Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality.")
+        public static let RelayEmailMaskSettingsLearnMore = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSettingsLearnMore.v146",
+            tableName: "RelayMask",
+            value: "Learn more",
+            comment: "Website link title that takes users to a website to learn additional information about the Relay email mask feature.")
+        public static let RelayEmailMaskSettingsManageEmailMasks = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146",
+            tableName: "RelayMask",
+            value: "Manage Email Masks",
+            comment: "Button title which takes users to a webpage to manage their Relay email masks and related settings.")
+        public static let RelayEmailMaskInsertedA11yAnnouncement = MZLocalizedString(
+            key: "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147",
+            tableName: "RelayMask",
+            value: "Email mask inserted",
+            comment: "VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully.")
+    }
+}
+
 // MARK: - Password autofill
 extension String {
     public struct PasswordAutofill {
@@ -8387,6 +8459,35 @@ extension String {
                 tableName: "Menu",
                 value: "Close All Tabs",
                 comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
+        }
+        struct v145 {
+            public static let Cute = MZLocalizedString(
+                key: "Settings.AppIconSelection.AppIconNames.Cute.Title.v139",
+                tableName: "AppIconSelection",
+                value: "Cute",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon.")
+            public static let Hug = MZLocalizedString(
+                key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
+                tableName: "AppIconSelection",
+                value: "Hug",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
+            public static let Lazy = MZLocalizedString(
+                key: "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136",
+                tableName: "AppIconSelection",
+                value: "Lazy",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
+        }
+        struct v146 {
+            public static let RelayEmailMaskFreeTierLimitReached = MZLocalizedString(
+                key: "RelayMask.RelayEmailMaskFreeTierLimitReached.v146",
+                tableName: "RelayMask",
+                value: "Your 5 free email masks are in use, so we picked one for you.",
+                comment: "Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly.")
+            public static let RelayEmailMaskSettingsDetailInfo = MZLocalizedString(
+                key: "RelayMask.RelayEmailMaskSettingsDetailInfo.v146",
+                tableName: "RelayMask",
+                value: "Hide your real email to protect your inbox from spam. Some sites don’t support it.",
+                comment: "Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality.")
         }
     }
 }

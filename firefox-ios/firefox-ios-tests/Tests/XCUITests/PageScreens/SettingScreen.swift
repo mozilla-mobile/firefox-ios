@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class SettingScreen {
     private let app: XCUIApplication
     private let sel: SettingsSelectorsSet
@@ -113,5 +114,69 @@ final class SettingScreen {
         let connectSetting = sel.CONNECT_SETTING.element(in: app)
         BaseTestCase().mozWaitForElementToExist(connectSetting)
         connectSetting.swipeUp()
+    }
+
+    func assertSettingsScreenExists() {
+        let table = app.tables.element(boundBy: 0)
+        BaseTestCase().mozWaitForElementToExist(table)
+    }
+
+    func assertLayout() {
+        let title = sel.SETTINGS_TITLE.element(in: app)
+        let done = sel.DONE_BUTTON.element(in: app)
+        let defaultBrowser = sel.DEFAULT_BROWSER_CELL.element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(title)
+        XCTAssertTrue(title.isLeftOf(rightElement: done))
+        XCTAssertTrue(done.isAbove(element: defaultBrowser))
+        XCTAssertTrue(title.isAbove(element: defaultBrowser))
+    }
+
+    func assertAllRowsVisible() {
+        let table = app.tables.element(boundBy: 0)
+        BaseTestCase().mozWaitForElementToExist(table)
+
+        // Toolbar check only on iPhone
+        if !BaseTestCase().iPad() {
+            let toolbar = sel.TOOLBAR_CELL.element(in: app)
+            BaseTestCase().mozWaitForElementToExist(toolbar)
+            XCTAssertTrue(toolbar.isVisible())
+        }
+
+        // Iterate over all expected cells
+        for selector in sel.ALL_CELLS() {
+            let element = selector.element(in: app)
+            BaseTestCase().scrollToElement(element)
+            BaseTestCase().mozWaitForElementToExist(element)
+            XCTAssertTrue(element.isVisible(), "\(selector.description) is not visible")
+        }
+    }
+
+    func openBrowsingSettings() {
+        let cell = sel.BROWSING_CELL_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(cell)
+        cell.waitAndTap()
+    }
+
+    func waitForBlockImagesSwitch() -> XCUIElement {
+        let sw = app.otherElements.tables.cells.switches[sel.BLOCK_IMAGES_SWITCH_TITLE.value]
+        BaseTestCase().mozWaitForElementToExist(sw)
+        return sw
+    }
+
+    func assertShowImagesState(showImages: Bool = true, file: StaticString = #filePath, line: UInt = #line) {
+        let noImageStatusSwitch = app.otherElements.tables.cells.switches[sel.NO_IMAGE_MODE_STATUS_SWITCH.value]
+        BaseTestCase().mozWaitForElementToExist(noImageStatusSwitch)
+
+        let expectedValue = showImages ? "0" : "1"
+        let actualValue = noImageStatusSwitch.value as? String
+
+        XCTAssertEqual(
+            actualValue,
+            expectedValue,
+            "Image display state is incorrect. Expected \(expectedValue) but got \(actualValue ?? "nil")",
+            file: file,
+            line: line
+        )
     }
 }

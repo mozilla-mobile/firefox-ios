@@ -6,7 +6,7 @@ import Common
 import XCTest
 
 final class InactiveTabsTest: BaseTestCase {
-    override func setUp() {
+    override func setUp() async throws {
         // Load 20 tabs. 19 tabs are inactive.
         let tabsDatabase = "tabsState20.archive"
         launchArguments = [
@@ -18,7 +18,7 @@ final class InactiveTabsTest: BaseTestCase {
             LaunchArguments.DisableAnimations,
         ]
         launchArguments.append(LaunchArguments.LoadTabsStateArchive + tabsDatabase)
-        super.setUp()
+        try await super.setUp()
         app.launch()
 
         // Workaround: Restart app to guarantee the tabs are loaded

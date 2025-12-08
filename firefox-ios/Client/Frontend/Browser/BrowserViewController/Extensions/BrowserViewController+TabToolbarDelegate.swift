@@ -145,6 +145,60 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: summarizeToolbarEntryContextHintVC)
     }
 
+    // Reset the CFR timer for the data clearance button to avoid presenting the CFR
+    // In cases, such as if user navigates to homepage
+    func resetSummarizeToolbarCFRTimer() {
+        summarizeToolbarEntryContextHintVC.stopTimer()
+    }
+
+    // MARK: - Translation CFR
+    func configureTranslationContextualHint(for view: UIView) {
+        guard let state = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
+        // Show up arrow for iPad and landscape or top address bar; otherwise show down arrow
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let shouldShowUpArrow = state.toolbarPosition == .top || !showNavToolbar
+
+        translationContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: shouldShowUpArrow ? .up : .down,
+            andDelegate: self,
+            presentedUsing: { [weak self] in
+                self?.presentTranslationContextualHint()
+            },
+            andActionForButton: { },
+            overlayState: overlayManager)
+    }
+
+    private func presentTranslationContextualHint() {
+        present(translationContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
+    }
+
+    func dismissToolbarCFRs(with windowUUID: WindowUUID) {
+        guard let toolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        ) else {
+            return
+        }
+        let translationAction = toolbarState.addressToolbar.leadingPageActions.first(where: { $0.actionType == .translate })
+        if translationAction == nil {
+            resetTranslationCFRTimer()
+        }
+    }
+
+    func resetCFRsTimer() {
+        resetDataClearanceCFRTimer()
+        resetSummarizeToolbarCFRTimer()
+    }
+
+    // Reset the CFR timer for the translation button to avoid presenting the CFR
+    // In cases, such as if translation icon is not available
+    private func resetTranslationCFRTimer() {
+        translationContextHintVC.stopTimer()
+    }
+
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
     }

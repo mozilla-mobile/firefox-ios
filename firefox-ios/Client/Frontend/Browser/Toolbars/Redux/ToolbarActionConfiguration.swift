@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import ToolbarKit
 
 struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     enum ActionType {
@@ -32,7 +33,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var badgeImageName: String?
     var maskImageName: String?
     var templateModeForImage = true
-    var shouldUseLoadingSpinner = false
+    var loadingConfig: LoadingConfig?
     var numberOfTabs: Int?
     var isFlippedForRTL = false
     var isEnabled: Bool

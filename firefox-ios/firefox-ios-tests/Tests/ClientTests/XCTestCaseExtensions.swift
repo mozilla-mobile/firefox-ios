@@ -45,7 +45,8 @@ extension XCTestCase {
     /// Helper function to ensure Glean telemetry is setup for unit tests
     /// This should not be called in new code:
     /// - We should us GleanWrapper or mock objects instead of concrete type testing for Glean
-    func setupTelemetry(with profile: Profile) {
+    @MainActor
+    static func setupTelemetry(with profile: Profile) {
         TelemetryWrapper.hasTelemetryOverride = true
 
         DependencyHelperMock().bootstrapDependencies()
@@ -59,8 +60,39 @@ extension XCTestCase {
     }
 
     /// Helper function to ensure Glean telemetry is properly teardown for unit tests
-    func tearDownTelemetry() {
+    static func tearDownTelemetry() {
         TelemetryWrapper.hasTelemetryOverride = false
         DependencyHelperMock().reset()
+    }
+
+    // MARK: Error Handling
+    /// Convenience method to simplify error checking in the test cases for non Equatable types.
+    func assertAsyncThrows<E: Error, T>(
+        ofType expectedType: E.Type,
+        _ expression: () async throws -> T,
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        verify: ((E) -> Void)? = nil
+    ) async {
+        do {
+            _ = try await expression()
+            XCTFail("Expected error \(expectedType), but no error thrown.", file: file, line: line)
+        } catch let error as E {
+            verify?(error)
+        } catch {
+            XCTFail("Expected error \(expectedType), but got \(error)", file: file, line: line)
+        }
+    }
+
+    /// Convenience method to simplify error checking in the test cases for Equatable types.
+    func assertAsyncThrowsEqual<E: Error & Equatable, T>(
+        _ expected: E,
+        _ expression: () async throws -> T,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        await assertAsyncThrows(ofType: E.self, expression, file: file, line: line) { error in
+            XCTAssertEqual(error, expected, file: file, line: line)
+        }
     }
 }

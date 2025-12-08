@@ -24,7 +24,9 @@ class MockRustRemoteTabs: RustRemoteTabs, @unchecked Sendable {
                                                clientName: "testClient",
                                                deviceType: .mobile,
                                                lastModified: Int64(Date.now()),
-                                               remoteTabs: [tab.toRemoteTabRecord()])
+                                               remoteTabs: [tab.toRemoteTabRecord()],
+                                               tabGroups: [:],
+                                               windows: [:])
 
         let url2 = "https://example2.com"
         let title2 = "example2"
@@ -41,7 +43,9 @@ class MockRustRemoteTabs: RustRemoteTabs, @unchecked Sendable {
                                                 clientName: "testClient2",
                                                 deviceType: .mobile,
                                                 lastModified: Int64(Date.now()),
-                                                remoteTabs: [tab2.toRemoteTabRecord()])
+                                                remoteTabs: [tab2.toRemoteTabRecord()],
+                                                tabGroups: [:],
+                                                windows: [:])
         return deferMaybe([clientRemoteTab, clientRemoteTab2])
     }
 }

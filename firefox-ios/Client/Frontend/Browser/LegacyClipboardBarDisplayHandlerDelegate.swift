@@ -8,10 +8,10 @@ import Common
 
 // TODO: FXIOS-12907 This legacy ClipboardBar code can be removed once iOS 15 is dropped
 protocol LegacyClipboardBarDisplayHandlerDelegate: AnyObject {
+    @MainActor
     func shouldDisplay(clipBoardURL url: URL)
 }
 
-@preconcurrency
 final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notifiable {
     struct UX {
         static let toastDelay = DispatchTimeInterval.milliseconds(10000)
@@ -112,7 +112,9 @@ final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notifi
         lastDisplayedURL = url.absoluteString
 
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) { [weak self] in
-            self?.delegate?.shouldDisplay(clipBoardURL: url)
+            ensureMainThread { [weak self] in
+                self?.delegate?.shouldDisplay(clipBoardURL: url)
+            }
         }
     }
 }

@@ -14,12 +14,12 @@ protocol BreachAlertsClientProtocol {
     func fetchEtag(
         endpoint: BreachAlertsClient.Endpoint,
         profile: Profile,
-        completion: @escaping (_ etag: String?) -> Void
+        completion: @escaping @Sendable (_ etag: String?) -> Void
     )
     func fetchData(
         endpoint: BreachAlertsClient.Endpoint,
         profile: Profile,
-        completion: @escaping (_ result: Maybe<Data>) -> Void
+        completion: @escaping @Sendable (_ result: Maybe<Data>) -> Void
     )
 }
 
@@ -33,7 +33,7 @@ class BreachAlertsClient: BreachAlertsClientProtocol {
     static let etagDateKey = "BreachAlertsDataDate"
 
     /// Makes a header-only request to an endpoint and hands off the endpoint's etag to a completion handler.
-    func fetchEtag(endpoint: Endpoint, profile: Profile, completion: @escaping (_ etag: String?) -> Void) {
+    func fetchEtag(endpoint: Endpoint, profile: Profile, completion: @escaping @Sendable (_ etag: String?) -> Void) {
         guard let url = URL(string: endpoint.rawValue) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "HEAD"
@@ -58,7 +58,7 @@ class BreachAlertsClient: BreachAlertsClientProtocol {
     }
 
     /// Makes a network request to an endpoint and hands off the result to a completion handler.
-    func fetchData(endpoint: Endpoint, profile: Profile, completion: @escaping (_ result: Maybe<Data>) -> Void) {
+    func fetchData(endpoint: Endpoint, profile: Profile, completion: @escaping @Sendable (_ result: Maybe<Data>) -> Void) {
         guard let url = URL(string: endpoint.rawValue) else { return }
 
         dataTask?.cancel()

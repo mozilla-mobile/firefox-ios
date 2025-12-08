@@ -158,9 +158,8 @@ final class NotificationsSettingsViewController: SettingsTableViewController, Fe
         accessDenied.addAction(settingsAction)
         return accessDenied
     }
-}
 
-extension NotificationsSettingsViewController: Notifiable {
+    // MARK: Notifiable
     func addObservers() {
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
@@ -169,7 +168,9 @@ extension NotificationsSettingsViewController: Notifiable {
         )
     }
 
-    func handleNotifications(_ notification: Notification) {
+    override func handleNotifications(_ notification: Notification) {
+        super.handleNotifications(notification)
+
         switch notification.name {
         case UIApplication.willEnterForegroundNotification:
             Task {

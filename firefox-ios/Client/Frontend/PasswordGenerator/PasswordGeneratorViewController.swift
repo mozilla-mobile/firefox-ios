@@ -58,10 +58,10 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     private lazy var header: PasswordGeneratorHeaderView = .build()
 
-    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build { [weak self] view in
-        view.refreshPasswordButtonOnClick = {
-            guard let self else {return}
-            store.dispatchLegacy(PasswordGeneratorAction(
+    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build { view in
+        view.refreshPasswordButtonOnClick = { [weak self] in
+            guard let self else { return }
+            store.dispatch(PasswordGeneratorAction(
                 windowUUID: self.windowUUID,
                 actionType: PasswordGeneratorActionType.userTappedRefreshPassword,
                 currentFrame: self.currentFrame)
@@ -179,9 +179,9 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     // MARK: - Interaction Handlers
     @objc
     func useButtonOnClick() {
-        store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                     actionType: PasswordGeneratorActionType.userTappedUsePassword,
-                                                     currentFrame: currentFrame))
+        store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
+                                               actionType: PasswordGeneratorActionType.userTappedUsePassword,
+                                               currentFrame: currentFrame))
         dismiss(animated: true)
     }
 
@@ -205,7 +205,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     // MARK: - Redux
     func subscribeToRedux() {
-        store.dispatchLegacy(
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
@@ -244,18 +244,29 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     }
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            ensureMainThread {
-                self.applyDynamicFontChange()
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                ensureMainThread {
+                    self.applyDynamicFontChange()
+                }
+            case UIApplication.willResignActiveNotification:
+                store.dispatch(
+                    PasswordGeneratorAction(
+                        windowUUID: self.windowUUID,
+                        actionType: PasswordGeneratorActionType.hidePassword
+                    )
+                )
+            case UIApplication.didBecomeActiveNotification:
+                store.dispatch(
+                    PasswordGeneratorAction(
+                        windowUUID: self.windowUUID,
+                        actionType: PasswordGeneratorActionType.showPassword
+                    )
+                )
+            default: break
             }
-        case UIApplication.willResignActiveNotification:
-            store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                         actionType: PasswordGeneratorActionType.hidePassword))
-        case UIApplication.didBecomeActiveNotification:
-            store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                         actionType: PasswordGeneratorActionType.showPassword))
-        default: break
         }
     }
 }

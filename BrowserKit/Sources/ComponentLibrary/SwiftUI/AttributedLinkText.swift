@@ -11,12 +11,14 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
     let linkText: String
     let action: Action
     let linkAction: (Action) -> Void
+    let textAlignment: TextAlignment
 
     public init(
         theme: Theme,
         fullText: String,
         linkText: String,
         action: Action,
+        textAlignment: TextAlignment = .center,
         linkAction: @escaping (Action) -> Void
     ) {
         self.theme = theme
@@ -24,6 +26,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
         self.linkText = linkText
         self.action = action
         self.linkAction = linkAction
+        self.textAlignment = textAlignment
     }
 
     public var body: some View {
@@ -36,7 +39,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
                 linkAction(action)
             }
             .font(.caption)
-            .multilineTextAlignment(.center)
+            .multilineTextAlignment(textAlignment)
             .environment(\.openURL, OpenURLAction { url in
                 if url.scheme == "action", let host = url.host,
                    let action = Action(rawValue: host) {

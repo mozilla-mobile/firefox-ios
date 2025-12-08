@@ -115,7 +115,6 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         case .sites:
             guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.selectItem(item)
-            break
         case .clearButton:
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
@@ -131,7 +130,6 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         case .sites:
             guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.deselectItem(item)
-            break
         default: break
         }
     }

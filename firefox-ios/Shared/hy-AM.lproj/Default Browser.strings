@@ -29,16 +29,16 @@
 "DefaultBrowserOnboarding.Button" = "Գնալ կարգավորումներին";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description1" = "1. Գնացեք Կարգավորումներ";
+"DefaultBrowserOnboarding.Description1" = "1․ Գնացեք դեպի կարգավորումներ";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. Հպեք սկզբնադիր դիտարկի հավելվածին";
+"DefaultBrowserOnboarding.Description2" = "2․ Հպեք սկզբնադիր դիտարկիչի հավելվածին";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Ընտրեք Firefox-ը";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "Դիտարկիչի սկզբնադիր հավելված";
+"DefaultBrowserOnboarding.Screenshot" = "Սկզբնադիր դիտարկիչի հավելված";
 
 /* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
 "DefaultBrowserOnboarding.SkipButton" = "Ես սա կանեմ ավելի ուշ";

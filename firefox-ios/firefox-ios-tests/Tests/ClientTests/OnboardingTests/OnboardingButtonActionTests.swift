@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import OnboardingKit
 
 @testable import Client
 
@@ -12,14 +13,15 @@ class OnboardingButtonActionTests: XCTestCase {
     var mockDelegate: MockOnboardingCardDelegateController!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         mockDelegate = nil
+        try await super.tearDown()
     }
 
     func testMockDelegate_whenInitialized_actionIsNil() {
@@ -106,18 +108,18 @@ class OnboardingButtonActionTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> OnboardingBasicCardViewController {
-        var buttons: OnboardingButtons
+        var buttons: OnboardingButtons<OnboardingActions>
         if twoButtons {
             buttons = OnboardingButtons(
-                primary: OnboardingButtonInfoModel(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SignInAction,
                     action: firstAction),
-                secondary: OnboardingButtonInfoModel(
+                secondary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SkipAction,
                     action: .forwardOneCard))
         } else {
             buttons = OnboardingButtons(
-                primary: OnboardingButtonInfoModel(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: .Onboarding.Sync.SignInAction,
                     action: firstAction))
         }

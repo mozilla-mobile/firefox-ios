@@ -14,15 +14,16 @@ class TelemetryWrapperTests: XCTestCase {
 
     var profile: Profile!
 
-    override func setUp() {
-        super.setUp()
+    @MainActor
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         Experiments.events.clearEvents()
-        setupTelemetry(with: profile)
+        Self.setupTelemetry(with: profile)
     }
 
     override func tearDown() {
-        tearDownTelemetry()
+        Self.tearDownTelemetry()
         Experiments.events.clearEvents()
         profile = nil
         super.tearDown()
@@ -68,59 +69,7 @@ class TelemetryWrapperTests: XCTestCase {
                                   failureMessage: "Incorrect mobile bookmarks quantity returned.")
     }
 
-    // MARK: - Top Site
-
-    func test_topSiteTileWithExtras_GleanIsCalled() throws {
-        let topSitePositionKey = TelemetryWrapper.EventExtraKey.topSitePosition.rawValue
-        let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
-        let extras = [topSitePositionKey: "\(1)", topSiteTileTypeKey: "history-based"]
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .topSiteTile,
-            value: nil,
-            extras: extras
-        )
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.tilePressed)
-    }
-
-    func test_topSiteTileWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .topSiteTile,
-            value: nil
-        )
-        XCTAssertNil(GleanMetrics.TopSites.tilePressed.testGetValue())
-    }
-
-    func test_topSiteContextualMenu_GleanIsCalled() throws {
-        let extras = [
-            ExtraKey.contextualMenuType.rawValue: HomepageContextMenuHelper.ContextualActionType.settings.rawValue
-        ]
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .topSiteContextualMenu,
-            value: nil,
-            extras: extras
-        )
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contextualMenu)
-    }
-
-    func test_topSiteContextualMenuWithoutExtra_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .topSiteContextualMenu,
-            value: nil,
-            extras: nil
-        )
-        XCTAssertNil(GleanMetrics.TopSites.contextualMenu.testGetValue())
-    }
+    // MARK: - Sponsored shortcuts
 
     func test_sponsoredShortcuts_GleanIsCalled() {
         TelemetryWrapper.recordEvent(
@@ -133,44 +82,6 @@ class TelemetryWrapperTests: XCTestCase {
         testBoolMetricSuccess(metric: GleanMetrics.TopSites.sponsoredShortcuts,
                               expectedValue: true,
                               failureMessage: "Sponsored shortcut value not tracked")
-    }
-
-    // MARK: - Firefox Home Page
-
-    func test_recentlySavedBookmarkViewWithExtras_GleanIsCalled() throws {
-        let extras: [String: Any] = [TelemetryWrapper.EventObject.bookmarkImpressions.rawValue: "\([String]().count)"]
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .firefoxHomepage,
-            value: .bookmarkItemView,
-            extras: extras
-        )
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView)
-    }
-
-    func test_recentlySavedBookmarkViewWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .firefoxHomepage,
-            value: .bookmarkItemView
-        )
-        XCTAssertNil(GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.testGetValue())
-    }
-
-    func test_firefoxHomePageAddView_GleanIsCalled() {
-        let extras = [ExtraKey.fxHomepageOrigin.rawValue: ValueKey.fxHomepageOriginZeroSearch.rawValue]
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .firefoxHomepage,
-            value: .fxHomepageOrigin,
-            extras: extras
-        )
-
-        testLabeledMetricSuccess(metric: GleanMetrics.FirefoxHomePage.firefoxHomepageOrigin)
     }
 
     // MARK: - CFR Analytics
@@ -238,6 +149,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: Wallpapers
 
+    @MainActor
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
         TelemetryWrapper.shared.setup(profile: profile)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -250,14 +162,14 @@ class TelemetryWrapperTests: XCTestCase {
         WallpaperManager().setCurrentWallpaper(to: defaultWallpaper) { _ in }
         XCTAssertEqual(WallpaperManager().currentWallpaper.type, .none)
 
-        let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
-        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics()
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = WallpaperManager().currentWallpaper.id.lowercased()
         XCTAssertNil(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue())
     }
 
+    @MainActor
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         TelemetryWrapper.shared.setup(profile: profile)
@@ -270,8 +182,7 @@ class TelemetryWrapperTests: XCTestCase {
         WallpaperManager().setCurrentWallpaper(to: themedWallpaper) { _ in }
         XCTAssertEqual(WallpaperManager().currentWallpaper.type, .other)
 
-        let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
-        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics()
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
         let wallpaperName = WallpaperManager().currentWallpaper.id.lowercased()

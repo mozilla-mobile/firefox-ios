@@ -210,6 +210,9 @@ final class SettingsCoordinator: BaseCoordinator,
             viewController.profile = profile
             return viewController
 
+        case .relayMask:
+            return RelayMaskSettingsViewController(profile: profile, windowUUID: windowUUID)
+
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
@@ -324,6 +327,10 @@ final class SettingsCoordinator: BaseCoordinator,
         findAndHandle(route: .settings(section: .creditCard))
     }
 
+    func pressedRelayMask() {
+        findAndHandle(route: .settings(section: .relayMask))
+    }
+
     func pressedClearPrivateData() {
         let viewController = ClearPrivateDataTableViewController(profile: profile, tabManager: tabManager)
         router.push(viewController)
@@ -418,7 +425,7 @@ final class SettingsCoordinator: BaseCoordinator,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .themeSettings)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {
             let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)

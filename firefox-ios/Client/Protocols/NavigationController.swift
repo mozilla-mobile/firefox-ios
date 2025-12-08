@@ -19,6 +19,7 @@ protocol NavigationController {
     func pushViewController(_ viewController: UIViewController, animated: Bool)
     func popViewController(animated: Bool) -> UIViewController?
     func setViewControllers(_ viewControllers: [UIViewController], animated: Bool)
+    func popToViewController(_ viewController: UIViewController, animated: Bool) -> [UIViewController]?
 }
 
 extension UINavigationController: NavigationController {

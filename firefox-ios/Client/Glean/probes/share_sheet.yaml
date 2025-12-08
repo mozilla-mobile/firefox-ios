@@ -56,3 +56,12 @@ share_sheet:
           appended to the shared content. For example, when a user shares
           Firefox anniversary text to their friends. This text will generally
           accompany a link.
+      is_enrolled_in_sent_from_firefox:
+        type: boolean
+        description: |
+          Whether the user is enrolled in the Sent from Firefox experiment.
+      is_opted_in_sent_from_firefox:
+        type: boolean
+        description: |
+          Whether the user is opted in to the Sent from Firefox experiment.
+          Only returns true if the user is both enrolled and opted in.

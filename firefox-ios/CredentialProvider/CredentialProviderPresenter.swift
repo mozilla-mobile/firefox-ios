@@ -4,14 +4,12 @@
 
 import UIKit
 import Common
-import AuthenticationServices
+@preconcurrency import AuthenticationServices
 
 let CredentialProviderAuthenticationDelay = 0.25
 
-// TODO: FXIOS-13149 this class is marked as unchecked sendable because
-// of a weak view reference. This follow up ticket is to see if this
-// actually makes sense.
-final class CredentialProviderPresenter: @unchecked Sendable {
+@MainActor
+final class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
     public let profile: Profile
     private let appAuthenticator: AppAuthenticator
@@ -36,8 +34,6 @@ final class CredentialProviderPresenter: @unchecked Sendable {
     }
 
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
-        let maxRetries = 3
-
         guard profile.logins.reopenIfClosed() == nil else {
             cancel(with: .failed)
             return
@@ -45,8 +41,15 @@ final class CredentialProviderPresenter: @unchecked Sendable {
 
         guard let id = credentialIdentity.recordIdentifier else { return }
 
-        func attemptProvision(currentRetry: Int) {
-            profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
+        attemptProvision(id: id, currentRetry: 0)
+    }
+
+    /// Helper method to retry provisioning up to 3 times after a delay.
+    private func attemptProvision(id: String, currentRetry: Int) {
+        let maxRetries = 3
+
+        profile.logins.getLogin(id: id, completionHandler: { result in
+            ensureMainThread { [weak self] in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
@@ -62,8 +65,8 @@ final class CredentialProviderPresenter: @unchecked Sendable {
                                 level: .warning,
                                 category: .autofill
                             )
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                attemptProvision(currentRetry: updatedRetry)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                                self?.attemptProvision(id: id, currentRetry: updatedRetry)
                             }
                         } else {
                             self?.logger.log(
@@ -75,34 +78,32 @@ final class CredentialProviderPresenter: @unchecked Sendable {
                         }
                     }
                 }
-            })
-        }
-
-        attemptProvision(currentRetry: 0)
+            }
+        })
     }
 
     func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else {
-            profile.logins.listLogins(completionHandler: { [weak self] result in
-                switch result {
-                case .failure:
-                    self?.cancel(with: .failed)
-                case .success(let loginRecords):
-                    var sortedLogins = loginRecords.sorted(by: <)
-                    for (index, element) in sortedLogins.enumerated() {
-                        if let identifier = serviceIdentifiers
-                            .first?
-                            .identifier.asURL?.domainURL
-                            .absoluteString.titleFromHostname,
-                           element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
-                            sortedLogins.remove(at: index)
-                            sortedLogins.insert(element, at: 0)
+            profile.logins.listLogins(completionHandler: { result in
+                ensureMainThread { [weak self] in
+                    switch result {
+                    case .failure:
+                        self?.cancel(with: .failed)
+                    case .success(let loginRecords):
+                        var sortedLogins = loginRecords.sorted(by: <)
+                        for (index, element) in sortedLogins.enumerated() {
+                            if let identifier = serviceIdentifiers
+                                .first?
+                                .identifier.asURL?.domainURL
+                                .absoluteString.titleFromHostname,
+                               element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
+                                sortedLogins.remove(at: index)
+                                sortedLogins.insert(element, at: 0)
+                            }
                         }
-                    }
 
-                    DispatchQueue.main.async {
                         let dataSource = sortedLogins.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
                         self?.view?.show(itemList: dataSource)
                     }
@@ -118,10 +119,7 @@ final class CredentialProviderPresenter: @unchecked Sendable {
             self.appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
                 switch result {
                 case .success:
-                    // Move to the main thread because a state update triggers UI changes.
-                    DispatchQueue.main.async { [unowned self] in
-                        self.showCredentialList(for: serviceIdentifiers)
-                    }
+                    self.showCredentialList(for: serviceIdentifiers)
                 case .failure:
                     self.cancel(with: .userCanceled)
                 }

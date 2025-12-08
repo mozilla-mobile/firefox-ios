@@ -7,6 +7,7 @@ import XCTest
 import Common
 import Shared
 
+@MainActor
 class ScreenGraphTest: XCTestCase {
     var navigator: MMNavigator<TestUserState>!
     var app: XCUIApplication!
@@ -30,8 +31,8 @@ class ScreenGraphTest: XCTestCase {
         mozWaitForElementToNotExist(progressIndicator, timeout: 90.0)
     }
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         app = XCUIApplication()
         navigator = createTestGraph(for: self, with: app).navigator()
         app.terminate()
@@ -49,8 +50,9 @@ class ScreenGraphTest: XCTestCase {
 extension XCTestCase {
     func wait(forElement element: XCUIElement, timeout: TimeInterval) {
         let predicate = NSPredicate(format: "exists == 1")
-        expectation(for: predicate, evaluatedWith: element)
-        waitForExpectations(timeout: timeout)
+        let expectation = expectation(for: predicate, evaluatedWith: element)
+
+        wait(for: [expectation], timeout: timeout)
     }
 }
 
@@ -129,11 +131,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
 
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab)
-        if !isTablet {
-            screenState.tap(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell], to: URLBarOpen)
-        } else {
-            screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], to: URLBarOpen)
-        }
+        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], to: URLBarOpen)
     }
 
     map.addScreenState(WebPageLoading) { screenState in

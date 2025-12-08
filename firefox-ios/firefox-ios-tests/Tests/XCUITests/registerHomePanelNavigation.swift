@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(HomePanel_TopSites) { screenState in
         let topSites = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
@@ -24,10 +25,6 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
             ) { userState in
                 userState.isPrivate = !userState.isPrivate
             }
-        }
-
-        if !isTablet {
-            screenState.tap(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell], to: URLBarOpen)
         }
 
         // Workaround to bug Bug 1417522

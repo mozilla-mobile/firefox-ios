@@ -5,56 +5,23 @@
 import XCTest
 import Common
 
-class PhotonActionSheetTests: FeatureFlaggedTestBase {
-    // https://mozilla.testrail.io/index.php?/cases/view/2306849
-    // Smoketest
-    func testPinToShortcuts_topSitesVisualRefreshFlagDisabled() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hnt-top-sites-visual-refresh-feature")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
-        waitUntilPageLoad()
-        // Open Page Action Menu Sheet and Pin the site
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenuMore)
-        navigator.performAction(Action.PinToTopSitesPAM)
+class PhotonActionSheetTests: BaseTestCase {
+    var toolBarScreen: ToolbarScreen!
+    var photonActionSheetScreen: PhotonActionSheetScreen!
+    var browserScreen: BrowserScreen!
+    var topSitesScreen: TopSitesScreen!
 
-        // Navigate to topsites to verify that the site has been pinned
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        // Verify that the site is pinned to top
-        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        let cell = itemCell.staticTexts["Example Domain"]
-        mozWaitForElementToExist(cell)
-        if #available(iOS 17, *) {
-            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
-        } else {
-            // No identifier is available for iOS 17 amd below
-            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images.element(boundBy: 1))
-        }
-
-        // Remove pin
-        cell.press(forDuration: 2)
-        app.tables.cells.buttons[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
-        // Check that it has been unpinned
-        if #available(iOS 17, *) {
-            mozWaitForElementToNotExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
-        } else {
-            mozWaitForElementToNotExist(app.links["Example Domain"].images.element(boundBy: 1))
-        }
-
-        mozWaitForElementToNotExist(cell)
+    override func setUp() async throws {
+        try await super.setUp()
+        toolBarScreen = ToolbarScreen(app: app)
+        photonActionSheetScreen = PhotonActionSheetScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        topSitesScreen = TopSitesScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
     // Smoketest
-    func testPinToShortcuts_testPinToShortcuts_topSitesVisualRefreshFlagEnabled() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+    func testPinToShortcuts() {
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
@@ -65,6 +32,9 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         // Navigate to topsites to verify that the site has been pinned
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
 
         // Verify that the site is pinned to top
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
@@ -90,11 +60,37 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(cell)
     }
 
-    func testPinToShortcuts_andThenRemovingShortcuts_topSitesVisualRefreshFlagEnabled() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
+    // https://mozilla.testrail.io/index.php?/cases/view/2306849
+    // Smoketest TAE
+    func testPinToShortcuts_TAE() {
         app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+
+        // Open Page Action Menu Sheet and Pin the site
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
+        navigator.performAction(Action.PinToTopSitesPAM)
+
+        // Navigate to topsites to verify that the site has been pinned
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        browserScreen.tapCancelButtonIfExist()
+
+        // Verify that the site is pinned to top
+        topSitesScreen.assertTopSiteExists(named: "Example Domain")
+        topSitesScreen.assertTopSitePinned(named: "Example Domain")
+
+        // Remove pin
+        topSitesScreen.longPressOnPinnedSite(named: "Example Domain")
+        topSitesScreen.tapPinSlashIcon()
+        topSitesScreen.assertTopSiteNotPinned(named: "Example Domain")
+        topSitesScreen.assertTopSiteDoesNotExist(named: "Example Domain")
+    }
+
+    func testPinToShortcuts_andThenRemovingShortcuts() {
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -102,6 +98,9 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
 
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let shortcutCell = itemCell.staticTexts["Example Domain"]
@@ -121,42 +120,17 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(shortcutCell)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3102521
-    func testPinToShortcuts_andThenRemovingShortcuts_topSitesVisualRefreshFlagDisabled() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hnt-top-sites-visual-refresh-feature")
-        app.launch()
+    private func openNewShareSheet_TAE() {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL("example.com")
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenuMore)
-        navigator.performAction(Action.PinToTopSitesPAM)
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        let shortcutCell = itemCell.staticTexts["Example Domain"]
-        mozWaitForElementToExist(shortcutCell)
-        if #available(iOS 17, *) {
-            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
-        } else {
-            // No identifier is available for iOS 17 amd below
-            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images.element(boundBy: 1))
-        }
-
-        let pinnedShortcutCell = app.collectionViews.links["Pinned: Example Domain"]
-        pinnedShortcutCell.press(forDuration: 2)
-        app.tables.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
-
-        mozWaitForElementToNotExist(shortcutCell)
-        mozWaitForElementToNotExist(pinnedShortcutCell)
+        toolBarScreen.tapShareButton()
+        photonActionSheetScreen.assertPhotonActionSheetExists()
+        photonActionSheetScreen.tapFennecIcon()
     }
 
     private func openNewShareSheet() {
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("example.com")
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
@@ -192,7 +166,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306841
     // Smoketest
     func testSharePageWithShareSheetOptions() {
-        app.launch()
         openNewShareSheet()
         waitForElementsToExist(
             [
@@ -205,9 +178,16 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306841
+    // Smoketest TAE
+    func testSharePageWithShareSheetOptions_TAE() {
+        app.launch()
+        openNewShareSheet_TAE()
+        photonActionSheetScreen.assertShareViewExists()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
-        app.launch()
         openNewShareSheet()
         var attempts = 2
         let sendToDeviceButton = app.staticTexts["Send to Device"]
@@ -227,7 +207,6 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323204
     func testShareSheetOpenAndCancel() {
-        app.launch()
         openNewShareSheet()
         app.buttons["Cancel"].waitAndTap()
         // User is back to the BrowserTab where the sharesheet was launched

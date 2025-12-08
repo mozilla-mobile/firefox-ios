@@ -267,4 +267,94 @@ extension Selector {
                         groups: groups
         )
     }
+
+    static func switchByIdOrLabel(_ value: String,
+                                  description: String,
+                                  groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.switch.rawValue,
+            value,
+            value
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: value,
+                        description: description,
+                        groups: groups)
+    }
+
+    static func buttonLabelContains(_ text: String,
+                                    description: String,
+                                    groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND label CONTAINS[c] %@",
+            XCUIElement.ElementType.button.rawValue,
+            text
+        )
+
+        return Selector(
+            strategy: .predicate(predicate),
+            value: text,
+            description: description,
+            groups: groups
+        )
+    }
+
+    static func anyIdOrLabel(_ value: String,
+                             description: String,
+                             groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "(identifier == %@ OR label == %@)",
+            value,
+            value
+        )
+
+        return Selector(
+            strategy: .predicate(predicate),
+            value: value,
+            description: description,
+            groups: groups
+        )
+    }
+
+    static func alertByTitle(_ title: String,
+                             description: String,
+                             groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier CONTAINS[c] %@ OR label CONTAINS[c] %@)",
+            XCUIElement.ElementType.alert.rawValue,
+            title,
+            title
+        )
+
+        return Selector(
+            strategy: .predicate(predicate),
+            value: title,
+            description: description,
+            groups: groups
+        )
+    }
+
+    static func tableFirstMatch(description: String,
+                                groups: [String] = []) -> Selector {
+            Selector(strategy: .anyById(""),
+                     value: "FirstTable",
+                     description: description,
+                     groups: groups)
+    }
+
+    static func tableById(_ value: String,
+                          description: String,
+                          groups: [String] = []) -> Selector {
+        Selector(strategy: .tableById(value),
+                 value: value,
+                 description: description,
+                 groups: groups)
+    }
+}
+
+extension XCUIElement {
+    func buttonContainingText(_ text: String) -> XCUIElement {
+        return self.buttons.containing(NSPredicate(format: "label CONTAINS[c] %@", text)).firstMatch
+    }
 }

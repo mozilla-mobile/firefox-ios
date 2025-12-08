@@ -152,11 +152,15 @@ class SearchViewController: SiteTableViewController,
         super.viewWillAppear(animated)
         reloadSearchEngines()
         reloadData()
-        loadZeroSearchData()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // Sometimes `viewModel.searchQuery` is not set yet, so we wait to check if we want to
+        // show load zero search in `viewDidAppear` `instead of viewWillAppear`.
+        // i.e. we enter a search term in the address bar and land on the google web page for the term,
+        // then we tap on the address bar, we should see that search term and avoid loading zero search.
+        loadZeroSearchData()
         viewModel.searchFeature.recordExposure()
 
         searchTelemetry?.startImpressionTimer()
@@ -352,20 +356,12 @@ class SearchViewController: SiteTableViewController,
     /// In this state, we surface two types of content:
     /// - Trending searches: popular or curated terms shown to inspire discovery.
     /// - Recent searches: the user’s own past searches for quick re-access.
+    ///
+    /// We clear telemetry here since we're showing users a new set of searches.
     private func loadZeroSearchData() {
-        loadTrendingSearches()
-        loadRecentSearches()
-    }
-
-    private func loadRecentSearches() {
+        searchTelemetry?.clearZeroSearchSectionSeen()
+        viewModel.loadTrendingSearches()
         viewModel.retrieveRecentSearches()
-    }
-
-    private func loadTrendingSearches() {
-        Task {
-            await viewModel.retrieveTrendingSearches()
-            reloadTableView()
-        }
     }
 
     func didSelectEngine(_ sender: UIButton) {
@@ -466,6 +462,7 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(recentSearch)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: recentSearch)
+            searchTelemetry?.recentSearchesTapped(at: indexPath.row)
 
         case .trendingSearches:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
@@ -474,6 +471,7 @@ class SearchViewController: SiteTableViewController,
                   let url = defaultEngine.searchURLForQuery(trendingSearch)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: trendingSearch)
+            searchTelemetry?.trendingSearchesTapped(at: indexPath.row)
 
         case .searchSuggestions:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
@@ -554,10 +552,14 @@ class SearchViewController: SiteTableViewController,
         else { return nil }
 
         var title: String
+        var accessory: SiteTableHeaderAccessory = .none
         switch section {
         case SearchListSection.recentSearches.rawValue:
             guard !viewModel.recentSearches.isEmpty else { return nil }
             title = .SearchZero.RecentSearchesSectionTitle
+            accessory = .clear(action: { [weak self] in
+                self?.viewModel.clearRecentSearches()
+            })
 
         case SearchListSection.trendingSearches.rawValue:
             guard !viewModel.trendingSearches.isEmpty else { return nil }
@@ -577,9 +579,10 @@ class SearchViewController: SiteTableViewController,
         default:  title = ""
         }
 
-        let viewModel = SiteTableViewHeaderModel(title: title,
-                                                 isCollapsible: false,
-                                                 collapsibleState: nil)
+        let viewModel = SiteTableViewHeaderModel(
+            title: title,
+            accessory: accessory
+        )
         headerView.configure(viewModel)
         headerView.applyTheme(theme: currentTheme())
         return headerView
@@ -613,8 +616,10 @@ class SearchViewController: SiteTableViewController,
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let section = SearchListSection(rawValue: indexPath.section) {
             switch section {
-            case .recentSearches, .trendingSearches:
-                break
+            case .recentSearches:
+                viewModel.recordRecentSearchesDisplayedEvent()
+            case .trendingSearches:
+                viewModel.recordTrendingSearchesDisplayedEvent()
             case .searchSuggestions:
                 if let site = viewModel.suggestions?[indexPath.row] {
                     if searchTelemetry?.visibleSuggestions.contains(site) == false {
@@ -861,6 +866,7 @@ class SearchViewController: SiteTableViewController,
     ) -> OneLineTableViewCellViewModel {
         let appendButton = UIButton(type: .roundedRect)
         appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        appendButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
         let action = UIAction { [weak self] _ in
             self?.appendSearch(with: text)
         }
@@ -919,7 +925,7 @@ class SearchViewController: SiteTableViewController,
             case .SearchSettingsChanged:
                 self.reloadSearchEngines()
                 // We fetch new list since trending searches are specific to the search engine.
-                self.loadTrendingSearches()
+                self.viewModel.loadTrendingSearches()
             case .SponsoredAndNonSponsoredSuggestionsChanged:
                 guard !self.viewModel.searchQuery.isEmpty else { return }
                 Task {

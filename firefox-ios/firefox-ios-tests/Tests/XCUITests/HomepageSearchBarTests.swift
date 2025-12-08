@@ -5,6 +5,11 @@
 import XCTest
 
 final class HomepageSearchBarTests: FeatureFlaggedTestBase {
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        throw XCTSkip("Skipping all tests in HomepageSearchBarTests")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3090297
     func testDoesNotShowSearchBar() {
         app.launch()

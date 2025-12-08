@@ -41,9 +41,12 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     }
 
     let prefs: Prefs
-    let state: IconState
+    let state: IconState?
 
-    init(prefs: Prefs, state: IconState = .inactive) {
+    // We initially set icon state as nil until we can detect the
+    // web page and determine if we should show the translation icon
+    // and set the icon to .inactive state.
+    init(prefs: Prefs, state: IconState? = nil) {
         self.prefs = prefs
         self.state = state
     }
@@ -51,13 +54,13 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     /// Determines whether to show the translate icon on the toolbar
     /// The experiment needs to be turned on and the user settings needs to be enabled
     /// If user has not toggled the settings, then we enable the feature by default
-    var canTranslate: Bool {
+    var isTranslationFeatureEnabled: Bool {
         let isExperimentOn = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
         let isSettingsEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
         return isExperimentOn && isSettingsEnabled
     }
 
     static func == (lhs: TranslationConfiguration, rhs: TranslationConfiguration) -> Bool {
-        return lhs.canTranslate == rhs.canTranslate
+        return lhs.isTranslationFeatureEnabled == rhs.isTranslationFeatureEnabled
     }
 }

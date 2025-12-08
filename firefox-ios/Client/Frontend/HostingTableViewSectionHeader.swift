@@ -20,8 +20,21 @@ final class HostingTableViewSectionHeader<Content: View>: UITableViewHeaderFoote
     }
 
     deinit {
-        // remove parent
-        removeHostingControllerFromParent()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            DefaultLogger.shared.log(
+                "AddressToolbarContainer was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // FIXME: FXIOS-14153 This doesn't seem like it should be necessary, investigate later
+            removeHostingControllerFromParent()
+        }
     }
 
     @available(*, unavailable)

@@ -8,7 +8,7 @@
 "AddressToolbar.Location.Placeholder.v128" = "Որոնեք կամ մուտքագրեք հասցե";
 
 /* Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings. */
-"AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "Գաղտնիության և անվտանգության հավելումներ";
+"AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "Գաղտնիության և անվտանգության կարգավորումներ";
 
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does. */
 "AddressToolbar.SearchEngine.A11y.Hint.v133" = "Բացում է որոնիչի ընտրությունը";

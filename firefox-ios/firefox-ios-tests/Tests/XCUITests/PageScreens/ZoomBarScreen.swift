@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class ZoomBarScreen {
     private let app: XCUIApplication
     private let sel: ZoomBarSelectorsSet
@@ -45,11 +46,18 @@ final class ZoomBarScreen {
         XCTAssertEqual(currentZoomPercent(), expected, file: file, line: line)
     }
 
-    func assertBookTextHeightChanged(action: () -> Void,
-                                     file: StaticString = #filePath, line: UInt = #line) {
+    func assertBookTextHeightChanged(
+        action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         let before = bookText.frame.size.height
         action()
         let after = bookText.frame.size.height
         XCTAssertNotEqual(before, after, "Expected book text height to change after action", file: file, line: line)
+    }
+
+    func returnBookTextElement() -> XCUIElement {
+        return bookText
     }
 }

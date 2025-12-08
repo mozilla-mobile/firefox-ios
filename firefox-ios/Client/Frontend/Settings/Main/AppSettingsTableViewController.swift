@@ -149,10 +149,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
             style: .plain,
             target: self,
             action: #selector(done))
-        if #available(iOS 26.0, *) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
-            navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
-        }
     }
 
     // MARK: - Accessibility Identifiers
@@ -399,15 +395,17 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         if let profile {
             privacySettings.append(
-                BoolSetting(prefs: profile.prefs,
-                            theme: themeManager.getCurrentTheme(for: windowUUID),
-                            prefKey: PrefsKeys.Settings.closePrivateTabs,
-                            defaultValue: true,
-                            titleText: .AppSettingsClosePrivateTabsTitle,
-                            statusText: .AppSettingsClosePrivateTabsDescription) { _ in
-                                let action = TabTrayAction(windowUUID: self.windowUUID,
-                                                           actionType: TabTrayActionType.closePrivateTabsSettingToggled)
-                                store.dispatchLegacy(action)
+                BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.Settings.closePrivateTabs,
+                    defaultValue: true,
+                    titleText: .AppSettingsClosePrivateTabsTitle,
+                    statusText: .AppSettingsClosePrivateTabsDescription
+                ) { _ in
+                    let action = TabTrayAction(windowUUID: self.windowUUID,
+                                               actionType: TabTrayActionType.closePrivateTabsSettingToggled)
+                    store.dispatch(action)
                 }
             )
         }
@@ -432,6 +430,18 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
         ]
+
+        // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
+        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly), let profile {
+            supportSettings.append(
+                SentFromFirefoxSetting(
+                    prefs: profile.prefs,
+                    delegate: settingsDelegate,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    settingsDelegate: parentCoordinator
+                )
+            )
+        }
 
         guard let sendTechnicalDataSetting,
               let sendDailyUsagePingSetting,
@@ -495,7 +505,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             DeleteAutofillKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
-            AddShortcutsSetting(settings: self, settingsDelegate: self)
+            AddShortcutsSetting(settings: self, settingsDelegate: self),
+            MerinoTestDataSetting(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
@@ -579,6 +590,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func askedToReload() {
         tableView.reloadData()
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        if #available(iOS 26.0, *) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+        }
     }
 
     // MARK: - UITableViewDelegate

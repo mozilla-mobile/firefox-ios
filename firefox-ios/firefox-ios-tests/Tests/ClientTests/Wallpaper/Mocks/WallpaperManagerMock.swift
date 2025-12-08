@@ -38,7 +38,7 @@ class WallpaperManagerMock: WallpaperManagerInterface {
     var fetchCallCount = 0
     var fetchResult: Result<Void, Error> = .success(())
 
-    func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void) {
+    func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping @Sendable (Result<Void, Error>) -> Void) {
         fetchCallCount += 1
         completion(fetchResult)
     }

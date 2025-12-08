@@ -5,6 +5,7 @@
 import Common
 import Shared
 import XCTest
+import OnboardingKit
 @testable import Client
 
 final class LaunchScreenViewModelTests: XCTestCase {
@@ -25,13 +26,12 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
+        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
         profile = nil
         messageManager = nil
         delegate = nil
-
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        super.tearDown()
     }
 
     func testLaunchDoesntCallLoadedIfNotStarted() {
@@ -180,8 +180,10 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {
-        let buttons = OnboardingButtons(primary: OnboardingButtonInfoModel(title: "Button title \(index)",
-                                                                           action: .forwardOneCard))
+        let buttons = OnboardingButtons<OnboardingActions>(
+            primary: OnboardingButtonInfoModel<OnboardingActions>(
+                title: "Button title \(index)",
+                action: .forwardOneCard))
         return OnboardingCardInfoModel(cardType: .basic,
                                        name: "Name \(index)",
                                        order: index,

@@ -49,6 +49,10 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
                     }
+                    if !viewModel.body.isEmpty {
+                        bodyView
+                        Spacer(minLength: UX.CardView.minContentSpacing)
+                    }
                 }
                 .padding(UX.CardView.verticalPadding)
             }
@@ -73,13 +77,21 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFont)
+            .font(UX.CardView.titleFontForCurrentLocale)
             .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
             .fixedSize(horizontal: false, vertical: true)
             .alignmentGuide(.titleAlignment) { dimensions in dimensions[.bottom] }
+    }
+
+    var bodyView: some View {
+        Text(viewModel.body)
+            .font(UX.CardView.bodyFont)
+            .foregroundColor(Color(theme.colors.textSecondary))
+            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
 
     var primaryButton: some View {

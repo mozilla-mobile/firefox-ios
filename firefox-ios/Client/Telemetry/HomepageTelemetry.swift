@@ -33,6 +33,11 @@ struct HomepageTelemetry {
         }
     }
 
+    private enum EventValue: String {
+        case fxHomepageOriginZeroSearch = "zero-search"
+        case fxHomepageOriginOther = "origin-other"
+    }
+
     private let gleanWrapper: GleanWrapper
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
@@ -69,7 +74,7 @@ struct HomepageTelemetry {
     }
 
     func sendTopSitesPressedEvent(position: Int, tileType: String, isZeroSearch: Bool) {
-        let originExtra: TelemetryWrapper.EventValue = isZeroSearch ? .fxHomepageOriginZeroSearch : .fxHomepageOriginOther
+        let originExtra: EventValue = isZeroSearch ? .fxHomepageOriginZeroSearch : .fxHomepageOriginOther
         gleanWrapper.incrementLabeledCounter(
             for: GleanMetrics.TopSites.pressedTileOrigin,
             label: originExtra.rawValue
@@ -82,7 +87,7 @@ struct HomepageTelemetry {
 
     // MARK: - Pocket
     func sendTapOnPocketStoryCounter(position: Int, isZeroSearch: Bool) {
-        let originExtra: TelemetryWrapper.EventValue = isZeroSearch ? .fxHomepageOriginZeroSearch : .fxHomepageOriginOther
+        let originExtra: EventValue = isZeroSearch ? .fxHomepageOriginZeroSearch : .fxHomepageOriginOther
         gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Pocket.openStoryOrigin, label: originExtra.rawValue)
         gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Pocket.openStoryPosition, label: "position-\(position)")
     }

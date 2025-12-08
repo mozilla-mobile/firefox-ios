@@ -6,6 +6,7 @@ import XCTest
 import MappaMundi
 
 enum NavigationRegistry {
+    @MainActor
     static func registerAll(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
         registerZoomNavigation(in: map, app: app)
         registerToolBarNavigation(in: map, app: app)

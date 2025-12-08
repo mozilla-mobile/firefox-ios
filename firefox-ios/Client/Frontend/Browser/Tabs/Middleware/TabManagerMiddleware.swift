@@ -283,7 +283,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
             else { return }
             let expanded = tabState.isInactiveTabsExpanded
             inactiveTabTelemetry.sectionToggled(hasExpanded: expanded)
-            break
 
         default:
             break
@@ -368,6 +367,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
             isPrivateMode: isPrivateMode,
             tabs: tabs,
             normalTabsCount: normalTabsCountTextForTabTray(for: uuid),
+            privateTabsCount: privateTabsCountTextForTabTray(for: uuid),
             inactiveTabs: inactiveTabs,
             isInactiveTabsExpanded: false,
             enableDeleteTabsButton: shouldEnableDeleteTabsButton(for: uuid, isPrivateMode: isPrivateMode)

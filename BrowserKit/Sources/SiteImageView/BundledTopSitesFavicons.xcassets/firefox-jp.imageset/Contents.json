@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "firefox-jp.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

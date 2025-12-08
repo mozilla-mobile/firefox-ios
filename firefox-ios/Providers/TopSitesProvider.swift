@@ -10,10 +10,10 @@ import Storage
 import enum MozillaAppServices.FrecencyThresholdOption
 
 /// A provider for frecency and pinned top sites, used for the home page and widgets
-protocol TopSitesProvider {
+protocol TopSitesProvider: Sendable {
     /// Get top sites from frecency and pinned tiles
     func getTopSites(numberOfMaxItems: Int,
-                     completion: @escaping ([Site]?) -> Void)
+                     completion: @escaping @Sendable ([Site]?) -> Void)
 
     /// Fetches the default top sites
     func defaultTopSites(_ prefs: Prefs) -> [Site]
@@ -26,28 +26,36 @@ protocol TopSitesProvider {
 }
 
 extension TopSitesProvider {
-    @MainActor
     static var numberOfMaxItems: Int {
-        return UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
+        return UIDeviceDetails.userInterfaceIdiom == .pad ? 32 : 16
     }
 
     func getTopSites(numberOfMaxItems: Int = Self.numberOfMaxItems,
-                     completion: @escaping ([Site]?) -> Void) {
+                     completion: @escaping @Sendable ([Site]?) -> Void) {
         getTopSites(numberOfMaxItems: numberOfMaxItems, completion: completion)
     }
 }
 
-// TODO: FXIOS-13706 TopSitesProviderImplementation should be concurrency safe
-class TopSitesProviderImplementation: @MainActor TopSitesProvider, @unchecked Sendable {
+final class TopSitesProviderImplementation: TopSitesProvider, FeatureFlaggable {
     private let pinnedSiteFetcher: PinnedSites
     private let placesFetcher: RustPlaces
     private let prefs: Prefs
 
+    @MainActor
     private var frecencySites = [Site]()
+
+    @MainActor
     private var pinnedSites = [Site]()
 
     var defaultSuggestedSitesKey: String {
         return "topSites.suggestedSites"
+    }
+
+    private var shouldExcludeFirefoxJpGuide: Bool {
+        let isFirefoxJpGuideDefaultSiteEnabled = featureFlags.isFeatureEnabled(.firefoxJpGuideDefaultSite,
+                                                                               checking: .buildOnly)
+        let locale = Locale.current
+        return locale.identifier == "ja_JP" && !isFirefoxJpGuideDefaultSiteEnabled
     }
 
     init(
@@ -61,27 +69,33 @@ class TopSitesProviderImplementation: @MainActor TopSitesProvider, @unchecked Se
     }
 
     func getTopSites(numberOfMaxItems: Int,
-                     completion: @escaping ([Site]?) -> Void) {
+                     completion: @escaping @Sendable ([Site]?) -> Void) {
         let group = DispatchGroup()
         getFrecencySites(group: group, numberOfMaxItems: numberOfMaxItems)
         getPinnedSites(group: group)
 
-        group.notify(queue: .main) { [weak self] in
-            guard let self = self else { return }
-            self.calculateTopSites(completion: completion)
+        group.notify(queue: .main) {
+            MainActor.assumeIsolated { [weak self] in
+                self?.calculateTopSites(completion: completion)
+            }
         }
     }
 
     func defaultTopSites(_ prefs: Prefs) -> [Site] {
-        let suggested = DefaultSuggestedSites.defaultSites()
+        var suggested = DefaultSuggestedSites.defaultSites()
+
+        if shouldExcludeFirefoxJpGuide {
+            // Remove the Firefox Japanese Guide from the list of default sites
+            suggested.removeAll {
+                $0.url == DefaultSuggestedSites.firefoxJpGuideURL
+            }
+        }
+
         let deleted = prefs.arrayForKey(defaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
     }
-}
 
-// MARK: Private
-private extension TopSitesProviderImplementation {
-    func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
+    private func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
         let placesFetcher = self.placesFetcher
         DispatchQueue.global().async {
@@ -94,33 +108,34 @@ private extension TopSitesProviderImplementation {
 
             placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems,
                                                  thresholdOption: FrecencyThresholdOption.none)
-                .uponQueue(.global()) { [weak self] result in
-                    guard let strongSelf = self else { return }
+                .uponQueue(.main) { [weak self] result in
+                    MainActor.assumeIsolated {
+                        if let sites = result.successValue {
+                            self?.frecencySites = sites
+                        }
 
-                    if let sites = result.successValue {
-                        strongSelf.frecencySites = sites
+                        group.leave()
                     }
-
-                    group.leave()
                 }
         }
     }
 
-    func getPinnedSites(group: DispatchGroup) {
+    private func getPinnedSites(group: DispatchGroup) {
         group.enter()
         pinnedSiteFetcher
             .getPinnedTopSites()
-            .uponQueue(.global()) { [weak self] result in
-                guard let strongSelf = self else { return }
+            .uponQueue(.main) { [weak self] result in
+                MainActor.assumeIsolated {
+                    if let sites = result.successValue?.asArray() {
+                        self?.pinnedSites = sites
+                    }
 
-                if let sites = result.successValue?.asArray() {
-                    strongSelf.pinnedSites = sites
+                    group.leave()
                 }
-
-                group.leave()
             }
     }
 
+    @MainActor
     func calculateTopSites(completion: ([Site]?) -> Void) {
         // Filter out frecency history which resulted from sponsored tiles clicks
         let sites = SponsoredContentFilterUtility().filterSponsoredSites(from: frecencySites)
@@ -133,15 +148,15 @@ private extension TopSitesProviderImplementation {
 
         // Fetch the default sites
         let defaultSites = defaultTopSites(prefs)
-        // Create PinnedSite objects. Used by the view layer to tell topsites apart
+        // Create PinnedSite objects. Used by the view layer to tell top sites apart
         let pinnedSites: [Site] = pinnedSites.map({ Site.createPinnedSite(fromSite: $0) })
-        // Merge default topsites with a user's topsites.
+        // Merge default top sites with a user's top sites.
         let mergedSites = sites.union(defaultSites, f: unionOnURL)
         // Filter out duplicates in merged sites, but do not remove duplicates within pinned sites
         let duplicateFreeList = pinnedSites.union(mergedSites, f: unionOnURL).filter { !$0.isPinnedSite }
         let allSites = pinnedSites + duplicateFreeList
 
-        // Favour topsites from defaultSites as they have better favicons. But keep PinnedSites
+        // Favour top sites from defaultSites as they have better favicons. But keep PinnedSites
         let newSites = allSites.map { site -> Site in
             if case SiteType.pinnedSite = site.type {
                 return site

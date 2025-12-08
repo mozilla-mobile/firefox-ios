@@ -7,24 +7,25 @@ import WebKit
 import XCTest
 @testable import Client
 
+@MainActor
 final class ContentContainerTests: XCTestCase {
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         setIsSwipingTabsEnabled(false)
-        DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.profile = MockProfile()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.overlayModeManager = MockOverlayModeManager()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         self.profile = nil
         self.overlayModeManager = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - canAddHomepage
@@ -109,21 +110,6 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertFalse(subject.canAdd(content: webview))
     }
 
-    // MARK: - hasLegacyHomepage
-
-    func testHasHomepage_trueWhenHomepage() {
-        let subject = createSubject()
-        let homepage = createHomepage()
-        subject.add(content: homepage)
-
-        XCTAssertTrue(subject.hasLegacyHomepage)
-    }
-
-    func testHasHomepage_falseWhenNil() {
-        let subject = createSubject()
-        XCTAssertFalse(subject.hasLegacyHomepage)
-    }
-
     func testHasHomepage_falseWhenWebview() {
         let subject = createSubject()
         let webview = WebviewViewController(webView: WKWebView())
@@ -186,14 +172,6 @@ final class ContentContainerTests: XCTestCase {
     }
 
     // MARK: - hasAnyHomepage
-
-    func testHasHomepage_trueWhenAddedLegacyHomepage() {
-        let subject = createSubject()
-        let homepage = createHomepage()
-        subject.add(content: homepage)
-
-        XCTAssertTrue(subject.hasAnyHomepage)
-    }
 
     func testHasAnyHomepage_returnsTrueWhenAddedNewHomepage() {
         let subject = createSubject()
@@ -260,16 +238,6 @@ final class ContentContainerTests: XCTestCase {
 
     // MARK: update method
 
-    func test_update_hasLegacyHomepage_returnsTrue() {
-        let subject = createSubject()
-        let homepage = createHomepage()
-        subject.update(content: homepage)
-        XCTAssertTrue(subject.hasLegacyHomepage)
-        XCTAssertFalse(subject.hasHomepage)
-        XCTAssertFalse(subject.hasPrivateHomepage)
-        XCTAssertFalse(subject.hasWebView)
-    }
-
     func test_update_hasNewHomepage_returnsTrue() {
         let subject = createSubject()
         let homepage = HomepageViewController(
@@ -279,7 +247,6 @@ final class ContentContainerTests: XCTestCase {
         )
         subject.update(content: homepage)
         XCTAssertTrue(subject.hasHomepage)
-        XCTAssertFalse(subject.hasLegacyHomepage)
         XCTAssertFalse(subject.hasPrivateHomepage)
         XCTAssertFalse(subject.hasWebView)
     }
@@ -292,7 +259,6 @@ final class ContentContainerTests: XCTestCase {
         )
         subject.update(content: privateHomepage)
         XCTAssertTrue(subject.hasPrivateHomepage)
-        XCTAssertFalse(subject.hasLegacyHomepage)
         XCTAssertFalse(subject.hasHomepage)
         XCTAssertFalse(subject.hasWebView)
     }
@@ -302,23 +268,11 @@ final class ContentContainerTests: XCTestCase {
         let webview = WebviewViewController(webView: WKWebView())
         subject.update(content: webview)
         XCTAssertTrue(subject.hasWebView)
-        XCTAssertFalse(subject.hasLegacyHomepage)
         XCTAssertFalse(subject.hasHomepage)
         XCTAssertFalse(subject.hasPrivateHomepage)
     }
 
     // MARK: - Swiping Tabs Enabled
-
-    func testAdd_doesNotRemoveLegacyHomepage() {
-        let subject = createSubject()
-        setIsSwipingTabsEnabled(true)
-
-        let homepage = createHomepage()
-        subject.add(content: homepage)
-        subject.add(content: WebviewViewController(webView: WKWebView()))
-
-        XCTAssertNotNil(homepage.view.superview)
-    }
 
     func testAdd_doesNotRemovePrivateHomepage() {
         let subject = createSubject()
@@ -377,12 +331,11 @@ final class ContentContainerTests: XCTestCase {
         return subject
     }
 
-    private func createHomepage() -> LegacyHomepageViewController {
-        return LegacyHomepageViewController(
-            profile: profile,
-            toastContainer: UIView(),
-            tabManager: MockTabManager(),
-            overlayManager: overlayModeManager
+    private func createHomepage() -> HomepageViewController {
+        return HomepageViewController(
+            windowUUID: WindowUUID.XCTestDefaultUUID,
+            overlayManager: overlayModeManager,
+            toastContainer: UIView()
         )
     }
 

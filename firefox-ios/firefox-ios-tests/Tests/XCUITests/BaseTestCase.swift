@@ -10,7 +10,9 @@ import Shared
 let page1 = "http://localhost:\(serverPort)/test-fixture/find-in-page-test.html"
 let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
 let serverPort = ProcessInfo.processInfo.environment["WEBSERVER_PORT"] ?? "\(Int.random(in: 1025..<65000))"
+@MainActor
 let urlBarAddress = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+@MainActor
 let homepageSearchBar = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
 
 func path(forTestPage page: String) -> String {
@@ -22,6 +24,7 @@ let TIMEOUT: TimeInterval = 20
 let TIMEOUT_LONG: TimeInterval = 45
 let MAX_SWIPE = 5
 
+@MainActor
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     let app = XCUIApplication()
@@ -106,16 +109,16 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = false
         setUpApp()
         setUpScreenGraph()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         app.terminate()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     var skipPlatform: Bool {
@@ -462,15 +465,10 @@ class BaseTestCase: XCTestCase {
         app.buttons["Cancel"].tapWithRetry()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
-        if !iPad() {
-            homepageSearchBar.waitAndTap()
-        }
-        urlBar.press(forDuration: 2)
-        if !pasteAction.exists {
-            urlBar.press(forDuration: 2)
-        }
+        urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
         mozWaitForElementToExist(app.tables["Context Menu"])
         pasteAction.waitAndTap()
+        mozWaitForElementToExist(urlBar)
         mozWaitForValueContains(urlBar, value: url)
     }
 
@@ -490,22 +488,37 @@ class BaseTestCase: XCTestCase {
         let result = XCTWaiter.wait(for: expectations, timeout: timeout)
         if result == .timedOut { XCTFail(message ?? expectations.description) }
     }
+
+    func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
+        var nrOfAttempts = 0
+        mozWaitForElementToExist(dropOnElement)
+        let startCoordinate = dragElement.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let endCoordinate = dropOnElement.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        startCoordinate.press(forDuration: 2.0, thenDragTo: endCoordinate)
+        mozWaitForElementToExist(dragElement)
+        // Repeat the action in case the first drag and drop attempt was not successful
+        while dragElement.isLeftOf(rightElement: dropOnElement) && nrOfAttempts < 5 {
+            dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
+            nrOfAttempts = nrOfAttempts + 1
+            mozWaitForElementToExist(dragElement)
+        }
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .pad
         if iPad() {
-            super.setUp()
+            try await super.setUp()
         }
     }
 }
 
 class IphoneOnlyTestCase: BaseTestCase {
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .phone
         if !iPad() {
-            super.setUp()
+            try await super.setUp()
         }
     }
 }
@@ -631,6 +644,26 @@ extension XCUIElement {
         }
         if self.isHittable {
             XCTFail("\(self) was not tapped")
+        }
+    }
+
+    func pressWithRetry(duration: TimeInterval, timeout: TimeInterval = TIMEOUT, element: XCUIElement) {
+        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        self.press(forDuration: duration)
+        if element.waitForExistence(timeout: 1.0) {
+            return
+        }
+        var attempts = 5
+        while !element.exists && attempts > 0 {
+            self.press(forDuration: duration)
+            if element.waitForExistence(timeout: 1.0) {
+                return
+            }
+            attempts -= 1
+        }
+
+        if !element.exists {
+            XCTFail("\(element) is not visible after \(attempts) attempts")
         }
     }
 

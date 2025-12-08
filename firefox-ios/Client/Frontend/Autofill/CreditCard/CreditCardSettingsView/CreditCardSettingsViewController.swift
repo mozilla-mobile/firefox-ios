@@ -61,7 +61,7 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
         self.creditCardEmptyView.view.backgroundColor = .clear
 
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         self.creditCardTableViewController.didSelectCardAtIndex = { [weak self] creditCard in
             self?.viewCreditCard(card: creditCard)
             self?.sendCreditCardsManagementCardTappedTelemetry()

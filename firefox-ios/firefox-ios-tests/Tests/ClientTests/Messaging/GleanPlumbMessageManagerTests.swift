@@ -34,9 +34,10 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     var applicationHelper: MockApplicationHelper!
     let messageId = "testId"
 
-    override func setUp() {
-        super.setUp()
-        setupTelemetry(with: MockProfile())
+    @MainActor
+    override func setUp() async throws {
+        try await super.setUp()
+        Self.setupTelemetry(with: MockProfile())
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         applicationHelper = MockApplicationHelper()
         subject = GleanPlumbMessageManager(
@@ -50,7 +51,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     override func tearDown() {
         messagingStore = nil
         subject = nil
-        tearDownTelemetry()
+        Self.tearDownTelemetry()
         super.tearDown()
     }
 

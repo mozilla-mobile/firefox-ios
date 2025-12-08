@@ -400,6 +400,22 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterUInt32: FfiConverterPrimitive {
+    typealias FfiType = UInt32
+    typealias SwiftType = UInt32
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt32 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterInt64: FfiConverterPrimitive {
     typealias FfiType = Int64
     typealias SwiftType = Int64
@@ -929,7 +945,15 @@ public protocol TabsStoreProtocol: AnyObject, Sendable {
     
     func registerWithSyncManager() 
     
+    /**
+     * An API for clients which know nothing about windows or tab groups.
+     */
     func setLocalTabs(remoteTabs: [RemoteTabRecord]) 
+    
+    /**
+     * More context-aware API for setting information about a tab like window and groups.
+     */
+    func setLocalTabsInfo(info: LocalTabsInfo) 
     
 }
 open class TabsStore: TabsStoreProtocol, @unchecked Sendable {
@@ -1025,9 +1049,22 @@ open func registerWithSyncManager()  {try! rustCall() {
 }
 }
     
+    /**
+     * An API for clients which know nothing about windows or tab groups.
+     */
 open func setLocalTabs(remoteTabs: [RemoteTabRecord])  {try! rustCall() {
     uniffi_tabs_fn_method_tabsstore_set_local_tabs(self.uniffiClonePointer(),
         FfiConverterSequenceTypeRemoteTabRecord.lower(remoteTabs),$0
+    )
+}
+}
+    
+    /**
+     * More context-aware API for setting information about a tab like window and groups.
+     */
+open func setLocalTabsInfo(info: LocalTabsInfo)  {try! rustCall() {
+    uniffi_tabs_fn_method_tabsstore_set_local_tabs_info(self.uniffiClonePointer(),
+        FfiConverterTypeLocalTabsInfo_lower(info),$0
     )
 }
 }
@@ -1089,6 +1126,9 @@ public func FfiConverterTypeTabsStore_lower(_ value: TabsStore) -> UnsafeMutable
 
 
 public struct ClientRemoteTabs {
+    /**
+     * misnamed: this is the fxa_device_id of the client (which may or may not be the same as the corresponding ID in the `clients` collection)
+     */
     public var clientId: String
     public var clientName: String
     public var deviceType: DeviceType
@@ -1097,18 +1137,25 @@ public struct ClientRemoteTabs {
      */
     public var lastModified: Int64
     public var remoteTabs: [RemoteTabRecord]
+    public var tabGroups: [String: TabGroup]
+    public var windows: [String: Window]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(clientId: String, clientName: String, deviceType: DeviceType, 
+    public init(
+        /**
+         * misnamed: this is the fxa_device_id of the client (which may or may not be the same as the corresponding ID in the `clients` collection)
+         */clientId: String, clientName: String, deviceType: DeviceType, 
         /**
          * Number of ms since the unix epoch (as reported by the server's clock)
-         */lastModified: Int64, remoteTabs: [RemoteTabRecord]) {
+         */lastModified: Int64, remoteTabs: [RemoteTabRecord], tabGroups: [String: TabGroup], windows: [String: Window]) {
         self.clientId = clientId
         self.clientName = clientName
         self.deviceType = deviceType
         self.lastModified = lastModified
         self.remoteTabs = remoteTabs
+        self.tabGroups = tabGroups
+        self.windows = windows
     }
 }
 
@@ -1134,6 +1181,12 @@ extension ClientRemoteTabs: Equatable, Hashable {
         if lhs.remoteTabs != rhs.remoteTabs {
             return false
         }
+        if lhs.tabGroups != rhs.tabGroups {
+            return false
+        }
+        if lhs.windows != rhs.windows {
+            return false
+        }
         return true
     }
 
@@ -1143,6 +1196,8 @@ extension ClientRemoteTabs: Equatable, Hashable {
         hasher.combine(deviceType)
         hasher.combine(lastModified)
         hasher.combine(remoteTabs)
+        hasher.combine(tabGroups)
+        hasher.combine(windows)
     }
 }
 
@@ -1159,7 +1214,9 @@ public struct FfiConverterTypeClientRemoteTabs: FfiConverterRustBuffer {
                 clientName: FfiConverterString.read(from: &buf), 
                 deviceType: FfiConverterTypeDeviceType.read(from: &buf), 
                 lastModified: FfiConverterInt64.read(from: &buf), 
-                remoteTabs: FfiConverterSequenceTypeRemoteTabRecord.read(from: &buf)
+                remoteTabs: FfiConverterSequenceTypeRemoteTabRecord.read(from: &buf), 
+                tabGroups: FfiConverterDictionaryStringTypeTabGroup.read(from: &buf), 
+                windows: FfiConverterDictionaryStringTypeWindow.read(from: &buf)
         )
     }
 
@@ -1169,6 +1226,8 @@ public struct FfiConverterTypeClientRemoteTabs: FfiConverterRustBuffer {
         FfiConverterTypeDeviceType.write(value.deviceType, into: &buf)
         FfiConverterInt64.write(value.lastModified, into: &buf)
         FfiConverterSequenceTypeRemoteTabRecord.write(value.remoteTabs, into: &buf)
+        FfiConverterDictionaryStringTypeTabGroup.write(value.tabGroups, into: &buf)
+        FfiConverterDictionaryStringTypeWindow.write(value.windows, into: &buf)
     }
 }
 
@@ -1185,6 +1244,84 @@ public func FfiConverterTypeClientRemoteTabs_lift(_ buf: RustBuffer) throws -> C
 #endif
 public func FfiConverterTypeClientRemoteTabs_lower(_ value: ClientRemoteTabs) -> RustBuffer {
     return FfiConverterTypeClientRemoteTabs.lower(value)
+}
+
+
+public struct LocalTabsInfo {
+    public var tabs: [RemoteTabRecord]
+    public var tabGroups: [String: TabGroup]
+    public var windows: [String: Window]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(tabs: [RemoteTabRecord], tabGroups: [String: TabGroup], windows: [String: Window]) {
+        self.tabs = tabs
+        self.tabGroups = tabGroups
+        self.windows = windows
+    }
+}
+
+#if compiler(>=6)
+extension LocalTabsInfo: Sendable {}
+#endif
+
+
+extension LocalTabsInfo: Equatable, Hashable {
+    public static func ==(lhs: LocalTabsInfo, rhs: LocalTabsInfo) -> Bool {
+        if lhs.tabs != rhs.tabs {
+            return false
+        }
+        if lhs.tabGroups != rhs.tabGroups {
+            return false
+        }
+        if lhs.windows != rhs.windows {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(tabs)
+        hasher.combine(tabGroups)
+        hasher.combine(windows)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeLocalTabsInfo: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> LocalTabsInfo {
+        return
+            try LocalTabsInfo(
+                tabs: FfiConverterSequenceTypeRemoteTabRecord.read(from: &buf), 
+                tabGroups: FfiConverterDictionaryStringTypeTabGroup.read(from: &buf), 
+                windows: FfiConverterDictionaryStringTypeWindow.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: LocalTabsInfo, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypeRemoteTabRecord.write(value.tabs, into: &buf)
+        FfiConverterDictionaryStringTypeTabGroup.write(value.tabGroups, into: &buf)
+        FfiConverterDictionaryStringTypeWindow.write(value.windows, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLocalTabsInfo_lift(_ buf: RustBuffer) throws -> LocalTabsInfo {
+    return try FfiConverterTypeLocalTabsInfo.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLocalTabsInfo_lower(_ value: LocalTabsInfo) -> RustBuffer {
+    return FfiConverterTypeLocalTabsInfo.lower(value)
 }
 
 
@@ -1281,23 +1418,31 @@ public struct RemoteTabRecord {
     public var title: String
     public var urlHistory: [String]
     public var icon: String?
-    /**
-     * Number of ms since the unix epoch (as reported by the client's clock)
-     */
     public var lastUsed: Int64
     public var inactive: Bool
+    public var pinned: Bool
+    /**
+     * The index within the window_id.
+     */
+    public var index: UInt32
+    public var windowId: String
+    public var tabGroupId: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(title: String, urlHistory: [String], icon: String?, 
+    public init(title: String, urlHistory: [String], icon: String?, lastUsed: Int64, inactive: Bool = false, pinned: Bool = false, 
         /**
-         * Number of ms since the unix epoch (as reported by the client's clock)
-         */lastUsed: Int64, inactive: Bool = false) {
+         * The index within the window_id.
+         */index: UInt32 = UInt32(0), windowId: String = "", tabGroupId: String = "") {
         self.title = title
         self.urlHistory = urlHistory
         self.icon = icon
         self.lastUsed = lastUsed
         self.inactive = inactive
+        self.pinned = pinned
+        self.index = index
+        self.windowId = windowId
+        self.tabGroupId = tabGroupId
     }
 }
 
@@ -1323,6 +1468,18 @@ extension RemoteTabRecord: Equatable, Hashable {
         if lhs.inactive != rhs.inactive {
             return false
         }
+        if lhs.pinned != rhs.pinned {
+            return false
+        }
+        if lhs.index != rhs.index {
+            return false
+        }
+        if lhs.windowId != rhs.windowId {
+            return false
+        }
+        if lhs.tabGroupId != rhs.tabGroupId {
+            return false
+        }
         return true
     }
 
@@ -1332,6 +1489,10 @@ extension RemoteTabRecord: Equatable, Hashable {
         hasher.combine(icon)
         hasher.combine(lastUsed)
         hasher.combine(inactive)
+        hasher.combine(pinned)
+        hasher.combine(index)
+        hasher.combine(windowId)
+        hasher.combine(tabGroupId)
     }
 }
 
@@ -1348,7 +1509,11 @@ public struct FfiConverterTypeRemoteTabRecord: FfiConverterRustBuffer {
                 urlHistory: FfiConverterSequenceString.read(from: &buf), 
                 icon: FfiConverterOptionString.read(from: &buf), 
                 lastUsed: FfiConverterInt64.read(from: &buf), 
-                inactive: FfiConverterBool.read(from: &buf)
+                inactive: FfiConverterBool.read(from: &buf), 
+                pinned: FfiConverterBool.read(from: &buf), 
+                index: FfiConverterUInt32.read(from: &buf), 
+                windowId: FfiConverterString.read(from: &buf), 
+                tabGroupId: FfiConverterString.read(from: &buf)
         )
     }
 
@@ -1358,6 +1523,10 @@ public struct FfiConverterTypeRemoteTabRecord: FfiConverterRustBuffer {
         FfiConverterOptionString.write(value.icon, into: &buf)
         FfiConverterInt64.write(value.lastUsed, into: &buf)
         FfiConverterBool.write(value.inactive, into: &buf)
+        FfiConverterBool.write(value.pinned, into: &buf)
+        FfiConverterUInt32.write(value.index, into: &buf)
+        FfiConverterString.write(value.windowId, into: &buf)
+        FfiConverterString.write(value.tabGroupId, into: &buf)
     }
 }
 
@@ -1374,6 +1543,181 @@ public func FfiConverterTypeRemoteTabRecord_lift(_ buf: RustBuffer) throws -> Re
 #endif
 public func FfiConverterTypeRemoteTabRecord_lower(_ value: RemoteTabRecord) -> RustBuffer {
     return FfiConverterTypeRemoteTabRecord.lower(value)
+}
+
+
+/**
+ * A tab-group, representing a session store `TabGroupStateData`.
+ */
+public struct TabGroup {
+    public var id: String
+    public var name: String
+    public var color: String
+    public var collapsed: Bool
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(id: String, name: String, color: String, collapsed: Bool) {
+        self.id = id
+        self.name = name
+        self.color = color
+        self.collapsed = collapsed
+    }
+}
+
+#if compiler(>=6)
+extension TabGroup: Sendable {}
+#endif
+
+
+extension TabGroup: Equatable, Hashable {
+    public static func ==(lhs: TabGroup, rhs: TabGroup) -> Bool {
+        if lhs.id != rhs.id {
+            return false
+        }
+        if lhs.name != rhs.name {
+            return false
+        }
+        if lhs.color != rhs.color {
+            return false
+        }
+        if lhs.collapsed != rhs.collapsed {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(name)
+        hasher.combine(color)
+        hasher.combine(collapsed)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeTabGroup: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TabGroup {
+        return
+            try TabGroup(
+                id: FfiConverterString.read(from: &buf), 
+                name: FfiConverterString.read(from: &buf), 
+                color: FfiConverterString.read(from: &buf), 
+                collapsed: FfiConverterBool.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: TabGroup, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.id, into: &buf)
+        FfiConverterString.write(value.name, into: &buf)
+        FfiConverterString.write(value.color, into: &buf)
+        FfiConverterBool.write(value.collapsed, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTabGroup_lift(_ buf: RustBuffer) throws -> TabGroup {
+    return try FfiConverterTypeTabGroup.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTabGroup_lower(_ value: TabGroup) -> RustBuffer {
+    return FfiConverterTypeTabGroup.lower(value)
+}
+
+
+public struct Window {
+    public var id: String
+    public var lastUsed: Timestamp
+    public var index: UInt32
+    public var windowType: WindowType
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(id: String, lastUsed: Timestamp, index: UInt32, windowType: WindowType) {
+        self.id = id
+        self.lastUsed = lastUsed
+        self.index = index
+        self.windowType = windowType
+    }
+}
+
+#if compiler(>=6)
+extension Window: Sendable {}
+#endif
+
+
+extension Window: Equatable, Hashable {
+    public static func ==(lhs: Window, rhs: Window) -> Bool {
+        if lhs.id != rhs.id {
+            return false
+        }
+        if lhs.lastUsed != rhs.lastUsed {
+            return false
+        }
+        if lhs.index != rhs.index {
+            return false
+        }
+        if lhs.windowType != rhs.windowType {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(lastUsed)
+        hasher.combine(index)
+        hasher.combine(windowType)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWindow: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Window {
+        return
+            try Window(
+                id: FfiConverterString.read(from: &buf), 
+                lastUsed: FfiConverterTypeTimestamp.read(from: &buf), 
+                index: FfiConverterUInt32.read(from: &buf), 
+                windowType: FfiConverterTypeWindowType.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: Window, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.id, into: &buf)
+        FfiConverterTypeTimestamp.write(value.lastUsed, into: &buf)
+        FfiConverterUInt32.write(value.index, into: &buf)
+        FfiConverterTypeWindowType.write(value.windowType, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWindow_lift(_ buf: RustBuffer) throws -> Window {
+    return try FfiConverterTypeWindow.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWindow_lower(_ value: Window) -> RustBuffer {
+    return FfiConverterTypeWindow.lower(value)
 }
 
 // Note that we don't yet support `indirect` for enums.
@@ -1537,6 +1881,69 @@ extension TabsApiError: Foundation.LocalizedError {
         String(reflecting: self)
     }
 }
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum WindowType : UInt8 {
+    
+    case normal = 0
+}
+
+
+#if compiler(>=6)
+extension WindowType: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWindowType: FfiConverterRustBuffer {
+    typealias SwiftType = WindowType
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WindowType {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .normal
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: WindowType, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .normal:
+            writeInt(&buf, Int32(1))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWindowType_lift(_ buf: RustBuffer) throws -> WindowType {
+    return try FfiConverterTypeWindowType.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWindowType_lower(_ value: WindowType) -> RustBuffer {
+    return FfiConverterTypeWindowType.lower(value)
+}
+
+
+extension WindowType: Equatable, Hashable {}
+
+
 
 
 
@@ -1714,6 +2121,58 @@ fileprivate struct FfiConverterSequenceTypeTabsGuid: FfiConverterRustBuffer {
     }
 }
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringTypeTabGroup: FfiConverterRustBuffer {
+    public static func write(_ value: [String: TabGroup], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterTypeTabGroup.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: TabGroup] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: TabGroup]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterTypeTabGroup.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringTypeWindow: FfiConverterRustBuffer {
+    public static func write(_ value: [String: Window], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterTypeWindow.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: Window] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: Window]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterTypeWindow.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 
 /**
  * Typealias from the type name used in the UDL file to the builtin type.  This
@@ -1887,6 +2346,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs() != 10534) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs_info() != 21646) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_constructor_tabsstore_new() != 24843) {

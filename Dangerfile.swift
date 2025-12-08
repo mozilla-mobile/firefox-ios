@@ -364,6 +364,15 @@ class CodeUsageDetector {
                 return false
             }
         }
+
+        var shouldWarn: Bool {
+            switch self {
+            case .deferred:
+                return true
+            default:
+                return false
+            }
+        }
     }
     // swiftlint:enable line_length
 
@@ -414,6 +423,8 @@ class CodeUsageDetector {
                 let lineNumber = hunk.newLineStart + newLineCount - 1
                 if keyword.shouldComment {
                     markdown(String(format: message, file, lineNumber))
+                } else if keyword.shouldWarn {
+                    warn(String(format: message, file, lineNumber))
                 } else {
                     fail(String(format: message, file, lineNumber))
                 }
@@ -432,6 +443,8 @@ class CodeUsageDetector {
             let lineNumber = index + 1
             if keyword.shouldComment {
                 markdown(String(format: message, file, lineNumber))
+            } else if keyword.shouldWarn {
+                warn(String(format: message, file, lineNumber))
             } else {
                 fail(String(format: message, file, lineNumber))
             }

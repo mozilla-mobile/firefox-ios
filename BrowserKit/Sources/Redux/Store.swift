@@ -8,6 +8,7 @@ import Common
 /// Stores your entire app state in the form of a single data structure.
 /// This state can only be modified by dispatching Actions to the store.
 /// Whenever the state of the store changes, the store will notify all store subscriber.
+@MainActor
 public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     typealias SubscriptionType = SubscriptionWrapper<State>
 
@@ -32,6 +33,7 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     private var actionQueue: [Action] = []
     private var isProcessingActions = false
 
+    @MainActor
     public init(state: State,
                 reducer: @escaping Reducer<State>,
                 middlewares: [Middleware<State>] = [],
@@ -69,22 +71,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         }
     }
 
-    nonisolated public func dispatchLegacy(_ action: Action) {
-        logger.log("Legacy dispatched action: \(action.debugDescription)", level: .info, category: .redux)
-
-        guard Thread.isMainThread else {
-            Task { @MainActor in
-                dispatch(action)
-            }
-            return
-        }
-
-        MainActor.assumeIsolated {
-            dispatch(action)
-        }
-    }
-
-    @MainActor
     public func dispatch(_ action: Action) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
@@ -92,7 +78,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         processQueuedActions()
     }
 
-    @MainActor
     private func processQueuedActions() {
         guard !isProcessingActions else { return }
         isProcessingActions = true
@@ -103,7 +88,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         isProcessingActions = false
     }
 
-    @MainActor
     private func executeAction(_ action: Action) {
         // Each active screen state is given an opportunity to be reduced using the dispatched action
         // (Note: this is true even if the action's UUID differs from the screen's window's UUID).

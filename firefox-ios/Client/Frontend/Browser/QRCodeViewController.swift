@@ -3,7 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import AVFoundation
+// AVCaptureSession is threadsafe even though it is not Sendable
+@preconcurrency import AVFoundation
 import Shared
 import Common
 
@@ -44,7 +45,7 @@ class QRCodeViewController: UIViewController {
 
     private var state: QRCodeViewControllerState = .scanning
 
-    private lazy var captureSession: AVCaptureSession = {
+    nonisolated private let captureSession: AVCaptureSession = {
         let session = AVCaptureSession()
         session.sessionPreset = AVCaptureSession.Preset.high
         return session

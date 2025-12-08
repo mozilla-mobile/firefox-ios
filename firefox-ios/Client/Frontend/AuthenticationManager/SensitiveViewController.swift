@@ -2,9 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 
-class SensitiveViewController: UIViewController {
+class SensitiveViewController: UIViewController, Notifiable {
     private enum VisibilityState {
         case active
         case inactive
@@ -14,64 +15,71 @@ class SensitiveViewController: UIViewController {
     private var backgroundBlurView: UIVisualEffectView?
     private var isAuthenticated = false
     private var visibilityState: VisibilityState = .active
-    private var sceneWillEnterForegroundObserver: NSObjectProtocol?
-    private var didEnterBackgroundObserver: NSObjectProtocol?
-    private var willResignActiveObserver: NSObjectProtocol?
-    private var didBecomeActiveObserver: NSObjectProtocol?
+    private let notificationCenter: NotificationProtocol
+
+    init(notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.notificationCenter = notificationCenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Lifecycle methods
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        sceneWillEnterForegroundObserver = observe(UIScene.willEnterForegroundNotification) { [weak self] notification in
-            guard let self,
-                  let sensitiveWindowScene = self.view.window?.windowScene,
-                  let notificationScene = notification.object as? UIWindowScene,
-                  sensitiveWindowScene === notificationScene else { return }
-            visibilityState = .active
-            handleCheckAuthentication()
-        }
-
-        didEnterBackgroundObserver = observe(UIApplication.didEnterBackgroundNotification) { [weak self] notification in
-            guard let self else { return }
-            visibilityState = .backgrounded
-            isAuthenticated = false
-            installBlurredOverlay()
-        }
-
-        willResignActiveObserver = observe(UIApplication.willResignActiveNotification) { [weak self] notification in
-            guard let self else { return }
-            if visibilityState == .active {
-                visibilityState = .inactive
-                installBlurredOverlay()
-            }
-        }
-
-        didBecomeActiveObserver = observe(UIApplication.didBecomeActiveNotification) { [weak self] notification in
-            guard let self else { return }
-            if visibilityState == .inactive {
-                visibilityState = .active
-                removedBlurredOverlay()
-            }
-        }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIScene.willEnterForegroundNotification,
+                        UIApplication.didEnterBackgroundNotification,
+                        UIApplication.willResignActiveNotification,
+                        UIApplication.didBecomeActiveNotification]
+        )
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    // MARK: - Notifiable
 
-        [sceneWillEnterForegroundObserver,
-         didEnterBackgroundObserver,
-         didBecomeActiveObserver,
-         willResignActiveObserver].forEach {
-            guard let observer = $0 else { return }
-            NotificationCenter.default.removeObserver(observer)
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIScene.willEnterForegroundNotification:
+            guard let notificationScene = notification.object as? UIWindowScene else { return }
+            ensureMainThread { [weak self] in
+                guard let self,
+                      let sensitiveWindowScene = self.view.window?.windowScene,
+                      sensitiveWindowScene === notificationScene else { return }
+                self.visibilityState = .active
+                self.handleCheckAuthentication()
+            }
+        case UIApplication.didEnterBackgroundNotification:
+            ensureMainThread { [weak self] in
+                guard let self else { return }
+                self.visibilityState = .backgrounded
+                self.isAuthenticated = false
+                self.installBlurredOverlay()
+            }
+        case UIApplication.willResignActiveNotification:
+            ensureMainThread { [weak self] in
+                guard let self else { return }
+                if self.visibilityState == .active {
+                    self.visibilityState = .inactive
+                    self.installBlurredOverlay()
+                }
+            }
+        case UIApplication.didBecomeActiveNotification:
+            ensureMainThread { [weak self] in
+                guard let self else { return }
+                if self.visibilityState == .inactive {
+                    self.visibilityState = .active
+                    self.removedBlurredOverlay()
+                }
+            }
+
+        default: break
         }
-    }
-
-    // MARK: - Utility func
-
-    private func observe(_ notification: Notification.Name,
-                         with closure: @escaping ((Notification) -> Void)) -> NSObjectProtocol? {
-        return NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main, using: closure)
     }
 
     private func handleCheckAuthentication() {
@@ -88,9 +96,9 @@ class SensitiveViewController: UIViewController {
             }
         }
     }
-}
 
-extension SensitiveViewController {
+    // MARK: - Blur management
+
     private func installBlurredOverlay() {
         guard backgroundBlurView == nil else { return }
         let blur = UIBlurEffect(style: .systemMaterialDark)

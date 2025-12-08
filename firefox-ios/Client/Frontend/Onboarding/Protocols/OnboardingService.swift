@@ -21,6 +21,7 @@ final class OnboardingService: FeatureFlaggable {
     private var profile: Profile
     private var introScreenManager: IntroScreenManagerProtocol?
     private var themeManager: ThemeManager
+    private var hasSyncFlowStarted = false
 
     // MARK: - Injected Dependencies
     private let notificationManager: NotificationManagerProtocol
@@ -77,8 +78,10 @@ final class OnboardingService: FeatureFlaggable {
             completion(.success(.advance(numberOfPages: 3)))
 
         case .syncSignIn:
-            handleSyncSignIn(from: cardName, with: activityEventHelper) {
-                completion(.success(.advance(numberOfPages: 1)))
+            handleSyncSignIn(from: cardName, with: activityEventHelper, cards: cards) { [weak self] in
+                if self?.hasSyncFlowStarted == true {
+                    completion(.success(.advance(numberOfPages: 1)))
+                }
             }
 
         case .setDefaultBrowser:
@@ -100,13 +103,7 @@ final class OnboardingService: FeatureFlaggable {
                 return
             }
             handleOpenInstructionsPopup(
-                from: OnboardingInstructionsPopupInfoModel(
-                    title: popupViewModel.title,
-                    instructionSteps: popupViewModel.instructionSteps,
-                    buttonTitle: popupViewModel.buttonTitle,
-                    buttonAction: popupViewModel.buttonAction,
-                    a11yIdRoot: popupViewModel.a11yIdRoot
-                )
+                from: popupViewModel
             ) {
                 completion(.success(.advance(numberOfPages: 1)))
             }
@@ -164,6 +161,15 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     // MARK: - Private Methods
+
+    /// Checks if any card in the onboarding flow contains a request notifications action
+    private func hasNotificationCard(in cards: [OnboardingKitCardInfoModel]) -> Bool {
+        cards.contains {
+            $0.buttons.primary.action == .requestNotifications
+            || $0.buttons.secondary?.action == .requestNotifications
+        }
+    }
+
     private func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
         activityEventHelper.updateOnboardingUserActivationEvent()
@@ -173,13 +179,19 @@ final class OnboardingService: FeatureFlaggable {
     private func handleSyncSignIn(
         from cardName: String,
         with activityEventHelper: ActivityEventHelper,
+        cards: [OnboardingKitCardInfoModel],
         completion: @escaping () -> Void
     ) {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
         activityEventHelper.updateOnboardingUserActivationEvent()
 
         let fxaParams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
-        presentSignToSync(with: fxaParams, profile: profile, completion: completion)
+        presentSignToSync(
+            with: fxaParams,
+            profile: profile,
+            notificationPermissionBehavior: !hasNotificationCard(in: cards) ? .request : .skip,
+            completion: completion
+        )
     }
 
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
@@ -190,7 +202,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenInstructionsPopup(
-        from popupViewModel: OnboardingDefaultBrowserModelProtocol,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping () -> Void
     ) {
         presentDefaultBrowserPopup(from: popupViewModel, completion: completion)
@@ -236,13 +248,19 @@ final class OnboardingService: FeatureFlaggable {
         hasRegisteredForDefaultBrowserNotification = true
     }
 
-    private func presentSignToSync(with params: FxALaunchParams, profile: Profile, completion: @escaping () -> Void) {
+    private func presentSignToSync(
+        with params: FxALaunchParams,
+        profile: Profile,
+        notificationPermissionBehavior: NotificationPermissionRequestBehavior,
+        completion: @escaping () -> Void
+    ) {
         guard let delegate = delegate else { return }
 
         let signInVC = createSignInViewController(
             windowUUID: windowUUID,
             params: params,
             profile: profile,
+            notificationPermissionBehavior: notificationPermissionBehavior,
             completion: completion
         )
 
@@ -250,7 +268,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func presentDefaultBrowserPopup(
-        from popupViewModel: OnboardingDefaultBrowserModelProtocol,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping @MainActor () -> Void
     ) {
         let popupVC = createDefaultBrowserPopupViewController(
@@ -277,14 +295,21 @@ final class OnboardingService: FeatureFlaggable {
         windowUUID: WindowUUID,
         params: FxALaunchParams,
         profile: Profile,
+        notificationPermissionBehavior: NotificationPermissionRequestBehavior,
         completion: @escaping () -> Void
     ) -> UIViewController {
+        // Reset sync flow started flag when creating a new sign-in view controller
+        hasSyncFlowStarted = false
+
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             params,
             flowType: .emailLoginFlow,
             referringPage: .onboarding,
             profile: profile,
-            windowUUID: windowUUID)
+            windowUUID: windowUUID,
+            notificationPermissionBehavior: notificationPermissionBehavior
+        )
+
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
@@ -297,6 +322,9 @@ final class OnboardingService: FeatureFlaggable {
         }
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
+        (singInSyncVC as? FirefoxAccountSignInViewController)?.onSyncFlowStarted = { [weak self] in
+            self?.hasSyncFlowStarted = true
+        }
 
         let controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = completion
@@ -305,7 +333,7 @@ final class OnboardingService: FeatureFlaggable {
 
     private func createDefaultBrowserPopupViewController(
         windowUUID: WindowUUID,
-        from popupViewModel: OnboardingDefaultBrowserModelProtocol,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping () -> Void
     ) -> UIViewController {
         let instructionsVC = OnboardingInstructionPopupViewController(
@@ -313,20 +341,15 @@ final class OnboardingService: FeatureFlaggable {
             windowUUID: windowUUID,
             buttonTappedFinishFlow: completion
         )
-        let bottomSheetViewModel = BottomSheetViewModel(
-            shouldDismissForTapOutside: true,
-            closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier:
-                AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
-        )
-        let bottomSheetVC = OnboardingBottomSheetViewController(
-            viewModel: bottomSheetViewModel,
-            childViewController: instructionsVC,
-            usingDimmedBackground: true,
-            windowUUID: windowUUID
-        )
 
-        instructionsVC.dismissDelegate = bottomSheetVC
+        let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
+        bottomSheetVC.configure(
+            closeButtonModel: CloseButtonViewModel(
+                a11yLabel: .CloseButtonTitle,
+                a11yIdentifier: AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
+            ),
+            child: instructionsVC
+        )
         return bottomSheetVC
     }
 

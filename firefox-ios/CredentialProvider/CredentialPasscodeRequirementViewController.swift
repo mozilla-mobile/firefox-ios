@@ -6,6 +6,7 @@ import UIKit
 import Common
 
 protocol CredentialPasscodeRequirementViewControllerDelegate: AnyObject {
+    @MainActor
     func credentialPasscodeRequirementViewControllerDidDismiss()
 }
 

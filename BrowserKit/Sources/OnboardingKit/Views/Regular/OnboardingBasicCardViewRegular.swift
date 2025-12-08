@@ -50,7 +50,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFont)
+            .font(UX.CardView.titleFontForCurrentLocale)
             .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -63,8 +63,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.imageHeight)
-                .accessibilityLabel(viewModel.title)
+                .frame(height: min(img.size.height, UX.CardView.maxImageHeight))
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }
@@ -74,7 +73,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
             .foregroundColor(Color(theme.colors.textSecondary))
-            .multilineTextAlignment(.center)
+            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
 

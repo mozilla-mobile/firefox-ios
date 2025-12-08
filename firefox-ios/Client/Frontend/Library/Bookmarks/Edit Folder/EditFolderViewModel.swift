@@ -7,7 +7,8 @@ import Foundation
 import MozillaAppServices
 import Shared
 
-class EditFolderViewModel {
+// FIXME: FXIOS-14160 Make EditFolderViewModel actually Sendable
+class EditFolderViewModel: @unchecked Sendable {
     private let profile: Profile
     private let logger: Logger
     private let parentFolder: FxBookmarkNode

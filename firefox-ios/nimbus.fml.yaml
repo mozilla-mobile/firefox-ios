@@ -14,6 +14,7 @@ channels:
   - release
 include:
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/appleSummarizerFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/defaultZoomFeature.yaml
@@ -22,23 +23,23 @@ include:
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/hntSponsoredShortcutsFeature.yaml
-  - nimbus-features/hntTopSitesVisualRefresh.yaml
   - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/hostedSummarizerFeature.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
+  - nimbus-features/firefoxJpGuideDefaultSite.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
-  - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/rustFxAKeychainEnabled.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
+  - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml

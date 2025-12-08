@@ -20,8 +20,8 @@ final class LegacyTabScrollControllerTests: XCTestCase {
     var overKeyboardContainer: BaseAlphaStackView = .build()
     var bottomContainer: BaseAlphaStackView = .build()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
@@ -30,11 +30,11 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         mockGesture = UIPanGestureRecognizerMock()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile?.shutdown()
         mockProfile = nil
         tab = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testHandlePan_ScrollingUp() {
@@ -182,7 +182,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
             isBottomSearchBar: true
         )
 
-        let expectedResult = containerHeight - topInset
+        let expectedResult: CGFloat = if #available(iOS 26.0, *) { .zero } else { containerHeight - topInset }
         XCTAssertEqual(result, expectedResult)
     }
 
@@ -213,7 +213,8 @@ final class LegacyTabScrollControllerTests: XCTestCase {
             isBottomSearchBar: true
         )
 
-        XCTAssertEqual(result, containerHeight)
+        let expectedResult: CGFloat = if #available(iOS 26.0, *) { .zero } else { containerHeight }
+        XCTAssertEqual(result, expectedResult)
     }
 
     func testOverKeyboardScrollHeight_zeroSafeAreaInsets_returnsContainerHeight() {
@@ -227,7 +228,8 @@ final class LegacyTabScrollControllerTests: XCTestCase {
             isBottomSearchBar: true
         )
 
-        XCTAssertEqual(result, containerHeight)
+        let expectedResult: CGFloat = if #available(iOS 26.0, *) { .zero } else { containerHeight }
+        XCTAssertEqual(result, expectedResult)
     }
 
     func testOverKeyboardScrollHeight_minimalEnabledIsNotBottomSearchBar_returnsContainerHeight() {

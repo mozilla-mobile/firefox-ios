@@ -72,8 +72,8 @@ final class AddressListViewModelTests: XCTestCase {
         )
     ]
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         mockLogger = MockLogger()
         mockAutofill = MockAutofill()
@@ -87,11 +87,11 @@ final class AddressListViewModelTests: XCTestCase {
         )
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         viewModel = nil
         mockProfile = nil
         mockLogger = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testFetchAddressesSuccess() {
@@ -266,7 +266,7 @@ final class AddressListViewModelTests: XCTestCase {
     }
 }
 
-final class MockAutofill: AddressProvider, SyncAutofillProvider {
+final class MockAutofill: AddressProvider, SyncAutofillProvider, @unchecked Sendable {
     var mockListAllAddressesResult: Result<[Address], Error>?
     var mockSaveAddressResult: Result<Address, Error>?
     var mockEditAddressResult: Result<Void, Error>?
@@ -274,6 +274,9 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
     var deleteAddressesCalled = false
     var getStoredKeyCalledCount = 0
     var registerWithSyncManagerCalled = 0
+    var reportPreSyncKeyRetrievalFailureCalled = 0
+    var verifyCreditCardsCalled = 0
+    var creditCardsVerified = true
 
     func deleteAddress(
         id: String,
@@ -320,5 +323,14 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
 
     func registerWithSyncManager() {
         registerWithSyncManagerCalled += 1
+    }
+
+    func reportPreSyncKeyRetrievalFailure(err: String) {
+        reportPreSyncKeyRetrievalFailureCalled += 1
+    }
+
+    func verifyCreditCards(key: String, completionHandler: @escaping @Sendable (Bool) -> Void) {
+        verifyCreditCardsCalled += 1
+        completionHandler(creditCardsVerified)
     }
 }

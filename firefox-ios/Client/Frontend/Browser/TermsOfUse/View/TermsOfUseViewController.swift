@@ -17,8 +17,8 @@ final class TermsOfUseViewController: UIViewController,
         static let sheetContainerSidePadding: CGFloat = 40
         static let logoSize: CGFloat = 40
         static let acceptButtonHeight: CGFloat = 44
-        static let acceptButtonCornerRadius: CGFloat = 12
-        static let remindMeLaterButtonHeight: CGFloat = 30
+        static let remindMeLaterButtonHeight: CGFloat = 44
+        static let buttonCornerRadius: CGFloat = 12
         static let grabberWidth: CGFloat = 36
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
@@ -31,10 +31,9 @@ final class TermsOfUseViewController: UIViewController,
         static let initialSpringVelocity: CGFloat = 1
         static let backgroundAlpha: CGFloat = 0.6
 
-        static let titleFont = FXFontStyles.Regular.headline.scaledFont()
+        static let titleFont = FXFontStyles.Bold.title3.scaledFont()
         static let descriptionFont = FXFontStyles.Regular.body.scaledFont()
-        static let acceptButtonFont = FXFontStyles.Regular.callout.scaledFont()
-        static let remindMeLaterFont = FXFontStyles.Regular.body.scaledFont()
+        static let buttonFont = FXFontStyles.Bold.callout.scaledFont()
     }
     typealias SubscriberStateType = TermsOfUseState
     weak var coordinator: TermsOfUseCoordinatorDelegate?
@@ -95,9 +94,9 @@ final class TermsOfUseViewController: UIViewController,
 
     private lazy var acceptButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.acceptButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.acceptButtonFont
+        button.titleLabel?.font = UX.buttonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.layer.cornerRadius = UX.acceptButtonCornerRadius
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.acceptButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.acceptTapped), for: .touchUpInside)
@@ -105,8 +104,9 @@ final class TermsOfUseViewController: UIViewController,
 
     private lazy var remindMeLaterButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.remindMeLaterFont
+        button.titleLabel?.font = UX.buttonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.remindMeLaterTapped), for: .touchUpInside)
@@ -139,7 +139,7 @@ final class TermsOfUseViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .termsShown))
+        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .termsShown))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -151,7 +151,7 @@ final class TermsOfUseViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .termsOfUse)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         store.subscribe(self) {
             $0.select { appState in
                 appState.screenState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
@@ -164,9 +164,10 @@ final class TermsOfUseViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .termsOfUse)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
@@ -202,8 +203,8 @@ final class TermsOfUseViewController: UIViewController,
         stackView.addArrangedSubview(self.logoImageView)
         stackView.addArrangedSubview(self.titleLabel)
         stackView.addArrangedSubview(self.descriptionTextView)
-        stackView.addArrangedSubview(self.acceptButton)
         stackView.addArrangedSubview(self.remindMeLaterButton)
+        stackView.addArrangedSubview(self.acceptButton)
     }
 
     private func setupConstraints() {
@@ -283,12 +284,11 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     @objc private func backgroundTapped(_ sender: UITapGestureRecognizer) {
-        // Only dismiss the view if the tap occurred outside the visible sheetContainer.
-        // This prevents dismissing the Terms of Use sheet when interacting with its content.
-        if !sheetContainer.frame.contains(sender.location(in: view)) {
-            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss))
-            coordinator?.dismissTermsFlow()
-        }
+        // Only intercepts tap occurred outside the visible sheetContainer.
+        // This prevents interacting with its content.
+        guard !sheetContainer.frame.contains(sender.location(in: view)) else { return }
+        // FXIOS-30197: Intentionally no longer dismissing when tapping the background scrim.
+        // Add any other scrim interaction here
     }
 
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -298,7 +298,7 @@ final class TermsOfUseViewController: UIViewController,
             sheetContainer.transform = CGAffineTransform(translationX: 0, y: translation.y)
         case .ended:
             if translation.y > UX.panDismissDistance || gesture.velocity(in: view).y > UX.panDismissVelocity {
-                store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss))
+                store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss))
                 // In rare external-open flows the Redux subscriber can be delayed for gestures
                 // due to window/state selection timing, so it should be dismissed directly
                 coordinator?.dismissTermsFlow()
@@ -317,12 +317,12 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     @objc private func acceptTapped() {
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .termsAccepted))
+        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .termsAccepted))
         coordinator?.dismissTermsFlow()
     }
 
     @objc private func remindMeLaterTapped() {
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .remindMeLaterTapped))
+        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .remindMeLaterTapped))
         coordinator?.dismissTermsFlow()
     }
 
@@ -333,7 +333,8 @@ final class TermsOfUseViewController: UIViewController,
         titleLabel.textColor = currentTheme().colors.textPrimary
         acceptButton.tintColor = currentTheme().colors.textOnDark
         acceptButton.backgroundColor = currentTheme().colors.actionPrimary
-        remindMeLaterButton.setTitleColor(currentTheme().colors.actionPrimary, for: .normal)
+        remindMeLaterButton.backgroundColor = currentTheme().colors.actionSecondary
+        remindMeLaterButton.setTitleColor(currentTheme().colors.textPrimary, for: .normal)
         descriptionTextView.linkTextAttributes = [
             .foregroundColor: currentTheme().colors.textAccent,
             .underlineStyle: NSUnderlineStyle.single.rawValue
@@ -370,7 +371,7 @@ final class TermsOfUseViewController: UIViewController,
                   interaction: UITextItemInteraction) -> Bool {
         guard interaction == .invokeDefaultAction else { return true }
         if let linkType = TermsOfUseLinkType.linkType(for: url) {
-            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: linkType.actionType))
+            store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: linkType.actionType))
         }
         coordinator?.showTermsLink(url: url)
         return false

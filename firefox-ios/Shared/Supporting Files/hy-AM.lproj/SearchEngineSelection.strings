@@ -2,7 +2,7 @@
 "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.CloseButton.Label.v133" = "Փակել";
 
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint for tapping the search settings row at the bottom of the list, which opens the app's search settings screen. */
-"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Hint.v133" = "Բացել որոնման կարգավորումները";
+"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Hint.v133" = "Բացում է որոնման կարգավորումները";
 
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This string is the label for the row at the bottom of the list. When this row is tapped, the app's search settings screen appears. */
 "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Label.v133" = "Որոնման կարգավորումներ";

@@ -14,8 +14,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockProfile: MockProfile!
     private var mockStore: MockStoreForMiddleware<AppState>!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         mockTabManager = MockTabManager()
         mockWindowManager = MockWindowManager(
@@ -30,14 +30,15 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         mockWindowManager = nil
         mockSummarizationChecker = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
+
     // TODO(FXIOS-13126): Fix and uncomment this test
 //    func test_shakeMotionAction_withFeatureFlagEnabled_dispatchesMiddlewareAction() throws {
 //        setupNimbusHostedSummarizerTesting(isEnabled: true)

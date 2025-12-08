@@ -3,72 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Common
 
-class ThemedNavigationController: DismissableNavigationViewController, Themeable {
-    var themeManager: ThemeManager
-    var themeListenerCancellable: Any?
-    var notificationCenter: NotificationProtocol
-    let windowUUID: WindowUUID
-    var currentWindowUUID: UUID? { windowUUID }
+class SettingsNavigationController: ThemedNavigationController {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
 
-    init(windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
-        self.windowUUID = windowUUID
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    init(rootViewController: UIViewController,
-         windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.windowUUID = windowUUID
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
-        super.init(rootViewController: rootViewController)
-    }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return topViewController?.preferredStatusBarStyle ?? .default
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        modalPresentationStyle = .overFullScreen
-        modalPresentationCapturesStatusBarAppearance = true
-
-        listenForThemeChanges(withNotificationCenter: notificationCenter)
-        applyTheme()
-    }
-
-    private func setupNavigationBarAppearance(theme: Theme) {
-        let standardAppearance = UINavigationBarAppearance()
-        standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = theme.colors.layer1
-        standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
-
-        navigationBar.standardAppearance = standardAppearance
-        navigationBar.compactAppearance = standardAppearance
-        navigationBar.scrollEdgeAppearance = standardAppearance
-        navigationBar.compactScrollEdgeAppearance = standardAppearance
-        navigationBar.tintColor = theme.colors.actionPrimary
-    }
-
-    func applyTheme() {
-        setupNavigationBarAppearance(theme: themeManager.getCurrentTheme(for: windowUUID))
-        setNeedsStatusBarAppearanceUpdate()
-    }
-}
-
-class ModalSettingsNavigationController: UINavigationController {
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
+        NotificationCenter.default.post(name: .SettingsDismissed, object: self)
     }
 }

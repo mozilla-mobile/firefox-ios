@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class BrowserScreen {
     private let app: XCUIApplication
     private let sel: BrowserSelectorsSet
@@ -144,6 +145,18 @@ final class BrowserScreen {
         }
     }
 
+    func dismissKeyboardIfVisible(maxTaps: Int = 3) {
+        let keyboard = app.keyboards.firstMatch
+        var remainingTaps = maxTaps
+
+        BaseTestCase().mozWaitForElementToExist(cancelButton)
+
+        while keyboard.exists && remainingTaps > 0 {
+            cancelButton.waitAndTap()
+            remainingTaps -= 1
+        }
+    }
+
     func assertURLAndKeyboardUnfocused(expectedURLValue: String) {
         let urlElement = addressBar
 
@@ -158,7 +171,11 @@ final class BrowserScreen {
         urlElement.waitAndTap()
     }
 
-    func assertCancelButtonOnUrlBarExist() {
+    func typeOnSearchBar(text: String) {
+        addressBar.typeText(text)
+    }
+
+    func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }
 
@@ -218,5 +235,28 @@ final class BrowserScreen {
         let firstLink = app.webViews.links.firstMatch
         BaseTestCase().mozWaitForElementToExist(firstLink)
         firstLink.press(forDuration: 1)
+    }
+
+    func assertTypeSuggestText(text: String) {
+        let suggestedText = app.tables.firstMatch.cells.staticTexts[text]
+        BaseTestCase().mozWaitForElementToExist(suggestedText)
+    }
+
+    func assertNumberOfSuggestedLines(expectedLines: Int) {
+        let suggestedLines = app.tables.firstMatch.cells
+        XCTAssertEqual(suggestedLines.count, expectedLines)
+    }
+
+    func assertAddressBarExists(duration: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(addressBar, timeout: duration)
+    }
+
+    func getAddressBarElement() -> XCUIElement {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        return addressBar
+    }
+
+    func tapCancelButtonOnUrlWithRetry() {
+        cancelButton.tapWithRetry()
     }
 }

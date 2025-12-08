@@ -10,6 +10,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class RatingPromptManagerTests: XCTestCase {
     var urlOpenerSpy: URLOpenerSpy!
     var prefs: MockProfilePrefs!
@@ -18,8 +19,8 @@ class RatingPromptManagerTests: XCTestCase {
     var crashTracker: MockCrashTracker!
     var subject: RatingPromptManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         prefs = MockProfilePrefs()
         logger = CrashingMockLogger()
@@ -32,7 +33,7 @@ class RatingPromptManagerTests: XCTestCase {
                                       userDefaults: userDefaults)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         prefs.clearAll()
         subject.reset()
         prefs = nil
@@ -42,7 +43,7 @@ class RatingPromptManagerTests: XCTestCase {
         crashTracker = nil
         subject = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testShouldShowPrompt_forceShow() {

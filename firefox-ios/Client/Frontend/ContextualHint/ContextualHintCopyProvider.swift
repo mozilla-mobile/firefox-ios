@@ -58,6 +58,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .toolbarUpdate:
             return CFRStrings.Toolbar.ToolbarUpdateTitle
 
+        case .translation:
+            return String(format: CFRStrings.Translations.Title, AppName.shortName.rawValue)
+
         default: return ""
         }
     }
@@ -84,8 +87,14 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .navigation:
             descriptionCopy = CFRStrings.Toolbar.NavigationButtonsBody
 
+        case .relay:
+            descriptionCopy = String(format: String.RelayMask.RelayEmailMaskAvailableCFR, AppName.shortName.rawValue)
+
         case .toolbarUpdate:
             descriptionCopy = CFRStrings.Toolbar.ToolbarUpdateBody
+
+        case .translation:
+            descriptionCopy = CFRStrings.Translations.Body
 
         case .summarizeToolbarEntry:
             descriptionCopy = CFRStrings.Summarize.Description
@@ -109,7 +118,11 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             actionCopy = ""
         case .navigation:
             actionCopy = ""
+        case .relay:
+            actionCopy = ""
         case .toolbarUpdate:
+            actionCopy = ""
+        case .translation:
             actionCopy = ""
         case .summarizeToolbarEntry:
             actionCopy = ""

@@ -51,8 +51,6 @@ extension Notification.Name {
 
     public static let TabsTrayDidSelectHomeTab = Notification.Name("TabsTrayDidSelectHomeTab")
 
-    public static let TabsPrivacyModeChanged = Notification.Name("TabsPrivacyModeChanged")
-
     public static let OpenClearRecentHistory = Notification.Name("OpenClearRecentHistory")
 
     public static let RemoteTabNotificationTapped = Notification.Name("RemoteTabNotificationTapped")
@@ -99,6 +97,7 @@ extension Notification.Name {
     public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
     public static let PageZoomLevelUpdated = Notification.Name("PageZoomLevelUpdated")
     public static let PageZoomSettingsChanged = Notification.Name("PageZoomSettingsChanged")
+    public static let SettingsDismissed = Notification.Name("SettingsDismissed")
 
     // Search
     public static let DefaultSearchEngineUpdated = Notification.Name("DefaultSearchEngineUpdated")

@@ -4,6 +4,7 @@
 
 import Foundation
 
+// TODO: FXIOS-14268 - Clean up locale interfaces + extensions
 protocol LocaleInterface {
     var localeRegionCode: String? { get }
 }
@@ -11,5 +12,30 @@ protocol LocaleInterface {
 extension Locale: LocaleInterface {
     var localeRegionCode: String? {
         return self.regionCode
+    }
+}
+
+protocol LocaleProvider {
+    var current: Locale { get }
+    var preferredLanguages: [String] { get }
+    var regionCode: String { get }
+    var possibleLanguageIdentifier: [String] { get }
+}
+
+struct SystemLocaleProvider: LocaleProvider {
+    var current: Locale {
+        .current
+    }
+
+    var preferredLanguages: [String] {
+        Locale.preferredLanguages
+    }
+
+    var regionCode: String {
+        Locale.current.regionCode()
+    }
+
+    var possibleLanguageIdentifier: [String] {
+        Locale.current.possibilitiesForLanguageIdentifier()
     }
 }

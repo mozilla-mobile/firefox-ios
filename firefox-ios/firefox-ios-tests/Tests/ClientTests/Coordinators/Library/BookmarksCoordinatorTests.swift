@@ -12,8 +12,8 @@ final class BookmarksCoordinatorTests: XCTestCase {
     private var parentCoordinator: MockLibraryCoordinatorDelegate!
     private var navigationHandler: MockLibraryNavigationHandler!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         router = MockRouter(navigationController: UINavigationController())
         profile = MockProfile()
@@ -22,13 +22,13 @@ final class BookmarksCoordinatorTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         router = nil
         profile = nil
         parentCoordinator = nil
         navigationHandler = nil
+        try await super.tearDown()
     }
 
     // MARK: Bookmarks

@@ -102,6 +102,8 @@ final class LegacyTabScrollController: NSObject,
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
 
+    private var didTapChangePreventScrollToTop = false
+
     // Top Toolbar offset updates related constraints
     private var headerTopOffset: CGFloat = 0 {
         didSet {
@@ -167,8 +169,12 @@ final class LegacyTabScrollController: NSObject,
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
         let topInset = safeAreaInsets?.top ?? .zero
-
-        return hasHomeIndicator ? .zero : containerHeight - topInset
+        let containerHeightAdjusted: CGFloat = if #available(iOS 26.0, *) {
+            .zero
+        } else {
+            hasHomeIndicator ? .zero : containerHeight - topInset
+        }
+        return containerHeightAdjusted
     }
 
     private var overKeyboardScrollHeight: CGFloat {
@@ -585,7 +591,7 @@ private extension LegacyTabScrollController {
     /// - Parameter delta: The amount by which to scroll, where a positive delta scrolls down and
     ///   a negative delta scrolls up.
     func scrollWithDelta(_ delta: CGFloat) {
-        guard hasScrollableContent else { return }
+        guard !isMinimalAddressBarEnabled, hasScrollableContent else { return }
 
         let updatedOffset = headerTopOffset - delta
         headerTopOffset = clamp(offset: updatedOffset, min: headerOffset, max: 0)
@@ -664,11 +670,11 @@ private extension LegacyTabScrollController {
             self.bottomContainerOffset = bottomContainerOffset
 
             if isMinimalAddressBarEnabled && tab?.isFindInPageMode == false && tab?.url?.isReaderModeURL == false {
-                store.dispatchLegacy(
+                store.dispatch(
                     ToolbarAction(
                         scrollAlpha: Float(alpha),
                         windowUUID: windowUUID,
-                        actionType: ToolbarActionType.scrollAlphaDidChange
+                        actionType: ToolbarActionType.scrollAlphaNeedsUpdate
                     )
                 )
             }
@@ -780,7 +786,7 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
         if (lastContentOffsetY > 0 && contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && contentOffset.y > 0) {
             lastContentOffsetY = contentOffset.y
-            store.dispatchLegacy(
+            store.dispatch(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: contentOffset,
                     windowUUID: windowUUID,
@@ -818,6 +824,14 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
             showToolbars(animated: true)
             return false
         }
+        if didTapChangePreventScrollToTop {
+            didTapChangePreventScrollToTop = false
+            return false
+        }
         return true
+    }
+
+    func didChangeTopTab() {
+        didTapChangePreventScrollToTop = true
     }
 }

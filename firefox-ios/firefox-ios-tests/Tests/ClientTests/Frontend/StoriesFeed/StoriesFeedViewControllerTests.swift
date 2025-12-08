@@ -6,19 +6,20 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class StoriesFeedViewControllerTests: XCTestCase {
     var mockStore: MockStoreForMiddleware<AppState>!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_viewDidLoad_triggersStoriesFeedAction() throws {
@@ -34,8 +35,39 @@ final class StoriesFeedViewControllerTests: XCTestCase {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    private func createSubject() -> StoriesFeedViewController {
-        let storiesFeedViewController = StoriesFeedViewController(windowUUID: .XCTestDefaultUUID)
+    func testDeinit_whenRecordTelemetryOnDisappearIsTrue_recordsClosedTelemetry() {
+        let telemetry = MockStoriesFeedTelemetry()
+        var subject = createNullableSubject(telemetry: telemetry)
+
+        // No-op to prevent "Written to but never read" xcode error
+        _ = subject
+
+        subject = nil
+
+        XCTAssertEqual(telemetry.storiesFeedClosedCalled, 1)
+    }
+
+    func testDeinit_whenRecordTelemetryOnDisappearIsFalse_doesNotRecordClosedTelemetry() {
+        let telemetry = MockStoriesFeedTelemetry()
+        var subject = createNullableSubject(telemetry: telemetry)
+
+        subject?.willBeDismissed(reason: .deeplink)
+
+        subject = nil
+
+        XCTAssertEqual(telemetry.storiesFeedClosedCalled, 0)
+    }
+
+    private func createSubject(telemetry: StoriesFeedTelemetryProtocol? = nil) -> StoriesFeedViewController {
+        let storiesFeedViewController = StoriesFeedViewController(windowUUID: .XCTestDefaultUUID,
+                                                                  telemetry: telemetry ?? MockStoriesFeedTelemetry())
+        trackForMemoryLeaks(storiesFeedViewController)
+        return storiesFeedViewController
+    }
+
+    private func createNullableSubject(telemetry: StoriesFeedTelemetryProtocol? = nil) -> StoriesFeedViewController? {
+        let storiesFeedViewController = StoriesFeedViewController(windowUUID: .XCTestDefaultUUID,
+                                                                  telemetry: telemetry ?? MockStoriesFeedTelemetry())
         trackForMemoryLeaks(storiesFeedViewController)
         return storiesFeedViewController
     }

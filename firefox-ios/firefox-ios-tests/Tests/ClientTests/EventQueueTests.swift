@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Client
-import XCTest
+import Common
 import Foundation
+import XCTest
 
 enum TestEvent: AppEventType {
     // Standard test events
@@ -37,7 +38,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testBasicSingleEventActionIsFired() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
 
         XCTAssertFalse(queue.hasSignalled(.startingEvent))
 
@@ -49,7 +50,7 @@ final class EventQueueTests: XCTestCase {
 
     func testBasicActionIsNeverFiredIfNoEvent() {
         XCTAssertFalse(queue.hasSignalled(.startingEvent))
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
         queue.wait(for: .startingEvent) { actionRun = true }
         // Signal an event, but not the one our action is dependent on
         queue.signal(event: .middleEvent)
@@ -57,7 +58,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testMultiEventActionIsFired() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
 
         queue.wait(for: [.startingEvent, .middleEvent]) { actionRun = true }
         XCTAssertFalse(actionRun)
@@ -70,7 +71,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testMultiEventActionNotFiredIfOnlyOneEventOccurs() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
         queue.wait(for: [.startingEvent, .middleEvent]) {
             actionRun = true
         }
@@ -81,8 +82,8 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testContextSpecificEventWithAssociatedValue() {
-        var action1Run = false
-        var action2Run = false
+        nonisolated(unsafe) var action1Run = false
+        nonisolated(unsafe) var action2Run = false
 
         queue.wait(for: .contextualEvent(1)) {
             action1Run = true
@@ -99,7 +100,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testActionCancellation() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
         XCTAssertFalse(queue.hasSignalled(.startingEvent))
         let token = queue.wait(for: .startingEvent, then: { actionRun = true })
         let wasCancelled = queue.cancelAction(token: token)
@@ -109,7 +110,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testActionCancellationFailed() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
         XCTAssertFalse(queue.hasSignalled(.startingEvent))
         let token = queue.wait(for: .startingEvent, then: { actionRun = true })
 
@@ -173,7 +174,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testActivityEventStateChanges() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
 
         XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
         queue.wait(for: .activityEvent) { actionRun = true }
@@ -190,7 +191,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testMultipleEventTypeDependencies() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
 
         XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
         queue.wait(for: [.startingEvent, .activityEvent], then: { actionRun = true })
@@ -208,7 +209,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testMultipleSequentialActivityEvents() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
 
         // Enqueue and trigger 1st occurrence of activity event
         queue.wait(for: [.activityEvent], then: { actionRun = true })
@@ -252,7 +253,7 @@ final class EventQueueTests: XCTestCase {
     }
 
     func testFailedState() {
-        var actionRun = false
+        nonisolated(unsafe) var actionRun = false
 
         XCTAssertTrue(queue.activityIsNotStarted(.startingEvent))
         queue.wait(for: [.activityEvent], then: { actionRun = true })
@@ -315,13 +316,13 @@ final class EventQueueTests: XCTestCase {
     // the original state of the events as they were when the enqueued action was performed.
     func testChangingAnEventAsPartOfAnActionStillRemovesTheActionAfterPerformingIt() {
         let expectation = XCTestExpectation(description: "Action block cleaned up.")
-        var actionsPerformed = 0
+        nonisolated(unsafe) var actionsPerformed = 0
         queue.wait(for: [.startingEvent, .activityEvent], then: {
             actionsPerformed += 1
             // As part of the enqueued action block, change the state of our dependent event out of .completed:
             self.queue.started(.activityEvent)
-            DispatchQueue.main.async {
-                self.queue.completed(.activityEvent)
+            ensureMainThread { [queue = self.queue] in
+                queue?.completed(.activityEvent)
                 if actionsPerformed > 1 {
                     // Action block was not cleaned up and was run repeatedly due
                     // to dependent event being moved out of .completed state by

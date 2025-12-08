@@ -1,0 +1,36 @@
+/* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "Нав! Акнун ниқобҳои почтаи электронии «%@ Relay» дар дастгоҳҳои мобилӣ дастрасанд.";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Шумо аллакай дар истифода дорои 5 ниқоби почтаи электронии ройгон мебошед, аз ин рӯ барои шумо яке аз онҳо интихоб карда шуд.";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Зеро ки шумо аз ҳамаи 5 ниқоби ройгони почтаи электронии худ истифода кардед, мо барои идомаи истифода ба шумо яке аз онҳоро интихоб намудем.";
+
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Дар айни ҳол ниқобҳои почтаи электронӣ дастнорасанд. Пас аз чанд дақиқа аз нав кӯшиш кунед.";
+
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Ниқоби почтаи электронӣ ворид карда шуд";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Барои муҳофизат кадани паёмдони худ аз паёмҳои номатлуб, нишонии почтаи электронии ҳақиқии худро пинҳон кунед. Баъзе сомонаҳо ин имкониятро дастгирӣ намекунанд.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Барои муҳофизат кадани паёмдони худ аз паёмҳои номатлуб, нишонии почтаи электронии ҳақиқии худро пинҳон кунед. Баъзе сомонаҳо ниқобҳои почтаи электрониро дастгирӣ намекунанд.";
+
+/* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
+"RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Маълумоти бештар";
+
+/* Button title which takes users to a webpage to manage their Relay email masks and related settings. */
+"RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146" = "Идоракунии ниқобҳои почтаи электронӣ";
+
+/* Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay. */
+"RelayMask.RelayEmailMaskSettingsTitle.v146" = "Ниқобҳои почтаи электронӣ";
+
+/* Label for settings toggle which allows users to enable or disable the suggestion of Relay email masks on registration forms, to provide anonymous email masking. */
+"RelayMask.RelayEmailMaskSuggestMasksToggle.v146" = "Пешниҳоди ниқобҳои почтаи электронӣ";
+
+/* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
+"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "Истифодаи ниқоби муҳофизатии почтаи электронӣ";
+

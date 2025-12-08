@@ -10,8 +10,7 @@ import Common
 import struct MozillaAppServices.LoginEntry
 
 class PasswordManagerListViewController: SensitiveViewController,
-                                         Themeable,
-                                         Notifiable {
+                                         Themeable {
     private struct UX {
         static let separatorInset: CGFloat = 20
         static let selectAllButtonMargin: CGFloat = 16
@@ -65,7 +64,7 @@ class PasswordManagerListViewController: SensitiveViewController,
         } else {
             tableView = .build()
         }
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -270,7 +269,8 @@ class PasswordManagerListViewController: SensitiveViewController,
     }
 
     // MARK: Notifiable
-    func handleNotifications(_ notification: Notification) {
+    override func handleNotifications(_ notification: Notification) {
+        super.handleNotifications(notification)
         let notificationName = notification.name
 
         ensureMainThread {

@@ -22,7 +22,10 @@ class ExportBrowserDataSetting: HiddenSetting {
                 fromRelativeDirectory: "",
                 toAbsoluteDirectory: documentsPath
             ) { file in
-                return file.hasPrefix("browser.") || file.hasPrefix("logins.") || file.hasPrefix("metadata.")
+                return file.hasPrefix("browser.")
+                || file.hasPrefix("logins.")
+                || file.hasPrefix("metadata.")
+                || file.hasPrefix("nimbus.")
             }
         } catch {}
     }

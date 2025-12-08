@@ -52,11 +52,17 @@ extension TabContentScript {
 }
 
 protocol LegacyTabDelegate: AnyObject {
+    @MainActor
     func tab(_ tab: Tab, didAddLoginAlert alert: SaveLoginAlert)
+    @MainActor
     func tab(_ tab: Tab, didRemoveLoginAlert alert: SaveLoginAlert)
+    @MainActor
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String)
+    @MainActor
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String)
+    @MainActor
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
+    @MainActor
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
@@ -79,7 +85,6 @@ typealias TabUUID = String
 
 @MainActor
 class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
-    nonisolated static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
         get {
@@ -956,8 +961,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
 
-        temporaryDocument?.download { [weak self] url in
-            ensureMainThread {
+        temporaryDocument?.download { url in
+            ensureMainThread { [weak self] in
                 guard let url else { return }
 
                 // Prevent the WebView to load a new item so it doesn't add a new entry to the back and forward list.

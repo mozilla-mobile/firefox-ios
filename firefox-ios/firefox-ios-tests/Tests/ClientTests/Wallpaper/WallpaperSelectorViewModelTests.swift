@@ -18,7 +18,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        tearDownTelemetry()
+        Self.tearDownTelemetry()
         wallpaperManager = nil
         super.tearDown()
     }
@@ -54,8 +54,9 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
+    @MainActor
     func testRecordsWallpaperSelectorView() throws {
-        setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: MockProfile())
         wallpaperManager = WallpaperManager()
         let subject = createSubject()
         subject.sendImpressionTelemetry()
@@ -64,8 +65,9 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
+    @MainActor
     func testRecordsWallpaperSelectorClose() throws {
-        setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: MockProfile())
         wallpaperManager = WallpaperManager()
         let subject = createSubject()
         subject.sendDismissImpressionTelemetry()

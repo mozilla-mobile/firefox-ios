@@ -62,9 +62,16 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 }
                 .ignoresSafeArea(.all, edges: .bottom)
             }
+            .animation(.easeOut, value: geo.size)
         }
         .accessibilityElement(children: .contain)
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+        .onAppear {
+            viewModel.handlePageChange()
+        }
+        .onChange(of: viewModel.pageCount) { _ in
+            viewModel.handlePageChange()
+        }
     }
 
     private var tabView: some View {

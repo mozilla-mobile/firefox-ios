@@ -7,10 +7,14 @@ import Common
 import Shared
 import Storage
 
-protocol SearchEnginesManagerProvider: AnyObject {
+protocol SearchEnginesManagerProvider: AnyObject, Sendable {
+    @MainActor
     var defaultEngine: OpenSearchEngine? { get }
+    @MainActor
     var orderedEngines: [OpenSearchEngine] { get }
+    @MainActor
     var delegate: SearchEngineDelegate? { get set }
+    @MainActor
     func getOrderedEngines(completion: @escaping SearchEngineCompletion)
 }
 
@@ -46,6 +50,7 @@ struct SearchEngineProviderFactory {
 /// enabled quick search engines, and it is possible to disable every non-default quick search engine).
 ///
 /// This class is not thread-safe -- you should only access it on a single thread (usually, the main thread)!
+@MainActor
 class SearchEnginesManager: SearchEnginesManagerProvider {
     private let prefs: Prefs
     private let fileAccessor: FileAccessor
@@ -291,19 +296,17 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         }
     }
 
-    func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping @Sendable () -> Void) {
+    func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @MainActor @escaping @Sendable () -> Void) {
         // We can't delete a preinstalled engine or an engine that is currently the default.
         guard engine.isCustomEngine && !isEngineDefault(engine) else { return }
 
         customEngines.remove(at: customEngines.firstIndex(of: engine)!)
         saveCustomEngines()
 
-        getOrderedEngines { enginePreferences, orderedEngines in
-            self.orderedEngines = orderedEngines
-            self.delegate?.searchEnginesDidUpdate()
+        orderedEngines.removeAll(where: { $0.engineID == engine.engineID })
+        delegate?.searchEnginesDidUpdate()
 
-            completion()
-        }
+        completion()
     }
 
     /// Adds an engine to the front of the search engines list.

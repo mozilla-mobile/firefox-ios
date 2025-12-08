@@ -7,10 +7,10 @@ import XCTest
 let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
 
 class AuthenticationTest: BaseTestCase {
+    let username = "Username"
+    let password = "Password"
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisibleAndLogin() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(testBasicHTTPAuthURL)
         waitUntilPageLoad()
 
@@ -34,31 +34,37 @@ class AuthenticationTest: BaseTestCase {
         ])
         let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0)
         let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0)
-        mozWaitForValueContains(placeholderValueUsername, value: "Username")
-        mozWaitForValueContains(placeholderValuePassword, value: "Password")
+        mozWaitForValueContains(placeholderValueUsername, value: username)
+        mozWaitForValueContains(placeholderValuePassword, value: password)
         waitForElementsToExist(
             [
                 app.alerts.buttons["Cancel"],
                 app.alerts.buttons["Log in"]
             ]
         )
-        app.alerts.textFields["Username"].typeText("guest")
-        app.alerts.secureTextFields["Password"].tapAndTypeText("guest")
-        mozWaitElementEnabled(element: app.alerts.buttons["Log in"], timeout: TIMEOUT)
-        app.alerts.buttons["Log in"].waitAndTap()
+        logIn()
         waitUntilPageLoad()
         /* There is no other way to verify basic auth is successful as the webview is
          inaccessible after sign in to verify the success text. */
         waitForNoExistence(app.alerts.buttons["Cancel"], timeoutValue: 5)
         waitForNoExistence(app.alerts.buttons["Log in"], timeoutValue: 5)
         // Added this check to ensure the BasicAuth login is persisting after app restart as well.
-        app.terminate()
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        forceRestartApp()
         navigator.openURL(testBasicHTTPAuthURL)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)
+        if app.alerts.buttons["Log in"].exists {
+            logIn()
+            waitUntilPageLoad()
+        }
         mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Your browser made it!"])
+    }
+
+    private func logIn() {
+        let guestLabel = "guest"
+        let LoginLabel = "Log in"
+        app.alerts.textFields[username].typeText(guestLabel)
+        app.alerts.secureTextFields[password].tapAndTypeText(guestLabel)
+        app.alerts.buttons[LoginLabel].waitAndTap()
     }
 }

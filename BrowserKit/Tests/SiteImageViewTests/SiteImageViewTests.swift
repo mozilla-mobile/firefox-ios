@@ -33,6 +33,7 @@ final class SiteImageViewTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    @MainActor
     func testHeroImageSetup() {
         let expectation = expectation(description: "Completed image setup")
         let url = "https://www.firefox.com"
@@ -82,7 +83,7 @@ final class SiteImageViewTests: XCTestCase {
     }
 }
 
-class MockSiteImageHandler: SiteImageHandler {
+final class MockSiteImageHandler: SiteImageHandler, @unchecked Sendable {
     var image = UIImage()
     var siteURL: URL?
     var faviconURL: URL?

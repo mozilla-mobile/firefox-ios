@@ -14,8 +14,7 @@ open class UserAgent {
     public static let platform = "AppleWebKit/605.1.15"
     public static let platformDetails = "(KHTML, like Gecko)"
 
-    // FIXME: FXIOS-13197 UserDefaults is not thread safe
-    nonisolated(unsafe) private static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+    private static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
         let versionStr: String
@@ -48,9 +47,7 @@ open class UserAgent {
     }
 
     public static func desktopUserAgent() -> String {
-        // swiftlint:disable line_length
-        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15"
-        // swiftlint:enable line_length
+        return UserAgentBuilder.defaultDesktopUserAgent().userAgent()
     }
 
     public static func mobileUserAgent() -> String {

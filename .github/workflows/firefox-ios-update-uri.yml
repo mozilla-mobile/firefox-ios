@@ -71,6 +71,6 @@ jobs:
         commit-message: Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
-        title: Refactor [v${{ env.next_version }}] Automated URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }}
+        title: Refactor FXIOS [URLExtensions] URI update on ${{ github.event.inputs.branchName || 'main' }} ${{ env.date }} for v${{ env.next_version }}
         branch: update-uri-schemes-${{ env.date }}
         body: This automated PR updates the URIs.

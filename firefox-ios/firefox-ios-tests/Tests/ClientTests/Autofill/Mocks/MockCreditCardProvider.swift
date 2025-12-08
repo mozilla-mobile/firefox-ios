@@ -11,6 +11,8 @@ class MockCreditCardProvider: CreditCardProvider {
     var updateCreditCardCalledCount = 0
     var listCreditCardsCalledCount = 0
     var deleteCreditCardsCalledCount = 0
+    var verifyCreditCardsCalled = 0
+    var creditCardsVerified = true
 
     var exampleCreditCard = CreditCard(
         guid: "1",
@@ -54,5 +56,10 @@ class MockCreditCardProvider: CreditCardProvider {
     ) {
         updateCreditCardCalledCount += 1
         completion(updateResult.status, updateResult.error)
+    }
+
+    func verifyCreditCards(key: String, completionHandler: @escaping @Sendable (Bool) -> Void) {
+        verifyCreditCardsCalled += 1
+        completionHandler(creditCardsVerified)
     }
 }

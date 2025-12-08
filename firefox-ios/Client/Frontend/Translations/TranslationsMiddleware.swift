@@ -10,11 +10,25 @@ import Common
 final class TranslationsMiddleware {
     private let profile: Profile
     private let logger: Logger
+    private let windowManager: WindowManager
+    private let translationsService: TranslationsServiceProtocol
+    private let translationsTelemetry: TranslationsTelemetryProtocol
+
+    /// Multiple windows can be open simultaneously, so we track IDs in a map.
+    /// On iPhone, only a single window exists, so this will contain at most one entry.
+    private var translationFlowIds: [WindowUUID: UUID] = [:]
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         translationsService: TranslationsServiceProtocol = TranslationsService(),
+         translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
+    ) {
         self.profile = profile
         self.logger = logger
+        self.windowManager = windowManager
+        self.translationsService = translationsService
+        self.translationsTelemetry = translationsTelemetry
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -22,6 +36,9 @@ final class TranslationsMiddleware {
         switch action.actionType {
         case ToolbarActionType.urlDidChange:
             guard let action = (action as? ToolbarAction) else { return }
+
+            guard action.url?.isWebPage() == true else { return }
+            self.clearFlowId(for: action)
             self.checkTranslationsAreEligible(for: action)
 
         case ToolbarMiddlewareActionType.didTapButton:
@@ -66,26 +83,30 @@ final class TranslationsMiddleware {
         // When user taps on button when in active mode,
         // then we go back to inactive mode and page should reload to original language.
 
-        // TODO: FXIOS-13844 - Only updates icon for now, connect with backend
         if translationConfiguration.state == .inactive {
+            let newFlowId = UUID()
+            translationFlowIds[action.windowUUID] = newFlowId
+            translationsTelemetry.translateButtonTapped(
+                isPrivate: toolbarState.isPrivateMode,
+                actionType: .willTranslate,
+                translationFlowId: newFlowId
+            )
             self.handleUpdatingTranslationIcon(for: action, with: .loading)
             self.retrieveTranslations(for: action)
         } else if translationConfiguration.state == .active {
+            translationsTelemetry.translateButtonTapped(
+                isPrivate: toolbarState.isPrivateMode,
+                actionType: .willRestore,
+                translationFlowId: flowId(for: action.windowUUID)
+            )
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
+            self.reloadPage(for: action)
         }
     }
 
     private func handleTappingRetryButtonOnToast(for action: TranslationsAction, and state: AppState) {
         self.handleUpdatingTranslationIcon(for: action, with: .loading)
-        // TODO: FXIOS-13844 - Retrieve translations properly with backend, using fake call for now
-        Task { @MainActor in
-            try? await fetchData()
-            dispatchAction(
-                for: ToolbarActionType.translationCompleted,
-                with: .active,
-                and: action.windowUUID
-            )
-        }
+        retrieveTranslations(for: action)
     }
 
     @MainActor
@@ -104,24 +125,38 @@ final class TranslationsMiddleware {
         store.dispatch(toolbarAction)
     }
 
-    // TODO: FXIOS-13844 - Check if we can translate a page based on certain eligibility
-    @MainActor
+    /// Checks whether the current page in the active tab is eligible for translation,
+    /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
-        // We dispatch an action for now, but eventually we want to inject a script
-        // to check if the page language differs from our locale language.
-        guard action.translationConfiguration?.canTranslate == true else { return }
-        let toolbarAction = ToolbarAction(
-            translationConfiguration: TranslationConfiguration(
-                prefs: profile.prefs,
-                state: .inactive
-            ),
-            windowUUID: action.windowUUID,
-            actionType: ToolbarActionType.receivedTranslationLanguage
-        )
-        store.dispatch(toolbarAction)
+        Task { @MainActor in
+            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+
+            do {
+                guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
+                let toolbarAction = ToolbarAction(
+                    translationConfiguration: TranslationConfiguration(
+                        prefs: profile.prefs,
+                        state: .inactive
+                    ),
+                    windowUUID: action.windowUUID,
+                    actionType: ToolbarActionType.receivedTranslationLanguage
+                )
+                store.dispatch(toolbarAction)
+            } catch {
+                let serviceError = TranslationsServiceError.fromUnknown(error)
+                translationsTelemetry.pageLanguageIdentificationFailed(
+                    errorType: serviceError.telemetryDescription
+                )
+                logger.log(
+                    "Unable to detect language from page to determine if eligible for translations.",
+                    level: .warning,
+                    category: .translations,
+                    extra: ["LanguageDetector error": "\(error.localizedDescription)"]
+                )
+            }
+        }
     }
 
-    // TODO: FXIOS-13844 - Start translation a page and dispatch action after completion
     @MainActor
     private func retrieveTranslations(for action: Action) {
         // We dispatch an action for now, but eventually we want to inject a script
@@ -129,16 +164,47 @@ final class TranslationsMiddleware {
         // When translation completed, we want icon to be active mode.
         Task { @MainActor in
             do {
-                try await fetchDataWithError()
+                try await translationsService.translateCurrentPage(
+                    for: action.windowUUID,
+                    onLanguageIdentified: { identifiedLanguage, deviceLanguage in
+                        self.translationsTelemetry.pageLanguageIdentified(
+                            identifiedLanguage: identifiedLanguage,
+                            deviceLanguage: deviceLanguage
+                        )
+                    }
+                )
+                try await translationsService.firstResponseReceived(for: action.windowUUID)
                 dispatchAction(
                     for: ToolbarActionType.translationCompleted,
                     with: .active,
                     and: action.windowUUID
                 )
             } catch {
+                let serviceError = TranslationsServiceError.fromUnknown(error)
+                translationsTelemetry.translationFailed(
+                    translationFlowId: flowId(for: action.windowUUID),
+                    errorType: serviceError.telemetryDescription
+                )
+                logger.log(
+                    "Unable to translate page, so translation failed.",
+                    level: .warning,
+                    category: .translations,
+                    extra: ["Translations error": "\(error.localizedDescription)"]
+                )
                 self.handleErrorFromTranslatingPage(for: action)
             }
         }
+    }
+
+    // Reloads web view if user taps on translation button to view original page after translating
+    private func reloadPage(for action: Action) {
+        let reloadAction = GeneralBrowserAction(
+            windowUUID: action.windowUUID,
+            actionType: GeneralBrowserActionType.reloadWebsite
+        )
+        store.dispatch(reloadAction)
+        translationsTelemetry.webpageRestored(translationFlowId: flowId(for: action.windowUUID))
+        clearFlowId(for: action)
     }
 
     // When we receive an error translating the page, we want to update the translation
@@ -180,13 +246,31 @@ final class TranslationsMiddleware {
         store.dispatch(toastAction)
     }
 
-    // TODO: FXIOS-13844 - Simulate a fake asynchronous call for now
-    private func fetchDataWithError() async throws {
-        enum ExampleError: Error { case example }
-        throw ExampleError.example
+    /// Clears the flow ID for the given action's window.
+    private func clearFlowId(for action: Action) {
+        translationFlowIds[action.windowUUID] = nil
     }
 
-    private func fetchData() async throws {
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
+    /// Returns the existing flow ID for this window, or generates a fallback one.
+    /// NOTE: Flow IDs should normally always exist by the time we need them, since they are
+    /// created when the user taps the translate button. If we ever observe
+    /// `translation_failed` or `webpage_restored` events whose flow ID does not match
+    /// any earlier `translate_button_tapped` event, that means we're losing session
+    /// correlation somewhere.
+    /// If this starts happening, we may need to revisit this logic or switch to using
+    /// a dedicated `<unknown>` sentinel ID instead of generating a random fallback UUID.
+    private func flowId(for windowUUID: WindowUUID) -> UUID {
+        if let existing = translationFlowIds[windowUUID] {
+            return existing
+        }
+
+        logger.log(
+            "Missing translationFlowId for this window; generating fallback UUID.",
+            level: .warning,
+            category: .translations,
+            extra: ["windowUUID": "\(windowUUID)"]
+        )
+
+        return UUID()
     }
 }

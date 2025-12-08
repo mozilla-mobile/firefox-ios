@@ -49,6 +49,7 @@ struct AccessibilityIdentifiers {
             static let previousButton = "KeyboardAccessory.previousButton"
             static let addressAutofillButton = "KeyboardAccessory.addressAutofillButton"
             static let creditCardAutofillButton = "KeyboardAccessory.creditCardAutofillButton"
+            static let relayMaskAutofillButton = "KeyboardAccessory.relayMaskAutofillButton"
         }
 
         struct AddressToolbar {
@@ -236,6 +237,10 @@ struct AccessibilityIdentifiers {
 
         struct StoriesFeed {
             static let storiesFeedCell = "StoriesFeedCell"
+        }
+
+        struct StoriesWebview {
+            static let reloadButton = "StoriesWebviewReloadButton"
         }
     }
 
@@ -653,6 +658,10 @@ struct AccessibilityIdentifiers {
             static let title = "ShowTour"
         }
 
+        struct SentFromFirefox {
+            static let whatsApp = "SentFromFirefox.WhatsApp"
+        }
+
         struct SendFeedback {
             static let title = "SendFeedback"
         }
@@ -707,6 +716,11 @@ struct AccessibilityIdentifiers {
 
         struct AutofillsPasswords {
             static let title = "AutofillsPasswordsSettings"
+        }
+
+        struct RelayMask {
+            static let title = "RelayMaskSettings"
+            static let manageMasksButton = "manageEmailMasks"
         }
 
         struct Passwords {

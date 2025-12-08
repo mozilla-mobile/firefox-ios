@@ -12,22 +12,31 @@ let removeWidgetButton = "com.apple.springboardhome.application-shortcut-item.re
 
 // Widget Buttons Identifier
 // TODO FXIOS-12604 These global properties are not concurrency safe
-nonisolated(unsafe) var goToCopiedLink = springboard.buttons["Go to Copied Link"]
-nonisolated(unsafe) var newPrivateSearch = springboard.buttons["New Private Search"]
-nonisolated(unsafe) var newSearch = springboard.buttons["New Search"]
-nonisolated(unsafe) var clearPrivateTabs = springboard.buttons["Clear Private Tabs"]
+@MainActor
+var goToCopiedLink = springboard.buttons["Go to Copied Link"]
+@MainActor
+var newPrivateSearch = springboard.buttons["New Private Search"]
+@MainActor
+var newSearch = springboard.buttons["New Search"]
+@MainActor
+var clearPrivateTabs = springboard.buttons["Clear Private Tabs"]
 
 // Widget coordinates
+@MainActor
 let normalized = springboard.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
 
 // Get the screen size
+@MainActor
 let screenSize = springboard.windows.element(boundBy: 0).frame.size
 
 // Calculate the center-right coordinate (x: right edge, y: middle of the screen)
+@MainActor
 let centerRightX = screenSize.width * 0.95  // Adjust this value if you want slightly away from the edge
+@MainActor
 let centerRightY = screenSize.height / 2
 
 // Create the coordinate using the calculated points
+@MainActor
 let coordinate = springboard.coordinate(withNormalizedOffset: CGVector(
     dx: centerRightX / screenSize.width, dy: centerRightY / screenSize.height))
 
@@ -37,6 +46,7 @@ enum SwipeDirection {
     case swipeRight
 }
 
+@MainActor
 private func widgetExist() -> Bool {
     let firefoxWidgetButton = springboard
         .buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "Firefox")).element.exists
@@ -47,6 +57,7 @@ private func widgetExist() -> Bool {
     return firefoxWidgetButton || firefoxWidgetSecureSearchButton || firefoxCopiedLinkWidget
 }
 
+@MainActor
 private func goToTodayWidgetPage() {
     // Swipe right until the "Screen Time" icon appears
     if #unavailable(iOS 16) {
@@ -60,6 +71,7 @@ private func goToTodayWidgetPage() {
     }
 }
 
+@MainActor
 private func checkPresenceFirefoxWidget() -> Bool {
     let maxSwipes = 3
     var firefoxWidgetExists = false
@@ -83,6 +95,7 @@ private func checkPresenceFirefoxWidget() -> Bool {
     return firefoxWidgetExists
 }
 
+@MainActor
 private func checkFirefoxShortcutsOptions() {
     let maxSwipes = 3
     var swipeCount = 0

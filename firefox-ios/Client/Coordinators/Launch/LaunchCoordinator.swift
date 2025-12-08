@@ -28,7 +28,6 @@ final class LaunchCoordinator: BaseCoordinator,
     private let isIphone: Bool
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
-    private let modernTransitionDelegate = ModernLaunchTransitionDelegate()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
 
     init(router: Router,
@@ -101,8 +100,8 @@ final class LaunchCoordinator: BaseCoordinator,
                 order: 20,
                 title: .Onboarding.Modern.TermsOfService.Title,
                 body: .Onboarding.Modern.TermsOfService.Subtitle,
-                buttons: OnboardingKit.OnboardingButtons(
-                    primary: OnboardingKit.OnboardingButtonInfoModel(
+                buttons: OnboardingButtons(
+                    primary: OnboardingButtonInfoModel(
                         title: .Onboarding.Modern.TermsOfService.AgreementButtonTitleV3,
                         action: OnboardingActions.syncSignIn
                     )
@@ -177,9 +176,11 @@ final class LaunchCoordinator: BaseCoordinator,
         )
 
         let viewController = PortraitOnlyHostingController(rootView: view)
-        viewController.modalPresentationStyle = .fullScreen
+        // `.overFullScreen` is required to display the underlying view controller beneath the presented one,
+        // and to prevent a white strip glitch caused by synchronization issues between SwiftUI and UIKit.
+        viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
-        viewController.transitioningDelegate = modernTransitionDelegate
+        viewController.view.backgroundColor = .clear
 
         router.present(viewController, animated: true)
     }
@@ -187,6 +188,7 @@ final class LaunchCoordinator: BaseCoordinator,
     private func presentLink(with url: URL?) {
         guard let url else { return }
         let presentLinkVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
+
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
@@ -250,59 +252,79 @@ final class LaunchCoordinator: BaseCoordinator,
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: manager.onboardingVariant
+            onboardingVariant: manager.onboardingVariant,
+            isDefaultBrowser: DefaultBrowserUtility().isDefaultBrowser,
+            isIpad: UIDevice.current.userInterfaceIdiom == .pad
         ).getOnboardingModel(
             for: .freshInstall
         )
         let activityEventHelper = ActivityEventHelper()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(
+            with: onboardingModel,
+            onboardingVariant: manager.onboardingVariant
+        )
 
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let onboardingCards = onboardingModel.cards.filter { viewModel in
-            // Filter out cards that are not relevant for the current device type.
-            if isPad, let action = viewModel.multipleChoiceButtons.first?.action,
-               action == .toolbarTop || action == .toolbarBottom {
-                return false
+        let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
+            onboardingCards: onboardingModel.cards,
+            skipText: .Onboarding.LaterAction,
+            onActionTap: { @MainActor [weak self] action, cardName, completion in
+                self?.onboardingService.handleAction(
+                    action,
+                    from: cardName,
+                    cards: onboardingModel.cards,
+                    with: activityEventHelper,
+                    completion: completion
+                )
+            },
+            onMultipleChoiceActionTap: { [weak self] action, cardName in
+                self?.onboardingService.handleMultipleChoiceAction(
+                    action,
+                    from: cardName
+                )
+            },
+            onComplete: { [weak self] currentCardName in
+                guard let self = self else { return }
+                manager.didSeeIntroScreen()
+                SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+                parentCoordinator?.didFinishLaunch(from: self)
             }
-            return true
+        )
+
+        flowViewModel.onCardView = { cardName in
+            telemetryUtility.sendCardViewTelemetry(from: cardName)
+        }
+
+        flowViewModel.onButtonTap = { cardName, action, isPrimary in
+            telemetryUtility.sendButtonActionTelemetry(
+                from: cardName,
+                with: action,
+                and: isPrimary
+            )
+        }
+
+        flowViewModel.onMultipleChoiceTap = { cardName, action in
+            telemetryUtility.sendMultipleChoiceButtonActionTelemetry(
+                from: cardName,
+                with: action
+            )
+        }
+
+        flowViewModel.onDismiss = { cardName in
+            telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
         }
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: OnboardingFlowViewModel(
-                onboardingCards: onboardingCards,
-                skipText: .Onboarding.LaterAction,
-                onActionTap: { @MainActor [weak self] action, cardName, completion in
-                    self?.onboardingService.handleAction(
-                        action,
-                        from: cardName,
-                        cards: onboardingModel.cards,
-                        with: activityEventHelper,
-                        completion: completion
-                    )
-                },
-                onMultipleChoiceActionTap: { [weak self] action, cardName in
-                    self?.onboardingService.handleMultipleChoiceAction(
-                        action,
-                        from: cardName
-                    )
-                },
-                onComplete: { [weak self] currentCardName in
-                    guard let self = self else { return }
-                    manager.didSeeIntroScreen()
-                    SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
-                    telemetryUtility.sendDismissOnboardingTelemetry(from: currentCardName)
-
-                    parentCoordinator?.didFinishLaunch(from: self)
-                }
-            )
+            viewModel: flowViewModel
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)
-        hostingController.modalPresentationStyle = .fullScreen
+        // `.overFullScreen` is required to display the underlying view controller beneath the presented one,
+        // and to prevent a white strip glitch caused by synchronization issues between SwiftUI and UIKit.
+        hostingController.modalPresentationStyle = .overFullScreen
         hostingController.modalTransitionStyle = .crossDissolve
-        hostingController.transitioningDelegate = modernTransitionDelegate
+        hostingController.view.backgroundColor = .clear
 
         router.present(hostingController, animated: true)
     }

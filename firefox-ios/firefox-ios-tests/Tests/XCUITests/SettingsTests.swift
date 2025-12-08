@@ -5,6 +5,8 @@
 import XCTest
 
 class SettingsTests: FeatureFlaggedTestBase {
+    var settingsScreen: SettingScreen!
+
     override func tearDown() {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
             name.contains("testBrowsingSettingsOptionSubtitles") ||
@@ -151,11 +153,54 @@ class SettingsTests: FeatureFlaggedTestBase {
         checkShowImages(showImages: true)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307058
+    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
+    // SmokeTest TAE
+    func testImageOnOff_TAE() {
+        let settingsScreen = SettingScreen(app: app)
+        // Select no images or hide images, check it's hidden or not
+        app.launch()
+        waitUntilPageLoad()
+
+        // Select hide images under Browsing Settings page
+
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        settingsScreen.openBrowsingSettings()
+        settingsScreen.waitForBrowsingLinksSection()
+
+        _ = settingsScreen.waitForBlockImagesSwitch()
+        app.swipeUp()
+        navigator.performAction(Action.ToggleNoImageMode)
+        settingsScreen.assertShowImagesState(showImages: false)
+
+        // Select show images
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        settingsScreen.waitForBrowsingLinksSection()
+        navigator.performAction(Action.ToggleNoImageMode)
+        settingsScreen.assertShowImagesState(showImages: true)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2951435
     // Smoketest
     func testSettingsOptionSubtitles() {
         app.launch()
         validateSettingsUIOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2951435
+    // Smoketest TAE
+    func testSettingsOptionSubtitles_TAE() {
+        app.launch()
+        let settingsScreen = SettingScreen(app: app)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+
+        settingsScreen.assertSettingsScreenExists()
+        settingsScreen.assertLayout()
+        settingsScreen.assertAllRowsVisible()
+        settingsScreen.closeSettingsWithDoneButton()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2989418
@@ -240,8 +285,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
@@ -276,15 +319,16 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     // MARK: Translation
+    // https://mozilla.testrail.io/index.php?/cases/view/3240821
     func testTranslationSettingsShouldShow_translationExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
+        navigator.nowAt(NewTabScreen)
         validateTranslationSettingsUI()
         dismissSearchScreenFromTranslation()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
@@ -301,15 +345,18 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        navigator.openURL(path(forTestPage: "test-translation.html"))
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
     }
-
+    // https://mozilla.testrail.io/index.php?/cases/edit/3210769
     func testTranslationSettingsWithToggleOnOff_translationExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
         navigator.nowAt(HomePanelsScreen)
+        navigator.openURL(path(forTestPage: "test-translation.html"))
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
+
         navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)
@@ -324,9 +371,7 @@ class SettingsTests: FeatureFlaggedTestBase {
                        "Translation feature - toggle is enabled by default")
         dismissSearchScreenFromTranslation()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
 
         navigator.goto(SettingsScreen)
@@ -338,10 +383,9 @@ class SettingsTests: FeatureFlaggedTestBase {
                        "Translation feature - toggle is enabled by default")
         dismissSearchScreenFromTranslation()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL("https://example.com")
+        navigator.nowAt(BrowserTab)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.translateButton])
+        navigator.nowAt(BrowserTab)
 
         validateTranslationSettingsUI()
     }
@@ -556,7 +600,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     private func validateTranslationSettingsUI() {
-        navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)

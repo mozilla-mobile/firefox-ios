@@ -20,7 +20,9 @@ final class AppleIntelligenceUtilTests: XCTestCase {
         super.tearDown()
     }
 
-    func testAppleIntelligenceAvailability_whenIsAvailable_returnsTrue() {
+    func testAppleIntelligenceAvailability_whenIsAvailable_returnsTrue() throws {
+        try XCTSkipIf(ProcessInfo.processInfo.operatingSystemVersion.majorVersion < 26,
+                      "Skipping test because it requires iOS 26 or later")
         let subject = createSubject()
         subject.processAvailabilityState(MockLanguageModel(isAvailable: true))
 
@@ -30,7 +32,9 @@ final class AppleIntelligenceUtilTests: XCTestCase {
         XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
-    func testAppleIntelligenceAvailability_whenIsNotAvailable_returnsFalse() {
+    func testAppleIntelligenceAvailability_whenIsNotAvailable_returnsFalse() throws {
+        try XCTSkipIf(ProcessInfo.processInfo.operatingSystemVersion.majorVersion < 26,
+                      "Skipping test because it requires iOS 26 or later")
         let subject = createSubject()
         subject.processAvailabilityState(MockLanguageModel(isAvailable: false))
 

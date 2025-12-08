@@ -23,7 +23,7 @@
 "DeleteLoginAlert.DeleteButton.Title.v122" = "Elimină";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
-"DeleteLoginAlert.Message.Local.v122" = "Nu poți anula această acțiune.";
+"DeleteLoginAlert.Message.Local.v122" = "Acțiunea este ireversibilă.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "DeleteLoginAlert.Message.Synced.v122" = "Vei elimina parola de pe toate dispozitivele sincronizate.";

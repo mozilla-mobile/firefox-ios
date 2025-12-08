@@ -11,19 +11,19 @@ final class SceneCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockRouter = nil
         profile = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testInitialState() {
@@ -86,6 +86,28 @@ final class SceneCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators.first as? BrowserCoordinator)
+    }
+
+    func testDidFinishTermsOfService_dimissesCurrentPresentedController() {
+        let subject = createSubject()
+        let launchCoordinator = LaunchCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID)
+
+        subject.didFinishTermsOfService(from: launchCoordinator)
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+    }
+
+    func testDidFinishTermsOfService_removesLaunchCoordinator() {
+        let subject = createSubject()
+        let launchCoordinator = LaunchCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID)
+        subject.add(child: launchCoordinator)
+
+        subject.didFinishTermsOfService(from: launchCoordinator)
+
+        let numberOfLaunchCoordinators = subject.childCoordinators.count {
+            $0 is LaunchCoordinator
+        }
+        XCTAssertEqual(numberOfLaunchCoordinators, 0)
     }
 
     // MARK: - Handle route

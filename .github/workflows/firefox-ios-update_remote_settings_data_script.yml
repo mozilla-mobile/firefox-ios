@@ -54,7 +54,7 @@ jobs:
           commit-message: "Refactor - auto update remote settings"
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           committer: GitHub <noreply@github.com>
-          title: "Refactor - auto update remote settings"
+          title: "Refactor FXIOS [Remote settings] Auto update RemoteSettingsData"
           branch: "auto-update-remote-settings"
           token: ${{ secrets.GITHUB_TOKEN }}
 
