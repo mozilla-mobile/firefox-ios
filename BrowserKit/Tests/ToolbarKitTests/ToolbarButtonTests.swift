@@ -5,17 +5,18 @@
 import XCTest
 @testable import ToolbarKit
 
+@MainActor
 final class ToolbarButtonTests: XCTestCase {
     private var button: ToolbarButton!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         button = ToolbarButton()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         button = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Configuration Caching Tests
