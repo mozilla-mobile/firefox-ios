@@ -9,14 +9,14 @@ import XCTest
 final class AdsTelemetryContentScriptTests: XCTestCase {
     private var contentScriptDelegate: MockContentScriptDelegate!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         contentScriptDelegate = MockContentScriptDelegate()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         contentScriptDelegate = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testDidReceiveMessageGivenEmptyMessageThenNoDelegateCalled() {
