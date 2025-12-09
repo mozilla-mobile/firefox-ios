@@ -272,8 +272,7 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
             current: Locale(identifier: "de-US"),
             preferredLanguages: ["de"],
             localeRegionCode: "",
-            regionCode: "",
-            possibleLanguageIdentifiers: []
+            searchRegionCode: ""
         )
         let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(
             engine.urls.trending,

@@ -8,7 +8,7 @@ protocol LocaleProvider {
     var current: Locale { get }
     var preferredLanguages: [String] { get }
     var localeRegionCode: String? { get }
-    var regionCode: String { get }
+    var searchRegionCode: String { get }
 }
 
 struct SystemLocaleProvider: LocaleProvider {
@@ -23,8 +23,11 @@ struct SystemLocaleProvider: LocaleProvider {
     var localeRegionCode: String? {
         return Locale.current.regionCode
     }
-
-    var regionCode: String {
+    // The locale handling for our Remote Settings search engines had some additional requirements
+    // that was needed in addition to existing `Locale.current.regionCode` so we add an extension that
+    // satisfy the requirements and allows us to be consistent with Android and Desktop. FXSuggest also
+    // adapted this requirement because it is related to search.
+    var searchRegionCode: String {
         return Locale.current.regionCode()
     }
 }

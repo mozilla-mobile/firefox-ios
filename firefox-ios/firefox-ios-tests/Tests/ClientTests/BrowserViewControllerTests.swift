@@ -51,7 +51,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func testTrackVisibleSuggestion() {
         TelemetryContextualIdentifier.setupContextId()
         let subject = createSubject()
-        let locale = Locale(identifier: "en-US")
+        let locale = MockLocaleProvider()
         let gleanWrapper = MockGleanWrapper()
         let telemetry = FxSuggestTelemetry(locale: locale, gleanWrapper: gleanWrapper)
         subject.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
