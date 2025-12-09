@@ -278,9 +278,14 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
     private func sendAppExtensionTelemetry(object: TelemetryWrapper.EventObject) {
         if prefs?.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) != nil {
             prefs?.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
-            TelemetryWrapper.recordEvent(category: .appExtensionAction,
-                                         method: .applicationOpenUrl,
-                                         object: object)
+            switch object {
+            case .url:
+                actionExtensionTelemetry.shareURL(extensionSource: "share-extension")
+            case .searchText:
+                actionExtensionTelemetry.shareText(extensionSource: "share-extension")
+            default:
+                break
+            }
         }
     }
 }

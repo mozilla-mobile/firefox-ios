@@ -27,6 +27,12 @@ share.open_in_firefox_extension:
     type: event
     description: |
       Recorded when the user shares a URL from the "Open in Firefox" Action Extension.
+    extra_keys:
+      extension_source:
+        type: string
+        description: |
+          The source of the extension event. Either "action-extension" for the new Action Extension
+          or "share-extension" for the legacy Share Extension.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/30797
     data_reviews:
@@ -42,6 +48,12 @@ share.open_in_firefox_extension:
     type: event
     description: |
       Recorded when the user shares text from the "Open in Firefox" Action Extension.
+    extra_keys:
+      extension_source:
+        type: string
+        description: |
+          The source of the extension event. Either "action-extension" for the new Action Extension
+          or "share-extension" for the legacy Share Extension.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/30797
     data_reviews:

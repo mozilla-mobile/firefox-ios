@@ -335,7 +335,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
 extension TelemetryWrapper {
     public enum EventCategory: String {
         case action = "action"
-        case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
         case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
@@ -365,7 +364,6 @@ extension TelemetryWrapper {
         case tap = "tap"
         case translate = "translate"
         case view = "view"
-        case applicationOpenUrl = "application-open-url"
         case emailLogin = "email"
         case qrPairing = "pairing"
         case settings = "settings"
