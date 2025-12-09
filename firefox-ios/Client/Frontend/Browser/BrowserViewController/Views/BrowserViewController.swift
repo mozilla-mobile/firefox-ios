@@ -369,9 +369,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isSwipingTabsEnabled: Bool {
-        // Swipe is not enabled on iPads
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly) && !isiPad
+        return toolbarHelper.isSwipingTabsEnabled
     }
 
     var isMinimalAddressBarEnabled: Bool {
