@@ -1857,6 +1857,9 @@ class BrowserViewController: UIViewController,
     private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
+        } else if !navigationToolbarContainer.isHidden {
+            remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
+            remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         } else {
             remake.bottom.equalTo(view.safeArea.bottom)
         }
