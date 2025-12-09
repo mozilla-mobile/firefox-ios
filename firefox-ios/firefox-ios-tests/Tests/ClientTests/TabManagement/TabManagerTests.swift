@@ -20,13 +20,16 @@ class TabManagerTests: XCTestCase {
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
+    var mockStore: MockStoreForMiddleware<AppState>!
+    var appState: AppState!
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     /// 9 Sep 2001 8:00 pm GMT + 0
     let testDate = Date(timeIntervalSince1970: 1_000_065_600)
 
-    override func setUp() {
-        super.setUp()
+    @MainActor
+    override func setUp() async throws {
+        try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
@@ -39,14 +42,18 @@ class TabManagerTests: XCTestCase {
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
         setIsDeeplinkOptimizationRefactorEnabled(false)
+        setupStore()
+        appState = setupAppState()
     }
 
-    override func tearDown() {
+    @MainActor
+    override func tearDown() async throws {
         mockProfile = nil
         mockDiskImageStore = nil
         mockTabStore = nil
         mockSessionStore = nil
-        super.tearDown()
+        resetStore()
+        try await super.tearDown()
     }
 
     @MainActor
@@ -213,6 +220,36 @@ class TabManagerTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation])
+    }
+
+    @MainActor
+    func testRestoreTabs_dispatchesAction() throws {
+        let testUUID = UUID()
+        let subject = createSubject(windowUUID: testUUID)
+        let expectation = XCTestExpectation(description: "Tab restoration should dispatch action")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     activeTabId: UUID(),
+                                                     tabData: getMockTabData(count: 3))
+
+        subject.restoreTabs()
+
+        wait(for: [expectation])
+
+        let tabManagerActions = mockStore.dispatchedActions.compactMap { $0 as? TabManagerAction }
+
+        let restoredActions = tabManagerActions.filter {
+            ($0.actionType as? TabManagerActionType) == .restoredTabs
+        }
+
+        XCTAssertEqual(restoredActions.count, 1, "Expected exactly one restoredTabs action")
+
+        let restoredAction = try XCTUnwrap(restoredActions.first)
+        XCTAssertEqual(restoredAction.actionType as? TabManagerActionType, .restoredTabs)
     }
 
     @MainActor
@@ -1580,5 +1617,33 @@ class TabManagerTests: XCTestCase {
                 enabled: isEnabled
             )
         }
+    }
+
+    // MARK: StoreTestUtility
+    func setupAppState() -> Client.AppState {
+        let appState = AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .tabsPanel(
+                        TabsPanelState(
+                            windowUUID: .XCTestDefaultUUID
+                        )
+                    )
+                ]
+            )
+        )
+        self.appState = appState
+        return appState
+    }
+
+    @MainActor
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    @MainActor
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }
