@@ -70,9 +70,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
             return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
 
-        case .inactiveTabs:
-            return checkTabTrayFeature(for: featureID, from: nimbus)
-
         case .shouldUseJapanConfiguration:
             return checkShouldUseJapanConfigurationFeature(from: nimbus)
 
@@ -102,9 +99,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
-
-        case .searchEngineConsolidation:
-            return checkSearchEngineConsolidationFeature(from: nimbus)
 
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature(from: nimbus)
@@ -389,11 +383,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         }
     }
 
-    private func checkSearchEngineConsolidationFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.searchEngineConsolidationFeature.value()
-        return config.enabled
-    }
-
     private func checkSplashScreenFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -410,22 +399,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .always: return .always
         case .disabled: return .disabled
         }
-    }
-
-    private func checkTabTrayFeature(for featureID: NimbusFeatureFlagID,
-                                     from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.tabTrayFeature.value()
-        var nimbusID: TabTraySection
-
-        switch featureID {
-        case .inactiveTabs: nimbusID = TabTraySection.inactiveTabs
-        default: return false
-        }
-
-        guard let status = config.sectionsEnabled[nimbusID] else { return false }
-
-        return status
     }
 
     private func checkRecentSearchesFeature(from nimbus: FxNimbus) -> Bool {

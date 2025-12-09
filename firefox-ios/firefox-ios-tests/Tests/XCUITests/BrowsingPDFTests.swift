@@ -21,9 +21,9 @@ class BrowsingPDFTests: BaseTestCase {
     private var contextMenu: ContextMenuScreen!
     private var library: LibraryScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
-        super.setUp()
+        try await super.setUp()
         topSites = TopSitesScreen(app: app)
         contextMenu = ContextMenuScreen(app: app)
         pdf = PDFScreen(app: app)

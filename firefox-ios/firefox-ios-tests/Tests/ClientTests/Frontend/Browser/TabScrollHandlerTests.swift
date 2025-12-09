@@ -21,8 +21,8 @@ final class TabScrollHandlerTests: XCTestCase {
     var overKeyboardContainer: BaseAlphaStackView = .build()
     var bottomContainer: BaseAlphaStackView = .build()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
@@ -31,13 +31,13 @@ final class TabScrollHandlerTests: XCTestCase {
         delegate = MockTabScrollHandlerDelegate()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile?.shutdown()
         mockProfile = nil
         tab = nil
         delegate = nil
         tabProvider = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_scrollDown_hidesToolbar_whenSignificant() {
@@ -93,6 +93,18 @@ final class TabScrollHandlerTests: XCTestCase {
         let should = subject.scrollViewShouldScrollToTop(tab.webView!.scrollView)
         XCTAssertTrue(should)
         XCTAssertEqual(delegate.showCount, 1, "scrollToTop should call show if collapsed")
+    }
+
+    func test_scrollToTop_whenDidTapChangePreventScrollToTop_isTrue_returnsFalse() {
+        let subject = createSubject()
+        subject.hideToolbars(animated: true)
+
+        subject.didTapChangePreventScrollToTop = true
+
+        let should = subject.scrollViewShouldScrollToTop(tab.webView!.scrollView)
+
+        XCTAssertFalse(should, "scrollToTop should return false when didTapChangePreventScrollToTop is true")
+        XCTAssertFalse(subject.didTapChangePreventScrollToTop, "Flag should reset to false after method call")
     }
 
     // MARK: - Transitioning state

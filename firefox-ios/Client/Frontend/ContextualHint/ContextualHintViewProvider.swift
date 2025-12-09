@@ -16,7 +16,6 @@ enum CFRTelemetryEvent {
 enum ContextualHintType: String {
     case jumpBackIn = "JumpBackIn"
     case jumpBackInSyncedTab = "JumpBackInSyncedTab"
-    case inactiveTabs = "InactiveTabs"
     case mainMenu = "MainMenu"
     case dataClearance = "DataClearance"
     case navigation = "Navigation"
@@ -83,17 +82,11 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
     }
 
     func startTimer() {
-        var timeInterval: TimeInterval = 0
-
-        switch hintType {
-        case .inactiveTabs: timeInterval = 0.25
-        default: timeInterval = 1.25
-        }
-
+        let defaultTimeInterval: TimeInterval = 1.25
         timer?.invalidate()
 
         timer = Timer.scheduledTimer(
-            timeInterval: timeInterval,
+            timeInterval: defaultTimeInterval,
             target: self,
             selector: #selector(presentHint),
             userInfo: nil,

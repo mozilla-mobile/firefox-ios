@@ -6,27 +6,28 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
     var profile: MockProfile!
     let tabManager = MockTabManager()
     var mockVC: MockBrowserViewController!
     var mockStore: MockStoreForMiddleware<AppState>!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile.shutdown()
         profile = nil
         DependencyHelperMock().reset()
         mockVC = nil
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testTakeScreenshotForHomepage() {

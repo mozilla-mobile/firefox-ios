@@ -7,15 +7,16 @@ import XCTest
 
 @testable import Client
 
-class GeneralizedImageFetcherTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
+@MainActor
+final class GeneralizedImageFetcherTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
 
         clearState()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
 
         clearState()
     }
@@ -99,7 +100,7 @@ extension GeneralizedImageFetcherTests {
         )
     }
 
-    func testGeneralizedImageFetcher(completion: @escaping (UIImage?) -> Void) {
+    func testGeneralizedImageFetcher(completion: @escaping @Sendable (UIImage?) -> Void) {
         let imageFetcher = getGeneralizedImageFetcher()
         let expectation = expectation(description: "Wait on completion.")
 

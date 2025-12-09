@@ -5,6 +5,7 @@
 import MappaMundi
 import XCTest
 
+@MainActor
 func registerOnboardingNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab, if: "showIntro == false && showWhatsNew == true")

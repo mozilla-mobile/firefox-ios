@@ -10,8 +10,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
     private var toolBarScreen: ToolbarScreen!
     private var browserScreen: BrowserScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         readingListScreen = ReadingListScreen(app: app)
         toolBarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)

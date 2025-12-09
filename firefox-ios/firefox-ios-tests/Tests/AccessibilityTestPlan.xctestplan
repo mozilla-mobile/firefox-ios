@@ -194,8 +194,6 @@
         "HomePageSettingsUITests\/testShortcutsRows()",
         "HomePageSettingsUITests\/testTyping()",
         "HomepageSearchBarTests",
-        "InactiveTabsTest",
-        "InactiveTabsTest\/testInactiveTabs()",
         "IntegrationTests",
         "IntegrationTests\/testFxADisconnectConnect()",
         "IntegrationTests\/testFxASyncBookmark()",

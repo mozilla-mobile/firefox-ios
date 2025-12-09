@@ -8,6 +8,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class ContextMenuConfigurationTests: XCTestCase {
     func tests_initialState_forMerinoItem_returnsExpectedState() {
         let merinoItem: HomepageItem = .merino(

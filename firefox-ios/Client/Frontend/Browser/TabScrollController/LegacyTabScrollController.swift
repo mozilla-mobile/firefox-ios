@@ -102,6 +102,8 @@ final class LegacyTabScrollController: NSObject,
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
 
+    private var didTapChangePreventScrollToTop = false
+
     // Top Toolbar offset updates related constraints
     private var headerTopOffset: CGFloat = 0 {
         didSet {
@@ -822,6 +824,14 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
             showToolbars(animated: true)
             return false
         }
+        if didTapChangePreventScrollToTop {
+            didTapChangePreventScrollToTop = false
+            return false
+        }
         return true
+    }
+
+    func didChangeTopTab() {
+        didTapChangePreventScrollToTop = true
     }
 }

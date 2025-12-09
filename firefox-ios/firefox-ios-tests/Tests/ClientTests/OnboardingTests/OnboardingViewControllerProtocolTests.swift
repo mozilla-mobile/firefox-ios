@@ -11,16 +11,16 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingTestingConfigUtility!
     typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         nimbusUtility = nil
+        try await super.tearDown()
     }
 
     // MARK: - Test `getNextOnboardingCard` forward

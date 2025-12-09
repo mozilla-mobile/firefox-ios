@@ -109,10 +109,6 @@ final class TabDisplayPanelViewController: UIViewController,
         setupView()
         subscribeToRedux()
 
-        if !tabDisplayView.shouldHideInactiveTabs {
-            InactiveTabsTelemetry().sectionShown()
-        }
-
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
