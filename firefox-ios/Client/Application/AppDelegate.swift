@@ -169,7 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         /// Prewarm translation resources off the main thread
         /// This will fetch the translator WASM and model attachments for the device language.
         /// Running this on a utility QoS to avoid impacting app launch time.
-        if TranslationConfiguration(prefs: profile.prefs).canTranslate {
+        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
             DispatchQueue.global(qos: .utility).async {
                 ASTranslationModelsFetcher().prewarmResourcesForStartup()
             }
