@@ -85,7 +85,7 @@ class TabContentBlocker: Notifiable {
 
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case UIApplication.didBecomeActiveNotification:
+        case .contentBlockerTabSetupRequired:
             ensureMainThread {
                 self.notifiedTabSetupRequired
             }
