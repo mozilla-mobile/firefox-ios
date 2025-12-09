@@ -19,6 +19,15 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
         "password": "password"
     ])
 
+    static func loginFactory(number: Int) -> LoginEntry {
+        LoginEntry(fromJSONDict: [
+            "hostname": "https://example\(number).com",
+            "formSubmitUrl": "https://example\(number).com",
+            "username": "username\(number)",
+            "password": "password\(number)"
+        ])
+    }
+
     override func setUp() {
         super.setUp()
         files = MockFiles()
@@ -155,4 +164,26 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
         }
         wait(for: [expectation])
     }
+    func testAddMultipleLoginsConcurrently() {
+            let numberOfLogins = 3
+            var expectations = [XCTestExpectation]()
+
+            for i in 0..<numberOfLogins {
+                let expectation = expectation(description: "addLogin \(i)")
+                expectations.append(expectation)
+
+                let login = Self.loginFactory(number: i)
+                logins.addLogin(login: login) { result in
+                    switch result {
+                    case .success(let login):
+                        XCTAssertNotNil(login)
+                    case .failure:
+                        XCTFail("Add login failed")
+                    }
+                    expectation.fulfill()
+                }
+            }
+
+            wait(for: expectations)
+        }
 }
