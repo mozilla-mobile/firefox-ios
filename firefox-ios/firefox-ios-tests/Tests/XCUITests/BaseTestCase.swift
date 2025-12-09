@@ -468,6 +468,7 @@ class BaseTestCase: XCTestCase {
         urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
         mozWaitForElementToExist(app.tables["Context Menu"])
         pasteAction.waitAndTap()
+        springboard.buttons["Allow Paste"].tapIfExists(timeout: 1.5)
         mozWaitForElementToExist(urlBar)
         mozWaitForValueContains(urlBar, value: url)
     }
