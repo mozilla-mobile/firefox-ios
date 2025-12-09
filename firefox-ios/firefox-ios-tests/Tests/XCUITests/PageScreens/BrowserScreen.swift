@@ -259,4 +259,9 @@ final class BrowserScreen {
     func tapCancelButtonOnUrlWithRetry() {
         cancelButton.tapWithRetry()
     }
+
+    func assertWebPageText(with text: String) {
+        let text = sel.webPageElement(with: text).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(text)
+    }
 }
