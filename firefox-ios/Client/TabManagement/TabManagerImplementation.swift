@@ -595,6 +595,13 @@ class TabManagerImplementation: NSObject,
         for delegate in delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
+
+        store.dispatch(
+            TabManagerAction(
+                windowUUID: windowUUID,
+                actionType: TabManagerActionType.restoredTabs
+            )
+        )
     }
 
     private func shouldClearPrivateTabs() -> Bool {
@@ -1115,6 +1122,13 @@ class TabManagerImplementation: NSObject,
                                  placeNextToParentTab: placeNextToParentTab,
                                  isRestoring: !tabRestoreHasFinished)
         }
+
+        store.dispatch(
+            TabManagerAction(
+                windowUUID: windowUUID,
+                actionType: TabManagerActionType.addedTab
+            )
+        )
 
         if !zombie {
             let configuration: WKWebViewConfiguration
