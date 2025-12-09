@@ -17,9 +17,9 @@ protocol OnboardingViewControllerProtocol {
         currentIndex: Int,
         numberOfCardsToMove: Int,
         goForward: Bool
-    ) -> OnboardingCardViewController?
+    ) -> OnboardingCardViewController<OnboardingKitCardInfoModel>?
 
-    func getCardIndex(viewController: OnboardingCardViewController) -> Int?
+    func getCardIndex(viewController: OnboardingCardViewController<OnboardingKitCardInfoModel>) -> Int?
 }
 
 extension OnboardingViewControllerProtocol {
@@ -27,7 +27,7 @@ extension OnboardingViewControllerProtocol {
         currentIndex: Int,
         numberOfCardsToMove: Int,
         goForward: Bool
-    ) -> OnboardingCardViewController? {
+    ) -> OnboardingCardViewController<OnboardingKitCardInfoModel>? {
         guard let nextIndex = viewModel.getNextIndexFrom(
             currentIndex: currentIndex,
             numberOfCardsToMove: numberOfCardsToMove,
@@ -69,7 +69,7 @@ extension OnboardingViewControllerProtocol {
 
     // Due to restrictions with PageViewController we need to get the index of the current view controller
     // to calculate the next view controller
-    func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
+    func getCardIndex(viewController: OnboardingCardViewController<OnboardingKitCardInfoModel>) -> Int? {
         let cardName = viewController.viewModel.name
 
         guard let index = viewModel.availableCards
