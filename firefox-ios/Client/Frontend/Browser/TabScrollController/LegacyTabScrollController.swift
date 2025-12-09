@@ -296,7 +296,7 @@ final class LegacyTabScrollController: NSObject,
         }
     }
 
-    private func applicationWillTerminate(_ notification: Notification) {
+    private func applicationWillTerminate() {
         // Ensures that we immediately de-register KVO observations for content size changes in
         // webviews if the app is about to terminate.
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
@@ -455,7 +455,7 @@ final class LegacyTabScrollController: NSObject,
 
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case UIApplication.didBecomeActiveNotification:
+        case UIApplication.willTerminateNotification:
             ensureMainThread {
                 self.applicationWillTerminate
             }
