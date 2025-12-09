@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-class PrivateModeButton: ToggleButton, PrivateModeUI {
+final class PrivateModeButton: ToggleButton, PrivateModeUI {
     override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityLabel = .TabsTray.TabTrayToggleAccessibilityLabel
