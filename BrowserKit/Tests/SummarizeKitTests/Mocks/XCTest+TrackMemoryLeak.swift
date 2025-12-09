@@ -13,6 +13,7 @@ public extension XCTestCase {
         }
     }
 
+    @MainActor
     func assertAsyncThrows<E: Error, T>(
         ofType expectedType: E.Type,
         _ expression: () async throws -> T,
