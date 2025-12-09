@@ -16,20 +16,20 @@ final class WKUIHandlerTests: XCTestCase {
     private let testURL = URL(string: "https://www.example.com")!
     private var sessionCreator: MockSessionCreator!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         sessionCreator = MockSessionCreator()
         mockApplication = MockApplication()
         mockDecider = MockPolicyDecider()
         sessionDelegate = MockEngineSessionDelegate()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         sessionCreator = nil
         mockApplication = nil
         mockDecider = nil
         sessionDelegate = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testRequestMediaCaptureSuccess() {

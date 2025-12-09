@@ -11,14 +11,14 @@ final class WKEngineWebViewTests: XCTestCase {
     private var delegate: MockWKEngineWebViewDelegate!
     private let testURL = URL(string: "https://www.example.com/")!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         delegate = MockWKEngineWebViewDelegate()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         delegate = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testNoLeaks() {

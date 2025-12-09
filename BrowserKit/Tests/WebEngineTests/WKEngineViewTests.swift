@@ -15,9 +15,9 @@ final class WKEngineViewTests: XCTestCase {
         engineSession = await MockWKEngineSession()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         engineSession = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testRenderSetsIsActiveTrue() {
