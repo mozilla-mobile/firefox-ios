@@ -425,7 +425,6 @@
         "OnboardingTests\/testOnboardingSignIn_TAE()",
         "OnboardingTests\/testSelectBottomPlacement()",
         "OnboardingTests\/testSelectTopPlacement()",
-        "OnboardingTests\/testWhatsNewPage()",
         "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTests\/testPinToShortcuts_TAE()",

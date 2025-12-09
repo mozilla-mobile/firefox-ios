@@ -107,7 +107,7 @@ class OnboardingButtonActionTests: XCTestCase {
         twoButtons: Bool = true,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> OnboardingBasicCardViewController {
+    ) -> OnboardingBasicCardViewController<OnboardingKitCardInfoModel> {
         var buttons: OnboardingButtons<OnboardingActions>
         if twoButtons {
             buttons = OnboardingButtons(
@@ -124,7 +124,7 @@ class OnboardingButtonActionTests: XCTestCase {
                     action: firstAction))
         }
 
-        let mockInfoModel = OnboardingCardInfoModel(
+        let mockInfoModel = OnboardingKitCardInfoModel(
             cardType: .basic,
             name: "signSync",
             order: 10,
@@ -136,7 +136,8 @@ class OnboardingButtonActionTests: XCTestCase {
             onboardingType: .freshInstall,
             a11yIdRoot: AccessibilityIdentifiers.Onboarding.onboarding,
             imageID: ImageIdentifiers.Onboarding.HeaderImages.syncv106,
-            instructionsPopup: nil)
+            instructionsPopup: nil,
+            embededLinkText: [])
 
         mockDelegate = MockOnboardingCardDelegateController()
         let subject = OnboardingBasicCardViewController(

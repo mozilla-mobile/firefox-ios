@@ -5,6 +5,6 @@
 import Foundation
 
 struct OnboardingViewModel {
-    let cards: [OnboardingCardInfoModel]
+    let cards: [OnboardingKitCardInfoModel]
     let isDismissible: Bool
 }

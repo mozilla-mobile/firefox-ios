@@ -26,7 +26,12 @@ class OnboardingTests: BaseTestCase {
 
     override func tearDown() async throws {
         if #available(iOS 17.0, *) {
-            switchThemeToDarkOrLight(theme: "Light")
+            if self.name.contains("testSelectBottomPlacement") && iPad() {
+                // Toolbar option not available for iPad, so the theme is not changed there.
+                return
+            } else {
+                switchThemeToDarkOrLight(theme: "Light")
+            }
         }
         app.terminate()
         try await super.tearDown()
@@ -287,44 +292,6 @@ class OnboardingTests: BaseTestCase {
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306815
-    func testWhatsNewPage() throws {
-        throw XCTSkip("Skipping. The option whats new page is not available on the new menu")
-        /*
-        app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].waitAndTap()
-        // Dismiss new changes pop up if exists
-        app.buttons["Close"].tapIfExists()
-        navigator.goto(BrowserTabMenu)
-        navigator.performAction(Action.OpenWhatsNewPage)
-        waitUntilPageLoad()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
-
-        // Extract version number from url
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
-        let textUrl = String(describing: url)
-        let start = textUrl.index(textUrl.startIndex, offsetBy: 51)
-        let end = textUrl.index(textUrl.startIndex, offsetBy: 56)
-        let range = start..<end
-        let mySubstring = textUrl[range]
-        let releaseVersion = String(mySubstring)
-
-        mozWaitForElementToExist(app.staticTexts[releaseVersion])
-        mozWaitForValueContains(
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-            value: "https://www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
-        )
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
-        waitForElementsToExist(
-            [
-                app.staticTexts["Release Notes"],
-                app.staticTexts["Firefox for iOS Release"],
-                app.staticTexts["\(releaseVersion)"],
-                app.staticTexts["Get the most recent version"]
-            ]
-        )
-         */
-    }
-
     // TOOLBAR THEME
     // https://mozilla.testrail.io/index.php?/cases/view/2575175
     func testSelectTopPlacement() {
@@ -379,12 +346,12 @@ class OnboardingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575176
     func testSelectBottomPlacement() throws {
+        if iPad() {
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Toolbar option not available for iPad")
+        }
         waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
         app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
-
-        guard !iPad() else {
-            throw XCTSkip("Toolbar option not available for iPad")
-        }
         let toolbar = app.textFields["url"]
 
         // Wait for the initial title label to appear
