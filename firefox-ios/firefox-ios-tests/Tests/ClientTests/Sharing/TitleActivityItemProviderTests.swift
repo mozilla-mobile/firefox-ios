@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 import XCTest
 @testable import Client
 
+@MainActor
 final class TitleActivityItemProviderTests: XCTestCase {
     let testMessage = "Test message"
 

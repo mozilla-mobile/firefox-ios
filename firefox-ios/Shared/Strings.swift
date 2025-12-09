@@ -301,21 +301,6 @@ extension String {
             }
         }
 
-        public struct TabsTray {
-            public struct InactiveTabs {
-                public static let Action = MZLocalizedString(
-                    key: "ContextualHints.TabTray.InactiveTabs.CallToAction",
-                    tableName: nil,
-                    value: "Turn off in settings",
-                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.")
-                public static let Body = MZLocalizedString(
-                    key: "ContextualHints.TabTray.InactiveTabs",
-                    tableName: nil,
-                    value: "Tabs you haven’t viewed for two weeks get moved here.",
-                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
-            }
-        }
-
         public struct Toolbar {
             public static let NavigationButtonsBody = MZLocalizedString(
                 key: "ContextualHints.Toolbar.Navigation.Description.v132",
@@ -2684,19 +2669,6 @@ extension String {
                     value: "Learn more",
                     comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user.")
             }
-        }
-
-        public struct Tabs {
-            public static let InactiveTabs = MZLocalizedString(
-                key: "Settings.Tabs.CustomizeTabsSection.InactiveTabs",
-                tableName: nil,
-                value: "Inactive Tabs",
-                comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
-            public static let InactiveTabsDescription = MZLocalizedString(
-                key: "Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101",
-                tableName: nil,
-                value: "Tabs you haven’t viewed for two weeks get moved to the inactive section.",
-                comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
         }
 
         public struct Browsing {
@@ -8488,6 +8460,26 @@ extension String {
                 tableName: nil,
                 value: nil,
                 comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
+            public static let Action = MZLocalizedString(
+                key: "ContextualHints.TabTray.InactiveTabs.CallToAction",
+                tableName: nil,
+                value: "Turn off in settings",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.")
+            public static let Body = MZLocalizedString(
+                key: "ContextualHints.TabTray.InactiveTabs",
+                tableName: nil,
+                value: "Tabs you haven’t viewed for two weeks get moved here.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
+            public static let InactiveTabs = MZLocalizedString(
+                key: "Settings.Tabs.CustomizeTabsSection.InactiveTabs",
+                tableName: nil,
+                value: "Inactive Tabs",
+                comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
+            public static let InactiveTabsDescription = MZLocalizedString(
+                key: "Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101",
+                tableName: nil,
+                value: "Tabs you haven’t viewed for two weeks get moved to the inactive section.",
+                comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
         }
     }
 }

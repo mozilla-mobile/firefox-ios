@@ -12,15 +12,15 @@ class VersionSettingTests: XCTestCase {
     private var delegate: MockDebugSettingsDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
         delegate = MockDebugSettingsDelegate()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         DependencyHelperMock().reset()
         delegate = nil
     }

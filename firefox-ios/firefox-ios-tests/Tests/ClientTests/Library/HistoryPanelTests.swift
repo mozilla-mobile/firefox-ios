@@ -11,17 +11,17 @@ import Common
 class HistoryPanelTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     private var notificationCenter: MockNotificationCenter!
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
         notificationCenter = MockNotificationCenter()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         notificationCenter = nil
+        try await super.tearDown()
     }
 
     func testHistoryButtons() {
