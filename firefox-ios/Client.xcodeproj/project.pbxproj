@@ -657,8 +657,7 @@
 		5AC7110729F822E60011ED11 /* MockTabSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */; };
 		5AD3B6742CF625B000AFA1FE /* DefaultBrowserUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B6732CF625A300AFA1FE /* DefaultBrowserUtility.swift */; };
 		5AD3B6782CF650DF00AFA1FE /* DefaultBrowserUitlityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B6772CF650D000AFA1FE /* DefaultBrowserUitlityTests.swift */; };
-		5AD3B67A2CF653A600AFA1FE /* MockLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B6792CF653A200AFA1FE /* MockLocale.swift */; };
-		5AD3B67C2CF65DE600AFA1FE /* LocaleInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67B2CF65DE300AFA1FE /* LocaleInterface.swift */; };
+		5AD3B67C2CF65DE600AFA1FE /* LocaleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67B2CF65DE300AFA1FE /* LocaleProvider.swift */; };
 		5AD3B67E2CF665B400AFA1FE /* UIApplicationInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */; };
 		5AD3B6802CF6674F00AFA1FE /* MockUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67F2CF6674B00AFA1FE /* MockUIApplication.swift */; };
 		5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE371832A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift */; };
@@ -1356,6 +1355,7 @@
 		AAB4321D2E8189390075E47F /* DefaultRecentSearchProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321C2E8189310075E47F /* DefaultRecentSearchProviderTests.swift */; };
 		AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */; };
 		AAB5B7882EE077BB0051EF6E /* TranslationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB5B7872EE077BB0051EF6E /* TranslationTests.swift */; };
+		AAB5AF382EDDCF600051EF6E /* MockLocaleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB5AF372EDDCF5A0051EF6E /* MockLocaleProvider.swift */; };
 		AAD1CD872EAABA8100BEC90A /* TranslationsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */; };
 		AAD861A82E9E748700F6E0E0 /* TranslationSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */; };
 		AAD861AB2E9E75AB00F6E0E0 /* TranslationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */; };
@@ -8347,8 +8347,7 @@
 		5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabSessionStore.swift; sourceTree = "<group>"; };
 		5AD3B6732CF625A300AFA1FE /* DefaultBrowserUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserUtility.swift; sourceTree = "<group>"; };
 		5AD3B6772CF650D000AFA1FE /* DefaultBrowserUitlityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserUitlityTests.swift; sourceTree = "<group>"; };
-		5AD3B6792CF653A200AFA1FE /* MockLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocale.swift; sourceTree = "<group>"; };
-		5AD3B67B2CF65DE300AFA1FE /* LocaleInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleInterface.swift; sourceTree = "<group>"; };
+		5AD3B67B2CF65DE300AFA1FE /* LocaleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleProvider.swift; sourceTree = "<group>"; };
 		5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationInterface.swift; sourceTree = "<group>"; };
 		5AD3B67F2CF6674B00AFA1FE /* MockUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIApplication.swift; sourceTree = "<group>"; };
 		5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerCoordinatorDelegateMock.swift; sourceTree = "<group>"; };
@@ -9582,6 +9581,7 @@
 		AAB4321C2E8189310075E47F /* DefaultRecentSearchProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRecentSearchProviderTests.swift; sourceTree = "<group>"; };
 		AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrendingSearchProvider.swift; sourceTree = "<group>"; };
 		AAB5B7872EE077BB0051EF6E /* TranslationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTests.swift; sourceTree = "<group>"; };
+		AAB5AF372EDDCF5A0051EF6E /* MockLocaleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocaleProvider.swift; sourceTree = "<group>"; };
 		AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsConfiguration.swift; sourceTree = "<group>"; };
 		AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSetting.swift; sourceTree = "<group>"; };
 		AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsViewController.swift; sourceTree = "<group>"; };
@@ -13003,7 +13003,6 @@
 				8A1C0B8E2E723EDC0030DCC8 /* AppLaunchUtilTests.swift */,
 				BC0723512E33D7A2005BAC05 /* AppleIntelligenceUtilTests.swift */,
 				5AD3B67F2CF6674B00AFA1FE /* MockUIApplication.swift */,
-				5AD3B6792CF653A200AFA1FE /* MockLocale.swift */,
 				8A13FA882AD82BC8007527AB /* AppSendTabDelegateTests.swift */,
 				5AD3B6772CF650D000AFA1FE /* DefaultBrowserUitlityTests.swift */,
 			);
@@ -14011,6 +14010,7 @@
 		8AFA66012CA2935C0008D0F6 /* RemoteSettings */ = {
 			isa = PBXGroup;
 			children = (
+				AAB5AF372EDDCF5A0051EF6E /* MockLocaleProvider.swift */,
 				8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */,
 				1D3564532D9329FA00F52F12 /* SearchPrefsMigrationTests.swift */,
 				1DA3E4B12DB1C86A0065F7E7 /* ASSearchEngineUtilitiesTests.swift */,
@@ -15819,7 +15819,7 @@
 				C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */,
 				C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */,
 				F85C7F112721048E004BDBA4 /* Layout.swift */,
-				5AD3B67B2CF65DE300AFA1FE /* LocaleInterface.swift */,
+				5AD3B67B2CF65DE300AFA1FE /* LocaleProvider.swift */,
 				C8DC90B92A0669540008832B /* MarkupParser */,
 				8A48808B2E68DD8000AD43D5 /* PingUploaderProtocol.swift */,
 				8A1E3BDE28CBA81E003388C4 /* SponsoredContentFilterUtility.swift */,
@@ -18926,7 +18926,7 @@
 				E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */,
 				C7B376E32E870173006B2D32 /* StoriesFeedCell.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
-				5AD3B67C2CF65DE600AFA1FE /* LocaleInterface.swift in Sources */,
+				5AD3B67C2CF65DE600AFA1FE /* LocaleProvider.swift in Sources */,
 				1D5A117A2EAEC51100DD27F7 /* ResetSearchEnginePrefsSetting.swift in Sources */,
 				21618A932A4499FC00A5189E /* AppState.swift in Sources */,
 				81020C942BB5B026007B8481 /* OnboardingMultipleChoiceButtonViewModel.swift in Sources */,
@@ -19726,7 +19726,6 @@
 				5A475E8F29DB89CE009C13FD /* MockTabDataStore.swift in Sources */,
 				39BF0CD32EB4ED6F002064F5 /* StoriesFeedTelemetryTests.swift in Sources */,
 				ED45893E2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift in Sources */,
-				5AD3B67A2CF653A600AFA1FE /* MockLocale.swift in Sources */,
 				C7A492762EBE817D0098845C /* MockDismissalNotifiableViewController.swift in Sources */,
 				8A7A93EE2810ADF2005E7E1B /* ContileProviderTests.swift in Sources */,
 				1DA3E4B22DB1C86F0065F7E7 /* ASSearchEngineUtilitiesTests.swift in Sources */,
@@ -19819,6 +19818,7 @@
 				8AA0A6682CAC747500AC7EB3 /* HomepageDiffableDataSourceTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
 				032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */,
+				AAB5AF382EDDCF600051EF6E /* MockLocaleProvider.swift in Sources */,
 				F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */,
 				1D3C90882ACE1AF400304C87 /* RemoteTabPanelTests.swift in Sources */,
 				43446CF02412DDBE00F5C643 /* UpdateViewModelTests.swift in Sources */,
