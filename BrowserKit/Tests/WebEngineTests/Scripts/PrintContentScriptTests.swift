@@ -10,8 +10,8 @@ import XCTest
 final class PrintContentScriptTests: XCTestCase {
     private var webView: MockWKEngineWebView!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         let webViewProvider = MockWKWebViewProvider()
         webView = webViewProvider.createWebview(
             configurationProvider: MockWKEngineConfigurationProvider(),
@@ -19,9 +19,9 @@ final class PrintContentScriptTests: XCTestCase {
         ) as? MockWKEngineWebView
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         webView = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_userContentController_withEmptyMessage_returnsDelegateCalled() {
