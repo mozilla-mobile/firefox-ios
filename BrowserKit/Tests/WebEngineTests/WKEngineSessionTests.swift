@@ -18,8 +18,8 @@ final class WKEngineSessionTests: XCTestCase {
     private var fullscreenDelegate: MockFullscreenDelegate!
     private var scriptResponder: MockEngineSessionScriptResponder!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         configurationProvider = MockWKEngineConfigurationProvider()
         webViewProvider = MockWKWebViewProvider()
         contentScriptManager = MockWKContentScriptManager()
@@ -30,8 +30,7 @@ final class WKEngineSessionTests: XCTestCase {
         scriptResponder = MockEngineSessionScriptResponder()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         configurationProvider = nil
         webViewProvider = nil
         contentScriptManager = nil
@@ -40,6 +39,7 @@ final class WKEngineSessionTests: XCTestCase {
         metadataFetcher = nil
         fullscreenDelegate = nil
         scriptResponder = nil
+        try await super.tearDown()
     }
 
     // MARK: Load URL

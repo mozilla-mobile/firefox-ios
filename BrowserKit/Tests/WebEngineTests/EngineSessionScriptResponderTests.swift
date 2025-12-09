@@ -15,9 +15,9 @@ class EngineSessionScriptResponderTests: XCTestCase {
         session = await MockWKEngineSession()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         session = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testContentScriptDidSendEventRespondsToTrackAdsClickedOnPage() throws {
