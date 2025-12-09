@@ -8,15 +8,21 @@ import Foundation
 protocol ToolbarHelperInterface {
     var isToolbarRefactorEnabled: Bool { get }
     var isToolbarTranslucencyEnabled: Bool { get }
+    var isSwipingTabsEnabled: Bool { get }
+    var userInterfaceIdiom: UIUserInterfaceIdiom { get }
+
     @MainActor
     var isReduceTransparencyEnabled: Bool { get }
+
     @MainActor
     var glassEffectAlpha: CGFloat { get }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
     func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
+
     @MainActor
     func shouldBlur() -> Bool
+
     @MainActor
     func backgroundAlpha() -> CGFloat
 }
@@ -33,6 +39,14 @@ final class ToolbarHelper: ToolbarHelperInterface {
     var isToolbarTranslucencyEnabled: Bool {
         FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
     }
+
+    var isSwipingTabsEnabled: Bool {
+        // Swipe is not enabled on iPads
+        let isiPad = userInterfaceIdiom == .pad
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().swipingTabs && !isiPad
+    }
+
+    var userInterfaceIdiom: UIUserInterfaceIdiom
 
     @MainActor
     var isReduceTransparencyEnabled: Bool {
@@ -67,5 +81,10 @@ final class ToolbarHelper: ToolbarHelperInterface {
         guard shouldBlur() else { return 1.0 }
 
         return UX.backgroundAlphaForBlur
+    }
+
+    @MainActor
+    init(userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        self.userInterfaceIdiom = userInterfaceIdiom
     }
 }
