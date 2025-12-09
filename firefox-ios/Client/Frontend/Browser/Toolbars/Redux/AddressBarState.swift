@@ -1353,7 +1353,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasHighlightedColor: false,
             contextualHintType: ContextualHintType.translation.rawValue,
             a11yLabel: state.buttonA11yLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.translateButton
+            a11yId: state.buttonA11yIdentifier
         )
     }
 }
