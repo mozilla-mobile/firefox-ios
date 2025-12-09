@@ -76,8 +76,6 @@ struct TabsPanelState: ScreenState, Equatable {
 
         if let action = action as? TabPanelMiddlewareAction {
             return TabsPanelState.reduceTabPanelMiddlewareAction(action: action, state: state)
-        } else if let action = action as? TabPanelViewAction {
-            return TabsPanelState.reduceTabsPanelViewAction(action: action, state: state)
         }
 
         return defaultState(from: state)
@@ -123,14 +121,6 @@ struct TabsPanelState: ScreenState, Equatable {
         }
     }
 
-    static func reduceTabsPanelViewAction(action: TabPanelViewAction,
-                                          state: TabsPanelState) -> TabsPanelState {
-        switch action.actionType {
-        default:
-            return defaultState(from: state)
-        }
-    }
-
     static func defaultState(from state: TabsPanelState) -> TabsPanelState {
         return TabsPanelState(windowUUID: state.windowUUID,
                               isPrivateMode: state.isPrivateMode,
@@ -141,7 +131,7 @@ struct TabsPanelState: ScreenState, Equatable {
         forState state: TabsPanelState,
         withScrollBehavior scrollBehavior: TabScrollBehavior
     ) -> TabsPanelState.ScrollState? {
-        guard !(state.tabs.isEmpty) else { return nil }
+        guard !state.tabs.isEmpty else { return nil }
 
         if case .scrollToSelectedTab(let shouldAnimate) = scrollBehavior {
             if let selectedTabIndex = state.tabs.firstIndex(where: { $0.isSelected }) {

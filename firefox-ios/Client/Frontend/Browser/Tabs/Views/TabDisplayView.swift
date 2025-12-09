@@ -169,7 +169,7 @@ final class TabDisplayView: UIView,
     }
 
     private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
-        let indexPath = IndexPath(row: scrollState.toIndex, section: 1)
+        let indexPath = IndexPath(row: scrollState.toIndex, section: 0)
         // Piping this into main thread let the collection view finish its layout process
         DispatchQueue.main.async {
             guard !self.collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
