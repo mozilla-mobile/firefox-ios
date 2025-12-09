@@ -31,7 +31,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
-    case inactiveTabs
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
     case menuRefactor
@@ -43,7 +42,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case recentSearches
     case reportSiteIssue
     case relayIntegration
-    case searchEngineConsolidation
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case splashScreen
@@ -101,7 +99,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .recentSearches,
-                .searchEngineConsolidation,
+                .relayIntegration,
                 .tabScrollRefactorFeature,
                 .sentFromFirefox,
                 .tabTrayUIExperiments,
@@ -144,8 +142,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.FirefoxSuggest
         case .hntSponsoredShortcuts:
             return FlagKeys.SponsoredShortcuts
-        case .inactiveTabs:
-            return FlagKeys.InactiveTabs
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
         case .startAtHome:
@@ -179,7 +175,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .noInternetConnectionErrorPage,
                 .recentSearches,
                 .reportSiteIssue,
-                .searchEngineConsolidation,
                 .sentFromFirefoxTreatmentA,
                 .splashScreen,
                 .appleSummarizer,

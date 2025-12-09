@@ -6,18 +6,20 @@ import Common
 import XCTest
 
 @testable import Client
+
+@MainActor
 final class TabDisplayDiffableDataSourceTests: XCTestCase {
     var diffableDataSource: TabDisplayDiffableDataSource?
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         diffableDataSource = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testNumberOfSections_ForRegularTabsWithInactiveTabs() {

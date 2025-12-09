@@ -51,6 +51,7 @@ final class CreditCardSettingsViewControllerTests: XCTestCase {
         XCTAssertTrue(subject.viewModel.cardInputViewModel.expirationDate.isEmpty)
     }
 
+    @MainActor
     private func createSubject() -> CreditCardSettingsViewController {
         let creditCardSettingsViewModel = CreditCardSettingsViewModel(
             profile: profile,

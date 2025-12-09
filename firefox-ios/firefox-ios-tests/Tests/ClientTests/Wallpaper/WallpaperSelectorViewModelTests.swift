@@ -47,7 +47,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         let subject = createSubject()
         let indexPath = IndexPath(item: 1, section: 0)
 
-        subject.downloadAndSetWallpaper(at: indexPath) { result in
+        subject.downloadAndSetWallpaper(at: indexPath) { [mockManager] result in
             XCTAssertEqual(subject.selectedIndexPath, indexPath)
             XCTAssertEqual(mockManager.setCurrentWallpaperCallCount, 1)
         }
