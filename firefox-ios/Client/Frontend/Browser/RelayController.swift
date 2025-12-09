@@ -78,7 +78,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         case stage = "41b4363ae36440a9"
     }
 
-    private enum RelayClientConfiguration {
+    enum RelayClientConfiguration {
         case prod
         case staging
 
@@ -99,6 +99,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     let telemetry: RelayMaskTelemetry
 
     static let isFeatureEnabled = {
+        if AppConstants.isRunningUnitTest { return true }
 #if targetEnvironment(simulator) && MOZ_CHANNEL_developer
         return true
 #else
@@ -109,8 +110,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private let logger: Logger
     private let profile: Profile
     private let config: RelayClientConfiguration
-    private var relayRSClient: RelayRemoteSettingsClient?
-    private var client: RelayClient?
+    private var relayRSClient: RelayRemoteSettingsClientProtocol?
+    private var client: RelayClientProtocol?
     private var isCreatingClient = false
     private var isGeneratingMask = false
     private let notificationCenter: NotificationProtocol
@@ -123,10 +124,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     // MARK: - Init
 
-    private init(logger: Logger = DefaultLogger.shared,
-                 profile: Profile = AppContainer.shared.resolve(),
-                 gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
-                 notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(logger: Logger = DefaultLogger.shared,
+         profile: Profile = AppContainer.shared.resolve(),
+         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+         config: RelayClientConfiguration = .prod,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.logger = logger
         self.profile = profile
         let isStaging = profile.prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
@@ -270,8 +272,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     nonisolated private func generateRelayMask(for websiteDomain: String,
-                                               client: RelayClient) async -> (mask: String?,
-                                                                              result: RelayMaskGenerationResult) {
+                                               client: RelayClientProtocol) async -> (mask: String?,
+                                                                                      result: RelayMaskGenerationResult) {
         do {
             logger.log("Relay: createAddress()", level: .info, category: .relay)
             let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
