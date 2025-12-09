@@ -5,7 +5,6 @@
 import Foundation
 import Glean
 
-/// Telemetry for the "Open in Firefox" extension, supporting both Action Extension and Share Extension
 struct ShareExtensionTelemetry {
     private let gleanWrapper: GleanWrapper
 
@@ -13,17 +12,11 @@ struct ShareExtensionTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    /// Records when a user shares a URL from the extension
-    /// - Parameter extensionSource: The source of the extension event. Defaults to "action-extension".
-    ///   Use "share-extension" for legacy Share Extension events.
     func shareURL(extensionSource: String = "action-extension") {
         let extra = GleanMetrics.ShareOpenInFirefoxExtension.UrlSharedExtra(extensionSource: extensionSource)
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtension.urlShared, extras: extra)
     }
 
-    /// Records when a user shares text from the extension
-    /// - Parameter extensionSource: The source of the extension event. Defaults to "action-extension".
-    ///   Use "share-extension" for legacy Share Extension events.
     func shareText(extensionSource: String = "action-extension") {
         let extra = GleanMetrics.ShareOpenInFirefoxExtension.TextSharedExtra(extensionSource: extensionSource)
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtension.textShared, extras: extra)
