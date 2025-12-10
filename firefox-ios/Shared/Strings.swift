@@ -6214,21 +6214,36 @@ extension String {
         tableName: "Settings",
         value: "Data about your device, hardware configuration, and usage helps us improve %@ features, performance and stability.",
         comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox).")
-    public static let StudiesSettingTitleV2 = MZLocalizedString(
-        key: "Settings.Studies.Title.v136",
+    public static let StudiesSettingTitleV3 = MZLocalizedString(
+        key: "Settings.Studies.Title.v148",
         tableName: "Settings",
-        value: "Install and Run Studies",
+        value: "Allow Feature Studies",
         comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
-    public static let StudiesSettingLinkV2 = MZLocalizedString(
-        key: "Settings.Studies.Link.v136",
+    public static let StudiesSettingLinkV3 = MZLocalizedString(
+        key: "Settings.Studies.Link.v148",
         tableName: "Settings",
         value: "Learn More",
         comment: "Title for a link that explains what Mozilla means by Studies")
-    public static let StudiesSettingMessageV2 = MZLocalizedString(
-        key: "Settings.Studies.Message.v136",
+    public static let StudiesSettingMessageV3 = MZLocalizedString(
+        key: "Settings.Studies.Message.v148",
         tableName: "Settings",
-        value: "Try out features and ideas before they’re released to everyone.",
-        comment: "A short description that explains that Mozilla is running studies")
+        value: "%@ randomly selects users to test features, which improves quality for everyone.",
+        comment: "A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox).")
+    public static let RolloutsSettingTitle = MZLocalizedString(
+        key: "Settings.Rollouts.Title.v148",
+        tableName: "Settings",
+        value: "Allow Remote Improvements",
+        comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts.")
+    public static let RolloutsSettingLink = MZLocalizedString(
+        key: "Settings.Rollouts.Link.v148",
+        tableName: "Settings",
+        value: "Learn More",
+        comment: "Title for a link that explains what Mozilla means by Rollouts")
+    public static let RolloutsSettingMessage = MZLocalizedString(
+        key: "Settings.Rollouts.Message.v148",
+        tableName: "Settings",
+        value: "%@ will improve features, performance, and stability between updates. Changes applied remotely.",
+        comment: "A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox).")
     public static let SettingsSiriSectionName = MZLocalizedString(
         key: "Settings.Siri.SectionName",
         tableName: nil,
@@ -8479,6 +8494,23 @@ extension String {
                 tableName: "TabsTray",
                 value: "Close",
                 comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
+        }
+        struct v148 {
+            public static let StudiesSettingTitleV2 = MZLocalizedString(
+                key: "Settings.Studies.Title.v136",
+                tableName: "Settings",
+                value: "Install and Run Studies",
+                comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
+            public static let StudiesSettingLinkV2 = MZLocalizedString(
+                key: "Settings.Studies.Link.v136",
+                tableName: "Settings",
+                value: "Learn More",
+                comment: "Title for a link that explains what Mozilla means by Studies")
+            public static let StudiesSettingMessageV2 = MZLocalizedString(
+                key: "Settings.Studies.Message.v136",
+                tableName: "Settings",
+                value: "Try out features and ideas before they're released to everyone.",
+                comment: "A short description that explains that Mozilla is running studies")
         }
     }
 }
