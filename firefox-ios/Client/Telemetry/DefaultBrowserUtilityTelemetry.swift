@@ -13,12 +13,29 @@ struct DefaultBrowserUtilityTelemetry {
     }
 
     func recordAppIsDefaultBrowser(_ isDefaultBrowser: Bool) {
-//        GleanMetrics.App.defaultBrowser.set(isDefaultBrowser)
         gleanWrapper.setBoolean(for: GleanMetrics.App.defaultBrowser, value: isDefaultBrowser)
     }
 
     func recordIsUserChoiceScreenAcquisition(_ isChoiceScreenAcquisition: Bool) {
         gleanWrapper.setBoolean(for: GleanMetrics.App.choiceScreenAcquisition, value: isChoiceScreenAcquisition)
-//        GleanMetrics.App.choiceScreenAcquisition.set(isChoiceScreenAcquisition)
+    }
+
+    func recordDefaultBrowserAPIError(
+        errorDescription: String,
+        retryDate: Date?,
+        lastProvidedDate: Date?,
+        apiQueryCount: Int?
+    ) {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let extra = GleanMetrics.App.DefaultBrowserApiErrorExtra(
+            apiQueryCount: apiQueryCount.map { Int32($0) },
+            errorDescription: errorDescription,
+            lastProvidedDate: lastProvidedDate.map { dateFormatter.string(from: $0) },
+            retryDate: retryDate.map { dateFormatter.string(from: $0) }
+        )
+
+        gleanWrapper.recordEvent(for: GleanMetrics.App.defaultBrowserApiError, extras: extra)
     }
 }

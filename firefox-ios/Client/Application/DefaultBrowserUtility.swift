@@ -34,6 +34,13 @@ class DefaultBrowserUtility {
     struct UserDefaultsKey {
         public static let isBrowserDefault = "com.moz.isBrowserDefault.key"
         public static let shouldNotPerformMigration = "com.moz.shouldNotPerformMigration.key"
+        public static let retryDate = "com.moz.defaultBrowserAPIRetryDate.key"
+        public static let apiQuery = "com.moz.defaultBrowserAPIQuery.key"
+    }
+
+    struct APIErrorDateKeys {
+        static let retryDate = "UIApplicationCategoryDefaultRetryAvailabilityDateErrorKey"
+        static let lastProvidedDate = "UIApplicationCategoryDefaultStatusLastProvidedDateErrorKey"
     }
 
     var isDefaultBrowser: Bool {
@@ -85,6 +92,16 @@ class DefaultBrowserUtility {
                 "UIApplicationInterface.isDefault returned retry error: \(error.localizedDescription)",
                 level: .info,
                 category: .setup
+            )
+
+            let (retryDate, lastProvidedDate) = trackDatesForErrorReporting(error.userInfo)
+            let apiQueryCount = userDefault.object(forKey: UserDefaultsKey.apiQuery) as? Int
+
+            telemetry.recordDefaultBrowserAPIError(
+                errorDescription: error.localizedDescription,
+                retryDate: retryDate,
+                lastProvidedDate: lastProvidedDate,
+                apiQueryCount: apiQueryCount
             )
         } catch {
             logger.log(
@@ -161,23 +178,32 @@ class DefaultBrowserUtility {
     /// users, in order to understand when the API returns an error. This number will only
     /// be sent when we receive the error.
     private func trackNumberOfAPIQueries(forNewUsers shouldStartTracking: Bool) {
-        let key = "trackNumberOf"
 
         if shouldStartTracking {
-            userDefault.set(1, forKey: key)
+            userDefault.set(1, forKey: UserDefaultsKey.apiQuery)
             return
         }
 
         // For existing users, if the key doesn't exist, do nothing
-        guard let currentCount = userDefault.object(forKey: key) as? Int,
-              userDefault.object(forKey: key) != nil else {
-            return
-        }
+        guard let currentCount = userDefault.object(forKey: UserDefaultsKey.apiQuery) as? Int,
+              userDefault.object(forKey: UserDefaultsKey.apiQuery) != nil
+        else { return }
 
-        userDefault.set(currentCount + 1, forKey: key)
+        userDefault.set(currentCount + 1, forKey: UserDefaultsKey.apiQuery)
     }
 
-    private func trackDateForErrorReporting() {
-        
+    private func trackDatesForErrorReporting(
+        _ userInfoDict: [AnyHashable: Any]
+    ) -> (retryDate: Date?, lastProvidedDate: Date?) {
+        for (key, value) in userInfoDict {
+            if let keyString = key as? String, let date = value as? Date {
+                userDefault.set(date, forKey: keyString)
+            }
+        }
+
+        let retryDate = userInfoDict[APIErrorDateKeys.retryDate] as? Date
+        let lastProvidedDate = userInfoDict[APIErrorDateKeys.lastProvidedDate] as? Date
+
+        return (retryDate, lastProvidedDate)
     }
 }

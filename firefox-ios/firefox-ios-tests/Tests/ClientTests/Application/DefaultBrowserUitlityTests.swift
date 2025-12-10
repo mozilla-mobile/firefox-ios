@@ -250,6 +250,66 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertTrue(subject.isDefaultBrowser)
     }
 
+    // MARK: - API Error Tests
+    @MainActor
+    func testAPIError_recordsTelemetryWithErrorDetails() throws {
+        guard #available(iOS 18.2, *) else { return }
+
+        let expectedEvent = GleanMetrics.App.defaultBrowserApiError
+        let retryDate = Date(timeIntervalSince1970: 1700000000)
+        let lastProvidedDate = Date(timeIntervalSince1970: 1699000000)
+
+        application.setupCategoryDefaultErrorWith(userInfo: [
+            DefaultBrowserUtility.APIErrorDateKeys.retryDate: retryDate,
+            DefaultBrowserUtility.APIErrorDateKeys.lastProvidedDate: lastProvidedDate
+        ])
+
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: true)
+
+        typealias EventExtra = GleanMetrics.App.DefaultBrowserApiErrorExtra
+        let savedEvent = try XCTUnwrap(mockGleanWrapper.savedEvents.last as? EventMetricType<EventExtra>)
+        let extras = try XCTUnwrap(mockGleanWrapper.savedExtras.last as? EventExtra)
+
+        XCTAssert(savedEvent === expectedEvent)
+        XCTAssertEqual(extras.apiQueryCount, 1)
+
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let retryDateString = try XCTUnwrap(extras.retryDate)
+        let savedRetryDate = try XCTUnwrap(formatter.date(from: retryDateString))
+        XCTAssertEqual(savedRetryDate, retryDate)
+
+        let lastProvidedDateString = try XCTUnwrap(extras.lastProvidedDate)
+        let savedLastProvidedDate = try XCTUnwrap(formatter.date(from: lastProvidedDateString))
+        XCTAssertEqual(savedLastProvidedDate, lastProvidedDate)
+    }
+
+    @MainActor
+    func testAPIError_savesDatesinUserDefaults() {
+        guard #available(iOS 18.2, *) else { return }
+
+        let retryDate = Date(timeIntervalSince1970: 1700000000)
+        let lastProvidedDate = Date(timeIntervalSince1970: 1699000000)
+
+        application.setupCategoryDefaultErrorWith(userInfo: [
+            DefaultBrowserUtility.APIErrorDateKeys.retryDate: retryDate,
+            DefaultBrowserUtility.APIErrorDateKeys.lastProvidedDate: lastProvidedDate
+        ])
+
+        setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: true)
+
+        let savedRetryDate = userDefaults.object(
+            forKey: DefaultBrowserUtility.APIErrorDateKeys.retryDate
+        ) as? Date
+        let savedLastProvidedDate = userDefaults.object(
+            forKey: DefaultBrowserUtility.APIErrorDateKeys.lastProvidedDate
+        ) as? Date
+
+        XCTAssertEqual(savedRetryDate, retryDate)
+        XCTAssertEqual(savedLastProvidedDate, lastProvidedDate)
+    }
+
     // MARK: - Helpers
     @MainActor
     private func setupSubjectForTesting(
