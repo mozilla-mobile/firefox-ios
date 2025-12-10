@@ -93,7 +93,7 @@ public final class DefaultURLFormatter: URLFormatter {
             // We only want to do percent encoding on our other schemes
             let hasHTTPScheme = entry.hasPrefix("http://") || entry.hasPrefix("https://")
             guard !hasHTTPScheme else { return URL(string: entry) }
-            
+
             // FXIOS-14375 - Manually add percent encoding since it's not handled by URL(string:) in < iOS 17
             guard let escapedURL = entry.addingPercentEncoding(withAllowedCharacters: urlAllowed) else {
                 return nil
