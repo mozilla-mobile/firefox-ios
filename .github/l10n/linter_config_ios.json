@@ -20,6 +20,7 @@
             "Pocket"
         ],
         "exclusions": [
+            "firefox-ios.xliff:CFBundleDisplayName",
             "firefox-ios.xliff:ctDNmu",
             "firefox-ios.xliff:DefaultBrowserCard.BetterInternet.Description.v108",
             "firefox-ios.xliff:DefaultBrowserCard.Description",
