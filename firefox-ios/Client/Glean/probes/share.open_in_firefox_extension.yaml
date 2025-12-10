@@ -65,3 +65,63 @@ share.open_in_firefox_extension:
       tags:
         - Share
         - OpenInFirefoxActionExtension
+  load_in_background:
+    type: event
+    description: |
+      Recorded when the user selects "Load in Background" from the Share Extension.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - ShareExtension
+  bookmark_this_page:
+    type: event
+    description: |
+      Recorded when the user bookmarks a page from the Share Extension.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - ShareExtension
+  add_to_reading_list:
+    type: event
+    description: |
+      Recorded when the user adds a page to the reading list from the Share Extension.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - ShareExtension
+  send_to_device:
+    type: event
+    description: |
+      Recorded when the user sends a tab to another device from the Share Extension.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - ShareExtension

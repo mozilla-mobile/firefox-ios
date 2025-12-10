@@ -150,4 +150,64 @@ final class ShareExtensionTelemetryTests: XCTestCase {
         XCTAssertEqual(firstExtras.extensionSource, "action-extension")
         XCTAssertEqual(secondExtras.extensionSource, "share-extension")
     }
+
+    // MARK: - loadInBackground Tests
+
+    func testLoadInBackground_RecordsEvent() throws {
+        let event = GleanMetrics.ShareOpenInFirefoxExtension.loadInBackground
+
+        subject?.loadInBackground()
+
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    // MARK: - bookmarkThisPage Tests
+
+    func testBookmarkThisPage_RecordsEvent() throws {
+        let event = GleanMetrics.ShareOpenInFirefoxExtension.bookmarkThisPage
+
+        subject?.bookmarkThisPage()
+
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    // MARK: - addToReadingList Tests
+
+    func testAddToReadingList_RecordsEvent() throws {
+        let event = GleanMetrics.ShareOpenInFirefoxExtension.addToReadingList
+
+        subject?.addToReadingList()
+
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    // MARK: - sendToDevice Tests
+
+    func testSendToDevice_RecordsEvent() throws {
+        let event = GleanMetrics.ShareOpenInFirefoxExtension.sendToDevice
+
+        subject?.sendToDevice()
+
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    // MARK: - All Share Extension Actions Tests
+
+    func testAllShareExtensionActions_RecordsAllEvents() throws {
+        subject?.loadInBackground()
+        subject?.bookmarkThisPage()
+        subject?.addToReadingList()
+        subject?.sendToDevice()
+
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 4)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 4)
+    }
 }

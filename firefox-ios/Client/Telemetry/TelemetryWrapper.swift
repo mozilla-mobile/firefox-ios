@@ -179,6 +179,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
 
         TelemetryContextualIdentifier.setupContextId()
 
+        // Process any pending app extension telemetry events from NSUserDefaults
+        processPendingAppExtensionTelemetry(profile: profile)
+
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
         startObservingNotifications(
@@ -328,6 +331,41 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             summarizerTelemetry.summarizationEnabled(summarizerNimbusUtils.isSummarizeFeatureToggledOn)
             summarizerTelemetry.summarizationShakeGestureEnabled(summarizerNimbusUtils.isShakeGestureEnabled)
         }
+    }
+
+    /// Processes pending app extension telemetry events stored in NSUserDefaults.
+    /// These events are written by the ShareTo extension and need to be recorded in Glean.
+    /// - Parameter profile: The profile containing the preferences where events are stored
+    @MainActor
+    private func processPendingAppExtensionTelemetry(profile: Profile) {
+        guard let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
+              !extensionEvents.isEmpty else {
+            return
+        }
+
+        let shareExtensionTelemetry = ShareExtensionTelemetry()
+
+        // Process each event and record it in Glean
+        for event in extensionEvents {
+            guard let method = event["method"] else { continue }
+
+            switch method {
+            case "load-in-background":
+                shareExtensionTelemetry.loadInBackground()
+            case "bookmark-this-page":
+                shareExtensionTelemetry.bookmarkThisPage()
+            case "add-to-reading-list":
+                shareExtensionTelemetry.addToReadingList()
+            case "send-to-device":
+                shareExtensionTelemetry.sendToDevice()
+            default:
+                // Unknown method, skip it
+                continue
+            }
+        }
+
+        // Clear the events array after processing
+        profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryEventArray)
     }
 }
 
