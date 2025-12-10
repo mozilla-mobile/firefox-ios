@@ -5,7 +5,6 @@ import Common
 import Redux
 import Shared
 
-// TODO: FXIOS-12947 - Add tests for TermsOfUse Feature
 @MainActor
 final class TermsOfUseMiddleware {
     private let prefs: Prefs

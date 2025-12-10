@@ -15,7 +15,6 @@ protocol TermsOfUseDelegate: AnyObject {
     func showTermsOfUse(context: TriggerContext)
 }
 
-// TODO: FXIOS-12947 - Add tests for TermsOfUseCoordinator
 @MainActor
 protocol TermsOfUseCoordinatorDelegate: AnyObject {
     func dismissTermsFlow()
