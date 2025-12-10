@@ -63,28 +63,35 @@ class DefaultBrowserUtility {
             level: .info,
             category: .setup
         )
-        guard let isDefault = try? application.isDefault(.webBrowser) else {
+
+        do {
+            trackNumberOfAPIQueries(forNewUsers: isFirstRun)
+            let isDefault = try application.isDefault(.webBrowser)
+
             logger.log(
-                "UIApplicationInterface.isDefault was not present",
+                "UIApplicationInterface.isDefault was successful",
                 level: .info,
                 category: .setup
             )
-            return
-        }
+            trackIfUserIsDefault(isDefault)
 
-        logger.log(
-            "UIApplicationInterface.isDefault was successful",
-            level: .info,
-            category: .setup
-        )
-        trackIfUserIsDefault(isDefault)
-
-        if isFirstRun {
-            trackIfNewUserIsComingFromBrowserChoiceScreen(isDefault)
-
-            if isDefault {
-                isDefaultBrowser = true
+            if isFirstRun {
+                trackIfNewUserIsComingFromBrowserChoiceScreen(isDefault)
             }
+
+            isDefaultBrowser = isDefault
+        } catch let error as UIApplication.CategoryDefaultError {
+            logger.log(
+                "UIApplicationInterface.isDefault returned retry error: \(error.localizedDescription)",
+                level: .info,
+                category: .setup
+            )
+        } catch {
+            logger.log(
+                "UIApplicationInterface.isDefault was not present with error: \(error.localizedDescription)",
+                level: .info,
+                category: .setup
+            )
         }
     }
 
@@ -155,5 +162,30 @@ class DefaultBrowserUtility {
         isDefaultBrowser = preAPIStatus || postAPIStatus
 
         userDefault.set(true, forKey: UserDefaultsKey.shouldNotPerformMigration)
+    }
+
+    // MARK: - Tracking
+    /// This tracks the number of times we've queried the `isDefault` API only for new
+    /// users, in order to understand when the API returns an error. This number will only
+    /// be sent when we receive the error.
+    private func trackNumberOfAPIQueries(forNewUsers shouldStartTracking: Bool) {
+        let key = "trackNumberOf"
+
+        if shouldStartTracking {
+            userDefault.set(1, forKey: key)
+            return
+        }
+
+        // For existing users, if the key doesn't exist, do nothing
+        guard let currentCount = userDefault.object(forKey: key) as? Int,
+              userDefault.object(forKey: key) != nil else {
+            return
+        }
+
+        userDefault.set(currentCount + 1, forKey: key)
+    }
+
+    private func trackDateForErrorReporting() {
+        
     }
 }

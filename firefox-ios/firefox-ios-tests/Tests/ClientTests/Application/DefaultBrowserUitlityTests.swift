@@ -43,7 +43,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
         XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
         XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
-        XCTAssertEqual(userDefaults.setCalledCount, 2)
+        XCTAssertEqual(userDefaults.setCalledCount, 3)
     }
 
     @MainActor
@@ -56,7 +56,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
         XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
         XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
-        XCTAssertEqual(userDefaults.setCalledCount, 1)
+        XCTAssertEqual(userDefaults.setCalledCount, 3)
     }
 
     @MainActor
@@ -65,11 +65,11 @@ final class DefaultBrowserUtilityTests: XCTestCase {
 
         setupSubjectForTesting(region: "IT", setToDefault: true, isFirstRun: false)
 
-        XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
+        XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
         XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
         XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
-        XCTAssertEqual(userDefaults.setCalledCount, 1)
+        XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
     @MainActor
@@ -82,7 +82,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
         XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
         XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
-        XCTAssertEqual(userDefaults.setCalledCount, 1)
+        XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
     // MARK: - Migration Flag Tests
@@ -166,7 +166,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
     }
 
     @MainActor
-    func testMigration_DMA_postFirstRun_isNotDefaultBrowser() {
+    func testMigration_DMA_postFirstRun_isDefaultBrowser() {
         XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
         XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
 
@@ -174,7 +174,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         setupSubjectForTesting(region: "IT", setToDefault: true, isFirstRun: isFirstRun)
         subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
 
-        XCTAssertFalse(subject.isDefaultBrowser)
+        XCTAssertTrue(subject.isDefaultBrowser)
     }
 
     // MARK: - Migration tests for any type of user post first run
@@ -195,10 +195,10 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertFalse(userDefaults.bool(forKey: apiOrUserSetToDefaultKey))
         XCTAssertFalse(userDefaults.bool(forKey: deeplinkValueKey))
 
-        userDefaults.set(true, forKey: deeplinkValueKey)
-
         let isFirstRun = false
         setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: isFirstRun)
+
+        userDefaults.set(true, forKey: deeplinkValueKey)
         subject.migrateDefaultBrowserStatusIfNeeded(isFirstRun: isFirstRun)
 
         XCTAssertTrue(subject.isDefaultBrowser)
