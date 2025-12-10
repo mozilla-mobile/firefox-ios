@@ -324,7 +324,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             switch result {
             case .success(let clients):
                 let OAuthID = isStaging ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
-                return clients.contains(where: { $0.clientId == OAuthID })
+                let hasRelayID = clients.contains(where: { $0.clientId == OAuthID })
+                if !hasRelayID {
+                    logger.log("No Relay service on this account.", level: .info, category: .relay)
+                }
+                return hasRelayID
             case .failure(let error):
                 logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .relay)
                 return false
