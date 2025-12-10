@@ -576,9 +576,18 @@ class LoginTest: BaseTestCase {
             throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
         }
         validateLoginTextFieldsCanBeCopied(indexField: 0, copiedText: "https://testweb", field: "website")
-        app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
+        print(app.debugDescription)
+        if #available(iOS 26, *) {
+            app.buttons["close"].waitAndTap()
+        } else {
+            app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
+        }
         validateLoginTextFieldsCanBeCopied(indexField: 1, copiedText: "foo", field: "username")
-        app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
+        if #available(iOS 26, *) {
+            app.buttons["close"].waitAndTap()
+        } else {
+            app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
+        }
         validateLoginTextFieldsCanBeCopied(indexField: 2, copiedText: "bar", field: "password")
     }
 

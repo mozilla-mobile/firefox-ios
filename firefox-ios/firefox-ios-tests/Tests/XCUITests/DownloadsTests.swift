@@ -42,7 +42,7 @@ class DownloadsTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft(velocity: 200)
-        app.tables.cells.buttons["Delete"].waitAndTap()
+        app.buttons["Delete"].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306896
@@ -156,7 +156,14 @@ class DownloadsTests: BaseTestCase {
                 app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel]
             ]
         )
-        if #available(iOS 17, *) {
+        if #available(iOS 26, *) {
+            waitForElementsToExist(
+                [
+                    app.collectionViews.cells["Copy"],
+                    app.collectionViews.cells["Save to Files"]
+                ]
+            )
+        } else if #available(iOS 17, *) {
             waitForElementsToExist(
                 [
                     app.collectionViews.cells["Copy"],
@@ -169,7 +176,9 @@ class DownloadsTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
         }
-        if !iPad() {
+        if #available(iOS 26, *) {
+            app.buttons["Done"].waitAndTap()
+        } else if !iPad() {
             app.navigationBars["UIActivityContentView"].buttons["Close"].waitAndTap()
         } else {
             // Workaround to close the context menu.
@@ -193,7 +202,14 @@ class DownloadsTests: BaseTestCase {
                 app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel]
             ]
         )
-        if #available(iOS 17, *) {
+        if #available(iOS 26, *) {
+            waitForElementsToExist(
+                [
+                    app.collectionViews.cells["Copy"],
+                    app.collectionViews.cells["Save to Files"]
+                ]
+            )
+        } else if #available(iOS 17, *) {
             waitForElementsToExist(
                 [
                     app.collectionViews.cells["Copy"],
@@ -206,7 +222,9 @@ class DownloadsTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
         }
-        if !iPad() {
+        if #available(iOS 26, *) {
+            app.buttons["Done"].waitAndTap()
+        } else if !iPad() {
             app.navigationBars["UIActivityContentView"].buttons["Close"].waitAndTap()
         } else {
             // Workaround to close the context menu.

@@ -131,7 +131,11 @@ class DataManagementTests: BaseTestCase {
         // I cannot test for visibility at the moment.
         // let expectedSearchResults = app.tables["Search results"].cells.count
         // XCTAssertEqual(expectedSearchResults, 1)
-        app.buttons["Cancel"].waitAndTap()
+        if #available(iOS 26, *) {
+            app.buttons["close"].waitAndTap()
+        } else {
+            app.buttons["Cancel"].waitAndTap()
+        }
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
         if #available(iOS 17, *) {
             XCTAssertGreaterThan(app.cells.images.count, 1)
