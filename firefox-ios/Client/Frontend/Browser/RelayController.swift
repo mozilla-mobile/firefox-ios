@@ -82,7 +82,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             }
         }
 
-        func scope() -> String { OAuthScope.relay }
+        var scope: String { OAuthScope.relay }
     }
 
     // MARK: - Properties
@@ -281,7 +281,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
         isCreatingClient = true
-        acctManager.getAccessToken(scope: config.scope()) { [config, weak self] result in
+        acctManager.getAccessToken(scope: config.scope) { [config, weak self] result in
             switch result {
             case .failure(let error):
                 self?.logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)
