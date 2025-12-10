@@ -127,7 +127,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
-    // TODO: FXIOS- This can't be nonisolated because it is a var but it is only set once.
+    // TODO: FXIOS-14381 This can't be nonisolated because it is a var but it is only set once.
     // We should probably just do this as part of a Tab init from TabData but it will
     // be a bigger refactor.
     nonisolated(unsafe) var tabUUID: TabUUID = UUID().uuidString
