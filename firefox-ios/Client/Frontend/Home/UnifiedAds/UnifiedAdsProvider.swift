@@ -6,7 +6,6 @@ import Common
 import Foundation
 import MozillaAppServices
 import Shared
-import Storage
 
 typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
 
