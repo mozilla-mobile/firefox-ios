@@ -369,7 +369,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isSwipingTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
+        return toolbarHelper.isSwipingTabsEnabled
     }
 
     var isMinimalAddressBarEnabled: Bool {
