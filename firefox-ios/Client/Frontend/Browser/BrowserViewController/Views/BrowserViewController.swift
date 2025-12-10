@@ -94,6 +94,7 @@ class BrowserViewController: UIViewController,
     var zoomManager: ZoomPageManager
     let documentLogger: DocumentLogger
     var downloadHelper: DownloadHelper?
+    private var shouldLayoutSubviews = true
 
     // MARK: Optional UI elements
 
@@ -676,7 +677,6 @@ class BrowserViewController: UIViewController,
         tabToolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
-        updateToolbarDisplay()
         if isToolbarTranslucencyRefactorEnabled {
             addOrUpdateMaskViewIfNeeded()
         }
@@ -843,8 +843,6 @@ class BrowserViewController: UIViewController,
             header.setNeedsLayout()
             view.layoutSubviews()
         }
-
-        updateToolbarDisplay()
     }
 
     private func updateSwipingTabs() {
@@ -1471,6 +1469,7 @@ class BrowserViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        shouldLayoutSubviews = true
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
@@ -1480,6 +1479,11 @@ class BrowserViewController: UIViewController,
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         updateToolbarStateForTraitCollection(traitCollection)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        shouldLayoutSubviews = false
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1560,7 +1564,7 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        guard shouldLayoutSubviews else { return }
         // Remove existing constraints
         statusBarOverlay.removeConstraints(statusBarOverlayConstraints)
         statusBarOverlayConstraints.removeAll()
@@ -1673,6 +1677,7 @@ class BrowserViewController: UIViewController,
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
                 updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
+                updateToolbarDisplay()
             }
             updateToolbarStateForTraitCollection(traitCollection)
         }
@@ -2015,7 +2020,6 @@ class BrowserViewController: UIViewController,
         }
 
         browserDelegate?.show(webView: webView)
-        updateToolbarDisplay()
     }
 
     // MARK: - Document Loading
