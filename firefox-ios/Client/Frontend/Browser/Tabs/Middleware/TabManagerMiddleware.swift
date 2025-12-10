@@ -518,11 +518,11 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private func undoCloseTab(state: AppState, uuid: WindowUUID) {
         toastTelemetry.undoClosedSingleTab()
         let tabManager = tabManager(for: uuid)
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid),
-              tabManager.backupCloseTab != nil
-        else { return }
+        guard tabManager.backupCloseTab != nil else { return }
 
         tabManager.undoCloseTab()
+
+        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
