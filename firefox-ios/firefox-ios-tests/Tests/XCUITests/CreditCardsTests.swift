@@ -189,6 +189,9 @@ class CreditCardsTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
         }
+        if #available(iOS 26, *) {
+            throw XCTSkip("Autofill does not work on iOS 26")
+        }
         addCreditCardAndReachAutofillWebsite()
         // Tap on the "Manage credit cards" option
         app.buttons[manageCards].waitAndTap()
@@ -311,6 +314,9 @@ class CreditCardsTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
         }
+        if #available(iOS 26, *) {
+            throw XCTSkip("Autofill does not work on iOS 26")
+        }
         addCreditCardAndReachAutofillWebsite()
         // Select the saved credit card
         selectCreditCardOnFormWebsite()
@@ -349,6 +355,10 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[updatedName])
         // Go to an saved credit card and change the credit card number
         app.tables.cells.element(boundBy: 1).waitAndTap()
+        if #available(iOS 26, *) {
+            restartInBackground()
+            unlockLoginsView()
+        }
         app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].waitAndTap()
         tapCardNr()
         clearTextUntilEmpty(element: cardNr)
@@ -357,7 +367,9 @@ class CreditCardsTests: BaseTestCase {
         // The credit card number is saved without issues
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1111"))
         // Reach autofill website
-        if #available(iOS 16, *) {
+        if #available(iOS 26, *) {
+            throw XCTSkip("Autofill does not work on iOS 26")
+        } else if #available(iOS 16, *) {
             reachAutofillWebsite()
             app.scrollViews.otherElements.tables.cells.firstMatch.tapOnApp()
             app.buttons["Test2"].tapIfExists()
@@ -367,7 +379,7 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306974
-    func testVerifyThatMultipleCardsCanBeAdded() {
+    func testVerifyThatMultipleCardsCanBeAdded() throws {
         // Add multiple credit cards
         let expectedCards = 3
         navigator.nowAt(NewTabScreen)
@@ -399,8 +411,10 @@ class CreditCardsTests: BaseTestCase {
             XCTAssertTrue(cellElement[card[1]].exists, "\(card[1]) info is not displayed")
             XCTAssertTrue(cellElement[card[2]].exists, "\(card[2]) info is not displayed")
         }
-        // reachAutofillWebsite() not working on iOS 15
-        if #available(iOS 16, *) {
+        // reachAutofillWebsite() not working on iOS 15 and iOS 26
+        if #available(iOS 26, *) {
+            throw XCTSkip("Autofill does not work on iOS 26")
+        } else if #available(iOS 16, *) {
             // Reach used saved cards autofill website
             reachAutofillWebsite()
             // Any saved card can be selected/used from the autofill menu
@@ -577,6 +591,9 @@ class CreditCardsTests: BaseTestCase {
     func testUpdatePrompt() throws {
         if #unavailable(iOS 17) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15 and 16")
+        }
+        if #available(iOS 26, *) {
+            throw XCTSkip("Autofill does not work on iOS 26")
         }
         // Fill in the form with the details of an already saved credit card
         addCreditCardAndReachAutofillWebsite()
