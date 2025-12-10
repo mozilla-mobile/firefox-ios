@@ -39,6 +39,10 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         return nimbus.features.touFeature.value().maxRemindersCount
     }
 
+    private var enableDragToDismiss: Bool {
+        return nimbus.features.touFeature.value().enableDragToDismiss
+    }
+
     init(windowUUID: WindowUUID,
          router: Router,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -62,7 +66,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         let vc = TermsOfUseViewController(
             themeManager: themeManager,
             windowUUID: windowUUID,
-            notificationCenter: notificationCenter
+            notificationCenter: notificationCenter,
+            enableDragToDismiss: enableDragToDismiss
         )
         vc.coordinator = self
         vc.modalPresentationStyle = .overFullScreen
