@@ -207,6 +207,10 @@ final class AddressToolbarContainer: UIView,
     }
 
     func hideSkeletonBars() {
+        if !leftSkeletonAddressBar.isHidden && rightSkeletonAddressBar.isHidden {
+            configureSkeletonAddressBars(previousTab: nil, forwardTab: nil)
+        }
+
         leftSkeletonAddressBar.isHidden = true
         rightSkeletonAddressBar.isHidden = true
     }
@@ -250,11 +254,10 @@ final class AddressToolbarContainer: UIView,
     }
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {
-        let isToolbarAtBottom = state?.toolbarPosition == .bottom
-        guard let selectedTab = tabManager.selectedTab, isToolbarAtBottom else {
-            hideSkeletonBars()
+        guard let selectedTab = tabManager.selectedTab else {
             return
         }
+
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
@@ -262,8 +265,9 @@ final class AddressToolbarContainer: UIView,
         let forwardTab = tabs[safe: index+1]
 
         configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
-        leftSkeletonAddressBar.isHidden = previousTab == nil
-        rightSkeletonAddressBar.isHidden = forwardTab == nil
+        let isToolbarAtBottom = state?.toolbarPosition == .bottom
+        leftSkeletonAddressBar.isHidden = previousTab == nil && isToolbarAtBottom
+        rightSkeletonAddressBar.isHidden = forwardTab == nil && isToolbarAtBottom
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -400,6 +404,7 @@ final class AddressToolbarContainer: UIView,
 
     private func updateSkeletonAddressBarsAlpha(to alpha: CGFloat) {
         guard isSwipingTabsEnabled else { return }
+
         leftSkeletonAddressBar.alpha = alpha
         rightSkeletonAddressBar.alpha = alpha
     }
