@@ -23,7 +23,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     func getOnboardingModel(
         for onboardingType: OnboardingType,
         from nimbus: FxNimbus = FxNimbus.shared
-    ) -> OnboardingViewModel {
+    ) -> OnboardingKitViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
         let cards = getOrderedOnboardingCards(
@@ -31,7 +31,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             from: framework.cards,
             withConditions: framework.conditions)
 
-        return OnboardingViewModel(
+        return OnboardingKitViewModel(
             cards: cards,
             isDismissible: framework.dismissable)
     }
