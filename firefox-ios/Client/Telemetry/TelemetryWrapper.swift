@@ -335,9 +335,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
 
     /// Processes pending app extension telemetry events stored in NSUserDefaults.
     /// These events are written by the ShareTo extension and need to be recorded in Glean.
+    /// Should be called both on app launch and when app becomes active (foreground) to ensure
+    /// events are processed even when the app was in background.
     /// - Parameter profile: The profile containing the preferences where events are stored
     @MainActor
-    private func processPendingAppExtensionTelemetry(profile: Profile) {
+    func processPendingAppExtensionTelemetry(profile: Profile) {
         guard let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
               !extensionEvents.isEmpty else {
             return
