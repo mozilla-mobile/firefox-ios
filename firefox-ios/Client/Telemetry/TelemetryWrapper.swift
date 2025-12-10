@@ -1125,10 +1125,7 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
-        case (.action, .open, .defaultBrowser, _, let extras):
-            if let isDefaultBrowser = extras?[EventExtraKey.isDefaultBrowser.rawValue] as? Bool {
-                GleanMetrics.App.defaultBrowser.set(isDefaultBrowser)
-            }
+            //roux
         case (.action, .open, .choiceScreenAcquisition, _, let extras):
             if let choiceScreen = extras?[EventExtraKey.didComeFromBrowserChoiceScreen.rawValue] as? Bool {
                 GleanMetrics.App.choiceScreenAcquisition.set(choiceScreen)

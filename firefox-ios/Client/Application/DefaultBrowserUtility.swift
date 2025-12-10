@@ -9,7 +9,7 @@ import Common
 @MainActor
 class DefaultBrowserUtility {
     let userDefault: UserDefaultsInterface
-    let telemtryWrapper: TelemetryWrapperProtocol
+    let telemetry: DefaultBrowserUtilityTelemetry
     let locale: LocaleProvider
     let application: UIApplicationInterface
     let dmaCountries = ["BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", "HR", "IT", "CY", "LV",
@@ -19,13 +19,13 @@ class DefaultBrowserUtility {
 
     init(
         userDefault: UserDefaultsInterface = UserDefaults.standard,
-        telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+        telemetry: DefaultBrowserUtilityTelemetry = DefaultBrowserUtilityTelemetry(),
         locale: LocaleProvider = SystemLocaleProvider(),
         application: UIApplicationInterface = UIApplication.shared,
         logger: Logger = DefaultLogger.shared
     ) {
         self.userDefault = userDefault
-        self.telemtryWrapper = telemetryWrapper
+        self.telemetry = telemetry
         self.locale = locale
         self.application = application
         self.logger = logger
@@ -104,22 +104,14 @@ class DefaultBrowserUtility {
 
     private func trackIfUserIsDefault(_ isDefault: Bool) {
         userDefault.set(isDefault, forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser)
-
-        telemtryWrapper.recordEvent(category: .action,
-                                    method: .open,
-                                    object: .defaultBrowser,
-                                    extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: isDefault])
+        telemetry.recordAppIsDefaultBrowser(isDefault)
     }
 
     private func trackIfNewUserIsComingFromBrowserChoiceScreen(_ isDefault: Bool) {
         guard let regionCode = locale.localeRegionCode else { return }
         // User is in a DMA effective region
         if dmaCountries.contains(regionCode) {
-            let key = TelemetryWrapper.EventExtraKey.didComeFromBrowserChoiceScreen.rawValue
-            telemtryWrapper.recordEvent(category: .action,
-                                        method: .open,
-                                        object: .choiceScreenAcquisition,
-                                        extras: [key: isDefault])
+            telemetry.recordIsUserChoiceScreenAcquisition(isDefault)
         }
     }
 
@@ -164,7 +156,7 @@ class DefaultBrowserUtility {
         userDefault.set(true, forKey: UserDefaultsKey.shouldNotPerformMigration)
     }
 
-    // MARK: - Tracking
+    // MARK: - API Tracking
     /// This tracks the number of times we've queried the `isDefault` API only for new
     /// users, in order to understand when the API returns an error. This number will only
     /// be sent when we receive the error.

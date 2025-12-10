@@ -2,15 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
+import Glean
 import Shared
+import XCTest
+
 @testable import Client
 
 final class DefaultBrowserUtilityTests: XCTestCase {
     typealias DefaultKeys = DefaultBrowserUtility.UserDefaultsKey
 
     var subject: DefaultBrowserUtility!
-    var telemetryWrapper: MockTelemetryWrapper!
+    var mockGleanWrapper: MockGleanWrapper!
     var userDefaults: MockUserDefaults!
     var application: MockUIApplication!
 
@@ -20,13 +22,13 @@ final class DefaultBrowserUtilityTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        telemetryWrapper = MockTelemetryWrapper()
+        mockGleanWrapper = MockGleanWrapper()
         userDefaults = MockUserDefaults()
         application = MockUIApplication()
     }
 
     override func tearDown() {
-        telemetryWrapper = nil
+        mockGleanWrapper = nil
         userDefaults = nil
         application = nil
         subject = nil
@@ -34,54 +36,69 @@ final class DefaultBrowserUtilityTests: XCTestCase {
     }
 
     @MainActor
-    func testFirstLaunchWithDMAUser() {
+    func testFirstLaunchWithDMAUser() throws {
         guard #available(iOS 18.2, *) else { return }
 
+        let expectedBrowserEvent = GleanMetrics.App.defaultBrowser
+        let expectedChoiceEvent = GleanMetrics.App.choiceScreenAcquisition
         setupSubjectForTesting(region: "IE", setToDefault: true, isFirstRun: true)
 
         XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
-        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
+
+        let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
+        let savedChoiceScreenMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? BooleanMetricType)
+        XCTAssert(savedDefaultMetric === expectedBrowserEvent)
+        XCTAssert(savedChoiceScreenMetric === expectedChoiceEvent)
+
         XCTAssertEqual(userDefaults.setCalledCount, 3)
     }
 
     @MainActor
-    func testFirstLaunchWithNonDMAUser() {
+    func testFirstLaunchWithNonDMAUser() throws {
         guard #available(iOS 18.2, *) else { return }
 
+        let expectedBrowserEvent = GleanMetrics.App.defaultBrowser
         setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: true)
 
         XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
-        XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
+
+        let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
+        XCTAssert(savedDefaultMetric === expectedBrowserEvent)
+
         XCTAssertEqual(userDefaults.setCalledCount, 3)
     }
 
     @MainActor
-    func testSecondLaunchWithDMAUser() {
+    func testSecondLaunchWithDMAUser() throws {
         guard #available(iOS 18.2, *) else { return }
 
+        let expectedBrowserEvent = GleanMetrics.App.defaultBrowser
         setupSubjectForTesting(region: "IT", setToDefault: true, isFirstRun: false)
 
         XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
-        XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
+
+        let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
+        XCTAssert(savedDefaultMetric === expectedBrowserEvent)
+
         XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
     @MainActor
-    func testSecondLaunchWithNonDMAUser() {
+    func testSecondLaunchWithNonDMAUser() throws {
         guard #available(iOS 18.2, *) else { return }
 
+        let expectedBrowserEvent = GleanMetrics.App.defaultBrowser
         setupSubjectForTesting(region: "US", setToDefault: false, isFirstRun: false)
 
         XCTAssertFalse(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
-        XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
+
+        let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
+        XCTAssert(savedDefaultMetric === expectedBrowserEvent)
+
         XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
@@ -251,7 +268,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
     private func setupSubject(with locale: LocaleProvider) {
         subject = DefaultBrowserUtility(
             userDefault: userDefaults,
-            telemetryWrapper: telemetryWrapper,
+            telemetry: DefaultBrowserUtilityTelemetry(gleanWrapper: mockGleanWrapper),
             locale: locale,
             application: application
         )
