@@ -281,7 +281,10 @@ class SettingsTests: FeatureFlaggedTestBase {
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)
         let summarizeSettings = table.cells[AccessibilityIdentifiers.Settings.Summarize.title]
-        mozWaitForElementToNotExist(summarizeSettings)
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31214
+        if #unavailable(iOS 26) {
+            mozWaitForElementToNotExist(summarizeSettings)
+        }
     }
 
     func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
