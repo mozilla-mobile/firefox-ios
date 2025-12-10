@@ -82,9 +82,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             }
         }
 
-        var scope: String {
-            "profile"
-        }
+        func scope() -> String { OAuthScope.relay }
     }
 
     // MARK: - Properties
@@ -136,7 +134,9 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool {
         // Note: the prefs key defaults to On. No value (nil) should be treated as true.
-        guard Self.isFeatureEnabled, profile.prefs.boolForKey(PrefsKeys.ShowRelayMaskSuggestions) ?? true else {
+        guard Self.isFeatureEnabled,
+              profile.prefs.boolForKey(PrefsKeys.ShowRelayMaskSuggestions) ?? true,
+              client != nil else {
             return false
         }
         guard let relayRSClient, hasRelayAccount() else { return false }
@@ -157,7 +157,12 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
 
-        guard let webView = tab.webView, let client else { return }
+        guard let webView = tab.webView, let client else {
+            logger.log("No tab webview available, or client is nil. Will not populate email field.",
+                       level: .warning,
+                       category: .relay)
+            return
+        }
         Task {
             let (email, result) = await generateRelayMask(for: tab.url?.baseDomain ?? "", client: client)
             guard result != .error else { completion(.error); return }
@@ -276,7 +281,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
         isCreatingClient = true
-        acctManager.getAccessToken(scope: config.scope) { [config, weak self] result in
+        acctManager.getAccessToken(scope: config.scope()) { [config, weak self] result in
             switch result {
             case .failure(let error):
                 self?.logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)
