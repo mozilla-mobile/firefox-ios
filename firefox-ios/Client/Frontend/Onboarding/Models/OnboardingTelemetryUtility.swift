@@ -15,7 +15,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
 
     // MARK: - Initializer (Legacy)
     init(
-        with model: OnboardingViewModel,
+        with model: OnboardingKitViewModel,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.cardOrder = model.cards.map { $0.name }

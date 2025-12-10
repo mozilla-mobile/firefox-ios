@@ -32,7 +32,7 @@ class LaunchScreenViewModel {
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
          messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
-         onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)) {
+         onboardingModel: OnboardingKitViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)) {
         self.profile = profile
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)

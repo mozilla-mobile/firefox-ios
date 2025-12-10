@@ -25,7 +25,7 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         windowUUID: WindowUUID,
         profile: Profile,
         messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
-        onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        onboardingModel: OnboardingKitViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
     ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)

@@ -200,14 +200,14 @@ class UpdateViewModelTests: XCTestCase {
         return subject
     }
 
-    func createOnboardingViewModel(withCards: Bool) -> OnboardingViewModel {
+    func createOnboardingViewModel(withCards: Bool) -> OnboardingKitViewModel {
         let cards: [OnboardingKitCardInfoModel] = [
             createCard(index: 1),
             createCard(index: 2)
         ]
 
-        return OnboardingViewModel(cards: withCards ? cards : [],
-                                   isDismissible: true)
+        return OnboardingKitViewModel(cards: withCards ? cards : [],
+                                      isDismissible: true)
     }
 
     func createCard(index: Int) -> OnboardingKitCardInfoModel {
