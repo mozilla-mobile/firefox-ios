@@ -18,6 +18,17 @@ class SearchTests: FeatureFlaggedTestBase {
     var toolbarScreen: ToolbarScreen!
     var browserScreen: BrowserScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
+    var searchScreen: SearchScreen!
+    var searchSettingsScreen: SearchSettingsScreen!
+    var settingsScreen: SettingScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        browserScreen = BrowserScreen(app: app)
+        settingsScreen = SettingScreen(app: app)
+        searchSettingsScreen = SearchSettingsScreen(app: app)
+        searchScreen = SearchScreen(app: app)
+    }
 
     private func typeOnSearchBar(text: String) {
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
@@ -25,9 +36,14 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     private func typeOnSearchBar_TAE(text: String) {
-        let browserScreen = BrowserScreen(app: app)
         browserScreen.tapOnAddressBar()
         browserScreen.getAddressBarElement().tapAndTypeText(text)
+    }
+
+    private func enterTextOnSearchBar_TAE(text: String) {
+        browserScreen.tapOnAddressBar()
+        browserScreen.typeOnSearchBar(text: text)
+        browserScreen.typeOnSearchBar(text: "\r")
     }
 
     private func suggestionsOnOff() {
@@ -745,125 +761,207 @@ class SearchTests: FeatureFlaggedTestBase {
     // MARK: - Pre Search (Trending Searches + Recent Searches)
     func testTrendingSearches_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.openURL("https://www.mozilla.org/en-US/")
-        waitUntilPageLoad()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        navigateToWebPage()
+
+        browserScreen.assertAddressBarExists()
+        browserScreen.tapOnAddressBar()
 
         // Trending Search appears
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Trending on Google"])
-        app.tables["SiteTable"].cells.firstMatch.waitAndTap()
+        searchScreen.assertSearchTableVisible()
+        searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
+        searchScreen.tapOnFirstCell()
+
         waitUntilPageLoad()
 
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
-        mozWaitForValueContains(url, value: "google")
+        browserScreen.assertAddressBarContains(value: "google")
     }
 
     func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+
         app.launch()
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
 
-        // By default, enable trending searches
-        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
-            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
-        ].switches.firstMatch
-        let recentSearchSuggestSwitch = app.otherElements.tables.cells[
-            AccessibilityIdentifiers.Settings.Search.showRecentSearches
-        ].switches.firstMatch
+        // By default, Trending Searches is Enabled
+        searchSettingsScreen.assertTrendingSearchesSwitchIsOn()
+        searchSettingsScreen.assertRecentSearchesSwitchDoesNotExist()
 
-        mozWaitForElementToExist(trendingSearchSuggestSwitch)
-        mozWaitForElementToNotExist(recentSearchSuggestSwitch)
+        searchSettingsScreen.assertNavBarVisible()
 
-        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+        dismissSearchSettingsScreen()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.openURL("https://www.mozilla.org/en-US/")
-        waitUntilPageLoad()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+        navigateToWebPage()
 
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending on Google"])
+        browserScreen.assertAddressBarExists()
+        browserScreen.tapOnAddressBar()
+        searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
     }
 
     func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         app.launch()
-        // Disable general search suggests
-        navigator.goto(SearchSettings)
-        navigator.nowAt(SearchSettings)
-        app.tables.switches["Show Search Suggestions"].waitAndTap()
 
-        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
-            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
-        ].switches.firstMatch
-
-        trendingSearchSuggestSwitch.waitAndTap()
-
-        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
-
-        navigator.nowAt(HomePanelsScreen)
-        navigator.openURL("https://www.mozilla.org/en-US/")
-        waitUntilPageLoad()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
-
-        mozWaitForElementToNotExist(app.tables["SiteTable"].otherElements["Trending on Google"])
-    }
-
-    func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
-        app.launch()
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
 
-        // By default, enable trending searches
-        let trendingSearchSuggestSwitch = app.otherElements.tables.cells[
-            AccessibilityIdentifiers.Settings.Search.showTrendingSearches
-        ].switches.firstMatch
-        let recentSearchSuggestSwitch = app.otherElements.tables.cells[
-            AccessibilityIdentifiers.Settings.Search.showRecentSearches
-        ].switches.firstMatch
+        searchSettingsScreen.assertTrendingSearchesSwitchIsOn()
+        searchSettingsScreen.assertRecentSearchesSwitchDoesNotExist()
 
-        mozWaitForElementToExist(trendingSearchSuggestSwitch)
-        mozWaitForElementToNotExist(recentSearchSuggestSwitch)
+        // Disable Trending Searches in Settings
+        searchSettingsScreen.tapOnTrendingSearchesSwitch()
 
-        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+        dismissSearchSettingsScreen()
 
-        navigator.nowAt(HomePanelsScreen)
-        navigator.openURL("https://www.mozilla.org/en-US/")
-        waitUntilPageLoad()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+        navigateToWebPage()
 
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending on Google"])
+        browserScreen.assertAddressBarExists()
+        browserScreen.tapOnAddressBar()
+        searchScreen.assertTrendingSearchesSectionTitleDoesNotExist(with: "Google")
     }
 
     func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.openURL("https://www.mozilla.org/en-US/")
-        waitUntilPageLoad()
 
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
-        let testString = "example"
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tapAndTypeText(testString)
+        navigateToWebPage()
 
-        // Search Term suggestions appears
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])
-        app.typeText(XCUIKeyboardKey.return.rawValue)
+        typeOnSearchBar_TAE(text: "example")
 
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
-        app.buttons["Clear text"].firstMatch.waitAndTap()
+        // Search Suggestions appears
+        searchScreen.assertSearchSectionVisible(with: "Google")
+
+        browserScreen.assertAddressBarExists()
+        browserScreen.tapOnAddressBar()
+        browserScreen.clearURL()
 
         // Trending Search appears
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Trending on Google"])
-        app.tables["SiteTable"].cells.firstMatch.waitAndTap()
+        searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
+        searchScreen.tapOnFirstCell()
+        waitUntilPageLoad()
+
+        browserScreen.assertAddressBarContains(value: "google")
+    }
+
+    func testRecentSearches_recentSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+
+        app.launch()
+        navigateToWebPage()
+
+        enterTextOnSearchBar_TAE(text: "example")
+
+        browserScreen.tapOnAddressBar()
+        browserScreen.clearURL()
+
+        // Recent Search appears
+        searchScreen.assertSearchTableVisible()
+        searchScreen.assertRecentSearchesSectionTitle()
+        searchScreen.tapOnFirstCell()
+
+        waitUntilPageLoad()
+
+        browserScreen.assertAddressBarContains(value: "google")
+    }
+
+    func testRecentSearchesWithNoRecentSearches_recentSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+
+        app.launch()
+        navigateToWebPage()
+
+        browserScreen.assertAddressBarExists()
+        browserScreen.tapOnAddressBar()
+
+        searchScreen.assertSearchTableVisible()
+        searchScreen.assertRecentSearchesSectionTitleDoesNotExist()
+    }
+
+    func testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+
+        app.launch()
+
+        enterTextOnSearchBar_TAE(text: "example")
+
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+
+        // By default, enable trending searches
+        searchSettingsScreen.assertRecentSearchesSwitchIsOn()
+        searchSettingsScreen.assertTrendingSearchesSwitchDoesNotExist()
+
+        searchSettingsScreen.assertNavBarVisible()
+
+        dismissSearchSettingsScreen()
+
+        navigateToWebPage()
+
+        browserScreen.tapOnAddressBar()
+        searchScreen.assertRecentSearchesSectionTitle()
+    }
+
+    func testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        app.launch()
+
+        enterTextOnSearchBar_TAE(text: "example")
+
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+
+        searchSettingsScreen.assertRecentSearchesSwitchIsOn()
+        searchSettingsScreen.assertTrendingSearchesSwitchDoesNotExist()
+
+        // Disable Recent Searches in Settings
+        searchSettingsScreen.tapOnRecentSearchesSwitch()
+
+        dismissSearchSettingsScreen()
+
+        navigateToWebPage()
+
+        browserScreen.tapOnAddressBar()
+        searchScreen.assertRecentSearchesSectionTitleDoesNotExist()
+    }
+
+    func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+
+        app.launch()
+
+        enterTextOnSearchBar_TAE(text: "example")
+
+        navigator.goto(SearchSettings)
+        navigator.nowAt(SearchSettings)
+
+        // Both Recent Searches + Trending Searches are On
+        searchSettingsScreen.assertTrendingSearchesSwitchIsOn()
+        searchSettingsScreen.assertRecentSearchesSwitchIsOn()
+
+        dismissSearchSettingsScreen()
+        navigateToWebPage()
+
+        browserScreen.assertAddressBarExists()
+        browserScreen.tapOnAddressBar()
+        searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
+        searchScreen.assertRecentSearchesSectionTitle()
+    }
+
+    private func dismissSearchSettingsScreen() {
+        searchSettingsScreen.tapOnBackButton()
+        settingsScreen.closeSettingsWithDoneButton()
+    }
+
+    private func navigateToWebPage() {
+        let urlPath = path(forTestPage: "https://www.mozilla.org/en-US/")
+        enterTextOnSearchBar_TAE(text: urlPath)
         waitUntilPageLoad()
     }
 }
