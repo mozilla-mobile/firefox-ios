@@ -499,6 +499,7 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         // Repeat for private browsing mode
         navigator.performAction(Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].waitAndTap()

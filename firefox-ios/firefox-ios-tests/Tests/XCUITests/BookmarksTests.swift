@@ -402,6 +402,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.launch()
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
+            navigator.nowAt(NewTabScreen)
             validateLongTapOptionsFromBookmarkLink(isExperiment: true)
         }
     }
@@ -519,11 +520,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         switchToTabAndValidate(nrOfTabs: "3")
 
         // Tap to "Open in Private Tab"
-        if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
-            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        } else {
-            navigator.performAction(Action.GoToHomePage)
-        }
+        navigator.performAction(Action.GoToHomePage)
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         longPressBookmarkCell()
         contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
@@ -534,8 +531,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         navigator.goto(TabTray)
         // Tap to "Remove bookmark"
-        let action = isExperiment ? Action.ToggleExperimentRegularMode : Action.ToggleRegularMode
-        navigator.toggleOn(userState.isPrivate, withAction: action)
+        if XCUIDevice.shared.orientation == .landscapeLeft {
+            navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        } else {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        }
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if iPad() {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
