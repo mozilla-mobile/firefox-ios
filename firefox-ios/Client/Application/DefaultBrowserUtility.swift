@@ -184,7 +184,20 @@ class DefaultBrowserUtility {
         userDefault.set(currentCount + 1, forKey: key)
     }
 
-    private func trackDateForErrorReporting() {
-        
+    private func trackDatesForErrorReporting(_ userInfoDict: [String: Any]) {
+        struct DateKeys {
+            static let retryDate = "UIApplicationCategoryDefaultRetryAvailabilityDateErrorKey"
+            static let lastProvidedDate = "UIApplicationCategoryDefaultStatusLastProvidedDateErrorKey"
+        }
+
+        for (key, value) in userInfoDict {
+            if let date = value as? Date {
+                userDefault.set(date, forKey: key)
+            }
+        }
+
+        if let retryDate = userDefault.object(forKey: "UIApplicationCategoryDefaultRetryAvailabilityDateErrorKey") as? Date {
+            print("Retry date:", retryDate)
+        }
     }
 }
