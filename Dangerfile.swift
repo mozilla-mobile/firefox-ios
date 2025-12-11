@@ -490,7 +490,7 @@ func failOrWarn(_ message: String, bypassLabel: String = globalBypassLabel) {
         warn("""
         \(message)
         
-        _Bypass label `\(bypassLabel)` detected — reporting as warning only for this PR._
+        Bypass label `\(bypassLabel)` detected — reporting as warning only for this PR._
         """)
     } else {
         fail(message)
