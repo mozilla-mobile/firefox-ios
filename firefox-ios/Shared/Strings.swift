@@ -6214,6 +6214,21 @@ extension String {
         tableName: "Settings",
         value: "Data about your device, hardware configuration, and usage helps us improve %@ features, performance and stability.",
         comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox).")
+    public static let StudiesSettingTitleV2 = MZLocalizedString(
+        key: "Settings.Studies.Title.v136",
+        tableName: "Settings",
+        value: "Install and Run Studies",
+        comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
+    public static let StudiesSettingLinkV2 = MZLocalizedString(
+        key: "Settings.Studies.Link.v136",
+        tableName: "Settings",
+        value: "Learn More",
+        comment: "Title for a link that explains what Mozilla means by Studies")
+    public static let StudiesSettingMessageV2 = MZLocalizedString(
+        key: "Settings.Studies.Message.v136",
+        tableName: "Settings",
+        value: "Try out features and ideas before they're released to everyone.",
+        comment: "A short description that explains that Mozilla is running studies")
     public static let StudiesSettingTitleV3 = MZLocalizedString(
         key: "Settings.Studies.Title.v148",
         tableName: "Settings",
@@ -8494,23 +8509,6 @@ extension String {
                 tableName: "TabsTray",
                 value: "Close",
                 comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
-        }
-        struct v148 {
-            public static let StudiesSettingTitleV2 = MZLocalizedString(
-                key: "Settings.Studies.Title.v136",
-                tableName: "Settings",
-                value: "Install and Run Studies",
-                comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
-            public static let StudiesSettingLinkV2 = MZLocalizedString(
-                key: "Settings.Studies.Link.v136",
-                tableName: "Settings",
-                value: "Learn More",
-                comment: "Title for a link that explains what Mozilla means by Studies")
-            public static let StudiesSettingMessageV2 = MZLocalizedString(
-                key: "Settings.Studies.Message.v136",
-                tableName: "Settings",
-                value: "Try out features and ideas before they're released to everyone.",
-                comment: "A short description that explains that Mozilla is running studies")
         }
     }
 }
