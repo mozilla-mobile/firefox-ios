@@ -7,6 +7,8 @@ import MozillaAppServices
 import Account
 import Shared
 
+typealias RelayPopulateCompletion = @MainActor @Sendable (RelayMaskGenerationResult) -> Void
+
 /// Describes public protocol for Relay component to track state and facilitate
 /// messaging between the BVC, keyboard accessory, and A~S Relay APIs.
 protocol RelayControllerProtocol {
@@ -31,7 +33,7 @@ protocol RelayControllerProtocol {
     /// - Parameter tab: the tab to populate. The email field is expected to be focused, otherwise a JS error will be logged.
     @MainActor
     func populateEmailFieldWithRelayMask(for tab: Tab,
-                                         completion: @Sendable @MainActor @escaping (RelayMaskGenerationResult) -> Void)
+                                         completion: @escaping RelayPopulateCompletion)
 
     /// Notifies the RelayController which tab is currently focused for the purposes of generating a Relay mask.
     /// - Parameter tab: the current tab.
@@ -46,6 +48,8 @@ enum RelayMaskGenerationResult {
     /// User is on a free plan and their limit has been reached.
     /// For Phase 1, one of the user's existing masks will be randomly picked.
     case freeTierLimitReached
+    /// Generation failed due to expired OAuth token.
+    case expiredToken
     /// A problem occurred.
     case error
 }
@@ -146,7 +150,13 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     func populateEmailFieldWithRelayMask(for tab: Tab,
-                                         completion: @escaping @MainActor @Sendable (RelayMaskGenerationResult) -> Void) {
+                                         completion: @escaping RelayPopulateCompletion) {
+        populateEmailFieldWithRelayMask(for: tab, isRetry: false, completion: completion)
+    }
+
+    private func populateEmailFieldWithRelayMask(for tab: Tab,
+                                                 isRetry: Bool,
+                                                 completion: @escaping RelayPopulateCompletion) {
         guard focusedTab == nil || focusedTab === tab else {
             logger.log("Attempting to populate Relay mask after tab has changed. Bailing.",
                        level: .warning,
@@ -161,11 +171,20 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             logger.log("No tab webview available, or client is nil. Will not populate email field.",
                        level: .warning,
                        category: .relay)
+            completion(.error)
             return
         }
         Task {
             let (email, result) = await generateRelayMask(for: tab.url?.baseDomain ?? "", client: client)
-            guard result != .error else { completion(.error); return }
+
+            if result == .expiredToken && !isRetry {
+                // Attempt a single retry of OAuth refresh
+                attemptOAuthTokenRefresh(tab: tab, completion: completion)
+                return
+            }
+
+            // If an error occurred, or our OAuth token refresh attempt failed, complete with error.
+            guard result != .error && result != .expiredToken else { completion(.error); return }
 
             guard let jsonData = try? JSONEncoder().encode(email),
                   let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
@@ -197,6 +216,21 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     // MARK: - Private Utilities
 
+    private func invalidateClient() {
+        client = nil
+    }
+
+    private func attemptOAuthTokenRefresh(tab: Tab, completion: @escaping RelayPopulateCompletion) {
+        // Attempt to refresh OAuth token and retry.
+        logger.log("Attempting OAuth refresh. Will re-create Relay client.", level: .info, category: .relay)
+        invalidateClient()
+        createRelayClientIfNeeded { [weak self] in
+            // This completion will be called async after we attempt to re-create a new RelayClient
+            // with a fresh OAuth token. At this point we can re-try to populate.
+            self?.populateEmailFieldWithRelayMask(for: tab, isRetry: true, completion: completion)
+        }
+    }
+
     nonisolated private func generateRelayMask(for websiteDomain: String,
                                                client: RelayClient) async -> (mask: String?,
                                                                               result: RelayMaskGenerationResult) {
@@ -206,7 +240,12 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return (relayAddress.fullAddress, .newMaskGenerated)
         } catch {
             // Certain errors we need to custom-handle
-            if case let RelayApiError.Api(_, code, _) = error, code == "free_tier_limit" {
+
+            if case let RelayApiError.Api(status, code, _) = error, status == 401, code == "invalid_token" {
+                // Invalid OAuth token
+                logger.log("OAuth token expired.", level: .info, category: .relay)
+                return (nil, .expiredToken)
+            } else if case let RelayApiError.Api(_, code, _) = error, code == "free_tier_limit" {
                 // For Phase 1, we return a random email from the user's list
                 logger.log("Free tier limit reached. Using random mask.", level: .info, category: .relay)
                 do {
@@ -274,7 +313,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     /// Creates the Relay client, if needed. This is safe to call redundantly.
-    private func createRelayClientIfNeeded() {
+    /// Optional completion block.
+    private func createRelayClientIfNeeded(completion: (() -> Void)? = nil) {
         guard client == nil, !isCreatingClient else { return }
         guard let acctManager = RustFirefoxAccounts.shared.accountManager else {
             logger.log("Couldn't create client, no account manager.", level: .debug, category: .relay)
@@ -286,6 +326,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             case .failure(let error):
                 self?.logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)
                 self?.isCreatingClient = false
+                completion?()
             case .success(let tokenInfo):
                 do {
                     let clientResult = try RelayClient(serverUrl: config.serverURL, authToken: tokenInfo.token)
@@ -294,6 +335,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                     self?.logger.log("Error creating Relay client: \(error)", level: .warning, category: .relay)
                 }
                 self?.isCreatingClient = false
+                completion?()
             }
         }
     }
