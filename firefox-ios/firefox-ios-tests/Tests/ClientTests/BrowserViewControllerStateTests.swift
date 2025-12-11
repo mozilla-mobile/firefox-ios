@@ -13,7 +13,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
