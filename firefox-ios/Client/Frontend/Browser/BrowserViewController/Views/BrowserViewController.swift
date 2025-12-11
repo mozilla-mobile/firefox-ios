@@ -679,6 +679,8 @@ class BrowserViewController: UIViewController,
         updateMicrosurveyConstraints()
         if isToolbarTranslucencyRefactorEnabled {
             addOrUpdateMaskViewIfNeeded()
+        } else {
+            updateToolbarDisplay()
         }
 
         let action = GeneralBrowserMiddlewareAction(
