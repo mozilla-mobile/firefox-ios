@@ -6,28 +6,24 @@ import XCTest
 
 class LibraryTestsIpad: IpadOnlyTestCase {
     func testLibraryShortcut() throws {
-        guard !iPad() else {
-            throw XCTSkip("Library shortcut not available on the new toolbar for iPad")
-        }
         if skipPlatform {return}
-        // Open Library from shortcut
+        waitForTabsButton()
+        navigator.goto(LibraryPanel_Bookmarks)
         // The Bookmark panel is displayed
-//        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton])
-//        let libraryShorcutButton = app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton]
-//        libraryShorcutButton.waitAndTap()
-//        navigator.nowAt(HomePanel_Library)
-//        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView])
-//        // Go to a different panel
-//        // The History Panel is displayed
-//        navigator.goto(LibraryPanel_History)
-//        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView])
-//        // The Downloads panel is displayed
-//        navigator.nowAt(HomePanel_Library)
-//        navigator.goto(LibraryPanel_Downloads)
-//        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.DownloadsPanel.tableView])
-//        // The Reading List panel is displayed
-//        navigator.nowAt(HomePanel_Library)
-//        navigator.goto(LibraryPanel_ReadingList)
-//        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.tableView])
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView])
+        // Go to a different panel
+        // The History Panel is displayed
+        navigator.nowAt(HomePanel_Library)
+        navigator.goto(LibraryPanel_History)
+        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView])
+        // The Downloads panel is displayed
+        navigator.nowAt(HomePanel_Library)
+        navigator.goto(LibraryPanel_Downloads)
+        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.DownloadsPanel.tableView])
+        // The Reading List panel is displayed
+        navigator.nowAt(HomePanel_Library)
+        navigator.goto(LibraryPanel_ReadingList)
+        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.tableView])
     }
 }
