@@ -4111,9 +4111,7 @@ class BrowserViewController: UIViewController,
             }
         }
         destroySearchController()
-        if !isToolbarTranslucencyRefactorEnabled {
-            updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
-        }
+        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
     }
