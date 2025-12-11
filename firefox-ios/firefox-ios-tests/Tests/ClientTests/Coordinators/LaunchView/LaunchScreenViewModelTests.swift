@@ -14,9 +14,9 @@ final class LaunchScreenViewModelTests: XCTestCase {
     private var delegate: MockLaunchFinishedLoadingDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         delegate = MockLaunchFinishedLoadingDelegate()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -25,13 +25,13 @@ final class LaunchScreenViewModelTests: XCTestCase {
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         AppContainer.shared.reset()
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
         profile = nil
         messageManager = nil
         delegate = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testLaunchDoesntCallLoadedIfNotStarted() {

@@ -9,14 +9,14 @@ import XCTest
 
 class CustomSearchEnginesTest: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         AppContainer.shared.reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     @MainActor

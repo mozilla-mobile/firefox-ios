@@ -23,7 +23,7 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         self.profile = MockProfile()
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.routeBuilder = RouteBuilder()

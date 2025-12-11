@@ -7,13 +7,13 @@ import XCTest
 
 @testable import Client
 final class TabDisplayPanelTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         DependencyHelperMock().reset()
     }
 

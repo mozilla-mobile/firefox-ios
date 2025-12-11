@@ -30,7 +30,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let mockTabManager = MockTabManager()
         self.tabManager = mockTabManager
         profile = MockProfile()
-        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
+        await DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsAppleSummarizerEnabled(false)
         setIsHostedSummarizerEnabled(false)
