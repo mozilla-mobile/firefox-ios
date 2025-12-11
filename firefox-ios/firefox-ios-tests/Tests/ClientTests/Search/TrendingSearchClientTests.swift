@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Client
 
-final class TrendingSearchClientTest: XCTestCase {
+final class TrendingSearchClientTest: XCTestCase, @unchecked Sendable {
     override func setUp() {
         super.setUp()
         clearState()

@@ -67,12 +67,13 @@ extension XCTestCase {
 
     // MARK: Error Handling
     /// Convenience method to simplify error checking in the test cases for non Equatable types.
+    @MainActor
     func assertAsyncThrows<E: Error, T>(
         ofType expectedType: E.Type,
-        _ expression: () async throws -> T,
+        _ expression: @MainActor () async throws -> T,
         file: StaticString = #filePath,
         line: UInt = #line,
-        verify: ((E) -> Void)? = nil
+        verify: (@MainActor (E) -> Void)? = nil
     ) async {
         do {
             _ = try await expression()
@@ -85,9 +86,10 @@ extension XCTestCase {
     }
 
     /// Convenience method to simplify error checking in the test cases for Equatable types.
+    @MainActor
     func assertAsyncThrowsEqual<E: Error & Equatable, T>(
         _ expected: E,
-        _ expression: () async throws -> T,
+        _ expression: @MainActor () async throws -> T,
         file: StaticString = #filePath,
         line: UInt = #line
     ) async {

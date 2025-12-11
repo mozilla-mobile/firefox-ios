@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Client
 
-class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
+class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider, @unchecked Sendable {
     let url = URL(string: "my.testurl.com")!
 
     func testAsyncDataCall() async {
@@ -40,7 +40,7 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
                                      and: expectedError)
         let subject = WallpaperNetworkingModule(with: session)
 
-        await assertAsyncThrowsEqual(URLError(.cannotConnectToHost)) {
+        await assertAsyncThrowsEqual(URLError(.cannotConnectToHost)) { [url] in
             _ = try await subject.data(from: url)
         }
     }
