@@ -548,14 +548,25 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
 
     public func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void) {
-        for id in ids {
-            deleteLogin(id: id) { result in
-                var results: [Result<Bool?, Error>] = []
-                results.append(result)
-                if results.count == ids.count {
-                    completionHandler(results)
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(Array(repeating: .failure(error), count: ids.count))
+                return
+            }
+
+            var results: [Result<Bool?, Error>] = []
+            results.reserveCapacity(ids.count)
+
+            for id in ids {
+                do {
+                    let existed = try self.storage?.delete(id: id)
+                    results.append(.success(existed))
+                } catch let err as NSError {
+                    results.append(.failure(err))
                 }
             }
+            completionHandler(results)
         }
     }
 
@@ -702,30 +713,34 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         // call or the key data has been cleared from the keychain.
 
         self.hasSyncedLogins().upon { result in
-            guard result.failureValue == nil else {
-                completion(.failure(result.failureValue! as NSError))
-                return
-            }
+            self.queue.async {
+                guard result.failureValue == nil else {
+                    completion(.failure(result.failureValue! as NSError))
+                    return
+                }
 
-            guard let hasLogins = result.successValue else {
-                let msg = "Failed to verify logins count before attempting to reset key"
-                completion(.failure(LoginEncryptionKeyError.dbRecordCountVerificationError(msg) as NSError))
-                return
-            }
+                guard let hasLogins = result.successValue else {
+                   let msg = "Failed to verify logins count before attempting to reset key"
+                   completion(.failure(
+                       LoginEncryptionKeyError.dbRecordCountVerificationError(msg) as NSError
+                   ))
+                   return
+               }
 
-            if hasLogins {
-                // Since the key data isn't present and we have login records in
-                // the database, we both clear the database and reset the key.
-                GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
-                self.resetLoginsAndKey(completion: completion)
-            } else {
-                // There are no records in the database so we don't need to wipe any
-                // existing login records. We just need to create a new key.
-                do {
-                    let key = try self.rustKeychain.createLoginsKeyData()
-                    completion(.success(key))
-                } catch let error as NSError {
-                    completion(.failure(error))
+                if hasLogins {
+                    // Since the key data isn't present and we have login records in
+                    // the database, we both clear the database and reset the key.
+                    GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
+                    self.resetLoginsAndKey(completion: completion)
+                } else {
+                    // There are no records in the database so we don't need to wipe any
+                    // existing login records. We just need to create a new key.
+                    do {
+                        let key = try self.rustKeychain.createLoginsKeyData()
+                        completion(.success(key))
+                    } catch let error as NSError {
+                        completion(.failure(error))
+                    }
                 }
             }
         }
@@ -773,3 +788,4 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 }
+
