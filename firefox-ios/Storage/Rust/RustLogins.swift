@@ -551,11 +551,11 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         queue.async {
             guard self.isOpen, let storage = self.storage else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                completionHandler(Array(repeating: .failure(error), count: ids.count))
+                completionHandler([Result<Bool?, Error>](repeating: .failure(error), count: ids.count))
                 return
             }
 
-            var results = Array<Result<Bool?, Error>>(repeating: .success(nil), count: ids.count)
+            var results = [Result<Bool?, Error>](repeating: .success(nil), count: ids.count)
 
             for (index, id) in ids.enumerated() {
                 do {
