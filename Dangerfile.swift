@@ -434,7 +434,7 @@ class CodeUsageDetector {
                 } else if keyword.shouldWarn {
                     warn(String(format: message, file, lineNumber))
                 } else {
-                    fail(String(format: message, file, lineNumber))
+                    failOrWarn(String(format: message, file, lineNumber))
                 }
             }
         }
@@ -454,7 +454,7 @@ class CodeUsageDetector {
             } else if keyword.shouldWarn {
                 warn(String(format: message, file, lineNumber))
             } else {
-                fail(String(format: message, file, lineNumber))
+                failOrWarn(String(format: message, file, lineNumber))
             }
         }
     }
@@ -468,6 +468,32 @@ extension String {
         newString = newString.replacingOccurrences(of: ")", with: "\\)")
         newString = newString.replacingOccurrences(of: " ", with: "\\ ")
         return newString
+    }
+}
+
+// MARK: - Label by-pass
+
+// Label that allows turning fails into warns on this PR
+let globalBypassLabel = "danger-bypass"
+
+private func hasLabel(_ name: String) -> Bool {
+    guard let labels = danger.github?.issue.labels else {
+        return false
+    }
+    return labels.contains { $0.name == name }
+}
+
+/// Call this instead of `fail` when you want a "bypassable" failure.
+/// If the PR has the bypass label, this becomes a `warn` instead.
+func failOrWarn(_ message: String, bypassLabel: String = globalBypassLabel) {
+    if hasLabel(bypassLabel) {
+        warn("""
+        \(message)
+        
+        _Bypass label `\(bypassLabel)` detected — reporting as warning only for this PR._
+        """)
+    } else {
+        fail(message)
     }
 }
 
@@ -620,12 +646,12 @@ class BrowserViewControllerChecker {
         let newBvcExtensions = created.filter { matches(regex, $0) }
 
         if newBvcExtensions.count == 1 {
-            fail("""
+            failOrWarn("""
             New `BrowserViewController+*.swift` file detected: \(newBvcExtensions)
             """)
         } else if !newBvcExtensions.isEmpty {
             let bullets = newBvcExtensions.map { "• `\($0)`" }.joined(separator: "\n")
-            fail("""
+            failOrWarn("""
             New `BrowserViewController+*.swift` files detected:
             \(bullets)
             """)
