@@ -70,7 +70,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_0"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_0"
         XCTAssertEqual(app.cells[identifier].label, "Example Domain")
         app.cells[identifier].waitAndTap()
         navigator.nowAt(BrowserTab)

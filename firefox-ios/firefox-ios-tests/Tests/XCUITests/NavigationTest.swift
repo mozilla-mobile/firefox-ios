@@ -622,7 +622,7 @@ class NavigationTest: BaseTestCase {
         }
         numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of private opened tabs should be 1")
-        let identifier = "TabDisplayView.tabCell_1_0"
+        let identifier = "TabDisplayView.tabCell_0_0"
         XCTAssertEqual(app.cells.matching(identifier: identifier).element.label,
                        "Example Domains")
     }
