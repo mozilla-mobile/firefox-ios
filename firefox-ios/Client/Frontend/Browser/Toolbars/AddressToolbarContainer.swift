@@ -207,7 +207,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     func hideSkeletonBars() {
-        if !leftSkeletonAddressBar.isHidden && !rightSkeletonAddressBar.isHidden {
+        if !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden {
             configureSkeletonAddressBars(previousTab: nil, forwardTab: nil)
         }
 
@@ -266,8 +266,8 @@ final class AddressToolbarContainer: UIView,
 
         configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
         let isToolbarAtBottom = state?.toolbarPosition == .bottom
-        leftSkeletonAddressBar.isHidden = previousTab == nil && !isToolbarAtBottom
-        rightSkeletonAddressBar.isHidden = forwardTab == nil && !isToolbarAtBottom
+        leftSkeletonAddressBar.isHidden = previousTab == nil || !isToolbarAtBottom
+        rightSkeletonAddressBar.isHidden = forwardTab == nil || !isToolbarAtBottom
     }
 
     override func becomeFirstResponder() -> Bool {
