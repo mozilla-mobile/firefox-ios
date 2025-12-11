@@ -209,5 +209,3 @@ final class FirefoxURLBuilderTests: XCTestCase {
         }
     }
 }
-
-
