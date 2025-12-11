@@ -137,10 +137,8 @@ class BrowserViewController: UIViewController,
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
-        AddressToolbarContainer(
-            isSwipingTabsEnabled: self.isSwipingTabsEnabled,
-            isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled
-        )
+        AddressToolbarContainer(isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled,
+                                toolbarHelper: self.toolbarHelper)
     })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()

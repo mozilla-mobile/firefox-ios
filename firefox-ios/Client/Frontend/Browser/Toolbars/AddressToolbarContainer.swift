@@ -72,8 +72,8 @@ final class AddressToolbarContainer: UIView,
 
     typealias SubscriberStateType = ToolbarState
 
-    private let isSwipingTabsEnabled: Bool
     private let isMinimalAddressBarEnabled: Bool
+    private let toolbarHelper: ToolbarHelperInterface
     private var windowUUID: WindowUUID?
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
@@ -151,9 +151,9 @@ final class AddressToolbarContainer: UIView,
     /// and the Cancel button is visible (allowing the user to leave overlay mode).
     var inOverlayMode = false
 
-    init(isSwipingTabsEnabled: Bool, isMinimalAddressBarEnabled: Bool) {
-        self.isSwipingTabsEnabled = isSwipingTabsEnabled
+    init(isMinimalAddressBarEnabled: Bool, toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.isMinimalAddressBarEnabled = isMinimalAddressBarEnabled
+        self.toolbarHelper = toolbarHelper
         super.init(frame: .zero)
         setupLayout()
     }
@@ -207,7 +207,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     func hideSkeletonBars() {
-        if !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden {
+        let needsConfiguration = leftSkeletonAddressBar.isHidden && rightSkeletonAddressBar.isHidden
+
+        if toolbarHelper.isToolbarTranslucencyRefactorEnabled && needsConfiguration {
             configureSkeletonAddressBars(previousTab: nil, forwardTab: nil)
         }
 
@@ -254,7 +256,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {
-        guard let selectedTab = tabManager.selectedTab else {
+        let isToolbarAtBottom = state?.toolbarPosition == .bottom
+        guard let selectedTab = tabManager.selectedTab, isToolbarAtBottom else {
+            hideSkeletonBars()
             return
         }
 
@@ -265,9 +269,8 @@ final class AddressToolbarContainer: UIView,
         let forwardTab = tabs[safe: index+1]
 
         configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
-        let isToolbarAtBottom = state?.toolbarPosition == .bottom
-        leftSkeletonAddressBar.isHidden = previousTab == nil || !isToolbarAtBottom
-        rightSkeletonAddressBar.isHidden = forwardTab == nil || !isToolbarAtBottom
+        leftSkeletonAddressBar.isHidden = previousTab == nil
+        rightSkeletonAddressBar.isHidden = forwardTab == nil
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -403,7 +406,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func updateSkeletonAddressBarsAlpha(to alpha: CGFloat) {
-        guard isSwipingTabsEnabled else { return }
+        guard toolbarHelper.isSwipingTabsEnabled else { return }
 
         leftSkeletonAddressBar.alpha = alpha
         rightSkeletonAddressBar.alpha = alpha
@@ -423,6 +426,7 @@ final class AddressToolbarContainer: UIView,
 
         setupToolbarConstraints()
         setupSkeletonAddressBarsLayout()
+        hideSkeletonBars()
 
         addSubview(addNewTabView)
         addNewTabLeadingConstraint = addNewTabView.leadingAnchor.constraint(equalTo: trailingAnchor)
@@ -438,7 +442,7 @@ final class AddressToolbarContainer: UIView,
 
     private func setupToolbarConstraints() {
         addSubview(toolbar)
-        if isSwipingTabsEnabled {
+        if toolbarHelper.isSwipingTabsEnabled {
             insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
             insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
 
@@ -456,7 +460,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func setupSkeletonAddressBarsLayout() {
-        if isSwipingTabsEnabled {
+        if toolbarHelper.isSwipingTabsEnabled {
             NSLayoutConstraint.activate([
                 leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
                 leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
@@ -519,7 +523,7 @@ final class AddressToolbarContainer: UIView,
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         regularToolbar.applyTheme(theme: theme)
-        if isSwipingTabsEnabled {
+        if toolbarHelper.isSwipingTabsEnabled {
             leftSkeletonAddressBar.applyTheme(theme: theme)
             rightSkeletonAddressBar.applyTheme(theme: theme)
             addNewTabView.applyTheme(theme: theme)
