@@ -707,7 +707,11 @@ class LoginTest: BaseTestCase {
         // A search field is displayed
         mozWaitForElementToExist(app.searchFields[passwordssQuery.searchPasswords])
         // Tap on the cancel button
-        app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
+        if #available(iOS 26, *) {
+            app.buttons["close"].waitAndTap()
+        } else {
+            app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
+        }
         // The "Saved logins" page is displayed
         mozWaitForElementToExist(app.switches[passwordssQuery.saveLogins])
         // Temporarily removing keyboard validation due to CI flakiness
