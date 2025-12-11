@@ -385,7 +385,11 @@ class SettingsTests: FeatureFlaggedTestBase {
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         let privacySection = table.staticTexts["PRIVACY"]
         let autoFillPasswords = table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title]
-        app.swipeUp()
+        if #available(iOS 26, *) {
+            table.swipeUp()
+        } else {
+            app.swipeUp()
+        }
         XCTAssertTrue(privacySection.isAbove(element: autoFillPasswords))
 
         // Navigate to the Autofills and passwords settings screen
