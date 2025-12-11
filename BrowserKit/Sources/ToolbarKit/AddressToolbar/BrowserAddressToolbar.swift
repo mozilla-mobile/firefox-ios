@@ -8,8 +8,8 @@ import Common
 /// Simple address toolbar implementation.
 /// +-------------+--------------------------------------------------------+----------+
 /// | navigation  | [ leading ]     indicators      url       [ trailing ] | browser  |
-/// | actions     | [ page    ]                               [ page     ] | browser  |
-/// |             | [ actions ]                               [ actions  ] | actions  |
+/// | actions     | [ page    ]                               [ page     ] | actions  |
+/// |             | [ actions ]                               [ actions  ] |          |
 /// +-------------+--------------------------------------------------------+----------+
 public class BrowserAddressToolbar: UIView,
                                     Notifiable,
