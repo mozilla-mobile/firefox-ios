@@ -15,7 +15,6 @@ protocol TermsOfUseDelegate: AnyObject {
     func showTermsOfUse(context: TriggerContext)
 }
 
-// TODO: FXIOS-12947 - Add tests for TermsOfUseCoordinator
 @MainActor
 protocol TermsOfUseCoordinatorDelegate: AnyObject {
     func dismissTermsFlow()
@@ -37,6 +36,10 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
     private var maxRemindersCount: Int {
         return nimbus.features.touFeature.value().maxRemindersCount
+    }
+
+    private var enableDragToDismiss: Bool {
+        return nimbus.features.touFeature.value().enableDragToDismiss
     }
 
     init(windowUUID: WindowUUID,
@@ -62,7 +65,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         let vc = TermsOfUseViewController(
             themeManager: themeManager,
             windowUUID: windowUUID,
-            notificationCenter: notificationCenter
+            notificationCenter: notificationCenter,
+            enableDragToDismiss: enableDragToDismiss
         )
         vc.coordinator = self
         vc.modalPresentationStyle = .overFullScreen

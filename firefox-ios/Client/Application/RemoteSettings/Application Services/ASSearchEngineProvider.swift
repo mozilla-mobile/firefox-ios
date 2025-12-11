@@ -128,7 +128,7 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
     private func getUnorderedBundledEnginesFor(locale: LocaleProvider,
                                                completion: @escaping ([OpenSearchEngine]) -> Void ) {
         let localeCode = ASSearchEngineUtilities.localeCode(from: locale)
-        let region = locale.regionCode
+        let region = locale.searchRegionCode
         let logger = self.logger
         guard let iconPopulator = iconDataFetcher, let selector else {
             let logExtra1 = iconDataFetcher == nil ? "nil" : "ok"

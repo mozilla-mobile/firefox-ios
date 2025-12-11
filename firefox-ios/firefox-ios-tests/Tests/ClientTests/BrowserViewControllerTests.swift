@@ -51,7 +51,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func testTrackVisibleSuggestion() {
         TelemetryContextualIdentifier.setupContextId()
         let subject = createSubject()
-        let locale = Locale(identifier: "en-US")
+        let locale = MockLocaleProvider()
         let gleanWrapper = MockGleanWrapper()
         let telemetry = FxSuggestTelemetry(locale: locale, gleanWrapper: gleanWrapper)
         subject.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
@@ -143,13 +143,22 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
-    func testViewDidLoad_addsHomepage_whenSwipingTabsEnabled() {
-        let subject = createSubject()
+    func testViewDidLoad_addsHomepage_whenSwipingTabsEnabled_onIphone() {
+        let subject = createSubject(userInterfaceIdiom: .phone)
         setIsSwipingTabsEnabled(true)
 
         subject.loadViewIfNeeded()
 
         XCTAssertEqual(browserCoordinator.showHomepageCalled, 1)
+    }
+
+    func testViewDidLoad_doesNotAddHomepage_whenSwipingTabsEnabled_onIpad() {
+        let subject = createSubject(userInterfaceIdiom: .pad)
+        setIsSwipingTabsEnabled(true)
+
+        subject.loadViewIfNeeded()
+
+        XCTAssertEqual(browserCoordinator.showHomepageCalled, 0)
     }
 
     func testUpdateReaderModeState_whenSummarizeFeatureOn_dispatchesToolbarMiddlewareAction() throws {
@@ -481,7 +490,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject(file: StaticString = #filePath, line: UInt = #line) -> BrowserViewController {
+    private func createSubject(userInterfaceIdiom: UIUserInterfaceIdiom? = nil,
+                               file: StaticString = #filePath,
+                               line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
                                             appStartupTelemetry: appStartupTelemetry,
@@ -490,6 +501,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
         subject.browserDelegate = browserCoordinator
+
+        if let userInterfaceIdiom {
+            let toolbarHelper: ToolbarHelperInterface = ToolbarHelper(userInterfaceIdiom: userInterfaceIdiom)
+            subject.toolbarHelper = toolbarHelper
+        }
+
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

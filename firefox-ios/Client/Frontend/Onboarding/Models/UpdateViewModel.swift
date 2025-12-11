@@ -34,7 +34,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     // MARK: - Initializer
     init(
         profile: Profile,
-        model: OnboardingViewModel,
+        model: OnboardingKitViewModel,
         telemetryUtility: OnboardingTelemetryProtocol,
         windowUUID: WindowUUID
     ) {

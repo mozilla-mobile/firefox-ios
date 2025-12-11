@@ -12,6 +12,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         XCTAssertEqual(result, "hello world")
     }
 
+    @MainActor
     func testSummarizeNonStreamingMapsRateLimited() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 429)
         let subject = createSubject(respondWithError: rateLimitError)
@@ -28,6 +29,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testSummarizeNonStreamingMapsInvalidResponse() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 502)
         let subject = createSubject(respondWithError: rateLimitError)
@@ -45,6 +47,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testSummarizeNonStreamingMapsUnknownError() async throws {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
@@ -74,6 +77,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         XCTAssertEqual(received, chunks.joined())
     }
 
+    @MainActor
     func testSummarizeStreamedMapsRateLimited() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 429)
         let subject = createSubject(respondWithError: rateLimitError)
@@ -91,6 +95,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testSummarizeStreamedMapsInvalidResponse() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 567)
         let subject = createSubject(respondWithError: rateLimitError)
@@ -109,6 +114,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testSummarizeStreamedMapsUnknownError() async throws {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)

@@ -194,7 +194,6 @@ class Action {
     static let ToggleTrackingProtection = "ToggleTrackingProtection"
     static let ToggleNoImageMode = "ToggleNoImageMode"
 
-    static let ToggleInactiveTabs = "ToggleInactiveTabs"
     static let ToggleTabGroups = "ToggleTabGroups"
 
     static let Bookmark = "Bookmark"

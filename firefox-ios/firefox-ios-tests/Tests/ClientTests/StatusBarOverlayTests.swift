@@ -576,6 +576,8 @@ private class ToolbarHelperMock: ToolbarHelperInterface {
     var isToolbarRefactorEnabled = true
     var isToolbarTranslucencyEnabled = true
     var isReduceTransparencyEnabled = false
+    var isSwipingTabsEnabled = true
+    var userInterfaceIdiom: UIUserInterfaceIdiom = .phone
 
     @MainActor
     var glassEffectAlpha: CGFloat {

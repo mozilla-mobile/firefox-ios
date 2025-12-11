@@ -169,14 +169,14 @@ final class LaunchScreenViewModelTests: XCTestCase {
                                  metadata: metadata)
     }
 
-    func createOnboardingViewModel() -> OnboardingViewModel {
+    func createOnboardingViewModel() -> OnboardingKitViewModel {
         let cards: [OnboardingKitCardInfoModel] = [
             createCard(index: 1),
             createCard(index: 2)
         ]
 
-        return OnboardingViewModel(cards: cards,
-                                   isDismissible: true)
+        return OnboardingKitViewModel(cards: cards,
+                                      isDismissible: true)
     }
 
     func createCard(index: Int) -> OnboardingKitCardInfoModel {

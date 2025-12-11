@@ -33,7 +33,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     init(
         introScreenManager: IntroScreenManagerProtocol? = nil,
         profile: Profile,
-        model: OnboardingViewModel,
+        model: OnboardingKitViewModel,
         telemetryUtility: OnboardingTelemetryProtocol
     ) {
         self.introScreenManager = introScreenManager

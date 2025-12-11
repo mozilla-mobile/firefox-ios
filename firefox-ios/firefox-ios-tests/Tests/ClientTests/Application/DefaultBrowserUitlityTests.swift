@@ -13,7 +13,6 @@ final class DefaultBrowserUtilityTests: XCTestCase {
     var telemetryWrapper: MockTelemetryWrapper!
     var userDefaults: MockUserDefaults!
     var application: MockUIApplication!
-    var locale: MockLocale!
 
     // For testing migration more legibly
     let deeplinkValueKey = DefaultKeys.isBrowserDefault
@@ -23,14 +22,12 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         super.setUp()
         telemetryWrapper = MockTelemetryWrapper()
         userDefaults = MockUserDefaults()
-        locale = MockLocale()
         application = MockUIApplication()
     }
 
     override func tearDown() {
         telemetryWrapper = nil
         userDefaults = nil
-        locale = nil
         application = nil
         subject = nil
         super.tearDown()
@@ -243,15 +240,15 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         setToDefault: Bool,
         isFirstRun: Bool
     ) {
-        locale.localeRegionCode = region
+        let locale = MockLocaleProvider(localeRegionCode: region)
         application.mockDefaultApplicationValue = setToDefault
 
-        setupSubject()
+        setupSubject(with: locale)
         subject.processUserDefaultState(isFirstRun: isFirstRun)
     }
 
     @MainActor
-    private func setupSubject() {
+    private func setupSubject(with locale: LocaleProvider) {
         subject = DefaultBrowserUtility(
             userDefault: userDefaults,
             telemetryWrapper: telemetryWrapper,

@@ -37,6 +37,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         XCTAssertEqual(result, "hello world")
     }
 
+    @MainActor
     @available(iOS 26, *)
     func testSummarizerRespondNonStreamingThrowsRateLimited() async throws {
         let rateLimitError = LanguageModelSession.GenerationError.rateLimited(.init(debugDescription: "context"))
@@ -55,6 +56,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         }
     }
 
+    @MainActor
     @available(iOS 26, *)
     func testSummarizerRespondNonStreamingThrowsUnknown() async throws {
         let randomError = NSError(domain: "Random error", code: 1)
@@ -95,6 +97,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         XCTAssertEqual(receivedChunks, expectedResponse)
     }
 
+    @MainActor
     @available(iOS 26, *)
     func testSummarizerRespondStreamingThrowsGuardViolation() async throws {
         let guardViolationError = LanguageModelSession.GenerationError.guardrailViolation(.init(debugDescription: "context"))
@@ -114,6 +117,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         }
     }
 
+    @MainActor
     @available(iOS 26, *)
     func testSummarizerRespondStreamingThrowsUnknown() async throws {
         let randomError = NSError(domain: "Random error", code: 1)

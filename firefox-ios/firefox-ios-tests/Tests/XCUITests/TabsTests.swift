@@ -46,7 +46,7 @@ class TabsTests: BaseTestCase {
         } else {
             navigator.goto(TabTray)
         }
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_1"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_1"
         mozWaitForElementToExist(app.cells[identifier])
         XCTAssertEqual(app.cells[identifier].label, "\(urlLabel). \(selectedTab)")
     }
@@ -93,7 +93,7 @@ class TabsTests: BaseTestCase {
 
         // Open tab tray to check that both tabs are there
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        let identifier = "TabDisplayView.tabCell_1_1"
+        let identifier = "TabDisplayView.tabCell_0_1"
         XCTAssertEqual(app.cells.matching(identifier: identifier).element.label,
                        "Example Domains")
     }
@@ -350,7 +350,7 @@ class TabsTests: BaseTestCase {
 
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_0"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_0"
         app.cells[identifier].waitAndTap()
         mozWaitForElementToExist(
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
@@ -499,6 +499,7 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         // Repeat for private browsing mode
         navigator.performAction(Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].waitAndTap()

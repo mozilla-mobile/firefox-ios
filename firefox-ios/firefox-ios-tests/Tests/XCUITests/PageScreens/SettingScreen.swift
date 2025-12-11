@@ -17,6 +17,7 @@ final class SettingScreen {
     private var clearDataCell: XCUIElement { sel.CLEAR_PRIVATE_DATA_CELL.element(in: app) }
     private var okButton: XCUIElement { sel.ALERT_OK_BUTTON.element(in: app)}
     private var toggle: XCUIElement { sel.BLOCK_POPUPS_SWITCH.element(in: app) }
+    private var translationCell: XCUIElement { sel.TRANSLATION_CELL_TITLE.element(in: app) }
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
@@ -178,5 +179,14 @@ final class SettingScreen {
             file: file,
             line: line
         )
+    }
+
+    func openTranslationSettings() {
+        BaseTestCase().mozWaitForElementToExist(translationCell)
+        translationCell.waitAndTap()
+    }
+
+    func assertTranslationSettingsDoesNotExist() {
+        BaseTestCase().mozWaitForElementToNotExist(translationCell)
     }
 }

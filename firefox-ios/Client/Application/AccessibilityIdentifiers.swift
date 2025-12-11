@@ -30,6 +30,8 @@ struct AccessibilityIdentifiers {
         static let searchButton = "TabToolbar.searchButton"
         static let stopButton = "TabToolbar.stopButton"
         static let translateButton = "TabToolbar.translateButton"
+        static let translateLoadingButton = "TabToolbar.translateLoadingButton"
+        static let translateActiveButton = "TabToolbar.translateActiveButton"
     }
 
     struct Browser {
@@ -310,15 +312,6 @@ struct AccessibilityIdentifiers {
         static let tabCell = "TabDisplayView.tabCell"
         static let closeButton = "tabCloseButton"
         static let tabsTray = "Tabs Tray"
-
-        struct InactiveTabs {
-            static let headerLabel = "InactiveTabs.headerLabel"
-            static let headerButton = "InactiveTabs.headerButton"
-            static let headerView = "InactiveTabs.header"
-            static let cellLabel = "InactiveTabs.cell.label"
-            static let footerView = "InactiveTabs.footer"
-            static let deleteButton = "InactiveTabs.deleteButton"
-        }
     }
 
     struct LibraryPanels {
@@ -685,7 +678,6 @@ struct AccessibilityIdentifiers {
             static let title = "BrowsingSettings"
             static let tabs = "TABS"
             static let links = "LINKS"
-            static let inactiveTabsSwitch = "Inactive Tabs"
             static let blockPopUps = "blockPopups"
             static let autoPlay = "AutoplaySettings"
             static let blockImages = "NoImageModeStatus"
@@ -703,6 +695,11 @@ struct AccessibilityIdentifiers {
 
         struct Translation {
             static let title = "Settings.Translation.Title"
+            // This is based on `PrefsKeys.Settings.translationsFeature`
+            static let toggleSwitch = "settings.translationFeature"
+            static let navigationBar = "Settings.Translation.navigationBar"
+            static let backButtoniOS26 = "BackButton"
+            static let backButton = "Settings"
         }
 
         struct BlockImages {

@@ -26,7 +26,8 @@ protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
 @MainActor
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
-                                       LegacyTabScrollProvider {
+                                       LegacyTabScrollProvider,
+                                       Notifiable {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -262,10 +263,13 @@ final class LegacyTabScrollController: NSObject,
     }
 
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationWillTerminate(_:)),
-                                               name: UIApplication.willTerminateNotification,
-                                               object: nil)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIApplication.willTerminateNotification
+            ]
+        )
     }
 
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
@@ -292,8 +296,7 @@ final class LegacyTabScrollController: NSObject,
         }
     }
 
-    @objc
-    private func applicationWillTerminate(_ notification: Notification) {
+    private func applicationWillTerminate() {
         // Ensures that we immediately de-register KVO observations for content size changes in
         // webviews if the app is about to terminate.
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
@@ -445,6 +448,19 @@ final class LegacyTabScrollController: NSObject,
         guard tab?.isFxHomeTab == false else { return }
         tab?.webView?.addPullRefresh { [weak self] in
             self?.reload()
+        }
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willTerminateNotification:
+            ensureMainThread {
+                self.applicationWillTerminate
+            }
+        default:
+            return
         }
     }
 }
