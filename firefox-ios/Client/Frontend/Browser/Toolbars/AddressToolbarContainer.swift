@@ -449,19 +449,19 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func setupSkeletonAddressBarsLayout() {
-        if isSwipingTabsEnabled {
-            NSLayoutConstraint.activate([
-                leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
-                leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
-                leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
-                leftSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset),
+        guard isSwipingTabsEnabled else { return }
 
-                rightSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
-                rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: trailingAnchor),
-                rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
-                rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
-            ])
-        }
+        NSLayoutConstraint.activate([
+            leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
+            leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
+            leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            leftSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset),
+
+            rightSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
+            rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: trailingAnchor),
+            rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
+        ])
     }
 
     private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
