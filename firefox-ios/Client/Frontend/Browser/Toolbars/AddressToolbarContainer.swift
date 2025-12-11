@@ -207,7 +207,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     func hideSkeletonBars() {
-        let needsConfiguration = leftSkeletonAddressBar.isHidden && rightSkeletonAddressBar.isHidden
+        let needsConfiguration = !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden
 
         if toolbarHelper.isToolbarTranslucencyRefactorEnabled && needsConfiguration {
             configureSkeletonAddressBars(previousTab: nil, forwardTab: nil)
@@ -426,7 +426,6 @@ final class AddressToolbarContainer: UIView,
 
         setupToolbarConstraints()
         setupSkeletonAddressBarsLayout()
-        hideSkeletonBars()
 
         addSubview(addNewTabView)
         addNewTabLeadingConstraint = addNewTabView.leadingAnchor.constraint(equalTo: trailingAnchor)
