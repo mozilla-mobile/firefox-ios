@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum BrowserViewType {
+enum BrowserViewType: Equatable {
     case normalHomepage
     case privateHomepage
     case webview
