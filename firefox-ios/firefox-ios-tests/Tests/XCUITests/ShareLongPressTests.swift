@@ -243,9 +243,10 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
         // Long-press on a bookmarked website
-        app.tables.cells.staticTexts["Example Domain"].press(forDuration: 1.0)
+        let contextMenu = app.tables["Context Menu"]
+        app.tables.cells.staticTexts["Example Domain"].pressWithRetry(duration: 1.5, element: contextMenu)
         // Tap the Share button in the context menu
-        app.tables["Context Menu"].buttons["shareLarge"].waitAndTap()
+        contextMenu.buttons["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])

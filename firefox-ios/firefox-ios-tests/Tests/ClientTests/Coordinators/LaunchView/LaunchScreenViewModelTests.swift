@@ -169,32 +169,35 @@ final class LaunchScreenViewModelTests: XCTestCase {
                                  metadata: metadata)
     }
 
-    func createOnboardingViewModel() -> OnboardingViewModel {
-        let cards: [OnboardingCardInfoModel] = [
+    func createOnboardingViewModel() -> OnboardingKitViewModel {
+        let cards: [OnboardingKitCardInfoModel] = [
             createCard(index: 1),
             createCard(index: 2)
         ]
 
-        return OnboardingViewModel(cards: cards,
-                                   isDismissible: true)
+        return OnboardingKitViewModel(cards: cards,
+                                      isDismissible: true)
     }
 
-    func createCard(index: Int) -> OnboardingCardInfoModel {
+    func createCard(index: Int) -> OnboardingKitCardInfoModel {
         let buttons = OnboardingButtons<OnboardingActions>(
             primary: OnboardingButtonInfoModel<OnboardingActions>(
                 title: "Button title \(index)",
                 action: .forwardOneCard))
-        return OnboardingCardInfoModel(cardType: .basic,
-                                       name: "Name \(index)",
-                                       order: index,
-                                       title: "Title \(index)",
-                                       body: "Body \(index)",
-                                       link: nil,
-                                       buttons: buttons,
-                                       multipleChoiceButtons: [],
-                                       onboardingType: .upgrade,
-                                       a11yIdRoot: "A11y id \(index)",
-                                       imageID: "Image id \(index)",
-                                       instructionsPopup: nil)
+        return OnboardingKitCardInfoModel(
+            cardType: .basic,
+            name: "Name \(index)",
+            order: index,
+            title: "Title \(index)",
+            body: "Body \(index)",
+            link: nil,
+            buttons: buttons,
+            multipleChoiceButtons: [],
+            onboardingType: .upgrade,
+            a11yIdRoot: "A11y id \(index)",
+            imageID: "Image id \(index)",
+            instructionsPopup: nil,
+            embededLinkText: []
+        )
     }
 }

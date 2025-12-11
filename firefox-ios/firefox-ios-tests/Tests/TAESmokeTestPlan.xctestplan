@@ -439,7 +439,6 @@
         "OnboardingTests\/testOnboardingSignIn()",
         "OnboardingTests\/testSelectBottomPlacement()",
         "OnboardingTests\/testSelectTopPlacement()",
-        "OnboardingTests\/testWhatsNewPage()",
         "OpeningScreenTests",
         "OpeningScreenTests\/testLastOpenedTab()",
         "PerformanceTests",

@@ -200,22 +200,22 @@ class UpdateViewModelTests: XCTestCase {
         return subject
     }
 
-    func createOnboardingViewModel(withCards: Bool) -> OnboardingViewModel {
-        let cards: [OnboardingCardInfoModel] = [
+    func createOnboardingViewModel(withCards: Bool) -> OnboardingKitViewModel {
+        let cards: [OnboardingKitCardInfoModel] = [
             createCard(index: 1),
             createCard(index: 2)
         ]
 
-        return OnboardingViewModel(cards: withCards ? cards : [],
-                                   isDismissible: true)
+        return OnboardingKitViewModel(cards: withCards ? cards : [],
+                                      isDismissible: true)
     }
 
-    func createCard(index: Int) -> OnboardingCardInfoModel {
+    func createCard(index: Int) -> OnboardingKitCardInfoModel {
         let buttons = OnboardingButtons<OnboardingActions>(
             primary: OnboardingButtonInfoModel<OnboardingActions>(
                 title: "Button title \(index)",
                 action: .forwardOneCard))
-        return OnboardingCardInfoModel(
+        return OnboardingKitCardInfoModel(
             cardType: .basic,
             name: "Name \(index)",
             order: index,
@@ -227,6 +227,7 @@ class UpdateViewModelTests: XCTestCase {
             onboardingType: .upgrade,
             a11yIdRoot: "A11y id \(index)",
             imageID: "Image id \(index)",
-            instructionsPopup: nil)
+            instructionsPopup: nil,
+            embededLinkText: [])
     }
 }

@@ -253,31 +253,13 @@ final class TabManagerMiddleware: FeatureFlaggable,
             selectTab(
                 for: tabUUID,
                 uuid: action.windowUUID,
-                isInactiveTab: action.isInactiveTab ?? false,
                 panelType: action.panelType ?? .tabs,
                 selectedTabIndex: action.selectedTabIndex
             )
 
-        case TabPanelViewActionType.closeAllInactiveTabs:
-            closeAllInactiveTabs(state: state, uuid: action.windowUUID)
-
-        case TabPanelViewActionType.undoCloseAllInactiveTabs:
-            undoCloseAllInactiveTabs(uuid: action.windowUUID)
-
-        case TabPanelViewActionType.closeInactiveTab:
-            guard let tabUUID = action.tabUUID else { return }
-            closeInactiveTab(for: tabUUID, state: state, uuid: action.windowUUID)
-
-        case TabPanelViewActionType.undoCloseInactiveTab:
-            undoCloseInactiveTab(uuid: action.windowUUID)
-
         case TabPanelViewActionType.learnMorePrivateMode:
             guard let urlRequest = action.urlRequest else { return }
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
-
-        case TabPanelViewActionType.toggleInactiveTabs:
-            // TODO: FXIOS-14327- This will be deleted in the next PR to remove inactive tabs
-            break
 
         default:
             break
@@ -357,14 +339,11 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private func getTabsDisplayModel(for isPrivateMode: Bool,
                                      uuid: WindowUUID) -> TabDisplayModel {
         let tabs = refreshTabs(for: isPrivateMode, uuid: uuid)
-        let inactiveTabs = refreshInactiveTabs(for: isPrivateMode, uuid: uuid)
         let tabDisplayModel = TabDisplayModel(
             isPrivateMode: isPrivateMode,
             tabs: tabs,
             normalTabsCount: normalTabsCountTextForTabTray(for: uuid),
             privateTabsCount: privateTabsCountTextForTabTray(for: uuid),
-            inactiveTabs: inactiveTabs,
-            isInactiveTabsExpanded: false,
             enableDeleteTabsButton: shouldEnableDeleteTabsButton(for: uuid, isPrivateMode: isPrivateMode)
         )
         return tabDisplayModel
@@ -391,19 +370,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         }
 
         return tabs
-    }
-
-    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
-    /// Gets the list of inactive tabs from `TabManager` and builds the array of InactiveTabsModel
-    /// to use in TabDisplayView
-    ///
-    /// - Parameter isPrivateMode: is on Private mode or not
-    /// - Returns: Array of InactiveTabsModel used to configure collection view
-    private func refreshInactiveTabs(for isPrivateMode: Bool = false, uuid: WindowUUID) -> [InactiveTabsModel] {
-        guard !isPrivateMode else { return [InactiveTabsModel]() }
-
-        let inactiveTabs = [InactiveTabsModel]()
-        return inactiveTabs
     }
 
     /// Creates a new tab in `TabManager` using optional `URLRequest`
@@ -552,11 +518,11 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private func undoCloseTab(state: AppState, uuid: WindowUUID) {
         toastTelemetry.undoClosedSingleTab()
         let tabManager = tabManager(for: uuid)
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid),
-              tabManager.backupCloseTab != nil
-        else { return }
+        guard tabManager.backupCloseTab != nil else { return }
 
         tabManager.undoCloseTab()
+
+        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
@@ -650,81 +616,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         store.dispatch(scrollAction)
     }
 
-    // MARK: - Inactive tabs helper
-
-    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
-    /// Close all inactive tabs, removing them from the tabs array on `TabManager`.
-    /// Makes a backup of tabs to be deleted in case the undo option is selected.
-    private func closeAllInactiveTabs(state: AppState, uuid: WindowUUID) {
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
-        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: [InactiveTabsModel](),
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-        store.dispatch(refreshAction)
-
-        // Refresh the active tabs panel. Can only happen if the user is in normal browsering mode (not private).
-        // Related: FXIOS-10010, FXIOS-9954, FXIOS-9999
-        let model = getTabsDisplayModel(for: false, uuid: uuid)
-        let refreshActiveTabsPanelAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                                    windowUUID: uuid,
-                                                                    actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatch(refreshActiveTabsPanelAction)
-
-        let inactiveTabsCount = tabsState.inactiveTabs.count
-        let toastAction = TabPanelMiddlewareAction(toastType: .closedAllInactiveTabs(count: inactiveTabsCount),
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
-    }
-
-    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
-    /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
-    private func undoCloseAllInactiveTabs(uuid: WindowUUID) {
-        let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-        store.dispatch(refreshAction)
-    }
-
-    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
-    private func closeInactiveTab(for tabUUID: String, state: AppState, uuid: WindowUUID) {
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
-        let tabManager = tabManager(for: uuid)
-        if let tabToClose = tabManager.getTabForUUID(uuid: tabUUID) {
-            let index = tabsState.inactiveTabs.firstIndex { $0.tabUUID == tabUUID }
-            tabManager.backupCloseTab = BackupCloseTab(
-                tab: tabToClose,
-                restorePosition: index,
-                isSelected: false)
-        }
-        tabManager.removeTab(tabUUID)
-
-        let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-        store.dispatch(refreshAction)
-
-        let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleInactiveTab,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
-    }
-
-    // TODO: FXIOS-14327 - This will be deleted in the next PR to remove inactive tabs
-    private func undoCloseInactiveTab(uuid: WindowUUID) {
-        let windowTabManager = self.tabManager(for: uuid)
-        guard windowTabManager.backupCloseTab != nil else { return }
-
-        windowTabManager.undoCloseTab()
-        let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-        store.dispatch(refreshAction)
-    }
-
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest, uuid: WindowUUID) {
         addNewTab(with: urlRequest, isPrivate: true, showOverlay: false, for: uuid)
     }
@@ -732,7 +623,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private func selectTab(
         for tabUUID: TabUUID,
         uuid: WindowUUID,
-        isInactiveTab: Bool,
         panelType: TabTrayPanelType,
         selectedTabIndex: Int?
     ) {

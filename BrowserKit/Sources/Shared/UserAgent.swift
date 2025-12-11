@@ -99,8 +99,12 @@ struct CustomUserAgentConstant {
     private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
     static let customMobileUAForDomain = [
+        // TODO: FXIOS-14371 [webcompat] rokuchannel blocking FXIOS "this browser isn't supported" (webcompat #126427)
+        "roku.com": safariMobileUA,
         // TODO: FXIOS-13391 [webcompat] "connection error" only on FxiOS/* UA (bug 1983983)
         "tver.jp": safariMobileUA,
+        // TODO: FXIOS-14398 [webcompat] ServiceNow rejects Mobile Safari version "null" (bug 1978984)
+        "lta.go.jp": safariMobileUA,
         // TODO: FXIOS-13096 [webcompat] UA version parsed as "Safari 0" (webcompat #170304)
         "epic.com": safariMobileUA,
         "athenahealth.com": safariMobileUA,

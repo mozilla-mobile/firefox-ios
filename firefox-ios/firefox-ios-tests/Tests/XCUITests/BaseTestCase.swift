@@ -465,9 +465,11 @@ class BaseTestCase: XCTestCase {
         app.buttons["Cancel"].tapWithRetry()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
+        urlBar.waitAndTap()
         urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
         mozWaitForElementToExist(app.tables["Context Menu"])
         pasteAction.waitAndTap()
+        springboard.buttons["Allow Paste"].tapIfExists(timeout: 1.5)
         mozWaitForElementToExist(urlBar)
         mozWaitForValueContains(urlBar, value: url)
     }

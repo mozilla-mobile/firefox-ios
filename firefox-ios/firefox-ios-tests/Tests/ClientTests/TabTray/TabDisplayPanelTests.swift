@@ -18,19 +18,9 @@ final class TabDisplayPanelTests: XCTestCase {
     }
 
     @MainActor
-    func testExpandedInactiveTabs_InitialState() {
-        let subject = createSubject(isPrivateMode: false,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: false)
-
-        XCTAssertTrue(subject.tabsState.isInactiveTabsExpanded)
-    }
-
-    @MainActor
     func testIsPrivateTabsEmpty() {
         let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: true,
-                                    emptyInactiveTabs: true)
+                                    emptyTabs: true)
 
         XCTAssertTrue(subject.tabsState.isPrivateTabsEmpty)
     }
@@ -38,8 +28,7 @@ final class TabDisplayPanelTests: XCTestCase {
     @MainActor
     func testIsPrivateTabsNotEmpty() {
         let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: true)
+                                    emptyTabs: false)
 
         XCTAssertFalse(subject.tabsState.isPrivateTabsEmpty)
     }
@@ -48,12 +37,10 @@ final class TabDisplayPanelTests: XCTestCase {
     @MainActor
     private func createSubject(isPrivateMode: Bool,
                                emptyTabs: Bool,
-                               emptyInactiveTabs: Bool,
                                file: StaticString = #filePath,
                                line: UInt = #line) -> TabDisplayPanelViewController {
         let subjectState = createSubjectState(isPrivateMode: isPrivateMode,
-                                              emptyTabs: emptyTabs,
-                                              emptyInactiveTabs: emptyInactiveTabs)
+                                              emptyTabs: emptyTabs)
         let delegate = MockTabDisplayViewDragAndDropInteraction()
         let subject = TabDisplayPanelViewController(isPrivateMode: isPrivateMode,
                                                     windowUUID: .XCTestDefaultUUID,
@@ -65,25 +52,11 @@ final class TabDisplayPanelTests: XCTestCase {
     }
 
     private func createSubjectState(isPrivateMode: Bool,
-                                    emptyTabs: Bool,
-                                    emptyInactiveTabs: Bool) -> TabsPanelState {
+                                    emptyTabs: Bool) -> TabsPanelState {
         let tabs = createTabs(emptyTabs)
-        var inactiveTabs = [InactiveTabsModel]()
-        if !emptyInactiveTabs {
-            let uuid = "UUID"
-            for index in 0...2 {
-                let inactiveTabModel = InactiveTabsModel(tabUUID: uuid,
-                                                         title: "InactiveTab\(index)",
-                                                         url: nil)
-                inactiveTabs.append(inactiveTabModel)
-            }
-        }
-        let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
         return TabsPanelState(windowUUID: .XCTestDefaultUUID,
                               isPrivateMode: isPrivateMode,
-                              tabs: tabs,
-                              inactiveTabs: inactiveTabs,
-                              isInactiveTabsExpanded: isInactiveTabsExpanded)
+                              tabs: tabs)
     }
 
     private func createTabs(_ emptyTabs: Bool) -> [TabModel] {

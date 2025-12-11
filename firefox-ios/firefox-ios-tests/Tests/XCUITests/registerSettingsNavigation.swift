@@ -185,8 +185,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     }
 
     map.addScreenState(TabsSettings) { screenState in
-        screenState.tap(app.switches.element(boundBy: 0), forAction: Action.ToggleInactiveTabs)
-        screenState.tap(app.switches.element(boundBy: 1), forAction: Action.ToggleTabGroups)
+        screenState.tap(app.switches.element(boundBy: 0), forAction: Action.ToggleTabGroups)
         screenState.tap(app.navigationBars.buttons["Settings"], to: SettingsScreen)
     }
 

@@ -10,7 +10,7 @@ import Common
 class DefaultBrowserUtility {
     let userDefault: UserDefaultsInterface
     let telemtryWrapper: TelemetryWrapperProtocol
-    let locale: LocaleInterface
+    let locale: LocaleProvider
     let application: UIApplicationInterface
     let dmaCountries = ["BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", "HR", "IT", "CY", "LV",
                         "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR", "JP"]
@@ -20,7 +20,7 @@ class DefaultBrowserUtility {
     init(
         userDefault: UserDefaultsInterface = UserDefaults.standard,
         telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
-        locale: LocaleInterface = Locale.current,
+        locale: LocaleProvider = SystemLocaleProvider(),
         application: UIApplicationInterface = UIApplication.shared,
         logger: Logger = DefaultLogger.shared
     ) {

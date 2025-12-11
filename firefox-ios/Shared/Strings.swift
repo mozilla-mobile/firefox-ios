@@ -3500,29 +3500,6 @@ extension String {
             value: "Private",
             comment: "The title on the button to look at private tabs.")
 
-        public struct InactiveTabs {
-            public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(
-                key: "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103",
-                tableName: nil,
-                value: "View Inactive Tabs",
-                comment: "Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while.")
-            public static let TabsTrayInactiveTabsSectionOpenedAccessibilityTitle = MZLocalizedString(
-                key: "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103",
-                tableName: nil,
-                value: "Hide Inactive Tabs",
-                comment: "Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while.")
-            public static let CloseAllInactiveTabsButton = MZLocalizedString(
-                key: "InactiveTabs.TabTray.CloseButtonTitle",
-                tableName: nil,
-                value: "Close All Inactive Tabs",
-                comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
-            public static let CloseInactiveTabSwipeActionTitle = MZLocalizedString(
-                key: "InactiveTabs.TabTray.CloseSwipeActionTitle.v115",
-                tableName: "TabsTray",
-                value: "Close",
-                comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
-        }
-
         public struct CloseTabsToast {
             public static let Title = MZLocalizedString(
                 key: "CloseTabsToast.Title.v113",
@@ -8480,6 +8457,28 @@ extension String {
                 tableName: nil,
                 value: "Tabs you haven’t viewed for two weeks get moved to the inactive section.",
                 comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
+        }
+        struct v147 {
+            public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(
+                key: "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103",
+                tableName: nil,
+                value: "View Inactive Tabs",
+                comment: "Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while.")
+            public static let TabsTrayInactiveTabsSectionOpenedAccessibilityTitle = MZLocalizedString(
+                key: "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103",
+                tableName: nil,
+                value: "Hide Inactive Tabs",
+                comment: "Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while.")
+            public static let CloseAllInactiveTabsButton = MZLocalizedString(
+                key: "InactiveTabs.TabTray.CloseButtonTitle",
+                tableName: nil,
+                value: "Close All Inactive Tabs",
+                comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
+            public static let CloseInactiveTabSwipeActionTitle = MZLocalizedString(
+                key: "InactiveTabs.TabTray.CloseSwipeActionTitle.v115",
+                tableName: "TabsTray",
+                value: "Close",
+                comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
         }
     }
 }
