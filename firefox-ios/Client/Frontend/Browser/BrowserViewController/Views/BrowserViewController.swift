@@ -842,6 +842,7 @@ class BrowserViewController: UIViewController,
         if !isToolbarTranslucencyRefactorEnabled {
             header.setNeedsLayout()
             view.layoutSubviews()
+            updateToolbarDisplay()
         }
     }
 
@@ -1469,7 +1470,9 @@ class BrowserViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        shouldLayoutSubviews = true
+        if isToolbarTranslucencyRefactorEnabled {
+            shouldLayoutSubviews = true
+        }
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
@@ -1483,7 +1486,9 @@ class BrowserViewController: UIViewController,
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        shouldLayoutSubviews = false
+        if isToolbarTranslucencyRefactorEnabled {
+            shouldLayoutSubviews = false
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1564,7 +1569,9 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard shouldLayoutSubviews else { return }
+        if isToolbarTranslucencyRefactorEnabled {
+            guard shouldLayoutSubviews else { return }
+        }
         // Remove existing constraints
         statusBarOverlay.removeConstraints(statusBarOverlayConstraints)
         statusBarOverlayConstraints.removeAll()
@@ -1582,12 +1589,10 @@ class BrowserViewController: UIViewController,
         checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
-        if !isToolbarTranslucencyRefactorEnabled {
-            // when toolbars are hidden/shown the mask on the content view that is used for
-            // toolbar translucency needs to be updated
-            // This also required for iPad rotation
-            updateToolbarDisplay()
-        }
+        // when toolbars are hidden/shown the mask on the content view that is used for
+        // toolbar translucency needs to be updated
+        // This also required for iPad rotation
+        updateToolbarDisplay()
 
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
@@ -1677,7 +1682,9 @@ class BrowserViewController: UIViewController,
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
                 updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
-                updateToolbarDisplay()
+                if isToolbarTranslucencyRefactorEnabled {
+                    updateToolbarDisplay()
+                }
             }
             updateToolbarStateForTraitCollection(traitCollection)
         }
@@ -2020,6 +2027,9 @@ class BrowserViewController: UIViewController,
         }
 
         browserDelegate?.show(webView: webView)
+        if !isToolbarTranslucencyRefactorEnabled {
+            updateToolbarDisplay()
+        }
     }
 
     // MARK: - Document Loading
