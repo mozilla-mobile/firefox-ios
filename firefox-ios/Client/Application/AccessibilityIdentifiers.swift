@@ -29,7 +29,6 @@ struct AccessibilityIdentifiers {
         static let addNewTabButton = "TabToolbar.addNewTabButton"
         static let searchButton = "TabToolbar.searchButton"
         static let stopButton = "TabToolbar.stopButton"
-        static let bookmarksButton = "TabToolbar.libraryButton"
         static let translateButton = "TabToolbar.translateButton"
         static let translateLoadingButton = "TabToolbar.translateLoadingButton"
         static let translateActiveButton = "TabToolbar.translateActiveButton"
@@ -58,10 +57,6 @@ struct AccessibilityIdentifiers {
             static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
-        }
-
-        struct ToolbarButtons {
-            static let qrCode = "Toolbar.QRCode.button"
         }
 
         struct WebView {

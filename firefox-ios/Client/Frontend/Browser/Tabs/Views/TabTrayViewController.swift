@@ -48,6 +48,8 @@ final class TabTrayViewController: UIViewController,
         }
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlHorizontalSpacing: CGFloat = 16
+        static let titleFont: UIFont = FXFontStyles.Bold.caption2.systemFont()
+        static let cornerRadius: CGFloat = 2
     }
 
     // MARK: Theme
@@ -149,8 +151,8 @@ final class TabTrayViewController: UIViewController,
 
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
-        label.font = TabsButton.UX.titleFont
-        label.layer.cornerRadius = TabsButton.UX.cornerRadius
+        label.font = UX.titleFont
+        label.layer.cornerRadius = UX.cornerRadius
         label.textAlignment = .center
         label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
