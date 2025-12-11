@@ -57,6 +57,8 @@ struct AccessibilityIdentifiers {
             static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
+            static let leadingSkeleton = "AddressToolbar.leadingSkeleton"
+            static let trailingSkeleton = "AddressToolbar.trailingSkeleton"
         }
 
         struct WebView {
