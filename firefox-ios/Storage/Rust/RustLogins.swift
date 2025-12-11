@@ -549,21 +549,20 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
 
     public func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void) {
         queue.async {
-            guard self.isOpen else {
+            guard self.isOpen, let storage = self.storage else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 completionHandler(Array(repeating: .failure(error), count: ids.count))
                 return
             }
 
-            var results: [Result<Bool?, Error>] = []
-            results.reserveCapacity(ids.count)
+            var results = Array<Result<Bool?, Error>>(repeating: .success(nil), count: ids.count)
 
-            for id in ids {
+            for (index, id) in ids.enumerated() {
                 do {
-                    let existed = try self.storage?.delete(id: id)
-                    results.append(.success(existed))
+                    let existed = try storage.delete(id: id)
+                    results[index] = .success(existed)
                 } catch let err as NSError {
-                    results.append(.failure(err))
+                    results[index] = .failure(err)
                 }
             }
             completionHandler(results)
@@ -622,21 +621,25 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
     }
 
     private func resetLoginsAndKey(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
-        self.wipeLocalEngine().upon { result in
-            guard result.isSuccess else {
-                completion(.failure(result.failureValue! as NSError))
-                return
-            }
+        queue.async {
+            self.wipeLocalEngine().upon { result in
+                self.queue.async {
+                    guard result.isSuccess else {
+                        completion(.failure(result.failureValue! as NSError))
+                        return
+                    }
 
-            do {
-                let key = try self.rustKeychain.createLoginsKeyData()
-                completion(.success(key))
-            } catch let error as NSError {
-                self.logger.log("Error creating logins encryption key",
-                                level: .warning,
-                                category: .storage,
-                                description: error.localizedDescription)
-                completion(.failure(error))
+                    do {
+                        let key = try self.rustKeychain.createLoginsKeyData()
+                        completion(.success(key))
+                    } catch let error as NSError {
+                        self.logger.log("Error creating logins encryption key",
+                                        level: .warning,
+                                        category: .storage,
+                                        description: error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                }
             }
         }
     }
