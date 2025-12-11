@@ -60,7 +60,11 @@ private func widgetExist() -> Bool {
 @MainActor
 private func goToTodayWidgetPage() {
     // Swipe right until the "Screen Time" icon appears
-    if #unavailable(iOS 16) {
+
+    if #available(iOS 26, *) {
+        springboard.swipeRight()
+        springboard.swipeRight()
+    } else if #unavailable(iOS 16) {
         while !springboard.textFields["SpotlightSearchField"].exists {
             springboard.swipeRight()
         }

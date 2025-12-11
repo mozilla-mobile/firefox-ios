@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import XCTest
 
 let sendLinkMsg1 = "You are not signed in to your account."
 let sendLinkMsg2 = "Please open Firefox, go to Settings and sign in to continue."
@@ -165,8 +166,14 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
 
     private func validateMarkupTool() {
         // The Markup tool opens
-        mozWaitForElementToExist(app.switches["Markup"])
-        mozWaitForElementToExist(app.buttons["Done"])
+        if #available(iOS 26, *) {
+            app.navigationBars.buttons["More"].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.buttons["Markup"])
+            XCTAssertTrue(app.collectionViews.buttons["Markup"].isSelected)
+        } else {
+            mozWaitForElementToExist(app.switches["Markup"])
+            mozWaitForElementToExist(app.buttons["Done"])
+        }
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {
@@ -176,6 +183,9 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
+        if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
+            app.cells["actionGroupCell"].staticTexts["More"].waitAndTap(timeout: 10)
+        }
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
             app.collectionViews.cells[option].tapOnApp()
@@ -192,6 +202,9 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         navigator.openURL(url)
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
+        if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
+            app.cells["actionGroupCell"].staticTexts["More"].waitAndTap(timeout: 10)
+        }
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
             app.collectionViews.cells[option].tapOnApp()
