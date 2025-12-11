@@ -13,14 +13,17 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
     private var isPrivate = false
     private var prefs: Prefs?
     private var mainQueue: DispatchQueueInterface
+    private let actionExtensionTelemetry: ShareExtensionTelemetry
     private let shareExtensionTelemetry: ShareExtensionTelemetry
     var shouldOpenNewTab = true
 
     init(
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
-        shareExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry()
+        actionExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry(extensionSource: .actionExtension),
+        shareExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry(extensionSource: .shareExtension)
     ) {
         self.mainQueue = mainQueue
+        self.actionExtensionTelemetry = actionExtensionTelemetry
         self.shareExtensionTelemetry = shareExtensionTelemetry
     }
 
@@ -79,7 +82,7 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
             case .openUrl:
                 let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
                 if isOpeningWithFirefoxExtension {
-                    shareExtensionTelemetry.shareURL()
+                    actionExtensionTelemetry.shareURL()
                 }
                 return .search(url: urlQuery, isPrivate: isPrivate)
 
@@ -89,7 +92,7 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
                 let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
                 let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
                 if isOpeningWithFirefoxExtension {
-                    shareExtensionTelemetry.shareText()
+                    actionExtensionTelemetry.shareText()
                 }
                 return .searchQuery(query: safeQuery, isPrivate: isPrivate)
 
@@ -280,9 +283,9 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
             prefs?.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
             switch object {
             case .url:
-                shareExtensionTelemetry.shareURL(extensionSource: "share-extension")
+                shareExtensionTelemetry.shareURL()
             case .searchText:
-                shareExtensionTelemetry.shareText(extensionSource: "share-extension")
+                shareExtensionTelemetry.shareText()
             default:
                 break
             }

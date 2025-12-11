@@ -8,122 +8,103 @@ import XCTest
 @testable import Client
 
 final class ShareExtensionTelemetryTests: XCTestCase {
-    var subject: ShareExtensionTelemetry?
+    var actionExtensionTelemetry: ShareExtensionTelemetry?
+    var shareExtensionTelemetry: ShareExtensionTelemetry?
     var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
         gleanWrapper = MockGleanWrapper()
-        subject = ShareExtensionTelemetry(gleanWrapper: gleanWrapper)
+        actionExtensionTelemetry = ShareExtensionTelemetry(extensionSource: .actionExtension, gleanWrapper: gleanWrapper)
+        shareExtensionTelemetry = ShareExtensionTelemetry(extensionSource: .shareExtension, gleanWrapper: gleanWrapper)
     }
 
     override func tearDown() {
-        subject = nil
+        actionExtensionTelemetry = nil
+        shareExtensionTelemetry = nil
         gleanWrapper = nil
         super.tearDown()
     }
 
     // MARK: - shareURL Tests
 
-    func testShareURL_WithDefaultSource_RecordsActionExtensionEvent() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.urlShared
-        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtension.UrlSharedExtra
+    func testShareURL_WithActionExtensionSource_RecordsActionExtensionEvent() throws {
+        let event = GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
         let expectedSource = "action-extension"
+        let expectedOption = "open_in_firefox"
 
-        subject?.shareURL()
+        actionExtensionTelemetry?.shareURL()
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.extensionSource, expectedSource)
+        XCTAssertEqual(savedExtras.option, expectedOption)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testShareURL_WithShareExtensionSource_RecordsShareExtensionEvent() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.urlShared
-        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtension.UrlSharedExtra
+        let event = GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
         let expectedSource = "share-extension"
+        let expectedOption = "open_in_firefox"
 
-        subject?.shareURL(extensionSource: expectedSource)
-
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-
-        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.extensionSource, expectedSource)
-        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-    }
-
-    func testShareURL_WithCustomSource_RecordsWithCustomSource() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.urlShared
-        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtension.UrlSharedExtra
-        let expectedSource = "custom-source"
-
-        subject?.shareURL(extensionSource: expectedSource)
+        shareExtensionTelemetry?.shareURL()
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.extensionSource, expectedSource)
+        XCTAssertEqual(savedExtras.option, expectedOption)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     // MARK: - shareText Tests
 
-    func testShareText_WithDefaultSource_RecordsActionExtensionEvent() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.textShared
-        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtension.TextSharedExtra
+    func testShareText_WithActionExtensionSource_RecordsActionExtensionEvent() throws {
+        let event = GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
         let expectedSource = "action-extension"
+        let expectedOption = "open_in_firefox"
 
-        subject?.shareText()
+        actionExtensionTelemetry?.shareText()
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.extensionSource, expectedSource)
+        XCTAssertEqual(savedExtras.option, expectedOption)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testShareText_WithShareExtensionSource_RecordsShareExtensionEvent() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.textShared
-        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtension.TextSharedExtra
+        let event = GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
         let expectedSource = "share-extension"
+        let expectedOption = "open_in_firefox"
 
-        subject?.shareText(extensionSource: expectedSource)
-
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-
-        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.extensionSource, expectedSource)
-        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-    }
-
-    func testShareText_WithCustomSource_RecordsWithCustomSource() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.textShared
-        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtension.TextSharedExtra
-        let expectedSource = "custom-source"
-
-        subject?.shareText(extensionSource: expectedSource)
+        shareExtensionTelemetry?.shareText()
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.extensionSource, expectedSource)
+        XCTAssertEqual(savedExtras.option, expectedOption)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     // MARK: - Multiple Events Tests
 
     func testMultipleShareURLEvents_RecordsAllEvents() throws {
-        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtension.UrlSharedExtra
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
 
-        subject?.shareURL(extensionSource: "action-extension")
-        subject?.shareURL(extensionSource: "share-extension")
+        actionExtensionTelemetry?.shareURL()
+        shareExtensionTelemetry?.shareURL()
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 2)
         XCTAssertEqual(gleanWrapper.savedExtras.count, 2)
@@ -132,14 +113,16 @@ final class ShareExtensionTelemetryTests: XCTestCase {
         let secondExtras = try XCTUnwrap(gleanWrapper.savedExtras[1] as? EventExtrasType)
 
         XCTAssertEqual(firstExtras.extensionSource, "action-extension")
+        XCTAssertEqual(firstExtras.option, "open_in_firefox")
         XCTAssertEqual(secondExtras.extensionSource, "share-extension")
+        XCTAssertEqual(secondExtras.option, "open_in_firefox")
     }
 
     func testMultipleShareTextEvents_RecordsAllEvents() throws {
-        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtension.TextSharedExtra
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
 
-        subject?.shareText(extensionSource: "action-extension")
-        subject?.shareText(extensionSource: "share-extension")
+        actionExtensionTelemetry?.shareText()
+        shareExtensionTelemetry?.shareText()
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 2)
         XCTAssertEqual(gleanWrapper.savedExtras.count, 2)
@@ -148,66 +131,97 @@ final class ShareExtensionTelemetryTests: XCTestCase {
         let secondExtras = try XCTUnwrap(gleanWrapper.savedExtras[1] as? EventExtrasType)
 
         XCTAssertEqual(firstExtras.extensionSource, "action-extension")
+        XCTAssertEqual(firstExtras.option, "open_in_firefox")
         XCTAssertEqual(secondExtras.extensionSource, "share-extension")
+        XCTAssertEqual(secondExtras.option, "open_in_firefox")
     }
 
     // MARK: - loadInBackground Tests
 
     func testLoadInBackground_RecordsEvent() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.loadInBackground
+        let event = GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
+        let expectedOption = "load_in_background"
+        let expectedSource = "share-extension"
 
-        subject?.loadInBackground()
+        shareExtensionTelemetry?.loadInBackground()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.option, expectedOption)
+        XCTAssertEqual(savedExtras.extensionSource, expectedSource)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     // MARK: - bookmarkThisPage Tests
 
     func testBookmarkThisPage_RecordsEvent() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.bookmarkThisPage
+        let event = GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
+        let expectedOption = "bookmark_this_page"
+        let expectedSource = "share-extension"
 
-        subject?.bookmarkThisPage()
+        shareExtensionTelemetry?.bookmarkThisPage()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.option, expectedOption)
+        XCTAssertEqual(savedExtras.extensionSource, expectedSource)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     // MARK: - addToReadingList Tests
 
     func testAddToReadingList_RecordsEvent() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.addToReadingList
+        let event = GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
+        let expectedOption = "add_to_reading_list"
+        let expectedSource = "share-extension"
 
-        subject?.addToReadingList()
+        shareExtensionTelemetry?.addToReadingList()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.option, expectedOption)
+        XCTAssertEqual(savedExtras.extensionSource, expectedSource)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     // MARK: - sendToDevice Tests
 
     func testSendToDevice_RecordsEvent() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.sendToDevice
+        let event = GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected
+        typealias EventExtrasType = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra
+        let expectedOption = "send_to_device"
+        let expectedSource = "share-extension"
 
-        subject?.sendToDevice()
+        shareExtensionTelemetry?.sendToDevice()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.option, expectedOption)
+        XCTAssertEqual(savedExtras.extensionSource, expectedSource)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     // MARK: - All Share Extension Actions Tests
 
     func testAllShareExtensionActions_RecordsAllEvents() throws {
-        subject?.loadInBackground()
-        subject?.bookmarkThisPage()
-        subject?.addToReadingList()
-        subject?.sendToDevice()
+        shareExtensionTelemetry?.loadInBackground()
+        shareExtensionTelemetry?.bookmarkThisPage()
+        shareExtensionTelemetry?.addToReadingList()
+        shareExtensionTelemetry?.sendToDevice()
 
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 4)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 4)
         XCTAssertEqual(gleanWrapper.savedEvents.count, 4)
+        XCTAssertEqual(gleanWrapper.savedExtras.count, 4)
     }
 }
