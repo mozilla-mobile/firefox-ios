@@ -180,9 +180,8 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         return FxAccountManager(
             config: config,
             deviceConfig: deviceConfig,
-            applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session, OAuthScope.relay],
-            keychainAccessGroup: accessGroupIdentifier
-        )
+            applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
+            keychainAccessGroup: accessGroupIdentifier        )
     }
 
     /// This is typically used to add a UI indicator that FxA needs attention (usually re-login manually).
