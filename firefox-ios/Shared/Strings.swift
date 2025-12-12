@@ -993,8 +993,8 @@ extension String {
             public static let Body = MZLocalizedString(
                 key: "FirefoxHome.PrivacyNotice.Body.v148",
                 tableName: "FirefoxHomepage",
-                value: "We’ve updated our %@ to reflect the latest features in Firefox. %@",
-                comment: "Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The first placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The second placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice")
+                value: "We’ve updated our %@ to reflect the latest features in %@. %@",
+                comment: "Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The first placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The second placeholder is for the app name (e.g. Firefox). The third placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice")
             public static let PrivacyNoticeLink = MZLocalizedString(
                 key: "FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148",
                 tableName: "FirefoxHomepage",
