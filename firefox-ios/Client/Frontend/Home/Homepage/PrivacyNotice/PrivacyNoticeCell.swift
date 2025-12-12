@@ -21,7 +21,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
 
     // MARK: - UI Elements
 
-    private lazy var bodyTextView: UITextView = .build { textView in
+    private let bodyTextView: UITextView = .build { textView in
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.isEditable = false
@@ -31,8 +31,6 @@ final class PrivacyNoticeCell: UICollectionViewCell,
 
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
-
-        self.setupAttributedString()
     }
 
     private let closeButton: UIButton = .build { button in
@@ -49,6 +47,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         super.init(frame: .zero)
 
         setupLayout()
+        setupBodyTextViewAttributedString()
     }
 
     override func layoutSubviews() {
@@ -82,7 +81,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         ])
     }
 
-    private func setupAttributedString() {
+    private func setupBodyTextViewAttributedString() {
         let bodyString = String.FirefoxHomepage.PrivacyNotice.Body
         let privacyNoticeString = String.FirefoxHomepage.PrivacyNotice.PrivacyNoticeLink
         let learnMoreString = String.FirefoxHomepage.PrivacyNotice.LearnMoreLink
