@@ -103,6 +103,8 @@ struct CustomUserAgentConstant {
         "roku.com": safariMobileUA,
         // TODO: FXIOS-13391 [webcompat] "connection error" only on FxiOS/* UA (bug 1983983)
         "tver.jp": safariMobileUA,
+        // TODO: FXIOS-14398 [webcompat] ServiceNow rejects Mobile Safari version "null" (bug 1978984)
+        "lta.go.jp": safariMobileUA,
         // TODO: FXIOS-13096 [webcompat] UA version parsed as "Safari 0" (webcompat #170304)
         "epic.com": safariMobileUA,
         "athenahealth.com": safariMobileUA,

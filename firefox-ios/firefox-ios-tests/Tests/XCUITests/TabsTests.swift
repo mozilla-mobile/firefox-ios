@@ -527,24 +527,25 @@ class TabsTests: BaseTestCase {
 
         // Experiment from #25337: "Undo" button no longer available on iPhone.
         // Tap "x"
-        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].buttons[StandardImageIdentifiers.Large.cross].tap()
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        let secondTab = app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_0_2"]
+        secondTab.buttons[StandardImageIdentifiers.Large.cross].tap()
+        mozWaitForElementToNotExist(secondTab)
         app.buttons["Undo"].waitAndTap()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        mozWaitForElementToExist(secondTab)
 
         // Long press tab. Tap "Close Tab" from the context menu
-        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].press(forDuration: 2)
+        secondTab.press(forDuration: 2)
         mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
         app.collectionViews.buttons["Close Tab"].waitAndTap()
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        mozWaitForElementToNotExist(secondTab)
         app.buttons["Undo"].waitAndTap()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        mozWaitForElementToExist(secondTab)
 
         // Swipe tab
-        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].swipeLeft()
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        secondTab.swipeLeft()
+        mozWaitForElementToNotExist(secondTab)
         app.buttons["Undo"].waitAndTap()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        mozWaitForElementToExist(secondTab)
     }
 
     private func validateToastWhenClosingMultipleTabs() {

@@ -35,7 +35,7 @@
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Logg inn for å synkronisere passord, faner, og meir";
 
 /* On the main menu, when the user is signed in. */
-"MainMenu.Account.SignedIn.Description.v141" = "Behandle det du sikkerheitskopierer og synkroniserer";
+"MainMenu.Account.SignedIn.Description.v141" = "Handsam det du sikkerheitskopierer og synkroniserer";
 
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Synkroniser passord, faner, og meir";

@@ -668,7 +668,7 @@
 "Logins.WelcomeView.TurnOnAutoFill" = "Automatikus kitöltés bekapcsolása";
 
 /* Button to not save the user's password */
-"LoginsHelper.DontSave.Button" = "Nincs mentés";
+"LoginsHelper.DontSave.Button" = "Ne mentse";
 
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "Ne frissítse";
@@ -1316,7 +1316,7 @@
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox háttérkép, égszínkék minta.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Alapértelmezett háttérkép eltávolítása.";
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Alapértelmezett üres háttérkép.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox háttérkép, napkelte minta.";

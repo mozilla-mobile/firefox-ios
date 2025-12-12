@@ -115,14 +115,23 @@
 /* Action to set the toolbar to the top. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "മേൽഭാഗം";
 
+/* Button to skip the entire onboarding flow. */
+"Onboarding.Modern.General.Skip.v145" = "ഒഴിവാക്കുകട";
+
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "ഏതെങ്കിലും ഉപകരണത്തിൽ താങ്ങളുടെ അടയാളക്കുറിപ്പുകളും നാൾവഴിയും ഒളിവാക്കുകളും നേടുക.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "സമന്വയിപ്പിക്കാൻ തുടങ്ങുക";
 
+/* Button to start the Sync setup process. */
+"Onboarding.Modern.Sync.SignIn.Action.v145" = "സമന്വയിപ്പിക്കാൻ തുടങ്ങുക";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.Skip.Action.v140" = "ഇപ്പോഴല്ല";
+
+/* Button to skip the Sync setup during onboarding. */
+"Onboarding.Modern.Sync.Skip.Action.v145" = "ഇപ്പോഴല്ല";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Sync.Title.v140" = "നിങ്ങൾ നിൎത്തിയയിടത്തിൽ നിന്നു് ഉടൻ തുടങ്ങുക";
@@ -175,6 +184,9 @@
 /* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "തുടരുന്നതിലൂടെ, താങ്ങൾ %@ അംഗീകരിക്കുന്നു";
 
+/* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "%@ ഉപയോഗനിബന്ധനകൾ.";
+
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "താങ്ങളുടെ തിരച്ചിലനുഭവം മെച്ചപ്പെടത്തുക";
 
@@ -184,6 +196,9 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "തനതു അന്വേഷിയന്ത്രമാക്കുക";
 
+/* Action button to set the app as the default browser. */
+"Onboarding.Modern.Welcome.ActionTreatmentA.v145" = "തനിമട്ടായ അന്വേഷിയന്ത്രമാക്കുക";
+
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Modern.Welcome.Skip.v140" = "ഇപ്പോഴല്ല";
 
@@ -192,6 +207,9 @@
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Welcome.Title.v140" = "പരസ്യങ്ങളോടു് വിട പറയൂ";
+
+/* Title for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Title.v145" = "പിന്തുടൎച്ചയന്ത്രങ്ങളോടു വിട പറഞ്ഞേക്കു്";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "തുടരുക";
@@ -264,6 +282,9 @@
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.Wallpaper.Action.v114" = "ചുവർകടലാസു് ഇടുക";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v114" = "താങ്ങൾക്കു കൊള്ളാവുന്നയൊരു ചുവൎക്കടലാസ്സു തിരഞ്ഞെടുക്കുക.";
 
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.SelectorTitle.v114" = "നിറത്തിന്റെ നീർത്തെറിപ്പ് ഉരച്ചുനോക്കുക";

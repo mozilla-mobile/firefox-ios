@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Сіздің 5 тегін эл. пошта маскасы қолданылуда, сондықтан біз сіз үшін біреуін таңдадық.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Сіз 5 тегін эл. пошта маскасын пайдаландыңыз, сондықтан қайта пайдалануыңыз үшін біреуін таңдадық.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Эл. пошта маскалары қазір қолжетімді емес. Бірнеше минуттан кейін әрекетті қайталаңыз.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Эл. пошта маскасы кірістірілді";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Кіріс жәшігін спамнан қорғау үшін шын эл. поштаңызды жасырыңыз. Кейбір сайттар оны қолдамайды.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Кіріс жәшігін спамнан қорғау үшін нақты эл. поштаңызды жасырыңыз. Кейбір сайттар эл. пошта маскаларына қолдау көрсетпейді.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Көбірек білу";

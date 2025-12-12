@@ -72,8 +72,8 @@ final class AddressToolbarContainer: UIView,
 
     typealias SubscriberStateType = ToolbarState
 
-    private let isSwipingTabsEnabled: Bool
     private let isMinimalAddressBarEnabled: Bool
+    private let toolbarHelper: ToolbarHelperInterface
     private var windowUUID: WindowUUID?
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
@@ -151,9 +151,9 @@ final class AddressToolbarContainer: UIView,
     /// and the Cancel button is visible (allowing the user to leave overlay mode).
     var inOverlayMode = false
 
-    init(isSwipingTabsEnabled: Bool, isMinimalAddressBarEnabled: Bool) {
-        self.isSwipingTabsEnabled = isSwipingTabsEnabled
+    init(isMinimalAddressBarEnabled: Bool, toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.isMinimalAddressBarEnabled = isMinimalAddressBarEnabled
+        self.toolbarHelper = toolbarHelper
         super.init(frame: .zero)
         setupLayout()
     }
@@ -207,6 +207,12 @@ final class AddressToolbarContainer: UIView,
     }
 
     func hideSkeletonBars() {
+        let needsConfiguration = !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden
+
+        if toolbarHelper.isToolbarTranslucencyRefactorEnabled && needsConfiguration {
+            configureSkeletonAddressBars(previousTab: nil, forwardTab: nil)
+        }
+
         leftSkeletonAddressBar.isHidden = true
         rightSkeletonAddressBar.isHidden = true
     }
@@ -255,6 +261,7 @@ final class AddressToolbarContainer: UIView,
             hideSkeletonBars()
             return
         }
+
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
@@ -381,6 +388,7 @@ final class AddressToolbarContainer: UIView,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
             animated: model.shouldAnimate
         )
+        leftSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.leadingSkeleton
 
         rightSkeletonAddressBar.configure(
             config: model.configureSkeletonAddressBar(
@@ -394,10 +402,12 @@ final class AddressToolbarContainer: UIView,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
             animated: model.shouldAnimate
         )
+        rightSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton
     }
 
     private func updateSkeletonAddressBarsAlpha(to alpha: CGFloat) {
-        guard isSwipingTabsEnabled else { return }
+        guard toolbarHelper.isSwipingTabsEnabled else { return }
+
         leftSkeletonAddressBar.alpha = alpha
         rightSkeletonAddressBar.alpha = alpha
     }
@@ -431,7 +441,7 @@ final class AddressToolbarContainer: UIView,
 
     private func setupToolbarConstraints() {
         addSubview(toolbar)
-        if isSwipingTabsEnabled {
+        if toolbarHelper.isSwipingTabsEnabled {
             insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
             insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
 
@@ -512,7 +522,7 @@ final class AddressToolbarContainer: UIView,
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         regularToolbar.applyTheme(theme: theme)
-        if isSwipingTabsEnabled {
+        if toolbarHelper.isSwipingTabsEnabled {
             leftSkeletonAddressBar.applyTheme(theme: theme)
             rightSkeletonAddressBar.applyTheme(theme: theme)
             addNewTabView.applyTheme(theme: theme)
