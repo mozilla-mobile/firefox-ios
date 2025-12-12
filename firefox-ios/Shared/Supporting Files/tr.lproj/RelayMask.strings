@@ -7,8 +7,14 @@
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "E-posta maskeleri şu anda kullanılamıyor. Birkaç dakika sonra yeniden deneyin.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "E-posta maskesi eklendi";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Gelen kutunuzu spam’den korumak için gerçek e-postanızı gizleyin. Bazı siteler bu özelliği desteklemez.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Gelen kutunuzu spam’den korumak için gerçek e-postanızı gizleyin. Bazı siteler e-posta maskelerini desteklemez.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Daha fazla bilgi al";

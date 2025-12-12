@@ -16,10 +16,23 @@ import Foundation
 ///           __SPECIAL NOTE__: If you download a PDF, you can view that in a tab. In that case, the URL may have a `file://`
 ///            scheme instead of `http(s)://`, so certain options, like Send to Device / Add to Home Screen, may not be
 ///            available.
-enum ShareType {
+enum ShareType: Equatable, Sendable {
     case file(url: URL, remoteURL: URL?)
     case site(url: URL)
     case tab(url: URL, tab: any ShareTab)
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case let (.file(lhsURL, rhsRemoteURL), .file(rhsURL, lhsRemoteURL)):
+            return lhsURL == rhsURL && rhsRemoteURL == lhsRemoteURL
+        case let (.site(lhsURL), .site(rhsURL)):
+            return lhsURL == rhsURL
+        case let (.tab(lhsURL, lhsTab), .tab(rhsURL, rhsTab)):
+            return lhsURL == rhsURL && lhsTab.tabUUID == rhsTab.tabUUID
+        default:
+            return false
+        }
+    }
 
     /// The share URL wrapped by the given type.
     var wrappedURL: URL {

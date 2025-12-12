@@ -72,7 +72,7 @@ public struct AddressToolbarUXConfiguration {
         case .top:
             (top: 8, bottom: 8)
         case .bottom:
-            (top: 8, bottom: 4)
+            (top: 8, bottom: 8)
         }
     }
 }
