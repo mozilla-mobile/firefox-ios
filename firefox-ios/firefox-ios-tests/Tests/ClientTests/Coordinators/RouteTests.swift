@@ -7,14 +7,14 @@ import XCTest
 
 @MainActor
 class RouteTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testSearchRouteWithUrl() {
