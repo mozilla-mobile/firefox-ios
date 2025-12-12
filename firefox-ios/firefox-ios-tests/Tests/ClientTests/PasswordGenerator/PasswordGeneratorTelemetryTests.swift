@@ -10,15 +10,15 @@ import XCTest
 final class PasswordGeneratorTelemetryTests: XCTestCase {
     var gleanWrapper: MockGleanWrapper!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         gleanWrapper = MockGleanWrapper()
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         gleanWrapper = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testShowPasswordGeneratorDialog() {
