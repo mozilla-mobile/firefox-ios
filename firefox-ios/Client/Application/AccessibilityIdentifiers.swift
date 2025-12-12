@@ -64,6 +64,13 @@ struct AccessibilityIdentifiers {
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
         }
+
+        static let overKeyboardContainer = "Browser.overKeyboardContainer"
+        static let headerContainer = "Browser.headerContainer"
+        static let bottomContainer = "Browser.bottomContainer"
+        static let bottomContentStackView = "Browser.bottomContentStackView"
+        static let contentContainer = "Browser.contentContainer"
+        static let statusBarOverlay = "Browser.statusBarOverlay"
     }
 
     struct ContextualHints {

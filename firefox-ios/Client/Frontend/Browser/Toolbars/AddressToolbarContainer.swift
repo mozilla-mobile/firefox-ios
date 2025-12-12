@@ -221,7 +221,7 @@ final class AddressToolbarContainer: UIView,
         guard #available(iOS 26.0, *), let windowUUID else { return 0 }
 
         let isEditingAddress = state?.addressToolbar.isEditing == true
-        let shoudShowKeyboard = state?.addressToolbar.shouldShowKeyboard
+        let shouldShowKeyboard = state?.addressToolbar.shouldShowKeyboard
         let isBottomToolbar = state?.toolbarPosition == .bottom
         let shouldAdjustForAccessory = hasAccessoryView &&
                                        !isEditingAddress &&
@@ -231,7 +231,7 @@ final class AddressToolbarContainer: UIView,
 
         /// We want to check here if the keyboard accessory view state has changed
         /// To avoid spamming redux actions.
-        guard hasAccessoryView != shoudShowKeyboard else { return accessoryViewOffset }
+        guard hasAccessoryView != shouldShowKeyboard else { return accessoryViewOffset }
         store.dispatch(
             ToolbarAction(
                 shouldShowKeyboard: hasAccessoryView,
@@ -459,19 +459,19 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func setupSkeletonAddressBarsLayout() {
-        if toolbarHelper.isSwipingTabsEnabled {
-            NSLayoutConstraint.activate([
-                leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
-                leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
-                leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
-                leftSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset),
+        guard toolbarHelper.isSwipingTabsEnabled else { return }
 
-                rightSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
-                rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: trailingAnchor),
-                rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
-                rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
-            ])
-        }
+        NSLayoutConstraint.activate([
+            leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
+            leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
+            leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            leftSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset),
+
+            rightSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
+            rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: trailingAnchor),
+            rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
+        ])
     }
 
     private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
