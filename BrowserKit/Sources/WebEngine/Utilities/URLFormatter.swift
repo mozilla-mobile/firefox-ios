@@ -107,7 +107,7 @@ public final class DefaultURLFormatter: URLFormatter {
      Returns whether the URL's scheme is one of those listed on the official list of URI schemes.
      This only accepts permanent schemes: historical and provisional schemes are not accepted.
      */
-    public func schemeIsValid(for url: URL) -> Bool {
+    func schemeIsValid(for url: URL) -> Bool {
         guard let scheme = url.scheme else { return false }
         return SchemesDefinition.permanentURISchemes.contains(scheme.lowercased())
                && url.absoluteString.lowercased() != scheme + ":"
