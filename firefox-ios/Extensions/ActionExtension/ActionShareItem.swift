@@ -23,7 +23,7 @@ extension NSItemProvider {
         hasItemConformingToTypeIdentifier(UTType.url.identifier)
     }
 
-    func loadURL(completion: @escaping (Result<URL, Error>) -> Void) {
+    func loadURL(completion: @Sendable @escaping (Result<URL, Error>) -> Void) {
         loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { item, error in
             if let error = error {
                 completion(.failure(error))
@@ -44,7 +44,7 @@ extension NSItemProvider {
         }
     }
 
-    func loadText(completion: @escaping (Result<String, Error>) -> Void) {
+    func loadText(completion: @Sendable @escaping (Result<String, Error>) -> Void) {
         loadItem(forTypeIdentifier: UTType.text.identifier, options: nil) { item, error in
             if let error = error {
                 completion(.failure(error))
