@@ -28,7 +28,7 @@ protocol ToolbarHelperInterface {
     func backgroundAlpha() -> CGFloat
 }
 
-final class ToolbarHelper: ToolbarHelperInterface {
+final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
     }
@@ -42,7 +42,7 @@ final class ToolbarHelper: ToolbarHelperInterface {
     }
 
     var isToolbarTranslucencyRefactorEnabled: Bool {
-        FxNimbus.shared.features.toolbarRefactorFeature.value().translucencyRefactor
+        featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly)
     }
 
     var isSwipingTabsEnabled: Bool {
