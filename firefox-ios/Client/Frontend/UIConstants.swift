@@ -12,6 +12,7 @@ public struct UIConstants {
     static let ZoomPageBarHeight: CGFloat = 54
 
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
-    static let ScreenshotQuality: Float = 1
+    static let ScreenshotQuality: Float = 0.7
     static let ActiveScreenshotQuality: CGFloat = 0.5
+    static let TargetImageScale: CGFloat = 1.0
 }

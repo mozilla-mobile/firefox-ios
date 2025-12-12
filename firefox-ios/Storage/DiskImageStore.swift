@@ -73,7 +73,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
 
         let imagePath = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
         let data = try Data(contentsOf: imagePath)
-        if let image = UIImage(data: data, scale: await UIScreen.main.scale) {
+        if let image = UIImage(data: data, scale: 1.0) {
             return image
         } else {
             throw DiskImageStoreErrorCase.invalidImageData(description: "Invalid image data")
@@ -82,12 +82,32 @@ public actor DefaultDiskImageStore: DiskImageStore {
 
     public func saveImageForKey(_ key: String, image: UIImage) async throws {
         let imageURL = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
-        if let data = image.jpegData(compressionQuality: quality) {
-            try data.write(to: imageURL, options: .noFileProtection)
-            keys.insert(key)
-        } else {
+        let scaledImage = scaleImageFrom3xTo1x(image)
+
+        guard let data = scaleImageFrom3xTo1x(image).jpegData(compressionQuality: quality) else {
             throw DiskImageStoreErrorCase.cannotWrite(description: "Could not write image to file")
         }
+
+        try data.write(to: imageURL, options: .noFileProtection)
+        keys.insert(key)
+    }
+
+    private func scaleImageFrom3xTo1x(_ image: UIImage) -> UIImage {
+        let targetScale: CGFloat = 1.0
+
+        if image.scale > targetScale {
+            let newSize = CGSize(
+                width: image.size.width * (targetScale / image.scale),
+                height: image.size.height * (targetScale / image.scale)
+            )
+
+            return UIGraphicsImageRenderer(size: newSize)
+                .image { context in
+                    image.draw(in: CGRect(origin: .zero, size: newSize))
+                }
+        }
+
+        return image
     }
 
     public func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {
