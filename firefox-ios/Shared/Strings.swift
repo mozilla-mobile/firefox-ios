@@ -6229,6 +6229,36 @@ extension String {
         tableName: "Settings",
         value: "Try out features and ideas before they’re released to everyone.",
         comment: "A short description that explains that Mozilla is running studies")
+    public static let StudiesSettingTitleV3 = MZLocalizedString(
+        key: "Settings.Studies.Title.v148",
+        tableName: "Settings",
+        value: "Allow Feature Studies",
+        comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
+    public static let StudiesSettingLinkV3 = MZLocalizedString(
+        key: "Settings.Studies.Link.v148",
+        tableName: "Settings",
+        value: "Learn More",
+        comment: "Title for a link that explains what Mozilla means by Studies")
+    public static let StudiesSettingMessageV3 = MZLocalizedString(
+        key: "Settings.Studies.Message.v148",
+        tableName: "Settings",
+        value: "%@ randomly selects users to test features, which improves quality for everyone.",
+        comment: "A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox).")
+    public static let RolloutsSettingTitle = MZLocalizedString(
+        key: "Settings.Rollouts.Title.v148",
+        tableName: "Settings",
+        value: "Allow Remote Improvements",
+        comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts.")
+    public static let RolloutsSettingLink = MZLocalizedString(
+        key: "Settings.Rollouts.Link.v148",
+        tableName: "Settings",
+        value: "Learn More",
+        comment: "Title for a link that explains what Mozilla means by Rollouts")
+    public static let RolloutsSettingMessage = MZLocalizedString(
+        key: "Settings.Rollouts.Message.v148",
+        tableName: "Settings",
+        value: "%@ will improve features, performance, and stability between updates. Changes applied remotely.",
+        comment: "A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox).")
     public static let SettingsSiriSectionName = MZLocalizedString(
         key: "Settings.Siri.SectionName",
         tableName: nil,
