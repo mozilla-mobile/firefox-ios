@@ -5,13 +5,8 @@
 import XCTest
 import UniformTypeIdentifiers
 
-/// Tests for FirefoxURLBuilder business logic
-/// 
-/// These tests verify URL building functionality for the Action Extension.
-/// The FirefoxURLBuilder is a good candidate for unit testing as it contains
-/// pure business logic without UI dependencies.
 final class FirefoxURLBuilderTests: XCTestCase {
-    var subject: FirefoxURLBuilder!
+    private var subject: FirefoxURLBuilder!
 
     override func setUp() {
         super.setUp()
@@ -25,13 +20,13 @@ final class FirefoxURLBuilderTests: XCTestCase {
 
     // MARK: - buildFirefoxURL Tests
 
-    func testBuildFirefoxURL_WithShareItem_ReturnsCorrectURL() {
+    func testBuildFirefoxURL_WithShareItem_ReturnsCorrectURL() throws {
         let shareItem = ActionShareItem(url: "https://example.com", title: "Example")
         let extractedItem = ExtractedShareItem.shareItem(shareItem)
 
         let result = try XCTUnwrap(subject.buildFirefoxURL(from: extractedItem))
         XCTAssertNotNil(result.scheme, "URL should have a scheme")
-        XCTAssertTrue(result.absoluteString.contains("open-url") == true)
+        XCTAssertTrue(result.absoluteString.contains("open-url"))
 
         // Parse URL to check query parameter (URL is percent-encoded)
         guard let urlComponents = URLComponents(url: result, resolvingAgainstBaseURL: false),
@@ -46,27 +41,27 @@ final class FirefoxURLBuilderTests: XCTestCase {
         XCTAssertEqual(decodedURL, "https://example.com")
     }
 
-    func testBuildFirefoxURL_WithRawText_ReturnsSearchURL() {
+    func testBuildFirefoxURL_WithRawText_ReturnsSearchURL() throws {
         let text = "search query"
         let extractedItem = ExtractedShareItem.rawText(text)
 
         let result = try XCTUnwrap(subject.buildFirefoxURL(from: extractedItem))
-        XCTAssertTrue(result.absoluteString.contains("open-text") == true)
-        XCTAssertTrue(result.absoluteString.contains("search%20query") == true)
+        XCTAssertTrue(result.absoluteString.contains("open-text"))
+        XCTAssertTrue(result.absoluteString.contains("search%20query"))
     }
 
-    func testBuildFirefoxURL_WithSpecialCharacters_EncodesCorrectly() {
+    func testBuildFirefoxURL_WithSpecialCharacters_EncodesCorrectly() throws {
         let shareItem = ActionShareItem(url: "https://example.com/path?query=test&value=hello world", title: nil)
         let extractedItem = ExtractedShareItem.shareItem(shareItem)
 
         let result = try XCTUnwrap(subject.buildFirefoxURL(from: extractedItem))
         // URL should be properly encoded
-        XCTAssertTrue(result.absoluteString.contains("open-url") == true)
+        XCTAssertTrue(result.absoluteString.contains("open-url"))
     }
 
     // MARK: - convertTextToURL Tests
 
-    func testConvertTextToURL_WithValidDomain_ReturnsURL() {
+    func testConvertTextToURL_WithValidDomain_ReturnsURL() throws {
         let text = "example.com"
 
         let result = try XCTUnwrap(subject.convertTextToURL(text))
@@ -74,7 +69,7 @@ final class FirefoxURLBuilderTests: XCTestCase {
         XCTAssertEqual(result.host, "example.com")
     }
 
-    func testConvertTextToURL_WithHTTPPrefix_ReturnsURL() {
+    func testConvertTextToURL_WithHTTPPrefix_ReturnsURL() throws {
         let text = "http://example.com"
 
         let result = try XCTUnwrap(subject.convertTextToURL(text))
@@ -82,7 +77,7 @@ final class FirefoxURLBuilderTests: XCTestCase {
         XCTAssertEqual(result.host, "example.com")
     }
 
-    func testConvertTextToURL_WithHTTPSPrefix_ReturnsURL() {
+    func testConvertTextToURL_WithHTTPSPrefix_ReturnsURL() throws {
         let text = "https://example.com"
 
         let result = try XCTUnwrap(subject.convertTextToURL(text))
@@ -116,18 +111,18 @@ final class FirefoxURLBuilderTests: XCTestCase {
 
     // MARK: - findURLInItems Tests
 
-    func testFindURLInItems_WithURLItem_CallsCompletionWithSuccess() {
-        let expectation = expectation(description: "findURLInItems completion")
+    func testFindURLInItems_WithURLItem_CallsCompletionWithSuccess() throws {
+        let expectation = expectation(description: "findURLInItems completion called")
         let extensionItem = NSExtensionItem()
         let itemProvider = NSItemProvider()
-        itemProvider.registerItem(forTypeIdentifier: UTType.url.identifier) { item, _, _ in
-            URL(string: "https://example.com")
+        itemProvider.registerItem(forTypeIdentifier: UTType.url.identifier) { completionHandler, _, _ in
+            completionHandler?(NSURL(string: "https://example.com"), nil)
         }
         extensionItem.attachments = [itemProvider]
 
         var result: Result<ActionShareItem, Error>?
-        subject.findURLInItems([extensionItem]) { res in
-            result = res
+        subject.findURLInItems([extensionItem]) { completionResult in
+            result = completionResult
             expectation.fulfill()
         }
 
@@ -140,13 +135,13 @@ final class FirefoxURLBuilderTests: XCTestCase {
         }
     }
 
-    func testFindURLInItems_WithNoURLItems_CallsCompletionWithFailure() {
-        let expectation = expectation(description: "findURLInItems completion")
+    func testFindURLInItems_WithNoURLItems_CallsCompletionWithFailure() throws {
+        let expectation = expectation(description: "findURLInItems completion called")
         let extensionItem = NSExtensionItem()
 
         var result: Result<ActionShareItem, Error>?
-        subject.findURLInItems([extensionItem]) { res in
-            result = res
+        subject.findURLInItems([extensionItem]) { completionResult in
+            result = completionResult
             expectation.fulfill()
         }
 
@@ -161,18 +156,18 @@ final class FirefoxURLBuilderTests: XCTestCase {
 
     // MARK: - findTextInItems Tests
 
-    func testFindTextInItems_WithTextItem_CallsCompletionWithSuccess() {
-        let expectation = expectation(description: "findTextInItems completion")
+    func testFindTextInItems_WithTextItem_CallsCompletionWithSuccess() throws {
+        let expectation = expectation(description: "findTextInItems completion called")
         let extensionItem = NSExtensionItem()
         let itemProvider = NSItemProvider()
-        itemProvider.registerItem(forTypeIdentifier: UTType.text.identifier) { item, _, _ in
-            "test text"
+        itemProvider.registerItem(forTypeIdentifier: UTType.text.identifier) { completionHandler, _, _ in
+            completionHandler?(NSString(string: "test text"), nil)
         }
         extensionItem.attachments = [itemProvider]
 
         var result: Result<ExtractedShareItem, Error>?
-        subject.findTextInItems([extensionItem]) { res in
-            result = res
+        subject.findTextInItems([extensionItem]) { completionResult in
+            result = completionResult
             expectation.fulfill()
         }
 
@@ -190,13 +185,13 @@ final class FirefoxURLBuilderTests: XCTestCase {
         }
     }
 
-    func testFindTextInItems_WithNoTextItems_CallsCompletionWithFailure() {
-        let expectation = expectation(description: "findTextInItems completion")
+    func testFindTextInItems_WithNoTextItems_CallsCompletionWithFailure() throws {
+        let expectation = expectation(description: "findTextInItems completion called")
         let extensionItem = NSExtensionItem()
 
         var result: Result<ExtractedShareItem, Error>?
-        subject.findTextInItems([extensionItem]) { res in
-            result = res
+        subject.findTextInItems([extensionItem]) { completionResult in
+            result = completionResult
             expectation.fulfill()
         }
 
