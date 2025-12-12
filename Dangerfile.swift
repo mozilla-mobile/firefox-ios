@@ -472,6 +472,7 @@ extension String {
 }
 
 // MARK: - Label by-pass
+// Used to by-pass a failure with the label `danger-bypass` on the pull request
 
 private func hasLabel(_ bypassLabel: String) -> Bool {
     let labelNames = danger.github.issue.labels
@@ -483,7 +484,7 @@ private func hasLabel(_ bypassLabel: String) -> Bool {
 
 /// Call this instead of `fail` when you want a "bypassable" failure.
 /// If the PR has the bypass label, this becomes a `warn` instead.
-func failOrWarn(_ message: String) {
+private func failOrWarn(_ message: String) {
     let bypassLabel = "danger-bypass"
     if hasLabel(bypassLabel) {
         warn("""
