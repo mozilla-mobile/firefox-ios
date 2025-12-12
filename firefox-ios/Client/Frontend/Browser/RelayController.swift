@@ -241,7 +241,9 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         } catch {
             // Certain errors we need to custom-handle
 
-            if case let RelayApiError.Api(status, code, _) = error, status == 401, code == "invalid_token" {
+            if case let RelayApiError.Api(status, code, _) = error,
+               status == 401,
+               (code == "invalid_token" || code == "unknown") {
                 // Invalid OAuth token
                 logger.log("OAuth token expired.", level: .info, category: .relay)
                 return (nil, .expiredToken)
