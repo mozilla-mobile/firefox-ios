@@ -77,7 +77,7 @@ public extension Nimbus {
     /// - Throws `NimbusError` if anything goes wrong with the Rust FFI or in the `NimbusClient` constructor.
     ///
     static func create(
-        _ server: NimbusServerSettings?,
+        server: NimbusServerSettings?,
         appSettings: NimbusAppSettings,
         coenrollingFeatureIds: [String] = [],
         dbPath: String,
@@ -99,8 +99,7 @@ public extension Nimbus {
             dbpath: dbPath,
             metricsHandler: GleanMetricsHandler(),
             geckoPrefHandler: nil,
-            remoteSettingsService: server?.remoteSettingsService,
-            collectionName: server?.collection
+            remoteSettingsInfo: server,
         )
 
         return Nimbus(

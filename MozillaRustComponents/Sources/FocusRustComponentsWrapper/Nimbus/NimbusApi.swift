@@ -236,15 +236,15 @@ public extension Notification.Name {
 
 /// This struct is used during in the `create` method to point `Nimbus` at the given `RemoteSettings` server.
 ///
-public struct NimbusServerSettings {
-    public init(url: URL, collection: String = remoteSettingsCollection) {
-        self.url = url
-        self.collection = collection
-    }
+//public struct NimbusServerSettings {
+//    public init(url: URL, collection: String = remoteSettingsCollection) {
+//        self.url = url
+//        self.collection = collection
+//    }
 
-    public let url: URL
-    public let collection: String
-}
+//    public let url: URL
+//    public let collection: String
+//}
 
 public let remoteSettingsCollection = "nimbus-mobile-experiments"
 public let remoteSettingsPreviewCollection = "nimbus-preview"

@@ -20,16 +20,19 @@ extension NimbusServerSettings {
         guard let serverURL = getNimbusEndpoint(useStagingServer: useStagingServer) else {
             return nil
         }
-        return NimbusServerSettings(url: serverURL, collection: usePreviewCollection ? "nimbus-preview" : remoteSettingsCollection)
+        let rsServer = RemoteSettingsServer.custom(url: serverURL)
+        let rsConfig = RemoteSettingsConfig2(server: rsServer)
+        let rsService = RemoteSettingsService(storageDir: URL(
+            fileURLWithPath: "",
+            isDirectory: true
+        ).appendingPathComponent("remote-settings").path, config: rsConfig)
+        
+        return NimbusServerSettings(rsService: rsService, collectionName: usePreviewCollection ? "nimbus-preview" : remoteSettingsCollection)
     }
 
-    static func getNimbusEndpoint(useStagingServer: Bool) -> URL? {
+    static func getNimbusEndpoint(useStagingServer: Bool) -> String? {
         let key = useStagingServer ? NimbusStagingServerURLKey : NimbusServerURLKey
-        if let serverURLString = Bundle.main.object(forInfoDictionaryKey: key) as? String,
-            let serverURL = URL(string: serverURLString, invalidCharacters: false) {
-            return serverURL
-        }
-        return nil
+        return Bundle.main.object(forInfoDictionaryKey: key) as? String
     }
 }
 
