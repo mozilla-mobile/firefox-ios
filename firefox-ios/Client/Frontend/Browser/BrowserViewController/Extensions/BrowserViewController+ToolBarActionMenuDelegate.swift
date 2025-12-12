@@ -26,7 +26,9 @@ extension BrowserViewController: PhotonActionSheetProtocol {
             anchor: view,
             withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
-            presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
+            presentedUsing: { [weak self] in
+                self?.presentContextualHint(for: .dataClearance)
+            },
             andActionForButton: { },
             overlayState: overlayManager)
     }
@@ -58,7 +60,9 @@ extension BrowserViewController: PhotonActionSheetProtocol {
             anchor: view,
             withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
-            presentedUsing: { [weak self] in self?.presentNavigationContextualHint() },
+            presentedUsing: { [weak self] in
+                self?.presentContextualHint(for: .navigation)
+            },
             actionOnDismiss: {
                 let action = ToolbarAction(windowUUID: self.windowUUID,
                                            actionType: ToolbarActionType.navigationHintFinishedPresenting)
@@ -107,7 +111,9 @@ extension BrowserViewController: PhotonActionSheetProtocol {
             anchor: view,
             withArrowDirection: arrowDirection,
             andDelegate: self,
-            presentedUsing: { [weak self] in self?.presentToolbarUpdateContextualHint() },
+            presentedUsing: { [weak self] in
+                self?.presentContextualHint(for: .toolbarUpdate)
+            },
             andActionForButton: { },
             overlayState: overlayManager)
     }
@@ -134,7 +140,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
             withArrowDirection: shouldShowUpArrow ? .up : .down,
             andDelegate: self,
             presentedUsing: { [weak self] in
-                self?.presentSummarizeToolbarEntryContextualHint()
+                self?.presentContextualHint(for: .summarizeToolbarEntry)
             },
             andActionForButton: { },
             overlayState: overlayManager)
@@ -163,7 +169,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
             withArrowDirection: shouldShowUpArrow ? .up : .down,
             andDelegate: self,
             presentedUsing: { [weak self] in
-                self?.presentTranslationContextualHint()
+                self?.presentContextualHint(for: .translation)
             },
             andActionForButton: { },
             overlayState: overlayManager)
@@ -172,6 +178,18 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     private func presentTranslationContextualHint() {
         present(translationContextHintVC, animated: true)
         UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
+    }
+
+    private func presentContextualHint(for hintType: ContextualHintType) {
+        scrollController.showToolbars(animated: true)
+        switch hintType {
+        case .summarizeToolbarEntry: presentSummarizeToolbarEntryContextualHint()
+        case .translation: presentTranslationContextualHint()
+        case .dataClearance: presentDataClearanceContextualHint()
+        case .navigation: presentNavigationContextualHint()
+        case .toolbarUpdate: presentToolbarUpdateContextualHint()
+        default: break
+        }
     }
 
     func dismissToolbarCFRs(with windowUUID: WindowUUID) {
