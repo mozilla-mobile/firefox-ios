@@ -473,24 +473,22 @@ extension String {
 
 // MARK: - Label by-pass
 
-// Label that allows turning fails into warns on this PR
-let globalBypassLabel = "danger-bypass"
-
-private func hasLabel(_ name: String) -> Bool {
-    guard let labels = danger.github?.issue.labels else {
-        return false
+private func hasLabel(_ bypassLabel: String) -> Bool {
+    let labelNames = danger.github.issue.labels
+    for label in labelNames where label.name == bypassLabel {
+        return true
     }
-    return labels.contains { $0.name == name }
+    return false
 }
 
 /// Call this instead of `fail` when you want a "bypassable" failure.
 /// If the PR has the bypass label, this becomes a `warn` instead.
-func failOrWarn(_ message: String, bypassLabel: String = globalBypassLabel) {
+func failOrWarn(_ message: String) {
+    let bypassLabel = "danger-bypass"
     if hasLabel(bypassLabel) {
         warn("""
         \(message)
-        
-        Bypass label `\(bypassLabel)` detected — reporting as warning only for this PR._
+        Since bypass label \(bypassLabel) detected we are reporting as warning only for this PR.
         """)
     } else {
         fail(message)
