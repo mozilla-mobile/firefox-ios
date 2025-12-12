@@ -419,7 +419,7 @@
 "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "已翻譯為 %@";
 
 /* On the main menu, the title for the action that will translate the content of the webpage. */
-"MainMenu.ToolsSection.Translation.Title.v145" = "翻譯此頁";
+"MainMenu.ToolsSection.Translation.Title.v145" = "翻譯頁面";
 
 /* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
 "MainMenu.ToolsSection.Translation.Translated.Title.v145" = "已翻譯";
