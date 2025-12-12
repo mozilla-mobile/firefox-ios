@@ -459,7 +459,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func setupSkeletonAddressBarsLayout() {
-        guard isSwipingTabsEnabled else { return }
+        guard toolbarHelper.isSwipingTabsEnabled else { return }
 
         NSLayoutConstraint.activate([
             leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
