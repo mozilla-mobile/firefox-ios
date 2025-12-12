@@ -989,6 +989,24 @@ extension String {
                 comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page")
         }
 
+        public struct PrivacyNotice {
+            public static let Body = MZLocalizedString(
+                key: "FirefoxHome.PrivacyNotice.Body.v148",
+                tableName: "FirefoxHomepage",
+                value: "We’ve updated our %@ to reflect the latest features in %@. %@",
+                comment: "Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The first placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The second placeholder is for the app name (e.g. Firefox). The third placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice")
+            public static let PrivacyNoticeLink = MZLocalizedString(
+                key: "FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148",
+                tableName: "FirefoxHomepage",
+                value: "Privacy Notice",
+                comment: "Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice.")
+            public static let LearnMoreLink = MZLocalizedString(
+                key: "FirefoxHome.PrivacyNotice.LearnMoreLink.v148",
+                tableName: "FirefoxHomepage",
+                value: "Learn More",
+                comment: "Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice.")
+        }
+
         public struct HomeTabBanner {
             public struct EvergreenMessage {
                 public static let HomeTabBannerTitle = MZLocalizedString(
