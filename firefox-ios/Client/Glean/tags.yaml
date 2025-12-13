@@ -93,6 +93,9 @@ Settings:
 Share:
   description: Corresponds to sharing functionality, including both the iOS Action Extension for sharing content into the app and the system share sheet for sharing content out of the app.
 
+ShareExtension:
+  description: Corresponds to the legacy iOS Share Extension that allows users to share URLs and perform actions like bookmarking, adding to reading list, and sending to device.
+
 ShareSheet:
   description: Corresponds to the iOS system share sheet for sharing content out of the app.
 

@@ -201,6 +201,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         profile.syncManager?.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
 
+        // Process any pending app extension telemetry events (e.g., from Share Extension)
+        TelemetryWrapper.shared.processPendingAppExtensionTelemetry(profile: profile)
+
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
         // update top sites widget
