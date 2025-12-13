@@ -18,10 +18,10 @@ jobs:
   get-screenshots:
     name: Generate screenshots
     runs-on: macos-26
-    timeout-minutes: 30
+    timeout-minutes: 80
     steps:
       - name: Clone firefox-ios repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: mozilla-mobile/firefox-ios
           ref: ${{ inputs.branch }}
@@ -31,10 +31,11 @@ jobs:
           sudo xcode-select -s /Applications/Xcode_26.0.1.app/Contents/Developer
           xcodebuild -version
       - name: Run setup scripts for Focus
+        timeout-minutes: 10
         run: |
           ./bootstrap.sh focus
       - name: Fetch derived data
-        id: download-derived-data
+        timeout-minutes: 10
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.derived-data }}
@@ -44,6 +45,7 @@ jobs:
           gunzip l10n-screenshots-dd.tar.gz
           tar -xvf l10n-screenshots-dd.tar
       - name: Generate screenshots
+        timeout-minutes: 55
         continue-on-error: true
         id: screenshots
         run: |

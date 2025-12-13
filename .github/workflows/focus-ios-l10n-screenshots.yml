@@ -8,7 +8,7 @@ on:
         type: string
         default: "main"
   schedule:
-    - cron: "0 4 * * 1"
+    - cron: "0 22 * * 6"
 
 jobs:
   determine-locales:
@@ -18,7 +18,7 @@ jobs:
       locales: ${{ steps.my_locales.outputs.locales }}
     steps:
       - name: Clone firefoxios-l10n repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: mozilla-l10n/firefoxios-l10n
       - name: Determine locales needed
@@ -35,7 +35,7 @@ jobs:
     runs-on: macos-26
     steps:
       - name: Clone firefox-ios repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: mozilla-mobile/firefox-ios
           ref: ${{ inputs.branch }}
