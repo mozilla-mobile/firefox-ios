@@ -4,13 +4,13 @@
 
 import UniformTypeIdentifiers
 
-struct ShareItem {
+struct ActionShareItem: Sendable {
     let url: String
     let title: String?
 }
 
-enum ExtractedShareItem {
-    case shareItem(ShareItem)
+enum ExtractedShareItem: Sendable {
+    case shareItem(ActionShareItem)
     case rawText(String)
 }
 
