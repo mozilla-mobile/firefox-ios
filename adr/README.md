@@ -12,6 +12,7 @@ This log lists the architectural decisions for MADR.
 * [ADR-0003](0003-redux-pilot.md) - Redux-style Unidirectional Data Flow
 * [ADR-0004](0004-using-redux-to-replace-mvvm.md) - Using Redux to replace MVVM
 * [ADR-0005](0005-redux-and-navigation.md) - Redux-driven Navigation via Navigation Actions & State
+* [ADR-0006](0006-adopt-three-tier-documentation-structure.md) - Adopt Three-Tier Documentation Structure
 
 <!-- adrlogstop -->
 
