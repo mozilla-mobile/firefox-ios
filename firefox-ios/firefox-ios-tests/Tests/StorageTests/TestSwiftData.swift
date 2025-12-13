@@ -38,7 +38,7 @@ class TestSwiftData: XCTestCase {
         closeTimeout: UInt64? = nil
     ) -> MaybeErrorType? {
         // Query the database and hold the cursor.
-        var c: Cursor<SDRow>!
+        nonisolated(unsafe) var c: Cursor<SDRow>!
         let result = swiftData!.withConnection(SwiftData.Flags.readOnly) { db in
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
