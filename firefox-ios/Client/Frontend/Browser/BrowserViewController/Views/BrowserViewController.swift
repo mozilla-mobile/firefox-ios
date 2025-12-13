@@ -94,6 +94,7 @@ class BrowserViewController: UIViewController,
     var zoomManager: ZoomPageManager
     let documentLogger: DocumentLogger
     var downloadHelper: DownloadHelper?
+    private var shouldLayoutSubviews = true
 
     // MARK: Optional UI elements
 
@@ -683,9 +684,10 @@ class BrowserViewController: UIViewController,
         updateHeaderConstraints()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
-        updateToolbarDisplay()
         if isToolbarTranslucencyRefactorEnabled {
             addOrUpdateMaskViewIfNeeded()
+        } else {
+            updateToolbarDisplay()
         }
 
         let action = GeneralBrowserMiddlewareAction(
@@ -862,9 +864,8 @@ class BrowserViewController: UIViewController,
         if !isToolbarTranslucencyRefactorEnabled {
             header.setNeedsLayout()
             view.layoutSubviews()
+            updateToolbarDisplay()
         }
-
-        updateToolbarDisplay()
     }
 
     private func updateSwipingTabs() {
@@ -1489,6 +1490,9 @@ class BrowserViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if isToolbarTranslucencyRefactorEnabled {
+            shouldLayoutSubviews = true
+        }
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
@@ -1498,6 +1502,13 @@ class BrowserViewController: UIViewController,
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         updateToolbarStateForTraitCollection(traitCollection)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if isToolbarTranslucencyRefactorEnabled {
+            shouldLayoutSubviews = false
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1578,7 +1589,9 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        if isToolbarTranslucencyRefactorEnabled {
+            guard shouldLayoutSubviews else { return }
+        }
         // Remove existing constraints
         statusBarOverlay.removeConstraints(statusBarOverlayConstraints)
         statusBarOverlayConstraints.removeAll()
@@ -1596,12 +1609,10 @@ class BrowserViewController: UIViewController,
         checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
-        if !isToolbarTranslucencyRefactorEnabled {
-            // when toolbars are hidden/shown the mask on the content view that is used for
-            // toolbar translucency needs to be updated
-            // This also required for iPad rotation
-            updateToolbarDisplay()
-        }
+        // when toolbars are hidden/shown the mask on the content view that is used for
+        // toolbar translucency needs to be updated
+        // This also required for iPad rotation
+        updateToolbarDisplay()
 
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
@@ -1691,6 +1702,9 @@ class BrowserViewController: UIViewController,
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
                 updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
+                if isToolbarTranslucencyRefactorEnabled {
+                    updateToolbarDisplay()
+                }
             }
             updateToolbarStateForTraitCollection(traitCollection)
         }
@@ -2032,7 +2046,9 @@ class BrowserViewController: UIViewController,
         }
 
         browserDelegate?.show(webView: webView)
-        updateToolbarDisplay()
+        if !isToolbarTranslucencyRefactorEnabled {
+            updateToolbarDisplay()
+        }
     }
 
     // MARK: - Document Loading
