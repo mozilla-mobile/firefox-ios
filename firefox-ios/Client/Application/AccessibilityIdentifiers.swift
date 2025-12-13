@@ -501,8 +501,14 @@ struct AccessibilityIdentifiers {
             static let deleteButton = "Delete"
             static let showPrivateSuggestions = "PrivateMode.showPrivateSuggestions"
             static let showTrendingSearches = "showTrendingSearch"
+            // This is based on `PrefsKeys.SearchSettings.showTrendingSearches`
+            static let showTrendingSearchesSwitch = "trendingSearchesFeatureKey"
             static let showRecentSearches = "showRecentSearch"
+            // This is based on `PrefsKeys.SearchSettings.showRecentSearches`
+            static let showRecentSearchesSwitch = "recentSearchesFeatureKey"
             static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
+            static let backButtoniOS26 = "BackButton"
+            static let backButton = "Settings"
         }
 
         struct AdvancedAccountSettings {
