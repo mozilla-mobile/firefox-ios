@@ -21,6 +21,11 @@ struct TabManagerAction: Action {
     }
 }
 
+enum TabManagerActionType: ActionType {
+    case addedTab
+    case restoredTabs
+}
+
 enum TabManagerMiddlewareActionType: ActionType {
     case fetchedRecentTabs
 }

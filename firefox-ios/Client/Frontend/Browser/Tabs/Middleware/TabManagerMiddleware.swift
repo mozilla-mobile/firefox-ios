@@ -76,6 +76,10 @@ final class TabManagerMiddleware: FeatureFlaggable,
             self.resolveScreenshotActions(action: action, state: state)
         } else if let action = action as? ShortcutsLibraryAction {
             self.resolveShortcutsLibrartActions(action: action, state: state)
+        } else if let action = action as? GeneralBrowserAction {
+            self.resolveGeneralBrowserAction(action: action)
+        } else if let action = action as? TabManagerAction {
+            self.resolveTabManagerAction(action: action)
         } else {
             self.resolveHomepageActions(with: action)
         }
@@ -85,6 +89,25 @@ final class TabManagerMiddleware: FeatureFlaggable,
         switch action.actionType {
         case ShortcutsLibraryActionType.switchTabToastButtonTapped:
             tabManager(for: action.windowUUID).selectTab(action.tab)
+        default:
+            break
+        }
+    }
+
+    private func resolveGeneralBrowserAction(action: GeneralBrowserAction) {
+        switch action.actionType {
+        case GeneralBrowserActionType.addNewTab:
+            dispatchRecentlyAccessedTabs(action: action)
+        default:
+            break
+        }
+    }
+
+    private func resolveTabManagerAction(action: TabManagerAction) {
+        switch action.actionType {
+        case TabManagerActionType.restoredTabs,
+            TabManagerActionType.addedTab:
+            dispatchRecentlyAccessedTabs(action: action)
         default:
             break
         }
