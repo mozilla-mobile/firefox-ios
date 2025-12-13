@@ -81,6 +81,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var sendCrashReportsSetting: SendDataSetting?
     private var sendDailyUsagePingSetting: SendDataSetting?
     private var studiesToggleSetting: SendDataSetting?
+    private var rolloutsToggleSetting: SendDataSetting?
 
     // MARK: - Initializers
     init(
@@ -219,9 +220,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
             prefs: profile.prefs,
             prefKey: AppConstants.prefStudiesToggle,
             defaultValue: true,
-            titleText: .StudiesSettingTitleV2,
-            subtitleText: .StudiesSettingMessageV2,
-            learnMoreText: .StudiesSettingLinkV2,
+            titleText: .StudiesSettingTitleV3,
+            subtitleText: String(format: .StudiesSettingMessageV3, AppName.shortName.rawValue),
+            learnMoreText: .StudiesSettingLinkV3,
             learnMoreURL: SupportUtils.URLForTopic("ios-studies"),
             a11yId: AccessibilityIdentifiers.Settings.SendData.studiesTitle,
             learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.studiesLearnMoreButton,
@@ -230,6 +231,31 @@ class AppSettingsTableViewController: SettingsTableViewController,
         )
         studiesSetting.settingDidChange = {
             Experiments.setStudiesSetting($0)
+        }
+
+        // Initialize rollouts participation on startup (rollouts are independent of telemetry)
+        // Get the value from Nimbus SDK to respect any DB migration that may have occurred
+        let rolloutsEnabled = Experiments.shared.rolloutParticipation
+        // Sync prefs with SDK value so UI toggle shows correct state after DB migration
+        if profile.prefs.boolForKey(AppConstants.prefRolloutsToggle) == nil {
+            profile.prefs.setBool(rolloutsEnabled, forKey: AppConstants.prefRolloutsToggle)
+        }
+        Experiments.setRolloutsSetting(rolloutsEnabled)
+
+        let rolloutsSetting = SendDataSetting(
+            prefs: profile.prefs,
+            prefKey: AppConstants.prefRolloutsToggle,
+            defaultValue: true,
+            titleText: .RolloutsSettingTitle,
+            subtitleText: String(format: .RolloutsSettingMessage, AppName.shortName.rawValue),
+            learnMoreText: .RolloutsSettingLink,
+            learnMoreURL: SupportUtils.URLForTopic("remote-improvements"),
+            a11yId: AccessibilityIdentifiers.Settings.SendData.rolloutsTitle,
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.rolloutsLearnMoreButton,
+            settingsDelegate: parentCoordinator
+        )
+        rolloutsSetting.settingDidChange = {
+            Experiments.setRolloutsSetting($0)
         }
 
         let sendTechnicalDataSettings = SendDataSetting(
@@ -290,6 +316,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         self.sendCrashReportsSetting = sendCrashReportsSettings
 
         studiesToggleSetting = studiesSetting
+        rolloutsToggleSetting = rolloutsSetting
     }
 
     // MARK: - Generate Settings
@@ -446,6 +473,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         guard let sendTechnicalDataSetting,
               let sendDailyUsagePingSetting,
               let studiesToggleSetting,
+              let rolloutsToggleSetting,
               let sendCrashReportsSetting else {
             return []
         }
@@ -453,6 +481,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         supportSettings.append(contentsOf: [
             sendTechnicalDataSetting,
             studiesToggleSetting,
+            rolloutsToggleSetting,
             sendDailyUsagePingSetting,
             sendCrashReportsSetting
         ])
