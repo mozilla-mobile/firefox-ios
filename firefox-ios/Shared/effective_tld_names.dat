@@ -6813,7 +6813,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-11-08T15:16:38Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-12-06T15:17:27Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -10191,7 +10191,7 @@ solutions
 // https://www.iana.org/domains/root/db/song.html
 song
 
-// sony : Sony Corporation
+// sony : Sony Group Corporation
 // https://www.iana.org/domains/root/db/sony.html
 sony
 
@@ -12926,6 +12926,12 @@ dnshome.de
 online.th
 shop.th
 
+// dotScot Domains : https://domains.scot/
+// Submitted by DNS Team <dns@domains.scot>
+co.scot
+me.scot
+org.scot
+
 // DrayTek Corp. : https://www.draytek.com/
 // Submitted by Paul Fang <mis@draytek.com>
 drayddns.com
@@ -13292,6 +13298,7 @@ elementor.cool
 // Emergent : https://emergent.sh
 // Submitted by Emergent Security Team <security@emergent.sh>
 emergent.cloud
+preview.emergentagent.com
 emergent.host
 
 // En root‽ : https://en-root.org
@@ -14981,10 +14988,6 @@ srv.us
 gh.srv.us
 gl.srv.us
 
-// PE Ulyanov Kirill Sergeevich : https://airy.host
-// Submitted by Kirill Ulyanov <k.ulyanov@airy.host>
-lk3.ru
-
 // Peplink | Pepwave : http://peplink.com/
 // Submitted by Steve Leung <steveleung@peplink.com>
 mypep.link
@@ -15176,6 +15179,11 @@ rhcloud.com
 // Redgate Software : https://red-gate.com
 // Submitted by Andrew Farries <andrew.farries@red-gate.com>
 instances.spawn.cc
+
+// Redpanda Data : https://redpanda.com
+// Submitted by Infrastructure Team <security@redpanda.com>
+*.clusters.rdpa.co
+*.srvrless.rdpa.co
 
 // Render : https://render.com
 // Submitted by Anurag Goel <dev@render.com>
