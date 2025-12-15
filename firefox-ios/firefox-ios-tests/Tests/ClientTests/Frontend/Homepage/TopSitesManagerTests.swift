@@ -93,7 +93,7 @@ final class TopSitesManagerTests: XCTestCase {
     func test_fetchSponsoredSites_forUnifiedAds_withEmptySuccess_returnSponsoredSites() async throws {
         let subject = try createSubject(
             unifiedAdsProvider: MockUnifiedAdsProvider(
-                result: .success(MockSponsoredTileData.convert(contiles: MockSponsoredTileData.defaultSuccessData))
+                result: .success(MockSponsoredTileData.convert(contiles: MockSponsoredTileData.emptySuccessData))
             )
         )
 
