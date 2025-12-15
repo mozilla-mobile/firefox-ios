@@ -20,9 +20,9 @@ final class TermsOfUseTelemetryTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         telemetry = nil
         Self.tearDownTelemetry()
+        try await super.tearDown()
     }
 
     func testTermsOfUseBottomSheetDisplayed() throws {

@@ -5,21 +5,22 @@
 import XCTest
 @testable import Client
 
-class NotificationSurfaceManagerTests: XCTestCase {
+@MainActor
+final class NotificationSurfaceManagerTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var notificationManager: MockNotificationManager!
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
         notificationManager = MockNotificationManager()
         messageManager = MockGleanPlumbMessageManagerProtocol()
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         messageManager = nil
         notificationManager = nil
+        try await super.tearDown()
     }
 
     func testShouldShowSurface_noMessage() {
@@ -60,7 +61,6 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(notificationManager.scheduledNotifications, 1)
     }
 
-    @MainActor
     func testDidTapNotification_noMessageId() {
         let subject = createSubject()
         subject.didTapNotification("")
@@ -68,7 +68,6 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
-    @MainActor
     func testDidTapNotification_noMessageFound() {
         let subject = createSubject()
         subject.didTapNotification("test")
@@ -76,7 +75,6 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
-    @MainActor
     func testDidTapNotification_openNewTabAction() {
         let subject = createSubject()
         let message = createMessage()
@@ -89,7 +87,6 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessagePressedCalled, 1)
     }
 
-    @MainActor
     func testDidTapNotification_defaultAction() {
         let subject = createSubject()
         let message = createMessage(action: "test-action")

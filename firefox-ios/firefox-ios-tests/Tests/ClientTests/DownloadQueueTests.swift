@@ -16,16 +16,15 @@ class DownloadQueueTests: XCTestCase {
     var download: MockDownload!
 
     override func setUp() {
+        super.setUp()
         queue = DownloadQueue()
         download = MockDownload()
-
-        super.setUp()
     }
 
     override func tearDown() {
-        super.tearDown()
         queue = nil
         download = nil
+        super.tearDown()
     }
 
     func testDownloadQueueIsEmpty() {
@@ -101,6 +100,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, didCompleteWithError)
     }
 
+    @MainActor
     func testDelegateMemoryLeak() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)

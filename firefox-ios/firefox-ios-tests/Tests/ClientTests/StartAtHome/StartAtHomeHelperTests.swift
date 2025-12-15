@@ -23,13 +23,12 @@ class StartAtHomeHelperTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
-
         profile = nil
         tabManager = nil
         helper = nil
 
         DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testShouldNotSkipStartAtHome() throws {

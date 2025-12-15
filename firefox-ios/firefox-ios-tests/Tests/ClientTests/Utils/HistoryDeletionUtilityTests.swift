@@ -30,12 +30,14 @@ class HistoryDeletionUtilityTests: XCTestCase, @unchecked Sendable {
     }
 
     // MARK: - General Tests
+    @MainActor
     func testEmptyRead() {
         let profile = profileSetup(named: "hsd_emptyTest")
 
         assertDBIsEmpty(with: profile)
     }
 
+    @MainActor
     func testSingleDataExists() {
         let profile = profileSetup(named: "hsd_singleDataExists")
         let testSites = [SiteElements(domain: "mozilla")]
@@ -353,10 +355,9 @@ class HistoryDeletionUtilityTests: XCTestCase, @unchecked Sendable {
         }
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
-}
 
-// MARK: - Helper functions
-private extension HistoryDeletionUtilityTests {
+    // MARK: - Helper functions
+    @MainActor
     func profileSetup(named dbPrefix: String) -> MockProfile {
         let profile = MockProfile(databasePrefix: dbPrefix)
         profile.reopen()
@@ -407,6 +408,7 @@ private extension HistoryDeletionUtilityTests {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
+    @MainActor
     func deleteHistoryMetadataOlderThan(dateOption: HistoryDeletionUtilityDateOptions,
                                         using profile: MockProfile,
                                         file: StaticString = #filePath,

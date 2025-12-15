@@ -16,9 +16,9 @@ class UIPasteboardExtensionsTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         UIPasteboard.remove(withName: pasteboard.name)
         pasteboard = nil
+        super.tearDown()
     }
 
     func testAddPNGImage() throws {

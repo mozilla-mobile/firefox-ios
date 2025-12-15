@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class TemporaryDocumentTests: XCTestCase {
     private let filename = "TempPDF.pdf"
     private let request = URLRequest(url: URL(string: "https://example.com")!)
@@ -13,8 +14,8 @@ final class TemporaryDocumentTests: XCTestCase {
     private var subject: DefaultTemporaryDocument!
     private var mockURLProtocol: MockURLProtocol!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockURLProtocol = MockURLProtocol()
 
         let configuration = URLSessionConfiguration.default
@@ -24,13 +25,13 @@ final class TemporaryDocumentTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockURLProtocol.response = nil
         mockURLProtocol.data = nil
         let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
         try? FileManager.default.removeItem(at: tempFileURL)
         mockURLSession = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testInit_appliesCookiesToRequest() {

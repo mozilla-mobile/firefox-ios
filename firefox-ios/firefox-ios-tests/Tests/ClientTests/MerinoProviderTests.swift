@@ -64,6 +64,7 @@ private final class MockCache: CuratedRecommendationsCacheProtocol {
     }
 }
 
+@MainActor
 final class MerinoProviderTests: XCTestCase {
     private let storiesFlag = PrefsKeys.UserFeatureFlagPrefs.ASPocketStories
 

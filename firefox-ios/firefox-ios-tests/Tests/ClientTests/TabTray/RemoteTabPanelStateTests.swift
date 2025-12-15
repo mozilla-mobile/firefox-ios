@@ -18,8 +18,8 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     @MainActor

@@ -5,17 +5,18 @@
 import XCTest
 @testable import Client
 
-class DownloadTests: XCTestCase {
+@MainActor
+final class DownloadTests: XCTestCase {
     var download: Download!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         download = Download(originWindow: .XCTestDefaultUUID)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         download = nil
+        try await super.tearDown()
     }
 
     func testDelegateMemoryLeak() {
@@ -51,7 +52,6 @@ class DownloadTests: XCTestCase {
         download = nil
     }
 
-    @MainActor
     func testResumeDoesNotLeak() {
         let mockDownloadDelegate = MockDownloadDelegate()
         download.delegate = mockDownloadDelegate

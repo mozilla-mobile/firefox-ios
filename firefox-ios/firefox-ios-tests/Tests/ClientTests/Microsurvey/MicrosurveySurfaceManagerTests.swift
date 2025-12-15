@@ -7,11 +7,13 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class MicrosurveySurfaceManagerTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
+
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
         messageManager = MockGleanPlumbMessageManagerProtocol()
     }
 
@@ -68,7 +70,6 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
-    @MainActor
     func testManager_messagePressedCalled() {
         let subject = createSubject()
         messageManager.message = createMessage()

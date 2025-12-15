@@ -19,10 +19,10 @@ final class CreditCardSettingsViewControllerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         DependencyHelperMock().reset()
         profile = nil
         viewModel = nil
+        try await super.tearDown()
     }
 
     @MainActor

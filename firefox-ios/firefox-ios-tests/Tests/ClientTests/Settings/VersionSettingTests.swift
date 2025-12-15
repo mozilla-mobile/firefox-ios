@@ -20,9 +20,9 @@ class VersionSettingTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         DependencyHelperMock().reset()
         delegate = nil
+        try await super.tearDown()
     }
 
     func testCopyAppVersion() {

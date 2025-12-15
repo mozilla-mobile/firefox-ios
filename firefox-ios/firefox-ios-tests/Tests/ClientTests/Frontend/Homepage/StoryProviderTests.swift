@@ -7,6 +7,7 @@ import MozillaAppServices
 
 @testable import Client
 
+@MainActor
 class StoryProviderTests: XCTestCase, FeatureFlaggable {
     func testFetchingStories_forHomepage_returnsList() async {
         let stories: [RecommendationDataItem] = (0..<30).map { .makeItem("feed\($0)") }

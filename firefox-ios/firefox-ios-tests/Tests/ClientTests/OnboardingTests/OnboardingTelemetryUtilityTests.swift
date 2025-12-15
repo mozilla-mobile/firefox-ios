@@ -7,13 +7,14 @@ import Glean
 
 @testable import Client
 
+@MainActor
 final class OnboardingTelemetryUtilityTests: XCTestCase {
     typealias CardNames = NimbusOnboardingTestingConfigUtility.CardOrder
     var mockGleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
         mockGleanWrapper = MockGleanWrapper()
     }
 

@@ -21,10 +21,10 @@ final class BrowsingSettingsViewControllerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         DependencyHelperMock().reset()
         self.profile = nil
         self.delegate = nil
+        try await super.tearDown()
     }
 
     func testHomePageSettingsLeaks_InitCall() throws {

@@ -34,9 +34,9 @@ class WebServerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         webServer = nil
         webServerBase = nil
+        super.tearDown()
     }
 
     func testWebServerIsRunning() {

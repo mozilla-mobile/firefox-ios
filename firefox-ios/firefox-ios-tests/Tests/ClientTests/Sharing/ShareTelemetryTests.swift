@@ -8,6 +8,7 @@ import XCTest
 @testable import Client
 
 // TODO: FXIOS-13742 - Migrate ShareTelemetryTests to use mock telemetry or GleanWrapper
+@MainActor
 final class ShareTelemetryTests: XCTestCase {
     private let testWebURL = URL(string: "https://mozilla.org")!
     var gleanWrapper: MockGleanWrapper!
@@ -20,17 +21,16 @@ final class ShareTelemetryTests: XCTestCase {
     let hasIsEnrolledInSentFromFirefoxKey = "is_enrolled_in_sent_from_firefox"
     let hasIsOptedInSentFromFirefoxKey = "is_opted_in_sent_from_firefox"
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         gleanWrapper = MockGleanWrapper()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         gleanWrapper = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
-    @MainActor
     func testSharedTo_withNoActivityType() throws {
         Self.setupTelemetry(with: MockProfile())
         let subject = createSubject()
@@ -66,7 +66,6 @@ final class ShareTelemetryTests: XCTestCase {
         // XCTAssertEqual(resultValue[0].extra?[hasIsOptedInSentFromFirefoxKey], String(testIsOptedInSentFromFirefox))
     }
 
-    @MainActor
     func testSharedTo_withActivityType() throws {
         Self.setupTelemetry(with: MockProfile())
         let subject = createSubject()

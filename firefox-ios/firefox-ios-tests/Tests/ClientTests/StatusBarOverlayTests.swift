@@ -26,10 +26,10 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         self.profile = nil
         self.wallpaperManager = nil
         self.notificationCenter = nil
+        try await super.tearDown()
     }
 
     // MARK: Translucency enabled

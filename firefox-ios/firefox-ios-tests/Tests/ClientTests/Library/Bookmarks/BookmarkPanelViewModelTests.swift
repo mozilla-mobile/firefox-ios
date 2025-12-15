@@ -9,18 +9,19 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         profile = nil
+        try await super.tearDown()
     }
 
     func testIsRootNode_falseWhenMenu() {
@@ -266,7 +267,6 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         return nodes
     }
 
-    @MainActor
     private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @Sendable @escaping () -> Void) {
         let expectation = expectation(description: "Subject reloaded")
 

@@ -68,8 +68,8 @@ class BreachAlertsTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         breachAlertsManager = nil
+        super.tearDown()
     }
 
     func testDataRequest() {
