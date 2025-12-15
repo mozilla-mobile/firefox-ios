@@ -179,7 +179,7 @@ workflows:
             envman add --key PATH --value "$PATH"
     - script@1.2.1:
         title: Override xctestrun file to UnitTests
-         inputs:
+        inputs:
         - content: |-
             #!/usr/bin/env bash
             set -euxo pipefail
