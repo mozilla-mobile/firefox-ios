@@ -7,15 +7,12 @@ import Shared
 
 @testable import Client
 
-final class MockSponsoredProvider: ContileProviderInterface, UnifiedAdsProviderInterface {
+struct MockSponsoredTileData {
     enum MockError: Error {
         case testError
     }
 
-    private let result: ContileResult
-
-    // TODO FXIOS-12605 This global property is not concurrency safe
-    nonisolated(unsafe) static var emptySuccessData: [Contile] = []
+    static let emptySuccessData: [Contile] = []
 
     static var defaultSuccessData: [Contile] {
         return [
@@ -45,25 +42,7 @@ final class MockSponsoredProvider: ContileProviderInterface, UnifiedAdsProviderI
                     position: 3)]
     }
 
-    init(result: ContileResult) {
-        self.result = result
-    }
-
-    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
-        completion(result)
-    }
-
-    func fetchTiles(timestamp: Timestamp, completion: @escaping (UnifiedTileResult) -> Void) {
-        switch result {
-        case .success(let contiles):
-            let unifiedTiles = self.convert(contiles: contiles)
-            completion(.success(unifiedTiles))
-        case .failure(let error):
-            completion(.failure(error))
-        }
-    }
-
-    func convert(contiles: [Contile]) -> [UnifiedTile] {
+    static func convert(contiles: [Contile]) -> [UnifiedTile] {
         return contiles.enumerated().map { (index, contile) in
             UnifiedTile(format: "tile",
                         url: contile.url,
@@ -72,5 +51,32 @@ final class MockSponsoredProvider: ContileProviderInterface, UnifiedAdsProviderI
                         name: contile.name,
                         blockKey: "Block_key_\(index)")
         }
+    }
+
+    static let pinnedTitle = "A pinned title %@"
+    static let pinnedURL = "https://www.apinnedurl.com/pinned%@"
+    static let title = "A title %@"
+    static let url = "https://www.aurl%@.com"
+
+    static var pinnedDuplicateTile: Contile {
+        return Contile(id: 1,
+                       name: String(format: MockSponsoredTileData.pinnedTitle, "0"),
+                       url: String(format: MockSponsoredTileData.pinnedURL, "0"),
+                       clickUrl: "https://www.test.com/click",
+                       imageUrl: "https://test.com/image0.jpg",
+                       imageSize: 200,
+                       impressionUrl: "https://test.com",
+                       position: 1)
+    }
+
+    static var duplicateTile: Contile {
+        return Contile(id: 1,
+                       name: String(format: MockSponsoredTileData.title, "0"),
+                       url: String(format: MockSponsoredTileData.url, "0"),
+                       clickUrl: "https://www.test.com/click",
+                       imageUrl: "https://test.com/image0.jpg",
+                       imageSize: 200,
+                       impressionUrl: "https://test.com",
+                       position: 1)
     }
 }

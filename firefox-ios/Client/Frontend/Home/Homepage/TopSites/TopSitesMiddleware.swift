@@ -14,7 +14,6 @@ final class TopSitesMiddleware: FeatureFlaggable {
     private let homepageTelemetry: HomepageTelemetry
     private let bookmarksTelemetry: BookmarksTelemetry
     private let unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry
-    private let sponsoredTileTelemetry: SponsoredTileTelemetry
     private let logger: Logger
     private let profile: Profile
 
@@ -24,7 +23,6 @@ final class TopSitesMiddleware: FeatureFlaggable {
         homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
         bookmarksTelemetry: BookmarksTelemetry = BookmarksTelemetry(),
         unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry = DefaultUnifiedAdsCallbackTelemetry(),
-        sponsoredTileTelemetry: SponsoredTileTelemetry = DefaultSponsoredTileTelemetry(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared
     ) {
@@ -39,7 +37,6 @@ final class TopSitesMiddleware: FeatureFlaggable {
         self.homepageTelemetry = homepageTelemetry
         self.bookmarksTelemetry = bookmarksTelemetry
         self.unifiedAdsTelemetry = unifiedAdsTelemetry
-        self.sponsoredTileTelemetry = sponsoredTileTelemetry
         self.logger = logger
         self.profile = profile
     }
@@ -141,20 +138,12 @@ final class TopSitesMiddleware: FeatureFlaggable {
         }
 
         guard telemetryMetadata.topSiteConfiguration.site.isSponsoredSite else { return }
-        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfiguration.site, position: telemetryMetadata.position)
-        } else {
-            sponsoredTileTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfiguration.site, position: telemetryMetadata.position)
-        }
+        unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfiguration.site, position: telemetryMetadata.position)
     }
 
     private func sendSponsoredTappedTracking(with topSiteConfig: TopSiteConfiguration, and position: Int) {
         guard topSiteConfig.site.isSponsoredSite else { return }
-        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendClickTelemetry(tileSite: topSiteConfig.site, position: position)
-        } else {
-            sponsoredTileTelemetry.sendClickTelemetry(tileSite: topSiteConfig.site, position: position)
-        }
+        unifiedAdsTelemetry.sendClickTelemetry(tileSite: topSiteConfig.site, position: position)
     }
 
     private func sendOpenInPrivateTelemetry(for action: Action) {

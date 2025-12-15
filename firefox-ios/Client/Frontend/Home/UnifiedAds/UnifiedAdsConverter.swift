@@ -2,9 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-/// To keep the integration of unified ads simple with minimal changes, we are converting Unified tiles
-/// into the old API Contile object. This will avoid logic changes inside the TopSitesDataAdaptor, which will be deprecated
-/// soon anyway due to the refactor of the homepage.
+/// To keep the integration of unified ads simple with minimal changes, we are converting `UnifiedTile`s
+/// into the old API Contile object. This avoid logic changes inside the `TopSitesManager`
 struct UnifiedAdsConverter {
     static func convert(unifiedTiles: [UnifiedTile]) -> [Contile] {
         return unifiedTiles.enumerated().map { (index, tile) in
