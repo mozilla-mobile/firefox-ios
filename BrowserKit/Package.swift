@@ -48,6 +48,9 @@ let package = Package(
         .library(
             name: "OnboardingKit",
             targets: ["OnboardingKit"]),
+        .library(
+            name: "ActionExtensionKit",
+            targets: ["ActionExtensionKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -284,6 +287,19 @@ let package = Package(
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency"),
                 .enableExperimentalFeature("RegionBasedIsolation")
+            ]),
+        .target(
+            name: "ActionExtensionKit",
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableExperimentalFeature("RegionBasedIsolation")
+            ]),
+        .testTarget(
+            name: "ActionExtensionKitTests",
+            dependencies: ["ActionExtensionKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
             ]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
