@@ -89,9 +89,9 @@ final class TemporaryDocumentTests: XCTestCase {
         mockURLProtocol.data = Data()
         subject = createSubject(filename: filename, request: request, session: mockURLSession)
 
-        subject.download { [weak self] url in
+        subject.download { [filename] url in
             XCTAssertNotNil(url)
-            XCTAssertEqual(url?.lastPathComponent, self?.filename)
+            XCTAssertEqual(url?.lastPathComponent, filename)
             XCTAssertTrue(Thread.isMainThread)
             expectation.fulfill()
         }

@@ -8,7 +8,7 @@ final class CookiePersistenceTests: BaseTestCase {
     let cookieSiteURL = "http://localhost:\(serverPort)/test-fixture/test-cookie-store.html"
     let topSitesTitle = ["Facebook", "YouTube", "Wikipedia"]
 
-    override func setUp() {
+    override func setUp() async throws {
         // Fresh install the app
         // removeApp() does not work on iOS 15 and 16 intermittently
         if #available(iOS 17, *) {
@@ -16,7 +16,7 @@ final class CookiePersistenceTests: BaseTestCase {
         }
 
         // The app is correctly installed
-        super.setUp()
+        try await super.setUp()
     }
 
     func testCookiePersistenceBasic() {

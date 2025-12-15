@@ -15,8 +15,8 @@ final class TranslationsServiceTests: XCTestCase {
     private var mockModelsFetcher: MockTranslationModelsFetcher!
     private var mockLogger: MockLogger!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         mockProfile = MockProfile()
         mockLogger = MockLogger()
@@ -33,7 +33,7 @@ final class TranslationsServiceTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         mockWindowManager = nil
         mockTabManager = nil
@@ -41,7 +41,7 @@ final class TranslationsServiceTests: XCTestCase {
         mockModelsFetcher = nil
         mockLogger = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_shouldOfferTranslation_returnsTrue_whenLanguagesDiffer_andModelExists() async throws {

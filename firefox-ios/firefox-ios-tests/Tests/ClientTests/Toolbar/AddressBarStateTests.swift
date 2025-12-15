@@ -15,19 +15,19 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockProfile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setIsHostedSummarizerFeatureEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         resetStore()
         mockProfile = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func tests_initialState_returnsExpectedState() {

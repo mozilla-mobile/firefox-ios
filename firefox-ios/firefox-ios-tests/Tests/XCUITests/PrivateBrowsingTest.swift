@@ -298,10 +298,10 @@ fileprivate extension BaseTestCase {
 }
 
 class PrivateBrowsingTestIphone: BaseTestCase {
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .phone
         if !iPad() {
-            super.setUp()
+            try await super.setUp()
         }
     }
 

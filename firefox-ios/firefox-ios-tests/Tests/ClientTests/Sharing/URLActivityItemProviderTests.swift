@@ -6,14 +6,20 @@ import UniformTypeIdentifiers
 import XCTest
 @testable import Client
 
+@MainActor
 final class URLActivityItemProviderTests: XCTestCase {
     let testFileURL = URL(string: "file://some/file/url")!
     let testWebURL = URL(string: "https://mozilla.org")!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testWebURL_forMailActivity() {

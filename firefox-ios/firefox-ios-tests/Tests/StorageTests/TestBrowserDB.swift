@@ -7,7 +7,7 @@ import Shared
 @testable import Storage
 import XCTest
 
-class TestBrowserDB: XCTestCase {
+class TestBrowserDB: XCTestCase, @unchecked Sendable {
     let files = MockFiles()
 
     fileprivate func rm(_ path: String) {
@@ -148,7 +148,7 @@ class TestBrowserDB: XCTestCase {
         XCTAssertEqual("foo.db", (listener.notification?.object as? String))
     }
 
-    func testConcurrentQueriesDealloc() {
+    func testConcurrentQueriesDealloc() async {
         let expectation = self.expectation(description: "Got all DB results")
 
         let db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
@@ -164,33 +164,34 @@ class TestBrowserDB: XCTestCase {
             }
         }
 
-        func fooBarFactory(_ row: SDRow) -> [String: Any] {
-            var result: [String: Any] = [:]
-            result["id"] = row["id"]
-            result["bar"] = row["bar"]
-            return result
-        }
-
         let shortConcurrentQuery = db.runQueryConcurrently(
             "SELECT * FROM foo LIMIT 1",
             args: nil,
-            factory: fooBarFactory
+            factory: Self.fooBarFactory
         )
 
-        _ = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String: Any]]>> in
-            if let results = result.successValue?.asArray() {
+        await self.trackForMemoryLeaks(shortConcurrentQuery)
+
+        _ = shortConcurrentQuery.bind { result -> Deferred<Maybe<Bool>> in
+            if result.successValue?.asArray() != nil {
                 expectation.fulfill()
-                return deferMaybe(results)
+                return deferMaybe(true)
             }
 
             return deferMaybe(DatabaseError(description: "Unable to execute concurrent short-running query"))
         }
 
-        trackForMemoryLeaks(shortConcurrentQuery)
-
-        waitForExpectations(timeout: 10, handler: nil)
+        await fulfillment(of: [expectation], timeout: 3)
     }
 
+    nonisolated static func fooBarFactory(_ row: SDRow) -> [String: Any] {
+        var result: [String: Any] = [:]
+        result["id"] = row["id"]
+        result["bar"] = row["bar"]
+        return result
+    }
+
+    @MainActor
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(

@@ -10,19 +10,19 @@ class MultiWindowTests: IpadOnlyTestCase {
     let splitView = springboard.buttons["top-affordance-split-view-button"]
     let dotMenuIdentifier = springboard.buttons.matching(identifier: "top-affordance:org.mozilla.ios.Fennec")
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         super.setUpLaunchArguments()
         if dotMenuIdentifier.element(boundBy: 1).exists {
             closeSplitViewWindow(windowToClose: 1)
         }
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         if dotMenuIdentifier.element(boundBy: 1).exists {
             closeSplitViewWindow(windowToClose: 1)
         }
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2711015

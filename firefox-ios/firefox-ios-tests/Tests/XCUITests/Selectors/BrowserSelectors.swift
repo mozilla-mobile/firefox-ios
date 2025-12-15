@@ -21,6 +21,7 @@ protocol BrowserSelectorsSet {
     var TOPTABS_COLLECTIONVIEW: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
+    func webPageElement(with text: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -135,6 +136,14 @@ struct BrowserSelectors: BrowserSelectorsSet {
         Selector.staticTextByExactLabel(
             preview,
             description: "Long-press link preview label",
+            groups: ["browser", "webview"]
+        )
+    }
+
+    func webPageElement(with text: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            text,
+            description: "Web page text",
             groups: ["browser", "webview"]
         )
     }

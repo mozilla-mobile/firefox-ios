@@ -9,15 +9,15 @@ import XCTest
 @testable import Client
 
 final class MerinoStateTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func tests_initialState_returnsExpectedState() {

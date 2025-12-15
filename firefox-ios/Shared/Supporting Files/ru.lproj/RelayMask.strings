@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "У вас есть 5 бесплатных псевдонимов электронной почты, поэтому мы выбрали один для вас.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Вы использовали свои 5 бесплатных псевдонимов электронной почты, поэтому мы выбрали один из них, чтобы вы могли использовать его повторно.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Псевдонимы электронной почты сейчас недоступны. Попробуйте снова через несколько минут.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Псевдоним эл. почты вставлен";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Скройте свой настоящий адрес электронной почты, чтобы защитить свой почтовый ящик от спама. Некоторые сайты это не поддерживают.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Скройте свой настоящий адрес электронной почты, чтобы защитить свой почтовый ящик от спама. Некоторые сайты не поддерживают псевдонимы электронной почты.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Подробнее";

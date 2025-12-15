@@ -24,10 +24,10 @@ let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
 class DragAndDropTests: BaseTestCase {
-//  Disable test suite since in theory it does not make sense with Chron tabs implementation
-    override func tearDown() {
+    // Disable test suite since in theory it does not make sense with Chron tabs implementation
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
@@ -291,7 +291,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         // This DDBB contains those 4 websites listed in the name
     let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample-places.db"
 
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
@@ -304,12 +304,12 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
                                    LaunchArguments.SkipContextualHints,
                                    LaunchArguments.DisableAnimations]
         }
-        super.setUp()
+        try await super.setUp()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307024

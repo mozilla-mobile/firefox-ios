@@ -17,17 +17,17 @@ final class ShareManagerTests: XCTestCase {
     let testWebpageDisplayTitle = "Mozilla"
     var testTab: (any ShareTab)!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         testTab = MockShareTab(title: testWebpageDisplayTitle, url: testWebURL, canonicalURL: testWebURL)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         testTab = nil
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Test sharing a file

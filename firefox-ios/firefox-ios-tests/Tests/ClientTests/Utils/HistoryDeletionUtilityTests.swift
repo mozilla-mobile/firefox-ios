@@ -14,7 +14,7 @@ import XCTest
 // 2. History writes&deletes data correctly
 // These basic cases are not tested here as they are tested in
 // `HistoryHighlightsManagerTests` and `TestHistory` respectively
-class HistoryDeletionUtilityTests: XCTestCase {
+class HistoryDeletionUtilityTests: XCTestCase, @unchecked Sendable {
     struct SiteElements {
         let domain: String
         let path: String
@@ -45,6 +45,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     // MARK: - Test url based deletion
+    @MainActor
     func testDeletingSingleItem() {
         let profile = profileSetup(named: "hsd_deleteSingleItem")
         let testSites = [SiteElements(domain: "mozilla")]
@@ -57,6 +58,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testDeletingMultipleItemsEmptyingDatabase() {
         let profile = profileSetup(named: "hsd_deleteMultipleItemsEmptyingDB")
         let sitesToDelete = [SiteElements(domain: "mozilla"),
@@ -74,6 +76,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testDeletingMultipleTopLevelItems() {
         let profile = profileSetup(named: "hsd_deleteMultipleItemsTopLevelItems")
         let sitesToRemain = [SiteElements(domain: "cnn")]
@@ -92,6 +95,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testDeletingMultipleSpecificItems() {
         let profile = profileSetup(named: "hsd_deleteMultipleSpecificItems")
         let sitesToRemain = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
@@ -363,6 +367,7 @@ private extension HistoryDeletionUtilityTests {
         return profile
     }
 
+    @MainActor
     func deletionWithExpectation(
         for siteEntries: [String],
         using profile: MockProfile,

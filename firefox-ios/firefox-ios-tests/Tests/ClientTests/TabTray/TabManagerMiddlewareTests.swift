@@ -15,6 +15,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var appState: AppState!
 
+    @MainActor
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()

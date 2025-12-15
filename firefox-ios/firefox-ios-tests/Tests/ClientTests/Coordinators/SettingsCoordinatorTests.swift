@@ -14,8 +14,8 @@ final class SettingsCoordinatorTests: XCTestCase {
     private var delegate: MockSettingsCoordinatorDelegate!
     private var mockSettingsVC: MockAppSettingsScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
@@ -24,13 +24,13 @@ final class SettingsCoordinatorTests: XCTestCase {
         self.mockSettingsVC = MockAppSettingsScreen()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.mockRouter = nil
         self.wallpaperManager = nil
         self.delegate = nil
         self.mockSettingsVC = nil
         DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testEmptyChildren_whenCreated() {

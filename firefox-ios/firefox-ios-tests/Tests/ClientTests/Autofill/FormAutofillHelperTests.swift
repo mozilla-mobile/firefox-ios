@@ -48,7 +48,7 @@ class FormAutofillHelperTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tab = await Tab(profile: profile, windowUUID: windowUUID)
         formAutofillHelper = FormAutofillHelper(tab: tab)

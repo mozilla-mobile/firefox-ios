@@ -203,7 +203,8 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441496
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
+        let searchBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        searchBar.pressWithRetry(duration: 2, element: app.tables["Context Menu"])
 
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
@@ -621,7 +622,7 @@ class NavigationTest: BaseTestCase {
         }
         numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of private opened tabs should be 1")
-        let identifier = "TabDisplayView.tabCell_1_0"
+        let identifier = "TabDisplayView.tabCell_0_0"
         XCTAssertEqual(app.cells.matching(identifier: identifier).element.label,
                        "Example Domains")
     }

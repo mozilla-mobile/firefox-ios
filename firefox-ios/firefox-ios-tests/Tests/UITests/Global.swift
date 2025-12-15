@@ -360,12 +360,8 @@ class BrowserUtils {
     }
 
     class func closeLibraryMenu(_ tester: KIFUITestActor) {
-        if iPad() {
-            tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.bookmarksButton)
-        } else {
-            // Workaround to be able to swipe the view and close the library panel
-            tester.tapView(withAccessibilityLabel: "Done")
-        }
+        // Workaround to be able to swipe the view and close the library panel
+        tester.tapView(withAccessibilityLabel: "Done")
         tester.waitForAnimationsToFinish()
     }
 }

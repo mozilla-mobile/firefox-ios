@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 class A11yUtils: XCTestCase {
     public struct MissingAccessibilityElement {
         public let elementType: String

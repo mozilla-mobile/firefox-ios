@@ -39,14 +39,20 @@ struct HomepageLayoutMeasurementCache {
 
     struct BookmarksMeasurement: Equatable {
         struct Key: Equatable {
+            let bookmarks: [BookmarkConfiguration]
             let headerState: SectionHeaderConfiguration
             let containerWidth: Double
             let shouldShowSection: Bool
             let contentSizeCategory: UIContentSizeCategory
         }
 
+        struct Result: Equatable {
+            let tallestCellHeight: CGFloat
+            let totalHeight: CGFloat
+        }
+
         let key: Key
-        let height: CGFloat
+        let result: Result
     }
 
     struct StoriesMeasurement: Equatable {
@@ -113,13 +119,13 @@ struct HomepageLayoutMeasurementCache {
         return measurement.height
     }
 
-    mutating func setHeight(_ height: CGFloat, for key: BookmarksMeasurement.Key) {
-        bookmarks = BookmarksMeasurement(key: key, height: height)
+    mutating func setResult(_ result: BookmarksMeasurement.Result, for key: BookmarksMeasurement.Key) {
+        bookmarks = BookmarksMeasurement(key: key, result: result)
     }
 
-    func height(for key: BookmarksMeasurement.Key) -> CGFloat? {
+    func result(for key: BookmarksMeasurement.Key) -> BookmarksMeasurement.Result? {
         guard let measurement = bookmarks, measurement.key == key else { return nil }
-        return measurement.height
+        return measurement.result
     }
 
     mutating func setResult(_ result: StoriesMeasurement.Result, for key: StoriesMeasurement.Key) {

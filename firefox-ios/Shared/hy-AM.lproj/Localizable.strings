@@ -1739,7 +1739,7 @@
 "Toolbar.Menu.CloseAllTabs" = "Փակել բոլոր ներդիրները";
 
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
-"TopSites.RemovePage.Button" = "Հեռացնել էջը՝ %@";
+"TopSites.RemovePage.Button" = "Հեռացնել էջը․ %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "Ոչ";

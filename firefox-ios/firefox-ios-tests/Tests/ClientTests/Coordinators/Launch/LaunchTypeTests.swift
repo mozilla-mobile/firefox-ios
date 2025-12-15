@@ -9,14 +9,14 @@ import XCTest
 final class LaunchTypeTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testCanLaunch_surveyFromBrowserCoordinator() {

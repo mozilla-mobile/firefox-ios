@@ -10,7 +10,7 @@ import Common
 class DefaultBrowserUtility {
     let userDefault: UserDefaultsInterface
     let telemtryWrapper: TelemetryWrapperProtocol
-    let locale: LocaleInterface
+    let locale: LocaleProvider
     let application: UIApplicationInterface
     let dmaCountries = ["BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", "HR", "IT", "CY", "LV",
                         "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR", "JP"]
@@ -20,7 +20,7 @@ class DefaultBrowserUtility {
     init(
         userDefault: UserDefaultsInterface = UserDefaults.standard,
         telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
-        locale: LocaleInterface = Locale.current,
+        locale: LocaleProvider = SystemLocaleProvider(),
         application: UIApplicationInterface = UIApplication.shared,
         logger: Logger = DefaultLogger.shared
     ) {
@@ -91,24 +91,6 @@ class DefaultBrowserUtility {
     private func isRunningOnBlockListBetaOS() -> Bool {
         let systemVersion = ProcessInfo.processInfo.operatingSystemVersionString
         let betaBlockLists: [String] = ["22C5109p", "22C5125e", "22C5131e", "22C5142a"]
-
-        return betaBlockLists.contains { systemVersion.contains($0) }
-    }
-
-    /// Returns true for devices running iOS 26 Beta 1 to 3 (developer betas). These betas have an Apple bug with
-    /// `UIGlassEffect`. See FXIOS-13528 for details. This workaround can probably be removed soon after iOS 26 official
-    /// release and user adoption.
-    static var isRunningLiquidGlassEarlyBeta: Bool {
-        let systemVersion = ProcessInfo.processInfo.operatingSystemVersionString
-
-        // Note: Info collected from https://betawiki.net/wiki/IOS_26. Beta 4 was the first public build.
-        let betaBlockLists: [String] = [
-            "23A257a",  // Unconfirmed early release
-            "23A5260n", // Developer Beta 1
-            "23A5260u", // Developer Beta 1 Update for iPhone 15 and 16 series
-            "23A5276f", // Developer Beta 2
-            "23A5287g", // Developer Beta 3
-        ]
 
         return betaBlockLists.contains { systemVersion.contains($0) }
     }

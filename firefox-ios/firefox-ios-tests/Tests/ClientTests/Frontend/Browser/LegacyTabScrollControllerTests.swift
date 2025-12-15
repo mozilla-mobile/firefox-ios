@@ -20,8 +20,8 @@ final class LegacyTabScrollControllerTests: XCTestCase {
     var overKeyboardContainer: BaseAlphaStackView = .build()
     var bottomContainer: BaseAlphaStackView = .build()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
@@ -30,11 +30,11 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         mockGesture = UIPanGestureRecognizerMock()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile?.shutdown()
         mockProfile = nil
         tab = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testHandlePan_ScrollingUp() {

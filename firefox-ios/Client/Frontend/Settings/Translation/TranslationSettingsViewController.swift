@@ -36,7 +36,7 @@ final class TranslationSettingsViewController: SettingsTableViewController {
             guard let self else { return }
             store.dispatch(
                 ToolbarAction(
-                    translationConfiguration: TranslationConfiguration(prefs: self.prefs),
+                    translationConfiguration: TranslationConfiguration(prefs: self.prefs, state: .inactive),
                     windowUUID: self.windowUUID,
                     actionType: ToolbarActionType.didTranslationSettingsChange
                 )

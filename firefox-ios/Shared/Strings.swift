@@ -301,21 +301,6 @@ extension String {
             }
         }
 
-        public struct TabsTray {
-            public struct InactiveTabs {
-                public static let Action = MZLocalizedString(
-                    key: "ContextualHints.TabTray.InactiveTabs.CallToAction",
-                    tableName: nil,
-                    value: "Turn off in settings",
-                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.")
-                public static let Body = MZLocalizedString(
-                    key: "ContextualHints.TabTray.InactiveTabs",
-                    tableName: nil,
-                    value: "Tabs you haven’t viewed for two weeks get moved here.",
-                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
-            }
-        }
-
         public struct Toolbar {
             public static let NavigationButtonsBody = MZLocalizedString(
                 key: "ContextualHints.Toolbar.Navigation.Description.v132",
@@ -1002,6 +987,24 @@ extension String {
                 tableName: nil,
                 value: "Customize Homepage",
                 comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page")
+        }
+
+        public struct PrivacyNotice {
+            public static let Body = MZLocalizedString(
+                key: "FirefoxHome.PrivacyNotice.Body.v148",
+                tableName: "FirefoxHomepage",
+                value: "We’ve updated our %@ to reflect the latest features in %@. %@",
+                comment: "Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice")
+            public static let PrivacyNoticeLink = MZLocalizedString(
+                key: "FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148",
+                tableName: "FirefoxHomepage",
+                value: "Privacy Notice",
+                comment: "Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice.")
+            public static let LearnMoreLink = MZLocalizedString(
+                key: "FirefoxHome.PrivacyNotice.LearnMoreLink.v148",
+                tableName: "FirefoxHomepage",
+                value: "Learn More",
+                comment: "Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice.")
         }
 
         public struct HomeTabBanner {
@@ -2686,19 +2689,6 @@ extension String {
             }
         }
 
-        public struct Tabs {
-            public static let InactiveTabs = MZLocalizedString(
-                key: "Settings.Tabs.CustomizeTabsSection.InactiveTabs",
-                tableName: nil,
-                value: "Inactive Tabs",
-                comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
-            public static let InactiveTabsDescription = MZLocalizedString(
-                key: "Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101",
-                tableName: nil,
-                value: "Tabs you haven’t viewed for two weeks get moved to the inactive section.",
-                comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
-        }
-
         public struct Browsing {
             public static let Title = MZLocalizedString(
                 key: "Settings.Browsing.Title.v137",
@@ -3099,10 +3089,10 @@ extension String {
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background.")
 
                 public static let Pixelated = MZLocalizedString(
-                        key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
-                        tableName: "AppIconSelection",
-                        value: "Pixelated",
-                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
+                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pixelated",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
 
                 public static let Pride = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
@@ -3527,29 +3517,6 @@ extension String {
             tableName: nil,
             value: "Private",
             comment: "The title on the button to look at private tabs.")
-
-        public struct InactiveTabs {
-            public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(
-                key: "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103",
-                tableName: nil,
-                value: "View Inactive Tabs",
-                comment: "Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while.")
-            public static let TabsTrayInactiveTabsSectionOpenedAccessibilityTitle = MZLocalizedString(
-                key: "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103",
-                tableName: nil,
-                value: "Hide Inactive Tabs",
-                comment: "Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while.")
-            public static let CloseAllInactiveTabsButton = MZLocalizedString(
-                key: "InactiveTabs.TabTray.CloseButtonTitle",
-                tableName: nil,
-                value: "Close All Inactive Tabs",
-                comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
-            public static let CloseInactiveTabSwipeActionTitle = MZLocalizedString(
-                key: "InactiveTabs.TabTray.CloseSwipeActionTitle.v115",
-                tableName: "TabsTray",
-                value: "Close",
-                comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
-        }
 
         public struct CloseTabsToast {
             public static let Title = MZLocalizedString(
@@ -6280,6 +6247,36 @@ extension String {
         tableName: "Settings",
         value: "Try out features and ideas before they’re released to everyone.",
         comment: "A short description that explains that Mozilla is running studies")
+    public static let StudiesSettingTitleV3 = MZLocalizedString(
+        key: "Settings.Studies.Title.v148",
+        tableName: "Settings",
+        value: "Allow Feature Studies",
+        comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
+    public static let StudiesSettingLinkV3 = MZLocalizedString(
+        key: "Settings.Studies.Link.v148",
+        tableName: "Settings",
+        value: "Learn More",
+        comment: "Title for a link that explains what Mozilla means by Studies")
+    public static let StudiesSettingMessageV3 = MZLocalizedString(
+        key: "Settings.Studies.Message.v148",
+        tableName: "Settings",
+        value: "%@ randomly selects users to test features, which improves quality for everyone.",
+        comment: "A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox).")
+    public static let RolloutsSettingTitle = MZLocalizedString(
+        key: "Settings.Rollouts.Title.v148",
+        tableName: "Settings",
+        value: "Allow Remote Improvements",
+        comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts.")
+    public static let RolloutsSettingLink = MZLocalizedString(
+        key: "Settings.Rollouts.Link.v148",
+        tableName: "Settings",
+        value: "Learn More",
+        comment: "Title for a link that explains what Mozilla means by Rollouts")
+    public static let RolloutsSettingMessage = MZLocalizedString(
+        key: "Settings.Rollouts.Message.v148",
+        tableName: "Settings",
+        value: "%@ will improve features, performance, and stability between updates. Changes applied remotely.",
+        comment: "A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox).")
     public static let SettingsSiriSectionName = MZLocalizedString(
         key: "Settings.Siri.SectionName",
         tableName: nil,
@@ -7015,11 +7012,6 @@ extension String {
         tableName: "TabToolbar",
         value: "Data Clearance",
         comment: "Accessibility label for the tab toolbar fire button in private mode, used to provide users a way to end and delete their private session data.")
-    public static let TabToolbarReloadAccessibilityLabel = MZLocalizedString(
-        key: "Reload",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility Label for the tab toolbar Reload button")
     public static let TabToolbarStopAccessibilityLabel = MZLocalizedString(
         key: "Stop",
         tableName: nil,
@@ -7045,11 +7037,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the tab toolbar indicating the Home button.")
-    public static let TabToolbarNavigationToolbarAccessibilityLabel = MZLocalizedString(
-        key: "Navigation Toolbar",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
 }
 
 extension String {
@@ -8488,6 +8475,58 @@ extension String {
                 tableName: "RelayMask",
                 value: "Hide your real email to protect your inbox from spam. Some sites don’t support it.",
                 comment: "Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality.")
+            public static let TabToolbarReloadAccessibilityLabel = MZLocalizedString(
+                key: "Reload",
+                tableName: nil,
+                value: nil,
+                comment: "Accessibility Label for the tab toolbar Reload button")
+            public static let TabToolbarNavigationToolbarAccessibilityLabel = MZLocalizedString(
+                key: "Navigation Toolbar",
+                tableName: nil,
+                value: nil,
+                comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
+            public static let Action = MZLocalizedString(
+                key: "ContextualHints.TabTray.InactiveTabs.CallToAction",
+                tableName: nil,
+                value: "Turn off in settings",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.")
+            public static let Body = MZLocalizedString(
+                key: "ContextualHints.TabTray.InactiveTabs",
+                tableName: nil,
+                value: "Tabs you haven’t viewed for two weeks get moved here.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
+            public static let InactiveTabs = MZLocalizedString(
+                key: "Settings.Tabs.CustomizeTabsSection.InactiveTabs",
+                tableName: nil,
+                value: "Inactive Tabs",
+                comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
+            public static let InactiveTabsDescription = MZLocalizedString(
+                key: "Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101",
+                tableName: nil,
+                value: "Tabs you haven’t viewed for two weeks get moved to the inactive section.",
+                comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
+        }
+        struct v147 {
+            public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(
+                key: "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103",
+                tableName: nil,
+                value: "View Inactive Tabs",
+                comment: "Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while.")
+            public static let TabsTrayInactiveTabsSectionOpenedAccessibilityTitle = MZLocalizedString(
+                key: "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103",
+                tableName: nil,
+                value: "Hide Inactive Tabs",
+                comment: "Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while.")
+            public static let CloseAllInactiveTabsButton = MZLocalizedString(
+                key: "InactiveTabs.TabTray.CloseButtonTitle",
+                tableName: nil,
+                value: "Close All Inactive Tabs",
+                comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
+            public static let CloseInactiveTabSwipeActionTitle = MZLocalizedString(
+                key: "InactiveTabs.TabTray.CloseSwipeActionTitle.v115",
+                tableName: "TabsTray",
+                value: "Close",
+                comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
         }
     }
 }

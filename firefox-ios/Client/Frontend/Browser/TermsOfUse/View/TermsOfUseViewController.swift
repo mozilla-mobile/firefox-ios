@@ -46,6 +46,8 @@ final class TermsOfUseViewController: UIViewController,
 
     private var activeContainerConstraints: [NSLayoutConstraint] = []
     private var textViewHeightConstraint: NSLayoutConstraint?
+    private var grabberHeightConstraint: NSLayoutConstraint?
+    private let isDragToDismissEnabled: Bool
 
     private var sheetContainer: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
@@ -114,10 +116,12 @@ final class TermsOfUseViewController: UIViewController,
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: UUID,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         enableDragToDismiss: Bool = true) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
+        self.isDragToDismissEnabled = enableDragToDismiss
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -192,11 +196,14 @@ final class TermsOfUseViewController: UIViewController,
         view.addSubview(sheetContainer)
         sheetContainer.addSubview(grabberView)
         sheetContainer.addSubview(stackView)
+        grabberView.isHidden = !isDragToDismissEnabled
         addStackSubviews()
         setupConstraints()
         configureTextViewScrolling()
         setupDismissGesture()
-        setupPanGesture()
+        if isDragToDismissEnabled {
+            setupPanGesture()
+        }
     }
 
     func addStackSubviews() {
@@ -233,11 +240,15 @@ final class TermsOfUseViewController: UIViewController,
         NSLayoutConstraint.activate(containerConstraints)
         activeContainerConstraints = containerConstraints
 
+        let grabberHeight = grabberView.heightAnchor.constraint(equalToConstant:
+                            isDragToDismissEnabled ? UX.grabberHeight : 0)
+        grabberHeightConstraint = grabberHeight
+
         NSLayoutConstraint.activate([
             grabberView.topAnchor.constraint(equalTo: sheetContainer.topAnchor, constant: UX.grabberTopPadding),
             grabberView.centerXAnchor.constraint(equalTo: sheetContainer.centerXAnchor),
             grabberView.widthAnchor.constraint(equalToConstant: UX.grabberWidth),
-            grabberView.heightAnchor.constraint(equalToConstant: UX.grabberHeight),
+            grabberHeight,
 
             stackView.leadingAnchor.constraint(equalTo: sheetContainer.leadingAnchor, constant: UX.stackSidePadding),
             stackView.trailingAnchor.constraint(equalTo: sheetContainer.trailingAnchor, constant: -UX.stackSidePadding),
@@ -330,6 +341,8 @@ final class TermsOfUseViewController: UIViewController,
         view.backgroundColor = currentTheme().colors.layerScrim.withAlphaComponent(UX.backgroundAlpha)
         sheetContainer.backgroundColor = currentTheme().colors.layer1
         grabberView.backgroundColor = currentTheme().colors.iconDisabled
+        grabberView.isHidden = !isDragToDismissEnabled
+        grabberView.alpha = isDragToDismissEnabled ? 1.0 : 0.0
         titleLabel.textColor = currentTheme().colors.textPrimary
         acceptButton.tintColor = currentTheme().colors.textOnDark
         acceptButton.backgroundColor = currentTheme().colors.actionPrimary

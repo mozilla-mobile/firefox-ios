@@ -9,6 +9,7 @@ import Glean
 
 @testable import Client
 
+@MainActor
 final class ShareTelemetryActivityItemProviderTests: XCTestCase {
     let testMessage = "Test message"
     let testSubtitle = "Test subtitle"

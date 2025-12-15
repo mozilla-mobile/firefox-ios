@@ -35,12 +35,10 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertEqual(result?.absoluteString, initialUrl)
     }
 
-    func testGetURLGivenAboutConfigSpaceURLThenValidEscapedURL() {
+    func testGetURLGivenAboutConfigSpaceURLThenValidEscapedURL() throws {
         let initialUrl = "about: config"
         let subject = DefaultURLFormatter()
-
         let result = subject.getURL(entry: initialUrl)
-
         XCTAssertEqual(result?.absoluteString, "about:%20config")
     }
 

@@ -5,7 +5,7 @@
 import Foundation
 import MozillaAppServices
 
-class MockLoginProvider: LoginProvider, SyncLoginProvider {
+class MockLoginProvider: LoginProvider, SyncLoginProvider, @unchecked Sendable {
     var searchLoginsWithQueryCalledCount = 0
     var addLoginCalledCount = 0
     var getStoredKeyCalledCount = 0

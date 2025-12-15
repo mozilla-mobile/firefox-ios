@@ -8,7 +8,7 @@
 "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox 不會留下瀏覽紀錄或 cookie，但會保留建立的書籤。";
 
 /* Text button displayed when there are no tabs open while in private mode */
-"Learn More" = "瞭解更多";
+"Learn More" = "更多資訊";
 
 /* Toggled OFF accessibility value */
 "Off" = "關閉";

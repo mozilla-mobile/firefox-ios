@@ -103,13 +103,7 @@ final class OnboardingService: FeatureFlaggable {
                 return
             }
             handleOpenInstructionsPopup(
-                from: OnboardingInstructionsPopupInfoModel(
-                    title: popupViewModel.title,
-                    instructionSteps: popupViewModel.instructionSteps,
-                    buttonTitle: popupViewModel.buttonTitle,
-                    buttonAction: popupViewModel.buttonAction,
-                    a11yIdRoot: popupViewModel.a11yIdRoot
-                )
+                from: popupViewModel
             ) {
                 completion(.success(.advance(numberOfPages: 1)))
             }
@@ -208,7 +202,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenInstructionsPopup(
-        from popupViewModel: OnboardingDefaultBrowserModelProtocol,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping () -> Void
     ) {
         presentDefaultBrowserPopup(from: popupViewModel, completion: completion)
@@ -274,7 +268,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func presentDefaultBrowserPopup(
-        from popupViewModel: OnboardingDefaultBrowserModelProtocol,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping @MainActor () -> Void
     ) {
         let popupVC = createDefaultBrowserPopupViewController(
@@ -339,7 +333,7 @@ final class OnboardingService: FeatureFlaggable {
 
     private func createDefaultBrowserPopupViewController(
         windowUUID: WindowUUID,
-        from popupViewModel: OnboardingDefaultBrowserModelProtocol,
+        from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
         completion: @escaping () -> Void
     ) -> UIViewController {
         let instructionsVC = OnboardingInstructionPopupViewController(
@@ -347,20 +341,15 @@ final class OnboardingService: FeatureFlaggable {
             windowUUID: windowUUID,
             buttonTappedFinishFlow: completion
         )
-        let bottomSheetViewModel = BottomSheetViewModel(
-            shouldDismissForTapOutside: true,
-            closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier:
-                AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
-        )
-        let bottomSheetVC = OnboardingBottomSheetViewController(
-            viewModel: bottomSheetViewModel,
-            childViewController: instructionsVC,
-            usingDimmedBackground: true,
-            windowUUID: windowUUID
-        )
 
-        instructionsVC.dismissDelegate = bottomSheetVC
+        let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
+        bottomSheetVC.configure(
+            closeButtonModel: CloseButtonViewModel(
+                a11yLabel: .CloseButtonTitle,
+                a11yIdentifier: AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
+            ),
+            child: instructionsVC
+        )
         return bottomSheetVC
     }
 

@@ -14,8 +14,8 @@ class SearchViewControllerTest: XCTestCase {
     var searchEnginesManager: SearchEnginesManager!
     var searchViewController: SearchViewController!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(firefoxSuggest: MockRustFirefoxSuggest())
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -44,8 +44,8 @@ class SearchViewControllerTest: XCTestCase {
         )
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         profile = nil
     }
 

@@ -93,10 +93,10 @@ class DesktopModeTestsIphone: BaseTestCase {
     var toolbarScreen: ToolbarScreen!
     var mainMenuScreen: MainMenuScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .phone
         if !iPad() {
-            super.setUp()
+            try await super.setUp()
         }
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)

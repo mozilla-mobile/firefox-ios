@@ -448,8 +448,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             switch item {
             case .tab(let model):
                 return model.id == id
-            case .inactiveTab(let model):
-                return model.id == id
             }
         }
     }

@@ -46,7 +46,7 @@ class TabsTests: BaseTestCase {
         } else {
             navigator.goto(TabTray)
         }
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_1"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_1"
         mozWaitForElementToExist(app.cells[identifier])
         XCTAssertEqual(app.cells[identifier].label, "\(urlLabel). \(selectedTab)")
     }
@@ -93,7 +93,7 @@ class TabsTests: BaseTestCase {
 
         // Open tab tray to check that both tabs are there
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        let identifier = "TabDisplayView.tabCell_1_1"
+        let identifier = "TabDisplayView.tabCell_0_1"
         XCTAssertEqual(app.cells.matching(identifier: identifier).element.label,
                        "Example Domains")
     }
@@ -350,7 +350,7 @@ class TabsTests: BaseTestCase {
 
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_0"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_0"
         app.cells[identifier].waitAndTap()
         mozWaitForElementToExist(
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
@@ -499,6 +499,7 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         // Repeat for private browsing mode
         navigator.performAction(Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].waitAndTap()
@@ -526,24 +527,25 @@ class TabsTests: BaseTestCase {
 
         // Experiment from #25337: "Undo" button no longer available on iPhone.
         // Tap "x"
-        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].buttons[StandardImageIdentifiers.Large.cross].tap()
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        let secondTab = app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_0_2"]
+        secondTab.buttons[StandardImageIdentifiers.Large.cross].tap()
+        mozWaitForElementToNotExist(secondTab)
         app.buttons["Undo"].waitAndTap()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        mozWaitForElementToExist(secondTab)
 
         // Long press tab. Tap "Close Tab" from the context menu
-        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].press(forDuration: 2)
+        secondTab.press(forDuration: 2)
         mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
         app.collectionViews.buttons["Close Tab"].waitAndTap()
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        mozWaitForElementToNotExist(secondTab)
         app.buttons["Undo"].waitAndTap()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        mozWaitForElementToExist(secondTab)
 
         // Swipe tab
-        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].swipeLeft()
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        secondTab.swipeLeft()
+        mozWaitForElementToNotExist(secondTab)
         app.buttons["Undo"].waitAndTap()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        mozWaitForElementToExist(secondTab)
     }
 
     private func validateToastWhenClosingMultipleTabs() {
@@ -632,10 +634,10 @@ class TabsTestsIphone: BaseTestCase {
     var newTabsScreen: NewTabsScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .phone
         if !iPad() {
-            super.setUp()
+            try await super.setUp()
         }
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)

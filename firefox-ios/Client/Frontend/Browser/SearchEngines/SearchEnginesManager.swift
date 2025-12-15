@@ -23,10 +23,7 @@ protocol SearchEngineDelegate: AnyObject {
 }
 
 struct SearchEngineProviderFactory {
-    static let defaultSearchEngineProvider: SearchEngineProvider = {
-        let secEnabled = SearchEngineFlagManager.isSECEnabled
-        return secEnabled ? ASSearchEngineProvider() : DefaultSearchEngineProvider()
-    }()
+    static let defaultSearchEngineProvider: SearchEngineProvider = ASSearchEngineProvider()
 }
 
 /// Manages a set of `OpenSearchEngine`s.
@@ -68,8 +65,6 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
 
     weak var delegate: SearchEngineDelegate?
     private var logger: Logger = DefaultLogger.shared
-
-    private lazy var isSECEnabled: Bool = { SearchEngineFlagManager.isSECEnabled }()
 
     init(prefs: Prefs,
          files: FileAccessor,
@@ -154,21 +149,13 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // The keys of this dictionary are used as a set.
     private lazy var disabledEngines: [String] = getDisabledEngines() {
         didSet {
-            if isSECEnabled {
-                prefs.setObject(Array(disabledEngines), forKey: disabledEngineIDsPrefsKey)
-            } else {
-                prefs.setObject(Array(disabledEngines), forKey: legacy_disabledEngineNamesPrefsKey)
-            }
+            prefs.setObject(Array(disabledEngines), forKey: disabledEngineIDsPrefsKey)
         }
     }
 
     var orderedEngines: [OpenSearchEngine] {
         didSet {
-            if isSECEnabled {
-                prefs.setObject(orderedEngines.map { $0.engineID }, forKey: orderedEngineIDsPrefsKey)
-            } else {
-                prefs.setObject(orderedEngines.map { $0.shortName }, forKey: legacy_orderedEngineNamesPrefsKey)
-            }
+            prefs.setObject(orderedEngines.map { $0.engineID }, forKey: orderedEngineIDsPrefsKey)
         }
     }
 
@@ -270,19 +257,11 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
-        if isSECEnabled {
-            return !disabledEngines.contains(engine.engineID)
-        } else {
-            return !disabledEngines.contains(engine.shortName)
-        }
+        return !disabledEngines.contains(engine.engineID)
     }
 
     func enableEngine(_ engine: OpenSearchEngine) {
-        if isSECEnabled {
-            disabledEngines.removeAll { $0 == engine.engineID }
-        } else {
-            disabledEngines.removeAll { $0 == engine.shortName }
-        }
+        disabledEngines.removeAll { $0 == engine.engineID }
     }
 
     func disableEngine(_ engine: OpenSearchEngine) {
@@ -290,7 +269,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
             // Can't disable default engine.
             return
         }
-        let engineKey = isSECEnabled ? engine.engineID : engine.shortName
+        let engineKey = engine.engineID
         if !disabledEngines.contains(engineKey) {
             disabledEngines.append(engineKey)
         }
@@ -336,7 +315,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // MARK: - Private
 
     private func getDisabledEngines() -> [String] {
-        let prefsKey = isSECEnabled ? disabledEngineIDsPrefsKey : legacy_disabledEngineNamesPrefsKey
+        let prefsKey = disabledEngineIDsPrefsKey
         return prefs.stringArrayForKey(prefsKey) ?? []
     }
 
@@ -373,29 +352,18 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
             }
         }
 
-        if isSECEnabled {
-            if prefs.hasObjectForKey(v2PrefsKey) {
-                // v2 (SEC) preferences are available on-disk
-                enginePrefs = fetchPrefs(.v2)
-            } else if prefs.hasObjectForKey(v1PrefsKey) {
-                // We're running for the first time with SEC enabled but haven't yet saved ordering
-                // prefs for those engines. We send the v1 preferences which will be migrated.
-                enginePrefs = fetchPrefs(.v1)
-            } else {
-                // Fresh install. No v2 or v1 preferences.
-                enginePrefs = SearchEnginePrefs(engineIdentifiers: nil, disabledEngines: nil, version: .v2)
-            }
+        if prefs.hasObjectForKey(v2PrefsKey) {
+            // v2 (SEC) preferences are available on-disk
+            enginePrefs = fetchPrefs(.v2)
+        } else if prefs.hasObjectForKey(v1PrefsKey) {
+            // We're running for the first time with SEC enabled but haven't yet saved ordering
+            // prefs for those engines. We send the v1 preferences which will be migrated.
+            enginePrefs = fetchPrefs(.v1)
         } else {
-            if prefs.hasObjectForKey(v1PrefsKey) {
-                enginePrefs = fetchPrefs(.v1)
-            } else if prefs.hasObjectForKey(v2PrefsKey) {
-                // Unlikely, but it's possible a new user installed during SEC experiment, and then was
-                // moved out of the SEC experiment.
-                enginePrefs = fetchPrefs(.v2)
-            } else {
-                enginePrefs = SearchEnginePrefs(engineIdentifiers: nil, disabledEngines: nil, version: .v1)
-            }
+            // Fresh install. No v2 or v1 preferences.
+            enginePrefs = SearchEnginePrefs(engineIdentifiers: nil, disabledEngines: nil, version: .v2)
         }
+
         return enginePrefs
     }
 

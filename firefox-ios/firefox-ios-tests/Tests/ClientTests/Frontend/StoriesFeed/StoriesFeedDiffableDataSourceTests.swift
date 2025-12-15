@@ -8,13 +8,13 @@ import Storage
 
 @testable import Client
 
+@MainActor
 final class StoriesFeedDiffableDataSourceTests: XCTestCase {
     var collectionView: UICollectionView?
     var diffableDataSource: StoriesFeedDiffableDataSource?
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-
+    override func setUp() async throws {
+        try await super.setUp()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         let collectionView = try XCTUnwrap(collectionView)
         diffableDataSource = StoriesFeedDiffableDataSource(
@@ -25,11 +25,11 @@ final class StoriesFeedDiffableDataSourceTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         diffableDataSource = nil
         collectionView = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_updateSnapshot_initialSnapshotHasNoData() throws {

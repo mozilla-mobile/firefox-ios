@@ -60,8 +60,8 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         // Make sure the year saved is a 4 digit year and not 2 digit
         // 2000 because that is our current period
         XCTAssertTrue(decryptedCreditCard.ccExpYear > 2000)
-        subject.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
-            XCTAssertEqual(self.autofill.addCreditCardCalledCount, 1)
+        subject.saveCreditCard(with: decryptedCreditCard) { [autofill] creditCard, error in
+            XCTAssertEqual(autofill?.addCreditCardCalledCount, 1)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 1.0)
@@ -75,16 +75,16 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let expectationSave = expectation(description: "wait for credit card fields to be saved")
         let expectationUpdate = expectation(description: "wait for credit card fields to be updated")
 
-        subject.saveCreditCard(with: samplePlainTextCard) { creditCard, error in
+        subject.saveCreditCard(with: samplePlainTextCard) {  [autofill, samplePlainTextCard] creditCard, error in
             DispatchQueue.main.async {
-                XCTAssertEqual(self.autofill.addCreditCardCalledCount, 1)
+                XCTAssertEqual(autofill.addCreditCardCalledCount, 1)
                 expectationSave.fulfill()
                 subject.state = .update
 
                 subject.updateCreditCard(for: creditCard?.guid,
-                                         with: self.samplePlainTextCard
+                                         with: samplePlainTextCard
                 ) { didUpdate, error in
-                    XCTAssertEqual(self.autofill.updateCreditCardCalledCount, 1)
+                    XCTAssertEqual(autofill.updateCreditCardCalledCount, 1)
                     expectationUpdate.fulfill()
                 }
             }
@@ -357,13 +357,13 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.decryptedCreditCard = samplePlainTextCard
         let expectation = expectation(description: "wait for credit card fields to be saved")
 
-        subject.didTapMainButton(queue: dispatchQueue) { error in
+        subject.didTapMainButton(queue: dispatchQueue) { [autofill] error in
             guard error == nil else {
                 XCTFail("Should not have received error: \(String(describing: error?.localizedDescription))")
                 return
             }
 
-            XCTAssertEqual(self.autofill.addCreditCardCalledCount, 1)
+            XCTAssertEqual(autofill?.addCreditCardCalledCount, 1)
             expectation.fulfill()
         }
 
@@ -378,12 +378,12 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.decryptedCreditCard = samplePlainTextCard
         let expectation = expectation(description: "wait for credit card fields to be updated")
 
-        subject.didTapMainButton(queue: dispatchQueue) { error in
+        subject.didTapMainButton(queue: dispatchQueue) { [autofill] error in
             guard error == nil else {
                 XCTFail("Should not have received error: \(String(describing: error?.localizedDescription))")
                 return
             }
-            XCTAssertEqual(self.autofill.updateCreditCardCalledCount, 1)
+            XCTAssertEqual(autofill?.updateCreditCardCalledCount, 1)
             expectation.fulfill()
         }
 
@@ -399,13 +399,13 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.decryptedCreditCard = nil
         subject.state = .selectSavedCard
 
-        subject.updateCreditCardList { cards in
+        subject.updateCreditCardList { [autofill] cards in
             DispatchQueue.main.async {
                 XCTAssertEqual(subject.creditCards, cards)
                 XCTAssertEqual(cards?.count, 1)
                 XCTAssertEqual(cards?.first?.guid, "1")
                 XCTAssertEqual(cards?.first?.ccName, "Allen Burges")
-                XCTAssertEqual(self.autofill.listCreditCardsCalledCount, 1)
+                XCTAssertEqual(autofill.listCreditCardsCalledCount, 1)
                 expectation.fulfill()
             }
         }

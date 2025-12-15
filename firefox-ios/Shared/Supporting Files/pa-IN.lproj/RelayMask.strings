@@ -1,0 +1,27 @@
+/* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "ਨਵਾਂ! %@ ਰੀਲੇਅ ਈਮੇਲ ਮਾਸਕ ਹੁਣ ਮੋਬਾਈਲ ਉੱਤੇ ਵੀ ਮੌਜੂਦ ਹਨ।";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "ਤੁਹਾਡੇ 5 ਮੁਫ਼ਤ ਈਮੇਲ ਮਾਸਕ ਵਰਤੋਂ ਵਿੱਚ ਹਨ, ਇਸਕਰਕੇ ਅਸੀਂ ਤੁਹਾਡੇ ਲਈ ਇੱਕ ਚੁਣਿਆ ਹੈ।";
+
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "ਈਮੇਲ ਮਾਸਕ ਇਸ ਵੇਲੇ ਮੌਜੂਦ ਨਹੀਂ ਹਨ। ਕੁਝ ਕੁ ਮਿੰਟਾਂ ਵਿਚ ਫ਼ੇਰ ਅਜ਼ਮਾ ਕੇ ਵੇਖਿਓ।";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "ਸਪੈਮ ਤੋਂ ਆਪਣੇ ਈਮੇਲ ਨੂੰ ਸੁਰੱਖਿਅਤ ਰੱਖਣ ਵਾਸਤੇ ਆਪਣੇ ਅਸਲ ਈਮੇਲ ਨੂੰ ਲੁਕਾਓ। ਕੁਝ ਸਾਈਟਾਂ ਇਸ ਲਈ ਸਹਾਇਕ ਨਹੀਂ ਹਨ।";
+
+/* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
+"RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "ਹੋਰ ਜਾਣੋ";
+
+/* Button title which takes users to a webpage to manage their Relay email masks and related settings. */
+"RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146" = "ਈਮੇਲ ਮਾਸਕ ਦਾ ਇੰਤਜ਼ਾਮ ਕਰੋ";
+
+/* Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay. */
+"RelayMask.RelayEmailMaskSettingsTitle.v146" = "ਈਮੇਲ ਮਾਸਕ";
+
+/* Label for settings toggle which allows users to enable or disable the suggestion of Relay email masks on registration forms, to provide anonymous email masking. */
+"RelayMask.RelayEmailMaskSuggestMasksToggle.v146" = "ਈਮੇਲ ਮਾਸਕ ਲਈ ਸੁਝਾਓ";
+
+/* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
+"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "ਈਮੇਲ ਮਾਸਕ ਨੂੰ ਵਰਤੋਂ";
+

@@ -16,8 +16,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     private var mockTabManager: MockTabManager!
     private var mockTranslationsTelemetry: MockTranslationsTelemetry!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         mockLogger = MockLogger()
         mockTabManager = MockTabManager()
@@ -34,7 +34,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         mockLogger = nil
         mockTabManager = nil
@@ -42,7 +42,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTranslationsTelemetry = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_urlDidChangeAction_withoutTranslationConfiguration_doesNotDispatchAction() throws {

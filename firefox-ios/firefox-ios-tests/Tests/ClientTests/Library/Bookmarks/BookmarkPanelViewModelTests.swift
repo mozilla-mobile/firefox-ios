@@ -155,6 +155,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(index, 0)
     }
 
+    @MainActor
     func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_zeroIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
@@ -164,6 +165,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
+    @MainActor
     func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_minusIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
@@ -264,7 +266,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         return nodes
     }
 
-    private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @escaping () -> Void) {
+    @MainActor
+    private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @Sendable @escaping () -> Void) {
         let expectation = expectation(description: "Subject reloaded")
 
         profile.places.createBookmark(
@@ -272,8 +275,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             url: "https://www.firefox.com",
             title: "Firefox",
             position: 0
-        ).uponQueue(.main) { _ in
-            self.profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
+        ).uponQueue(.main) { [profile] _ in
+            profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
                 switch result {
                 case .success:
                     subject.reloadData {

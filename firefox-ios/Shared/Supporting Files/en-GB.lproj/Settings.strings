@@ -235,11 +235,29 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Learn More";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Learn More";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Try out features and ideas before they’re released to everyone.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ randomly selects users to test features, which improves quality for everyone.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Install and Run Studies";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Allow Feature Studies";
+
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Learn More";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ will improve features, performance, and stability between updates. Changes applied remotely.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Allow Remote Improvements";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Provides access to summarise pages.";
@@ -291,4 +309,3 @@
 
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "Enable Translations";
-

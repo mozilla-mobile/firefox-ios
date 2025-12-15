@@ -23,17 +23,17 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     var introScreenManager: IntroScreenManagerProtocol?
     var chosenOptions: OnboardingOptions = []
 
-    var availableCards: [OnboardingCardViewController]
+    var availableCards: [OnboardingCardViewController<OnboardingKitCardInfoModel>]
     var isDismissible: Bool
     var profile: Profile
     var telemetryUtility: OnboardingTelemetryProtocol
-    private var cardModels: [OnboardingCardInfoModelProtocol]
+    private var cardModels: [OnboardingKitCardInfoModel]
 
     // MARK: - Initializer
     init(
         introScreenManager: IntroScreenManagerProtocol? = nil,
         profile: Profile,
-        model: OnboardingViewModel,
+        model: OnboardingKitViewModel,
         telemetryUtility: OnboardingTelemetryProtocol
     ) {
         self.introScreenManager = introScreenManager
@@ -51,7 +51,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     /// as we want the address bar to always be on top for iPads.
     @MainActor
     private func addCardIfNeeded(
-        for cardModel: OnboardingCardInfoModelProtocol,
+        for cardModel: OnboardingKitCardInfoModel,
         delegate: OnboardingCardDelegate?,
         windowUUID: WindowUUID
     ) {
@@ -59,20 +59,21 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
         if !(card?.action == .toolbarBottom || card?.action == .toolbarTop) || !isPad {
-            availableCards.append(OnboardingMultipleChoiceCardViewController(
+            availableCards.append(OnboardingMultipleChoiceCardViewController<OnboardingKitCardInfoModel>(
                 viewModel: cardModel,
                 delegate: delegate,
                 windowUUID: windowUUID))
         }
     }
 
+    @MainActor
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID) {
         availableCards.removeAll()
         cardModels.forEach { cardModel in
             if cardModel.cardType == .multipleChoice {
                 addCardIfNeeded(for: cardModel, delegate: delegate, windowUUID: window)
             } else {
-                availableCards.append(OnboardingBasicCardViewController(
+                availableCards.append(OnboardingBasicCardViewController<OnboardingKitCardInfoModel>(
                     viewModel: cardModel,
                     delegate: delegate,
                     windowUUID: window))

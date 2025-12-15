@@ -6,6 +6,7 @@ import XCTest
 import MappaMundi
 import Common
 
+@MainActor
 func registerTabTrayNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     // This menu is only available for iPhone, NOT for iPad, no menu when long tapping on tabs button
     if !isTablet {

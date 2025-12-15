@@ -39,6 +39,7 @@ final class UserAgentBuilderTests: XCTestCase {
         return XCTAssertEqual(agent, "FXIOS1 iPhone12 Apple 5 New details 14.090")
     }
 
+    @MainActor
     func testDefaultMobileUserAgent() {
         let builder = UserAgentBuilder.defaultMobileUserAgent()
         let systemInfo = "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)"

@@ -16,8 +16,8 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     var urlBar: MockURLBarView!
     var overlayState: MockOverlayModeManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         profile = MockProfile()
         urlBar = MockURLBarView()
@@ -28,27 +28,19 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
                                                    overlayState: nil)
     }
 
-    override func tearDown() {
-        super.tearDown()
-
+    override func tearDown() async throws {
         profile.shutdown()
         profile = nil
         urlBar = nil
         overlayState = nil
         subject = nil
+        try await super.tearDown()
     }
 
     // MARK: - Test should Present cases
 
-    func test_shouldPresentInactiveTabsHint() {
-        let result = subject.canPresent(.inactiveTabs)
-        XCTAssertTrue(result)
-    }
-
-    func test_shouldPresentInactiveTabsHint_WithNilOverlayMode() {
-        subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: nil)
-        let result = subject.canPresent(.inactiveTabs)
+    func test_shouldPresentNavigationHint() {
+        let result = subject.canPresent(.navigation)
         XCTAssertTrue(result)
     }
 
@@ -93,13 +85,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     // MARK: - Test should NOT Present cases
-
-    func test_shouldNotPresentInactiveTabsHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.inactiveTabsKey.rawValue)
-
-        let result = subject.canPresent(.inactiveTabs)
-        XCTAssertFalse(result)
-    }
 
     func test_shouldNotPresentDataClearanceHint() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.dataClearanceKey.rawValue)

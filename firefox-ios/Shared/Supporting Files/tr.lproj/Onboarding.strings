@@ -44,7 +44,7 @@
 "Onboarding.Customization.Theme.Skip.Action.v123" = "Atla";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
-"Onboarding.Customization.Theme.System.Action.v123" = "Otomatik sistem teması";
+"Onboarding.Customization.Theme.System.Action.v123" = "Sistem teması";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "Temanızı seçin";

@@ -394,10 +394,10 @@ final class HomepageViewController: UIViewController,
         view.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
 
@@ -522,14 +522,16 @@ final class HomepageViewController: UIViewController,
             return searchBar
 
         case .jumpBackIn(let tab):
-            guard let jumpBackInCell = collectionView?.dequeueReusableCell(
-                cellType: JumpBackInCell.self,
-                for: indexPath
-            ) else {
+            let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
+            let cellType: (UICollectionViewCell & JumpBackInCellProtocol).Type =
+                isStoriesRedesignV2Enabled ? JumpBackInCell.self : LegacyJumpBackInCell.self
+
+            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            jumpBackInCell.configure(config: tab, theme: currentTheme)
-            return jumpBackInCell
+
+            cell.configure(config: tab, theme: currentTheme)
+            return cell
 
         case .jumpBackInSyncedTab(let config):
             guard let syncedTabCell = collectionView?.dequeueReusableCell(
@@ -554,14 +556,16 @@ final class HomepageViewController: UIViewController,
             return syncedTabCell
 
         case .bookmark(let item):
-            guard let bookmarksCell = collectionView?.dequeueReusableCell(
-                cellType: BookmarksCell.self,
-                for: indexPath
-            ) else {
+            let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
+            let cellType: (UICollectionViewCell & BookmarksCellProtocol).Type =
+                isStoriesRedesignV2Enabled ? BookmarksCell.self : LegacyBookmarksCell.self
+
+            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            bookmarksCell.configure(config: item, theme: currentTheme)
-            return bookmarksCell
+
+            cell.configure(config: item, theme: currentTheme)
+            return cell
 
         case .merino(let story):
             let cellType: ReusableCell.Type = isAnyStoriesRedesignEnabled ? StoryCell.self : MerinoStandardCell.self

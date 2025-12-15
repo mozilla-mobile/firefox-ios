@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Hai già creato tutti i tuoi 5 alias di posta elettronica gratuiti, quindi ne abbiamo scelto uno per te.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Hai già utilizzato i tuoi 5 alias di posta elettronica gratuiti, quindi ne abbiamo scelto uno da riutilizzare.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Gli alias email non sono al momento disponibili. Riprova tra qualche minuto.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Alias email inserito";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Nascondi in tuo indirizzo email reale per proteggere la tua casella di posta dallo spam. Alcuni siti non supportano gli alias.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Nascondi in tuo indirizzo email reale per proteggere la tua casella di posta dallo spam. Alcuni siti non supportano gli alias.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Ulteriori informazioni";

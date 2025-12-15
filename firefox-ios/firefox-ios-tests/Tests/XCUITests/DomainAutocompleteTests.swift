@@ -28,7 +28,7 @@ class DomainAutocompleteTests: BaseTestCase {
     // This DB contains 3 entries mozilla.com/github.com/git.es
     let historyDB = "browserAutocomplete-places.db"
 
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
@@ -41,7 +41,7 @@ class DomainAutocompleteTests: BaseTestCase {
                                LaunchArguments.SkipContextualHints,
                                LaunchArguments.DisableAnimations]
         }
-        super.setUp()
+        try await super.setUp()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2334558

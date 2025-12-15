@@ -5,9 +5,9 @@
 import XCTest
 
 class HomeButtonTests: BaseTestCase {
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306925

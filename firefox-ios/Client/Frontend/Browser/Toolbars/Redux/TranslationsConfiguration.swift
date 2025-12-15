@@ -38,6 +38,17 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
                 return .Toolbars.Translation.ButtonActiveAccessibilityLabel
             }
         }
+
+        var buttonA11yIdentifier: String {
+            switch self {
+            case .inactive:
+                return AccessibilityIdentifiers.Toolbar.translateButton
+            case .loading:
+                return AccessibilityIdentifiers.Toolbar.translateLoadingButton
+            case .active:
+                return AccessibilityIdentifiers.Toolbar.translateActiveButton
+            }
+        }
     }
 
     let prefs: Prefs
@@ -54,13 +65,13 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     /// Determines whether to show the translate icon on the toolbar
     /// The experiment needs to be turned on and the user settings needs to be enabled
     /// If user has not toggled the settings, then we enable the feature by default
-    var canTranslate: Bool {
+    var isTranslationFeatureEnabled: Bool {
         let isExperimentOn = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
         let isSettingsEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
         return isExperimentOn && isSettingsEnabled
     }
 
     static func == (lhs: TranslationConfiguration, rhs: TranslationConfiguration) -> Bool {
-        return lhs.canTranslate == rhs.canTranslate
+        return lhs.isTranslationFeatureEnabled == rhs.isTranslationFeatureEnabled
     }
 }

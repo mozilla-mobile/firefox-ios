@@ -557,6 +557,26 @@ public protocol RelayClientProtocol: AnyObject, Sendable {
      */
     func fetchAddresses() throws  -> [RelayAddress]
     
+    /**
+     * Retrieves the profile for the authenticated user.
+     *
+     * Returns a [`RelayProfile`] object containing subscription status, usage statistics,
+     * and account settings. The `has_premium` field indicates whether the user has
+     * an active premium subscription.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response.
+     * Provides the HTTP `status` and response `body`; downstream consumers can inspect
+     * these fields. If the response body is JSON with `error_code` or `detail` fields,
+     * these are parsed and included for more granular handling; otherwise, the raw
+     * response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity,
+     * with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
+     */
+    func fetchProfile() throws  -> RelayProfile
+    
 }
 /**
  * Represents a client for the Relay API.
@@ -700,6 +720,31 @@ open func createAddress(description: String, generatedFor: String, usedOn: Strin
 open func fetchAddresses()throws  -> [RelayAddress]  {
     return try  FfiConverterSequenceTypeRelayAddress.lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_method_relayclient_fetch_addresses(self.uniffiClonePointer(),$0
+    )
+})
+}
+    
+    /**
+     * Retrieves the profile for the authenticated user.
+     *
+     * Returns a [`RelayProfile`] object containing subscription status, usage statistics,
+     * and account settings. The `has_premium` field indicates whether the user has
+     * an active premium subscription.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response.
+     * Provides the HTTP `status` and response `body`; downstream consumers can inspect
+     * these fields. If the response body is JSON with `error_code` or `detail` fields,
+     * these are parsed and included for more granular handling; otherwise, the raw
+     * response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity,
+     * with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
+     */
+open func fetchProfile()throws  -> RelayProfile  {
+    return try  FfiConverterTypeRelayProfile_lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
+    uniffi_relay_fn_method_relayclient_fetch_profile(self.uniffiClonePointer(),$0
     )
 })
 }
@@ -1027,6 +1072,79 @@ public func FfiConverterTypeRelayRemoteSettingsClient_lower(_ value: RelayRemote
 
 
 /**
+ * Represents a bounce status object nested within the profile.
+ */
+public struct BounceStatus {
+    public var paused: Bool
+    public var bounceType: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(paused: Bool, bounceType: String) {
+        self.paused = paused
+        self.bounceType = bounceType
+    }
+}
+
+#if compiler(>=6)
+extension BounceStatus: Sendable {}
+#endif
+
+
+extension BounceStatus: Equatable, Hashable {
+    public static func ==(lhs: BounceStatus, rhs: BounceStatus) -> Bool {
+        if lhs.paused != rhs.paused {
+            return false
+        }
+        if lhs.bounceType != rhs.bounceType {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(paused)
+        hasher.combine(bounceType)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeBounceStatus: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> BounceStatus {
+        return
+            try BounceStatus(
+                paused: FfiConverterBool.read(from: &buf), 
+                bounceType: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: BounceStatus, into buf: inout [UInt8]) {
+        FfiConverterBool.write(value.paused, into: &buf)
+        FfiConverterString.write(value.bounceType, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeBounceStatus_lift(_ buf: RustBuffer) throws -> BounceStatus {
+    return try FfiConverterTypeBounceStatus.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeBounceStatus_lower(_ value: BounceStatus) -> RustBuffer {
+    return FfiConverterTypeBounceStatus.lower(value)
+}
+
+
+/**
  * Represents a Relay email address object returned by the Relay API.
  *
  * Includes metadata and statistics for an alias, such as its status,
@@ -1233,6 +1351,260 @@ public func FfiConverterTypeRelayAddress_lower(_ value: RelayAddress) -> RustBuf
 }
 
 
+/**
+ * Represents a Relay user profile returned by the Relay API.
+ *
+ * Contains information about the user's subscription status, usage statistics,
+ * and account settings.
+ *
+ * See: https://mozilla.github.io/fx-private-relay/api_docs.html#tag/privaterelay/operation/profiles_retrieve
+ */
+public struct RelayProfile {
+    public var id: Int64
+    public var serverStorage: Bool
+    public var storePhoneLog: Bool
+    public var subdomain: String?
+    public var hasPremium: Bool
+    public var hasPhone: Bool
+    public var hasVpn: Bool
+    public var hasMegabundle: Bool
+    public var onboardingState: Int64
+    public var onboardingFreeState: Int64
+    public var datePhoneRegistered: String?
+    public var dateSubscribed: String?
+    public var avatar: String?
+    public var nextEmailTry: String
+    public var bounceStatus: BounceStatus
+    public var apiToken: String
+    public var emailsBlocked: Int64
+    public var emailsForwarded: Int64
+    public var emailsReplied: Int64
+    public var levelOneTrackersBlocked: Int64
+    public var removeLevelOneEmailTrackers: Bool?
+    public var totalMasks: Int64
+    public var atMaskLimit: Bool
+    public var metricsEnabled: Bool
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(id: Int64, serverStorage: Bool, storePhoneLog: Bool, subdomain: String?, hasPremium: Bool, hasPhone: Bool, hasVpn: Bool, hasMegabundle: Bool, onboardingState: Int64, onboardingFreeState: Int64, datePhoneRegistered: String?, dateSubscribed: String?, avatar: String?, nextEmailTry: String, bounceStatus: BounceStatus, apiToken: String, emailsBlocked: Int64, emailsForwarded: Int64, emailsReplied: Int64, levelOneTrackersBlocked: Int64, removeLevelOneEmailTrackers: Bool?, totalMasks: Int64, atMaskLimit: Bool, metricsEnabled: Bool) {
+        self.id = id
+        self.serverStorage = serverStorage
+        self.storePhoneLog = storePhoneLog
+        self.subdomain = subdomain
+        self.hasPremium = hasPremium
+        self.hasPhone = hasPhone
+        self.hasVpn = hasVpn
+        self.hasMegabundle = hasMegabundle
+        self.onboardingState = onboardingState
+        self.onboardingFreeState = onboardingFreeState
+        self.datePhoneRegistered = datePhoneRegistered
+        self.dateSubscribed = dateSubscribed
+        self.avatar = avatar
+        self.nextEmailTry = nextEmailTry
+        self.bounceStatus = bounceStatus
+        self.apiToken = apiToken
+        self.emailsBlocked = emailsBlocked
+        self.emailsForwarded = emailsForwarded
+        self.emailsReplied = emailsReplied
+        self.levelOneTrackersBlocked = levelOneTrackersBlocked
+        self.removeLevelOneEmailTrackers = removeLevelOneEmailTrackers
+        self.totalMasks = totalMasks
+        self.atMaskLimit = atMaskLimit
+        self.metricsEnabled = metricsEnabled
+    }
+}
+
+#if compiler(>=6)
+extension RelayProfile: Sendable {}
+#endif
+
+
+extension RelayProfile: Equatable, Hashable {
+    public static func ==(lhs: RelayProfile, rhs: RelayProfile) -> Bool {
+        if lhs.id != rhs.id {
+            return false
+        }
+        if lhs.serverStorage != rhs.serverStorage {
+            return false
+        }
+        if lhs.storePhoneLog != rhs.storePhoneLog {
+            return false
+        }
+        if lhs.subdomain != rhs.subdomain {
+            return false
+        }
+        if lhs.hasPremium != rhs.hasPremium {
+            return false
+        }
+        if lhs.hasPhone != rhs.hasPhone {
+            return false
+        }
+        if lhs.hasVpn != rhs.hasVpn {
+            return false
+        }
+        if lhs.hasMegabundle != rhs.hasMegabundle {
+            return false
+        }
+        if lhs.onboardingState != rhs.onboardingState {
+            return false
+        }
+        if lhs.onboardingFreeState != rhs.onboardingFreeState {
+            return false
+        }
+        if lhs.datePhoneRegistered != rhs.datePhoneRegistered {
+            return false
+        }
+        if lhs.dateSubscribed != rhs.dateSubscribed {
+            return false
+        }
+        if lhs.avatar != rhs.avatar {
+            return false
+        }
+        if lhs.nextEmailTry != rhs.nextEmailTry {
+            return false
+        }
+        if lhs.bounceStatus != rhs.bounceStatus {
+            return false
+        }
+        if lhs.apiToken != rhs.apiToken {
+            return false
+        }
+        if lhs.emailsBlocked != rhs.emailsBlocked {
+            return false
+        }
+        if lhs.emailsForwarded != rhs.emailsForwarded {
+            return false
+        }
+        if lhs.emailsReplied != rhs.emailsReplied {
+            return false
+        }
+        if lhs.levelOneTrackersBlocked != rhs.levelOneTrackersBlocked {
+            return false
+        }
+        if lhs.removeLevelOneEmailTrackers != rhs.removeLevelOneEmailTrackers {
+            return false
+        }
+        if lhs.totalMasks != rhs.totalMasks {
+            return false
+        }
+        if lhs.atMaskLimit != rhs.atMaskLimit {
+            return false
+        }
+        if lhs.metricsEnabled != rhs.metricsEnabled {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(serverStorage)
+        hasher.combine(storePhoneLog)
+        hasher.combine(subdomain)
+        hasher.combine(hasPremium)
+        hasher.combine(hasPhone)
+        hasher.combine(hasVpn)
+        hasher.combine(hasMegabundle)
+        hasher.combine(onboardingState)
+        hasher.combine(onboardingFreeState)
+        hasher.combine(datePhoneRegistered)
+        hasher.combine(dateSubscribed)
+        hasher.combine(avatar)
+        hasher.combine(nextEmailTry)
+        hasher.combine(bounceStatus)
+        hasher.combine(apiToken)
+        hasher.combine(emailsBlocked)
+        hasher.combine(emailsForwarded)
+        hasher.combine(emailsReplied)
+        hasher.combine(levelOneTrackersBlocked)
+        hasher.combine(removeLevelOneEmailTrackers)
+        hasher.combine(totalMasks)
+        hasher.combine(atMaskLimit)
+        hasher.combine(metricsEnabled)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRelayProfile: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RelayProfile {
+        return
+            try RelayProfile(
+                id: FfiConverterInt64.read(from: &buf), 
+                serverStorage: FfiConverterBool.read(from: &buf), 
+                storePhoneLog: FfiConverterBool.read(from: &buf), 
+                subdomain: FfiConverterOptionString.read(from: &buf), 
+                hasPremium: FfiConverterBool.read(from: &buf), 
+                hasPhone: FfiConverterBool.read(from: &buf), 
+                hasVpn: FfiConverterBool.read(from: &buf), 
+                hasMegabundle: FfiConverterBool.read(from: &buf), 
+                onboardingState: FfiConverterInt64.read(from: &buf), 
+                onboardingFreeState: FfiConverterInt64.read(from: &buf), 
+                datePhoneRegistered: FfiConverterOptionString.read(from: &buf), 
+                dateSubscribed: FfiConverterOptionString.read(from: &buf), 
+                avatar: FfiConverterOptionString.read(from: &buf), 
+                nextEmailTry: FfiConverterString.read(from: &buf), 
+                bounceStatus: FfiConverterTypeBounceStatus.read(from: &buf), 
+                apiToken: FfiConverterString.read(from: &buf), 
+                emailsBlocked: FfiConverterInt64.read(from: &buf), 
+                emailsForwarded: FfiConverterInt64.read(from: &buf), 
+                emailsReplied: FfiConverterInt64.read(from: &buf), 
+                levelOneTrackersBlocked: FfiConverterInt64.read(from: &buf), 
+                removeLevelOneEmailTrackers: FfiConverterOptionBool.read(from: &buf), 
+                totalMasks: FfiConverterInt64.read(from: &buf), 
+                atMaskLimit: FfiConverterBool.read(from: &buf), 
+                metricsEnabled: FfiConverterBool.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: RelayProfile, into buf: inout [UInt8]) {
+        FfiConverterInt64.write(value.id, into: &buf)
+        FfiConverterBool.write(value.serverStorage, into: &buf)
+        FfiConverterBool.write(value.storePhoneLog, into: &buf)
+        FfiConverterOptionString.write(value.subdomain, into: &buf)
+        FfiConverterBool.write(value.hasPremium, into: &buf)
+        FfiConverterBool.write(value.hasPhone, into: &buf)
+        FfiConverterBool.write(value.hasVpn, into: &buf)
+        FfiConverterBool.write(value.hasMegabundle, into: &buf)
+        FfiConverterInt64.write(value.onboardingState, into: &buf)
+        FfiConverterInt64.write(value.onboardingFreeState, into: &buf)
+        FfiConverterOptionString.write(value.datePhoneRegistered, into: &buf)
+        FfiConverterOptionString.write(value.dateSubscribed, into: &buf)
+        FfiConverterOptionString.write(value.avatar, into: &buf)
+        FfiConverterString.write(value.nextEmailTry, into: &buf)
+        FfiConverterTypeBounceStatus.write(value.bounceStatus, into: &buf)
+        FfiConverterString.write(value.apiToken, into: &buf)
+        FfiConverterInt64.write(value.emailsBlocked, into: &buf)
+        FfiConverterInt64.write(value.emailsForwarded, into: &buf)
+        FfiConverterInt64.write(value.emailsReplied, into: &buf)
+        FfiConverterInt64.write(value.levelOneTrackersBlocked, into: &buf)
+        FfiConverterOptionBool.write(value.removeLevelOneEmailTrackers, into: &buf)
+        FfiConverterInt64.write(value.totalMasks, into: &buf)
+        FfiConverterBool.write(value.atMaskLimit, into: &buf)
+        FfiConverterBool.write(value.metricsEnabled, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRelayProfile_lift(_ buf: RustBuffer) throws -> RelayProfile {
+    return try FfiConverterTypeRelayProfile.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRelayProfile_lower(_ value: RelayProfile) -> RustBuffer {
+    return FfiConverterTypeRelayProfile.lower(value)
+}
+
+
 public enum RelayApiError: Swift.Error {
 
     
@@ -1335,6 +1707,30 @@ extension RelayApiError: Foundation.LocalizedError {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionBool: FfiConverterRustBuffer {
+    typealias SwiftType = Bool?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterBool.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterBool.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
     typealias SwiftType = String?
 
@@ -1403,6 +1799,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 52619) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_relay_checksum_method_relayclient_fetch_profile() != 54123) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_relay_checksum_method_relayremotesettingsclient_should_show_relay() != 53216) {

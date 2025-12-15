@@ -43,7 +43,7 @@ class HistoryTests: BaseTestCase {
     var browserScreen: BrowserScreen!
     var historyScreen: HistoryScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
@@ -57,7 +57,7 @@ class HistoryTests: BaseTestCase {
                                LaunchArguments.SkipContextualHints,
                                LaunchArguments.DisableAnimations]
         }
-        super.setUp()
+        try await super.setUp()
         toolbarScreen = ToolbarScreen(app: app)
         settingScreen = SettingScreen(app: app)
         browserScreen = BrowserScreen(app: app)

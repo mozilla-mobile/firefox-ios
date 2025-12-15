@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerZoomNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(PageZoom) { screenState in
         screenState.tap(app.buttons[AccessibilityIdentifiers.ZoomPageBar.doneButton], to: BrowserTab)

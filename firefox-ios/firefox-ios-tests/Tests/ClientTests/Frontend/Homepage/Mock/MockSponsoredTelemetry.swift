@@ -19,7 +19,7 @@ class MockUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     }
 }
 
-class MockSponsoredTileTelemetry: SponsoredTileTelemetry {
+class MockSponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry {
     var sendImpressionTelemetryCalled = 0
     var sendClickTelemetryCalled = 0
 

@@ -20,7 +20,7 @@ protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
 
 @MainActor
 @available(iOS 16.0, *)
-final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
+final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notifiable {
     struct UX {
         static let toastDelay = DispatchTimeInterval.milliseconds(10000)
     }
@@ -36,15 +36,15 @@ final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
         self.prefs = prefs
         self.windowUUID = windowUUID
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(appWillEnterForegroundNotification),
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIApplication.willEnterForegroundNotification
+            ]
         )
     }
 
-    @objc
     private func appWillEnterForegroundNotification() {
         checkIfShouldDisplayBar()
     }
@@ -72,6 +72,19 @@ final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
             Task { @MainActor [weak self] in
                 self?.delegate?.shouldDisplay()
             }
+        }
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willEnterForegroundNotification:
+            ensureMainThread {
+                self.appWillEnterForegroundNotification
+            }
+        default:
+            return
         }
     }
 }

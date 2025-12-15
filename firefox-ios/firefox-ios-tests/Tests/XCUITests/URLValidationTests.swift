@@ -11,8 +11,8 @@ class URLValidationTests: BaseTestCase {
     let urlField = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
     var browserScreen: BrowserScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = true
         navigator.goto(SearchSettings)
         app.tables.switches["Show Search Suggestions"].waitAndTap()

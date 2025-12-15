@@ -1,0 +1,15 @@
+/* When a user taps on the address bar, they can see their recent searches. This is the title of the button that the user can tap on to clear the list of their recent searches. */
+"SearchZero.Clear.ButtonTitle.v146" = "Izbriši";
+
+/* When a user taps on the address bar, they can see their recent searches. This is the title of the section that shows the list of their recent searches. */
+"SearchZero.RecentSearches.SectionTitle.v146" = "Nedavne pretrage";
+
+/* When a user taps on the address bar, they can see their trending searches. This is the title of the section that shows the list of their trending searches. %@ is the search engine name. */
+"SearchZero.TrendingSearches.SectionTitle.v146" = "Popularno na tražilici %@";
+
+/* In the Search page of the Settings menu, this is the title for the toggle that shows or hides the recent searches when a user views the search zero state. The search zero state is when the user taps on the address bar and has yet to type a search term. */
+"Settings.SearchZero.RecentSearches.Toggle.v146" = "Prikaži nedavne pretrage";
+
+/* In the Search page of the Settings menu, this is the title for the toggle that shows or hides the trending searches when a user views the search zero state. The search zero state is when the user taps on the address bar and has yet to type a search term. */
+"Settings.SearchZero.TrendingSearches.Toggle.v146" = "Prikaži popularne pretrage";
+

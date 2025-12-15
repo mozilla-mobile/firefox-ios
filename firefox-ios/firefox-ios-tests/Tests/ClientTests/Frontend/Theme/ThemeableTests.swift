@@ -12,19 +12,19 @@ class ThemeableTests: XCTestCaseRootViewController {
     private var testThemeable: TestsThemeable!
     private var mockThemeManager: MockThemeManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockThemeManager = MockThemeManager()
         tableViewDelegate = TestsTableView()
         testThemeable = TestsThemeable()
         testThemeable.themeManager = mockThemeManager
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockThemeManager = nil
         tableViewDelegate = nil
         testThemeable = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: Get all subviews
@@ -123,7 +123,7 @@ class TestsTableView: NSObject, UITableViewDataSource, UITableViewDelegate {
 }
 
 // MARK: - TestsThemeable
-class TestsThemeable: UIViewController, Themeable {
+final class TestsThemeable: UIViewController, @MainActor Themeable {
     var themeManager: ThemeManager = MockThemeManager()
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol = NotificationCenter.default

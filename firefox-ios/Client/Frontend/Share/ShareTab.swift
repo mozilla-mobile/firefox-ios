@@ -5,6 +5,8 @@
 import Foundation
 
 protocol ShareTab: Sendable {
+    nonisolated var tabUUID: TabUUID { get }
+
     @MainActor
     var displayTitle: String { get }
     @MainActor

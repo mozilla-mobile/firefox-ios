@@ -50,7 +50,7 @@
 "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136" = "Leneş";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a white background. */
-"Settings.AppIconSelection.AppIconNames.Light.Title.v139" = "Deschisă";
+"Settings.AppIconSelection.AppIconNames.Light.Title.v139" = "Luminoasă";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to light purple. */
 "Settings.AppIconSelection.AppIconNames.Midday.Title.v137" = "Amiază";
@@ -74,7 +74,7 @@
 "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136" = "Pixelat";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a LGBT+ pride fox logo. */
-"Settings.AppIconSelection.AppIconNames.Pride.Title.v136" = "Orgoliu";
+"Settings.AppIconSelection.AppIconNames.Pride.Title.v136" = "Mândrie";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a purple background. */
 "Settings.AppIconSelection.AppIconNames.Purple.Title.v137" = "Violet";

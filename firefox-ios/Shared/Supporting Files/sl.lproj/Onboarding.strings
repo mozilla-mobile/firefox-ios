@@ -88,6 +88,9 @@
 /* Option for the dark theme. */
 "Onboarding.Modern.Customization.Theme.Dark.v145" = "Temna";
 
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Izberite si temo, ki vam ugaja, ali nastavite, naj se %@ ujema s temo naprave.";
+
 /* Option for the light theme. */
 "Onboarding.Modern.Customization.Theme.Light.v145" = "Svetla";
 

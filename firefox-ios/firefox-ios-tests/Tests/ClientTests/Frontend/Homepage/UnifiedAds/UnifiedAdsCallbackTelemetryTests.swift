@@ -125,10 +125,10 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     // MARK: - Helper functions
 
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsCallbackTelemetry {
-        let sponsoredTileTelemetry = DefaultSponsoredTileTelemetry(gleanWrapper: gleanWrapper)
+        let sponsoredTileGleanTelemetry = DefaultSponsoredTileGleanTelemetry(gleanWrapper: gleanWrapper)
         let subject = DefaultUnifiedAdsCallbackTelemetry(networking: networking,
                                                          logger: logger,
-                                                         sponsoredTileTelemetry: sponsoredTileTelemetry)
+                                                         sponsoredTileGleanTelemetry: sponsoredTileGleanTelemetry)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

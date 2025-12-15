@@ -13,14 +13,14 @@ class UpdateViewModelTests: XCTestCase {
     private var profile: MockProfile!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         profile = nil
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
@@ -33,6 +33,7 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: Enable cards
+    @MainActor
     func testEnabledCards_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
         let subject = createSubject()
@@ -50,6 +51,7 @@ class UpdateViewModelTests: XCTestCase {
         waitForExpectations(timeout: 2.0)
     }
 
+    @MainActor
     func testEnabledCards_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()
@@ -68,6 +70,7 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: Has Single card
+    @MainActor
     func testHasSingleCard_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
         let subject = createSubject()
@@ -197,22 +200,22 @@ class UpdateViewModelTests: XCTestCase {
         return subject
     }
 
-    func createOnboardingViewModel(withCards: Bool) -> OnboardingViewModel {
-        let cards: [OnboardingCardInfoModel] = [
+    func createOnboardingViewModel(withCards: Bool) -> OnboardingKitViewModel {
+        let cards: [OnboardingKitCardInfoModel] = [
             createCard(index: 1),
             createCard(index: 2)
         ]
 
-        return OnboardingViewModel(cards: withCards ? cards : [],
-                                   isDismissible: true)
+        return OnboardingKitViewModel(cards: withCards ? cards : [],
+                                      isDismissible: true)
     }
 
-    func createCard(index: Int) -> OnboardingCardInfoModel {
+    func createCard(index: Int) -> OnboardingKitCardInfoModel {
         let buttons = OnboardingButtons<OnboardingActions>(
             primary: OnboardingButtonInfoModel<OnboardingActions>(
                 title: "Button title \(index)",
                 action: .forwardOneCard))
-        return OnboardingCardInfoModel(
+        return OnboardingKitCardInfoModel(
             cardType: .basic,
             name: "Name \(index)",
             order: index,
@@ -224,6 +227,7 @@ class UpdateViewModelTests: XCTestCase {
             onboardingType: .upgrade,
             a11yIdRoot: "A11y id \(index)",
             imageID: "Image id \(index)",
-            instructionsPopup: nil)
+            instructionsPopup: nil,
+            embededLinkText: [])
     }
 }

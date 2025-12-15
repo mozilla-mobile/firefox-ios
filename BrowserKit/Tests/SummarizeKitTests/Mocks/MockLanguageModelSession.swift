@@ -25,7 +25,7 @@ struct MockLanguageModelResponseSnapshot: LanguageModelResponseSnapshotProtocol 
 /// Mock implementation of a language model session for testing the session and responses.
 /// This allows injecting controlled outputs or errors without calling the real inference backend.
 @available(iOS 26, *)
-final class MockLanguageModelSession: LanguageModelSessionProtocol {
+final class MockLanguageModelSession: LanguageModelSessionProtocol, @unchecked Sendable {
     var respondWith: [String] = [""]
     var respondWithError: Error?
 

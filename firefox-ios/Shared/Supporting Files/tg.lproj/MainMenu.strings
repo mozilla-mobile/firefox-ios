@@ -413,7 +413,7 @@
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Абзорҳо";
 
 /* On the main menu, the accessibility label for the action that shows that the content of the webpage is already translated. */
-"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145" = "Саҳифаи тарҷума шуд";
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145" = "Саҳифа тарҷума шуд";
 
 /* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
 "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "Ба забони %@ тарҷума шуд";

@@ -256,12 +256,7 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
 
     func testPerplexityTrendingURLWithUS() {
         let engine = perplexity_testEngine
-        let localeProvider = FakeLocaleProvider(
-            current: Locale(identifier: "en-US"),
-            preferredLanguages: ["en-US"],
-            regionCode: "",
-            possibleLanguageIdentifier: []
-        )
+        let localeProvider = MockLocaleProvider.defaultEN()
         let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(
             engine.urls.trending,
             for: engine,
@@ -273,11 +268,11 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
 
     func testPerplexityTrendingURLWithDE() {
         let engine = perplexity_testEngine
-        let localeProvider = FakeLocaleProvider(
+        let localeProvider = MockLocaleProvider(
             current: Locale(identifier: "de-US"),
             preferredLanguages: ["de"],
-            regionCode: "",
-            possibleLanguageIdentifier: []
+            localeRegionCode: "",
+            searchRegionCode: ""
         )
         let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(
             engine.urls.trending,
@@ -287,12 +282,4 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
         let expected = "https://www.perplexity.ai/rest/autosuggest/list-trending-suggest?lang=de&q={searchTerms}"
         XCTAssertEqual(result, expected)
     }
-}
-
-// TODO: FXIOS-14268 - Clean up locale interfaces + extensions
-private struct FakeLocaleProvider: LocaleProvider {
-    let current: Locale
-    let preferredLanguages: [String]
-    let regionCode: String
-    let possibleLanguageIdentifier: [String]
 }

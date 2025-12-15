@@ -6,7 +6,7 @@ import Foundation
 import MozillaAppServices
 import Storage
 
-class MockCreditCardProvider: CreditCardProvider {
+final class MockCreditCardProvider: CreditCardProvider, @unchecked Sendable {
     var addCreditCardCalledCount = 0
     var updateCreditCardCalledCount = 0
     var listCreditCardsCalledCount = 0

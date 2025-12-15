@@ -9,15 +9,15 @@ class NotificationSurfaceManagerTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var notificationManager: MockNotificationManager!
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         notificationManager = MockNotificationManager()
         messageManager = MockGleanPlumbMessageManagerProtocol()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         messageManager = nil
         notificationManager = nil
     }

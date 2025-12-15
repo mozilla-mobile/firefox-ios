@@ -219,7 +219,7 @@ protocol LoginsProtocol {
     func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func use(login: Login, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void)
-    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void)
+    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable (Result<[Result<Bool?, Error>], Error>) -> Void)
     func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Bool?, Error>) -> Void)
 }
 
@@ -363,8 +363,8 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             do {
                 let record = try self.storage?.get(id: id)
                 completionHandler(.success(record))
-            } catch let err as NSError {
-                completionHandler(.failure(err))
+            } catch {
+                completionHandler(.failure(error))
             }
         }
     }

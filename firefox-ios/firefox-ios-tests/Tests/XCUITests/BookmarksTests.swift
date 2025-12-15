@@ -18,8 +18,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private var homepageSettingsScreen: HomepageSettingsScreen!
     private var firefoxHomeScreen: FirefoxHomePageScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         topSitesScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
@@ -28,9 +28,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
         firefoxHomeScreen = FirefoxHomePageScreen(app: app)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func checkBookmarked() {
@@ -70,7 +70,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_0"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_0"
         XCTAssertEqual(app.cells[identifier].label, "Example Domain")
         app.cells[identifier].waitAndTap()
         navigator.nowAt(BrowserTab)
@@ -402,6 +402,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.launch()
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
+            navigator.nowAt(NewTabScreen)
             validateLongTapOptionsFromBookmarkLink(isExperiment: true)
         }
     }
@@ -519,11 +520,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         switchToTabAndValidate(nrOfTabs: "3")
 
         // Tap to "Open in Private Tab"
-        if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
-            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        } else {
-            navigator.performAction(Action.GoToHomePage)
-        }
+        navigator.performAction(Action.GoToHomePage)
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         longPressBookmarkCell()
         contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
@@ -534,8 +531,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         navigator.goto(TabTray)
         // Tap to "Remove bookmark"
-        let action = isExperiment ? Action.ToggleExperimentRegularMode : Action.ToggleRegularMode
-        navigator.toggleOn(userState.isPrivate, withAction: action)
+        if XCUIDevice.shared.orientation == .landscapeLeft {
+            navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        } else {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        }
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if iPad() {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()

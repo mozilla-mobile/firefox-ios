@@ -8,7 +8,7 @@ import Redux
 import Shared
 import ComponentLibrary
 
-class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
+class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notifiable {
     typealias SubscriberStateType = ThemeSettingsState
     struct UX {
         static let rowHeight: CGFloat = 70
@@ -59,10 +59,13 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(systemBrightnessChanged),
-                                               name: UIScreen.brightnessDidChangeNotification,
-                                               object: nil)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIScreen.brightnessDidChangeNotification
+            ]
+        )
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -119,7 +122,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         }
     }
 
-    @objc
     nonisolated func systemBrightnessChanged() {
         ensureMainThread {
             guard self.themeState.isAutomaticBrightnessEnabled else { return }
@@ -377,5 +379,18 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         deviceBrightnessIndicator.maximumTrackTintColor = .clear
         deviceBrightnessIndicator.thumbTintColor = theme.colors.formKnob
         self.slider = (slider, deviceBrightnessIndicator)
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIScreen.brightnessDidChangeNotification:
+            ensureMainThread {
+                self.systemBrightnessChanged
+            }
+        default:
+            return
+        }
     }
 }

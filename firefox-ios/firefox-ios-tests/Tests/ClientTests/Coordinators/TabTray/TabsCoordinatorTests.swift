@@ -9,16 +9,16 @@ import XCTest
 final class TabsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         mockRouter = nil
         DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testInitialState() {

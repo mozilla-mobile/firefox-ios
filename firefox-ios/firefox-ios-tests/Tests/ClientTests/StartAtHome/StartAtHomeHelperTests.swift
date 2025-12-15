@@ -12,19 +12,18 @@ class StartAtHomeHelperTests: XCTestCase {
     private var profile: MockProfile!
     private var tabManager: MockTabManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         tabManager = MockTabManager()
 
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
 
         profile = nil
         tabManager = nil

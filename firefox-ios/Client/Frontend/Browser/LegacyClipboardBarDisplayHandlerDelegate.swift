@@ -12,7 +12,7 @@ protocol LegacyClipboardBarDisplayHandlerDelegate: AnyObject {
     func shouldDisplay(clipBoardURL url: URL)
 }
 
-final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
+final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notifiable {
     struct UX {
         static let toastDelay = DispatchTimeInterval.milliseconds(10000)
     }
@@ -24,51 +24,51 @@ final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
     private var prefs: Prefs
     private let windowUUID: WindowUUID
     var clipboardToast: ButtonToast?
+    var notificationCenter: NotificationProtocol
 
-    init(prefs: Prefs, tabManager: TabManager) {
+    init(prefs: Prefs, tabManager: TabManager, notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.prefs = prefs
         self.tabManager = tabManager
         self.windowUUID = tabManager.windowUUID
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(appWillEnterForegroundNotification),
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(UIPasteboardChanged),
-            name: UIPasteboard.changedNotification,
-            object: nil
+        self.notificationCenter = notificationCenter
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIApplication.willEnterForegroundNotification,
+                        UIPasteboard.changedNotification]
         )
     }
 
-    @objc
-    private func appWillEnterForegroundNotification() {
-        checkIfShouldDisplayBar()
+    func handleNotifications(_ notification: Notification) {
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIApplication.willEnterForegroundNotification:
+                self.checkIfShouldDisplayBar()
+            case UIPasteboard.changedNotification:
+                self.UIPasteboardChanged()
+            default: break
+            }
+        }
     }
 
-    @objc
     private func UIPasteboardChanged() {
         // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
-        NotificationCenter.default.removeObserver(self, name: UIPasteboard.changedNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIPasteboard.changedNotification, object: nil)
 
         UIPasteboard.general.asyncURL { url in
             ensureMainThread {
                 defer {
-                    NotificationCenter.default.addObserver(
-                        self,
-                        selector: #selector(self.UIPasteboardChanged),
-                        name: UIPasteboard.changedNotification,
-                        object: nil
+                    // this will replace the UIPasteboard.changedNotification observer
+                    self.startObservingNotifications(
+                        withNotificationCenter: self.notificationCenter,
+                        forObserver: self,
+                        observing: [UIPasteboard.changedNotification]
                     )
                 }
-
                 guard let url = url else {
                     return
                 }
-
                 MainActor.assumeIsolated {
                     self.lastDisplayedURL = url.absoluteString
                 }

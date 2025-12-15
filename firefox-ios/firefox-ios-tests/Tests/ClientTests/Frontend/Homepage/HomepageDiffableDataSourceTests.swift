@@ -8,13 +8,13 @@ import MozillaAppServices
 
 @testable import Client
 
+@MainActor
 final class HomepageDiffableDataSourceTests: XCTestCase {
     var collectionView: UICollectionView?
     var diffableDataSource: HomepageDiffableDataSource?
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-
+    override func setUp() async throws {
+        try await super.setUp()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         let collectionView = try XCTUnwrap(collectionView)
         diffableDataSource = HomepageDiffableDataSource(
@@ -26,11 +26,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         diffableDataSource = nil
         collectionView = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - applyInitialSnapshot

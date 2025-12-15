@@ -13,8 +13,8 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     var prefs: Prefs!
     var mockNotificationCenter: MockNotificationCenter!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         let profile = MockProfile(databasePrefix: "SearchBarSettingsTests")
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         prefs = profile.prefs
@@ -22,8 +22,8 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         mockNotificationCenter = MockNotificationCenter()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         prefs.clearAll()
         prefs = nil
         mockNotificationCenter = nil

@@ -9,16 +9,16 @@ import XCTest
 
 final class MicrosurveySurfaceManagerTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         messageManager = MockGleanPlumbMessageManagerProtocol()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         messageManager = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testNilMessage_microsurveyShouldNotShow() {

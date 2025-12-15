@@ -27,7 +27,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     let testWithDB = ["testTopSites2Add", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
     let pagesVisited = "browserActivityStreamPages-places.db"
-    override func setUp() {
+
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
@@ -41,16 +42,17 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
         launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
-        super.setUp()
+        try await super.setUp()
         topSites = TopSitesScreen(app: app)
         contextMenu = ContextMenuScreen(app: app)
         tabTray = TabTrayScreen(app: app)
         browser = BrowserScreen(app: app)
         toolbar = ToolbarScreen(app: app)
     }
-    override func tearDown() {
+
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2273342

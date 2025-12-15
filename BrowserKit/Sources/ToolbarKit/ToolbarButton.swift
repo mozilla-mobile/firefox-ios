@@ -44,6 +44,8 @@ class ToolbarButton: UIButton,
     // Used to determine whether we want to generate a new image
     // based on change in icon name
     private var lastIconName: String?
+    // Cache the current element to avoid unnecessary reconfiguration.
+    private var currentElement: ToolbarElement?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,6 +62,11 @@ class ToolbarButton: UIButton,
         element: ToolbarElement,
         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         guard var config = configuration else { return }
+
+        // Skip reconfiguration if the element hasn't changed.
+        if let currentElement, currentElement == element { return }
+        currentElement = element
+
         removeLongPressGestureRecognizer()
         configureLongPressGestureRecognizerIfNeeded(for: element, notificationCenter: notificationCenter)
         configureCustomA11yActionIfNeeded(for: element)

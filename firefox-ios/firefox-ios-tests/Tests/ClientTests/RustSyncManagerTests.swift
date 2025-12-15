@@ -70,7 +70,7 @@ class RustSyncManagerTests: XCTestCase {
             .addresses
         ]
 
-        rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
+        rustSyncManager.getEnginesAndKeys(engines: engines) { [tabs, logins, autofill, places] (engines, keys) in
             XCTAssertEqual(engines.count, 6)
 
             XCTAssertEqual(engines[safe: 0], "bookmarks")
@@ -83,10 +83,10 @@ class RustSyncManagerTests: XCTestCase {
 
             XCTAssertNotNil(keys["creditcards"])
 
-            XCTAssertEqual(self.tabs.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.autofill.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.places.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(tabs?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(logins?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(autofill?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(places?.registerWithSyncManagerCalled, 1)
         }
     }
 
@@ -133,7 +133,7 @@ class RustSyncManagerTests: XCTestCase {
             .addresses
         ]
 
-        rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
+        rustSyncManager.getEnginesAndKeys(engines: engines) { [tabs, logins, autofill, places] (engines, keys) in
             XCTAssertEqual(engines.count, 5)
 
             XCTAssertEqual(engines[safe: 0], "bookmarks")
@@ -145,10 +145,10 @@ class RustSyncManagerTests: XCTestCase {
 
             XCTAssertNotNil(keys["creditcards"])
 
-            XCTAssertEqual(self.tabs.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 0)
-            XCTAssertEqual(self.autofill.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.places.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(tabs?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(logins?.registerWithSyncManagerCalled, 0)
+            XCTAssertEqual(autofill?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(places?.registerWithSyncManagerCalled, 1)
         }
     }
 

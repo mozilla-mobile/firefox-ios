@@ -7,6 +7,7 @@ import MappaMundi
 
 private let defaultURL = "https://www.mozilla.org/en-US/book/"
 
+@MainActor
 func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(URLBarLongPressMenu) { screenState in
         let menu = app.tables["Context Menu"].firstMatch

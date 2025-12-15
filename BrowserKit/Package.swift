@@ -48,6 +48,9 @@ let package = Package(
         .library(
             name: "OnboardingKit",
             targets: ["OnboardingKit"]),
+        .library(
+            name: "ActionExtensionKit",
+            targets: ["ActionExtensionKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -155,7 +158,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "TabDataStoreTests",
-            dependencies: ["TabDataStore"]),
+            dependencies: ["TabDataStore"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]
+        ),
         .target(
             name: "Redux",
             dependencies: ["Common"],
@@ -190,7 +197,10 @@ let package = Package(
             ]),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"]),
+            dependencies: ["ToolbarKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+        ]),
         .target(
             name: "MenuKit",
             dependencies: ["Common", "ComponentLibrary"],
@@ -220,7 +230,11 @@ let package = Package(
             ]
         ),
         .testTarget(name: "SummarizeKitTests",
-                    dependencies: ["SummarizeKit"]),
+                    dependencies: ["SummarizeKit"],
+                    swiftSettings: [
+                        .unsafeFlags(["-enable-testing"]),
+                        .enableExperimentalFeature("StrictConcurrency")
+                    ]),
         .target(
             name: "JWTKit",
             dependencies: ["Common", "Shared"],
@@ -273,6 +287,19 @@ let package = Package(
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency"),
                 .enableExperimentalFeature("RegionBasedIsolation")
+            ]),
+        .target(
+            name: "ActionExtensionKit",
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableExperimentalFeature("RegionBasedIsolation")
+            ]),
+        .testTarget(
+            name: "ActionExtensionKitTests",
+            dependencies: ["ActionExtensionKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
             ]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",

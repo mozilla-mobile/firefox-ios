@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(HomePanel_TopSites) { screenState in
         let topSites = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]

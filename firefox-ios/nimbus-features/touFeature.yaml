@@ -14,12 +14,19 @@ features:
           Maximum number of ToU bottom sheet reminders that can be displayed
         type: Int
         default: 2
+      enable-drag-to-dismiss:
+        description: >
+          Whether to show a drag handle on the prompt and allows users to use it to dismiss the prompt.
+        type: Boolean
+        default: true
     defaults:
       - channel: beta
         value:
           status: false
           max-reminders-count: 2
+          enable-drag-to-dismiss: true
       - channel: developer
         value:
           status: false
           max-reminders-count: 2
+          enable-drag-to-dismiss: true

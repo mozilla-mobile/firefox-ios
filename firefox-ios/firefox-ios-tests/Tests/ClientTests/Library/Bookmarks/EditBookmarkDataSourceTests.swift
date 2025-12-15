@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class EditBookmarkDataSourceTests: XCTestCase {
     private let folders = [
         Folder(title: "Parent", guid: "ParentFolder", indentation: 0),
@@ -12,8 +13,8 @@ final class EditBookmarkDataSourceTests: XCTestCase {
     ]
     private var tableView: UITableView!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         tableView = UITableView()
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = UIViewController()
@@ -21,9 +22,9 @@ final class EditBookmarkDataSourceTests: XCTestCase {
         window.makeKeyAndVisible()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         tableView = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testOnSnapshotUpdate() {

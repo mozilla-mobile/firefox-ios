@@ -92,7 +92,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        let expectedCard = OnboardingCardInfoModel(
+        let expectedCard = OnboardingKitCardInfoModel(
             cardType: .basic,
             name: CardElementNames.name + " 1",
             order: 10,
@@ -111,7 +111,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             onboardingType: .freshInstall,
             a11yIdRoot: CardElementNames.a11yIDOnboarding,
             imageID: ImageIdentifiers.Onboarding.HeaderImages.welcomev106,
-            instructionsPopup: nil)
+            instructionsPopup: nil,
+            embededLinkText: [])
 
         XCTAssertEqual(subject.name, expectedCard.name)
         XCTAssertEqual(subject.title, expectedCard.title)

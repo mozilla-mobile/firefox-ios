@@ -28,11 +28,6 @@ pipelines:
         depends_on:
         - firefox_configure_build
         parallel: 5
-      run_firefox_ui_tests_ios26:
-        run_if:
-          expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
-        depends_on:
-        - firefox_configure_build
       focus_ui_test:
         run_if:
           expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
@@ -300,29 +295,6 @@ workflows:
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
 
-  run_firefox_ui_tests_ios26:
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    steps:
-    - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0.5.1:
-        title: Sanity check on iOS 26
-        timeout: 1200
-        inputs:
-        - only_testing: |
-            XCUITests/OnboardingTests
-            XCUITests/BookmarksTests
-            XCUITests/BrowsingPDFTests
-            XCUITests/FindInPageTests
-            XCUITests/HomePageSettingsUITests
-            XCUITests/PhotonActionSheetTests
-            XCUITests/SettingsTests
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.1
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.1-arm64.xctestrun
-    - deploy-to-bitrise-io@2.10.0: {}
-
   run_firefox_ui_tests:
     before_run:
     - 1_git_clone_and_post_clone
@@ -333,7 +305,7 @@ workflows:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.1
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.1-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
@@ -1283,6 +1255,8 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
+            mkdir -p "$BITRISE_DEPLOY_DIR"
+            mv perfherder-data.json $BITRISE_DEPLOY_DIR
     - deploy-to-bitrise-io@2.10.0: {}
     before_run:
     - 1_git_clone_and_post_clone
@@ -1613,6 +1587,9 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
+            mkdir -p "$BITRISE_DEPLOY_DIR"
+            mv perfherder-data.json $BITRISE_DEPLOY_DIR
+    - deploy-to-bitrise-io@2.10.0: {}
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x

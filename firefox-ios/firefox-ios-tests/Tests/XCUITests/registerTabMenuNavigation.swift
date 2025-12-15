@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(BrowserTabMenuMore) { screenState in
         screenState.tap(
