@@ -30,7 +30,6 @@ public struct FirefoxURLBuilder: FirefoxURLBuilding, Sendable {
     public init() {}
 
     public func buildFirefoxURL(from shareItem: ExtractedShareItem) -> URL? {
-        // This is a test that will be reverted to check code coverage
         let (content, isSearch) = switch shareItem {
         case .shareItem(let item):
             (item.url, false)
