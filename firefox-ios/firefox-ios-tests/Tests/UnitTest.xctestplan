@@ -105,6 +105,13 @@
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "OnboardingKitTests",
+        "name" : "OnboardingKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "ContentBlockingGeneratorTests",
         "name" : "ContentBlockingGeneratorTests"
       }
@@ -121,6 +128,13 @@
         "containerPath" : "container:Client.xcodeproj",
         "identifier" : "2FA436041ABB83B4008031D1",
         "name" : "AccountTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "ActionExtensionKitTests",
+        "name" : "ActionExtensionKitTests"
       }
     },
     {
