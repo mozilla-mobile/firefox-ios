@@ -35,32 +35,40 @@ final class WKUIHandlerTests: XCTestCase {
     func testRequestMediaCaptureSuccess() {
         let subject = createSubject(isActive: true)
 
-        let expectation = expectation(description: "Wait for the decision handler to be called")
+        guard let (frame, origin) = WebKitTestHelpers.captureFrameAndOrigin(for: URL(string: "https://example.com")!) else {
+            XCTFail("Could not obtain WKFrameInfo")
+            return
+        }
 
+        let expectation = expectation(description: "Wait for the decision handler to be called")
         let decisionHandler = { (decision: WKPermissionDecision) in
             XCTAssertEqual(decision, .prompt)
             expectation.fulfill()
         }
+
         subject.webView(MockWKWebView(),
-                        requestMediaCapturePermissionFor: MockWKSecurityOrigin.new(nil),
-                        initiatedByFrame: MockWKFrameInfo(),
+                        requestMediaCapturePermissionFor: origin,
+                        initiatedByFrame: frame,
                         type: .cameraAndMicrophone,
-                        decisionHandler: decisionHandler
-        )
+                        decisionHandler: decisionHandler)
         wait(for: [expectation])
     }
 
     func testRequestMediaCaptureIsActiveFalse() {
         let subject = createSubject(isActive: false)
-        let expectation = expectation(description: "Wait for the decision handler to be called")
+        guard let (frame, origin) = WebKitTestHelpers.captureFrameAndOrigin(for: URL(string: "https://example.com")!) else {
+            XCTFail("Could not obtain WKFrameInfo")
+            return
+        }
 
+        let expectation = expectation(description: "Wait for the decision handler to be called")
         let decisionHandler = { (decision: WKPermissionDecision) in
             XCTAssertEqual(decision, .deny)
             expectation.fulfill()
         }
         subject.webView(MockWKWebView(),
-                        requestMediaCapturePermissionFor: MockWKSecurityOrigin.new(nil),
-                        initiatedByFrame: MockWKFrameInfo(),
+                        requestMediaCapturePermissionFor: origin,
+                        initiatedByFrame: frame,
                         type: .cameraAndMicrophone,
                         decisionHandler: decisionHandler
         )
@@ -70,6 +78,10 @@ final class WKUIHandlerTests: XCTestCase {
     func testRequestMediaCaptureDelegateReturnsFalse() {
         sessionDelegate.hasMediaCapturePermission = false
         let subject = createSubject(isActive: true)
+        guard let (frame, origin) = WebKitTestHelpers.captureFrameAndOrigin(for: URL(string: "https://example.com")!) else {
+            XCTFail("Could not obtain WKFrameInfo")
+            return
+        }
         let expectation = expectation(description: "Wait for the decision handler to be called")
 
         let decisionHandler = { (decision: WKPermissionDecision) in
@@ -77,8 +89,8 @@ final class WKUIHandlerTests: XCTestCase {
             expectation.fulfill()
         }
         subject.webView(MockWKWebView(),
-                        requestMediaCapturePermissionFor: MockWKSecurityOrigin.new(nil),
-                        initiatedByFrame: MockWKFrameInfo(),
+                        requestMediaCapturePermissionFor: origin,
+                        initiatedByFrame: frame,
                         type: .cameraAndMicrophone,
                         decisionHandler: decisionHandler
         )
