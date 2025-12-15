@@ -74,7 +74,7 @@ share.open_in_firefox_extension.list:
         description: |
           The source of the extension event. Always "share-extension" for the legacy Share Extension.
     bugs:
-    - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    - https://github.com/mozilla-mobile/firefox-ios/issues/31178
     data_reviews:
     - https://github.com/mozilla-mobile/firefox-ios/pull/30796
     notification_emails:
