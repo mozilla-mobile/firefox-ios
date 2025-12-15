@@ -4,17 +4,22 @@
 
 import UniformTypeIdentifiers
 
-struct ShareItem {
-    let url: String
-    let title: String?
+public struct ActionShareItem: Sendable {
+    public let url: String
+    public let title: String?
+
+    public init(url: String, title: String?) {
+        self.url = url
+        self.title = title
+    }
 }
 
-enum ExtractedShareItem {
-    case shareItem(ShareItem)
+public enum ExtractedShareItem: Sendable {
+    case shareItem(ActionShareItem)
     case rawText(String)
 }
 
-extension NSItemProvider {
+public extension NSItemProvider {
     var isText: Bool {
         hasItemConformingToTypeIdentifier(UTType.text.identifier)
     }
