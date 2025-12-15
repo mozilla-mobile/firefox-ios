@@ -8,6 +8,7 @@ import Foundation
 protocol ToolbarHelperInterface {
     var isToolbarRefactorEnabled: Bool { get }
     var isToolbarTranslucencyEnabled: Bool { get }
+    var isToolbarTranslucencyRefactorEnabled: Bool { get }
     var isSwipingTabsEnabled: Bool { get }
     var userInterfaceIdiom: UIUserInterfaceIdiom { get }
 
@@ -38,6 +39,10 @@ final class ToolbarHelper: ToolbarHelperInterface {
 
     var isToolbarTranslucencyEnabled: Bool {
         FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
+    }
+
+    var isToolbarTranslucencyRefactorEnabled: Bool {
+        FxNimbus.shared.features.toolbarRefactorFeature.value().translucencyRefactor
     }
 
     var isSwipingTabsEnabled: Bool {

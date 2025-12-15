@@ -28,7 +28,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     }
 
     // MARK: - Variables
-    private var badgeOverlay: BadgeWithBackdrop?
     private var item: SingleActionViewModel?
     weak var delegate: PhotonActionSheetViewDelegate?
 
@@ -221,7 +220,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
             statusIcon.removeFromSuperview()
         }
 
-        setupBadgeOverlay(action: item)
         addSubBorder(action: item)
         applyTheme(theme: theme)
     }
@@ -252,7 +250,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         verticalBorder.backgroundColor = colors.layer4
         bottomBorder.backgroundColor = colors.layer4
 
-        badgeOverlay?.badge.tintBackground(color: colors.layer1)
         disclosureIndicator.tintColor = colors.iconSecondary
 
         let iconTint: UIColor? = item?.needsIconActionableTint ?? false ? colors.iconAccentYellow : tintColor
@@ -380,17 +377,5 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
                 stackView.addArrangedSubview(statusIcon)
             }
         }
-    }
-
-    private func setupBadgeOverlay(action: SingleActionViewModel) {
-        guard let name = action.badgeIconName,
-              action.isEnabled,
-              let parent = statusIcon.superview
-        else { return }
-
-        badgeOverlay = BadgeWithBackdrop(imageName: name)
-        badgeOverlay?.add(toParent: parent)
-        badgeOverlay?.layout(onButton: statusIcon)
-        badgeOverlay?.show(true)
     }
 }

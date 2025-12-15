@@ -50,7 +50,7 @@ class MainThreadThrottlerTests: XCTestCase {
     func testSecondCallAfterDelayThresholdCallsBothClosures() {
         let threshold = 0.5
         let step: Double = (threshold / 2.0)
-        let throttler = createSubject(timeout: threshold)
+        nonisolated(unsafe) let throttler = createSubject(timeout: threshold)
 
         // Send one call to throttler
         let executedFirstThrottle = expectation(description: "First throttle completion fired")

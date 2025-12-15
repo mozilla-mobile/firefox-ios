@@ -107,7 +107,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     @MainActor
-    func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController_whenToolbarRefactorEnabled() {
+    func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController() {
         let subject = createSubject()
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
         let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
@@ -120,7 +120,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
 
         XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
-        XCTAssertTrue(subject.tabToolbar.privateModeBadge.badge.isHidden)
     }
 
     func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {

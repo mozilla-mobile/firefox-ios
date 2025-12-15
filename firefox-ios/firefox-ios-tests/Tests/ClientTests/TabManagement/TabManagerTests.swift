@@ -25,10 +25,10 @@ class TabManagerTests: XCTestCase {
     /// 9 Sep 2001 8:00 pm GMT + 0
     let testDate = Date(timeIntervalSince1970: 1_000_065_600)
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         // For this test suite, use a consistent window UUID for all test cases
         let uuid: WindowUUID = .XCTestDefaultUUID
@@ -41,12 +41,12 @@ class TabManagerTests: XCTestCase {
         setIsDeeplinkOptimizationRefactorEnabled(false)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         mockDiskImageStore = nil
         mockTabStore = nil
         mockSessionStore = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     @MainActor

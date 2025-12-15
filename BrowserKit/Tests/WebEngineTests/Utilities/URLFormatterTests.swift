@@ -35,21 +35,7 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertEqual(result?.absoluteString, initialUrl)
     }
 
-    func testGetURLGivenAboutConfigSpaceURLThenValidEscapedURL_foriOS17AndBelow() throws {
-        if #available(iOS 17, *) {
-            throw XCTSkip("Skipping since test does not apply for iOS 17 and above versions")
-        } else {
-            let initialUrl = "about:%20config"
-            let subject = DefaultURLFormatter()
-            let result = subject.getURL(entry: initialUrl)
-            XCTAssertEqual(result?.absoluteString, "about:%20config")
-        }
-    }
-
-    func testGetURLGivenAboutConfigSpaceURLThenValidEscapedURL_foriOS17AndAbove() throws {
-        guard #available(iOS 17, *) else {
-            throw XCTSkip("Skipping unless iOS 17 and above versions")
-        }
+    func testGetURLGivenAboutConfigSpaceURLThenValidEscapedURL() throws {
         let initialUrl = "about: config"
         let subject = DefaultURLFormatter()
         let result = subject.getURL(entry: initialUrl)

@@ -6,7 +6,7 @@ import Foundation
 @testable import Storage
 import XCTest
 
-class MockFiles: FileAccessor {
+class MockFiles: FileAccessor, @unchecked Sendable {
     var rootPath: String
 
     init() {

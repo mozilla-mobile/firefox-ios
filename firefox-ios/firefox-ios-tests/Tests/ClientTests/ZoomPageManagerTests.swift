@@ -13,18 +13,18 @@ class ZoomPageManagerTests: XCTestCase {
     private var zoomStore: MockZoomStore!
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.profile = MockProfile()
         self.zoomStore = MockZoomStore()
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         self.profile = nil
         self.zoomStore = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     @MainActor

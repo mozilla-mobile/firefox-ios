@@ -134,23 +134,27 @@ class BrowserViewController: UIViewController,
     // MARK: Lazy loading UI elements
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
-    private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
+    private lazy var statusBarOverlay: StatusBarOverlay = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.statusBarOverlay
+    }
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
-        AddressToolbarContainer(
-            isSwipingTabsEnabled: self.isSwipingTabsEnabled,
-            isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled
-        )
+        AddressToolbarContainer(isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled,
+                                toolbarHelper: self.toolbarHelper)
     })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
-    private(set) lazy var header: BaseAlphaStackView = .build { _ in }
+    private(set) lazy var header: BaseAlphaStackView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.headerContainer
+    }
 
     // OverKeyboardContainer stack view contains
     // the bottom reader mode, the bottom url bar and the ZoomPageBar
-    private(set) lazy var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
+    private(set) lazy var overKeyboardContainer: BaseAlphaStackView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.overKeyboardContainer
+    }
 
     // Constraints used to show/hide toolbars
     var headerTopConstraint: Constraint?
@@ -172,16 +176,21 @@ class BrowserViewController: UIViewController,
     }
 
     // BottomContainer stack view contains toolbar
-    lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
+    lazy var bottomContainer: BaseAlphaStackView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.bottomContainer
+    }
 
     // Alert content that appears on top of the content
     // ex: Find In Page, SnackBar from LoginsHelper
     private(set) lazy var bottomContentStackView: BaseAlphaStackView = .build { stackview in
         stackview.isClearBackground = true
+        stackview.accessibilityIdentifier = AccessibilityIdentifiers.Browser.bottomContentStackView
     }
 
     // The content container contains the homepage, error page or webview. Embedded by the coordinator.
-    private(set) lazy var contentContainer: ContentContainer = .build { _ in }
+    private(set) lazy var contentContainer: ContentContainer = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.contentContainer
+    }
 
     // A view for displaying a preview of the web page.
     private lazy var webPagePreview: TabWebViewPreview = .build {
@@ -209,7 +218,6 @@ class BrowserViewController: UIViewController,
     private lazy var navigationToolbarContainer: NavigationToolbarContainer = .build { view in
         view.windowUUID = self.windowUUID
     }
-    private(set) lazy var tabToolbar = TabToolbar()
 
     private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
@@ -673,7 +681,6 @@ class BrowserViewController: UIViewController,
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         updateHeaderConstraints()
-        tabToolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
@@ -1057,8 +1064,6 @@ class BrowserViewController: UIViewController,
         if state.reloadWebView {
             updateContentInHomePanel(state.browserViewType)
         }
-
-        setupMiddleButtonStatus(isLoading: false)
 
         if let toast = state.toast {
             self.showToastType(toast: toast)
@@ -1692,7 +1697,6 @@ class BrowserViewController: UIViewController,
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.applyThemeUpdatesToWindows()
         }
-        setupMiddleButtonStatus(isLoading: false)
 
         // Everything works fine on iPad orientation switch (because CFR remains anchored to the same button),
         // so only necessary to dismiss when vertical size class changes
@@ -1875,7 +1879,7 @@ class BrowserViewController: UIViewController,
     private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
-        } else if !tabToolbar.isHidden {
+        } else if !navigationToolbarContainer.isHidden {
             remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
             remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         } else {
@@ -2399,36 +2403,6 @@ class BrowserViewController: UIViewController,
         return false
     }
 
-    func setupMiddleButtonStatus(isLoading: Bool) {
-        // Setting the default state to search to account for no tab or starting page tab
-        // `state` will be modified later if needed
-        let state: MiddleButtonState = .search
-
-        // No tab
-        guard let tab = tabManager.selectedTab else {
-            handleMiddleButtonState(state)
-            return
-        }
-
-        // Tab with starting page
-        if tab.isURLStartingPage {
-            handleMiddleButtonState(state)
-            return
-        }
-
-        handleMiddleButtonState(.home)
-    }
-
-    private func handleMiddleButtonState(_ state: MiddleButtonState) {
-        let showDataClearanceFlow = browserViewControllerState?.browserViewType == .privateHomepage
-        let showFireButton = featureFlags.isFeatureEnabled(
-            .feltPrivacyFeltDeletion,
-            checking: .buildOnly
-        ) && showDataClearanceFlow
-        guard !showFireButton else { return }
-        resetDataClearanceCFRTimer()
-    }
-
     private func updateToolbarAnimationStateIfNeeded() {
         let shouldAnimate = store.state.screenState(
             ToolbarState.self,
@@ -2512,10 +2486,8 @@ class BrowserViewController: UIViewController,
                 webView.estimatedProgress
             }
             addressToolbarContainer.updateProgressBar(progress: progressValue)
-            setupMiddleButtonStatus(isLoading: true)
         } else {
             addressToolbarContainer.hideProgressBar()
-            setupMiddleButtonStatus(isLoading: false)
         }
     }
 
@@ -2524,7 +2496,6 @@ class BrowserViewController: UIViewController,
         if let doc = tab.temporaryDocument {
             loading = doc.isDownloading
         }
-        setupMiddleButtonStatus(isLoading: loading)
 
         let action = ToolbarAction(
             isLoading: loading,
@@ -3168,10 +3139,10 @@ class BrowserViewController: UIViewController,
         var actions: [[PhotonRowActions]] = []
         let useToolbarRefactorLongPressActions = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
         if useToolbarRefactorLongPressActions {
-            actions = getTabToolbarRefactorLongPressActions()
+            actions = getNavigationToolbarRefactorLongPressActions()
         } else {
-            actions.append(getTabToolbarLongPressActionsForModeSwitching())
-            actions.append(getMoreTabToolbarLongPressActions())
+            actions.append(getNavigationToolbarLongPressActionsForModeSwitching())
+            actions.append(getMoreNavigationToolbarLongPressActions())
         }
 
         let viewModel = PhotonActionSheetViewModel(
@@ -3917,7 +3888,6 @@ class BrowserViewController: UIViewController,
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         documentLoadingView?.applyTheme(theme: currentTheme)
-        tabToolbar.applyTheme(theme: currentTheme)
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
@@ -4150,9 +4120,7 @@ class BrowserViewController: UIViewController,
             }
         }
         destroySearchController()
-        if !isToolbarTranslucencyRefactorEnabled {
-            updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
-        }
+        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
     }
@@ -4769,7 +4737,6 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateFindInPageVisibility(isVisible: false, tab: previousTab)
-        setupMiddleButtonStatus(isLoading: selectedTab.isLoading)
         dispatchBackForwardToolbarAction(canGoBack: selectedTab.canGoBack,
                                          canGoForward: selectedTab.canGoForward,
                                          windowUUID: windowUUID)
@@ -4911,7 +4878,6 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             updateToolbarTabCount(count)
-            topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
 

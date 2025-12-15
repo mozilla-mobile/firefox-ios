@@ -7,24 +7,25 @@ import MozillaAppServices
 @testable import Client
 
 final class DefaultBookmarksSaverTests: XCTestCase {
-    var mockProfile: MockProfile!
     let rootFolderGUID = BookmarkRoots.MobileFolderGUID
     let testBookmark = Bookmark(title: "test", url: "https://www.test.com")
     var testBookmarkGUID: Guid?
     // the guid is empty since it is assigned by the system
     let testFolder = Folder(title: "test", guid: "", indentation: 0)
     var testFolderGUID: Guid?
+    var helper: BookmarksSaverTestsHelper!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        let mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
-        testBookmarkGUID = await addBookmark(title: testBookmark.title, url: testBookmark.url)
-        testFolderGUID = await addFolder(title: testFolder.title)
+        helper = BookmarksSaverTestsHelper(mockProfile: mockProfile, rootFolderGUID: rootFolderGUID)
+        testBookmarkGUID = await helper.addBookmark(title: testBookmark.title, url: testBookmark.url)
+        testFolderGUID = await helper.addFolder(title: testFolder.title)
     }
 
     override func tearDown() {
-        mockProfile = nil
+        helper = nil
         testBookmarkGUID = nil
         testFolderGUID = nil
         super.tearDown()
@@ -45,7 +46,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
             return await subject.save(bookmark: bookmark, parentFolderGUID: rootFolderGUID)
         }
         let addedNode = try await unwrapAsync {
-            return await readNode(url: bookmark.url) as? BookmarkItemData
+            return await helper.readNode(url: bookmark.url) as? BookmarkItemData
         }
 
         XCTAssertNotNil(try? result.get())
@@ -55,10 +56,11 @@ final class DefaultBookmarksSaverTests: XCTestCase {
     }
 
     func testSave_updateAlreadyPresentBookmark() async throws {
+        let testBookmark = Bookmark(title: "test", url: "https://www.test.com")
         let subject = createSubject()
 
         let previouslyAddedBookmark = try await unwrapAsync {
-            return await readNode(url: testBookmark.url) as? BookmarkItemData
+            return await helper.readNode(url: testBookmark.url) as? BookmarkItemData
         }
         let newTitle = "new title"
         let newUrl = "https://www.newurl.com/"
@@ -70,7 +72,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         }
 
         let readModfiedBookmark = try await unwrapAsync {
-            return await readNode(guid: previouslyAddedBookmark.guid) as? BookmarkItemData
+            return await helper.readNode(guid: previouslyAddedBookmark.guid) as? BookmarkItemData
         }
 
         switch result {
@@ -99,10 +101,10 @@ final class DefaultBookmarksSaverTests: XCTestCase {
             return await subject.save(bookmark: folder, parentFolderGUID: rootFolderGUID)
         }
         let addedFolder = try await unwrapAsync {
-            let rootFolder = await readNode(guid: rootFolderGUID) as? BookmarkFolderData
+            let rootFolder = await helper.readNode(guid: rootFolderGUID) as? BookmarkFolderData
 
             for childGUID in rootFolder?.childGUIDs ?? [] {
-                let childNode = await readNode(guid: childGUID) as? BookmarkFolderData
+                let childNode = await helper.readNode(guid: childGUID) as? BookmarkFolderData
                 if let childNode, childNode.title == folder.title {
                     return childNode
                 }
@@ -151,7 +153,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         }
         let resultingGUID = try XCTUnwrap(tempGUID)
 
-        let tempFolder = await readNode(guid: resultingGUID) as? BookmarkFolderData
+        let tempFolder = await helper.readNode(guid: resultingGUID) as? BookmarkFolderData
         let addedFolder = try XCTUnwrap(tempFolder)
 
         XCTAssertNotNil(addedFolder)
@@ -178,7 +180,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         }
         let resultingGUID = try XCTUnwrap(tempGUID)
 
-        let tempBookmark = await readNode(guid: resultingGUID) as? BookmarkItemData
+        let tempBookmark = await helper.readNode(guid: resultingGUID) as? BookmarkItemData
         let addedBookmark = try XCTUnwrap(tempBookmark)
 
         XCTAssertNotNil(addedBookmark)
@@ -189,13 +191,15 @@ final class DefaultBookmarksSaverTests: XCTestCase {
     }
 
     func testSave_updatesAlreadyPresentFolder() async throws {
+        // the guid is empty since it is assigned by the system
+        let testFolder = Folder(title: "test", guid: "", indentation: 0)
         let subject = createSubject()
 
         let previouslyAddedFolder = try await unwrapAsync {
-            let rootFolder = await readNode(guid: rootFolderGUID) as? BookmarkFolderData
+            let rootFolder = await helper.readNode(guid: rootFolderGUID) as? BookmarkFolderData
 
             for childGUID in rootFolder?.childGUIDs ?? [] {
-                let childNode = await readNode(guid: childGUID) as? BookmarkFolderData
+                let childNode = await helper.readNode(guid: childGUID) as? BookmarkFolderData
                 if let childNode, childNode.title == testFolder.title {
                     return childNode
                 }
@@ -211,7 +215,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         }
 
         let readModfiedBookmark = try await unwrapAsync {
-            return await readNode(guid: modifiedFolder.guid) as? BookmarkFolderData
+            return await helper.readNode(guid: modifiedFolder.guid) as? BookmarkFolderData
         }
 
         switch result {
@@ -246,24 +250,31 @@ final class DefaultBookmarksSaverTests: XCTestCase {
 
     func testCreateBookmark_createsNewBookmark() async throws {
         let bookmarkUrl = "https://www.mozilla.com/"
-        let bookmarTitle =  "testTitle"
+        let bookmarkTitle =  "testTitle"
 
         let subject = createSubject()
 
-        await subject.createBookmark(url: bookmarkUrl, title: bookmarTitle, position: 0)
+        await subject.createBookmark(url: bookmarkUrl, title: bookmarkTitle, position: 0)
 
         let addedNode = try await unwrapAsync {
-            return await readNode(url: bookmarkUrl) as? BookmarkItemData
+            return await helper.readNode(url: bookmarkUrl) as? BookmarkItemData
         }
 
         XCTAssertEqual(addedNode.url, bookmarkUrl)
-        XCTAssertEqual(addedNode.title, bookmarTitle)
+        XCTAssertEqual(addedNode.title, bookmarkTitle)
         XCTAssertEqual(addedNode.parentGUID, rootFolderGUID)
     }
 
-    // MARK: - Utility
+    private func createSubject() -> DefaultBookmarksSaver {
+        return DefaultBookmarksSaver(profile: helper.mockProfile)
+    }
+}
 
-    private func addFolder(title: String, position: Int = 0, parentFolderGUID: String? = nil) async -> Guid? {
+struct BookmarksSaverTestsHelper {
+    let mockProfile: MockProfile!
+    let rootFolderGUID: String!
+
+    func addFolder(title: String, position: Int = 0, parentFolderGUID: String? = nil) async -> Guid? {
         return await withCheckedContinuation { continuation in
             mockProfile.places.createFolder(parentGUID: parentFolderGUID ?? rootFolderGUID,
                                             title: title,
@@ -277,7 +288,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         }
     }
 
-    private func addBookmark(title: String, url: String, position: Int = 0, parentFolderGUID: String? = nil) async -> Guid? {
+    func addBookmark(title: String, url: String, position: Int = 0, parentFolderGUID: String? = nil) async -> Guid? {
         return await withCheckedContinuation { continuation in
             mockProfile.places.createBookmark(parentGUID: parentFolderGUID ?? rootFolderGUID,
                                               url: url,
@@ -292,7 +303,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         }
     }
 
-    private func readNode(guid: String) async -> BookmarkNodeData? {
+    func readNode(guid: String) async -> BookmarkNodeData? {
         return await withCheckedContinuation { continuation in
             mockProfile.places.getBookmark(guid: guid).uponQueue(.main) { data in
                 let result: BookmarkNodeData?
@@ -309,7 +320,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
     }
 
     /// Returns the first bookmark with the provided url
-    private func readNode(url: String) async -> BookmarkNodeData? {
+    func readNode(url: String) async -> BookmarkNodeData? {
         return await withCheckedContinuation { continuation in
             mockProfile.places.getBookmarksWithURL(url: url).uponQueue(.main) { data in
                 let result: BookmarkNodeData?
@@ -323,9 +334,5 @@ final class DefaultBookmarksSaverTests: XCTestCase {
                 }
             }
         }
-    }
-
-    private func createSubject() -> DefaultBookmarksSaver {
-        return DefaultBookmarksSaver(profile: mockProfile)
     }
 }

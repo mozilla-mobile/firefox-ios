@@ -12,17 +12,17 @@ import XCTest
 final class JumpBackInSectionStateTests: XCTestCase {
     var mockProfile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func tests_initialState_returnsExpectedState() {

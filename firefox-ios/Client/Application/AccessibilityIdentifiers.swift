@@ -29,7 +29,6 @@ struct AccessibilityIdentifiers {
         static let addNewTabButton = "TabToolbar.addNewTabButton"
         static let searchButton = "TabToolbar.searchButton"
         static let stopButton = "TabToolbar.stopButton"
-        static let bookmarksButton = "TabToolbar.libraryButton"
         static let translateButton = "TabToolbar.translateButton"
         static let translateLoadingButton = "TabToolbar.translateLoadingButton"
         static let translateActiveButton = "TabToolbar.translateActiveButton"
@@ -58,15 +57,20 @@ struct AccessibilityIdentifiers {
             static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
-        }
-
-        struct ToolbarButtons {
-            static let qrCode = "Toolbar.QRCode.button"
+            static let leadingSkeleton = "AddressToolbar.leadingSkeleton"
+            static let trailingSkeleton = "AddressToolbar.trailingSkeleton"
         }
 
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
         }
+
+        static let overKeyboardContainer = "Browser.overKeyboardContainer"
+        static let headerContainer = "Browser.headerContainer"
+        static let bottomContainer = "Browser.bottomContainer"
+        static let bottomContentStackView = "Browser.bottomContentStackView"
+        static let contentContainer = "Browser.contentContainer"
+        static let statusBarOverlay = "Browser.statusBarOverlay"
     }
 
     struct ContextualHints {

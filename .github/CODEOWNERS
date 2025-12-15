@@ -9,10 +9,10 @@
 /firefox-ios/Client/Experiments/initial_experiments.json @afurlan-firefox @mozilla-mobile/fxios-eng
 /firefox-ios/Client/Assets/CC_Script @nbhasin2 @issammani
 /firefox-ios/Client/Assets/RemoteSettingsData/ @nbhasin2 @issammani @mattreaganmozilla
-/MozillaRustComponents/Package.swift @issammani
-/MozillaRustComponents/Package.resolved @issammani
-/MozillaRustComponents/Sources/FocusRustComponentsWrapper/Generated @issammani
-/MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated @issammani
+/MozillaRustComponents/Package.swift @issammani @mozilla-mobile/fxios-eng
+/MozillaRustComponents/Package.resolved @issammani @mozilla-mobile/fxios-eng
+/MozillaRustComponents/Sources/FocusRustComponentsWrapper/Generated @issammani @mozilla-mobile/fxios-eng
+/MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated @issammani @mozilla-mobile/fxios-eng
 
 # When someone opens a pull request that only modifies those folders / files, 
 # only @mozilla-mobile/fxios-automation and not the global
