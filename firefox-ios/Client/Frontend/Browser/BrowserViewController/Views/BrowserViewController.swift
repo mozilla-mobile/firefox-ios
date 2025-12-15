@@ -526,6 +526,9 @@ class BrowserViewController: UIViewController,
 
     var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
+    private var shouldWaitForTabsToBeRestored = false
+    private var searchInPrivateTab = false
+
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         if let existingHandler = keyboardPressesHandlerValue as? KeyboardPressesHandler {
@@ -3319,7 +3322,11 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            guard let selectedTab = tabManager.selectedTab else { return }
+            self.searchInPrivateTab = isPrivate
+            guard let selectedTab = tabManager.selectedTab else {
+                shouldWaitForTabsToBeRestored = true
+                return
+            }
             if selectedTab.isPrivate == isPrivate, selectedTab.isFxHomeTab {
                 focusLocationTextField(forTab: selectedTab)
             } else {
@@ -4838,6 +4845,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        handleSearchFromWidget(tabManager)
         updateTabCountUsingTabManager(tabManager)
     }
 
@@ -4883,6 +4891,21 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerUpdateCount() {
         updateTabCountUsingTabManager(self.tabManager)
+    }
+
+    private func handleSearchFromWidget(_ tabManager: TabManager) {
+        if shouldWaitForTabsToBeRestored {
+            guard let selectedTab = tabManager.selectedTab else { return }
+            if selectedTab.isPrivate == searchInPrivateTab, selectedTab.isFxHomeTab || selectedTab.url == nil {
+                focusLocationTextField(forTab: selectedTab)
+            } else {
+                openBlankNewTab(
+                    focusLocationField: true,
+                    isPrivate: searchInPrivateTab
+                )
+            }
+            shouldWaitForTabsToBeRestored = false
+        }
     }
 
     private func updateToolbarTabCount(_ count: Int) {
