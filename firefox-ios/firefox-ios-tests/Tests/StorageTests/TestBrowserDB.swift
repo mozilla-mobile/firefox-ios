@@ -148,43 +148,37 @@ class TestBrowserDB: XCTestCase, @unchecked Sendable {
         XCTAssertEqual("foo.db", (listener.notification?.object as? String))
     }
 
-    @MainActor
-    func testConcurrentQueriesDealloc() async throws {
+    func testConcurrentQueriesDealloc() async {
         let expectation = self.expectation(description: "Got all DB results")
 
         let db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (id INTEGER PRIMARY KEY AUTOINCREMENT, bar TEXT)").succeeded()
 
-        /// We run with a detached Task because for some reason (probably because of our `@unchecked Sendables` in the
-        /// Deferred code), the compiler thinks these closures should run on the main thread (due to the test's
-        /// `@MainActor` annotation) even when they're explicitly placed on background queues.
-        Task.detached {
-            _ = db.withConnection { connection in
-                for i in 0..<1000 {
-                    let args: Args = ["bar \(i)"]
-                    try connection.executeChange(
-                        "INSERT INTO foo (bar) VALUES (?)",
-                        withArgs: args
-                    )
-                }
+        _ = db.withConnection { connection in
+            for i in 0..<1000 {
+                let args: Args = ["bar \(i)"]
+                try connection.executeChange(
+                    "INSERT INTO foo (bar) VALUES (?)",
+                    withArgs: args
+                )
+            }
+        }
+
+        let shortConcurrentQuery = db.runQueryConcurrently(
+            "SELECT * FROM foo LIMIT 1",
+            args: nil,
+            factory: Self.fooBarFactory
+        )
+
+        await self.trackForMemoryLeaks(shortConcurrentQuery)
+
+        _ = shortConcurrentQuery.bind { result -> Deferred<Maybe<Bool>> in
+            if result.successValue?.asArray() != nil {
+                expectation.fulfill()
+                return deferMaybe(true)
             }
 
-            let shortConcurrentQuery = db.runQueryConcurrently(
-                "SELECT * FROM foo LIMIT 1",
-                args: nil,
-                factory: Self.fooBarFactory
-            )
-
-            await self.trackForMemoryLeaks(shortConcurrentQuery)
-
-            _ = shortConcurrentQuery.bind { result -> Deferred<Maybe<Bool>> in
-                if result.successValue?.asArray() != nil {
-                    expectation.fulfill()
-                    return deferMaybe(true)
-                }
-
-                return deferMaybe(DatabaseError(description: "Unable to execute concurrent short-running query"))
-            }
+            return deferMaybe(DatabaseError(description: "Unable to execute concurrent short-running query"))
         }
 
         await fulfillment(of: [expectation], timeout: 3)
