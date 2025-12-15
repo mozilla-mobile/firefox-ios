@@ -76,7 +76,7 @@ share.open_in_firefox_extension.list:
     bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/31178
     data_reviews:
-    - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    - https://github.com/mozilla-mobile/firefox-ios/pull/31177
     notification_emails:
     - fx-ios-data-stewards@mozilla.com
     expires: "2026-06-01"
