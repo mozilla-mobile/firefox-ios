@@ -10,7 +10,8 @@ public final class AppConstants {
     || AppConstants.isRunningUITests
     || AppConstants.isRunningPerfTests
 
-    public static let useAppleIntelligence = !ProcessInfo.processInfo.arguments.contains(LaunchArguments.SkipAppleIntelligence)
+    public static let useAppleIntelligence =
+        !ProcessInfo.processInfo.arguments.contains(LaunchArguments.SkipAppleIntelligence)
     || !AppConstants.isRunningUITests
     || !AppConstants.isRunningPerfTests
 
