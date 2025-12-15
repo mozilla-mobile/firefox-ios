@@ -3,7 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// To keep the integration of unified ads simple with minimal changes, we are converting `UnifiedTile`s
-/// into the old API Contile object. This avoid logic changes inside the `TopSitesManager`
+/// into the old API Contile object. This avoid logic changes inside the `TopSitesManager`.
+/// We'll remove this with https://mozilla-hub.atlassian.net/browse/FXIOS-14455
 struct UnifiedAdsConverter {
     static func convert(unifiedTiles: [UnifiedTile]) -> [Contile] {
         return unifiedTiles.enumerated().map { (index, tile) in
