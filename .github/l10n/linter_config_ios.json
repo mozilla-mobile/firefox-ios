@@ -5,9 +5,7 @@
     },
     "quotes": {
         "enabled": true,
-        "exclusions": [
-            "firefox-ios.xliff:Settings.Studies.Message.v136"
-        ]
+        "exclusions": []
     },
     "placeables": {
         "enabled": true,
