@@ -41,7 +41,7 @@ struct AppleIntelligenceUtil {
 
     @available(iOS 26, *)
     private func checkAppleIntelligenceAvailability(with model: LanguageModelProtocol) -> Bool {
-        if AppConstants.useAppleIntelligence {
+        if !AppConstants.useAppleIntelligence {
             return false
         } else {
             return model.isAvailable

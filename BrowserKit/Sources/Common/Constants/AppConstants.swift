@@ -12,8 +12,6 @@ public final class AppConstants {
 
     public static let useAppleIntelligence =
         !ProcessInfo.processInfo.arguments.contains(LaunchArguments.SkipAppleIntelligence)
-    || !AppConstants.isRunningUITests
-    || !AppConstants.isRunningPerfTests
 
     // Unit tests only
     public static let isRunningUnitTest = NSClassFromString("XCTestCase") != nil
