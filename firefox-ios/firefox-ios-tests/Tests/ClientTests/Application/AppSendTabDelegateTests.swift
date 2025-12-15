@@ -10,16 +10,16 @@ final class AppFxACommandsTests: XCTestCase {
     private var applicationStateProvider: MockApplicationStateProvider!
     private var applicationHelper: MockApplicationHelper!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.applicationStateProvider = MockApplicationStateProvider()
         self.applicationHelper = MockApplicationHelper()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         self.applicationStateProvider = nil
         self.applicationHelper = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testOpenSendTabs_inactiveState_doesntCallDeeplink() {
