@@ -177,33 +177,34 @@ workflows:
         - content: |
             export PATH="${PATH#"$HOME/.bitrise-xcelerate/bin:"}"
             envman add --key PATH --value "$PATH"
-    # - script@1.2.1:
-    #     title: Override xctestrun file to UnitTests
-    #     inputs:
-    #     - content: |-
-    #         #!/usr/bin/env bash
-    #         set -euxo pipefail
+    - script@1.2.1:
+        title: Override xctestrun file to UnitTests
+         inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+            # Point to the Unit tests plan instead of Accessibility
+            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun"
+            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.2-arm64.xctestrun"
 
-    #         # Point to the Unit tests plan instead of Accessibility
-    #         UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun"
-    #         SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.2-arm64.xctestrun"
+            if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
+              echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
+              exit 1
+            fi
 
-    #         if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
-    #           echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
-    #           exit 1
-    #         fi
+            echo "Found UnitTest .xctestrun: $UNIT_TESTS_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
 
-    #         echo "Found UnitTest .xctestrun: $UNIT_TESTS_XCTESTRUN"
-    #         envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
-    #         envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
-
-    # - xcode-test-without-building@0.5.1:
-    #     timeout: 1200
-    #     inputs:
-    #     - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
-    #     - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-    #     - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun
-    #     - maximum_test_repetitions: 2
+    - xcode-test-without-building@0.5.1:
+        timeout: 1200
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun
+        - only_testing: |-
+            MenuKitTests/testMenuElement_initializesCorrectly
+        - maximum_test_repetitions: 2
     - xcode-test-shard-calculation@0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
