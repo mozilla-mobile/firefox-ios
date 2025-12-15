@@ -27,4 +27,3 @@ struct ActionExtensionTelemetry {
     }
 }
 
-
