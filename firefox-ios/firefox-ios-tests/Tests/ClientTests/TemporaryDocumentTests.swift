@@ -5,7 +5,7 @@
 import XCTest
 @testable import Client
 
-final class TemporaryDocumentTests: XCTestCase {
+final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
     private let filename = "TempPDF.pdf"
     private let request = URLRequest(url: URL(string: "https://example.com")!)
     private let mimeTypePDF = "application/pdf"
