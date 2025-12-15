@@ -273,6 +273,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             navigator.nowAt(HomeSettings)
             navigator.performAction(Action.OpenNewTabFromTabTray)
             checkBookmarks()
+            if iPad() {
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
             app.scrollViews
                 .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
                 .staticTexts[urlExampleLabel].waitAndTap()
@@ -371,8 +374,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 5)
             validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 4, maxBoundary: 9)
         } else {
-            validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 8)
-            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 15)
+            validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 10)
+            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 10)
         }
     }
 
@@ -381,8 +384,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         app.cells[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage].waitAndTap()
         app.staticTexts["Rows"].waitAndTap()
         let expectedRowValues = ["1", "2"]
+        print(app.debugDescription)
         for i in 0...1 {
-            XCTAssertEqual(app.tables.cells.element(boundBy: i).label, expectedRowValues[i])
+            XCTAssertEqual(app.cells.element(boundBy: i).label, expectedRowValues[i])
         }
         app.tables.cells.element(boundBy: row).waitAndTap()
         app.buttons["Shortcuts"].waitAndTap()

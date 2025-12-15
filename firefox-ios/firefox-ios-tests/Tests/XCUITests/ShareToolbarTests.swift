@@ -167,7 +167,9 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     private func validateMarkupTool() {
         // The Markup tool opens
         if #available(iOS 26, *) {
-            app.navigationBars.buttons["More"].waitAndTap()
+            if iPad() {
+                app.navigationBars.buttons["More"].waitAndTap()
+            }
             mozWaitForElementToExist(app.collectionViews.buttons["Markup"])
             XCTAssertTrue(app.collectionViews.buttons["Markup"].isSelected)
         } else {

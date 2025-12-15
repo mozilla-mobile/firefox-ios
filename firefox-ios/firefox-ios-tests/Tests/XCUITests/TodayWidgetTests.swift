@@ -583,7 +583,7 @@ class TodayWidgetTests: BaseTestCase {
         }
         // Add Firefox Widget
         if iPad() {
-            coordinate.press(forDuration: 3)
+            coordinate.press(forDuration: 5)
         }
         addWidget(widgetName: "Fennec")
         checkFirefoxAvailablesWidgets()

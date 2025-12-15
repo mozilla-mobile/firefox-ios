@@ -199,6 +199,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.tables.buttons.staticTexts["Mark as  Read"])
         app.tables["ReadingTable"].buttons.element(boundBy: 1).waitAndTap()
         // iOS 26: Once we remove the item, the item is gone.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31283
         if #unavailable(iOS 26) {
             savedToReadingList.swipeLeft()
             mozWaitForElementToExist(app.tables.buttons.staticTexts["Mark as  Unread"])
