@@ -59,5 +59,3 @@ final class ActionExtensionTelemetryTests: XCTestCase {
         XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
     }
 }
-
-

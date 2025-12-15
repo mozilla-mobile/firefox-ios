@@ -26,5 +26,3 @@ struct ActionExtensionTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtension.textShared)
     }
 }
-
-
