@@ -1973,7 +1973,7 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-  
+
 # iOS 14 widget metrics
 # m: medium, s: small, l: large
 widget:
@@ -2627,7 +2627,6 @@ adjust:
         type: string
     send_in_pings:
       - first-session
-      - metrics
       - events
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11089
