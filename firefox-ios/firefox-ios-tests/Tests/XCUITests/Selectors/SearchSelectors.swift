@@ -47,6 +47,6 @@ struct SearchSelectors: SearchSelectorsSet {
     }
 
     var all: [Selector] {
-        [SEARCH_TABLE]
+        [SEARCH_TABLE, RECENT_SEARCHES_SECTION_TITLE]
     }
 }
