@@ -345,7 +345,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             return
         }
 
-        let shareExtensionTelemetry = ShareExtensionTelemetry(extensionSource: .shareExtension)
+        let shareExtensionTelemetry = ShareExtensionTelemetry()
 
         // Process each event and record it in Glean
         for event in extensionEvents {

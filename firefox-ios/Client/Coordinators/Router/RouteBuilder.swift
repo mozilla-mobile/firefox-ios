@@ -13,14 +13,14 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
     private var isPrivate = false
     private var prefs: Prefs?
     private var mainQueue: DispatchQueueInterface
-    private let actionExtensionTelemetry: ShareExtensionTelemetry
+    private let actionExtensionTelemetry: ActionExtensionTelemetry
     private let shareExtensionTelemetry: ShareExtensionTelemetry
     var shouldOpenNewTab = true
 
     init(
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
-        actionExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry(extensionSource: .actionExtension),
-        shareExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry(extensionSource: .shareExtension)
+        actionExtensionTelemetry: ActionExtensionTelemetry = ActionExtensionTelemetry(),
+        shareExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry()
     ) {
         self.mainQueue = mainQueue
         self.actionExtensionTelemetry = actionExtensionTelemetry

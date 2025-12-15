@@ -14,6 +14,7 @@ $schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 $tags:
   - Share
+  - OpenInFirefoxActionExtension
 
 ###############################################################################
 # Documentation
@@ -21,11 +22,43 @@ $tags:
 
 # Add your new metrics and/or events here.
 
+share.open_in_firefox_extension:
+  url_shared:
+    type: event
+    description: |
+      Recorded when the user shares a URL from the "Open in Firefox" Action Extension.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - OpenInFirefoxActionExtension
+  text_shared:
+    type: event
+    description: |
+      Recorded when the user shares text from the "Open in Firefox" Action Extension.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30797
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30796
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - Share
+        - OpenInFirefoxActionExtension
+
 share.open_in_firefox_extension.list:
   option_selected:
     type: event
     description: |
-      Recorded when the user selects an option from the Share Extension.
+      Recorded when the user selects an option from the legacy Share Extension view controller.
     extra_keys:
       option:
         type: string
@@ -39,8 +72,7 @@ share.open_in_firefox_extension.list:
       extension_source:
         type: string
         description: |
-          The source of the extension event. Either "action-extension" for the new Action Extension
-          or "share-extension" for the legacy Share Extension.
+          The source of the extension event. Always "share-extension" for the legacy Share Extension.
     bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/30797
     data_reviews:

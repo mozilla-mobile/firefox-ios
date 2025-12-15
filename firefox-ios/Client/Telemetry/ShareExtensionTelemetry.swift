@@ -5,12 +5,6 @@
 import Foundation
 import Glean
 
-/// Represents the source of an extension telemetry event
-enum ExtensionSource: String {
-    case actionExtension = "action-extension"
-    case shareExtension = "share-extension"
-}
-
 /// Represents the option selected in the Share Extension
 enum ShareExtensionOption: String {
     case openInFirefox = "open_in_firefox"
@@ -20,36 +14,31 @@ enum ShareExtensionOption: String {
     case sendToDevice = "send_to_device"
 }
 
-/// Telemetry for the "Open in Firefox" extension, supporting both Action Extension and Share Extension
+/// Telemetry for the legacy "Open in Firefox" Share Extension
+/// This handles telemetry from the legacy Share Extension view controller
 struct ShareExtensionTelemetry {
     private let gleanWrapper: GleanWrapper
-    private let extensionSource: ExtensionSource
+    private static let extensionSource = "share-extension"
 
-    /// Initializes ShareExtensionTelemetry with a specific extension source
-    /// - Parameters:
-    ///   - extensionSource: The source of the extension event
-    ///   - gleanWrapper: The Glean wrapper for recording events
-    init(
-        extensionSource: ExtensionSource,
-        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
-    ) {
-        self.extensionSource = extensionSource
+    /// Initializes ShareExtensionTelemetry
+    /// - Parameter gleanWrapper: The Glean wrapper for recording events
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
 
-    /// Records when a user shares a URL from the extension
+    /// Records when a user shares a URL from the Share Extension
     func shareURL() {
         let extra = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra(
-            extensionSource: extensionSource.rawValue,
+            extensionSource: Self.extensionSource,
             option: ShareExtensionOption.openInFirefox.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected, extras: extra)
     }
 
-    /// Records when a user shares text from the extension
+    /// Records when a user shares text from the Share Extension
     func shareText() {
         let extra = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra(
-            extensionSource: extensionSource.rawValue,
+            extensionSource: Self.extensionSource,
             option: ShareExtensionOption.openInFirefox.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected, extras: extra)
@@ -58,7 +47,7 @@ struct ShareExtensionTelemetry {
     /// Records when a user loads a page in the background from the Share Extension
     func loadInBackground() {
         let extra = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra(
-            extensionSource: extensionSource.rawValue,
+            extensionSource: Self.extensionSource,
             option: ShareExtensionOption.loadInBackground.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected, extras: extra)
@@ -67,7 +56,7 @@ struct ShareExtensionTelemetry {
     /// Records when a user bookmarks a page from the Share Extension
     func bookmarkThisPage() {
         let extra = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra(
-            extensionSource: extensionSource.rawValue,
+            extensionSource: Self.extensionSource,
             option: ShareExtensionOption.bookmarkThisPage.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected, extras: extra)
@@ -76,7 +65,7 @@ struct ShareExtensionTelemetry {
     /// Records when a user adds a page to the reading list from the Share Extension
     func addToReadingList() {
         let extra = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra(
-            extensionSource: extensionSource.rawValue,
+            extensionSource: Self.extensionSource,
             option: ShareExtensionOption.addToReadingList.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected, extras: extra)
@@ -85,7 +74,7 @@ struct ShareExtensionTelemetry {
     /// Records when a user sends a tab to another device from the Share Extension
     func sendToDevice() {
         let extra = GleanMetrics.ShareOpenInFirefoxExtensionList.OptionSelectedExtra(
-            extensionSource: extensionSource.rawValue,
+            extensionSource: Self.extensionSource,
             option: ShareExtensionOption.sendToDevice.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ShareOpenInFirefoxExtensionList.optionSelected, extras: extra)
