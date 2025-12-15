@@ -4,6 +4,7 @@
 
 import XCTest
 import UniformTypeIdentifiers
+@testable import ActionExtensionKit
 
 final class FirefoxURLBuilderTests: XCTestCase {
     private var subject: FirefoxURLBuilder!

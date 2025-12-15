@@ -4,20 +4,20 @@
 
 import Foundation
 
-protocol FirefoxURLBuilding {
+public protocol FirefoxURLBuilding {
     func buildFirefoxURL(from shareItem: ExtractedShareItem) -> URL?
     func findURLInItems(_ items: [NSExtensionItem], completion: @escaping (Result<ActionShareItem, Error>) -> Void)
     func findTextInItems(_ items: [NSExtensionItem], completion: @escaping (Result<ExtractedShareItem, Error>) -> Void)
     func convertTextToURL(_ text: String) -> URL?
 }
 
-enum ShareExtensionError: Error {
+public enum ShareExtensionError: Error {
     case noURLFound
     case noTextFound
 }
 
-struct FirefoxURLBuilder: FirefoxURLBuilding {
-    let mozInternalScheme: String = {
+public struct FirefoxURLBuilder: FirefoxURLBuilding, Sendable {
+    public let mozInternalScheme: String = {
         guard let string = Bundle.main.object(
             forInfoDictionaryKey: "MozInternalURLScheme"
         ) as? String, !string.isEmpty else {
@@ -27,7 +27,9 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
         return string
     }()
 
-    func buildFirefoxURL(from shareItem: ExtractedShareItem) -> URL? {
+    public init() {}
+
+    public func buildFirefoxURL(from shareItem: ExtractedShareItem) -> URL? {
         let (content, isSearch) = switch shareItem {
         case .shareItem(let item):
             (item.url, false)
@@ -46,7 +48,7 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
         return URL(string: urlString)
     }
 
-    func findURLInItems(_ items: [NSExtensionItem], completion: @escaping (Result<ActionShareItem, Error>) -> Void) {
+    public func findURLInItems(_ items: [NSExtensionItem], completion: @escaping (Result<ActionShareItem, Error>) -> Void) {
         let group = DispatchGroup()
         // TODO: FXIOS-14296 These should be made actually threadsafe
         nonisolated(unsafe) var foundShareItem: ActionShareItem?
@@ -83,7 +85,10 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
         }
     }
 
-    func findTextInItems(_ items: [NSExtensionItem], completion: @escaping (Result<ExtractedShareItem, Error>) -> Void) {
+    public func findTextInItems(
+        _ items: [NSExtensionItem],
+        completion: @escaping (Result<ExtractedShareItem, Error>) -> Void
+    ) {
         let group = DispatchGroup()
         // TODO: FXIOS-14296 These should be made actually threadsafe
         nonisolated(unsafe) var foundItem: ExtractedShareItem?
@@ -123,7 +128,7 @@ struct FirefoxURLBuilder: FirefoxURLBuilding {
         }
     }
 
-    func convertTextToURL(_ text: String) -> URL? {
+    public func convertTextToURL(_ text: String) -> URL? {
         guard text.contains(".") else {
             return nil
         }
