@@ -270,8 +270,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         subject.newState(state: populatedState)
         subject.view.layoutIfNeeded()
 
-        subject.newState(state: populatedState)
-
         subject.viewDidAppear(false)
 
         XCTAssertTrue(mockThrottler.didCallThrottle)
@@ -324,8 +322,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         subject.newState(state: populatedState)
         subject.view.layoutIfNeeded()
 
-        subject.newState(state: populatedState)
-
         subject.scrollViewDidEndDecelerating(UIScrollView())
 
         XCTAssertTrue(mockThrottler.didCallThrottle)
@@ -376,13 +372,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
 
         let populatedState = await getPopulatedCollectionViewState(from: initialState)
-
-        // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
-        // reload the collectionView so that it's content is visible
-        subject.loadViewIfNeeded()
-        subject.newState(state: populatedState)
-        subject.view.layoutIfNeeded()
-
         let newState = HomepageState.reducer(
             populatedState,
             GeneralBrowserAction(
@@ -390,6 +379,12 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
                 actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
             )
         )
+
+        // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
+        // reload the collectionView so that it's content is visible
+        subject.loadViewIfNeeded()
+        subject.newState(state: newState)
+        subject.view.layoutIfNeeded()
 
         subject.newState(state: newState)
 
