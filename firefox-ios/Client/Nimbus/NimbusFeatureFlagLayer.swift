@@ -136,9 +136,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
-        case .unifiedAds:
-            return checkUnifiedAdsFeature(from: nimbus)
-
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
@@ -291,11 +288,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.enabled
-    }
-
-    private func checkUnifiedAdsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.unifiedAds.value()
         return config.enabled
     }
 

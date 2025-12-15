@@ -50,6 +50,5 @@ include:
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
-  - nimbus-features/unifiedAds.yaml
   - nimbus-features/updatedPasswordManager.yaml
   - nimbus-features/webEngineIntegrationRefactor.yaml

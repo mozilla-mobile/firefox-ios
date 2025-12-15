@@ -69,7 +69,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trackingProtectionRefactor
     case translation
     case trendingSearches
-    case unifiedAds
     case unifiedSearch
     case updatedPasswordManager
     case webEngineIntegrationRefactor
@@ -109,7 +108,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .trackingProtectionRefactor,
                 .translation,
                 .trendingSearches,
-                .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
                 .webEngineIntegrationRefactor:
@@ -201,7 +199,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .trackingProtectionRefactor,
                 .translation,
                 .trendingSearches,
-                .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
                 .webEngineIntegrationRefactor:

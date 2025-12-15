@@ -6,9 +6,9 @@ import Foundation
 import Glean
 import Storage
 
-// Telemetry for the Sponsored tiles located in the Top sites on the Firefox home page
-// Using Pings to send the telemetry events
-protocol SponsoredTileTelemetry {
+/// Telemetry for the Sponsored tiles located in the Top sites on the Firefox home page.
+/// Using Pings to send the telemetry events. This is sent alongside the Unified Ads MARS API telemetry.
+protocol SponsoredTileGleanTelemetry {
     func sendImpressionTelemetry(tileSite: Site,
                                  position: Int,
                                  isUnifiedAdsEnabled: Bool)
@@ -17,7 +17,7 @@ protocol SponsoredTileTelemetry {
                             isUnifiedAdsEnabled: Bool)
 }
 
-extension SponsoredTileTelemetry {
+extension SponsoredTileGleanTelemetry {
     func sendImpressionTelemetry(tileSite: Site,
                                  position: Int,
                                  isUnifiedAdsEnabled: Bool = false) {
@@ -31,7 +31,7 @@ extension SponsoredTileTelemetry {
     }
 }
 
-struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
+struct DefaultSponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry {
     // Source is only new tab at the moment, more source could be added later
     static let source = "newtab"
     private let gleanWrapper: GleanWrapper
@@ -55,7 +55,7 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
 
         let extra = GleanMetrics.TopSites.ContileImpressionExtra(
             position: Int32(position),
-            source: DefaultSponsoredTileTelemetry.source
+            source: DefaultSponsoredTileGleanTelemetry.source
         )
         gleanWrapper.recordEvent(for: GleanMetrics.TopSites.contileImpression, extras: extra)
 
@@ -89,7 +89,7 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
 
         let extra = GleanMetrics.TopSites.ContileClickExtra(
             position: Int32(position),
-            source: DefaultSponsoredTileTelemetry.source
+            source: DefaultSponsoredTileGleanTelemetry.source
         )
         gleanWrapper.recordEvent(for: GleanMetrics.TopSites.contileClick, extras: extra)
 

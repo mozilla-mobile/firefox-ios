@@ -6,7 +6,8 @@ import Common
 import Shared
 import Storage
 
-/// Send click and impression telemetry using the unified tile callbacks
+/// Send click and impression telemetry using the unified tile callbacks.
+/// This both sends the telemetry to Glean and MARS API.
 protocol UnifiedAdsCallbackTelemetry {
     func sendImpressionTelemetry(tileSite: Site, position: Int)
     func sendClickTelemetry(tileSite: Site, position: Int)
@@ -15,16 +16,16 @@ protocol UnifiedAdsCallbackTelemetry {
 final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     private let networking: ContileNetworking
     private let logger: Logger
-    private let sponsoredTileTelemetry: SponsoredTileTelemetry
+    private let sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry
 
     init(
         networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
         logger: Logger = DefaultLogger.shared,
-        sponsoredTileTelemetry: SponsoredTileTelemetry = DefaultSponsoredTileTelemetry()
+        sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry = DefaultSponsoredTileGleanTelemetry()
     ) {
         self.networking = networking
         self.logger = logger
-        self.sponsoredTileTelemetry = sponsoredTileTelemetry
+        self.sponsoredTileGleanTelemetry = sponsoredTileGleanTelemetry
     }
 
     /// Impression telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
@@ -35,7 +36,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         }
 
         sendTelemetry(urlString: siteInfo.impressionURL, position: position)
-        sendLegacyImpressionTelemetry(tileSite: tileSite, position: position)
+        sendGleanImpressionTelemetry(tileSite: tileSite, position: position)
     }
 
     /// Click telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
@@ -46,7 +47,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         }
 
         sendTelemetry(urlString: siteInfo.clickURL, position: position)
-        sendLegacyClickTelemetry(tileSite: tileSite, position: position)
+        sendGleanClickTelemetry(tileSite: tileSite, position: position)
     }
 
     private func sendTelemetry(urlString: String, position: Int) {
@@ -83,15 +84,21 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         }
     }
 
-    // MARK: Legacy telemetry
-    // FXIOS-11121 While we are migrating to the new Unified Ads telemetry system, we should
-    // keep sending the legacy telemetry Glean pings
+    // MARK: Glean telemetry
 
-    private func sendLegacyImpressionTelemetry(tileSite: Site, position: Int) {
-        sponsoredTileTelemetry.sendImpressionTelemetry(tileSite: tileSite, position: position, isUnifiedAdsEnabled: true)
+    private func sendGleanImpressionTelemetry(tileSite: Site, position: Int) {
+        sponsoredTileGleanTelemetry.sendImpressionTelemetry(
+            tileSite: tileSite,
+            position: position,
+            isUnifiedAdsEnabled: true
+        )
     }
 
-    private func sendLegacyClickTelemetry(tileSite: Site, position: Int) {
-        sponsoredTileTelemetry.sendClickTelemetry(tileSite: tileSite, position: position, isUnifiedAdsEnabled: true)
+    private func sendGleanClickTelemetry(tileSite: Site, position: Int) {
+        sponsoredTileGleanTelemetry.sendClickTelemetry(
+            tileSite: tileSite,
+            position: position,
+            isUnifiedAdsEnabled: true
+        )
     }
 }

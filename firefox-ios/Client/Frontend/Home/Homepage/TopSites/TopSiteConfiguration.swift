@@ -80,13 +80,6 @@ struct TopSiteConfiguration: Hashable, Equatable, CustomStringConvertible, Custo
 
     // MARK: Telemetry
 
-    func impressionTracking(position: Int) {
-        // Only sending sponsored tile impressions for now
-        guard site.isSponsoredSite else { return }
-
-        DefaultSponsoredTileTelemetry().sendImpressionTelemetry(tileSite: site, position: position)
-    }
-
     var getTelemetrySiteType: String {
         if isGooglePinnedTile {
             return "google"
