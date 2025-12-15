@@ -64,8 +64,7 @@ private final class MockCache: CuratedRecommendationsCacheProtocol {
     }
 }
 
-@MainActor
-final class MerinoProviderTests: XCTestCase {
+final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     private let storiesFlag = PrefsKeys.UserFeatureFlagPrefs.ASPocketStories
 
     func testIncorrectLocalesAreNotSupported() {
@@ -80,7 +79,7 @@ final class MerinoProviderTests: XCTestCase {
     }
 
     func test_fetchStories_cachesManyStories_returnsRequired() async throws {
-        let control = createSubject(thresholdHours: 4)
+        let control = await createSubject(thresholdHours: 4)
         control.cache.seed(items: MerinoTestData().getMockDataFeed(), lastUpdated: Date())
         control.fetcher.stubbedItems = MerinoTestData().getMockDataFeed()
 
@@ -98,7 +97,7 @@ final class MerinoProviderTests: XCTestCase {
     }
 
     func test_fetchStories_returnsCached_whenThresholdNotPassed() async throws {
-        let control = createSubject(thresholdHours: 4)
+        let control = await createSubject(thresholdHours: 4)
         control.cache.seed(items: [.makeItem("a"), .makeItem("b")], lastUpdated: Date())
         control.fetcher.stubbedItems = [.makeItem("net1"), .makeItem("net2")]
 
@@ -110,7 +109,7 @@ final class MerinoProviderTests: XCTestCase {
     }
 
     func test_fetchStories_fetchesAndSaves_whenThresholdPassed() async throws {
-        let control = createSubject(thresholdHours: 1/60)
+        let control = await createSubject(thresholdHours: 1/60)
         control.cache.seed(items: [.makeItem("old")], lastUpdated: Date().addingTimeInterval(-3600))
         control.fetcher.stubbedItems = [.makeItem("new1"), .makeItem("new2")]
 
@@ -123,7 +122,7 @@ final class MerinoProviderTests: XCTestCase {
     }
 
     func test_fetchStories_fetchesAndSaves_whenNoCache() async throws {
-        let control = createSubject()
+        let control = await createSubject()
         control.cache.seedEmpty()
         control.fetcher.stubbedItems = [.makeItem("net")]
 
@@ -136,7 +135,7 @@ final class MerinoProviderTests: XCTestCase {
     }
 
     func test_fetchStories_throws_whenFeatureDisabled() async {
-        let control = createSubject(prefsEnabled: false)
+        let control = await createSubject(prefsEnabled: false)
 
         do {
             _ = try await control.subject.fetchStories(3)
@@ -149,7 +148,7 @@ final class MerinoProviderTests: XCTestCase {
     }
 
     func test_fetchStories_fetches_whenNoLastUpdatedEvenIfItemsExist() async throws {
-        let control = createSubject(prefsEnabled: true)
+        let control = await createSubject(prefsEnabled: true)
 
         // Cache has _ itemCount but NO timestamp should be treated as STALE and must fetch
         // new stories. We should never get here, but we should still test it.
@@ -173,7 +172,7 @@ final class MerinoProviderTests: XCTestCase {
         prefsEnabled: Bool = true,
         cache: MockCache = MockCache(),
         fetcher: MockFeedFetcher = MockFeedFetcher()
-    ) -> TestableSubject {
+    ) async -> TestableSubject {
         let prefs = MockProfilePrefs()
         prefs.setBool(prefsEnabled, forKey: storiesFlag)
         let subject = MerinoProvider(
@@ -183,7 +182,7 @@ final class MerinoProviderTests: XCTestCase {
             fetcher: fetcher
         )
 
-        trackForMemoryLeaks(subject)
+        await trackForMemoryLeaks(subject)
         return TestableSubject(subject: subject, cache: cache, fetcher: fetcher)
     }
 }
