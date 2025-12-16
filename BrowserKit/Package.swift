@@ -258,6 +258,7 @@ let package = Package(
             name: "ContentBlockingGenerator",
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency"),
                 .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
