@@ -25,7 +25,7 @@ final class WKEngineWebViewTests: XCTestCase {
         let subject = createSubject()
         subject.close()
 
-        // Wait for Webview to fully deallocate
+        // Wait for webView to fully deallocate
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
