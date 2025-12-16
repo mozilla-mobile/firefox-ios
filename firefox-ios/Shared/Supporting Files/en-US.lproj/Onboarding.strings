@@ -316,13 +316,13 @@
 /* The text for the Manage settings link button. */
 "Onboarding.Modern.TermsOfService.ManageLink.v145" = "Manage settings";
 
-/* Title for the Terms of Service card in the v148 brand refresh onboarding flow. */
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.Title.v148" = "Get ready to run free";
 
-/* Description for the Terms of Service card in the v148 brand refresh onboarding flow. */
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.Description.v148" = "Speedy, safe, and won’t sell you out. Browsing just got better.";
 
-/* Agreement text for Terms of Service in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfServiceAgreement.v148" = "By continuing, you agree to the %@";
 
 /* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
@@ -331,7 +331,7 @@
 /* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.ManagePreferenceAgreement.v148" = "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@";
 
-/* Button title for agreeing to Terms of Service in the v148 brand refresh onboarding flow. */
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.AgreementButtonTitle.v148" = "Agree and continue";
 
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
