@@ -307,6 +307,12 @@ private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
 
 // Detects Keywords in PR so certain functions are not used in new code.
 class CodeUsageDetector {
+    // In uniffi generated code, we might have print statements automatically generated.
+    private let allowedPrintDirectories: [String] = [
+        "MozillaRustComponents/Sources/FocusRustComponentsWrapper/Generated/",
+        "MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated/"
+    ]
+
     private enum Keywords: CaseIterable {
         static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
 
@@ -384,6 +390,12 @@ class CodeUsageDetector {
     }
     // swiftlint:enable line_length
 
+    private func shouldSkip(_ keyword: Keywords, for file: String) -> Bool {
+        // Only skip `print(` in whitelisted directories
+        guard keyword == .print else { return false }
+        return allowedPrintDirectories.contains { file.contains($0) }
+    }
+
     func checkForCodeUsage() {
         let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
         // Iterate through each added and modified file, running the checks on swift files only
@@ -416,6 +428,7 @@ class CodeUsageDetector {
     }
 
     private func detect(keyword: Keywords, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
+        guard !shouldSkip(keyword, for: file) else { return }
         for hunk in hunks {
             var newLineCount = 0
             for line in hunk.lines {
@@ -447,6 +460,7 @@ class CodeUsageDetector {
     }
 
     private func detect(keyword: Keywords, inLines lines: [String], file: String, message: String) {
+        guard !shouldSkip(keyword, for: file) else { return }
         for (index, line) in lines.enumerated() where line.contains(keyword.keyword) {
             let lineNumber = index + 1
             if keyword.shouldComment {
