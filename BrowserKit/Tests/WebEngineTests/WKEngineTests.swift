@@ -39,7 +39,7 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
 
     @MainActor
     func testWarmEngineCallsSetupEngine() async {
-        let subject = createSubject()
+        let subject = await createSubject()
         subject.warmEngine()
 
         XCTAssertEqual(sourceTimerFactory.dispatchSource.cancelCalled, 0)
