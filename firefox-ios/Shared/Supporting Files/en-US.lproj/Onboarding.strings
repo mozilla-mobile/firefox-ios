@@ -398,7 +398,7 @@
 "Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Help us build a better internet";
 
 /* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Share how you discovered %@, and that you use it, with Mozilla’s marketing partners. This data is never sold.";
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Share how you discovered %1$@, and that you use it, with Mozilla’s marketing partners. This data is never sold.";
 
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "How we use data";
