@@ -83,7 +83,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return ThemeSettingsState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

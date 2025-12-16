@@ -152,7 +152,7 @@ class IntroViewController: UIViewController,
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return OnboardingViewControllerState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

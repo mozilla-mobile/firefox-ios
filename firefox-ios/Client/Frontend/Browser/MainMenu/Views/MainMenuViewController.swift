@@ -374,7 +374,7 @@ class MainMenuViewController: UIViewController,
         store.subscribe(self, transform: {
             return $0.select({ appState in
                 return MainMenuState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

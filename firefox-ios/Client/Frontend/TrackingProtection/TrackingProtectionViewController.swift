@@ -268,7 +268,7 @@ class TrackingProtectionViewController: UIViewController,
         store.subscribe(self, transform: {
             return $0.select({ appState in
                 return TrackingProtectionState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

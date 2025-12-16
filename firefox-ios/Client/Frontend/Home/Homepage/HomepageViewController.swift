@@ -323,7 +323,7 @@ final class HomepageViewController: UIViewController,
                     appState: appState,
                     uuid: uuid
                 )
-            })
+            }).skipRepeats()
         })
     }
 

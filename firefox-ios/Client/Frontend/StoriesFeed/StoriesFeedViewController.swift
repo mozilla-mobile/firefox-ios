@@ -130,7 +130,7 @@ class StoriesFeedViewController: UIViewController,
                     appState: appState,
                     uuid: uuid
                 )
-            })
+            }).skipRepeats()
         })
     }
 

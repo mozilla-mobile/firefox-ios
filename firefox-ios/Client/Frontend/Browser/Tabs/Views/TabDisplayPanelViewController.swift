@@ -325,7 +325,7 @@ final class TabDisplayPanelViewController: UIViewController,
         store.subscribe(self, transform: {
             return $0.select({ appState in
                 return TabsPanelState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

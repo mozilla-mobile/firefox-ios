@@ -1033,7 +1033,7 @@ class BrowserViewController: UIViewController,
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return BrowserViewControllerState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

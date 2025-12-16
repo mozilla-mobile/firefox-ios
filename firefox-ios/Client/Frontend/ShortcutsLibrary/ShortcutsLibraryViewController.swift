@@ -141,7 +141,7 @@ class ShortcutsLibraryViewController: UIViewController,
                     appState: appState,
                     uuid: uuid
                 )
-            })
+            }).skipRepeats()
         })
     }
 

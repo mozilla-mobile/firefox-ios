@@ -74,7 +74,7 @@ final class TabPeekViewController: UIViewController,
         store.subscribe(self, transform: {
             return $0.select({ appState in
                 return TabPeekState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

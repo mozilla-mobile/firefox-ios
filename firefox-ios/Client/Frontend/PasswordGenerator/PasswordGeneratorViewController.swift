@@ -217,7 +217,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         store.subscribe(self, transform: {
             return $0.select({ appState in
                 return PasswordGeneratorState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

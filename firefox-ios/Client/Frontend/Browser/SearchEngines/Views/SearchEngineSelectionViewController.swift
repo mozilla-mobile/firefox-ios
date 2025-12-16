@@ -114,7 +114,7 @@ class SearchEngineSelectionViewController: UIViewController,
         store.subscribe(self, transform: {
             return $0.select({ appState in
                 return SearchEngineSelectionState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

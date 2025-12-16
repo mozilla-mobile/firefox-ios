@@ -168,7 +168,7 @@ final class MicrosurveyViewController: UIViewController,
         store.subscribe(self, transform: {
             return $0.select({ appState in
                 return MicrosurveyState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

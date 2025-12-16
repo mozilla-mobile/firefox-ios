@@ -363,7 +363,7 @@ final class TabTrayViewController: UIViewController,
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return TabTrayState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
         let action = TabTrayAction(
             panelType: initialSelectedPanel,

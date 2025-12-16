@@ -184,7 +184,7 @@ final class NativeErrorPageViewController: UIViewController,
         store.subscribe(self, transform: {
             return $0.select({ appState in
                 return NativeErrorPageState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

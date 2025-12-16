@@ -76,7 +76,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return ToolbarState(appState: appState, uuid: windowUUID)
-            })
+            }).skipRepeats()
         })
     }
 

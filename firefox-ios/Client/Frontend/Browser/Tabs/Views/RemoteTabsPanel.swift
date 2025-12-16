@@ -192,7 +192,7 @@ class RemoteTabsPanel: UIViewController,
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return RemoteTabsPanelState(appState: appState, uuid: uuid)
-            })
+            }).skipRepeats()
         })
     }
 

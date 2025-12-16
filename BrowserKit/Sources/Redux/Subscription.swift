@@ -65,4 +65,29 @@ public final class Subscription<State> {
             }
         }
     }
+
+    /// Skips notifications when the new state is equal to the previous state.
+    /// This prevents unnecessary view updates when state hasn't actually changed.
+    /// - Parameter areEqual: A closure that returns true if two states should be considered equal
+    /// - Returns: A new Subscription that only notifies when state actually changes
+    public func skipRepeats(_ areEqual: @escaping (State, State) -> Bool) -> Subscription<State> {
+        return Subscription<State> { sink in
+            self.observer = { oldState, newState in
+                // If we have an old state and it's equal to the new state, skip notification
+                if let oldState = oldState, areEqual(oldState, newState) {
+                    return
+                }
+                sink(oldState, newState)
+            }
+        }
+    }
+}
+
+extension Subscription where State: Equatable {
+    /// Convenience method that skips notifications when state is unchanged.
+    /// Uses the Equatable conformance of the State type.
+    /// - Returns: A new Subscription that only notifies when state actually changes
+    public func skipRepeats() -> Subscription<State> {
+        return skipRepeats(==)
+    }
 }
