@@ -448,7 +448,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     // MARK: Page Zoom
-
+    @MainActor
     func testIncreaseZoom() {
         let subject = createSubject()
         // Check default zoom of 1.0
@@ -459,6 +459,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 + ZoomChangeValue.defaultStepIncrease)
     }
 
+    @MainActor
     func testDecreaseZoom() {
         let subject = createSubject()
         // Check default zoom of 1.0
@@ -469,6 +470,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 - ZoomChangeValue.defaultStepIncrease)
     }
 
+    @MainActor
     func testSetZoomLevelAndReset() {
         let subject = createSubject()
         // Check default zoom of 1.0
@@ -615,7 +617,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     // MARK: Helper
-
+    @MainActor
     func createSubject(file: StaticString = #filePath,
                        line: UInt = #line,
                        uiHandler: WKUIHandler? = nil) -> WKEngineSession? {
