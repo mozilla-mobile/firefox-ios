@@ -2,10 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 class SettingsTests: FeatureFlaggedTestBase {
     var settingsScreen: SettingScreen!
+
+    override func setUp() async throws {
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
+        try await super.setUp()
+    }
 
     override func tearDown() async throws {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
