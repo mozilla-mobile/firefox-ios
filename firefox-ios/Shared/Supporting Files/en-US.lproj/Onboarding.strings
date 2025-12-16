@@ -334,7 +334,7 @@
 /* Button title for agreeing to Terms of Service in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.AgreementButtonTitle.v148" = "Agree and continue";
 
-/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. */
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfUseLink.v148" = "%@ Terms of Use";
 
 /* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
@@ -376,7 +376,7 @@
 /* Option for the dark theme in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Dark";
 
-/* Description for the theme selection card in the v148 brand refresh onboarding flow. */
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Pick your favorite theme or have %@ match your device, putting you in control.";
 
 /* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
@@ -397,8 +397,8 @@
 /* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Help us build a better internet";
 
-/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Share how you discovered %1$@, and that you use it, with %2$@'s marketing partners. This data is never sold.";
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Share how you discovered %1$@, and that you use it, with %2$@’s marketing partners. This data is never sold.";
 
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "How we use data";
@@ -406,10 +406,10 @@
 /* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "Not Now";
 
-/* Title for the notification card in the v148 brand refresh onboarding flow. */
+/* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Notifications help you stay safer with %@";
 
-/* Description for the notification card in the v148 brand refresh onboarding flow. */
+/* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Discover privacy features in %@ and securely send tabs between your devices.";
 
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
