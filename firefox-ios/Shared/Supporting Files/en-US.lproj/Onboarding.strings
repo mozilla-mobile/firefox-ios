@@ -320,7 +320,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfService.Title.v148" = "Get ready to run free";
 
 /* Description for the Terms of Service card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfService.Description.v148" = "Speedy, safe, and won't sell you out. Browsing just got better.";
+"Onboarding.Modern.BrandRefresh.TermsOfService.Description.v148" = "Speedy, safe, and won’t sell you out. Browsing just got better.";
 
 /* Agreement text for Terms of Service in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfServiceAgreement.v148" = "By continuing, you agree to the %@";
