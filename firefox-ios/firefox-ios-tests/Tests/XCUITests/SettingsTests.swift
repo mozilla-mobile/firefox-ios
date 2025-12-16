@@ -8,11 +8,6 @@ import XCTest
 class SettingsTests: FeatureFlaggedTestBase {
     var settingsScreen: SettingScreen!
 
-    override func setUp() async throws {
-        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
-        try await super.setUp()
-    }
-
     override func tearDown() async throws {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
             name.contains("testBrowsingSettingsOptionSubtitles") ||
@@ -279,6 +274,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
     func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
