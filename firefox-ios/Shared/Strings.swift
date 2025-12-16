@@ -1847,7 +1847,7 @@ extension String {
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148",
                         tableName: "Onboarding",
-                        value: "Start typing to get search suggestions, your top sites, bookmarks, history and search engines – all in one place.",
+                        value: "Start typing to get search suggestions, your top sites, bookmarks, history and search engines — all in one place.",
                         comment: "Description for the toolbar customization card in the v148 brand refresh onboarding flow.")
                     public static let ContinueAction = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148",
@@ -1904,7 +1904,7 @@ extension String {
                         key: "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148",
                         tableName: "Onboarding",
                         value: "Start Syncing",
-                        comment: "Button to start the Sync setup process in the v148 brand refresh onboarding flow.")
+                        comment: "Button to start the sync setup process in the v148 brand refresh onboarding flow.")
                     public static let SkipAction = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148",
                         tableName: "Onboarding",
