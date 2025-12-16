@@ -8,9 +8,9 @@ import Foundation
 struct MockState: StateType, Equatable {
     let counter: Int
 
-    static var actionsReduced = [ActionType]()
-    static var runMidReducerActions = false
-    static var midReducerActions: (() -> Void)?
+    static nonisolated(unsafe) var actionsReduced = [ActionType]()
+    static nonisolated(unsafe) var runMidReducerActions = false
+    static nonisolated(unsafe) var midReducerActions: (() -> Void)?
 
     init(midReducerActions: (() -> Void)? = nil) {
         counter = 0

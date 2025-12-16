@@ -9,8 +9,8 @@ import XCTest
 final class StoreTests: XCTestCase {
     var mockState = MockState()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockState = MockState()
     }
 
