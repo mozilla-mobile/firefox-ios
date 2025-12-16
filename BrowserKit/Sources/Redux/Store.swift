@@ -14,12 +14,12 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
 
     public var state: State {
         didSet {
-            subscriptions.forEach {
-                guard $0.subscriber != nil else {
-                    subscriptions.remove($0)
-                    return
-                }
+            // Remove dead subscribers first to avoid modifying set during iteration
+            let deadSubscriptions = subscriptions.filter { $0.subscriber == nil }
+            subscriptions.subtract(deadSubscriptions)
 
+            // Now safely iterate through live subscriptions
+            subscriptions.forEach {
                 $0.newValues(oldState: oldValue, newState: state)
             }
         }
