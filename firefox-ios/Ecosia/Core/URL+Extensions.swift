@@ -86,9 +86,11 @@ extension URL {
         guard isEcosia(urlProvider),
               var components = components
         else { return self }
+
+        // Remove existing userId if present
         components.queryItems?.removeAll(where: { $0.name == EcosiaQueryItemName.userId.rawValue })
-        var items = components.queryItems ?? .init()
-        /* 
+
+        /*
          The `sendAnonymousUsageData` is set by the native UX component in settings
          that determines whether the app would send the events to Snowplow.
          To align the business logic, this parameter will also function as a condition
@@ -100,9 +102,9 @@ extension URL {
                                     !User.shared.hasAnalyticsCookieConsent ||
                                     !User.shared.sendAnonymousUsageData
         let userId = shouldAnonymizeUserId ? UUID(uuid: UUID_NULL).uuidString : User.shared.analyticsId.uuidString
-        items.append(Self.item(name: .userId, value: userId))
-        components.queryItems = items
-        return components.url!
+
+        guard let urlWithoutUserId = components.url else { return self }
+        return urlWithoutUserId.appendingQueryItems([Self.item(name: .userId, value: userId)])
     }
 
     public var policy: Scheme.Policy {
@@ -128,5 +130,27 @@ extension URL {
 
     private static func item(name: EcosiaQueryItemName, value: String) -> URLQueryItem {
         .init(name: name.rawValue, value: value)
+    }
+
+    /// Appends query items to a URL in a version-safe way.
+    /// - Parameter queryItems: The query items to append to the URL
+    /// - Returns: A new URL with the query items appended
+    /// - Note: This method can be removed once the minimum deployment target is iOS 16+,
+    ///         as URL.append(queryItems:) is available natively from iOS 16.
+    public func appendingQueryItems(_ queryItems: [URLQueryItem]) -> URL {
+        if #available(iOS 16.0, *) {
+            var url = self
+            url.append(queryItems: queryItems)
+            return url
+        } else {
+            guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
+                return self
+            }
+            if components.queryItems == nil {
+                components.queryItems = []
+            }
+            components.queryItems?.append(contentsOf: queryItems)
+            return components.url ?? self
+        }
     }
 }

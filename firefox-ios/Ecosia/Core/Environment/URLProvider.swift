@@ -165,17 +165,25 @@ public enum URLProvider {
     }
 
     public var notifications: URL {
-        var components = URLComponents(url: URL(string: "https://api.ecosia.org/v1/notifications")!, resolvingAgainstBaseURL: false)!
-        components.queryItems = [
+        let url = URL(string: "https://api.ecosia.org/v1/notifications")!
+        return url.appendingQueryItems([
             .init(name: "language", value: Language.current.rawValue),
             .init(name: "market", value: User.shared.marketCode.rawValue),
             .init(name: "limit", value: "50")
-        ]
-        return components.url!
+        ])
     }
 
-    public var aiSearch: URL {
-        root.appendingPathComponent("ai-search")
+    public enum AISearchOrigin: String {
+        case ntp = "newtabbutton"
+        case autocomplete = "autocomplete_app"
+    }
+    public func aiSearch(origin: AISearchOrigin?) -> URL {
+        let baseURL = root.appendingPathComponent("ai-search")
+        guard let origin = origin else {
+            return baseURL
+        }
+
+        return baseURL.appendingQueryItems([URLQueryItem(name: "origin", value: origin.rawValue)])
     }
 
     public var storeWriteReviewPage: URL {
