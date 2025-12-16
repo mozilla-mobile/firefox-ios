@@ -15,7 +15,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         static let bodyLabelVerticalInset: CGFloat = 10
         static let contentHorizontalInset: CGFloat = 16
         static let contentSpacing: CGFloat = 4
-        static let closeButtonSize = CGSize(width: 20, height: 20)
+        static let closeButtonSize = CGSize(width: 30, height: 30)
         static let closeButtonImageSize = CGSize(width: 20, height: 20)
     }
 
