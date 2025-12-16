@@ -7,15 +7,16 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class TrendingSearchClientTest: XCTestCase, @unchecked Sendable {
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         clearState()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         clearState()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_getTrendingSearches_withSuccess_returnsExpectedSearches() async throws {

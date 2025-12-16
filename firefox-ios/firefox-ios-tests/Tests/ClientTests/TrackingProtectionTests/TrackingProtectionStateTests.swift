@@ -17,8 +17,8 @@ final class TrackingProtectionStateTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         mockProfile = nil
+        try await super.tearDown()
     }
 
     @MainActor

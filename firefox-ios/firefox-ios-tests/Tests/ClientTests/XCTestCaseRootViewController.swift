@@ -16,9 +16,9 @@ class XCTestCaseRootViewController: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         rootViewController = nil
         window = nil
+        try await super.tearDown()
     }
 
     func loadViewForTesting() {

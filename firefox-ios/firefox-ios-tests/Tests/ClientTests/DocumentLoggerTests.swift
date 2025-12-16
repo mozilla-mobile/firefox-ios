@@ -5,17 +5,18 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class DocumentLoggerTests: XCTestCase {
     private var logger: MockLogger!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         logger = MockLogger()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         logger = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testLogPendingDownloads_logOnlineURL() throws {

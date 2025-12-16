@@ -17,9 +17,8 @@ class NativeErrorPageFeatureFlagTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         subject = nil
+        super.tearDown()
     }
 
     func testFeatureFlag_WhenNativeErrorPageEnabled_ThenFeatureIsEnabled() {

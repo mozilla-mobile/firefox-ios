@@ -16,9 +16,8 @@ final class GeneralizedImageFetcherTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
-
         clearState()
+        try await super.tearDown()
     }
 
     func testErrorResponse() {

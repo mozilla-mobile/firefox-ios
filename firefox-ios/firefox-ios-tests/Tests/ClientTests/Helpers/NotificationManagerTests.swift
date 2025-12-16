@@ -17,9 +17,9 @@ class NotificationManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         center = nil
         notificationManager = nil
+        super.tearDown()
     }
 
     func testRequestAuthorization() {

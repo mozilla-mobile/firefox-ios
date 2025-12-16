@@ -7,20 +7,21 @@ import XCTest
 
 @testable import Client
 
-class WallpaperSelectorViewModelTests: XCTestCase {
+@MainActor
+final class WallpaperSelectorViewModelTests: XCTestCase {
     private var wallpaperManager: WallpaperManagerInterface!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         wallpaperManager = WallpaperManagerMock()
         addWallpaperCollections()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         Self.tearDownTelemetry()
         wallpaperManager = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testInit_hasCorrectNumberOfWallpapers() {
@@ -54,7 +55,6 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
-    @MainActor
     func testRecordsWallpaperSelectorView() throws {
         Self.setupTelemetry(with: MockProfile())
         wallpaperManager = WallpaperManager()
@@ -65,7 +65,6 @@ class WallpaperSelectorViewModelTests: XCTestCase {
     }
 
     // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
-    @MainActor
     func testRecordsWallpaperSelectorClose() throws {
         Self.setupTelemetry(with: MockProfile())
         wallpaperManager = WallpaperManager()

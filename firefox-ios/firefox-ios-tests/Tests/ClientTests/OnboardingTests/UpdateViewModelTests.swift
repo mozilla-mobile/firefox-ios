@@ -9,20 +9,21 @@ import Shared
 import Common
 import OnboardingKit
 
-class UpdateViewModelTests: XCTestCase {
+@MainActor
+final class UpdateViewModelTests: XCTestCase {
     private var profile: MockProfile!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         profile = nil
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        try await super.tearDown()
     }
 
     func testContainsSyncableAccounts_returnsMockValue() {
@@ -33,7 +34,6 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: Enable cards
-    @MainActor
     func testEnabledCards_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
         let subject = createSubject()
@@ -51,7 +51,6 @@ class UpdateViewModelTests: XCTestCase {
         waitForExpectations(timeout: 2.0)
     }
 
-    @MainActor
     func testEnabledCards_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()
@@ -70,7 +69,6 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: Has Single card
-    @MainActor
     func testHasSingleCard_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true
         let subject = createSubject()
@@ -86,7 +84,6 @@ class UpdateViewModelTests: XCTestCase {
         waitForExpectations(timeout: 2.0)
     }
 
-    @MainActor
     func testHasSingleCard_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()

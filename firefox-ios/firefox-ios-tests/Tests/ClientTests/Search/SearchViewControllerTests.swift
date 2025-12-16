@@ -45,8 +45,8 @@ class SearchViewControllerTest: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         profile = nil
+        try await super.tearDown()
     }
 
     func testHistoryAndBookmarksAreFilteredWhenShowSponsoredSuggestionsIsTrue() {

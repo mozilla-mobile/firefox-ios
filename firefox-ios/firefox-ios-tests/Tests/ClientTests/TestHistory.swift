@@ -24,10 +24,10 @@ class TestHistory: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try await super.tearDown()
         self.clear(profile.places)
         profile.shutdown()
         profile = nil
+        try await super.tearDown()
     }
 
     // This is a very basic test. Adds an entry, retrieves it, and then clears the database.

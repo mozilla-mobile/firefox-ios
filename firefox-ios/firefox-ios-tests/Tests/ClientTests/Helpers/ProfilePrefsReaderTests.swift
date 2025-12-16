@@ -18,9 +18,9 @@ class ProfilePrefsReaderTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockUserDefaults = nil
         prefsReader = nil
+        super.tearDown()
     }
 
     func testIsBottomToolbarUser_returnsTrue_whenPositionIsBottom() {
