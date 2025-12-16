@@ -41,7 +41,11 @@ struct AppleIntelligenceUtil {
 
     @available(iOS 26, *)
     private func checkAppleIntelligenceAvailability(with model: LanguageModelProtocol) -> Bool {
-        return model.isAvailable
+        if AppConstants.isSkippingAppleIntelligence {
+            return false
+        } else {
+            return model.isAvailable
+        }
     }
 
     @available(iOS 26.0, *)

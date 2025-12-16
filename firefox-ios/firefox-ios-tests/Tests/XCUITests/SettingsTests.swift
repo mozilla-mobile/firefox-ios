@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 class SettingsTests: FeatureFlaggedTestBase {
@@ -273,6 +274,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
     func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)

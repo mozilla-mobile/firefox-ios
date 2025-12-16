@@ -11,6 +11,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
     private var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         try await super.setUp()
         readingListScreen = ReadingListScreen(app: app)
         toolBarScreen = ToolbarScreen(app: app)
