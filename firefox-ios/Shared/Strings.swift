@@ -1776,7 +1776,7 @@ extension String {
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.Description.v148",
                         tableName: "Onboarding",
-                        value: "Speedy, safe, and won't sell you out. Browsing just got better.",
+                        value: "Speedy, safe, and won’t sell you out. Browsing just got better.",
                         comment: "Description for the Terms of Service card in the v148 brand refresh onboarding flow.")
                     public static let TermsOfServiceAgreement = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfServiceAgreement.v148",
@@ -1786,7 +1786,7 @@ extension String {
                     public static let PrivacyNoticeAgreement = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.PrivacyNoticeAgreement.v148",
                         tableName: "Onboarding",
-                        value: "%@ cares about your privacy. Read more in our %@",
+                        value: "%1$@ cares about your privacy. Read more in our %2$@",
                         comment: "Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page.")
                     public static let ManagePreferenceAgreement = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.ManagePreferenceAgreement.v148",
@@ -1801,8 +1801,8 @@ extension String {
                     public static let TermsOfUseLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfUseLink.v148",
                         tableName: "Onboarding",
-                        value: "Firefox Terms of Use",
-                        comment: "The text for the Terms of Use link button in the v148 brand refresh onboarding flow.")
+                        value: "%@ Terms of Use",
+                        comment: "The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
                     public static let PrivacyNoticeLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.PrivacyNoticeLink.v148",
                         tableName: "Onboarding",
@@ -1880,8 +1880,8 @@ extension String {
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148",
                         tableName: "Onboarding",
-                        value: "Pick your favorite theme or have Firefox match your device, putting you in control.",
-                        comment: "Description for the theme selection card in the v148 brand refresh onboarding flow.")
+                        value: "Pick your favorite theme or have %@ match your device, putting you in control.",
+                        comment: "Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
                     public static let ContinueAction = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148",
                         tableName: "Onboarding",
@@ -1921,8 +1921,8 @@ extension String {
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Marketing.Description.v148",
                         tableName: "Onboarding",
-                        value: "Share how you discovered Firefox, and that you use it, with Mozilla's marketing partners. This data is never sold.",
-                        comment: "Description for the marketing data sharing card in the v148 brand refresh onboarding flow.")
+                        value: "Share how you discovered %@, and that you use it, with Mozilla’s marketing partners. This data is never sold.",
+                        comment: "Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
                     public static let LearnMoreLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148",
                         tableName: "Onboarding",
@@ -1939,13 +1939,13 @@ extension String {
                     public static let Title = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Notification.Title.v148",
                         tableName: "Onboarding",
-                        value: "Notifications help you stay safer with Firefox",
-                        comment: "Title for the notification card in the v148 brand refresh onboarding flow.")
+                        value: "Notifications help you stay safer with %@",
+                        comment: "Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Notification.Description.v148",
                         tableName: "Onboarding",
-                        value: "Discover privacy features in Firefox and securely send tabs between your devices.",
-                        comment: "Description for the notification card in the v148 brand refresh onboarding flow.")
+                        value: "Discover privacy features in %@ and securely send tabs between your devices.",
+                        comment: "Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
                     public static let TurnOnAction = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148",
                         tableName: "Onboarding",
