@@ -326,7 +326,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfServiceAgreement.v148" = "By continuing, you agree to the %@";
 
 /* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
-"Onboarding.Modern.BrandRefresh.TermsOfService.PrivacyNoticeAgreement.v148" = "%@ cares about your privacy. Read more in our %@";
+"Onboarding.Modern.BrandRefresh.TermsOfService.PrivacyNoticeAgreement.v148" = "%1$@ cares about your privacy. Read more in our %2$@";
 
 /* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the Manage settings link button that redirects the user to manage data collection preferences. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.ManagePreferenceAgreement.v148" = "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@";
@@ -335,7 +335,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfService.AgreementButtonTitle.v148" = "Agree and continue";
 
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfUseLink.v148" = "Firefox Terms of Use";
+"Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfUseLink.v148" = "%@ Terms of Use";
 
 /* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfService.PrivacyNoticeLink.v148" = "Privacy Notice";
@@ -377,7 +377,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Dark";
 
 /* Description for the theme selection card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Pick your favorite theme or have Firefox match your device, putting you in control.";
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Pick your favorite theme or have %@ match your device, putting you in control.";
 
 /* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "Continue";
@@ -398,7 +398,7 @@
 "Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Help us build a better internet";
 
 /* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Share how you discovered Firefox, and that you use it, with Mozilla's marketing partners. This data is never sold.";
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Share how you discovered %@, and that you use it, with Mozilla’s marketing partners. This data is never sold.";
 
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "How we use data";
@@ -407,10 +407,10 @@
 "Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "Not Now";
 
 /* Title for the notification card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Notifications help you stay safer with Firefox";
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Notifications help you stay safer with %@";
 
 /* Description for the notification card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Discover privacy features in Firefox and securely send tabs between your devices.";
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Discover privacy features in %@ and securely send tabs between your devices.";
 
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Turn on notifications";
