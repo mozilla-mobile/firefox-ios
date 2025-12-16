@@ -3322,20 +3322,41 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            self.searchInPrivateTab = isPrivate
-            guard let selectedTab = tabManager.selectedTab else {
-                shouldWaitForTabsToBeRestored = true
-                return
-            }
-            if selectedTab.isPrivate == isPrivate, selectedTab.isFxHomeTab {
-                focusLocationTextField(forTab: selectedTab)
-            } else {
+            let isFocusLocationTextFieldOption = options?.contains(.focusLocationField) == true
+
+            if let selectedTab = tabManager.selectedTab {
+                if shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
+                    focusLocationTextField(forTab: selectedTab)
+                    return
+                }
+
                 openBlankNewTab(
-                    focusLocationField: options?.contains(.focusLocationField) == true,
+                    focusLocationField: isFocusLocationTextFieldOption,
                     isPrivate: isPrivate
                 )
+                return
+            }
+
+            AppEventQueue.wait(for: [.tabRestoration(tabManager.windowUUID)]) { [weak self] in
+                ensureMainThread { [weak self] in
+                    guard let self, let selectedTab = self.tabManager.selectedTab else { return }
+
+                    if self.shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
+                        self.focusLocationTextField(forTab: selectedTab)
+                    } else {
+                        self.openBlankNewTab(
+                            focusLocationField: isFocusLocationTextFieldOption,
+                            isPrivate: isPrivate
+                        )
+                    }
+                }
             }
         }
+    }
+
+    private func shouldFocusLocationTextField(for tab: Tab, isPrivate: Bool) -> Bool {
+        guard tab.isPrivate == isPrivate else { return false }
+        return tab.isFxHomeTab || tab.url == nil
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
@@ -4845,7 +4866,6 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        handleSearchFromWidget(tabManager)
         updateTabCountUsingTabManager(tabManager)
     }
 
@@ -4891,21 +4911,6 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerUpdateCount() {
         updateTabCountUsingTabManager(self.tabManager)
-    }
-
-    private func handleSearchFromWidget(_ tabManager: TabManager) {
-        if shouldWaitForTabsToBeRestored {
-            guard let selectedTab = tabManager.selectedTab else { return }
-            if selectedTab.isPrivate == searchInPrivateTab, selectedTab.isFxHomeTab || selectedTab.url == nil {
-                focusLocationTextField(forTab: selectedTab)
-            } else {
-                openBlankNewTab(
-                    focusLocationField: true,
-                    isPrivate: searchInPrivateTab
-                )
-            }
-            shouldWaitForTabsToBeRestored = false
-        }
     }
 
     private func updateToolbarTabCount(_ count: Int) {
