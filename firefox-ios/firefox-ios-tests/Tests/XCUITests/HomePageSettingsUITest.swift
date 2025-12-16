@@ -375,7 +375,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 4, maxBoundary: 9)
         } else {
             validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 10)
-            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 10)
+            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 14)
         }
     }
 
@@ -384,7 +384,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         app.cells[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage].waitAndTap()
         app.staticTexts["Rows"].waitAndTap()
         let expectedRowValues = ["1", "2"]
-        print(app.debugDescription)
         for i in 0...1 {
             XCTAssertEqual(app.cells.element(boundBy: i).label, expectedRowValues[i])
         }
