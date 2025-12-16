@@ -8,23 +8,6 @@ import Storage
 import Common
 import SiteImageView
 
-private struct SearchViewControllerUX {
-    static let EngineButtonHeight: Float = 44 // Equivalent to toolbar height, fixed at the moment
-    static let EngineButtonWidth = EngineButtonHeight * 1.4
-    static let EngineButtonBackgroundColor = UIColor.clear.cgColor
-
-    static let SearchImage = StandardImageIdentifiers.Large.search
-    static let SearchEngineTopBorderWidth = 0.5
-    static let SuggestionMargin: CGFloat = 8
-
-    static let IconSize: CGFloat = 23
-    static let FaviconSize: CGFloat = 29
-    static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
-    static let IconBorderWidth: CGFloat = 0.5
-
-    static let AppendButtonSize: CGFloat = 44
-}
-
 protocol SearchViewControllerDelegate: AnyObject {
     @MainActor
     func searchViewController(
@@ -58,6 +41,24 @@ class SearchViewController: SiteTableViewController,
                             Notifiable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
+    private struct UX {
+        static let EngineButtonHeight: CGFloat = 44 // Equivalent to toolbar height, fixed at the moment
+        static let EngineButtonWidth: CGFloat = EngineButtonHeight * 1.4
+        static let EngineButtonBackgroundColor = UIColor.clear.cgColor
+
+        static let SearchImage = StandardImageIdentifiers.Large.search
+        static let SearchEngineTopBorderWidth = 0.5
+        static let SuggestionMargin: CGFloat = 8
+
+        static let IconSize: CGFloat = 23
+        static let SearchIconSize: CGFloat = 20
+        static let FaviconSize: CGFloat = 29
+        static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
+        static let IconBorderWidth: CGFloat = 0.5
+
+        static let AppendButtonSize: CGFloat = 44
+    }
+
     var searchDelegate: SearchViewControllerDelegate?
     let viewModel: SearchViewModel
     private var tabManager: TabManager
@@ -71,9 +72,14 @@ class SearchViewController: SiteTableViewController,
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
     private let searchEngineContainerView: UIView = .build()
     private let searchEngineScrollView: ButtonScrollView = .build()
-    private let searchEngineScrollViewContent: UIView = .build()
     private var bottomConstraintWithKeyboard: NSLayoutConstraint?
     private var bottomConstraintWithoutKeyboard: NSLayoutConstraint?
+
+    private let searchEngineStackView: UIStackView = .build { stackview in
+        stackview.axis = .horizontal
+        stackview.alignment = .center
+        stackview.spacing = 8
+    }
 
     private lazy var bookmarkedBadge: UIImage = {
         return UIImage(named: StandardImageIdentifiers.Medium.bookmarkBadgeFillBlue50)!
@@ -118,7 +124,7 @@ class SearchViewController: SiteTableViewController,
         searchEngineContainerView.layer.shadowOpacity = 100
         searchEngineContainerView.layer.shadowOffset = CGSize(
             width: 0,
-            height: -SearchViewControllerUX.SearchEngineTopBorderWidth
+            height: -UX.SearchEngineTopBorderWidth
         )
         searchEngineContainerView.clipsToBounds = false
 
@@ -126,8 +132,7 @@ class SearchViewController: SiteTableViewController,
         searchEngineContainerView.addSubview(searchEngineScrollView)
         view.addSubview(searchEngineContainerView)
 
-        searchEngineScrollViewContent.layer.backgroundColor = UIColor.clear.cgColor
-        searchEngineScrollView.addSubview(searchEngineScrollViewContent)
+        searchEngineScrollView.addSubview(searchEngineStackView)
 
         layoutTable()
         layoutSearchEngineScrollView()
@@ -201,28 +206,20 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func layoutSearchEngineScrollViewContent() {
-        NSLayoutConstraint.activate(
-            [
-                searchEngineScrollViewContent.centerXAnchor.constraint(
-                    equalTo: searchEngineScrollView.centerXAnchor
-                ).priority(.defaultLow),
-                searchEngineScrollViewContent.centerYAnchor.constraint(
-                    equalTo: searchEngineScrollView.centerYAnchor
-                ).priority(.defaultLow),
-                searchEngineScrollViewContent.trailingAnchor.constraint(
-                    lessThanOrEqualTo: searchEngineScrollView.trailingAnchor
-                ).priority(.defaultHigh),
-                searchEngineScrollViewContent.topAnchor.constraint(equalTo: searchEngineScrollView.topAnchor),
-                searchEngineScrollViewContent.bottomAnchor.constraint(equalTo: searchEngineScrollView.bottomAnchor)
-            ]
-        )
+        NSLayoutConstraint.activate([
+            searchEngineStackView.leadingAnchor.constraint(equalTo: searchEngineScrollView.leadingAnchor, constant: 16),
+            searchEngineStackView.trailingAnchor.constraint(equalTo: searchEngineScrollView.trailingAnchor),
+            searchEngineStackView.topAnchor.constraint(equalTo: searchEngineScrollView.topAnchor),
+            searchEngineStackView.bottomAnchor.constraint(equalTo: searchEngineScrollView.bottomAnchor),
+            searchEngineStackView.heightAnchor.constraint(equalTo: searchEngineScrollView.heightAnchor)
+        ])
 
         // left-align the engines on iphones, center on ipad
         let isCompact = UIScreen.main.traitCollection.horizontalSizeClass == .compact
-        searchEngineScrollViewContent.leadingAnchor.constraint(
+        searchEngineStackView.leadingAnchor.constraint(
             equalTo: searchEngineScrollView.leadingAnchor
         ).priority(.defaultHigh).isActive = isCompact
-        searchEngineScrollViewContent.leadingAnchor.constraint(
+        searchEngineStackView.leadingAnchor.constraint(
             greaterThanOrEqualTo: searchEngineScrollView.leadingAnchor
         ).priority(.defaultHigh).isActive = !isCompact
     }
@@ -278,77 +275,41 @@ class SearchViewController: SiteTableViewController,
     }
 
     func reloadSearchEngines() {
-        searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
-        var leftEdge = searchEngineScrollViewContent.leadingAnchor
+        searchEngineStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        // Add search button first
+        searchEngineStackView.addArrangedSubview(searchButton)
+        searchButton.widthAnchor.constraint(equalToConstant: UX.FaviconSize).isActive = true
+        searchButton.heightAnchor.constraint(equalToConstant: UX.FaviconSize).isActive = true
 
         if let imageView = searchButton.imageView {
-            NSLayoutConstraint.activate([
-                imageView.widthAnchor.constraint(equalToConstant: 20),
-                imageView.heightAnchor.constraint(equalToConstant: 20)
-            ])
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.widthAnchor.constraint(equalToConstant: UX.SearchIconSize).isActive = true
+            imageView.heightAnchor.constraint(equalToConstant: UX.SearchIconSize).isActive = true
         }
 
-        searchEngineScrollViewContent.addSubview(searchButton)
+        guard !viewModel.isZeroSearchState else { return }
 
-        NSLayoutConstraint.activate(
-            [
-                searchButton.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
-                searchButton.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
-                // offset the left edge to align with search results
-                searchButton.leadingAnchor.constraint(equalTo: leftEdge, constant: 16),
-                searchButton.topAnchor.constraint(
-                    equalTo: searchEngineScrollViewContent.topAnchor,
-                    constant: SearchViewControllerUX.SuggestionMargin
-                ),
-                searchButton.bottomAnchor.constraint(
-                    equalTo: searchEngineScrollViewContent.bottomAnchor,
-                    constant: -SearchViewControllerUX.SuggestionMargin
-                )
-            ]
-        )
+        for engine in viewModel.quickSearchEngines {
+            let engineButton: UIButton = .build()
+            engineButton.setImage(engine.image, for: [])
+            engineButton.imageView?.contentMode = .scaleAspectFit
 
-        leftEdge = searchButton.trailingAnchor
-        if !viewModel.isZeroSearchState {
-            for engine in viewModel.quickSearchEngines {
-                let engineButton: UIButton = .build()
-                engineButton.setImage(engine.image, for: [])
-                engineButton.imageView?.contentMode = .scaleAspectFit
-                engineButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
-                engineButton.imageView?.layer.cornerRadius = 4
-                engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-                engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
-                engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
+            engineButton.imageView?.layer.cornerRadius = 4
+            engineButton.layer.backgroundColor = UX.EngineButtonBackgroundColor
+            engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
+            engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
 
-                if let imageView = engineButton.imageView {
-                    NSLayoutConstraint.activate([
-                        imageView.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
-                        imageView.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize)
-                    ])
-                }
-
-                searchEngineScrollViewContent.addSubview(engineButton)
-                NSLayoutConstraint.activate(
-                    [
-                        engineButton.widthAnchor.constraint(
-                            equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)
-                        ),
-                        engineButton.heightAnchor.constraint(
-                            equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)
-                        ),
-                        engineButton.leadingAnchor.constraint(equalTo: leftEdge),
-                        engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
-                        engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
-                    ]
-                )
-
-                if engine === self.viewModel.searchEnginesManager?.quickSearchEngines.last {
-                    engineButton.trailingAnchor.constraint(
-                        equalTo: searchEngineScrollViewContent.trailingAnchor
-                    ).isActive = true
-                }
-
-                leftEdge = engineButton.trailingAnchor
+            if let imageView = engineButton.imageView {
+                imageView.translatesAutoresizingMaskIntoConstraints = false
+                imageView.widthAnchor.constraint(equalToConstant: UX.FaviconSize).isActive = true
+                imageView.heightAnchor.constraint(equalToConstant: UX.FaviconSize).isActive = true
             }
+
+            engineButton.widthAnchor.constraint(equalToConstant: UX.EngineButtonWidth).isActive = true
+            engineButton.heightAnchor.constraint(equalToConstant: UX.EngineButtonHeight).isActive = true
+
+            searchEngineStackView.addArrangedSubview(engineButton)
         }
     }
 
@@ -367,7 +328,7 @@ class SearchViewController: SiteTableViewController,
     func didSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
-        guard let index = searchEngineScrollViewContent.subviews.firstIndex(of: sender) else {
+        guard let index = searchEngineStackView.subviews.firstIndex(of: sender) else {
             assertionFailure()
             return
         }
@@ -720,7 +681,7 @@ class SearchViewController: SiteTableViewController,
         view.backgroundColor = currentTheme().colors.layer5
 
         // search settings icon
-        searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
+        searchButton.layer.backgroundColor = UX.EngineButtonBackgroundColor
         searchButton.tintColor = currentTheme().colors.iconPrimary
 
         searchEngineContainerView.layer.backgroundColor = currentTheme().colors.layer1.cgColor
@@ -788,8 +749,8 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
                 twoLineCell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
                 twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+                twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
                 if let urlString = openedTab.url?.absoluteString {
                     twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
                 }
@@ -805,8 +766,8 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.titleLabel.text = remoteTab.title
                 twoLineCell.descriptionLabel.text = remoteClient.name
                 twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+                twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
                 let urlString = remoteTab.URL.absoluteString
                 twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
                 twoLineCell.accessoryView = nil
@@ -846,8 +807,8 @@ class SearchViewController: SiteTableViewController,
             }
             twoLineCell.leftOverlayImageView.image = nil
             twoLineCell.leftImageView.contentMode = .scaleAspectFit
-            twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-            twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+            twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+            twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
             twoLineCell.leftImageView.manuallySetImage(firefoxSuggestion.iconImage ?? UIImage())
             twoLineCell.accessoryView = nil
             cell = twoLineCell
@@ -861,7 +822,7 @@ class SearchViewController: SiteTableViewController,
 
     private func oneLineCellModelForSearch(
         with text: String,
-        and imageName: String = SearchViewControllerUX.SearchImage,
+        and imageName: String = UX.SearchImage,
         shouldShowAccessoryView: Bool = true
     ) -> OneLineTableViewCellViewModel {
         let appendButton = UIButton(type: .roundedRect)
@@ -890,8 +851,8 @@ class SearchViewController: SiteTableViewController,
         cell.titleLabel.text = title
         cell.descriptionLabel.text = description
         cell.leftOverlayImageView.image = isBookmark ? bookmarkedBadge : nil
-        cell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-        cell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: description))
         cell.accessoryView = nil
     }
