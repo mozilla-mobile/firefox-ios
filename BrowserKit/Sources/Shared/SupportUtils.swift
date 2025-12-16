@@ -36,6 +36,14 @@ public struct SupportUtils {
         return URL(string: "https://www.mozilla.org/privacy/firefox/")
     }
 
+    public static var URLForUpdatedPrivacyNotice: URL? {
+        return URL(string: "https://www.mozilla.org/privacy/firefox/next/")
+    }
+
+    public static var URLForUpdatedPrivacyNoticeDiff: URL? {
+        return URL(string: "https://www.mozilla.org/privacy/firefox/update/")
+    }
+
     public static var URLForRelayAccountManagement: URL? {
         return URL(string: "https://relay.firefox.com/accounts/profile")
     }

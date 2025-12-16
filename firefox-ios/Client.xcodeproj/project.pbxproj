@@ -1543,6 +1543,7 @@
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
 		C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */; };
 		C710FDB72DCBDBEF0046475F /* TopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */; };
+		C71158CD2EEA0B19009766B8 /* PrivacyNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */; };
 		C7149E002EB14E2400C1FF00 /* StoriesWebviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7149DFF2EB14E2400C1FF00 /* StoriesWebviewViewController.swift */; };
 		C714D27E2E4539BE00FC02E6 /* ShortcutsLibraryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */; };
 		C714D2822E4549BB00FC02E6 /* ShortcutsLibraryAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */; };
@@ -9945,6 +9946,7 @@
 		C6C94C1CB6286845DEAF8EDD /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCell.swift; sourceTree = "<group>"; };
+		C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeCell.swift; sourceTree = "<group>"; };
 		C7149DFF2EB14E2400C1FF00 /* StoriesWebviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesWebviewViewController.swift; sourceTree = "<group>"; };
 		C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryState.swift; sourceTree = "<group>"; };
 		C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryAction.swift; sourceTree = "<group>"; };
@@ -13445,6 +13447,7 @@
 				8AF347DC2CADD0E100624036 /* Redux */,
 				DFACBF82277B9278003D5F41 /* Wallpapers */,
 				8AB5958628412B620090F4AE /* CustomizeHome */,
+				C71158CB2EEA0ADF009766B8 /* PrivacyNotice */,
 			);
 			path = Homepage;
 			sourceTree = "<group>";
@@ -14430,6 +14433,14 @@
 				C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		C71158CB2EEA0ADF009766B8 /* PrivacyNotice */ = {
+			isa = PBXGroup;
+			children = (
+				C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */,
+			);
+			path = PrivacyNotice;
 			sourceTree = "<group>";
 		};
 		C714D27C2E45388D00FC02E6 /* ShortcutsLibrary */ = {
@@ -18466,6 +18477,7 @@
 				8AEAD9F52C3D7BA9001A2C5A /* FeatureFlagsDebugViewController.swift in Sources */,
 				810CD9C12BB346D800E290C2 /* OnboardingCardViewController.swift in Sources */,
 				8AD3AFC32D143EF600CFC887 /* HomepageDimensionImplementation.swift in Sources */,
+				C71158CD2EEA0B19009766B8 /* PrivacyNoticeCell.swift in Sources */,
 				8A3EF8172A2FD2B900796E3A /* AdvancedAccountSettings.swift in Sources */,
 				C2886E082EC5E025007AE6C3 /* StaticFileRoute.swift in Sources */,
 				EBB89509219398E500EB91A0 /* TabContentBlocker+ContentScript.swift in Sources */,
