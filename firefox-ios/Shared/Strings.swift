@@ -1779,7 +1779,7 @@ extension String {
                         value: "Speedy, safe, and won’t sell you out. Browsing just got better.",
                         comment: "Description for the Terms of Use card in the v148 brand refresh onboarding flow.")
                     public static let TermsOfUseAgreement = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfUseAgreement.v148",
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148",
                         tableName: "Onboarding",
                         value: "By continuing, you agree to the %@",
                         comment: "Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page.")
