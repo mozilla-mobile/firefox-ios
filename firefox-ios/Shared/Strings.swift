@@ -1921,7 +1921,7 @@ extension String {
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Marketing.Description.v148",
                         tableName: "Onboarding",
-                        value: "Share how you discovered %1$@, and that you use it, with %2$@'s marketing partners. This data is never sold.",
+                        value: "Share how you discovered %1$@, and that you use it, with %2$@’s marketing partners. This data is never sold.",
                         comment: "Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla).")
                     public static let LearnMoreLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148",
