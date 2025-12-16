@@ -526,9 +526,6 @@ class BrowserViewController: UIViewController,
 
     var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
-    private var shouldWaitForTabsToBeRestored = false
-    private var searchInPrivateTab = false
-
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         if let existingHandler = keyboardPressesHandlerValue as? KeyboardPressesHandler {
