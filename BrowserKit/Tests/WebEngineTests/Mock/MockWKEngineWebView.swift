@@ -146,10 +146,13 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     }
 
     override func value(forKey key: String) -> Any? {
-        if key == "viewScale" {
-            return self.pageZoom
+        Task { @MainActor in
+            if key == "viewScale" {
+                return self.pageZoom
+            } else {
+                return super.value(forKey: key) as? CGFloat ?? 1.0
+            }
         }
-        return super.value(forKey: key)
     }
 
     override func setValue(_ value: Any?, forKey key: String) {
