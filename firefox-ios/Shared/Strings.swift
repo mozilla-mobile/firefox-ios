@@ -1802,12 +1802,12 @@ extension String {
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.ManagePreferenceAgreement.v148",
                         tableName: "Onboarding",
                         value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
-                        comment: "Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the Manage settings link button that redirects the user to manage data collection preferences.")
+                        comment: "Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences.")
                     public static let ManageLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.ManageLink.v148",
                         tableName: "Onboarding",
                         value: "Manage settings",
-                        comment: "The text for the Manage settings link button in the v148 brand refresh onboarding flow.")
+                        comment: "The text for the manage settings link button in the v148 brand refresh onboarding flow.")
                     public static let AgreementButtonTitle = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.AgreementButtonTitle.v148",
                         tableName: "Onboarding",
@@ -1894,12 +1894,12 @@ extension String {
                         key: "Onboarding.Modern.BrandRefresh.Sync.Title.v148",
                         tableName: "Onboarding",
                         value: "Instantly pick up where you left off",
-                        comment: "Title for the Sync card in the v148 brand refresh onboarding flow.")
+                        comment: "Title for the sync card in the v148 brand refresh onboarding flow.")
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Sync.Description.v148",
                         tableName: "Onboarding",
                         value: "Grab bookmarks, passwords, and more on any device in a snap. Your personal data stays safe and secure with encryption.",
-                        comment: "Description for the Sync card in the v148 brand refresh onboarding flow.")
+                        comment: "Description for the sync card in the v148 brand refresh onboarding flow.")
                     public static let SignInAction = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148",
                         tableName: "Onboarding",
@@ -1909,7 +1909,7 @@ extension String {
                         key: "Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148",
                         tableName: "Onboarding",
                         value: "Not Now",
-                        comment: "Button to skip the Sync setup during onboarding in the v148 brand refresh onboarding flow.")
+                        comment: "Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow.")
                 }
 
                 public struct Marketing {
