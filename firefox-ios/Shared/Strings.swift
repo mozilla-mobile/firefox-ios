@@ -1772,17 +1772,17 @@ extension String {
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.Title.v148",
                         tableName: "Onboarding",
                         value: "Get ready to run free",
-                        comment: "Title for the Terms of Service card in the v148 brand refresh onboarding flow.")
+                        comment: "Title for the Terms of Use card in the v148 brand refresh onboarding flow.")
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.Description.v148",
                         tableName: "Onboarding",
                         value: "Speedy, safe, and won’t sell you out. Browsing just got better.",
-                        comment: "Description for the Terms of Service card in the v148 brand refresh onboarding flow.")
+                        comment: "Description for the Terms of Use card in the v148 brand refresh onboarding flow.")
                     public static let TermsOfServiceAgreement = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfServiceAgreement.v148",
                         tableName: "Onboarding",
                         value: "By continuing, you agree to the %@",
-                        comment: "Agreement text for Terms of Service in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page.")
+                        comment: "Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page.")
                     public static let TermsOfUseLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfUseLink.v148",
                         tableName: "Onboarding",
@@ -1812,7 +1812,7 @@ extension String {
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.AgreementButtonTitle.v148",
                         tableName: "Onboarding",
                         value: "Agree and continue",
-                        comment: "Button title for agreeing to Terms of Service in the v148 brand refresh onboarding flow.")
+                        comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
                 }
 
                 public struct Welcome {
