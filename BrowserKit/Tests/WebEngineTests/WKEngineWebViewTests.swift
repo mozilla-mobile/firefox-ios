@@ -7,7 +7,7 @@ import XCTest
 import WebKit
 
 @MainActor
-final class WKEngineWebViewTests: XCTestCase {
+final class WKEngineWebViewTests: XCTestCase, @unchecked Sendable {
     private var delegate: MockWKEngineWebViewDelegate!
     private let testURL = URL(string: "https://www.example.com/")!
 
