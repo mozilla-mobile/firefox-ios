@@ -12,7 +12,7 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
 
     override func setUp() async throws {
         try await super.setUp()
-        userScriptManager = await MockWKUserScriptManager()
+        userScriptManager = MockWKUserScriptManager()
         webServerUtil = MockWKWebServerUtil()
         sourceTimerFactory = MockDispatchSourceTimerFactory()
     }
@@ -30,15 +30,16 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
         XCTAssertNotNil(subject.createView())
     }
 
+    @MainActor
     func testCreateSessionThenCreatesSession() async throws {
         let subject = await createSubject()
-        let session = try await subject.createSession(dependencies: DefaultTestDependencies().sessionDependencies)
+        let session = try subject.createSession(dependencies: DefaultTestDependencies().sessionDependencies)
         XCTAssertNotNil(session)
     }
 
     @MainActor
     func testWarmEngineCallsSetupEngine() async {
-        let subject = await createSubject()
+        let subject = createSubject()
         subject.warmEngine()
 
         XCTAssertEqual(sourceTimerFactory.dispatchSource.cancelCalled, 0)
@@ -70,12 +71,12 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
     @MainActor
     func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) async -> WKEngine {
-        let configProvider = await MockWKEngineConfigurationProvider()
-        let subject = await WKEngine(userScriptManager: userScriptManager,
-                                     webServerUtil: webServerUtil,
-                                     sourceTimerFactory: sourceTimerFactory,
-                                     configProvider: configProvider,
-                                     engineDependencies: engineDependencies)
+        let configProvider = MockWKEngineConfigurationProvider()
+        let subject = WKEngine(userScriptManager: userScriptManager,
+                               webServerUtil: webServerUtil,
+                               sourceTimerFactory: sourceTimerFactory,
+                               configProvider: configProvider,
+                               engineDependencies: engineDependencies)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
