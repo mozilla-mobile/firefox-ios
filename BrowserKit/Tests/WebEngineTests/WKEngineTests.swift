@@ -5,7 +5,7 @@
 import XCTest
 @testable import WebEngine
 
-final class WKEngineTests: XCTestCase {
+final class WKEngineTests: XCTestCase, @unchecked Sendable {
     private var userScriptManager: MockWKUserScriptManager!
     private var webServerUtil: MockWKWebServerUtil!
     private var sourceTimerFactory: MockDispatchSourceTimerFactory!
@@ -67,7 +67,7 @@ final class WKEngineTests: XCTestCase {
     }
 
     // MARK: Helper
-
+    @MainActor
     func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) async -> WKEngine {
         let configProvider = await MockWKEngineConfigurationProvider()
