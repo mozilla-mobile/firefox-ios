@@ -408,12 +408,12 @@ features:
             terms-of-service-brand-refresh:
               card-type: basic
               order: 5
-              title: Onboarding/Onboarding.Modern.BrandRefresh.TermsOfService.Title.v148
-              body: Onboarding/Onboarding.Modern.BrandRefresh.TermsOfService.Description.v148
+              title: Onboarding/Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148
+              body: Onboarding/Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148
               image: welcome-globe
               buttons:
                 primary:
-                  title: Onboarding/Onboarding.Modern.BrandRefresh.TermsOfService.AgreementButtonTitle.v148
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148
                   action: forward-one-card
               onboarding-type: fresh-install
               prerequisites:
