@@ -1783,36 +1783,36 @@ extension String {
                         tableName: "Onboarding",
                         value: "By continuing, you agree to the %@",
                         comment: "Agreement text for Terms of Service in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page.")
-                    public static let PrivacyNoticeAgreement = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.TermsOfService.PrivacyNoticeAgreement.v148",
-                        tableName: "Onboarding",
-                        value: "%1$@ cares about your privacy. Read more in our %2$@",
-                        comment: "Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page.")
-                    public static let ManagePreferenceAgreement = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.TermsOfService.ManagePreferenceAgreement.v148",
-                        tableName: "Onboarding",
-                        value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
-                        comment: "Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the Manage settings link button that redirects the user to manage data collection preferences.")
-                    public static let AgreementButtonTitle = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.TermsOfService.AgreementButtonTitle.v148",
-                        tableName: "Onboarding",
-                        value: "Agree and continue",
-                        comment: "Button title for agreeing to Terms of Service in the v148 brand refresh onboarding flow.")
                     public static let TermsOfUseLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.TermsOfUseLink.v148",
                         tableName: "Onboarding",
                         value: "%@ Terms of Use",
                         comment: "The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
+                    public static let PrivacyNoticeAgreement = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfService.PrivacyNoticeAgreement.v148",
+                        tableName: "Onboarding",
+                        value: "%1$@ cares about your privacy. Read more in our %2$@",
+                        comment: "Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page.")
                     public static let PrivacyNoticeLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.PrivacyNoticeLink.v148",
                         tableName: "Onboarding",
                         value: "Privacy Notice",
                         comment: "The text for the Privacy Notice link button in the v148 brand refresh onboarding flow.")
+                    public static let ManagePreferenceAgreement = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfService.ManagePreferenceAgreement.v148",
+                        tableName: "Onboarding",
+                        value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
+                        comment: "Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the Manage settings link button that redirects the user to manage data collection preferences.")
                     public static let ManageLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfService.ManageLink.v148",
                         tableName: "Onboarding",
                         value: "Manage settings",
                         comment: "The text for the Manage settings link button in the v148 brand refresh onboarding flow.")
+                    public static let AgreementButtonTitle = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfService.AgreementButtonTitle.v148",
+                        tableName: "Onboarding",
+                        value: "Agree and continue",
+                        comment: "Button title for agreeing to Terms of Service in the v148 brand refresh onboarding flow.")
                 }
 
                 public struct Welcome {
