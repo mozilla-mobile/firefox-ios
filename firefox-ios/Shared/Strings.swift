@@ -1783,6 +1783,199 @@ extension String {
                         comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
                 }
             }
+
+            public struct BrandRefresh {
+                public struct TermsOfUse {
+                    public static let Title = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148",
+                        tableName: "Onboarding",
+                        value: "Get ready to run free",
+                        comment: "Title for the Terms of Use card in the v148 brand refresh onboarding flow.")
+                    public static let Description = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148",
+                        tableName: "Onboarding",
+                        value: "Speedy, safe, and won’t sell you out. Browsing just got better.",
+                        comment: "Description for the Terms of Use card in the v148 brand refresh onboarding flow.")
+                    public static let TermsOfUseAgreement = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148",
+                        tableName: "Onboarding",
+                        value: "By continuing, you agree to the %@",
+                        comment: "Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page.")
+                    public static let TermsOfUseLink = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148",
+                        tableName: "Onboarding",
+                        value: "%@ Terms of Use",
+                        comment: "The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
+                    public static let PrivacyNoticeAgreement = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148",
+                        tableName: "Onboarding",
+                        value: "%1$@ cares about your privacy. Read more in our %2$@",
+                        comment: "Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page.")
+                    public static let PrivacyNoticeLink = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148",
+                        tableName: "Onboarding",
+                        value: "Privacy Notice",
+                        comment: "The text for the Privacy Notice link button in the v148 brand refresh onboarding flow.")
+                    public static let ManagePreferenceAgreement = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148",
+                        tableName: "Onboarding",
+                        value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
+                        comment: "Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences.")
+                    public static let ManageLink = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148",
+                        tableName: "Onboarding",
+                        value: "Manage settings",
+                        comment: "The text for the manage settings link button in the v148 brand refresh onboarding flow.")
+                    public static let AgreementButtonTitle = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148",
+                        tableName: "Onboarding",
+                        value: "Agree and continue",
+                        comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
+                }
+
+                public struct Welcome {
+                    public static let Title = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148",
+                        tableName: "Onboarding",
+                        value: "Say goodbye to creepy trackers",
+                        comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
+                    public static let Description = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Welcome.Description.v148",
+                        tableName: "Onboarding",
+                        value: "We protect your data and automatically block companies from spying on your clicks.",
+                        comment: "Description for the welcome card in the v148 brand refresh onboarding flow.")
+                    public static let ActionTreatmentA = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148",
+                        tableName: "Onboarding",
+                        value: "Set as Default Browser",
+                        comment: "Action button to set the app as the default browser in the v148 brand refresh onboarding flow.")
+                    public static let Skip = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Welcome.Skip.v148",
+                        tableName: "Onboarding",
+                        value: "Not Now",
+                        comment: "Button to skip the welcome card in the v148 brand refresh onboarding flow.")
+                }
+
+                public struct Toolbar {
+                    public static let Title = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148",
+                        tableName: "Onboarding",
+                        value: "Choose your address bar",
+                        comment: "Title for the toolbar customization card in the v148 brand refresh onboarding flow.")
+                    public static let Description = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148",
+                        tableName: "Onboarding",
+                        value: "Start typing to get search suggestions, your top sites, bookmarks, history and search engines — all in one place.",
+                        comment: "Description for the toolbar customization card in the v148 brand refresh onboarding flow.")
+                    public static let ContinueAction = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148",
+                        tableName: "Onboarding",
+                        value: "Continue",
+                        comment: "Continue button on the toolbar customization card in the v148 brand refresh onboarding flow.")
+                }
+
+                public struct Theme {
+                    public static let Title = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148",
+                        tableName: "Onboarding",
+                        value: "Pick your theme",
+                        comment: "Title for the theme selection card in the v148 brand refresh onboarding flow.")
+                    public static let Automatic = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148",
+                        tableName: "Onboarding",
+                        value: "Automatic",
+                        comment: "Option for the automatic theme in the v148 brand refresh onboarding flow.")
+                    public static let Light = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148",
+                        tableName: "Onboarding",
+                        value: "Light",
+                        comment: "Option for the light theme in the v148 brand refresh onboarding flow.")
+                    public static let Dark = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148",
+                        tableName: "Onboarding",
+                        value: "Dark",
+                        comment: "Option for the dark theme in the v148 brand refresh onboarding flow.")
+                    public static let Description = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148",
+                        tableName: "Onboarding",
+                        value: "Pick your favorite theme or have %@ match your device, putting you in control.",
+                        comment: "Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
+                    public static let ContinueAction = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148",
+                        tableName: "Onboarding",
+                        value: "Continue",
+                        comment: "Continue button on the theme selection card in the v148 brand refresh onboarding flow.")
+                }
+
+                public struct Sync {
+                    public static let Title = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Sync.Title.v148",
+                        tableName: "Onboarding",
+                        value: "Instantly pick up where you left off",
+                        comment: "Title for the sync card in the v148 brand refresh onboarding flow.")
+                    public static let Description = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Sync.Description.v148",
+                        tableName: "Onboarding",
+                        value: "Grab bookmarks, passwords, and more on any device in a snap. Your personal data stays safe and secure with encryption.",
+                        comment: "Description for the sync card in the v148 brand refresh onboarding flow.")
+                    public static let SignInAction = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148",
+                        tableName: "Onboarding",
+                        value: "Start Syncing",
+                        comment: "Button to start the sync setup process in the v148 brand refresh onboarding flow.")
+                    public static let SkipAction = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148",
+                        tableName: "Onboarding",
+                        value: "Not Now",
+                        comment: "Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow.")
+                }
+
+                public struct Marketing {
+                    public static let Title = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Marketing.Title.v148",
+                        tableName: "Onboarding",
+                        value: "Help us build a better internet",
+                        comment: "Title for the marketing data sharing card in the v148 brand refresh onboarding flow.")
+                    public static let Description = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Marketing.Description.v148",
+                        tableName: "Onboarding",
+                        value: "Share how you discovered %1$@, and that you use it, with %2$@’s marketing partners. This data is never sold.",
+                        comment: "Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla).")
+                    public static let LearnMoreLink = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148",
+                        tableName: "Onboarding",
+                        value: "How we use data",
+                        comment: "Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow.")
+                    public static let SkipAction = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148",
+                        tableName: "Onboarding",
+                        value: "Not Now",
+                        comment: "Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow.")
+                }
+
+                public struct Notification {
+                    public static let Title = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Notification.Title.v148",
+                        tableName: "Onboarding",
+                        value: "Notifications help you stay safer with %@",
+                        comment: "Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
+                    public static let Description = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Notification.Description.v148",
+                        tableName: "Onboarding",
+                        value: "Discover privacy features in %@ and securely send tabs between your devices.",
+                        comment: "Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox).")
+                    public static let TurnOnAction = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148",
+                        tableName: "Onboarding",
+                        value: "Turn on notifications",
+                        comment: "Button to turn on notifications in the v148 brand refresh onboarding flow.")
+                    public static let SkipAction = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148",
+                        tableName: "Onboarding",
+                        value: "Not Now",
+                        comment: "Button to skip the notification card in the v148 brand refresh onboarding flow.")
+                }
+            }
         }
 
         public struct JapanStrings {
