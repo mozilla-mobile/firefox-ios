@@ -132,7 +132,11 @@ class DataManagementTests: BaseTestCase {
         // let expectedSearchResults = app.tables["Search results"].cells.count
         // XCTAssertEqual(expectedSearchResults, 1)
         if #available(iOS 26, *) {
-            app.buttons["close"].waitAndTap()
+            if iPad() {
+                app.buttons["Clear text"].waitAndTap()
+            } else {
+                app.buttons["close"].waitAndTap()
+            }
         } else {
             app.buttons["Cancel"].waitAndTap()
         }
