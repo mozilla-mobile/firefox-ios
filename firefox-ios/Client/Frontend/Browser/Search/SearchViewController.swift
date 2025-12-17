@@ -42,17 +42,17 @@ class SearchViewController: SiteTableViewController,
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     private struct UX {
-        static let EngineButtonHeight: CGFloat = 44 // Equivalent to toolbar height, fixed at the moment
-        static let EngineButtonWidth: CGFloat = EngineButtonHeight * 1.4
+        static let buttonsHeight: CGFloat = 44 // Equivalent to toolbar height, fixed at the moment
+        static let engineButtonWidth: CGFloat = buttonsHeight * 1.4
         static let EngineButtonBackgroundColor = UIColor.clear.cgColor
 
         static let SearchImage = StandardImageIdentifiers.Large.search
         static let SearchEngineTopBorderWidth = 0.5
-        static let SuggestionMargin: CGFloat = 8
+        static let suggestionMargin: CGFloat = 8
 
         static let IconSize: CGFloat = 23
         static let SearchIconSize: CGFloat = 20
-        static let FaviconSize: CGFloat = 29
+        static let faviconSize: CGFloat = 29
         static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
         static let IconBorderWidth: CGFloat = 0.5
 
@@ -75,10 +75,13 @@ class SearchViewController: SiteTableViewController,
     private var bottomConstraintWithKeyboard: NSLayoutConstraint?
     private var bottomConstraintWithoutKeyboard: NSLayoutConstraint?
 
-    private let searchEngineStackView: UIStackView = .build { stackview in
-        stackview.axis = .horizontal
-        stackview.alignment = .center
-        stackview.spacing = 8
+    private var isCompact: Bool {
+        return UIScreen.main.traitCollection.horizontalSizeClass == .compact
+    }
+
+    private let searchEngineStackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
     }
 
     private lazy var bookmarkedBadge: UIImage = {
@@ -207,21 +210,25 @@ class SearchViewController: SiteTableViewController,
 
     private func layoutSearchEngineScrollViewContent() {
         NSLayoutConstraint.activate([
-            searchEngineStackView.leadingAnchor.constraint(equalTo: searchEngineScrollView.leadingAnchor, constant: 16),
-            searchEngineStackView.trailingAnchor.constraint(equalTo: searchEngineScrollView.trailingAnchor),
             searchEngineStackView.topAnchor.constraint(equalTo: searchEngineScrollView.topAnchor),
             searchEngineStackView.bottomAnchor.constraint(equalTo: searchEngineScrollView.bottomAnchor),
             searchEngineStackView.heightAnchor.constraint(equalTo: searchEngineScrollView.heightAnchor)
         ])
 
-        // left-align the engines on iphones, center on ipad
-        let isCompact = UIScreen.main.traitCollection.horizontalSizeClass == .compact
-        searchEngineStackView.leadingAnchor.constraint(
-            equalTo: searchEngineScrollView.leadingAnchor
-        ).priority(.defaultHigh).isActive = isCompact
-        searchEngineStackView.leadingAnchor.constraint(
-            greaterThanOrEqualTo: searchEngineScrollView.leadingAnchor
-        ).priority(.defaultHigh).isActive = !isCompact
+        if isCompact {
+            searchEngineStackView.alignment = .leading
+            searchEngineStackView.leadingAnchor.constraint(equalTo: searchEngineScrollView.leadingAnchor,
+                                                           constant: UX.suggestionMargin).isActive = true
+            searchEngineStackView.trailingAnchor.constraint(equalTo: searchEngineScrollView.trailingAnchor,
+                                                            constant: UX.suggestionMargin).isActive = true
+        } else {
+            searchEngineStackView.alignment = .center
+            searchEngineStackView.leadingAnchor.constraint(greaterThanOrEqualTo:
+                                                            searchEngineScrollView.leadingAnchor).isActive = true
+            searchEngineStackView.trailingAnchor.constraint(lessThanOrEqualTo:
+                                                                searchEngineScrollView.trailingAnchor).isActive = true
+            searchEngineStackView.centerXAnchor.constraint(equalTo: searchEngineScrollView.centerXAnchor).isActive = true
+        }
     }
 
     /// Information to record in telemetry for the currently visible
@@ -279,8 +286,8 @@ class SearchViewController: SiteTableViewController,
 
         // Add search button first
         searchEngineStackView.addArrangedSubview(searchButton)
-        searchButton.widthAnchor.constraint(equalToConstant: UX.FaviconSize).isActive = true
-        searchButton.heightAnchor.constraint(equalToConstant: UX.FaviconSize).isActive = true
+        searchButton.widthAnchor.constraint(equalToConstant: UX.buttonsHeight).isActive = true
+        searchButton.heightAnchor.constraint(equalToConstant: UX.buttonsHeight).isActive = true
 
         if let imageView = searchButton.imageView {
             imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -302,12 +309,12 @@ class SearchViewController: SiteTableViewController,
 
             if let imageView = engineButton.imageView {
                 imageView.translatesAutoresizingMaskIntoConstraints = false
-                imageView.widthAnchor.constraint(equalToConstant: UX.FaviconSize).isActive = true
-                imageView.heightAnchor.constraint(equalToConstant: UX.FaviconSize).isActive = true
+                imageView.widthAnchor.constraint(equalToConstant: UX.faviconSize).isActive = true
+                imageView.heightAnchor.constraint(equalToConstant: UX.faviconSize).isActive = true
             }
 
-            engineButton.widthAnchor.constraint(equalToConstant: UX.EngineButtonWidth).isActive = true
-            engineButton.heightAnchor.constraint(equalToConstant: UX.EngineButtonHeight).isActive = true
+            engineButton.widthAnchor.constraint(equalToConstant: UX.engineButtonWidth).isActive = true
+            engineButton.heightAnchor.constraint(equalToConstant: UX.buttonsHeight).isActive = true
 
             searchEngineStackView.addArrangedSubview(engineButton)
         }
