@@ -157,7 +157,9 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
 
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "viewScale", let zoomValue = value as? CGFloat {
-            self.pageZoom = zoomValue
+            Task { @MainActor in
+                self.pageZoom = zoomValue
+            }
             return
         }
         super.setValue(value, forKey: key)
