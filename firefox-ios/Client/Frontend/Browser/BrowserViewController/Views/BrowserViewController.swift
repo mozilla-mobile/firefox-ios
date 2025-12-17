@@ -4151,7 +4151,7 @@ class BrowserViewController: UIViewController,
         switch result {
         case .newMaskGenerated:
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
-        case .error:
+        case .error, .expiredToken:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         case .freeTierLimitReached:
