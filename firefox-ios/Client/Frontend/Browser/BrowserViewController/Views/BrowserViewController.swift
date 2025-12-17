@@ -206,7 +206,7 @@ class BrowserViewController: UIViewController,
         if isTabScrollRefactoringEnabled {
             return TabScrollHandler(windowUUID: windowUUID, delegate: self)
         } else {
-            return LegacyTabScrollController(windowUUID: windowUUID)
+            return LegacyTabScrollController(windowUUID: windowUUID, delegate: self)
         }
     }()
 
@@ -712,7 +712,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateBlurViews(scrollOffset: CGFloat? = nil) {
+    func updateBlurViews(scrollOffset: CGFloat? = nil) {
         guard toolbarHelper.shouldBlur() else {
             topBlurView.alpha = 0
             bottomBlurView.isHidden = true
@@ -782,7 +782,7 @@ class BrowserViewController: UIViewController,
 
     // Adds or updates the mask for the content container that ensures the content is extending
     // under the toolbars but not leading and trailing (would show during swiping tabs)
-    private func addOrUpdateMaskViewIfNeeded() {
+    func addOrUpdateMaskViewIfNeeded() {
         guard toolbarHelper.shouldBlur() else { return }
 
         let frame = CGRect(x: 0,
@@ -3873,13 +3873,11 @@ class BrowserViewController: UIViewController,
         let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
         let colors = currentTheme.colors
         backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
-#if canImport(FoundationModels)
         if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
             glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
             bottomBlurView.effect = glassEffect
             topBlurView.effect = glassEffect
         }
-#endif
 
         setNeedsStatusBarAppearanceUpdate()
 
