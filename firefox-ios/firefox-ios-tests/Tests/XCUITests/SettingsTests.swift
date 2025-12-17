@@ -507,7 +507,7 @@ class SettingsTests: FeatureFlaggedTestBase {
             table.cells[settingsQuery.Siri.title],
             table.cells[settingsQuery.AutofillsPasswords.title],
             table.cells[settingsQuery.ClearData.title],
-            app.switches[settingsQuery.ClosePrivateTabs.title],
+            table.switches[settingsQuery.ClosePrivateTabs.title],
             table.cells[settingsQuery.ContentBlocker.title],
             table.cells[settingsQuery.Notifications.title],
             table.cells[settingsQuery.PrivacyPolicy.title],
@@ -531,7 +531,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         for i in settingsElements {
             scrollToElement(i)
             mozWaitForElementToExist(i)
-            XCTAssertTrue(i.isVisible())
+            XCTAssertTrue(i.exists)
         }
         app.buttons["Done"].waitAndTap()
     }

@@ -402,7 +402,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let swipeableElement = swipeableElement ?? app
         var nrOfSwipes = 0
-        while(!element.isVisible() || isHittable && !element.isHittable) && nrOfSwipes < maxNumberOfScreenSwipes {
+        while(!element.exists || isHittable && !element.isHittable) && nrOfSwipes < maxNumberOfScreenSwipes {
             if swipe == "down" {
                 swipeableElement.partialSwipeDown()
             } else {
