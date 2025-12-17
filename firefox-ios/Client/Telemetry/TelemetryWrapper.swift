@@ -179,6 +179,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
 
         TelemetryContextualIdentifier.setupContextId()
 
+        // Process any pending app extension telemetry events from NSUserDefaults
+        processPendingAppExtensionTelemetry(profile: profile)
+
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
         startObservingNotifications(
@@ -329,13 +332,49 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             summarizerTelemetry.summarizationShakeGestureEnabled(summarizerNimbusUtils.isShakeGestureEnabled)
         }
     }
+
+    /// Processes pending app extension telemetry events stored in NSUserDefaults.
+    /// These events are written by the ShareTo extension and need to be recorded in Glean.
+    /// Should be called both on app launch and when app becomes active (foreground) to ensure
+    /// events are processed even when the app was in background.
+    /// - Parameter profile: The profile containing the preferences where events are stored
+    @MainActor
+    func processPendingAppExtensionTelemetry(profile: Profile) {
+        guard let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
+              !extensionEvents.isEmpty else {
+            return
+        }
+
+        let shareExtensionTelemetry = ShareExtensionTelemetry()
+
+        // Process each event and record it in Glean
+        for event in extensionEvents {
+            guard let method = event["method"] else { continue }
+
+            switch method {
+            case "load-in-background":
+                shareExtensionTelemetry.loadInBackground()
+            case "bookmark-this-page":
+                shareExtensionTelemetry.bookmarkThisPage()
+            case "add-to-reading-list":
+                shareExtensionTelemetry.addToReadingList()
+            case "send-to-device":
+                shareExtensionTelemetry.sendToDevice()
+            default:
+                // Unknown method, skip it
+                continue
+            }
+        }
+
+        // Clear the events array after processing
+        profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryEventArray)
+    }
 }
 
 // Enums for Event telemetry.
 extension TelemetryWrapper {
     public enum EventCategory: String {
         case action = "action"
-        case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
         case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
@@ -365,7 +404,6 @@ extension TelemetryWrapper {
         case tap = "tap"
         case translate = "translate"
         case view = "view"
-        case applicationOpenUrl = "application-open-url"
         case emailLogin = "email"
         case qrPairing = "pairing"
         case settings = "settings"

@@ -14,14 +14,17 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
     private var prefs: Prefs?
     private var mainQueue: DispatchQueueInterface
     private let actionExtensionTelemetry: ActionExtensionTelemetry
+    private let shareExtensionTelemetry: ShareExtensionTelemetry
     var shouldOpenNewTab = true
 
     init(
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
-        actionExtensionTelemetry: ActionExtensionTelemetry = ActionExtensionTelemetry()
+        actionExtensionTelemetry: ActionExtensionTelemetry = ActionExtensionTelemetry(),
+        shareExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry()
     ) {
         self.mainQueue = mainQueue
         self.actionExtensionTelemetry = actionExtensionTelemetry
+        self.shareExtensionTelemetry = shareExtensionTelemetry
     }
 
     func configure(isPrivate: Bool,
@@ -278,9 +281,14 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
     private func sendAppExtensionTelemetry(object: TelemetryWrapper.EventObject) {
         if prefs?.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) != nil {
             prefs?.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
-            TelemetryWrapper.recordEvent(category: .appExtensionAction,
-                                         method: .applicationOpenUrl,
-                                         object: object)
+            switch object {
+            case .url:
+                shareExtensionTelemetry.shareURL()
+            case .searchText:
+                shareExtensionTelemetry.shareText()
+            default:
+                break
+            }
         }
     }
 }

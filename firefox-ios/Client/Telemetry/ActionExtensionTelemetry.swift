@@ -5,9 +5,13 @@
 import Foundation
 import Glean
 
+/// Telemetry for the "Open in Firefox" Action Extension
+/// This handles telemetry from the system share sheet (Action Extension)
 struct ActionExtensionTelemetry {
     private let gleanWrapper: GleanWrapper
 
+    /// Initializes ActionExtensionTelemetry
+    /// - Parameter gleanWrapper: The Glean wrapper for recording events
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }

@@ -8,46 +8,54 @@ import XCTest
 @testable import Client
 
 final class ActionExtensionTelemetryTests: XCTestCase {
-    var subject: ActionExtensionTelemetry?
+    var actionExtensionTelemetry: ActionExtensionTelemetry?
     var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
         gleanWrapper = MockGleanWrapper()
-        subject = ActionExtensionTelemetry(gleanWrapper: gleanWrapper)
+        actionExtensionTelemetry = ActionExtensionTelemetry(gleanWrapper: gleanWrapper)
     }
 
     override func tearDown() {
-        subject = nil
+        actionExtensionTelemetry = nil
         gleanWrapper = nil
         super.tearDown()
     }
 
-    func testRecordEvent_WhenShareURL_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.urlShared
-        let expectedMetricType = type(of: event)
+    // MARK: - shareURL Tests
 
-        subject?.shareURL()
+    func testShareURL_RecordsUrlSharedEvent() throws {
+        let event = GleanMetrics.ShareOpenInFirefoxExtension.urlShared
+
+        actionExtensionTelemetry?.shareURL()
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType === expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testRecordEvent_WhenShareText_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.ShareOpenInFirefoxExtension.textShared
-        let expectedMetricType = type(of: event)
+    // MARK: - shareText Tests
 
-        subject?.shareText()
+    func testShareText_RecordsTextSharedEvent() throws {
+        let event = GleanMetrics.ShareOpenInFirefoxExtension.textShared
+
+        actionExtensionTelemetry?.shareText()
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType === expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    // MARK: - Multiple Events Tests
+
+    func testMultipleEvents_RecordsAllEvents() {
+        actionExtensionTelemetry?.shareURL()
+        actionExtensionTelemetry?.shareText()
+
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 2)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
     }
 }
