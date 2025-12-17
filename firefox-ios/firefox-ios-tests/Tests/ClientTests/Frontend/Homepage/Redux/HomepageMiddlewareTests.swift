@@ -668,17 +668,19 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func setupNimbusStoriesRedesignTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(storiesRedesign: isEnabled)
-        }
         if !isEnabled {
-            setupNimbusStoriesRedesignV2Testing(isEnabled: false)
-        }
-    }
-
-    private func setupNimbusStoriesRedesignV2Testing(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(storiesRedesignV2: isEnabled)
+            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+                return HomepageRedesignFeature(
+                    storiesRedesign: false,
+                    storiesRedesignV2: false
+                )
+            }
+        } else {
+            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+                return HomepageRedesignFeature(
+                    storiesRedesign: true
+                )
+            }
         }
     }
 

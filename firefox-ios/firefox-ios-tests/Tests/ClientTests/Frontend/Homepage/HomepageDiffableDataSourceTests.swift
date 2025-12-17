@@ -322,21 +322,19 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     private func setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(
-                storiesRedesign: storiesRedesignEnabled,
-            )
-        }
         if !storiesRedesignEnabled {
-            setupNimbusHomepageRedesignV2Testing(storiesRedesignEnabled: false)
-        }
-    }
-
-    private func setupNimbusHomepageRedesignV2Testing(storiesRedesignEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(
-                storiesRedesignV2: storiesRedesignEnabled,
-            )
+            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+                return HomepageRedesignFeature(
+                    storiesRedesign: false,
+                    storiesRedesignV2: false
+                )
+            }
+        } else {
+            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+                return HomepageRedesignFeature(
+                    storiesRedesign: true
+                )
+            }
         }
     }
 }
