@@ -26113,7 +26113,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/Ecosia.entitlements;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				EAGER_LINKING = YES;
+				EAGER_LINKING = "$(inherited)";
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = Client/Info.plist;

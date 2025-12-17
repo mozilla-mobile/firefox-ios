@@ -28,6 +28,7 @@ OTHER_SWIFT_FLAGS_common = -DMOZ_TARGET_CLIENT
 PRODUCT_NAME = $(TARGET_NAME)
 SDKROOT = iphoneos
 SKIP_INSTALL = YES // Overridden for Client and extensions, so they end up in the bundle
+EAGER_LINKING = NO
 SWIFT_VERSION = 5.3
 TARGETED_DEVICE_FAMILY = 1,2
 TEST_TARGET_NAME = Client
