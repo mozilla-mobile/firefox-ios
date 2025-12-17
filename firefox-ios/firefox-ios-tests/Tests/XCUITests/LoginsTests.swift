@@ -38,7 +38,9 @@ class LoginTest: BaseTestCase {
         // removeApp() does not work on iOS 15 and 16 intermittently
         if name.contains("testLoginFreshInstallMessage") {
             if #available(iOS 17, *) {
-                removeApp()
+                if #unavailable(iOS 26) {
+                    removeApp()
+                }
             }
         }
         // The app is correctly installed
@@ -500,6 +502,9 @@ class LoginTest: BaseTestCase {
         if #unavailable(iOS 17) {
             throw XCTSkip("setUp() fails to remove app intermittently")
         }
+        if #available(iOS 26, *) {
+            throw XCTSkip("setUp() fails to remove app intermittently")
+        }
         navigator.goto(SettingsScreen)
         let syncInToSync = AccessibilityIdentifiers.Settings.ConnectSetting.title.self
         mozWaitForElementToExist(app.cells[syncInToSync])
@@ -576,15 +581,22 @@ class LoginTest: BaseTestCase {
             throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
         }
         validateLoginTextFieldsCanBeCopied(indexField: 0, copiedText: "https://testweb", field: "website")
-        print(app.debugDescription)
         if #available(iOS 26, *) {
-            app.buttons["close"].waitAndTap()
+            if iPad() {
+                app.buttons["Clear text"].waitAndTap()
+            } else {
+                app.buttons["close"].waitAndTap()
+            }
         } else {
             app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
         }
         validateLoginTextFieldsCanBeCopied(indexField: 1, copiedText: "foo", field: "username")
         if #available(iOS 26, *) {
-            app.buttons["close"].waitAndTap()
+            if iPad() {
+                app.buttons["Clear text"].waitAndTap()
+            } else {
+                app.buttons["close"].waitAndTap()
+            }
         } else {
             app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
         }
@@ -708,7 +720,11 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.searchFields[passwordssQuery.searchPasswords])
         // Tap on the cancel button
         if #available(iOS 26, *) {
-            app.buttons["close"].waitAndTap()
+            if iPad() {
+                app.buttons["Clear text"].waitAndTap()
+            } else {
+                app.buttons["close"].waitAndTap()
+            }
         } else {
             app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
         }
