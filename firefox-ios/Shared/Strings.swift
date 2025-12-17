@@ -1944,7 +1944,7 @@ extension String {
                     public static let LearnMoreLink = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148",
                         tableName: "Onboarding",
-                        value: "How we use data",
+                        value: "How we use the data",
                         comment: "Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow.")
                     public static let SkipAction = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148",

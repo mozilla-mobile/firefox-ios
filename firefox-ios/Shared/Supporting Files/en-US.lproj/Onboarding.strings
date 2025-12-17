@@ -401,7 +401,7 @@
 "Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Share how you discovered %1$@, and that you use it, with %2$@’s marketing partners. This data is never sold.";
 
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "How we use data";
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "How we use the data";
 
 /* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "Not Now";
