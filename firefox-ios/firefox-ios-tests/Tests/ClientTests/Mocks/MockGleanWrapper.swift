@@ -49,8 +49,10 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
 
     func enableTestingMode() {}
 
-    func recordEvent<ExtraObject>(for metric: EventMetricType<ExtraObject>,
-                                  extras: EventExtras) where ExtraObject: EventExtras {
+    func recordEvent<ExtraObject>(
+        for metric: EventMetricType<ExtraObject>,
+        extras: EventExtras
+    ) where ExtraObject: EventExtras {
         savedExtras.append(extras)
         savedEvents.append(metric)
         recordEventCalled += 1
@@ -72,7 +74,10 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
         recordStringCalled += 1
     }
 
-    func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String) {
+    func incrementLabeledCounter(
+        for metric: LabeledMetricType<CounterMetricType>,
+        label: String
+    ) {
         savedLabel = label
         savedEvents.append(metric)
         incrementLabeledCounterCalled += 1
@@ -88,12 +93,20 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
         recordQuantityCalled += 1
     }
 
-    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String) {
+    func recordLabel(
+        for metric: LabeledMetricType<StringMetricType>,
+        label: String,
+        value: String
+    ) {
         savedEvents.append(metric)
         recordLabelCalled += 1
     }
 
-    func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {
+    func recordLabeledQuantity(
+        for metric: LabeledMetricType<QuantityMetricType>,
+        label: String,
+        value: Int64
+    ) {
         savedLabel = label
         savedValues.append(value)
         savedEvents.append(metric)
