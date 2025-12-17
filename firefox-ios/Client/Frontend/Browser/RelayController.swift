@@ -219,6 +219,9 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private func invalidateClient() {
         guard let acctManager = RustFirefoxAccounts.shared.accountManager else { return }
         // Needs additional clarification from services team. This is currently required for token refresh to work.
+        // TODO: Revisit this soon.
+        // See also: [FXIOS-14492] &&
+        // https://mozilla.slack.com/archives/C0559DDDPQF/p1765996942015839?thread_ts=1765823236.913449&cid=C0559DDDPQF
         acctManager.clearAccessTokenCache()
         client = nil
     }
