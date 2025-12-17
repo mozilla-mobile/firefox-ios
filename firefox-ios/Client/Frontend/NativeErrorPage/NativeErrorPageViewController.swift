@@ -154,6 +154,7 @@ final class NativeErrorPageViewController: UIViewController,
 
     // MARK: Redux
     func newState(state: NativeErrorPageState) {
+        guard state != nativeErrorPageState else { return }
         nativeErrorPageState = state
 
         if !state.title.isEmpty {

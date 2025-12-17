@@ -389,6 +389,7 @@ class MainMenuViewController: UIViewController,
     }
 
     func newState(state: MainMenuState) {
+        guard state != menuState else { return }
         menuState = state
 
         isBrowserDefault = menuState.isBrowserDefault

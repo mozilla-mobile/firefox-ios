@@ -232,6 +232,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     }
 
     func newState(state: PasswordGeneratorState) {
+        guard state != passwordGeneratorState else { return }
         passwordGeneratorState = state
         passwordField.configure(password: passwordGeneratorState.password)
         passwordField.setPasswordHidden(passwordGeneratorState.passwordHidden)

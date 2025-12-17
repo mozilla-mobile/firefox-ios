@@ -167,6 +167,7 @@ class IntroViewController: UIViewController,
     func newState(state: OnboardingViewControllerState) {
         ensureMainThread { [weak self] in
             guard let self else { return }
+            guard state != introViewControllerState else { return }
 
             introViewControllerState = state
 

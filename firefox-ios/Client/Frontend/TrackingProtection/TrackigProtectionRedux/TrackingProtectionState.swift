@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-struct TrackingProtectionState: ScreenState {
+struct TrackingProtectionState: ScreenState, Equatable {
     enum NavType {
         case home
         case back

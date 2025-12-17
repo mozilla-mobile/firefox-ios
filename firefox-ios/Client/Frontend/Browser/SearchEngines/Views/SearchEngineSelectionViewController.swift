@@ -129,6 +129,7 @@ class SearchEngineSelectionViewController: UIViewController,
     }
 
     func newState(state: SearchEngineSelectionState) {
+        guard state != self.state else { return }
         self.state = state
 
         searchEngineTableView.reloadTableView(

@@ -135,6 +135,7 @@ class StoriesFeedViewController: UIViewController,
     }
 
     func newState(state: StoriesFeedState) {
+        guard state != storiesFeedState else { return }
         self.storiesFeedState = state
 
         dataSource?.updateSnapshot(state: state)

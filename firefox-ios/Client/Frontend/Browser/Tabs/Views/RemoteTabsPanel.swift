@@ -206,6 +206,7 @@ class RemoteTabsPanel: UIViewController,
     func newState(state: RemoteTabsPanelState) {
         ensureMainThread { [weak self] in
             guard let self else { return }
+            guard state != self.state else { return }
 
             self.state = state
             tabsDisplayViewController.newState(state: state)

@@ -224,6 +224,7 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: Redux
     func newState(state: TrackingProtectionState) {
+        guard state != trackingProtectionState else { return }
         trackingProtectionState = state
         if let navDestination = state.navigateTo {
             switch navDestination {

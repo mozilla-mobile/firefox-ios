@@ -152,6 +152,7 @@ final class TabDisplayView: UIView,
             return
         }
 
+        guard state != tabsState else { return }
         tabsState = state
 
         dataSource.updateSnapshot(state: tabsState)

@@ -314,6 +314,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     func newState(state: ToolbarState) {
+        guard state != self.state else { return }
         self.state = state
         updateModel(toolbarState: state)
     }

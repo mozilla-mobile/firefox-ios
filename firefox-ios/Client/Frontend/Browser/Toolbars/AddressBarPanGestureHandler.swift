@@ -120,6 +120,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     func newState(state: ToolbarState) {
+        guard state != toolbarState else { return }
         toolbarState = state
         disablePanGestureIfTopAddressBar()
 

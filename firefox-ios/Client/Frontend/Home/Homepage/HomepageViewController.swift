@@ -328,16 +328,16 @@ final class HomepageViewController: UIViewController,
     }
 
     func newState(state: HomepageState) {
+        guard state != homepageState else { return }
+
         wallpaperView.wallpaperState = state.wallpaperState
 
-        // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
-        // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
-        if homepageState != state {
-            dataSource?.updateSnapshot(
-                state: state,
-                jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
-            )
-        }
+        // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded
+        // all the time also when data don't change
+        dataSource?.updateSnapshot(
+            state: state,
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
+        )
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
         if state.shouldTriggerImpression {

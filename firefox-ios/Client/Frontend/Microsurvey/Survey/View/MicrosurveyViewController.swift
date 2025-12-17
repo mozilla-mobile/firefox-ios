@@ -150,6 +150,7 @@ final class MicrosurveyViewController: UIViewController,
 
     // MARK: Redux
     func newState(state: MicrosurveyState) {
+        guard state != microsurveyState else { return }
         microsurveyState = state
         if microsurveyState.shouldDismiss {
             coordinator?.dismissFlow()

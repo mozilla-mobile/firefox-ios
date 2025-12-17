@@ -146,6 +146,7 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     func newState(state: ShortcutsLibraryState) {
+        guard state != shortcutsLibraryState else { return }
         self.shortcutsLibraryState = state
 
         dataSource?.updateSnapshot(state: state)

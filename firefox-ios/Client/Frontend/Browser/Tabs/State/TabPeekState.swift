@@ -5,7 +5,7 @@
 import Redux
 import Common
 
-struct TabPeekState: ScreenState {
+struct TabPeekState: ScreenState, Equatable {
     let showAddToBookmarks: Bool
     let showRemoveBookmark: Bool
     let showSendToDevice: Bool

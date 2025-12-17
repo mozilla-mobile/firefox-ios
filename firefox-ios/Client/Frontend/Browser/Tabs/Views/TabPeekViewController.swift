@@ -58,6 +58,7 @@ final class TabPeekViewController: UIViewController,
     }
 
     func newState(state: TabPeekState) {
+        guard state != tabPeekState else { return }
         tabPeekState = state
         setupWithScreenshot()
     }

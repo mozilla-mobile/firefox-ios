@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-struct PasswordGeneratorState: ScreenState {
+struct PasswordGeneratorState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var password: String
     var passwordHidden: Bool
