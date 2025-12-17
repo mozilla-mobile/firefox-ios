@@ -257,6 +257,11 @@ public struct PrefsKeys {
     public struct Usage {
         public static let profileId = "profileId"
     }
+
+    public struct PrivacyNotice {
+        // Timestamp in milliseconds for when the privacy notice homepage card was last shown
+        public static let notifiedDate = "NotifiedDate"
+    }
 }
 
 public protocol Prefs: Sendable {

@@ -16,6 +16,7 @@ final class HomepageDiffableDataSource:
     typealias NumberOfTilesPerRow = Int
 
     enum HomeSection: Hashable {
+        case privacyNotice
         case messageCard
         case topSites(TextColor?, NumberOfTilesPerRow)
         case searchBar
@@ -36,6 +37,7 @@ final class HomepageDiffableDataSource:
     }
 
     enum HomeItem: Hashable, Sendable {
+        case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
@@ -49,6 +51,7 @@ final class HomepageDiffableDataSource:
 
         static var cellTypes: [ReusableCell.Type] {
             return [
+                PrivacyNoticeCell.self,
                 HomepageMessageCardCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
@@ -92,6 +95,11 @@ final class HomepageDiffableDataSource:
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
+
+        if state.shouldShowPrivacyNotice {
+            snapshot.appendSections([.privacyNotice])
+            snapshot.appendItems([.privacyNotice], toSection: .privacyNotice)
+        }
 
         if let configuration = state.messageState.messageCardConfiguration {
             snapshot.appendSections([.messageCard])

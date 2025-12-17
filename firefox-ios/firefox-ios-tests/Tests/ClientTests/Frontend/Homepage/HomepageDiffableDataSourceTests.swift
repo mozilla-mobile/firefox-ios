@@ -260,6 +260,26 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    @MainActor
+    func test_updateSnapshot_withValidState_returnsPrivacyNoticeSection() throws {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            HomepageAction(
+                shouldShowPrivacyNotice: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+        let snapshot = dataSource.snapshot()
+        let expectedSections: [HomepageSection] = [.privacyNotice, .customizeHomepage]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
     private func createSites(count: Int = 30) -> [TopSiteConfiguration] {
         var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
@@ -304,7 +324,18 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     private func setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: Bool) {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             return HomepageRedesignFeature(
-                storiesRedesign: storiesRedesignEnabled
+                storiesRedesign: storiesRedesignEnabled,
+            )
+        }
+        if !storiesRedesignEnabled {
+            setupNimbusHomepageRedesignV2Testing(storiesRedesignEnabled: false)
+        }
+    }
+
+    private func setupNimbusHomepageRedesignV2Testing(storiesRedesignEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(
+                storiesRedesignV2: storiesRedesignEnabled,
             )
         }
     }
