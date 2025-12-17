@@ -173,7 +173,12 @@ let package = Package(
             ]),
         .testTarget(
             name: "ReduxTests",
-            dependencies: ["Redux"]),
+            dependencies: ["Redux"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableExperimentalFeature("RegionBasedIsolation")
+            ]
+        ),
         .target(
             name: "WebEngine",
             dependencies: ["Common",
