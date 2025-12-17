@@ -1543,6 +1543,7 @@
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
 		C705FA782EF30C4F00AC5EE7 /* PrivacyNoticeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705FA772EF30C4B00AC5EE7 /* PrivacyNoticeHelperTests.swift */; };
 		C705FA7A2EF31F0500AC5EE7 /* MockPrivacyNoticeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705FA792EF31F0000AC5EE7 /* MockPrivacyNoticeHelper.swift */; };
+		C705FD582EF354D300AC5EE7 /* PrivacyNoticeUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */; };
 		C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */; };
 		C710FDB72DCBDBEF0046475F /* TopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */; };
 		C71158CD2EEA0B19009766B8 /* PrivacyNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */; };
@@ -9950,6 +9951,7 @@
 		C6C94C1CB6286845DEAF8EDD /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C705FA772EF30C4B00AC5EE7 /* PrivacyNoticeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeHelperTests.swift; sourceTree = "<group>"; };
 		C705FA792EF31F0000AC5EE7 /* MockPrivacyNoticeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPrivacyNoticeHelper.swift; sourceTree = "<group>"; };
+		C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeUpdate.swift; sourceTree = "<group>"; };
 		C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCell.swift; sourceTree = "<group>"; };
 		C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeCell.swift; sourceTree = "<group>"; };
@@ -13176,6 +13178,7 @@
 				8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */,
 				C72748232ECE1809003B394D /* MerinoTestDataSetting.swift */,
 				8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */,
+				C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */,
 				8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */,
 				1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */,
 				8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */,
@@ -18695,6 +18698,7 @@
 				8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */,
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
+				C705FD582EF354D300AC5EE7 /* PrivacyNoticeUpdate.swift in Sources */,
 				0B8A39EF2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift in Sources */,
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
 				EDD2A7FA2CDBD1D100ED464C /* SearchEngineElement+initFromSearchEngine.swift in Sources */,

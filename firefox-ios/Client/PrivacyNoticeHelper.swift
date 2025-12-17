@@ -12,12 +12,15 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
     // Date of the last privacy notice update in miliseconds since epoch
     // Update this value to the latest privacy notice release date when you want to show users the
     // homepage privacy notice card
-    let privacyNoticeUpdateInMilliseconds: UInt64 = {
-        var components = DateComponents(year: 2025, month: 12, day: 15)
+    var privacyNoticeUpdateInMilliseconds: UInt64 {
+        let isDebugOverride = prefs.boolForKey(PrefsKeys.PrivacyNotice.privacyNoticeUpdateDebugOverride) ?? false
+        if isDebugOverride { return UInt64(Date().timeIntervalSince1970 * 1000) }
+
+        let components = DateComponents(year: 2025, month: 12, day: 15)
         let calendar = Calendar(identifier: .gregorian)
         let date = calendar.date(from: components) ?? .distantPast
         return UInt64(date.timeIntervalSince1970 * 1000)
-    }()
+    }
 
     private let prefs: Prefs
 
@@ -40,6 +43,7 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
         guard isPrivacyNoticeOutdated, isAcceptanceOutdated else { return false }
 
         prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.PrivacyNotice.notifiedDate)
+        prefs.setBool(false, forKey: PrefsKeys.PrivacyNotice.privacyNoticeUpdateDebugOverride)
 
         return true
     }
