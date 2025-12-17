@@ -216,18 +216,23 @@ class SearchViewController: SiteTableViewController,
         ])
 
         if isCompact {
-            searchEngineStackView.alignment = .leading
-            searchEngineStackView.leadingAnchor.constraint(equalTo: searchEngineScrollView.leadingAnchor,
-                                                           constant: UX.suggestionMargin).isActive = true
-            searchEngineStackView.trailingAnchor.constraint(equalTo: searchEngineScrollView.trailingAnchor,
-                                                            constant: UX.suggestionMargin).isActive = true
+            // iPhone setup: left aligned and scroll enabled
+            NSLayoutConstraint.activate([
+                searchEngineStackView.leadingAnchor.constraint(equalTo: searchEngineScrollView.leadingAnchor,
+                                                               constant: UX.suggestionMargin),
+                searchEngineStackView.trailingAnchor.constraint(equalTo: searchEngineScrollView.trailingAnchor,
+                                                                constant: -UX.suggestionMargin),
+                searchEngineStackView.widthAnchor.constraint(greaterThanOrEqualTo: searchEngineScrollView.widthAnchor)
+            ])
         } else {
-            searchEngineStackView.alignment = .center
-            searchEngineStackView.leadingAnchor.constraint(greaterThanOrEqualTo:
-                                                            searchEngineScrollView.leadingAnchor).isActive = true
-            searchEngineStackView.trailingAnchor.constraint(lessThanOrEqualTo:
-                                                                searchEngineScrollView.trailingAnchor).isActive = true
-            searchEngineStackView.centerXAnchor.constraint(equalTo: searchEngineScrollView.centerXAnchor).isActive = true
+            // iPad setup: centered
+            NSLayoutConstraint.activate([
+                searchEngineStackView.leadingAnchor.constraint(greaterThanOrEqualTo: searchEngineScrollView.leadingAnchor),
+                searchEngineStackView.trailingAnchor.constraint(lessThanOrEqualTo: searchEngineScrollView.trailingAnchor),
+                searchEngineStackView.centerXAnchor.constraint(equalTo: searchEngineScrollView.centerXAnchor),
+                searchEngineStackView.widthAnchor.constraint(greaterThanOrEqualTo:
+                                                                searchEngineScrollView.widthAnchor).priority(.defaultLow)
+            ])
         }
     }
 
