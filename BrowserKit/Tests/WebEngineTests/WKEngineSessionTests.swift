@@ -449,39 +449,47 @@ final class WKEngineSessionTests: XCTestCase {
 
     // MARK: Page Zoom
     @MainActor
-    func testIncreaseZoom() {
+    func testIncreaseZoom() async {
         let subject = createSubject()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
         // Increase zoom
         subject?.updatePageZoom(.increase)
+        // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
+        await Task.yield()
         // Assert zoom increased by expected step
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 + ZoomChangeValue.defaultStepIncrease)
     }
 
     @MainActor
-    func testDecreaseZoom() {
+    func testDecreaseZoom() async {
         let subject = createSubject()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
         // Increase zoom
         subject?.updatePageZoom(.decrease)
+        // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
+        await Task.yield()
         // Assert zoom decreased by expected step
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 - ZoomChangeValue.defaultStepIncrease)
     }
 
     @MainActor
-    func testSetZoomLevelAndReset() {
+    func testSetZoomLevelAndReset() async {
         let subject = createSubject()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
         // Set explicit zoom level
         subject?.updatePageZoom(.set(0.8))
+        // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
+        await Task.yield()
         // Assert zoom at expected level
         XCTAssertEqual(webViewProvider.webView.pageZoom, 0.8)
 
         // Reset zoom level
         subject?.updatePageZoom(.reset)
+        // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
+        await Task.yield()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
     }
