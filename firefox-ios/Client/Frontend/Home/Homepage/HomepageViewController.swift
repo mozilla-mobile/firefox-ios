@@ -479,6 +479,16 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
+        case .privacyNotice:
+            guard let privacyNoticeCell = collectionView?.dequeueReusableCell(
+                cellType: PrivacyNoticeCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            privacyNoticeCell.configure(theme: currentTheme)
+            return privacyNoticeCell
         case .messageCard(let config):
             guard let messageCardCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageMessageCardCell.self,

@@ -131,6 +131,24 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.isZeroSearch, initialState.isZeroSearch)
     }
 
+    @MainActor
+    func test_handlePrivacyNoticeInitialization_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                shouldShowPrivacyNotice: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+            )
+        )
+
+        XCTAssertTrue(newState.shouldShowPrivacyNotice)
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+    }
+
     // MARK: - Private
     private func createSubject() -> HomepageState {
         return HomepageState(windowUUID: .XCTestDefaultUUID)

@@ -537,7 +537,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_initializeAction_configuresSpacer() throws {
         setupNimbusStoriesRedesignTesting(isEnabled: true)
         let subject = createSubject()
-        let action = ToolbarAction(
+        let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.initialize
         )
@@ -562,7 +562,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_initializeAction_doesNotConfigureSpacer() throws {
         setupNimbusStoriesRedesignTesting(isEnabled: false)
         let subject = createSubject()
-        let action = ToolbarAction(
+        let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.initialize
         )
@@ -584,12 +584,79 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, false)
     }
 
+    func test_initializeAction_dispatchesConfiguresPrivacyNotice_withTrueValue() throws {
+        let mockPrivacyNoticeHelper = MockPrivacyNoticeHelper()
+        mockPrivacyNoticeHelper.shouldShowResult = true
+        let subject = createSubject(privacyNoticeHelper: mockPrivacyNoticeHelper)
+
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "Privacy notice configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredPrivacyNoticeAction, configuredPrivacyNoticeActionCount) = try getActionInfo(
+            for: .configuredPrivacyNotice
+        )
+
+        let configuredPrivacyNoticeActionType = try XCTUnwrap(
+            configuredPrivacyNoticeAction.actionType as? HomepageMiddlewareActionType
+        )
+
+        XCTAssertEqual(configuredPrivacyNoticeActionCount, 1)
+        XCTAssertEqual(configuredPrivacyNoticeActionType, .configuredPrivacyNotice)
+        XCTAssertEqual(configuredPrivacyNoticeAction.shouldShowPrivacyNotice, mockPrivacyNoticeHelper.shouldShowResult)
+    }
+
+    func test_initializeAction_dispatchesConfiguresPrivacyNotice_withFalseValue() throws {
+        let mockPrivacyNoticeHelper = MockPrivacyNoticeHelper()
+        mockPrivacyNoticeHelper.shouldShowResult = false
+        let subject = createSubject(privacyNoticeHelper: mockPrivacyNoticeHelper)
+
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "Privacy notice configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredPrivacyNoticeAction, configuredPrivacyNoticeActionCount) = try getActionInfo(
+            for: .configuredPrivacyNotice
+        )
+
+        let configuredPrivacyNoticeActionType = try XCTUnwrap(
+            configuredPrivacyNoticeAction.actionType as? HomepageMiddlewareActionType
+        )
+
+        XCTAssertEqual(configuredPrivacyNoticeActionCount, 1)
+        XCTAssertEqual(configuredPrivacyNoticeActionType, .configuredPrivacyNotice)
+        XCTAssertEqual(configuredPrivacyNoticeAction.shouldShowPrivacyNotice, mockPrivacyNoticeHelper.shouldShowResult)
+    }
+
     // MARK: - Helpers
-    private func createSubject() -> HomepageMiddleware {
+    private func createSubject(privacyNoticeHelper: PrivacyNoticeHelperProtocol? = nil) -> HomepageMiddleware {
         return HomepageMiddleware(
             homepageTelemetry: HomepageTelemetry(
                 gleanWrapper: mockGleanWrapper
             ),
+            privacyNoticeHelper: privacyNoticeHelper,
             notificationCenter: mockNotificationCenter
         )
     }
@@ -601,8 +668,19 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func setupNimbusStoriesRedesignTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(storiesRedesign: isEnabled)
+        if !isEnabled {
+            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+                return HomepageRedesignFeature(
+                    storiesRedesign: false,
+                    storiesRedesignV2: false
+                )
+            }
+        } else {
+            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+                return HomepageRedesignFeature(
+                    storiesRedesign: true
+                )
+            }
         }
     }
 

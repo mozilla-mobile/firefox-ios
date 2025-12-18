@@ -17,6 +17,7 @@ struct HomepageAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let isSearchBarEnabled: Bool?
+    let shouldShowPrivacyNotice: Bool?
     let shouldShowSpacer: Bool?
     let showiPadSetup: Bool?
     let numberOfTopSitesPerRow: Int?
@@ -26,6 +27,7 @@ struct HomepageAction: Action {
 
     init(
         isSearchBarEnabled: Bool? = nil,
+        shouldShowPrivacyNotice: Bool? = nil,
         shouldShowSpacer: Bool? = nil,
         numberOfTopSitesPerRow: Int? = nil,
         showiPadSetup: Bool? = nil,
@@ -38,6 +40,7 @@ struct HomepageAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isSearchBarEnabled = isSearchBarEnabled
+        self.shouldShowPrivacyNotice = shouldShowPrivacyNotice
         self.shouldShowSpacer = shouldShowSpacer
         self.numberOfTopSitesPerRow = numberOfTopSitesPerRow
         self.showiPadSetup = showiPadSetup
@@ -66,6 +69,7 @@ enum HomepageMiddlewareActionType: ActionType {
     case jumpBackInRemoteTabsUpdated
     case bookmarksUpdated
     case enteredForeground
+    case configuredPrivacyNotice
     case configuredSearchBar
     case configuredSpacer
 }

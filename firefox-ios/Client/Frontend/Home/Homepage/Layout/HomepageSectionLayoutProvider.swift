@@ -39,6 +39,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let bottomSpacing: CGFloat = 30
         }
 
+        struct PrivacyNoticeConstants {
+            static let topInsets: CGFloat = 12
+        }
+
         struct MessageCardConstants {
             static let height: CGFloat = 180
         }
@@ -159,6 +163,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 for: traitCollection,
                 topInsets: UX.standardInset,
                 bottomInsets: UX.HeaderConstants.bottomSpacing
+            )
+        case .privacyNotice:
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                itemHeight: UX.MessageCardConstants.height,
+                topInsets: UX.PrivacyNoticeConstants.topInsets
             )
         case .messageCard:
             return createSingleItemSectionLayout(
@@ -516,6 +526,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
+        let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
@@ -523,7 +534,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
         let spacerHeight = max(
             0.1,
-            availableContentHeight - topSitesHeight - jumpBackInHeight - bookmarksHeight - storiesHeight - searchBarHeight
+            availableContentHeight
+            - privacyNoticeHeight
+            - topSitesHeight
+            - jumpBackInHeight
+            - bookmarksHeight
+            - storiesHeight
+            - searchBarHeight
         )
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -546,6 +563,20 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)]
         )
         return NSCollectionLayoutSection(group: emptyGroup)
+    }
+
+    private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        // Ensures we should be showing the privacy notice
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+              state.shouldShowPrivacyNotice else { return 0 }
+
+        var totalHeight: CGFloat = 0
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+
+        let privacyNoticeCell = PrivacyNoticeCell()
+        totalHeight += HomepageDimensionCalculator.fittingHeight(for: privacyNoticeCell, width: containerWidth)
+        totalHeight += UX.PrivacyNoticeConstants.topInsets
+        return totalHeight
     }
 
     /// Creates a "dummy" top sites section and returns its height

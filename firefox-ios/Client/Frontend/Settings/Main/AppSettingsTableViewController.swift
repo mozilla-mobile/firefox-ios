@@ -508,6 +508,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
 
