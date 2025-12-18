@@ -11,7 +11,6 @@ THRESHOLD_XCUITEST=13
 WARNINGS=$(
   grep -E -v 'SourcePackages/checkouts' "$BUILD_LOG_FILE" \
   | grep -E '^[^ ]+:[0-9]+:[0-9]+: warning:' \
-  | grep -Ev '/Tests/' \
   | uniq
 )
 
