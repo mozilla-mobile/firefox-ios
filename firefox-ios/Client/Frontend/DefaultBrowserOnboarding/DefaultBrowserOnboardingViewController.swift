@@ -46,6 +46,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     let viewModel = DefaultBrowserOnboardingViewModel()
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private let telemetryUtility: OnboardingTelemetryProtocol
 
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
@@ -101,10 +102,12 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         telemetryUtility: OnboardingTelemetryProtocol) {
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
+        self.telemetryUtility = telemetryUtility
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -236,7 +239,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     @objc
     private func dismissAnimated() {
         viewModel.didAskToDismissView?()
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
+        telemetryUtility.sendDismissPressedTelemetry()
     }
 
     @objc
@@ -247,11 +250,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         // as the default browser
         DefaultBrowserUtility().isDefaultBrowser = true
 
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .goToSettingsDefaultBrowserOnboarding
-        )
+        telemetryUtility.sendGoToSettingsTelemetry()
 
         DefaultApplicationHelper().openSettings()
     }

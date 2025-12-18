@@ -28,6 +28,7 @@ final class OnboardingService: FeatureFlaggable {
     private let defaultApplicationHelper: ApplicationHelper
     private let notificationCenter: NotificationProtocol
     private let searchBarLocationSaver: SearchBarLocationSaverProtocol
+    private var telemetryUtility: OnboardingTelemetryProtocol?
 
     init(
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
@@ -40,7 +41,8 @@ final class OnboardingService: FeatureFlaggable {
         notificationManager: NotificationManagerProtocol = NotificationManager(),
         defaultApplicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        searchBarLocationSaver: SearchBarLocationSaverProtocol = SearchBarLocationSaver()
+        searchBarLocationSaver: SearchBarLocationSaverProtocol = SearchBarLocationSaver(),
+        telemetryUtility: OnboardingTelemetryProtocol? = nil
     ) {
         self.delegate = delegate
         self.userDefaults = userDefaults
@@ -54,6 +56,7 @@ final class OnboardingService: FeatureFlaggable {
         self.defaultApplicationHelper = defaultApplicationHelper
         self.notificationCenter = notificationCenter
         self.searchBarLocationSaver = searchBarLocationSaver
+        self.telemetryUtility = telemetryUtility
     }
 
     func handleAction(
@@ -170,6 +173,17 @@ final class OnboardingService: FeatureFlaggable {
         }
     }
 
+    /// Checks if any card in the onboarding flow contains default browser related actions
+    func hasDefaultBrowserCard(in cards: [OnboardingKitCardInfoModel]) -> Bool {
+        cards.contains {
+            $0.buttons.primary.action == .setDefaultBrowser
+            || $0.buttons.primary.action == .openIosFxSettings
+            || $0.buttons.secondary?.action == .setDefaultBrowser
+            || $0.buttons.secondary?.action == .openIosFxSettings
+            || $0.instructionsPopup?.buttonAction == .openIosFxSettings
+        }
+    }
+
     private func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
         activityEventHelper.updateOnboardingUserActivationEvent()
@@ -198,6 +212,7 @@ final class OnboardingService: FeatureFlaggable {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
         registerForNotification()
+        telemetryUtility?.sendGoToSettingsTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
@@ -213,6 +228,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenIosFxSettings(from cardName: String) {
+        telemetryUtility?.sendGoToSettingsTelemetry()
         defaultApplicationHelper.openSettings()
     }
 

@@ -236,17 +236,6 @@ final class LaunchCoordinator: BaseCoordinator,
         router.present(viewController, animated: false)
     }
 
-    private lazy var onboardingService: OnboardingService = {
-        OnboardingService(
-            windowUUID: windowUUID,
-            profile: profile,
-            themeManager: themeManager,
-            delegate: self,
-            navigationDelegate: self,
-            qrCodeNavigationHandler: self
-        )
-    }()
-
     // MARK: - Intro
     @MainActor
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
@@ -264,11 +253,21 @@ final class LaunchCoordinator: BaseCoordinator,
             onboardingVariant: manager.onboardingVariant
         )
 
+        let onboardingService = OnboardingService(
+            windowUUID: windowUUID,
+            profile: profile,
+            themeManager: themeManager,
+            delegate: self,
+            navigationDelegate: self,
+            qrCodeNavigationHandler: self,
+            telemetryUtility: telemetryUtility
+        )
+
         let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
             onboardingCards: onboardingModel.cards,
             skipText: .Onboarding.LaterAction,
-            onActionTap: { @MainActor [weak self] action, cardName, completion in
-                self?.onboardingService.handleAction(
+            onActionTap: { @MainActor action, cardName, completion in
+                onboardingService.handleAction(
                     action,
                     from: cardName,
                     cards: onboardingModel.cards,
@@ -276,8 +275,8 @@ final class LaunchCoordinator: BaseCoordinator,
                     completion: completion
                 )
             },
-            onMultipleChoiceActionTap: { [weak self] action, cardName in
-                self?.onboardingService.handleMultipleChoiceAction(
+            onMultipleChoiceActionTap: { action, cardName in
+                onboardingService.handleMultipleChoiceAction(
                     action,
                     from: cardName
                 )
@@ -311,6 +310,11 @@ final class LaunchCoordinator: BaseCoordinator,
 
         flowViewModel.onDismiss = { cardName in
             telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
+
+            // Also record dismiss_pressed if onboarding contains default browser cards
+            if onboardingService.hasDefaultBrowserCard(in: onboardingModel.cards) {
+                telemetryUtility.sendDismissPressedTelemetry()
+            }
         }
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(
@@ -393,7 +397,14 @@ final class LaunchCoordinator: BaseCoordinator,
 
     // MARK: - Default Browser
     func presentDefaultBrowserOnboarding() {
-        let defaultOnboardingViewController = DefaultBrowserOnboardingViewController(windowUUID: windowUUID)
+        // Create a minimal telemetry utility for default browser onboarding
+        let emptyModel = OnboardingKitViewModel(cards: [], isDismissible: true)
+        let telemetryUtility = OnboardingTelemetryUtility(with: emptyModel)
+
+        let defaultOnboardingViewController = DefaultBrowserOnboardingViewController(
+            windowUUID: windowUUID,
+            telemetryUtility: telemetryUtility
+        )
         defaultOnboardingViewController.viewModel.goToSettings = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)

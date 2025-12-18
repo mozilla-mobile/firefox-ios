@@ -106,6 +106,14 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.closeTap, extras: extras)
     }
 
+    func sendGoToSettingsTelemetry() {
+        GleanMetrics.Onboarding.goToSettingsPressed.add()
+    }
+
+    func sendDismissPressedTelemetry() {
+        GleanMetrics.Onboarding.dismissPressed.add()
+    }
+
     private struct BaseExtras {
         let cardType: String
         let flowType: String
