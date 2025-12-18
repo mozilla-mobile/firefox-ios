@@ -72,8 +72,14 @@ class BaseTestCase: XCTestCase {
     func removeApp() {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
+        let iPadIcon = springboard.icons.containingText("Fennec").element(boundBy: 1)
         if icon.exists {
-            icon.press(forDuration: 1.5)
+            if #available(iOS 26, *), iPad() {
+                iPadIcon.press(forDuration: 1.0)
+                springboard.buttons["Options"].tapWithRetry()
+            } else {
+                icon.press(forDuration: 1.0)
+            }
             springboard.buttons["Remove App"].tapWithRetry()
             mozWaitForElementToNotExist(springboard.buttons["Remove App"])
             mozWaitForElementToExist(springboard.alerts.firstMatch)
