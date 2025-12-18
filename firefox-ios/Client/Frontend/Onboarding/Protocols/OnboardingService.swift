@@ -355,7 +355,15 @@ final class OnboardingService: FeatureFlaggable {
         let instructionsVC = OnboardingInstructionPopupViewController(
             viewModel: popupViewModel,
             windowUUID: windowUUID,
-            buttonTappedFinishFlow: completion
+            buttonTappedFinishFlow: { [weak self] in
+                switch popupViewModel.buttonAction {
+                case .openIosFxSettings:
+                    self?.telemetryUtility?.sendGoToSettingsTelemetry()
+                case .dismiss, .dismissAndNextCard:
+                    self?.telemetryUtility?.sendDismissPressedTelemetry()
+                }
+                completion()
+            }
         )
 
         let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
