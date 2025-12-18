@@ -95,7 +95,7 @@
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "已关闭保护";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected. */
-"Menu.EnhancedTrackingProtection.On.Header.v128" = "您已受保护，我们会在发现异常情况时告知您。";
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "您已受保护。若发现异常，我们将提醒。";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "您的连接不安全。";

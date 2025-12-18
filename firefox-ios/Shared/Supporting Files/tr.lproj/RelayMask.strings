@@ -4,6 +4,9 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "5 ücretsiz e-posta maskenizin hepsi kullanımda olduğundan birini sizin için seçtik.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "5 ücretsiz e-posta maskesi hakkınız dolduğundan mevcut maskelerinizden birini sizin için seçtik.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "E-posta maskeleri şu anda kullanılamıyor. Birkaç dakika sonra yeniden deneyin.";
 

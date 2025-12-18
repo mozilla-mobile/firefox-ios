@@ -172,6 +172,15 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "Informativa sulla privacy";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Ulteriori informazioni";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ apporterà miglioramenti a funzionalità, prestazioni e stabilità tra un aggiornamento e l’altro. Le modifiche verranno applicate da remoto.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Consenti miglioramenti da remoto";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Scorri per nascondere le schede e la barra degli indirizzi";
 
@@ -235,11 +244,20 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Ulteriori informazioni";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Ulteriori informazioni";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Prova funzionalità e idee prima che diventino disponibili per tutti.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ seleziona utenti in modo casuale per provare nuove funzionalità, contribuendo così a migliorare la qualità del browser per tutti.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Installa e conduci studi";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Consenti studi sulle funzionalità";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Consente l’accesso alla funzione per riassumere le pagine.";

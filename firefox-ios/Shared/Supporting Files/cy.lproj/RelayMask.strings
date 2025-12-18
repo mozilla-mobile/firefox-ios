@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Mae eich 5 arallenw e-bost rhad ac am ddim yn cael eu defnyddio ar hyn o bryd, felly rydym wedi dewis un i chi.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Rydych chi wedi defnyddio'ch 5 arallenw e-bost am ddim, felly rydym wedi dewis un i chi ei ailddefnyddio.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Does dim arallenwau e-bost ar gael ar hyn o bryd. Ceisiwch eto mewn ychydig funudau.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Arallenw e-bost wedi'i fewnosod";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Cuddiwch eich e-bost go iawn i ddiogelu eich blwch derbyn rhag sbam. Dyw rhai gwefannau ddim yn ei gefnogi.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Cuddiwch eich e-bost go iawn i ddiogelu eich blwch derbyn rhag sbam. Dyw rhai gwefannau ddim yn cefnog arallenwau.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Dysgu rhagor";

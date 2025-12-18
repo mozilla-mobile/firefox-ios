@@ -1,20 +1,26 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
-"FirefoxHome.Pocket.SectionTitle.v140" = "Články";
+"FirefoxHome.Pocket.SectionTitle.v140" = "Příběhy";
+
+/* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
+"FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "Zjistit více";
+
+/* Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice. */
+"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "Zásady ochrany osobních údajů";
 
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "Domovská stránka";
 
 /* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
-"FirefoxHome.Stories.AllStoriesButtonTitle.v145" = "Všechny články";
+"FirefoxHome.Stories.AllStoriesButtonTitle.v145" = "Všechny příběhy";
 
 /* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
-"FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Všechny články";
+"FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Všechny příběhy";
 
 /* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
 "FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Populární dnes";
 
 /* This is the title of the Stories section on Firefox Homepage. */
-"FirefoxHome.Stories.SectionTitle.v140" = "Články";
+"FirefoxHome.Stories.SectionTitle.v140" = "Příběhy";
 
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Data anonymního prohlížení byla vymazána";
