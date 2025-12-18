@@ -24,6 +24,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         messageManager = MockGleanPlumbMessageManagerProtocol()
 
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        setTermsOfServiceFeatureEnabled(false)
     }
 
     override func tearDown() async throws {
@@ -62,9 +63,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     func testLaunchType_termsOfService() {
-        FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
-            TosFeature(status: true)
-        })
+        setTermsOfServiceFeatureEnabled(true)
 
         let subject = createSubject()
         subject.delegate = delegate
@@ -138,9 +137,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     // MARK: - Multiple Launch Types Tests
 
     func testLaunchType_termsOfServiceAndIntro_sequence() {
-        FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
-            TosFeature(status: true)
-        })
+        setTermsOfServiceFeatureEnabled(true)
 
         let subject = createSubject()
         subject.delegate = delegate
@@ -467,6 +464,13 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     // MARK: - Helpers
+
+    private func setTermsOfServiceFeatureEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
+            TosFeature(status: enabled)
+        })
+    }
+
     private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchScreenViewModel {
         let onboardingModel = createOnboardingViewModel()
