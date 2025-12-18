@@ -4,7 +4,7 @@
 
 import Common
 import Foundation
-import GCDWebServers
+@preconcurrency import GCDWebServers
 import Shared
 
 protocol WebServerProtocol {
