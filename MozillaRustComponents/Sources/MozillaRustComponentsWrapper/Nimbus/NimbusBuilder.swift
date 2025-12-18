@@ -193,9 +193,9 @@ public class NimbusBuilder {
     ) -> NimbusInterface {
         let serverSettings: NimbusServerSettings?
         if usePreviewCollection {
-            serverSettings = NimbusServerSettings(remoteSettingsService: remoteSettingsService, collection: remoteSettingsPreviewCollection)
+            serverSettings = NimbusServerSettings(rsService: remoteSettingsService, collectionName: remoteSettingsPreviewCollection)
         } else {
-            serverSettings = NimbusServerSettings(remoteSettingsService: remoteSettingsService, collection: remoteSettingsCollection)
+            serverSettings = NimbusServerSettings(rsService: remoteSettingsService, collectionName: remoteSettingsCollection)
         }
 
         do {
@@ -260,7 +260,7 @@ public class NimbusBuilder {
         _ appInfo: NimbusAppSettings,
         serverSettings: NimbusServerSettings?
     ) throws -> NimbusInterface {
-        try Nimbus.create(serverSettings,
+        try Nimbus.create(server: serverSettings,
                           appSettings: appInfo,
                           coenrollingFeatureIds: getCoenrollingFeatureIds(),
                           dbPath: dbFilePath,
