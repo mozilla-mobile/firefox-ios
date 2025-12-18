@@ -260,7 +260,7 @@ public struct PrefsKeys {
 
     public struct PrivacyNotice {
         // Timestamp in milliseconds for when the privacy notice homepage card was last shown
-        public static let notifiedDate = "NotifiedDate"
+        public static let notifiedDate = "PrivacyNotice.NotifiedDate"
 
         // Boolean value denoting whether to override the last privacy notice update timestamp with the current date
         // For testing use only
