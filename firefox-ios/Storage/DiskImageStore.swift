@@ -82,7 +82,6 @@ public actor DefaultDiskImageStore: DiskImageStore {
 
     public func saveImageForKey(_ key: String, image: UIImage) async throws {
         let imageURL = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
-        let scaledImage = scaleImageFrom3xTo1x(image)
 
         guard let data = scaleImageFrom3xTo1x(image).jpegData(compressionQuality: quality) else {
             throw DiskImageStoreErrorCase.cannotWrite(description: "Could not write image to file")
