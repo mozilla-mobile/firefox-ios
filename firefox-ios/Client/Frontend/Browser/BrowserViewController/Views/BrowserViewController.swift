@@ -3352,8 +3352,7 @@ class BrowserViewController: UIViewController,
     func switchToTabForURLOrOpen(
         _ url: URL,
         uuid: String? = nil,
-        isPrivate: Bool = false,
-        completionHandler: (@Sendable () -> Void)? = nil
+        isPrivate: Bool = false
     ) {
         // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
         guard !tabManager.isRestoringTabs else {
@@ -3362,8 +3361,7 @@ class BrowserViewController: UIViewController,
                     self?.switchToTabForURLOrOpen(
                         url,
                         uuid: uuid,
-                        isPrivate: isPrivate,
-                        completionHandler: completionHandler
+                        isPrivate: isPrivate
                     )
                 }
             }
@@ -3373,7 +3371,6 @@ class BrowserViewController: UIViewController,
         popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
-            completionHandler?()
             return
         }
 
@@ -3384,7 +3381,6 @@ class BrowserViewController: UIViewController,
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)
         }
-        completionHandler?()
     }
 
     @discardableResult
