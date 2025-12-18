@@ -249,8 +249,14 @@ let package = Package(
                 .enableExperimentalFeature("RegionBasedIsolation")
             ]
         ),
-        .testTarget(name: "JWTKitTests",
-                    dependencies: ["JWTKit"]),
+        .testTarget(
+            name: "JWTKitTests",
+            dependencies: ["JWTKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableExperimentalFeature("RegionBasedIsolation")
+            ]
+        ),
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],
