@@ -1,5 +1,5 @@
 {
-  "originHash" : "34c532ccad0be50c1340ae9fc0fbb1a9224ba08f5a9f9d254df5f5679a6343e1",
+  "originHash" : "ee32f6058f53f9fca18c3b572609562e51fad8a655915754f214243ce30eb2b2",
   "pins" : [
     {
       "identity" : "a-star",
@@ -43,7 +43,7 @@
       "location" : "https://github.com/nbhasin2/GCDWebServer.git",
       "state" : {
         "branch" : "master",
-        "revision" : "7674c93e79ee5aac17681acace324761325e7346"
+        "revision" : "0039b4d377874784258154c2c551d146320a8985"
       }
     },
     {
