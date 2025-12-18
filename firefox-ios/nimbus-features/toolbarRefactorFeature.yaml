@@ -83,7 +83,7 @@ features:
           toolbar_update_hint: false
           swiping_tabs: true
           translucency: true
-          translucency-refactor: false
+          translucency-refactor: true
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1
