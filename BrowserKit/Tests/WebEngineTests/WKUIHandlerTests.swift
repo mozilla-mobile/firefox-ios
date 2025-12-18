@@ -54,7 +54,7 @@ final class WKUIHandlerTests: XCTestCase {
             XCTAssertEqual(decision, .deny)
             expectation.fulfill()
         }
-        
+
         subject.requestMediaCapturePermission(decisionHandler: decisionHandler)
         wait(for: [expectation])
     }
