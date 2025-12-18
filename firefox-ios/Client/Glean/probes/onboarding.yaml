@@ -435,6 +435,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/issues/31366
       - https://github.com/mozilla-mobile/firefox-ios/pull/31375
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
