@@ -19,6 +19,8 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         static let closeButtonImageSize = CGSize(width: 20, height: 20)
     }
 
+    private var closeButtonAction: (() -> Void)?
+
     // MARK: - UI Elements
 
     private let bodyTextView: UITextView = .build { textView in
@@ -33,7 +35,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         textView.textContainer.lineFragmentPadding = 0
     }
 
-    private let closeButton: UIButton = .build { button in
+    private lazy var closeButton: UIButton = .build { button in
         var config = UIButton.Configuration.plain()
 
         let image = UIImage(named: (StandardImageIdentifiers.Medium.cross))
@@ -41,6 +43,8 @@ final class PrivacyNoticeCell: UICollectionViewCell,
 
         config.image = scaledAndTemplatedImage
         button.configuration = config
+
+        button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
     }
 
     override init(frame: CGRect) {
@@ -59,7 +63,8 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(theme: Theme) {
+    public func configure(theme: Theme, closeButtonAction: (() -> Void)?) {
+        self.closeButtonAction = closeButtonAction
         applyTheme(theme: theme)
     }
 
@@ -102,6 +107,11 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         }
 
         bodyTextView.attributedText = attributedString
+    }
+
+    @objc
+    func closeButtonTapped(_ sender: Any) {
+        closeButtonAction?()
     }
 
     // MARK: - ThemeApplicable

@@ -487,7 +487,9 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            privacyNoticeCell.configure(theme: currentTheme)
+            privacyNoticeCell.configure(theme: currentTheme) { [weak self] in
+                self?.dispatchPrivacyNoticeCloseButtonTapped()
+            }
             return privacyNoticeCell
         case .messageCard(let config):
             guard let messageCardCell = collectionView?.dequeueReusableCell(
@@ -906,6 +908,15 @@ final class HomepageViewController: UIViewController,
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
                 actionType: actionType
+            )
+        )
+    }
+
+    private func dispatchPrivacyNoticeCloseButtonTapped() {
+        store.dispatch(
+            HomepageAction(
+                windowUUID: self.windowUUID,
+                actionType: HomepageActionType.privacyNoticeCloseButtonTapped
             )
         )
     }

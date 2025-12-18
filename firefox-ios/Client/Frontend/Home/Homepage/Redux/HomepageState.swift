@@ -141,6 +141,8 @@ struct HomepageState: ScreenState, Equatable {
             return handleEmbeddedHomepageAction(state: state, action: action, isZeroSearch: isZeroSearch)
         case HomepageActionType.availableContentHeightDidChange:
             return handleAvailableContentHeightChangeAction(state: state, action: action)
+        case HomepageActionType.privacyNoticeCloseButtonTapped:
+            return handlePrivacyNoticeCloseButtonTappedAction(state: state, action: action)
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             return handleDidTabChangeToHomepageAction(state: state, action: action)
         case HomepageMiddlewareActionType.configuredPrivacyNotice:
@@ -215,6 +217,26 @@ struct HomepageState: ScreenState, Equatable {
             shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             shouldShowSpacer: state.shouldShowSpacer,
             availableContentHeight: availableContentHeight
+        )
+    }
+
+    @MainActor
+    private static func handlePrivacyNoticeCloseButtonTappedAction(state: HomepageState, action: Action) -> HomepageState {
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: MerinoState.reducer(state.merinoState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: false,
+            shouldShowPrivacyNotice: false,
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
         )
     }
 
