@@ -15,11 +15,13 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     func showToolbar() {
         updateToolbarContext()
         toolbarAnimator?.showToolbar()
+        updateToolbarTranslucency()
     }
 
     func hideToolbar() {
         updateToolbarContext()
         toolbarAnimator?.hideToolbar()
+        updateToolbarTranslucency()
     }
 
     func dispatchScrollAlphaChange(alpha: CGFloat) {
@@ -44,6 +46,17 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     }
 
     // MARK: - Private
+
+    /// Updates the toolbar's translucency effects.
+    ///
+    /// This method applies blur effects to the top and bottom toolbars and updates the content
+    /// container's mask view to ensure proper visual effects during toolbar animations and state
+    /// transitions. Only executes when the toolbar translucency refactor feature flag is enabled.
+    private func updateToolbarTranslucency() {
+        guard isToolbarTranslucencyRefactorEnabled else { return }
+        updateBlurViews()
+        addOrUpdateMaskViewIfNeeded()
+    }
 
     private func updateToolbarContext() {
         guard let animator = toolbarAnimator else { return }
@@ -101,5 +114,11 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         let topInset = safeAreaInsets?.top ?? .zero
 
         return hasHomeIndicator ? .zero : containerHeight - topInset
+    }
+}
+
+extension BrowserViewController: LegacyTabScrollController.Delegate {
+    func toolbarDisplayStateDidChange() {
+        updateToolbarTranslucency()
     }
 }

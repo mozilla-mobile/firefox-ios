@@ -37,6 +37,11 @@ final class LegacyTabScrollController: NSObject,
         static let minimumScrollVelocity: CGFloat = 100
     }
 
+    protocol Delegate: AnyObject {
+        @MainActor
+        func toolbarDisplayStateDidChange()
+    }
+
     private var isMinimalAddressBarEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
     }
@@ -104,6 +109,7 @@ final class LegacyTabScrollController: NSObject,
     private var isUserZoom = false
 
     private var didTapChangePreventScrollToTop = false
+    private weak var delegate: Delegate?
 
     // Top Toolbar offset updates related constraints
     private var headerTopOffset: CGFloat = 0 {
@@ -248,9 +254,11 @@ final class LegacyTabScrollController: NSObject,
     }
 
     init(windowUUID: WindowUUID,
+         delegate: Delegate? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
+        self.delegate = delegate
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init()
@@ -362,6 +370,7 @@ final class LegacyTabScrollController: NSObject,
             overKeyboardOffset: 0,
             alpha: 1,
             completion: nil)
+        delegate?.toolbarDisplayStateDidChange()
     }
 
     func hideToolbars(animated: Bool) {
@@ -378,6 +387,7 @@ final class LegacyTabScrollController: NSObject,
             overKeyboardOffset: overKeyboardScrollHeight,
             alpha: 0,
             completion: nil)
+        delegate?.toolbarDisplayStateDidChange()
     }
 
     // MARK: - ScrollView observation
