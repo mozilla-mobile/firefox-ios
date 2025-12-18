@@ -190,7 +190,12 @@ let package = Package(
             ]),
         .testTarget(
             name: "WebEngineTests",
-            dependencies: ["WebEngine"]),
+            dependencies: ["WebEngine"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableExperimentalFeature("RegionBasedIsolation")
+            ],
+        ),
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
