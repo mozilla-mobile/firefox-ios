@@ -173,17 +173,6 @@ final class OnboardingService: FeatureFlaggable {
         }
     }
 
-    /// Checks if any card in the onboarding flow contains default browser related actions
-    func hasDefaultBrowserCard(in cards: [OnboardingKitCardInfoModel]) -> Bool {
-        cards.contains {
-            $0.buttons.primary.action == .setDefaultBrowser
-            || $0.buttons.primary.action == .openIosFxSettings
-            || $0.buttons.secondary?.action == .setDefaultBrowser
-            || $0.buttons.secondary?.action == .openIosFxSettings
-            || $0.instructionsPopup?.buttonAction == .openIosFxSettings
-        }
-    }
-
     private func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
         activityEventHelper.updateOnboardingUserActivationEvent()
