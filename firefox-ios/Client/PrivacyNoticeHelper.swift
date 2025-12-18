@@ -16,7 +16,7 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
         let isDebugOverride = prefs.boolForKey(PrefsKeys.PrivacyNotice.privacyNoticeUpdateDebugOverride) ?? false
         if isDebugOverride { return UInt64(Date().timeIntervalSince1970 * 1000) }
 
-        let components = DateComponents(year: 2025, month: 12, day: 15, hour: 12)
+        let components = DateComponents(timeZone: TimeZone(secondsFromGMT: 0), year: 2025, month: 12, day: 17)
         let calendar = Calendar(identifier: .gregorian)
         let date = calendar.date(from: components) ?? .distantPast
         return UInt64(date.timeIntervalSince1970 * 1000)
