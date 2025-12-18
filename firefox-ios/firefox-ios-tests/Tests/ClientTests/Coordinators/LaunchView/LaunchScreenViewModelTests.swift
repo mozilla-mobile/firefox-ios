@@ -55,10 +55,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        guard case .intro = delegate.savedLaunchType else {
-            XCTFail("Expected intro, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.intro)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -74,10 +71,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        guard case .termsOfService = delegate.savedLaunchType else {
-            XCTFail("Expected terms of service, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.termsOfService)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -94,10 +88,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        guard case .update = delegate.savedLaunchType else {
-            XCTFail("Expected update, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.update)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -116,10 +107,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        guard case .survey = delegate.savedLaunchType else {
-            XCTFail("Expected survey, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.survey)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -148,18 +136,12 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(subject.launchOrder.count, 2)
 
         subject.loadNextLaunchType()
-        guard case .termsOfService = delegate.savedLaunchType else {
-            XCTFail("Expected terms of service, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.termsOfService)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
         XCTAssertEqual(subject.launchOrder.count, 1)
 
         subject.loadNextLaunchType()
-        guard case .intro = delegate.savedLaunchType else {
-            XCTFail("Expected intro, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.intro)
         XCTAssertEqual(delegate.launchWithTypeCalled, 2)
         XCTAssertEqual(subject.launchOrder.count, 0)
 
@@ -347,10 +329,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        guard case .update = delegate.savedLaunchType else {
-            XCTFail("Expected update, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.update)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -384,10 +363,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        guard case .survey = delegate.savedLaunchType else {
-            XCTFail("Expected survey, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.survey)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -417,10 +393,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         XCTAssertEqual(subject.launchOrder.count, 1)
         subject.loadNextLaunchType()
-        guard case .intro = delegate.savedLaunchType else {
-            XCTFail("Expected intro to take precedence, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.intro)
     }
 
     func testLaunchType_priority_updateTakesPrecedenceOverSurvey() {
@@ -436,10 +409,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         XCTAssertEqual(subject.launchOrder.count, 1)
         subject.loadNextLaunchType()
-        guard case .update = delegate.savedLaunchType else {
-            XCTFail("Expected update to take precedence, but was \(String(describing: delegate.savedLaunchType))")
-            return
-        }
+        assertSavedLaunchType(.update)
     }
 
     // MARK: - Splash Screen Experiment Tests
@@ -469,6 +439,56 @@ final class LaunchScreenViewModelTests: XCTestCase {
         FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
             TosFeature(status: enabled)
         })
+    }
+
+    private func assertSavedLaunchType(
+        _ expectedCase: LaunchTypeCase,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        guard let saved = delegate.savedLaunchType else {
+            XCTFail("Expected \(expectedCase.description) but savedLaunchType was nil", file: file, line: line)
+            return
+        }
+
+        let expected: LaunchType
+        switch expectedCase {
+        case .intro:
+            expected = .intro(manager: IntroScreenManager(prefs: profile.prefs))
+        case .termsOfService:
+            expected = .termsOfService(manager: TermsOfServiceManager(prefs: profile.prefs))
+        case .update:
+            let onboardingModel = createOnboardingViewModel()
+            let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+            expected = .update(viewModel: UpdateViewModel(profile: profile,
+                                                          model: onboardingModel,
+                                                          telemetryUtility: telemetryUtility,
+                                                          windowUUID: windowUUID))
+        case .survey:
+            expected = .survey(manager: SurveySurfaceManager(windowUUID: windowUUID, and: messageManager))
+        case .defaultBrowser:
+            expected = .defaultBrowser
+        }
+
+        XCTAssertEqual(saved, expected, "Expected \(expectedCase.description) but was \(saved)", file: file, line: line)
+    }
+
+    private enum LaunchTypeCase {
+        case intro
+        case termsOfService
+        case update
+        case survey
+        case defaultBrowser
+
+        var description: String {
+            switch self {
+            case .intro: return "intro"
+            case .termsOfService: return "termsOfService"
+            case .update: return "update"
+            case .survey: return "survey"
+            case .defaultBrowser: return "defaultBrowser"
+            }
+        }
     }
 
     private func createSubject(file: StaticString = #filePath,
@@ -531,5 +551,22 @@ final class LaunchScreenViewModelTests: XCTestCase {
             instructionsPopup: nil,
             embededLinkText: []
         )
+    }
+}
+
+// MARK: - LaunchType Equatable Extension (Test Only)
+
+extension LaunchType: @retroactive Equatable {
+    public static func == (lhs: LaunchType, rhs: LaunchType) -> Bool {
+        switch (lhs, rhs) {
+        case (.termsOfService, .termsOfService),
+             (.intro, .intro),
+             (.update, .update),
+             (.survey, .survey),
+             (.defaultBrowser, .defaultBrowser):
+            return true
+        default:
+            return false
+        }
     }
 }
