@@ -49,14 +49,12 @@ open class FxAccountManager: @unchecked Sendable {
         config: FxAConfig,
         deviceConfig: DeviceConfig,
         applicationScopes: [String] = [OAuthScope.profile],
-        keychainAccessGroup: String? = nil,
-        useRustKeychainForFxA: Bool = false
+        keychainAccessGroup: String? = nil
     ) {
         self.config = config
         self.deviceConfig = deviceConfig
         self.applicationScopes = applicationScopes
-        accountStorage = KeyChainAccountStorage(keychainAccessGroup: keychainAccessGroup,
-                                                useRustKeychainForFxA: useRustKeychainForFxA)
+        accountStorage = KeyChainAccountStorage(keychainAccessGroup: keychainAccessGroup)
         setupInternalListeners()
     }
 
