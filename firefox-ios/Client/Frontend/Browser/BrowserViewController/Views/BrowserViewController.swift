@@ -3321,9 +3321,9 @@ class BrowserViewController: UIViewController,
         } else {
             let isFocusLocationTextFieldOption = options?.contains(.focusLocationField) == true
 
-            // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
-            // Wait for tabsRestoration because we need selectedTab
-            // selectedTab is nil when open FF from widget
+            // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-14406]
+            // Wait for tabs restoration because we need the `selectedTab`.
+            // The `selectedTab` is `nil` when open firefox from a widget.
             guard let selectedTab = tabManager.selectedTab, !tabManager.isRestoringTabs else {
                 AppEventQueue.wait(for: [.tabRestoration(tabManager.windowUUID)]) { [weak self] in
                     ensureMainThread { [weak self] in
