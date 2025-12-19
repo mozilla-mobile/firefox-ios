@@ -310,40 +310,6 @@ public class RustAutofill: @unchecked Sendable {
         }
     }
 
-    /// Iterates through the stored credit cards checking that each record can be decrypted. If any records cannot be
-    /// decrypted, they are locally scrubbed to potentially be overwritten by a perviously synced server record.
-    ///
-    /// This function is meant to be executed only once (which is enforced via the `CreditCardsHaveBeenVerified` pref)
-    /// and is called before a credit card sync in `RustSyncManager`.
-    ///
-    /// - Parameters:
-    /// - Note: Scrubs undecryptable credit cards for sync users. This function is for a very specific purpose and should not
-    /// be used for general purposes.
-    public func verifyCreditCards(
-        key: String,
-        completionHandler: @escaping @Sendable (Bool) -> Void) {
-        performDatabaseOperation { error in
-            guard error == nil, let storage = self.storage else {
-                completionHandler(false)
-                return
-            }
-            do {
-                 let result = try storage.scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKey: key)
-
-                if result.totalScrubbedRecords > 0 {
-                    GleanMetrics.UserCreditCards.undecryptableCount.add(Int32(result.totalScrubbedRecords))
-                }
-                completionHandler(true)
-            } catch let err as NSError {
-                self.logger.log("Error verifying credit cards",
-                                level: .warning,
-                                category: .storage,
-                                description: err.localizedDescription)
-                completionHandler(false)
-            }
-        }
-    }
-
     enum AddressAutofillError: Error {
         case addAddressFailure
     }

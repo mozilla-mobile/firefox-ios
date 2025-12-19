@@ -377,49 +377,22 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         }
     }
 
-    func shouldSyncCreditCards(_ creditCardEngineIncluded: Bool,
-                               key: String?,
-                               completion: @escaping @Sendable (Bool) -> Void) {
-        guard creditCardEngineIncluded, let encKey = key else {
-            completion(false)
-            return
-        }
-        if !(self.prefs.boolForKey(PrefsKeys.CreditCardsHaveBeenVerified) ?? false) {
-            // We should only sync credit cards when the verification step has completed
-            // successfully. Otherwise records could exist in the database that can't be decrypted
-            // and would prevent credit cards from syncing if they are not scrubbed.
-
-            self.autofill.verifyCreditCards(key: encKey) { successfullyVerified in
-                self.prefs.setBool(successfullyVerified, forKey: PrefsKeys.CreditCardsHaveBeenVerified)
-                completion(successfullyVerified)
-            }
-        } else {
-            // Successful credit cards verification already occurred so credit card syncing can proceed
-            completion(true)
-        }
-    }
-
     private func registerSyncEngines(engines: [RustSyncManagerAPI.TogglableEngine],
                                      loginKey: String?,
                                      creditCardKey: String?,
                                      completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         let passwordEngineIncluded = engines.contains(.passwords)
-        let creditCardEngineIncluded = engines.contains(.creditcards)
         self.shouldSyncLogins(passwordEngineIncluded) { syncLogins in
-            self.shouldSyncCreditCards(creditCardEngineIncluded, key: creditCardKey) { syncCreditCards in
-                self.doRegisterSyncEngines(engines,
-                                           syncLogins,
-                                           loginKey,
-                                           syncCreditCards,
-                                           creditCardKey) { registeredEngineData in completion(registeredEngineData) }
-            }
+            self.doRegisterSyncEngines(engines,
+                                       syncLogins,
+                                       loginKey,
+                                       creditCardKey) { registeredEngineData in completion(registeredEngineData) }
         }
     }
 
     private func doRegisterSyncEngines(_ engines: [RustSyncManagerAPI.TogglableEngine],
                                        _ syncLogins: Bool,
                                        _ loginKey: String?,
-                                       _ syncCreditCards: Bool,
                                        _ creditCardKey: String?,
                                        completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
@@ -438,7 +411,7 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                     rustEngines.append(engine.rawValue)
                 }
             case .creditcards:
-                if syncCreditCards, let key = creditCardKey {
+                if let key = creditCardKey {
                     // checking if autofill was already registered with addresses
                     if !registeredAutofill {
                         self.autofill.registerWithSyncManager()

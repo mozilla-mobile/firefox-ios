@@ -19,7 +19,6 @@ protocol SyncAutofillProvider {
     func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void)
     func registerWithSyncManager()
     func reportPreSyncKeyRetrievalFailure(err: String)
-    func verifyCreditCards(key: String, completionHandler: @escaping @Sendable (Bool) -> Void)
 }
 
 extension RustAutofill: AddressProvider, SyncAutofillProvider {}
