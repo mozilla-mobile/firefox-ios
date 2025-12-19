@@ -280,6 +280,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         snapshot("PrivateBrowsingTabsEmptyState-01")
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        snapshot("PrivateBrowsingTabsNewTab-01")
     }
 
     @MainActor
