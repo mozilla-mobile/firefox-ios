@@ -36,6 +36,8 @@ class DefaultBrowserUtility {
         public static let shouldNotPerformMigration = "com.moz.shouldNotPerformMigration.key"
         public static let retryDate = "com.moz.defaultBrowserAPIRetryDate.key"
         public static let apiQuery = "com.moz.defaultBrowserAPIQuery.key"
+        public static let defaultBrowserSetDate = "com.moz.defaultBrowserSetDate.key"
+        public static let appleAPILastUseDate = "com.moz.appleDefaultBrowerAPILastUseDate.key"
     }
 
     struct APIErrorDateKeys {
@@ -52,14 +54,34 @@ class DefaultBrowserUtility {
                 category: .setup
             )
             userDefault.set(newValue, forKey: UserDefaultsKey.isBrowserDefault)
+            if newValue { defaultBrowserSetDate = Date() }
         }
+    }
+
+    private var defaultBrowserSetDate: Date? {
+        get { userDefault.object(forKey: UserDefaultsKey.defaultBrowserSetDate) as? Date }
+        set { userDefault.set(newValue, forKey: UserDefaultsKey.defaultBrowserSetDate) }
+    }
+
+    private var appleAPILastUseDate: Date? {
+        get { userDefault.object(forKey: UserDefaultsKey.appleAPILastUseDate) as? Date }
+        set { userDefault.set(newValue, forKey: UserDefaultsKey.appleAPILastUseDate) }
     }
 
     func processUserDefaultState(isFirstRun: Bool) {
         guard #available(iOS 18.2, *) else { return }
 
+        expireDefaultStatusIfStale()
+
         guard !isRunningOnBlockListBetaOS() else {
             logger.log("Cannot run the isDefault since the device running a Beta on the block list",
+                       level: .info,
+                       category: .setup)
+            return
+        }
+
+        guard shouldQueryAppleDefaultBrowserAPI() else {
+            logger.log("Skipping isDefault API call based on timing conditions",
                        level: .info,
                        category: .setup)
             return
@@ -71,8 +93,10 @@ class DefaultBrowserUtility {
             category: .setup
         )
 
+
         do {
             trackNumberOfAPIQueries(forNewUsers: isFirstRun)
+            appleAPILastUseDate = Date()
             let isDefault = try application.isDefault(.webBrowser)
 
             logger.log(
@@ -131,6 +155,8 @@ class DefaultBrowserUtility {
             telemetry.recordIsUserChoiceScreenAcquisition(isDefault)
         }
     }
+
+    // MARK: - Migration
 
     /// This function consolidates the two currently used states for determining
     /// whether we are the default browser, into a single state.
@@ -204,5 +230,54 @@ class DefaultBrowserUtility {
         let lastProvidedDate = userInfoDict[APIErrorDateKeys.lastProvidedDate] as? Date
 
         return (retryDate, lastProvidedDate)
+    }
+
+    // MARK: - Default Browser Status Management
+
+    func expireDefaultStatusIfStale() {
+        if isDefaultBrowser && !wasSetAsDefaultWithinLastMonth() {
+            isDefaultBrowser = false
+        }
+    }
+
+    func shouldQueryAppleDefaultBrowserAPI() -> Bool {
+        let hasLastUseDate = appleAPILastUseDate != nil
+
+        // Never used API before - use it
+        if !hasLastUseDate { return true }
+
+        // Not past retry date - don't use it
+        if !isPastRetryDate() { return false }
+
+        // Set as default in last month - don't use it
+        if wasSetAsDefaultWithinLastMonth() { return false }
+
+        // Been at least 3 months since last use - use it
+        if hasBeenAtLeastThreeMonthsSinceLastAPIUse() { return true }
+
+        return false
+    }
+
+    func wasSetAsDefaultWithinLastMonth() -> Bool {
+        guard let setDate = defaultBrowserSetDate,
+              let oneMonthAgo = Calendar.current.date(byAdding: .month, value: -1, to: Date())
+        else { return false }
+
+        return setDate > oneMonthAgo
+    }
+
+    func hasBeenAtLeastThreeMonthsSinceLastAPIUse() -> Bool {
+        guard let lastUseDate = appleAPILastUseDate,
+              let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: Date())
+        else { return true }
+
+        return lastUseDate < threeMonthsAgo
+    }
+
+    func isPastRetryDate() -> Bool {
+        guard let retryDate = userDefault.object(forKey: APIErrorDateKeys.retryDate) as? Date else {
+            return true
+        }
+        return Date() > retryDate
     }
 }
