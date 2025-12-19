@@ -2478,14 +2478,14 @@ public struct TermsOfUse {
     public static let TitleVariant2 = MZLocalizedString(
         key: "TermsOfUse.TitleVariant2.v147",
         tableName: "TermsOfUse",
-        value: "A note from Firefox",
-        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 2."
+        value: "A note from %@",
+        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox)."
     )
-    public static let ReviewAndAcceptTextVariant = MZLocalizedString(
-        key: "TermsOfUse.ReviewAndAcceptTextVariant.v147",
+    public static let LearnMoreHere = MZLocalizedString(
+        key: "TermsOfUse.LearnMoreHere.v147",
         tableName: "TermsOfUse",
         value: "You can learn more here.",
-        comment: "Descriptive text shown when user is invited to accept the Terms of Use for variants 1 and 2. Includes link text for 'here'."
+        comment: "Text shown in the Terms of Use bottom sheet for variants 1 and 2. The word 'here' is a tappable link."
     )
     public static let LinkTermsOfUse = MZLocalizedString(
         key: "TermsOfUse.Link.TermsOfUse.v142",

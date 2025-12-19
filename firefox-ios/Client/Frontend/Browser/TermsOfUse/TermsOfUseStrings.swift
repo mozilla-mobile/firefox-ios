@@ -17,7 +17,7 @@ enum TermsOfUseStringVariant: Int, CaseIterable {
         case .variant1:
             return TermsOfUse.TitleVariant1
         case .variant2:
-            return TermsOfUse.TitleVariant2
+            return String.localizedStringWithFormat(TermsOfUse.TitleVariant2, AppName.shortName.rawValue)
         }
     }
 
@@ -26,7 +26,7 @@ enum TermsOfUseStringVariant: Int, CaseIterable {
         case .variant0:
             return TermsOfUse.ReviewAndAcceptText
         case .variant1, .variant2:
-            return TermsOfUse.ReviewAndAcceptTextVariant
+            return TermsOfUse.LearnMoreHere
         }
     }
 }
