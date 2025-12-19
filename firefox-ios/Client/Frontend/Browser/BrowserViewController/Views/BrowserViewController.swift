@@ -3321,37 +3321,34 @@ class BrowserViewController: UIViewController,
         } else {
             let isFocusLocationTextFieldOption = options?.contains(.focusLocationField) == true
 
-            if let selectedTab = tabManager.selectedTab {
-                if shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
-                    focusLocationTextField(forTab: selectedTab)
-                    return
-                }
-
-                openBlankNewTab(
-                    focusLocationField: isFocusLocationTextFieldOption,
-                    isPrivate: isPrivate
-                )
-                return
-            }
-
-            AppEventQueue.wait(for: [.tabRestoration(tabManager.windowUUID)]) { [weak self] in
-                ensureMainThread { [weak self] in
-                    guard let self, let selectedTab = self.tabManager.selectedTab else { return }
-
-                    if self.shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
-                        self.focusLocationTextField(forTab: selectedTab)
-                    } else {
-                        self.openBlankNewTab(
-                            focusLocationField: isFocusLocationTextFieldOption,
-                            isPrivate: isPrivate
-                        )
+            // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
+            // Wait for tabsRestoration because we need selectedTab
+            // selectedTab is nil when open FF from widget
+            guard let selectedTab = tabManager.selectedTab, !tabManager.isRestoringTabs else {
+                AppEventQueue.wait(for: [.tabRestoration(tabManager.windowUUID)]) { [weak self] in
+                    ensureMainThread { [weak self] in
+                        guard let self, let selectedTab = self.tabManager.selectedTab else { return }
+                        self.handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
                     }
                 }
+                return
             }
+            handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
         }
     }
 
-    private func shouldFocusLocationTextField(for tab: Tab, isPrivate: Bool) -> Bool {
+    private func handle(_ selectedTab: Tab, _ isPrivate: Bool, _ isFocusLocationTextFieldOption: Bool) {
+        if shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
+            focusLocationTextField(forTab: selectedTab)
+        } else {
+            openBlankNewTab(
+                focusLocationField: isFocusLocationTextFieldOption,
+                isPrivate: isPrivate
+            )
+        }
+    }
+
+    func shouldFocusLocationTextField(for tab: Tab, isPrivate: Bool) -> Bool {
         guard tab.isPrivate == isPrivate else { return false }
         return tab.isFxHomeTab || tab.url == nil
     }

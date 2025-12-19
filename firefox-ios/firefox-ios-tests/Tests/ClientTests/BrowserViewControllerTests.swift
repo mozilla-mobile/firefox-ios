@@ -193,6 +193,58 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 //        XCTAssertEqual(action.readerModeState, .active)
 //    }
 
+    func testHandle_withoutURL_withSelectedTab_notRestoring_opensBlankNewTab_ifTabHasURL_and_isNotHomepage() {
+        let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        tabManager.selectedTab = MockTab(
+            profile: profile,
+            isPrivate: false,
+            windowUUID: .XCTestDefaultUUID,
+            isHomePage: false
+        )
+        tabManager.isRestoringTabs = false
+        tabManager.selectedTab?.url = URL(string: "https://example.com/")
+        mockBVC.handle(url: nil, isPrivate: false, options: nil)
+        XCTAssertTrue(mockBVC.openBlankNewTabCalled)
+    }
+
+    func testHandle_withoutURL_withSelectedTab_notRestoring_opensBlankNewTab_ifPrivateDoesNotMatch() {
+        let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        tabManager.selectedTab = MockTab(
+            profile: profile,
+            isPrivate: false,
+            windowUUID: .XCTestDefaultUUID,
+            isHomePage: true
+        )
+        tabManager.isRestoringTabs = false
+        mockBVC.handle(url: nil, isPrivate: true, options: nil)
+        XCTAssertTrue(mockBVC.openBlankNewTabCalled)
+    }
+
+    func testShouldFocusLocationTextField_true_whenPrivateMatches_andIsFxHome() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, isPrivate: false, windowUUID: .XCTestDefaultUUID, isHomePage: true)
+        XCTAssertTrue(subject.shouldFocusLocationTextField(for: tab, isPrivate: false))
+    }
+
+    func testShouldFocusLocationTextField_true_whenPrivateMatches_andUrlIsNil() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, isPrivate: false, windowUUID: .XCTestDefaultUUID, isHomePage: false)
+        XCTAssertTrue(subject.shouldFocusLocationTextField(for: tab, isPrivate: false))
+    }
+
+    func testShouldFocusLocationTextField_false_whenPrivateMismatch() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, isPrivate: false, windowUUID: .XCTestDefaultUUID, isHomePage: false)
+        XCTAssertFalse(subject.shouldFocusLocationTextField(for: tab, isPrivate: true))
+    }
+
+    func testShouldFocusLocationTextField_false_whenHasURL_andNotFxHome() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID, isHomePage: false)
+        tab.url = URL(string: "https://example.com/")
+        XCTAssertFalse(subject.shouldFocusLocationTextField(for: tab, isPrivate: true))
+    }
+
     // MARK: - Handle PDF
 
     func testHandlePDFDownloadRequest_doesntDocumentLoadingView_whenTabNotSelected() {
