@@ -345,12 +345,7 @@ final class OnboardingService: FeatureFlaggable {
             viewModel: popupViewModel,
             windowUUID: windowUUID,
             buttonTappedFinishFlow: { [weak self] in
-                switch popupViewModel.buttonAction {
-                case .openIosFxSettings:
-                    self?.telemetryUtility?.sendGoToSettingsTelemetry()
-                case .dismiss, .dismissAndNextCard:
-                    self?.telemetryUtility?.sendDismissPressedTelemetry()
-                }
+                self?.telemetryUtility?.sendGoToSettingsTelemetry()
                 completion()
             }
         )
