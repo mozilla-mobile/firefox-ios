@@ -64,8 +64,10 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     // MARK: Glean Metrics
 
-    func recordEvent<ExtraObject>(for metric: EventMetricType<ExtraObject>,
-                                  extras: EventExtras) where ExtraObject: EventExtras {
+    func recordEvent<ExtraObject>(
+        for metric: EventMetricType<ExtraObject>,
+        extras: EventExtras
+    ) where ExtraObject: EventExtras {
         if let castedExtras = extras as? ExtraObject {
             metric.record(castedExtras)
         } else {

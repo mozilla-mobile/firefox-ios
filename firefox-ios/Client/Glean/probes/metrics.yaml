@@ -397,6 +397,35 @@ app:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-06-01"
+  default_browser_api_error:
+    type: event
+    description: |
+      Records when the UIApplication.isDefault API returns an error,
+      capturing error details and context for debugging.
+    extra_keys:
+      error_description:
+        type: string
+        description: |
+          The localized description of the error
+      retry_date:
+        type: string
+        description: |
+          The date when the API can be retried (ISO 8601 format)
+      last_provided_date:
+        type: string
+        description: |
+          The date when the status was last provided (ISO 8601 format)
+      api_query_count:
+        type: quantity
+        description: |
+          Number of times the API has been queried for this user
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/31170
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/31365
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
   opened_as_default_browser:
     type: counter
     description: |

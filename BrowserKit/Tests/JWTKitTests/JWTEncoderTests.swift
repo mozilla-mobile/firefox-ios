@@ -10,13 +10,13 @@ import Shared
 final class JWTEncoderTests: XCTestCase {
     private static let mockSecret = "super-secret"
 
-    private static let mockPayload: [String: Any] = [
+    nonisolated(unsafe) private static let mockPayload: [String: Any] = [
         "sub": "1234567890",
         "name": "John Doe",
         "admin": true
     ]
 
-    private static let invalidPayload: [String: Any] = [
+    nonisolated(unsafe) private static let invalidPayload: [String: Any] = [
         "invalid": Date()
     ]
 
