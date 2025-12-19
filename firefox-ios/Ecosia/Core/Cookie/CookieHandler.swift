@@ -36,7 +36,7 @@ class BaseCookieHandler: CookieHandler {
         let urlProvider = Cookie.urlProvider
         return HTTPCookie(properties: [
             .name: cookieName,
-            .domain: ".\(urlProvider.domain ?? "")",
+            .domain: ".\(urlProvider.domain)",
             .path: "/",
             .value: value
         ])

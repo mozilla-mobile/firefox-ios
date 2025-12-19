@@ -18,6 +18,13 @@ final class AnalyticsSpy: Analytics {
 
     // MARK: - AnalyticsSpy Properties to Capture Calls
 
+    var trackedEvents: [SnowplowTracker.Event] = []
+
+    override func track(_ event: SnowplowTracker.Event) {
+        super.track(event)
+        trackedEvents.append(event)
+    }
+
     var installCalled = false
     override func install() {
         installCalled = true
@@ -26,6 +33,7 @@ final class AnalyticsSpy: Analytics {
     var activityActionCalled: Analytics.Action.Activity?
     override func activity(_ action: Analytics.Action.Activity) {
         activityActionCalled = action
+        super.activity(action)
     }
 
     var bookmarksImportExportPropertyCalled: Analytics.Property.Bookmarks?
@@ -370,7 +378,7 @@ final class AnalyticsSpyTests: XCTestCase {
                 Analytics.shared = analyticsSpy
                 tabManagerMock.selectedTab?.url = URL(string: "https://example.com")
 
-                // Set expectation
+                let semaphore = DispatchSemaphore(value: 0)
                 let expectation = self.expectation(description: "menuStatus called for \(testCase.label.rawValue) to \(testCase.value)")
                 analyticsSpy.menuStatusExpectation = expectation
 
@@ -379,15 +387,18 @@ final class AnalyticsSpyTests: XCTestCase {
                     let flatItems = actions.flatMap { $0 }.flatMap { $0.items }
                     guard let action = flatItems.first(where: { $0.title == testCase.title }) else {
                         XCTFail("No action with title \(testCase.title) found")
+                        semaphore.signal()
                         return
                     }
 
                     action.tapHandler?(action)
+                    semaphore.signal()
                 }
 
+                // Wait for async completion
+                _ = semaphore.wait(timeout: .now() + 2)
                 wait(for: [expectation], timeout: 2)
 
-                // Assert
                 XCTAssertEqual(analyticsSpy.menuStatusItemCalled, testCase.label, "Expected menu status label to be \(testCase.label.rawValue)")
                 XCTAssertEqual(analyticsSpy.menuStatusItemChangedTo, testCase.value, "Expected menu status value to be \(testCase.value)")
             }
@@ -746,7 +757,7 @@ final class AnalyticsSpyTests: XCTestCase {
     func testWebViewDelegateTracksSearchEventOnEcosiaVerticalURLChange() {
         let browser = BrowserViewController(profile: profileMock, tabManager: tabManagerMock)
 
-        let rootURL = Environment.current.urlProvider.root
+        let rootURL = EcosiaEnvironment.current.urlProvider.root
         let testCases = [
             ("https://www.example.org", false, "Does not track external URLs"),
             ("\(rootURL)", false, "Does not track index page"),
@@ -785,7 +796,7 @@ final class AnalyticsSpyTests: XCTestCase {
     func testWebViewDelegateTracksSearchEventBasedOnNavigationType() {
         let browser = BrowserViewController(profile: profileMock, tabManager: tabManagerMock)
 
-        let rootURL = Environment.current.urlProvider.root
+        let rootURL = EcosiaEnvironment.current.urlProvider.root
         let testCases = [
             (WKNavigationType.other, "\(rootURL)/search?q=test", true, "Tracks regular navigation"),
             (WKNavigationType.reload, "\(rootURL)/search?q=test", true, "Tracks reload (with unchanged url)"),
@@ -825,7 +836,7 @@ final class AnalyticsSpyTests: XCTestCase {
                                action: Analytics.Action.Activity.resume.rawValue)
 
         // Act
-        analyticsSpy.appendTestContextIfNeeded(.resume, event) {
+        analyticsSpy.appendActivityContextIfNeeded(.resume, event) {
             expectation.fulfill()
         }
         waitForExpectations(timeout: 1.0, handler: nil)
@@ -846,7 +857,7 @@ final class AnalyticsSpyTests: XCTestCase {
                                action: Analytics.Action.Activity.launch.rawValue)
 
         // Act
-        analyticsSpy.appendTestContextIfNeeded(.resume, event) {
+        analyticsSpy.appendActivityContextIfNeeded(.resume, event) {
             expectation.fulfill()
         }
         waitForExpectations(timeout: 1.0, handler: nil)
@@ -856,6 +867,53 @@ final class AnalyticsSpyTests: XCTestCase {
         XCTAssertNotNil(userContext, "User state context not found in event entities")
         if let userContext = userContext {
             XCTAssertEqual(userContext.data["push_notification_state"] as? String, "disabled")
+        }
+    }
+
+    func testAddUserSeedCountContextToAllEvents() {
+        // Arrange
+        let analyticsSpy = makeAnalyticsSpyContextSUT()
+        User.shared.sendAnonymousUsageData = true
+        let event = Structured(category: Analytics.Category.bookmarks.rawValue,
+                               action: Analytics.Action.click.rawValue)
+
+        // Act
+        analyticsSpy.track(event)
+
+        // Assert
+        XCTAssertEqual(analyticsSpy.trackedEvents.count, 1, "Should have tracked one event")
+        let seedCountContext = event.entities.first { $0.schema == Analytics.impactBalanceSchema }
+        XCTAssertNotNil(seedCountContext, "User seed count context must be added to the structured event")
+        if let seedCountContext = seedCountContext {
+            XCTAssertEqual(seedCountContext.data["amount"] as? Int, User.shared.seedCount)
+        }
+    }
+
+    func testAddUserSeedCountContextToResumeEventOnDidBecomeActive() async {
+        // Arrange
+        User.shared.sendAnonymousUsageData = true
+        XCTAssertNil(analyticsSpy.activityActionCalled)
+        let application = await UIApplication.shared
+
+        // Act
+        _ = await appDelegate.applicationDidBecomeActive(application)
+
+        waitForCondition(timeout: 2) {
+            !analyticsSpy.trackedEvents.isEmpty && analyticsSpy.activityActionCalled == .resume
+        }
+
+        // Assert
+        XCTAssertEqual(analyticsSpy.activityActionCalled, .resume)
+        XCTAssertEqual(analyticsSpy.trackedEvents.count, 1)
+
+        if let structuredEvent = analyticsSpy.trackedEvents.first(where: { ($0 as? Structured)?.action == Analytics.Action.Activity.resume.rawValue }) {
+            let seedCountContext = structuredEvent.entities.first { $0.schema == Analytics.impactBalanceSchema }
+            XCTAssertNotNil(seedCountContext)
+            if let seedCountContext = seedCountContext {
+                XCTAssertEqual(seedCountContext.data["amount"] as? Int, User.shared.seedCount)
+            }
+        } else {
+            XCTFail("Tracked event should be a Structured event")
         }
     }
 

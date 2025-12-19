@@ -12,4 +12,5 @@ MOZ_BUNDLE_ID = com.ecosia.ecosiaapp
 CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/Ecosia.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_RELEASE
 MOZ_INTERNAL_URL_SCHEME = ecosia
+OTHER_LDFLAGS = $(inherited) -ld_classic
 DEVELOPMENT_TEAM = 33YMRSYD2L

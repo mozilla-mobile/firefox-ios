@@ -168,7 +168,7 @@ final class EcosiaPrivacyPolicySetting: Setting {
     }
 
     override var url: URL? {
-        return Environment.current.urlProvider.privacy
+        return EcosiaEnvironment.current.urlProvider.privacy
     }
 
     let windowUUID: UUID
@@ -189,7 +189,7 @@ final class EcosiaTermsSetting: Setting {
     }
 
     override var url: URL? {
-        return Environment.current.urlProvider.terms
+        return EcosiaEnvironment.current.urlProvider.terms
     }
 
     let windowUUID: UUID
@@ -255,7 +255,7 @@ class HelpCenterSetting: Setting {
     override var accessibilityIdentifier: String? { return "HelpCenter" }
 
     override var url: URL? {
-        return Environment.current.urlProvider.faq
+        return EcosiaEnvironment.current.urlProvider.faq
     }
 
     let windowUUID = WindowUUID()

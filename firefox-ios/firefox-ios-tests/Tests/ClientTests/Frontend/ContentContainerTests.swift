@@ -263,7 +263,8 @@ final class ContentContainerTests: XCTestCase {
             tabManager: MockTabManager(),
             overlayManager: overlayModeManager,
             referrals: .init(),
-            delegate: nil
+            delegate: nil,
+            auth: EcosiaAuth(browserViewController: BrowserViewController(profile: profile, tabManager: MockTabManager()))
         )
     }
 }

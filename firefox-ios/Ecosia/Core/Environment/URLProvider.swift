@@ -8,54 +8,48 @@ public enum URLProvider {
 
     case production
     case staging
+    case debug
 
-    public var root: URL {
+    // MARK: - Public Properties
+
+    public var domain: String {
         switch self {
-        case .production:
-            return URL(string: "https://www.ecosia.org")!
+        case .production, .debug:
+            return "ecosia.org"
         case .staging:
-            return URL(string: "https://www.ecosia-staging.xyz")!
+            return "ecosia-staging.xyz"
         }
     }
 
-    public var domain: String? {
-        if let urlComponents = URLComponents(string: root.absoluteString) {
-            if let host = urlComponents.host {
-                let domain = host.replacingOccurrences(of: "www.", with: "")
-                return domain
-            }
-        }
-        return nil
+    public var root: URL {
+        URL(string: "https://www.\(domain)")!
     }
 
     public var apiRoot: URL {
-        switch self {
-        case .production:
-            return URL(string: "https://api.ecosia.org")!
-        case .staging:
-            return URL(string: "https://api.ecosia-staging.xyz")!
-        }
+        URL(string: "https://api.\(domain)")!
     }
 
     public var snowplowMicro: String? {
-        if case .staging = self {
-            return "https://www.ecosia-staging.xyz/analytics-test-micro"
+        switch self {
+        case .staging:
+            return "https://www.\(domain)/analytics-test-micro"
+        case .production, .debug:
+            return nil
         }
-        return nil
     }
 
     public var snowplow: String {
         switch self {
         case .production:
             return "sp.ecosia.org"
-        case .staging:
+        case .staging, .debug:
             return "org-ecosia-prod1.mini.snplow.net"
         }
     }
 
     var unleash: String {
         switch self {
-        case .production:
+        case .production, .debug:
             return "prod"
         case .staging:
             return "staging"
@@ -188,5 +182,55 @@ public enum URLProvider {
 
     public var storeWriteReviewPage: URL {
         URL(string: "https://itunes.apple.com/app/id670881887?action=write-review")!
+	}
+
+    public var seedCounterInfo: URL {
+        URL(string: "https://support.ecosia.org/article/844-seed-counter")!
+    }
+
+    public var profileURL: URL {
+        root.appendingPathComponent("accounts/profile")
+    }
+
+    // MARK: - Authentication URL Patterns
+
+    /// URL paths that indicate errors in either the signUp or signOut flow
+    public var errorPaths: [String] {
+        ["/accounts/error"]
+    }
+
+    // MARK: - Authentication URLs
+
+    /// Complete URL for user login/sign-up flow
+    public var signUpURL: URL {
+        root.appendingPathComponent("accounts/sign-up")
+    }
+
+    /// Complete URL for user sign-in flow
+    public var signInURL: URL {
+        root.appendingPathComponent("accounts/sign-in")
+    }
+
+    /// Complete URL for user logout/sign-out flow
+    public var logoutURL: URL {
+        root.appendingPathComponent("accounts/sign-out")
+    }
+
+    /// The API Identifier matching the `audience` parameter used by Auth0 when creating the `WebAuth`
+    public var authApiAudience: URL {
+        URL(string: "https://auth0.api.ecosia.org/v1/accounts/web")!
+    }
+
+    // MARK: - Auth0 Configuration
+
+    /// Auth0 domain for authentication (custom domain)
+    public var auth0Domain: String {
+        "login.\(domain)"
+    }
+
+    /// Auth0 cookie domain for session management
+    /// Returns the same value as `auth0Domain` since they must match for custom domain authentication
+    public var auth0CookieDomain: String {
+        auth0Domain
     }
 }

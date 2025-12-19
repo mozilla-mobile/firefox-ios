@@ -7,6 +7,7 @@ import Foundation
 extension Analytics {
     public enum Category: String {
         case
+        account,
         activity,
         autocomplete = "autocomplete_suggestion",
         bookmarks,
@@ -24,7 +25,17 @@ extension Analytics {
         settings
     }
 
-    public enum Label {
+    public enum Label: String {
+        case
+        analytics,
+        accountNudgeCard = "account_nudge_card",
+        clear,
+        close,
+        market,
+        profile,
+        signIn = "sign_in",
+        signUp = "sign_up",
+        toolbar
 
         public enum Bookmarks: String {
             case
@@ -215,12 +226,16 @@ extension Analytics {
 
     public enum Property: String {
         case
+        account,
+        cancel,
         enable,
         disable,
         header,
         home,
         detail,
-        nativeSettings = "native_settings"
+        menu,
+        nativeSettings = "native_settings",
+        signOut = "sign_out"
 
         public enum APNConsent: String {
             case

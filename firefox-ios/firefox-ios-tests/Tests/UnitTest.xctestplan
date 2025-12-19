@@ -213,7 +213,6 @@
     },
     {
       "skippedTests" : [
-        "AnalyticsSpyTests\/testTrackMenuStatus()",
         "AppDelegateFeatureManagementIntegrationTests\/testStateAfterDidBecomeActive_expectesSameModel_AfterDidFinishLaunchingWithOptions()"
       ],
       "target" : {

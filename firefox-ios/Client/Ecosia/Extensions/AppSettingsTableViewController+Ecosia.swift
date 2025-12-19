@@ -25,6 +25,8 @@ extension AppSettingsTableViewController {
 
         if isDebugSectionEnabled {
             sections.append(getEcosiaDebugSupportSection())
+            sections.append(getEcosiaDebugUnleashSection())
+            sections.append(getEcosiaDebugAccountsSection())
         }
 
         return sections
@@ -144,8 +146,7 @@ extension AppSettingsTableViewController {
     }
 
     private func getEcosiaDebugSupportSection() -> SettingSection {
-
-        var hiddenDebugSettings = [
+        var hiddenDebugSettings: [Setting] = [
             ExportBrowserDataSetting(settings: self),
             ForceCrashSetting(settings: self),
             PushBackInstallation(settings: self),
@@ -160,28 +161,39 @@ extension AppSettingsTableViewController {
             ResetSearchCount(settings: self),
             ResetDefaultBrowserNudgeCard(settings: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
-            UnleashSeedCounterNTPSetting(settings: self),
-            UnleashBrazeIntegrationSetting(settings: self),
-            UnleashNativeSRPVAnalyticsSetting(settings: self),
-            UnleashAISearchMVPSetting(settings: self),
-            UnleashIdentifierSetting(settings: self),
-            AnalyticsIdentifierSetting(settings: self)
+            AnalyticsIdentifierSetting(settings: self),
         ]
 
-        if Environment.current == .staging {
+        if EcosiaEnvironment.current == .staging {
             hiddenDebugSettings.append(AnalyticsStagingUrlSetting(settings: self))
         }
 
-        if SeedCounterNTPExperiment.isEnabled {
-            hiddenDebugSettings.append(AddOneSeedSetting(settings: self,
-                                                         progressManagerType: UserDefaultsSeedProgressManager.self))
-            hiddenDebugSettings.append(AddFiveSeedsSetting(settings: self,
-                                                           progressManagerType: UserDefaultsSeedProgressManager.self))
-            hiddenDebugSettings.append(ResetSeedCounterSetting(settings: self,
-                                                               progressManagerType: UserDefaultsSeedProgressManager.self))
-        }
-
         return SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugSettings)
+    }
+
+    private func getEcosiaDebugUnleashSection() -> SettingSection {
+        let unleashSettings: [Setting] = [
+            UnleashBrazeIntegrationSetting(settings: self),
+            UnleashNativeSRPVAnalyticsSetting(settings: self),
+            UnleashAISearchMVPSetting(settings: self),
+            UnleashIdentifierSetting(settings: self)
+        ]
+
+        return SettingSection(title: NSAttributedString(string: "Debug - Unleash"), children: unleashSettings)
+    }
+
+    private func getEcosiaDebugAccountsSection() -> SettingSection {
+        let accountSettings: [Setting] = [
+            ResetAccountImpactNudgeCard(settings: self),
+            DebugAddSeedsLoggedOut(settings: self),
+            DebugAddSeedsLoggedIn(settings: self),
+            DebugAddCustomSeeds(settings: self),
+            DebugForceLevelUp(settings: self),
+            SimulateAuthErrorSetting(settings: self),
+            SimulateImpactAPIErrorSetting(settings: self)
+        ]
+
+        return SettingSection(title: NSAttributedString(string: "Debug - Accounts"), children: accountSettings)
     }
 }
 

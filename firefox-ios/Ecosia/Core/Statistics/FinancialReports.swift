@@ -28,7 +28,7 @@ public final class FinancialReports {
     init() { }
 
     public func fetchAndUpdate(urlSession: URLSessionProtocol = URLSession.shared) async throws {
-        let (data, _) = try await urlSession.data(from: Environment.current.urlProvider.financialReportsData)
+        let (data, _) = try await urlSession.data(from: EcosiaEnvironment.current.urlProvider.financialReportsData)
 
         let response = try JSONSerialization.jsonObject(with: data) as? [String: Any]
 

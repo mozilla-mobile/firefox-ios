@@ -24,7 +24,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     override var normalActiveTabs: [Tab] {
         let inactiveTabs = getInactiveTabs()
+        /* Ecosia: filter out invisible tabs
         let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
+         */
+        let activeTabs = tabs.filter { $0.isPrivate == false && !$0.isInvisible && !inactiveTabs.contains($0) }
         return activeTabs
     }
 

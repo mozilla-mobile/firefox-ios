@@ -963,7 +963,10 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
             return
         }
 
+        /* Ecosia: Skip invisible tabs from being added to UI
         guard tab.isPrivate == self.isPrivate else { return }
+        */
+        guard tab.isPrivate == self.isPrivate, !tab.isInvisible else { return }
 
         updateWith(animationType: .addTab) { [unowned self] in
             let indexToPlaceTab = getIndexToPlaceTab(placeNextToParentTab: placeNextToParentTab)

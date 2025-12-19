@@ -19,13 +19,16 @@ public protocol EcosiaSemanticColors {
     var backgroundQuaternary: UIColor { get }
     var backgroundElevation1: UIColor { get }
     var backgroundElevation2: UIColor { get }
+    var backgroundRoleNegative: UIColor { get }
 
     // MARK: - Border
     var borderDecorative: UIColor { get }
+    var borderNegative: UIColor { get }
 
     // MARK: - Brand
     var brandFeatured: UIColor { get }
     var brandPrimary: UIColor { get }
+    var brandImpact: UIColor { get }
 
     // MARK: - Button
     var buttonBackgroundFeatured: UIColor { get }
@@ -38,6 +41,9 @@ public protocol EcosiaSemanticColors {
     var buttonBackgroundSecondaryHover: UIColor { get }
     var buttonContentSecondary: UIColor { get }
     var buttonContentSecondaryStatic: UIColor { get }
+
+    // MARK: - Link
+    var linkPrimary: UIColor { get }
 
     // MARK: - Icon
     var iconDecorative: UIColor { get }
@@ -60,6 +66,7 @@ public protocol EcosiaSemanticColors {
     var textPrimary: UIColor { get }
     var textInversePrimary: UIColor { get }
     var textSecondary: UIColor { get }
+    var textStaticDark: UIColor { get }
 }
 
 public protocol EcosiaThemeColourPalette: ThemeColourPalette {
@@ -78,7 +85,9 @@ class FakeEcosiaSemanticColors: EcosiaSemanticColors {
     var backgroundQuaternary: UIColor = .systemGray
     var backgroundElevation1: UIColor = .systemGray
     var backgroundElevation2: UIColor = .systemGray
+    var backgroundRoleNegative: UIColor = .systemGray
     var borderDecorative: UIColor = .systemGray
+    var brandImpact: UIColor = .systemGray
     var brandFeatured: UIColor = .systemGray
     var brandPrimary: UIColor = .systemGray
     var buttonBackgroundFeatured: UIColor = .systemGray
@@ -91,7 +100,9 @@ class FakeEcosiaSemanticColors: EcosiaSemanticColors {
     var buttonBackgroundSecondaryHover: UIColor = .systemGray
     var buttonContentSecondary: UIColor = .systemGray
     var buttonContentSecondaryStatic: UIColor = .systemGray
+    var borderNegative: UIColor = .systemGray
     var highlighter: UIColor = .systemGray
+    var linkPrimary: UIColor = .systemGray
     var iconDecorative: UIColor = .systemGray
     var iconInverseStrong: UIColor = .systemGray
     var segmentedControlBackgroundActive: UIColor = .systemGray
@@ -103,4 +114,5 @@ class FakeEcosiaSemanticColors: EcosiaSemanticColors {
     var textPrimary: UIColor = .systemGray
     var textInversePrimary: UIColor = .systemGray
     var textSecondary: UIColor = .systemGray
+    var textStaticDark: UIColor = .systemGray
 }

@@ -12,7 +12,7 @@ final class UserAgentTests: XCTestCase {
         domains.forEach { domain, agent in
             // Ecosia: Add not nil check for domain
             XCTAssertNotNil(domain)
-            XCTAssertEqual(agent, UserAgent.getUserAgent(domain: domain!, platform: .Desktop))
+            XCTAssertEqual(agent, UserAgent.getUserAgent(domain: domain, platform: .Desktop))
         }
     }
 

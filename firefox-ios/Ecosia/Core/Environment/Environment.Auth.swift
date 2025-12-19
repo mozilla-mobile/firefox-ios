@@ -5,12 +5,12 @@
 import Foundation
 
 extension Environment {
-    struct Auth: Equatable {
+    struct CloudFlareAuth: Equatable {
         let id: String
         let secret: String
     }
 
-    var auth: Auth? {
+    var cloudFlareAuth: CloudFlareAuth? {
         switch self {
         case .staging:
             let keyId = "CF_ACCESS_CLIENT_ID"
@@ -18,7 +18,7 @@ extension Environment {
 
             guard let id = EnvironmentFetcher.valueFromMainBundleOrProcessInfo(forKey: keyId),
                   let secret = EnvironmentFetcher.valueFromMainBundleOrProcessInfo(forKey: keySecret) else { return nil }
-            return Auth(id: id, secret: secret)
+            return CloudFlareAuth(id: id, secret: secret)
 
         default:
             return nil

@@ -432,6 +432,7 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
+
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -452,6 +453,12 @@ extension BrowserViewController: WKNavigationDelegate {
                 tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""
             }
+        }
+
+        // Ecosia: Detect Ecosia-specific URLs (auth, profile, etc.) and trigger native flows
+        if detectAndHandleEcosiaURL(url, for: tab) {
+            decisionHandler(.cancel)
+            return
         }
 
         if InternalURL.isValid(url: url) {

@@ -585,7 +585,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
-            webView.load(URLRequest(url: url))
+            if let internalURL = InternalURL(url),
+               internalURL.isAboutHomeURL {
+                webView.load(PrivilegedRequest(url: url) as URLRequest)
+            } else {
+                webView.load(URLRequest(url: url))
+            }
         }
 
         if let interactionState = interactionState {
@@ -678,7 +683,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             // return webView.load(request)
             var ecosiaUpdatedRequest = request
             // Inject auth parameters if needed
-            ecosiaUpdatedRequest = ecosiaUpdatedRequest.withAuthParameters()
+            ecosiaUpdatedRequest = ecosiaUpdatedRequest.withCloudFlareAuthParameters()
             // Enriching the search request (showing SERP page) with a language region header for market selection options
             if ecosiaUpdatedRequest.url?.isEcosiaSearchQuery() == true {
                 ecosiaUpdatedRequest.addLanguageRegionHeader()
@@ -712,7 +717,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             }
         }
 
-        if let webView, webView.url != nil {
+        // Do not reload from origin for homepage internal URLs
+        if let webView, webView.url != nil && !(InternalURL(webView.url)?.isAboutHomeURL ?? false) {
             webView.reloadFromOrigin()
             logger.log("Reloaded zombified tab from origin",
                        level: .debug,

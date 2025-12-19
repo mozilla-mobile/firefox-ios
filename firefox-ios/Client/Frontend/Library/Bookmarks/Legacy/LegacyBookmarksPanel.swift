@@ -720,7 +720,7 @@ extension LegacyBookmarksPanel {
 extension LegacyBookmarksPanel: EmptyBookmarksViewDelegate {
     func emptyBookmarksViewLearnMoreTapped(_ view: EmptyBookmarksView) {
         libraryPanelDelegate?.libraryPanel(
-            didSelectURL: Environment.current.urlProvider.bookmarksHelp,
+            didSelectURL: EcosiaEnvironment.current.urlProvider.bookmarksHelp,
             visitType: .link
         )
     }
@@ -742,7 +742,7 @@ extension LegacyBookmarksPanel: NTPTooltipDelegate {
 
     func ntpTooltipLinkTapped(_ tooltip: NTPTooltip?) {
         libraryPanelDelegate?.libraryPanel(
-            didSelectURL: Environment.current.urlProvider.bookmarksHelp,
+            didSelectURL: EcosiaEnvironment.current.urlProvider.bookmarksHelp,
             visitType: .link
         )
     }

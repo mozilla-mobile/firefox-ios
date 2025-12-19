@@ -113,7 +113,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
                                                           tabManager: tabManager,
                                                           overlayManager: overlayModeManager,
                                                           referrals: .init(),
-                                                          delegate: nil)
+                                                          delegate: nil,
+                                                          auth: EcosiaAuth(browserViewController: BrowserViewController(profile: profile, tabManager: MockTabManager())))
 
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
         XCTAssertNotNil(subject.legacyHomepageViewController)

@@ -148,7 +148,7 @@ extension BrazeService {
     ///
     /// - Warning: Ensure that the provided API key is not empty to avoid invalid configurations.
     func getBrazeConfiguration(apiKey: String = BrazeService.apiKey,
-                               environment: Environment = Environment.current) throws -> BrazeKit.Braze.Configuration {
+                               environment: Environment = EcosiaEnvironment.current) throws -> BrazeKit.Braze.Configuration {
         guard !apiKey.isEmpty else { throw Error.invalidConfiguration }
 
         let brazeConfiguration = BrazeKit.Braze.Configuration(apiKey: apiKey, endpoint: environment.urlProvider.brazeEndpoint)
@@ -179,7 +179,7 @@ extension BrazeService: BrazeDelegate {
     public func braze(_ braze: Braze, shouldOpenURL context: Braze.URLContext) -> Bool {
         let isInternal: Bool = {
             let contextUrl = context.url
-            let rootUrl = Environment.current.urlProvider.root
+            let rootUrl = EcosiaEnvironment.current.urlProvider.root
             if #available(iOS 16.0, *) {
                 return contextUrl.host() == rootUrl.host()
             } else {

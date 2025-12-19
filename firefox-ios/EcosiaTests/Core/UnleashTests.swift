@@ -198,13 +198,7 @@ extension UnleashTests {
         request.setValue(etag, forHTTPHeaderField: "If-None-Match")
         request.cachePolicy = .reloadIgnoringLocalCacheData
         request.httpBody = body
-
-        if let auth = environment.auth {
-            request.setValue(auth.id, forHTTPHeaderField: CloudflareKeyProvider.clientId)
-            request.setValue(auth.secret, forHTTPHeaderField: CloudflareKeyProvider.clientSecret)
-        }
-
-        return request
+        return request.withCloudFlareAuthParameters(environment: environment)
     }
 
     struct MockStagingUnleashRequest: BaseRequest {

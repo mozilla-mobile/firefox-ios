@@ -220,7 +220,9 @@ class BrowserCoordinator: BaseCoordinator,
                 // Ecosia: Add Referrals
                 referrals: browserViewController.referrals,
                 // Ecosia: Add HomePageViewControllerDelegate
-                delegate: browserViewController
+                delegate: browserViewController,
+                // Ecosia: Add EcosiaAuth
+                auth: EcosiaAuth(browserViewController: browserViewController)
             )
             legacyHomepageViewController.homePanelDelegate = homepanelDelegate
             legacyHomepageViewController.libraryPanelDelegate = libraryPanelDelegate

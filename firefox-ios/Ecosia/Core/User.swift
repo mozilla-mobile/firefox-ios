@@ -58,6 +58,9 @@ public struct User: Codable, Equatable {
     public var news = Date.distantPast
     public var migrated = false
     public var referrals = Referrals.Model()
+    public var seedCount: Int {
+        EcosiaAuthUIStateProvider.shared.seedCount
+    }
     public internal(set) var id: String?
     public var whatsNewItemsVersionsShown = Set<String>()
     public internal(set) var analyticsUserState = AnalyticsStateContext()
@@ -227,6 +230,18 @@ extension User {
         state[Key.isDefaultBrowserSettingNudgeCardShown.rawValue] = "\(true)"
     }
 
+    public var shouldShowAccountImpactNudgeCard: Bool {
+        state[Key.isAccountImpactNudgeCardDismissed.rawValue].map(Bool.init) != true
+    }
+
+    public mutating func showAccountImpactNudgeCard() {
+        state[Key.isAccountImpactNudgeCardDismissed.rawValue] = "\(false)"
+    }
+
+    public mutating func hideAccountImpactNudgeCard() {
+        state[Key.isAccountImpactNudgeCardDismissed.rawValue] = "\(true)"
+    }
+
     enum Key: String {
         case
         referralSpotlight,
@@ -234,7 +249,8 @@ extension User {
         inactiveTabsTooltip,
         bookmarksImportExportTooltipShown,
         isNewUserSinceBookmarksImportExportHasBeenShipped,
-        isDefaultBrowserSettingNudgeCardShown
+        isDefaultBrowserSettingNudgeCardShown,
+        isAccountImpactNudgeCardDismissed
     }
 }
 

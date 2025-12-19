@@ -66,9 +66,7 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
-            // Ecosia: Update top inset for Seed Experiment
-            // top: height * factor,
-            top: SeedCounterNTPExperiment.isEnabled ? UX.seedCounterNTPExperimentTopInset : height * factor,
+            top: height * factor,
             leading: 0,
             bottom: UX.bottomSpacing,
             trailing: 0)

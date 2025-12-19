@@ -71,7 +71,8 @@ public final class DefaultBrowserSettingsNudgeCardHeaderView: UITableViewHeaderF
                                                            image: .init(named: "default-browser-card-side-image-koto-illustrations",
                                                                         in: .ecosia,
                                                                         with: nil),
-                                                           style: nudgeCardStyle)
+                                                           style: nudgeCardStyle,
+                                                           layout: .default)
         let view = ConfigurableNudgeCardView(viewModel: configurableCardViewModel,
                                              delegate: self)
         setupHostingControllerForView(view)

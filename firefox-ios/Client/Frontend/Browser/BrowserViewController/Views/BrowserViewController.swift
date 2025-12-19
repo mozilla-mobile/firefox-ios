@@ -132,6 +132,9 @@ class BrowserViewController: UIViewController,
     let profile: Profile
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
+
+    // Ecosia: Authentication manager for handling login/logout flows
+    var ecosiaAuth: EcosiaAuth?
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
@@ -301,6 +304,10 @@ class BrowserViewController: UIViewController,
 
     deinit {
         logger.log("BVC deallocating", level: .info, category: .lifecycle)
+
+        // Ecosia: Unregister window from auth state management
+        EcosiaAuthWindowRegistry.shared.unregisterWindow(windowUUID)
+
         unsubscribeFromRedux()
         observedWebViews.forEach({ stopObserving(webView: $0) })
     }
@@ -737,6 +744,10 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Ecosia: Register window for auth state management
+        EcosiaAuthWindowRegistry.shared.registerWindow(windowUUID)
+
         KeyboardHelper.defaultHelper.addDelegate(self)
         trackTelemetry()
         setupNotifications()

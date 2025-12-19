@@ -17,7 +17,7 @@ extension String {
         String(format: Bundle.ecosia.localizedString(forKey: key.rawValue, value: "", table: "Plurals"), num)
     }
 
-    public enum Key: String {
+    public enum Key: String, CaseIterable {
         case addMoreDetailAboutYourFeedback = "Add more detail about your feedback..."
         case aiSearch = "AI Search"
         case aiOverviewsTitle = "Overviews"
@@ -26,6 +26,8 @@ extension String {
         case autocomplete = "Autocomplete"
         case climateImpact = "Climate Impact"
         case closeAll = "Close all"
+        case couldNotLoadSeedCounter = "Could not load seed counter"
+        case couldNotLoadSeedCounterMessage = "Something went wrong with displaying your seeds. Please try again later."
         case customizeHomepage = "Customize homepage"
         case daysAgo = "%@ days ago"
         case defaultBrowserPromptExperimentButton = "Set as default in Settings"
@@ -37,6 +39,7 @@ extension String {
         case ecosiaRecommends = "Ecosia recommends"
         case estimatedImpact = "Estimated impact"
         case estimatedTrees = "Estimated trees"
+        case ecosiaErrorViewAccessibilityImageLabel = "Image associated to the error, showing a warning signal"
         case exploreEcosia = "Explore Ecosia"
         case financialReports = "Financial reports"
         case forceDarkMode = "Force Dark Mode"
@@ -88,6 +91,9 @@ extension String {
         case searchRegion = "Search region"
         case sendFeedback = "Send feedback"
         case shownUnderSearchField = "Shown under the search field"
+        case signUp = "Sign up"
+        case signInErrorMessage = "Something went wrong. Please sign in again."
+        case signOutErrorMessage = "Something went wrong. Please sign out again."
         case showOnHomepage = "Show on homepage"
         case startPlanting = "Plant your first tree"
         case strict = "Strict"
@@ -227,7 +233,6 @@ extension String {
         case configurableNudgeCardCloseButtonAccessibilityLabel = "Close card button"
         case newsletterNTPCardExperimentTitle = "Be the first to know"
         case newsletterNTPCardExperimentDescription = "Subscribe to our monthly newsletter for updates on your climate impact."
-        case newsletterNTPCardExperimentButton = "Sign up"
         case defaultBrowserSettingTitle = "Default browser"
         case defaultBrowserCardTitle = "Make Ecosia your default browser app"
         case defaultBrowserCardDescription = "Safely open all links from other apps in Ecosia"
@@ -250,5 +255,50 @@ extension String {
         case settingsRatingPromptYes = "Yes"
         case settingsRatingPromptNo = "No"
         case settingsRatingPromptTitle = "Do you enjoy Ecosia?"
+
+        // MARK: - WebView Modal
+        case failedToLoadPage = "Failed to load page"
+        case tryAgain = "Try Again"
+        case errorIcon = "Error"
+
+        // MARK: - Level System
+        case level = "Level"
+        case ecocurious = "Ecocurious"
+        case greenExplorer = "Green explorer"
+        case planetPal = "Planet pal"
+        case seedlingSupporter = "Seedling supporter"
+        case biodiversityBeetle = "Biodiversity beetle"
+        case forestFriend = "Forest friend"
+        case wildlifeProtector = "Wildlife protector"
+        case ecoExplorer = "Eco explorer"
+        case rainforestReviver = "Rainforest reviver"
+        case planetProtector = "Planet protector"
+        case carbonNeutralizer = "Carbon neutralizer"
+        case seekerOfSustainability = "Seeker of sustainability"
+        case branchBuilder = "Branch builder"
+        case ecoEnthusiast = "Eco enthusiast"
+        case carbonCutter = "Carbon cutter"
+        case seedSower = "Seed sower"
+        case emissionEliminator = "Emission eliminator"
+
+        // MARK: - Account Impact View
+        case guestUser = "Guest user"
+        case seedsSymbolizeYourOwnImpact = "Seeds symbolize your own impact"
+        case collectSeedsEveryDayYouUse = "Collect seeds every day you use Ecosia and see the climate impact you're having."
+        case learnMoreAboutSeeds = "Learn more about seeds"
+        case sustainabilitySage = "Sustainability sage"
+        case earthAdvocate = "Earth advocate"
+        case seedSuperstar = "Seed superstar"
+        case yourEcosia = "Your Ecosia"
+        case yourProfile = "Your profile"
+        case signOut = "Sign out"
+        case seedCountAccessibilityLabel = "%d seeds"
+        case userAvatarAccessibilityLabel = "User avatar"
+        case defaultAvatarAccessibilityLabel = "Default avatar"
+        case accountButtonAccessibilityLabel = "Account: %@"
+        case accountButtonAccessibilityHint = "Opens your account and impact details"
+        case userLevelAccessibilityLabel = "Level: %@"
+        case profileButtonAccessibilityHint = "Opens your profile page"
+        case signOutButtonAccessibilityHint = "Sign out of your account"
     }
 }

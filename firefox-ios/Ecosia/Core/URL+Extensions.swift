@@ -26,7 +26,7 @@ extension URL {
         }
     }
 
-    public static func ecosiaSearchWithQuery(_ query: String, urlProvider: URLProvider = Environment.current.urlProvider) -> URL {
+    public static func ecosiaSearchWithQuery(_ query: String, urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> URL {
         var components = URLComponents(url: urlProvider.root, resolvingAgainstBaseURL: false)!
         components.path = "/search"
         components.queryItems = [item(name: .query, value: query), item(name: .typeTag, value: "iosapp")]
@@ -34,7 +34,7 @@ extension URL {
     }
 
     /// Check whether the URL being browsed will present the SERP out of a search or a search suggestion
-    public func isEcosiaSearchQuery(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Bool {
+    public func isEcosiaSearchQuery(_ urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> Bool {
         guard isEcosia(urlProvider),
               let components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
             return false
@@ -42,11 +42,11 @@ extension URL {
         return components.path == "/search"
     }
 
-    public func isEcosiaSearchVertical(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Bool {
+    public func isEcosiaSearchVertical(_ urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> Bool {
         getEcosiaSearchVerticalPath(urlProvider) != nil
     }
 
-    public func getEcosiaSearchVerticalPath(_ urlProvider: URLProvider = Environment.current.urlProvider) -> String? {
+    public func getEcosiaSearchVerticalPath(_ urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> String? {
         guard isEcosia(urlProvider),
               let components = components else {
             return nil
@@ -54,7 +54,7 @@ extension URL {
         return EcosiaSearchVertical(path: components.path)?.rawValue
     }
 
-    public func getEcosiaSearchQuery(_ urlProvider: URLProvider = Environment.current.urlProvider) -> String? {
+    public func getEcosiaSearchQuery(_ urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> String? {
         guard isEcosia(urlProvider),
               let components = components else {
             return nil
@@ -64,7 +64,7 @@ extension URL {
         })?.value
     }
 
-    public func getEcosiaSearchPage(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Int? {
+    public func getEcosiaSearchPage(_ urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> Int? {
         guard isEcosia(urlProvider),
               let components = components else {
             return nil
@@ -78,11 +78,11 @@ extension URL {
     }
 
     /// Check whether the URL should be Ecosified. At the moment this is true for every Ecosia URL.
-    public func shouldEcosify(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Bool {
+    public func shouldEcosify(_ urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> Bool {
         return isEcosia(urlProvider)
     }
 
-    public func ecosified(isIncognitoEnabled: Bool, urlProvider: URLProvider = Environment.current.urlProvider) -> URL {
+    public func ecosified(isIncognitoEnabled: Bool, urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> URL {
         guard isEcosia(urlProvider),
               var components = components
         else { return self }
@@ -117,10 +117,9 @@ extension URL {
         components?.queryItems?.first { $0.name == itemName.rawValue }?.value
     }
 
-    private func isEcosia(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Bool {
-        guard let domain = urlProvider.domain else { return false }
+    public func isEcosia(_ urlProvider: URLProvider = EcosiaEnvironment.current.urlProvider) -> Bool {
         let isBrowser = scheme.flatMap(Scheme.init(rawValue:))?.isBrowser == true
-        let hasURLProviderDomainSuffix = host?.hasSuffix(domain) == true
+        let hasURLProviderDomainSuffix = host?.hasSuffix(urlProvider.domain) == true
         return isBrowser && hasURLProviderDomainSuffix
     }
 

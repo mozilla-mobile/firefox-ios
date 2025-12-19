@@ -33,6 +33,60 @@ public struct NudgeCardStyle {
     }
 }
 
+/// Layout configuration for `ConfigurableNudgeCardView`.
+public struct NudgeCardLayout {
+    let imageSize: CGFloat
+    let closeButtonSize: CGFloat
+    let closeButtonPaddingTop: CGFloat
+    let closeButtonPaddingLeading: CGFloat
+    let closeButtonPaddingBottom: CGFloat
+    let closeButtonPaddingTrailing: CGFloat
+    let horizontalSpacing: CGFloat
+    let verticalSpacing: CGFloat
+    let contentPadding: CGFloat
+    let cornerRadius: CGFloat
+    let borderWidth: CGFloat
+    let titleFont: Font
+    let descriptionFont: Font
+    let buttonFont: Font
+    let buttonTopPadding: CGFloat
+
+    public init(imageSize: CGFloat = 48,
+                closeButtonSize: CGFloat = 15,
+                closeButtonPaddingTop: CGFloat = 0,
+                closeButtonPaddingLeading: CGFloat = 0,
+                closeButtonPaddingBottom: CGFloat = 0,
+                closeButtonPaddingTrailing: CGFloat = 0,
+                horizontalSpacing: CGFloat = .ecosia.space._2s,
+                verticalSpacing: CGFloat = .ecosia.space._2s,
+                contentPadding: CGFloat = .ecosia.space._m,
+                cornerRadius: CGFloat = .ecosia.borderRadius._l,
+                borderWidth: CGFloat = 1,
+                titleFont: Font = .ecosia(size: .ecosia.font._l, weight: .bold),
+                descriptionFont: Font = .ecosia(size: .ecosia.font._m),
+                buttonFont: Font = .ecosia(size: .ecosia.font._m),
+                buttonTopPadding: CGFloat = .ecosia.space._1s) {
+        self.imageSize = imageSize
+        self.closeButtonSize = closeButtonSize
+        self.closeButtonPaddingTop = closeButtonPaddingTop
+        self.closeButtonPaddingLeading = closeButtonPaddingLeading
+        self.closeButtonPaddingBottom = closeButtonPaddingBottom
+        self.closeButtonPaddingTrailing = closeButtonPaddingTrailing
+        self.horizontalSpacing = horizontalSpacing
+        self.verticalSpacing = verticalSpacing
+        self.contentPadding = contentPadding
+        self.cornerRadius = cornerRadius
+        self.borderWidth = borderWidth
+        self.titleFont = titleFont
+        self.descriptionFont = descriptionFont
+        self.buttonFont = buttonFont
+        self.buttonTopPadding = buttonTopPadding
+    }
+
+    /// Default layout for standard nudge cards
+    public static let `default` = NudgeCardLayout()
+}
+
 /// A view model containing the content and style information used to render a `ConfigurableNudgeCardView`.
 public struct NudgeCardViewModel {
     /// A card must have a title.
@@ -45,19 +99,22 @@ public struct NudgeCardViewModel {
     let image: UIImage?
     let showsCloseButton: Bool
     var style: NudgeCardStyle
+    let layout: NudgeCardLayout
 
     public init(title: String,
                 description: String? = nil,
                 buttonText: String? = nil,
                 image: UIImage? = nil,
                 showsCloseButton: Bool = true,
-                style: NudgeCardStyle) {
+                style: NudgeCardStyle,
+                layout: NudgeCardLayout = .default) {
         self.title = title
         self.description = description
         self.buttonText = buttonText
         self.image = image
         self.showsCloseButton = showsCloseButton
         self.style = style
+        self.layout = layout
     }
 }
 
@@ -74,20 +131,22 @@ public struct ConfigurableNudgeCardView: View {
     }
 
     public var body: some View {
-        HStack(alignment: .top, spacing: .ecosia.space._2s) {
+        HStack(alignment: .top, spacing: viewModel?.layout.horizontalSpacing ?? .ecosia.space._2s) {
             // Image
             if let image = viewModel?.image {
                 Image(uiImage: image)
                     .resizable()
-                    .frame(width: UX.imageWidthHeight, height: UX.imageWidthHeight)
+                    .frame(width: viewModel?.layout.imageSize ?? 48,
+                           height: viewModel?.layout.imageSize ?? 48)
                     .accessibilityHidden(true)
             }
 
             // Text and Action Stack
-            VStack(alignment: .leading, spacing: .ecosia.space._2s) {
+            VStack(alignment: .leading,
+                   spacing: viewModel?.layout.verticalSpacing ?? .ecosia.space._2s) {
                 if let title = viewModel?.title {
                     Text(title)
-                        .font(.headline.bold())
+                        .font(viewModel?.layout.titleFont ?? .headline.bold())
                         .foregroundColor(viewModel?.style.textPrimaryColor)
                         .multilineTextAlignment(.leading)
                         .accessibilityLabel(title)
@@ -96,7 +155,7 @@ public struct ConfigurableNudgeCardView: View {
 
                 if let description = viewModel?.description {
                     Text(description)
-                        .font(.subheadline)
+                        .font(viewModel?.layout.descriptionFont ?? .subheadline)
                         .foregroundColor(viewModel?.style.textSecondaryColor)
                         .multilineTextAlignment(.leading)
                         .accessibilityLabel(description)
@@ -108,10 +167,10 @@ public struct ConfigurableNudgeCardView: View {
                         delegate?.nudgeCardRequestToPerformAction()
                     }) {
                         Text(buttonText)
-                            .font(.subheadline)
+                            .font(viewModel?.layout.buttonFont ?? .subheadline)
                             .foregroundColor(viewModel?.style.actionButtonTextColor)
                     }
-                    .padding(.top, .ecosia.space._1s)
+                    .padding(.top, viewModel?.layout.buttonTopPadding ?? .ecosia.space._1s)
                     .accessibilityLabel(buttonText)
                     .accessibilityIdentifier("nudge_card_cta_button")
                     .accessibilityAddTraits(.isButton)
@@ -126,13 +185,17 @@ public struct ConfigurableNudgeCardView: View {
                     Image("close", bundle: .ecosia)
                         .renderingMode(.template)
                         .resizable()
-                        .frame(width: UX.closeButtonWidthHeight,
-                               height: UX.closeButtonWidthHeight)
+                        .frame(width: viewModel?.layout.closeButtonSize ?? 15,
+                               height: viewModel?.layout.closeButtonSize ?? 15)
                         .foregroundStyle(viewModel?.style.closeButtonTextColor ?? .primaryText)
                         .accessibilityLabel(String.localized(.configurableNudgeCardCloseButtonAccessibilityLabel))
                         .accessibilityIdentifier("nudge_card_close_button")
                         .accessibilityAddTraits(.isButton)
                 }
+                .padding(.top, viewModel?.layout.closeButtonPaddingTop ?? 0)
+                .padding(.leading, viewModel?.layout.closeButtonPaddingLeading ?? 0)
+                .padding(.bottom, viewModel?.layout.closeButtonPaddingBottom ?? 0)
+                .padding(.trailing, viewModel?.layout.closeButtonPaddingTrailing ?? 0)
             }
         }
         .onTapGesture {
@@ -140,20 +203,13 @@ public struct ConfigurableNudgeCardView: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isButton)
-        .padding(.ecosia.space._m)
+        .padding(viewModel?.layout.contentPadding ?? .ecosia.space._m)
         .background(viewModel?.style.backgroundColor)
-        .clipShape(RoundedRectangle(cornerRadius: .ecosia.borderRadius._l))
+        .clipShape(RoundedRectangle(cornerRadius: viewModel?.layout.cornerRadius ?? .ecosia.borderRadius._l))
         .overlay(
-            RoundedRectangle(cornerRadius: .ecosia.borderRadius._l)
-                .stroke(.border, lineWidth: 1)
+            RoundedRectangle(cornerRadius: viewModel?.layout.cornerRadius ?? .ecosia.borderRadius._l)
+                .stroke(.border, lineWidth: viewModel?.layout.borderWidth ?? 1)
         )
-    }
-
-    // MARK: - UX Constants
-
-    private enum UX {
-        static let closeButtonWidthHeight: CGFloat = 15
-        static let imageWidthHeight: CGFloat = 48
     }
 }
 
@@ -169,7 +225,8 @@ public struct ConfigurableNudgeCardView: View {
                               textPrimaryColor: .primaryText,
                               textSecondaryColor: .primaryText,
                               closeButtonTextColor: .primaryText,
-                              actionButtonTextColor: .primaryBrand)
+                              actionButtonTextColor: .primaryBrand),
+        layout: .default
     )
 
     ConfigurableNudgeCardView(viewModel: mockViewModel, delegate: nil)

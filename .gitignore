@@ -153,3 +153,4 @@ test_output
 .vscode
 firefox-ios/EcosiaTests/Results
 firefox-ios/EcosiaTests/SnapshotTests/SnapshotArtifacts/*
+firefox-ios/TestResults.xcresult

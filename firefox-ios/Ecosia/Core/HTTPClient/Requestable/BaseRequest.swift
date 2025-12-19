@@ -39,15 +39,10 @@ public extension BaseRequest {
         request.cachePolicy = .reloadIgnoringLocalCacheData
         request.httpBody = body
 
-        if let auth = environment.auth {
-            request.setValue(auth.id, forHTTPHeaderField: CloudflareKeyProvider.clientId)
-            request.setValue(auth.secret, forHTTPHeaderField: CloudflareKeyProvider.clientSecret)
-        }
-
         if let additionalHeaders {
             additionalHeaders.forEach({ request.setValue($0.value, forHTTPHeaderField: $0.key) })
         }
 
-        return request
+        return request.withCloudFlareAuthParameters()
     }
 }

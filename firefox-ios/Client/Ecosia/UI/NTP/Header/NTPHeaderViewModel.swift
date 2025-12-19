@@ -7,6 +7,7 @@ import Foundation
 import Shared
 import SwiftUI
 import Ecosia
+import Combine
 
 final class NTPHeaderViewModel: ObservableObject {
     struct UX {
@@ -14,17 +15,70 @@ final class NTPHeaderViewModel: ObservableObject {
     }
 
     // MARK: - Properties
-    private let windowUUID: WindowUUID
     internal weak var delegate: NTPHeaderDelegate?
     internal var theme: Theme
+    private let windowUUID: WindowUUID
+    let profile: Profile
+    private(set) var auth: EcosiaAuth
+    var onTapAction: ((UIButton) -> Void)?
+    private let authStateProvider = EcosiaAuthUIStateProvider.shared
+    private var cancellables = Set<AnyCancellable>()
+
+    var seedCount: Int { authStateProvider.seedCount }
+    var isLoggedIn: Bool { authStateProvider.isLoggedIn }
+    var userAvatarURL: URL? { authStateProvider.avatarURL }
+    var balanceIncrement: Int? { authStateProvider.balanceIncrement }
+    var shouldAnimateSeed: Bool { balanceIncrement != nil }
+    @Published var showSeedSparkles: Bool = false
+
+    private var levelUpObserver: NSObjectProtocol?
 
     // MARK: - Initialization
-    init(theme: Theme,
+    init(profile: Profile,
+         theme: Theme,
          windowUUID: WindowUUID,
+         auth: EcosiaAuth,
          delegate: NTPHeaderDelegate? = nil) {
+        self.profile = profile
         self.theme = theme
         self.windowUUID = windowUUID
+        self.auth = auth
         self.delegate = delegate
+
+        // Forward objectWillChange notifications from authStateProvider
+        // This ensures SwiftUI knows to update the view when auth state changes
+        authStateProvider.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+
+        setupLevelUpObserver()
+    }
+
+    deinit {
+        if let observer = levelUpObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
+
+    private func setupLevelUpObserver() {
+        levelUpObserver = NotificationCenter.default.addObserver(
+            forName: .EcosiaAccountLevelUp,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.triggerSeedSparkles()
+        }
+    }
+
+    private func triggerSeedSparkles() {
+        showSeedSparkles = true
+
+        // Turn off sparkles after animation completes
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            self.showSeedSparkles = false
+        }
     }
 
     // MARK: - Public Methods
@@ -32,6 +86,20 @@ final class NTPHeaderViewModel: ObservableObject {
     func openAISearch() {
         delegate?.headerOpenAISearch()
         Analytics.shared.aiSearchNTPButtonTapped()
+    }
+
+    func performLogin() {
+        auth.login()
+    }
+
+    func performLogout() {
+        EcosiaLogger.auth.info("Performing immediate logout without confirmation")
+        auth.logout()
+    }
+
+    @MainActor
+    func refreshSeedState() {
+        authStateProvider.refreshSeedState()
     }
 }
 
@@ -70,7 +138,7 @@ extension NTPHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        AISearchMVPExperiment.isEnabled
+        return true
     }
 
     func setTheme(theme: Theme) {

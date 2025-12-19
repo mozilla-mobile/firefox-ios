@@ -8,6 +8,7 @@ import WebKit
 import CoreSpotlight
 import SiteImageView
 import Common
+import Ecosia
 
 // A base protocol for something that can be cleared.
 protocol Clearable {
@@ -153,6 +154,12 @@ class CookiesClearable: Clearable {
                 WKWebsiteDataTypeIndexedDBDatabases
             ]
         )
+
+        // Ecosia: Trigger native logout when cookies are cleared
+        Task {
+            await DataClearingIntegration.handleEcosiaAuthCookieClearing()
+        }
+
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         logger.log("CookiesClearable succeeded.",

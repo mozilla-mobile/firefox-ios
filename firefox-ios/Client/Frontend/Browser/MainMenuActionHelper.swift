@@ -587,7 +587,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .help)
              */
-            self.delegate?.openURLInCurrentTab(Environment.current.urlProvider.faq)
+            self.delegate?.openURLInCurrentTab(EcosiaEnvironment.current.urlProvider.faq)
             Analytics.shared.menuClick(.help)
         }.items
     }
@@ -753,7 +753,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             // Ecosia: if we have nothing to share we share Ecosia Root URL
             // guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
             guard let tab = self.selectedTab else { return }
-            let url = tab.canonicalURL?.displayURL ?? Environment.current.urlProvider.root
+            let url = tab.canonicalURL?.displayURL ?? EcosiaEnvironment.current.urlProvider.root
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
 

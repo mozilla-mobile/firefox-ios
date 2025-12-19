@@ -18,7 +18,7 @@ public protocol Requestable {
 
     var additionalHeaders: [String: String]? { get }
 
-    var body: Data? { get set }
+    var body: Data? { get }
 
     func makeURLRequest() throws -> URLRequest
 }

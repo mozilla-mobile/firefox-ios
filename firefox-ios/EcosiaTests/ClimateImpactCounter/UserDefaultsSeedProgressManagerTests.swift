@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+@testable import Ecosia
 @testable import Client
 
-/// Remember that we always start from 1 seed and level 1 every time.
+/// Tests for logged-out user seed collection. Users start at 0 seeds and level 1.
 final class UserDefaultsSeedProgressManagerTests: XCTestCase {
 
     override func setUp() {
@@ -21,123 +22,163 @@ final class UserDefaultsSeedProgressManagerTests: XCTestCase {
             maxCappedLevel: nil,
             maxCappedSeeds: nil,
             levels: [
-                SeedCounterConfig.SeedLevel(level: 1, requiredSeeds: 5),
-                SeedCounterConfig.SeedLevel(level: 2, requiredSeeds: 10)
+                SeedCounterConfig.SeedLevel(level: 1, requiredSeeds: 2),
+                SeedCounterConfig.SeedLevel(level: 2, requiredSeeds: 3)
             ]
         )
     }
 
     // Test the initial state
     func test_initial_seed_progress_state() {
+        // Given / When
         let level = UserDefaultsSeedProgressManager.loadCurrentLevel()
         let totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
 
+        // Then
         XCTAssertEqual(level, 1, "Initial level should be 1")
-        XCTAssertEqual(totalSeedsCollected, 1, "Initial totalSeedsCollected should be 1")
+        XCTAssertEqual(totalSeedsCollected, 0, "Initial totalSeedsCollected should be 0")
     }
 
-    // Test adding seeds, make sure the user stays on level 1 until the required seeds to reach next level are added
-    func test_add_seeds_progress_to_next_level() {
-        UserDefaultsSeedProgressManager.addSeeds(4)
+    // Test that logged-out users never level up
+    func test_logged_out_users_never_level_up() {
+        // Given
+        UserDefaultsSeedProgressManager.addSeeds(2)
 
+        // When / Then
         var level = UserDefaultsSeedProgressManager.loadCurrentLevel()
         var totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
 
-        // User should still be in level 1 after collecting exactly 5 seeds
-        XCTAssertEqual(level, 1, "User should still be in level 1 after collecting 5 seeds")
-        XCTAssertEqual(totalSeedsCollected, 5, "Total seeds should be 5")
+        XCTAssertEqual(level, 1)
+        XCTAssertEqual(totalSeedsCollected, 2)
 
-        // Add 5 more seeds, now the user should progress to level 2, as 10 seeds total reached
-        UserDefaultsSeedProgressManager.addSeeds(5)
+        // When: Try to add more seeds
+        UserDefaultsSeedProgressManager.addSeeds(10)
 
+        // Then: Level remains 1, seeds capped at 3
         level = UserDefaultsSeedProgressManager.loadCurrentLevel()
         totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
 
-        XCTAssertEqual(level, 2, "User should progress to level 2 after collecting the 10th seed")
-        XCTAssertEqual(totalSeedsCollected, 10, "Total seeds should be 10")
+        XCTAssertEqual(level, 1)
+        XCTAssertEqual(totalSeedsCollected, 3)
     }
 
-    // Test adding seeds beyond level 1 and keep accumulating for level 2
-    func test_add_seeds_beyond_level_1() {
-        // Collect 5 seeds, stay in level 1 (4+1)
-        UserDefaultsSeedProgressManager.addSeeds(4)
-
-        // Add 2 more seeds, stays at level 1
+    // Test resetting the progress to first-launch state
+    func test_reset_local_seed_progress() {
+        // Given
         UserDefaultsSeedProgressManager.addSeeds(2)
 
+        // When
+        UserDefaultsSeedProgressManager.resetLocalSeedProgress()
+
+        // Then
         let level = UserDefaultsSeedProgressManager.loadCurrentLevel()
         let totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        let lastAppOpenDate = UserDefaultsSeedProgressManager.loadLastAppOpenDate()
 
-        XCTAssertEqual(level, 1, "User should still be in level 1 after adding 2 more seed beyond the first level threshold")
-        XCTAssertEqual(totalSeedsCollected, 7, "Total seeds should accumulate across levels (6 new added + 1 accumulated at the start")
-    }
-
-    // Test inner progress calculation for Level 2
-    func test_calculate_inner_progress_for_level_2() {
-        UserDefaultsSeedProgressManager.addSeeds(6)  // Collect 7 (1+6) seeds, which puts the user progressing to level 2
-
-        let innerProgress = UserDefaultsSeedProgressManager.calculateInnerProgress()
-        XCTAssertEqual(innerProgress, 0.4, accuracy: 0.01, "Inner progress should reflect 40% progress for level 2 after collecting 7 seeds total out of 10")
-    }
-
-    // Test resetting the progress to the initial state
-    func test_reset_counter() {
-        UserDefaultsSeedProgressManager.addSeeds(10)
-        UserDefaultsSeedProgressManager.resetCounter()
-
-        let level = UserDefaultsSeedProgressManager.loadCurrentLevel()
-        let totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
-        let innerProgress = UserDefaultsSeedProgressManager.calculateInnerProgress()
-
-        XCTAssertEqual(level, 1, "Reset should set the level to 1")
-        XCTAssertEqual(totalSeedsCollected, 1, "Reset should set totalSeedsCollected to 1")
-        XCTAssertEqual(innerProgress, 0.2, "Reset should set progress to 20%")
+        XCTAssertEqual(level, 1)
+        XCTAssertEqual(totalSeedsCollected, 0)
+        XCTAssertNil(lastAppOpenDate, "Last app open date should be cleared to allow immediate seed collection")
     }
 
     // Test collecting a seed once per day
     func test_collect_seed_once_per_day() {
-        UserDefaultsSeedProgressManager.collectDailySeed()  // First seed collection today
+        // Given: Start with 0 seeds
+        let initialSeeds = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        XCTAssertEqual(initialSeeds, 0)
+
+        // When: Collect seed on first day
+        UserDefaultsSeedProgressManager.collectDailySeed()
         let totalSeedsAfterFirstCollect = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
 
-        UserDefaultsSeedProgressManager.collectDailySeed()  // Try collecting another seed today
+        // When: Try to collect again same day
+        UserDefaultsSeedProgressManager.collectDailySeed()
         let totalSeedsAfterSecondCollect = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
 
-        XCTAssertEqual(totalSeedsAfterFirstCollect, 1, "Should collect one seed on first open")
-        XCTAssertEqual(totalSeedsAfterSecondCollect, 1, "Should not collect more than one seed in a day")
+        // Then: First collect should add 1, second should do nothing
+        XCTAssertEqual(totalSeedsAfterFirstCollect, 1)
+        XCTAssertEqual(totalSeedsAfterSecondCollect, 1)
     }
 
-    // Test that a seed can be collected the next day
-    func test_collect_seed_next_day() {
+    // Test that a seed can be collected the next day but stays at level 1
+    func test_collect_seed_next_day_stays_level_1() {
+        // Given / When
+        UserDefaultsSeedProgressManager.collectDailySeed()
+        var totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        XCTAssertEqual(totalSeedsCollected, 1)
+
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
         UserDefaults.standard.set(yesterday, forKey: "LastAppOpenDate")
+        UserDefaultsSeedProgressManager.collectDailySeed()
 
-        UserDefaultsSeedProgressManager.collectDailySeed()  // Simulate collecting seed today
+        // Then
+        totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        let level = UserDefaultsSeedProgressManager.loadCurrentLevel()
 
-        let totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
-        XCTAssertEqual(totalSeedsCollected, 2, "User should be able to collect a seed on a new day")
+        XCTAssertEqual(totalSeedsCollected, 2)
+        XCTAssertEqual(level, 1)
     }
 
-    // Test that adding seeds beyond the maximum level stops at the maximum seeds for the last level.
-    func test_add_seeds_beyond_maximum_level_stops_at_max_seeds_for_last_level() {
-        // Add enough seeds to reach level 2
-        UserDefaultsSeedProgressManager.addSeeds(9) // +9 seeds; total: 10 seeds (5 from level 1, 5 from level 2)
+    // Test that logged-out users are capped at 3 seeds and always remain at level 1
+    func test_logged_out_users_capped_at_max_seeds_and_level_1() {
+        // Given
+        let initialSeeds = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        let initialLevel = UserDefaultsSeedProgressManager.loadCurrentLevel()
+        XCTAssertEqual(initialSeeds, 0)
+        XCTAssertEqual(initialLevel, 1)
 
-        // Ensure user is at level 2 and has 10 seeds
-        var totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
-        var currentLevel = UserDefaultsSeedProgressManager.loadCurrentLevel()
+        // When
+        UserDefaultsSeedProgressManager.addSeeds(3)
 
-        XCTAssertEqual(currentLevel, 2, "User should be at level 2 after collecting 10 seeds.")
-        XCTAssertEqual(totalSeedsCollected, 10, "Total seeds should be exactly 10 after reaching level 2.")
+        // Then
+        var totalSeeds = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        var level = UserDefaultsSeedProgressManager.loadCurrentLevel()
+        XCTAssertEqual(totalSeeds, UserDefaultsSeedProgressManager.maxSeedsForLoggedOutUsers)
+        XCTAssertEqual(level, 1)
 
-        // Now, try to add more seeds beyond the maximum allowed seeds for level 2
-        UserDefaultsSeedProgressManager.addSeeds(5) // Try adding +5 seeds
+        // When
+        UserDefaultsSeedProgressManager.addSeeds(5)
 
-        // Reload the values after adding seeds
-        totalSeedsCollected = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
-        currentLevel = UserDefaultsSeedProgressManager.loadCurrentLevel()
+        // Then
+        totalSeeds = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        level = UserDefaultsSeedProgressManager.loadCurrentLevel()
+        XCTAssertEqual(totalSeeds, UserDefaultsSeedProgressManager.maxSeedsForLoggedOutUsers)
+        XCTAssertEqual(level, 1)
+    }
 
-        // Ensure user is still at level 2, and total seeds should be capped at 10
-        XCTAssertEqual(currentLevel, 2, "User should remain at level 2, as it's the last level.")
-        XCTAssertEqual(totalSeedsCollected, 10, "Total seeds should be capped at 10 (the maximum for level 2) even after adding more seeds.")
+    // Test that bulk seed addition caps at 3 seeds and level remains 1
+    func test_logged_out_users_bulk_addition_caps_at_3_seeds_level_1() {
+        // Given
+        let initialSeeds = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        XCTAssertEqual(initialSeeds, 0)
+
+        // When
+        UserDefaultsSeedProgressManager.addSeeds(10)
+
+        // Then
+        let totalSeeds = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        let level = UserDefaultsSeedProgressManager.loadCurrentLevel()
+        XCTAssertEqual(totalSeeds, UserDefaultsSeedProgressManager.maxSeedsForLoggedOutUsers)
+        XCTAssertEqual(level, 1)
+    }
+
+    // Test that daily seed collection respects cap and level remains 1
+    func test_logged_out_users_daily_seed_respects_cap_and_level_1() {
+        // Given
+        UserDefaultsSeedProgressManager.addSeeds(3)
+        var totalSeeds = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        var level = UserDefaultsSeedProgressManager.loadCurrentLevel()
+        XCTAssertEqual(totalSeeds, 3)
+        XCTAssertEqual(level, 1)
+
+        // When
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+        UserDefaults.standard.set(yesterday, forKey: "LastAppOpenDate")
+        UserDefaultsSeedProgressManager.collectDailySeed()
+
+        // Then
+        totalSeeds = UserDefaultsSeedProgressManager.loadTotalSeedsCollected()
+        level = UserDefaultsSeedProgressManager.loadCurrentLevel()
+        XCTAssertEqual(totalSeeds, UserDefaultsSeedProgressManager.maxSeedsForLoggedOutUsers)
+        XCTAssertEqual(level, 1)
     }
 }

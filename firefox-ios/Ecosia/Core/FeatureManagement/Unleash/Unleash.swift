@@ -45,7 +45,7 @@ public enum Unleash: UnleashProtocol {
          "appName": "iOS",
          "appVersion": appVersion,
          "versionOnInstall": User.shared.versionOnInstall,
-         "environment": Environment.current.urlProvider.unleash,
+         "environment": EcosiaEnvironment.current.urlProvider.unleash,
          "market": User.shared.marketCode.rawValue,
          "deviceRegion": currentDeviceRegion,
          // Mapped from device region to enabled Web flags with geo-ip based context field

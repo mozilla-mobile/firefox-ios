@@ -90,6 +90,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
 
+        // Ecosia: Configure accounts provider factory for error simulation support
+        // This must happen before EcosiaAuthUIStateProvider.shared is first accessed
+        EcosiaAuthUIStateProvider.accountsProviderFactory = { AccountsProviderWrapper() }
+
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
 

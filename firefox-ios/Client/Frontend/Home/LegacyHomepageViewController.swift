@@ -86,7 +86,9 @@ class LegacyHomepageViewController:
          // Ecosia: Add Referrals
          referrals: Referrals,
          // Ecosia: Add HomePageViewControllerDelegate
-         delegate: HomepageViewControllerDelegate?
+         delegate: HomepageViewControllerDelegate?,
+         // Ecosia: Add EcosiaAuth
+         auth: EcosiaAuth
     ) {
         self.overlayManager = overlayManager
         self.tabManager = tabManager
@@ -96,7 +98,8 @@ class LegacyHomepageViewController:
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
                                            referrals: referrals, // Ecosia: Add referrals
-                                           theme: themeManager.getCurrentTheme(for: tabManager.windowUUID))
+                                           theme: themeManager.getCurrentTheme(for: tabManager.windowUUID),
+                                           auth: auth) // Ecosia: Add EcosiaAuth
 
         let jumpBackInContextualViewProvider = ContextualHintViewProvider(forHintType: .jumpBackIn,
                                                                           with: viewModel.profile)
@@ -136,8 +139,6 @@ class LegacyHomepageViewController:
                            observing: [.HomePanelPrefsChanged,
                                        .TabsPrivacyModeChanged,
                                        .WallpaperDidChange,
-                                       // Ecosia: Seed Counter Experiment
-                                       SeedCounterNTPExperiment.progressManagerType.levelUpNotification,
                                        UIApplication.didBecomeActiveNotification])
     }
 
@@ -865,7 +866,6 @@ private extension LegacyHomepageViewController {
         viewModel.impactViewModel.delegate = self
         viewModel.newsViewModel.delegate = self
         viewModel.ntpCustomizationViewModel.delegate = self
-        viewModel.climateImpactCounterViewModel.delegate = self
     }
 
     private func openHistoryHighlightsSearchGroup(item: HighlightItem) {
@@ -1063,13 +1063,6 @@ extension LegacyHomepageViewController: Notifiable {
             case .HomePanelPrefsChanged,
                     .WallpaperDidChange:
                 self.reloadView()
-
-            // Ecosia: Seed Counter Experiment
-            case SeedCounterNTPExperiment.progressManagerType.levelUpNotification:
-                SeedCounterNTPExperiment.trackSeedLevellingUp()
-            case UIApplication.didBecomeActiveNotification:
-                SeedCounterNTPExperiment.trackSeedCollectionIfNewDayAppOpening()
-                SeedCounterNTPExperiment.progressManagerType.collectDailySeed()
             default: break
             }
         }

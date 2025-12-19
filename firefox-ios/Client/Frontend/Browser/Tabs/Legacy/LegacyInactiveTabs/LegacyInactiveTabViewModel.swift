@@ -94,6 +94,9 @@ class LegacyInactiveTabViewModel {
         inactiveTabModel.tabWithStatus = LegacyInactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
         clearAll()
         for tab in self.allTabs {
+            // Ecosia: Skip invisible tabs from inactive tab management
+            guard !tab.isInvisible else { continue }
+
             let status = inactiveTabModel.tabWithStatus[tab.tabUUID]
             if status == nil {
                 activeTabs.append(tab)

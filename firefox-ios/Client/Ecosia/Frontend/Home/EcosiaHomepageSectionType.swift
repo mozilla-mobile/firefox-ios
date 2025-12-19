@@ -12,7 +12,6 @@ import Common
 
 enum HomepageSectionType: Int, CaseIterable {
     case header
-    case climateImpactCounter
     case homepageHeader
     case libraryShortcuts
     case topSites
@@ -28,7 +27,6 @@ enum HomepageSectionType: Int, CaseIterable {
             } else {
                 return "" // Fallback for iOS < 16.0
             }
-        case .climateImpactCounter: return NTPSeedCounterCell.cellIdentifier
         case .homepageHeader: return NTPLogoCell.cellIdentifier
         case .libraryShortcuts: return NTPLibraryCell.cellIdentifier
         case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
@@ -46,7 +44,6 @@ enum HomepageSectionType: Int, CaseIterable {
         }
 
         types.append(contentsOf: [
-            NTPSeedCounterCell.self,
             NTPLogoCell.self,
             TopSiteItemCell.self,
             EmptyTopSiteCell.self,
@@ -69,7 +66,7 @@ private let MinimumInsets: CGFloat = 16
 extension HomepageSectionType {
     var customizableConfig: CustomizableNTPSettingConfig? {
         switch self {
-        case .header, .homepageHeader, .libraryShortcuts, .ntpCustomization, .climateImpactCounter: return nil
+        case .header, .homepageHeader, .libraryShortcuts, .ntpCustomization: return nil
         case .topSites: return .topSites
         case .impact: return .climateImpact
         case .news: return .ecosiaNews
@@ -101,7 +98,7 @@ extension HomepageSectionType {
                                            leading: horizontal,
                                            bottom: bottomSpacing,
                                            trailing: horizontal)
-        case .homepageHeader, .climateImpactCounter, .header:
+        case .homepageHeader, .header:
             return .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         }
     }

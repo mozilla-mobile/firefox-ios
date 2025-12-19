@@ -33,7 +33,8 @@ extension NTPTests {
                                                                       tabManager: MockTabManager(),
                                                                       overlayManager: overlayManager,
                                                                       referrals: .init(),
-                                                                      delegate: nil)
+                                                                      delegate: nil,
+                                                                      auth: EcosiaAuth(browserViewController: BrowserViewController(profile: self.profile, tabManager: MockTabManager())))
             return homePageViewController
         },
                                           // Precision at .95 to accommodate a snapshot looking slightly different due to the different data output

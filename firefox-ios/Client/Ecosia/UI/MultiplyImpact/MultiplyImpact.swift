@@ -436,7 +436,7 @@ class MultiplyImpact: UIViewController, Themeable {
     }
 
     @objc private func learnMore() {
-        delegate?.openLink(url: Environment.current.urlProvider.referHelp)
+        delegate?.openLink(url: EcosiaEnvironment.current.urlProvider.referHelp)
         dismiss(animated: true)
         Analytics.shared.referral(action: .click, label: .learnMore)
     }

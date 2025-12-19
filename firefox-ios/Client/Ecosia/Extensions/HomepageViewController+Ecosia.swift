@@ -114,12 +114,6 @@ extension LegacyHomepageViewController: NTPCustomizationCellDelegate {
     }
 }
 
-extension LegacyHomepageViewController: NTPSeedCounterDelegate {
-    func didTapSeedCounter() {
-        SeedCounterNTPExperiment.trackTapOnSeedCounter()
-    }
-}
-
 extension LegacyHomepageViewController: NTPHeaderDelegate {
     func headerOpenAISearch() {
         openLink(url: Environment.current.urlProvider.aiSearch(origin: .ntp))

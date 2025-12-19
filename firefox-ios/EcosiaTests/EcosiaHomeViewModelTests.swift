@@ -10,11 +10,18 @@ import Common
 class EcosiaHomeViewModelTests: XCTestCase {
 
     var profile: MockProfile!
+    var tabManager: MockTabManager!
+    var referrals: Referrals!
+    var theme: Theme!
 
     override func setUp() {
         super.setUp()
 
         profile = MockProfile()
+        tabManager = MockTabManager()
+        referrals = Referrals()
+        theme = LightTheme()
+
         User.shared = User()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         // Clean user defaults to avoid having flaky test changing the section count
@@ -35,16 +42,17 @@ class EcosiaHomeViewModelTests: XCTestCase {
     func testNumberOfSection_withoutUpdatingData_has4Sections() {
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
-                                          tabManager: MockTabManager(),
-                                          theme: EcosiaLightTheme())
+                                          tabManager: tabManager,
+                                          referrals: referrals,
+                                          theme: theme,
+                                          auth: EcosiaAuth(browserViewController: BrowserViewController(profile: profile, tabManager: tabManager)))
         User.shared.showClimateImpact = true
 
-        XCTAssertEqual(viewModel.shownSections.count, 4)
-        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)
-        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.libraryShortcuts)
-        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.impact)
-        // News is not shown without items
-        // XCTAssertEqual(viewModel.shownSections[4], HomepageSectionType.news)
-        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.ntpCustomization)
+        XCTAssertEqual(viewModel.shownSections.count, 5)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.header)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.homepageHeader)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.libraryShortcuts)
+        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.impact)
+        XCTAssertEqual(viewModel.shownSections[4], HomepageSectionType.ntpCustomization)
     }
 }

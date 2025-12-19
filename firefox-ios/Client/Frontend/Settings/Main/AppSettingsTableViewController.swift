@@ -157,11 +157,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     private func openHelpDialogOrRateApp() {
         let rateAction = UIAlertAction(title: .localized(.settingsRatingPromptYes), style: .default) { _ in
-            UIApplication.shared.open(Environment.current.urlProvider.storeWriteReviewPage)
+            UIApplication.shared.open(EcosiaEnvironment.current.urlProvider.storeWriteReviewPage)
         }
 
         let helpAction = UIAlertAction(title: .localized(.settingsRatingPromptNo), style: .destructive) { [weak self] _ in
-            self?.settingsDelegate?.settingsOpenURLInNewTab(Environment.current.urlProvider.helpPage)
+            self?.settingsDelegate?.settingsOpenURLInNewTab(EcosiaEnvironment.current.urlProvider.helpPage)
             self?.dismissVC()
         }
 

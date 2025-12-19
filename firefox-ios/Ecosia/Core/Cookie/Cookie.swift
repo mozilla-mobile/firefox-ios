@@ -16,25 +16,27 @@ public enum Cookie: String, CaseIterable {
     case unleash = "ECUNL"
     // https://ecosia.atlassian.net/wiki/spaces/DEV/pages/4128796/Cookies#ECAIO
     case aiOverviews = "ECAIO"
+    // https://ecosia.atlassian.net/wiki/spaces/DEV/pages/4128796/Cookies#EASC
+    case authSession = "EASC"
 
     // MARK: - URLProvider Management
 
     private static var _urlProvider: URLProvider?
 
     /// Sets the URLProvider for all cookie operations. Primarily used for testing.
-    /// If not set, defaults to Environment.current.urlProvider
+    /// If not set, defaults to EcosiaEnvironment.current.urlProvider
     public static func setURLProvider(_ provider: URLProvider) {
         _urlProvider = provider
     }
 
-    /// Resets the URLProvider to use the default Environment.current.urlProvider
+    /// Resets the URLProvider to use the default EcosiaEnvironment.current.urlProvider
     public static func resetURLProvider() {
         _urlProvider = nil
     }
 
-    /// Gets the current URLProvider, defaulting to Environment.current.urlProvider if not explicitly set
+    /// Gets the current URLProvider, defaulting to EcosiaEnvironment.current.urlProvider if not explicitly set
     static var urlProvider: URLProvider {
-        return _urlProvider ?? Environment.current.urlProvider
+        return _urlProvider ?? EcosiaEnvironment.current.urlProvider
     }
 
     // MARK: - Init
@@ -42,7 +44,7 @@ public enum Cookie: String, CaseIterable {
     /// - Parameters:
     ///   - cookie: HTTPCookie
     init?(_ cookie: HTTPCookie) {
-        let ecosiaDomain = Cookie.urlProvider.domain ?? ""
+        let ecosiaDomain = Cookie.urlProvider.domain
         guard cookie.domain == ".\(ecosiaDomain)" else {
             return nil
         }
@@ -69,6 +71,8 @@ public enum Cookie: String, CaseIterable {
             return UnleashCookieHandler()
         case .aiOverviews:
             return AIOverviewsCookieHandler()
+        case .authSession:
+            return AuthSessionCookieHandler()
         }
     }
 

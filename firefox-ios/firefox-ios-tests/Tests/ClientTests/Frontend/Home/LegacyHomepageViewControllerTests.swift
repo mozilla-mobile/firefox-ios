@@ -45,7 +45,8 @@ class LegacyHomepageViewControllerTests: XCTestCase {
             tabManager: tabManager,
             overlayManager: overlayManager,
             referrals: .init(),
-            delegate: nil
+            delegate: nil,
+            auth: EcosiaAuth(browserViewController: BrowserViewController(profile: profile, tabManager: MockTabManager()))
         )
 
         trackForMemoryLeaks(firefoxHomeViewController)
@@ -73,7 +74,8 @@ class LegacyHomepageViewControllerTests: XCTestCase {
             tabManager: tabManager,
             overlayManager: overlayManager,
             referrals: .init(),
-            delegate: nil
+            delegate: nil,
+            auth: EcosiaAuth(browserViewController: BrowserViewController(profile: profile, tabManager: MockTabManager()))
         )
 
         XCTAssertFalse(

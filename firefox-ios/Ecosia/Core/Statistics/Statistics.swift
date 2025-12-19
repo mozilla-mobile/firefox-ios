@@ -49,7 +49,7 @@ public final class Statistics {
     init() { }
 
     public func fetchAndUpdate(urlSession: URLSessionProtocol = URLSession.shared) async throws {
-        let (data, _) = try await urlSession.data(from: Environment.current.urlProvider.statistics)
+        let (data, _) = try await urlSession.data(from: EcosiaEnvironment.current.urlProvider.statistics)
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let response = try decoder.decode(Response.self, from: data)

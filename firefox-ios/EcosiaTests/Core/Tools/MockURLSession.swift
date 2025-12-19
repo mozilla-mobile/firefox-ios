@@ -4,7 +4,7 @@
 
 import Foundation
 
-final class MockURLSession: URLSession {
+final class MockURLSession: URLSession, @unchecked Sendable {
     var data = [Data]()
     var request: (() -> Void)?
     var response: HTTPURLResponse?
@@ -26,7 +26,7 @@ final class MockURLSession: URLSession {
     }
 }
 
-private class MockDataTask: URLSessionDataTask {
+private class MockDataTask: URLSessionDataTask, @unchecked Sendable {
     override init() {
         super.init()
     }
