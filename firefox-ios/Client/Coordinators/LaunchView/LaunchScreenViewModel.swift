@@ -35,6 +35,9 @@ class LaunchScreenViewModel {
     /// Ordered list of launch screens to display. Empty array means no screens to show.
     private(set) var launchOrder: [LaunchType] = []
 
+    /// Tracks whether loading has completed. Used to distinguish between "not loaded yet" and "loaded with no screens".
+    private var hasFinishedLoading = false
+
     weak var delegate: LaunchFinishedLoadingDelegate?
 
     /// Initializes the launch screen view model
@@ -82,6 +85,11 @@ class LaunchScreenViewModel {
     /// Loads and displays the next launch type in the sequence
     /// If no more launch types remain, launches the browser directly
     func loadNextLaunchType() {
+        // If loading hasn't finished yet, return early (don't call launchBrowser prematurely)
+        guard hasFinishedLoading else {
+            return
+        }
+
         guard !launchOrder.isEmpty else {
             delegate?.launchBrowser()
             return
@@ -109,6 +117,7 @@ class LaunchScreenViewModel {
         }
 
         self.launchOrder = order
+        hasFinishedLoading = true
 
         if order.isEmpty {
             delegate?.launchBrowser()
