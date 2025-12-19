@@ -247,7 +247,11 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         // as the default browser
         DefaultBrowserUtility().isDefaultBrowser = true
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .goToSettingsDefaultBrowserOnboarding
+        )
 
         DefaultApplicationHelper().openSettings()
     }
