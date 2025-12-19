@@ -184,9 +184,9 @@ final class OnboardingServiceTests: XCTestCase {
             notificationManager: mockNotificationManager,
             defaultApplicationHelper: mockDefaultApplicationHelper,
             notificationCenter: mockNotificationCenter,
-            searchBarLocationSaver: mockSearchBarLocationSaver,
-            telemetryUtility: mockTelemetryUtility
+            searchBarLocationSaver: mockSearchBarLocationSaver
         )
+        sut.telemetryUtility = mockTelemetryUtility
         DependencyHelperMock().bootstrapDependencies()
     }
 

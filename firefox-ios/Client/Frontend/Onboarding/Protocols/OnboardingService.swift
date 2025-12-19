@@ -14,7 +14,7 @@ final class OnboardingService: FeatureFlaggable {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
     private weak var navigationDelegate: OnboardingNavigationDelegate?
-    private let qrCodeNavigationHandler: QRCodeNavigationHandler?
+    private weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     private var hasRegisteredForDefaultBrowserNotification = false
     private var userDefaults: UserDefaultsInterface
     private var windowUUID: WindowUUID
@@ -28,7 +28,7 @@ final class OnboardingService: FeatureFlaggable {
     private let defaultApplicationHelper: ApplicationHelper
     private let notificationCenter: NotificationProtocol
     private let searchBarLocationSaver: SearchBarLocationSaverProtocol
-    private let telemetryUtility: OnboardingTelemetryProtocol
+    weak var telemetryUtility: OnboardingTelemetryProtocol?
 
     init(
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
@@ -41,8 +41,7 @@ final class OnboardingService: FeatureFlaggable {
         notificationManager: NotificationManagerProtocol = NotificationManager(),
         defaultApplicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        searchBarLocationSaver: SearchBarLocationSaverProtocol = SearchBarLocationSaver(),
-        telemetryUtility: OnboardingTelemetryProtocol
+        searchBarLocationSaver: SearchBarLocationSaverProtocol = SearchBarLocationSaver()
     ) {
         self.delegate = delegate
         self.userDefaults = userDefaults
@@ -56,7 +55,6 @@ final class OnboardingService: FeatureFlaggable {
         self.defaultApplicationHelper = defaultApplicationHelper
         self.notificationCenter = notificationCenter
         self.searchBarLocationSaver = searchBarLocationSaver
-        self.telemetryUtility = telemetryUtility
     }
 
     func handleAction(
@@ -201,7 +199,7 @@ final class OnboardingService: FeatureFlaggable {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
         registerForNotification()
-        telemetryUtility.sendGoToSettingsTelemetry()
+        telemetryUtility?.sendGoToSettingsTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
@@ -217,7 +215,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenIosFxSettings(from cardName: String) {
-        telemetryUtility.sendGoToSettingsTelemetry()
+        telemetryUtility?.sendGoToSettingsTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
@@ -345,14 +343,14 @@ final class OnboardingService: FeatureFlaggable {
             viewModel: popupViewModel,
             windowUUID: windowUUID,
             buttonTappedFinishFlow: { [weak self] in
-                self?.telemetryUtility.sendGoToSettingsTelemetry()
+                self?.telemetryUtility?.sendGoToSettingsTelemetry()
                 completion()
             }
         )
 
         let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
         bottomSheetVC.onDismiss = { [weak self] in
-            self?.telemetryUtility.sendDismissPressedTelemetry()
+            self?.telemetryUtility?.sendDismissPressedTelemetry()
         }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(
