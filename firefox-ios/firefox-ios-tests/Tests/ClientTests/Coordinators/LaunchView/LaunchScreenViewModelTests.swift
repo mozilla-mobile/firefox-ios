@@ -55,7 +55,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        assertSavedLaunchType(.intro)
+        assertSavedLaunchType(.intro(manager: IntroScreenManager(prefs: profile.prefs)))
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -71,7 +71,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        assertSavedLaunchType(.termsOfService)
+        assertSavedLaunchType(.termsOfService(manager: TermsOfServiceManager(prefs: profile.prefs)))
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -88,7 +88,14 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        assertSavedLaunchType(.update)
+        let onboardingModel = createOnboardingViewModel()
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        assertSavedLaunchType(.update(viewModel: UpdateViewModel(
+            profile: profile,
+            model: onboardingModel,
+            telemetryUtility: telemetryUtility,
+            windowUUID: windowUUID
+        )))
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -107,7 +114,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        assertSavedLaunchType(.survey)
+        assertSavedLaunchType(.survey(manager: SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)))
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -136,12 +143,12 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(subject.launchOrder.count, 2)
 
         subject.loadNextLaunchType()
-        assertSavedLaunchType(.termsOfService)
+        assertSavedLaunchType(.termsOfService(manager: TermsOfServiceManager(prefs: profile.prefs)))
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
         XCTAssertEqual(subject.launchOrder.count, 1)
 
         subject.loadNextLaunchType()
-        assertSavedLaunchType(.intro)
+        assertSavedLaunchType(.intro(manager: IntroScreenManager(prefs: profile.prefs)))
         XCTAssertEqual(delegate.launchWithTypeCalled, 2)
         XCTAssertEqual(subject.launchOrder.count, 0)
 
@@ -329,7 +336,14 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        assertSavedLaunchType(.update)
+        let onboardingModel = createOnboardingViewModel()
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        assertSavedLaunchType(.update(viewModel: UpdateViewModel(
+            profile: profile,
+            model: onboardingModel,
+            telemetryUtility: telemetryUtility,
+            windowUUID: windowUUID
+        )))
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -363,7 +377,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         subject.loadNextLaunchType()
 
-        assertSavedLaunchType(.survey)
+        assertSavedLaunchType(.survey(manager: SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)))
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -393,7 +407,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         XCTAssertEqual(subject.launchOrder.count, 1)
         subject.loadNextLaunchType()
-        assertSavedLaunchType(.intro)
+        assertSavedLaunchType(.intro(manager: IntroScreenManager(prefs: profile.prefs)))
     }
 
     func testLaunchType_priority_updateTakesPrecedenceOverSurvey() {
@@ -409,7 +423,14 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         XCTAssertEqual(subject.launchOrder.count, 1)
         subject.loadNextLaunchType()
-        assertSavedLaunchType(.update)
+        let onboardingModel = createOnboardingViewModel()
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        assertSavedLaunchType(.update(viewModel: UpdateViewModel(
+            profile: profile,
+            model: onboardingModel,
+            telemetryUtility: telemetryUtility,
+            windowUUID: windowUUID
+        )))
     }
 
     // MARK: - Splash Screen Experiment Tests
@@ -442,43 +463,24 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     private func assertSavedLaunchType(
-        _ expectedCase: LaunchTypeCase,
+        _ expected: LaunchType,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
         guard let saved = delegate.savedLaunchType else {
-            XCTFail("Expected \(expectedCase.description) but savedLaunchType was nil", file: file, line: line)
+            XCTFail("Expected \(expected) but savedLaunchType was nil", file: file, line: line)
             return
         }
 
-        switch (saved, expectedCase) {
+        switch (saved, expected) {
         case (.intro, .intro),
              (.termsOfService, .termsOfService),
              (.update, .update),
              (.survey, .survey),
              (.defaultBrowser, .defaultBrowser):
-            // Pattern matched successfully
             break
         default:
-            XCTFail("Expected \(expectedCase.description) but was \(saved)", file: file, line: line)
-        }
-    }
-
-    private enum LaunchTypeCase {
-        case intro
-        case termsOfService
-        case update
-        case survey
-        case defaultBrowser
-
-        var description: String {
-            switch self {
-            case .intro: return "intro"
-            case .termsOfService: return "termsOfService"
-            case .update: return "update"
-            case .survey: return "survey"
-            case .defaultBrowser: return "defaultBrowser"
-            }
+            XCTFail("Expected \(expected) but was \(saved)", file: file, line: line)
         }
     }
 
