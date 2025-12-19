@@ -310,11 +310,6 @@ final class LaunchCoordinator: BaseCoordinator,
 
         flowViewModel.onDismiss = { cardName in
             telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
-
-            // Also record dismiss_pressed if onboarding contains default browser cards
-            if onboardingService.hasDefaultBrowserCard(in: onboardingModel.cards) {
-                telemetryUtility.sendDismissPressedTelemetry()
-            }
         }
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(
