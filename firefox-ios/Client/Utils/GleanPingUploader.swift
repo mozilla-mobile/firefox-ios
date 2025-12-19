@@ -4,7 +4,7 @@
 
 import Common
 import Foundation
-import Glean
+@preconcurrency import Glean
 import MozillaAppServices
 
 /// Custom Glean Ping Uploader supporting both OHTTP and HTTP capabilities
@@ -32,7 +32,7 @@ struct GleanPingUploader: PingUploader {
     }
 
     func upload(request: CapablePingUploadRequest,
-                callback: @escaping (UploadResult) -> Void) {
+                callback: @Sendable @escaping (UploadResult) -> Void) {
         if let capableRequest = request.capable([PingCapabilities.http.rawValue]) {
             httpUploader.uploadHttpRequest(request: capableRequest, callback: callback)
         } else if let capableRequest = request.capable([PingCapabilities.ohttp.rawValue]) {

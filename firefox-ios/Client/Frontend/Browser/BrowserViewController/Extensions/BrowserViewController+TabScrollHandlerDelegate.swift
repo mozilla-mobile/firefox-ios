@@ -15,11 +15,13 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     func showToolbar() {
         updateToolbarContext()
         toolbarAnimator?.showToolbar()
+        updateToolbarTranslucency()
     }
 
     func hideToolbar() {
         updateToolbarContext()
         toolbarAnimator?.hideToolbar()
+        updateToolbarTranslucency()
     }
 
     func dispatchScrollAlphaChange(alpha: CGFloat) {
@@ -44,6 +46,17 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     }
 
     // MARK: - Private
+
+    /// Updates the toolbar's translucency effects.
+    ///
+    /// This method applies blur effects to the top and bottom toolbars and updates the content
+    /// container's mask view to ensure proper visual effects during toolbar animations and state
+    /// transitions. Only executes when the toolbar translucency refactor feature flag is enabled.
+    private func updateToolbarTranslucency() {
+        guard isToolbarTranslucencyRefactorEnabled else { return }
+        updateBlurViews()
+        addOrUpdateMaskViewIfNeeded()
+    }
 
     private func updateToolbarContext() {
         guard let animator = toolbarAnimator else { return }
@@ -84,7 +97,6 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     /// - Returns: The calculated scroll height.
     private func calculateOverKeyboardScrollHeight(safeAreaInsets: UIEdgeInsets?) -> CGFloat {
         let containerHeight = getOverKeyboardContainerSize().height
-
         let isReaderModeActive = tabManager.selectedTab?.url?.isReaderModeURL == true
 
         // Return full height if conditions aren't met for adjustment.
@@ -92,14 +104,22 @@ extension BrowserViewController: TabScrollHandler.Delegate,
                                   && isBottomSearchBar
                                   && zoomPageBar == nil
                                   && !isReaderModeActive
-
         guard shouldAdjustHeight else { return containerHeight }
 
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
-
         let topInset = safeAreaInsets?.top ?? .zero
+        let containerHeightAdjusted: CGFloat = if #available(iOS 26.0, *) {
+            .zero
+        } else {
+            hasHomeIndicator ? .zero : containerHeight - topInset
+        }
+        return containerHeightAdjusted
+    }
+}
 
-        return hasHomeIndicator ? .zero : containerHeight - topInset
+extension BrowserViewController: LegacyTabScrollController.Delegate {
+    func toolbarDisplayStateDidChange() {
+        updateToolbarTranslucency()
     }
 }

@@ -4,14 +4,13 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THRESHOLD_UNIT_TEST=13
-THRESHOLD_XCUITEST=13
+THRESHOLD_UNIT_TEST=9
+THRESHOLD_XCUITEST=9
 
 
 WARNINGS=$(
   grep -E -v 'SourcePackages/checkouts' "$BUILD_LOG_FILE" \
   | grep -E '^[^ ]+:[0-9]+:[0-9]+: warning:' \
-  | grep -Ev '/Tests/' \
   | uniq
 )
 

@@ -1541,9 +1541,13 @@
 		C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E3985F1D22C409004E89BA /* TopTabsLayout.swift */; };
 		C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */; };
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
+		C705FA782EF30C4F00AC5EE7 /* PrivacyNoticeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705FA772EF30C4B00AC5EE7 /* PrivacyNoticeHelperTests.swift */; };
+		C705FA7A2EF31F0500AC5EE7 /* MockPrivacyNoticeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705FA792EF31F0000AC5EE7 /* MockPrivacyNoticeHelper.swift */; };
+		C705FD582EF354D300AC5EE7 /* PrivacyNoticeUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */; };
 		C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */; };
 		C710FDB72DCBDBEF0046475F /* TopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */; };
 		C71158CD2EEA0B19009766B8 /* PrivacyNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */; };
+		C71169B32EF1CFFF009766B8 /* PrivacyNoticeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71169B22EF1CFFB009766B8 /* PrivacyNoticeHelper.swift */; };
 		C7149E002EB14E2400C1FF00 /* StoriesWebviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7149DFF2EB14E2400C1FF00 /* StoriesWebviewViewController.swift */; };
 		C714D27E2E4539BE00FC02E6 /* ShortcutsLibraryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */; };
 		C714D2822E4549BB00FC02E6 /* ShortcutsLibraryAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */; };
@@ -9945,9 +9949,13 @@
 		C6A44DE7A0A9155777FDAD1C /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C6AF4D4DBE2C76759B1DDE6B /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C6C94C1CB6286845DEAF8EDD /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		C705FA772EF30C4B00AC5EE7 /* PrivacyNoticeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeHelperTests.swift; sourceTree = "<group>"; };
+		C705FA792EF31F0000AC5EE7 /* MockPrivacyNoticeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPrivacyNoticeHelper.swift; sourceTree = "<group>"; };
+		C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeUpdate.swift; sourceTree = "<group>"; };
 		C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCell.swift; sourceTree = "<group>"; };
 		C71158CC2EEA0B0A009766B8 /* PrivacyNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeCell.swift; sourceTree = "<group>"; };
+		C71169B22EF1CFFB009766B8 /* PrivacyNoticeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyNoticeHelper.swift; sourceTree = "<group>"; };
 		C7149DFF2EB14E2400C1FF00 /* StoriesWebviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesWebviewViewController.swift; sourceTree = "<group>"; };
 		C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryState.swift; sourceTree = "<group>"; };
 		C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryAction.swift; sourceTree = "<group>"; };
@@ -12304,6 +12312,7 @@
 				DA27EEDA28BADF4700DD6F5D /* MenuBuilderHelper.swift */,
 				E1463D012981DA190074E16E /* NotificationManager.swift */,
 				E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */,
+				C71169B22EF1CFFB009766B8 /* PrivacyNoticeHelper.swift */,
 				BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */,
 				8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */,
 				E11C0E3C2CEF328B00D884D3 /* TermsOfServiceManager.swift */,
@@ -13169,6 +13178,7 @@
 				8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */,
 				C72748232ECE1809003B394D /* MerinoTestDataSetting.swift */,
 				8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */,
+				C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */,
 				8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */,
 				1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */,
 				8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */,
@@ -13740,6 +13750,7 @@
 		8ACA8F722919870B00D3075D /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C705FA772EF30C4B00AC5EE7 /* PrivacyNoticeHelperTests.swift */,
 				8A83C58D2DDF887200FF60EF /* ProfilePrefsReaderTests.swift */,
 				8AC884202D5261FC0033ABF5 /* CrashTrackerTests.swift */,
 				8A967E412D30418A00B1017D /* TelemetryDebugMessage.swift */,
@@ -14774,6 +14785,7 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				C705FA792EF31F0000AC5EE7 /* MockPrivacyNoticeHelper.swift */,
 				8A387FEC2EF066BC0015C429 /* MockUnifiedAdsProvider.swift */,
 				C7A492752EBE81770098845C /* MockDismissalNotifiableViewController.swift */,
 				8AD8FF162EBB022A00FDFD78 /* MockGleanPlumbMessageManagerProtocol.swift */,
@@ -18355,6 +18367,7 @@
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				5A9F83422B2B796800272819 /* TabPeekState.swift in Sources */,
 				C796E22A2E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift in Sources */,
+				C71169B32EF1CFFF009766B8 /* PrivacyNoticeHelper.swift in Sources */,
 				C7E35BAF2EA17CEE00FB63E2 /* StoriesFeedDimensionCalculator.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* PasswordManagerTableViewCell.swift in Sources */,
 				8A0A1BA02B2200FD00E8706F /* PrivateHomepageViewController.swift in Sources */,
@@ -18685,6 +18698,7 @@
 				8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */,
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
+				C705FD582EF354D300AC5EE7 /* PrivacyNoticeUpdate.swift in Sources */,
 				0B8A39EF2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift in Sources */,
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
 				EDD2A7FA2CDBD1D100ED464C /* SearchEngineElement+initFromSearchEngine.swift in Sources */,
@@ -19348,6 +19362,7 @@
 				8A13FA892AD82BC8007527AB /* AppSendTabDelegateTests.swift in Sources */,
 				0ABCD45D2D356015005D704A /* TermsOfServiceTelemetryTests.swift in Sources */,
 				C8CD80D42A1E268C0097C3AE /* MockGleanPlumbEvaluationUtility.swift in Sources */,
+				C705FA782EF30C4F00AC5EE7 /* PrivacyNoticeHelperTests.swift in Sources */,
 				8A7AE4472BAC78230072DAEC /* MockLibraryNavigationHandler.swift in Sources */,
 				C25020842ECDE75D0071506F /* MockTranslationsSchemeHandler.swift in Sources */,
 				8A7A26E829D4C0FE00EA76F1 /* IntroScreenManagerTests.swift in Sources */,
@@ -19662,6 +19677,7 @@
 				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,
 				8A9D31642D1355EE00171502 /* MockFxBookmarkNode.swift in Sources */,
 				8A827E302C20C7F5008D5E3C /* MicrosurveyMiddlewareTests.swift in Sources */,
+				C705FA7A2EF31F0500AC5EE7 /* MockPrivacyNoticeHelper.swift in Sources */,
 				8A9D31622D13545A00171502 /* EditFolderViewModelTests.swift in Sources */,
 				ED6C23102DFB4F39005EDE1D /* UserTelemetryTests.swift in Sources */,
 				8AF6D4DF2A856A9000B0474B /* MockContileNetworking.swift in Sources */,
@@ -27435,6 +27451,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec;
 		};
@@ -28349,6 +28366,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 			};
 			name = FirefoxStaging;
 		};
@@ -28772,6 +28790,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec_Testing;
 		};
@@ -29785,6 +29804,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Firefox;
 		};
@@ -30081,6 +30101,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -30398,6 +30419,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 			};
 			name = FirefoxBeta;
 		};

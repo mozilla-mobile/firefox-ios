@@ -103,7 +103,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
     }
 
     private func setupLayout() {
-        translatesAutoresizingMaskIntoConstraints = false
         headerStack.addArrangedSubview(titleLabel)
         contentView.addSubviews(headerStack)
 
