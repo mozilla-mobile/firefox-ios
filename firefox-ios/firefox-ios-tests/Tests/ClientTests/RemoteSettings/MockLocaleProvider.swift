@@ -7,19 +7,16 @@
 struct MockLocaleProvider: LocaleProvider {
     let current: Locale
     let preferredLanguages: [String]
-    let localeRegionCode: String?
-    let searchRegionCode: String
+    let regionCode: String
 
     init(
         current: Locale = Locale(identifier: "en-US"),
         preferredLanguages: [String] = ["en-US"],
-        localeRegionCode: String? = nil,
-        searchRegionCode: String = "US"
+        regionCode: String = "US",
     ) {
         self.current = current
         self.preferredLanguages = preferredLanguages
-        self.localeRegionCode = localeRegionCode
-        self.searchRegionCode = searchRegionCode
+        self.regionCode = regionCode
     }
 
     static func defaultEN() -> MockLocaleProvider {

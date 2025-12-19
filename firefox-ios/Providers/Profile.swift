@@ -724,7 +724,7 @@ open class BrowserProfile: Profile,
             os: "iOS",
             osVersion: UIDeviceDetails.systemVersion,
             formFactor: formFactor,
-            country: Locale.current.regionCode)
+            country: SystemLocaleProvider().regionCode)
     }
 
     func hasAccount() -> Bool {

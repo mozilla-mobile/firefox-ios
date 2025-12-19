@@ -20,7 +20,7 @@ struct FxSuggestTelemetry {
 
     init(locale: LocaleProvider = SystemLocaleProvider(),
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
-        self.systemRegion = locale.searchRegionCode
+        self.systemRegion = locale.regionCode
         self.gleanWrapper = gleanWrapper
     }
 
