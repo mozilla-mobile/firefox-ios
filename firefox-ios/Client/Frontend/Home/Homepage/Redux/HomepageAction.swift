@@ -61,6 +61,7 @@ enum HomepageActionType: ActionType {
     case embeddedHomepage
     case sectionSeen
     case availableContentHeightDidChange
+    case privacyNoticeCloseButtonTapped
 }
 
 enum HomepageMiddlewareActionType: ActionType {

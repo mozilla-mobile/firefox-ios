@@ -149,6 +149,23 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
     }
 
+    @MainActor
+    func test_handlePrivacyNoticeCloseButtonTapped_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.privacyNoticeCloseButtonTapped
+            )
+        )
+
+        XCTAssertFalse(newState.shouldShowPrivacyNotice)
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+    }
+
     // MARK: - Private
     private func createSubject() -> HomepageState {
         return HomepageState(windowUUID: .XCTestDefaultUUID)
