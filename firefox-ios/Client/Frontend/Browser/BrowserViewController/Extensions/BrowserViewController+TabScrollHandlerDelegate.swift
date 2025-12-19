@@ -7,7 +7,8 @@ import SnapKit
 extension BrowserViewController: TabScrollHandler.Delegate,
                                  ToolbarAnimator.Delegate,
                                  ToolbarViewProtocol {
-    func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
+    func updateToolbarTransition(progress: CGFloat,
+                                 towards state: TabScrollHandler.ToolbarDisplayState) {
         updateToolbarContext()
         toolbarAnimator?.updateToolbarTransition(progress: progress, towards: state)
     }
@@ -53,7 +54,6 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     /// container's mask view to ensure proper visual effects during toolbar animations and state
     /// transitions. Only executes when the toolbar translucency refactor feature flag is enabled.
     private func updateToolbarTranslucency() {
-        guard isToolbarTranslucencyRefactorEnabled else { return }
         updateBlurViews()
         addOrUpdateMaskViewIfNeeded()
     }
@@ -115,11 +115,5 @@ extension BrowserViewController: TabScrollHandler.Delegate,
             hasHomeIndicator ? .zero : containerHeight - topInset
         }
         return containerHeightAdjusted
-    }
-}
-
-extension BrowserViewController: LegacyTabScrollController.Delegate {
-    func toolbarDisplayStateDidChange() {
-        updateToolbarTranslucency()
     }
 }

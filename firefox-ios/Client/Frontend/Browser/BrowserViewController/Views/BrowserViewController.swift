@@ -206,7 +206,7 @@ class BrowserViewController: UIViewController,
         if isTabScrollRefactoringEnabled {
             return TabScrollHandler(windowUUID: windowUUID, delegate: self)
         } else {
-            return LegacyTabScrollController(windowUUID: windowUUID, delegate: self)
+            return LegacyTabScrollController(windowUUID: windowUUID)
         }
     }()
 
