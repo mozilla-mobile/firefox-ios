@@ -46,7 +46,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     let viewModel = DefaultBrowserOnboardingViewModel()
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
-    private let telemetryUtility: OnboardingTelemetryProtocol
 
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
@@ -102,12 +101,10 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default,
-         telemetryUtility: OnboardingTelemetryProtocol) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
-        self.telemetryUtility = telemetryUtility
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -239,7 +236,9 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     @objc
     private func dismissAnimated() {
         viewModel.didAskToDismissView?()
-        telemetryUtility.sendDismissPressedTelemetry()
+        TelemetryWrapper.recordEvent(category: .action,
+                                      method: .tap,
+                                      object: .dismissDefaultBrowserOnboarding)
     }
 
     @objc
@@ -250,7 +249,9 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         // as the default browser
         DefaultBrowserUtility().isDefaultBrowser = true
 
-        telemetryUtility.sendGoToSettingsTelemetry()
+        TelemetryWrapper.recordEvent(category: .action,
+                                      method: .tap,
+                                      object: .goToSettingsDefaultBrowserOnboarding)
 
         DefaultApplicationHelper().openSettings()
     }

@@ -392,13 +392,8 @@ final class LaunchCoordinator: BaseCoordinator,
 
     // MARK: - Default Browser
     func presentDefaultBrowserOnboarding() {
-        // Create a minimal telemetry utility for default browser onboarding
-        let emptyModel = OnboardingKitViewModel(cards: [], isDismissible: true)
-        let telemetryUtility = OnboardingTelemetryUtility(with: emptyModel)
-
         let defaultOnboardingViewController = DefaultBrowserOnboardingViewController(
-            windowUUID: windowUUID,
-            telemetryUtility: telemetryUtility
+            windowUUID: windowUUID
         )
         defaultOnboardingViewController.viewModel.goToSettings = { [weak self] in
             guard let self = self else { return }
