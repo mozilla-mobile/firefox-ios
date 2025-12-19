@@ -27480,6 +27480,7 @@
 					"$(PROJECT_DIR)/FxA/FxA/lib",
 				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec;
 		};
@@ -28190,6 +28191,7 @@
 					"$(PROJECT_DIR)/FxA/FxA/lib",
 				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = FirefoxStaging;
 		};
@@ -28607,6 +28609,7 @@
 					"$(PROJECT_DIR)/FxA/FxA/lib",
 				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec_Testing;
 		};
@@ -29856,6 +29859,7 @@
 					"$(PROJECT_DIR)/FxA/FxA/lib",
 				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Firefox;
 		};
@@ -30140,6 +30144,7 @@
 					"$(PROJECT_DIR)/FxA/FxA/lib",
 				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -30471,6 +30476,7 @@
 					"$(PROJECT_DIR)/FxA/FxA/lib",
 				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = FirefoxBeta;
 		};
