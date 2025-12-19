@@ -451,26 +451,17 @@ final class LaunchScreenViewModelTests: XCTestCase {
             return
         }
 
-        let expected: LaunchType
-        switch expectedCase {
-        case .intro:
-            expected = .intro(manager: IntroScreenManager(prefs: profile.prefs))
-        case .termsOfService:
-            expected = .termsOfService(manager: TermsOfServiceManager(prefs: profile.prefs))
-        case .update:
-            let onboardingModel = createOnboardingViewModel()
-            let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
-            expected = .update(viewModel: UpdateViewModel(profile: profile,
-                                                          model: onboardingModel,
-                                                          telemetryUtility: telemetryUtility,
-                                                          windowUUID: windowUUID))
-        case .survey:
-            expected = .survey(manager: SurveySurfaceManager(windowUUID: windowUUID, and: messageManager))
-        case .defaultBrowser:
-            expected = .defaultBrowser
+        switch (saved, expectedCase) {
+        case (.intro, .intro),
+             (.termsOfService, .termsOfService),
+             (.update, .update),
+             (.survey, .survey),
+             (.defaultBrowser, .defaultBrowser):
+            // Pattern matched successfully
+            break
+        default:
+            XCTFail("Expected \(expectedCase.description) but was \(saved)", file: file, line: line)
         }
-
-        XCTAssertEqual(saved, expected, "Expected \(expectedCase.description) but was \(saved)", file: file, line: line)
     }
 
     private enum LaunchTypeCase {
@@ -551,22 +542,5 @@ final class LaunchScreenViewModelTests: XCTestCase {
             instructionsPopup: nil,
             embededLinkText: []
         )
-    }
-}
-
-// MARK: - LaunchType Equatable Extension (Test Only)
-
-extension LaunchType: @retroactive Equatable {
-    public static func == (lhs: LaunchType, rhs: LaunchType) -> Bool {
-        switch (lhs, rhs) {
-        case (.termsOfService, .termsOfService),
-             (.intro, .intro),
-             (.update, .update),
-             (.survey, .survey),
-             (.defaultBrowser, .defaultBrowser):
-            return true
-        default:
-            return false
-        }
     }
 }
