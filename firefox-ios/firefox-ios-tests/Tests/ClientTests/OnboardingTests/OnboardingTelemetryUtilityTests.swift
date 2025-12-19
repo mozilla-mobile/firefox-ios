@@ -16,11 +16,12 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockGleanWrapper = MockGleanWrapper()
+        Self.setupTelemetry(with: MockProfile())
     }
 
     override func tearDown() async throws {
         mockGleanWrapper = nil
-        DependencyHelperMock().reset()
+        Self.tearDownTelemetry()
         try await super.tearDown()
     }
 
@@ -267,6 +268,93 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         XCTAssertEqual(savedExtras.onboardingVariant, "japan")
+    }
+
+    // MARK: - Go To Settings Telemetry
+    func testSendGoToSettingsTelemetry_IncrementsCounter() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+
+        subject.sendGoToSettingsTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.goToSettingsPressed.testGetValue())
+        XCTAssertEqual(count, 1)
+    }
+
+    func testSendGoToSettingsTelemetry_MultipleCalls_IncrementsCounter() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+
+        subject.sendGoToSettingsTelemetry()
+        subject.sendGoToSettingsTelemetry()
+        subject.sendGoToSettingsTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.goToSettingsPressed.testGetValue())
+        XCTAssertEqual(count, 3)
+    }
+
+    func testSendGoToSettingsTelemetry_WorksWithLegacyOnboarding() throws {
+        let subject = createTelemetryUtility(for: .upgrade)
+
+        subject.sendGoToSettingsTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.goToSettingsPressed.testGetValue())
+        XCTAssertEqual(count, 1)
+    }
+
+    func testSendGoToSettingsTelemetry_WorksWithModernOnboarding() throws {
+        let subject = createModernTelemetryUtility(for: .freshInstall)
+
+        subject.sendGoToSettingsTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.goToSettingsPressed.testGetValue())
+        XCTAssertEqual(count, 1)
+    }
+
+    // MARK: - Dismiss Pressed Telemetry
+    func testSendDismissPressedTelemetry_IncrementsCounter() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+
+        subject.sendDismissPressedTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.dismissPressed.testGetValue())
+        XCTAssertEqual(count, 1)
+    }
+
+    func testSendDismissPressedTelemetry_MultipleCalls_IncrementsCounter() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+
+        subject.sendDismissPressedTelemetry()
+        subject.sendDismissPressedTelemetry()
+        subject.sendDismissPressedTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.dismissPressed.testGetValue())
+        XCTAssertEqual(count, 3)
+    }
+
+    func testSendDismissPressedTelemetry_WorksWithLegacyOnboarding() throws {
+        let subject = createTelemetryUtility(for: .upgrade)
+
+        subject.sendDismissPressedTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.dismissPressed.testGetValue())
+        XCTAssertEqual(count, 1)
+    }
+
+    func testSendDismissPressedTelemetry_WorksWithModernOnboarding() throws {
+        let subject = createModernTelemetryUtility(for: .freshInstall)
+
+        subject.sendDismissPressedTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.dismissPressed.testGetValue())
+        XCTAssertEqual(count, 1)
+    }
+
+    func testSendDismissPressedTelemetry_WorksWithJapanOnboarding() throws {
+        let subject = createModernTelemetryUtility(for: .freshInstall, variant: .japan)
+
+        subject.sendDismissPressedTelemetry()
+
+        let count = try XCTUnwrap(GleanMetrics.Onboarding.dismissPressed.testGetValue())
+        XCTAssertEqual(count, 1)
     }
 
     // MARK: Private

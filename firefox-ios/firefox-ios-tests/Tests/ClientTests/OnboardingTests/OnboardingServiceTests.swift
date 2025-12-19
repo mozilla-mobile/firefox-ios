@@ -84,6 +84,56 @@ class MockSearchBarLocationSaver: SearchBarLocationSaverProtocol {
     }
 }
 
+class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
+    var sendCardViewTelemetryCalled = false
+    var sendButtonActionTelemetryCalled = false
+    var sendMultipleChoiceButtonActionTelemetryCalled = false
+    var sendDismissOnboardingTelemetryCalled = false
+    var sendGoToSettingsTelemetryCalled = false
+    var sendDismissPressedTelemetryCalled = false
+
+    var cardName: String?
+    var action: OnboardingActions?
+    var primaryButton: Bool?
+    var multipleChoiceAction: OnboardingMultipleChoiceAction?
+
+    func sendCardViewTelemetry(from cardName: String) {
+        sendCardViewTelemetryCalled = true
+        self.cardName = cardName
+    }
+
+    func sendButtonActionTelemetry(from cardName: String,
+                                   with action: OnboardingActions,
+                                   and primaryButton: Bool) {
+        sendButtonActionTelemetryCalled = true
+        self.cardName = cardName
+        self.action = action
+        self.primaryButton = primaryButton
+    }
+
+    func sendMultipleChoiceButtonActionTelemetry(
+        from cardName: String,
+        with action: OnboardingMultipleChoiceAction
+    ) {
+        sendMultipleChoiceButtonActionTelemetryCalled = true
+        self.cardName = cardName
+        self.multipleChoiceAction = action
+    }
+
+    func sendDismissOnboardingTelemetry(from cardName: String) {
+        sendDismissOnboardingTelemetryCalled = true
+        self.cardName = cardName
+    }
+
+    func sendGoToSettingsTelemetry() {
+        sendGoToSettingsTelemetryCalled = true
+    }
+
+    func sendDismissPressedTelemetry() {
+        sendDismissPressedTelemetryCalled = true
+    }
+}
+
 class MockActivityEventHelper: ActivityEventHelper {
     var chosenOption: [IntroViewModel.OnboardingOptions] = []
     var updateOnboardingUserActivationEventCalled = false
@@ -107,6 +157,7 @@ final class OnboardingServiceTests: XCTestCase {
     var mockSearchBarLocationSaver: MockSearchBarLocationSaver!
     var mockProfile: MockProfile!
     var mockThemeManager: MockThemeManager!
+    var mockTelemetryUtility: MockOnboardingTelemetryUtility!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -120,6 +171,7 @@ final class OnboardingServiceTests: XCTestCase {
         mockSearchBarLocationSaver = MockSearchBarLocationSaver()
         mockProfile = MockProfile(databasePrefix: "OnboardingServiceTests")
         mockThemeManager = MockThemeManager()
+        mockTelemetryUtility = MockOnboardingTelemetryUtility()
 
         sut = OnboardingService(
             userDefaults: mockUserDefaults,
@@ -132,7 +184,8 @@ final class OnboardingServiceTests: XCTestCase {
             notificationManager: mockNotificationManager,
             defaultApplicationHelper: mockDefaultApplicationHelper,
             notificationCenter: mockNotificationCenter,
-            searchBarLocationSaver: mockSearchBarLocationSaver
+            searchBarLocationSaver: mockSearchBarLocationSaver,
+            telemetryUtility: mockTelemetryUtility
         )
         DependencyHelperMock().bootstrapDependencies()
     }

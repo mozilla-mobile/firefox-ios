@@ -28,7 +28,7 @@ final class OnboardingService: FeatureFlaggable {
     private let defaultApplicationHelper: ApplicationHelper
     private let notificationCenter: NotificationProtocol
     private let searchBarLocationSaver: SearchBarLocationSaverProtocol
-    private var telemetryUtility: OnboardingTelemetryProtocol?
+    private let telemetryUtility: OnboardingTelemetryProtocol
 
     init(
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
@@ -42,7 +42,7 @@ final class OnboardingService: FeatureFlaggable {
         defaultApplicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         searchBarLocationSaver: SearchBarLocationSaverProtocol = SearchBarLocationSaver(),
-        telemetryUtility: OnboardingTelemetryProtocol? = nil
+        telemetryUtility: OnboardingTelemetryProtocol
     ) {
         self.delegate = delegate
         self.userDefaults = userDefaults
@@ -201,7 +201,7 @@ final class OnboardingService: FeatureFlaggable {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
         registerForNotification()
-        telemetryUtility?.sendGoToSettingsTelemetry()
+        telemetryUtility.sendGoToSettingsTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
@@ -217,7 +217,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenIosFxSettings(from cardName: String) {
-        telemetryUtility?.sendGoToSettingsTelemetry()
+        telemetryUtility.sendGoToSettingsTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
@@ -345,14 +345,14 @@ final class OnboardingService: FeatureFlaggable {
             viewModel: popupViewModel,
             windowUUID: windowUUID,
             buttonTappedFinishFlow: { [weak self] in
-                self?.telemetryUtility?.sendGoToSettingsTelemetry()
+                self?.telemetryUtility.sendGoToSettingsTelemetry()
                 completion()
             }
         )
 
         let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
         bottomSheetVC.onDismiss = { [weak self] in
-            self?.telemetryUtility?.sendDismissPressedTelemetry()
+            self?.telemetryUtility.sendDismissPressedTelemetry()
         }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(
