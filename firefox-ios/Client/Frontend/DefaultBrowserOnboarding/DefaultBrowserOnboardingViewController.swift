@@ -236,9 +236,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     @objc
     private func dismissAnimated() {
         viewModel.didAskToDismissView?()
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .dismissDefaultBrowserOnboarding)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
     }
 
     @objc
@@ -249,9 +247,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         // as the default browser
         DefaultBrowserUtility().isDefaultBrowser = true
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .goToSettingsDefaultBrowserOnboarding)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
 
         DefaultApplicationHelper().openSettings()
     }

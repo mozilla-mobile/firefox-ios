@@ -392,9 +392,7 @@ final class LaunchCoordinator: BaseCoordinator,
 
     // MARK: - Default Browser
     func presentDefaultBrowserOnboarding() {
-        let defaultOnboardingViewController = DefaultBrowserOnboardingViewController(
-            windowUUID: windowUUID
-        )
+        let defaultOnboardingViewController = DefaultBrowserOnboardingViewController(windowUUID: windowUUID)
         defaultOnboardingViewController.viewModel.goToSettings = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)

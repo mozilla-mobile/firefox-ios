@@ -1123,10 +1123,6 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserCard.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserCard, _, _):
             GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
-        case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
-            GleanMetrics.Onboarding.dismissPressed.add()
-        case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
-            GleanMetrics.Onboarding.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
         case (.action, .open, .defaultBrowser, _, let extras):
@@ -1143,6 +1139,10 @@ extension TelemetryWrapper {
             GleanMetrics.Onboarding.engagementNotificationCancel.record()
         case (.information, .view, .homeTabBannerEvergreen, _, _):
             GleanMetrics.DefaultBrowserCard.evergreenImpression.record()
+        case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
+            GleanMetrics.Onboarding.dismissPressed.add()
+        case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
+            GleanMetrics.Onboarding.goToSettingsPressed.add()
         // MARK: Downloads
         case(.action, .tap, .downloadNowButton, _, _):
             GleanMetrics.Downloads.downloadNowButtonTapped.record()
