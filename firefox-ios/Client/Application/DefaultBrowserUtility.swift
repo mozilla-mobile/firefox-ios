@@ -6,6 +6,53 @@ import Foundation
 import Shared
 import Common
 
+/* A utility for tracking the state of whether or not we're the default browser.
+
+ The main public interface is `processUserDefaultState(isFirstRun:)`. Its flow:
+
+ 1. iOS 18.2+ check
+ └─ Exit early API not available and we rely on deeplinks & others for the state
+ 2. Expire stale status one month after we last set `isDefaultBrowser` to `true`
+ └─ If isDefaultBrowser == true AND defaultBrowserSetDate > 1mo then Set isDefaultBrowser = false
+ 3. Beta blocklist check
+ └─ Exit if on blocklisted beta OS
+ 4. Should we query Apple API?
+ (see decision tree below)
+ └─ Exit if `false`
+ 5. Call Apple's isDefault(.webBrowser)
+ └─ Record `appleAPILastUseDate` so we can make sure to check at least every 3 months
+ └─ On success: update isDefaultBrowser with value
+ └─ On error: record telemetry + dates
+
+ - Apple API Query Decision Tree (`shouldQueryAppleDefaultBrowserAPI()`)
+
+ ┌─ Never used API before? (no appleAPILastUseDate)
+ │  └─ YES -> Query API
+ │  * Basically, first time using the API
+ │
+ ├─ Not past Apple's retry date from previous error?
+ │  └─ YES -> Skip API
+ │  * Apple told us to wait till the retry date
+ │
+ ├─ Been 3+ months since last API use?
+ │  └─ YES -> Query API
+ │  * Refresh with the API at least every 3 months
+ │
+ ├─ Set as default within last month?
+ │  └─ YES -> Skip API
+ │  * We're generally confident we're default from deeplinks/other
+ │
+ └─ Otherwise -> Skip API
+
+ - Status Expiration Logic
+
+ When processUserDefaultState runs, it first checks if the current `isDefaultBrowser = true`
+ status is stale (if isDefaultBrowser == true AND it's been more than 1 month since
+ defaultBrowserSetDate), and then it sets `isDefaultBrowser` to `false`, to ensure we don't
+ indefinitely claim default status without re-verification. This is a rolling expration,
+ so, even though it checks all the time, technically, if we set `isDefaultBrowser` to `true`
+ through deeplinks or other means frequently enough, then we never actually expire.
+ */
 @MainActor
 class DefaultBrowserUtility {
     let userDefault: UserDefaultsInterface
@@ -16,20 +63,6 @@ class DefaultBrowserUtility {
                         "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR", "JP"]
 
     private let logger: Logger
-
-    init(
-        userDefault: UserDefaultsInterface = UserDefaults.standard,
-        telemetry: DefaultBrowserUtilityTelemetry = DefaultBrowserUtilityTelemetry(),
-        locale: LocaleProvider = SystemLocaleProvider(),
-        application: UIApplicationInterface = UIApplication.shared,
-        logger: Logger = DefaultLogger.shared
-    ) {
-        self.userDefault = userDefault
-        self.telemetry = telemetry
-        self.locale = locale
-        self.application = application
-        self.logger = logger
-    }
 
     struct UserDefaultsKey {
         public static let isBrowserDefault = "com.moz.isBrowserDefault.key"
@@ -68,6 +101,20 @@ class DefaultBrowserUtility {
         set { userDefault.set(newValue, forKey: UserDefaultsKey.appleAPILastUseDate) }
     }
 
+    init(
+        userDefault: UserDefaultsInterface = UserDefaults.standard,
+        telemetry: DefaultBrowserUtilityTelemetry = DefaultBrowserUtilityTelemetry(),
+        locale: LocaleProvider = SystemLocaleProvider(),
+        application: UIApplicationInterface = UIApplication.shared,
+        logger: Logger = DefaultLogger.shared
+    ) {
+        self.userDefault = userDefault
+        self.telemetry = telemetry
+        self.locale = locale
+        self.application = application
+        self.logger = logger
+    }
+
     func processUserDefaultState(isFirstRun: Bool) {
         guard #available(iOS 18.2, *) else { return }
 
@@ -87,52 +134,10 @@ class DefaultBrowserUtility {
             return
         }
 
-        logger.log(
-            "Going to try UIApplicationInterface.isDefault",
-            level: .info,
-            category: .setup
-        )
-
-
         do {
-            trackNumberOfAPIQueries(forNewUsers: isFirstRun)
-            appleAPILastUseDate = Date()
-            let isDefault = try application.isDefault(.webBrowser)
-
-            logger.log(
-                "UIApplicationInterface.isDefault was successful",
-                level: .info,
-                category: .setup
-            )
-            trackIfUserIsDefault(isDefault)
-
-            if isFirstRun {
-                trackIfNewUserIsComingFromBrowserChoiceScreen(isDefault)
-            }
-
-            isDefaultBrowser = isDefault
-        } catch let error as UIApplication.CategoryDefaultError {
-            logger.log(
-                "UIApplicationInterface.isDefault returned retry error: \(error.localizedDescription)",
-                level: .info,
-                category: .setup
-            )
-
-            let (retryDate, lastProvidedDate) = trackDatesForErrorReporting(error.userInfo)
-            let apiQueryCount = userDefault.object(forKey: UserDefaultsKey.apiQuery) as? Int
-
-            telemetry.recordDefaultBrowserAPIError(
-                errorDescription: error.localizedDescription,
-                retryDate: retryDate,
-                lastProvidedDate: lastProvidedDate,
-                apiQueryCount: apiQueryCount
-            )
+            try performAPICheck(isFirstRun: isFirstRun)
         } catch {
-            logger.log(
-                "UIApplicationInterface.isDefault was not present with error: \(error.localizedDescription)",
-                level: .info,
-                category: .setup
-            )
+            handleAPICheckError(error)
         }
     }
 
@@ -141,6 +146,61 @@ class DefaultBrowserUtility {
         let betaBlockLists: [String] = ["22C5109p", "22C5125e", "22C5131e", "22C5142a"]
 
         return betaBlockLists.contains { systemVersion.contains($0) }
+    }
+
+    private func performAPICheck(isFirstRun: Bool) throws {
+        guard #available(iOS 18.2, *) else { return }
+
+        logger.log(
+            "Going to try UIApplicationInterface.isDefault",
+            level: .info,
+            category: .setup
+        )
+
+        trackNumberOfAPIQueries(forNewUsers: isFirstRun)
+        appleAPILastUseDate = Date()
+        let isDefault = try application.isDefault(.webBrowser)
+
+        logger.log(
+            "UIApplicationInterface.isDefault was successful",
+            level: .info,
+            category: .setup
+        )
+        trackIfUserIsDefault(isDefault)
+
+        if isFirstRun {
+            trackIfNewUserIsComingFromBrowserChoiceScreen(isDefault)
+        }
+
+        isDefaultBrowser = isDefault
+    }
+
+    private func handleAPICheckError(_ error: Error) {
+        guard #available(iOS 18.2, *) else { return }
+
+        if let categoryError = error as? UIApplication.CategoryDefaultError {
+            logger.log(
+                "UIApplicationInterface.isDefault returned retry error: \(categoryError.localizedDescription)",
+                level: .info,
+                category: .setup
+            )
+
+            let (retryDate, lastProvidedDate) = trackDatesForErrorReporting(categoryError.userInfo)
+            let apiQueryCount = userDefault.object(forKey: UserDefaultsKey.apiQuery) as? Int
+
+            telemetry.recordDefaultBrowserAPIError(
+                errorDescription: categoryError.localizedDescription,
+                retryDate: retryDate,
+                lastProvidedDate: lastProvidedDate,
+                apiQueryCount: apiQueryCount
+            )
+        } else {
+            logger.log(
+                "UIApplicationInterface.isDefault was not present with error: \(error.localizedDescription)",
+                level: .info,
+                category: .setup
+            )
+        }
     }
 
     private func trackIfUserIsDefault(_ isDefault: Bool) {
@@ -234,31 +294,24 @@ class DefaultBrowserUtility {
 
     // MARK: - Default Browser Status Management
 
-    func expireDefaultStatusIfStale() {
+    private func expireDefaultStatusIfStale() {
         if isDefaultBrowser && !wasSetAsDefaultWithinLastMonth() {
             isDefaultBrowser = false
         }
     }
 
-    func shouldQueryAppleDefaultBrowserAPI() -> Bool {
+    private func shouldQueryAppleDefaultBrowserAPI() -> Bool {
         let hasLastUseDate = appleAPILastUseDate != nil
 
-        // Never used API before - use it
         if !hasLastUseDate { return true }
-
-        // Not past retry date - don't use it
         if !isPastRetryDate() { return false }
-
-        // Set as default in last month - don't use it
-        if wasSetAsDefaultWithinLastMonth() { return false }
-
-        // Been at least 3 months since last use - use it
         if hasBeenAtLeastThreeMonthsSinceLastAPIUse() { return true }
+        if wasSetAsDefaultWithinLastMonth() { return false }
 
         return false
     }
 
-    func wasSetAsDefaultWithinLastMonth() -> Bool {
+    private func wasSetAsDefaultWithinLastMonth() -> Bool {
         guard let setDate = defaultBrowserSetDate,
               let oneMonthAgo = Calendar.current.date(byAdding: .month, value: -1, to: Date())
         else { return false }
@@ -266,7 +319,7 @@ class DefaultBrowserUtility {
         return setDate > oneMonthAgo
     }
 
-    func hasBeenAtLeastThreeMonthsSinceLastAPIUse() -> Bool {
+    private func hasBeenAtLeastThreeMonthsSinceLastAPIUse() -> Bool {
         guard let lastUseDate = appleAPILastUseDate,
               let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: Date())
         else { return true }
@@ -274,7 +327,7 @@ class DefaultBrowserUtility {
         return lastUseDate < threeMonthsAgo
     }
 
-    func isPastRetryDate() -> Bool {
+    private func isPastRetryDate() -> Bool {
         guard let retryDate = userDefault.object(forKey: APIErrorDateKeys.retryDate) as? Date else {
             return true
         }
