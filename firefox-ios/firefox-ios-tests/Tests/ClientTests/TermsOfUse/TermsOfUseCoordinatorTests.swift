@@ -123,11 +123,18 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
-    private func setupNimbusTouFeatureForTesting(isEnabled: Bool, maxRemindersCount: Int32 = 5) {
+    private func setupNimbusTouFeatureForTesting(
+        isEnabled: Bool,
+        maxRemindersCount: Int32 = 5,
+        enableDragToDismiss: Bool = true,
+        bottomSheetStrings: Int = 0
+    ) {
         FxNimbus.shared.features.touFeature.with { _, _ in
             return TouFeature(
                 maxRemindersCount: Int(maxRemindersCount),
-                status: isEnabled
+                status: isEnabled,
+                enableDragToDismiss: enableDragToDismiss,
+                bottomSheetStrings: bottomSheetStrings
             )
         }
     }

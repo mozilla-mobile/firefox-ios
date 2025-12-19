@@ -2469,6 +2469,24 @@ public struct TermsOfUse {
         value: "Please take a moment to review and accept. Learn more",
         comment: "Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'."
     )
+    public static let TitleVariant1 = MZLocalizedString(
+        key: "TermsOfUse.TitleVariant1.v147",
+        tableName: "TermsOfUse",
+        value: "Terms of Use",
+        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 1."
+    )
+    public static let TitleVariant2 = MZLocalizedString(
+        key: "TermsOfUse.TitleVariant2.v147",
+        tableName: "TermsOfUse",
+        value: "A note from Firefox",
+        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 2."
+    )
+    public static let ReviewAndAcceptTextVariant = MZLocalizedString(
+        key: "TermsOfUse.ReviewAndAcceptTextVariant.v147",
+        tableName: "TermsOfUse",
+        value: "You can learn more here.",
+        comment: "Descriptive text shown when user is invited to accept the Terms of Use for variants 1 and 2. Includes link text for 'here'."
+    )
     public static let LinkTermsOfUse = MZLocalizedString(
         key: "TermsOfUse.Link.TermsOfUse.v142",
         tableName: "TermsOfUse",
@@ -2486,6 +2504,12 @@ public struct TermsOfUse {
         tableName: "TermsOfUse",
         value: "Learn more",
         comment: "Link shown in the Terms of Use sheet to direct users to more details about the update."
+    )
+    public static let LinkHereText = MZLocalizedString(
+        key: "TermsOfUse.Link.HereText.v147",
+        tableName: "TermsOfUse",
+        value: "here",
+        comment: "Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for treatment variants A and B."
     )
     public static let AcceptButton = MZLocalizedString(
         key: "TermsOfUse.AcceptButton.v142",
