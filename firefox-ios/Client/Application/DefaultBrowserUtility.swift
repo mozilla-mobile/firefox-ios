@@ -87,6 +87,7 @@ class DefaultBrowserUtility {
                 category: .setup
             )
             userDefault.set(newValue, forKey: UserDefaultsKey.isBrowserDefault)
+            telemetry.recordAppIsDefaultBrowser(newValue)
             if newValue { defaultBrowserSetDate = Date() }
         }
     }
@@ -158,8 +159,8 @@ class DefaultBrowserUtility {
         )
 
         trackNumberOfAPIQueries(forNewUsers: isFirstRun)
-        appleAPILastUseDate = Date()
         let isDefault = try application.isDefault(.webBrowser)
+        appleAPILastUseDate = Date()
 
         logger.log(
             "UIApplicationInterface.isDefault was successful",
@@ -205,7 +206,6 @@ class DefaultBrowserUtility {
 
     private func trackIfUserIsDefault(_ isDefault: Bool) {
         userDefault.set(isDefault, forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser)
-        telemetry.recordAppIsDefaultBrowser(isDefault)
     }
 
     private func trackIfNewUserIsComingFromBrowserChoiceScreen(_ isDefault: Bool) {

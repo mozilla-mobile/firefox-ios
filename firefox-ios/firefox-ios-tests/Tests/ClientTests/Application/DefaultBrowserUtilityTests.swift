@@ -46,8 +46,8 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
 
-        let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
-        let savedChoiceScreenMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? BooleanMetricType)
+        let savedChoiceScreenMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[0] as? BooleanMetricType)
+        let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? BooleanMetricType)
         XCTAssert(savedDefaultMetric === expectedBrowserEvent)
         XCTAssert(savedChoiceScreenMetric === expectedChoiceEvent)
 
