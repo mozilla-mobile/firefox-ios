@@ -153,8 +153,7 @@ final class ToolbarAnimator {
         let headerOffset = isShowing ? 0 : context.headerHeight
         UIView.animate(withDuration: UX.topToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut],
-                       animations: {
+                       options: [.curveEaseOut]) {
             if !isShowing {
                 view.header.transform = .identity.translatedBy(x: 0, y: headerOffset)
                 view.topBlurView.transform = .identity.translatedBy(x: 0, y: headerOffset)
@@ -162,9 +161,7 @@ final class ToolbarAnimator {
                 view.header.transform = .identity
                 view.topBlurView.transform = .identity
             }
-        }, completion: { [weak self] _ in
-            self?.updateTopToolbarConstraints(topContainerOffset: headerOffset)
-        })
+        }
         delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }
 
@@ -172,7 +169,6 @@ final class ToolbarAnimator {
         guard let view else { return }
 
         let isShowing = alpha == 1
-        let customOffset = context.bottomContainerHeight + context.overKeyboardContainerHeight
         let bottomOffset = isShowing ? 0 :  context.bottomContainerHeight
         let overkeyBoardOffset = isShowing ? 0 : context.overKeyboardContainerHeight
         UIView.animate(withDuration: UX.bottomToolbarDuration,
@@ -180,9 +176,9 @@ final class ToolbarAnimator {
                        options: [.curveEaseOut],
                        animations: {
             if !isShowing {
-                view.bottomContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
-                view.overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
-                view.bottomBlurView.transform = .identity.translatedBy(x: 0, y: customOffset)
+                view.bottomContainer.transform = .identity.translatedBy(x: 0, y: bottomOffset)
+                view.overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: overkeyBoardOffset)
+                view.bottomBlurView.transform = .identity.translatedBy(x: 0, y: bottomOffset)
             } else {
                 view.bottomContainer.transform = .identity
                 view.overKeyboardContainer.transform = .identity
