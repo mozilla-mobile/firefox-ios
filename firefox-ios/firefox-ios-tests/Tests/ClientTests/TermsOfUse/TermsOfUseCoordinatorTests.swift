@@ -131,10 +131,10 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
     ) {
         FxNimbus.shared.features.touFeature.with { _, _ in
             return TouFeature(
-                maxRemindersCount: Int(maxRemindersCount),
-                status: isEnabled,
+                bottomSheetStrings: bottomSheetStrings,
                 enableDragToDismiss: enableDragToDismiss,
-                bottomSheetStrings: bottomSheetStrings
+                maxRemindersCount: Int(maxRemindersCount),
+                status: isEnabled
             )
         }
     }
