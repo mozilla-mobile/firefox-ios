@@ -271,8 +271,7 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
         let localeProvider = MockLocaleProvider(
             current: Locale(identifier: "de-US"),
             preferredLanguages: ["de"],
-            localeRegionCode: "",
-            searchRegionCode: ""
+            regionCode: ""
         )
         let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(
             engine.urls.trending,
