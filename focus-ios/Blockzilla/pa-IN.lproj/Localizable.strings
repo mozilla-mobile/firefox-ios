@@ -325,10 +325,10 @@
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "ਤੁਹਾਡੇ ਵਲੋਂ ਐਡਰੈਸ ਪੱਟੀ ਵਿੱਚ ਲਿਖੀ ਲਿਖਤ %@ ਤੁਹਾਡੇ ਖੋਜ ਇੰਜਣ ਨੂੰ ਭੇਜੇਗਾ।";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla ਸਿਰਫ਼ ਉਹੀ ਇਕੱਠਾ ਕਰਦਾ ਹੈ, ਜੋ ਕਿ ਸਾਨੂੰ ਹਰੇਕ ਲਈ %@ ਨੂੰ ਸੁਧਾਰ ਕਰਨ ਲਈ ਚਾਹੀਦਾ ਹੈ।";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ ਸਮੇਂ ਸਮੇਂ ਉੱਤੇ ਅਧਿਐਨ ਇੰਸਟਾਲ ਕਰ ਤੇ ਚਲਾ ਸਕਦਾ ਹੈ।";
 
 /* Title for section in settings menu */
