@@ -14,12 +14,15 @@ protocol LocaleProvider {
 struct SystemLocaleProvider: LocaleProvider {
     private let logger: Logger
     private let injectedLocale: Locale
-    init(logger: Logger = DefaultLogger.shared,
-         injectedLocale: Locale = Locale.current
+
+    init(
+        logger: Logger = DefaultLogger.shared,
+        injectedLocale: Locale = Locale.current
     ) {
         self.logger = logger
         self.injectedLocale = injectedLocale
     }
+
     var current: Locale {
         return injectedLocale
     }
@@ -34,9 +37,6 @@ struct SystemLocaleProvider: LocaleProvider {
     /// the most appropriate API available for the current iOS version:
     /// - On iOS 16 and later, it uses `Locale.region?.identifier`.
     /// - On earlier versions, it falls back to `Locale.regionCode`.
-    ///
-    /// If neither API yields a value, the region subtag is extracted from the
-    /// locale identifier (e.g. `"en_US"` → `"US"`).
     ///
     /// If all attempts fail, this method logs a fatal error and returns `"und"`,
     /// the BCP-47 primary language subtag for *Undetermined* linguistic content.

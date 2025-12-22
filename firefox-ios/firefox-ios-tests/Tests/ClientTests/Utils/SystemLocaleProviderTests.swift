@@ -19,20 +19,41 @@ final class SystemLocaleProviderTests: XCTestCase {
     }
 
     func test_preferredLanguages_returnsSystemPreferredLanguages() {
-        let subject = createSubject()
+        let subject = createSubject(with: Locale(identifier: "en_US"))
         XCTAssertEqual(subject.preferredLanguages, Locale.preferredLanguages)
     }
 
-    func test_regionCode_withDefaultLocale_returnsProperRegionCode() {
-        let subject = createSubject()
+    func test_regionCode_withEnglishUSLocale_returnsProperRegionCode() {
+        let subject = createSubject(with: Locale(identifier: "en_US"))
         XCTAssertEqual(subject.regionCode, "US")
         XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
     }
 
-    func test_regionCode_withFrenchLocale_returnsProperRegionCode() {
+    func test_regionCode_withEnglishCanadaLocale_returnsProperRegionCode() {
+        let subject = createSubject(with: Locale(identifier: "en_CA"))
+
+        XCTAssertEqual(subject.regionCode, "CA")
+        XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
+    }
+
+    func test_regionCode_withFrenchCanadaLocale_returnsProperRegionCode() {
+        let subject = createSubject(with: Locale(identifier: "fr_CA"))
+
+        XCTAssertEqual(subject.regionCode, "CA")
+        XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
+    }
+
+    func test_regionCode_withFrenchFranceLocale_returnsProperRegionCode() {
         let subject = createSubject(with: Locale(identifier: "fr_FR"))
 
         XCTAssertEqual(subject.regionCode, "FR")
+        XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
+    }
+
+    func test_regionCode_withGermanGermanyLocale_returnsProperRegionCode() {
+        let subject = createSubject(with: Locale(identifier: "de_DE"))
+
+        XCTAssertEqual(subject.regionCode, "DE")
         XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
     }
 
@@ -48,7 +69,45 @@ final class SystemLocaleProviderTests: XCTestCase {
         XCTAssertEqual(logger.savedExtra, Optional(["Locale identifier": "abc123"]))
     }
 
-    private func createSubject(with locale: Locale = Locale(identifier: "en_US")) -> SystemLocaleProvider {
+    func test_regionCode_withMultipleLanguages_returnsUnd_andLogsFatal() {
+        let subject: SystemLocaleProvider
+        if #available (iOS 16, *) {
+            subject = createSubject(with: Locale(languageCode: .multiple))
+        } else {
+            subject = createSubject(with: Locale(identifier: "mul"))
+        }
+
+        let result = subject.regionCode
+        XCTAssertEqual(result, "und", "Expected 'und' for cases when there are more than one languages")
+
+        XCTAssertEqual(logger.savedCategory, .locale)
+        XCTAssertEqual(logger.savedLevel, .fatal)
+        XCTAssertEqual(logger.savedMessage, "Unable to retrieve region code from Locale, so return undetermined")
+        XCTAssertEqual(logger.savedExtra, Optional(["Locale identifier": "mul"]))
+    }
+
+    func test_regionCode_withUnavailable_returnsUnd_andLogsFatal() {
+        let subject: SystemLocaleProvider
+        if #available (iOS 16, *) {
+            subject = createSubject(with: Locale(languageCode: .unavailable))
+        } else {
+            subject = createSubject(with: Locale(identifier: "zxx"))
+        }
+
+        let result = subject.regionCode
+        XCTAssertEqual(
+            result,
+            "und",
+            "Expected 'und' for cases when the content is not in any particular languages, such as images, symbols, etc."
+        )
+
+        XCTAssertEqual(logger.savedCategory, .locale)
+        XCTAssertEqual(logger.savedLevel, .fatal)
+        XCTAssertEqual(logger.savedMessage, "Unable to retrieve region code from Locale, so return undetermined")
+        XCTAssertEqual(logger.savedExtra, Optional(["Locale identifier": "zxx"]))
+    }
+
+    private func createSubject(with locale: Locale) -> SystemLocaleProvider {
         return SystemLocaleProvider(
             logger: logger,
             injectedLocale: locale
