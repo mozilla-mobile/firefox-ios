@@ -5004,13 +5004,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-
-        if isToolbarTranslucencyRefactorEnabled {
-            // Only correct the order of views to not cut off the shadow
-            updateToolbarDisplay(shouldUpdateBlurViews: false)
-        } else {
-            updateToolbarDisplay()
-        }
+        updateToolbarDisplay()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
