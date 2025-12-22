@@ -160,8 +160,8 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
             Task { @MainActor in
                 self.pageZoom = zoomValue
             }
-            return
+        } else {
+            super.setValue(value, forKey: key)
         }
-        super.setValue(value, forKey: key)
     }
 }
