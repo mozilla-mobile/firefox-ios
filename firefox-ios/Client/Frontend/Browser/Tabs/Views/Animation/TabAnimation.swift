@@ -202,13 +202,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
               let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
         else { return }
 
-        cv.layoutIfNeeded()
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
 
         if let indexPath = dataSource.indexPath(for: item) {
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-            cv.layoutIfNeeded()
             if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
                 tabCell = cell
                 cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
