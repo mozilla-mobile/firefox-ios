@@ -36,8 +36,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
                 AccessibilityIdentifiers.Settings.BlockImages.title].waitAndTap()
         }
         screenState.tap(
-            table.cells[AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle],
-                        to: AppIconSettings)
+            table.cells[AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle], to: AppIconSettings)
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
