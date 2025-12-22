@@ -89,8 +89,8 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     var sendButtonActionTelemetryCalled = false
     var sendMultipleChoiceButtonActionTelemetryCalled = false
     var sendDismissOnboardingTelemetryCalled = false
-    var sendGoToSettingsTelemetryCalled = false
-    var sendDismissPressedTelemetryCalled = false
+    var sendGoToSettingsButtonTappedTelemetryCalled = false
+    var sendDismissButtonTappedTelemetryCalled = false
 
     var cardName: String?
     var action: OnboardingActions?
@@ -125,12 +125,12 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         self.cardName = cardName
     }
 
-    func sendGoToSettingsTelemetry() {
-        sendGoToSettingsTelemetryCalled = true
+    func sendGoToSettingsButtonTappedTelemetry() {
+        sendGoToSettingsButtonTappedTelemetryCalled = true
     }
 
-    func sendDismissPressedTelemetry() {
-        sendDismissPressedTelemetryCalled = true
+    func sendDismissButtonTappedTelemetry() {
+        sendDismissButtonTappedTelemetryCalled = true
     }
 }
 

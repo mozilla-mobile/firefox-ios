@@ -199,7 +199,7 @@ final class OnboardingService: FeatureFlaggable {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
         registerForNotification()
-        telemetryUtility?.sendGoToSettingsTelemetry()
+        telemetryUtility?.sendGoToSettingsButtonTappedTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
@@ -215,7 +215,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenIosFxSettings(from cardName: String) {
-        telemetryUtility?.sendGoToSettingsTelemetry()
+        telemetryUtility?.sendGoToSettingsButtonTappedTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
@@ -343,14 +343,14 @@ final class OnboardingService: FeatureFlaggable {
             viewModel: popupViewModel,
             windowUUID: windowUUID,
             buttonTappedFinishFlow: { [weak self] in
-                self?.telemetryUtility?.sendGoToSettingsTelemetry()
+                self?.telemetryUtility?.sendGoToSettingsButtonTappedTelemetry()
                 completion()
             }
         )
 
         let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
         bottomSheetVC.onDismiss = { [weak self] in
-            self?.telemetryUtility?.sendDismissPressedTelemetry()
+            self?.telemetryUtility?.sendDismissButtonTappedTelemetry()
         }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(

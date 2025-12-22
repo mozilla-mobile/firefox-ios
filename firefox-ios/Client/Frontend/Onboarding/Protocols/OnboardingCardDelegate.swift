@@ -110,7 +110,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             viewModel: popupViewModel,
             windowUUID: windowUUID,
             buttonTappedFinishFlow: { [weak self] in
-                self?.viewModel.telemetryUtility.sendGoToSettingsTelemetry()
+                self?.viewModel.telemetryUtility.sendGoToSettingsButtonTappedTelemetry()
                 self?.advance(
                     numberOfPages: 1,
                     from: name,
@@ -121,7 +121,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
 
         let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
         bottomSheetVC.onDismiss = { [weak self] in
-            self?.viewModel.telemetryUtility.sendDismissPressedTelemetry()
+            self?.viewModel.telemetryUtility.sendDismissButtonTappedTelemetry()
         }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(

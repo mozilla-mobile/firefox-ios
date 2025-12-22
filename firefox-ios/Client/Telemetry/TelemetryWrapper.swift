@@ -1126,9 +1126,15 @@ extension TelemetryWrapper {
         case (.information, .view, .homeTabBannerEvergreen, _, _):
             GleanMetrics.DefaultBrowserCard.evergreenImpression.record()
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
-            GleanMetrics.Onboarding.dismissPressed.add()
+            let extras = GleanMetrics.OnboardingDefaultBrowserSheet.DismissButtonTappedExtra(
+                onboardingVariant: "legacy"
+            )
+            GleanMetrics.OnboardingDefaultBrowserSheet.dismissButtonTapped.record(extras)
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
-            GleanMetrics.Onboarding.goToSettingsPressed.add()
+            let extras = GleanMetrics.OnboardingDefaultBrowserSheet.GoToSettingsButtonTappedExtra(
+                onboardingVariant: "legacy"
+            )
+            GleanMetrics.OnboardingDefaultBrowserSheet.goToSettingsButtonTapped.record(extras)
         // MARK: Downloads
         case(.action, .tap, .downloadNowButton, _, _):
             GleanMetrics.Downloads.downloadNowButtonTapped.record()
