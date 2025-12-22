@@ -5,10 +5,10 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 final class SecurityManagerTests: XCTestCase {
     // MARK: - Internal Navigation
 
-    @MainActor
     func testCanNavigateGivenInternalNotAUrlThenRefused() {
         let url = URL(string: "blabla")!
         let context = BrowsingContext(type: .internalNavigation,
@@ -20,7 +20,6 @@ final class SecurityManagerTests: XCTestCase {
         XCTAssertEqual(result, .refused)
     }
 
-    @MainActor
     func testCanNavigateGivenInternalNoSchemeThenRefused() {
         let url = URL(string: "banana.com")!
         let context = BrowsingContext(type: .internalNavigation,
@@ -32,7 +31,6 @@ final class SecurityManagerTests: XCTestCase {
         XCTAssertEqual(result, .refused)
     }
 
-    @MainActor
     func testCanNavigateGivenInternalAboutHTTPSThenAllowed() {
         let url = URL(string: "https://mozilla.com")!
         let context = BrowsingContext(type: .internalNavigation,
@@ -44,7 +42,6 @@ final class SecurityManagerTests: XCTestCase {
         XCTAssertEqual(result, .allowed)
     }
 
-    @MainActor
     func testCanNavigateGivenInternalAboutUrlThenAllowed() {
         let url = URL(string: "about://home.com")!
         let context = BrowsingContext(type: .internalNavigation,
@@ -56,7 +53,6 @@ final class SecurityManagerTests: XCTestCase {
         XCTAssertEqual(result, .allowed)
     }
 
-    @MainActor
     func testCanNavigateGivenInternalAboutSchemeOnlyUrlThenRefused() {
         let url = URL(string: "about:")!
         let context = BrowsingContext(type: .internalNavigation,
@@ -69,7 +65,6 @@ final class SecurityManagerTests: XCTestCase {
     }
 
     // MARK: - External Navigation
-    @MainActor
     func testCanNavigateGivenExternalNotAUrlThenRefused() {
         let url = URL(string: "blabla")!
         let context = BrowsingContext(type: .externalNavigation,
@@ -81,7 +76,6 @@ final class SecurityManagerTests: XCTestCase {
         XCTAssertEqual(result, .refused)
     }
 
-    @MainActor
     func testCanNavigateGivenExternalHTTPSURLThenAllowed() {
         let url = URL(string: "https://mozilla.com")!
         let context = BrowsingContext(type: .externalNavigation,
@@ -93,7 +87,6 @@ final class SecurityManagerTests: XCTestCase {
         XCTAssertEqual(result, .allowed)
     }
 
-    @MainActor
     func testCanNavigateGivenExternalHTTPURLThenAllowed() {
         let url = URL(string: "http://mozilla.com")!
         let context = BrowsingContext(type: .externalNavigation,
@@ -105,7 +98,6 @@ final class SecurityManagerTests: XCTestCase {
         XCTAssertEqual(result, .allowed)
     }
 
-    @MainActor
     func testCanNavigateGivenExternalDataURLThenAllowed() {
         let url = URL(string: "data://someDataBlob.com")!
         let context = BrowsingContext(type: .externalNavigation,
@@ -117,7 +109,6 @@ final class SecurityManagerTests: XCTestCase {
         XCTAssertEqual(result, .allowed)
     }
 
-    @MainActor
     func testCanNavigateGivenExternalJavascriptURLThenRefused() {
         let url = URL(string: "javascript://badurl.com")!
         let context = BrowsingContext(type: .externalNavigation,
@@ -130,7 +121,6 @@ final class SecurityManagerTests: XCTestCase {
     }
 
     // MARK: Helper
-    @MainActor
     func createSubject() -> DefaultSecurityManager {
         let subject = DefaultSecurityManager()
         trackForMemoryLeaks(subject)
