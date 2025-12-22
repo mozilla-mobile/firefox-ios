@@ -172,8 +172,7 @@ final class ToolbarAnimator {
         let overkeyboardOffset = isShowing ? 0 : context.overKeyboardContainerHeight
         UIView.animate(withDuration: UX.bottomToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut],
-                       animations: {
+                       options: [.curveEaseOut]) { [weak self] in
             if !isShowing {
                 view.bottomContainer.transform = .identity.translatedBy(x: 0, y: bottomOffset)
                 view.overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: overkeyboardOffset)
@@ -183,10 +182,9 @@ final class ToolbarAnimator {
                 view.overKeyboardContainer.transform = .identity
                 view.bottomBlurView.transform = .identity
             }
-        }, completion: { [weak self] _ in
             self?.updateBottomToolbarConstraints(bottomContainerOffset: bottomOffset,
                                                  overKeyboardContainerOffset: overkeyboardOffset)
-        })
+        }
 
         self.delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }
