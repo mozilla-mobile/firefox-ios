@@ -121,7 +121,7 @@ let allSettingsScreens = [
     SiriSettings,
     AutofillPasswordSettings,
     AppIconSettings,
-    ToolbarSettings, // ?? back to browser tab?
+    ToolbarSettings
 ]
 
 let allHomePanels = [
