@@ -282,13 +282,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
-    func testDummy() {
-        allSettingsScreens.forEach{ screen in
-            navigator.goto(screen)
-            sleep(5)
-        }
-    }
-
     @MainActor
     func testPrivateBrowsingTabsEmptyState() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
