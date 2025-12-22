@@ -14,13 +14,20 @@ features:
           This feature is for managing the roll out of the no interet connection native error page feature
         type: Boolean
         default: false
+      other-error-pages:
+        description: >
+          This feature is for managing the roll out of other native error pages
+        type: Boolean
+        default: false
 
     defaults:
       - channel: beta
         value:
           enabled: false
           no_internet_connection_error: false
+          other-error-pages: false
       - channel: developer
         value:
           enabled: true
           no_internet_connection_error: true
+          other-error-pages: false
