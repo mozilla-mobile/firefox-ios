@@ -5,16 +5,16 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 @available(iOS 16.0, *)
 final class WKUserScriptManagerTests: XCTestCase, @unchecked Sendable {
     func testInitThenAddsUserScripts() async {
         let subject = await createSubject()
 
-        let userScripts = await subject.compiledUserScripts
+        let userScripts = subject.compiledUserScripts
         XCTAssertEqual(userScripts.count, 8)
     }
 
-    @MainActor
     func testInjectUserScriptThenScriptsAreAddedInWebView() async {
         let webView = MockWKEngineWebView(frame: .zero,
                                           configurationProvider: MockWKEngineConfigurationProvider(),
@@ -29,7 +29,6 @@ final class WKUserScriptManagerTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(config.addUserScriptCalled, 9)
     }
 
-    @MainActor
     func createSubject() async -> DefaultUserScriptManager {
         let subject = DefaultUserScriptManager(scriptProvider: MockUserScriptProvider())
         trackForMemoryLeaks(subject)
