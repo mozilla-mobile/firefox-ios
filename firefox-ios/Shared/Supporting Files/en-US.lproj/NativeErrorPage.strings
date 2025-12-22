@@ -4,14 +4,14 @@
 /* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
 "NativeErrorPage.BadCertDomain.AdvancedButton.v135" = "Advanced";
 
-/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %@ is the site URL. */
-"NativeErrorPage.BadCertDomain.AdvancedInfo.v135" = "Firefox doesn't trust this site because the certificate provided isn't valid for %@.";
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v135" = "%1$@ doesn’t trust this site because the certificate provided isn’t valid for %2$@.";
 
 /* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
 "NativeErrorPage.BadCertDomain.AdvancedWarning1.v135" = "You might need to sign in through your network, or check your settings.";
 
 /* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
-"NativeErrorPage.BadCertDomain.AdvancedWarning2.v135" = "If you're on a corporate network, your support team might have more info.";
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v135" = "If you’re on a corporate network, your support team might have more info.";
 
 /* On certificate error page, this is the description explaining the security risk. */
 "NativeErrorPage.BadCertDomain.Description.v135" = "Someone pretending to be the site could try to steal your personal info. Your connection settings could also be set up incorrectly.";
@@ -26,10 +26,10 @@
 "NativeErrorPage.BadCertDomain.ProceedButton.v135" = "Proceed to %@ (Risky)";
 
 /* On certificate error page, this is the title warning the user about a potential security issue. */
-"NativeErrorPage.BadCertDomain.TitleLabel.v135" = "Be careful. Something doesn't look right.";
+"NativeErrorPage.BadCertDomain.TitleLabel.v135" = "Be careful. Something doesn’t look right.";
 
-/* On certificate error page, this is a link that will show the site's certificate details. */
-"NativeErrorPage.BadCertDomain.ViewCertificateLink.v135" = "View the site's certificate";
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v135" = "View the site’s certificate";
 
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.";
