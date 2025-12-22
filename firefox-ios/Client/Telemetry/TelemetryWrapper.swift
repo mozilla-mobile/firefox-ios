@@ -529,8 +529,6 @@ extension TelemetryWrapper {
         case onboarding = "onboarding"
         case upgradeOnboarding = "upgrade-onboarding"
         // MARK: New Upgrade screen
-        case dismissDefaultBrowserCard = "default-browser-card"
-        case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
         case goToSettingsDefaultBrowserOnboarding = "default-browser-onboarding-go-to-settings"
         case homeTabBannerEvergreen = "home-tab-banner-evergreen"
@@ -1119,10 +1117,6 @@ extension TelemetryWrapper {
                     extras: extras)
             }
         // MARK: Default Browser
-        case (.action, .tap, .dismissDefaultBrowserCard, _, _):
-            GleanMetrics.DefaultBrowserCard.dismissPressed.add()
-        case (.action, .tap, .goToSettingsDefaultBrowserCard, _, _):
-            GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
         case(.action, .tap, .engagementNotification, _, _):
