@@ -211,10 +211,10 @@ class PersistedFirefoxAccount {
         return try URL(string: inner.getManageDevicesUrl(entrypoint: entrypoint))!
     }
 
-    func getAccessToken(scope: String, ttl: UInt64? = nil) throws -> AccessTokenInfo {
+    func getAccessToken(scope: String, useCache: Bool? = true) throws -> AccessTokenInfo {
         defer { tryPersistState() }
         return try notifyAuthErrors {
-            try self.inner.getAccessToken(scope: scope, ttl: ttl == nil ? nil : Int64(clamping: ttl!))
+            try self.inner.getAccessToken(scope: scope, useCache: useCache)
         }
     }
 
