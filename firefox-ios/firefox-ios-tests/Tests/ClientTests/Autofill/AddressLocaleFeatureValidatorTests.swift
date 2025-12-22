@@ -58,6 +58,7 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
 
     func testInvalidRegionWithoutRegionCode() {
         let locale =  MockLocaleProvider(regionCode: "")
+
         XCTAssertFalse(
             AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode),
             "Invalid region for locale without region code"
