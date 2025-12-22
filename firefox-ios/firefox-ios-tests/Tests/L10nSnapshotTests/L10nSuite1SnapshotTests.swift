@@ -263,7 +263,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         allSettingsScreens.forEach { nodeName in
             self.navigator.goto(nodeName)
-            print("========== "+nodeName+" ==========")
             if nodeName == "DisplaySettings" {
                 scrollview.forEachScreen { i in
                     snapshot("Settings-\(nodeName)-\(i)")
