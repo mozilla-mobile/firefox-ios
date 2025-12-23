@@ -422,3 +422,50 @@ onboarding:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
 
+# Default Browser Sheet
+onboarding.default_browser_sheet:
+  go_to_settings_button_tapped:
+    type: event
+    description: |
+      Records when the Go To Settings button on default browser onboarding
+      is clicked. This applies to both legacy and modern onboarding flows.
+    extra_keys:
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern, legacy, or japan).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+      - https://github.com/mozilla-mobile/firefox-ios/issues/31366
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/31375
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
+  dismiss_button_tapped:
+    type: event
+    description: |
+      Records when default browser onboarding is dismissed.
+      This applies to both legacy and modern onboarding flows.
+    extra_keys:
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern, legacy, or japan).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+      - https://github.com/mozilla-mobile/firefox-ios/issues/31366
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/31375
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-06-01"
+

@@ -529,8 +529,6 @@ extension TelemetryWrapper {
         case onboarding = "onboarding"
         case upgradeOnboarding = "upgrade-onboarding"
         // MARK: New Upgrade screen
-        case dismissDefaultBrowserCard = "default-browser-card"
-        case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
         case goToSettingsDefaultBrowserOnboarding = "default-browser-onboarding-go-to-settings"
         case homeTabBannerEvergreen = "home-tab-banner-evergreen"
@@ -1119,22 +1117,24 @@ extension TelemetryWrapper {
                     extras: extras)
             }
         // MARK: Default Browser
-        case (.action, .tap, .dismissDefaultBrowserCard, _, _):
-            GleanMetrics.DefaultBrowserCard.dismissPressed.add()
-        case (.action, .tap, .goToSettingsDefaultBrowserCard, _, _):
-            GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
         case(.action, .tap, .engagementNotification, _, _):
             GleanMetrics.Onboarding.engagementNotificationTapped.record()
         case(.action, .cancel, .engagementNotification, _, _):
             GleanMetrics.Onboarding.engagementNotificationCancel.record()
-        case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
-            GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
-        case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
-            GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
         case (.information, .view, .homeTabBannerEvergreen, _, _):
             GleanMetrics.DefaultBrowserCard.evergreenImpression.record()
+        case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
+            let extras = GleanMetrics.OnboardingDefaultBrowserSheet.DismissButtonTappedExtra(
+                onboardingVariant: "legacy"
+            )
+            GleanMetrics.OnboardingDefaultBrowserSheet.dismissButtonTapped.record(extras)
+        case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
+            let extras = GleanMetrics.OnboardingDefaultBrowserSheet.GoToSettingsButtonTappedExtra(
+                onboardingVariant: "legacy"
+            )
+            GleanMetrics.OnboardingDefaultBrowserSheet.goToSettingsButtonTapped.record(extras)
         // MARK: Downloads
         case(.action, .tap, .downloadNowButton, _, _):
             GleanMetrics.Downloads.downloadNowButtonTapped.record()

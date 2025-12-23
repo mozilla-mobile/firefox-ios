@@ -332,35 +332,6 @@ context_menu:
 
 # Default browser card metrics
 default_browser_card:
-  dismiss_pressed:
-    type: counter
-    description: |
-      Counts the number of times default browser card is dismissed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
-  go_to_settings_pressed:
-    type: counter
-    description: |
-      Counts the number of times the Go To Settings button on
-      default browser card is clicked.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
   evergreen_impression:
     type: event
     description: |
@@ -369,38 +340,6 @@ default_browser_card:
       - https://github.com/mozilla-mobile/firefox-ios/issues/9696
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10600
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
-
-# Default browser onboarding metrics
-default_browser_onboarding:
-  dismiss_pressed:
-    type: counter
-    description: |
-      Counts the number of times default browser onboarding is dismissed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
-  go_to_settings_pressed:
-    type: counter
-    description: |
-      Counts the number of times the Go To Settings button on
-      default browser onboarding is clicked.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com

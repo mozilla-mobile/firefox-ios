@@ -106,6 +106,20 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.closeTap, extras: extras)
     }
 
+    func sendGoToSettingsButtonTappedTelemetry() {
+        let extras = GleanMetrics.OnboardingDefaultBrowserSheet.GoToSettingsButtonTappedExtra(
+            onboardingVariant: onboardingVariant.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.OnboardingDefaultBrowserSheet.goToSettingsButtonTapped, extras: extras)
+    }
+
+    func sendDismissButtonTappedTelemetry() {
+        let extras = GleanMetrics.OnboardingDefaultBrowserSheet.DismissButtonTappedExtra(
+            onboardingVariant: onboardingVariant.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.OnboardingDefaultBrowserSheet.dismissButtonTapped, extras: extras)
+    }
+
     private struct BaseExtras {
         let cardType: String
         let flowType: String
