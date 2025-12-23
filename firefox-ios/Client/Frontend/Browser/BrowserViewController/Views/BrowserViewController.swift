@@ -772,11 +772,10 @@ class BrowserViewController: UIViewController,
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
-
-            if !isToolbarTranslucencyRefactorEnabled {
-                $0.setNeedsLayout()
-                $0.layoutIfNeeded()
-            }
+            // TODO: FXIOS-14536 Can we figure out a way not to do these calls? Sometimes they are needed
+            // for specific layout calls.
+            $0.setNeedsLayout()
+            $0.layoutIfNeeded()
         }
     }
 
