@@ -253,7 +253,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testSettings() {
         let table = app.tables.element(boundBy: 0)
         let scrollview = app.scrollViews.element(boundBy: 0)
-        let collectionview = app.collectionViews.firstMatch
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -267,11 +266,10 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
                 scrollview.forEachScreen { i in
                     snapshot("Settings-\(nodeName)-\(i)")
                 }
-            } else if nodeName == "AppIconSettings" {
-                collectionview.forEachScreen { i in
-                    snapshot("Settings-\(nodeName)-\(i)")
-                }
             } else if nodeName == "ToolbarSettings" {
+                snapshot("Settings-\(nodeName)")
+            } else if nodeName == "AppIconSettings" {
+                // forEachScreen may not work with collectionView
                 snapshot("Settings-\(nodeName)")
             } else {
                 table.forEachScreen { i in
