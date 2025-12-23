@@ -19,8 +19,8 @@ final class WebKitTestHelpers {
         init(expect: XCTestExpectation) { self.expect = expect }
 
         private func webView(_ webView: WKWebView,
-                     decidePolicyFor navigationAction: WKNavigationAction,
-                     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+                             decidePolicyFor navigationAction: WKNavigationAction,
+                             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             let frame = navigationAction.sourceFrame
             capturedFrame = frame
             capturedOrigin = frame.securityOrigin
