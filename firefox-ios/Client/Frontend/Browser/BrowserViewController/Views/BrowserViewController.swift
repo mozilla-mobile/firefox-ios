@@ -40,7 +40,8 @@ class BrowserViewController: UIViewController,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
-                             BrowserStatusBarScrollDelegate {
+                             BrowserStatusBarScrollDelegate,
+                             LegacyTabScrollController.Delegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
@@ -206,7 +207,7 @@ class BrowserViewController: UIViewController,
         if isTabScrollRefactoringEnabled {
             return TabScrollHandler(windowUUID: windowUUID, delegate: self)
         } else {
-            return LegacyTabScrollController(windowUUID: windowUUID)
+            return LegacyTabScrollController(windowUUID: windowUUID, delegate: self)
         }
     }()
 
@@ -712,6 +713,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    // MARK: - Translucency and blur helpers
+
     func updateBlurViews(scrollOffset: CGFloat? = nil) {
         guard toolbarHelper.shouldBlur() else {
             topBlurView.alpha = 0
@@ -798,6 +801,24 @@ class BrowserViewController: UIViewController,
             maskView.backgroundColor = .black
             contentContainer.mask = maskView
         }
+    }
+
+    func toolbarDisplayStateDidChange() {
+        updateToolbarTranslucency()
+    }
+
+    /// Updates the toolbar's translucency effects.
+    ///
+    /// This method applies blur effects to the top and bottom toolbars and updates the content
+    /// container's mask view to ensure proper visual effects during toolbar animations and state
+    /// transitions. Only executes when the toolbar translucency refactor feature flag is enabled.
+    func updateToolbarTranslucency() {
+        // If Toolbar translucency flag is disabled TabScroll refactor seems broken,
+        // please enabled both flags to get the right behaviour
+        guard isToolbarTranslucencyRefactorEnabled else { return }
+
+        updateBlurViews()
+        addOrUpdateMaskViewIfNeeded()
     }
 
     fileprivate func appMenuBadgeUpdate() {
