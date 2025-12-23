@@ -46,7 +46,7 @@ search:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     send_in_pings:
       - metrics
       - baseline
@@ -70,7 +70,7 @@ search:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     send_in_pings:
       - metrics
       - baseline
@@ -90,7 +90,7 @@ search:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   in_content:
     type: labeled_counter
     description: |
@@ -106,7 +106,7 @@ search:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     send_in_pings:
       - metrics
       - baseline
@@ -126,7 +126,7 @@ search:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
 
 # Trending Searches
 search.trending_searches:
@@ -147,7 +147,7 @@ search.trending_searches:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30661
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
     metadata:
       tags:
         - TrendingSearches
@@ -169,7 +169,7 @@ search.trending_searches:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30661
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
     metadata:
       tags:
         - TrendingSearches
@@ -193,7 +193,7 @@ search.recent_searches:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30661
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
     metadata:
       tags:
         - RecentSearches
@@ -215,7 +215,7 @@ search.recent_searches:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30661
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
     metadata:
       tags:
         - RecentSearches
@@ -232,7 +232,7 @@ search.recent_searches:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30761
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
     metadata:
       tags:
         - RecentSearches

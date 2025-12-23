@@ -35,7 +35,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   form_detected:
     type: event
     description: |
@@ -47,7 +47,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15251
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofilled:
     type: event
     description: |
@@ -60,7 +60,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15251
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_failed:
     type: event
     description: |
@@ -73,7 +73,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15251
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   save_prompt_create:
     type: event
     description: |
@@ -85,7 +85,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15251
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_toggle:
     type: event
     description: |
@@ -104,7 +104,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15251
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   sync_toggle:
     type: event
     description: |
@@ -123,7 +123,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15251
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_enabled:
     type: boolean
     description: |
@@ -136,7 +136,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15251
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   sync_enabled:
     type: boolean
     description: |
@@ -149,7 +149,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15251
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_prompt_shown:
     type: event
     description: |
@@ -160,7 +160,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_prompt_expanded:
     type: event
     description: |
@@ -171,7 +171,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_prompt_dismissed:
     type: event
     description: |
@@ -182,7 +182,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   save_prompt_shown:
     type: event
     description: |
@@ -193,7 +193,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   save_prompt_update:
     type: event
     description: |
@@ -204,7 +204,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   management_add_tapped:
     type: event
     description: |
@@ -215,7 +215,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   management_card_tapped:
     type: event
     description: |
@@ -226,7 +226,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   saved:
     type: counter
     description: |
@@ -237,7 +237,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   saved_all:
     type: quantity
     description: |
@@ -248,7 +248,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     unit: quantity of credit_card.saved_all
   deleted:
     type: counter
@@ -260,7 +260,7 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   modified:
     type: counter
     description: |
@@ -271,4 +271,4 @@ credit_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17331
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never

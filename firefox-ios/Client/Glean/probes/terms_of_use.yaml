@@ -49,7 +49,7 @@ terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   accepted:
     type: event
@@ -65,7 +65,7 @@ terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   remind_me_later_button_tapped:
     type: event
@@ -80,7 +80,7 @@ terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   learn_more_button_tapped:
     type: event
@@ -95,7 +95,7 @@ terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   privacy_notice_tapped:
     type: event
@@ -110,7 +110,7 @@ terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   terms_of_use_link_tapped:
     type: event
@@ -125,7 +125,7 @@ terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   dismissed:
     type: event
@@ -140,7 +140,7 @@ terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
 
 # User-scoped Terms of Use metrics
 user.terms_of_use:
@@ -162,7 +162,7 @@ user.terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   date_accepted:
     type: datetime
@@ -181,7 +181,7 @@ user.terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   shown_count:
     type: counter
@@ -197,7 +197,7 @@ user.terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   remind_me_later_count:
     type: counter
@@ -213,7 +213,7 @@ user.terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     
   dismissed_count:
     type: counter
@@ -229,4 +229,4 @@ user.terms_of_use:
       - https://github.com/mozilla-mobile/firefox-ios/pull/29019
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
