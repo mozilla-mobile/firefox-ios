@@ -33,7 +33,7 @@ homepage.shortcuts_library:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28953
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   shortcut_tapped:
     type: event
     description: |
@@ -44,7 +44,7 @@ homepage.shortcuts_library:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28953
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   viewed:
     type: event
     description: |
@@ -55,4 +55,4 @@ homepage.shortcuts_library:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28953
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never

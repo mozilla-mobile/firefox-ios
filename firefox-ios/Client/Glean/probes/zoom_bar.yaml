@@ -38,7 +38,7 @@ zoom_bar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26555
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - ZoomBar
@@ -58,7 +58,7 @@ zoom_bar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26555
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - ZoomBar
@@ -74,7 +74,7 @@ zoom_bar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26555
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - ZoomBar
@@ -88,7 +88,7 @@ zoom_bar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26555
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - ZoomBar

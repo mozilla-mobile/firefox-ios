@@ -33,7 +33,7 @@ share.open_in_firefox_extension:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30796
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - Share
@@ -48,7 +48,7 @@ share.open_in_firefox_extension:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30796
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - Share
@@ -79,7 +79,7 @@ share.open_in_firefox_extension.list:
     - https://github.com/mozilla-mobile/firefox-ios/pull/31177
     notification_emails:
     - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
     metadata:
       tags:
       - OpenInFirefoxActionExtension
