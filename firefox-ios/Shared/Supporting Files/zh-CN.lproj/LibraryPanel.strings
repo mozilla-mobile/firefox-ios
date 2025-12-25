@@ -8,7 +8,7 @@
 "LibraryPanel.Sections.LastHour.v134" = "一小时内";
 
 /* Section title that, when expanded, shows all web browsing history entries for the last 7 days beneath it (not including entries from the less inclusve sections) */
-"LibraryPanel.Sections.LastSevenDays.v138" = "最近7天";
+"LibraryPanel.Sections.LastSevenDays.v138" = "过去 7 天";
 
 /* Section title that, when expanded, shows all web browsing history entries for the last 24 hours beneath it (not including entries from the less inclusive sections) */
 "LibraryPanel.Sections.LastTwentyFourHours.v138" = "过去 24 小时";

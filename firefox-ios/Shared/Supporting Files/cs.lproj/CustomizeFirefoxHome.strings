@@ -2,13 +2,13 @@
 "Settings.Home.Option.Bookmarks.v128" = "Záložky";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Stories recommendations section on the Firefox homepage on or off */
-"Settings.Home.Option.Stories.v140" = "Články";
+"Settings.Home.Option.Stories.v140" = "Příběhy";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off. %@ is Pocket. */
 "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116" = "Články ze služby %@";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
-"Settings.Home.Option.ThoughtProvokingStories.v116" = "Podnětné články";
+"Settings.Home.Option.ThoughtProvokingStories.v116" = "Podnětné příběhy";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Top Stories recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.TopStories.v143" = "Nejlepší příběhy";

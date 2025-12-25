@@ -5,13 +5,13 @@
 "TermsOfUse.BackButton.v142" = "Natrag";
 
 /* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
-"TermsOfUse.Description.v142" = "Uveli smo %@ Uvjete korištenja i aktualizirali našu Napomenu o privatnosti.";
+"TermsOfUse.Description.v142" = "Uveli smo %@ uvjete korištenja i aktualizirali naše napomene o privatnosti.";
 
 /* Link shown in the Terms of Use sheet to direct users to more details about the update. */
 "TermsOfUse.Link.LearnMore.v142" = "Saznaj više";
 
 /* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
-"TermsOfUse.Link.PrivacyNotice.v142" = "Napomena o privatnosti";
+"TermsOfUse.Link.PrivacyNotice.v142" = "Napomene o privatnosti";
 
 /* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
 "TermsOfUse.Link.TermsOfUse.v142" = "%@ uvjeti korištenja";
