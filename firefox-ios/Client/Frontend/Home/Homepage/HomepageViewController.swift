@@ -474,6 +474,17 @@ final class HomepageViewController: UIViewController,
         }
     }
 
+    private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
+        cell.configure(theme: currentTheme,
+                       closeButtonAction: { [weak self] in
+                           self?.dispatchPrivacyNoticeCloseButtonTapped()
+                       },
+                       linkAction: { [weak self] url in
+                           self?.dispatchPrivacyNoticeLinkTapped(url: url)
+                       }
+        )
+    }
+
     private func configureCell(
         for item: HomepageDiffableDataSource.HomeItem,
         at indexPath: IndexPath
@@ -487,9 +498,8 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            privacyNoticeCell.configure(theme: currentTheme) { [weak self] in
-                self?.dispatchPrivacyNoticeCloseButtonTapped()
-            }
+            configurePrivacyNoticeCell(cell: privacyNoticeCell)
+
             return privacyNoticeCell
         case .messageCard(let config):
             guard let messageCardCell = collectionView?.dequeueReusableCell(
@@ -917,6 +927,16 @@ final class HomepageViewController: UIViewController,
             HomepageAction(
                 windowUUID: self.windowUUID,
                 actionType: HomepageActionType.privacyNoticeCloseButtonTapped
+            )
+        )
+    }
+
+    private func dispatchPrivacyNoticeLinkTapped(url: URL) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.privacyNoticeLink(url)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnPrivacyNoticeLink
             )
         )
     }

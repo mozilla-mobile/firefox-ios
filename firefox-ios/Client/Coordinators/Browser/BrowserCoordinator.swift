@@ -1118,6 +1118,17 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(webviewViewController)
     }
 
+    func showPrivacyNoticeLink(url: URL) {
+        let linkVC = TermsOfUseLinkViewController(
+            url: url,
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+        linkVC.modalPresentationStyle = .pageSheet
+        linkVC.modalTransitionStyle = .coverVertical
+        router.present(linkVC, animated: true)
+    }
+
     func popToBVC() {
         _ = router.popToViewController(browserViewController, reason: .deeplink)
     }
