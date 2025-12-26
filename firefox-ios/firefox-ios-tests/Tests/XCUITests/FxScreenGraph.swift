@@ -86,6 +86,7 @@ let SummarizeSettings = "SummarizeSettings"
 let AutofillPasswordSettings = "AutofillsPasswordsSettings"
 let Shortcuts = "Shortcuts"
 let AutoplaySettings = "AutoplaySettings"
+let AppIconSettings = "AppIconSettings"
 
 let HistoryPanelContextMenu = "HistoryPanelContextMenu"
 let TopSitesPanelContextMenu = "TopSitesPanelContextMenu"
@@ -114,7 +115,13 @@ let allSettingsScreens = [
     DisplaySettings,
     ClearPrivateDataSettings,
     TrackingProtectionSettings,
-    NotificationsSettings
+    NotificationsSettings,
+    BrowsingSettings,
+    SummarizeSettings,
+    SiriSettings,
+    AutofillPasswordSettings,
+    AppIconSettings,
+    ToolbarSettings
 ]
 
 let allHomePanels = [
