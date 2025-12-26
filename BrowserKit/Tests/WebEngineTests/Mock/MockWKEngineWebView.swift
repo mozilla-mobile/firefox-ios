@@ -8,6 +8,7 @@ import WebKit
 
 /// Necessary since some methods of `WKWebView` cannot be overriden. An abstraction need to be used to be able
 /// to mock all methods.
+@MainActor
 @available(iOS 16.0, *)
 class MockWKEngineWebView: UIView, WKEngineWebView {
     weak var delegate: WKEngineWebViewDelegate?
@@ -145,17 +146,22 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     }
 
     override func value(forKey key: String) -> Any? {
-        if key == "viewScale" {
-            return self.pageZoom
+        Task { @MainActor in
+            if key == "viewScale" {
+                return self.pageZoom
+            } else {
+                return super.value(forKey: key) as? CGFloat ?? 1.0
+            }
         }
-        return super.value(forKey: key)
     }
 
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "viewScale", let zoomValue = value as? CGFloat {
-            self.pageZoom = zoomValue
-            return
+            Task { @MainActor in
+                self.pageZoom = zoomValue
+            }
+        } else {
+            super.setValue(value, forKey: key)
         }
-        super.setValue(value, forKey: key)
     }
 }

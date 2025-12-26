@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 final class SecurityManagerTests: XCTestCase {
     // MARK: - Internal Navigation
 
@@ -64,7 +65,6 @@ final class SecurityManagerTests: XCTestCase {
     }
 
     // MARK: - External Navigation
-
     func testCanNavigateGivenExternalNotAUrlThenRefused() {
         let url = URL(string: "blabla")!
         let context = BrowsingContext(type: .externalNavigation,
@@ -121,7 +121,6 @@ final class SecurityManagerTests: XCTestCase {
     }
 
     // MARK: Helper
-
     func createSubject() -> DefaultSecurityManager {
         let subject = DefaultSecurityManager()
         trackForMemoryLeaks(subject)
