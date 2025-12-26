@@ -7,6 +7,9 @@
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "目前无法使用马甲邮箱，请过几分钟再试。";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "已填入马甲邮箱";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "隐藏您的真实邮箱地址，保护收件箱免受垃圾邮件侵扰。部分网站可能不支持此功能。";
 

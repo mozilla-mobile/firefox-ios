@@ -170,7 +170,16 @@
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Uključi obavijesti";
 
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Settings.PrivacyNotice.Title.v137" = "Napomena o privatnosti";
+"Settings.PrivacyNotice.Title.v137" = "Napomene o privatnosti";
+
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Saznaj više";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ će poboljšati funkcije, performanse i stabilnost između aktualiziranja. Promjene se primjenjuju daljinski.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Dopusti daljinska poboljšanja";
 
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Pomicanjem sakrij karticu i adresnu traku";
@@ -235,11 +244,20 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Saznaj više";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Saznaj više";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Isprobaj funkcije i ideje prije nego što se objave.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ nasumično bira korisnike za testiranje funkcija, što poboljšava kvalitetu za sve.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Instaliraj i pokreni istraživanja";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Dopusti istraživanja funkcija";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Omogućuje pristup sažetcima stranica.";
