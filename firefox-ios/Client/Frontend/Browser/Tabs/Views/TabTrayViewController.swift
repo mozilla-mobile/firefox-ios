@@ -381,10 +381,11 @@ final class TabTrayViewController: UIViewController,
 
     func newState(state: TabTrayState) {
         guard state != tabTrayState else { return }
-
+        if state.normalTabsCount != tabTrayState.normalTabsCount {
+            updateTabCountImage(count: state.normalTabsCount)
+        }
         tabTrayState = state
 
-        updateTabCountImage(count: tabTrayState.normalTabsCount)
         segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
