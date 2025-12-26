@@ -2835,6 +2835,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showStoriesFeed()
         case .storiesWebView:
             navigationHandler?.showStoriesWebView(url: type.url)
+        case .privacyNoticeLink(let url):
+            navigationHandler?.showPrivacyNoticeLink(url: url)
         }
     }
 

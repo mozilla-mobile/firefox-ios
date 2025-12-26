@@ -19,6 +19,7 @@ enum BrowserNavigationDestination: Equatable {
     case shortcutsLibrary
     case storiesFeed
     case storiesWebView
+    case privacyNoticeLink(URL)
     case summarizer(config: SummarizerConfig)
 
     // Webpage views

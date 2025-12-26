@@ -7,6 +7,7 @@ import Shared
 
 /// The privacy notice cell used in the homepage collection view
 final class PrivacyNoticeCell: UICollectionViewCell,
+                               UITextViewDelegate,
                                ReusableCell,
                                ThemeApplicable {
     struct UX {
@@ -20,10 +21,11 @@ final class PrivacyNoticeCell: UICollectionViewCell,
     }
 
     private var closeButtonAction: (() -> Void)?
+    private var linkAction: ((URL) -> Void)?
 
     // MARK: - UI Elements
 
-    private let bodyTextView: UITextView = .build { textView in
+    private lazy var bodyTextView: UITextView = .build { textView in
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.isEditable = false
@@ -33,6 +35,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
 
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
+        textView.delegate = self
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -63,8 +66,9 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(theme: Theme, closeButtonAction: (() -> Void)?) {
+    public func configure(theme: Theme, closeButtonAction: (() -> Void)?, linkAction: ((URL) -> Void)?) {
         self.closeButtonAction = closeButtonAction
+        self.linkAction = linkAction
         applyTheme(theme: theme)
     }
 
@@ -126,5 +130,16 @@ final class PrivacyNoticeCell: UICollectionViewCell,
         var config = closeButton.configuration
         config?.baseForegroundColor = theme.colors.iconPrimary
         closeButton.configuration = config
+    }
+
+    // MARK: TextView Delegate
+
+    func textView(_ textView: UITextView,
+                  shouldInteractWith url: URL,
+                  in characterRange: NSRange,
+                  interaction: UITextItemInteraction) -> Bool {
+        guard interaction == .invokeDefaultAction else { return true }
+        linkAction?(url)
+        return false
     }
 }

@@ -676,6 +676,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
+    func testShowPrivacyNoticeLink_showsStoriesWebview() throws {
+        let subject = createSubject()
+
+        guard let url = URL(string: "https://www.mozilla.com") else { return }
+
+        subject.showPrivacyNoticeLink(url: url)
+
+        XCTAssertNotNil(mockRouter.presentedViewController as? TermsOfUseLinkViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
     func testPopToBVC_popsViewControllers() {
         let subject = createSubject()
 

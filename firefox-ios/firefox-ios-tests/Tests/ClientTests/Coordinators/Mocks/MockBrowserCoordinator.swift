@@ -48,6 +48,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showShortcutsLibraryCalled = 0
     var showStoriesFeedCalled = 0
     var showStoriesWebViewCalled = 0
+    var showPrivacyNoticeLink = 0
     var showTermsOfUseCalled = 0
     var shouldShowNewTabToastCalled = 0
     var popToBVCCalled = 0
@@ -207,6 +208,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showStoriesWebView(url: URL?) {
         showStoriesWebViewCalled += 1
+    }
+
+    func showPrivacyNoticeLink(url: URL) {
+        showPrivacyNoticeLink += 1
     }
 
     func shouldShowNewTabToast(tab: Client.Tab) -> Bool {
