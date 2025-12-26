@@ -8,7 +8,7 @@ protocol PrivacyNoticeHelperProtocol {
     func shouldShowPrivacyNotice() -> Bool
 }
 
-struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
+struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol, FeatureFlaggable {
     // Date of the last privacy notice update in miliseconds since epoch
     // Update this value to the latest privacy notice release date when you want to show users the
     // homepage privacy notice card
@@ -29,6 +29,7 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
     }
 
     func shouldShowPrivacyNotice() -> Bool {
+        guard featureFlags.isFeatureEnabled(.privacyNotice, checking: .buildOnly) else { return false }
         // 1. User has already accepted ToS (via onboarding or bottom sheet)
         let termsOfUseAcceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate)
         let termsOfServiceAcceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate)
