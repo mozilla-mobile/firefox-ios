@@ -1125,7 +1125,6 @@ class BrowserCoordinator: BaseCoordinator,
             themeManager: themeManager
         )
         linkVC.modalPresentationStyle = .pageSheet
-        linkVC.modalTransitionStyle = .coverVertical
         router.present(linkVC, animated: true)
     }
 
