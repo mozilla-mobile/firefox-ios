@@ -172,6 +172,15 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "Pribatutasun-oharra";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Argibide gehiago";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "Eguneraketen artean eginbideak, errendimendua eta egonkortasuna hobetuko ditu %@(e)k. Aldaketak urrunetik aplikatzen dira.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Baimendu urruneko hobekuntzak";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Korritu fitxa- eta helbide-barra ezkutatzeko";
 
@@ -235,11 +244,20 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Argibide gehiago";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Argibide gehiago";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Probatu eginbide eta ideiak mundu guztiarentzat argitaratu diren aurretik.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@(e)k ausaz aukeratzen ditu eginbideen probak egiteko erabiltzaileak eta horrela kalitatea hobetzen da denontzat.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Instalatu eta exekutatu esperimentuak";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Baimendu eginbideen esperimentuak";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Laburbildutako orrietarako sarbidea ematen du.";
