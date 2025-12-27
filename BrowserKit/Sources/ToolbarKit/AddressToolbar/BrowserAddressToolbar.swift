@@ -53,7 +53,9 @@ public class BrowserAddressToolbar: UIView,
     }
 
     private lazy var browserActionStack: UIStackView = .build()
-    private lazy var toolbarTopBorderView: UIView = .build()
+    private lazy var toolbarTopBorderView: UIView = .build { view in
+        view.accessibilityIdentifier = "BrowserAddress.toolbarTopBorderView"
+    }
     private lazy var toolbarBottomBorderView: UIView = .build()
 
     private var leadingBrowserActionConstraint: NSLayoutConstraint?
