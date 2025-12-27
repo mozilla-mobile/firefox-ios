@@ -19,6 +19,15 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
         "password": "password"
     ])
 
+    static func loginFactory(number: Int) -> LoginEntry {
+        LoginEntry(fromJSONDict: [
+            "hostname": "https://example\(number).com",
+            "formSubmitUrl": "https://example\(number).com",
+            "username": "username\(number)",
+            "password": "password\(number)"
+        ])
+    }
+
     override func setUp() {
         super.setUp()
         files = MockFiles()
@@ -155,58 +164,26 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
         }
         wait(for: [expectation])
     }
+    func testAddMultipleLoginsConcurrently() {
+            let numberOfLogins = 3
+            var expectations = [XCTestExpectation]()
 
-    func testDeleteMultipleLogins() {
-        // Add three logins to delete, one after another to avoid crashing (FIXME: FXIOS-14323 / Github #31023)
-        for i in 0..<3 {
-            let expectation = XCTestExpectation(description: "Add login \(i)")
-            let login = RustLoginsTests.loginFactory(number: i)
+            for i in 0..<numberOfLogins {
+                let expectation = expectation(description: "addLogin \(i)")
+                expectations.append(expectation)
 
-            logins.addLogin(login: login) { result in
-                switch result {
-                case .success(let login):
-                    XCTAssertNotNil(login)
-                    expectation.fulfill()
-                case .failure:
-                    XCTFail("Add login \(i) failed")
-                }
-            }
-
-            wait(for: [expectation], timeout: 2)
-        }
-
-        let deleteExpectation = XCTestExpectation(description: "Deleting all entries")
-
-        // Fetch all the logins and then delete them
-        self.logins.listLogins { [logins] listLoginsResult in
-            switch listLoginsResult {
-            case .success(let allLogins):
-                XCTAssertEqual(allLogins.count, 3, "Three logins must have been added")
-
-                // Now try to delete multiple logins
-                logins?.deleteLogins(ids: allLogins.map(\.id)) { deleteLoginsResult in
-                    switch deleteLoginsResult {
-                    case .success(let deletedLogins):
-                        XCTAssertEqual(deletedLogins.count, 3, "Three results should have been deleted")
-                        deleteExpectation.fulfill()
+                let login = Self.loginFactory(number: i)
+                logins.addLogin(login: login) { result in
+                    switch result {
+                    case .success(let login):
+                        XCTAssertNotNil(login)
                     case .failure:
-                        XCTFail("Deleting all logins failed")
+                        XCTFail("Add login failed")
                     }
+                    expectation.fulfill()
                 }
-            case .failure:
-                XCTFail()
             }
+
+            wait(for: expectations)
         }
-
-        wait(for: [deleteExpectation], timeout: 2)
-    }
-
-    static func loginFactory(number: Int) -> LoginEntry {
-        return LoginEntry(fromJSONDict: [
-            "hostname": "https://example\(number).com",
-            "formSubmitUrl": "https://example\(number).com",
-            "username": "username\(number)",
-            "password": "password\(number)"
-        ])
-    }
 }

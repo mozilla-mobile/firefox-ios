@@ -327,20 +327,26 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
 
             self.getStoredKey { result in
-                switch result {
-                case .success:
-                    do {
-                        try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
-                        completionHandler(true)
-                    } catch let err as NSError {
-                        self.logger.log("Error verifying logins",
-                                        level: .warning,
-                                        category: .storage,
-                                        description: err.localizedDescription)
+                // `getStoredKey` can invoke its completion on an arbitrary queue. Hop back to our
+                // serial queue before touching storage/FFI to avoid racing with other operations.
+                self.queue.async {
+                    switch result {
+                    case .success:
+                        do {
+                            try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
+                            completionHandler(true)
+                        } catch let err as NSError {
+                            self.logger.log(
+                                "Error verifying logins",
+                                level: .warning,
+                                category: .storage,
+                                description: err.localizedDescription
+                            )
+                            completionHandler(false)
+                        }
+                    case .failure:
                         completionHandler(false)
                     }
-                case .failure:
-                    completionHandler(false)
                 }
             }
         }
@@ -474,16 +480,20 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
 
             self.getStoredKey { result in
-                switch result {
-                case .success:
-                    do {
-                        let login = try self.storage?.add(login: login)
-                        completionHandler(.success(login))
-                    } catch let err as NSError {
+                // `getStoredKey` may call back on a background queue. Dispatch to the serial queue
+                // before calling into storage/FFI to maintain queue confinement.
+                self.queue.async {
+                    switch result {
+                    case .success:
+                        do {
+                            let login = try self.storage?.add(login: login)
+                            completionHandler(.success(login))
+                        } catch let err as NSError {
+                            completionHandler(.failure(err))
+                        }
+                    case .failure(let err):
                         completionHandler(.failure(err))
                     }
-                case .failure(let err):
-                    completionHandler(.failure(err))
                 }
             }
         }
@@ -518,44 +528,44 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
                 }
 
                 self.getStoredKey { result in
-                    switch result {
-                    case .success:
-                        do {
-                            let updatedLogin = try self.storage?.update(id: id, login: login)
-                            completionHandler(.success(updatedLogin))
-                        } catch let error as NSError {
-                            completionHandler(.failure(error))
+                    // `getStoredKey` may call back on a background queue. Dispatch to the serial queue
+                    // before calling into storage/FFI to maintain queue confinement.
+                    self.queue.async {
+                        switch result {
+                        case .success:
+                            do {
+                                let updatedLogin = try self.storage?.update(id: id, login: login)
+                                completionHandler(.success(updatedLogin))
+                            } catch let error as NSError {
+                                completionHandler(.failure(error))
+                            }
+                        case .failure(let err):
+                            completionHandler(.failure(err))
                         }
-                    case .failure(let err):
-                        completionHandler(.failure(err))
                     }
                 }
             }
         }
 
-    public func deleteLogins(
-        ids: [String],
-        completionHandler: @escaping @Sendable (Result<[Result<Bool?, Error>], Error>) -> Void
-    ) {
+    public func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void) {
         queue.async {
-            guard self.isOpen else {
+            guard self.isOpen, let storage = self.storage else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                completionHandler(.failure(error))
+                completionHandler([Result<Bool?, Error>](repeating: .failure(error), count: ids.count))
                 return
             }
 
-            var results: [Result<Bool?, Error>] = []
+            var results = [Result<Bool?, Error>](repeating: .success(nil), count: ids.count)
 
-            for id in ids {
+            for (index, id) in ids.enumerated() {
                 do {
-                    let existed = try self.storage?.delete(id: id)
-                    results.append(.success(existed))
-                } catch {
-                    results.append(.failure(error))
+                    let existed = try storage.delete(id: id)
+                    results[index] = .success(existed)
+                } catch let err as NSError {
+                    results[index] = .failure(err)
                 }
             }
-
-            completionHandler(.success(results))
+            completionHandler(results)
         }
     }
 
@@ -611,21 +621,25 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
     }
 
     private func resetLoginsAndKey(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
-        self.wipeLocalEngine().upon { result in
-            guard result.isSuccess else {
-                completion(.failure(result.failureValue! as NSError))
-                return
-            }
+        queue.async {
+            self.wipeLocalEngine().upon { result in
+                self.queue.async {
+                    guard result.isSuccess else {
+                        completion(.failure(result.failureValue! as NSError))
+                        return
+                    }
 
-            do {
-                let key = try self.rustKeychain.createLoginsKeyData()
-                completion(.success(key))
-            } catch let error as NSError {
-                self.logger.log("Error creating logins encryption key",
-                                level: .warning,
-                                category: .storage,
-                                description: error.localizedDescription)
-                completion(.failure(error))
+                    do {
+                        let key = try self.rustKeychain.createLoginsKeyData()
+                        completion(.success(key))
+                    } catch let error as NSError {
+                        self.logger.log("Error creating logins encryption key",
+                                        level: .warning,
+                                        category: .storage,
+                                        description: error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                }
             }
         }
     }
@@ -702,30 +716,34 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         // call or the key data has been cleared from the keychain.
 
         self.hasSyncedLogins().upon { result in
-            guard result.failureValue == nil else {
-                completion(.failure(result.failureValue! as NSError))
-                return
-            }
+            self.queue.async {
+                guard result.failureValue == nil else {
+                    completion(.failure(result.failureValue! as NSError))
+                    return
+                }
 
-            guard let hasLogins = result.successValue else {
-                let msg = "Failed to verify logins count before attempting to reset key"
-                completion(.failure(LoginEncryptionKeyError.dbRecordCountVerificationError(msg) as NSError))
-                return
-            }
+                guard let hasLogins = result.successValue else {
+                   let msg = "Failed to verify logins count before attempting to reset key"
+                   completion(.failure(
+                       LoginEncryptionKeyError.dbRecordCountVerificationError(msg) as NSError
+                   ))
+                   return
+               }
 
-            if hasLogins {
-                // Since the key data isn't present and we have login records in
-                // the database, we both clear the database and reset the key.
-                GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
-                self.resetLoginsAndKey(completion: completion)
-            } else {
-                // There are no records in the database so we don't need to wipe any
-                // existing login records. We just need to create a new key.
-                do {
-                    let key = try self.rustKeychain.createLoginsKeyData()
-                    completion(.success(key))
-                } catch let error as NSError {
-                    completion(.failure(error))
+                if hasLogins {
+                    // Since the key data isn't present and we have login records in
+                    // the database, we both clear the database and reset the key.
+                    GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
+                    self.resetLoginsAndKey(completion: completion)
+                } else {
+                    // There are no records in the database so we don't need to wipe any
+                    // existing login records. We just need to create a new key.
+                    do {
+                        let key = try self.rustKeychain.createLoginsKeyData()
+                        completion(.success(key))
+                    } catch let error as NSError {
+                        completion(.failure(error))
+                    }
                 }
             }
         }
