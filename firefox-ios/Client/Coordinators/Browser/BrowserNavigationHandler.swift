@@ -124,6 +124,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showStoriesWebView(url: URL?)
 
     @MainActor
+    func showPrivacyNoticeLink(url: URL)
+
+    @MainActor
     func showTermsOfUse(context: TriggerContext)
 
     @MainActor

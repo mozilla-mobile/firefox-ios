@@ -486,6 +486,28 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    // MARK: - Privacy Notice Link
+
+    func test_tapOnPrivacyNoticeLink_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        guard let url = URL(string: "https://www.mozilla.com") else { return }
+
+        let action = getNavigationBrowserAction(for: .tapOnPrivacyNoticeLink, destination: .privacyNoticeLink(url))
+        let newState = reducer(initialState, action)
+
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .privacyNoticeLink:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)
