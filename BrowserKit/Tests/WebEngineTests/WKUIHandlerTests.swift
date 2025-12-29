@@ -36,7 +36,7 @@ final class WKUIHandlerTests: XCTestCase {
         let subject = createSubject(isActive: true)
 
         let expectation = expectation(description: "Wait for the decision handler to be called")
-        let decisionHandler = { (decision: WKPermissionDecision) in
+        let decisionHandler: @Sendable (WKPermissionDecision) -> Void = { (decision: WKPermissionDecision) in
             XCTAssertEqual(decision, .prompt)
             expectation.fulfill()
         }
@@ -50,7 +50,7 @@ final class WKUIHandlerTests: XCTestCase {
 
         let expectation = expectation(description: "Wait for the decision handler to be called")
 
-        let decisionHandler = { (decision: WKPermissionDecision) in
+        let decisionHandler: @Sendable (WKPermissionDecision) -> Void = { (decision: WKPermissionDecision) in
             XCTAssertEqual(decision, .deny)
             expectation.fulfill()
         }
@@ -65,7 +65,7 @@ final class WKUIHandlerTests: XCTestCase {
 
         let expectation = expectation(description: "Wait for the decision handler to be called")
 
-        let decisionHandler = { (decision: WKPermissionDecision) in
+        let decisionHandler: @Sendable (WKPermissionDecision) -> Void = { (decision: WKPermissionDecision) in
             XCTAssertEqual(decision, .deny)
             expectation.fulfill()
         }
