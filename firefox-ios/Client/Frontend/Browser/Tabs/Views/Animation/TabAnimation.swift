@@ -207,6 +207,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         if let indexPath = dataSource.indexPath(for: item) {
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
             cv.layoutIfNeeded()
             if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
                 tabCell = cell
