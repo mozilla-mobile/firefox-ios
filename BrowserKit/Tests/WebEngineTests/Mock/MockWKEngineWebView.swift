@@ -48,7 +48,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var evaluateJavaScriptCalled = 0
     var savedJavaScript: String?
     var javascriptResult: (Result<Any, Error>)?
-    var pageZoom: CGFloat = 1.0
+    nonisolated(unsafe) var pageZoom: CGFloat = 1.0
     var viewPrintFormatterCalled = 0
 
     var loadFileReadAccessURL: URL?
@@ -146,22 +146,17 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     }
 
     override func value(forKey key: String) -> Any? {
-        Task { @MainActor in
-            if key == "viewScale" {
-                return self.pageZoom
-            } else {
-                return super.value(forKey: key) as? CGFloat ?? 1.0
-            }
+        if key == "viewScale" {
+            return self.pageZoom
         }
+        return super.value(forKey: key)
     }
 
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "viewScale", let zoomValue = value as? CGFloat {
-            Task { @MainActor in
-                self.pageZoom = zoomValue
-            }
-        } else {
-            super.setValue(value, forKey: key)
+            self.pageZoom = zoomValue
+            return
         }
+        super.setValue(value, forKey: key)
     }
 }

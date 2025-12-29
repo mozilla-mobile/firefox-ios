@@ -469,7 +469,7 @@ final class WKEngineSessionTests: XCTestCase {
         // Increase zoom
         subject?.updatePageZoom(.decrease)
         // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
-        await Task.yield()
+        // await Task.yield()
         // Assert zoom decreased by expected step
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 - ZoomChangeValue.defaultStepIncrease)
     }
