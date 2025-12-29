@@ -2,6 +2,7 @@ name: Snapshot Tests
 
 on:
   pull_request:
+    branches: [main, 'patch/**']
     paths:
       - 'firefox-ios/Client/Configuration/Common.xcconfig'
 

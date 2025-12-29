@@ -2,6 +2,7 @@ name: Merge Unit Tests
 
 on:
   pull_request:
+    branches: [main, 'patch/**']
 
 jobs:
   execute_merge_tests:

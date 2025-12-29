@@ -5,7 +5,7 @@ on:
     paths:
       - 'fastlane/metadata/**/release_notes.txt'
       - '!fastlane/metadata/en-US/**/release_notes.txt'
-    branches: [ main ]
+    branches: [ main, 'patch/**' ]
 
 jobs:
   upload_release_notes_to_appstore:

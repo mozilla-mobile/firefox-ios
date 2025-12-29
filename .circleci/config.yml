@@ -409,7 +409,7 @@ workflows:
   setup-workflow:
     unless: << pipeline.parameters.is-release-pipeline >>
     jobs:
-      # Always run on main branch merges
+      # Always run on main branch merges and patch branches
       - build-and-deploy-firebase-and-browserstack:
           name: Deploy ad-hoc version over Firebase + Upload to Browserstack
           filters:
@@ -417,6 +417,7 @@ workflows:
               only: 
                 - main
                 - /^main-\d+$/
+                - /^patch\/.+$/
           context: napps
 
       # Check if version was bumped and conditionally continue to release pipeline
@@ -429,6 +430,7 @@ workflows:
               only: 
                 - main
                 - /^main-\d+$/
+                - /^patch\/.+$/
           context: napps
 
   # Beta deployment triggered by tags

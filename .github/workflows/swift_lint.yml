@@ -1,7 +1,7 @@
 name: SwiftLint
 on:
   pull_request:
-    branches: [main]
+    branches: [main, 'patch/**']
 jobs:
   build:
     runs-on: ubuntu-latest
