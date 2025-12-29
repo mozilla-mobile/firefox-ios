@@ -28030,6 +28030,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "BR STG org.mozilla.ios.FirefoxBeta.ShareTo";
 				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 6.0;
 			};
 			name = FirefoxStaging;
 		};
@@ -28527,6 +28528,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec_Testing;
 		};
@@ -29834,6 +29836,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Firefox.ShareTo";
 				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Firefox;
 		};
@@ -30153,6 +30156,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Fennec Enterprise ShareTo";
 				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -30477,6 +30481,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta.ShareTo";
 				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 6.0;
 			};
 			name = FirefoxBeta;
 		};
@@ -31011,6 +31016,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Fennec;
 		};

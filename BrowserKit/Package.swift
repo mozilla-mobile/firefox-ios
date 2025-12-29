@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.2
 
 import PackageDescription
 
@@ -87,8 +87,6 @@ let package = Package(
             dependencies: ["Common"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]
         ),
         .target(
@@ -96,15 +94,11 @@ let package = Package(
             dependencies: ["Common", "SiteImageView"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "ComponentLibraryTests",
             dependencies: ["ComponentLibrary"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
             ]
         ),
         .target(
@@ -114,9 +108,6 @@ let package = Package(
             resources: [.process("BundledTopSitesFavicons.xcassets")],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "SiteImageViewTests",
@@ -127,7 +118,6 @@ let package = Package(
                 .copy("Resources/hackernews.svg")
             ],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
             ],
         ),
         .target(
@@ -137,30 +127,23 @@ let package = Package(
                            .product(name: "Sentry-Dynamic", package: "sentry-cocoa")],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]
         ),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
             ]),
         .target(
             name: "TabDataStore",
             dependencies: ["Common"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "TabDataStoreTests",
             dependencies: ["TabDataStore"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
             ]
         ),
         .target(
@@ -168,15 +151,11 @@ let package = Package(
             dependencies: ["Common"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "ReduxTests",
             dependencies: ["Redux"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]
         ),
         .target(
@@ -185,14 +164,11 @@ let package = Package(
                            .product(name: "GCDWebServers", package: "GCDWebServer")],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "WebEngineTests",
             dependencies: ["WebEngine"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
             ]
         ),
         .target(
@@ -200,29 +176,22 @@ let package = Package(
             dependencies: ["Common"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableUpcomingFeature("InferSendableFromCaptures"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "ToolbarKitTests",
             dependencies: ["ToolbarKit"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
         ]),
         .target(
             name: "MenuKit",
             dependencies: ["Common", "ComponentLibrary"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "MenuKitTests",
             dependencies: ["MenuKit"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
             ]
         ),
         .target(
@@ -234,31 +203,24 @@ let package = Package(
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]
         ),
         .testTarget(name: "SummarizeKitTests",
                     dependencies: ["SummarizeKit"],
                     swiftSettings: [
                         .unsafeFlags(["-enable-testing"]),
-                        .enableExperimentalFeature("StrictConcurrency")
                     ]),
         .target(
             name: "JWTKit",
             dependencies: ["Common", "Shared"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]
         ),
         .testTarget(
             name: "JWTKitTests",
             dependencies: ["JWTKit"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]
         ),
         .target(
@@ -266,21 +228,16 @@ let package = Package(
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .target(
             name: "ContentBlockingGenerator",
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "ContentBlockingGeneratorTests",
             dependencies: ["ContentBlockingGenerator"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
             ]),
         .target(
             name: "OnboardingKit",
@@ -290,8 +247,6 @@ let package = Package(
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ],
             linkerSettings: [
                 .linkedFramework("Metal"),
@@ -301,21 +256,16 @@ let package = Package(
             name: "OnboardingKitTests",
             dependencies: ["OnboardingKit"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .target(
             name: "ActionExtensionKit",
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency"),
-                .enableExperimentalFeature("RegionBasedIsolation")
             ]),
         .testTarget(
             name: "ActionExtensionKitTests",
             dependencies: ["ActionExtensionKit"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
             ]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
