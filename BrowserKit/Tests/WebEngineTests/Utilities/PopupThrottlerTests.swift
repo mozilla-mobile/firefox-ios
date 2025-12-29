@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 class PopupThrottlerTests: XCTestCase {
     private let popupType: PopupType = .alert
 

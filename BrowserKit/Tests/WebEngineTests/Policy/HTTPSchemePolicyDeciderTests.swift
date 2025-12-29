@@ -9,14 +9,14 @@ import XCTest
 final class HTTPSchemePolicyDeciderTests: XCTestCase {
     private var mockDecider: MockPolicyDecider!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockDecider = MockPolicyDecider()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockDecider = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testPolicyForPopupNavigation_allowsHttpScheme() {
