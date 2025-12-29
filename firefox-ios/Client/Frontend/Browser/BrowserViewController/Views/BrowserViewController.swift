@@ -850,7 +850,7 @@ class BrowserViewController: UIViewController,
         notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
     }
 
-    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
+    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, shouldUpdateBlurViews: Bool = true) {
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
 
@@ -869,8 +869,9 @@ class BrowserViewController: UIViewController,
         if !isToolbarTranslucencyRefactorEnabled {
             header.setNeedsLayout()
             view.layoutSubviews()
-            updateToolbarDisplay()
         }
+
+        updateToolbarDisplay(shouldUpdateBlurViews: shouldUpdateBlurViews)
     }
 
     private func updateSwipingTabs() {
@@ -1504,7 +1505,7 @@ class BrowserViewController: UIViewController,
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        updateToolbarStateForTraitCollection(traitCollection)
+        updateToolbarStateForTraitCollection(traitCollection, shouldUpdateBlurViews: !isToolbarTranslucencyEnabled)
     }
 
     override func viewDidAppear(_ animated: Bool) {
