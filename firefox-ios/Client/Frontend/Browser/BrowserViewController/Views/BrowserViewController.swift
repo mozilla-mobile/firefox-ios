@@ -869,9 +869,8 @@ class BrowserViewController: UIViewController,
         if !isToolbarTranslucencyRefactorEnabled {
             header.setNeedsLayout()
             view.layoutSubviews()
+            updateToolbarDisplay()
         }
-
-        updateToolbarDisplay()
     }
 
     private func updateSwipingTabs() {
