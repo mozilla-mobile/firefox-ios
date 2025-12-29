@@ -175,7 +175,7 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "மற்ற உள்ளடக்க தடமறிதல்களைத் தடுப்பதால் சில காணொளிகள் மற்றும் வலைப்பக்கங்கள் முறியலாம்.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "அனைவருக்கும் %@ வழங்கவும் மேம்படுத்தவும் தேவையானதை மட்டும் சேகரிக்க மொசில்லா உறுதிபூண்டுள்ளது.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */

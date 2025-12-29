@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Это помогает нам диагностировать и устранять проблемы с браузером.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ улучшит работу, производительность и стабильность между обновлениями. Изменения применяются удалённо.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ будет отправлять то, что вы вводите в адресной строке, в вашу поисковую систему.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы и улучшения %@.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы %@ и его улучшения в будущем.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ может время от времени устанавливать и проводить исследования.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ случайным образом выбирает пользователей для тестирования функций, что повышает качество для всех и каждого.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Основные";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Показывать советы на домашнем экране";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Разрешить удалённые улучшения";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Исследования";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Разрешить исследование функций";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Использовать Touch ID для разблокировки приложения";
@@ -614,7 +629,7 @@
 "TooltipBodyText.ContextMenu" = "Перейдите в «Настройки» для управления специфичными настройками приватности и безопасности.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
-"TooltipBodyText.Privacy" = "Эти настройки по умолчанию обеспечивают надежную защиту. Но вы можете легко изменить их под ваши конкретные потребности.";
+"TooltipBodyText.Privacy" = "Эти настройки по умолчанию обеспечивают надёжную защиту. Но вы можете легко изменить их под ваши конкретные потребности.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Начните сеанс приватного просмотра, и мы будем блокировать трекеры и другие плохие штуки.";

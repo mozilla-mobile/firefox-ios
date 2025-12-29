@@ -220,7 +220,7 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Մուգ";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %@-ը լավարկելու համար";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */

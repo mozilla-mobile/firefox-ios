@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "此資訊可讓我們診斷並修正瀏覽器的問題。";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ 將在新版本推出前，從遠端套用變更，以改進功能、效能與穩定性。";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "您在網址列打字時，%@ 就會將您輸入的文字傳送到搜尋引擎。";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla 致力於只收集用來為眾人改善 %@ 所需的必要資料。";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla 致力於只收集用來為眾人改善 %@ 所需的必要資料。";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ 會不定時安裝並執行使用者研究。";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ 會隨機選擇使用者來測試功能，為每個人改進品質。";
 
 /* Title for section in settings menu */
 "Settings.general" = "一般";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "在主畫面顯示小秘訣";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "允許遠端改善";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "使用者研究";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "允許進行功能研究";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "使用 Touch ID 解鎖程式";
