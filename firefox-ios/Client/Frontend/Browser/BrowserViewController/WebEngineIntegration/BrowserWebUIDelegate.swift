@@ -39,7 +39,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor @Sendable () -> Void
+        completionHandler: @escaping @Sendable () -> Void
     ) {
         legacyResponder?.webView?(
             webView,
