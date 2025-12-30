@@ -12,9 +12,9 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
     public let onActionTap: @MainActor (
         ViewModel.OnboardingActionType,
         String,
-        @escaping (Result<TabAction, Error>) -> Void
+        @MainActor @escaping (Result<TabAction, Error>) -> Void
     ) -> Void
-    public let onMultipleChoiceActionTap: (
+    public let onMultipleChoiceActionTap: @MainActor (
         ViewModel.OnboardingMultipleChoiceActionType,
         String
     ) -> Void
@@ -24,13 +24,13 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         case none
     }
 
-    public let onComplete: (String) -> Void
+    public let onComplete: @MainActor (String) -> Void
     public private(set) var multipleChoiceSelections: [String: ViewModel.OnboardingMultipleChoiceActionType] = [:]
 
-    public var onCardView: ((String) -> Void)?
-    public var onButtonTap: ((String, ViewModel.OnboardingActionType, Bool) -> Void)?
-    public var onMultipleChoiceTap: ((String, ViewModel.OnboardingMultipleChoiceActionType) -> Void)?
-    public var onDismiss: ((String) -> Void)?
+    public var onCardView: (@MainActor (String) -> Void)?
+    public var onButtonTap: (@MainActor (String, ViewModel.OnboardingActionType, Bool) -> Void)?
+    public var onMultipleChoiceTap: (@MainActor (String, ViewModel.OnboardingMultipleChoiceActionType) -> Void)?
+    public var onDismiss: (@MainActor (String) -> Void)?
 
     public init(
         onboardingCards: [ViewModel],
@@ -38,12 +38,12 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         onActionTap: @MainActor @escaping (
             ViewModel.OnboardingActionType,
             String,
-            @escaping (Result<TabAction, Error>) -> Void) -> Void,
-        onMultipleChoiceActionTap: @escaping (
+            @MainActor @escaping (Result<TabAction, Error>) -> Void) -> Void,
+        onMultipleChoiceActionTap: @MainActor @escaping (
             ViewModel.OnboardingMultipleChoiceActionType,
             String
         ) -> Void,
-        onComplete: @escaping (String) -> Void
+        onComplete: @MainActor @escaping (String) -> Void
     ) {
         self.onboardingCards = onboardingCards
         self.skipText = skipText

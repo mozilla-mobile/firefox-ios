@@ -62,7 +62,9 @@ final class OnboardingService: FeatureFlaggable {
         from cardName: String,
         cards: [OnboardingKitCardInfoModel],
         with activityEventHelper: ActivityEventHelper,
-        completion: @escaping (Result<OnboardingFlowViewModel<OnboardingKitCardInfoModel>.TabAction, Error>) -> Void
+        completion: @Sendable @escaping @MainActor (
+            Result<OnboardingFlowViewModel<OnboardingKitCardInfoModel>.TabAction, Error>
+        ) -> Void
     ) {
         switch action {
         case .requestNotifications:
@@ -205,7 +207,7 @@ final class OnboardingService: FeatureFlaggable {
 
     private func handleOpenInstructionsPopup(
         from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
-        completion: @escaping () -> Void
+        completion: @Sendable @escaping @MainActor () -> Void
     ) {
         presentDefaultBrowserPopup(from: popupViewModel, completion: completion)
     }
