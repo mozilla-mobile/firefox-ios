@@ -207,7 +207,7 @@ class SearchTelemetry: @unchecked Sendable {
         let provider = tab.getProviderForUrl()
         let code = SearchPartner.getCode(
             searchEngine: provider,
-            region: Locale.current.regionCode == "US" ? "US" : "ROW"
+            region: SystemLocaleProvider().regionCode == "US" ? "US" : "ROW"
         )
         self.code = code
         self.provider = provider

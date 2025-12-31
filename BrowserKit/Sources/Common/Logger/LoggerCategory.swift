@@ -39,6 +39,9 @@ public enum LoggerCategory: String {
     /// Related to the application lifecycle.
     case lifecycle
 
+    /// Related to all things locale.
+    case locale
+
     /// Related to the main menu.
     case mainMenu
 

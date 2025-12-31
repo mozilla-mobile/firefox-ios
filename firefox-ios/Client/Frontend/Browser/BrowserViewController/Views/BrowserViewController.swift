@@ -3661,9 +3661,10 @@ class BrowserViewController: UIViewController,
     private func handleFoundAddressFieldValue(type: FormAutofillPayloadType?,
                                               tabWebView: TabWebView,
                                               webView: WKWebView,
-                                              frame: WKFrameInfo?) {
+                                              frame: WKFrameInfo?,
+                                              localeProvider: LocaleProvider = SystemLocaleProvider()) {
         guard addressAutofillSettingsUserDefaultsIsEnabled(),
-              AddressLocaleFeatureValidator.isValidRegion(),
+              AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode),
               // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
               let type = type else { return }
 

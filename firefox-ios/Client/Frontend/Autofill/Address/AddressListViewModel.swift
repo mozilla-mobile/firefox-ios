@@ -36,7 +36,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     private let logger: Logger
 
     var isEditingFeatureEnabled: Bool {
-        AddressLocaleFeatureValidator.isValidRegion() ||
+        AddressLocaleFeatureValidator.isValidRegion(for: currentRegionCode) ||
         featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly)
     }
 
@@ -50,7 +50,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     let themeManager: ThemeManager
     let profile: Profile
 
-    var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
+    let currentRegionCode: String
     var isDarkTheme: Bool {
         themeManager.getCurrentTheme(for: windowUUID).type == .dark
     }
@@ -87,7 +87,8 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
         addressProvider: AddressProvider,
         editAddressWebViewManager: WebViewPreloadManaging = EditAddressWebViewManager(),
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        profile: Profile = AppContainer.shared.resolve()
+        profile: Profile = AppContainer.shared.resolve(),
+        localeProvider: LocaleProvider = SystemLocaleProvider()
     ) {
         self.logger = logger
         self.windowUUID = windowUUID
@@ -95,6 +96,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
         self.editAddressWebViewManager = editAddressWebViewManager
         self.themeManager = themeManager
         self.profile = profile
+        self.currentRegionCode = localeProvider.regionCode
     }
 
     // MARK: - Fetch Addresses
@@ -268,7 +270,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
             addressLevel2: "",
             addressLevel1: "",
             postalCode: "",
-            country: currentRegionCode(),
+            country: currentRegionCode,
             tel: "",
             email: "",
             timeCreated: 0,
