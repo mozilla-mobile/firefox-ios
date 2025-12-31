@@ -47,7 +47,7 @@ jobs:
         - name: Set job log URL
           if: always()
           run: echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
-        - name: Send Slack notification if tests fail
+        - name: Send Slack notification
           if: '${{ !cancelled() && !github.event.pull_request.head.repo.fork }}'
           id: slack
           uses: slackapi/slack-github-action@v2.0.0
