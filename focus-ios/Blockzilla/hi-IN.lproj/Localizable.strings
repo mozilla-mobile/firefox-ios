@@ -232,10 +232,10 @@
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ आपके द्वारा पता बार में टाइप किए गए चीज़ों को आपके सर्च इंजन को भेज देगा।";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla मात्र वही एकत्रित करने का प्रयास करता है जिसकी हमें %@ को बेहतर बनाने और सबको उपलब्ध कराने के लिए आवश्यकता है.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ समय-समय पर संस्थापित करने और अध्ययन चला सकता हैं।";
 
 /* Title for section in settings menu */
