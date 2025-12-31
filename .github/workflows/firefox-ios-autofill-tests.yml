@@ -26,6 +26,7 @@ jobs:
           uses: actions/checkout@v6
           with:
             repository: issammani/test-playwright
+            path: 'test-playwright'
         - name: Get the current github action name
           run: |
             github_action_name="Update credential provider script"
