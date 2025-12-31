@@ -1,4 +1,4 @@
-name: Build and Run Autofill Automation
+name: Test Autofill Playwright specs
 permissions: read-all
 on:
     workflow_dispatch:
@@ -14,7 +14,7 @@ on:
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
 jobs:
-  build:
+  test:
     runs-on: macos-26
     timeout-minutes: 40
     strategy:
