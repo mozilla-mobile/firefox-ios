@@ -20,32 +20,28 @@ jobs:
     strategy:
       matrix:
         node: ["24"]
-    continue-on-error: true
     steps:
-        - name: Checkout repository
+        - uses: actions/checkout@v6
+        - name: Clone test specs
           uses: actions/checkout@v6
+          with:
+            repository: issammani/test-playwright
         - name: Get the current github action name
           run: |
             github_action_name="Update credential provider script"
             echo "github_action_name=$github_action_name" >> $GITHUB_ENV
-        - name: Clone repository
-          run: |
-            git clone https://github.com/issammani/test-playwright.git
-        - name: Install node
+        - name: Use Node ${{ matrix.node }}
           uses: actions/setup-node@v4
           with:
             node-version: ${{ matrix.node }}
-        - run: |
-            echo "Install dependencies and run tests"
-            npm i
-            npm install --save concurrently
-            npm i -D @playwright/test
-
+        - name: Install test-playwright
+          run: |
             cd test-playwright
-            echo "Install playwright"
-            npx playwright install
-            
-            echo "Run tests"
+            npm ci
+            npx playwright install webkit
+        - name: Run tests
+          run: |
+            cd test-playwright
             npm test
         - name: Set job log URL
           if: always()
