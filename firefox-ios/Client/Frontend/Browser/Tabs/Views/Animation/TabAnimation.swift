@@ -151,6 +151,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
         bvcSnapshot.layer.cornerCurve = .continuous
         bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        bvcSnapshot.layer.shouldRasterize = true
         bvcSnapshot.clipsToBounds = true
         bvcSnapshot.contentMode = .scaleAspectFill
 
@@ -158,6 +159,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         let snapshotContainer = UIView(frame: bvcSnapshot.frame)
         snapshotContainer.layer.cornerRadius = bvcSnapshot.layer.cornerRadius
         snapshotContainer.layer.cornerCurve = .continuous
+        snapshotContainer.layer.shouldRasterize = true
         snapshotContainer.clipsToBounds = false
         bvcSnapshot.frame = snapshotContainer.bounds
 
@@ -369,11 +371,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.contentMode = .scaleAspectFill
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        tabSnapshot.layer.shouldRasterize = true
 
         contentContainer.isHidden = true
 
         toView.layer.cornerCurve = .continuous
         toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        toView.layer.shouldRasterize = true
         toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
 
@@ -401,6 +405,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             toView.layer.cornerRadius = UX.zeroCornerRadius
             tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
         } completion: { _ in
+            toView.layer.shouldRasterize = false
             contentContainer.isHidden = false
             tabCell?.isHidden = false
             self.view.removeFromSuperview()
