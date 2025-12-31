@@ -201,22 +201,18 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
               let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
         else { return }
+        guard let tabCell = panelViewController.tabDisplayView.selectedTabCell else { return }
 
-        var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
-
         if let indexPath = dataSource.indexPath(for: item) {
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-            // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
-            cv.layoutIfNeeded()
-            if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
-                tabCell = cell
-                cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
-                cell.isHidden = true
-                cell.setUnselectedState(theme: theme)
-                cell.alpha = UX.clearAlpha
-            }
         }
+        // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
+        cv.layoutIfNeeded()
+        cellFrame = tabCell.backgroundHolder.convert(tabCell.backgroundHolder.bounds, to: nil)
+        tabCell.isHidden = true
+        tabCell.setUnselectedState(theme: theme)
+        tabCell.alpha = UX.clearAlpha
 
         // Animate
         cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)

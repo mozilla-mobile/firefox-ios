@@ -42,6 +42,7 @@ final class TabDisplayView: UIView,
     private let windowUUID: WindowUUID
     var theme: Theme?
     weak var dragAndDropDelegate: TabDisplayViewDragAndDropInteraction?
+    var selectedTabCell: ExperimentTabCell?
 
     lazy var dataSource =
     TabDisplayDiffableDataSource(
@@ -265,6 +266,9 @@ final class TabDisplayView: UIView,
                                                 windowUUID: windowUUID,
                                                 actionType: TabPanelViewActionType.selectTab)
                 store.dispatch(action)
+            }
+            if let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell {
+                selectedTabCell = cell
             }
         }
     }
