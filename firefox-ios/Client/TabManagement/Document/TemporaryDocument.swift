@@ -8,7 +8,7 @@ import Common
 
 private let temporaryDocumentOperationQueue = OperationQueue()
 
-protocol TemporaryDocument: Sendable {
+protocol TemporaryDocument: Sendable, AnyObject {
     var filename: String { get }
     var sourceURL: URL? { get }
     var isDownloading: Bool { get }
