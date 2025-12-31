@@ -15,7 +15,6 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Search.searchNavigationBar], to: SearchSettings)
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Homepage.homeSettings], to: HomeSettings)
-        screenState.tap(table.cells["Tabs"], to: TabsSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.title], to: BrowsingSettings)
@@ -36,6 +35,8 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
             app.otherElements.tables.cells.switches[
                 AccessibilityIdentifiers.Settings.BlockImages.title].waitAndTap()
         }
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle], to: AppIconSettings)
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
@@ -184,11 +185,6 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
-    map.addScreenState(TabsSettings) { screenState in
-        screenState.tap(app.switches.element(boundBy: 0), forAction: Action.ToggleTabGroups)
-        screenState.tap(app.navigationBars.buttons["Settings"], to: SettingsScreen)
-    }
-
     map.addScreenState(NewTabSettings) { screenState in
         screenState.gesture(forAction: Action.SelectNewTabAsBlankPage) { UserState in
             table.cells["NewTabAsBlankPage"].waitAndTap()
@@ -227,6 +223,10 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
             app.buttons[AccessibilityIdentifiers.Settings.SearchBar.topSetting].waitAndTap()
         }
 
+        screenState.backAction = navigationControllerBackAction(for: app)
+    }
+
+    map.addScreenState(AppIconSettings) { screenState in
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 }
