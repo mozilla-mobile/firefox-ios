@@ -517,7 +517,6 @@ class TabManagerImplementation: NSObject,
     }
 
     private func restoreTabs() {
-        tabs = [Tab]()
         Task { @MainActor in
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
@@ -578,16 +577,6 @@ class TabManagerImplementation: NSObject,
             return
         }
 
-        guard tabs.isEmpty else {
-            // Always make sure there is a single normal tab
-            // Note: this is where the first tab in a newly-created browser window will be added
-            generateEmptyTab()
-            logger.log("Not restoring tabs because there are in memory tabs already.",
-                       level: .warning,
-                       category: .tabs)
-
-            return
-        }
         generateTabs(from: windowData)
         cleanUpUnusedScreenshots()
         cleanUpTabSessionData()
@@ -604,6 +593,8 @@ class TabManagerImplementation: NSObject,
 
     /// Creates the webview so needs to live on the main thread
     private func generateTabs(from windowData: WindowData) {
+        // Clear in memory tabs for tab restore
+        tabs = [Tab]()
         let filteredTabs = filterPrivateTabs(from: windowData,
                                              clearPrivateTabs: shouldClearPrivateTabs())
         var tabToSelect: Tab?
