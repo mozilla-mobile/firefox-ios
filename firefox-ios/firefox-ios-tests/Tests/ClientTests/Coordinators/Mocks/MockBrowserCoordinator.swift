@@ -43,7 +43,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showNativeErrorPageCalled = 0
     var showPrivateHomepageCalled = 0
     var showWebViewCalled = 0
-    var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
     var showStoriesFeedCalled = 0
@@ -182,8 +181,11 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         return nil
     }
 
-    func setHomepageVisibility(isVisible: Bool) {
-        setHomepageVisibilityCalled += 1
+    func prepareHomepageForScreenshots(
+        overlayManager: any Client.OverlayModeManager,
+        statusBarScrollDelegate: any Client.StatusBarScrollDelegate,
+        toastContainer: UIView
+    ) {
     }
 
     func showPrivateHomepage(overlayManager: any Client.OverlayModeManager) {

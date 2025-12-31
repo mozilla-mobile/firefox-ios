@@ -168,9 +168,42 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    func setHomepageVisibility(isVisible: Bool) {
+    /// Prepares the homepage view for screenshot purposes without proper view controller containment.
+    /// This adds the homepage's view to the hierarchy but doesn't establish parent-child relationship,
+    /// which prevents viewDidAppear and other lifecycle methods from being called.
+    /// Use this only when you need the view for screenshots but don't want to trigger lifecycle events.
+    func prepareHomepageForScreenshots(
+        overlayManager: OverlayModeManager,
+        statusBarScrollDelegate: StatusBarScrollDelegate,
+        toastContainer: UIView
+    ) {
+        // Create homepage view controller if needed
+        if homepageViewController == nil {
+            let homepageController = HomepageViewController(
+                windowUUID: windowUUID,
+                overlayManager: overlayManager,
+                statusBarScrollDelegate: statusBarScrollDelegate,
+                toastContainer: toastContainer
+            )
+            homepageController.termsOfUseDelegate = self
+            self.homepageViewController = homepageController
+        }
+
         guard let homepage = homepageViewController else { return }
-        homepage.view.isHidden = !isVisible
+
+        // Load homepage
+        _ = homepage.view
+
+        // Manually add the view to the content container without view controller containment
+        // This prevents viewDidAppear from being called since there's no parent-child relationship
+        let contentContainer = browserViewController.contentContainer
+        if homepage.view.superview == nil {
+            homepage.view.accessibilityElementsHidden = false
+            // Add view with frame-based layout (constraints will be set by embedContent when actually shown)
+            homepage.view.frame = contentContainer.bounds
+            homepage.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            contentContainer.addSubview(homepage.view)
+        }
     }
 
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
