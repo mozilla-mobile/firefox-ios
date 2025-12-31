@@ -1,11 +1,11 @@
-name: Build and Run Autofill Automation
+name: Test Autofill Playwright specs
 permissions: read-all
 on:
     workflow_call:
       secrets:
           SLACK_WEBHOOK_URL:
             required: true
-    workflow_dispatch: {}
+    workflow_dispatch:
     pull_request:
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
@@ -14,44 +14,40 @@ on:
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
 jobs:
-  build:
-    runs-on: macos-13
+  test:
+    runs-on: macos-26
     timeout-minutes: 40
     strategy:
       matrix:
-        python-version: [3.9]
-        xcode: ["15.2"]
-    continue-on-error: true
+        node: ["24"]
     steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
+        - uses: actions/checkout@v6
+        - name: Clone test specs
+          uses: actions/checkout@v6
+          with:
+            repository: issammani/test-playwright
+            path: 'test-playwright'
         - name: Get the current github action name
           run: |
             github_action_name="Update credential provider script"
             echo "github_action_name=$github_action_name" >> $GITHUB_ENV
-        - name: Clone repository
-          run: |
-            git clone https://github.com/issammani/test-playwright.git
-        - name: Install node
+        - name: Use Node ${{ matrix.node }}
           uses: actions/setup-node@v4
           with:
-           node-version: 18
-        - run: |
-            echo "Install dependencies and run tests"
-            npm i
-            npm install --save concurrently
-            npm i -D @playwright/test
-
+            node-version: ${{ matrix.node }}
+        - name: Install test-playwright
+          run: |
             cd test-playwright
-            echo "Install playwright"
-            npx playwright install
-            
-            echo "Run tests"
+            npm ci
+            npx playwright install webkit
+        - name: Run tests
+          run: |
+            cd test-playwright
             npm test
         - name: Set job log URL
           if: always()
           run: echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
-        - name: Send Slack notification if tests fail
+        - name: Send Slack notification
           if: '${{ !cancelled() && !github.event.pull_request.head.repo.fork }}'
           id: slack
           uses: slackapi/slack-github-action@v2.0.0
