@@ -1,16 +1,16 @@
 name: Test Autofill Playwright specs
 permissions: read-all
 on:
-    workflow_dispatch:
     workflow_call:
       secrets:
           SLACK_WEBHOOK_URL:
             required: true
-    push:
-      branches: ['main']
+    workflow_dispatch:
+    pull_request:
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
-    pull_request:
+    push:
+      branches: ['main']
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
 jobs:
