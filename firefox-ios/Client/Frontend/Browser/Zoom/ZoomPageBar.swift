@@ -313,10 +313,11 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
         backgroundColor = colors.layer2.withAlphaComponent(backgroundAlpha)
 
+        let separatorBackgroundColor: UIColor = if #available(iOS 26.0, *) { .systemGray2 } else { colors.borderPrimary }
         stepperContainer.backgroundColor = if #available(iOS 26.0, *) { .clear } else { colors.layer5 }
         stepperContainer.layer.shadowColor = colors.shadowDefault.cgColor
-        leftSeparator.backgroundColor = colors.borderPrimary
-        rightSeparator.backgroundColor = colors.borderPrimary
+        leftSeparator.backgroundColor = separatorBackgroundColor
+        rightSeparator.backgroundColor = separatorBackgroundColor
         zoomLevel.tintColor = colors.textPrimary
         zoomInButton.tintColor = colors.iconPrimary
         let zoomInButtonImageColorTransformer = UIConfigurationColorTransformer({ [weak zoomInButton] baseColor in
