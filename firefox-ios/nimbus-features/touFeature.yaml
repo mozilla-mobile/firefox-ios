@@ -19,14 +19,21 @@ features:
           Whether to show a drag handle on the prompt and allows users to use it to dismiss the prompt.
         type: Boolean
         default: true
+      bottom-sheet-strings:
+        description: >
+          Which bottom sheet strings to show: 0, 1, or 2.
+        type: Int
+        default: 0
     defaults:
       - channel: beta
         value:
           status: false
           max-reminders-count: 2
           enable-drag-to-dismiss: true
+          bottom-sheet-strings: 0
       - channel: developer
         value:
           status: false
           max-reminders-count: 2
           enable-drag-to-dismiss: true
+          bottom-sheet-strings: 0
