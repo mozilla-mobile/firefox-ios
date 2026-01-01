@@ -79,6 +79,108 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "ئاتلا";
 
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "ئاپتوماتىك";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "داۋاملاشتۇر";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "قاراڭغۇ";
+
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "ئۆزىڭىز ياقتۇرىدىغان ئۆرنەك ياكى ئۈسكۈنىڭىزگە ماس كېلىدىغان %@ نى تاللاپ، تىزگىننى قولىڭىزدا تۇتۇڭ.";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "يورۇق";
+
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "ئۆرنەك تاللىنىدۇ";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "داۋاملاشتۇر";
+
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "خەت بېسىشقا باشلىغاندا ئىزدەش تەۋسىيەسىگە ئېرىشىدۇ، دائىم ئىشلىتىدىغان تور بېكەت، خەتكۈش، تارىخ خاتىرىسى ۋە ئىزدەش موتورىنى ئۆز ئىچىگە ئالىدۇ – ھەممىسى بىر جايدا.";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "ئادرېس بالداق تاللىنىدۇ";
+
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "%1$@ نى قانداق بايقىغانلىقىڭىز ۋە ئۇنى ئىشلىتىشنى %2$@ نىڭ بازارچىلىق ھەمكارلاشقۇچىلىرى بىلەن ھەمبەھىرلەڭ. بۇ سانلىق مەلۇماتلار ھەرگىز سېتىلمايدۇ.";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "سانلىق مەلۇماتنى قانداق ئىشلىتىمىز";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "ھازىر ئەمەس";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "تېخىمۇ ياخشى ئىنتېرنېت قۇرۇشىمىزغا ياردەم قىلىڭ";
+
+/* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "%@ دىكى شەخسىيەت ئىقتىدارىنى بايقاپ، ئۈسكۈنىلىرىڭىز ئارىسىدا بەتكۈچلەرنى بىخەتەر ئەۋەتەلەيسىز.";
+
+/* Button to skip the notification card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "ھازىر ئەمەس";
+
+/* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "ئۇقتۇرۇش قوزغىتىلسا %@ تېخىمۇ بىخەتەر بولۇشىڭىزغا ياردەم بېرىدۇ";
+
+/* Button to turn on notifications in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "ئۇقتۇرۇشنى ئاچ";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "كۆزنى يۇمۇپ ئاچقۇچە خالىغان ئۈسكۈنىدە خەتكۈچ، ئىم قاتارلىق ئۇچۇرلارنى كۆرەلەيسىز. شەخسىي ئۇچۇرلىرىڭىز شىفىرلىنىپ بىخەتەر ساقلىنىدۇ.";
+
+/* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "قەدەمداشنى باشلايدۇ";
+
+/* Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "ھازىر ئەمەس";
+
+/* Title for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "شۇئان ئالدىنقى قېتىم كەلگەن جايدىن داۋاملاشتۇرىدۇ";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "قوشۇلۇپ داۋاملاشتۇر";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "تېز، بىخەتەر، سىزنى ھەرگىز سېتىۋەتمەيدۇ. تېخىمۇ ياخشى تور زىيارەت تەسىراتىغا ئېرىشتۈرىدۇ.";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "تەڭشەك باشقۇرۇش";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "توركۆرگۈنى ياخشىلاشقا ياردەملىشىپ، %1$@ دىياگنوز ۋە تەسىرلىشىش سانلىق مەلۇماتىنى %2$@ غا يوللايدۇ. %3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ شەخسىيىتىڭىزگە كۆڭۈل بۆلىدۇ. %2$@ دىن تەپسىلاتىنى ئوقۇغىلى بولىدۇ";
+
+/* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "شەخسىيەت ئۇقتۇرۇشى";
+
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "داۋاملاشتۇرسىڭىز، %@ غا قوشۇلىسىز";
+
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ نىڭ ئىشلىتىش شەرتلىرى";
+
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "ئەركىن يۈگۈرۈشكە تەييار";
+
+/* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "كۆڭۈلدىكى توركۆرگۈ قىلىپ تەڭشە";
+
+/* Description for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "سانلىق مەلۇماتىڭىزنى قوغدايمىز ۋە شىركەتلەرنىڭ چېكىشلىرىڭىزنى نازارەت قىلىشىنى ئۆزلۈكىدىن توسىمىز.";
+
+/* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "ھازىر ئەمەس";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "زېرىكىشلىك ئىزلىغۇچىلار بىلەن خوشلىشىڭ";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "ئاپتوماتىك";
 

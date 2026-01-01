@@ -172,6 +172,12 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "ਪਰਦੇਦਾਰੀ ਸੂਚਨਾ";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "ਹੋਰ ਜਾਣੋ";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "ਰਿਮੋਟ ਸੁਧਾਰਾਂ ਲਈ ਮਨਜ਼ੂਰੀ";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "ਟੈਬ ਅਤੇ ਸਿਰਨਾਵਾਂ ਪੱਟੀ ਨੂੰ ਓਹਲੇ ਕਰਨ ਲਈ ਸਕਰੋਲ ਕਰੋ";
 
@@ -235,11 +241,17 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "ਹੋਰ ਜਾਣੋ";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "ਹੋਰ ਜਾਣੋ";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "ਫ਼ੀਚਰ ਅਤੇ ਵਿਚਾਰਾਂ ਨੂੰ ਹਰ ਕਿਸੇ ਕੋਲ ਪਹੁੰਚਣ ਤੋਂ ਪਹਿਲਾਂ ਅਜ਼ਮਾਓ।";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "ਅਧਿਐਨ ਇੰਸਟਾਲ ਕਰੋ ਤੇ ਚਲਾਓ";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "ਫ਼ੀਚਰ ਅਧਿਐਨਾਂ ਦੀ ਮਨਜ਼ੂਰੀ";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "ਸਫ਼ਿਆਂ ਦਾ ਸਾਰ ਲੈਣ ਲਈ ਪਹੁੰਚ ਦਿੰਦਾ ਹੈ।";

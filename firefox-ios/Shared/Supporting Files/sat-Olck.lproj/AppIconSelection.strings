@@ -1,0 +1,24 @@
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option. */
+"Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136" = "ᱵᱟᱪᱷᱟᱣᱮᱱᱟ";
+
+/* On the app icon customization screen, where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. %@ is the app name. */
+"Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136" = "%@ ᱮᱯ ᱟᱭᱠᱚᱱ ᱵᱟᱪᱷᱟᱣ ᱢᱮ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option. */
+"Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136" = "ᱵᱟᱝ ᱵᱟᱪᱷᱟᱣ ᱟᱠᱟᱱᱟ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background. */
+"Settings.AppIconSelection.AppIconNames.Blue.Title.v136" = "ᱞᱤᱞ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of blue fading to purple. */
+"Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137" = "ᱞᱤᱞ ᱴᱟᱲᱟᱝ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a cyan background. */
+"Settings.AppIconSelection.AppIconNames.Cyan.Title.v137" = "ᱥᱟᱭᱟᱱ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of yellow fading to orange. */
+"Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137" = "ᱥᱚᱱᱟ ᱚᱠᱛᱚ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background. */
+"Settings.AppIconSelection.AppIconNames.Green.Title.v136" = "ᱦᱟᱹᱨᱤᱭᱟᱹᱲ";
+

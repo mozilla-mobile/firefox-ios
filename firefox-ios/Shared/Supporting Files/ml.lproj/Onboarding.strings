@@ -79,6 +79,84 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "ഒഴിവാക്കുക";
 
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "തന്നെത്താനെ";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "തുടരുക";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "ഇരുളിമ";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "തെളിച്ചം";
+
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "അലങ്കാരം തിരഞ്ഞെടുക്കുക";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "തുടരുക";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "വിലാസപ്പട്ട തിരഞ്ഞെടുക്കുക";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "എങ്ങനെയാണു ഞങ്ങൾ ദത്ത ഉപയോഗിക്കുന്നതു്";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "ഇപ്പോഴല്ല";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "ഒരു മികച്ച ഇന്റെർനെറ്റ് പണിയാൻ ഞങ്ങളെ തുണയ്ക്കുക";
+
+/* Button to skip the notification card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "ഇപ്പോഴല്ല";
+
+/* Button to turn on notifications in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "അറിയിപ്പുകൾ തുടങ്ങിവയ്ക്കുക";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "ഏതൊരു ഉപകരണത്തിലും ഞൊടിയിടയിൽ അടയാളക്കുറിപ്പുകളും ഒളിവാക്കുകളും മറ്റും നേടൂ. എൻക്രിപ്ഷൻ കൊണ്ടു താങ്ങളുടെ സ്വകാര്യ ഡാറ്റ സുരക്ഷിതമായി നിലനില്ക്കും.";
+
+/* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "സമന്വയിപ്പിക്കാൻ തുടങ്ങുക";
+
+/* Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "ഇപ്പോഴല്ല";
+
+/* Title for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "താങ്ങൾ നിറുത്തിയയിടത്തിൽ നിന്നു് ഉടൻ തുടങ്ങുക";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "സമ്മതിച്ചു തുടരുക";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "ക്രമീകരണങ്ങൾ കൈകാര്യം ചെയ്യുക";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "അന്വേഷിയന്ത്രത്തിനെ മെച്ചപ്പെുടത്താൻ %1$@ %2$@-ക്കു് നിദാനനിർണയനീയും ഇടപാടുനീയ ദത്ത അയയ്ക്കാറുണ്ടു്. %3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "താങ്ങളുടെ സ്വകാര്യതക്കു് %1$@ ശ്രദ്ധിക്കാറുണ്ടു്. ഞങ്ങളുടെ %2$@-ൽ കൂടുതൽ വായിക്കുക.";
+
+/* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "സ്വകാര്യത അറിയിപ്പു്";
+
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "തുടരുന്നതിലൂടെ, താങ്ങൾ %@ അംഗീകരിക്കുന്നു";
+
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ ഉപയോഗനിബന്ധനകൾ";
+
+/* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "തനിമട്ടായ അന്വേഷിയന്ത്രമാക്കുക";
+
+/* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "ഇപ്പോഴല്ല";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "പിന്തുടൎച്ചയന്ത്രങ്ങളോടു വിട പറഞ്ഞേറു്";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "തന്നെതാനെ";
 
@@ -151,8 +229,14 @@
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "അന്വേഷിയന്ത്രത്തിനെ മെച്ചപ്പെുടത്താൻ %1$@ %2$@-ക്കു് നിദാനനിർണയനീയും ഇടപാടുനീയ ദത്ത അയയ്ക്കാറുണ്ടു്. %3$@";
 
+/* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "അന്വേഷിയന്ത്രത്തിനെ മെച്ചപ്പെുടത്താൻ %1$@ %2$@-ക്കു് നിദാനനിർണയനീയും ഇടപാടുനീയ ദത്ത അയയ്ക്കാറുണ്ടു്. %3$@";
+
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "താങ്ങളുടെ സ്വകാര്യതക്കു് %1$@ ശ്രദ്ധിക്കാറുണ്ടു്. ഞങ്ങളുടെ %2$@-ൽ കൂടുതൽ വായിക്കുക";
+
+/* Agreement text for Privacy Notice. %1$@ is the app name (e.g. Firefox), %2$@ is the placeholder for the Privacy Notice link. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "താങ്ങളുടെ സ്വകാര്യതക്കു് %1$@ ശ്രദ്ധിക്കാറുണ്ടു്. ഞങ്ങളുടെ %2$@-ൽ കൂടുതൽ വായിക്കുക.";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "സ്വകാര്യതാ അറിയിപ്പു്.";
