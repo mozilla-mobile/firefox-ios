@@ -106,6 +106,9 @@
 /* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Escolha uma barra de endereços";
 
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Compartilhe que você usa o %1$@ e como o descobriu, com parceiros de marketing da %2$@. Esses dados nunca são vendidos.";
+
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Como usamos os dados";
 
@@ -126,6 +129,9 @@
 
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Ativar notificações";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Acesse favoritos, senhas e muito mais em qualquer dispositivo num piscar de olhos. Seus dados pessoais permanecem seguros e protegidos com criptografia.";
 
 /* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "Iniciar sincronização";
@@ -159,6 +165,9 @@
 
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "termos de uso do %@";
+
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Prepare-se para se libertar";
 
 /* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Definir como navegador padrão";
