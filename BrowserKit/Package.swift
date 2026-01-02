@@ -205,18 +205,6 @@ let package = Package(
                 .unsafeFlags(["-enable-testing"]),
             ]
         ),
-//        .target(
-//            name: "GestureKit",
-//            dependencies: ["Common", "SiteImageView"],
-//            swiftSettings: [
-//                .unsafeFlags(["-enable-testing"]),
-//                .enableExperimentalFeature("StrictConcurrency")
-//            ]
-//        ),
-//        .testTarget(
-//            name: "GestureKitTests",
-//            dependencies: ["GestureKit"]
-//        ),
         .testTarget(name: "SummarizeKitTests",
                     dependencies: ["SummarizeKit"],
                     swiftSettings: [

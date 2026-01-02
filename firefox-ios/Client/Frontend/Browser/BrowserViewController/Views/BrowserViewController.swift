@@ -19,7 +19,6 @@ import SummarizeKit
 import ActivityKit
 import Glean
 import ComponentLibrary
-import GestureKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -247,6 +246,14 @@ class BrowserViewController: UIViewController,
     // background view is placed behind content view so view scrolled to top or bottom shows
     // correct background for translucent toolbars
     private let backgroundView: UIView = .build()
+
+    private let swipeAwayTabPreview: SwipeAwayTabPreview = .build()
+    private lazy var swipeAwayTabPreviewGestureHandler = SwipeAwayTabPreviewGestureHandler(
+        tabPreview: swipeAwayTabPreview,
+        tabManager: tabManager,
+        themeManager: themeManager,
+        windowUUID: windowUUID
+    )
 
     // MARK: Contextual Hints
 
@@ -1157,10 +1164,6 @@ class BrowserViewController: UIViewController,
         super.viewDidLoad()
 
         setupEssentialUI()
-        view.insertSubview(fancyView, at: 0)
-        fancyView.pinToSuperview()
-        setupGesture()
-        fancyView.alpha = 0
         subscribeToRedux()
         enqueueTabRestoration()
         updateAddressToolbarContainerPosition(for: traitCollection)
@@ -1173,98 +1176,6 @@ class BrowserViewController: UIViewController,
         Task(priority: .background) { [weak self] in
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
             await self?.trackStartupTelemetry()
-        }
-    }
-
-    let fancyView: SwipeAwayTabPreview = .build()
-    var horizontalPan: UIGestureRecognizer?
-    var verticalPan: UIGestureRecognizer?
-
-    // FUN GESTURE!
-    private func setupGesture() {
-        let gesture = UIPanGestureRecognizer(target: self,
-                                             action: #selector(onFancyGestureRecognize))
-        gesture.delegate = self
-        addressBarPanGestureHandler?.gesture?.delegate = self
-        horizontalPan = addressBarPanGestureHandler?.gesture
-        verticalPan = gesture
-        overKeyboardContainer.addGestureRecognizer(gesture)
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        // allow only your two pans to work together
-        if (gestureRecognizer == horizontalPan && otherGestureRecognizer == verticalPan) ||
-            (gestureRecognizer == verticalPan && otherGestureRecognizer == horizontalPan) {
-            return true
-        }
-        return false
-    }
-
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let pan = gestureRecognizer as? UIPanGestureRecognizer else { return true }
-        let velocity = pan.velocity(in: view)
-
-        if gestureRecognizer == horizontalPan {
-            // horizontal only if X velocity dominates
-            return abs(velocity.x) > abs(velocity.y)
-        } else if gestureRecognizer == verticalPan {
-            // vertical only if Y velocity dominates
-            return abs(velocity.y) > abs(velocity.x)
-        }
-
-        return true
-    }
-
-    @objc private func onFancyGestureRecognize(gesture: UIPanGestureRecognizer) {
-        switch gesture.state {
-        case .began:
-            fancyView.applyTheme(theme: themeManager.getCurrentTheme(for: currentWindowUUID))
-            UIView.animate(withDuration: 0.3) { [self] in
-                fancyView.addImage(url: tabManager.selectedTab?.url?.absoluteString ?? "",
-                                   startingPoint: bottomContainer.frame.size.height)
-                fancyView.alpha = 1
-                fancyView.layer.zPosition = 1000
-            }
-
-        case .changed:
-            let translation = gesture.translation(in: view)
-            fancyView.translate(position: translation)
-        case .ended:
-            let velocity = gesture.velocity(in: view)
-            let translation = gesture.translation(in: view)
-            if velocity.y < -500 || translation.y < -(view.bounds.height / 2.7) {
-                UIView.animate(withDuration: 0.1) { [self] in
-                    fancyView.tossPreview()
-                } completion: { [self] _ in
-                    store.dispatchLegacy(
-                        TabPanelViewAction(
-                            panelType: .tabs,
-                            tabUUID: tabManager.selectedTab?.tabUUID,
-                            windowUUID: windowUUID,
-                            actionType: TabPanelViewActionType.closeTab
-                        )
-                    )
-                    UIView.animate(withDuration: 0.3) { [self] in
-                        fancyView.alpha = 0.0
-                        fancyView.layer.zPosition = 0
-                    } completion: { [weak self] _ in
-                        self?.fancyView.restore()
-                    }
-                }
-            } else {
-                if abs(translation.y) > 130 {
-                    navigationHandler?.showTabTray(selectedPanel: .tabs)
-                }
-                UIView.animate(withDuration: 0.3) { [self] in
-                    fancyView.alpha = 0
-                    fancyView.layer.zPosition = 0
-                } completion: { [weak self] _ in
-                    self?.fancyView.restore()
-                }
-            }
-        default:
-            break
         }
     }
 
@@ -1532,10 +1443,12 @@ class BrowserViewController: UIViewController,
             prefs: profile.prefs
         )
         addressBarPanGestureHandler?.delegate = self
+        swipeAwayTabPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
     }
 
     func addSubviews() {
         if isSwipingTabsEnabled {
+            view.addSubview(swipeAwayTabPreview)
             view.addSubviews(webPagePreview)
         }
         view.addSubviews(contentContainer)
@@ -1860,6 +1773,7 @@ class BrowserViewController: UIViewController,
                 webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 webPagePreview.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
+            swipeAwayTabPreview.pinToSuperview()
         }
 
         updateHeaderConstraints()

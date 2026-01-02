@@ -2,17 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
 import UIKit
 import Common
 import SiteImageView
 
-public class SwipeAwayTabPreview: UIView, ThemeApplicable {
-    public let screenShotView: UIView = .build()
+class SwipeAwayTabPreview: UIView, ThemeApplicable {
+    let screenShotView: UIView = .build()
     private let favicon: FaviconImageView = .build()
     private let deleteOverlay: UIView = .build()
 
-    override public init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
@@ -21,50 +20,7 @@ public class SwipeAwayTabPreview: UIView, ThemeApplicable {
         fatalError()
     }
 
-    public func addImage(url: String, startingPoint: CGFloat) {
-        if url.contains("home") {
-            favicon.manuallySetImage(UIImage(named: "faviconFox") ?? .checkmark)
-        } else {
-            favicon.setFavicon(FaviconImageViewModel(siteURLString: url, faviconCornerRadius: 20.0))
-        }
-        screenShotView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
-    }
-
-    public func translate(position: CGPoint) {
-        let shouldShowRemoveOverlay = position.y < -(bounds.size.height / 2.7)
-        print("FF: postion: \(position.y), shouldShowRemoveOverlay: \(shouldShowRemoveOverlay)")
-        let shouldAnimateOverlay = deleteOverlay.alpha != (shouldShowRemoveOverlay ? 1 : 0)
-        if shouldAnimateOverlay {
-            addHaptics()
-        }
-        UIView.animate(withDuration: 0.15) {
-            self.deleteOverlay.alpha = shouldShowRemoveOverlay ? 1 : 0
-        }
-        screenShotView.transform = .identity.translatedBy(x: position.x,
-                                                          y: position.y).scaledBy(
-            x: 0.7,
-            y: 0.7
-        )
-    }
-
-    private func addHaptics() {
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.prepare()
-        impactFeedback.impactOccurred()
-    }
-
-    public func restore() {
-        screenShotView.transform = .identity
-    }
-
-    public func tossPreview() {
-        screenShotView.transform = .identity.translatedBy(x: 0, y: -500).scaledBy(
-            x: 0.6,
-            y: 0.6
-        )
-    }
-
-    func setup() {
+    private func setup() {
         if #available(iOS 26.0, *) {
             let background = UIVisualEffectView(effect: UIGlassEffect(style: .clear))
             addSubview(background)
@@ -106,14 +62,49 @@ public class SwipeAwayTabPreview: UIView, ThemeApplicable {
         screenShotView.contentMode = .scaleToFill
     }
 
-    public func applyTheme(theme: Theme) {
+    func addImage(url: String, startingPoint: CGFloat) {
+        if url.contains("home") {
+            favicon.manuallySetImage(UIImage(named: "faviconFox") ?? .checkmark)
+        } else {
+            favicon.setFavicon(FaviconImageViewModel(siteURLString: url, faviconCornerRadius: 20.0))
+        }
+        screenShotView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+    }
+
+    func translate(position: CGPoint) {
+        let shouldShowRemoveOverlay = position.y < -(bounds.size.height / 2.7)
+        let shouldAnimateOverlay = deleteOverlay.alpha != (shouldShowRemoveOverlay ? 1 : 0)
+        if shouldAnimateOverlay {
+            addHaptics()
+        }
+        UIView.animate(withDuration: 0.15) {
+            self.deleteOverlay.alpha = shouldShowRemoveOverlay ? 1 : 0
+        }
+        screenShotView.transform = .identity.translatedBy(x: position.x,
+                                                          y: position.y).scaledBy(
+            x: 0.7,
+            y: 0.7
+        )
+    }
+
+    private func addHaptics() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.prepare()
+        impactFeedback.impactOccurred()
+    }
+
+    func restore() {
+        screenShotView.transform = .identity
+    }
+
+    func tossPreview() {
+        screenShotView.transform = .identity.translatedBy(x: 0, y: -500).scaledBy(
+            x: 0.6,
+            y: 0.6
+        )
+    }
+
+    func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2.withAlphaComponent(0.5)
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    let view = SwipeAwayTabPreview()
-    view.addImage(url: "https://www.google.com", startingPoint: 0.0)
-    return view
 }
