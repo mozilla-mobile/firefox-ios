@@ -914,9 +914,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
+        let sourceURL = document.sourceURL
+        let isSourceFileURL = sourceURL?.isFileURL == true
 
-        temporaryDocument?.download { [weak self, weak document] url in
-            ensureMainThread { [weak self, weak document] in
+        temporaryDocument?.download { [weak self] url in
+            ensureMainThread { [weak self] in
                 guard let url else { return }
 
                 // Prevent the WebView to load a new item so it doesn't add a new entry to the back and forward list.
@@ -927,7 +929,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
                 }
 
                 // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
-                guard let sourceURL = document?.sourceURL, document?.sourceURL?.isFileURL == false else { return }
+                guard let sourceURL, !isSourceFileURL else { return }
                 self?.temporaryDocumentsSession[url] = sourceURL
                 self?.documentLogger.registerDownloadFinish(url: sourceURL)
             }
