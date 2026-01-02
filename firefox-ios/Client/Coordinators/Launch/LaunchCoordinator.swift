@@ -268,7 +268,7 @@ final class LaunchCoordinator: BaseCoordinator,
         let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
             onboardingCards: onboardingModel.cards,
             skipText: .Onboarding.LaterAction,
-            onActionTap: { [weak self] action, cardName, completion in
+            onActionTap: { @MainActor [weak self] action, cardName, completion in
                 guard let onboardingService = self?.onboardingService else { return }
                 onboardingService.handleAction(
                     action,
