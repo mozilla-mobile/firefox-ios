@@ -6,12 +6,12 @@ import Common
 import XCTest
 
 final class MicrosurveyTests: BaseTestCase {
-    override func setUp() {
+    override func setUp() async throws {
         launchArguments = [
             LaunchArguments.SkipIntro,
             LaunchArguments.ResetMicrosurveyExpirationCount
         ]
-        super.setUp()
+        try await super.setUp()
         app.launch()
     }
 

@@ -70,7 +70,7 @@ final class HomepageViewController: UIViewController,
     // Telemetry related
     private var alreadyTrackedSections = Set<HomepageSection>()
     private var alreadyTrackedTopSites = Set<HomepageItem>()
-    private let trackingImpressionsThrottler: GCDThrottlerProtocol
+    private let trackingImpressionsThrottler: MainThreadThrottlerProtocol
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -81,7 +81,7 @@ final class HomepageViewController: UIViewController,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         throttler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.5)
+         throttler: MainThreadThrottlerProtocol = MainThreadThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -394,10 +394,10 @@ final class HomepageViewController: UIViewController,
         view.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
 
@@ -474,11 +474,33 @@ final class HomepageViewController: UIViewController,
         }
     }
 
+    private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
+        cell.configure(theme: currentTheme,
+                       closeButtonAction: { [weak self] in
+                           self?.dispatchPrivacyNoticeCloseButtonTapped()
+                       },
+                       linkAction: { [weak self] url in
+                           self?.dispatchPrivacyNoticeLinkTapped(url: url)
+                       }
+        )
+    }
+
     private func configureCell(
         for item: HomepageDiffableDataSource.HomeItem,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
+        case .privacyNotice:
+            guard let privacyNoticeCell = collectionView?.dequeueReusableCell(
+                cellType: PrivacyNoticeCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            configurePrivacyNoticeCell(cell: privacyNoticeCell)
+
+            return privacyNoticeCell
         case .messageCard(let config):
             guard let messageCardCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageMessageCardCell.self,
@@ -522,14 +544,16 @@ final class HomepageViewController: UIViewController,
             return searchBar
 
         case .jumpBackIn(let tab):
-            guard let jumpBackInCell = collectionView?.dequeueReusableCell(
-                cellType: JumpBackInCell.self,
-                for: indexPath
-            ) else {
+            let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
+            let cellType: (UICollectionViewCell & JumpBackInCellProtocol).Type =
+                isStoriesRedesignV2Enabled ? JumpBackInCell.self : LegacyJumpBackInCell.self
+
+            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            jumpBackInCell.configure(config: tab, theme: currentTheme)
-            return jumpBackInCell
+
+            cell.configure(config: tab, theme: currentTheme)
+            return cell
 
         case .jumpBackInSyncedTab(let config):
             guard let syncedTabCell = collectionView?.dequeueReusableCell(
@@ -554,19 +578,19 @@ final class HomepageViewController: UIViewController,
             return syncedTabCell
 
         case .bookmark(let item):
-            guard let bookmarksCell = collectionView?.dequeueReusableCell(
-                cellType: BookmarksCell.self,
-                for: indexPath
-            ) else {
+            let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
+            let cellType: (UICollectionViewCell & BookmarksCellProtocol).Type =
+                isStoriesRedesignV2Enabled ? BookmarksCell.self : LegacyBookmarksCell.self
+
+            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            bookmarksCell.configure(config: item, theme: currentTheme)
-            return bookmarksCell
+
+            cell.configure(config: item, theme: currentTheme)
+            return cell
 
         case .merino(let story):
-            let isHomepageStoriesCardsEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign,
-                                                                              checking: .buildOnly)
-            let cellType: ReusableCell.Type = isHomepageStoriesCardsEnabled ? StoryCell.self : MerinoStandardCell.self
+            let cellType: ReusableCell.Type = isAnyStoriesRedesignEnabled ? StoryCell.self : MerinoStandardCell.self
 
             guard let storyCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
@@ -894,6 +918,25 @@ final class HomepageViewController: UIViewController,
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
                 actionType: actionType
+            )
+        )
+    }
+
+    private func dispatchPrivacyNoticeCloseButtonTapped() {
+        store.dispatch(
+            HomepageAction(
+                windowUUID: self.windowUUID,
+                actionType: HomepageActionType.privacyNoticeCloseButtonTapped
+            )
+        )
+    }
+
+    private func dispatchPrivacyNoticeLinkTapped(url: URL) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.privacyNoticeLink(url)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnPrivacyNoticeLink
             )
         )
     }

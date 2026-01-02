@@ -22,8 +22,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     var tabManager: MockTabManager!
     var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         setIsHostedSummaryEnabled(false)
         mockGleanWrapper = MockGleanWrapper()
         summarizationChecker = MockSummarizationChecker()
@@ -40,7 +40,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockGleanWrapper = nil
         summarizationChecker = nil
         mockRecentSearchProvider = nil
@@ -49,7 +49,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         windowManager = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: GeneralBrowserMiddlewareAction

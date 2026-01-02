@@ -5,7 +5,8 @@
 import Foundation
 import WebKit
 
-final class WebsiteDataManagementViewModel {
+// TODO: FXIOS-14216 - WebsiteDataManagementViewModel shouldn't be @unchecked Sendable
+final class WebsiteDataManagementViewModel: @unchecked Sendable {
     enum State {
         case loading
         case displayInitial

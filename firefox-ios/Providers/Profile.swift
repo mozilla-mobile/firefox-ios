@@ -30,7 +30,8 @@ import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.PendingCommand
 import struct MozillaAppServices.RemoteSettingsConfig2
 
-public protocol SyncManager {
+// TODO: FXIOS-14225 - SyncManager shouldn't be Sendable
+public protocol SyncManager: Sendable {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
     var syncDisplayState: SyncDisplayState? { get }
@@ -131,8 +132,8 @@ protocol Profile: AnyObject, Sendable {
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
-    func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
-    func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void)
+    func getClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void)
+    func getCachedClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void)
 
     func cleanupHistoryIfNeeded()
 
@@ -480,16 +481,16 @@ open class BrowserProfile: Profile,
         }
     }
 
-    public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
+    public func getClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void) {
         let deferredResponse = self.getClientsAndTabs()
         deferredResponse.upon { result in
             completion(result.successValue)
         }
     }
 
-    public func getCachedClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
-        let defferedResponse = self.retrieveTabData()
-        defferedResponse.upon { result in
+    public func getCachedClientsAndTabs(completion: @escaping @Sendable ([ClientAndTabs]?) -> Void) {
+        let deferredResponse = self.retrieveTabData()
+        deferredResponse.upon { result in
             completion(result.successValue)
         }
     }
@@ -704,8 +705,7 @@ open class BrowserProfile: Profile,
 
     private func remoteSettingsAppContext() -> RemoteSettingsContext {
         let appInfo = BrowserKitInformation.shared
-        let uiDevice = UIDevice.current
-        let formFactor = switch uiDevice.userInterfaceIdiom {
+        let formFactor = switch UIDeviceDetails.userInterfaceIdiom {
         case .pad: "tablet"
         case .mac: "desktop"
         default: "phone"
@@ -722,7 +722,7 @@ open class BrowserProfile: Profile,
             /// See: https://developer.apple.com/documentation/foundation/locale/identifiertype/bcp47
             locale: getLocaleTag(),
             os: "iOS",
-            osVersion: uiDevice.systemVersion,
+            osVersion: UIDeviceDetails.systemVersion,
             formFactor: formFactor,
             country: Locale.current.regionCode)
     }
@@ -801,8 +801,11 @@ open class BrowserProfile: Profile,
                 )
             }
         }
-        if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
-            application.unregisterForRemoteNotifications()
+
+        ensureMainThread {
+            if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
+                application.unregisterForRemoteNotifications()
+            }
         }
     }
 

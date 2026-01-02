@@ -14,7 +14,8 @@ import WebEngine
 
 let browsingActivityType = "org.mozilla.ios.firefox.browsing"
 
-private let searchableIndex = CSSearchableIndex.default()
+// TODO: FXIOS-14175 - SearchableIndex is not thread safe
+nonisolated(unsafe) private let searchableIndex = CSSearchableIndex.default()
 
 @MainActor
 class UserActivityHandler {

@@ -11,9 +11,7 @@ enum ToastType: Equatable {
     case addToReadingList
     case clearCookies
     case closedSingleTab
-    case closedSingleInactiveTab
     case closedAllTabs(count: Int)
-    case closedAllInactiveTabs(count: Int)
     case openNewTab
     case removeFromReadingList
     case removeShortcut
@@ -27,10 +25,9 @@ enum ToastType: Equatable {
             return .LegacyAppMenu.AddToReadingListConfirmMessage
         case .clearCookies:
             return .Menu.EnhancedTrackingProtection.clearDataToastMessage
-        case .closedSingleTab, .closedSingleInactiveTab:
+        case .closedSingleTab:
             return .TabsTray.CloseTabsToast.SingleTabTitle
-        case let .closedAllInactiveTabs(tabsCount),
-            let .closedAllTabs(count: tabsCount):
+        case let .closedAllTabs(count: tabsCount):
             return String.localizedStringWithFormat(
                 .TabsTray.CloseTabsToast.Title,
                 tabsCount)
@@ -60,12 +57,8 @@ enum ToastType: Equatable {
         switch self {
         case .closedSingleTab:
             return tabPanelAction(for: TabPanelViewActionType.undoClose, uuid: uuid)
-        case .closedSingleInactiveTab:
-            return tabPanelAction(for: TabPanelViewActionType.undoCloseInactiveTab, uuid: uuid)
         case .closedAllTabs:
             return tabPanelAction(for: TabPanelViewActionType.undoCloseAllTabs, uuid: uuid)
-        case .closedAllInactiveTabs:
-            return tabPanelAction(for: TabPanelViewActionType.undoCloseAllInactiveTabs, uuid: uuid)
         case .retryTranslatingPage:
             return TranslationsAction(windowUUID: uuid, actionType: TranslationsActionType.didTapRetryFailedTranslation)
         case .clearCookies,

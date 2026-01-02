@@ -13,8 +13,6 @@ class SiteLoadTest: BaseTestCase {
         let futureDate = Date().addingTimeInterval(TimeInterval(60 * 60 * durationInHrs))
         var counter = 0
         while Date() < futureDate {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
             navigator.openURL(site[counter % 5])
             sleep(5)
 

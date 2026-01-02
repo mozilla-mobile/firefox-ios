@@ -20,8 +20,8 @@ final class IntroScreenManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         prefs = nil
+        super.tearDown()
     }
 
     // MARK: - shouldShowIntroScreen Tests

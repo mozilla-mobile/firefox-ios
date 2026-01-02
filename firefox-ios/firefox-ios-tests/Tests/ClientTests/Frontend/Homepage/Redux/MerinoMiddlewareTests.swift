@@ -14,18 +14,18 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockGleanWrapper: MockGleanWrapper!
     var mockStore: MockStoreForMiddleware<AppState>!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockGleanWrapper = MockGleanWrapper()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         mockGleanWrapper = nil
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_initializeHomepageAction_getPocketData() throws {

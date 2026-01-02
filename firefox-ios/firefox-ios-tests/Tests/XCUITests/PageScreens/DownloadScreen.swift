@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class DownloadsScreen {
     private let app: XCUIApplication
     private let sel: DownloadsSelectorsSet

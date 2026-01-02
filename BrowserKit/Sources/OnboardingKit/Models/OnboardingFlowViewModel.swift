@@ -12,9 +12,9 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
     public let onActionTap: @MainActor (
         ViewModel.OnboardingActionType,
         String,
-        @escaping (Result<TabAction, Error>) -> Void
+        @MainActor @escaping (Result<TabAction, Error>) -> Void
     ) -> Void
-    public let onMultipleChoiceActionTap: (
+    public let onMultipleChoiceActionTap: @MainActor (
         ViewModel.OnboardingMultipleChoiceActionType,
         String
     ) -> Void
@@ -24,8 +24,13 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         case none
     }
 
-    public let onComplete: (String) -> Void
+    public let onComplete: @MainActor (String) -> Void
     public private(set) var multipleChoiceSelections: [String: ViewModel.OnboardingMultipleChoiceActionType] = [:]
+
+    public var onCardView: (@MainActor (String) -> Void)?
+    public var onButtonTap: (@MainActor (String, ViewModel.OnboardingActionType, Bool) -> Void)?
+    public var onMultipleChoiceTap: (@MainActor (String, ViewModel.OnboardingMultipleChoiceActionType) -> Void)?
+    public var onDismiss: (@MainActor (String) -> Void)?
 
     public init(
         onboardingCards: [ViewModel],
@@ -33,12 +38,12 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         onActionTap: @MainActor @escaping (
             ViewModel.OnboardingActionType,
             String,
-            @escaping (Result<TabAction, Error>) -> Void) -> Void,
-        onMultipleChoiceActionTap: @escaping (
+            @MainActor @escaping (Result<TabAction, Error>) -> Void) -> Void,
+        onMultipleChoiceActionTap: @MainActor @escaping (
             ViewModel.OnboardingMultipleChoiceActionType,
             String
         ) -> Void,
-        onComplete: @escaping (String) -> Void
+        onComplete: @MainActor @escaping (String) -> Void
     ) {
         self.onboardingCards = onboardingCards
         self.skipText = skipText
@@ -51,6 +56,15 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         action: ViewModel.OnboardingActionType,
         cardName: String
     ) {
+        let card = onboardingCards.first(where: { $0.name == cardName })
+        let isPrimaryButton: Bool
+        if let card = card {
+            isPrimaryButton = card.buttons.primary.action.rawValue == action.rawValue
+        } else {
+            isPrimaryButton = false
+        }
+        onButtonTap?(cardName, action, isPrimaryButton)
+
         onActionTap(action, cardName) { [weak self] result in
             switch result {
             case .success(let tabAction):
@@ -74,12 +88,14 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
                 pageCount = nextIndex
             }
         } else {
+            onDismiss?(cardName)
             onComplete(cardName)
         }
     }
 
     public func handleMultipleChoiceAction(action: ViewModel.OnboardingMultipleChoiceActionType, cardName: String) {
         multipleChoiceSelections[cardName] = action
+        onMultipleChoiceTap?(cardName, action)
         onMultipleChoiceActionTap(action, cardName)
     }
 
@@ -90,6 +106,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
 
         let currentIndex = min(max(pageCount, 0), onboardingCards.count - 1)
         let currentCardName = onboardingCards[currentIndex].name
+        onDismiss?(currentCardName)
         onComplete(currentCardName)
     }
 
@@ -106,5 +123,10 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         let previous = max(pageCount - 1, 0)
         guard previous != pageCount else { return }
         pageCount = previous
+    }
+
+    func handlePageChange() {
+        guard pageCount >= 0 && pageCount < onboardingCards.count else { return }
+        onCardView?(onboardingCards[pageCount].name)
     }
 }

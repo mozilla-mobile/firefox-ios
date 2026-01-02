@@ -8,7 +8,7 @@ import Shared
 import Sync
 import Account
 
-class ManageFxAccountSetting: Setting {
+final class ManageFxAccountSetting: Setting {
     private var notification: NSObjectProtocol?
 
     let profile: Profile?
@@ -34,8 +34,10 @@ class ManageFxAccountSetting: Setting {
             forName: .accountLoggedOut,
             object: nil,
             queue: .main
-        ) { [weak settings] _ in
-            settings?.dismiss(animated: true, completion: nil)
+        ) { _ in
+            ensureMainThread { [weak settings] in
+                settings?.dismiss(animated: true, completion: nil)
+            }
         }
     }
 

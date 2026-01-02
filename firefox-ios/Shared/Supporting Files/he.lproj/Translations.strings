@@ -38,7 +38,7 @@
 "Translations.Sheet.Error.RetryButton.v145" = "ניסיון חוזר";
 
 /* On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page. */
-"Translations.Sheet.Error.SubtitleLabel.v145" = "נא לבדוק את החיבור שלך לרשת ולנסות שוב.";
+"Translations.Sheet.Error.SubtitleLabel.v145" = "נא לבדוק את החיבור שלך לאינטרנט ולנסות שוב.";
 
 /* On the translation feature bottom sheet, this is the text for the error message that appears when a user has no internet connection when trying to translate a page. */
 "Translations.Sheet.Error.TitleLabel.v145" = "לא ניתן לטעון שפות";
@@ -48,6 +48,9 @@
 
 /* This is the text on the secondary button used to indicate that page is being translated and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.LoadingButton.v145" = "הדף בתהליך תרגום";
+
+/* This is the accessibility label to announce that the page is translated and loading is completed. From a user perspective, they will see the translation icon go from loading state to active state, which means we received the a valid translation response from translating the page. */
+"Translations.Sheet.LoadingCompleted.AccessibilityLabel.v147" = "העמוד תורגם";
 
 /* This is the text on the secondary button used to restore the translated page to its original language and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.ShowOriginalButton.v145" = "הצגת מקור";

@@ -22,7 +22,6 @@ struct TabPanelViewAction: Action {
     let moveTabData: MoveTabData?
     let toastType: ToastType?
     let shareSheetURL: URL?
-    let isInactiveTab: Bool?
     let deleteTabPeriod: TabsDeletionPeriod?
 
     init(panelType: TabTrayPanelType?,
@@ -33,7 +32,6 @@ struct TabPanelViewAction: Action {
          moveTabData: MoveTabData? = nil,
          toastType: ToastType? = nil,
          shareSheetURL: URL? = nil,
-         isInactiveTab: Bool? = nil,
          deleteTabPeriod: TabsDeletionPeriod? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
@@ -47,7 +45,6 @@ struct TabPanelViewAction: Action {
         self.moveTabData = moveTabData
         self.toastType = toastType
         self.shareSheetURL = shareSheetURL
-        self.isInactiveTab = isInactiveTab
         self.deleteTabPeriod = deleteTabPeriod
     }
 }
@@ -65,11 +62,6 @@ enum TabPanelViewActionType: ActionType {
     case deleteTabsOlderThan
     case undoCloseAllTabs
     case moveTab
-    case toggleInactiveTabs
-    case closeInactiveTab
-    case undoCloseInactiveTab
-    case closeAllInactiveTabs
-    case undoCloseAllInactiveTabs
     case learnMorePrivateMode
     case selectTab
 }
@@ -78,12 +70,10 @@ struct TabPanelMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let tabDisplayModel: TabDisplayModel?
-    let inactiveTabModels: [InactiveTabsModel]?
     let toastType: ToastType??
     let scrollBehavior: TabScrollBehavior?
 
     init(tabDisplayModel: TabDisplayModel? = nil,
-         inactiveTabModels: [InactiveTabsModel]? = nil,
          toastType: ToastType? = nil,
          scrollBehavior: TabScrollBehavior? = nil,
          windowUUID: WindowUUID,
@@ -91,7 +81,6 @@ struct TabPanelMiddlewareAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.tabDisplayModel = tabDisplayModel
-        self.inactiveTabModels = inactiveTabModels
         self.toastType = toastType
         self.scrollBehavior = scrollBehavior
     }
@@ -102,7 +91,6 @@ enum TabPanelMiddlewareActionType: ActionType {
     case willAppearTabPanel
     case didChangeTabPanel
     case refreshTabs
-    case refreshInactiveTabs
     case showToast
     case scrollToTab
 }

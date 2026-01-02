@@ -57,7 +57,7 @@ protocol SearchBarLocationProvider: FeatureFlaggable {
 
 extension SearchBarLocationProvider {
     var isSearchBarLocationFeatureEnabled: Bool {
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isiPad = UIDeviceDetails.userInterfaceIdiom == .pad
         let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
 
         return isFeatureEnabled && !isiPad

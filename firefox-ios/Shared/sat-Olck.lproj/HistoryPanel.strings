@@ -10,3 +10,12 @@
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
 "LibraryPanel.History.LastHourOption.v138" = "ᱢᱩᱪᱟᱹᱫ ᱴᱟᱲᱟᱝ";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "7 ᱫᱤᱱ ᱢᱟᱲᱟᱝ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "24 ᱴᱟᱲᱟᱝ ᱢᱟᱲᱟᱝ";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "ᱱᱟᱜᱟᱢ ᱢᱮᱴᱟᱣ ᱢᱮ (ᱮᱴᱟᱜ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱠᱷᱚᱱ ᱥᱤᱱᱠ ᱱᱟᱜᱟᱢ ᱥᱟᱶᱛᱮ), ᱠᱩᱠᱤᱡᱽ ᱟᱨ ᱮᱴᱟᱜ ᱵᱽᱨᱟᱣᱩᱡᱤᱝ ᱰᱟᱴᱟ᱾";
+

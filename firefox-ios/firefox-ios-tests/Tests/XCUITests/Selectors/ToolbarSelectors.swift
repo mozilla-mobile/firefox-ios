@@ -12,6 +12,10 @@ protocol ToolbarSelectorsSet {
     var FORWARD_BUTTON: Selector { get }
     var TABTOOLBAR_MENUBUTTON: Selector { get }
     var RELOAD_BUTTON: Selector { get }
+    var SHARE_BUTTON: Selector { get }
+    var TRANSLATE_BUTTON: Selector { get }
+    var TRANSLATE_LOADING_BUTTON: Selector { get }
+    var TRANSLATE_ACTIVE_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -24,6 +28,10 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let forwardButton = AccessibilityIdentifiers.Toolbar.forwardButton
         static let tabToolbar_MenuButton = "TabToolbar.menuButton"
         static let reloadButton = AccessibilityIdentifiers.Toolbar.reloadButton
+        static let shareButton = AccessibilityIdentifiers.Toolbar.shareButton
+        static let translateButton = AccessibilityIdentifiers.Toolbar.translateButton
+        static let translateLoadingButton = AccessibilityIdentifiers.Toolbar.translateLoadingButton
+        static let translateActiveButton = AccessibilityIdentifiers.Toolbar.translateActiveButton
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -68,6 +76,41 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["browser", "toolbar"]
     )
 
-    var all: [Selector] { [SETTINGS_MENU_BUTTON, TABS_BUTTON, NEW_TAB_BUTTON, BACK_BUTTON, FORWARD_BUTTON,
-                           TABTOOLBAR_MENUBUTTON, RELOAD_BUTTON] }
+    let SHARE_BUTTON = Selector.buttonId(
+        IDs.shareButton,
+        description: "Share button on browser toolbar",
+        groups: ["browser", "toolbar"]
+    )
+
+    let TRANSLATE_BUTTON = Selector.buttonId(
+        IDs.translateButton,
+        description: "Translate button on browser toolbar",
+        groups: ["browser", "toolbar", "translation"]
+    )
+
+    let TRANSLATE_LOADING_BUTTON = Selector.buttonId(
+        IDs.translateLoadingButton,
+        description: "Translate loading button on browser toolbar",
+        groups: ["browser", "translation"]
+    )
+
+    let TRANSLATE_ACTIVE_BUTTON = Selector.buttonId(
+        IDs.translateActiveButton,
+        description: "Translate active button on browser toolbar",
+        groups: ["browser", "toolbar", "translation"]
+    )
+
+    var all: [Selector] { [
+        SETTINGS_MENU_BUTTON,
+        TABS_BUTTON,
+        NEW_TAB_BUTTON,
+        BACK_BUTTON,
+        FORWARD_BUTTON,
+        TABTOOLBAR_MENUBUTTON,
+        RELOAD_BUTTON,
+        SHARE_BUTTON,
+        TRANSLATE_BUTTON,
+        TRANSLATE_LOADING_BUTTON,
+        TRANSLATE_ACTIVE_BUTTON
+    ] }
 }

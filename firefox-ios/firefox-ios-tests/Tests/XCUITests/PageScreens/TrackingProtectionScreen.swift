@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class TrackingProtectionScreen {
     private let app: XCUIApplication
     private let sel: TrackingProtectionSelectorsSet
@@ -13,12 +14,14 @@ final class TrackingProtectionScreen {
         self.sel = selectors
     }
 
+    @MainActor
     func assertTrackingProtectionSwitchIsEnabled() {
         let toggle = sel.TRACKING_PROTECTION_SWITCH.element(in: app)
         BaseTestCase().mozWaitForElementToExist(toggle)
         XCTAssertTrue(toggle.isEnabled, "Expected Tracking Protection switch to be enabled")
     }
 
+    @MainActor
     func assertTrackingProtectionSwitchIsDisabled() {
         let toggle = sel.TRACKING_PROTECTION_SWITCH.element(in: app)
         BaseTestCase().mozWaitForElementToExist(toggle)

@@ -29,8 +29,9 @@ struct AccessibilityIdentifiers {
         static let addNewTabButton = "TabToolbar.addNewTabButton"
         static let searchButton = "TabToolbar.searchButton"
         static let stopButton = "TabToolbar.stopButton"
-        static let bookmarksButton = "TabToolbar.libraryButton"
         static let translateButton = "TabToolbar.translateButton"
+        static let translateLoadingButton = "TabToolbar.translateLoadingButton"
+        static let translateActiveButton = "TabToolbar.translateActiveButton"
     }
 
     struct Browser {
@@ -56,15 +57,20 @@ struct AccessibilityIdentifiers {
             static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
-        }
-
-        struct ToolbarButtons {
-            static let qrCode = "Toolbar.QRCode.button"
+            static let leadingSkeleton = "AddressToolbar.leadingSkeleton"
+            static let trailingSkeleton = "AddressToolbar.trailingSkeleton"
         }
 
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
         }
+
+        static let overKeyboardContainer = "Browser.overKeyboardContainer"
+        static let headerContainer = "Browser.headerContainer"
+        static let bottomContainer = "Browser.bottomContainer"
+        static let bottomContentStackView = "Browser.bottomContentStackView"
+        static let contentContainer = "Browser.contentContainer"
+        static let statusBarOverlay = "Browser.statusBarOverlay"
     }
 
     struct ContextualHints {
@@ -315,15 +321,6 @@ struct AccessibilityIdentifiers {
         static let tabCell = "TabDisplayView.tabCell"
         static let closeButton = "tabCloseButton"
         static let tabsTray = "Tabs Tray"
-
-        struct InactiveTabs {
-            static let headerLabel = "InactiveTabs.headerLabel"
-            static let headerButton = "InactiveTabs.headerButton"
-            static let headerView = "InactiveTabs.header"
-            static let cellLabel = "InactiveTabs.cell.label"
-            static let footerView = "InactiveTabs.footer"
-            static let deleteButton = "InactiveTabs.deleteButton"
-        }
     }
 
     struct LibraryPanels {
@@ -504,8 +501,14 @@ struct AccessibilityIdentifiers {
             static let deleteButton = "Delete"
             static let showPrivateSuggestions = "PrivateMode.showPrivateSuggestions"
             static let showTrendingSearches = "showTrendingSearch"
+            // This is based on `PrefsKeys.SearchSettings.showTrendingSearches`
+            static let showTrendingSearchesSwitch = "trendingSearchesFeatureKey"
             static let showRecentSearches = "showRecentSearch"
+            // This is based on `PrefsKeys.SearchSettings.showRecentSearches`
+            static let showRecentSearchesSwitch = "recentSearchesFeatureKey"
             static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
+            static let backButtoniOS26 = "BackButton"
+            static let backButton = "Settings"
         }
 
         struct AdvancedAccountSettings {
@@ -658,6 +661,10 @@ struct AccessibilityIdentifiers {
             static let title = "ShowTour"
         }
 
+        struct SentFromFirefox {
+            static let whatsApp = "SentFromFirefox.WhatsApp"
+        }
+
         struct SendFeedback {
             static let title = "SendFeedback"
         }
@@ -686,7 +693,6 @@ struct AccessibilityIdentifiers {
             static let title = "BrowsingSettings"
             static let tabs = "TABS"
             static let links = "LINKS"
-            static let inactiveTabsSwitch = "Inactive Tabs"
             static let blockPopUps = "blockPopups"
             static let autoPlay = "AutoplaySettings"
             static let blockImages = "NoImageModeStatus"
@@ -704,6 +710,11 @@ struct AccessibilityIdentifiers {
 
         struct Translation {
             static let title = "Settings.Translation.Title"
+            // This is based on `PrefsKeys.Settings.translationsFeature`
+            static let toggleSwitch = "settings.translationFeature"
+            static let navigationBar = "Settings.Translation.navigationBar"
+            static let backButtoniOS26 = "BackButton"
+            static let backButton = "Settings"
         }
 
         struct BlockImages {
@@ -712,6 +723,11 @@ struct AccessibilityIdentifiers {
 
         struct AutofillsPasswords {
             static let title = "AutofillsPasswordsSettings"
+        }
+
+        struct RelayMask {
+            static let title = "RelayMaskSettings"
+            static let manageMasksButton = "manageEmailMasks"
         }
 
         struct Passwords {

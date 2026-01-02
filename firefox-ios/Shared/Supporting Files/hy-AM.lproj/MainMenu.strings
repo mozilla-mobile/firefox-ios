@@ -11,7 +11,7 @@
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Նոր. պարզեցված ցանկ";
 
 /* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "Էջանշել էջը";
+"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "Էջանշել";
 
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.AccessibilityLabels.CloseButton.142" = "Փակել ցանկը";
@@ -53,7 +53,7 @@
 "MainMenu.Account.SyncError.Title.v131" = "Մուտք գործեք կրկին՝ համաժամեցնելու համար";
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.BookmarkPage.Title.v141" = "Էջանշել էջը";
+"MainMenu.BookmarkPage.Title.v141" = "Էջանշել";
 
 /* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
 "MainMenu.DesktopSiteOff.Title.v142" = "Անջ.";
@@ -65,7 +65,7 @@
 "MainMenu.HeaderBanner.Subtitle.v142" = "Վայրկյաններ է տևում։ Կարող եք փոխել ցանկացած պահի։";
 
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
-"MainMenu.HeaderBanner.Title.v142" = "Դարձրեք %@-ը ձեր սկզբնադիրը";
+"MainMenu.HeaderBanner.Title.v142" = "Դարձրեք Ձեր սկզբնադիրը %@";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "Անջ.";
@@ -146,7 +146,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Ավելացնել Էջանիշ";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Էջանշել այս էջը";
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Էջանշել սա";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
 "MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Խմբագրել Էջանիշը";
@@ -185,7 +185,7 @@
 "MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Ավելացնել Էջանիշ";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Էջանշել այս էջը";
+"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Էջանշել սա";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to edit the bookmark for this particular page. */
 "MainMenu.Submenus.Save.EditBookmark.Title.v131" = "Խմբագրել էջանիշը";

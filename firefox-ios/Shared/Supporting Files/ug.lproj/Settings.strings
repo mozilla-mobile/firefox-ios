@@ -172,6 +172,15 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "شەخسىيەت ئۇقتۇرۇشى";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "مول بىلىم";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ يېڭى نەشرى ئېلان قىلىنىشتىن ئىلگىرى، ئىقتىدارى، ئۈنۈمى ۋە مۇقىملىقىنى ياخشىلايدۇ. يىراقتىن قوللىنىشنى ئۆزگەرتىدۇ.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "يىراقتىن ياخشىلاشقا يول قويىدۇ";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "سىيرىلسا بەتكۈچ ۋە ئادرېس بالداقنى يوشۇرىدۇ";
 
@@ -235,11 +244,20 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "تەپسىلاتى";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "مول بىلىم";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "ئىقتىدارى ھەممەيلەنگە تارقىتىلىشتىن ئىلگىرى يېڭى ئىقتىدار ۋە ئامالنى ئالدىن ئىشلىتىدۇ.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ ئىقتىدارنى سىناش ئۈچۈن ئىشلەتكۈچىنى تاسادىپىي تاللايدۇ، بۇ ھەممەيلەن ئۈچۈن سۈپىتىنى ياخشىلايدۇ.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "ئورنىتىپ ۋە ئىجرا قىلىپ تەتقىق قىلىدۇ";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "ئىقتىدار تەتقىقاتىغا يول قويىدۇ";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "خۇلاسە بەت مەزمۇنىنى زىيارەت قىلىشنى تەمىنلەيدۇ.";

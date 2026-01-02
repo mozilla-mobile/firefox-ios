@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class BrowserScreen {
     private let app: XCUIApplication
     private let sel: BrowserSelectorsSet
@@ -144,6 +145,18 @@ final class BrowserScreen {
         }
     }
 
+    func dismissKeyboardIfVisible(maxTaps: Int = 3) {
+        let keyboard = app.keyboards.firstMatch
+        var remainingTaps = maxTaps
+
+        BaseTestCase().mozWaitForElementToExist(cancelButton)
+
+        while keyboard.exists && remainingTaps > 0 {
+            cancelButton.waitAndTap()
+            remainingTaps -= 1
+        }
+    }
+
     func assertURLAndKeyboardUnfocused(expectedURLValue: String) {
         let urlElement = addressBar
 
@@ -241,5 +254,14 @@ final class BrowserScreen {
     func getAddressBarElement() -> XCUIElement {
         BaseTestCase().mozWaitForElementToExist(addressBar)
         return addressBar
+    }
+
+    func tapCancelButtonOnUrlWithRetry() {
+        cancelButton.tapWithRetry()
+    }
+
+    func assertWebPageText(with text: String) {
+        let text = sel.webPageElement(with: text).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(text)
     }
 }

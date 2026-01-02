@@ -20,28 +20,28 @@ class IntegrationTests: BaseTestCase {
     // This DB contains 1 entry example.com
     let historyDB = "exampleURLHistoryBookmark-places.db"
 
-    override func setUp() {
-     // Test name looks like: "[Class testFunc]", parse out the function name
-     let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
-     let key = String(parts[1])
-     if testWithDB.contains(key) {
-     // for the current test name, add the db fixture used
-     launchArguments = [LaunchArguments.SkipIntro,
-                        LaunchArguments.StageServer,
-                        LaunchArguments.SkipWhatsNew,
-                        LaunchArguments.SkipETPCoverSheet,
-                        LaunchArguments.LoadDatabasePrefix + historyDB,
-                        LaunchArguments.SkipContextualHints]
-     } else if testFxAChinaServer.contains(key) {
-        launchArguments = [LaunchArguments.SkipIntro,
-                           LaunchArguments.FxAChinaServer,
-                           LaunchArguments.SkipWhatsNew,
-                           LaunchArguments.SkipETPCoverSheet,
-                           LaunchArguments.SkipContextualHints]
-     }
-    launchArguments.append(LaunchArguments.DisableAnimations)
-     super.setUp()
-     }
+    override func setUp() async throws {
+        // Test name looks like: "[Class testFunc]", parse out the function name
+        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
+        let key = String(parts[1])
+        if testWithDB.contains(key) {
+            // for the current test name, add the db fixture used
+            launchArguments = [LaunchArguments.SkipIntro,
+                               LaunchArguments.StageServer,
+                               LaunchArguments.SkipWhatsNew,
+                               LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.LoadDatabasePrefix + historyDB,
+                               LaunchArguments.SkipContextualHints]
+        } else if testFxAChinaServer.contains(key) {
+            launchArguments = [LaunchArguments.SkipIntro,
+                               LaunchArguments.FxAChinaServer,
+                               LaunchArguments.SkipWhatsNew,
+                               LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.SkipContextualHints]
+        }
+        launchArguments.append(LaunchArguments.DisableAnimations)
+        try await super.setUp()
+    }
 
     func allowNotifications() {
         addUIInterruptionMonitor(withDescription: "notifications") { (alert) -> Bool in

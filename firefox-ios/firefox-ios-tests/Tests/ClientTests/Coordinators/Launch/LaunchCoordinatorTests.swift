@@ -15,8 +15,8 @@ final class LaunchCoordinatorTests: XCTestCase {
     private var delegate: MockLaunchCoordinatorDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -24,12 +24,12 @@ final class LaunchCoordinatorTests: XCTestCase {
         delegate = MockLaunchCoordinatorDelegate()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         profile = nil
         mockRouter = nil
         delegate = nil
-        AppContainer.shared.reset()
+        try await super.tearDown()
     }
 
     func testInitialState() {

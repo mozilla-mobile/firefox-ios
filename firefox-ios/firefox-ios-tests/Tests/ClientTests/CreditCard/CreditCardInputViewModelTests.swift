@@ -41,11 +41,11 @@ class CreditCardInputViewModelTests: XCTestCase {
         viewModel.cardNumber = samplePlainTextCard.ccNumber
         viewModel.expirationDate = "1288"
         let expectation = expectation(description: "wait for credit card fields to be saved")
-        viewModel.saveCreditCard { creditCard, error in
+        viewModel.saveCreditCard { [autofill] creditCard, error in
             XCTAssertNotNil(creditCard)
             XCTAssertNil(error)
             XCTAssertEqual(creditCard?.ccName, "Allen Burges")
-            XCTAssertEqual(self.autofill.addCreditCardCalledCount, 1)
+            XCTAssertEqual(autofill?.addCreditCardCalledCount, 1)
             // Note: the number for credit card is encrypted so that part
             // will get added later and for now we will check the name only
             expectation.fulfill()
@@ -213,10 +213,10 @@ class CreditCardInputViewModelTests: XCTestCase {
 
         autofill.deleteResult = (true, TestError.example)
 
-        viewModel.removeCreditCard(creditCard: exampleCreditCard) { status, success in
+        viewModel.removeCreditCard(creditCard: exampleCreditCard) { [autofill] status, success in
             XCTAssertEqual(status, .none)
             XCTAssertFalse(success)
-            XCTAssertEqual(self.autofill.deleteCreditCardsCalledCount, 1)
+            XCTAssertEqual(autofill?.deleteCreditCardsCalledCount, 1)
             expectation.fulfill()
         }
 
@@ -226,10 +226,10 @@ class CreditCardInputViewModelTests: XCTestCase {
     func test_removeCreditCard_withNoCreditCard_returnsStatusNone() {
         let expectation = expectation(description: "wait for credit card to be removed")
 
-        viewModel.removeCreditCard(creditCard: nil) { status, success in
+        viewModel.removeCreditCard(creditCard: nil) { [autofill] status, success in
             XCTAssertEqual(status, .none)
             XCTAssertFalse(success)
-            XCTAssertEqual(self.autofill.deleteCreditCardsCalledCount, 0)
+            XCTAssertEqual(autofill?.deleteCreditCardsCalledCount, 0)
             expectation.fulfill()
         }
 
@@ -245,10 +245,10 @@ class CreditCardInputViewModelTests: XCTestCase {
 
         let expectation = expectation(description: "wait for credit card to be updated")
 
-        viewModel.updateCreditCard { status, error in
+        viewModel.updateCreditCard { [autofill] status, error in
             XCTAssertNil(error)
             XCTAssertEqual(status, true)
-            XCTAssertEqual(self.autofill.updateCreditCardCalledCount, 1)
+            XCTAssertEqual(autofill?.updateCreditCardCalledCount, 1)
             expectation.fulfill()
         }
 
@@ -265,10 +265,10 @@ class CreditCardInputViewModelTests: XCTestCase {
         enum TestError: Error { case example }
         autofill.updateResult = (true, TestError.example)
 
-        viewModel.updateCreditCard { status, error in
+        viewModel.updateCreditCard { [autofill] status, error in
             XCTAssertNotNil(error)
             XCTAssertEqual(status, true)
-            XCTAssertEqual(self.autofill.updateCreditCardCalledCount, 1)
+            XCTAssertEqual(autofill?.updateCreditCardCalledCount, 1)
             expectation.fulfill()
         }
 
@@ -278,10 +278,10 @@ class CreditCardInputViewModelTests: XCTestCase {
     func test_updateCreditCard_withoutValidCrediCard_ReturnsError() {
         let expectation = expectation(description: "wait for credit card to be updated")
 
-        viewModel.updateCreditCard { status, error in
+        viewModel.updateCreditCard { [autofill] status, error in
             XCTAssertNotNil(error)
             XCTAssertEqual(status, true)
-            XCTAssertEqual(self.autofill.updateCreditCardCalledCount, 0)
+            XCTAssertEqual(autofill?.updateCreditCardCalledCount, 0)
             expectation.fulfill()
         }
 

@@ -16,6 +16,7 @@ final class HomepageDiffableDataSource:
     typealias NumberOfTilesPerRow = Int
 
     enum HomeSection: Hashable {
+        case privacyNotice
         case messageCard
         case topSites(TextColor?, NumberOfTilesPerRow)
         case searchBar
@@ -36,6 +37,7 @@ final class HomepageDiffableDataSource:
     }
 
     enum HomeItem: Hashable, Sendable {
+        case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
@@ -49,12 +51,15 @@ final class HomepageDiffableDataSource:
 
         static var cellTypes: [ReusableCell.Type] {
             return [
+                PrivacyNoticeCell.self,
                 HomepageMessageCardCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 SearchBarCell.self,
+                LegacyJumpBackInCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
+                LegacyBookmarksCell.self,
                 BookmarksCell.self,
                 MerinoStandardCell.self,
                 StoryCell.self,
@@ -91,6 +96,11 @@ final class HomepageDiffableDataSource:
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
 
+        if state.shouldShowPrivacyNotice {
+            snapshot.appendSections([.privacyNotice])
+            snapshot.appendItems([.privacyNotice], toSection: .privacyNotice)
+        }
+
         if let configuration = state.messageState.messageCardConfiguration {
             snapshot.appendSections([.messageCard])
             snapshot.appendItems([.messageCard(configuration)], toSection: .messageCard)
@@ -99,16 +109,6 @@ final class HomepageDiffableDataSource:
         if let (topSites, numberOfCellsPerRow) = getTopSites(with: state.topSitesState, and: textColor) {
             snapshot.appendSections([.topSites(textColor, numberOfCellsPerRow)])
             snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
-        }
-
-        if state.shouldShowSpacer {
-            snapshot.appendSections([.spacer])
-            snapshot.appendItems([.spacer], toSection: .spacer)
-        }
-
-        if state.searchState.shouldShowSearchBar {
-            snapshot.appendSections([.searchBar])
-            snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
@@ -121,12 +121,22 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
+        if state.shouldShowSpacer {
+            snapshot.appendSections([.spacer])
+            snapshot.appendItems([.spacer], toSection: .spacer)
+        }
+
+        if state.searchState.shouldShowSearchBar {
+            snapshot.appendSections([.searchBar])
+            snapshot.appendItems([.searchBar], toSection: .searchBar)
+        }
+
         if let stories = getPocketStories(with: state.merinoState) {
             snapshot.appendSections([.pocket(textColor)])
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
 
-        if !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) {
+        if !isAnyStoriesRedesignEnabled {
             snapshot.appendSections([.customizeHomepage])
             snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
         }

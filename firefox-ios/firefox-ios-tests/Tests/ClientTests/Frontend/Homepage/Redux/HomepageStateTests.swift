@@ -8,14 +8,14 @@ import XCTest
 @testable import Client
 
 final class HomepageStateTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func tests_initialState_returnsExpectedState() {
@@ -129,6 +129,41 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.shouldTriggerImpression)
         XCTAssertEqual(newState.isZeroSearch, initialState.isZeroSearch)
+    }
+
+    @MainActor
+    func test_handlePrivacyNoticeInitialization_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                shouldShowPrivacyNotice: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+            )
+        )
+
+        XCTAssertTrue(newState.shouldShowPrivacyNotice)
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+    }
+
+    @MainActor
+    func test_handlePrivacyNoticeCloseButtonTapped_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.privacyNoticeCloseButtonTapped
+            )
+        )
+
+        XCTAssertFalse(newState.shouldShowPrivacyNotice)
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
     }
 
     // MARK: - Private

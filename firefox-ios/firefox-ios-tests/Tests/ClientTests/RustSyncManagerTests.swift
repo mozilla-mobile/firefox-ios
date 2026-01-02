@@ -70,23 +70,23 @@ class RustSyncManagerTests: XCTestCase {
             .addresses
         ]
 
-        rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
+        rustSyncManager.getEnginesAndKeys(engines: engines) { [tabs, logins, autofill, places] (engines, keys) in
             XCTAssertEqual(engines.count, 6)
 
-            XCTAssertTrue(engines.contains("bookmarks"))
-            XCTAssertTrue(engines.contains("history"))
-            XCTAssertTrue(engines.contains("passwords"))
-            XCTAssertTrue(engines.contains("tabs"))
-            XCTAssertTrue(engines.contains("addresses"))
-            XCTAssertTrue(engines.contains("creditcards"))
+            XCTAssertEqual(engines[safe: 0], "bookmarks")
+            XCTAssertEqual(engines[safe: 1], "creditcards")
+            XCTAssertEqual(engines[safe: 2], "history")
+            XCTAssertEqual(engines[safe: 3], "passwords")
+            XCTAssertEqual(engines[safe: 4], "tabs")
+            XCTAssertEqual(engines[safe: 5], "addresses")
             XCTAssertFalse(keys.isEmpty)
 
             XCTAssertNotNil(keys["creditcards"])
 
-            XCTAssertEqual(self.tabs.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.autofill.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.places.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(tabs?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(logins?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(autofill?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(places?.registerWithSyncManagerCalled, 1)
         }
     }
 
@@ -133,22 +133,22 @@ class RustSyncManagerTests: XCTestCase {
             .addresses
         ]
 
-        rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
+        rustSyncManager.getEnginesAndKeys(engines: engines) { [tabs, logins, autofill, places] (engines, keys) in
             XCTAssertEqual(engines.count, 5)
 
-            XCTAssertTrue(engines.contains("bookmarks"))
-            XCTAssertTrue(engines.contains("history"))
-            XCTAssertTrue(engines.contains("tabs"))
-            XCTAssertTrue(engines.contains("addresses"))
-            XCTAssertTrue(engines.contains("creditcards"))
+            XCTAssertEqual(engines[safe: 0], "bookmarks")
+            XCTAssertEqual(engines[safe: 1], "creditcards")
+            XCTAssertEqual(engines[safe: 2], "history")
+            XCTAssertEqual(engines[safe: 3], "tabs")
+            XCTAssertEqual(engines[safe: 4], "addresses")
             XCTAssertFalse(keys.isEmpty)
 
             XCTAssertNotNil(keys["creditcards"])
 
-            XCTAssertEqual(self.tabs.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 0)
-            XCTAssertEqual(self.autofill.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.places.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(tabs?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(logins?.registerWithSyncManagerCalled, 0)
+            XCTAssertEqual(autofill?.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(places?.registerWithSyncManagerCalled, 1)
         }
     }
 

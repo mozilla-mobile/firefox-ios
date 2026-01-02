@@ -9,7 +9,7 @@ import Common
 let AppEventQueue = EventQueue<AppEvent>()
 
 /// Action taken when an event's dependencies are completed.
-typealias EventQueueAction = (() -> Void)
+typealias EventQueueAction = (@Sendable () -> Void)
 /// Unique ID associated with an enqueued action.
 typealias ActionToken = UUID
 
@@ -81,7 +81,6 @@ final class EventQueue<QueueEventType: Hashable & Sendable>: @unchecked Sendable
               then action: @escaping EventQueueAction) -> ActionToken {
         mainQueue.ensureMainThread { [weak self] in
             guard let self else { return }
-
             // If a specific ID has been provided for this action, ensure
             guard !actions.contains(where: { $0.token == token }) else {
                 logger.log("Ignoring duplicate action (ID: \(token))", level: .info, category: .library)

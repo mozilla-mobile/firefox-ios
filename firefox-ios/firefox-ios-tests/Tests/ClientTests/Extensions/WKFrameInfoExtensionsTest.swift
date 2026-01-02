@@ -5,6 +5,7 @@
 import XCTest
 import WebKit
 
+@MainActor
 final class WKFrameInfoExtensionsTests: XCTestCase {
     let secureURL = URL(string: "https://foo.com")!
     let insecureURL = URL(string: "http://bar.com")!

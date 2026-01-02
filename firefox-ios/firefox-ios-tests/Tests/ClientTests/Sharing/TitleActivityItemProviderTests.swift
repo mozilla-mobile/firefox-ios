@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 import XCTest
 @testable import Client
 
+@MainActor
 final class TitleActivityItemProviderTests: XCTestCase {
     let testMessage = "Test message"
 
@@ -74,6 +75,42 @@ final class TitleActivityItemProviderTests: XCTestCase {
         )
 
         XCTAssertEqual(itemForActivity as? String, testMessage, "Must set title for non-excluded activity")
+        XCTAssertEqual(subtitle, testMessage)
+    }
+
+    // MARK: - Sent from Firefox experiment WhatsApp tab share override
+
+    func testOveridesWhatsAppShareItem_forApplySentFromFirefoxTreatment() {
+        let testActivityType = UIActivity.ActivityType(rawValue: "net.whatsapp.WhatsApp.ShareExtension")
+
+        let titleActivityItemProvider = TitleActivityItemProvider(title: testMessage, applySentFromFirefoxTreatment: true)
+        let itemForActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+        let subtitle = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            subjectForActivityType: testActivityType
+        )
+
+        XCTAssertTrue(itemForActivity is NSNull, "When applying Sent from Firefox treatment, don't append title to items")
+        XCTAssertEqual(subtitle, testMessage)
+    }
+
+    func testBasicBehaviour_whenApplySentFromFirefoxTreatment_forUnrelatedActivity() {
+        let testActivityType = UIActivity.ActivityType.mail
+
+        let titleActivityItemProvider = TitleActivityItemProvider(title: testMessage, applySentFromFirefoxTreatment: true)
+        let itemForActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+        let subtitle = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            subjectForActivityType: testActivityType
+        )
+
+        XCTAssertTrue(itemForActivity is NSNull, "When applying Sent from Firefox treatment, don't append title to items")
         XCTAssertEqual(subtitle, testMessage)
     }
 

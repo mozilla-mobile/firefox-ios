@@ -18,11 +18,9 @@ class PrivateBrowsingTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
     func testPrivateTabDoesNotTrackHistory() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(url1)
         waitForTabsButton()
-        navigator.goto(BrowserTabMenu)
+        navigator.nowAt(NewTabScreen)
         // Go to History screen
         navigator.goto(LibraryPanel_History)
         waitForElementsToExist(
@@ -63,10 +61,6 @@ class PrivateBrowsingTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307005
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(url2)
         waitUntilPageLoad()
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -304,10 +298,10 @@ fileprivate extension BaseTestCase {
 }
 
 class PrivateBrowsingTestIphone: BaseTestCase {
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .phone
         if !iPad() {
-            super.setUp()
+            try await super.setUp()
         }
     }
 

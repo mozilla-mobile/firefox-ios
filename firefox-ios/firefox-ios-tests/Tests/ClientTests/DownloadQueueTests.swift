@@ -16,16 +16,15 @@ class DownloadQueueTests: XCTestCase {
     var download: MockDownload!
 
     override func setUp() {
+        super.setUp()
         queue = DownloadQueue()
         download = MockDownload()
-
-        super.setUp()
     }
 
     override func tearDown() {
-        super.tearDown()
         queue = nil
         download = nil
+        super.tearDown()
     }
 
     func testDownloadQueueIsEmpty() {
@@ -57,6 +56,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertTrue(download.downloadCanceled)
     }
 
+    @MainActor
     func testDidDownloadBytes() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -65,6 +65,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, didDownloadCombinedBytes)
     }
 
+    @MainActor
     func testDidFinishDownloadingToWithOneElementsInQueue() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -73,6 +74,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, didCompleteWithError)
     }
 
+    @MainActor
     func testDidFinishDownloadingToWithTwoElementsInQueue() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -81,6 +83,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, didFinishDownloadingTo)
     }
 
+    @MainActor
     func testDidFinishDownloadingToWithNoElementsInQueue() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -88,6 +91,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, "noneOfMethodWasCalled")
     }
 
+    @MainActor
     func testDidCompleteWithError() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
@@ -96,6 +100,7 @@ class DownloadQueueTests: XCTestCase {
         XCTAssertEqual(mockQueueDelegate.methodCalled, didCompleteWithError)
     }
 
+    @MainActor
     func testDelegateMemoryLeak() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)

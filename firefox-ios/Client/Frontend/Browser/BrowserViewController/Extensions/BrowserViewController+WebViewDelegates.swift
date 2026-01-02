@@ -76,7 +76,7 @@ extension BrowserViewController: WKUIDelegate {
     private func handleJavaScriptAlert<T: WKJavaScriptAlertInfo>(
         _ alert: T,
         for webView: WKWebView,
-        spamCallback: @escaping () -> Void
+        spamCallback: @escaping @MainActor @Sendable () -> Void
     ) {
         if jsAlertExceedsSpamLimits(webView) {
             handleSpammedJSAlert(spamCallback)
@@ -95,7 +95,7 @@ extension BrowserViewController: WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor () -> Void
+        completionHandler: @escaping @MainActor @Sendable () -> Void
     ) {
         let messageAlert = MessageAlert(message: message,
                                         frame: frame,
@@ -110,7 +110,7 @@ extension BrowserViewController: WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptConfirmPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (Bool) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Bool) -> Void
     ) {
         let confirmAlert = ConfirmPanelAlert(message: message, frame: frame) { confirm in
             self.logger.log("JavaScript confirm panel was completed with result: \(confirm)", level: .info, category: .webview)
@@ -127,7 +127,7 @@ extension BrowserViewController: WKUIDelegate {
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (String?) -> Void
+        completionHandler: @escaping @MainActor @Sendable (String?) -> Void
     ) {
         let textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText) { input in
             self.logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
@@ -153,7 +153,7 @@ extension BrowserViewController: WKUIDelegate {
     func webView(
         _ webView: WKWebView,
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
-        completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
+        completionHandler: @escaping @MainActor @Sendable (UIContextMenuConfiguration?) -> Void
     ) {
         guard let url = elementInfo.linkURL,
               let currentTab = tabManager.selectedTab,
@@ -184,7 +184,7 @@ extension BrowserViewController: WKUIDelegate {
         requestMediaCapturePermissionFor origin: WKSecurityOrigin,
         initiatedByFrame frame: WKFrameInfo,
         type: WKMediaCaptureType,
-        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
+        decisionHandler: @escaping @MainActor @Sendable (WKPermissionDecision) -> Void
     ) {
         // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
         guard tabManager.selectedTab?.webView === webView, !contentContainer.hasAnyHomepage else {
@@ -197,7 +197,7 @@ extension BrowserViewController: WKUIDelegate {
 
     // MARK: - Helpers
 
-    private func handleSpammedJSAlert(_ callback: @escaping () -> Void) {
+    private func handleSpammedJSAlert(_ callback: @escaping @MainActor @Sendable () -> Void) {
         // User is being spammed. Squelch alert. Note that we have to do this after
         // a delay to avoid JS that could spin the CPU endlessly.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { callback() }
@@ -312,7 +312,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func createActions(isPrivate: Bool,
                        url: URL,
-                       addTab: @escaping (URL, Bool, Tab) -> Void,
+                       addTab: @escaping @MainActor @Sendable (URL, Bool, Tab) -> Void,
                        title: String?,
                        image: URL?,
                        currentTab: Tab,
@@ -705,7 +705,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse,
-        decisionHandler: @escaping @MainActor (WKNavigationResponsePolicy) -> Void
+        decisionHandler: @escaping @MainActor @Sendable (WKNavigationResponsePolicy) -> Void
     ) {
         let response = navigationResponse.response
         let responseURL = response.url
@@ -1053,7 +1053,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping @Sendable @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        completionHandler: @escaping @MainActor @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
             handleServerTrust(
@@ -1136,6 +1136,12 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
+            // Because we are not calling updateInContentHomePanel in updateUIForReaderHomeStateForTab we need to
+            // call it here so that we can load the webpage from tapping a link on the homepage
+            // TODO: FXIOS-14355 Remove this call in favor of newState update
+            if isToolbarTranslucencyRefactorEnabled {
+                updateInContentHomePanel(tab.url, focusUrlBar: true)
+            }
         }
     }
 
@@ -1226,7 +1232,7 @@ private extension BrowserViewController {
 
     // Use for sms and mailto, which do not show a confirmation before opening.
     func showExternalAlert(withText text: String,
-                           completion: @escaping (UIAlertAction) -> Void) {
+                           completion: @escaping @MainActor @Sendable (UIAlertAction) -> Void) {
         let alert = UIAlertController(title: nil,
                                       message: text,
                                       preferredStyle: .alert)
@@ -1323,7 +1329,7 @@ private extension BrowserViewController {
     func handleServerTrust(
         challenge: URLAuthenticationChallenge,
         dispatchQueue: DispatchQueueInterface,
-        completionHandler: @escaping @Sendable @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        completionHandler: @escaping @MainActor @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         dispatchQueue.async {
             // If this is a certificate challenge, see if the certificate has previously been
@@ -1340,8 +1346,9 @@ private extension BrowserViewController {
                 return
             }
 
+            let credential = URLCredential(trust: trust)
             ensureMainThread {
-                completionHandler(.useCredential, URLCredential(trust: trust))
+                completionHandler(.useCredential, credential)
             }
         }
     }

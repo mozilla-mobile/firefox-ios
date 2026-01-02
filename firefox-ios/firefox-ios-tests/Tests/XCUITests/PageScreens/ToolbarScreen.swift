@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class ToolbarScreen {
     private let app: XCUIApplication
     private let sel: ToolbarSelectorsSet
@@ -17,6 +18,10 @@ final class ToolbarScreen {
     private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app)}
     private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app)}
     private var tabToolbarMenuButton: XCUIElement { sel.TABTOOLBAR_MENUBUTTON.element(in: app) }
+    private var shareButton: XCUIElement { sel.SHARE_BUTTON.element(in: app) }
+    private var translateButton: XCUIElement { sel.TRANSLATE_BUTTON.element(in: app) }
+    private var translateLoadingButton: XCUIElement { sel.TRANSLATE_LOADING_BUTTON.element(in: app) }
+    private var translateActiveButton: XCUIElement { sel.TRANSLATE_ACTIVE_BUTTON.element(in: app) }
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
@@ -110,5 +115,53 @@ final class ToolbarScreen {
         let settingMenuButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settingMenuButton, timeout: TIMEOUT)
         return settingMenuButton
+    }
+
+    func tapShareButton() {
+        shareButton.waitAndTap()
+    }
+
+    func tapOnNewTabButton() {
+        newTabButton.waitAndTap()
+    }
+
+    // MARK: - Translate Button
+    enum TranslationButtonType {
+        case inactive
+        case loading
+        case active
+    }
+
+    func tapTranslateButton(with mode: TranslationButtonType) {
+        switch mode {
+        case .inactive:
+            translateButton.waitAndTap()
+        case .loading:
+            translateLoadingButton.waitAndTap()
+        case .active:
+            translateActiveButton.waitAndTap()
+        }
+    }
+
+    func assertTranslateButtonExists(with mode: TranslationButtonType) {
+        switch mode {
+        case .inactive:
+            BaseTestCase().mozWaitForElementToExist(translateButton)
+        case .loading:
+            BaseTestCase().mozWaitForElementToExist(translateLoadingButton)
+        case .active:
+            BaseTestCase().mozWaitForElementToExist(translateActiveButton)
+        }
+    }
+
+    func assertTranslateButtonDoesNotExist(with mode: TranslationButtonType) {
+        switch mode {
+        case .inactive:
+            BaseTestCase().mozWaitForElementToNotExist(translateButton)
+        case .loading:
+            BaseTestCase().mozWaitForElementToNotExist(translateLoadingButton)
+        case .active:
+            BaseTestCase().mozWaitForElementToNotExist(translateActiveButton)
+        }
     }
 }

@@ -8,13 +8,13 @@ import MozillaAppServices
 
 @testable import Client
 
+@MainActor
 final class HomepageDiffableDataSourceTests: XCTestCase {
     var collectionView: UICollectionView?
     var diffableDataSource: HomepageDiffableDataSource?
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-
+    override func setUp() async throws {
+        try await super.setUp()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         let collectionView = try XCTUnwrap(collectionView)
         diffableDataSource = HomepageDiffableDataSource(
@@ -26,11 +26,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         diffableDataSource = nil
         collectionView = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - applyInitialSnapshot
@@ -260,6 +260,26 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    @MainActor
+    func test_updateSnapshot_withValidState_returnsPrivacyNoticeSection() throws {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            HomepageAction(
+                shouldShowPrivacyNotice: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+        let snapshot = dataSource.snapshot()
+        let expectedSections: [HomepageSection] = [.privacyNotice, .customizeHomepage]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
     private func createSites(count: Int = 30) -> [TopSiteConfiguration] {
         var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
@@ -302,10 +322,19 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     private func setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(
-                storiesRedesign: storiesRedesignEnabled
-            )
+        if !storiesRedesignEnabled {
+            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+                return HomepageRedesignFeature(
+                    storiesRedesign: false,
+                    storiesRedesignV2: false
+                )
+            }
+        } else {
+            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+                return HomepageRedesignFeature(
+                    storiesRedesign: true
+                )
+            }
         }
     }
 }

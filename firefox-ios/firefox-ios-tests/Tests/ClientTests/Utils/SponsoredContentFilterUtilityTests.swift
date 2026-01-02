@@ -16,16 +16,16 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     private var profile: MockProfile!
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Sites

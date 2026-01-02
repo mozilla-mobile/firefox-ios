@@ -62,4 +62,24 @@ extension UIView {
         ])
         translatesAutoresizingMaskIntoConstraints = false
     }
+
+    /// Applies a shadow configuration to the view's layer. The shadow color is determined based on the current theme
+    /// *Note: Figma's shadow "blur" value is roughly double UIKit's shadowRadius,
+    /// so we divide by 2 to visually match Figma's shadow.
+    /// *Note: A UIView layers `shadowPath` should be applied separately after it's bounds have been computed
+    /// - Parameter shadow: The FxShadow configuration to apply
+    ///
+    /// Usage:
+    /// ```
+    ///    view.applyShadow(FxShadow.shadow200)
+    /// ```
+    public func applyShadow(_ shadow: FxShadow, theme: Theme) {
+        let shadowColor = shadow.colorProvider(theme)
+
+        // Apply shadow properties to the layer
+        layer.shadowColor = shadowColor.cgColor
+        layer.shadowOffset = shadow.offset
+        layer.shadowRadius = shadow.blurRadius / 2
+        layer.shadowOpacity = shadow.opacity
+    }
 }

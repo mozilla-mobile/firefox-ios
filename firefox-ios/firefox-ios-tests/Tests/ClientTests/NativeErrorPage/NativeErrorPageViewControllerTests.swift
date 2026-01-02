@@ -7,17 +7,18 @@ import Common
 
 @testable import Client
 
+@MainActor
 final class NativeErrorPageViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testNativeErrorPageViewController_simpleCreation_hasNoLeaks() {

@@ -19,6 +19,7 @@ protocol CreditCardProvider {
         creditCard: UnencryptedCreditCardFields,
         completion: @escaping @Sendable (Bool?, Error?) -> Void
     )
+    func verifyCreditCards(key: String, completionHandler: @escaping @Sendable (Bool) -> Void)
 }
 
 extension RustAutofill: CreditCardProvider {}

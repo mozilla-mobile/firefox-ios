@@ -12,8 +12,8 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
     private var mockMicrosurveyManager: MockMicrosurveySurfaceManager!
     var mockStore: MockStoreForMiddleware<AppState>!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         let model = MicrosurveyModel(
             id: "survey-id",
             promptTitle: "title",
@@ -32,10 +32,10 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testShowPromptAction_withInvalidModel() {

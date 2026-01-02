@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     let doneButton = app.buttons["Done"]
 
@@ -35,7 +36,7 @@ func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
             to: HistoryRecentlyClosed
         )
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
-            app.toolbars.matching(identifier: "Toolbar").buttons["historyBottomDeleteButton"].waitAndTap()
+            app.buttons["historyBottomDeleteButton"].firstMatch.waitAndTap()
         }
         screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
             doneButton.waitAndTap()

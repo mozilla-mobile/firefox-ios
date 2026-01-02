@@ -676,6 +676,8 @@ extension CuratedRecommendationsBucket: Equatable, Hashable {
     }
 }
 
+extension CuratedRecommendationsBucket: Codable {}
+
 
 
 #if swift(>=5.8)
@@ -745,6 +747,8 @@ extension CuratedRecommendationsConfig: Equatable, Hashable {
         hasher.combine(userAgentHeader)
     }
 }
+
+extension CuratedRecommendationsConfig: Codable {}
 
 
 
@@ -858,6 +862,8 @@ extension CuratedRecommendationsRequest: Equatable, Hashable {
     }
 }
 
+extension CuratedRecommendationsRequest: Codable {}
+
 
 
 #if swift(>=5.8)
@@ -954,6 +960,8 @@ extension CuratedRecommendationsResponse: Equatable, Hashable {
     }
 }
 
+extension CuratedRecommendationsResponse: Codable {}
+
 
 
 #if swift(>=5.8)
@@ -1027,6 +1035,8 @@ extension FakespotCta: Equatable, Hashable {
         hasher.combine(url)
     }
 }
+
+extension FakespotCta: Codable {}
 
 
 
@@ -1115,6 +1125,8 @@ extension FakespotFeed: Equatable, Hashable {
         hasher.combine(cta)
     }
 }
+
+extension FakespotFeed: Codable {}
 
 
 
@@ -1209,6 +1221,8 @@ extension FakespotProduct: Equatable, Hashable {
         hasher.combine(url)
     }
 }
+
+extension FakespotProduct: Codable {}
 
 
 
@@ -1315,6 +1329,8 @@ extension FeedSection: Equatable, Hashable {
         hasher.combine(isBlocked)
     }
 }
+
+extension FeedSection: Codable {}
 
 
 
@@ -1498,6 +1514,8 @@ extension Feeds: Equatable, Hashable {
     }
 }
 
+extension Feeds: Codable {}
+
 
 
 #if swift(>=5.8)
@@ -1614,6 +1632,8 @@ extension InterestPicker: Equatable, Hashable {
     }
 }
 
+extension InterestPicker: Codable {}
+
 
 
 #if swift(>=5.8)
@@ -1682,6 +1702,8 @@ extension InterestPickerSection: Equatable, Hashable {
     }
 }
 
+extension InterestPickerSection: Codable {}
+
 
 
 #if swift(>=5.8)
@@ -1749,6 +1771,8 @@ extension Layout: Equatable, Hashable {
         hasher.combine(responsiveLayouts)
     }
 }
+
+extension Layout: Codable {}
 
 
 
@@ -1880,6 +1904,8 @@ extension RecommendationDataItem: Equatable, Hashable {
     }
 }
 
+extension RecommendationDataItem: Codable {}
+
 
 
 #if swift(>=5.8)
@@ -1970,6 +1996,8 @@ extension ResponsiveLayout: Equatable, Hashable {
     }
 }
 
+extension ResponsiveLayout: Codable {}
+
 
 
 #if swift(>=5.8)
@@ -2045,6 +2073,8 @@ extension SectionSettings: Equatable, Hashable {
         hasher.combine(isBlocked)
     }
 }
+
+extension SectionSettings: Codable {}
 
 
 
@@ -2129,6 +2159,8 @@ extension Tile: Equatable, Hashable {
         hasher.combine(hasExcerpt)
     }
 }
+
+extension Tile: Codable {}
 
 
 
@@ -2318,6 +2350,8 @@ public func FfiConverterTypeCuratedRecommendationLocale_lower(_ value: CuratedRe
 
 extension CuratedRecommendationLocale: Equatable, Hashable {}
 
+extension CuratedRecommendationLocale: Codable {}
+
 
 
 
@@ -2398,6 +2432,8 @@ public func FfiConverterTypeCuratedRecommendationsApiError_lower(_ value: Curate
 
 
 extension CuratedRecommendationsApiError: Equatable, Hashable {}
+
+extension CuratedRecommendationsApiError: Codable {}
 
 
 

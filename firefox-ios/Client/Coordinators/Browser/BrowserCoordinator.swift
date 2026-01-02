@@ -91,7 +91,11 @@ class BrowserCoordinator: BaseCoordinator,
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         } else {
-            showTermsOfUse()
+            // Defer ToU presentation to next run loop after deep link processing
+            // This prevents ToU from being dismissed when deep link navigation starts
+            DispatchQueue.main.async { [weak self] in
+                self?.showTermsOfUse()
+            }
         }
     }
 
@@ -139,6 +143,7 @@ class BrowserCoordinator: BaseCoordinator,
             toastContainer: toastContainer
         )
         homepageController.termsOfUseDelegate = self
+        homepageController.view.accessibilityElementsHidden = false
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -183,6 +188,7 @@ class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             overlayManager: overlayManager
         )
+        homepageViewController?.view.accessibilityElementsHidden = true
         privateHomepageController.parentCoordinator = self
         self.privateHomepageViewController = privateHomepageController
         guard browserViewController.embedContent(privateHomepageController) else {
@@ -263,6 +269,8 @@ class BrowserCoordinator: BaseCoordinator,
             router.popViewController(animated: false)
         }
 
+        homepageViewController?.view.accessibilityElementsHidden = true
+        UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         screenshotService.screenshotableView = webviewController
     }
 
@@ -1110,6 +1118,16 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(webviewViewController)
     }
 
+    func showPrivacyNoticeLink(url: URL) {
+        let linkVC = TermsOfUseLinkViewController(
+            url: url,
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+        linkVC.modalPresentationStyle = .pageSheet
+        router.present(linkVC, animated: true)
+    }
+
     func popToBVC() {
         _ = router.popToViewController(browserViewController, reason: .deeplink)
     }
@@ -1162,6 +1180,15 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Terms of Use
 
     func showTermsOfUse(context: TriggerContext = .appLaunch) {
+        /// For .appLaunch and .appBecameActive, we show ToU
+        /// on top of standard homepage or any website
+        /// For case .homepageOpened, ToU should be displayed only on
+        /// standard  homepage or blank page
+        /// (not on custom URL homepage/new tab, not on regular websites)
+        if let selectedTab = tabManager.selectedTab, context == .homepageOpened {
+            guard selectedTab.isFxHomeTab || selectedTab.url == nil else { return }
+        }
+
         guard !childCoordinators.contains(where: { $0 is TermsOfUseCoordinator }) else {
             return // route is handled with existing child coordinator
         }

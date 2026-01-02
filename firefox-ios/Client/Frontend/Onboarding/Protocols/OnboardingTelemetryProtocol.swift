@@ -14,4 +14,6 @@ protocol OnboardingTelemetryProtocol: AnyObject {
         with action: OnboardingMultipleChoiceAction
     )
     func sendDismissOnboardingTelemetry(from cardName: String)
+    func sendGoToSettingsButtonTappedTelemetry()
+    func sendDismissButtonTappedTelemetry()
 }

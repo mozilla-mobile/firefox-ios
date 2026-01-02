@@ -6,9 +6,9 @@ import Foundation
 import XCTest
 
 class SwipingTabsTests: BaseTestCase {
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     let addressBar = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -29,8 +29,6 @@ class SwipingTabsTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)

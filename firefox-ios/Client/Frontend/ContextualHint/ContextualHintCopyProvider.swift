@@ -72,9 +72,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .dataClearance:
             descriptionCopy = CFRStrings.FeltDeletion.Body
 
-        case .inactiveTabs:
-            descriptionCopy = CFRStrings.TabsTray.InactiveTabs.Body
-
         case .jumpBackIn:
                 descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
 
@@ -86,6 +83,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
         case .navigation:
             descriptionCopy = CFRStrings.Toolbar.NavigationButtonsBody
+
+        case .relay:
+            descriptionCopy = String(format: String.RelayMask.RelayEmailMaskAvailableCFR, AppName.shortName.rawValue)
 
         case .toolbarUpdate:
             descriptionCopy = CFRStrings.Toolbar.ToolbarUpdateBody
@@ -106,14 +106,14 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         switch hint {
         case .dataClearance:
             actionCopy = ""
-        case .inactiveTabs:
-            actionCopy = CFRStrings.TabsTray.InactiveTabs.Action
         case .mainMenu:
             actionCopy = ""
         case .jumpBackIn,
                 .jumpBackInSyncedTab:
             actionCopy = ""
         case .navigation:
+            actionCopy = ""
+        case .relay:
             actionCopy = ""
         case .toolbarUpdate:
             actionCopy = ""

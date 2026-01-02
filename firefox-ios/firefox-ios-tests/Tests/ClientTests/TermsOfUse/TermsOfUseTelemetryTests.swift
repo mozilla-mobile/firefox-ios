@@ -13,16 +13,16 @@ import Shared
 final class TermsOfUseTelemetryTests: XCTestCase {
     private var telemetry: TermsOfUseTelemetry!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         telemetry = TermsOfUseTelemetry()
-        setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: MockProfile())
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         telemetry = nil
-        tearDownTelemetry()
+        Self.tearDownTelemetry()
+        try await super.tearDown()
     }
 
     func testTermsOfUseBottomSheetDisplayed() throws {

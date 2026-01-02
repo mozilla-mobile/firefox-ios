@@ -1,0 +1,91 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Autofill
+  - EmailMask
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Relay Email Mask
+
+autofill.email_mask:
+  prompt_shown:
+    type: event
+    description: |
+      Recorded when the keyboard accessory is shown to allow Relay email mask generation.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30866
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30935
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  autofill_failed:
+    type: event
+    description: |
+      Recorded when autofilling a Relay email mask fails for any reason.
+    extra_keys:
+      error:
+        type: string
+        description: |
+          The error that occurred.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30866
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30935
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  autofilled:
+    type: event
+    description: |
+      Recorded when autofilling a Relay email mask succeeds.
+    extra_keys:
+      is_new_email_mask:
+        type: boolean
+        description: |
+          True if a new email mask was generated, false if an existing mask was reused.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30866
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30935
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  email_mask_learn_more_tapped:
+    type: event
+    description: |
+      Recorded when the Learn More button in the Email Mask settings screen is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30866
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30935
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  manage_email_mask_tapped:
+    type: event
+    description: |
+      Recorded when the Manage Email Masks button in Email Mask settings is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30866
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30935
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

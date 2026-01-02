@@ -37,11 +37,11 @@ struct NimbusOnboardingTestingConfigUtility {
     }
 
     // MARK: - Order-based setups
-    func setupNimbus(withOrder order: [CardOrder]) {
+    func setupNimbus(withOrder order: [CardOrder], uiVariant: OnboardingVariant? = nil) {
         var dictionary = [String: NimbusOnboardingCardData]()
 
         for (index, item) in order.enumerated() {
-            dictionary[item.rawValue] = createCard(withID: item, andOrder: index)
+            dictionary[item.rawValue] = createCard(withID: item, andOrder: index, uiVariant: uiVariant)
         }
 
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
@@ -61,7 +61,8 @@ struct NimbusOnboardingTestingConfigUtility {
         withSecondaryButton: Bool = false,
         withPrimaryButtonAction primaryAction: [OnboardingActions] = [.forwardOneCard],
         prerequisites: [String] = ["ALWAYS"],
-        disqualifiers: [String] = []
+        disqualifiers: [String] = [],
+        uiVariant: OnboardingVariant? = nil
     ) {
         let cards = createCards(
             numbering: primaryAction.count,
@@ -72,7 +73,8 @@ struct NimbusOnboardingTestingConfigUtility {
             withSecondaryButton: withSecondaryButton,
             primaryButtonAction: primaryAction,
             prerequisites: prerequisites,
-            disqualifiers: disqualifiers)
+            disqualifiers: disqualifiers,
+            uiVariant: uiVariant)
 
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
             OnboardingFrameworkFeature(
@@ -91,7 +93,8 @@ struct NimbusOnboardingTestingConfigUtility {
         withSecondaryButton: Bool,
         primaryButtonAction: [OnboardingActions],
         prerequisites: [String],
-        disqualifiers: [String]
+        disqualifiers: [String],
+        uiVariant: OnboardingVariant?
     ) -> [String: NimbusOnboardingCardData] {
         var dictionary = [String: NimbusOnboardingCardData]()
 
@@ -109,7 +112,8 @@ struct NimbusOnboardingTestingConfigUtility {
                 onboardingType: onboardingType,
                 order: number,
                 prerequisites: prerequisites,
-                title: "\(CardElementNames.title) \(number)")
+                title: "\(CardElementNames.title) \(number)",
+                uiVariant: uiVariant)
         }
 
         return dictionary
@@ -117,7 +121,8 @@ struct NimbusOnboardingTestingConfigUtility {
 
     private func createCard(
         withID id: CardOrder,
-        andOrder order: Int
+        andOrder order: Int,
+        uiVariant: OnboardingVariant? = nil
     ) -> NimbusOnboardingCardData {
         let shouldAddLink: [CardOrder] = [.welcome, .updateWelcome]
         let isUpdate: [CardOrder] = [.updateWelcome, .updateSync]
@@ -140,7 +145,8 @@ struct NimbusOnboardingTestingConfigUtility {
             onboardingType: isUpdate.contains(where: { $0 == id }) ? .upgrade : .freshInstall,
             order: order,
             prerequisites: ["ALWAYS"],
-            title: "title text")
+            title: "title text",
+            uiVariant: uiVariant)
     }
 
     private func createButtons(

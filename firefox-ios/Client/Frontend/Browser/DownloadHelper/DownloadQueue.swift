@@ -7,13 +7,17 @@ import Common
 
 protocol DownloadQueueDelegate: AnyObject {
     var windowUUID: WindowUUID { get }
+    @MainActor
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download)
+    @MainActor
     func downloadQueue(
         _ downloadQueue: DownloadQueue,
         didDownloadCombinedBytes combinedBytesDownloaded: Int64,
         combinedTotalBytesExpected: Int64?
     )
+    @MainActor
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL)
+    @MainActor
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?)
 }
 

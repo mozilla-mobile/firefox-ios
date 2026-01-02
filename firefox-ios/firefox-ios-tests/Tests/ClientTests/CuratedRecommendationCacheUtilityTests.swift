@@ -7,16 +7,17 @@ import MozillaAppServices
 
 @testable import Client
 
+@MainActor
 final class CuratedRecommendationCacheUtilityTests: XCTestCase {
     var testFileURL: URL!
 
-    override func tearDown() {
+    override func tearDown() async throws {
         try? FileManager.default.removeItem(at: testFileURL)
         testFileURL = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
-    func testSaveAndLoadRecommendations() {
+    func testSaveAndLoadRecommendations() async throws {
         let cache = createCache()
         let recs = generateFakeDataWith(numberOfItems: 2)
 

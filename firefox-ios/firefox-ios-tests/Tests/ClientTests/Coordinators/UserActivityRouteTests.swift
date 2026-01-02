@@ -7,7 +7,8 @@ import CoreSpotlight
 
 @testable import Client
 
-class UserActivityRouteTests: XCTestCase {
+@MainActor
+final class UserActivityRouteTests: XCTestCase {
     // Test the Route initializer with a Siri shortcut user activity.
     func testSiriShortcutUserActivity() {
         let subject = createSubject()

@@ -774,6 +774,8 @@ public protocol PlacesConnectionProtocol: AnyObject, Sendable {
     
     func getMostRecentHistoryMetadata(limit: Int32) throws  -> [HistoryMetadata]
     
+    func getMostRecentSearchEntriesInHistoryMetadata(limit: Int32) throws  -> [HistoryMetadata]
+    
     func getTopFrecentSiteInfos(numItems: Int32, thresholdOption: FrecencyThresholdOption) throws  -> [TopFrecentSiteInfo]
     
     func getVisitCount(excludeTypes: VisitTransitionSet) throws  -> Int64
@@ -795,6 +797,8 @@ public protocol PlacesConnectionProtocol: AnyObject, Sendable {
     func metadataDelete(url: Url, referrerUrl: Url?, searchTerm: String?) throws 
     
     func metadataDeleteOlderThan(olderThan: PlacesTimestamp) throws 
+    
+    func metadataDeleteSearchTerms() throws 
     
     func newInterruptHandle()  -> SqlInterruptHandle
     
@@ -1087,6 +1091,14 @@ open func getMostRecentHistoryMetadata(limit: Int32)throws  -> [HistoryMetadata]
 })
 }
     
+open func getMostRecentSearchEntriesInHistoryMetadata(limit: Int32)throws  -> [HistoryMetadata]  {
+    return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+    uniffi_places_fn_method_placesconnection_get_most_recent_search_entries_in_history_metadata(self.uniffiClonePointer(),
+        FfiConverterInt32.lower(limit),$0
+    )
+})
+}
+    
 open func getTopFrecentSiteInfos(numItems: Int32, thresholdOption: FrecencyThresholdOption)throws  -> [TopFrecentSiteInfo]  {
     return try  FfiConverterSequenceTypeTopFrecentSiteInfo.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
     uniffi_places_fn_method_placesconnection_get_top_frecent_site_infos(self.uniffiClonePointer(),
@@ -1183,6 +1195,12 @@ open func metadataDelete(url: Url, referrerUrl: Url?, searchTerm: String?)throws
 open func metadataDeleteOlderThan(olderThan: PlacesTimestamp)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
     uniffi_places_fn_method_placesconnection_metadata_delete_older_than(self.uniffiClonePointer(),
         FfiConverterTypePlacesTimestamp_lower(olderThan),$0
+    )
+}
+}
+    
+open func metadataDeleteSearchTerms()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+    uniffi_places_fn_method_placesconnection_metadata_delete_search_terms(self.uniffiClonePointer(),$0
     )
 }
 }
@@ -5084,6 +5102,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_places_checksum_method_placesconnection_get_most_recent_history_metadata() != 25879) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_places_checksum_method_placesconnection_get_most_recent_search_entries_in_history_metadata() != 58751) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_places_checksum_method_placesconnection_get_top_frecent_site_infos() != 4671) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -5115,6 +5136,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesconnection_metadata_delete_older_than() != 30473) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_places_checksum_method_placesconnection_metadata_delete_search_terms() != 63321) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesconnection_new_interrupt_handle() != 5418) {

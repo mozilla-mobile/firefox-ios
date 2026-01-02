@@ -6,6 +6,7 @@ import XCTest
 @testable import SummarizeKit
 @testable import Client
 
+@MainActor
 final class SummarizerConfigManagerTests: XCTestCase {
     func testReturnsEmptyConfigWhenNoSourcesProvided() async {
         let subject = createSubject(sources: [])

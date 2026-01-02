@@ -185,7 +185,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(.syncSignIn),
-                                currentTabInfo: tabInfo
+                                currentTabInfo: tabInfo,
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                             )
                         )
                     }

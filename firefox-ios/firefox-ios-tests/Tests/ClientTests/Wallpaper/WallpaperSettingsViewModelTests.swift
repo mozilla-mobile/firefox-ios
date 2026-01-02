@@ -9,19 +9,20 @@ import XCTest
 
 @testable import Client
 
-class WallpaperSettingsViewModelTests: XCTestCase {
+@MainActor
+final class WallpaperSettingsViewModelTests: XCTestCase {
     private var wallpaperManager: WallpaperManagerInterface!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         wallpaperManager = WallpaperManagerMock()
         addWallpaperCollections()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         wallpaperManager = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testInit_hasDefaultLayout() {
@@ -47,7 +48,6 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         XCTAssertEqual(subject.numberOfSections, 2)
     }
 
-    @MainActor
     func testNumberOfItemsInSection() {
         let subject = createSubject()
 
@@ -58,7 +58,6 @@ class WallpaperSettingsViewModelTests: XCTestCase {
                        wallpaperManager.availableCollections[safe: 1]?.wallpapers.count)
     }
 
-    @MainActor
     func testSectionHeaderViewModel_defaultCollectionWithoutLinkAndDescription() {
         let subject = createSubject()
         let headerViewModel = subject.sectionHeaderViewModel(for: 0) {
@@ -69,7 +68,6 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         XCTAssertNil(headerViewModel?.buttonTitle)
     }
 
-    @MainActor
     func testSectionHeaderViewModel_limitedCollectionWithLinkAndDescription() {
         let subject = createSubject()
         let headerViewModel = subject.sectionHeaderViewModel(for: 1) {

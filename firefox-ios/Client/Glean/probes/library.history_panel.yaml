@@ -39,7 +39,7 @@ library.history_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/25614
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - HistoryPanel
@@ -57,7 +57,7 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15696
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   selected_item:
     type: labeled_counter
     description: |
@@ -75,7 +75,7 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   opened_item:
     type: event
     description: |
@@ -86,7 +86,7 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/pull/17462
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   search_tap:
     type: event
     description: |
@@ -99,7 +99,7 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   delete_tap:
     type: event
     description: |
@@ -112,7 +112,7 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   removed:
     type: event
     description: |
@@ -123,4 +123,4 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15696
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never

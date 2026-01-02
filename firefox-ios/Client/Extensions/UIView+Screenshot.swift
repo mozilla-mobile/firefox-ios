@@ -18,7 +18,9 @@ extension UIView: Screenshotable {
     ///   - quality: CGFloat that represents quality of the screenshot.
     ///   The expected value is 0 to 1 and is defaulted to 1
     /// - Returns: The image that represents the screenshot
-    func screenshot(quality: CGFloat = 1) -> UIImage? {
+    func screenshot(
+        quality: CGFloat = CGFloat(UIConstants.ScreenshotQuality)
+    ) -> UIImage? {
         return screenshot(frame.size, offset: nil, quality: quality)
     }
 
@@ -41,10 +43,19 @@ extension UIView: Screenshotable {
     private func screenshot(_ size: CGSize, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
         guard 0...1 ~= quality else { return nil }
 
+        let targetScale: CGFloat = 1.0
         let offset = offset ?? .zero
 
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale * quality)
-        drawHierarchy(in: CGRect(origin: offset, size: frame.size), afterScreenUpdates: false)
+        UIGraphicsBeginImageContextWithOptions(
+            size,
+            false,
+            min(UIScreen.main.scale, targetScale) * quality
+        )
+        drawHierarchy(
+            in: CGRect(origin: offset, size: frame.size),
+            afterScreenUpdates: false
+        )
+
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 

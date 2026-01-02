@@ -4,12 +4,24 @@
 
 @testable import SummarizeKit
 import XCTest
+import Common
 
+@MainActor
 final class SummarizerServiceTests: XCTestCase {
     static let mockResponse = ["Summarized", "content"]
     static let maxWords = 100
     static let maxWordCount = 50
-    var mockWebView = MockWebView(URL(string: "https://foo.com")!)
+    private var mockWebView: MockWebView!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        mockWebView = MockWebView(URL(string: "https://foo.com")!)
+    }
+
+    override func tearDown() async throws {
+        mockWebView = nil
+        try await super.tearDown()
+    }
 
     func testSummarizerServiceReturnsSummary() async throws {
         let subject = createSubject()
@@ -27,11 +39,19 @@ final class SummarizerServiceTests: XCTestCase {
 
         let subject = createSubject(checker: checker)
 
-        await assertSummarizeThrows(.tooLong) {
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             _ = try await subject.summarize(from: self.mockWebView)
+        } verify: { err in
+            guard case .tooLong = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "tooLong")
         }
     }
 
+    @MainActor
     func testSummarizerServiceReturnsStreamedSummary() async throws {
         let subject = createSubject()
         var streamedChunks: [String] = []
@@ -43,6 +63,7 @@ final class SummarizerServiceTests: XCTestCase {
         XCTAssertEqual(streamedChunks, ["Summarized", "content"] )
     }
 
+    @MainActor
     func testSummarizerServiceThrowsWhenSummarizerFails() async {
         let summarizer = MockSummarizer(
             shouldRespond: [],
@@ -50,8 +71,15 @@ final class SummarizerServiceTests: XCTestCase {
         )
         let subject = createSubject(summarizer: summarizer)
 
-        await assertSummarizeThrows(.safetyBlocked) {
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             for try await _ in subject.summarizeStreamed(from: self.mockWebView) { }
+        } verify: { err in
+            guard case .safetyBlocked = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "safetyBlocked")
         }
     }
 
@@ -65,8 +93,16 @@ final class SummarizerServiceTests: XCTestCase {
 
         let subject = createSubject(summarizer: summarizer)
 
-        await assertSummarizeThrows(.unknown(randomError)) {
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             _ = try await subject.summarize(from: self.mockWebView)
+        } verify: { err in
+            guard case .unknown(let randomError) = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(randomError.localizedDescription, "The operation couldn’t be completed. (Random error error 1.)")
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "unknown(domain: Random error, code: 1)")
         }
     }
 
@@ -89,22 +125,5 @@ final class SummarizerServiceTests: XCTestCase {
             checker: checker,
             maxWords: maxWords
         )
-    }
-
-    /// Convenience method to simplify error checking in the test cases
-    private func assertSummarizeThrows(
-        _ expected: SummarizerError,
-        when running: @escaping () async throws -> Void
-    ) async {
-        do {
-            try await running()
-            XCTFail("Expected summarize to throw, but it returned normally")
-        } catch let error as SummarizerError {
-            if error != expected {
-                XCTFail("Expected \(expected) to be thrown, but got \(error) instead")
-            }
-        } catch {
-            XCTFail("Expected SummarizerError, but got non SummarizerError: \(error)")
-        }
     }
 }

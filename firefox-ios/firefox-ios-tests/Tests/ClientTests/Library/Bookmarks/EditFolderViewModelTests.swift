@@ -8,7 +8,8 @@ import Shared
 
 @testable import Client
 
-class EditFolderViewModelTests: XCTestCase {
+@MainActor
+final class EditFolderViewModelTests: XCTestCase {
     let folder = MockFxBookmarkNode(type: .folder,
                                     guid: "1235",
                                     position: 1,
@@ -29,20 +30,20 @@ class EditFolderViewModelTests: XCTestCase {
     var profile: MockProfile!
     var parentFolderSelector: MockParentFolderSelector!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         folderFetcher = MockFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
         profile = MockProfile()
         parentFolderSelector = MockParentFolderSelector()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         folderFetcher = nil
         bookmarksSaver = nil
         profile = nil
         parentFolderSelector = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testInit() {
@@ -66,7 +67,6 @@ class EditFolderViewModelTests: XCTestCase {
         XCTAssertFalse(subject.shouldShowDisclosureIndicator(isFolderSelected: false))
     }
 
-    @MainActor
     func testShouldShowDisclosureIndicator_whenIsNotFolderSelectedAfterSelectFolder() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         subject.selectFolder(Folder(title: "Test", guid: "", indentation: 0))
@@ -74,7 +74,6 @@ class EditFolderViewModelTests: XCTestCase {
         XCTAssertTrue(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
     }
 
-    @MainActor
     func testSelectFolder_callsOnFolderStatusUpdate() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         let expectation = expectation(description: "onFolderStatusUpdate should be called")
@@ -86,7 +85,6 @@ class EditFolderViewModelTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
-    @MainActor
     func testSelectFolder_callsGetFolderStructure() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         let expectation = expectation(description: "onFolderStatusUpdate should be called")

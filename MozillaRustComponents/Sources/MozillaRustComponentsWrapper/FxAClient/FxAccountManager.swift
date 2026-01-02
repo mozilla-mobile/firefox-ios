@@ -223,6 +223,11 @@ open class FxAccountManager: @unchecked Sendable {
         }
     }
 
+    /// Clear the access token cache for reauthentication.
+    public func clearAccessTokenCache() {
+        account?.clearAccessTokenCache()
+    }
+
     /// Get a list of the attached OAuth clients.
     public func getAttachedClients() -> Result<[AttachedClient], Error> {
         do {

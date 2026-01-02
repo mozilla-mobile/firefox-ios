@@ -23,7 +23,7 @@
 "TermsOfUse.ReviewAndAcceptText.v142" = "請花一些時間閱讀內容並且接受。更多資訊。";
 
 /* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
-"TermsOfUse.TermsOfUseHasOpened.v142" = "已開啟使用調款表";
+"TermsOfUse.TermsOfUseHasOpened.v142" = "已開啟使用條款畫面";
 
 /* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
 "TermsOfUse.Title.v142" = "這裡有點新鮮事";

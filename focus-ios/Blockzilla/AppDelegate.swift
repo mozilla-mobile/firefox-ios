@@ -99,11 +99,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 switch state {
                 case .loggedin:
                     self.hidePrivacyProtectionWindow()
-                    break
 
                 case .loggedout:
                     self.showPrivacyProtectionWindow()
-                    break
 
                 case .canceled:
                     break
@@ -293,7 +291,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.submit(url: url, source: .action)
             GleanMetrics.Siri.openFavoriteSite.record()
         case "EraseIntent":
-            guard userActivity.interaction?.intent as? EraseIntent != nil else { return false }
+            guard userActivity.interaction?.intent is EraseIntent else { return false }
             browserViewController.resetBrowser()
             GleanMetrics.Siri.eraseInBackground.record()
         default: break

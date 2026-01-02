@@ -39,8 +39,8 @@ class SponsoredTileDataUtilityTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         subject = nil
+        super.tearDown()
     }
 
     // MARK: Tests

@@ -8,15 +8,15 @@ import Glean
 import XCTest
 
 class TelemetryContextualIdentifierTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         clearTest()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         clearTest()
+        try await super.tearDown()
     }
 
     // MARK: Context id

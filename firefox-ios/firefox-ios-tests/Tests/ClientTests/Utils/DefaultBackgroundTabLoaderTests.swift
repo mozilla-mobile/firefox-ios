@@ -6,23 +6,23 @@ import Storage
 import XCTest
 @testable import Client
 
-class DefaultBackgroundTabLoaderTests: XCTestCase {
+@MainActor
+final class DefaultBackgroundTabLoaderTests: XCTestCase {
     private var applicationHelper: MockApplicationHelper!
     private var tabQueue: MockTabQueue!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.applicationHelper = MockApplicationHelper()
         self.tabQueue = MockTabQueue()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.applicationHelper = nil
         self.tabQueue = nil
+        try await super.tearDown()
     }
 
-    @MainActor
     func testLoadBackgroundTabs_noTabs_doesntLoad() {
         let subject = createSubject()
 
@@ -39,7 +39,6 @@ class DefaultBackgroundTabLoaderTests: XCTestCase {
         XCTAssertEqual(applicationHelper.openURLCalled, 0)
     }
 
-    @MainActor
     func testLoadBackgroundTabs_withTabs_load() {
         let urlString = "https://www.mozilla.com"
         tabQueue.queuedTabs = [ShareItem(url: urlString, title: "Title 1"),

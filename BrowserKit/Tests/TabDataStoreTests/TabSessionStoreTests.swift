@@ -15,8 +15,8 @@ final class TabSessionStoreTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockFileManager = nil
+        super.tearDown()
     }
 
     // MARK: Save
@@ -70,7 +70,7 @@ final class TabSessionStoreTests: XCTestCase {
     }
 
     // MARK: Helper functions
-
+    @MainActor
     func createSubject() -> DefaultTabSessionStore {
         let subject = DefaultTabSessionStore(fileManager: mockFileManager)
         trackForMemoryLeaks(subject)

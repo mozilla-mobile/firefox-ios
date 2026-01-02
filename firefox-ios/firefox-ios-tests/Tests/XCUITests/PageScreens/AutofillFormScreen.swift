@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class AutofillFormScreen {
     private let app: XCUIApplication
     private let sel: AutofillSelectorsSet

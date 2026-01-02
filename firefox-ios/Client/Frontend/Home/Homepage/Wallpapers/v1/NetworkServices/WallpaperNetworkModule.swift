@@ -6,9 +6,9 @@ import Common
 import Foundation
 import Shared
 
-class WallpaperNetworkingModule: WallpaperNetworking {
-    private var urlSession: URLSessionProtocol
-    private var logger: Logger
+final class WallpaperNetworkingModule: WallpaperNetworking, Sendable {
+    private let urlSession: URLSessionProtocol
+    private let logger: Logger
 
     init(
         with urlSession: URLSessionProtocol = URLSession.sharedMPTCP,

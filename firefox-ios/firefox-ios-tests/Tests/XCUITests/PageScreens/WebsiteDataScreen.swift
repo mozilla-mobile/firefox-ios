@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class WebsiteDataScreen {
     private let app: XCUIApplication
     private let sel: WebsiteDataSelectorsSet

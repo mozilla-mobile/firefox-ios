@@ -7,18 +7,19 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class UnifiedAdsProviderTests: XCTestCase {
     private var networking: MockContileNetworking!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TelemetryContextualIdentifier.setupContextId()
         networking = MockContileNetworking()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         networking = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testFetchTile_givenErrorResponse_thenFailsWithError() {

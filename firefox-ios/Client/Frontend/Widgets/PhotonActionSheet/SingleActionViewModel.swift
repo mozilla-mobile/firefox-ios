@@ -42,7 +42,6 @@ struct SingleActionViewModel: Sendable {
     let bold: Bool
     let tabCount: String?
     let tapHandler: (@Sendable @MainActor (SingleActionViewModel) -> Void)?
-    let badgeIconName: String?
 
     let isEnabled: Bool // Used by toggles like night mode to switch tint color
     // Flip the cells for the main menu (hamburger menu) since content needs to appear at the bottom
@@ -51,7 +50,7 @@ struct SingleActionViewModel: Sendable {
     let isFlipped: Bool
 
     // Enable title customization beyond what the interface provides,
-    let customRender: (@Sendable @MainActor(_ title: UILabel, _ contentView: UIView) -> Void)?
+    let customRender: (@Sendable @MainActor (_ title: UILabel, _ contentView: UIView) -> Void)?
 
     // Enable height customization
     let customHeight: (@Sendable @MainActor (SingleActionViewModel) -> CGFloat)?
@@ -69,7 +68,6 @@ struct SingleActionViewModel: Sendable {
          iconAlignment: IconAlignment = .left,
          needsIconActionableTint: Bool = false,
          isEnabled: Bool = false,
-         badgeIconNamed: String? = nil,
          bold: Bool? = false,
          tabCount: String? = nil,
          isFlipped: Bool = false,
@@ -91,7 +89,6 @@ struct SingleActionViewModel: Sendable {
         self.bold = bold ?? false
         self.tabCount = tabCount
         self.isFlipped = isFlipped
-        self.badgeIconName = badgeIconNamed
         self.customRender = customRender
         self.customHeight = customHeight
         self.accessibilityId = accessibilityId
@@ -112,7 +109,6 @@ struct SingleActionViewModel: Sendable {
             iconAlignment: vmodel.iconAlignment,
             needsIconActionableTint: vmodel.needsIconActionableTint,
             isEnabled: isEnabled ?? vmodel.isEnabled,
-            badgeIconNamed: vmodel.badgeIconName,
             bold: vmodel.bold,
             tabCount: vmodel.tabCount,
             isFlipped: isFlipped ?? vmodel.isFlipped,

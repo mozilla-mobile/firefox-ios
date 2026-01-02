@@ -13,6 +13,7 @@ class HeadersViewViewController: UIViewController, Themeable {
     let errorHeaderSubtitle = "Website Error"
 
     var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
@@ -33,7 +34,7 @@ class HeadersViewViewController: UIViewController, Themeable {
         super.viewDidLoad()
         setupView()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         navigationHeaderView.setViews(with: headerTitle, and: backButtonTitle)

@@ -32,7 +32,7 @@ struct GleanPingUploader: PingUploader {
     }
 
     func upload(request: CapablePingUploadRequest,
-                callback: @escaping (UploadResult) -> Void) {
+                callback: @escaping @Sendable (UploadResult) -> Void) {
         if let capableRequest = request.capable([PingCapabilities.http.rawValue]) {
             httpUploader.uploadHttpRequest(request: capableRequest, callback: callback)
         } else if let capableRequest = request.capable([PingCapabilities.ohttp.rawValue]) {

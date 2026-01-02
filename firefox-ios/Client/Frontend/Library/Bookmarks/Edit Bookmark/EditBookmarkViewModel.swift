@@ -17,7 +17,8 @@ protocol ParentFolderSelector: AnyObject {
     func selectFolderCreatedFromChild(folder: Folder)
 }
 
-class EditBookmarkViewModel: ParentFolderSelector {
+// FIXME: FXIOS-14161 Make EditBookmarkViewModel actually Sendable
+class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
     private let parentFolder: FxBookmarkNode
     private var node: BookmarkItemData?
     private let profile: Profile

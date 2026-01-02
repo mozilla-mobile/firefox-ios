@@ -26,20 +26,18 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
-    private let defaultBrowserUtil: DefaultBrowserUtil
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
+    private var onboardingService: OnboardingService?
 
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
-         defaultBrowserUtil: DefaultBrowserUtil = DefaultBrowserUtil()) {
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.profile = profile
         self.isIphone = isIphone
         self.windowUUID = windowUUID
-        self.defaultBrowserUtil = defaultBrowserUtil
         super.init(router: router)
     }
 
@@ -103,8 +101,8 @@ final class LaunchCoordinator: BaseCoordinator,
                 order: 20,
                 title: .Onboarding.Modern.TermsOfService.Title,
                 body: .Onboarding.Modern.TermsOfService.Subtitle,
-                buttons: OnboardingKit.OnboardingButtons(
-                    primary: OnboardingKit.OnboardingButtonInfoModel(
+                buttons: OnboardingButtons(
+                    primary: OnboardingButtonInfoModel(
                         title: .Onboarding.Modern.TermsOfService.AgreementButtonTitleV3,
                         action: OnboardingActions.syncSignIn
                     )
@@ -239,8 +237,25 @@ final class LaunchCoordinator: BaseCoordinator,
         router.present(viewController, animated: false)
     }
 
-    private lazy var onboardingService: OnboardingService = {
-        OnboardingService(
+    // MARK: - Intro
+    @MainActor
+    private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
+                                              isFullScreen: Bool) {
+        let onboardingModel = NimbusOnboardingKitFeatureLayer(
+            onboardingVariant: manager.onboardingVariant,
+            isDefaultBrowser: DefaultBrowserUtility().isDefaultBrowser,
+            isIpad: UIDevice.current.userInterfaceIdiom == .pad
+        ).getOnboardingModel(
+            for: .freshInstall
+        )
+        let activityEventHelper = ActivityEventHelper()
+        let telemetryUtility = OnboardingTelemetryUtility(
+            with: onboardingModel,
+            onboardingVariant: manager.onboardingVariant
+        )
+
+        // Create onboardingService and store it directly - don't create local variable
+        self.onboardingService = OnboardingService(
             windowUUID: windowUUID,
             profile: profile,
             themeManager: themeManager,
@@ -248,69 +263,66 @@ final class LaunchCoordinator: BaseCoordinator,
             navigationDelegate: self,
             qrCodeNavigationHandler: self
         )
-    }()
+        self.onboardingService?.telemetryUtility = telemetryUtility
 
-    // MARK: - Intro
-    @MainActor
-    private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
-                                              isFullScreen: Bool) {
-        let onboardingModel = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: manager.onboardingVariant
-        ).getOnboardingModel(
-            for: .freshInstall
+        let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
+            onboardingCards: onboardingModel.cards,
+            skipText: .Onboarding.LaterAction,
+            onActionTap: { [weak self] action, cardName, completion in
+                guard let onboardingService = self?.onboardingService else { return }
+                onboardingService.handleAction(
+                    action,
+                    from: cardName,
+                    cards: onboardingModel.cards,
+                    with: activityEventHelper,
+                    completion: completion
+                )
+            },
+            onMultipleChoiceActionTap: { [weak self] action, cardName in
+                guard let onboardingService = self?.onboardingService else { return }
+                onboardingService.handleMultipleChoiceAction(
+                    action,
+                    from: cardName
+                )
+            },
+            onComplete: { [weak self] currentCardName in
+                guard let self = self else { return }
+                manager.didSeeIntroScreen()
+                SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+                self.onboardingService = nil
+                parentCoordinator?.didFinishLaunch(from: self)
+            }
         )
-        let activityEventHelper = ActivityEventHelper()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isDefault = defaultBrowserUtil.isDefault
+        flowViewModel.onCardView = { cardName in
+            telemetryUtility.sendCardViewTelemetry(from: cardName)
+        }
 
-        let onboardingCards = onboardingModel.cards.filter { viewModel in
-            // Filter out cards that are not relevant for the current device type.
-            if isPad, let action = viewModel.multipleChoiceButtons.first?.action,
-               action == .toolbarTop || action == .toolbarBottom {
-                return false
-            }
+        flowViewModel.onButtonTap = { cardName, action, isPrimary in
+            telemetryUtility.sendButtonActionTelemetry(
+                from: cardName,
+                with: action,
+                and: isPrimary
+            )
+        }
 
-            // Filter out welcome cards for DMA users
-            // TODO: FXIOS-14125 #30620 Test DMA filtering for Japan/Global Onboarding
-            if isDefault && viewModel.name.localizedCaseInsensitiveContains("welcome") {
-                return false
-            }
+        flowViewModel.onMultipleChoiceTap = { cardName, action in
+            telemetryUtility.sendMultipleChoiceButtonActionTelemetry(
+                from: cardName,
+                with: action
+            )
+        }
 
-            return true
+        flowViewModel.onDismiss = { [weak self] cardName in
+            guard let self = self else { return }
+            telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
+            self.onboardingService = nil
         }
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: OnboardingFlowViewModel(
-                onboardingCards: onboardingCards,
-                skipText: .Onboarding.LaterAction,
-                onActionTap: { @MainActor [weak self] action, cardName, completion in
-                    self?.onboardingService.handleAction(
-                        action,
-                        from: cardName,
-                        cards: onboardingModel.cards,
-                        with: activityEventHelper,
-                        completion: completion
-                    )
-                },
-                onMultipleChoiceActionTap: { [weak self] action, cardName in
-                    self?.onboardingService.handleMultipleChoiceAction(
-                        action,
-                        from: cardName
-                    )
-                },
-                onComplete: { [weak self] currentCardName in
-                    guard let self = self else { return }
-                    manager.didSeeIntroScreen()
-                    SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
-                    telemetryUtility.sendDismissOnboardingTelemetry(from: currentCardName)
-
-                    parentCoordinator?.didFinishLaunch(from: self)
-                }
-            )
+            viewModel: flowViewModel
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)

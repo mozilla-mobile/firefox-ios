@@ -11,20 +11,20 @@ import XCTest
 class SearchBarLocationSaverTests: XCTestCase {
     private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile.shutdown()
         profile = nil
 
         DependencyHelperMock().reset()
         resetNimbusToolbarLayoutTesting()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Toolbar Refactor - Version layout

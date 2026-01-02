@@ -6,6 +6,7 @@ import XCTest
 import Common
 @testable import SummarizeKit
 
+@MainActor
 final class LiteLLMClientTests: XCTestCase {
     private static let mockAPIEndpoint = "https://test-api-url.com"
     private static let mockAPIKey =  "test-api-key"

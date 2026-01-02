@@ -7,6 +7,7 @@ import MozillaAppServices
 
 @testable import Client
 
+@MainActor
 final class MerinoManagerTests: XCTestCase {
     let storyProvider = MockStoryProvider()
 

@@ -11,8 +11,8 @@ class URLValidationTests: BaseTestCase {
     let urlField = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
     var browserScreen: BrowserScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = true
         navigator.goto(SearchSettings)
         app.tables.switches["Show Search Suggestions"].waitAndTap()
@@ -25,8 +25,6 @@ class URLValidationTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2460854
     // Smoketest
     func testDifferentURLTypes() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
@@ -48,8 +46,6 @@ class URLValidationTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2460854
     // Smoketest TAE
     func testDifferentURLTypes_TAE() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()

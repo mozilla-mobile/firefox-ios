@@ -17,15 +17,15 @@ class NotificationManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         center = nil
         notificationManager = nil
+        super.tearDown()
     }
 
     func testRequestAuthorization() {
-        notificationManager.requestAuthorization { (granted, error) in
+        notificationManager.requestAuthorization { [center] (granted, error) in
             XCTAssertTrue(granted)
-            XCTAssertTrue(self.center.requestAuthorizationWasCalled)
+            XCTAssertTrue(center?.requestAuthorizationWasCalled ?? false)
         }
     }
 

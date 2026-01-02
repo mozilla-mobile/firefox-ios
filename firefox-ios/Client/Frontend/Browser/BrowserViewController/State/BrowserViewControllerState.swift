@@ -10,7 +10,7 @@ import WebKit
 import SummarizeKit
 
 struct BrowserViewControllerState: ScreenState {
-    enum NavigationType {
+    enum NavigationType: Equatable {
         case home
         case back
         case forward
@@ -173,7 +173,8 @@ struct BrowserViewControllerState: ScreenState {
             NavigationBrowserActionType.tapOnShareSheet,
             NavigationBrowserActionType.tapOnHomepageSearchBar,
             NavigationBrowserActionType.tapOnShortcutsShowAllButton,
-            NavigationBrowserActionType.tapOnAllStoriesButton:
+            NavigationBrowserActionType.tapOnAllStoriesButton,
+            NavigationBrowserActionType.tapOnPrivacyNoticeLink:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,

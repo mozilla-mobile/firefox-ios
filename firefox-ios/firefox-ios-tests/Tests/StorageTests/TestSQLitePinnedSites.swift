@@ -10,6 +10,21 @@ import XCTest
 
 class TestSQLitePinnedSites: XCTestCase {
     let files = MockFiles()
+    @discardableResult
+    private func chainSuccess(
+        _ initial: @Sendable () -> Success,
+        _ steps: @Sendable () -> Success...
+    ) -> Success {
+        return steps.reduce(initial()) { current, next in
+            current.bind { result in
+                if result.isSuccess {
+                    return next()
+                }
+
+                return deferMaybe(result.failureValue!)
+            }
+        }
+    }
 
     fileprivate func deleteDatabases() {
         do {
@@ -60,20 +75,32 @@ class TestSQLitePinnedSites: XCTestCase {
         }
 
         let checkPinnedSites: @Sendable () -> Success = {
-            return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
-                XCTAssertEqual(pinnedSites.count, 2)
-                XCTAssertEqual(pinnedSites[0]?.url, site2.url)
-                XCTAssertEqual(pinnedSites[1]?.url, site1.url, "The older pinned site should be last")
-                return succeed()
+            return pinnedSites.getPinnedTopSites().bind { result in
+                if let pinnedSites = result.successValue {
+                    XCTAssertEqual(pinnedSites.count, 2)
+                    XCTAssertEqual(pinnedSites[0]?.url, site2.url)
+                    XCTAssertEqual(pinnedSites[1]?.url, site1.url, "The older pinned site should be last")
+                    return succeed()
+                }
+
+                return deferMaybe(result.failureValue!)
             }
         }
 
         let removePinnedSites: @Sendable () -> Success = {
-            return pinnedSites.removeFromPinnedTopSites(site2) >>== {
-                return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
-                    XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
-                    XCTAssertEqual(pinnedSites[0]?.url, site1.url, "Site1 should be the only pin left")
-                    return succeed()
+            return pinnedSites.removeFromPinnedTopSites(site2).bind { removalResult in
+                if removalResult.isFailure {
+                    return deferMaybe(removalResult.failureValue!)
+                }
+
+                return pinnedSites.getPinnedTopSites().bind { result in
+                    if let pinnedSites = result.successValue {
+                        XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
+                        XCTAssertEqual(pinnedSites[0]?.url, site1.url, "Site1 should be the only pin left")
+                        return succeed()
+                    }
+
+                    return deferMaybe(result.failureValue!)
                 }
             }
         }
@@ -83,23 +110,27 @@ class TestSQLitePinnedSites: XCTestCase {
                 if let error = result.failureValue {
                     return deferMaybe(error)
                 }
-                return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
-                    XCTAssertEqual(pinnedSites.count, 1, "There should not be a dupe")
-                    XCTAssertEqual(pinnedSites[0]?.url, site1.url, "Site1 should still be the only pin")
-                    return succeed()
+                return pinnedSites.getPinnedTopSites().bind { result in
+                    if let pinnedSites = result.successValue {
+                        XCTAssertEqual(pinnedSites.count, 1, "There should not be a dupe")
+                        XCTAssertEqual(pinnedSites[0]?.url, site1.url, "Site1 should still be the only pin")
+                        return succeed()
+                    }
+
+                    return deferMaybe(result.failureValue!)
                 }
             }
         }
 
-        addPinnedSites()
-            >>> checkPinnedSites
-            >>> removePinnedSites
-            >>> dupePinnedSite
-            >>> done
+        chainSuccess(
+            addPinnedSites,
+            checkPinnedSites,
+            removePinnedSites,
+            dupePinnedSite,
+            done
+        )
 
-        waitForExpectations(timeout: 3) { error in
-            return
-        }
+        wait(for: [expectation], timeout: 3)
     }
 
     func testPinnedTopSitesDuplicateDomains() {
@@ -132,32 +163,44 @@ class TestSQLitePinnedSites: XCTestCase {
         }
 
         let checkPinnedSites: @Sendable () -> Success = {
-            return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
-                XCTAssertEqual(pinnedSites.count, 2)
-                XCTAssertEqual(pinnedSites[0]?.url, site2.url)
-                XCTAssertEqual(pinnedSites[1]?.url, site1.url, "The older pinned site should be last")
-                return succeed()
+            return pinnedSites.getPinnedTopSites().bind { result in
+                if let pinnedSites = result.successValue {
+                    XCTAssertEqual(pinnedSites.count, 2)
+                    XCTAssertEqual(pinnedSites[0]?.url, site2.url)
+                    XCTAssertEqual(pinnedSites[1]?.url, site1.url, "The older pinned site should be last")
+                    return succeed()
+                }
+
+                return deferMaybe(result.failureValue!)
             }
         }
 
         let removePinnedSites: @Sendable () -> Success = {
-            return pinnedSites.removeFromPinnedTopSites(site2) >>== {
-                return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
-                    XCTAssertEqual(pinnedSites.count, 0, "Duplicate pinned domains are removed with a fuzzy search")
-                    return succeed()
+            return pinnedSites.removeFromPinnedTopSites(site2).bind { removalResult in
+                if removalResult.isFailure {
+                    return deferMaybe(removalResult.failureValue!)
+                }
+
+                return pinnedSites.getPinnedTopSites().bind { result in
+                    if let pinnedSites = result.successValue {
+                        XCTAssertEqual(pinnedSites.count, 0, "Duplicate pinned domains are removed with a fuzzy search")
+                        return succeed()
+                    }
+
+                    return deferMaybe(result.failureValue!)
                 }
             }
         }
 
-        addPinnedSites()
-            >>> checkPinnedSites
-            >>> checkPinnedSites
-            >>> removePinnedSites
-            >>> done
+        chainSuccess(
+            addPinnedSites,
+            checkPinnedSites,
+            checkPinnedSites,
+            removePinnedSites,
+            done
+        )
 
-        waitForExpectations(timeout: 3) { error in
-            return
-        }
+        wait(for: [expectation], timeout: 3)
     }
 
     func testPinnedTopSites_idOfMaxSizeInt64() {
@@ -187,30 +230,42 @@ class TestSQLitePinnedSites: XCTestCase {
         }
 
         let checkPinnedSite: @Sendable () -> Success = {
-            return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
-                XCTAssertEqual(pinnedSites.count, 1)
-                XCTAssertEqual(pinnedSites[0]?.url, site.url)
-                XCTAssertEqual(pinnedSites[0]?.title, site.title)
-                return succeed()
+            return pinnedSites.getPinnedTopSites().bind { result in
+                if let pinnedSites = result.successValue {
+                    XCTAssertEqual(pinnedSites.count, 1)
+                    XCTAssertEqual(pinnedSites[0]?.url, site.url)
+                    XCTAssertEqual(pinnedSites[0]?.title, site.title)
+                    return succeed()
+                }
+
+                return deferMaybe(result.failureValue!)
             }
         }
 
         let removePinnedSite: @Sendable () -> Success = {
-            return pinnedSites.removeFromPinnedTopSites(site) >>== {
-                return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
-                    XCTAssertEqual(pinnedSites.count, 0, "There should be no pinned sites")
-                    return succeed()
+            return pinnedSites.removeFromPinnedTopSites(site).bind { removalResult in
+                if removalResult.isFailure {
+                    return deferMaybe(removalResult.failureValue!)
+                }
+
+                return pinnedSites.getPinnedTopSites().bind { result in
+                    if let pinnedSites = result.successValue {
+                        XCTAssertEqual(pinnedSites.count, 0, "There should be no pinned sites")
+                        return succeed()
+                    }
+
+                    return deferMaybe(result.failureValue!)
                 }
             }
         }
 
-        addPinnedSite()
-            >>> checkPinnedSite
-            >>> removePinnedSite
-            >>> done
+        chainSuccess(
+            addPinnedSite,
+            checkPinnedSite,
+            removePinnedSite,
+            done
+        )
 
-        waitForExpectations(timeout: 3) { error in
-            return
-        }
+        wait(for: [expectation], timeout: 3)
     }
 }

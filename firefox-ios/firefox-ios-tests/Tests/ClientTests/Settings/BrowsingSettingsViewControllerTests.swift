@@ -8,22 +8,23 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class BrowsingSettingsViewControllerTests: XCTestCase {
     private var profile: Profile!
     private var delegate: MockSettingsDelegate!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         self.delegate = MockSettingsDelegate()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         self.profile = nil
         self.delegate = nil
+        try await super.tearDown()
     }
 
     func testHomePageSettingsLeaks_InitCall() throws {

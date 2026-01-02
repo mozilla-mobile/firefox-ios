@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Foundation
 
 class CreditCardsTests: BaseTestCase {
     let creditCardsStaticTexts = AccessibilityIdentifiers.Settings.CreditCards.self
@@ -45,6 +46,9 @@ class CreditCardsTests: BaseTestCase {
         )
         addCardButton.waitAndTap()
         // Add Credit Card page is displayed
+        if #available(iOS 26, *) {
+            tapCardName()
+        }
         waitForElementsToExist(
             [
                 app.staticTexts[creditCardsStaticTexts.AddCreditCard.addCreditCard],
@@ -87,7 +91,8 @@ class CreditCardsTests: BaseTestCase {
         creditCardScreen.waitForSectionVisible()
         creditCardScreen.openAddCreditCardForm()
         // Add Credit Card page is displayed
-        creditCardScreen.waitForSectionVisible()
+        addCreditCardScreen.tapCreditCardForm()
+        creditCardScreen.waitForAddCreditCardValues()
         // Add and save a valid credit card
         addCreditCardScreen.addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
 
@@ -225,6 +230,7 @@ class CreditCardsTests: BaseTestCase {
         formatter.dateFormat = "MMyy"
         let futureExpiryMonthYear = formatter.string(from: dateFiveYearsFromNow!)
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: futureExpiryMonthYear)
+
         navigator.goto(NewTabScreen)
         navigator.openURL(url_fill_form)
         waitUntilPageLoad()
@@ -237,11 +243,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[useSavedCard])
         // If Keyboard is open, hit return button
         app.buttons["KeyboardAccessory.doneButton"].tapIfExists()
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            navigator.goto(BrowserTabMenu)
-            app.swipeUp()
-        }
+
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -254,12 +256,13 @@ class CreditCardsTests: BaseTestCase {
         if iPad() {
             app.webViews["Web content"].textFields["Expiration month:"].waitAndTap()
             app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
-        }
-        if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
+        } else {
             app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
             app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
         }
-        mozWaitForElementToExist(app.buttons[useSavedCard])
+        if #unavailable(iOS 26) {
+            mozWaitForElementToExist(app.buttons[useSavedCard])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306969
@@ -297,7 +300,10 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         cardNumber.waitAndTap()
         // The autofill option (Use saved card prompt) is displayed
-        creditCardScreen.prepareForSavedCardPrompt()
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
+        if #unavailable(iOS 26) {
+            creditCardScreen.prepareForSavedCardPrompt()
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306971
@@ -836,19 +842,23 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         app.tables.cells.element(boundBy: 1).waitAndTap()
         // The "View card" page is displayed with all the details of the card
+        // iOS 26 only: "Edit Card" heading may not be displayed without a restart
+        // during automated testing.
+        if #available(iOS 26, *) {
+            restartInBackground()
+            unlockLoginsView()
+        }
         waitForElementsToExist(
             [
                 app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard],
-                app.tables.cells.element(
-                    boundBy: 1
-                ).buttons.elementContainingText(
-                    "1252"
-                )
+                app.buttons.elementContainingText(String("1252"))
             ]
         )
         let cardDetails = ["Test", "05 / 40"]
         for index in cardDetails {
-            if #available(iOS 16, *) {
+            if #available(iOS 26, *) {
+                mozWaitForElementToExist(app.textFields[index])
+            } else if #available(iOS 16, *) {
                 mozWaitForElementToExist(app.buttons[index])
                 XCTAssertTrue(app.buttons[index].exists, "\(index) does not exists")
             } else {

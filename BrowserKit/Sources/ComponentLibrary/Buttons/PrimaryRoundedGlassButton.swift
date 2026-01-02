@@ -17,4 +17,12 @@ public final class PrimaryRoundedGlassButton: PrimaryRoundedButton {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: ThemeApplicable
+
+    override public func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+        foregroundColor = .invertedLabel
+        setNeedsUpdateConfiguration()
+    }
 }

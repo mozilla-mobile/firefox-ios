@@ -10,7 +10,7 @@ import Kingfisher
 import class MozillaAppServices.HardcodedNimbusFeatures
 
 class UITestAppDelegate: AppDelegate {
-    lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
+    nonisolated static let dirForTestProfile = "\(UITestAppDelegate.appRootDir())/profile.testProfile"
 
     private var internalProfile: Profile?
 
@@ -143,13 +143,13 @@ class UITestAppDelegate: AppDelegate {
             )!
         )
         try? FileManager.default.createDirectory(
-            atPath: dirForTestProfile,
+            atPath: UITestAppDelegate.dirForTestProfile,
             withIntermediateDirectories: false,
             attributes: nil
         )
-        let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
+        let output = URL(fileURLWithPath: "\(UITestAppDelegate.dirForTestProfile)/places.db")
 
-        let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
+        let enumerator = FileManager.default.enumerator(atPath: UITestAppDelegate.dirForTestProfile)
         guard let filePaths = enumerator?.allObjects as? [String] else {
             logger.log("Failed to retrieve file paths during database configuration in UITestAppDelegate class",
                        level: .info,
@@ -158,7 +158,7 @@ class UITestAppDelegate: AppDelegate {
         }
         filePaths.filter { $0.contains(".db") }.forEach { item in
             try? FileManager.default.removeItem(
-                at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)")
+                at: URL(fileURLWithPath: "\(UITestAppDelegate.dirForTestProfile)/\(item)")
             )
         }
 
@@ -173,7 +173,7 @@ class UITestAppDelegate: AppDelegate {
     }
 
     private func configureTabs(_ arg: String, launchArguments: [String]) {
-        let tabDirectory = "\(self.appRootDir())/profile.profile"
+        let tabDirectory = "\(UITestAppDelegate.appRootDir())/profile.profile"
         if launchArguments.contains(LaunchArguments.ClearProfile) {
             fatalError("Clearing profile and loading tabs, not a supported combination.")
         }
@@ -250,7 +250,7 @@ class UITestAppDelegate: AppDelegate {
         }
 
         // Clear the documents directory
-        let rootPath = appRootDir()
+        let rootPath = UITestAppDelegate.appRootDir()
         let manager = FileManager.default
         let documents = URL(fileURLWithPath: rootPath)
         do {
@@ -279,7 +279,7 @@ class UITestAppDelegate: AppDelegate {
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
-    func appRootDir() -> String {
+    nonisolated static func appRootDir() -> String {
         var rootPath = ""
         let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
         if let url = FileManager.default.containerURL(

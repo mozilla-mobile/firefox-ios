@@ -7,6 +7,16 @@ import XCTest
 
 @MainActor
 class RouteTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
+    }
+
     func testSearchRouteWithUrl() {
         let subject = createSubject()
         let url = URL(string: "http://google.com?a=1&b=2&c=foo%20bar")!
@@ -602,11 +612,27 @@ class RouteTests: XCTestCase {
     func testShareSheetRouteUrlTitle() {
         let testURL = URL(string: "https://www.google.com")!
         let testTitle = "TEST TITLE"
-        let shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)&title=\(testTitle)")!
+        let shareURL: URL?
+
+        // URL(string:) changed between iOS 17 and if the string includes a space
+        // it returns nil. We updated to using URLComponents, since under the hood
+        // URL(string:) was updated in iOS17+ to use same RFC 3986 parsing as URLComponents.
+        if #available(iOS 17, *) {
+            shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)&title=\(testTitle)")
+        } else {
+            var components = URLComponents()
+            components.scheme = "firefox"
+            components.host = "share-sheet"
+            components.queryItems = [
+                URLQueryItem(name: "url", value: testURL.absoluteString),
+                URLQueryItem(name: "title", value: testTitle)
+            ]
+            shareURL = components.url
+        }
 
         let subject = createSubject()
 
-        let route = subject.makeRoute(url: shareURL)
+        let route = subject.makeRoute(url: shareURL!)
 
         let expectedShareMessage = ShareMessage(message: testTitle, subtitle: nil)
 
@@ -628,11 +654,28 @@ class RouteTests: XCTestCase {
         let testURL = URL(string: "https://www.google.com")!
         let testTitle = "TEST TITLE"
         let testSubtitle = "TEST SUBTITLE"
-        let shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)&title=\(testTitle)&subtitle=\(testSubtitle)")!
+        let shareURL: URL?
+
+        // URL(string:) changed between iOS 17 and if the string includes a space
+        // it returns nil. We updated to using URLComponents, since under the hood
+        // URL(string:) was updated in iOS17+ to use same RFC 3986 parsing as URLComponents.
+        if #available(iOS 17, *) {
+            shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)&title=\(testTitle)&subtitle=\(testSubtitle)")
+        } else {
+            var components = URLComponents()
+            components.scheme = "firefox"
+            components.host = "share-sheet"
+            components.queryItems = [
+                URLQueryItem(name: "url", value: testURL.absoluteString),
+                URLQueryItem(name: "title", value: testTitle),
+                URLQueryItem(name: "subtitle", value: testSubtitle)
+            ]
+            shareURL = components.url
+        }
 
         let subject = createSubject()
 
-        let route = subject.makeRoute(url: shareURL)
+        let route = subject.makeRoute(url: shareURL!)
 
         let expectedShareMessage = ShareMessage(message: testTitle, subtitle: testSubtitle)
 

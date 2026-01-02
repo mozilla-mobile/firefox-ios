@@ -20,11 +20,14 @@ final class LocationView: UIView,
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.03
-        static let bottomAddressBarYoffset: CGFloat = -28
-        static let bottomAddressBarYoffsetForDefaultScale: CGFloat = -10
+        static let bottomAddressBarYoffset: CGFloat = -16
+        static let bottomAddressBarYoffsetForHomeButton: CGFloat = -28
         static let topAddressBarYoffset: CGFloat = 26
         static let smallScale: CGFloat = 0.7
         static let identityResetAnimationDuration: TimeInterval = 0.2
+        static let effectViewCornerRadius: CGFloat = 24
+        static let effectViewLeadingPadding: CGFloat = -12
+        static let effectViewTrailingPadding: CGFloat = 18
     }
 
     private var urlAbsolutePath: String?
@@ -39,10 +42,16 @@ final class LocationView: UIView,
     private var safeListedURLImageName: String?
     private var scrollAlpha: CGFloat = 1
     private var hasAlternativeLocationColor = false
+    private var config: LocationViewConfiguration?
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
         urlTextField.text?.isEmpty == true
+    }
+    private var hasHomeIndicator: Bool {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else { return false }
+        return window.safeAreaInsets.bottom > 0
     }
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
@@ -68,7 +77,7 @@ final class LocationView: UIView,
         return CGFloat(width)
     }
 
-    private lazy var urlTextFieldColor: UIColor = .black
+    private lazy var urlTextFieldColor: UIColor = .label
     private lazy var urlTextFieldSubdomainColor: UIColor = .clear
     private lazy var lockIconImageColor: UIColor = .clear
     private lazy var safeListedURLImageColor: UIColor = .clear
@@ -76,7 +85,7 @@ final class LocationView: UIView,
     private lazy var gradientView: UIView = .build()
     private lazy var containerView: UIView = .build()
 
-    private var containerViewConstrains: [NSLayoutConstraint] = []
+    private var containerViewConstraints: [NSLayoutConstraint] = []
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
     private var urlTextFieldTrailingConstraint: NSLayoutConstraint?
     private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
@@ -95,6 +104,11 @@ final class LocationView: UIView,
     private lazy var lockIconButton: UIButton = .build { button in
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
+    }
+
+    private lazy var glassEffect: UIVisualEffect? = if #available(iOS 26.0, *) { UIGlassEffect() } else { nil }
+    private lazy var effectView: UIVisualEffectView = .build {
+        $0.layer.cornerRadius = UX.effectViewCornerRadius
     }
 
     // MARK: - URL Text Field
@@ -145,6 +159,7 @@ final class LocationView: UIView,
                    isUnifiedSearchEnabled: Bool,
                    uxConfig: AddressToolbarUXConfiguration,
                    addressBarPosition: AddressToolbarPosition) {
+        self.config = config
         isURLTextFieldCentered = uxConfig.isLocationTextCentered
         hasAlternativeLocationColor = uxConfig.hasAlternativeLocationColor
 
@@ -162,8 +177,7 @@ final class LocationView: UIView,
 
         applyToolbarAlphaIfNeeded(
             alpha: uxConfig.scrollAlpha,
-            barPosition: addressBarPosition,
-            isKeyboardVisible: config.shouldShowKeyboard
+            barPosition: addressBarPosition
         )
         configureLockIconButton(config)
         configureURLTextField(config)
@@ -214,9 +228,9 @@ final class LocationView: UIView,
         // Only update the constraints if necessary
         guard !newConstraints.isEmpty else { return }
 
-        NSLayoutConstraint.deactivate(containerViewConstrains)
-        containerViewConstrains = newConstraints
-        NSLayoutConstraint.activate(containerViewConstrains)
+        NSLayoutConstraint.deactivate(containerViewConstraints)
+        containerViewConstraints = newConstraints
+        NSLayoutConstraint.activate(containerViewConstraints)
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -242,8 +256,23 @@ final class LocationView: UIView,
     }
 
     private func setupLayout() {
-        addSubview(containerView)
+        if #available(iOS 26.0, *) {
+            addSubview(effectView)
+            effectView.contentView.addSubview(containerView)
+        } else {
+            addSubview(containerView)
+        }
         containerView.addSubviews(urlTextField, iconContainerStackView, gradientView)
+        if #available(iOS 26.0, *) {
+            NSLayoutConstraint.activate([
+                effectView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
+                effectView.leadingAnchor.constraint(equalTo: iconContainerStackView.leadingAnchor,
+                                                    constant: UX.effectViewLeadingPadding),
+                effectView.trailingAnchor.constraint(equalTo: urlTextField.trailingAnchor,
+                                                     constant: UX.effectViewTrailingPadding),
+                effectView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor)
+            ])
+        }
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor)
@@ -257,12 +286,12 @@ final class LocationView: UIView,
         )
         iconContainerStackViewLeadingConstraint?.isActive = true
 
-        containerViewConstrains = [
+        containerViewConstraints = [
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ]
 
-        NSLayoutConstraint.activate(containerViewConstrains)
+        NSLayoutConstraint.activate(containerViewConstraints)
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
@@ -400,14 +429,16 @@ final class LocationView: UIView,
     }
 
     // MARK: - LocationView Scaling
-    private func shrinkLocationView(barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+    private func shrinkLocationView(barPosition: AddressToolbarPosition) {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? UX.bottomAddressBarYoffset : UX.topAddressBarYoffset
+        let bottomAddressBarYoffset = if #available(iOS 26.0, *) {
+            UX.bottomAddressBarYoffset
+        } else {
+            hasHomeIndicator ? UX.bottomAddressBarYoffset : UX.bottomAddressBarYoffsetForHomeButton
+        }
+        let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? bottomAddressBarYoffset : UX.topAddressBarYoffset
         let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
-        transform = isKeyboardVisible ? CGAffineTransform(
-            translationX: 0,
-            y: UX.bottomAddressBarYoffsetForDefaultScale
-        ) : scaledTransformation
+        transform = scaledTransformation
         urlTextField.isUserInteractionEnabled = false
     }
 
@@ -425,13 +456,27 @@ final class LocationView: UIView,
         )
     }
 
-    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition, isKeyboardVisible: Bool) {
+    private func removeGlassEffectImmediately() {
+        guard #available(iOS 26.0, *) else { return }
+        /// Workaround for iOS 26.0 bug: Setting `effectView.effect` to `nil` doesn't remove the glass effect.
+        /// We work around this by first setting it to `UIBlurEffect()` and then to `nil`, which forces an immediate removal.
+        effectView.effect = UIBlurEffect()
+        effectView.effect = nil
+    }
+
+    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
         if scrollAlpha.isZero {
-            shrinkLocationView(barPosition: barPosition, isKeyboardVisible: isKeyboardVisible)
+            shrinkLocationView(barPosition: barPosition)
+            if #available(iOS 26.0, *), barPosition == .bottom {
+                effectView.effect = glassEffect
+            } else {
+                removeGlassEffectImmediately()
+            }
         } else {
             restoreLocationViewSize()
+            removeGlassEffectImmediately()
         }
         if let theme { applyTheme(theme: theme) }
     }
@@ -449,26 +494,20 @@ final class LocationView: UIView,
         }
         urlAbsolutePath = config.url?.absoluteString
 
-        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
-        _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
-
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.
         if let dropInteraction = urlTextField.textDropInteraction {
             urlTextField.removeInteraction(dropInteraction)
         }
 
-        if configurationIsEditing {
-            let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
-            if isAnimationEnabled {
-                UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
-                    self.urlTextField.clearButton?.alpha = 1
-                }
-            } else {
-                urlTextField.clearButton?.alpha = 1
+        let targetAlpha: CGFloat = configurationIsEditing ? 1 : 0
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        if isAnimationEnabled {
+            UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
+                self.urlTextField.clearButton?.alpha = targetAlpha
             }
         } else {
-            urlTextField.clearButton?.alpha = 0
+            urlTextField.clearButton?.alpha = targetAlpha
         }
 
         // Once the user started typing we should not update the text anymore as that interferes with
@@ -478,12 +517,18 @@ final class LocationView: UIView,
         let text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
         urlTextField.text = text
 
-        // Start overlay mode & select text when in edit mode with a search term
-        if shouldShowKeyboard, config.shouldSelectSearchTerm {
-            DispatchQueue.main.async {
-                self.urlTextField.text = text
-                self.urlTextField.selectAll(nil)
+        // Defer keyboard/first responder to next run loop (non-blocking).
+        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
+        if shouldShowKeyboard {
+            DispatchQueue.main.async { [unowned self] in
+                _ = becomeFirstResponder()
+                if config.shouldSelectSearchTerm {
+                    urlTextField.text = text
+                    urlTextField.selectAll(nil)
+                }
             }
+        } else {
+            _ = resignFirstResponder()
         }
     }
 
@@ -681,8 +726,17 @@ final class LocationView: UIView,
         let colors = theme.colors
 
         let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
-        urlTextFieldColor = colors.textPrimary
-        urlTextFieldSubdomainColor = colors.textSecondary
+        if #available(iOS 26.0, *), scrollAlpha.isZero {
+            // We want to use system colors when the location view is fully transparent
+            // To make sure it blends well with the background when using glass effect.
+            urlTextFieldColor =  .label
+            urlTextFieldSubdomainColor = .label
+            lockIconButton.tintColor = .label
+        } else {
+            urlTextFieldColor = colors.textPrimary
+            urlTextFieldSubdomainColor = colors.textSecondary
+            lockIconButton.tintColor = colors.textSecondary
+        }
         gradientLayer.colors = Gradient(
             colors: [
                 mainBackgroundColor.withAlphaComponent(1),
@@ -698,7 +752,6 @@ final class LocationView: UIView,
         )
 
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = colors.textSecondary
         lockIconImageColor = colors.textSecondary
 
         setLockIconImage()

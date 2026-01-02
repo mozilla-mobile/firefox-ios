@@ -68,7 +68,7 @@ final class SiriShortcuts {
                 // Next, check for intent, which is used for shortcuts that work in the background
                 if type == SiriShortcuts.activityType.erase && foundShortcut == nil {
                     foundShortcut = voiceShortcuts.first(where: { (attempt) in
-                        attempt.shortcut.intent as? EraseIntent != nil
+                        attempt.shortcut.intent is EraseIntent
                     })
                 }
                 completion(foundShortcut != nil)
@@ -107,7 +107,7 @@ final class SiriShortcuts {
                 })
                 if activityType == SiriShortcuts.activityType.erase && foundShortcut == nil {
                     foundShortcut = voiceShortcuts.first(where: { (attempt) in
-                        attempt.shortcut.intent as? EraseIntent != nil
+                        attempt.shortcut.intent is EraseIntent
                     })
                 }
                 if let foundShortcut = foundShortcut {

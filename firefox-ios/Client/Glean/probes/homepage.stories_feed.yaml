@@ -35,7 +35,7 @@ homepage.stories_feed:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
   story_viewed:
     type: event
     description: |
@@ -53,7 +53,7 @@ homepage.stories_feed:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
   story_tapped:
     type: event
     description: |
@@ -71,7 +71,7 @@ homepage.stories_feed:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
   viewed:
     type: event
     description: |
@@ -84,4 +84,4 @@ homepage.stories_feed:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never

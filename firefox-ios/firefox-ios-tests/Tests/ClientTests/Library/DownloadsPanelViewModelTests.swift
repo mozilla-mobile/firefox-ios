@@ -7,17 +7,18 @@ import Shared
 
 @testable import Client
 
-class DownloadsPanelViewModelTests: XCTestCase {
+@MainActor
+final class DownloadsPanelViewModelTests: XCTestCase {
     private var fileFetcher: MockDownloadFileFetcher!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         fileFetcher = MockDownloadFileFetcher()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         fileFetcher = nil
+        try await super.tearDown()
     }
 
     func testReloadData_WithResults() {

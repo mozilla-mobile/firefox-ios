@@ -28,7 +28,7 @@ class WebContextMenuActionsProvider {
     }
 
     @MainActor
-    func addOpenInNewTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void) {
+    func addOpenInNewTab(url: URL, currentTab: Tab, addTab: @escaping @MainActor @Sendable (URL, Bool, Tab) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewTab,
@@ -41,7 +41,7 @@ class WebContextMenuActionsProvider {
     }
 
     @MainActor
-    func addOpenInNewPrivateTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void) {
+    func addOpenInNewPrivateTab(url: URL, currentTab: Tab, addTab: @escaping @MainActor @Sendable (URL, Bool, Tab) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewPrivateTab,

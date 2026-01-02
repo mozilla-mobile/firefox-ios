@@ -11,8 +11,6 @@ class AuthenticationTest: BaseTestCase {
     let password = "Password"
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisibleAndLogin() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(testBasicHTTPAuthURL)
         waitUntilPageLoad()
 
@@ -52,8 +50,6 @@ class AuthenticationTest: BaseTestCase {
         waitForNoExistence(app.alerts.buttons["Log in"], timeoutValue: 5)
         // Added this check to ensure the BasicAuth login is persisting after app restart as well.
         forceRestartApp()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(testBasicHTTPAuthURL)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)

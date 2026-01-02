@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class MainMenuScreen {
     private let app: XCUIApplication
     private let sel: MainMenuSelectorSet

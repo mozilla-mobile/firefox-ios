@@ -9,18 +9,19 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         profile = nil
+        try await super.tearDown()
     }
 
     func testIsRootNode_falseWhenMenu() {
@@ -155,6 +156,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(index, 0)
     }
 
+    @MainActor
     func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_zeroIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
@@ -164,6 +166,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
+    @MainActor
     func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_minusIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
@@ -264,7 +267,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         return nodes
     }
 
-    private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @escaping () -> Void) {
+    private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @Sendable @escaping () -> Void) {
         let expectation = expectation(description: "Subject reloaded")
 
         profile.places.createBookmark(
@@ -272,8 +275,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             url: "https://www.firefox.com",
             title: "Firefox",
             position: 0
-        ).uponQueue(.main) { _ in
-            self.profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
+        ).uponQueue(.main) { [profile] _ in
+            profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
                 switch result {
                 case .success:
                     subject.reloadData {

@@ -12,11 +12,11 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     // MARK: - Properties
     var profile: Profile
     var hasSyncableAccount: Bool?
-    var availableCards: [OnboardingCardViewController]
+    var availableCards: [OnboardingCardViewController<OnboardingKitCardInfoModel>]
     var isDismissible: Bool
     var telemetryUtility: OnboardingTelemetryProtocol
     let windowUUID: WindowUUID
-    private var cardModels: [OnboardingCardInfoModelProtocol]
+    private var cardModels: [OnboardingKitCardInfoModel]
 
     var shouldShowSingleCard: Bool {
         return availableCards.count == 1
@@ -34,7 +34,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     // MARK: - Initializer
     init(
         profile: Profile,
-        model: OnboardingViewModel,
+        model: OnboardingKitViewModel,
         telemetryUtility: OnboardingTelemetryProtocol,
         windowUUID: WindowUUID
     ) {
@@ -98,12 +98,12 @@ class UpdateViewModel: OnboardingViewModelProtocol,
             }
 
             if cardModel.cardType == .multipleChoice {
-            availableCards.append(OnboardingMultipleChoiceCardViewController(
+            availableCards.append(OnboardingMultipleChoiceCardViewController<OnboardingKitCardInfoModel>(
                 viewModel: cardModel,
                 delegate: delegate,
                 windowUUID: window))
             } else {
-                availableCards.append(OnboardingBasicCardViewController(
+                availableCards.append(OnboardingBasicCardViewController<OnboardingKitCardInfoModel>(
                     viewModel: cardModel,
                     delegate: delegate,
                     windowUUID: window))

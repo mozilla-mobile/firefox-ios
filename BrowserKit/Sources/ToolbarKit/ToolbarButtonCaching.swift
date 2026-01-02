@@ -10,6 +10,11 @@ protocol ToolbarButtonCaching: AnyObject {
     /// This improves performance by reusing buttons instead of creating new instances.
     var cachedButtonReferences: [String: ToolbarButton] { get set }
 
+    // Returns true if a cached button matching the given `ToolbarElement` exists, else false.
+    /// - Parameter toolbarElement: The `ToolbarElement` to check if cached button exists.
+    /// - Returns: true if cached button exist, else false.
+    func hasCachedButton(for toolbarElement: ToolbarElement) -> Bool
+
     /// Retrieves a `ToolbarButton` for the given `ToolbarElement`.
     /// If a cached button exists for the element's accessibility identifier, it returns the cached button.
     /// Otherwise, it creates a new button, caches it, and then returns it.
@@ -20,6 +25,11 @@ protocol ToolbarButtonCaching: AnyObject {
 
 // MARK: - Default Implementation
 extension ToolbarButtonCaching {
+    func hasCachedButton(for toolbarElement: ToolbarElement) -> Bool {
+        let cacheKey = toolbarElement.a11yId
+        return cachedButtonReferences[cacheKey] != nil
+    }
+
     func getToolbarButton(for toolbarElement: ToolbarElement) -> ToolbarButton {
         let cacheKey = toolbarElement.a11yId
         let button: ToolbarButton

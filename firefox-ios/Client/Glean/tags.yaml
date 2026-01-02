@@ -30,6 +30,9 @@ AppIconSelection:
 AppMenu:
   description: Corresponds to the app's main menu.
 
+EmailMask:
+  description: Corresponds to the the email mask autofill feature for website forms.
+
 Autofill:
   description: "Corresponds to the website form autofill feature within the app: addresses autofill, credit cards autofill, and passwords autofill."
 
@@ -60,6 +63,12 @@ Library:
 Microsurvey:
   description: Corresponds to the microsurveys shown to the user.
 
+Onboarding:
+  description: Corresponds to user interactions during the onboarding flow, including card views, button taps, wallpaper selection, and notification permission prompts.
+  
+OpenInFirefoxActionExtension:
+  description: Corresponds to the iOS Action Extension that allows users to share URLs and text from other apps into Firefox.
+
 Passwords:
   description: Corresponds to the collection, storage, and autofilling of login passwords.
 
@@ -72,6 +81,24 @@ ReaderMode:
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
+RecentSearches:
+  description: Corresponds to the recent searches feature.
+
+Search:
+  description: Corresponds to all things related to search.
+
+Settings:
+  description: Corresponds to all the options encompassed in the app's settings screens.
+
+Share:
+  description: Corresponds to sharing functionality, including both the iOS Action Extension for sharing content into the app and the system share sheet for sharing content out of the app.
+
+ShareExtension:
+  description: Corresponds to the legacy iOS Share Extension that allows users to share URLs and perform actions like bookmarking, adding to reading list, and sending to device.
+
+ShareSheet:
+  description: Corresponds to the iOS system share sheet for sharing content out of the app.
+
 ShortcutsLibrary:
   description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
 
@@ -80,12 +107,6 @@ StoriesFeed:
 
 Summarizer:
   description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
-
-Settings:
-  description: Corresponds to all the options encompassed in the app's settings screens.
-
-ShareSheet:
-  description: Corresponds to the iOS system share sheet for sharing content out of the app.
 
 TabsPanel:
   description: Corresponds to all things related to the tab panel.
@@ -106,6 +127,12 @@ TopSites:
 
 TrackingProtection:
   description: Corresponds to the enhanced tracking protection bottom sheet which can be displayed over a webpage.
+  
+Translations:
+  description: Corresponds to the AI-powered feature that translates webpage content into different languages.
+
+TrendingSearches:
+  description: Corresponds to the trending searches feature.
 
 User:
   description: Corresponds to user properties and settings.

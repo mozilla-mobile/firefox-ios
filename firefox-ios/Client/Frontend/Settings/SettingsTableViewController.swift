@@ -813,7 +813,6 @@ class WithoutAccountSetting: AccountSetting {
     }
 }
 
-@objc
 protocol SettingsDelegate: AnyObject {
     @MainActor
     func settingsOpenURLInNewTab(_ url: URL)
@@ -823,7 +822,7 @@ protocol SettingsDelegate: AnyObject {
 }
 
 // The base settings view controller.
-class SettingsTableViewController: ThemedTableViewController {
+class SettingsTableViewController: ThemedTableViewController, Notifiable {
     private struct UX {
         static let tableViewFooterHeight: CGFloat = 30
         static let estimatedRowHeight: CGFloat = 44
@@ -864,23 +863,14 @@ class SettingsTableViewController: ThemedTableViewController {
         super.viewWillAppear(animated)
 
         settings = generateSettings()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(syncDidChangeState),
-            name: .ProfileDidStartSyncing,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(syncDidChangeState),
-            name: .ProfileDidFinishSyncing,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(firefoxAccountDidChange),
-            name: .FirefoxAccountChanged,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                .ProfileDidStartSyncing,
+                .ProfileDidFinishSyncing,
+                .FirefoxAccountChanged
+            ]
         )
 
         applyTheme()
@@ -915,14 +905,10 @@ class SettingsTableViewController: ThemedTableViewController {
         return []
     }
 
-    @objc
     private func syncDidChangeState() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        self.tableView.reloadData()
     }
 
-    @objc
     private func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported
         // and will likely crash the app.
@@ -930,7 +916,6 @@ class SettingsTableViewController: ThemedTableViewController {
         // TODO [rustfxa] listen to notification and refresh profile
     }
 
-    @objc
     func firefoxAccountDidChange() {
         self.tableView.reloadData()
     }
@@ -972,7 +957,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
-        if setting as? DisconnectSetting != nil {
+        if setting is DisconnectSetting {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
                 for: indexPath
@@ -980,7 +965,7 @@ class SettingsTableViewController: ThemedTableViewController {
                 return ThemedCenteredTableViewCell()
             }
             return cell
-        } else if setting as? SendDataSetting != nil {
+        } else if setting is SendDataSetting {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedLearnMoreTableViewCell.cellIdentifier,
                 for: indexPath
@@ -1083,6 +1068,23 @@ class SettingsTableViewController: ThemedTableViewController {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             setting.accessoryButtonTapped()
+        }
+    }
+
+    // MARK: Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
+            ensureMainThread {
+                self.syncDidChangeState()
+            }
+        case .FirefoxAccountChanged:
+            ensureMainThread {
+                self.firefoxAccountDidChange()
+            }
+        default:
+            break
         }
     }
 }

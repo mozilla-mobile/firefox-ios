@@ -8,7 +8,7 @@ import Glean
 import XCTest
 import Storage
 
-class SponsoredTileTelemetryTests: XCTestCase {
+class SponsoredTileGleanTelemetryTests: XCTestCase {
     private var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
@@ -27,7 +27,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
     func testImpressionTopSite() {
         TelemetryContextualIdentifier.setupContextId()
-        let contile = ContileProviderMock.defaultSuccessData[0]
+        let contile = MockSponsoredTileData.defaultSuccessData[0]
         let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let subject = createSubject()
@@ -50,7 +50,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
     func testClickTopSite() {
         TelemetryContextualIdentifier.setupContextId()
-        let contile = ContileProviderMock.defaultSuccessData[1]
+        let contile = MockSponsoredTileData.defaultSuccessData[1]
         let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let subject = createSubject()
@@ -71,8 +71,8 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
     // MARK: Helper methods
 
-    func createSubject() -> SponsoredTileTelemetry {
-        return DefaultSponsoredTileTelemetry(gleanWrapper: gleanWrapper)
+    func createSubject() -> SponsoredTileGleanTelemetry {
+        return DefaultSponsoredTileGleanTelemetry(gleanWrapper: gleanWrapper)
     }
 
     func clearTest() {

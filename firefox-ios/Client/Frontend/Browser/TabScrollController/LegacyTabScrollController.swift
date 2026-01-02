@@ -26,7 +26,8 @@ protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
 @MainActor
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
-                                       LegacyTabScrollProvider {
+                                       LegacyTabScrollProvider,
+                                       Notifiable {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -34,6 +35,11 @@ final class LegacyTabScrollController: NSObject,
         static let heightOffset: CGFloat = 14
         static let minimumScrollThreshold: CGFloat = 20
         static let minimumScrollVelocity: CGFloat = 100
+    }
+
+    protocol Delegate: AnyObject {
+        @MainActor
+        func toolbarDisplayStateDidChange()
     }
 
     private var isMinimalAddressBarEnabled: Bool {
@@ -102,6 +108,9 @@ final class LegacyTabScrollController: NSObject,
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
 
+    private var didTapChangePreventScrollToTop = false
+    private weak var delegate: Delegate?
+
     // Top Toolbar offset updates related constraints
     private var headerTopOffset: CGFloat = 0 {
         didSet {
@@ -167,8 +176,12 @@ final class LegacyTabScrollController: NSObject,
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
         let topInset = safeAreaInsets?.top ?? .zero
-
-        return hasHomeIndicator ? .zero : containerHeight - topInset
+        let containerHeightAdjusted: CGFloat = if #available(iOS 26.0, *) {
+            .zero
+        } else {
+            hasHomeIndicator ? .zero : containerHeight - topInset
+        }
+        return containerHeightAdjusted
     }
 
     private var overKeyboardScrollHeight: CGFloat {
@@ -241,9 +254,11 @@ final class LegacyTabScrollController: NSObject,
     }
 
     init(windowUUID: WindowUUID,
+         delegate: Delegate? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
+        self.delegate = delegate
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init()
@@ -256,10 +271,13 @@ final class LegacyTabScrollController: NSObject,
     }
 
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationWillTerminate(_:)),
-                                               name: UIApplication.willTerminateNotification,
-                                               object: nil)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIApplication.willTerminateNotification
+            ]
+        )
     }
 
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
@@ -286,8 +304,7 @@ final class LegacyTabScrollController: NSObject,
         }
     }
 
-    @objc
-    private func applicationWillTerminate(_ notification: Notification) {
+    private func applicationWillTerminate() {
         // Ensures that we immediately de-register KVO observations for content size changes in
         // webviews if the app is about to terminate.
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
@@ -353,6 +370,7 @@ final class LegacyTabScrollController: NSObject,
             overKeyboardOffset: 0,
             alpha: 1,
             completion: nil)
+        delegate?.toolbarDisplayStateDidChange()
     }
 
     func hideToolbars(animated: Bool) {
@@ -369,6 +387,7 @@ final class LegacyTabScrollController: NSObject,
             overKeyboardOffset: overKeyboardScrollHeight,
             alpha: 0,
             completion: nil)
+        delegate?.toolbarDisplayStateDidChange()
     }
 
     // MARK: - ScrollView observation
@@ -439,6 +458,19 @@ final class LegacyTabScrollController: NSObject,
         guard tab?.isFxHomeTab == false else { return }
         tab?.webView?.addPullRefresh { [weak self] in
             self?.reload()
+        }
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willTerminateNotification:
+            ensureMainThread {
+                self.applicationWillTerminate
+            }
+        default:
+            return
         }
     }
 }
@@ -585,7 +617,7 @@ private extension LegacyTabScrollController {
     /// - Parameter delta: The amount by which to scroll, where a positive delta scrolls down and
     ///   a negative delta scrolls up.
     func scrollWithDelta(_ delta: CGFloat) {
-        guard hasScrollableContent else { return }
+        guard !isMinimalAddressBarEnabled, hasScrollableContent else { return }
 
         let updatedOffset = headerTopOffset - delta
         headerTopOffset = clamp(offset: updatedOffset, min: headerOffset, max: 0)
@@ -818,6 +850,14 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
             showToolbars(animated: true)
             return false
         }
+        if didTapChangePreventScrollToTop {
+            didTapChangePreventScrollToTop = false
+            return false
+        }
         return true
+    }
+
+    func didChangeTopTab() {
+        didTapChangePreventScrollToTop = true
     }
 }

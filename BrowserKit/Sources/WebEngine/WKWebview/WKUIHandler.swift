@@ -169,6 +169,12 @@ public final class DefaultUIHandler: NSObject, WKUIHandler {
                         initiatedByFrame frame: WKFrameInfo,
                         type: WKMediaCaptureType,
                         decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void) {
+        requestMediaCapturePermission(decisionHandler: decisionHandler)
+    }
+
+    func requestMediaCapturePermission(
+        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
+    ) {
         guard isActive && (delegate?.requestMediaCapturePermission() ?? false) else {
             decisionHandler(.deny)
             return

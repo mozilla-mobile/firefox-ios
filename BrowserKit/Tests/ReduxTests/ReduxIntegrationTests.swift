@@ -11,19 +11,20 @@ let store = Store(state: FakeReduxState(),
                   reducer: FakeReduxState.reducer,
                   middlewares: [FakeReduxMiddleware().fakeProvider])
 
+@MainActor
 final class ReduxIntegrationTests: XCTestCase {
     var fakeViewController: FakeReduxViewController!
     var expectedIntValue: Int!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         fakeViewController = FakeReduxViewController()
         fakeViewController.view.setNeedsLayout()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         fakeViewController = nil
+        try await super.tearDown()
     }
 
     func testDispatchStore_IncreaseCounter() {

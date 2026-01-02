@@ -100,7 +100,11 @@ class FxAWebViewController: UIViewController {
         if dismissType == .dismiss {
             super.dismiss(animated: animated, completion: completion)
         } else if dismissType == .popToTabTray {
-            shouldDismissFxASignInViewController?()
+            if let shouldDismissFxASignInViewController {
+                shouldDismissFxASignInViewController()
+            } else {
+                super.dismiss(animated: animated, completion: completion)
+            }
         } else {
             // Pop to settings view controller
             navigationController?.popToRootViewController(animated: true)
@@ -264,9 +268,12 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
 
 // MARK: - Observe value
 extension FxAWebViewController {
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
-                               change: [NSKeyValueChangeKey: Any]?,
-                               context: UnsafeMutableRawPointer?) {
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
         ensureMainThread {
             guard let kp = keyPath,
                   let path = KVOConstants(rawValue: kp)

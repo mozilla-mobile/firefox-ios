@@ -125,7 +125,7 @@
 "BreachAlerts.Description" = "自您上次更改密碼後發生過密碼外洩或失竊事件。為了保護此帳號，請登入網站更改密碼。";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
-"BreachAlerts.LearnMoreButton" = "了解更多";
+"BreachAlerts.LearnMoreButton" = "更多資訊";
 
 /* Leads to a link to the breached website */
 "BreachAlerts.Link" = "前往";
@@ -1478,7 +1478,7 @@
 "Settings.ShowLoginsInAppMenu.Title" = "於應用程式選單中顯示";
 
 /* The description of the open new tab siri shortcut */
-"Settings.Siri.OpenTabShortcut" = "開啟新分頁";
+"Settings.Siri.OpenTabShortcut" = "開新分頁";
 
 /* The description that describes what siri shortcuts are */
 "Settings.Siri.SectionDescription" = "透過 Siri 使用捷徑快速開啟 Firefox";
@@ -1685,7 +1685,7 @@
 "TabTray.InactiveTabs.SectionTitle" = "閒置分頁";
 
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"TabTray.OpenNewTab.KeyCodeTitle" = "開啟新分頁";
+"TabTray.OpenNewTab.KeyCodeTitle" = "開新分頁";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "隱私";

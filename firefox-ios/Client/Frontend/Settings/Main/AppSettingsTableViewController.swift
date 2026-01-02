@@ -431,6 +431,18 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
         ]
 
+        // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
+        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly), let profile {
+            supportSettings.append(
+                SentFromFirefoxSetting(
+                    prefs: profile.prefs,
+                    delegate: settingsDelegate,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    settingsDelegate: parentCoordinator
+                )
+            )
+        }
+
         guard let sendTechnicalDataSetting,
               let sendDailyUsagePingSetting,
               let studiesToggleSetting,
@@ -478,13 +490,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ForceRSSyncSetting(settings: self),
             ChangeToChinaSetting(settings: self),
             AppReviewPromptSetting(settings: self, settingsDelegate: self),
-            ToggleInactiveTabs(settings: self, settingsDelegate: self),
             ResetContextualHints(settings: self),
             ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
             ResetTermsOfServiceAcceptancePage(settings: self, settingsDelegate: self),
             ResetSearchEnginePrefsSetting(settings: self),
             SentryIDSetting(settings: self, settingsDelegate: self),
-            FasterInactiveTabs(settings: self, settingsDelegate: self),
             TermsOfUseTimeout(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
@@ -493,10 +503,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
             DeleteAutofillKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
-            AddShortcutsSetting(settings: self, settingsDelegate: self)
+            AddShortcutsSetting(settings: self, settingsDelegate: self),
+            MerinoTestDataSetting(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
 

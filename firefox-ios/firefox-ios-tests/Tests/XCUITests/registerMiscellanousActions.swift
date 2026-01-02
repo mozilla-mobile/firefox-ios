@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerMiscellanousActions(in map: MMScreenGraph<FxUserState>) {
     // URLBarOpen is dismissOnUse, which ScreenGraph interprets as "now we've done this action,
     // then go back to the one before it" but SetURL is an action than keeps us in URLBarOpen.

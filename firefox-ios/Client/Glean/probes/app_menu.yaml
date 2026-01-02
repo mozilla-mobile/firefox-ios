@@ -41,7 +41,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22788
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   close_button:
     type: event
     description: |
@@ -57,7 +57,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22788
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   menu_dismissed:
     type: event
     description: |
@@ -73,7 +73,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22788
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   homepage_menu:
     type: counter
     description: |
@@ -86,7 +86,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   site_menu:
     type: counter
     description: |
@@ -99,7 +99,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   home:
     type: counter
     description: |
@@ -113,7 +113,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   block_images_enabled:
     type: counter
     description: |
@@ -128,7 +128,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   block_images_disabled:
     type: counter
     description: |
@@ -143,7 +143,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   night_mode_enabled:
     type: counter
     description: |
@@ -158,7 +158,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   night_mode_disabled:
     type: counter
     description: |
@@ -173,7 +173,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   whats_new:
     type: counter
     description: |
@@ -187,7 +187,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   help:
     type: counter
     description: |
@@ -199,7 +199,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   customize_homepage:
     type: counter
     description: |
@@ -212,7 +212,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   settings:
     type: counter
     description: |
@@ -226,7 +226,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   logins:
     type: counter
     description: |
@@ -241,7 +241,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   sign_into_sync:
     type: counter
     description: |
@@ -257,7 +257,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15181
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   passwords:
     type: event
     description: |
@@ -268,7 +268,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/16685
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
 
 # Page Action menu
 page_action_menu:
@@ -286,7 +286,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   send_to_device:
     type: counter
     description: |
@@ -301,7 +301,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   copy_address:
     type: counter
     description: |
@@ -316,7 +316,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   report_site_issue:
     type: counter
     description: |
@@ -331,7 +331,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   find_in_page:
     type: counter
     description: |
@@ -346,7 +346,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   request_desktop_site:
     type: counter
     description: |
@@ -361,7 +361,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   request_mobile_site:
     type: counter
     description: |
@@ -376,7 +376,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   pin_to_top_sites:
     type: counter
     description: |
@@ -391,7 +391,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   remove_pinned_site:
     type: counter
     description: |
@@ -406,7 +406,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   view_downloads_panel:
     type: counter
     description: |
@@ -420,7 +420,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   view_history_panel:
     type: counter
     description: |
@@ -434,7 +434,7 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   create_new_tab:
     type: counter
     description: |
@@ -448,4 +448,4 @@ page_action_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never

@@ -26,6 +26,7 @@ TEST_FLIGHT_GROUP_NAME = os.getenv("TEST_FLIGHT_EXTERNAL_GROUP_NAME", "Nightly")
 # The version of the build in TestFlight
 BUILD_VERSION = os.getenv("BITRISE_NIGHTLY_VERSION", "9000")
 
+
 def generate_jwt_token(issuer_id, key_id, private_key):
     """Generates a JWT token using the given credentials."""
     payload = {
@@ -53,7 +54,9 @@ def api_call(url, jwt_token, method="GET", payload=None, params=None):
         "Content-Type": "application/json",
     }
 
-    response = requests.request(method, url, headers=headers, json=payload, params=params)
+    response = requests.request(
+        method, url, headers=headers, json=payload, params=params
+    )
     if response.status_code in [200, 201]:
         return response.json()
     elif response.status_code == 204:
@@ -83,10 +86,12 @@ def main():
 
     # Fetch beta groups
     beta_groups = get_paginated_data(
-        "https://api.appstoreconnect.apple.com/v1/betaGroups", jwt_token, {
+        "https://api.appstoreconnect.apple.com/v1/betaGroups",
+        jwt_token,
+        {
             "filter[app]": APPSTORE_APP_ID,
             "filter[name]": TEST_FLIGHT_GROUP_NAME,
-        }
+        },
     )
     assert len(beta_groups) == 1
     group = beta_groups[0]
@@ -94,17 +99,35 @@ def main():
 
     # Fetch builds for the app with a specific pre-release version
     builds = get_paginated_data(
-        "https://api.appstoreconnect.apple.com/v1/builds", jwt_token, {
+        "https://api.appstoreconnect.apple.com/v1/builds",
+        jwt_token,
+        {
             "filter[app]": APPSTORE_APP_ID,
             "filter[preReleaseVersion.version]": BUILD_VERSION,
             "fields[preReleaseVersions]": "version",
             "sort": "-version",
-            "limit": "1"
-        }
+            "limit": "1",
+        },
     )
     assert len(builds) == 1
     build = builds[0]
-    print(f"Found build: ID<{build['id']}> version<{build['attributes']['version']}> uploaded<{build['attributes']['uploadedDate']}>")
+    print(
+        f"Found build: ID<{build['id']}> version<{build['attributes']['version']}> uploaded<{build['attributes']['uploadedDate']}>"
+    )
+
+    build_id = build["id"]
+    all_build_l10n = get_paginated_data(
+        f"https://api.appstoreconnect.apple.com/v1/builds/{build_id}/betaBuildLocalizations",
+        jwt_token,
+    )
+    build_l10n_id = None
+    for record in all_build_l10n:
+        if record["attributes"]["locale"] == "en-US":
+            build_l10n_id = record["id"]
+            break
+    else:
+        raise Exception("Could not find localization")
+    print(f"Found betaBuildLocalization: {build_l10n_id}")
 
     # Add the beta group to the build
     payload = {"data": [{"type": "betaGroups", "id": group["id"]}]}
@@ -115,6 +138,44 @@ def main():
         payload=payload,
     )
     print(f"Added {TEST_FLIGHT_GROUP_NAME} to build {build['attributes']['version']}")
+
+    # Update "What To Test"
+    payload = {
+        "data": {
+            "id": build_l10n_id,
+            "type": "betaBuildLocalizations",
+            "attributes": {"whatsNew": "Bug fixes."},
+        }
+    }
+    api_call(
+        f"https://api.appstoreconnect.apple.com/v1/betaBuildLocalizations/{build_l10n_id}",
+        jwt_token,
+        method="PATCH",
+        payload=payload,
+    )
+    print("Updated whatsNew with 'Bug fixes'")
+
+    payload = {
+        "data": {
+            "type": "betaAppReviewSubmissions",
+            "relationships": {
+                "build": {
+                    "data": {
+                        "id": build_id,
+                        "type": "builds",
+                    }
+                }
+            },
+        }
+    }
+    api_call(
+        "https://api.appstoreconnect.apple.com/v1/betaAppReviewSubmissions",
+        jwt_token,
+        "POST",
+        payload,
+    )
+    print("Submitted build for beta testing.")
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,25 @@
+# The configuration for the sentFromFirefoxFeature feature
+features:
+  sent-from-firefox-feature:
+    description: >
+      Adds additional promo text to links shared to WhatsApp.
+    variables:
+      enabled:
+        description: >
+          Controls whether promo text is added to WhatsApp shares and an on/off toggle is added to Settings.
+        type: Boolean
+        default: false
+      isTreatmentA:
+        description: >
+          If true, shares the treatment A text. If false, shares the treatment B text.
+        type: Boolean
+        default: true
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+          isTreatmentA: true
+      - channel: developer
+        value:
+          enabled: true
+          isTreatmentA: true

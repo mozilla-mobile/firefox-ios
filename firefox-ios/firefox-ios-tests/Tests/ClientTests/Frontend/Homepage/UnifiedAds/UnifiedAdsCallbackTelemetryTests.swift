@@ -9,23 +9,24 @@ import Storage
 
 @testable import Client
 
-class UnifiedAdsCallbackTelemetryTests: XCTestCase {
+@MainActor
+final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     private var networking: MockContileNetworking!
     private var logger: MockLogger!
     private var gleanWrapper: MockGleanWrapper!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         networking = MockContileNetworking()
         logger = MockLogger()
         gleanWrapper = MockGleanWrapper()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         networking = nil
         logger = nil
         gleanWrapper = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testImpressionTelemetry_givenErrorResponse_thenFailsWithLogMessage() {
@@ -125,10 +126,10 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     // MARK: - Helper functions
 
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsCallbackTelemetry {
-        let sponsoredTileTelemetry = DefaultSponsoredTileTelemetry(gleanWrapper: gleanWrapper)
+        let sponsoredTileGleanTelemetry = DefaultSponsoredTileGleanTelemetry(gleanWrapper: gleanWrapper)
         let subject = DefaultUnifiedAdsCallbackTelemetry(networking: networking,
                                                          logger: logger,
-                                                         sponsoredTileTelemetry: sponsoredTileTelemetry)
+                                                         sponsoredTileGleanTelemetry: sponsoredTileGleanTelemetry)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

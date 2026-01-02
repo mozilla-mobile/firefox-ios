@@ -13,7 +13,7 @@ enum BasicSearchProvider: String {
     case bing
 }
 
-struct SearchProviderModel {
+public struct SearchProviderModel: Sendable {
     typealias Predicate = (String) -> Bool
     let name: String
     let regexp: String

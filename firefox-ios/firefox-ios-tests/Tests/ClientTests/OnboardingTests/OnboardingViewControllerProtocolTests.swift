@@ -11,23 +11,24 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingTestingConfigUtility!
     typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         nimbusUtility = nil
+        try await super.tearDown()
     }
 
     // MARK: - Test `getNextOnboardingCard` forward
     func testProtocol_hasCorrectFirstViewController() {
         let subject = createSubject()
 
-        guard let result = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
+        guard let result = subject.pageController.viewControllers?.first
+            as? OnboardingBasicCardViewController<OnboardingKitCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -124,7 +125,8 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
     func testProtocol_initialIndex_isZero() {
         let subject = createSubject()
 
-        guard let result = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
+        guard let result = subject.pageController.viewControllers?.first
+            as? OnboardingBasicCardViewController<OnboardingKitCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -137,7 +139,8 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         let subject = createSubject()
 
         subject.moveForward(numberOfPages: 1, from: cards.welcome.rawValue)
-        guard let result = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
+        guard let result = subject.pageController.viewControllers?.first
+            as? OnboardingBasicCardViewController<OnboardingKitCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -150,7 +153,8 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         let subject = createSubject()
 
         subject.moveForward(numberOfPages: 1, from: cards.notifications.rawValue)
-        guard let result = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
+        guard let result = subject.pageController.viewControllers?.first
+            as? OnboardingBasicCardViewController<OnboardingKitCardInfoModel> else {
             XCTFail("expected a view controller, but got nothing")
             return
         }

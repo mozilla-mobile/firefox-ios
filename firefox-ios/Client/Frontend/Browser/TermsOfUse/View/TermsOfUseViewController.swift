@@ -17,8 +17,8 @@ final class TermsOfUseViewController: UIViewController,
         static let sheetContainerSidePadding: CGFloat = 40
         static let logoSize: CGFloat = 40
         static let acceptButtonHeight: CGFloat = 44
-        static let acceptButtonCornerRadius: CGFloat = 12
-        static let remindMeLaterButtonHeight: CGFloat = 30
+        static let remindMeLaterButtonHeight: CGFloat = 44
+        static let buttonCornerRadius: CGFloat = 12
         static let grabberWidth: CGFloat = 36
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
@@ -31,10 +31,9 @@ final class TermsOfUseViewController: UIViewController,
         static let initialSpringVelocity: CGFloat = 1
         static let backgroundAlpha: CGFloat = 0.6
 
-        static let titleFont = FXFontStyles.Regular.headline.scaledFont()
+        static let titleFont = FXFontStyles.Bold.title3.scaledFont()
         static let descriptionFont = FXFontStyles.Regular.body.scaledFont()
-        static let acceptButtonFont = FXFontStyles.Regular.callout.scaledFont()
-        static let remindMeLaterFont = FXFontStyles.Regular.body.scaledFont()
+        static let buttonFont = FXFontStyles.Bold.callout.scaledFont()
     }
     typealias SubscriberStateType = TermsOfUseState
     weak var coordinator: TermsOfUseCoordinatorDelegate?
@@ -47,6 +46,8 @@ final class TermsOfUseViewController: UIViewController,
 
     private var activeContainerConstraints: [NSLayoutConstraint] = []
     private var textViewHeightConstraint: NSLayoutConstraint?
+    private var grabberHeightConstraint: NSLayoutConstraint?
+    private let isDragToDismissEnabled: Bool
 
     private var sheetContainer: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
@@ -95,9 +96,9 @@ final class TermsOfUseViewController: UIViewController,
 
     private lazy var acceptButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.acceptButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.acceptButtonFont
+        button.titleLabel?.font = UX.buttonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.layer.cornerRadius = UX.acceptButtonCornerRadius
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.acceptButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.acceptTapped), for: .touchUpInside)
@@ -105,8 +106,9 @@ final class TermsOfUseViewController: UIViewController,
 
     private lazy var remindMeLaterButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.remindMeLaterFont
+        button.titleLabel?.font = UX.buttonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.remindMeLaterTapped), for: .touchUpInside)
@@ -114,10 +116,12 @@ final class TermsOfUseViewController: UIViewController,
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: UUID,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         enableDragToDismiss: Bool = true) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
+        self.isDragToDismissEnabled = enableDragToDismiss
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -192,19 +196,22 @@ final class TermsOfUseViewController: UIViewController,
         view.addSubview(sheetContainer)
         sheetContainer.addSubview(grabberView)
         sheetContainer.addSubview(stackView)
+        grabberView.isHidden = !isDragToDismissEnabled
         addStackSubviews()
         setupConstraints()
         configureTextViewScrolling()
         setupDismissGesture()
-        setupPanGesture()
+        if isDragToDismissEnabled {
+            setupPanGesture()
+        }
     }
 
     func addStackSubviews() {
         stackView.addArrangedSubview(self.logoImageView)
         stackView.addArrangedSubview(self.titleLabel)
         stackView.addArrangedSubview(self.descriptionTextView)
-        stackView.addArrangedSubview(self.acceptButton)
         stackView.addArrangedSubview(self.remindMeLaterButton)
+        stackView.addArrangedSubview(self.acceptButton)
     }
 
     private func setupConstraints() {
@@ -233,11 +240,15 @@ final class TermsOfUseViewController: UIViewController,
         NSLayoutConstraint.activate(containerConstraints)
         activeContainerConstraints = containerConstraints
 
+        let grabberHeight = grabberView.heightAnchor.constraint(equalToConstant:
+                            isDragToDismissEnabled ? UX.grabberHeight : 0)
+        grabberHeightConstraint = grabberHeight
+
         NSLayoutConstraint.activate([
             grabberView.topAnchor.constraint(equalTo: sheetContainer.topAnchor, constant: UX.grabberTopPadding),
             grabberView.centerXAnchor.constraint(equalTo: sheetContainer.centerXAnchor),
             grabberView.widthAnchor.constraint(equalToConstant: UX.grabberWidth),
-            grabberView.heightAnchor.constraint(equalToConstant: UX.grabberHeight),
+            grabberHeight,
 
             stackView.leadingAnchor.constraint(equalTo: sheetContainer.leadingAnchor, constant: UX.stackSidePadding),
             stackView.trailingAnchor.constraint(equalTo: sheetContainer.trailingAnchor, constant: -UX.stackSidePadding),
@@ -330,10 +341,13 @@ final class TermsOfUseViewController: UIViewController,
         view.backgroundColor = currentTheme().colors.layerScrim.withAlphaComponent(UX.backgroundAlpha)
         sheetContainer.backgroundColor = currentTheme().colors.layer1
         grabberView.backgroundColor = currentTheme().colors.iconDisabled
+        grabberView.isHidden = !isDragToDismissEnabled
+        grabberView.alpha = isDragToDismissEnabled ? 1.0 : 0.0
         titleLabel.textColor = currentTheme().colors.textPrimary
         acceptButton.tintColor = currentTheme().colors.textOnDark
         acceptButton.backgroundColor = currentTheme().colors.actionPrimary
-        remindMeLaterButton.setTitleColor(currentTheme().colors.actionPrimary, for: .normal)
+        remindMeLaterButton.backgroundColor = currentTheme().colors.actionSecondary
+        remindMeLaterButton.setTitleColor(currentTheme().colors.textPrimary, for: .normal)
         descriptionTextView.linkTextAttributes = [
             .foregroundColor: currentTheme().colors.textAccent,
             .underlineStyle: NSUnderlineStyle.single.rawValue

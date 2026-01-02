@@ -12,8 +12,8 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
     var syncContentSettingsVC: SyncContentSettingsViewController?
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -21,11 +21,11 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
         syncContentSettingsVC?.profile = profile
     }
 
-    override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         profile = nil
         syncContentSettingsVC = nil
+        try await super.tearDown()
     }
 
     func test_syncContentSettingsViewController_generateSettingsCount() {

@@ -148,15 +148,21 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
-        let fancyView = browserVC.fancyView
+        // Snapshot of the BVC view
+        let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
+        bvcSnapshot.layer.cornerCurve = .continuous
+        bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        bvcSnapshot.layer.shouldRasterize = true
+        bvcSnapshot.clipsToBounds = true
+        bvcSnapshot.contentMode = .scaleAspectFill
 
-        if fancyView.alpha == 1 {
-            // Snapshot of the fancyView
-            let fancyViewSnapshot = fancyView.screenShotView
-            fancyViewSnapshot.layer.cornerCurve = .continuous
-            fancyViewSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-            fancyViewSnapshot.clipsToBounds = true
-            fancyViewSnapshot.contentMode = .scaleAspectFill
+        // Wrap bvcSnapshot in a container to support external border
+        let snapshotContainer = UIView(frame: bvcSnapshot.frame)
+        snapshotContainer.layer.cornerRadius = bvcSnapshot.layer.cornerRadius
+        snapshotContainer.layer.cornerCurve = .continuous
+        snapshotContainer.layer.shouldRasterize = true
+        snapshotContainer.clipsToBounds = false
+        bvcSnapshot.frame = snapshotContainer.bounds
 
             // Wrap bvcSnapshot in a container to support external border
             let snapshotContainer = UIView(frame: fancyViewSnapshot.frame)
@@ -201,11 +207,12 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                   let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
             else { return }
 
-            let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
-                  let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-            else { return }
+        var tabCell: ExperimentTabCell?
+        var cellFrame: CGRect?
 
+        if let indexPath = dataSource.indexPath(for: item) {
+            cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
             cv.layoutIfNeeded()
             var tabCell: ExperimentTabCell?
             var cellFrame: CGRect?
@@ -527,11 +534,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.contentMode = .scaleAspectFill
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        tabSnapshot.layer.shouldRasterize = true
 
         contentContainer.isHidden = true
 
         toView.layer.cornerCurve = .continuous
         toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        toView.layer.shouldRasterize = true
         toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
 
@@ -559,6 +568,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             toView.layer.cornerRadius = UX.zeroCornerRadius
             tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
         } completion: { _ in
+            toView.layer.shouldRasterize = false
             contentContainer.isHidden = false
             tabCell?.isHidden = false
             self.view.removeFromSuperview()
@@ -605,8 +615,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         return dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
             case .tab(let model):
-                return model.id == id
-            case .inactiveTab(let model):
                 return model.id == id
             }
         }

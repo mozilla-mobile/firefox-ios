@@ -1,0 +1,238 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Search
+
+###############################################################################
+# Search
+###############################################################################
+
+# General Search
+search:
+  counts:
+    type: labeled_counter
+    description: |
+      The labels for this counter are `{search-engine-name}.{source}`
+
+      If the search engine is bundled with Firefox-iOS, then
+      `search-engine-name` will be the name of the search engine. If
+      it is a custom search engine, the value will be `custom`.
+
+      The value of `source` will reflect the source from which the
+      search started.  One of:
+      * quicksearch
+      * suggestion
+      * actionbar
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+  default_engine:
+    type: string
+    lifetime: application
+    description: |
+      The default search engine identifier if the search engine is
+      pre-loaded with Firefox-iOS.  If it's a custom search engine,
+      then the value will be 'custom'.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+  start_search_pressed:
+    type: counter
+    description: |
+      Counts the number of times the start search button is
+      pressed
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  in_content:
+    type: labeled_counter
+    description: |
+      Records the type of interaction a user has on SERP pages.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7602
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7702
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+  google_topsite_pressed:
+    type: labeled_counter
+    description: |
+      Counts the number of times the google top site button
+      is pressed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7965
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7965
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+# Trending Searches
+search.trending_searches:
+  suggestions_shown:
+    type: event
+    description: |
+      Triggered when the trending search suggestions section is shown to the user.
+    extra_keys:
+      count:
+        type: quantity
+        description: |
+          The number of trending search suggestions displayed.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30661
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - TrendingSearches
+
+  suggestion_tapped:
+    type: event
+    description: |
+      Triggered when the user taps a trending search suggestion.
+    extra_keys:
+      position:
+        type: quantity
+        description: |
+          The position of the clicked trending search suggestion. The first suggestion has index of 1.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30661
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - TrendingSearches
+
+# Recent Searches
+search.recent_searches:
+  suggestions_shown:
+    type: event
+    description: |
+      Triggered when the recent search suggestions section is shown to the user.
+    extra_keys:
+      count:
+        type: quantity
+        description: |
+          The number of recent search suggestions displayed.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30661
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - RecentSearches
+
+  suggestion_tapped:
+    type: event
+    description: |
+      Triggered when the user taps a recent search suggestion.
+    extra_keys:
+      position:
+        type: quantity
+        description: |
+          The position of the clicked recent search suggestion. The first suggestion has index of 1.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30661
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - RecentSearches
+        
+  clear_button_tapped:
+    type: event
+    description: |
+      Triggered when a user taps the button to clear past recent search suggestions.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30751
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30761
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - RecentSearches

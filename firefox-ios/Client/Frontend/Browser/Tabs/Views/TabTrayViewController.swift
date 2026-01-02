@@ -48,6 +48,8 @@ final class TabTrayViewController: UIViewController,
         }
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlHorizontalSpacing: CGFloat = 16
+        static let titleFont: UIFont = FXFontStyles.Bold.caption2.systemFont()
+        static let cornerRadius: CGFloat = 2
     }
 
     // MARK: Theme
@@ -149,8 +151,8 @@ final class TabTrayViewController: UIViewController,
 
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
-        label.font = TabsButton.UX.titleFont
-        label.layer.cornerRadius = TabsButton.UX.cornerRadius
+        label.font = UX.titleFont
+        label.layer.cornerRadius = UX.cornerRadius
         label.textAlignment = .center
         label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -379,10 +381,11 @@ final class TabTrayViewController: UIViewController,
 
     func newState(state: TabTrayState) {
         guard state != tabTrayState else { return }
-
+        if state.normalTabsCount != tabTrayState.normalTabsCount {
+            updateTabCountImage(count: state.normalTabsCount)
+        }
         tabTrayState = state
 
-        updateTabCountImage(count: tabTrayState.normalTabsCount)
         segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
@@ -718,7 +721,7 @@ final class TabTrayViewController: UIViewController,
             currentToast.dismiss(false)
         }
 
-        if toastType.reduxAction(for: windowUUID) as? TabPanelViewAction != nil {
+        if toastType.reduxAction(for: windowUUID) is TabPanelViewAction {
             let viewModel = ButtonToastViewModel(labelText: toastType.title, buttonText: toastType.buttonText)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: retrieveTheme(),

@@ -11,19 +11,19 @@ import XCTest
 final class AppLaunchUtilTests: XCTestCase {
     var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.clearUserDefaults()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         TelemetryContextualIdentifier.clearUserDefaults()
         profile = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: Telemetry contextual identifier setup

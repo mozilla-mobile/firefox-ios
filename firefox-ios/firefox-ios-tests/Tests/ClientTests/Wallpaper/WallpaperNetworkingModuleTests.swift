@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Client
 
-class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
+class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider, @unchecked Sendable {
     let url = URL(string: "my.testurl.com")!
 
     func testAsyncDataCall() async {
@@ -40,11 +40,8 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
                                      and: expectedError)
         let subject = WallpaperNetworkingModule(with: session)
 
-        do {
+        await assertAsyncThrowsEqual(URLError(.cannotConnectToHost)) { [url] in
             _ = try await subject.data(from: url)
-            XCTFail("This test should throw an error, but it did not.")
-        } catch {
-            XCTAssertEqual(error as? URLError, expectedError)
         }
     }
 
@@ -55,12 +52,8 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
                                      and: nil)
         let subject = WallpaperNetworkingModule(with: session)
 
-        do {
+        await assertAsyncThrowsEqual(URLError(.badServerResponse)) {
             _ = try await subject.data(from: url)
-            XCTFail("This test should throw an error, but it did not.")
-        } catch {
-            XCTAssertEqual(error as? URLError,
-                           URLError(.badServerResponse))
         }
     }
 
@@ -71,12 +64,8 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
                                      and: nil)
         let subject = WallpaperNetworkingModule(with: session)
 
-        do {
+        await assertAsyncThrowsEqual(URLError(.badServerResponse)) {
             _ = try await subject.data(from: url)
-            XCTFail("This test should throw an error, but it did not.")
-        } catch {
-            XCTAssertEqual(error as? URLError,
-                           URLError(.badServerResponse))
         }
     }
 
@@ -103,12 +92,8 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
                                      and: nil)
         let subject = WallpaperNetworkingModule(with: session)
 
-        do {
+        await assertAsyncThrowsEqual(WallpaperServiceError.dataUnavailable) {
             _ = try await subject.data(from: url)
-            XCTFail("This test should throw an error, but it did not.")
-        } catch {
-            XCTAssertEqual(error as? WallpaperServiceError,
-                           WallpaperServiceError.dataUnavailable)
         }
     }
 }

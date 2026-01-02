@@ -7,7 +7,7 @@ import Shared
 import Storage
 
 protocol TopSiteHistoryManagerProvider: Sendable {
-    func getTopSites(completion: @escaping ([Site]?) -> Void)
+    func getTopSites(completion: @escaping @Sendable ([Site]?) -> Void)
     func removeDefaultTopSitesTile(site: Site)
     func remove(pinnedSite: Site) async throws
 }
@@ -30,7 +30,7 @@ class TopSiteHistoryManager: TopSiteHistoryManagerProvider, @unchecked Sendable 
         )
     }
 
-    func getTopSites(completion: @escaping ([Site]?) -> Void) {
+    func getTopSites(completion: @escaping @Sendable ([Site]?) -> Void) {
         topSitesProvider.getTopSites { [weak self] result in
             guard self != nil else { return }
             completion(result)

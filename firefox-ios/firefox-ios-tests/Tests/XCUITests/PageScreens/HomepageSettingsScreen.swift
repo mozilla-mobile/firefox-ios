@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class HomepageSettingsScreen {
     private let app: XCUIApplication
     private let sel: HomepageSettingsSelectorSet

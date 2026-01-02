@@ -5,7 +5,7 @@
 import SwiftUI
 import Common
 
-struct AppIconSelectionView: View, ThemeApplicable {
+struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
     private let windowUUID: WindowUUID
     private let logger: Logger
     private let telemetry: AppIconSelectionTelemetry
@@ -35,10 +35,18 @@ struct AppIconSelectionView: View, ThemeApplicable {
         self.logger = logger
     }
 
+    var availableAppIcons: [AppIcon] {
+        guard featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly)
+        else {
+            return AppIcon.allCases.filter({ $0.isFunIcon == false })
+        }
+        return AppIcon.allCases
+    }
+
     var body: some View {
         VStack {
             List {
-                ForEach(AppIcon.allCases, id: \.imageSetAssetName) { appIcon in
+                ForEach(availableAppIcons, id: \.imageSetAssetName) { appIcon in
                     AppIconView(
                         appIcon: appIcon,
                         isSelected: appIcon == currentAppIcon,
@@ -87,10 +95,12 @@ struct AppIconSelectionView: View, ThemeApplicable {
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
                 logger.log("Failed to set an alternative app icon [\(appIcon)]", level: .fatal, category: .appIcon)
-                isShowingErrorAlert = true
+                ensureMainThread {
+                    self.isShowingErrorAlert = true
 
-                // Reset the app icon in the UI since we changed it optimistically to provide UI feedback
-                self.currentAppIcon = previousIcon
+                    // Reset the app icon in the UI since we changed it optimistically to provide UI feedback
+                    self.currentAppIcon = previousIcon
+                }
 
                 return
             }

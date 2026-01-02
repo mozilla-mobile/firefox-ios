@@ -4,6 +4,7 @@
 
 import MozillaAppServices
 import XCTest
+import OnboardingKit
 
 @testable import Client
 
@@ -18,8 +19,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         configUtility = nil
+        super.tearDown()
     }
 
     // MARK: - Test placeholder methods
@@ -91,7 +92,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        let expectedCard = OnboardingCardInfoModel(
+        let expectedCard = OnboardingKitCardInfoModel(
             cardType: .basic,
             name: CardElementNames.name + " 1",
             order: 10,
@@ -99,18 +100,19 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             body: CardElementNames.body + " 1",
             link: OnboardingLinkInfoModel(title: CardElementNames.linkTitle,
                                           url: URL(string: CardElementNames.linkURL)!),
-            buttons: OnboardingButtons(
-                primary: OnboardingButtonInfoModel(
+            buttons: OnboardingButtons<OnboardingActions>(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: CardElementNames.primaryButtonTitle,
                     action: .forwardOneCard),
-                secondary: OnboardingButtonInfoModel(
+                secondary: OnboardingButtonInfoModel<OnboardingActions>(
                     title: CardElementNames.secondaryButtonTitle,
                     action: .forwardOneCard)),
             multipleChoiceButtons: [],
             onboardingType: .freshInstall,
             a11yIdRoot: CardElementNames.a11yIDOnboarding,
             imageID: ImageIdentifiers.Onboarding.HeaderImages.welcomev106,
-            instructionsPopup: nil)
+            instructionsPopup: nil,
+            embededLinkText: [])
 
         XCTAssertEqual(subject.name, expectedCard.name)
         XCTAssertEqual(subject.title, expectedCard.title)

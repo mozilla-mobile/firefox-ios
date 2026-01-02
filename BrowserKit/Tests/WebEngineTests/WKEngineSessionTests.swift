@@ -18,8 +18,8 @@ final class WKEngineSessionTests: XCTestCase {
     private var fullscreenDelegate: MockFullscreenDelegate!
     private var scriptResponder: MockEngineSessionScriptResponder!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         configurationProvider = MockWKEngineConfigurationProvider()
         webViewProvider = MockWKWebViewProvider()
         contentScriptManager = MockWKContentScriptManager()
@@ -30,8 +30,7 @@ final class WKEngineSessionTests: XCTestCase {
         scriptResponder = MockEngineSessionScriptResponder()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         configurationProvider = nil
         webViewProvider = nil
         contentScriptManager = nil
@@ -40,6 +39,7 @@ final class WKEngineSessionTests: XCTestCase {
         metadataFetcher = nil
         fullscreenDelegate = nil
         scriptResponder = nil
+        try await super.tearDown()
     }
 
     // MARK: Load URL
@@ -448,38 +448,48 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     // MARK: Page Zoom
-
-    func testIncreaseZoom() {
+    @MainActor
+    func testIncreaseZoom() async {
         let subject = createSubject()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
         // Increase zoom
         subject?.updatePageZoom(.increase)
+        // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
+        await Task.yield()
         // Assert zoom increased by expected step
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 + ZoomChangeValue.defaultStepIncrease)
     }
 
-    func testDecreaseZoom() {
+    @MainActor
+    func testDecreaseZoom() async {
         let subject = createSubject()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
         // Increase zoom
         subject?.updatePageZoom(.decrease)
+        // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
+        // await Task.yield()
         // Assert zoom decreased by expected step
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 - ZoomChangeValue.defaultStepIncrease)
     }
 
-    func testSetZoomLevelAndReset() {
+    @MainActor
+    func testSetZoomLevelAndReset() async {
         let subject = createSubject()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
         // Set explicit zoom level
         subject?.updatePageZoom(.set(0.8))
+        // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
+        await Task.yield()
         // Assert zoom at expected level
         XCTAssertEqual(webViewProvider.webView.pageZoom, 0.8)
 
         // Reset zoom level
         subject?.updatePageZoom(.reset)
+        // Yield the test so that updatePageZoom can cross isolation boundaries to update pageZoom
+        await Task.yield()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
     }
@@ -615,7 +625,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     // MARK: Helper
-
+    @MainActor
     func createSubject(file: StaticString = #filePath,
                        line: UInt = #line,
                        uiHandler: WKUIHandler? = nil) -> WKEngineSession? {

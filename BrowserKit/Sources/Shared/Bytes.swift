@@ -39,6 +39,17 @@ extension Bytes {
         return nil
     }
 
+    /// Encodes raw bytes into a Base64URL-safe string.
+    ///
+    /// This performs the inverse operation of `base64urlSafeDecodedData(_:)`.
+    public static func base64urlSafeEncodeData(_ data: Data) -> String {
+        return data
+            .base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+    }
+
     /**
      * Turn a string of base64 characters into an NSData *without decoding*.
      * This is to allow HMAC to be computed of the raw base64 string.

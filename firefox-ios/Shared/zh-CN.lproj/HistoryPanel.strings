@@ -8,7 +8,7 @@
 "LibraryPanel.History.LastFourWeeksOption.v138" = "过去 4 周";
 
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
-"LibraryPanel.History.LastHourOption.v138" = "过去一小时";
+"LibraryPanel.History.LastHourOption.v138" = "过去 1 小时";
 
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
 "LibraryPanel.History.LastSevenDaysOption.v138" = "过去 7 天";

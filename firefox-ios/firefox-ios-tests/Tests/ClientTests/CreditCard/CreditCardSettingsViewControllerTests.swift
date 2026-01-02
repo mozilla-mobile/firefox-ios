@@ -11,18 +11,18 @@ final class CreditCardSettingsViewControllerTests: XCTestCase {
     var profile: MockProfile!
     var viewModel: CreditCardInputViewModel!
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         viewModel = CreditCardInputViewModel(profile: profile, creditCardProvider: MockCreditCardProvider())
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         profile = nil
         viewModel = nil
+        try await super.tearDown()
     }
 
     @MainActor
@@ -51,6 +51,7 @@ final class CreditCardSettingsViewControllerTests: XCTestCase {
         XCTAssertTrue(subject.viewModel.cardInputViewModel.expirationDate.isEmpty)
     }
 
+    @MainActor
     private func createSubject() -> CreditCardSettingsViewController {
         let creditCardSettingsViewModel = CreditCardSettingsViewModel(
             profile: profile,

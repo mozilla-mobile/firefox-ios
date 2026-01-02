@@ -12,8 +12,8 @@ final class SearchEngineSelectionCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var mockParentCoordinator: MockParentCoordinator!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockRouter = MockRouter(navigationController: MockNavigationController())
         mockParentCoordinator = MockParentCoordinator()

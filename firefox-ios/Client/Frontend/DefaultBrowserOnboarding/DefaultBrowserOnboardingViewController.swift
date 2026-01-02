@@ -243,9 +243,15 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private func goToSettings() {
         viewModel.goToSettings?()
 
-        // Don't show default browser card if this button is clicked
-        UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
+        // By clicking this card, we assume that the user will have set us
+        // as the default browser
+        DefaultBrowserUtility().isDefaultBrowser = true
+
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .goToSettingsDefaultBrowserOnboarding
+        )
 
         DefaultApplicationHelper().openSettings()
     }

@@ -11,16 +11,16 @@ import SummarizeKit
 final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     let storeUtilityHelper = StoreTestUtilityHelper()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testAddNewTabAction() {
@@ -480,6 +480,28 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let destination = newState.navigationDestination?.destination
         switch destination {
         case .storiesFeed:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+    }
+
+    // MARK: - Privacy Notice Link
+
+    func test_tapOnPrivacyNoticeLink_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        guard let url = URL(string: "https://www.mozilla.com") else { return }
+
+        let action = getNavigationBrowserAction(for: .tapOnPrivacyNoticeLink, destination: .privacyNoticeLink(url))
+        let newState = reducer(initialState, action)
+
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .privacyNoticeLink:
             break
         default:
             XCTFail("destination is not the right type")

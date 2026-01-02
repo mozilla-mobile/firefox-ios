@@ -29,7 +29,7 @@
 "Addresses.EditAddress.AutofillAddressCounty.v129" = "Županija";
 
 /* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
-"Addresses.EditAddress.AutofillAddressDepartment.v129" = "Odjel";
+"Addresses.EditAddress.AutofillAddressDepartment.v129" = "Departman";
 
 /* Label for the district field in the address form, allowing users to specify their district for more precise location identification. This aids in refining address details for accurate autofill. */
 "Addresses.EditAddress.AutofillAddressDistrict.v129" = "Okrug";

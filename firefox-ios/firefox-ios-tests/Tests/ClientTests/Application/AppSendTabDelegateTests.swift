@@ -5,23 +5,23 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class AppFxACommandsTests: XCTestCase {
     private var applicationStateProvider: MockApplicationStateProvider!
     private var applicationHelper: MockApplicationHelper!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.applicationStateProvider = MockApplicationStateProvider()
         self.applicationHelper = MockApplicationHelper()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.applicationStateProvider = nil
         self.applicationHelper = nil
+        try await super.tearDown()
     }
 
-    @MainActor
     func testOpenSendTabs_inactiveState_doesntCallDeeplink() {
         applicationStateProvider.applicationState = .inactive
         let url = URL(string: "https://mozilla.com")!
@@ -31,7 +31,6 @@ final class AppFxACommandsTests: XCTestCase {
         XCTAssertEqual(applicationHelper.openURLCalled, 0)
     }
 
-    @MainActor
     func testOpenSendTabs_backgroundState_doesntCallDeeplink() {
         applicationStateProvider.applicationState = .background
         let url = URL(string: "https://mozilla.com")!
@@ -41,7 +40,6 @@ final class AppFxACommandsTests: XCTestCase {
         XCTAssertEqual(applicationHelper.openURLCalled, 0)
     }
 
-    @MainActor
     func testOpenSendTabs_activeWithOneURL_callsDeeplink() {
         let url = URL(string: "https://mozilla.com")!
         let subject = createSubject()
@@ -52,7 +50,6 @@ final class AppFxACommandsTests: XCTestCase {
         XCTAssertEqual(applicationHelper.lastOpenURL, expectedURL)
     }
 
-    @MainActor
     func testOpenSendTabs_activeWithMultipleURLs_callsDeeplink() {
         let url = URL(string: "https://mozilla.com")!
         let subject = createSubject()

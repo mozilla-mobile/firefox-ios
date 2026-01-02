@@ -19,7 +19,8 @@ let LocalizedRootBookmarkFolderStrings = [
     LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
 ]
 
-final class BookmarksPanelViewModel {
+// FIXME: FXIOS-14162 Make BookmarksPanelViewModel actually Sendable
+final class BookmarksPanelViewModel: @unchecked Sendable {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }

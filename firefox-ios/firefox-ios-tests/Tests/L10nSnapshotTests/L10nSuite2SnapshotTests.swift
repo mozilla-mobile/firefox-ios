@@ -96,6 +96,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnWebPage-03")
+        navigator.goto(BrowserTabMenuMore)
+        snapshot("MenuOnWebPage-04")
     }
 
     @MainActor

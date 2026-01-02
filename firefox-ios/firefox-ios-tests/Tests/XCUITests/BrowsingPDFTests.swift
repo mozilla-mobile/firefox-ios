@@ -21,9 +21,9 @@ class BrowsingPDFTests: BaseTestCase {
     private var contextMenu: ContextMenuScreen!
     private var library: LibraryScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
-        super.setUp()
+        try await super.setUp()
         topSites = TopSitesScreen(app: app)
         contextMenu = ContextMenuScreen(app: app)
         pdf = PDFScreen(app: app)
@@ -33,8 +33,6 @@ class BrowsingPDFTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307116
     func testOpenPDFViewer() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
@@ -50,8 +48,6 @@ class BrowsingPDFTests: BaseTestCase {
         // Sometimes the test fails before opening the URL
         // Let's make sure the homepage is ready
         mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
 
@@ -99,8 +95,6 @@ class BrowsingPDFTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307118
     func testLongPressOnPDFLink() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
@@ -123,8 +117,6 @@ class BrowsingPDFTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307119
     func testLongPressOnPDFLinkToAddToReadingList() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
@@ -143,8 +135,6 @@ class BrowsingPDFTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307120
     // Smoketest
     func testPinPDFtoTopSites() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -225,8 +215,6 @@ class BrowsingPDFTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307121
     // Smoketest
     func testBookmarkPDF() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)

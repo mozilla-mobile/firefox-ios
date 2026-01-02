@@ -11,15 +11,15 @@ import XCTest
 final class MainMenuCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
-    override func tearDown() {
-        AppContainer.shared.reset()
-        super.tearDown()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testInitialState() {

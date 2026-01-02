@@ -22,8 +22,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var appState: AppState!
     var recordVisitManager: MockRecordVisitObservationManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
         tabManager = MockTabManager()
@@ -37,7 +37,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile.shutdown()
         profile = nil
         tabManager = nil
@@ -45,13 +45,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         recordVisitManager = nil
         resetStore()
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testTrackVisibleSuggestion() {
         TelemetryContextualIdentifier.setupContextId()
         let subject = createSubject()
-        let locale = Locale(identifier: "en-US")
+        let locale = MockLocaleProvider()
         let gleanWrapper = MockGleanWrapper()
         let telemetry = FxSuggestTelemetry(locale: locale, gleanWrapper: gleanWrapper)
         subject.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
@@ -107,7 +107,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     @MainActor
-    func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController_whenToolbarRefactorEnabled() {
+    func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController() {
         let subject = createSubject()
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
         let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
@@ -120,7 +120,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
 
         XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
-        XCTAssertTrue(subject.tabToolbar.privateModeBadge.badge.isHidden)
     }
 
     func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {
@@ -144,13 +143,22 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
-    func testViewDidLoad_addsHomepage_whenSwipingTabsEnabled() {
-        let subject = createSubject()
+    func testViewDidLoad_addsHomepage_whenSwipingTabsEnabled_onIphone() {
+        let subject = createSubject(userInterfaceIdiom: .phone)
         setIsSwipingTabsEnabled(true)
 
         subject.loadViewIfNeeded()
 
         XCTAssertEqual(browserCoordinator.showHomepageCalled, 1)
+    }
+
+    func testViewDidLoad_doesNotAddHomepage_whenSwipingTabsEnabled_onIpad() {
+        let subject = createSubject(userInterfaceIdiom: .pad)
+        setIsSwipingTabsEnabled(true)
+
+        subject.loadViewIfNeeded()
+
+        XCTAssertEqual(browserCoordinator.showHomepageCalled, 0)
     }
 
     func testUpdateReaderModeState_whenSummarizeFeatureOn_dispatchesToolbarMiddlewareAction() throws {
@@ -184,6 +192,58 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 //        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
 //        XCTAssertEqual(action.readerModeState, .active)
 //    }
+
+    func testHandle_withoutURL_withSelectedTab_notRestoring_opensBlankNewTab_ifTabHasURL_and_isNotHomepage() {
+        let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        tabManager.selectedTab = MockTab(
+            profile: profile,
+            isPrivate: false,
+            windowUUID: .XCTestDefaultUUID,
+            isHomePage: false
+        )
+        tabManager.isRestoringTabs = false
+        tabManager.selectedTab?.url = URL(string: "https://example.com/")
+        mockBVC.handle(url: nil, isPrivate: false, options: nil)
+        XCTAssertTrue(mockBVC.openBlankNewTabCalled)
+    }
+
+    func testHandle_withoutURL_withSelectedTab_notRestoring_opensBlankNewTab_ifPrivateDoesNotMatch() {
+        let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        tabManager.selectedTab = MockTab(
+            profile: profile,
+            isPrivate: false,
+            windowUUID: .XCTestDefaultUUID,
+            isHomePage: true
+        )
+        tabManager.isRestoringTabs = false
+        mockBVC.handle(url: nil, isPrivate: true, options: nil)
+        XCTAssertTrue(mockBVC.openBlankNewTabCalled)
+    }
+
+    func testShouldFocusLocationTextField_true_whenPrivateMatches_andIsFxHome() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, isPrivate: false, windowUUID: .XCTestDefaultUUID, isHomePage: true)
+        XCTAssertTrue(subject.shouldFocusLocationTextField(for: tab, isPrivate: false))
+    }
+
+    func testShouldFocusLocationTextField_true_whenPrivateMatches_andUrlIsNil() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, isPrivate: false, windowUUID: .XCTestDefaultUUID, isHomePage: false)
+        XCTAssertTrue(subject.shouldFocusLocationTextField(for: tab, isPrivate: false))
+    }
+
+    func testShouldFocusLocationTextField_false_whenPrivateMismatch() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, isPrivate: false, windowUUID: .XCTestDefaultUUID, isHomePage: false)
+        XCTAssertFalse(subject.shouldFocusLocationTextField(for: tab, isPrivate: true))
+    }
+
+    func testShouldFocusLocationTextField_false_whenHasURL_andNotFxHome() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID, isHomePage: false)
+        tab.url = URL(string: "https://example.com/")
+        XCTAssertFalse(subject.shouldFocusLocationTextField(for: tab, isPrivate: true))
+    }
 
     // MARK: - Handle PDF
 
@@ -482,7 +542,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject() -> BrowserViewController {
+    private func createSubject(userInterfaceIdiom: UIUserInterfaceIdiom? = nil,
+                               file: StaticString = #filePath,
+                               line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
                                             appStartupTelemetry: appStartupTelemetry,
@@ -491,7 +553,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
         subject.browserDelegate = browserCoordinator
-        trackForMemoryLeaks(subject)
+
+        if let userInterfaceIdiom {
+            let toolbarHelper: ToolbarHelperInterface = ToolbarHelper(userInterfaceIdiom: userInterfaceIdiom)
+            subject.toolbarHelper = toolbarHelper
+        }
+
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 

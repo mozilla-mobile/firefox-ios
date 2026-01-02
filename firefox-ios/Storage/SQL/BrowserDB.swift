@@ -107,8 +107,9 @@ public final class BrowserDB: Sendable {
     }
 
     func queryReturnsResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
-        return runQuery(sql, args: args, factory: { _ in true })
-         >>== { deferMaybe($0[0] ?? false) }
+        return chainDeferred(runQuery(sql, args: args, factory: { _ in true })) { cursor in
+            return deferMaybe(cursor[0] ?? false)
+        }
     }
 }
 

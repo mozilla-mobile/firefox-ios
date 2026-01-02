@@ -15,7 +15,6 @@ protocol TermsOfUseDelegate: AnyObject {
     func showTermsOfUse(context: TriggerContext)
 }
 
-// TODO: FXIOS-12947 - Add tests for TermsOfUseCoordinator
 @MainActor
 protocol TermsOfUseCoordinatorDelegate: AnyObject {
     func dismissTermsFlow()
@@ -37,6 +36,10 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
     private var maxRemindersCount: Int {
         return nimbus.features.touFeature.value().maxRemindersCount
+    }
+
+    private var enableDragToDismiss: Bool {
+        return nimbus.features.touFeature.value().enableDragToDismiss
     }
 
     init(windowUUID: WindowUUID,
@@ -62,7 +65,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         let vc = TermsOfUseViewController(
             themeManager: themeManager,
             windowUUID: windowUUID,
-            notificationCenter: notificationCenter
+            notificationCenter: notificationCenter,
+            enableDragToDismiss: enableDragToDismiss
         )
         vc.coordinator = self
         vc.modalPresentationStyle = .overFullScreen
@@ -100,14 +104,14 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         let hasAcceptedTermsOfService = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
         guard !hasAcceptedTermsOfUse && !hasAcceptedTermsOfService else { return false }
 
-        // 3. Check reminders count limit from Nimbus
-        let currentRemindersCount = prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
-        guard currentRemindersCount < maxRemindersCount else { return false }
-
-        // 4. Check if this is the first time it is shown
-        // Show on fresh install or next app open for existing users
+        // 3. Check if this is the first time it is shown
+        // Always show first time - it is not a reminder
         let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
         guard hasShownFirstTime else { return true }
+
+        // 4. Check reminders count limit from Nimbus
+        let currentRemindersCount = prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
+        guard currentRemindersCount < maxRemindersCount else { return false }
 
         // 5. Check if user dismissed and timeout period expired
         guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) else {

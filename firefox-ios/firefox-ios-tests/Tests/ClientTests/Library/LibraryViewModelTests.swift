@@ -10,20 +10,20 @@ class LibraryViewModelTests: XCTestCase {
     private var subject: LibraryViewModel!
     private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "libraryViewModel_tests")
         profile.reopen()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         profile.shutdown()
         profile = nil
+        try await super.tearDown()
     }
 
     func testInitialState_Init() {

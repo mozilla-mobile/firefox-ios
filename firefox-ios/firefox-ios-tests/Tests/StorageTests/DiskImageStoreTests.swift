@@ -7,16 +7,15 @@ import Shared
 import UIKit
 import XCTest
 
+@MainActor
 class DiskImageStoreTests: XCTestCase {
-    var files: FileAccessor!
     var store: DiskImageStore!
 
-    override func setUp() {
-        super.setUp()
-        files = MockFiles()
-        store = DefaultDiskImageStore(files: files, namespace: "DiskImageStoreTests", quality: 1)
+    override func setUp() async throws {
+        try await super.setUp()
+        store = DefaultDiskImageStore(files: MockFiles(), namespace: "DiskImageStoreTests", quality: 1)
 
-        clearStore()
+        await clearStore()
     }
 
     func testSaveImageForKey() async throws {
@@ -56,12 +55,10 @@ class DiskImageStoreTests: XCTestCase {
         }
     }
 
-// MARK: - Helper methods
+    // MARK: - Helper methods
 
-    func clearStore() {
-        Task {
-            try? await store?.clearAllScreenshotsExcluding(Set())
-        }
+    func clearStore() async {
+        try? await store?.clearAllScreenshotsExcluding(Set())
     }
 
     func makeImageWithColor(_ color: UIColor, size: CGSize) -> UIImage {

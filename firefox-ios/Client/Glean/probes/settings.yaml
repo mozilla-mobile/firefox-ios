@@ -51,7 +51,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   home_page_setting:
     type: string
     description: |
@@ -66,7 +66,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   save_logins:
     type: boolean
     description: |
@@ -80,7 +80,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   tips_and_features_notifs:
     type: boolean
     description: |
@@ -91,7 +91,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15114
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   sync_notifs:
     type: boolean
     description: |
@@ -102,7 +102,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15114
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   fxa_logged_in:
     type: boolean
     description: |
@@ -113,7 +113,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15181
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   close_private_tabs:
     type: boolean
     description: |
@@ -127,7 +127,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   opening_screen:
     type: string
     description: |
@@ -140,7 +140,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15583
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autoplay_setting_changed:
     type: event
     description: |
@@ -157,7 +157,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
 
 ###############################################################################
 # New "settings" telemetry properly nested under "settings".
@@ -197,7 +197,7 @@ settings:
       - https://github.com/mozilla-mobile/firefox-ios/pull/27180
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   option_selected:
     type: event
     description: |
@@ -225,7 +225,7 @@ settings:
       - https://github.com/mozilla-mobile/firefox-ios/pull/27128
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
 
 # App Icon Settings
 settings.app_icon:
@@ -250,7 +250,7 @@ settings.app_icon:
       - https://github.com/mozilla-mobile/firefox-ios/pull/25029
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - AppIconSelection
@@ -272,7 +272,7 @@ settings.zoom_bar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/27006
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - ZoomBar
@@ -286,7 +286,7 @@ settings.zoom_bar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/27006
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - ZoomBar

@@ -1,0 +1,100 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Ai
+  - Translations
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+
+translations:
+  page_language_identified:
+    type: event
+    description: |
+      Triggers when the language of a webpage has been successfully detected
+      from a text sample.
+    extra_keys:
+      identified_language:
+        type: string
+        description: |
+          The language tag that was identified via the nlp model.
+      device_language:
+        type: string
+        description: |
+          The system language code of the user's device.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30441
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30820
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  page_language_identification_failed:
+    type: event
+    description: |
+      Triggers when there is an error attempting to detect the language of a
+      webpage from a sample.
+    extra_keys:
+      error_type:
+        type: string
+        description: |
+          A key describing the type of error.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30441
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30820
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  translation_failed:
+    type: event
+    description: |
+      Recorded when translation fails after a translation request is made.
+    extra_keys:
+      translation_flow_id:
+        type: string
+        description: |
+          A UUID used to link events in a single translation session.
+      error_type:
+        type: string
+        description: |
+          The reason for the failure, represented as a key (not a raw message).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30441
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30820
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  webpage_restored:
+    type: event
+    description: |
+      Recorded when the user restores a webpage to its original (non-translated)
+      content.
+    extra_keys:
+      translation_flow_id:
+        type: string
+        description: |
+          A UUID used to link events in a single translation session.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30441
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30820
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

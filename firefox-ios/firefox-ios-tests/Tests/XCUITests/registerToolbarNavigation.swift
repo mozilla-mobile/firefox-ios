@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 private func configureURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XCUIApplication) {
     let textField = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
     screenState.tap(textField, to: URLBarOpen)
@@ -13,6 +14,7 @@ private func configureURLBarAvailable(_ screenState: MMScreenStateNode<FxUserSta
     }
 }
 
+@MainActor
 private func configureToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XCUIApplication) {
     let settingButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
     let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
@@ -28,6 +30,7 @@ private func configureToolBarAvailable(_ screenState: MMScreenStateNode<FxUserSt
     }
 }
 
+@MainActor
 func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XCUIApplication) {
     screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
     if isTablet {
@@ -39,6 +42,7 @@ func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XC
     }
 }
 
+@MainActor
 func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XCUIApplication) {
     let addressToolbar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
     screenState.tap(addressToolbar, to: URLBarOpen)
@@ -47,6 +51,7 @@ func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XCU
     }
 }
 
+@MainActor
 func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(NewTabScreen) { screenState in
         let tabsButtonSelector = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
@@ -60,14 +65,6 @@ func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         }
         makeURLBarAvailable(screenState, app: app)
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
-
-        let homepageSearchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
-        let addressToolbar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        if !isTablet && homepageSearchBar.exists {
-            screenState.tap(homepageSearchBar, to: URLBarOpen)
-        } else {
-            screenState.tap(addressToolbar, to: URLBarOpen)
-        }
 
         if isTablet {
             screenState.tap(

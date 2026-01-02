@@ -40,7 +40,7 @@ ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     no_lint:
       - COMMON_PREFIX
   summarization_started:
@@ -79,7 +79,7 @@ ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     no_lint:
       - COMMON_PREFIX
   summarization_completed:
@@ -121,7 +121,7 @@ ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     no_lint:
       - COMMON_PREFIX
   summarization_displayed:
@@ -134,7 +134,7 @@ ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     no_lint:
       - COMMON_PREFIX
   summarization_closed:
@@ -147,7 +147,7 @@ ai.summarize:
         - https://github.com/mozilla-mobile/firefox-ios/pull/28453
       notification_emails:
         - fx-ios-data-stewards@mozilla.com
-      expires: "2026-01-01"
+      expires: never
   summarization_time:
     type: timing_distribution
     time_unit: millisecond
@@ -161,7 +161,7 @@ ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     no_lint:
       - COMMON_PREFIX
   summarization_consent_displayed:
@@ -179,7 +179,7 @@ ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     no_lint:
       - COMMON_PREFIX
 
@@ -194,7 +194,7 @@ user.ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   shake_gesture_enabled:
     type: boolean
     description: |
@@ -205,4 +205,4 @@ user.ai.summarize:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never

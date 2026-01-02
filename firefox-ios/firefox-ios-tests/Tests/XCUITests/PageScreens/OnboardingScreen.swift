@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class OnboardingScreen {
     private let app: XCUIApplication
     private let sel: OnboardingSelectorsSet

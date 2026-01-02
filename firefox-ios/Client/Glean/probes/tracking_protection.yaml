@@ -36,7 +36,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   strength:
     type: string
     description: |
@@ -53,7 +53,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   etp_setting_changed:
     type: event
     description: |
@@ -76,7 +76,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   show_clear_cookies_alert:
     type: event
     description: |
@@ -87,7 +87,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   show_etp_details:
     type: event
     description: |
@@ -98,7 +98,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   show_etp_blocked_trackers_details:
     type: event
     description: |
@@ -109,7 +109,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   show_etp_settings:
     type: event
     description: |
@@ -120,7 +120,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   tapped_clear_cookies:
     type: event
     description: |
@@ -131,7 +131,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   dismiss_etp_panel:
     type: event
     description: |
@@ -142,7 +142,7 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   show_certificates:
     type: event
     description: |
@@ -153,4 +153,4 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never

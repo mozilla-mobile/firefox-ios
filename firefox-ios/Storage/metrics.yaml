@@ -191,3 +191,20 @@ pre_sync_key_retrieval_failure:
       error_message:
         description: The error encountered retrieving the credit cards encryption key
         type: string
+
+user.credit_cards:
+  undecryptable_count:
+    type: counter
+    description: >
+      Track how many undecryptable credit cards we scrub during the credit card
+      verification process
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30727
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30609#issuecomment-3548892236
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+      - lougenia@mozilla.com
+    expires: "never"

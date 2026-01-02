@@ -11,7 +11,7 @@ protocol TabProviderProtocol: AnyObject {
     var isFindInPageMode: Bool { get }
     var isLoading: Bool { get }
     // Pull to refresh related
-    var onLoadingStateChanged: (() -> Void)? { get set }
+    var onLoadingStateChanged: (@MainActor @Sendable () -> Void)? { get set }
     func removePullToRefresh()
     func addPullToRefresh(onReload: @escaping () -> Void)
     func reloadPage()
@@ -29,7 +29,7 @@ final class TabProviderAdapter: TabProviderProtocol {
     var isLoading: Bool { tab.isLoading }
     var scrollView: UIScrollView? { tab.webView?.scrollView }
 
-    var onLoadingStateChanged: (() -> Void)? {
+    var onLoadingStateChanged: (@MainActor @Sendable () -> Void)? {
         get { tab.onWebViewLoadingStateChanged }
         set { tab.onWebViewLoadingStateChanged = newValue }
     }

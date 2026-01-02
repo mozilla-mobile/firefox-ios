@@ -146,6 +146,7 @@ class SearchTelemetry: @unchecked Sendable {
     var shouldSetGoogleTopSiteSearch = false
     var shouldSetUrlTypeSearch = false
     private var tabManager: TabManager
+    private let gleanWrapper: GleanWrapper
 
     var interactionType: SearchTelemetryValues.Interaction = .typed
     var selectedResult: SearchTelemetryValues.SelectedResult = .unknown
@@ -157,13 +158,16 @@ class SearchTelemetry: @unchecked Sendable {
     var visibleFilteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     var visibleSuggestions = [String]()
     var visibleFirefoxSuggestions = [RustFirefoxSuggestion]()
+    var hasSeenRecentSearches = false
+    var hasSeenTrendingSearches = false
     var visibleData = [Site]()
 
     var searchQuery = ""
     var savedQuery = ""
 
-    init(tabManager: TabManager) {
+    init(tabManager: TabManager, gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.tabManager = tabManager
+        self.gleanWrapper = gleanWrapper
     }
 
     // MARK: Searchbar SAP
@@ -438,6 +442,11 @@ class SearchTelemetry: @unchecked Sendable {
         visibleFilteredRemoteClientTabs.removeAll()
     }
 
+    func clearZeroSearchSectionSeen() {
+        hasSeenRecentSearches = false
+        hasSeenTrendingSearches = false
+    }
+
     // Comma separated list of result types in order.
     func listResultTypes() -> String {
         var resultTypes: [String] = []
@@ -506,6 +515,34 @@ class SearchTelemetry: @unchecked Sendable {
         }
 
         return groupTypes.joined(separator: ",")
+    }
+
+    // MARK: Trending Searches
+    func trendingSearchesShown(count: Int) {
+        let countExtra = GleanMetrics.SearchTrendingSearches.SuggestionsShownExtra(count: Int32(count))
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchTrendingSearches.suggestionsShown, extras: countExtra)
+    }
+
+    func trendingSearchesTapped(at index: Int) {
+        let position = "\(index + 1)"
+        let positionExtra = GleanMetrics.SearchTrendingSearches.SuggestionTappedExtra(position: Int32(position))
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchTrendingSearches.suggestionTapped, extras: positionExtra)
+    }
+
+    // MARK: Recent Searches
+    func recentSearchesShown(count: Int) {
+        let countExtra = GleanMetrics.SearchRecentSearches.SuggestionsShownExtra(count: Int32(count))
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.suggestionsShown, extras: countExtra)
+    }
+
+    func recentSearchesTapped(at index: Int) {
+        let position = "\(index + 1)"
+        let positionExtra = GleanMetrics.SearchRecentSearches.SuggestionTappedExtra(position: Int32(position))
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.suggestionTapped, extras: positionExtra)
+    }
+
+    func recentSearchesClearButtonTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.SearchRecentSearches.clearButtonTapped)
     }
 }
 

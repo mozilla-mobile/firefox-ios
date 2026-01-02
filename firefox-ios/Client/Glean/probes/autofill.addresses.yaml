@@ -33,7 +33,7 @@ addresses:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_prompt_shown:
     type: event
     description: |
@@ -44,7 +44,7 @@ addresses:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_prompt_expanded:
     type: event
     description: |
@@ -55,7 +55,7 @@ addresses:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofill_prompt_dismissed:
     type: event
     description: |
@@ -66,7 +66,7 @@ addresses:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   autofilled:
     type: event
     description: |
@@ -77,7 +77,7 @@ addresses:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   modified:
     type: event
     description: |
@@ -88,7 +88,7 @@ addresses:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   settings_autofill:
     type: event
     description: |
@@ -99,7 +99,7 @@ addresses:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   saved_all:
     type: quantity
     description: |
@@ -110,5 +110,5 @@ addresses:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     unit: quantity of addresses.saved_all

@@ -10,19 +10,19 @@ class MultiWindowTests: IpadOnlyTestCase {
     let splitView = springboard.buttons["top-affordance-split-view-button"]
     let dotMenuIdentifier = springboard.buttons.matching(identifier: "top-affordance:org.mozilla.ios.Fennec")
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         super.setUpLaunchArguments()
         if dotMenuIdentifier.element(boundBy: 1).exists {
             closeSplitViewWindow(windowToClose: 1)
         }
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         if dotMenuIdentifier.element(boundBy: 1).exists {
             closeSplitViewWindow(windowToClose: 1)
         }
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2711015
@@ -54,11 +54,8 @@ class MultiWindowTests: IpadOnlyTestCase {
         // A new tab is opened in the same window
         app.links.matching(identifier: topSites).element(boundBy: 7).waitAndTap()
         waitUntilPageLoad()
-        app.buttons[newTab].firstMatch.waitAndTap()
         let tabButtonFirstWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 1)
-        // Automation issue - action performed in window A is mirrored in window B
-        // Workaround until the automation issue is fixed
-        XCTAssertEqual(tabButtonFirstWindow.value as? String, "3", "Number of tabs opened should be equal to 3")
+        XCTAssertEqual(tabButtonFirstWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
     }
 
     func testOpenWindowFromTabSwitcher() {
@@ -85,8 +82,8 @@ class MultiWindowTests: IpadOnlyTestCase {
 
     // Param windowToClose - 0 for the first window, 1 for the second window
     func closeSplitViewWindow(windowToClose: Int) {
-        dotMenuIdentifier.element(boundBy: windowToClose).waitAndTap()
-        springboard.buttons["top-affordance-close-window"].waitAndTap()
+        dotMenuIdentifier.element(boundBy: windowToClose).tapWithRetry()
+        springboard.buttons["top-affordance-close-window"].tapWithRetry()
     }
 
     // Coudn't find a way to select a tab from switcher

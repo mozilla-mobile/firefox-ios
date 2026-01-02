@@ -1361,10 +1361,10 @@
 "Settings.HomePage.SectionName" = "首页";
 
 /* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
-"Settings.Homepage.Shortcuts.Rows.v100" = "行";
+"Settings.Homepage.Shortcuts.Rows.v100" = "行数";
 
 /* This string is the title of the page to customize the number of rows in the shortcuts section */
-"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "行";
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "行数";
 
 /* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
 "Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "快捷方式";

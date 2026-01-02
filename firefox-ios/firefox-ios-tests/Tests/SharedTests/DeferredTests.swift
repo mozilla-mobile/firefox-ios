@@ -7,6 +7,7 @@ import XCTest
 
 // Trivial test for using Deferred.
 class DeferredTests: XCTestCase {
+    @MainActor
     func testDeferred() {
         let d = Deferred<Int>()
         XCTAssertNil(d.peek(), "Value not yet filled.")
@@ -24,6 +25,7 @@ class DeferredTests: XCTestCase {
         XCTAssertEqual(5, d.peek()!, "Value is filled.")
     }
 
+    @MainActor
     func testMultipleUponBlocks() {
         let e1 = self.expectation(description: "First.")
         let e2 = self.expectation(description: "Second.")
@@ -40,6 +42,7 @@ class DeferredTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
     }
 
+    @MainActor
     func testOperators() {
         let e1 = self.expectation(description: "First.")
         let e2 = self.expectation(description: "Second.")
@@ -56,7 +59,9 @@ class DeferredTests: XCTestCase {
         }
 
         // Type signatures:
-        let combined: () -> Deferred<Maybe<String>> = { f1() >>== f2 }
+        let combined: () -> Deferred<Maybe<String>> = {
+            chainDeferred(f1(), f: f2)
+        }
         let result: Deferred<Maybe<String>> = combined()
 
         result.upon {
@@ -124,6 +129,7 @@ class DeferredTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    @MainActor
     func testDeferredAll_calledOnBackgroundThread() {
         let expectation = self.expectation(description: "All blocks ran")
 
@@ -150,6 +156,7 @@ class DeferredTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    @MainActor
     func testDeferredAll_calledOnBackgroundThread_withFailure() {
         let expectation = self.expectation(description: "All blocks ran")
 
@@ -177,19 +184,5 @@ class DeferredTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 3, handler: nil)
-    }
-}
-
-// MARK: Helper
-private extension DeferredTests {
-    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(
-                instance,
-                "Instance should have been deallocated, potential memory leak.",
-                file: file,
-                line: line
-            )
-        }
     }
 }

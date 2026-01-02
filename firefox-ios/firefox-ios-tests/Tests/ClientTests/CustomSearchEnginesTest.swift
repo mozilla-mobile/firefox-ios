@@ -9,16 +9,17 @@ import XCTest
 
 class CustomSearchEnginesTest: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         AppContainer.shared.reset()
+        try await super.tearDown()
     }
 
+    @MainActor
     func testgetSearchTemplate() {
         let profile = MockBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController(windowUUID: windowUUID)

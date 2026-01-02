@@ -16,8 +16,8 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var appState: AppState!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
         mockTabManager = MockTabManager()
@@ -32,12 +32,12 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         appState = setupAppState()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         mockWindowManager = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_didBrowserBecomeActiveAction_withAfterFourHours_returnsTrueStartAtHomeCheck() throws {
