@@ -167,6 +167,12 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        // viewDidAppear should only trigger when the homepage is the top view in the content container
+        // not being hidden by the webview
+        guard let parent = parent as? BrowserViewController else { return }
+        guard parent.contentContainer.subviews.last == self.view else { return }
+
         store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,

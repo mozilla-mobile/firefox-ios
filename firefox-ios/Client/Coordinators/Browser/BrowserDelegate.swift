@@ -19,13 +19,18 @@ protocol BrowserDelegate: AnyObject {
     @MainActor
     func homepageScreenshotTool() -> Screenshotable?
 
-    /// Hides or shows the homepage.
+    /// Prepares the homepage for screenshot purposes without triggering lifecycle events.
     ///
-    /// Homepage is added to hierarchy when opening the app when swiping tabs is enabled.
-    /// This method hide or show the homepage and it's needed when opening the app
-    /// to avoid an homepage flash on the background.
+    /// Adds the homepage view to the hierarchy without proper view controller containment,
+    /// which prevents viewDidAppear and other lifecycle methods from being called.
+    /// Use this when the homepage needs to be available for screenshots but shouldn't
+    /// execute its normal lifecycle logic.
     @MainActor
-    func setHomepageVisibility(isVisible: Bool)
+    func prepareHomepageForScreenshots(
+        overlayManager: OverlayModeManager,
+        statusBarScrollDelegate: StatusBarScrollDelegate,
+        toastContainer: UIView
+    )
 
     /// Show the private homepage to the user as part of felt privacy
     @MainActor
