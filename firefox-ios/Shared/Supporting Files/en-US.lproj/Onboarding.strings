@@ -332,7 +332,10 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@";
 
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Continue";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Agree and continue";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Continue";
 
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ Terms of Use";
@@ -344,7 +347,10 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Manage settings";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Open your links with built-in privacy";
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Say goodbye to creepy trackers";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Open your links with built-in privacy";
 
 /* Description for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "We protect your data and automatically block companies from spying on your clicks.";

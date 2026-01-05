@@ -1826,16 +1826,28 @@ extension String {
                         tableName: "Onboarding",
                         value: "Manage settings",
                         comment: "The text for the manage settings link button in the v148 brand refresh onboarding flow.")
+                    @available(*, deprecated, message: "Use AgreementButtonTitleV2 instead")
                     public static let AgreementButtonTitle = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148",
+                        tableName: "Onboarding",
+                        value: "Agree and continue",
+                        comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
+                    public static let AgreementButtonTitleV2 = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2",
                         tableName: "Onboarding",
                         value: "Continue",
                         comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
                 }
 
                 public struct Welcome {
+                    @available(*, deprecated, message: "Use TitleV2 instead")
                     public static let Title = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148",
+                        tableName: "Onboarding",
+                        value: "Say goodbye to creepy trackers",
+                        comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
+                    public static let TitleV2 = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2",
                         tableName: "Onboarding",
                         value: "Open your links with built-in privacy",
                         comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
