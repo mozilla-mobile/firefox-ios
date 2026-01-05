@@ -56,7 +56,7 @@
 "MainMenu.BookmarkPage.Title.v141" = "Добавить страницу в закладки";
 
 /* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
-"MainMenu.DesktopSiteOff.Title.v142" = "Выкл.";
+"MainMenu.DesktopSiteOff.Title.v142" = "Откл.";
 
 /* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
 "MainMenu.DesktopSiteOn.Title.v142" = "Вкл.";
@@ -68,7 +68,7 @@
 "MainMenu.HeaderBanner.Title.v142" = "Сделайте %@ вашим браузером по умолчанию";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
-"MainMenu.Off.Title.v141" = "Выкл.";
+"MainMenu.Off.Title.v141" = "Откл.";
 
 /* On the main menu, a title for a label that indicate the current option/action state is on. */
 "MainMenu.On.Title.v141" = "Вкл.";
@@ -425,7 +425,7 @@
 "MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Переведено";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
-"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Выкл.";
+"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Откл.";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON. */
 "MainMenu.WebsiteDarkModeOnV2.Title.v142" = "Вкл.";

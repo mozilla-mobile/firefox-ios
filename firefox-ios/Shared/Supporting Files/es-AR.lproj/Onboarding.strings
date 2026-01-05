@@ -116,7 +116,7 @@
 "Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "No ahora";
 
 /* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Ayudanos a construir una mejor internet";
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Ayudanos a crear una mejor internet";
 
 /* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Descubrí funciones de privacidad en %@ y enviá pestañas entre dispositivos de forma segura.";
@@ -131,7 +131,7 @@
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Activar notificaciones";
 
 /* Description for the sync card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Conseguí marcadores, contraseñas y más en cualquier dispositivo en un instante. Tus datos personales se mantienen seguros y protegidos con cifrado.";
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Llevate marcadores, contraseñas y más a cualquier dispositivo en un instante. Tus datos personales se mantienen seguros y protegidos con cifrado.";
 
 /* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "Empezar a sincronizar";

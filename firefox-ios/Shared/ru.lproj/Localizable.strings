@@ -404,7 +404,7 @@
 "FxA.SyncNow" = "Синхронизировать";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Служба Синхронизации Firefox соединилась с %@";
+"FxAPush_DeviceConnected_body" = "Служба синхронизации Firefox соединилась с %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Синхронизация соединилась";
@@ -1160,7 +1160,7 @@
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Внешний вид сайтов";
 
 /* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
-"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Придает веб-сайтам тёмный вид. Некоторые сайты могут выглядеть некорректно.";
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Придаёт веб-сайтам тёмный вид. Некоторые сайты могут выглядеть некорректно.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
 "Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Темный режим веб-сайта";
