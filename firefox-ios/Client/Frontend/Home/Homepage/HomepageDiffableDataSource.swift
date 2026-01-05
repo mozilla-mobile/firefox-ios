@@ -111,17 +111,22 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
         }
 
+        // As per design requirements, we only want to show spacer if bookmark or jump back in section is not shown.
+        var shouldShowSpacer = state.shouldShowSpacer
+
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
             snapshot.appendSections([.jumpBackIn(textColor, configuration)])
             snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor, configuration))
+            shouldShowSpacer = false
         }
 
         if let bookmarks = getBookmarks(with: state.bookmarkState) {
             snapshot.appendSections([.bookmarks(textColor)])
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
+            shouldShowSpacer = false
         }
 
-        if state.shouldShowSpacer {
+        if shouldShowSpacer {
             snapshot.appendSections([.spacer])
             snapshot.appendItems([.spacer], toSection: .spacer)
         }

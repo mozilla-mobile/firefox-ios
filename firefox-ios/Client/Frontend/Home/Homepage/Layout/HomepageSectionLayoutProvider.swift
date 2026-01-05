@@ -16,11 +16,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     struct UX {
+        static let topSpacing: CGFloat = 24
         static let standardInset: CGFloat = 16
         static let standardSpacing: CGFloat = 16
         static let interGroupSpacing: CGFloat = 8
         static let iPadInset: CGFloat = 50
-        static let spacingBetweenSections: CGFloat = 62
+        static let spacingBetweenSections: CGFloat = 44
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 75
 
@@ -535,6 +536,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let spacerHeight = max(
             0.1,
             availableContentHeight
+            - UX.topSpacing
             - privacyNoticeHeight
             - topSitesHeight
             - jumpBackInHeight

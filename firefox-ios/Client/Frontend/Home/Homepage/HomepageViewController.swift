@@ -420,7 +420,14 @@ final class HomepageViewController: UIViewController,
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
         collectionView.delegate = self
-
+        // Per design requirement, set spacing on top. We may want to revisit this spacing when implement liquid glass.
+        collectionView.contentInset = UIEdgeInsets(
+            top: HomepageSectionLayoutProvider.UX.topSpacing,
+            left: 0,
+            bottom: 0,
+            right: 0
+        )
+        collectionView.scrollIndicatorInsets = collectionView.contentInset
         self.collectionView = collectionView
 
         view.addSubview(collectionView)
