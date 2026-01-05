@@ -27,6 +27,7 @@ public protocol ThemeColourPalette {
     var layerSuccess: UIColor { get }
     var layerWarning: UIColor { get }
     var layerCritical: UIColor { get }
+    var layerCriticalSubdued: UIColor { get }
     var layerSelectedText: UIColor { get }
     var layerAutofillText: UIColor { get }
     var layerEmphasis: UIColor { get }
@@ -46,7 +47,6 @@ public protocol ThemeColourPalette {
     var layerRatingD: UIColor { get }
     var layerRatingDSubdued: UIColor { get }
     var layerRatingF: UIColor { get }
-    var layerRatingFSubdued: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }

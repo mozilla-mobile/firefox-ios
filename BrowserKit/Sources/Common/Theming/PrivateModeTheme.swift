@@ -38,6 +38,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var layerSuccess: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
     var layerCritical: UIColor = FXColors.Pink80
+    var layerCriticalSubdued: UIColor = FXColors.Red05.withAlphaComponent(0.7)
     var layerSelectedText: UIColor = FXColors.Blue40
     var layerAutofillText: UIColor = FXColors.Violet60
     var layerEmphasis: UIColor = FXColors.Ink90
@@ -63,7 +64,6 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var layerRatingD: UIColor = FXColors.Orange20
     var layerRatingDSubdued: UIColor = FXColors.Orange05.withAlphaComponent(0.7)
     var layerRatingF: UIColor = FXColors.Red30
-    var layerRatingFSubdued: UIColor = FXColors.Red05.withAlphaComponent(0.6)
 
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue30
