@@ -52,17 +52,6 @@ private struct LightColourPalette: ThemeColourPalette {
         FXColors.Orange50
     ])
 
-    // MARK: - Ratings
-    var layerRatingA: UIColor = FXColors.Green20
-    var layerRatingASubdued: UIColor = FXColors.Green05.withAlphaComponent(0.7)
-    var layerRatingB: UIColor = FXColors.Blue10
-    var layerRatingBSubdued: UIColor = FXColors.Blue05.withAlphaComponent(0.4)
-    var layerRatingC: UIColor = FXColors.Yellow20
-    var layerRatingCSubdued: UIColor = FXColors.Yellow05.withAlphaComponent(0.7)
-    var layerRatingD: UIColor = FXColors.Orange20
-    var layerRatingDSubdued: UIColor = FXColors.Orange05.withAlphaComponent(0.7)
-    var layerRatingF: UIColor = FXColors.Red30
-
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue50
     var actionPrimaryHover: UIColor = FXColors.Blue60

@@ -37,17 +37,6 @@ public protocol ThemeColourPalette {
     var layerSurfaceMediumAlt: UIColor { get }
     var layerGradientSummary: Gradient { get }
 
-    // MARK: - Ratings
-    var layerRatingA: UIColor { get }
-    var layerRatingASubdued: UIColor { get }
-    var layerRatingB: UIColor { get }
-    var layerRatingBSubdued: UIColor { get }
-    var layerRatingC: UIColor { get }
-    var layerRatingCSubdued: UIColor { get }
-    var layerRatingD: UIColor { get }
-    var layerRatingDSubdued: UIColor { get }
-    var layerRatingF: UIColor { get }
-
     // MARK: - Actions
     var actionPrimary: UIColor { get }
     var actionPrimaryHover: UIColor { get }

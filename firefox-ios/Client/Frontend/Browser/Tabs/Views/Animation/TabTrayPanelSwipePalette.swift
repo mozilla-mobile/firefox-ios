@@ -102,16 +102,6 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerSurfaceMediumAlt: UIColor { base.layerSurfaceMediumAlt }
     var layerGradientSummary: Gradient { base.layerGradientSummary }
 
-    var layerRatingA: UIColor { base.layerRatingA }
-    var layerRatingASubdued: UIColor { base.layerRatingASubdued }
-    var layerRatingB: UIColor { base.layerRatingB }
-    var layerRatingBSubdued: UIColor { base.layerRatingBSubdued }
-    var layerRatingC: UIColor { base.layerRatingC }
-    var layerRatingCSubdued: UIColor { base.layerRatingCSubdued }
-    var layerRatingD: UIColor { base.layerRatingD }
-    var layerRatingDSubdued: UIColor { base.layerRatingDSubdued }
-    var layerRatingF: UIColor { base.layerRatingF }
-
     var actionPrimary: UIColor { base.actionPrimary }
     var actionPrimaryHover: UIColor { base.actionPrimaryHover }
     var actionPrimaryDisabled: UIColor { base.actionPrimaryDisabled }
