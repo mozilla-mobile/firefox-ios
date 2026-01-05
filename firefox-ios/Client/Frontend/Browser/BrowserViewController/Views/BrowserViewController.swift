@@ -197,6 +197,18 @@ class BrowserViewController: UIViewController,
     private lazy var webPagePreview: TabWebViewPreview = .build {
         $0.isHidden = true
     }
+    private lazy var swipeUpTabWebViewPreview: SwipeUpTabWebViewPreview = .build {
+        $0.alpha = 0.0
+    }
+    private lazy var swipeUpTabWebViewPreviewGestureHandler = SwipeUpTabPreviewGestureHandler(
+        tabPreview: swipeUpTabWebViewPreview,
+        bottomBlurView: bottomBlurView,
+        topBlurView: topBlurView,
+        screenshotHelper: screenshotHelper,
+        tabManager: tabManager,
+        themeManager: themeManager,
+        windowUUID: windowUUID
+    )
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
@@ -1436,6 +1448,10 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
+        // TODO: - Replace with feature flag
+        if true {
+            view.addSubview(swipeUpTabWebViewPreview)
+        }
         if isSwipingTabsEnabled {
             view.addSubviews(webPagePreview)
         }
@@ -1469,6 +1485,9 @@ class BrowserViewController: UIViewController,
             addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
                 return self?.newTabSettings
             }
+        }
+        if true {
+            swipeUpTabWebViewPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
         }
     }
 
@@ -1761,6 +1780,10 @@ class BrowserViewController: UIViewController,
                 webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 webPagePreview.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
+        }
+        
+        if true {
+            swipeUpTabWebViewPreview.pinToSuperview()
         }
 
         updateHeaderConstraints()
