@@ -15,6 +15,11 @@ features:
           Toggle between standard (false) and Japan-specific (true) assets and content.
         type: Boolean
         default: false
+      should-use-brand-refresh-configuration:
+        description: >
+          Toggle between standard (false) and brand refresh (true) onboarding content.
+        type: Boolean
+        default: false
       conditions:
         description: >
           A collection of out the box conditional expressions to be
@@ -38,8 +43,9 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enable-modern-ui: false
+          enable-modern-ui: true
           should-use-japan-configuration: false
+          should-use-brand-refresh-configuration: true
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
@@ -399,6 +405,93 @@ features:
               prerequisites:
                 - ALWAYS
               uiVariant: japan
+            welcome-brand-refresh:
+              card-type: basic
+              order: 10
+              title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2
+              body: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Description.v148
+              image: trackers-brand-refresh
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148
+                  action: open-instructions-popup
+                secondary:
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Skip.v148
+                  action: forward-one-card
+              instructions-popup:
+                title: Onboarding/DefaultBrowserPopup.Title.v114
+                button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
+                button-action: open-ios-fx-settings
+                instructions:
+                  - Onboarding/DefaultBrowserPopup.FirstLabel.v114
+                  - Onboarding/DefaultBrowserPopup.SecondLabel.v114
+                  - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: brandRefresh
+            customization-toolbar-brand-refresh:
+              card-type: multiple-choice
+              order: 20
+              title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148
+              body: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148
+              image: toolbar
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148
+                  action: forward-one-card
+              multiple-choice-buttons:
+                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140
+                  image: toolbar-bottom-brand-refresh
+                  action: toolbar-bottom
+                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v140
+                  image: toolbar-top-brand-refresh
+                  action: toolbar-top
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: brandRefresh
+            customization-theme-brand-refresh:
+              card-type: multiple-choice
+              order: 25
+              title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148
+              body: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148
+              image: themeing
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148
+                  action: forward-one-card
+              multiple-choice-buttons:
+                - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148
+                  image: theme-system-brand-refresh
+                  action: theme-system-default
+                - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148
+                  image: theme-light-brand-refresh
+                  action: theme-light
+                - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148
+                  image: theme-dark-brand-refresh
+                  action: theme-dark
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: brandRefresh
+            sign-to-sync-brand-refresh:
+              card-type: basic
+              order: 30
+              title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Title.v148
+              body: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Description.v148
+              image: sync-with-icons-brand-refresh
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148
+                  action: sync-sign-in
+                secondary:
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148
+                  action: forward-one-card
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: brandRefresh
           dismissable: true
 
 objects:
@@ -601,6 +694,8 @@ enums:
         description: Use the new (modern) onboarding UI.
       japan:
         description: Use the Japan-specific onboarding UI with localized assets.
+      brandRefresh:
+        description: Use the brand refresh onboarding UI with v148 strings.
   OnboardingActions:
     description: >
       The identifiers for the different actions available for cards in onboarding
@@ -703,6 +798,12 @@ enums:
       trackers-japan:
         description: >
           Corresponding to the trackers image for Japan
+      sync-with-icons-brand-refresh:
+        description: >
+          Corresponding to the sync-with-icons image for brand refresh
+      trackers-brand-refresh:
+        description: >
+          Corresponding to the trackers image for brand refresh
   OnboardingCardType:
     description: >
       The identifiers for the different types of onboarding cards.
@@ -778,3 +879,18 @@ enums:
       toolbar-bottom-japan:
         description: >
           Corresponding to the toolbar on the bottom for Japan
+      theme-system-brand-refresh:
+        description: >
+          Corresponding to the system theme for brand refresh
+      theme-dark-brand-refresh:
+        description: >
+          Corresponding to the dark theme for brand refresh
+      theme-light-brand-refresh:
+        description: >
+          Corresponding to the light theme for brand refresh
+      toolbar-top-brand-refresh:
+        description: >
+          Corresponding to the toolbar on top for brand refresh
+      toolbar-bottom-brand-refresh:
+        description: >
+          Corresponding to the toolbar on the bottom for brand refresh
