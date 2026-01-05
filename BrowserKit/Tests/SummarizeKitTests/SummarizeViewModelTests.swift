@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 @testable import SummarizeKit
 
 extension Result {
@@ -25,7 +26,7 @@ class MockDateProvider: DateProvider {
 }
 
 @MainActor
-final class SummarizeViewModelTests: XCTestCase {
+final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
     private var tosAcceptor: MockSummarizeToSAcceptor!
     private var summarizerService: MockSummarizerService!
     private var webView: MockWebView!
@@ -33,20 +34,20 @@ final class SummarizeViewModelTests: XCTestCase {
     private let maxWords = 5000
     private let url = URL(string: "https://example.com")!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         webView = MockWebView(url)
         dateProvider = MockDateProvider()
         summarizerService = MockSummarizerService()
         tosAcceptor = MockSummarizeToSAcceptor()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         tosAcceptor = nil
         dateProvider = nil
         summarizerService = nil
         webView = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_summarize_whenTosNotAccepted_whenTriggerIsShake_showsToSScreen() {
@@ -58,7 +59,10 @@ final class SummarizeViewModelTests: XCTestCase {
         subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let error = try? XCTUnwrap(result.failure())
 
-            XCTAssertEqual(error, .tosConsentMissing)
+            guard case .tosConsentMissing = error else {
+                XCTFail("Should not have been a different error, got \(String(describing: error))")
+                return
+            }
             newDataExpectation.fulfill()
         }
         wait(for: [newDataExpectation], timeout: 0.5)
@@ -186,7 +190,11 @@ final class SummarizeViewModelTests: XCTestCase {
         subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.failure())
 
-            XCTAssertEqual(response, .unknown(error))
+            guard case .unknown(let error) = response else {
+                XCTFail("Should not have been a different error, got \(String(describing: response))")
+                return
+            }
+            XCTAssertEqual(error.localizedDescription, "The operation couldn’t be completed. ( error 0.)")
             newDataExpectation.fulfill()
         }
         wait(for: [newDataExpectation], timeout: 0.5)
@@ -203,7 +211,11 @@ final class SummarizeViewModelTests: XCTestCase {
         subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.failure())
 
-            XCTAssertEqual(response, error)
+            guard case .cancelled = response else {
+                XCTFail("Should not have been a different error, got \(String(describing: response))")
+                return
+            }
+
             newDataExpectation.fulfill()
         }
         wait(for: [newDataExpectation], timeout: 0.5)

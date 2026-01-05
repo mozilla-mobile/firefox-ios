@@ -17,19 +17,19 @@ final class StatusBarOverlayTests: XCTestCase {
 
     private var expectedAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.85 }
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.wallpaperManager = WallpaperManagerMock()
         self.notificationCenter = MockNotificationCenter()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.profile = nil
         self.wallpaperManager = nil
         self.notificationCenter = nil
+        try await super.tearDown()
     }
 
     // MARK: Translucency enabled
@@ -575,7 +575,10 @@ private class ToolbarHelperMock: ToolbarHelperInterface {
 
     var isToolbarRefactorEnabled = true
     var isToolbarTranslucencyEnabled = true
+    var isToolbarTranslucencyRefactorEnabled = false
     var isReduceTransparencyEnabled = false
+    var isSwipingTabsEnabled = true
+    var userInterfaceIdiom: UIUserInterfaceIdiom = .phone
 
     @MainActor
     var glassEffectAlpha: CGFloat {

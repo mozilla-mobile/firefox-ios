@@ -70,17 +70,14 @@ final class LanguageDetectorTests: XCTestCase {
         mockLanguageSampleSource.mockError = FakeError.foo
         let subject = createSubject()
 
-        do {
+        await assertAsyncThrowsEqual(FakeError.foo) {
             _ = try await subject.detectLanguage(from: mockLanguageSampleSource)
-            XCTFail("expected error")
-        } catch {
-            XCTAssertEqual(error as? FakeError, .foo)
         }
     }
 
     func test_detectLanguage_prefersDominantLanguage() async throws {
         let subject = createSubject()
-        mockLanguageSampleSource.mockResult = "Hello, bonjour, hello, hello"
+        mockLanguageSampleSource.mockResult = "Hello! This is an English sentence. A common word in French is Bonjour."
         let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
         XCTAssertEqual(result, "en")
     }

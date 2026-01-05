@@ -12,16 +12,16 @@ class OnboardingNotificationCardHelperTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingTestingConfigUtility!
     typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         nimbusUtility = NimbusOnboardingTestingConfigUtility()
     }
 
-    override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         nimbusUtility = nil
+        try await super.tearDown()
     }
 
     func testHelper_fromOnboarding_withNotificationCard_returnsTrue() {

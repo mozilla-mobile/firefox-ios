@@ -17,7 +17,7 @@ import class MozillaAppServices.RemoteSettingsService
 
 public typealias ClientSyncManager = Client.SyncManager
 
-open class ClientSyncManagerSpy: ClientSyncManager {
+open class ClientSyncManagerSpy: ClientSyncManager, @unchecked Sendable {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
@@ -90,7 +90,7 @@ final class MockTabQueue: TabQueue, @unchecked Sendable {
         return succeed()
     }
 
-    func getQueuedTabs(completion: @escaping @MainActor ([ShareItem]) -> Void) {
+    func getQueuedTabs(completion: @MainActor @Sendable @escaping ([ShareItem]) -> Void) {
         Task { @MainActor in
             completion(queuedTabs)
             getQueuedTabsCalled += 1

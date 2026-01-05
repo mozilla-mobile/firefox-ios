@@ -307,6 +307,12 @@ private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
 
 // Detects Keywords in PR so certain functions are not used in new code.
 class CodeUsageDetector {
+    // In uniffi generated code, we might have print statements automatically generated.
+    private let allowedPrintDirectories: [String] = [
+        "MozillaRustComponents/Sources/FocusRustComponentsWrapper/Generated/",
+        "MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated/"
+    ]
+
     private enum Keywords: CaseIterable {
         static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
 
@@ -316,6 +322,7 @@ class CodeUsageDetector {
         case deferred
         case swiftUIText
         case task
+        case notifiable
 
         var message: String {
             switch self {
@@ -336,6 +343,9 @@ class CodeUsageDetector {
                 New `Task {}` added in file %@ at line %d.
                 Please add a concurrency reviewer on your PR: \(contacts)
                 """
+            case .notifiable:
+                let usage = "Please prefer Notifiable over `NotificationCenter` unless specific circumstances."
+                return "`NotificationCenter.default.addObserver` detected in file %@ at line %d. \(usage)"
             }
         }
 
@@ -350,12 +360,15 @@ class CodeUsageDetector {
             case .deferred:
                 return "Deferred<"
             case .swiftUIText:
-                return "Text(\""
+                return " Text(\""
             case .task:
                 return " Task {"
+            case .notifiable:
+                return "NotificationCenter.default.addObserver("
             }
         }
 
+        // Comment with `markdown` instead of `warn` or `fail`. Has precedence over `shouldWarn`.
         var shouldComment: Bool {
             switch self {
             case .task:
@@ -365,9 +378,10 @@ class CodeUsageDetector {
             }
         }
 
+        // Decide if we want to `warn` instead of `fail` on the pull request.
         var shouldWarn: Bool {
             switch self {
-            case .deferred:
+            case .deferred, .notifiable:
                 return true
             default:
                 return false
@@ -375,6 +389,12 @@ class CodeUsageDetector {
         }
     }
     // swiftlint:enable line_length
+
+    private func shouldSkip(_ keyword: Keywords, for file: String) -> Bool {
+        // Only skip `print(` in whitelisted directories
+        guard keyword == .print else { return false }
+        return allowedPrintDirectories.contains { file.contains($0) }
+    }
 
     func checkForCodeUsage() {
         let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
@@ -408,6 +428,7 @@ class CodeUsageDetector {
     }
 
     private func detect(keyword: Keywords, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
+        guard !shouldSkip(keyword, for: file) else { return }
         for hunk in hunks {
             var newLineCount = 0
             for line in hunk.lines {
@@ -426,7 +447,7 @@ class CodeUsageDetector {
                 } else if keyword.shouldWarn {
                     warn(String(format: message, file, lineNumber))
                 } else {
-                    fail(String(format: message, file, lineNumber))
+                    failOrWarn(String(format: message, file, lineNumber))
                 }
             }
         }
@@ -439,6 +460,7 @@ class CodeUsageDetector {
     }
 
     private func detect(keyword: Keywords, inLines lines: [String], file: String, message: String) {
+        guard !shouldSkip(keyword, for: file) else { return }
         for (index, line) in lines.enumerated() where line.contains(keyword.keyword) {
             let lineNumber = index + 1
             if keyword.shouldComment {
@@ -446,7 +468,7 @@ class CodeUsageDetector {
             } else if keyword.shouldWarn {
                 warn(String(format: message, file, lineNumber))
             } else {
-                fail(String(format: message, file, lineNumber))
+                failOrWarn(String(format: message, file, lineNumber))
             }
         }
     }
@@ -460,6 +482,31 @@ extension String {
         newString = newString.replacingOccurrences(of: ")", with: "\\)")
         newString = newString.replacingOccurrences(of: " ", with: "\\ ")
         return newString
+    }
+}
+
+// MARK: - Label by-pass
+// Used to by-pass a failure with the label `danger-bypass` on the pull request
+
+private func hasLabel(_ bypassLabel: String) -> Bool {
+    let labelNames = danger.github.issue.labels
+    for label in labelNames where label.name == bypassLabel {
+        return true
+    }
+    return false
+}
+
+/// Call this instead of `fail` when you want a "bypassable" failure.
+/// If the PR has the bypass label, this becomes a `warn` instead.
+private func failOrWarn(_ message: String) {
+    let bypassLabel = "danger-bypass"
+    if hasLabel(bypassLabel) {
+        warn("""
+        \(message)
+        Since bypass label \(bypassLabel) detected we are reporting as warning only for this PR.
+        """)
+    } else {
+        fail(message)
     }
 }
 
@@ -612,12 +659,12 @@ class BrowserViewControllerChecker {
         let newBvcExtensions = created.filter { matches(regex, $0) }
 
         if newBvcExtensions.count == 1 {
-            fail("""
+            failOrWarn("""
             New `BrowserViewController+*.swift` file detected: \(newBvcExtensions)
             """)
         } else if !newBvcExtensions.isEmpty {
             let bullets = newBvcExtensions.map { "• `\($0)`" }.joined(separator: "\n")
-            fail("""
+            failOrWarn("""
             New `BrowserViewController+*.swift` files detected:
             \(bullets)
             """)

@@ -15,11 +15,11 @@ protocol UnifiedAdsProviderInterface: Sendable {
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
     ///   - completion: Returns an array of Tiles, can be empty
-    func fetchTiles(timestamp: Timestamp, completion: @escaping (UnifiedTileResult) -> Void)
+    func fetchTiles(timestamp: Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void)
 }
 
 extension UnifiedAdsProviderInterface {
-    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping (UnifiedTileResult) -> Void) {
+    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
         fetchTiles(timestamp: timestamp, completion: completion)
     }
 }
@@ -61,7 +61,8 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         let placements: [AdPlacement]
     }
 
-    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping (UnifiedTileResult) -> Void) {
+    func fetchTiles(timestamp: Timestamp = Date.now(),
+                    completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
         guard let request = buildRequest() else {
             completion(.failure(Error.noDataAvailable))
             return
@@ -117,7 +118,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         return request
     }
 
-    private func fetchTiles(request: URLRequest, completion: @escaping (UnifiedTileResult) -> Void) {
+    private func fetchTiles(request: URLRequest, completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
         networking.data(from: request) { [weak self] result in
             guard let self = self else { return }
             switch result {

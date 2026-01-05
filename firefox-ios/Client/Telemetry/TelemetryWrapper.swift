@@ -179,6 +179,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
 
         TelemetryContextualIdentifier.setupContextId()
 
+        // Process any pending app extension telemetry events from NSUserDefaults
+        processPendingAppExtensionTelemetry(profile: profile)
+
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
         startObservingNotifications(
@@ -329,13 +332,49 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             summarizerTelemetry.summarizationShakeGestureEnabled(summarizerNimbusUtils.isShakeGestureEnabled)
         }
     }
+
+    /// Processes pending app extension telemetry events stored in NSUserDefaults.
+    /// These events are written by the ShareTo extension and need to be recorded in Glean.
+    /// Should be called both on app launch and when app becomes active (foreground) to ensure
+    /// events are processed even when the app was in background.
+    /// - Parameter profile: The profile containing the preferences where events are stored
+    @MainActor
+    func processPendingAppExtensionTelemetry(profile: Profile) {
+        guard let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
+              !extensionEvents.isEmpty else {
+            return
+        }
+
+        let shareExtensionTelemetry = ShareExtensionTelemetry()
+
+        // Process each event and record it in Glean
+        for event in extensionEvents {
+            guard let method = event["method"] else { continue }
+
+            switch method {
+            case "load-in-background":
+                shareExtensionTelemetry.loadInBackground()
+            case "bookmark-this-page":
+                shareExtensionTelemetry.bookmarkThisPage()
+            case "add-to-reading-list":
+                shareExtensionTelemetry.addToReadingList()
+            case "send-to-device":
+                shareExtensionTelemetry.sendToDevice()
+            default:
+                // Unknown method, skip it
+                continue
+            }
+        }
+
+        // Clear the events array after processing
+        profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryEventArray)
+    }
 }
 
 // Enums for Event telemetry.
 extension TelemetryWrapper {
     public enum EventCategory: String {
         case action = "action"
-        case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
         case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
@@ -365,7 +404,6 @@ extension TelemetryWrapper {
         case tap = "tap"
         case translate = "translate"
         case view = "view"
-        case applicationOpenUrl = "application-open-url"
         case emailLogin = "email"
         case qrPairing = "pairing"
         case settings = "settings"
@@ -491,8 +529,6 @@ extension TelemetryWrapper {
         case onboarding = "onboarding"
         case upgradeOnboarding = "upgrade-onboarding"
         // MARK: New Upgrade screen
-        case dismissDefaultBrowserCard = "default-browser-card"
-        case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
         case goToSettingsDefaultBrowserOnboarding = "default-browser-onboarding-go-to-settings"
         case homeTabBannerEvergreen = "home-tab-banner-evergreen"
@@ -1081,30 +1117,24 @@ extension TelemetryWrapper {
                     extras: extras)
             }
         // MARK: Default Browser
-        case (.action, .tap, .dismissDefaultBrowserCard, _, _):
-            GleanMetrics.DefaultBrowserCard.dismissPressed.add()
-        case (.action, .tap, .goToSettingsDefaultBrowserCard, _, _):
-            GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
-        case (.action, .open, .defaultBrowser, _, let extras):
-            if let isDefaultBrowser = extras?[EventExtraKey.isDefaultBrowser.rawValue] as? Bool {
-                GleanMetrics.App.defaultBrowser.set(isDefaultBrowser)
-            }
-        case (.action, .open, .choiceScreenAcquisition, _, let extras):
-            if let choiceScreen = extras?[EventExtraKey.didComeFromBrowserChoiceScreen.rawValue] as? Bool {
-                GleanMetrics.App.choiceScreenAcquisition.set(choiceScreen)
-            }
         case(.action, .tap, .engagementNotification, _, _):
             GleanMetrics.Onboarding.engagementNotificationTapped.record()
         case(.action, .cancel, .engagementNotification, _, _):
             GleanMetrics.Onboarding.engagementNotificationCancel.record()
-        case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
-            GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
-        case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
-            GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
         case (.information, .view, .homeTabBannerEvergreen, _, _):
             GleanMetrics.DefaultBrowserCard.evergreenImpression.record()
+        case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
+            let extras = GleanMetrics.OnboardingDefaultBrowserSheet.DismissButtonTappedExtra(
+                onboardingVariant: "legacy"
+            )
+            GleanMetrics.OnboardingDefaultBrowserSheet.dismissButtonTapped.record(extras)
+        case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
+            let extras = GleanMetrics.OnboardingDefaultBrowserSheet.GoToSettingsButtonTappedExtra(
+                onboardingVariant: "legacy"
+            )
+            GleanMetrics.OnboardingDefaultBrowserSheet.goToSettingsButtonTapped.record(extras)
         // MARK: Downloads
         case(.action, .tap, .downloadNowButton, _, _):
             GleanMetrics.Downloads.downloadNowButtonTapped.record()

@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Client
 
-class NetworkingMock: WallpaperNetworking {
+final class NetworkingMock: WallpaperNetworking, @unchecked Sendable {
     var result = Result<Data, Error>.failure(URLError(.notConnectedToInternet))
 
     func data(from url: URL) async throws -> (Data, URLResponse) {

@@ -8,8 +8,8 @@ import Common
 /// Simple address toolbar implementation.
 /// +-------------+--------------------------------------------------------+----------+
 /// | navigation  | [ leading ]     indicators      url       [ trailing ] | browser  |
-/// | actions     | [ page    ]                               [ page     ] | browser  |
-/// |             | [ actions ]                               [ actions  ] | actions  |
+/// | actions     | [ page    ]                               [ page     ] | actions  |
+/// |             | [ actions ]                               [ actions  ] |          |
 /// +-------------+--------------------------------------------------------+----------+
 public class BrowserAddressToolbar: UIView,
                                     Notifiable,
@@ -48,7 +48,7 @@ public class BrowserAddressToolbar: UIView,
 
     private lazy var leadingPageActionStack: UIStackView = .build()
 
-    private lazy var pageActionStack: UIStackView = .build { view in
+    private lazy var trailingPageActionStack: UIStackView = .build { view in
         view.spacing = UX.actionSpacing
     }
 
@@ -123,8 +123,11 @@ public class BrowserAddressToolbar: UIView,
                           trailingSpace: CGFloat,
                           isUnifiedSearchEnabled: Bool,
                           animated: Bool) {
-        [navigationActionStack, leadingPageActionStack, pageActionStack, browserActionStack].forEach {
+        [navigationActionStack, leadingPageActionStack, trailingPageActionStack, browserActionStack].forEach {
             $0.isHidden = config.uxConfiguration.scrollAlpha.isZero
+        }
+        if #available(iOS 26.0, *) {
+            toolbarTopBorderView.isHidden = config.uxConfiguration.scrollAlpha.isZero
         }
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
@@ -190,7 +193,7 @@ public class BrowserAddressToolbar: UIView,
         locationContainer.addSubview(leadingPageActionStack)
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(locationDividerView)
-        locationContainer.addSubview(pageActionStack)
+        locationContainer.addSubview(trailingPageActionStack)
 
         toolbarContainerView.addSubview(navigationActionStack)
         toolbarContainerView.addSubview(locationContainer)
@@ -211,7 +214,7 @@ public class BrowserAddressToolbar: UIView,
 
         [navigationActionStack,
          leadingPageActionStack,
-         pageActionStack,
+         trailingPageActionStack,
          browserActionStack].forEach(setZeroWidthConstraint)
 
         toolbarTopBorderHeightConstraint = toolbarTopBorderView.heightAnchor.constraint(equalToConstant: 0)
@@ -266,12 +269,12 @@ public class BrowserAddressToolbar: UIView,
             locationView.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
             locationDividerView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
-            locationDividerView.trailingAnchor.constraint(equalTo: pageActionStack.leadingAnchor),
+            locationDividerView.trailingAnchor.constraint(equalTo: trailingPageActionStack.leadingAnchor),
             locationDividerView.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
-            pageActionStack.topAnchor.constraint(equalTo: locationContainer.topAnchor),
-            pageActionStack.trailingAnchor.constraint(equalTo: locationContainer.trailingAnchor),
-            pageActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
+            trailingPageActionStack.topAnchor.constraint(equalTo: locationContainer.topAnchor),
+            trailingPageActionStack.trailingAnchor.constraint(equalTo: locationContainer.trailingAnchor),
+            trailingPageActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
             browserActionStack.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             browserActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
@@ -316,7 +319,7 @@ public class BrowserAddressToolbar: UIView,
 
         // Page actions
         updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
-        updateActionStack(stackView: pageActionStack, toolbarElements: config.trailingPageActions)
+        updateActionStack(stackView: trailingPageActionStack, toolbarElements: config.trailingPageActions)
 
         updateActionSpacing(uxConfig: config.uxConfiguration)
         updateToolbarLayout(animated: animated)
@@ -326,7 +329,7 @@ public class BrowserAddressToolbar: UIView,
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
                      leadingPageActionStack.arrangedSubviews +
-                     pageActionStack.arrangedSubviews
+                     trailingPageActionStack.arrangedSubviews
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
@@ -361,6 +364,7 @@ public class BrowserAddressToolbar: UIView,
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
         let buttons = toolbarElements.map { toolbarElement in
+            let hasCachedButton = hasCachedButton(for: toolbarElement)
             let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
             if !stackView.arrangedSubviews.contains(button) {
@@ -375,6 +379,22 @@ public class BrowserAddressToolbar: UIView,
             if let contextualHintType = toolbarElement.contextualHintType {
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
+
+            // Only add the constraints to new buttons
+            if !hasCachedButton {
+                if button.configuration?.title == nil {
+                    NSLayoutConstraint.activate([
+                        button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+                        button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+                    ])
+                } else {
+                    NSLayoutConstraint.activate([
+                        button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
+                        button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.height),
+                    ])
+                    button.setContentCompressionResistancePriority(.required, for: .horizontal)
+                }
+            }
             return button
         }
 
@@ -382,19 +402,6 @@ public class BrowserAddressToolbar: UIView,
 
         buttons.forEach { button in
             stackView.addArrangedSubview(button)
-
-            if button.configuration?.title == nil {
-                NSLayoutConstraint.activate([
-                    button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                    button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
-                ])
-            } else {
-                NSLayoutConstraint.activate([
-                    button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
-                    button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.height),
-                ])
-                button.setContentCompressionResistancePriority(.required, for: .horizontal)
-            }
         }
     }
 
@@ -409,7 +416,7 @@ public class BrowserAddressToolbar: UIView,
         leadingLocationContainerConstraint?.constant = hasNavigationActions && isRegular ? -UX.horizontalSpace : 0
 
         // Page action spacing
-        let hasPageActions = !pageActionStack.arrangedSubviews.isEmpty
+        let hasPageActions = !trailingPageActionStack.arrangedSubviews.isEmpty
         dividerWidthConstraint?.constant = hasPageActions ? uxConfig.browserActionsAddressBarDividerWidth : 0
     }
 

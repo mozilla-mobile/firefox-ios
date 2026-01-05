@@ -125,9 +125,11 @@ final class MicrosurveyViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(model: MicrosurveyModel, windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default
+    init(
+        model: MicrosurveyModel,
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager

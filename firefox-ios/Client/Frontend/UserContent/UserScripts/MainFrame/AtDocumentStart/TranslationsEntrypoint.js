@@ -30,7 +30,7 @@ const sendToEngine = (message) => {
 /// NOTE: This receives messages from the engine and forwards them to the content context.
 /// For "done" messages, it resolves the isDone promise.
 window.receive = (message) => {
-    if (message.type === "foo" && isDoneResolve) {
+    if (message.type === "TranslationsPort:TranslationResponse" && isDoneResolve) {
         isDoneResolve(true);
         isDoneResolve = null;
     }

@@ -17,8 +17,8 @@ class AppSettingsTableViewControllerTests: XCTestCase {
     private var mockParentCoordinator: MockSettingsFlowDelegate!
     private var mockGleanUsageReportingMetricsService: MockGleanUsageReportingMetricsService!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -31,14 +31,14 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         self.mockGleanUsageReportingMetricsService = MockGleanUsageReportingMetricsService(profile: MockProfile())
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         self.profile = nil
         self.tabManager = nil
         self.appAuthenticator = nil
         self.delegate = nil
         self.applicationHelper = nil
+        try await super.tearDown()
     }
 
     func testRouteNotHandled_delegatesArentCalled() {

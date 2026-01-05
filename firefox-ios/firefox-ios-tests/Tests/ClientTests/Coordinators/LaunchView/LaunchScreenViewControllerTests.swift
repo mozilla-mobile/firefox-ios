@@ -6,14 +6,15 @@ import Common
 import XCTest
 @testable import Client
 
+@MainActor
 final class LaunchScreenViewControllerTests: XCTestCase {
     private var viewModel: MockLaunchScreenViewModel!
     private var profile: MockProfile!
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -22,19 +23,22 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
 
-    override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         viewModel = nil
         profile = nil
         coordinatorDelegate = nil
+
+        try await super.tearDown()
     }
 
+    @MainActor
     func testNotLoaded_notCalled() {
         _ = createSubject()
         XCTAssertEqual(viewModel.startLoadingCalled, 0)
     }
 
+    @MainActor
     func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() {
         viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
         let subject = createSubject()
@@ -49,6 +53,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
+    @MainActor
     func testViewDidLoad_whenNilLaunchType_callsCoordinatorBrowser() {
         viewModel.mockLaunchType = nil
         let subject = createSubject()
@@ -59,6 +64,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
+    @MainActor
     func testAddLaunchView_whenViewWillAppear() {
         let subject = LaunchScreenViewController(windowUUID: windowUUID,
                                                  coordinator: coordinatorDelegate,
@@ -69,6 +75,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     }
 
     // MARK: - Helpers
+    @MainActor
     private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchScreenViewController {
         let subject = LaunchScreenViewController(windowUUID: windowUUID,

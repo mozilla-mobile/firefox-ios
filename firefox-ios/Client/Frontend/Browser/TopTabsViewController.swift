@@ -66,13 +66,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         return collectionView
     }()
 
-    private lazy var tabsButton: TabsButton = .build { button in
-        button.semanticContentAttribute = .forceLeftToRight
-        button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
-        button.showsLargeContentViewer = true
-    }
-
     private lazy var newTab: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
@@ -197,13 +190,10 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         let uiLargeContentViewInteraction = UILargeContentViewerInteraction()
         view.addInteraction(uiLargeContentViewInteraction)
 
-        tabsButton.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         applyUIMode(
             isPrivate: tabManager.selectedTab?.isPrivate ?? false,
             theme: themeManager.getCurrentTheme(for: windowUUID)
         )
-
-        updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
     }
 
     func applyTheme() {
@@ -218,7 +208,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
             collectionView.backgroundColor = view.backgroundColor
         }
 
-        tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)
         newTab.tintColor = colors.iconPrimary
         collectionView.reloadData()
@@ -229,10 +218,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         super.viewDidDisappear(animated)
         UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false,
                                   forKey: PrefsKeys.LastSessionWasPrivate)
-    }
-
-    func updateTabCount(_ count: Int, animated: Bool = true) {
-        tabsButton.updateTabCount(count, animated: animated)
     }
 
     @objc

@@ -60,9 +60,9 @@ public protocol BookmarksHandler {
 
 public protocol HistoryHandler {
     func applyObservation(visitObservation: VisitObservation,
-                          completion: @escaping (Result<Void, any Error>) -> Void)
+                          completion: @Sendable @escaping (Result<Void, any Error>) -> Void)
 
-    func getMostRecentHistoryMetadata(
+    func getMostRecentSearchHistoryMetadata(
         limit: Int32,
         completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
     )
@@ -71,6 +71,10 @@ public protocol HistoryHandler {
         for searchTerm: String,
         and urlString: String,
         completion: @Sendable @escaping (Result<(), any Error>) -> Void
+    )
+
+    func deleteSearchHistoryMetadata(
+        completion: @escaping @Sendable (Result<(), any Error>) -> Void
     )
 }
 
@@ -410,8 +414,11 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
             }
     }
 
-    public func createFolder(parentGUID: GUID, title: String,
-                             position: UInt32?) -> Deferred<Maybe<GUID>> {
+    public func createFolder(
+        parentGUID: GUID,
+        title: String,
+        position: UInt32?
+    ) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createFolder(
                 parentGUID: parentGUID,
@@ -422,9 +429,12 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     }
 
     /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
-    public func createFolder(parentGUID: GUID, title: String,
-                             position: UInt32?,
-                             completion: @Sendable @escaping (Result<GUID, any Error>) -> Void) {
+    public func createFolder(
+        parentGUID: GUID,
+        title: String,
+        position: UInt32?,
+        completion: @Sendable @escaping (Result<GUID, any Error>) -> Void
+    ) {
         withWriter({ connection in
                 return try connection.createFolder(
                     parentGUID: parentGUID,
@@ -550,13 +560,13 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     }
 
     // MARK: History metadata
-    /// Currently only used to get the recent searches from the user's history storage.
-    public func getMostRecentHistoryMetadata(
+    /// Fetches recent searches from the user's history storage.
+    public func getMostRecentSearchHistoryMetadata(
         limit: Int32,
         completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
     ) {
         withReader({ connection in
-            return try connection.getMostRecentHistoryMetadata(limit: limit)
+            return try connection.getMostRecentSearchHistoryMetadata(limit: limit)
         }, completion: completion)
     }
 
@@ -593,6 +603,17 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
             let response: Void = try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
             return response
         }
+    }
+
+    public func deleteSearchHistoryMetadata(
+        completion: @escaping @Sendable (Result<(), any Error>) -> Void
+    ) {
+        withWriter(
+            { connection in
+                return try connection.deleteSearchHistoryMetadata()
+            },
+            completion: completion
+        )
     }
 
     private func deleteHistoryMetadata(since startDate: Int64) -> Deferred<Maybe<Void>> {
@@ -703,7 +724,7 @@ extension RustPlaces {
 
     public func applyObservation(
         visitObservation: VisitObservation,
-        completion: @escaping (Result<Void, any Error>) -> Void
+        completion: @Sendable @escaping (Result<Void, any Error>) -> Void
     ) {
         withWriter { connection in
             return try connection.applyObservation(visitObservation: visitObservation)

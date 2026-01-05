@@ -37,7 +37,7 @@ microsurvey:
       - https://github.com/mozilla-mobile/firefox-ios/pull/20903
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
 
   privacy_notice_tapped:
     type: event
@@ -58,7 +58,7 @@ microsurvey:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: "2026-01-01"
+    expires: never
 
   dismiss_button_tapped:
     type: event
@@ -79,7 +79,7 @@ microsurvey:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: "2026-01-01"
+    expires: never
 
   submit_button_tapped:
     type: event
@@ -104,7 +104,7 @@ microsurvey:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: "2026-01-01"
+    expires: never
 
   confirmation_shown:
     type: event
@@ -123,4 +123,4 @@ microsurvey:
       - https://github.com/mozilla-mobile/firefox-ios/pull/20903
     notification_emails:
         - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never

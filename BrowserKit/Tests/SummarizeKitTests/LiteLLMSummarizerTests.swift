@@ -12,27 +12,56 @@ final class LiteLLMSummarizerTests: XCTestCase {
         XCTAssertEqual(result, "hello world")
     }
 
+    @MainActor
     func testSummarizeNonStreamingMapsRateLimited() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 429)
         let subject = createSubject(respondWithError: rateLimitError)
-        await assertSummarizeThrows(.rateLimited) {
+
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             _ = try await subject.summarize("t")
+        } verify: { err in
+            guard case .rateLimited = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "rateLimited")
         }
     }
 
+    @MainActor
     func testSummarizeNonStreamingMapsInvalidResponse() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 502)
         let subject = createSubject(respondWithError: rateLimitError)
-        await assertSummarizeThrows(.invalidResponse(statusCode: 502)) {
+
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             _ = try await subject.summarize("t")
+        } verify: { err in
+            guard case .invalidResponse(let statusCode) = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(statusCode, 502)
+            XCTAssertEqual(err.shouldRetrySummarizing, .retry)
+            XCTAssertEqual(err.telemetryDescription, "invalidResponse(statusCode: 502)")
         }
     }
 
+    @MainActor
     func testSummarizeNonStreamingMapsUnknownError() async throws {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
-        await assertSummarizeThrows(.unknown(randomError)) {
+
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             _ = try await subject.summarize("t")
+        } verify: { err in
+            guard case .unknown(let randomError) = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(randomError.localizedDescription, "The operation couldn’t be completed. (Random error error 1.)")
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "unknown(domain: Random error, code: 1)")
         }
     }
 
@@ -48,30 +77,59 @@ final class LiteLLMSummarizerTests: XCTestCase {
         XCTAssertEqual(received, chunks.joined())
     }
 
+    @MainActor
     func testSummarizeStreamedMapsRateLimited() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 429)
         let subject = createSubject(respondWithError: rateLimitError)
         let stream = subject.summarizeStreamed("t")
-        await assertSummarizeThrows(.rateLimited) {
+
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             for try await _ in stream { }
+        } verify: { err in
+            guard case .rateLimited = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "rateLimited")
         }
     }
 
+    @MainActor
     func testSummarizeStreamedMapsInvalidResponse() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 567)
         let subject = createSubject(respondWithError: rateLimitError)
         let stream = subject.summarizeStreamed("t")
-        await assertSummarizeThrows(.invalidResponse(statusCode: 567)) {
+
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             for try await _ in stream { }
+        } verify: { err in
+            guard case .invalidResponse(let statusCode) = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(statusCode, 567)
+            XCTAssertEqual(err.shouldRetrySummarizing, .retry)
+            XCTAssertEqual(err.telemetryDescription, "invalidResponse(statusCode: 567)")
         }
     }
 
+    @MainActor
     func testSummarizeStreamedMapsUnknownError() async throws {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
         let stream = subject.summarizeStreamed("t")
-        await assertSummarizeThrows(.unknown(randomError)) {
+
+        await assertAsyncThrows(ofType: SummarizerError.self) {
             for try await _ in stream { }
+        } verify: { err in
+            guard case .unknown(let randomError) = err else {
+                XCTFail("Should not have been a different error")
+                return
+            }
+            XCTAssertEqual(randomError.localizedDescription, "The operation couldn’t be completed. (Random error error 1.)")
+            XCTAssertEqual(err.shouldRetrySummarizing, .close)
+            XCTAssertEqual(err.telemetryDescription, "unknown(domain: Random error, code: 1)")
         }
     }
 
@@ -89,22 +147,5 @@ final class LiteLLMSummarizerTests: XCTestCase {
             mockClient.respondWithError = error
         }
         return LiteLLMSummarizer(client: mockClient, config: SummarizerConfig(instructions: "instructions", options: [:]))
-    }
-
-    /// Convenience method to simplify error checking in the test cases
-    private func assertSummarizeThrows(
-        _ expected: SummarizerError,
-        when running: @escaping () async throws -> Void
-    ) async {
-        do {
-            try await running()
-            XCTFail("Expected summarize to throw, but it returned normally")
-        } catch let error as SummarizerError {
-            if error != expected {
-                XCTFail("Expected \(expected) to be thrown, but got \(error) instead")
-            }
-        } catch {
-            XCTFail("Expected SummarizerError, but got non SummarizerError: \(error)")
-        }
     }
 }

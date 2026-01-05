@@ -9,13 +9,13 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class TestHistory: XCTestCase {
     var profile: MockProfile!
     let numThreads = 5
-    let numCmds = 10
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = false
 
         // Setup mock profile
@@ -23,15 +23,16 @@ class TestHistory: XCTestCase {
         profile.reopen()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.clear(profile.places)
         profile.shutdown()
         profile = nil
+        try await super.tearDown()
     }
 
     // This is a very basic test. Adds an entry, retrieves it, and then clears the database.
     func testHistory() {
+        let helper = TestHistoryHelper()
         let places = profile.places
         // Add 5 sites
         let numSites = 5
@@ -39,7 +40,7 @@ class TestHistory: XCTestCase {
         for i in 0..<numSites {
             let newSite = (url: "http://url\(i)/", title: "title \(i)")
             siteDictionary[newSite.url] = newSite.title
-            self.addSite(places, url: newSite.url, title: newSite.title)
+            helper.addSite(places, url: newSite.url, title: newSite.title)
         }
 
         // Test
@@ -50,13 +51,14 @@ class TestHistory: XCTestCase {
     }
 
     func testSearchHistory_WithResults() {
+        let helper = TestHistoryHelper()
         let expectation = self.expectation(description: "Wait for search history")
         let places = profile.places
 
-        addSite(places, url: "http://amazon.com/", title: "Amazon")
-        addSite(places, url: "http://mozilla.org/", title: "Mozilla")
-        addSite(places, url: "https://apple.com/", title: "Apple")
-        addSite(places, url: "https://apple.developer.com/", title: "Apple Developer")
+        helper.addSite(places, url: "http://amazon.com/", title: "Amazon")
+        helper.addSite(places, url: "http://mozilla.org/", title: "Mozilla")
+        helper.addSite(places, url: "https://apple.com/", title: "Apple")
+        helper.addSite(places, url: "https://apple.developer.com/", title: "Apple Developer")
 
         places.queryAutocomplete(matchingSearchQuery: "App", limit: 25).upon { result in
             XCTAssertTrue(result.isSuccess)
@@ -69,13 +71,14 @@ class TestHistory: XCTestCase {
     }
 
     func testSearchHistory_WithResultsByTitle() {
+        let helper = TestHistoryHelper()
         let expectation = self.expectation(description: "Wait for search history")
 
         let places = profile.places
-        addSite(places, url: "http://amazon.com/", title: "Amazon")
-        addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
-        addSite(places, url: "http://mozilla.dev.org/", title: "Internet dev")
-        addSite(places, url: "https://apple.com/", title: "Apple")
+        helper.addSite(places, url: "http://amazon.com/", title: "Amazon")
+        helper.addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
+        helper.addSite(places, url: "http://mozilla.dev.org/", title: "Internet dev")
+        helper.addSite(places, url: "https://apple.com/", title: "Apple")
 
         places.queryAutocomplete(matchingSearchQuery: "int", limit: 25).upon { result in
             XCTAssertTrue(result.isSuccess)
@@ -88,11 +91,12 @@ class TestHistory: XCTestCase {
     }
 
     func testSearchHistory_WithResultsByUrl() {
+        let helper = TestHistoryHelper()
         let expectation = self.expectation(description: "Wait for search history")
         let places = profile.places
-        addSite(places, url: "http://amazon.com/", title: "Amazon")
-        addSite(places, url: "http://mozilla.developer.org/", title: "Mozilla")
-        addSite(places, url: "https://apple.developer.com/", title: "Apple")
+        helper.addSite(places, url: "http://amazon.com/", title: "Amazon")
+        helper.addSite(places, url: "http://mozilla.developer.org/", title: "Mozilla")
+        helper.addSite(places, url: "https://apple.developer.com/", title: "Apple")
 
         places.queryAutocomplete(matchingSearchQuery: "dev", limit: 25).upon { result in
             XCTAssertTrue(result.isSuccess)
@@ -105,11 +109,12 @@ class TestHistory: XCTestCase {
     }
 
     func testSearchHistory_NoResults() {
+        let helper = TestHistoryHelper()
         let expectation = self.expectation(description: "Wait for search history")
         let places = profile.places
-        addSite(places, url: "http://amazon.com/", title: "Amazon")
-        addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
-        addSite(places, url: "https://apple.com/", title: "Apple")
+        helper.addSite(places, url: "http://amazon.com/", title: "Amazon")
+        helper.addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
+        helper.addSite(places, url: "https://apple.com/", title: "Apple")
 
         places.queryAutocomplete(matchingSearchQuery: "red", limit: 25).upon { result in
             XCTAssertTrue(result.isSuccess)
@@ -186,8 +191,9 @@ class TestHistory: XCTestCase {
 //    }
 
     func testAboutUrls() {
+        let helper = TestHistoryHelper()
         let places = profile.places
-        self.addSite(
+        helper.addSite(
             places,
             url: "about:home",
             title: "About Home"
@@ -196,12 +202,13 @@ class TestHistory: XCTestCase {
     }
 
     func testGetPerformance() {
+        let helper = TestHistoryHelper()
         let places = profile.places
         var index = 0
         var urls = [String: String]()
 
-        for _ in 0..<self.numCmds {
-            self.addSite(
+        for _ in 0..<helper.numCmds {
+            helper.addSite(
                 places,
                 url: "https://someurl\(index).com/",
                 title: "title \(index)"
@@ -247,6 +254,7 @@ class TestHistory: XCTestCase {
 
     // Same as testRandomThreading, but uses one history connection for all threads
     func testRandomThreading2() {
+        let helper = TestHistoryHelper()
         let queue = DispatchQueue(
             label: "My Queue",
             qos: DispatchQoS.default,
@@ -255,13 +263,13 @@ class TestHistory: XCTestCase {
             target: nil
         )
         var places = profile.places
-        var counter = 0
+        nonisolated(unsafe) var counter = 0
 
-        let expectation = self.expectation(description: "Wait for history")
+        let expectation = expectation(description: "Wait for history")
         for _ in 0..<self.numThreads {
-            self.runRandom(&places, queue: queue, completion: { () in
+            helper.runRandom(&places, queue: queue, completion: { [numThreads] () in
                 counter += 1
-                if counter == self.numThreads {
+                if counter == numThreads {
                     expectation.fulfill()
                 }
             })
@@ -270,38 +278,6 @@ class TestHistory: XCTestCase {
     }
 
     // MARK: - Private helper
-
-    private func addSite(
-        _ places: RustPlaces,
-        url: String,
-        title: String,
-        bool: Bool = true,
-        visitType: VisitType = .link
-    ) {
-        _ = places.reopenIfClosed()
-        let site = Site.createBasicSite(url: url, title: title)
-        let visit = VisitObservation(url: site.url, title: site.title, visitType: visitType)
-        let res = places.applyObservation(visitObservation: visit).value
-        XCTAssertEqual(
-            bool,
-            res.isSuccess,
-            "Site added: \(url)., error value: \(res.failureValue ?? "wow")"
-        )
-    }
-
-    private func innerCheckSites(_ places: RustPlaces, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
-        // Retrieve the entry
-        places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).upon {
-            do {
-                XCTAssertTrue($0.isSuccess)
-                let successValue = try XCTUnwrap($0.successValue)
-                callback(successValue)
-            } catch {
-                XCTFail("Should not receive a nil successValue")
-                callback(Cursor<Site>())
-            }
-        }
-    }
 
     private func checkSites(
         _ places: RustPlaces,
@@ -335,7 +311,7 @@ class TestHistory: XCTestCase {
     }
 
     private func clear(_ places: RustPlaces) {
-        let expectation = self.expectation(description: "Wait for clear history")
+        let expectation = expectation(description: "Wait for clear history")
 
         profile.places.deleteEverythingHistory().uponQueue(.global()) { result in
             expectation .fulfill()
@@ -346,7 +322,7 @@ class TestHistory: XCTestCase {
     }
 
     private func checkVisits(_ places: RustPlaces, url: String) {
-        let expectation = self.expectation(description: "Wait for history")
+        let expectation = expectation(description: "Wait for history")
         places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).upon { result in
             XCTAssertTrue(result.isSuccess)
             places.queryAutocomplete(matchingSearchQuery: url, limit: 100).upon { result in
@@ -355,14 +331,18 @@ class TestHistory: XCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
+}
+
+struct TestHistoryHelper {
+    let numCmds = 10
 
     // Runs a random command on a database. Calls cb when finished.
-    private func runRandom(
+    func runRandom(
         _ places: inout RustPlaces,
         cmdIn: Int,
-        completion: @escaping () -> Void
+        completion: @escaping @Sendable () -> Void
     ) {
         var cmd = cmdIn
         if cmd < 0 {
@@ -388,11 +368,12 @@ class TestHistory: XCTestCase {
     }
 
     // Calls numCmds random methods on this database. val is a counter used by
-    // this interally (i.e. always pass zero for it). Calls cb when finished.
+    // this internally (i.e. always pass zero for it). Calls cb when finished.
     private func runMultiRandom(
         _ places: inout RustPlaces,
-        val: Int, numCmds: Int,
-        completion: @escaping () -> Void
+        val: Int,
+        numCmds: Int,
+        completion: @escaping @Sendable () -> Void
     ) {
         if val == numCmds {
             completion()
@@ -406,16 +387,48 @@ class TestHistory: XCTestCase {
     }
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
-    private func runRandom(
+    func runRandom(
         _ places: inout RustPlaces,
         queue: DispatchQueue,
-        completion: @escaping () -> Void
+        completion: @escaping @Sendable () -> Void
     ) {
-        queue.async { [places] in
+        queue.async { [places, numCmds] in
             var places = places
             // Each thread creates its own history provider
-            self.runMultiRandom(&places, val: 0, numCmds: self.numCmds) {
+            self.runMultiRandom(&places, val: 0, numCmds: numCmds) {
                 DispatchQueue.main.async(execute: completion)
+            }
+        }
+    }
+
+    func addSite(
+        _ places: RustPlaces,
+        url: String,
+        title: String,
+        bool: Bool = true,
+        visitType: VisitType = .link
+    ) {
+        _ = places.reopenIfClosed()
+        let site = Site.createBasicSite(url: url, title: title)
+        let visit = VisitObservation(url: site.url, title: site.title, visitType: visitType)
+        let res = places.applyObservation(visitObservation: visit).value
+        XCTAssertEqual(
+            bool,
+            res.isSuccess,
+            "Site added: \(url)., error value: \(res.failureValue ?? "wow")"
+        )
+    }
+
+    private func innerCheckSites(_ places: RustPlaces, callback: @escaping @Sendable (_ cursor: Cursor<Site>) -> Void) {
+        // Retrieve the entry
+        places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).upon {
+            do {
+                XCTAssertTrue($0.isSuccess)
+                let successValue = try XCTUnwrap($0.successValue)
+                callback(successValue)
+            } catch {
+                XCTFail("Should not receive a nil successValue")
+                callback(Cursor<Site>())
             }
         }
     }

@@ -1,0 +1,471 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Onboarding
+
+###############################################################################
+# Onboarding Telemetry Metrics
+# 
+# This file contains telemetry metrics for tracking user interactions
+# during the onboarding flow (both legacy UIKit and modern SwiftUI), including:
+# - Card views and navigation
+# - Button taps (primary, secondary, multiple choice)
+# - Onboarding dismissal
+#
+# The onboarding_variant extra key distinguishes between different flow UIs.
+# For all possible options, see onboardingFrameworkFeature.yaml's `OnboardingVariant`
+# enumeration (e.g. "legacy", "modern", "japan").
+###############################################################################
+
+# Onboarding metrics
+onboarding:
+  card_view:
+    type: event
+    description: |
+      Records when an onboarding card is shown
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          The name of the presented card.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern or legacy).
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  primary_button_tap:
+    type: event
+    description: |
+      Records when the primary button is tapped during the onboarding
+    extra_keys:
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / wallpapers / sign to sync)
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern or legacy).
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  secondary_button_tap:
+    type: event
+    description: |
+      Records when the secondary button is tapped during the onboarding
+    extra_keys:
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / wallpapers / sign to sync)
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern or legacy).
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  multiple_choice_button_tap:
+    type: event
+    description: |
+      Records when a multiple choice button is tapped during the onboarding
+    extra_keys:
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern or legacy).
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18358
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19678
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  close_tap:
+    type: event
+    description: |
+      Records when the user closes the onboarding.
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          The card presented when the onboarding was closed
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern or legacy).
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30844
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14566
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30798
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  terms_of_service_card:
+    type: event
+    description: |
+      User viewed the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  terms_of_service_accepted:
+    type: event
+    description: |
+      User clicked accept button on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  terms_of_service_link_clicked:
+    type: event
+    description: |
+      User clicked the terms of service link on the onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  terms_of_service_manage_link_clicked:
+    type: event
+    description: |
+      User clicked the manage link on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  terms_of_service_privacy_notice_link_clicked:
+    type: event
+    description: |
+      User clicked the privacy policy link on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  toggle_technical_interaction_data:
+    type: event
+    description: |
+      User toggled the preference to share technical and interaction data from the manage modal on the terms of service onboarding card.
+    extra_keys:
+      changed_to:
+        type: boolean
+        description: |
+          The value of the technical interaction data switch.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  toggle_automatic_crash_reports:
+    type: event
+    description: |
+      User toggled the preference to automatically send crash reports from the manage modal on the terms of service onboarding card.
+    extra_keys:
+      changed_to:
+        type: boolean
+        description: |
+          The value of the automatic crash reports switch.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  wallpaper_selected:
+    type: event
+    description: |
+      Recorded when the user selects a wallpaper from
+      the wallpaper onboarding screen.
+    extra_keys:
+      wallpaper_name:
+        type: string
+        description: |
+          The name of the wallpaper set.
+      wallpaper_type:
+        type: string
+        description: |
+          The name of the wallpaper set.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  wallpaper_selector_view:
+    type: event
+    description: |
+      Recorded when the wallpaper onboarding bottom sheet is shown to the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  wallpaper_selector_close:
+    type: event
+    description: |
+      Recorded when the wallpaper onboarding bottom sheet
+      is dismissed by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  wallpaper_selector_selected:
+    type: event
+    description: |
+      Recorded when the user selects a wallpaper from
+      the wallpaper onboarding bottom sheet. Wallpaper information
+      is sent in the extra keys.
+    extra_keys:
+      wallpaper_name:
+        type: string
+        description: |
+          The name of the wallpaper set.
+      wallpaper_type:
+        type: string
+        description: |
+          The name of the wallpaper set.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11675
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  notification_permission_prompt:
+    type: event
+    description: |
+      Records the users decision to enable/disable notifications.
+    extra_keys:
+      granted:
+        type: boolean
+        description: |
+          Whether the notification permission was granted.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  engagement_notification_tapped:
+    type: event
+    description: |
+      Records the users interaction with the engagement notification.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  engagement_notification_cancel:
+    type: event
+    description: |
+      Records the cancelation of a scheduled engagement notification.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+# Default Browser Sheet
+onboarding.default_browser_sheet:
+  go_to_settings_button_tapped:
+    type: event
+    description: |
+      Records when the Go To Settings button on default browser onboarding
+      is clicked. This applies to both legacy and modern onboarding flows.
+    extra_keys:
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern, legacy, or japan).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+      - https://github.com/mozilla-mobile/firefox-ios/issues/31366
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/31375
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  dismiss_button_tapped:
+    type: event
+    description: |
+      Records when default browser onboarding is dismissed.
+      This applies to both legacy and modern onboarding flows.
+    extra_keys:
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern, legacy, or japan).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+      - https://github.com/mozilla-mobile/firefox-ios/issues/31366
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/31375
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+

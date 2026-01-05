@@ -11,7 +11,15 @@
  */
 
 /* global loadBergamot */
-importScripts("chrome://global/content/translations/bergamot-translator.js");
+/// NOTE: We need the script-loader! flag here to tell webpack to expose any functions
+/// that are added to the global scope by bergamot-translator.js.
+/// Without this, the `loadBergamot` function would not be defined.
+import "script-loader!Assets/CC_Script/bergamot-translator.js";
+
+const ChromeUtils = { 
+  addProfilerMarker: () => {},
+  now: () => performance.now()
+};
 
 // Respect the preference "browser.translations.logLevel".
 let _loggingLevel = "Error";

@@ -22,6 +22,39 @@ struct HomepageLayoutMeasurementCache {
         let height: CGFloat
     }
 
+    struct JumpBackInMeasurement: Equatable {
+        struct Key: Equatable {
+            let syncedTabConfig: JumpBackInSyncedTabConfiguration?
+            let maxNumberOfLocalTabs: Int
+            let numberOfLocalTabsToShow: Int
+            let headerState: SectionHeaderConfiguration
+            let containerWidth: Double
+            let shouldShowSection: Bool
+            let contentSizeCategory: UIContentSizeCategory
+        }
+
+        let key: Key
+        let height: CGFloat
+    }
+
+    struct BookmarksMeasurement: Equatable {
+        struct Key: Equatable {
+            let bookmarks: [BookmarkConfiguration]
+            let headerState: SectionHeaderConfiguration
+            let containerWidth: Double
+            let shouldShowSection: Bool
+            let contentSizeCategory: UIContentSizeCategory
+        }
+
+        struct Result: Equatable {
+            let tallestCellHeight: CGFloat
+            let totalHeight: CGFloat
+        }
+
+        let key: Key
+        let result: Result
+    }
+
     struct StoriesMeasurement: Equatable {
         struct Key: Equatable {
             let stories: [MerinoStoryConfiguration]
@@ -54,6 +87,8 @@ struct HomepageLayoutMeasurementCache {
     }
 
     private var topSites: TopSitesMeasurement?
+    private var jumpBackIn: JumpBackInMeasurement?
+    private var bookmarks: BookmarksMeasurement?
     private var stories: StoriesMeasurement?
     private var searchBar: SearchBarMeasurement?
 
@@ -73,6 +108,24 @@ struct HomepageLayoutMeasurementCache {
     func height(for key: SearchBarMeasurement.Key) -> CGFloat? {
         guard let measurement = searchBar, measurement.key == key else { return nil }
         return measurement.height
+    }
+
+    mutating func setHeight(_ height: CGFloat, for key: JumpBackInMeasurement.Key) {
+        jumpBackIn = JumpBackInMeasurement(key: key, height: height)
+    }
+
+    func height(for key: JumpBackInMeasurement.Key) -> CGFloat? {
+        guard let measurement = jumpBackIn, measurement.key == key else { return nil }
+        return measurement.height
+    }
+
+    mutating func setResult(_ result: BookmarksMeasurement.Result, for key: BookmarksMeasurement.Key) {
+        bookmarks = BookmarksMeasurement(key: key, result: result)
+    }
+
+    func result(for key: BookmarksMeasurement.Key) -> BookmarksMeasurement.Result? {
+        guard let measurement = bookmarks, measurement.key == key else { return nil }
+        return measurement.result
     }
 
     mutating func setResult(_ result: StoriesMeasurement.Result, for key: StoriesMeasurement.Key) {

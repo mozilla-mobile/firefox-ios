@@ -8,23 +8,24 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class RecordVisitObservationManagerTests: XCTestCase {
     private var historyHandler: MockHistoryHandler!
     private var logger: MockLogger!
     private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         historyHandler = MockHistoryHandler()
         logger = MockLogger()
         profile = MockProfile()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile = nil
         logger = nil
         historyHandler = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testRecordVisitRecordsAndUpdatesLastObservation() {

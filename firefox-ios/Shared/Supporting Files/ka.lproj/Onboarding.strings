@@ -170,7 +170,7 @@
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "ბრაუზერის გასაუმჯობესებლად %1$@ გზავნის შემოწმებისა და გამოყენების მონაცემებს, რომელთაც გაეცნობა %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
-"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ ზრუნავს თქვენს პირადულობაზე. ვრცლად, იხილეთ %2$@";
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ ზრუნავს თქვენი პირადულობის დაცვაზე. ვრცლად იხილეთ %2$@";
 
 /* Agreement text for Privacy Notice. %1$@ is the app name (e.g. Firefox), %2$@ is the placeholder for the Privacy Notice link. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "%1$@ ზრუნავს თქვენს პირადულობაზე. ვრცლად იხილეთ %2$@";
@@ -281,7 +281,7 @@
 "Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "ბრაუზერის გასაუმჯობესებლად %1$@ გზავნის შემოწმებისა და გამოყენების მონაცემებს, რომელთაც გაეცნობა %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ ზრუნავს თქვენს პირადულობაზე. ვრცლად, იხილეთ %2$@";
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ ზრუნავს თქვენი პირადულობის დაცვაზე. ვრცლად იხილეთ %2$@";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "პირადულობის განაცხადი.";

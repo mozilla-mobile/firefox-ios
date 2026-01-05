@@ -1,5 +1,35 @@
+/* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "ใหม่! ตัวปกปิดอีเมลของ %@ พร้อมใช้งานบนมือถือแล้ว";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "ตัวปกปิดอีเมลฟรี 5 ตัวของคุณถูกใช้งานอยู่ เราจึงเลือกตัวหนึ่งมาให้คุณ";
+
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "คุณได้ใช้ตัวปกปิดอีเมลฟรี 5 ตัวของคุณหมดแล้ว เราจึงเลือกตัวหนึ่งใหม่ให้คุณใช้ซ้ำ";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "ตัวปกปิดอีเมลไม่พร้อมใช้งานในขณะนี้ โปรดลองอีกครั้งในอีกสักครู่";
+
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "แทรกตัวปกปิดอีเมลแล้ว";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "ซ่อนอีเมลจริงของคุณเพื่อป้องกันกล่องจดหมายจากสแปม บางเว็บไซต์อาจไม่รองรับคุณลักษณะนี้";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "ซ่อนอีเมลจริงของคุณเพื่อป้องกันกล่องจดหมายจากสแปม บางเว็บไซต์อาจไม่รองรับตัวปกปิดอีเมล";
+
+/* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
+"RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "เรียนรู้เพิ่มเติม";
+
+/* Button title which takes users to a webpage to manage their Relay email masks and related settings. */
+"RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146" = "จัดการตัวปกปิดอีเมล";
+
+/* Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay. */
+"RelayMask.RelayEmailMaskSettingsTitle.v146" = "ตัวปกปิดอีเมล";
+
+/* Label for settings toggle which allows users to enable or disable the suggestion of Relay email masks on registration forms, to provide anonymous email masking. */
+"RelayMask.RelayEmailMaskSuggestMasksToggle.v146" = "แนะนำตัวปกปิดอีเมล";
 
 /* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
 "RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "ใช้ตัวปกปิดอีเมล";

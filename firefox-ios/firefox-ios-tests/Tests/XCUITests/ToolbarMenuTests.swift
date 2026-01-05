@@ -6,15 +6,13 @@ import Foundation
 import XCTest
 
 class ToolbarMenuTests: BaseTestCase {
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306840
     func testToolbarMenu() {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         let hamburgerMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]

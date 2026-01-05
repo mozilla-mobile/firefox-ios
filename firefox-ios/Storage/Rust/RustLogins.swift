@@ -219,7 +219,7 @@ protocol LoginsProtocol {
     func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func use(login: Login, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void)
-    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void)
+    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable (Result<[Result<Bool?, Error>], Error>) -> Void)
     func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Bool?, Error>) -> Void)
 }
 
@@ -357,8 +357,8 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             do {
                 let record = try self.storage?.get(id: id)
                 completionHandler(.success(record))
-            } catch let err as NSError {
-                completionHandler(.failure(err))
+            } catch {
+                completionHandler(.failure(error))
             }
         }
     }
@@ -533,15 +533,29 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
         }
 
-    public func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void) {
-        for id in ids {
-            deleteLogin(id: id) { result in
-                var results: [Result<Bool?, Error>] = []
-                results.append(result)
-                if results.count == ids.count {
-                    completionHandler(results)
+    public func deleteLogins(
+        ids: [String],
+        completionHandler: @escaping @Sendable (Result<[Result<Bool?, Error>], Error>) -> Void
+    ) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            var results: [Result<Bool?, Error>] = []
+
+            for id in ids {
+                do {
+                    let existed = try self.storage?.delete(id: id)
+                    results.append(.success(existed))
+                } catch {
+                    results.append(.failure(error))
                 }
             }
+
+            completionHandler(.success(results))
         }
     }
 

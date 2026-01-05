@@ -140,7 +140,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         }
     }
 
-    // swiftlint:disable function_body_length
     private func runPresentationAnimation(
         context: UIViewControllerContextTransitioning,
         browserVC: BrowserViewController,
@@ -148,311 +147,156 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
-        let fancyView = browserVC.fancyView
+        // Snapshot of the BVC view
+        let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
+        bvcSnapshot.layer.cornerCurve = .continuous
+        bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        bvcSnapshot.layer.shouldRasterize = true
+        bvcSnapshot.clipsToBounds = true
+        bvcSnapshot.contentMode = .scaleAspectFill
 
-        if fancyView.alpha == 1 {
-            // Snapshot of the fancyView
-            let fancyViewSnapshot = fancyView.screenShotView
-            fancyViewSnapshot.layer.cornerCurve = .continuous
-            fancyViewSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-            fancyViewSnapshot.clipsToBounds = true
-            fancyViewSnapshot.contentMode = .scaleAspectFill
+        // Wrap bvcSnapshot in a container to support external border
+        let snapshotContainer = UIView(frame: bvcSnapshot.frame)
+        snapshotContainer.layer.cornerRadius = bvcSnapshot.layer.cornerRadius
+        snapshotContainer.layer.cornerCurve = .continuous
+        snapshotContainer.layer.shouldRasterize = true
+        snapshotContainer.clipsToBounds = false
+        bvcSnapshot.frame = snapshotContainer.bounds
 
-            // Wrap bvcSnapshot in a container to support external border
-            let snapshotContainer = UIView(frame: fancyViewSnapshot.frame)
-            snapshotContainer.layer.cornerRadius = fancyViewSnapshot.layer.cornerRadius
-            snapshotContainer.layer.cornerCurve = .continuous
-            snapshotContainer.clipsToBounds = false
-            fancyViewSnapshot.frame = snapshotContainer.bounds
+        // Create border layer
+        let theme = retrieveTheme()
+        // This borderWidth multiplier needed for smooth transition between end of animation and final selected state
+        let borderWidth: CGFloat = ExperimentTabCell.UX.selectedBorderWidth * 2
 
-            // Create border layer
-            let theme = retrieveTheme()
-            // This borderWidth multiplier needed for smooth transition between end of animation and final selected state
-            let borderWidth: CGFloat = ExperimentTabCell.UX.selectedBorderWidth * 2
+        let borderColor = selectedTab.isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let borderLayer = CAShapeLayer()
+        borderLayer.path = UIBezierPath(
+            roundedRect: snapshotContainer.bounds,
+            cornerRadius: ExperimentTabCell.UX.cornerRadius
+        ).cgPath
+        borderLayer.strokeColor = borderColor.cgColor
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.lineWidth = borderWidth
+        borderLayer.opacity = Float(UX.finalOpacity)
 
-            let borderColor = selectedTab.isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-            let borderLayer = CAShapeLayer()
-            borderLayer.path = UIBezierPath(
-                roundedRect: snapshotContainer.bounds,
-                cornerRadius: ExperimentTabCell.UX.cornerRadius
-            ).cgPath
-            borderLayer.strokeColor = borderColor.cgColor
-            borderLayer.fillColor = UIColor.clear.cgColor
-            borderLayer.lineWidth = borderWidth
-            borderLayer.opacity = Float(UX.finalOpacity)
+        snapshotContainer.layer.addSublayer(borderLayer)
+        snapshotContainer.addSubview(bvcSnapshot)
 
-            snapshotContainer.layer.addSublayer(borderLayer)
-            snapshotContainer.addSubview(fancyViewSnapshot)
+        // Dimmed background view
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .init(white: UX.dimmedWhiteValue, alpha: UX.dimmedAlpha)
+        backgroundView.frame = finalFrame
 
-            // Dimmed background view
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .init(white: UX.dimmedWhiteValue, alpha: UX.dimmedAlpha)
-            backgroundView.frame = finalFrame
+        // Add views to container
+        context.containerView.addSubview(destinationController.view)
+        context.containerView.addSubview(backgroundView)
+        context.containerView.addSubview(snapshotContainer)
 
-            // Add views to container
-            context.containerView.addSubview(destinationController.view)
-            context.containerView.addSubview(backgroundView)
-            context.containerView.addSubview(snapshotContainer)
+        destinationController.view.frame = finalFrame
+        destinationController.view.layoutIfNeeded()
 
-            destinationController.view.frame = finalFrame
-            destinationController.view.layoutIfNeeded()
+        guard let panel = currentExperimentPanel as? ThemedNavigationController,
+              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
+        else { return }
 
-            guard let panel = currentExperimentPanel as? ThemedNavigationController,
-                  let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
-            else { return }
+        let cv = panelViewController.tabDisplayView.collectionView
+        guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
+        else { return }
 
-            let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
-                  let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-            else { return }
+        var tabCell: ExperimentTabCell?
+        var cellFrame: CGRect?
 
+        if let indexPath = dataSource.indexPath(for: item) {
+            cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
             cv.layoutIfNeeded()
-            var tabCell: ExperimentTabCell?
-            var cellFrame: CGRect?
-
-            if let indexPath = dataSource.indexPath(for: item) {
-                cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-                cv.layoutIfNeeded()
-                if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
-                    tabCell = cell
-                    cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
-                    cell.isHidden = true
-                    cell.setUnselectedState(theme: theme)
-                    cell.alpha = UX.clearAlpha
-                }
+            if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
+                tabCell = cell
+                cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
+                cell.isHidden = true
+                cell.setUnselectedState(theme: theme)
+                cell.alpha = UX.clearAlpha
             }
-
-            // Animate
-            cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            cv.alpha = UX.halfAlpha
-
-            CATransaction.begin()
-            CATransaction.setAnimationDuration(UX.presentDuration)
-            CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeOut))
-            CATransaction.setCompletionBlock { [weak self, weak tabCell] in
-                snapshotContainer.removeFromSuperview()
-                self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
-            }
-
-            // IMPORTANT NOTE FOR SIMULATOR TESTING
-            // The Debug > Slow Animations setting on the simulator does not render
-            // this border animation correctly on XCode 16.2
-            // Alternative: Make recording of the simulator animation
-            // and play it back at a reduced speed or go frame-by-frame.
-            let lineWidthAnimation = CABasicAnimation(keyPath: UX.lineWidthKeyPath)
-            lineWidthAnimation.fromValue = UX.initialBorderWidth
-            lineWidthAnimation.toValue = borderWidth
-            lineWidthAnimation.duration = UX.presentDuration
-            lineWidthAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-            borderLayer.add(lineWidthAnimation, forKey: UX.lineWidthKeyPath)
-            borderLayer.lineWidth = borderWidth
-
-            let fadeAnimation = CABasicAnimation(keyPath: UX.opacityKeyPath)
-            fadeAnimation.fromValue = UX.initialOpacity
-            fadeAnimation.toValue = UX.finalOpacity
-            fadeAnimation.duration = UX.presentDuration
-            fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            borderLayer.add(fadeAnimation, forKey: UX.opacityKeyPath)
-
-            let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
-                if let frame = cellFrame {
-                    snapshotContainer.frame = frame
-                    fancyViewSnapshot.frame = snapshotContainer.bounds
-
-                    snapshotContainer.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-                    fancyViewSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-                    // Animate path to match new size
-                    let oldPath = borderLayer.path
-                    let newPath = UIBezierPath(
-                        roundedRect: snapshotContainer.bounds,
-                        cornerRadius: ExperimentTabCell.UX.cornerRadius
-                    ).cgPath
-
-                    let pathAnimation = CABasicAnimation(keyPath: UX.animationPath)
-                    pathAnimation.fromValue = oldPath
-                    pathAnimation.toValue = newPath
-                    pathAnimation.duration = UX.presentDuration
-                    pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-
-                    borderLayer.add(pathAnimation, forKey: UX.animationPath)
-                    borderLayer.path = newPath
-                } else {
-                    snapshotContainer.alpha = UX.clearAlpha
-                }
-                cv.transform = .identity
-                cv.alpha = UX.opaqueAlpha
-                backgroundView.alpha = UX.clearAlpha
-            }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak tabCell] in
-                tabCell?.isHidden = false
-                UIView.animate(withDuration: 0.1) {
-                    tabCell?.alpha = UX.opaqueAlpha
-                }
-            }
-
-            animator.addCompletion { _ in
-                backgroundView.removeFromSuperview()
-                borderLayer.removeFromSuperlayer()
-                context.completeTransition(true)
-            }
-
-            animator.startAnimation()
-
-            CATransaction.commit()
-        } else {
-            // Snapshot of the BVC view
-            let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
-            bvcSnapshot.layer.cornerCurve = .continuous
-            bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-            bvcSnapshot.clipsToBounds = true
-            bvcSnapshot.contentMode = .scaleAspectFill
-
-            // Wrap bvcSnapshot in a container to support external border
-            let snapshotContainer = UIView(frame: bvcSnapshot.frame)
-            snapshotContainer.layer.cornerRadius = bvcSnapshot.layer.cornerRadius
-            snapshotContainer.layer.cornerCurve = .continuous
-            snapshotContainer.clipsToBounds = false
-            bvcSnapshot.frame = snapshotContainer.bounds
-
-            // Create border layer
-            let theme = retrieveTheme()
-            // This borderWidth multiplier needed for smooth transition between end of animation and final selected state
-            let borderWidth: CGFloat = ExperimentTabCell.UX.selectedBorderWidth * 2
-
-            let borderColor = selectedTab.isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-            let borderLayer = CAShapeLayer()
-            borderLayer.path = UIBezierPath(
-                roundedRect: snapshotContainer.bounds,
-                cornerRadius: ExperimentTabCell.UX.cornerRadius
-            ).cgPath
-            borderLayer.strokeColor = borderColor.cgColor
-            borderLayer.fillColor = UIColor.clear.cgColor
-            borderLayer.lineWidth = borderWidth
-            borderLayer.opacity = Float(UX.finalOpacity)
-
-            snapshotContainer.layer.addSublayer(borderLayer)
-            snapshotContainer.addSubview(bvcSnapshot)
-
-            // Dimmed background view
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .init(white: UX.dimmedWhiteValue, alpha: UX.dimmedAlpha)
-            backgroundView.frame = finalFrame
-
-            // Add views to container
-            context.containerView.addSubview(destinationController.view)
-            context.containerView.addSubview(backgroundView)
-            context.containerView.addSubview(snapshotContainer)
-
-            destinationController.view.frame = finalFrame
-            destinationController.view.layoutIfNeeded()
-
-            guard let panel = currentExperimentPanel as? ThemedNavigationController,
-                  let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
-            else { return }
-
-            let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
-                  let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-            else { return }
-
-            cv.layoutIfNeeded()
-            var tabCell: ExperimentTabCell?
-            var cellFrame: CGRect?
-
-            if let indexPath = dataSource.indexPath(for: item) {
-                cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-                cv.layoutIfNeeded()
-                if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
-                    tabCell = cell
-                    cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
-                    cell.isHidden = true
-                    cell.setUnselectedState(theme: theme)
-                    cell.alpha = UX.clearAlpha
-                }
-            }
-
-            // Animate
-            cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            cv.alpha = UX.halfAlpha
-
-            CATransaction.begin()
-            CATransaction.setAnimationDuration(UX.presentDuration)
-            CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeOut))
-            CATransaction.setCompletionBlock { [weak self, weak tabCell] in
-                snapshotContainer.removeFromSuperview()
-                self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
-            }
-
-            // IMPORTANT NOTE FOR SIMULATOR TESTING
-            // The Debug > Slow Animations setting on the simulator does not render
-            // this border animation correctly on XCode 16.2
-            // Alternative: Make recording of the simulator animation
-            // and play it back at a reduced speed or go frame-by-frame.
-            let lineWidthAnimation = CABasicAnimation(keyPath: UX.lineWidthKeyPath)
-            lineWidthAnimation.fromValue = UX.initialBorderWidth
-            lineWidthAnimation.toValue = borderWidth
-            lineWidthAnimation.duration = UX.presentDuration
-            lineWidthAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-            borderLayer.add(lineWidthAnimation, forKey: UX.lineWidthKeyPath)
-            borderLayer.lineWidth = borderWidth
-
-            let fadeAnimation = CABasicAnimation(keyPath: UX.opacityKeyPath)
-            fadeAnimation.fromValue = UX.initialOpacity
-            fadeAnimation.toValue = UX.finalOpacity
-            fadeAnimation.duration = UX.presentDuration
-            fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            borderLayer.add(fadeAnimation, forKey: UX.opacityKeyPath)
-
-            let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
-                if let frame = cellFrame {
-                    snapshotContainer.frame = frame
-                    bvcSnapshot.frame = snapshotContainer.bounds
-
-                    snapshotContainer.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-                    bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-                    // Animate path to match new size
-                    let oldPath = borderLayer.path
-                    let newPath = UIBezierPath(
-                        roundedRect: snapshotContainer.bounds,
-                        cornerRadius: ExperimentTabCell.UX.cornerRadius
-                    ).cgPath
-
-                    let pathAnimation = CABasicAnimation(keyPath: UX.animationPath)
-                    pathAnimation.fromValue = oldPath
-                    pathAnimation.toValue = newPath
-                    pathAnimation.duration = UX.presentDuration
-                    pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-
-                    borderLayer.add(pathAnimation, forKey: UX.animationPath)
-                    borderLayer.path = newPath
-                } else {
-                    snapshotContainer.alpha = UX.clearAlpha
-                }
-                cv.transform = .identity
-                cv.alpha = UX.opaqueAlpha
-                backgroundView.alpha = UX.clearAlpha
-            }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak tabCell] in
-                tabCell?.isHidden = false
-                UIView.animate(withDuration: 0.1) {
-                    tabCell?.alpha = UX.opaqueAlpha
-                }
-            }
-
-            animator.addCompletion { _ in
-                backgroundView.removeFromSuperview()
-                borderLayer.removeFromSuperlayer()
-                context.completeTransition(true)
-            }
-
-            animator.startAnimation()
-
-            CATransaction.commit()
         }
+
+        // Animate
+        cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+        cv.alpha = UX.halfAlpha
+
+        CATransaction.begin()
+        CATransaction.setAnimationDuration(UX.presentDuration)
+        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeOut))
+        CATransaction.setCompletionBlock { [weak self, weak tabCell] in
+            snapshotContainer.removeFromSuperview()
+            self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
+        }
+
+        // IMPORTANT NOTE FOR SIMULATOR TESTING
+        // The Debug > Slow Animations setting on the simulator does not render this border animation correctly on XCode 16.2
+        // Alternative: Make recording of the simulator animation and play it back at a reduced speed or go frame-by-frame.
+        let lineWidthAnimation = CABasicAnimation(keyPath: UX.lineWidthKeyPath)
+        lineWidthAnimation.fromValue = UX.initialBorderWidth
+        lineWidthAnimation.toValue = borderWidth
+        lineWidthAnimation.duration = UX.presentDuration
+        lineWidthAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+        borderLayer.add(lineWidthAnimation, forKey: UX.lineWidthKeyPath)
+        borderLayer.lineWidth = borderWidth
+
+        let fadeAnimation = CABasicAnimation(keyPath: UX.opacityKeyPath)
+        fadeAnimation.fromValue = UX.initialOpacity
+        fadeAnimation.toValue = UX.finalOpacity
+        fadeAnimation.duration = UX.presentDuration
+        fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        borderLayer.add(fadeAnimation, forKey: UX.opacityKeyPath)
+
+        let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
+            if let frame = cellFrame {
+                snapshotContainer.frame = frame
+                bvcSnapshot.frame = snapshotContainer.bounds
+
+                snapshotContainer.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+                bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+                // Animate path to match new size
+                let oldPath = borderLayer.path
+                let newPath = UIBezierPath(
+                    roundedRect: snapshotContainer.bounds,
+                    cornerRadius: ExperimentTabCell.UX.cornerRadius
+                ).cgPath
+
+                let pathAnimation = CABasicAnimation(keyPath: UX.animationPath)
+                pathAnimation.fromValue = oldPath
+                pathAnimation.toValue = newPath
+                pathAnimation.duration = UX.presentDuration
+                pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+                borderLayer.add(pathAnimation, forKey: UX.animationPath)
+                borderLayer.path = newPath
+            } else {
+                snapshotContainer.alpha = UX.clearAlpha
+            }
+            cv.transform = .identity
+            cv.alpha = UX.opaqueAlpha
+            backgroundView.alpha = UX.clearAlpha
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak tabCell] in
+            tabCell?.isHidden = false
+            UIView.animate(withDuration: 0.1) {
+                tabCell?.alpha = UX.opaqueAlpha
+            }
+        }
+
+        animator.addCompletion { _ in
+            backgroundView.removeFromSuperview()
+            borderLayer.removeFromSuperlayer()
+            context.completeTransition(true)
+        }
+
+        animator.startAnimation()
+
+        CATransaction.commit()
     }
-    // swiftlint:enable function_body_length
 
     private func unhideCellBorder(tabCell: ExperimentTabCell?, isPrivate: Bool, theme: Theme) {
         guard let tab = tabCell else { return }
@@ -527,11 +371,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.contentMode = .scaleAspectFill
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        tabSnapshot.layer.shouldRasterize = true
 
         contentContainer.isHidden = true
 
         toView.layer.cornerCurve = .continuous
         toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        toView.layer.shouldRasterize = true
         toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
 
@@ -559,6 +405,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             toView.layer.cornerRadius = UX.zeroCornerRadius
             tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
         } completion: { _ in
+            toView.layer.shouldRasterize = false
             contentContainer.isHidden = false
             tabCell?.isHidden = false
             self.view.removeFromSuperview()
@@ -605,8 +452,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         return dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
             case .tab(let model):
-                return model.id == id
-            case .inactiveTab(let model):
                 return model.id == id
             }
         }

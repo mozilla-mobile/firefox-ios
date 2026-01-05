@@ -1,4 +1,4 @@
-name: Deploy DocC
+name: Build and publish ComponentLibrary DocC
 on:
   workflow_dispatch: # Allow manual runs
   push:
@@ -19,10 +19,10 @@ concurrency:
 
 jobs:
   docs:
-    runs-on: macos-15
+    runs-on: macos-26
     strategy:
       matrix:
-        xcode: ["16.4"]
+        xcode: ["26.1"]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

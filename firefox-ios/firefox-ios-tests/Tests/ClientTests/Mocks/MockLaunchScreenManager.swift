@@ -23,9 +23,10 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
 
     override init(
         windowUUID: WindowUUID,
-        profile: Profile,
+        profile: Profile = AppContainer.shared.resolve(),
         messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
-        onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        onboardingModel: OnboardingKitViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade),
+        introScreenManager: IntroScreenManagerProtocol? = nil
     ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
@@ -34,7 +35,11 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
                                                telemetryUtility: telemetryUtility,
                                                windowUUID: windowUUID)
         self.surveySurfaceManager = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
-        super.init(windowUUID: windowUUID)
+        super.init(windowUUID: windowUUID,
+                   profile: profile,
+                   messageManager: messageManager,
+                   onboardingModel: onboardingModel,
+                   introScreenManager: introScreenManager)
     }
 
     override func startLoading(appVersion: String) {

@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class ShortcutRouteTests: XCTestCase {
     func testNewTabShortcut() {
         let subject = createSubject()

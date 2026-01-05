@@ -231,7 +231,9 @@ final class WindowManagerImplementation: WindowManager {
                                level: .fatal,
                                category: .window)
                     let uuidsToDelete = Array(onDiskUUIDs.dropFirst())
-                    Task { await tabDataStore.removeWindowData(forUUIDs: uuidsToDelete) }
+                    Task { [tabDataStore] in
+                        await tabDataStore.removeWindowData(forUUIDs: uuidsToDelete)
+                    }
                 }
             }
         } else {
@@ -299,6 +301,7 @@ final class WindowManagerImplementation: WindowManager {
         reservedUUIDs.remove(at: reservedUUIDIdx)
     }
 
+    @MainActor
     private func saveSimpleTabs() {
         let providers = allWindowTabManagers() as? [WindowSimpleTabsProvider] ?? []
         widgetSimpleTabsCoordinator.saveSimpleTabs(for: providers)

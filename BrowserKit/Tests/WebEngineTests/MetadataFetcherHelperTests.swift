@@ -10,14 +10,14 @@ import XCTest
 final class MetadataFetcherHelperTests: XCTestCase {
     var metadataDelegate: MockMetadataFetcherDelegate!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         metadataDelegate = MockMetadataFetcherDelegate()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         metadataDelegate = nil
+        try await super.tearDown()
     }
 
     func testFetchFromSessionGivenNotWebpageURLThenPageMetadataNil() async {

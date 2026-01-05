@@ -18,8 +18,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private var homepageSettingsScreen: HomepageSettingsScreen!
     private var firefoxHomeScreen: FirefoxHomePageScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         topSitesScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
@@ -28,9 +28,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
         firefoxHomeScreen = FirefoxHomePageScreen(app: app)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func checkBookmarked() {
@@ -49,10 +49,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testBookmarkingUI() {
         app.launch()
         // Go to a webpage, and add to bookmarks, check it's added
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -65,8 +61,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
             navigator.performAction(Action.CloseURLBarOpen)
         }
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
 
         navigator.nowAt(BrowserTab)
@@ -76,7 +70,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_0"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_0"
         XCTAssertEqual(app.cells[identifier].label, "Example Domain")
         app.cells[identifier].waitAndTap()
         navigator.nowAt(BrowserTab)
@@ -129,8 +123,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testValidateBookmarksOptions() {
         app.launch()
         // Add a bookmark
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -146,8 +138,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // Smoketest
     func testBookmarksAwesomeBar() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         XCTExpectFailure("The app was not launched", strict: false) {
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                      timeout: TIMEOUT_LONG)
@@ -162,8 +152,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "https://mozilla.org")
 
         // Site table exists but is empty
@@ -190,8 +178,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // SmokeTest TAE
     func testBookmarksAwesomeBar_TAE() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         XCTExpectFailure("The app was not launched", strict: false) {
             topSitesScreen.assertVisible()
         }
@@ -205,8 +191,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Enter new url
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "https://mozilla.org")
 
@@ -372,8 +356,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306911
     func testRecentlyBookmarked() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -394,8 +376,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306866
     func testEditBookmark() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -422,6 +402,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.launch()
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
+            navigator.nowAt(NewTabScreen)
             validateLongTapOptionsFromBookmarkLink(isExperiment: true)
         }
     }
@@ -429,8 +410,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307054
     func testBookmark() {
         app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(url_3)
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -463,10 +442,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         XCTAssertEqual(bookmarksToggle.value! as? String, "0", "Bookmark toogle is not disabled")
         navigator.nowAt(HomeSettings)
-        navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapIfExists()
         mozWaitForElementToNotExist(app.cells["BookmarksCell"])
-        navigator.nowAt(BrowserTab)
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
             app.swipeUp()
@@ -478,7 +457,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         XCTAssertEqual(bookmarksToggle.value! as? String, "1", "Bookmark toogle is not enabled")
         navigator.nowAt(HomeSettings)
-        navigator.goto(BrowserTab)
+        navigator.goto(HomePanelsScreen)
         mozWaitForElementToExist(app.cells["BookmarksCell"])
     }
 
@@ -541,11 +520,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         switchToTabAndValidate(nrOfTabs: "3")
 
         // Tap to "Open in Private Tab"
-        if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
-            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        } else {
-            navigator.performAction(Action.GoToHomePage)
-        }
+        navigator.performAction(Action.GoToHomePage)
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         longPressBookmarkCell()
         contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
@@ -556,8 +531,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         navigator.goto(TabTray)
         // Tap to "Remove bookmark"
-        let action = isExperiment ? Action.ToggleExperimentRegularMode : Action.ToggleRegularMode
-        navigator.toggleOn(userState.isPrivate, withAction: action)
+        if XCUIDevice.shared.orientation == .landscapeLeft {
+            navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        } else {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        }
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if iPad() {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()

@@ -5,15 +5,13 @@
 import XCTest
 
 class HomeButtonTests: BaseTestCase {
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306925
     func testGoHome() throws {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -35,8 +33,6 @@ class HomeButtonTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306883
     func testSwitchHomepageKeyboardRaisedUp() {
         // Open a new tab and load a web page
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
 

@@ -18,9 +18,9 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
     private lazy var allowBlockingUniversalLinksPolicy = WKNavigationActionPolicy(rawValue: allowPolicyRawValue + 2)
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = MockTabManager()
@@ -28,14 +28,15 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         setWebEngineIntegrationEnabled(false)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile = nil
         tabManager = nil
         fileManager = nil
         DependencyHelperMock().reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
+    @MainActor
     func testWKUIDelegate_isBrowserWebUIDelegate_whenWebEngineIntegrationIsEnabled() {
         let subject = createSubject()
 
@@ -44,6 +45,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         XCTAssertTrue(subject.wkUIDelegate is BrowserWebUIDelegate)
     }
 
+    @MainActor
     func testWKUIDelegate_isBrowserViewController_whenWebEngineIntegrationIsDisabled() {
         let subject = createSubject()
 
@@ -336,6 +338,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(
             profile: profile,
@@ -346,6 +349,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         return subject
     }
 
+    @MainActor
     private func anyWebView(url: URL? = nil) -> MockTabWebView {
         let tab = MockTabWebView(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
         tab.loadedURL = url

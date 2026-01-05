@@ -146,6 +146,60 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
         clickUrl: nil
     )
 
+    private let perplexity_testEngine =
+    SearchEngineDefinition(
+        aliases: ["perplexity"],
+        charset: "UTF-8",
+        classification: .general,
+        identifier: "perplexity",
+        isNewUntil: nil,
+        name: "Perplexity",
+        optional: false,
+        partnerCode: "firefox",
+        telemetrySuffix: "",
+        urls: SearchEngineUrls(
+            search: SearchEngineUrl(
+                base: "https://www.perplxity.ai/search",
+                method: "GET",
+                params: [
+                    SearchUrlParam(
+                        name: "pc",
+                        value: "{partnerCode}",
+                        enterpriseValue: nil,
+                        experimentConfig: nil
+                    )
+                ],
+                searchTermParamName: "q",
+                displayName: nil
+            ),
+            suggestions: SearchEngineUrl(
+                base: "https://www.suggest.perplxity.ai/suggest",
+                method: "GET",
+                params: [],
+                searchTermParamName: "q",
+                displayName: nil
+            ),
+            trending: SearchEngineUrl(
+                base: "https://www.perplexity.ai/rest/autosuggest/list-trending-suggest",
+                method: "GET",
+                params: [
+                    SearchUrlParam(
+                        name: "lang",
+                        value: "{acceptLanguages}",
+                        enterpriseValue: nil,
+                        experimentConfig: nil
+                    )
+                ],
+                searchTermParamName: "q",
+                displayName: nil
+            ),
+            searchForm: nil,
+            visualSearch: nil
+        ),
+        orderHint: nil,
+        clickUrl: nil
+    )
+
     func testConvertGoogleEngineSearchURL() {
         let engine = google_US_testEngine
         let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(engine.urls.search,
@@ -197,6 +251,35 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
         let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(engine.urls.search,
                                                                                for: engine)
         let expected = "https://dict.leo.org/englisch-deutsch/{searchTerms}?foo=bar"
+        XCTAssertEqual(result, expected)
+    }
+
+    func testPerplexityTrendingURLWithUS() {
+        let engine = perplexity_testEngine
+        let localeProvider = MockLocaleProvider.defaultEN()
+        let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(
+            engine.urls.trending,
+            for: engine,
+            with: localeProvider
+        )
+        let expected = "https://www.perplexity.ai/rest/autosuggest/list-trending-suggest?lang=en-US&q={searchTerms}"
+        XCTAssertEqual(result, expected)
+    }
+
+    func testPerplexityTrendingURLWithDE() {
+        let engine = perplexity_testEngine
+        let localeProvider = MockLocaleProvider(
+            current: Locale(identifier: "de-US"),
+            preferredLanguages: ["de"],
+            localeRegionCode: "",
+            searchRegionCode: ""
+        )
+        let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(
+            engine.urls.trending,
+            for: engine,
+            with: localeProvider
+        )
+        let expected = "https://www.perplexity.ai/rest/autosuggest/list-trending-suggest?lang=de&q={searchTerms}"
         XCTAssertEqual(result, expected)
     }
 }

@@ -62,6 +62,7 @@ extension AppState {
     }
 }
 
+@MainActor
 let middlewares = [
     FeltPrivacyMiddleware().privacyManagerProvider,
     MainMenuMiddleware().mainMenuProvider,

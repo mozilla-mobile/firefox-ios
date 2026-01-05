@@ -10,6 +10,7 @@ import Storage
 protocol RecentSearchProvider {
     func addRecentSearch(_ term: String, url: String?)
     func loadRecentSearches(completion: @escaping @Sendable ([String]) -> Void)
+    func clear(completion: @escaping @Sendable (Result<(), any Error>) -> Void)
 }
 
 /// A provider that manages recent search terms from a user's history storage.
@@ -57,7 +58,7 @@ final class DefaultRecentSearchProvider: RecentSearchProvider {
     /// Only care about returning the `maxNumberOfSuggestions`.
     /// We don't have an interface to fetch only a certain amount, so we follow what Android does for now.
     func loadRecentSearches(completion: @escaping @Sendable ([String]) -> Void) {
-        historyStorage.getMostRecentHistoryMetadata(limit: maxNumberOfSuggestions) { result in
+        historyStorage.getMostRecentSearchHistoryMetadata(limit: maxNumberOfSuggestions) { result in
             if case .success(let historyMetadata) = result {
                 let uniqueSearchTermResult = historyMetadata.compactMap { $0.searchTerm }
                     .uniqued()
@@ -65,6 +66,12 @@ final class DefaultRecentSearchProvider: RecentSearchProvider {
             } else {
                 completion([])
             }
+        }
+    }
+
+    func clear(completion: @escaping @Sendable (Result<(), any Error>) -> Void) {
+        historyStorage.deleteSearchHistoryMetadata { result in
+            completion(result)
         }
     }
 }

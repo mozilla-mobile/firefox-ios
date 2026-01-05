@@ -7,15 +7,16 @@ import XCTest
 
 @testable import Client
 
-final class TrendingSearchClientTest: XCTestCase {
-    override func setUp() {
-        super.setUp()
+@MainActor
+final class TrendingSearchClientTest: XCTestCase, @unchecked Sendable {
+    override func setUp() async throws {
+        try await super.setUp()
         clearState()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         clearState()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_getTrendingSearches_withSuccess_returnsExpectedSearches() async throws {
@@ -44,10 +45,8 @@ final class TrendingSearchClientTest: XCTestCase {
         let subject = createSubject()
         loadStubResponse(response: nil, statusCode: 200, error: nil)
 
-        await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
+        await assertAsyncThrowsEqual(TrendingSearchClientError.unableToParseJsonData) {
             try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
-        } verify: { err in
-             XCTAssertEqual(err, .unableToParseJsonData)
         }
     }
 
@@ -55,10 +54,8 @@ final class TrendingSearchClientTest: XCTestCase {
         let subject = createSubject()
         loadStubResponse(response: nil, statusCode: 404, error: nil)
 
-        await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
+        await assertAsyncThrowsEqual(TrendingSearchClientError.invalidHTTPResponse) {
             try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
-        } verify: { err in
-             XCTAssertEqual(err, .invalidHTTPResponse)
         }
     }
 
@@ -67,7 +64,7 @@ final class TrendingSearchClientTest: XCTestCase {
         enum TestError: Error { case example }
         loadStubResponse(response: nil, statusCode: 200, error: TestError.example)
 
-        await assertAsyncThrows(ofType: Error.self) {
+        await assertAsyncThrows(ofType: NSError.self) {
             try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
         } verify: { err in
             XCTAssertNotNil(err)
@@ -78,10 +75,8 @@ final class TrendingSearchClientTest: XCTestCase {
         loadStubResponse(response: malformedResponse, statusCode: 200, error: nil)
         let subject = createSubject()
 
-        await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
+        await assertAsyncThrowsEqual(TrendingSearchClientError.unableToParseJsonData) {
             try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
-        } verify: { err in
-             XCTAssertEqual(err, .unableToParseJsonData)
         }
     }
 
@@ -89,10 +84,8 @@ final class TrendingSearchClientTest: XCTestCase {
         loadStubResponse(response: emptyResponse, statusCode: 200, error: nil)
         let subject = createSubject()
 
-        await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
+        await assertAsyncThrowsEqual(TrendingSearchClientError.unableToParseJsonData) {
             try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
-        } verify: { err in
-            XCTAssertEqual(err, .unableToParseJsonData)
         }
     }
 
@@ -108,24 +101,6 @@ final class TrendingSearchClientTest: XCTestCase {
         let config = URLSessionConfiguration.ephemeralMPTCP
         config.protocolClasses = [URLProtocolStub.self]
         return URLSession(configuration: config)
-    }
-
-    /// Convenience method to simplify error checking in the test cases
-    func assertAsyncThrows<E: Error, T>(
-        ofType type: E.Type,
-        _ expression: () async throws -> T,
-        file: StaticString = #filePath,
-        line: UInt = #line,
-        verify: ((E) -> Void)? = nil
-    ) async {
-        do {
-            let results = try await expression()
-            XCTFail("Expected to throw \(E.self), but received \(results)", file: file, line: line)
-        } catch let error as E {
-            verify?(error)
-        } catch {
-            XCTFail("Threw \(error), expected \(E.self)", file: file, line: line)
-        }
     }
 
     // MARK: URLProtocolStub

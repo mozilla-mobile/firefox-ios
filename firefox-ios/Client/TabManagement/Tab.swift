@@ -101,14 +101,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return !isPrivate
     }
 
-    var isNormalActive: Bool {
-        return !isPrivate && (isInactiveTabsEnabled ? isActive : true)
-    }
-
-    var isNormalAndInactive: Bool {
-        return !isPrivate && (isInactiveTabsEnabled ? isInactive : false)
-    }
-
     /// The window associated with the tab (where the tab lives and will be displayed).
     /// Currently tabs cannot be actively moved between windows on iPadOS, however this
     /// may change in the future.
@@ -135,7 +127,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
-    var tabUUID: TabUUID = UUID().uuidString
+    // TODO: FXIOS-14381 This can't be nonisolated because it is a var but it is only set once.
+    // We should probably just do this as part of a Tab init from TabData but it will
+    // be a bigger refactor.
+    nonisolated(unsafe) var tabUUID: TabUUID = UUID().uuidString
     private var screenshotUUIDString: String?
 
     var screenshotUUID: UUID? {
@@ -427,38 +422,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
-    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
-    var isInactive: Bool {
-        let currentDate = Date()
-        let inactiveDate: Date
-
-        // Check if we're debugging for inactive tabs to easily test in code
-        let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterInactiveTabsOverride)
-        let option = FasterInactiveTabsOption(rawValue: rawValue) ?? .normal
-        switch option {
-        case .normal:
-            // Normal operation when no debug setting overrides the inactive tabs timeout
-            inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
-        case .tenSeconds:
-            inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
-        case .oneMinute:
-            inactiveDate = Calendar.current.date(byAdding: .minute, value: -1, to: currentDate) ?? Date()
-        case .twoMinutes:
-            inactiveDate = Calendar.current.date(byAdding: .minute, value: -2, to: currentDate) ?? Date()
-        }
-
-        // If the tabDate is older than our inactive date cutoff, return true
-        let tabDate = Date.fromTimestamp(lastExecutedTime)
-        return tabDate <= inactiveDate
-    }
-
-    /// Returns true if this tab is considered active (has been executed within a specific numbers of days).
-    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
-    var isActive: Bool {
-        return !isInactive
-    }
-
     fileprivate(set) var screenshot: UIImage?
 
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
@@ -476,12 +439,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     private var webViewLoadingObserver: NSKeyValueObservation?
 
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
-
-    // MARK: - Feature flags
-
-    var isInactiveTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
-    }
 
     // MARK: - Dependencies
     var profile: Profile
@@ -541,8 +498,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
                 title: title ?? displayTitle,
                 history: filteredReversedHistory,
                 lastUsed: lastExecutedTime,
-                icon: faviconURL?.asURL,
-                inactive: isInactive
+                icon: faviconURL?.asURL
             )
         }
 
@@ -881,18 +837,16 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     // MARK: - Static Helpers
 
-    /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
-    /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
+    /// Returns true if the tabs both have the same type of private or normal.
+    /// Simply checks the `isPrivate` of both tabs.
     func isSameTypeAs(_ otherTab: Tab) -> Bool {
         switch (self.isPrivate, otherTab.isPrivate) {
         case (true, true):
-            // Two private tabs are always lumped together in the same type regardless of their last execution time
+            // Two private tabs are always lumped together in the same type
             return true
         case (false, false):
-            // Two normal tabs are only the same type if they're both active, or both inactive
-            return isInactiveTabsEnabled
-                ? self.isActive == otherTab.isActive
-                : true
+            // Two normal tabs are always lumped together in the same type
+            return true
         default:
             return false
         }
@@ -1289,8 +1243,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
             refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
             refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
             refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height),
-            refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
+            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
         ])
         refresh.startObservingContentScroll()
         pullRefresh = refresh

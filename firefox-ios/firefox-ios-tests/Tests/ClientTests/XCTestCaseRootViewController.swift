@@ -9,16 +9,16 @@ class XCTestCaseRootViewController: XCTestCase {
     var rootViewController: UIViewController!
     var window: UIWindow!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         rootViewController = UIViewController()
         window = UIWindow()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         rootViewController = nil
         window = nil
+        try await super.tearDown()
     }
 
     func loadViewForTesting() {

@@ -15,19 +15,19 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         navigationDelegate = MockNavigationDelegate()
         tabWebViewDelegate = MockTabWebViewDelegate()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         navigationDelegate = nil
         tabWebViewDelegate = nil
         DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testBasicTabWebView_doesntLeak() async throws {

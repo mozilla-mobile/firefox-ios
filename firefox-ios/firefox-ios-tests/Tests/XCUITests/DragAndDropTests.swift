@@ -24,19 +24,15 @@ let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
 class DragAndDropTests: BaseTestCase {
-//  Disable test suite since in theory it does not make sense with Chron tabs implementation
-    override func tearDown() {
+    // Disable test suite since in theory it does not make sense with Chron tabs implementation
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest
     func testRearrangeTabsTabTray() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
@@ -50,12 +46,22 @@ class DragAndDropTests: BaseTestCase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2362645
+    // Smoketest TAE
+    func testRearrangeTabsTabTray_TAE() {
+        let tabTrayScreen = TabTrayScreen(app: app)
+        openTwoWebsites_TAE()
+        navigator.goto(TabTray)
+        checkTabsOrder_TAE(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        if #available(iOS 17, *) {
+            tabTrayScreen.dragTab(from: firstWebsite.tabName, to: secondWebsite.tabName)
+            tabTrayScreen.waitForTab(named: firstWebsite.tabName)
+            checkTabsOrder_TAE(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
     func testRearrangeMoreThan3TabsTabTraytab() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         // Arranging more than 3 to check that it works moving tabs between lines
         let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
 
@@ -179,30 +185,33 @@ private extension BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        if XCUIDevice.shared.orientation == UIDeviceOrientation.portrait && !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        } else {
-            navigator.nowAt(BrowserTab)
-        }
+        navigator.nowAt(BrowserTab)
         navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()
     }
 
-    func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
-        var nrOfAttempts = 0
-        mozWaitForElementToExist(dropOnElement)
-        let startCoordinate = dragElement.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
-        let endCoordinate = dropOnElement.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        startCoordinate.press(forDuration: 2.0, thenDragTo: endCoordinate)
-        mozWaitForElementToExist(dragElement)
-        // Repeat the action in case the first drag and drop attempt was not successful
-        while dragElement.isLeftOf(rightElement: dropOnElement) && nrOfAttempts < 5 {
-            dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
-            nrOfAttempts = nrOfAttempts + 1
-            mozWaitForElementToExist(dragElement)
+    func openTwoWebsites_TAE() {
+        let tabTrayScreen = TabTrayScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+
+        // Open two tabs
+        if !userState.isPrivate && iPad() {
+            navigator.nowAt(NewTabScreen)
+        } else {
+            navigator.nowAt(BrowserTab)
         }
+        if userState.isPrivate {
+            tabTrayScreen.tapOnNewTabButton()
+        }
+        navigator.openURL(firstWebsite.url)
+        waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(secondWebsite.url)
+        waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
     }
 
     func checkTabsOrder(dragAndDropTab: Bool,
@@ -244,6 +253,31 @@ private extension BaseTestCase {
             XCTAssertEqual(secondTabCell, secondTab, "second tab before is not correct", file: file, line: line)
         }
     }
+
+    func checkTabsOrder_TAE(dragAndDropTab: Bool,
+                            firstTab: String,
+                            secondTab: String,
+                            file: StaticString = #filePath,
+                            line: UInt = #line) {
+        // Determine which collection view to use based on the current screen
+        let tabTrayScreen = TabTrayScreen(app: app)
+        tabTrayScreen.waitForTabCells()
+
+        guard let collectionView = tabTrayScreen.getVisibleCollectionView() else {
+            XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
+            return
+        }
+        let firstTabCell = collectionView.cells.element(boundBy: 0).label
+        let secondTabCell = collectionView.cells.element(boundBy: 1).label
+
+        if dragAndDropTab {
+            sleep(2)
+        }
+
+        let context = dragAndDropTab ? "after" : "before"
+        XCTAssertEqual(firstTabCell, firstTab, "first tab \(context) is not correct", file: file, line: line)
+        XCTAssertEqual(secondTabCell, secondTab, "second tab \(context) is not correct", file: file, line: line)
+    }
 }
 
 class DragAndDropTestIpad: IpadOnlyTestCase {
@@ -257,7 +291,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         // This DDBB contains those 4 websites listed in the name
     let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample-places.db"
 
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
@@ -270,12 +304,12 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
                                    LaunchArguments.SkipContextualHints,
                                    LaunchArguments.DisableAnimations]
         }
-        super.setUp()
+        try await super.setUp()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307024

@@ -12,18 +12,18 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
     private var profile: MockProfile!
     private var middleware: TermsOfUseMiddleware!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         middleware = TermsOfUseMiddleware(profile: profile)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         profile = nil
         middleware = nil
-        AppContainer.shared.reset()
+        try await super.tearDown()
     }
 
     func testMiddleware_termsAccepted_updatesAcceptedPref() {

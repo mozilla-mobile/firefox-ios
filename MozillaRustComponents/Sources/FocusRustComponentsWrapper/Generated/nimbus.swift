@@ -1735,12 +1735,11 @@ public struct AppContext {
     public var androidSdkVersion: String?
     public var debugTag: String?
     public var installationDate: Int64?
-    public var homeDirectory: String?
     public var customTargetingAttributes: JsonObject?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(appName: String, appId: String, channel: String, appVersion: String?, appBuild: String?, architecture: String?, deviceManufacturer: String?, deviceModel: String?, locale: String?, os: String?, osVersion: String?, androidSdkVersion: String?, debugTag: String?, installationDate: Int64?, homeDirectory: String?, customTargetingAttributes: JsonObject?) {
+    public init(appName: String, appId: String, channel: String, appVersion: String?, appBuild: String?, architecture: String?, deviceManufacturer: String?, deviceModel: String?, locale: String?, os: String?, osVersion: String?, androidSdkVersion: String?, debugTag: String?, installationDate: Int64?, customTargetingAttributes: JsonObject?) {
         self.appName = appName
         self.appId = appId
         self.channel = channel
@@ -1755,7 +1754,6 @@ public struct AppContext {
         self.androidSdkVersion = androidSdkVersion
         self.debugTag = debugTag
         self.installationDate = installationDate
-        self.homeDirectory = homeDirectory
         self.customTargetingAttributes = customTargetingAttributes
     }
 }
@@ -1809,9 +1807,6 @@ extension AppContext: Equatable, Hashable {
         if lhs.installationDate != rhs.installationDate {
             return false
         }
-        if lhs.homeDirectory != rhs.homeDirectory {
-            return false
-        }
         if lhs.customTargetingAttributes != rhs.customTargetingAttributes {
             return false
         }
@@ -1833,7 +1828,6 @@ extension AppContext: Equatable, Hashable {
         hasher.combine(androidSdkVersion)
         hasher.combine(debugTag)
         hasher.combine(installationDate)
-        hasher.combine(homeDirectory)
         hasher.combine(customTargetingAttributes)
     }
 }
@@ -1861,7 +1855,6 @@ public struct FfiConverterTypeAppContext: FfiConverterRustBuffer {
                 androidSdkVersion: FfiConverterOptionString.read(from: &buf), 
                 debugTag: FfiConverterOptionString.read(from: &buf), 
                 installationDate: FfiConverterOptionInt64.read(from: &buf), 
-                homeDirectory: FfiConverterOptionString.read(from: &buf), 
                 customTargetingAttributes: FfiConverterOptionTypeJsonObject.read(from: &buf)
         )
     }
@@ -1881,7 +1874,6 @@ public struct FfiConverterTypeAppContext: FfiConverterRustBuffer {
         FfiConverterOptionString.write(value.androidSdkVersion, into: &buf)
         FfiConverterOptionString.write(value.debugTag, into: &buf)
         FfiConverterOptionInt64.write(value.installationDate, into: &buf)
-        FfiConverterOptionString.write(value.homeDirectory, into: &buf)
         FfiConverterOptionTypeJsonObject.write(value.customTargetingAttributes, into: &buf)
     }
 }

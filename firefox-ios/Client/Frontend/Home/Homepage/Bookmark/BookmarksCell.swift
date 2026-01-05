@@ -6,25 +6,36 @@ import Common
 import Foundation
 import SiteImageView
 
+@MainActor
+protocol BookmarksCellProtocol: ReusableCell where Self: UIView {
+    func configure(config: BookmarkConfiguration, theme: Theme)
+}
+
 /// A cell used in homepage's Bookmarks section.
-final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
+final class BookmarksCell: UICollectionViewCell, BookmarksCellProtocol, ThemeApplicable, Blurrable {
     private struct UX {
-        static let containerSpacing: CGFloat = 16
-        static let heroImageSize = CGSize(width: 126, height: 82)
+        static let containerSpacing: CGFloat = 4
+        static let heroImageSize = CGSize(width: 126, height: 68)
         static let generalSpacing: CGFloat = 8
+        static let contentSpacing: CGFloat = 4
+        static let generalCornerRadius: CGFloat = 16
+        static let heroImageCornerRadius: CGFloat = 13
     }
 
     // MARK: - UI Elements
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
-        view.layer.cornerRadius = HomepageUX.generalCornerRadius
+        view.layer.cornerRadius = UX.generalCornerRadius
     }
 
     private var heroImageView: HeroImageView = .build { _ in }
 
+    let titleContainer: UIView = .build()
+
     let itemTitle: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 2
     }
 
     // MARK: - Inits
@@ -49,14 +60,15 @@ final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, 
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        rootContainer.layer.shadowPath = UIBezierPath(
-            roundedRect: rootContainer.bounds,
-            cornerRadius: HomepageUX.generalCornerRadius).cgPath
+        contentView.layer.shadowPath = UIBezierPath(
+            roundedRect: contentView.bounds,
+            cornerRadius: UX.generalCornerRadius).cgPath
     }
 
     func configure(config: BookmarkConfiguration, theme: Theme) {
         let heroImageViewModel = HomepageHeroImageViewModel(
             urlStringRequest: config.site.url,
+            generalCornerRadius: UX.heroImageCornerRadius,
             heroImageSize: UX.heroImageSize
         )
         heroImageView.setHeroImage(heroImageViewModel)
@@ -69,7 +81,8 @@ final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, 
 
     private func setupLayout() {
         contentView.backgroundColor = .clear
-        rootContainer.addSubviews(heroImageView, itemTitle)
+        titleContainer.addSubview(itemTitle)
+        rootContainer.addSubviews(heroImageView, titleContainer)
         contentView.addSubview(rootContainer)
 
         NSLayoutConstraint.activate([
@@ -78,32 +91,32 @@ final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, 
             rootContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            heroImageView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
-                                               constant: UX.containerSpacing),
-            heroImageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
-                                                   constant: UX.containerSpacing),
-            heroImageView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
-                                                    constant: -UX.containerSpacing),
+            heroImageView.topAnchor.constraint(equalTo: rootContainer.topAnchor, constant: UX.containerSpacing),
+            heroImageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor, constant: UX.containerSpacing),
+            heroImageView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor, constant: -UX.containerSpacing),
             heroImageView.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
             heroImageView.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
 
-            itemTitle.topAnchor.constraint(equalTo: heroImageView.bottomAnchor,
-                                           constant: UX.generalSpacing),
-            itemTitle.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor),
-            itemTitle.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor),
-            itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
-                                              constant: -UX.generalSpacing),
+            titleContainer.topAnchor.constraint(equalTo: heroImageView.bottomAnchor, constant: UX.contentSpacing),
+            titleContainer.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor, constant: UX.generalSpacing),
+            titleContainer.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor, constant: -UX.generalSpacing),
+            titleContainer.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: -UX.generalSpacing),
+
+            itemTitle.topAnchor.constraint(equalTo: titleContainer.topAnchor),
+            itemTitle.leadingAnchor.constraint(equalTo: titleContainer.leadingAnchor),
+            itemTitle.trailingAnchor.constraint(equalTo: titleContainer.trailingAnchor),
+            itemTitle.bottomAnchor.constraint(lessThanOrEqualTo: titleContainer.bottomAnchor)
         ])
     }
 
     private func setupShadow(theme: Theme) {
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: HomepageUX.generalCornerRadius).cgPath
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
 
-        rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        rootContainer.layer.shadowOpacity = HomepageUX.shadowOpacity
-        rootContainer.layer.shadowOffset = HomepageUX.shadowOffset
-        rootContainer.layer.shadowRadius = HomepageUX.shadowRadius
+        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        contentView.layer.shadowOpacity = HomepageUX.shadowOpacity
+        contentView.layer.shadowOffset = HomepageUX.shadowOffset
+        contentView.layer.shadowRadius = HomepageUX.shadowRadius
     }
 
     // MARK: - ThemeApplicable

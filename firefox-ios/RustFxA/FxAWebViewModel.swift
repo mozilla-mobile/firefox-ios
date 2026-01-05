@@ -40,7 +40,7 @@ class FxAWebViewModel: FeatureFlaggable {
     fileprivate let profile: Profile
     fileprivate var deepLinkParams: FxALaunchParams
     fileprivate(set) var baseURL: URL?
-    let fxAWebViewTelemetry = FxAWebViewTelemetry()
+    let fxAWebViewTelemetry: FxAWebViewTelemetry
     private let shouldAskForNotificationPermission: Bool
     private let logger: Logger
     // This is not shown full-screen, use mobile UA
@@ -98,12 +98,14 @@ class FxAWebViewModel: FeatureFlaggable {
                   profile: Profile,
                   deepLinkParams: FxALaunchParams,
                   shouldAskForNotificationPermission: Bool = true,
-                  logger: Logger = DefaultLogger.shared) {
+                  logger: Logger = DefaultLogger.shared,
+                  telemetry: FxAWebViewTelemetry = FxAWebViewTelemetry()) {
         self.pageType = pageType
         self.profile = profile
         self.deepLinkParams = deepLinkParams
         self.shouldAskForNotificationPermission = shouldAskForNotificationPermission
         self.logger = logger
+        self.fxAWebViewTelemetry = telemetry
     }
 
     var onDismissController: (() -> Void)?
@@ -123,7 +125,7 @@ class FxAWebViewModel: FeatureFlaggable {
                 case .emailLoginFlow:
                     accountManager.beginAuthentication(
                         entrypoint: "email_\(entrypoint)",
-                        scopes: [OAuthScope.profile, OAuthScope.oldSync]
+                        scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.relay]
                     ) { [weak self] result in
                         guard let self = self else { return }
 

@@ -34,9 +34,15 @@ protocol SettingsSelectorsSet {
     // Browsing
     var BROWSING_LINKS_SECTION: Selector { get }
     var BLOCK_POPUPS_SWITCH: Selector { get }
-
     var TOOLBAR_CELL: Selector { get }
     var DEFAULT_BROWSER_CELL: Selector { get }
+    var BROWSING_CELL_TITLE: Selector { get }
+    var BLOCK_IMAGES_SWITCH_TITLE: Selector { get }
+
+    // Translation
+    var TRANSLATION_CELL_TITLE: Selector { get }
+
+    var NO_IMAGE_MODE_STATUS_SWITCH: Selector { get }
 
     func ALL_CELLS() -> [Selector]
 
@@ -62,6 +68,10 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let settingTitle = "Settings"
         static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
         static let defaultBrowserSettings = AccessibilityIdentifiers.Settings.DefaultBrowser.defaultBrowser
+        static let browsingCellTitle = AccessibilityIdentifiers.Settings.Browsing.title
+        static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
+        static let noImageModeStatus = "NoImageModeStatus"
+        static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
     }
 
     // Core Element Selector
@@ -203,6 +213,30 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings"]
     )
 
+    let BROWSING_CELL_TITLE = Selector.tableCellById(
+        IDs.browsingCellTitle,
+        description: "Browsing settings cell",
+        groups: ["settings", "browsing"]
+    )
+
+    let BLOCK_IMAGES_SWITCH_TITLE = Selector.anyId(
+        IDs.blockImages,
+        description: "Block Images switch in Browsing settings",
+        groups: ["settings", "browsing"]
+    )
+
+    let NO_IMAGE_MODE_STATUS_SWITCH = Selector.anyId(
+        IDs.noImageModeStatus,
+        description: "No Image Mode Status switch",
+        groups: ["settings"]
+    )
+
+    let TRANSLATION_CELL_TITLE = Selector.tableCellById(
+        IDs.translationCellTitle,
+        description: "Translation settings cell",
+        groups: ["settings", "translation"]
+    )
+
     func ALL_CELLS() -> [Selector] {
         let s = AccessibilityIdentifiers.Settings.self
         return [
@@ -220,6 +254,9 @@ struct SettingsSelectors: SettingsSelectorsSet {
                                    groups: ["settings"]),
             Selector.tableCellById(s.Browsing.title,
                                    description: "Browsing setting",
+                                   groups: ["settings"]),
+            Selector.tableCellById(s.Translation.title,
+                                   description: "Translation setting",
                                    groups: ["settings"]),
             Selector.tableCellById(s.Theme.title,
                                    description: "Theme setting",
@@ -289,6 +326,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
          CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
-         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, DEFAULT_BROWSER_CELL]
+         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, DEFAULT_BROWSER_CELL,
+         BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH, TRANSLATION_CELL_TITLE]
     }
 }

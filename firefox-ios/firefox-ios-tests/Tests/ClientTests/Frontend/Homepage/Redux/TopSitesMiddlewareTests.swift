@@ -16,19 +16,19 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var appState: AppState!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         mockGleanWrapper = MockGleanWrapper()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockGleanWrapper = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_homepageInitializeAction_returnsTopSitesSection() throws {
@@ -58,44 +58,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
-    func test_topSitesSeenAction_sendTelemetryData() {
-        let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
-        let sponsoredTelemetry = MockSponsoredTileTelemetry()
-        let subject = createSubject(
-            topSitesManager: mockTopSitesManager,
-            unifiedAdsTelemetry: unifiedAdsTelemetry,
-            sponsoredTileTelemetry: sponsoredTelemetry
-        )
-        setupNimbusUnifiedAdsTesting(isEnabled: false)
-        let config = TopSiteConfiguration(
-            site: Site.createSponsoredSite(fromContile: MockSponsoredProvider.defaultSuccessData.first!)
-        )
-        let action = TopSitesAction(
-            telemetryConfig: TopSitesTelemetryConfig(
-                    isZeroSearch: false,
-                    position: 0,
-                    topSiteConfiguration: config
-            ),
-            windowUUID: .XCTestDefaultUUID,
-            actionType: TopSitesActionType.topSitesSeen
-        )
-
-        subject.topSitesProvider(AppState(), action)
-        XCTAssertEqual(sponsoredTelemetry.sendImpressionTelemetryCalled, 1)
-        XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 0)
-    }
-
     func test_homepageSectionSeenAction_withUnifiedAds_sendTelemetryData() {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
-        let sponsoredTelemetry = MockSponsoredTileTelemetry()
         let subject = createSubject(
             topSitesManager: mockTopSitesManager,
-            unifiedAdsTelemetry: unifiedAdsTelemetry,
-            sponsoredTileTelemetry: sponsoredTelemetry
+            unifiedAdsTelemetry: unifiedAdsTelemetry
         )
-        setupNimbusUnifiedAdsTesting(isEnabled: true)
         let config = TopSiteConfiguration(
-            site: Site.createSponsoredSite(fromContile: MockSponsoredProvider.defaultSuccessData.first!)
+            site: Site.createSponsoredSite(fromContile: MockSponsoredTileData.defaultSuccessData.first!)
         )
         let action = TopSitesAction(
             telemetryConfig: TopSitesTelemetryConfig(
@@ -109,7 +79,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.topSitesProvider(AppState(), action)
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 1)
-        XCTAssertEqual(sponsoredTelemetry.sendImpressionTelemetryCalled, 0)
     }
 
     func test_fetchTopSitesAction_returnsTopSitesSection() throws {
@@ -170,46 +139,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
-    func test_tappedOnHomepageTopSite_forSponsoredSites_sendsTelemetry() throws {
-        let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
-        let sponsoredTelemetry = MockSponsoredTileTelemetry()
-        let subject = createSubject(
-            topSitesManager: mockTopSitesManager,
-            unifiedAdsTelemetry: unifiedAdsTelemetry,
-            sponsoredTileTelemetry: sponsoredTelemetry
-        )
-        setupNimbusUnifiedAdsTesting(isEnabled: false)
-        let config = TopSiteConfiguration(
-            site: Site.createSponsoredSite(fromContile: MockSponsoredProvider.defaultSuccessData.first!)
-        )
-        let action = TopSitesAction(
-            telemetryConfig: TopSitesTelemetryConfig(isZeroSearch: true, position: 0, topSiteConfiguration: config),
-            windowUUID: .XCTestDefaultUUID,
-            actionType: TopSitesActionType.tapOnHomepageTopSitesCell
-        )
-
-        subject.topSitesProvider(appState, action)
-
-        try checkTopSitesPressedMetrics(label: "zero-search", position: "0", tileType: "sponsored")
-
-        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
-        XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 1)
-        XCTAssertEqual(unifiedAdsTelemetry.sendClickTelemetryCalled, 0)
-    }
-
     func test_tappedOnHomepageTopSite_forSponsoredSites_withUnifiedAds_sendsTelemetry() throws {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
-        let sponsoredTelemetry = MockSponsoredTileTelemetry()
         let subject = createSubject(
             topSitesManager: mockTopSitesManager,
-            unifiedAdsTelemetry: unifiedAdsTelemetry,
-            sponsoredTileTelemetry: sponsoredTelemetry
+            unifiedAdsTelemetry: unifiedAdsTelemetry
         )
-        setupNimbusUnifiedAdsTesting(isEnabled: true)
         let config = TopSiteConfiguration(
-            site: Site.createSponsoredSite(fromContile: MockSponsoredProvider.defaultSuccessData.first!)
+            site: Site.createSponsoredSite(fromContile: MockSponsoredTileData.defaultSuccessData.first!)
         )
         let action = TopSitesAction(
             telemetryConfig: TopSitesTelemetryConfig(isZeroSearch: true, position: 0, topSiteConfiguration: config),
@@ -225,16 +162,13 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(unifiedAdsTelemetry.sendClickTelemetryCalled, 1)
-        XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 0)
     }
 
     func test_tappedOnHomepageTopSite_withoutIsZeroSearch_forSuggestedSites_sendsCorrectTelemetry() throws {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
-        let sponsoredTelemetry = MockSponsoredTileTelemetry()
         let subject = createSubject(
             topSitesManager: mockTopSitesManager,
-            unifiedAdsTelemetry: unifiedAdsTelemetry,
-            sponsoredTileTelemetry: sponsoredTelemetry
+            unifiedAdsTelemetry: unifiedAdsTelemetry
         )
         let config = TopSiteConfiguration(
             site: Site.createSuggestedSite(
@@ -256,17 +190,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
         XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 0)
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 0)
     }
 
     func test_tappedOnHomepageTopSite_withoutConfig_doesNotSendTelemetry() throws {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
-        let sponsoredTelemetry = MockSponsoredTileTelemetry()
         let subject = createSubject(
             topSitesManager: mockTopSitesManager,
-            unifiedAdsTelemetry: unifiedAdsTelemetry,
-            sponsoredTileTelemetry: sponsoredTelemetry
+            unifiedAdsTelemetry: unifiedAdsTelemetry
         )
         let action = TopSitesAction(
             windowUUID: .XCTestDefaultUUID,
@@ -279,7 +210,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 0)
-        XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 0)
     }
 
     // MARK: Context Menu
@@ -450,15 +380,13 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - Helpers
     private func createSubject(
         topSitesManager: MockTopSitesManager,
-        unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry? = nil,
-        sponsoredTileTelemetry: SponsoredTileTelemetry? = nil
+        unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry? = nil
     ) -> TopSitesMiddleware {
         return TopSitesMiddleware(
             topSitesManager: topSitesManager,
             homepageTelemetry: HomepageTelemetry(gleanWrapper: mockGleanWrapper),
             bookmarksTelemetry: BookmarksTelemetry(gleanWrapper: mockGleanWrapper),
-            unifiedAdsTelemetry: unifiedAdsTelemetry ??  MockUnifiedAdsCallbackTelemetry(),
-            sponsoredTileTelemetry: sponsoredTileTelemetry ?? MockSponsoredTileTelemetry()
+            unifiedAdsTelemetry: unifiedAdsTelemetry ??  MockUnifiedAdsCallbackTelemetry()
         )
     }
 
@@ -524,13 +452,5 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
-    }
-
-    private func setupNimbusUnifiedAdsTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.unifiedAds.with { _, _ in
-            return UnifiedAds(
-                enabled: isEnabled
-            )
-        }
     }
 }

@@ -395,7 +395,13 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
-
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -426,6 +432,22 @@ fileprivate struct FfiConverterUInt64: FfiConverterPrimitive {
 
     public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
         writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDouble: FfiConverterPrimitive {
+    typealias FfiType = Double
+    typealias SwiftType = Double
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Double {
+        return try lift(readDouble(&buf))
+    }
+
+    public static func write(_ value: Double, into buf: inout [UInt8]) {
+        writeDouble(&buf, lower(value))
     }
 }
 
@@ -485,9 +507,11 @@ public protocol MozAdsClientProtocol: AnyObject, Sendable {
     
     func reportAd(reportUrl: String) throws 
     
-    func requestAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?) throws  -> [String: MozAd]
+    func requestImageAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?) throws  -> [String: MozAdsImage]
     
-    func requestAdsMultiset(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions?) throws  -> [String: [MozAd]]
+    func requestSpocAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions?) throws  -> [String: [MozAdsSpoc]]
+    
+    func requestTileAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?) throws  -> [String: MozAdsTile]
     
 }
 open class MozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
@@ -584,19 +608,28 @@ open func reportAd(reportUrl: String)throws   {try rustCallWithError(FfiConverte
 }
 }
     
-open func requestAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?)throws  -> [String: MozAd]  {
-    return try  FfiConverterDictionaryStringTypeMozAd.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
-    uniffi_ads_client_fn_method_mozadsclient_request_ads(self.uniffiClonePointer(),
+open func requestImageAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?)throws  -> [String: MozAdsImage]  {
+    return try  FfiConverterDictionaryStringTypeMozAdsImage.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
+    uniffi_ads_client_fn_method_mozadsclient_request_image_ads(self.uniffiClonePointer(),
         FfiConverterSequenceTypeMozAdsPlacementRequest.lower(mozAdRequests),
         FfiConverterOptionTypeMozAdsRequestOptions.lower(options),$0
     )
 })
 }
     
-open func requestAdsMultiset(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions?)throws  -> [String: [MozAd]]  {
-    return try  FfiConverterDictionaryStringSequenceTypeMozAd.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
-    uniffi_ads_client_fn_method_mozadsclient_request_ads_multiset(self.uniffiClonePointer(),
+open func requestSpocAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions?)throws  -> [String: [MozAdsSpoc]]  {
+    return try  FfiConverterDictionaryStringSequenceTypeMozAdsSpoc.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
+    uniffi_ads_client_fn_method_mozadsclient_request_spoc_ads(self.uniffiClonePointer(),
         FfiConverterSequenceTypeMozAdsPlacementRequestWithCount.lower(mozAdRequests),
+        FfiConverterOptionTypeMozAdsRequestOptions.lower(options),$0
+    )
+})
+}
+    
+open func requestTileAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?)throws  -> [String: MozAdsTile]  {
+    return try  FfiConverterDictionaryStringTypeMozAdsTile.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
+    uniffi_ads_client_fn_method_mozadsclient_request_tile_ads(self.uniffiClonePointer(),
+        FfiConverterSequenceTypeMozAdsPlacementRequest.lower(mozAdRequests),
         FfiConverterOptionTypeMozAdsRequestOptions.lower(options),$0
     )
 })
@@ -658,89 +691,302 @@ public func FfiConverterTypeMozAdsClient_lower(_ value: MozAdsClient) -> UnsafeM
 
 
 
-public struct MozAd {
-    public var altText: String?
-    public var blockKey: String
-    public var callbacks: MozAdsCallbacks
-    public var format: String
-    public var imageUrl: String
-    public var url: String
 
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(altText: String?, blockKey: String, callbacks: MozAdsCallbacks, format: String, imageUrl: String, url: String) {
-        self.altText = altText
-        self.blockKey = blockKey
-        self.callbacks = callbacks
-        self.format = format
-        self.imageUrl = imageUrl
-        self.url = url
-    }
+
+public protocol MozAdsTelemetry: AnyObject, Sendable {
+    
+    func recordBuildCacheError(label: String, value: String) 
+    
+    func recordClientError(label: String, value: String) 
+    
+    func recordClientOperationTotal(label: String) 
+    
+    func recordDeserializationError(label: String, value: String) 
+    
+    func recordHttpCacheOutcome(label: String, value: String) 
+    
 }
+open class MozAdsTelemetryImpl: MozAdsTelemetry, @unchecked Sendable {
+    fileprivate let pointer: UnsafeMutableRawPointer!
 
-#if compiler(>=6)
-extension MozAd: Sendable {}
+    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
 #endif
-
-
-extension MozAd: Equatable, Hashable {
-    public static func ==(lhs: MozAd, rhs: MozAd) -> Bool {
-        if lhs.altText != rhs.altText {
-            return false
-        }
-        if lhs.blockKey != rhs.blockKey {
-            return false
-        }
-        if lhs.callbacks != rhs.callbacks {
-            return false
-        }
-        if lhs.format != rhs.format {
-            return false
-        }
-        if lhs.imageUrl != rhs.imageUrl {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        return true
+    public struct NoPointer {
+        public init() {}
     }
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(altText)
-        hasher.combine(blockKey)
-        hasher.combine(callbacks)
-        hasher.combine(format)
-        hasher.combine(imageUrl)
-        hasher.combine(url)
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
     }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noPointer: NoPointer) {
+        self.pointer = nil
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
+        return try! rustCall { uniffi_ads_client_fn_clone_mozadstelemetry(self.pointer, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        guard let pointer = pointer else {
+            return
+        }
+
+        try! rustCall { uniffi_ads_client_fn_free_mozadstelemetry(pointer, $0) }
+    }
+
+    
+
+    
+open func recordBuildCacheError(label: String, value: String)  {try! rustCall() {
+    uniffi_ads_client_fn_method_mozadstelemetry_record_build_cache_error(self.uniffiClonePointer(),
+        FfiConverterString.lower(label),
+        FfiConverterString.lower(value),$0
+    )
+}
+}
+    
+open func recordClientError(label: String, value: String)  {try! rustCall() {
+    uniffi_ads_client_fn_method_mozadstelemetry_record_client_error(self.uniffiClonePointer(),
+        FfiConverterString.lower(label),
+        FfiConverterString.lower(value),$0
+    )
+}
+}
+    
+open func recordClientOperationTotal(label: String)  {try! rustCall() {
+    uniffi_ads_client_fn_method_mozadstelemetry_record_client_operation_total(self.uniffiClonePointer(),
+        FfiConverterString.lower(label),$0
+    )
+}
+}
+    
+open func recordDeserializationError(label: String, value: String)  {try! rustCall() {
+    uniffi_ads_client_fn_method_mozadstelemetry_record_deserialization_error(self.uniffiClonePointer(),
+        FfiConverterString.lower(label),
+        FfiConverterString.lower(value),$0
+    )
+}
+}
+    
+open func recordHttpCacheOutcome(label: String, value: String)  {try! rustCall() {
+    uniffi_ads_client_fn_method_mozadstelemetry_record_http_cache_outcome(self.uniffiClonePointer(),
+        FfiConverterString.lower(label),
+        FfiConverterString.lower(value),$0
+    )
+}
+}
+    
+
 }
 
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceMozAdsTelemetry {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // This creates 1-element array, since this seems to be the only way to construct a const
+    // pointer that we can pass to the Rust code.
+    static let vtable: [UniffiVTableCallbackInterfaceMozAdsTelemetry] = [UniffiVTableCallbackInterfaceMozAdsTelemetry(
+        recordBuildCacheError: { (
+            uniffiHandle: UInt64,
+            label: RustBuffer,
+            value: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMozAdsTelemetry.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordBuildCacheError(
+                     label: try FfiConverterString.lift(label),
+                     value: try FfiConverterString.lift(value)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordClientError: { (
+            uniffiHandle: UInt64,
+            label: RustBuffer,
+            value: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMozAdsTelemetry.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordClientError(
+                     label: try FfiConverterString.lift(label),
+                     value: try FfiConverterString.lift(value)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordClientOperationTotal: { (
+            uniffiHandle: UInt64,
+            label: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMozAdsTelemetry.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordClientOperationTotal(
+                     label: try FfiConverterString.lift(label)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordDeserializationError: { (
+            uniffiHandle: UInt64,
+            label: RustBuffer,
+            value: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMozAdsTelemetry.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordDeserializationError(
+                     label: try FfiConverterString.lift(label),
+                     value: try FfiConverterString.lift(value)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordHttpCacheOutcome: { (
+            uniffiHandle: UInt64,
+            label: RustBuffer,
+            value: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMozAdsTelemetry.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordHttpCacheOutcome(
+                     label: try FfiConverterString.lift(label),
+                     value: try FfiConverterString.lift(value)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            let result = try? FfiConverterTypeMozAdsTelemetry.handleMap.remove(handle: uniffiHandle)
+            if result == nil {
+                print("Uniffi callback interface MozAdsTelemetry: handle missing in uniffiFree")
+            }
+        }
+    )]
+}
+
+private func uniffiCallbackInitMozAdsTelemetry() {
+    uniffi_ads_client_fn_init_callback_vtable_mozadstelemetry(UniffiCallbackInterfaceMozAdsTelemetry.vtable)
+}
 
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public struct FfiConverterTypeMozAd: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAd {
-        return
-            try MozAd(
-                altText: FfiConverterOptionString.read(from: &buf), 
-                blockKey: FfiConverterString.read(from: &buf), 
-                callbacks: FfiConverterTypeMozAdsCallbacks.read(from: &buf), 
-                format: FfiConverterString.read(from: &buf), 
-                imageUrl: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
-        )
+public struct FfiConverterTypeMozAdsTelemetry: FfiConverter {
+    fileprivate static let handleMap = UniffiHandleMap<MozAdsTelemetry>()
+
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = MozAdsTelemetry
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> MozAdsTelemetry {
+        return MozAdsTelemetryImpl(unsafeFromRawPointer: pointer)
     }
 
-    public static func write(_ value: MozAd, into buf: inout [UInt8]) {
-        FfiConverterOptionString.write(value.altText, into: &buf)
-        FfiConverterString.write(value.blockKey, into: &buf)
-        FfiConverterTypeMozAdsCallbacks.write(value.callbacks, into: &buf)
-        FfiConverterString.write(value.format, into: &buf)
-        FfiConverterString.write(value.imageUrl, into: &buf)
-        FfiConverterString.write(value.url, into: &buf)
+    public static func lower(_ value: MozAdsTelemetry) -> UnsafeMutableRawPointer {
+        guard let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: handleMap.insert(obj: value))) else {
+            fatalError("Cast to UnsafeMutableRawPointer failed")
+        }
+        return ptr
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsTelemetry {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if (ptr == nil) {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: MozAdsTelemetry, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
     }
 }
 
@@ -748,16 +994,18 @@ public struct FfiConverterTypeMozAd: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeMozAd_lift(_ buf: RustBuffer) throws -> MozAd {
-    return try FfiConverterTypeMozAd.lift(buf)
+public func FfiConverterTypeMozAdsTelemetry_lift(_ pointer: UnsafeMutableRawPointer) throws -> MozAdsTelemetry {
+    return try FfiConverterTypeMozAdsTelemetry.lift(pointer)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeMozAd_lower(_ value: MozAd) -> RustBuffer {
-    return FfiConverterTypeMozAd.lower(value)
+public func FfiConverterTypeMozAdsTelemetry_lower(_ value: MozAdsTelemetry) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeMozAdsTelemetry.lower(value)
 }
+
+
 
 
 public struct MozAdsCacheConfig {
@@ -919,36 +1167,20 @@ public func FfiConverterTypeMozAdsCallbacks_lower(_ value: MozAdsCallbacks) -> R
 public struct MozAdsClientConfig {
     public var environment: MozAdsEnvironment
     public var cacheConfig: MozAdsCacheConfig?
+    public var telemetry: MozAdsTelemetry?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(environment: MozAdsEnvironment, cacheConfig: MozAdsCacheConfig?) {
+    public init(environment: MozAdsEnvironment, cacheConfig: MozAdsCacheConfig?, telemetry: MozAdsTelemetry?) {
         self.environment = environment
         self.cacheConfig = cacheConfig
+        self.telemetry = telemetry
     }
 }
 
 #if compiler(>=6)
 extension MozAdsClientConfig: Sendable {}
 #endif
-
-
-extension MozAdsClientConfig: Equatable, Hashable {
-    public static func ==(lhs: MozAdsClientConfig, rhs: MozAdsClientConfig) -> Bool {
-        if lhs.environment != rhs.environment {
-            return false
-        }
-        if lhs.cacheConfig != rhs.cacheConfig {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(environment)
-        hasher.combine(cacheConfig)
-    }
-}
 
 
 
@@ -960,13 +1192,15 @@ public struct FfiConverterTypeMozAdsClientConfig: FfiConverterRustBuffer {
         return
             try MozAdsClientConfig(
                 environment: FfiConverterTypeMozAdsEnvironment.read(from: &buf), 
-                cacheConfig: FfiConverterOptionTypeMozAdsCacheConfig.read(from: &buf)
+                cacheConfig: FfiConverterOptionTypeMozAdsCacheConfig.read(from: &buf), 
+                telemetry: FfiConverterOptionTypeMozAdsTelemetry.read(from: &buf)
         )
     }
 
     public static func write(_ value: MozAdsClientConfig, into buf: inout [UInt8]) {
         FfiConverterTypeMozAdsEnvironment.write(value.environment, into: &buf)
         FfiConverterOptionTypeMozAdsCacheConfig.write(value.cacheConfig, into: &buf)
+        FfiConverterOptionTypeMozAdsTelemetry.write(value.telemetry, into: &buf)
     }
 }
 
@@ -1123,6 +1357,108 @@ public func FfiConverterTypeMozAdsIABContent_lift(_ buf: RustBuffer) throws -> M
 #endif
 public func FfiConverterTypeMozAdsIABContent_lower(_ value: MozAdsIabContent) -> RustBuffer {
     return FfiConverterTypeMozAdsIABContent.lower(value)
+}
+
+
+public struct MozAdsImage {
+    public var altText: String?
+    public var blockKey: String
+    public var callbacks: MozAdsCallbacks
+    public var format: String
+    public var imageUrl: String
+    public var url: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(altText: String?, blockKey: String, callbacks: MozAdsCallbacks, format: String, imageUrl: String, url: String) {
+        self.altText = altText
+        self.blockKey = blockKey
+        self.callbacks = callbacks
+        self.format = format
+        self.imageUrl = imageUrl
+        self.url = url
+    }
+}
+
+#if compiler(>=6)
+extension MozAdsImage: Sendable {}
+#endif
+
+
+extension MozAdsImage: Equatable, Hashable {
+    public static func ==(lhs: MozAdsImage, rhs: MozAdsImage) -> Bool {
+        if lhs.altText != rhs.altText {
+            return false
+        }
+        if lhs.blockKey != rhs.blockKey {
+            return false
+        }
+        if lhs.callbacks != rhs.callbacks {
+            return false
+        }
+        if lhs.format != rhs.format {
+            return false
+        }
+        if lhs.imageUrl != rhs.imageUrl {
+            return false
+        }
+        if lhs.url != rhs.url {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(altText)
+        hasher.combine(blockKey)
+        hasher.combine(callbacks)
+        hasher.combine(format)
+        hasher.combine(imageUrl)
+        hasher.combine(url)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsImage: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsImage {
+        return
+            try MozAdsImage(
+                altText: FfiConverterOptionString.read(from: &buf), 
+                blockKey: FfiConverterString.read(from: &buf), 
+                callbacks: FfiConverterTypeMozAdsCallbacks.read(from: &buf), 
+                format: FfiConverterString.read(from: &buf), 
+                imageUrl: FfiConverterString.read(from: &buf), 
+                url: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: MozAdsImage, into buf: inout [UInt8]) {
+        FfiConverterOptionString.write(value.altText, into: &buf)
+        FfiConverterString.write(value.blockKey, into: &buf)
+        FfiConverterTypeMozAdsCallbacks.write(value.callbacks, into: &buf)
+        FfiConverterString.write(value.format, into: &buf)
+        FfiConverterString.write(value.imageUrl, into: &buf)
+        FfiConverterString.write(value.url, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsImage_lift(_ buf: RustBuffer) throws -> MozAdsImage {
+    return try FfiConverterTypeMozAdsImage.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsImage_lower(_ value: MozAdsImage) -> RustBuffer {
+    return FfiConverterTypeMozAdsImage.lower(value)
 }
 
 
@@ -1403,6 +1739,406 @@ public func FfiConverterTypeMozAdsRequestOptions_lift(_ buf: RustBuffer) throws 
 #endif
 public func FfiConverterTypeMozAdsRequestOptions_lower(_ value: MozAdsRequestOptions) -> RustBuffer {
     return FfiConverterTypeMozAdsRequestOptions.lower(value)
+}
+
+
+public struct MozAdsSpoc {
+    public var blockKey: String
+    public var callbacks: MozAdsCallbacks
+    public var caps: MozAdsSpocFrequencyCaps
+    public var domain: String
+    public var excerpt: String
+    public var format: String
+    public var imageUrl: String
+    public var ranking: MozAdsSpocRanking
+    public var sponsor: String
+    public var sponsoredByOverride: String?
+    public var title: String
+    public var url: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(blockKey: String, callbacks: MozAdsCallbacks, caps: MozAdsSpocFrequencyCaps, domain: String, excerpt: String, format: String, imageUrl: String, ranking: MozAdsSpocRanking, sponsor: String, sponsoredByOverride: String?, title: String, url: String) {
+        self.blockKey = blockKey
+        self.callbacks = callbacks
+        self.caps = caps
+        self.domain = domain
+        self.excerpt = excerpt
+        self.format = format
+        self.imageUrl = imageUrl
+        self.ranking = ranking
+        self.sponsor = sponsor
+        self.sponsoredByOverride = sponsoredByOverride
+        self.title = title
+        self.url = url
+    }
+}
+
+#if compiler(>=6)
+extension MozAdsSpoc: Sendable {}
+#endif
+
+
+extension MozAdsSpoc: Equatable, Hashable {
+    public static func ==(lhs: MozAdsSpoc, rhs: MozAdsSpoc) -> Bool {
+        if lhs.blockKey != rhs.blockKey {
+            return false
+        }
+        if lhs.callbacks != rhs.callbacks {
+            return false
+        }
+        if lhs.caps != rhs.caps {
+            return false
+        }
+        if lhs.domain != rhs.domain {
+            return false
+        }
+        if lhs.excerpt != rhs.excerpt {
+            return false
+        }
+        if lhs.format != rhs.format {
+            return false
+        }
+        if lhs.imageUrl != rhs.imageUrl {
+            return false
+        }
+        if lhs.ranking != rhs.ranking {
+            return false
+        }
+        if lhs.sponsor != rhs.sponsor {
+            return false
+        }
+        if lhs.sponsoredByOverride != rhs.sponsoredByOverride {
+            return false
+        }
+        if lhs.title != rhs.title {
+            return false
+        }
+        if lhs.url != rhs.url {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(blockKey)
+        hasher.combine(callbacks)
+        hasher.combine(caps)
+        hasher.combine(domain)
+        hasher.combine(excerpt)
+        hasher.combine(format)
+        hasher.combine(imageUrl)
+        hasher.combine(ranking)
+        hasher.combine(sponsor)
+        hasher.combine(sponsoredByOverride)
+        hasher.combine(title)
+        hasher.combine(url)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsSpoc: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsSpoc {
+        return
+            try MozAdsSpoc(
+                blockKey: FfiConverterString.read(from: &buf), 
+                callbacks: FfiConverterTypeMozAdsCallbacks.read(from: &buf), 
+                caps: FfiConverterTypeMozAdsSpocFrequencyCaps.read(from: &buf), 
+                domain: FfiConverterString.read(from: &buf), 
+                excerpt: FfiConverterString.read(from: &buf), 
+                format: FfiConverterString.read(from: &buf), 
+                imageUrl: FfiConverterString.read(from: &buf), 
+                ranking: FfiConverterTypeMozAdsSpocRanking.read(from: &buf), 
+                sponsor: FfiConverterString.read(from: &buf), 
+                sponsoredByOverride: FfiConverterOptionString.read(from: &buf), 
+                title: FfiConverterString.read(from: &buf), 
+                url: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: MozAdsSpoc, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.blockKey, into: &buf)
+        FfiConverterTypeMozAdsCallbacks.write(value.callbacks, into: &buf)
+        FfiConverterTypeMozAdsSpocFrequencyCaps.write(value.caps, into: &buf)
+        FfiConverterString.write(value.domain, into: &buf)
+        FfiConverterString.write(value.excerpt, into: &buf)
+        FfiConverterString.write(value.format, into: &buf)
+        FfiConverterString.write(value.imageUrl, into: &buf)
+        FfiConverterTypeMozAdsSpocRanking.write(value.ranking, into: &buf)
+        FfiConverterString.write(value.sponsor, into: &buf)
+        FfiConverterOptionString.write(value.sponsoredByOverride, into: &buf)
+        FfiConverterString.write(value.title, into: &buf)
+        FfiConverterString.write(value.url, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsSpoc_lift(_ buf: RustBuffer) throws -> MozAdsSpoc {
+    return try FfiConverterTypeMozAdsSpoc.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsSpoc_lower(_ value: MozAdsSpoc) -> RustBuffer {
+    return FfiConverterTypeMozAdsSpoc.lower(value)
+}
+
+
+public struct MozAdsSpocFrequencyCaps {
+    public var capKey: String
+    public var day: UInt32
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(capKey: String, day: UInt32) {
+        self.capKey = capKey
+        self.day = day
+    }
+}
+
+#if compiler(>=6)
+extension MozAdsSpocFrequencyCaps: Sendable {}
+#endif
+
+
+extension MozAdsSpocFrequencyCaps: Equatable, Hashable {
+    public static func ==(lhs: MozAdsSpocFrequencyCaps, rhs: MozAdsSpocFrequencyCaps) -> Bool {
+        if lhs.capKey != rhs.capKey {
+            return false
+        }
+        if lhs.day != rhs.day {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(capKey)
+        hasher.combine(day)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsSpocFrequencyCaps: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsSpocFrequencyCaps {
+        return
+            try MozAdsSpocFrequencyCaps(
+                capKey: FfiConverterString.read(from: &buf), 
+                day: FfiConverterUInt32.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: MozAdsSpocFrequencyCaps, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.capKey, into: &buf)
+        FfiConverterUInt32.write(value.day, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsSpocFrequencyCaps_lift(_ buf: RustBuffer) throws -> MozAdsSpocFrequencyCaps {
+    return try FfiConverterTypeMozAdsSpocFrequencyCaps.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsSpocFrequencyCaps_lower(_ value: MozAdsSpocFrequencyCaps) -> RustBuffer {
+    return FfiConverterTypeMozAdsSpocFrequencyCaps.lower(value)
+}
+
+
+public struct MozAdsSpocRanking {
+    public var priority: UInt32
+    public var personalizationModels: [String: UInt32]
+    public var itemScore: Double
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(priority: UInt32, personalizationModels: [String: UInt32], itemScore: Double) {
+        self.priority = priority
+        self.personalizationModels = personalizationModels
+        self.itemScore = itemScore
+    }
+}
+
+#if compiler(>=6)
+extension MozAdsSpocRanking: Sendable {}
+#endif
+
+
+extension MozAdsSpocRanking: Equatable, Hashable {
+    public static func ==(lhs: MozAdsSpocRanking, rhs: MozAdsSpocRanking) -> Bool {
+        if lhs.priority != rhs.priority {
+            return false
+        }
+        if lhs.personalizationModels != rhs.personalizationModels {
+            return false
+        }
+        if lhs.itemScore != rhs.itemScore {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(priority)
+        hasher.combine(personalizationModels)
+        hasher.combine(itemScore)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsSpocRanking: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsSpocRanking {
+        return
+            try MozAdsSpocRanking(
+                priority: FfiConverterUInt32.read(from: &buf), 
+                personalizationModels: FfiConverterDictionaryStringUInt32.read(from: &buf), 
+                itemScore: FfiConverterDouble.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: MozAdsSpocRanking, into buf: inout [UInt8]) {
+        FfiConverterUInt32.write(value.priority, into: &buf)
+        FfiConverterDictionaryStringUInt32.write(value.personalizationModels, into: &buf)
+        FfiConverterDouble.write(value.itemScore, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsSpocRanking_lift(_ buf: RustBuffer) throws -> MozAdsSpocRanking {
+    return try FfiConverterTypeMozAdsSpocRanking.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsSpocRanking_lower(_ value: MozAdsSpocRanking) -> RustBuffer {
+    return FfiConverterTypeMozAdsSpocRanking.lower(value)
+}
+
+
+public struct MozAdsTile {
+    public var blockKey: String
+    public var callbacks: MozAdsCallbacks
+    public var format: String
+    public var imageUrl: String
+    public var name: String
+    public var url: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(blockKey: String, callbacks: MozAdsCallbacks, format: String, imageUrl: String, name: String, url: String) {
+        self.blockKey = blockKey
+        self.callbacks = callbacks
+        self.format = format
+        self.imageUrl = imageUrl
+        self.name = name
+        self.url = url
+    }
+}
+
+#if compiler(>=6)
+extension MozAdsTile: Sendable {}
+#endif
+
+
+extension MozAdsTile: Equatable, Hashable {
+    public static func ==(lhs: MozAdsTile, rhs: MozAdsTile) -> Bool {
+        if lhs.blockKey != rhs.blockKey {
+            return false
+        }
+        if lhs.callbacks != rhs.callbacks {
+            return false
+        }
+        if lhs.format != rhs.format {
+            return false
+        }
+        if lhs.imageUrl != rhs.imageUrl {
+            return false
+        }
+        if lhs.name != rhs.name {
+            return false
+        }
+        if lhs.url != rhs.url {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(blockKey)
+        hasher.combine(callbacks)
+        hasher.combine(format)
+        hasher.combine(imageUrl)
+        hasher.combine(name)
+        hasher.combine(url)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsTile: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsTile {
+        return
+            try MozAdsTile(
+                blockKey: FfiConverterString.read(from: &buf), 
+                callbacks: FfiConverterTypeMozAdsCallbacks.read(from: &buf), 
+                format: FfiConverterString.read(from: &buf), 
+                imageUrl: FfiConverterString.read(from: &buf), 
+                name: FfiConverterString.read(from: &buf), 
+                url: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: MozAdsTile, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.blockKey, into: &buf)
+        FfiConverterTypeMozAdsCallbacks.write(value.callbacks, into: &buf)
+        FfiConverterString.write(value.format, into: &buf)
+        FfiConverterString.write(value.imageUrl, into: &buf)
+        FfiConverterString.write(value.name, into: &buf)
+        FfiConverterString.write(value.url, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsTile_lift(_ buf: RustBuffer) throws -> MozAdsTile {
+    return try FfiConverterTypeMozAdsTile.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsTile_lower(_ value: MozAdsTile) -> RustBuffer {
+    return FfiConverterTypeMozAdsTile.lower(value)
 }
 
 // Note that we don't yet support `indirect` for enums.
@@ -1756,6 +2492,30 @@ fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionTypeMozAdsTelemetry: FfiConverterRustBuffer {
+    typealias SwiftType = MozAdsTelemetry?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeMozAdsTelemetry.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeMozAdsTelemetry.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionTypeMozAdsCacheConfig: FfiConverterRustBuffer {
     typealias SwiftType = MozAdsCacheConfig?
 
@@ -1925,31 +2685,6 @@ fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterSequenceTypeMozAd: FfiConverterRustBuffer {
-    typealias SwiftType = [MozAd]
-
-    public static func write(_ value: [MozAd], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for item in value {
-            FfiConverterTypeMozAd.write(item, into: &buf)
-        }
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [MozAd] {
-        let len: Int32 = try readInt(&buf)
-        var seq = [MozAd]()
-        seq.reserveCapacity(Int(len))
-        for _ in 0 ..< len {
-            seq.append(try FfiConverterTypeMozAd.read(from: &buf))
-        }
-        return seq
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
 fileprivate struct FfiConverterSequenceTypeMozAdsPlacementRequest: FfiConverterRustBuffer {
     typealias SwiftType = [MozAdsPlacementRequest]
 
@@ -2000,23 +2735,48 @@ fileprivate struct FfiConverterSequenceTypeMozAdsPlacementRequestWithCount: FfiC
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterDictionaryStringTypeMozAd: FfiConverterRustBuffer {
-    public static func write(_ value: [String: MozAd], into buf: inout [UInt8]) {
+fileprivate struct FfiConverterSequenceTypeMozAdsSpoc: FfiConverterRustBuffer {
+    typealias SwiftType = [MozAdsSpoc]
+
+    public static func write(_ value: [MozAdsSpoc], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeMozAdsSpoc.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [MozAdsSpoc] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [MozAdsSpoc]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeMozAdsSpoc.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringUInt32: FfiConverterRustBuffer {
+    public static func write(_ value: [String: UInt32], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for (key, value) in value {
             FfiConverterString.write(key, into: &buf)
-            FfiConverterTypeMozAd.write(value, into: &buf)
+            FfiConverterUInt32.write(value, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: MozAd] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: UInt32] {
         let len: Int32 = try readInt(&buf)
-        var dict = [String: MozAd]()
+        var dict = [String: UInt32]()
         dict.reserveCapacity(Int(len))
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
-            let value = try FfiConverterTypeMozAd.read(from: &buf)
+            let value = try FfiConverterUInt32.read(from: &buf)
             dict[key] = value
         }
         return dict
@@ -2026,23 +2786,75 @@ fileprivate struct FfiConverterDictionaryStringTypeMozAd: FfiConverterRustBuffer
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterDictionaryStringSequenceTypeMozAd: FfiConverterRustBuffer {
-    public static func write(_ value: [String: [MozAd]], into buf: inout [UInt8]) {
+fileprivate struct FfiConverterDictionaryStringTypeMozAdsImage: FfiConverterRustBuffer {
+    public static func write(_ value: [String: MozAdsImage], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for (key, value) in value {
             FfiConverterString.write(key, into: &buf)
-            FfiConverterSequenceTypeMozAd.write(value, into: &buf)
+            FfiConverterTypeMozAdsImage.write(value, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [MozAd]] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: MozAdsImage] {
         let len: Int32 = try readInt(&buf)
-        var dict = [String: [MozAd]]()
+        var dict = [String: MozAdsImage]()
         dict.reserveCapacity(Int(len))
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
-            let value = try FfiConverterSequenceTypeMozAd.read(from: &buf)
+            let value = try FfiConverterTypeMozAdsImage.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringTypeMozAdsTile: FfiConverterRustBuffer {
+    public static func write(_ value: [String: MozAdsTile], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterTypeMozAdsTile.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: MozAdsTile] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: MozAdsTile]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterTypeMozAdsTile.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringSequenceTypeMozAdsSpoc: FfiConverterRustBuffer {
+    public static func write(_ value: [String: [MozAdsSpoc]], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterSequenceTypeMozAdsSpoc.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [MozAdsSpoc]] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: [MozAdsSpoc]]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterSequenceTypeMozAdsSpoc.read(from: &buf)
             dict[key] = value
         }
         return dict
@@ -2123,16 +2935,35 @@ private let initializationResult: InitializationResult = {
     if (uniffi_ads_client_checksum_method_mozadsclient_report_ad() != 17071) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_request_ads() != 18145) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_image_ads() != 5900) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_request_ads_multiset() != 61203) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_spoc_ads() != 60345) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_tile_ads() != 57621) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_build_cache_error() != 16257) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_client_error() != 13788) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_client_operation_total() != 61968) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_deserialization_error() != 17062) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadstelemetry_record_http_cache_outcome() != 51965) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_constructor_mozadsclient_new() != 17901) {
         return InitializationResult.apiChecksumMismatch
     }
 
+    uniffiCallbackInitMozAdsTelemetry()
     return InitializationResult.ok
 }()
 

@@ -11,18 +11,18 @@ final class BookmarksMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockProfile: MockProfile!
     var mockStore: MockStoreForMiddleware<AppState>!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockProfile = nil
         DependencyHelperMock().reset()
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_initializeAction_getBookmarksData() throws {

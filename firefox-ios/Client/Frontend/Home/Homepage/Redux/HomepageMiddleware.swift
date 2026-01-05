@@ -10,14 +10,20 @@ import Common
 /// If this gets too big, can split out notifications and feature flags
 @MainActor
 final class HomepageMiddleware: FeatureFlaggable, Notifiable {
+    private let profile: Profile
     private let homepageTelemetry: HomepageTelemetry
+    private let privacyNoticeHelper: PrivacyNoticeHelperProtocol
     private let notificationCenter: NotificationProtocol
     private let windowManager: WindowManager
 
-    init(homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
+    init(profile: Profile = AppContainer.shared.resolve(),
+         homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
+         privacyNoticeHelper: PrivacyNoticeHelperProtocol? = nil,
          notificationCenter: NotificationProtocol,
          windowManager: WindowManager = AppContainer.shared.resolve()) {
+        self.profile = profile
         self.homepageTelemetry = homepageTelemetry
+        self.privacyNoticeHelper = privacyNoticeHelper ?? PrivacyNoticeHelper(prefs: profile.prefs)
         self.notificationCenter = notificationCenter
         self.windowManager = windowManager
         observeNotifications()
@@ -54,6 +60,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
             self.handleSectionSeenAction(action: action)
 
         case HomepageActionType.initialize:
+            self.dispatchPrivacyNoticeConfigurationAction(action: action)
             self.dispatchSearchBarConfigurationAction(action: action)
             self.dispatchSpacerConfigurationAction(action: action)
 
@@ -72,6 +79,16 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
             return
         }
         self.homepageTelemetry.sendSectionLabeledCounter(for: type)
+    }
+
+    private func dispatchPrivacyNoticeConfigurationAction(action: Action) {
+        store.dispatch(
+            HomepageAction(
+                shouldShowPrivacyNotice: privacyNoticeHelper.shouldShowPrivacyNotice(),
+                windowUUID: action.windowUUID,
+                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+            )
+        )
     }
 
     private func dispatchSearchBarConfigurationAction(action: Action) {
@@ -108,7 +125,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func shouldShowSpacer(for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
-        return device == .phone && featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+        return device == .phone && isAnyStoriesRedesignEnabled
     }
 
     // MARK: - Notifications

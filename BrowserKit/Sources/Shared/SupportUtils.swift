@@ -36,6 +36,22 @@ public struct SupportUtils {
         return URL(string: "https://www.mozilla.org/privacy/firefox/")
     }
 
+    public static var URLForUpdatedPrivacyNotice: URL? {
+        return URL(string: "https://www.mozilla.org/privacy/firefox/next/")
+    }
+
+    public static var URLForUpdatedPrivacyNoticeDiff: URL? {
+        return URL(string: "https://www.mozilla.org/privacy/firefox/update/")
+    }
+
+    public static var URLForRelayAccountManagement: URL? {
+        return URL(string: "https://relay.firefox.com/accounts/profile")
+    }
+
+    public static var URLForRelayMaskLearnMoreArticle: URL? {
+        return URL(string: "https://support.mozilla.org/en-US/kb/relay-masks-ios")
+    }
+
     public static func URLForTopic(_ topic: String, useMobilePath: Bool = true) -> URL? {
         // Construct a NSURL pointing to a specific topic on SUMO. The topic should be a non-escaped string. It will
         // be properly escaped by this function.

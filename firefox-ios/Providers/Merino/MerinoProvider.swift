@@ -85,7 +85,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     }
 
     private var shouldUseMockData: Bool {
-        return featureFlags.isCoreFeatureEnabled(.useMockData)
+        return featureFlags.isCoreFeatureEnabled(.useMockData) || prefs.boolForKey(PrefsKeys.useMerinoTestData) ?? false
     }
 
     private func iOSToMerinoLocale(from locale: String) -> CuratedRecommendationLocale? {

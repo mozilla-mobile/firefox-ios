@@ -5,6 +5,7 @@
 import XCTest
 import MappaMundi
 
+@MainActor
 func registerTrackingProtection(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(TrackingProtectionContextMenuDetails) { screenState in
         screenState.gesture(forAction: Action.TrackingProtectionperSiteToggle) { userState in

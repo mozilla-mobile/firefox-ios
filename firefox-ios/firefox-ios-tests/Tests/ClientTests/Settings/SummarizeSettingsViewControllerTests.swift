@@ -6,23 +6,23 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class SummarizeSettingsViewControllerTests: XCTestCase {
     private var profile: Profile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         self.profile = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
-    @MainActor
     func test_generateSettings_withShakeFeature_hasExpectedSections() {
         setupNimbusHostedSummarizerTesting(isEnabled: true)
         let subject = createSubject()
@@ -34,7 +34,6 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
         XCTAssertEqual(sections.last?.children.count, 1)
     }
 
-    @MainActor
     func test_generateSettings_withoutShakeFeature_hasExpectedSections() {
         setupNimbusHostedSummarizerTesting(isEnabled: false)
         let subject = createSubject()

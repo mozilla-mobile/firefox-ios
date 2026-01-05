@@ -8,6 +8,6 @@ enum WallpaperServiceError: Error {
     case dataUnavailable
 }
 
-protocol WallpaperNetworking {
+protocol WallpaperNetworking: Sendable {
     func data(from url: URL) async throws -> (Data, URLResponse)
 }

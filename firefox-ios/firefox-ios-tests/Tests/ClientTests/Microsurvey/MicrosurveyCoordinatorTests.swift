@@ -12,16 +12,16 @@ final class MicrosurveyCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var mockTabManager: MockTabManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockRouter = MockRouter(navigationController: MockNavigationController())
         mockTabManager = MockTabManager()
     }
 
-    override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testInitialState() {

@@ -15,19 +15,19 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockProfile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setIsHostedSummarizerFeatureEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         resetStore()
         mockProfile = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func tests_initialState_returnsExpectedState() {
@@ -405,7 +405,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
         XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
         XCTAssertEqual(newState.leadingPageActions[1].iconName, StandardImageIdentifiers.Medium.translate)
-        XCTAssertFalse(newState.leadingPageActions[1].isLoading)
+        XCTAssertFalse(newState.leadingPageActions[1].loadingConfig!.isLoading)
     }
 
     func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsLoadingIcon() {
@@ -428,7 +428,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions.count, 2)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
         XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
-        XCTAssertTrue(newState.leadingPageActions[1].isLoading)
+        XCTAssertTrue(newState.leadingPageActions[1].loadingConfig!.isLoading)
         XCTAssertNil(newState.leadingPageActions[1].iconName)
     }
 
@@ -452,7 +452,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions.count, 2)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
         XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
-        XCTAssertFalse(newState.leadingPageActions[1].isLoading)
+        XCTAssertFalse(newState.leadingPageActions[1].loadingConfig!.isLoading)
         XCTAssertEqual(newState.leadingPageActions[1].iconName, ImageIdentifiers.Translations.translationActive)
     }
 

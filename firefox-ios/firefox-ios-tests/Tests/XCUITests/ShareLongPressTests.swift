@@ -180,8 +180,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressLinkAndSelectShareOption(option: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.webViews["contentView"].links.element(boundBy: 0).press(forDuration: 1.5)
@@ -196,8 +194,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressReadingListAndReachShareOptions(option: String) {
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -221,8 +217,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     private func longPressHistoryAndReachShareOptions(option: String) {
         // Go to a webpage and navigate to history
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -242,8 +236,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     private func longPressBookmarkAndReachShareOptions(option: String) {
         // Go to a webpage, and add to bookmarks
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -251,9 +243,10 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
         // Long-press on a bookmarked website
-        app.tables.cells.staticTexts["Example Domain"].press(forDuration: 1.0)
+        let contextMenu = app.tables["Context Menu"]
+        app.tables.cells.staticTexts["Example Domain"].pressWithRetry(duration: 1.5, element: contextMenu)
         // Tap the Share button in the context menu
-        app.tables["Context Menu"].buttons["shareLarge"].waitAndTap()
+        contextMenu.buttons["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])

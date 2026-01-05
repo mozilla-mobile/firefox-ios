@@ -13,6 +13,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
     case appearanceMenu
+    case appIconSelection
     case bottomSearchBar
     case deeplinkOptimizationRefactor
     case defaultZoomFeature
@@ -26,10 +27,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageSearchBar
     case homepageShortcutsLibrary
     case homepageStoriesRedesign
+    case homepageStoriesRedesignV2
     case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
-    case inactiveTabs
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
     case menuRefactor
@@ -38,11 +39,13 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case noInternetConnectionErrorPage
+    case otherErrorPages
+    case privacyNotice
     case recentSearches
     case reportSiteIssue
     case relayIntegration
-    case revertUnsafeContinuationsRefactor
-    case searchEngineConsolidation
+    case sentFromFirefox
+    case sentFromFirefoxTreatmentA
     case splashScreen
     case startAtHome
     case appleSummarizer
@@ -60,6 +63,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarRefactor
     case toolbarSwipingTabs
     case toolbarTranslucency
+    case toolbarTranslucencyRefactor
     case toolbarMinimalAddressBar
     case toolbarMiddleButtonCustomization
     case tosFeature
@@ -67,7 +71,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trackingProtectionRefactor
     case translation
     case trendingSearches
-    case unifiedAds
     case unifiedSearch
     case updatedPasswordManager
     case webEngineIntegrationRefactor
@@ -76,12 +79,14 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appearanceMenu,
+                .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
                 .homepageStoriesRedesign,
+                .homepageStoriesRedesignV2,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
@@ -94,16 +99,19 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .microsurvey,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
+                .otherErrorPages,
+                .privacyNotice,
                 .recentSearches,
-                .searchEngineConsolidation,
+                .relayIntegration,
                 .tabScrollRefactorFeature,
+                .sentFromFirefox,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
+                .toolbarTranslucencyRefactor,
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
                 .trendingSearches,
-                .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
                 .webEngineIntegrationRefactor:
@@ -136,12 +144,13 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.FirefoxSuggest
         case .hntSponsoredShortcuts:
             return FlagKeys.SponsoredShortcuts
-        case .inactiveTabs:
-            return FlagKeys.InactiveTabs
+        case .sentFromFirefox:
+            return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
+                .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
@@ -154,6 +163,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageStoriesRedesign,
+                .homepageStoriesRedesignV2,
                 .homepageScrim,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
@@ -165,10 +175,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .modernOnboardingUI,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
+                .otherErrorPages,
+                .privacyNotice,
                 .recentSearches,
                 .reportSiteIssue,
-                .revertUnsafeContinuationsRefactor,
-                .searchEngineConsolidation,
+                .sentFromFirefoxTreatmentA,
                 .splashScreen,
                 .appleSummarizer,
                 .appleSummarizerToolbarEntrypoint,
@@ -186,6 +197,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarRefactor,
                 .toolbarSwipingTabs,
                 .toolbarTranslucency,
+                .toolbarTranslucencyRefactor,
                 .toolbarMinimalAddressBar,
                 .toolbarMiddleButtonCustomization,
                 .tosFeature,
@@ -193,7 +205,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .trackingProtectionRefactor,
                 .translation,
                 .trendingSearches,
-                .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
                 .webEngineIntegrationRefactor:

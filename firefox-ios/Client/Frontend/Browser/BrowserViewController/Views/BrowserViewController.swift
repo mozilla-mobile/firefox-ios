@@ -19,7 +19,6 @@ import SummarizeKit
 import ActivityKit
 import Glean
 import ComponentLibrary
-import GestureKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -43,15 +42,13 @@ class BrowserViewController: UIViewController,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
-                             BrowserStatusBarScrollDelegate {
+                             BrowserStatusBarScrollDelegate,
+                             LegacyTabScrollController.Delegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
         static let minimalHeaderOffset: CGFloat = 14
-
-        static let topToolbarDuration: TimeInterval = 0.3
-        static let bottomToolbarDuration: TimeInterval = 0.4
     }
 
     /// Describes the state of the current search session. This state is used
@@ -140,28 +137,33 @@ class BrowserViewController: UIViewController,
     // MARK: Lazy loading UI elements
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
-    private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
+    private lazy var statusBarOverlay: StatusBarOverlay = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.statusBarOverlay
+    }
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
-        AddressToolbarContainer(
-            isSwipingTabsEnabled: self.isSwipingTabsEnabled,
-            isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled
-        )
+        AddressToolbarContainer(isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled,
+                                toolbarHelper: self.toolbarHelper)
     })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
-    private(set) lazy var header: BaseAlphaStackView = .build { _ in }
+    private(set) lazy var header: BaseAlphaStackView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.headerContainer
+    }
 
     // OverKeyboardContainer stack view contains
     // the bottom reader mode, the bottom url bar and the ZoomPageBar
-    private(set) lazy var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
+    private(set) lazy var overKeyboardContainer: BaseAlphaStackView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.overKeyboardContainer
+    }
 
     // Constraints used to show/hide toolbars
     var headerTopConstraint: Constraint?
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
+    var topTouchAreaHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -177,16 +179,21 @@ class BrowserViewController: UIViewController,
     }
 
     // BottomContainer stack view contains toolbar
-    lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
+    lazy var bottomContainer: BaseAlphaStackView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.bottomContainer
+    }
 
     // Alert content that appears on top of the content
     // ex: Find In Page, SnackBar from LoginsHelper
     private(set) lazy var bottomContentStackView: BaseAlphaStackView = .build { stackview in
         stackview.isClearBackground = true
+        stackview.accessibilityIdentifier = AccessibilityIdentifiers.Browser.bottomContentStackView
     }
 
     // The content container contains the homepage, error page or webview. Embedded by the coordinator.
-    private(set) lazy var contentContainer: ContentContainer = .build { _ in }
+    private(set) lazy var contentContainer: ContentContainer = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.contentContainer
+    }
 
     // A view for displaying a preview of the web page.
     private lazy var webPagePreview: TabWebViewPreview = .build {
@@ -202,9 +209,11 @@ class BrowserViewController: UIViewController,
         if isTabScrollRefactoringEnabled {
             return TabScrollHandler(windowUUID: windowUUID, delegate: self)
         } else {
-            return LegacyTabScrollController(windowUUID: windowUUID)
+            return LegacyTabScrollController(windowUUID: windowUUID, delegate: self)
         }
     }()
+
+    var toolbarAnimator: ToolbarAnimator?
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -212,11 +221,10 @@ class BrowserViewController: UIViewController,
     private lazy var navigationToolbarContainer: NavigationToolbarContainer = .build { view in
         view.windowUUID = self.windowUUID
     }
-    private(set) lazy var tabToolbar = TabToolbar()
 
     private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
-        if #available(iOS 26, *), !DefaultBrowserUtil.isRunningLiquidGlassEarlyBeta {
+        if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             return UIGlassEffect(style: .regular)
         } else {
             return UIBlurEffect(style: .systemUltraThinMaterial)
@@ -238,6 +246,14 @@ class BrowserViewController: UIViewController,
     // background view is placed behind content view so view scrolled to top or bottom shows
     // correct background for translucent toolbars
     private let backgroundView: UIView = .build()
+
+    private let swipeAwayTabPreview: SwipeAwayTabPreview = .build()
+    private lazy var swipeAwayTabPreviewGestureHandler = SwipeAwayTabPreviewGestureHandler(
+        tabPreview: swipeAwayTabPreview,
+        tabManager: tabManager,
+        themeManager: themeManager,
+        windowUUID: windowUUID
+    )
 
     // MARK: Contextual Hints
 
@@ -264,6 +280,11 @@ class BrowserViewController: UIViewController,
     private(set) lazy var translationContextHintVC: ContextualHintViewController = {
         let translationProvider = ContextualHintViewProvider(forHintType: .translation, with: profile)
         return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
+    }()
+
+    private(set) lazy var relayMaskContextHintVC: ContextualHintViewController = {
+        let relayProvider = ContextualHintViewProvider(forHintType: .relay, with: profile)
+        return ContextualHintViewController(with: relayProvider, windowUUID: windowUUID)
     }()
 
     private(set) lazy var summarizeToolbarEntryContextHintVC: ContextualHintViewController = {
@@ -353,8 +374,21 @@ class BrowserViewController: UIViewController,
         return featureFlagStatus
     }
 
+    var isToolbarTranslucencyRefactorEnabled: Bool {
+        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
+        let flagToCheck = NimbusFeatureFlagID.toolbarTranslucencyRefactor
+        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        logger.log(
+            "Feature flag status",
+            level: .info,
+            category: .experiments,
+            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
+        )
+        return featureFlagStatus
+    }
+
     var isSwipingTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
+        return toolbarHelper.isSwipingTabsEnabled
     }
 
     var isMinimalAddressBarEnabled: Bool {
@@ -406,10 +440,6 @@ class BrowserViewController: UIViewController,
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
-    }
-
-    var isStoriesRedesignEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
 
     var isHomepageSearchBarEnabled: Bool {
@@ -598,15 +628,17 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    fileprivate func didInit() {
+    private func didInit() {
         tabManager.addDelegate(self)
         tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
-            // Ensure we call into didBecomeActive at least once during startup flow (if needed)
-            guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
-            self?.browserDidBecomeActive()
+            ensureMainThread { [weak self] in
+                // Ensure we call into didBecomeActive at least once during startup flow (if needed)
+                guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
+                self?.browserDidBecomeActive()
+            }
         }
 
         crashTracker.updateData()
@@ -660,10 +692,12 @@ class BrowserViewController: UIViewController,
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         updateHeaderConstraints()
-        tabToolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            addOrUpdateMaskViewIfNeeded()
+        }
 
         let action = GeneralBrowserMiddlewareAction(
             scrollOffset: scrollController.contentOffset,
@@ -674,7 +708,7 @@ class BrowserViewController: UIViewController,
         updateSwipingTabs()
     }
 
-    private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
+    private func updateToolbarDisplay(scrollOffset: CGFloat? = nil, shouldUpdateBlurViews: Bool = true) {
         // move views to the front so the address toolbar shadow doesn't get clipped
         if isBottomSearchBar {
             overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
@@ -684,11 +718,14 @@ class BrowserViewController: UIViewController,
             view.bringSubviewToFront(header)
         }
 
-        updateBlurViews(scrollOffset: scrollOffset)
+        if shouldUpdateBlurViews {
+            updateBlurViews(scrollOffset: scrollOffset)
+        }
     }
 
-    private func updateBlurViews(scrollOffset: CGFloat? = nil) {
-        let enableBlur = isToolbarTranslucencyEnabled
+    // MARK: - Translucency and blur helpers
+
+    func updateBlurViews(scrollOffset: CGFloat? = nil) {
         guard toolbarHelper.shouldBlur() else {
             topBlurView.alpha = 0
             bottomBlurView.isHidden = true
@@ -699,15 +736,29 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        let enableBlur = isToolbarTranslucencyEnabled
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
+        let isScrollAlphaZero = if #available(iOS 26.0, *) {
+            store.state.screenState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: windowUUID
+            )?.scrollAlpha == 0 } else { false }
+
         if isBottomSearchBar {
             header.isClearBackground = false
 
+            // Prevent homepage from showing behind the keyboard when content isn't scrollable.
+            // Only clear background if content exceeds viewport height.
+            let shouldClearBackground: Bool = {
+                guard let webView = tabManager.selectedTab?.webView else { return false }
+                return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
+            }()
             // we disable the translucency when the keyboard is getting displayed
-            overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
+            overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || shouldClearBackground
 
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
@@ -719,19 +770,64 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
-        bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
+        bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isScrollAlphaZero
+        bottomContainer.isHidden = isScrollAlphaZero
 
-        let maskView = UIView(frame: CGRect(x: 0,
-                                            y: -contentContainer.frame.origin.y,
-                                            width: view.frame.width,
-                                            height: view.frame.height))
-        maskView.backgroundColor = .black
-        contentContainer.mask = maskView
+        if !isToolbarTranslucencyRefactorEnabled {
+            let maskView = UIView(frame: CGRect(x: 0,
+                                                y: -contentContainer.frame.origin.y,
+                                                width: view.frame.width,
+                                                height: view.frame.height))
+            maskView.backgroundColor = .black
+            contentContainer.mask = maskView
+        }
 
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
+            // TODO: FXIOS-14536 Can we figure out a way not to do these calls? Sometimes they are needed
+            // for specific layout calls.
+            $0.setNeedsLayout()
+            $0.layoutIfNeeded()
         }
+    }
+
+    // Adds or updates the mask for the content container that ensures the content is extending
+    // under the toolbars but not leading and trailing (would show during swiping tabs)
+    func addOrUpdateMaskViewIfNeeded() {
+        guard toolbarHelper.shouldBlur() else { return }
+
+        let frame = CGRect(x: 0,
+                           y: -contentContainer.frame.origin.y,
+                           width: view.frame.width,
+                           height: view.frame.height)
+
+        // if we already have a mask update the frame
+        if let mask = contentContainer.mask {
+            mask.frame = frame
+        } else {
+            let maskView = UIView(frame: frame)
+            maskView.backgroundColor = .black
+            contentContainer.mask = maskView
+        }
+    }
+
+    func toolbarDisplayStateDidChange() {
+        updateToolbarTranslucency()
+    }
+
+    /// Updates the toolbar's translucency effects.
+    ///
+    /// This method applies blur effects to the top and bottom toolbars and updates the content
+    /// container's mask view to ensure proper visual effects during toolbar animations and state
+    /// transitions. Only executes when the toolbar translucency refactor feature flag is enabled.
+    func updateToolbarTranslucency() {
+        // If Toolbar translucency flag is disabled TabScroll refactor seems broken,
+        // please enabled both flags to get the right behaviour
+        guard isToolbarTranslucencyRefactorEnabled else { return }
+
+        updateBlurViews()
+        addOrUpdateMaskViewIfNeeded()
     }
 
     fileprivate func appMenuBadgeUpdate() {
@@ -764,7 +860,7 @@ class BrowserViewController: UIViewController,
         notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
     }
 
-    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
+    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, shouldUpdateBlurViews: Bool = true) {
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
 
@@ -780,10 +876,12 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
         updateTopTabs(showTopTabs: showTopTabs)
 
-        header.setNeedsLayout()
-        view.layoutSubviews()
+        if !isToolbarTranslucencyRefactorEnabled {
+            header.setNeedsLayout()
+            view.layoutSubviews()
+        }
 
-        updateToolbarDisplay()
+        updateToolbarDisplay(shouldUpdateBlurViews: shouldUpdateBlurViews)
     }
 
     private func updateSwipingTabs() {
@@ -817,7 +915,7 @@ class BrowserViewController: UIViewController,
 
     func dismissVisibleMenus() {
         displayedPopoverController?.dismiss(animated: true)
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -827,7 +925,7 @@ class BrowserViewController: UIViewController,
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
 
@@ -984,8 +1082,6 @@ class BrowserViewController: UIViewController,
             updateContentInHomePanel(state.browserViewType)
         }
 
-        setupMiddleButtonStatus(isLoading: false)
-
         if let toast = state.toast {
             self.showToastType(toast: toast)
         }
@@ -1068,111 +1164,18 @@ class BrowserViewController: UIViewController,
         super.viewDidLoad()
 
         setupEssentialUI()
-        view.insertSubview(fancyView, at: 0)
-        fancyView.pinToSuperview()
-        setupGesture()
-        fancyView.alpha = 0
         subscribeToRedux()
         enqueueTabRestoration()
         updateAddressToolbarContainerPosition(for: traitCollection)
+        if isTabScrollRefactoringEnabled {
+            setupToolbarAnimator()
+        }
 
         // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
         guard !AppConstants.isRunningUnitTest else { return }
         Task(priority: .background) { [weak self] in
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
             await self?.trackStartupTelemetry()
-        }
-    }
-
-    let fancyView: SwipeAwayTabPreview = .build()
-    var horizontalPan: UIGestureRecognizer?
-    var verticalPan: UIGestureRecognizer?
-
-    // FUN GESTURE!
-    private func setupGesture() {
-        let gesture = UIPanGestureRecognizer(target: self,
-                                             action: #selector(onFancyGestureRecognize))
-        gesture.delegate = self
-        addressBarPanGestureHandler?.gesture?.delegate = self
-        horizontalPan = addressBarPanGestureHandler?.gesture
-        verticalPan = gesture
-        overKeyboardContainer.addGestureRecognizer(gesture)
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        // allow only your two pans to work together
-        if (gestureRecognizer == horizontalPan && otherGestureRecognizer == verticalPan) ||
-            (gestureRecognizer == verticalPan && otherGestureRecognizer == horizontalPan) {
-            return true
-        }
-        return false
-    }
-
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let pan = gestureRecognizer as? UIPanGestureRecognizer else { return true }
-        let velocity = pan.velocity(in: view)
-
-        if gestureRecognizer == horizontalPan {
-            // horizontal only if X velocity dominates
-            return abs(velocity.x) > abs(velocity.y)
-        } else if gestureRecognizer == verticalPan {
-            // vertical only if Y velocity dominates
-            return abs(velocity.y) > abs(velocity.x)
-        }
-
-        return true
-    }
-
-    @objc private func onFancyGestureRecognize(gesture: UIPanGestureRecognizer) {
-        switch gesture.state {
-        case .began:
-            fancyView.applyTheme(theme: themeManager.getCurrentTheme(for: currentWindowUUID))
-            UIView.animate(withDuration: 0.3) { [self] in
-                fancyView.addImage(url: tabManager.selectedTab?.url?.absoluteString ?? "",
-                                   startingPoint: bottomContainer.frame.size.height)
-                fancyView.alpha = 1
-                fancyView.layer.zPosition = 1000
-            }
-
-        case .changed:
-            let translation = gesture.translation(in: view)
-            fancyView.translate(position: translation)
-        case .ended:
-            let velocity = gesture.velocity(in: view)
-            let translation = gesture.translation(in: view)
-            if velocity.y < -500 || translation.y < -(view.bounds.height / 2.7) {
-                UIView.animate(withDuration: 0.1) { [self] in
-                    fancyView.tossPreview()
-                } completion: { [self] _ in
-                    store.dispatchLegacy(
-                        TabPanelViewAction(
-                            panelType: .tabs,
-                            tabUUID: tabManager.selectedTab?.tabUUID,
-                            windowUUID: windowUUID,
-                            actionType: TabPanelViewActionType.closeTab
-                        )
-                    )
-                    UIView.animate(withDuration: 0.3) { [self] in
-                        fancyView.alpha = 0.0
-                        fancyView.layer.zPosition = 0
-                    } completion: { [weak self] _ in
-                        self?.fancyView.restore()
-                    }
-                }
-            } else {
-                if abs(translation.y) > 130 {
-                    navigationHandler?.showTabTray(selectedPanel: .tabs)
-                }
-                UIView.animate(withDuration: 0.3) { [self] in
-                    fancyView.alpha = 0
-                    fancyView.layer.zPosition = 0
-                } completion: { [weak self] _ in
-                    self?.fancyView.restore()
-                }
-            }
-        default:
-            break
         }
     }
 
@@ -1371,7 +1374,12 @@ class BrowserViewController: UIViewController,
     }
 
     private func onReduceTransparencyStatusDidChange() {
-        updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
+        } else {
+            updateToolbarDisplay()
+        }
 
         store.dispatch(
             ToolbarAction(
@@ -1417,7 +1425,8 @@ class BrowserViewController: UIViewController,
             profile: profile,
             searchEnginesManager: searchEnginesManager,
             delegate: self,
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+            isBottomSearchBar: isBottomSearchBar
         )
         addressToolbarContainer.applyTheme(theme: currentTheme())
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
@@ -1434,10 +1443,12 @@ class BrowserViewController: UIViewController,
             prefs: profile.prefs
         )
         addressBarPanGestureHandler?.delegate = self
+        swipeAwayTabPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
     }
 
     func addSubviews() {
         if isSwipingTabsEnabled {
+            view.addSubview(swipeAwayTabPreview)
             view.addSubviews(webPagePreview)
         }
         view.addSubviews(contentContainer)
@@ -1483,11 +1494,15 @@ class BrowserViewController: UIViewController,
         // handles a deeplink when was already opened
         if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
             AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
-                self?.tabManager.restoreTabs()
+                ensureMainThread { [weak self] in
+                    self?.tabManager.restoreTabs()
+                }
             }
         } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
             AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
-                self?.tabManager.restoreTabs()
+                ensureMainThread { [weak self] in
+                    self?.tabManager.restoreTabs()
+                }
             }
         }
     }
@@ -1502,7 +1517,7 @@ class BrowserViewController: UIViewController,
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        updateToolbarStateForTraitCollection(traitCollection)
+        updateToolbarStateForTraitCollection(traitCollection, shouldUpdateBlurViews: !isToolbarTranslucencyEnabled)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1601,9 +1616,12 @@ class BrowserViewController: UIViewController,
         checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
-        // when toolbars are hidden/shown the mask on the content view that is used for
-        // toolbar translucency needs to be updated
-        updateToolbarDisplay()
+        if !isToolbarTranslucencyRefactorEnabled {
+            // when toolbars are hidden/shown the mask on the content view that is used for
+            // toolbar translucency needs to be updated
+            // This also required for iPad rotation
+            updateToolbarDisplay()
+        }
 
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
@@ -1699,7 +1717,6 @@ class BrowserViewController: UIViewController,
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.applyThemeUpdatesToWindows()
         }
-        setupMiddleButtonStatus(isLoading: false)
 
         // Everything works fine on iPad orientation switch (because CFR remains anchored to the same button),
         // so only necessary to dismiss when vertical size class changes
@@ -1738,8 +1755,16 @@ class BrowserViewController: UIViewController,
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
+            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
+
+            topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
+            topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+
+        let topTouchAreaHeight = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
+        topTouchAreaHeightConstraint = topTouchArea.heightAnchor.constraint(equalToConstant: topTouchAreaHeight)
+        topTouchAreaHeightConstraint?.isActive = true
 
         if isSwipingTabsEnabled {
             NSLayoutConstraint.activate([
@@ -1748,6 +1773,7 @@ class BrowserViewController: UIViewController,
                 webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 webPagePreview.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
+            swipeAwayTabPreview.pinToSuperview()
         }
 
         updateHeaderConstraints()
@@ -1811,12 +1837,7 @@ class BrowserViewController: UIViewController,
     }
 
     override func updateViewConstraints() {
-        NSLayoutConstraint.activate([
-            topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
-            topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight)
-        ])
+        topTouchAreaHeightConstraint?.constant = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
 
         readerModeBar?.snp.remakeConstraints { make in
             make.height.equalTo(UIConstants.ToolbarHeight)
@@ -1879,7 +1900,7 @@ class BrowserViewController: UIViewController,
     private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
-        } else if !tabToolbar.isHidden {
+        } else if !navigationToolbarContainer.isHidden {
             remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
             remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         } else {
@@ -1913,7 +1934,6 @@ class BrowserViewController: UIViewController,
         )
         let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
         let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
-
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
         // make sure the keyboard spacer has the right color/translucency
@@ -1961,12 +1981,17 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
-        // for the first two layers of views other than web view and legacy homepage
-        if toolbarHelper.shouldBlur() &&
-            !viewController.isKind(of: WebviewViewController.self) {
-            viewController.view.clipsToBounds = false
-            viewController.view.subviews.forEach { $0.clipsToBounds = false }
-        } else {
+        // for the first two layers of views other than a web view
+        if toolbarHelper.shouldBlur() && !viewController.isKind(of: WebviewViewController.self) {
+            // Only update clipsToBounds if the first view layer has it turned on currently
+            if isToolbarTranslucencyRefactorEnabled, viewController.view.clipsToBounds {
+                viewController.view.clipsToBounds = false
+                viewController.view.subviews.forEach { $0.clipsToBounds = false }
+            } else if !isToolbarTranslucencyRefactorEnabled {
+                viewController.view.clipsToBounds = false
+                viewController.view.subviews.forEach { $0.clipsToBounds = false }
+            }
+        } else if !isToolbarTranslucencyRefactorEnabled {
             contentContainer.mask = nil
         }
 
@@ -1979,11 +2004,15 @@ class BrowserViewController: UIViewController,
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
-        resetDataClearanceCFRTimer()
+        resetCFRsTimer()
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
-            updateToolbarDisplay()
+
+            // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
+            if !isToolbarTranslucencyRefactorEnabled {
+                updateToolbarDisplay()
+            }
             return
         }
 
@@ -2001,7 +2030,10 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
 
-        updateToolbarDisplay()
+        // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
+        if !isToolbarTranslucencyRefactorEnabled {
+            updateToolbarDisplay()
+        }
     }
 
     func showEmbeddedWebview() {
@@ -2392,36 +2424,6 @@ class BrowserViewController: UIViewController,
         return false
     }
 
-    func setupMiddleButtonStatus(isLoading: Bool) {
-        // Setting the default state to search to account for no tab or starting page tab
-        // `state` will be modified later if needed
-        let state: MiddleButtonState = .search
-
-        // No tab
-        guard let tab = tabManager.selectedTab else {
-            handleMiddleButtonState(state)
-            return
-        }
-
-        // Tab with starting page
-        if tab.isURLStartingPage {
-            handleMiddleButtonState(state)
-            return
-        }
-
-        handleMiddleButtonState(.home)
-    }
-
-    private func handleMiddleButtonState(_ state: MiddleButtonState) {
-        let showDataClearanceFlow = browserViewControllerState?.browserViewType == .privateHomepage
-        let showFireButton = featureFlags.isFeatureEnabled(
-            .feltPrivacyFeltDeletion,
-            checking: .buildOnly
-        ) && showDataClearanceFlow
-        guard !showFireButton else { return }
-        resetDataClearanceCFRTimer()
-    }
-
     private func updateToolbarAnimationStateIfNeeded() {
         let shouldAnimate = store.state.screenState(
             ToolbarState.self,
@@ -2505,10 +2507,8 @@ class BrowserViewController: UIViewController,
                 webView.estimatedProgress
             }
             addressToolbarContainer.updateProgressBar(progress: progressValue)
-            setupMiddleButtonStatus(isLoading: true)
         } else {
             addressToolbarContainer.hideProgressBar()
-            setupMiddleButtonStatus(isLoading: false)
         }
     }
 
@@ -2517,7 +2517,6 @@ class BrowserViewController: UIViewController,
         if let doc = tab.temporaryDocument {
             loading = doc.isDownloading
         }
-        setupMiddleButtonStatus(isLoading: loading)
 
         let action = ToolbarAction(
             isLoading: loading,
@@ -2641,7 +2640,9 @@ class BrowserViewController: UIViewController,
                 hideReaderModeBar(animated: false)
             }
 
-            updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar)
+            if !isToolbarTranslucencyRefactorEnabled {
+                updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar)
+            }
         }
     }
 
@@ -2847,6 +2848,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showStoriesFeed()
         case .storiesWebView:
             navigationHandler?.showStoriesWebView(url: type.url)
+        case .privacyNoticeLink(let url):
+            navigationHandler?.showPrivacyNoticeLink(url: url)
         }
     }
 
@@ -2952,7 +2955,11 @@ class BrowserViewController: UIViewController,
         generator.impactOccurred()
 
         let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let style: UIModalPresentationStyle = if #available(iOS 26.0, *) {
+            .overCurrentContext
+        } else {
+            !shouldSuppress ? .popover : .overCurrentContext
+        }
         let viewModel = PhotonActionSheetViewModel(
             actions: [actions],
             closeButtonTitle: .CloseButtonTitle,
@@ -3155,10 +3162,10 @@ class BrowserViewController: UIViewController,
         var actions: [[PhotonRowActions]] = []
         let useToolbarRefactorLongPressActions = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
         if useToolbarRefactorLongPressActions {
-            actions = getTabToolbarRefactorLongPressActions()
+            actions = getNavigationToolbarRefactorLongPressActions()
         } else {
-            actions.append(getTabToolbarLongPressActionsForModeSwitching())
-            actions.append(getMoreTabToolbarLongPressActions())
+            actions.append(getNavigationToolbarLongPressActionsForModeSwitching())
+            actions.append(getMoreNavigationToolbarLongPressActions())
         }
 
         let viewModel = PhotonActionSheetViewModel(
@@ -3198,7 +3205,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchAvailableContentHeightChangedAction() {
-        guard isStoriesRedesignEnabled, let browserViewControllerState,
+        guard isAnyStoriesRedesignEnabled, let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
            homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
@@ -3335,16 +3342,38 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            guard let selectedTab = tabManager.selectedTab else { return }
-            if selectedTab.isPrivate == isPrivate, selectedTab.isFxHomeTab {
-                focusLocationTextField(forTab: selectedTab)
-            } else {
-                openBlankNewTab(
-                    focusLocationField: options?.contains(.focusLocationField) == true,
-                    isPrivate: isPrivate
-                )
+            let isFocusLocationTextFieldOption = options?.contains(.focusLocationField) == true
+
+            // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-14406]
+            // Wait for tabs restoration because we need the `selectedTab`.
+            // The `selectedTab` is `nil` when open firefox from a widget.
+            guard let selectedTab = tabManager.selectedTab, !tabManager.isRestoringTabs else {
+                AppEventQueue.wait(for: [.tabRestoration(tabManager.windowUUID)]) { [weak self] in
+                    ensureMainThread { [weak self] in
+                        guard let self, let selectedTab = self.tabManager.selectedTab else { return }
+                        self.handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
+                    }
+                }
+                return
             }
+            handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
         }
+    }
+
+    private func handle(_ selectedTab: Tab, _ isPrivate: Bool, _ isFocusLocationTextFieldOption: Bool) {
+        if shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
+            focusLocationTextField(forTab: selectedTab)
+        } else {
+            openBlankNewTab(
+                focusLocationField: isFocusLocationTextFieldOption,
+                isPrivate: isPrivate
+            )
+        }
+    }
+
+    func shouldFocusLocationTextField(for tab: Tab, isPrivate: Bool) -> Bool {
+        guard tab.isPrivate == isPrivate else { return false }
+        return tab.isFxHomeTab || tab.url == nil
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
@@ -3381,18 +3410,18 @@ class BrowserViewController: UIViewController,
     func switchToTabForURLOrOpen(
         _ url: URL,
         uuid: String? = nil,
-        isPrivate: Bool = false,
-        completionHandler: (() -> Void)? = nil
+        isPrivate: Bool = false
     ) {
         // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
         guard !tabManager.isRestoringTabs else {
             AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
-                self?.switchToTabForURLOrOpen(
-                    url,
-                    uuid: uuid,
-                    isPrivate: isPrivate,
-                    completionHandler: completionHandler
-                )
+                ensureMainThread { [weak self] in
+                    self?.switchToTabForURLOrOpen(
+                        url,
+                        uuid: uuid,
+                        isPrivate: isPrivate
+                    )
+                }
             }
             return
         }
@@ -3400,7 +3429,6 @@ class BrowserViewController: UIViewController,
         popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
-            completionHandler?()
             return
         }
 
@@ -3411,7 +3439,6 @@ class BrowserViewController: UIViewController,
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)
         }
-        completionHandler?()
     }
 
     @discardableResult
@@ -3490,7 +3517,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func isShowingJSPromptAlert() -> Bool {
-        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
+        return navigationController?.topViewController?.presentedViewController is JSPromptAlertController
     }
 
     fileprivate func recordVisitForLocationChange(_ tab: Tab, navigation: WKNavigation?) {
@@ -3887,13 +3914,11 @@ class BrowserViewController: UIViewController,
         let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
         let colors = currentTheme.colors
         backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
-#if canImport(FoundationModels)
         if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
             glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
             bottomBlurView.effect = glassEffect
             topBlurView.effect = glassEffect
         }
-#endif
 
         setNeedsStatusBarAppearanceUpdate()
 
@@ -3902,7 +3927,6 @@ class BrowserViewController: UIViewController,
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         documentLoadingView?.applyTheme(theme: currentTheme)
-        tabToolbar.applyTheme(theme: currentTheme)
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
@@ -4148,14 +4172,21 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
 
+    // MARK: - Relay Additions
+
     private func handleEmailFieldDetected(for tab: Tab?) {
         guard let tab, let tabURL = tab.url else { return }
         guard RelayController.isFeatureEnabled else { return }
 
         if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            RelayController.shared.telemetry.showPrompt()
             RelayController.shared.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
+            Task { @MainActor [weak self] in
+                guard let targetView = tab.webView?.accessoryView else { return }
+                self?.configureRelayContextualHint(for: targetView)
+            }
         }
     }
 
@@ -4168,17 +4199,36 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleRelayMaskResult(_ result: RelayMaskGenerationResult) {
+        let a11yAnnounce = String.RelayMask.RelayEmailMaskInsertedA11yAnnouncement
         switch result {
         case .newMaskGenerated:
-            break
-        case .error:
+            UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
+        case .error, .expiredToken:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         case .freeTierLimitReached:
+            UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
             let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
             SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
         }
     }
+
+    private func presentRelayContextualHint() {
+        present(relayMaskContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: relayMaskContextHintVC)
+    }
+
+    private func configureRelayContextualHint(for view: UIView) {
+         relayMaskContextHintVC.configure(
+             anchor: view,
+             withArrowDirection: .down,
+             andDelegate: self,
+             presentedUsing: { [weak self] in
+                 self?.presentRelayContextualHint()
+             },
+             andActionForButton: { },
+             overlayState: overlayManager)
+     }
 }
 
 extension BrowserViewController: LegacyClipboardBarDisplayHandlerDelegate {
@@ -4691,7 +4741,18 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
+            if !isToolbarTranslucencyRefactorEnabled {
+                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
+            } else {
+                if selectedTab.isFxHomeTab && previousTab != nil {
+                    store.dispatch(
+                        GeneralBrowserAction(
+                            windowUUID: windowUUID,
+                            actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+                        )
+                    )
+                }
+            }
 
             if selectedTab.isFxHomeTab {
                 // Added as initial fix for WKWebView memory leak. Needs further investigation.
@@ -4715,7 +4776,6 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateFindInPageVisibility(isVisible: false, tab: previousTab)
-        setupMiddleButtonStatus(isLoading: selectedTab.isLoading)
         dispatchBackForwardToolbarAction(canGoBack: selectedTab.canGoBack,
                                          canGoForward: selectedTab.canGoForward,
                                          windowUUID: windowUUID)
@@ -4767,16 +4827,17 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
+    // TODO: FXIOS-14347 This function will be removed when toolbarTranslucencyRefactor is on for everyone
     /// Updates the embedded content in the browser view controller (BVC) based on whether its a home page or web page.
     /// - Parameters:
     ///   - isHomeTab: A Boolean value indicating whether the current tab is the home page.
     ///   - webView: The `WKWebView` instance to be displayed.
-    ///   - previousTab: The previously selected tab, used to dispatch action only if opening a new homepage
-    ///   after viewing a homepage. We want to dispatch an action that triggers impression telemetry.
+    ///   - previousTab: The previously selected tab. We check if this is not nil to dispatch an action that
+    ///   triggers impression telemetry, indicating a  tab change to the Home tab has occurred.
     private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView, previousTab: Tab?) {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
-            guard previousTab?.isFxHomeTab ?? false else { return }
+            guard previousTab != nil else { return }
             store.dispatch(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
@@ -4856,7 +4917,6 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             updateToolbarTabCount(count)
-            topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
 
@@ -4947,7 +5007,15 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            // When animation duration is zero the keyboard is already showing and we don't need
+            // to update the toolbar again. This is the case when we are moving between fields in a form.
+            if state.animationDuration > 0 {
+                updateToolbarDisplay()
+            }
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
@@ -5073,6 +5141,7 @@ extension BrowserViewController: TopTabsDelegate {
         // Only for iPad leave overlay mode on tab change
         overlayManager.switchTab(shouldCancelLoading: true)
         updateZoomPageBarVisibility(visible: false)
+        scrollController.didChangeTopTab()
     }
 
     func topTabsDidPressPrivateMode() {

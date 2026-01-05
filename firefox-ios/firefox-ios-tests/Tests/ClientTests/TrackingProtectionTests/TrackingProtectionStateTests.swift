@@ -10,15 +10,15 @@ import Redux
 final class TrackingProtectionStateTests: XCTestCase {
     private var mockProfile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         mockProfile = nil
+        try await super.tearDown()
     }
 
     @MainActor

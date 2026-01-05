@@ -250,7 +250,7 @@ extension ContentBlocker {
     ) {
         let logger = self.logger
         DispatchQueue.global().async {
-            var source = ""
+            let source: String
             do {
                 let jsonSuffix = ".json"
                 let suffixLength = jsonSuffix.count
@@ -260,12 +260,15 @@ extension ContentBlocker {
                 if fileTrimmed.hasPrefix(BlocklistFileName.customBlocklistJSONFilePrefix) {
                     if let path = Bundle.main.path(forResource: fileTrimmed, ofType: "json") {
                         source = try String(contentsOfFile: path, encoding: .utf8)
+                    } else {
+                        source = ""
                     }
                 } else {
                     let json = try RemoteDataType.contentBlockingLists.loadLocalSettingsFileAsJSON(fileName: fileTrimmed)
                     source = String(data: json, encoding: .utf8) ?? ""
                 }
             } catch let error {
+                source = ""
                 logger.log("Error loading content-blocking JSON: \(error)", level: .warning, category: .adblock)
                 assertionFailure("Error loading JSON from bundle.")
             }

@@ -20,27 +20,27 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     private var glean: MockGleanWrapper!
     private var delegate: MockEnhancedTrackingProtectionCoordinatorDelegate!
 
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
-        self.mockRouter = MockRouter(navigationController: MockNavigationController())
+    override func setUp() async throws {
+        try await super.setUp()
         self.profile = MockProfile()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.routeBuilder = RouteBuilder()
         self.tabManager = MockTabManager()
         self.glean = MockGleanWrapper()
         self.delegate = MockEnhancedTrackingProtectionCoordinatorDelegate()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         self.routeBuilder = nil
         self.mockRouter = nil
         self.profile = nil
         self.tabManager = nil
         self.glean = nil
         self.delegate = nil
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testParentCoordinatorDelegate_calledWithPage() {

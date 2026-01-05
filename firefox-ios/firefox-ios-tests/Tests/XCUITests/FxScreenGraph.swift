@@ -7,6 +7,7 @@ import Foundation
 import MappaMundi
 import XCTest
 
+@MainActor
 func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<FxUserState> {
     let map = MMScreenGraph(for: test, with: FxUserState.self)
 
@@ -123,31 +124,38 @@ let allHomePanels = [
     LibraryPanel_Downloads
 ]
 
+@MainActor
 let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+@MainActor
 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 
+@MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 }
 
+@MainActor
 func cancelBackAction(for app: XCUIApplication) -> () -> Void {
     return {
         app.otherElements["PopoverDismissRegion"].waitAndTap()
     }
 }
 
+@MainActor
 func dismissContextMenuAction(app: XCUIApplication) -> () -> Void {
     return {
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
     }
 }
 
+@MainActor
 func select(rows: Int, in app: XCUIApplication) {
     app.staticTexts[String(rows)].firstMatch.waitAndTap()
 }
 
+@MainActor
 func type(text: String, in app: XCUIApplication) {
      text.forEach { char in
          app.keys[String(char)].waitAndTap()
@@ -186,7 +194,6 @@ class Action {
     static let ToggleTrackingProtection = "ToggleTrackingProtection"
     static let ToggleNoImageMode = "ToggleNoImageMode"
 
-    static let ToggleInactiveTabs = "ToggleInactiveTabs"
     static let ToggleTabGroups = "ToggleTabGroups"
 
     static let Bookmark = "Bookmark"
@@ -285,6 +292,7 @@ extension MMNavigator where T == FxUserState {
         performAction(Action.LoadURLByTyping)
     }
 
+    @MainActor
     func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
         let startTime = Date()
 
@@ -298,6 +306,7 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Opens a URL in a new tab.
+    @MainActor
     func openNewURL(urlString: String) {
         let app = XCUIApplication()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
@@ -307,6 +316,7 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Add a new Tab from the New Tab option in Browser Tab Menu
+    @MainActor
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
@@ -315,6 +325,7 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Add Tab(s) from the Tab Tray
+    @MainActor
     func createSeveralTabsFromTabTray(numberTabs: Int) {
         let app = XCUIApplication()
         for _ in 1...numberTabs {

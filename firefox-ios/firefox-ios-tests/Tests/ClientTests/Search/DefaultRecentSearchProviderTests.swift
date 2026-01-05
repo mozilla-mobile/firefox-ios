@@ -20,7 +20,7 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
     }
 
     func test_addRecentSearch_withMultipleCalls_returnsExpectedRecentSearches() {
-        let sut = createSubject(for: "engineA")
+        let sut = createSubject()
 
         sut.addRecentSearch("swift enums", url: "https://example.com")
         sut.addRecentSearch("combine", url: "https://example.com")
@@ -31,7 +31,7 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
     }
 
     func test_addRecentSearch_withWhitespaces_trimsAndReturnsValidSearchTerm() {
-        let sut = createSubject(for: "engineA")
+        let sut = createSubject()
 
         sut.addRecentSearch("   swift  ", url: "https://example.com")
         sut.addRecentSearch("   ", url: "https://example.com")
@@ -42,7 +42,7 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
     }
 
     func test_addRecentSearch_withCaseSensitivity_returnsLowercasedSearchTerm() {
-        let sut = createSubject(for: "engineA")
+        let sut = createSubject()
 
         sut.addRecentSearch("SWIFT", url: "https://example.com")
 
@@ -51,7 +51,7 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
     }
 
     func test_loadRecentSearches_withSuccess_returnsExpectedList() {
-        let sut = createSubject(for: "engineA")
+        let sut = createSubject()
         let expectation = XCTestExpectation(description: "Recent searches have been fetched successfully")
 
         sut.loadRecentSearches { results in
@@ -61,14 +61,14 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(mockHistoryStorage.getMostRecentHistoryMetadataCallCount, 1)
+        XCTAssertEqual(mockHistoryStorage.getMostRecentSearchHistoryMetadataCallCount, 1)
     }
 
     func test_loadRecentSearches_withError_returnsEmptyList() {
         enum TestError: Error { case example }
         mockHistoryStorage.result = .failure(TestError.example)
 
-        let sut = createSubject(for: "engineA")
+        let sut = createSubject()
         let expectation = XCTestExpectation(description: "Recent searches have been fetched successfully")
 
         sut.loadRecentSearches { results in
@@ -76,13 +76,45 @@ final class DefaultRecentSearchProviderTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(mockHistoryStorage.getMostRecentHistoryMetadataCallCount, 1)
+        XCTAssertEqual(mockHistoryStorage.getMostRecentSearchHistoryMetadataCallCount, 1)
     }
 
-    func createSubject(for searchEngineID: String) -> RecentSearchProvider {
-        let subject = DefaultRecentSearchProvider(
-            historyStorage: mockHistoryStorage
-        )
+    func test_clear_returnsSuccess() {
+        let sut = createSubject()
+        let expectation = XCTestExpectation(description: "Recent searches have been cleared successfully")
+
+        sut.clear { result in
+            if case .success = result {
+                expectation.fulfill()
+            } else {
+                XCTFail("Expected success, got \(result)")
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(mockHistoryStorage.deleteSearchHistoryMetadataCallCount, 1)
+    }
+
+    func test_clear_withError_returnsFail() {
+        enum TestError: Error { case example }
+        let injectedHistoryStorage = MockHistoryHandler(clearResult: .failure(TestError.example))
+        let sut = createSubject(with: injectedHistoryStorage)
+        let expectation = XCTestExpectation(description: "Recent searches have not been cleared")
+
+        sut.clear { result in
+            if case .success = result {
+                XCTFail("Expected failure, got \(result)")
+                expectation.fulfill()
+            } else {
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(mockHistoryStorage.deleteSearchHistoryMetadataCallCount, 0)
+    }
+
+    func createSubject(with injectedHistoryStorage: MockHistoryHandler? = nil) -> RecentSearchProvider {
+        let subject = DefaultRecentSearchProvider(historyStorage: injectedHistoryStorage ?? mockHistoryStorage)
         return subject
     }
 }

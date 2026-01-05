@@ -288,8 +288,11 @@ class RemoteTabsViewController: UIViewController,
         reloadUI()
     }
 
-    func presentContextMenu(for site: Site, with indexPath: IndexPath,
-                            completionHandler: @escaping () -> PhotonActionSheet?) {
+    func presentContextMenu(
+        for site: Site,
+        with indexPath: IndexPath,
+        completionHandler: @escaping () -> PhotonActionSheet?
+    ) {
         guard let contextMenu = completionHandler() else { return }
 
         present(contextMenu, animated: true, completion: nil)

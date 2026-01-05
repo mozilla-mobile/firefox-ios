@@ -266,7 +266,6 @@ class WebsiteDataManagementViewController: UIViewController,
         case .sites:
             guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
             viewModel.selectItem(item)
-            break
         case .showMore:
             viewModel.showMoreButtonPressed()
             tableView.reloadData()
@@ -285,7 +284,6 @@ class WebsiteDataManagementViewController: UIViewController,
         case .sites:
             guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
             viewModel.deselectItem(item)
-            break
         default: break
         }
     }

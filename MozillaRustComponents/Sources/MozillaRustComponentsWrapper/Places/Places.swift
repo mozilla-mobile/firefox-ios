@@ -358,10 +358,10 @@ public class PlacesReadConnection {
         }
     }
 
-    open func getMostRecentHistoryMetadata(limit: Int32) throws -> [HistoryMetadata] {
+    open func getMostRecentSearchHistoryMetadata(limit: Int32) throws -> [HistoryMetadata] {
         return try queue.sync {
             try self.checkApi()
-            return try self.conn.getMostRecentHistoryMetadata(limit: limit)
+            return try self.conn.getMostRecentSearchEntriesInHistoryMetadata(limit: limit)
         }
     }
     
@@ -806,6 +806,13 @@ public class PlacesWriteConnection: PlacesReadConnection {
                 referrerUrl: key.referrerUrl,
                 searchTerm: key.searchTerm
             )
+        }
+    }
+    
+    open func deleteSearchHistoryMetadata() throws {
+        try queue.sync {
+            try self.checkApi()
+            try self.conn.metadataDeleteSearchTerms()
         }
     }
 

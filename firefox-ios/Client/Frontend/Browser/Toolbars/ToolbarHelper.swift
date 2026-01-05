@@ -8,20 +8,27 @@ import Foundation
 protocol ToolbarHelperInterface {
     var isToolbarRefactorEnabled: Bool { get }
     var isToolbarTranslucencyEnabled: Bool { get }
+    var isToolbarTranslucencyRefactorEnabled: Bool { get }
+    var isSwipingTabsEnabled: Bool { get }
+    var userInterfaceIdiom: UIUserInterfaceIdiom { get }
+
     @MainActor
     var isReduceTransparencyEnabled: Bool { get }
+
     @MainActor
     var glassEffectAlpha: CGFloat { get }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
     func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
+
     @MainActor
     func shouldBlur() -> Bool
+
     @MainActor
     func backgroundAlpha() -> CGFloat
 }
 
-final class ToolbarHelper: ToolbarHelperInterface {
+final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
     }
@@ -34,6 +41,18 @@ final class ToolbarHelper: ToolbarHelperInterface {
         FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
     }
 
+    var isToolbarTranslucencyRefactorEnabled: Bool {
+        featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly)
+    }
+
+    var isSwipingTabsEnabled: Bool {
+        // Swipe is not enabled on iPads
+        let isiPad = userInterfaceIdiom == .pad
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().swipingTabs && !isiPad
+    }
+
+    var userInterfaceIdiom: UIUserInterfaceIdiom
+
     @MainActor
     var isReduceTransparencyEnabled: Bool {
         UIAccessibility.isReduceTransparencyEnabled
@@ -42,11 +61,7 @@ final class ToolbarHelper: ToolbarHelperInterface {
     @MainActor
     var glassEffectAlpha: CGFloat {
         guard shouldBlur() else { return 1 }
-        #if canImport(FoundationModels)
         if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
-        #else
-            return UX.backgroundAlphaForBlur
-        #endif
     }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
@@ -71,5 +86,10 @@ final class ToolbarHelper: ToolbarHelperInterface {
         guard shouldBlur() else { return 1.0 }
 
         return UX.backgroundAlphaForBlur
+    }
+
+    @MainActor
+    init(userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+        self.userInterfaceIdiom = userInterfaceIdiom
     }
 }

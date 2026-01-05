@@ -99,11 +99,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         }
     }
 
-    var gesture: UIGestureRecognizer?
-
     private func setupGesture() {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        self.gesture = gesture
         addressToolbarContainer.addGestureRecognizer(gesture)
         panGestureRecognizer = gesture
     }
@@ -162,6 +159,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         toolbarState?.isShowingNavigationToolbar == true else { return }
         enablePanGestureRecognizer()
     }
+
     // MARK: - Pan Gesture Handling
     @objc
     @MainActor

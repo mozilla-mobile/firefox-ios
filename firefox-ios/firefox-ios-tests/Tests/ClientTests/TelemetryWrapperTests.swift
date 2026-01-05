@@ -15,15 +15,15 @@ class TelemetryWrapperTests: XCTestCase {
     var profile: Profile!
 
     @MainActor
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         Experiments.events.clearEvents()
-        setupTelemetry(with: profile)
+        Self.setupTelemetry(with: profile)
     }
 
     override func tearDown() {
-        tearDownTelemetry()
+        Self.tearDownTelemetry()
         Experiments.events.clearEvents()
         profile = nil
         super.tearDown()
@@ -928,27 +928,6 @@ class TelemetryWrapperTests: XCTestCase {
                                           value: .webviewShowErrorPage,
                                           extras: extra)
         try testEventMetricRecordingSuccess(metric: GleanMetrics.Webview.showErrorPage)
-    }
-
-    func testRecordIfUserDefault() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .open,
-                                     object: .defaultBrowser,
-                                     extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: true])
-        testBoolMetricSuccess(metric: GleanMetrics.App.defaultBrowser,
-                              expectedValue: true,
-                              failureMessage: "Failed to record is default browser")
-    }
-
-    func testRecordChoiceScreenAcquisition() {
-        let key = TelemetryWrapper.EventExtraKey.didComeFromBrowserChoiceScreen.rawValue
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .open,
-                                     object: .choiceScreenAcquisition,
-                                     extras: [key: true])
-        testBoolMetricSuccess(metric: GleanMetrics.App.choiceScreenAcquisition,
-                              expectedValue: true,
-                              failureMessage: "Failed to record choice screen acquisition")
     }
 }
 

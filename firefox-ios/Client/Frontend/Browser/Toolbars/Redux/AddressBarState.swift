@@ -1068,9 +1068,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
         hasAlternativeLocationColor: Bool
     ) -> ToolbarActionConfiguration? {
         // Check if action has an updated configuration, otherwise default to state.
-        let canTranslateFromAction = action.translationConfiguration?.canTranslate ?? false
-        let canTranslateFromState = addressBarState.translationConfiguration?.canTranslate ?? false
-        let shouldShowTranslationIcon = canTranslateFromAction || canTranslateFromState
+        // We need to do this check because of existing architecture
+        // in which the state is updated after
+        // we configure the button, so we need to check action too.
+        let isFeatureEnabledFromAction = action.translationConfiguration?.isTranslationFeatureEnabled ?? false
+        let isFeatureEnabledFromState = addressBarState.translationConfiguration?.isTranslationFeatureEnabled ?? false
+        let shouldShowTranslationIcon = isFeatureEnabledFromAction || isFeatureEnabledFromState
         guard shouldShowTranslationIcon else { return nil }
         let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
         guard let state = configuration?.state else { return nil }
@@ -1341,13 +1344,16 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actionType: .translate,
             iconName: state.buttonImageName,
             templateModeForImage: !isActiveState,
-            isLoading: state == .loading,
+            loadingConfig: LoadingConfig(
+                isLoading: state == .loading,
+                a11yLabel: .Translations.Sheet.AccessibilityLabels.LoadingCompletedAccessibilityLabel
+            ),
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
             contextualHintType: ContextualHintType.translation.rawValue,
             a11yLabel: state.buttonA11yLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.translateButton
+            a11yId: state.buttonA11yIdentifier
         )
     }
 }

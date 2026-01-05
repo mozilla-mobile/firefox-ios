@@ -9,17 +9,23 @@ import Storage
 @MainActor
 final class Debouncer {
     private let delay: TimeInterval
-    private var workItem: DispatchWorkItem?
+    private var task: Task<Void, Never>?
+    private let nanosecondsPerSecond: UInt64 = 1_000_000_000
 
     init(delay: TimeInterval) {
         self.delay = delay
     }
 
     func call(action: @escaping @MainActor @Sendable () -> Void) {
-        workItem?.cancel()  // Cancel any previously scheduled work
-        workItem = DispatchWorkItem(block: action)
-        DispatchQueue.main.asyncAfter(
-            deadline: .now() + delay, execute: workItem!)
+        task?.cancel()
+
+        let nanos = UInt64(delay) * nanosecondsPerSecond
+
+        task = Task {
+            try? await Task.sleep(nanoseconds: nanos)
+            guard !Task.isCancelled else { return }
+            action()
+        }
     }
 }
 
@@ -97,15 +103,7 @@ final class AccountSyncHandler: TabEventHandler, Sendable {
         // Store tabs keyed by tabUUID to easily handle overrides.
         var storedTabsDict = [String: RemoteTab]()
         for manager in tabManagers {
-            // Set inactive tabs explicitly as inactive (initial state)
-            for tab in manager.inactiveTabs {
-                if let remoteTab = tab.toRemoteTab() {
-                    storedTabsDict[tab.tabUUID] = remoteTab
-                }
-            }
-
-            // Active tabs override inactive ones if there's overlap
-            for tab in manager.normalActiveTabs {
+            for tab in manager.normalTabs {
                 if let remoteTab = tab.toRemoteTab() {
                     storedTabsDict[tab.tabUUID] = remoteTab
                 }

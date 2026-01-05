@@ -8,6 +8,7 @@ import WebKit
 @testable import Client
 
 class DownloadHelperTests: XCTestCase {
+    @MainActor
     func test_init_whenMIMETypeIsNil_initializeCorrectly() {
         let response = anyResponse(mimeType: nil)
 
@@ -17,6 +18,7 @@ class DownloadHelperTests: XCTestCase {
         XCTAssertNotNil(subject)
     }
 
+    @MainActor
     func test_shouldDownloadFile_whenMIMETypeOctetStream_isTrue() {
         let mimeType = MIMEType.OctetStream
 
@@ -30,6 +32,7 @@ class DownloadHelperTests: XCTestCase {
         XCTAssertTrue(shouldDownload ?? false)
     }
 
+    @MainActor
     func test_shouldDownloadFile_whenMIMETypeIsNotOctetStream_isFalse() {
         let mimeType = MIMEType.GIF
 
@@ -44,6 +47,7 @@ class DownloadHelperTests: XCTestCase {
         }
     }
 
+    @MainActor
     func test_shouldDownloadFile_whenContentDispositionAttachmentHeader_isTrue() {
         let response = httpURLResponse(mimeType: MIMEType.JPEG,
                                        contentDispositionHeader: true)
@@ -57,6 +61,7 @@ class DownloadHelperTests: XCTestCase {
         }
     }
 
+    @MainActor
     func test_shouldDownloadFile_whenContentDispositionAttachmentHeader_isFalse() {
         let response = httpURLResponse(mimeType: MIMEType.JPEG,
                                        contentDispositionHeader: false)
@@ -70,6 +75,7 @@ class DownloadHelperTests: XCTestCase {
         }
     }
 
+    @MainActor
     func test_shouldDownloadFile_whenCanShowInWebview_isFalse() {
         let response = anyResponse(mimeType: MIMEType.GIF)
 
@@ -83,6 +89,7 @@ class DownloadHelperTests: XCTestCase {
         }
     }
 
+    @MainActor
     func test_shouldDownloadFile_whenCanNotShowInWebview_isTrue() {
         let response = anyResponse(mimeType: MIMEType.GIF)
 
@@ -96,6 +103,7 @@ class DownloadHelperTests: XCTestCase {
         }
     }
 
+    @MainActor
     func test_shouldDownloadFile_whenNotForceDownload_isFalse() {
         let response = anyResponse(mimeType: MIMEType.GIF)
 
@@ -109,6 +117,7 @@ class DownloadHelperTests: XCTestCase {
         }
     }
 
+    @MainActor
     func test_shouldDownloadFile_whenForceDownload_isTrue() {
         let response = anyResponse(mimeType: MIMEType.GIF)
 
@@ -198,6 +207,7 @@ class DownloadHelperTests: XCTestCase {
         )
     }
 
+    @MainActor
     private func cookieStore() -> WKHTTPCookieStore {
         return WKWebsiteDataStore.`default`().httpCookieStore
     }

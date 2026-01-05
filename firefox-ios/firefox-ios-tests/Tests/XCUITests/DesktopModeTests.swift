@@ -93,10 +93,10 @@ class DesktopModeTestsIphone: BaseTestCase {
     var toolbarScreen: ToolbarScreen!
     var mainMenuScreen: MainMenuScreen!
 
-    override func setUp() {
+    override func setUp() async throws {
         specificForPlatform = .phone
         if !iPad() {
-            super.setUp()
+            try await super.setUp()
         }
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
@@ -106,8 +106,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306853
     func testClearPrivateData() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -137,8 +135,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306855
     func testSameHostInMultipleTabs() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -179,8 +175,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // Smoketest
     func testChangeModeInSameTab() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
@@ -208,8 +202,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // Smoketest TAE
     func testChangeModeInSameTab_TAE() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
 
@@ -233,8 +225,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306856
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -272,8 +262,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306857
     func testPrivateModeOnHasNoAffectOnNormalMode() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
@@ -306,8 +294,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // Smoketest
     func testLongPressReload() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
@@ -335,12 +321,8 @@ class DesktopModeTestsIphone: BaseTestCase {
 
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitUntilPageLoad()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
         navigator.createNewTab()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
@@ -351,8 +333,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // Smoketest TAE
     func testLongPressReload_TAE() {
         if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
@@ -375,12 +355,8 @@ class DesktopModeTestsIphone: BaseTestCase {
 
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitUntilPageLoad()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
         navigator.createNewTab()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         browserScreen.assertDesktopUserAgentIsDisplayed()

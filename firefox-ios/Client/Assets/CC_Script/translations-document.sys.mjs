@@ -3361,6 +3361,10 @@ export class TranslationsDocument {
     try {
       callback();
     } finally {
+      /// NOTE(FXIOS-14349): On Webkit, calling `takeRecords` here is necessary to avoid to avoid having mutations our code 
+      /// triggers be reported as new mutations once we restart the observer. This doesn't happen on Gecko. 
+      /// We will investigate further why this happens on Webkit later. But it seems safer to call this on iOS for now.
+      this.#mutationObserver.takeRecords();
       this.#startMutationObserver();
     }
   }

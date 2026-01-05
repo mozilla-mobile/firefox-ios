@@ -32,13 +32,13 @@
 "Onboarding.Customization.Theme.Continue.Action.v123" = "保存并继续";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
-"Onboarding.Customization.Theme.Dark.Action.v123" = "深色";
+"Onboarding.Customization.Theme.Dark.Action.v123" = "深邃";
 
 /* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Description.v123" = "选个舒适的氛围浏览网页。";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
-"Onboarding.Customization.Theme.Light.Action.v123" = "浅色";
+"Onboarding.Customization.Theme.Light.Action.v123" = "明亮";
 
 /* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Skip.Action.v123" = "跳过";
@@ -79,6 +79,108 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "跳过";
 
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "自动";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "继续";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "深邃";
+
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "选取喜欢的主题，或让 %@ 适应设备主题，随您偏好。";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "明亮";
+
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "选取主题";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "继续";
+
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "键入即可获取搜索建议、常用网站、书签、历史记录、搜索引擎，尽在一处。";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "选择地址栏位置";
+
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "与 %2$@ 的营销合作伙伴分享您发现 %1$@ 的途径及使用方式。我们绝不会出售此数据。";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "我们如何使用您的数据";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "暂时不要";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "帮助我们建设更好的互联网";
+
+/* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "探索 %@ 的隐私功能，并在设备间安全发送标签页。";
+
+/* Button to skip the notification card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "暂时不要";
+
+/* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "允许通知可让 %@ 更好地为您保驾护航";
+
+/* Button to turn on notifications in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "开启通知";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "顷刻间在任意设备上查看书签、密码等数据。您的个人数据将受加密保护，安全不减。";
+
+/* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "开始同步";
+
+/* Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "暂时不要";
+
+/* Title for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "立即从上次看到的地方继续浏览";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "同意并继续";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "快速、安全，绝不出卖您。纯粹带来更好的浏览体验。";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "管理设置";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "为帮助改进浏览器，%1$@ 会向 %2$@ 发送诊断和交互数据。%3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ 重视您的隐私。阅读%2$@可详细了解";
+
+/* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "隐私声明";
+
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "继续即表示您同意 %@";
+
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ 使用条款";
+
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "准备好自由驰骋";
+
+/* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "设为默认浏览器";
+
+/* Description for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "我们会保护您的数据，并自动阻止大公司窥探您的浏览活动。";
+
+/* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "暂时不要";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "甩掉鬼祟跟踪器";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "自动";
 
@@ -89,13 +191,13 @@
 "Onboarding.Modern.Customization.Theme.Dark.v145" = "深邃";
 
 /* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.Customization.Theme.Description.v145" = "挑选您最喜爱的主题或让 %@ 与您的设备匹配，让您掌控。";
+"Onboarding.Modern.Customization.Theme.Description.v145" = "选取喜欢的主题，或让 %@ 适应设备主题，随您喜好。";
 
 /* Option for the light theme. */
 "Onboarding.Modern.Customization.Theme.Light.v145" = "明亮";
 
 /* Title for the theme selection card. */
-"Onboarding.Modern.Customization.Theme.Title.v145" = "请选择您的主题";
+"Onboarding.Modern.Customization.Theme.Title.v145" = "选取主题";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "底部";
@@ -107,13 +209,13 @@
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "继续";
 
 /* Description for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Description.v145" = "输入即可获得搜索建议，包括您的常用网站、书签、历史记录以及搜索引擎⸺一切尽在此处。";
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "键入即可获取搜索建议、常用网站、书签、历史记录、搜索引擎，尽在一处。";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "选择地址栏的位置";
 
 /* Title for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Title.v145" = "请选择您的地址栏";
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "选择地址栏位置";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "顶部";
@@ -128,7 +230,7 @@
 "Onboarding.Modern.Sync.Description.v140" = "跨设备查看书签、历史记录和密码。";
 
 /* Description for the Sync card in the v2 onboarding flow. */
-"Onboarding.Modern.Sync.Description.v145" = "与任何设备同步书签、密码等数据。所有内容都已被加密保护，只有您可以访问。";
+"Onboarding.Modern.Sync.Description.v145" = "在各设备间同步书签、密码等数据。所有数据均受加密保护，只有您可以访问。";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "开始同步";
@@ -215,7 +317,7 @@
 "Onboarding.Modern.TermsOfService.Title.v140" = "升级您的浏览体验";
 
 /* Title for the Terms of Service screen in the v2 onboarding flow. */
-"Onboarding.Modern.TermsOfService.Title.v145" = "掌控互联网";
+"Onboarding.Modern.TermsOfService.Title.v145" = "掌控上网体验";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ 使用条款";
@@ -284,7 +386,7 @@
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ 重视您的隐私。阅读%2$@可详细了解";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隐私声明。";
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隐私声明";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "详细了解";

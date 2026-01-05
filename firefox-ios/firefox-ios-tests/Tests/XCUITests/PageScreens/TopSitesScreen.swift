@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 final class TopSitesScreen {
     private let app: XCUIApplication
     private let sel: TopSitesSelectorsSet
@@ -21,9 +22,12 @@ final class TopSitesScreen {
         BaseTestCase().mozWaitForElementToExist(app.links[itemCellId], timeout: timeout)
     }
 
-    func assertTopSitesCount(_ expected: Int,
-                             timeout: TimeInterval = TIMEOUT,
-                             file: StaticString = #filePath, line: UInt = #line) {
+    func assertTopSitesCount(
+        _ expected: Int,
+        timeout: TimeInterval = TIMEOUT,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         // Wait at least one link is available with the id
         BaseTestCase().mozWaitForElementToExist(app.links[itemCellId], timeout: timeout)
 
@@ -45,13 +49,6 @@ final class TopSitesScreen {
             let link = collectionView.links.matching(pred).firstMatch
             BaseTestCase().mozWaitForElementToExist(link, timeout: timeout)
         }
-    }
-
-    func longPressOnSite(named name: String, duration: TimeInterval = 1.0) {
-        let pred = NSPredicate(format: "label == %@", name)
-        let site = collectionView.links.matching(pred).firstMatch
-        BaseTestCase().mozWaitForElementToExist(site)
-        site.press(forDuration: duration)
     }
 
     func assertVisibleTopSites(timeout: TimeInterval = TIMEOUT) {
@@ -85,24 +82,48 @@ final class TopSitesScreen {
         BaseTestCase().mozWaitForElementToNotExist(linkElement, timeout: timeout)
     }
 
+    // Asserts a site is pinned
+    func assertTopSitePinned(named name: String, timeout: TimeInterval = TIMEOUT) {
+        let pinnedSite = sel.COLLECTION_VIEW.element(in: app)
+            .links["Pinned: \(name)"]
+        BaseTestCase().mozWaitForElementToExist(pinnedSite, timeout: timeout)
+    }
+
+    // Asserts a site is not pinned
+    func assertTopSiteNotPinned(named name: String, timeout: TimeInterval = TIMEOUT) {
+        let pinnedSite = sel.COLLECTION_VIEW.element(in: app)
+            .links["Pinned: \(name)"]
+        BaseTestCase().mozWaitForElementToNotExist(pinnedSite, timeout: timeout)
+    }
+
     // Taps on a pinned top site.
     func tapOnPinnedSite(named name: String) {
-        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+        let pinnedSite = sel.COLLECTION_VIEW.element(in: app)
             .links["Pinned: \(name)"]
         BaseTestCase().mozWaitForElementToExist(pinnedSite)
         pinnedSite.waitAndTap()
     }
 
+    func longPressOnSite(named name: String, duration: TimeInterval = 1.0) {
+        let pred = NSPredicate(format: "label == %@", name)
+        let site = collectionView.links.matching(pred).firstMatch
+        BaseTestCase().mozWaitForElementToExist(site)
+        site.press(forDuration: duration)
+    }
+
     // Long-presses on a pinned top site to show the context menu.
     func longPressOnPinnedSite(named name: String, duration: TimeInterval = 1.0) {
-        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-            .links["Pinned: \(name)"]
+        let pinnedSite = sel.COLLECTION_VIEW.element(in: app).links["Pinned: \(name)"]
         BaseTestCase().mozWaitForElementToExist(pinnedSite)
         pinnedSite.press(forDuration: duration)
     }
 
-    func assertYoutubeTopSitesExist() {
-        BaseTestCase().mozWaitForElementToExist(sel.COLLECTION_VIEW.element(in: app))
-        BaseTestCase().mozWaitForElementToExist(sel.TOPSITE_YOUTUBE.element(in: app))
+    func tapPinSlashIcon() {
+        sel.PIN_SLASH.element(in: app).waitAndTap()
+    }
+
+    func assertYoutubeTopSitesNotExist() {
+        BaseTestCase().mozWaitForElementToNotExist(sel.COLLECTION_VIEW.element(in: app))
+        BaseTestCase().mozWaitForElementToNotExist(sel.TOPSITE_YOUTUBE.element(in: app))
     }
 }

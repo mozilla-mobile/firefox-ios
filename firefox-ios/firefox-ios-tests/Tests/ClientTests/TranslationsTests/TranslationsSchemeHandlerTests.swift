@@ -6,6 +6,7 @@ import XCTest
 @testable import Client
 import WebKit
 
+@MainActor
 final class TranslationsSchemeHandlerTests: XCTestCase {
     func test_start_validModelsRequest_sendsResponseAndFinishes() {
         let subject = createSubject()

@@ -32,7 +32,7 @@ struct ZoomLevelPickerView: View {
         return .Settings.Appearance.PageZoom.ZoomLevelSelectorTitle
     }
 
-    init(theme: Theme, zoomManager: ZoomPageManager, onZoomLevelChanged: @escaping(ZoomLevel) -> Void) {
+    init(theme: Theme, zoomManager: ZoomPageManager, onZoomLevelChanged: @escaping (ZoomLevel) -> Void) {
         self.theme = theme
         self.zoomManager = zoomManager
         self.onZoomLevelChanged = onZoomLevelChanged

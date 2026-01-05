@@ -18,9 +18,9 @@ struct FxSuggestTelemetry {
     private let systemRegion: String
     private let gleanWrapper: GleanWrapper
 
-    init(locale: Locale = Locale.current,
+    init(locale: LocaleProvider = SystemLocaleProvider(),
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
-        self.systemRegion = locale.regionCode()
+        self.systemRegion = locale.searchRegionCode
         self.gleanWrapper = gleanWrapper
     }
 

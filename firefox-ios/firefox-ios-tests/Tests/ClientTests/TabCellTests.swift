@@ -5,20 +5,23 @@
 import XCTest
 
 @testable import Client
+
+@MainActor
 class TabCellTests: XCTestCase {
     var cellDelegate: MockTabCellDelegate!
     var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         cellDelegate = MockTabCellDelegate()
         profile = MockProfile()
     }
 
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
         cellDelegate = nil
         profile = nil
+
+        try await super.tearDown()
     }
 
     func testTabCellDeinit() {

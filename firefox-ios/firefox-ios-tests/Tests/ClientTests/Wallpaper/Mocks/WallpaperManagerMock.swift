@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Client
 
-class WallpaperManagerMock: WallpaperManagerInterface {
+final class WallpaperManagerMock: WallpaperManagerInterface, @unchecked Sendable {
     var currentWallpaper = Wallpaper(id: "fxDefault",
                                      textColor: .green,
                                      cardColor: .purple,

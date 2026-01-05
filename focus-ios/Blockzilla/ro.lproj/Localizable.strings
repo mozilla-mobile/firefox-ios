@@ -341,7 +341,7 @@
 "Settings.licenses" = "Licențe";
 
 /* Light theme option in settings menu */
-"Settings.lightTheme" = "Deschisă";
+"Settings.lightTheme" = "Luminoasă";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Evaluează %@";
@@ -461,7 +461,7 @@
 "Settings.trackingProtectionOn" = "Activat";
 
 /* Value for theme toggle in settings menu */
-"Settings.useSystemTheme" = "Folosește modul deschis/întunecat al sistemului";
+"Settings.useSystemTheme" = "Folosește modul luminos/întunecat al sistemului";
 
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SCURTĂTURI SIRI";

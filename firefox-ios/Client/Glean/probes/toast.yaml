@@ -33,7 +33,7 @@ toasts.close_single_tab:
       - https://github.com/mozilla-mobile/firefox-ios/pull/25569
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel
@@ -49,7 +49,7 @@ toasts.close_all_tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/25569
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel

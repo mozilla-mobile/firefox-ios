@@ -7,7 +7,8 @@ import MozillaAppServices
 import Shared
 import Common
 
-final class RemoteSettingsServiceSyncCoordinator: Notifiable {
+// TODO: FXIOS-14203 RemoteSettingsServiceSyncCoordinator is not sendable
+final class RemoteSettingsServiceSyncCoordinator: @unchecked Sendable, Notifiable {
     private weak var service: RemoteSettingsService?
     private let prefs: Prefs
     private let prefsKey = PrefsKeys.RemoteSettings.lastRemoteSettingsServiceSyncTimestamp
@@ -60,9 +61,9 @@ final class RemoteSettingsServiceSyncCoordinator: Notifiable {
         // Don't perform sync immediately upon becoming active, give the app
         // some time to allow any other work or threads to take priority
         syncTimer?.invalidate()
-        syncTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) { [weak self] _ in
+        syncTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) { _ in
             // Sync needs to be scheduled on a background thread, otherwise it will block ui
-            DispatchQueue.global().async {
+            DispatchQueue.global().async { [weak self] in
                 self?.syncIfNeeded()
             }
         }

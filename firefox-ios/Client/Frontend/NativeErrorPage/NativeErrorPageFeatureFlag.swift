@@ -14,4 +14,9 @@ struct NativeErrorPageFeatureFlag: FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) &&
             featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
     }
+
+    /// Flag for showing other native error pages 
+    var isOtherErrorPagesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.otherErrorPages, checking: .buildOnly)
+    }
 }

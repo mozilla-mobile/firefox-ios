@@ -18,6 +18,8 @@ protocol TabScrollHandlerProtocol: AnyObject {
     func stopObserving(scrollView: UIScrollView)
     func traitCollectionDidChange()
     func createToolbarTapHandler() -> (() -> Void)
+
+    func didChangeTopTab()
 }
 
 final class TabScrollHandler: NSObject,
@@ -35,16 +37,11 @@ final class TabScrollHandler: NSObject,
 
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
-        static let toolbarBaseAnimationDuration: CGFloat = 0.2
-        static let minimalAddressBarAnimationDuration: CGFloat = 0.4
-        static let heightOffset: CGFloat = 14
         static let minimumScrollThreshold: CGFloat = 20
-        // Setting a very high number to use translation mainly
-        static let minimumScrollVelocity: CGFloat = 1000
     }
 
     private var isMinimalAddressBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
+        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildAndUser)
     }
 
     enum ScrollDirection {
@@ -93,6 +90,7 @@ final class TabScrollHandler: NSObject,
     var toolbarDisplayState = ToolbarDisplayState()
     var lastValidState: ToolbarDisplayState = .expanded
     private var isStatusBarScrollToTop = false
+    var didTapChangePreventScrollToTop = false
 
     private weak var delegate: TabScrollHandler.Delegate?
     private let windowUUID: WindowUUID
@@ -284,9 +282,11 @@ final class TabScrollHandler: NSObject,
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        isStatusBarScrollToTop = true
         if toolbarDisplayState.isCollapsed { showToolbars(animated: true) }
-        return true
+
+        isStatusBarScrollToTop = !didTapChangePreventScrollToTop
+        didTapChangePreventScrollToTop = false
+        return isStatusBarScrollToTop
     }
 
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
@@ -298,6 +298,10 @@ final class TabScrollHandler: NSObject,
             guard isMinimalAddressBarEnabled && toolbarDisplayState.isCollapsed  else { return }
             showToolbars(animated: true)
         }
+    }
+
+    func didChangeTopTab() {
+        didTapChangePreventScrollToTop = true
     }
 
     // MARK: - Private

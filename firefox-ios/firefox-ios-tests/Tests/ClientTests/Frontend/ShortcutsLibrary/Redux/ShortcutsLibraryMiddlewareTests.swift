@@ -12,16 +12,16 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockGleanWrapper: MockGleanWrapper!
     var mockStore: MockStoreForMiddleware<AppState>!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockGleanWrapper = MockGleanWrapper()
         setupStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockGleanWrapper = nil
         resetStore()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_viewDidAppearAction_sendsTelemetryData_whenShouldRecordImpressionTelemetry_isTrue() throws {
