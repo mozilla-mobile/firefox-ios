@@ -4880,6 +4880,7 @@ extension BrowserViewController: TabManagerDelegate {
             return
         }
 
+        scrollController.showToolbars(animated: false)
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
                 toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
