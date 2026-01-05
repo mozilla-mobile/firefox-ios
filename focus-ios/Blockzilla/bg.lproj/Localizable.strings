@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Това ни помага да откриваме и отстраняваме проблеми с четеца.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ ще подобри възможностите, производителността и стабилността между актуализациите. Промените бяха приложени дистанционно.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ ще изпраща към търсачката всичко, каквото въвеждате в адресната лента.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla се старае да събира само нужните данни за подобряване на %@ за всички.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla се старае да събира само нужните данни за подобряване на %@ за всички.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ може да инсталира и провежда проучвания от време на време.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ произволно избира потребители, които да тестват функции, което подобрява качеството за всички.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Основни";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Показване на съвети на началния екран";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Разрешаване на отдалечените подобрения";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Проучвания";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Разрешаване на проучванията на функционалност";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Използване на пръстово разпознаване за отключване на приложението";

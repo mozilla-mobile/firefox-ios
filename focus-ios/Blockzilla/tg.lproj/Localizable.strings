@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Ин ба мо кумак мерасонад, то тавонем мушкилотро дар браузер ташхис ва ислоҳ намоем.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "Барномаи «%@» хусусиятҳо, самаранокӣ ва кори устувори низомро байни навсозиҳо беҳтар мекунад. Тағйирот ба таври дурдаст татбиқ карда мешавад.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "«%@» он чизеро, ки шумо дар навори нишонӣ менависед, ба низоми ҷустуҷӯии шумо мефиристад.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "«Mozilla» cаъю кӯшиш мекунад, ки танҳо он маълумотеро ҷамъоварӣ намояд, ки мо бояд барои фаъолият ва беҳтарсозии «%@» барои ҳар як кас таъмин намоем.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "«Mozilla» cаъю кӯшиш мекунад, ки танҳо он маълумотеро ҷамъоварӣ намояд, ки мо бояд барои фаъолият ва беҳтарсозии «%@» барои ҳар як кас таъмин намоем.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "Баъзе вақт «%@» метавонад омӯзишҳоро насб ва иҷро намояд.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "Барномаи «%@» корбаронро ба таври тасодуфӣ барои санҷиши хусусиятҳо интихоб мекунад, зеро ки ин амал сифати низомро барои ҳама беҳтар месозад.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Умумӣ";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Нишон додани маслиҳатҳо дар экрани асосӣ";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Иҷозат додани такмилдиҳии дурдаст";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Омӯзишҳо";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Иҷозат додан ба омӯзиши хусусиятҳо";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Истифодаи «Touch ID» барои кушодани қулфи барнома";

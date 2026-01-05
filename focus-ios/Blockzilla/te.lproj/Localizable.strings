@@ -169,7 +169,7 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "ఇతర కంటెంట్ ట్రాకర్లను నిరోధించడం వలన కొన్ని వీడియోలు మరియు వెబ్ పేజీలు విరిగిపోవచ్చు.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "ప్రతి ఒక్కరికీ %@ ను అందించడానికి మరియు మెరుగుపరచడానికి Mozilla అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
