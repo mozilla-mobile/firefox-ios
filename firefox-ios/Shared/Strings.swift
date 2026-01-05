@@ -1622,12 +1622,12 @@ extension String {
             public static let AdvancedInfo = MZLocalizedString(
                 key: "NativeErrorPage.BadCertDomain.AdvancedInfo.v135",
                 tableName: "NativeErrorPage",
-                value: "%1$@ doesn’t trust this site because the certificate found isn't valid for %2$@.",
+                value: "%1$@ doesn’t trust this site because the certificate found isn’t valid for %2$@.",
                 comment: "On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL.")
             public static let AdvancedSecurityInfo = MZLocalizedString(
                 key: "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v135",
                 tableName: "NativeErrorPage",
-                value: "This site doesn’t allow connections that aren't secure.",
+                value: "This site doesn’t allow connections that aren’t secure.",
                 comment: "On certificate error page, this is the security information shown in the advanced section.")
             public static let AdvancedWarning1 = MZLocalizedString(
                 key: "NativeErrorPage.BadCertDomain.AdvancedWarning1.v135",
@@ -1668,7 +1668,7 @@ extension String {
                 key: "NativeErrorPage.BadCertDomain.ViewCertificateLink.v135",
                 tableName: "NativeErrorPage",
                 value: "View the site’s certificate",
-                comment: "On certificate error page, this is a link that will show the site's certificate details.")
+                comment: "On certificate error page, this is a link that will show the site’s certificate details.")
             public static let ErrorCodeLabel = MZLocalizedString(
                 key: "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v135",
                 tableName: "NativeErrorPage",
