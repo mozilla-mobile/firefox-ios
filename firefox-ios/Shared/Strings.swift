@@ -1829,7 +1829,7 @@ extension String {
                     public static let AgreementButtonTitle = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148",
                         tableName: "Onboarding",
-                        value: "Agree and continue",
+                        value: "Continue",
                         comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
                 }
 
@@ -1837,7 +1837,7 @@ extension String {
                     public static let Title = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148",
                         tableName: "Onboarding",
-                        value: "Say goodbye to creepy trackers",
+                        value: "Open your links with built-in privacy",
                         comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Welcome.Description.v148",
