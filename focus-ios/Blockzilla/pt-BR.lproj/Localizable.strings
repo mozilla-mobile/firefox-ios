@@ -53,7 +53,7 @@
 "AddPass.Error.Message" = "Ocorreu um erro ao adicionar a senha no Wallet. Tente novamente mais tarde.";
 
 /* Title of the 'Add Pass Failed' alert. */
-"AddPass.Error.Title" = "Falha ao adicionar senha";
+"AddPass.Error.Title" = "Falha ao adicionar passe";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Faça a autenticação para retornar ao %@";
