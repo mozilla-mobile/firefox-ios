@@ -124,7 +124,7 @@ class TrackingProtectionModel {
             return theme.colors.layerAccentPrivateNonOpaque
         }
         if !connectionSecure {
-            return theme.colors.layerRatingFSubdued
+            return theme.colors.layerCriticalSubdued
         }
         return theme.colors.layerAccentPrivateNonOpaque
     }
