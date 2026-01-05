@@ -3,10 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
+import Common
 
 class NativeErrorPageHelper {
     enum NetworkErrorType {
         case noInternetConnection
+        case badCertDomain
     }
 
     var error: NSError
@@ -20,6 +23,66 @@ class NativeErrorPageHelper {
     }
 
     func parseErrorDetails() -> ErrorPageModel {
+        // Helper function to handle certificate errors
+        func handleCertificateError(url: URL) -> ErrorPageModel {
+            // Check error domain for safety
+            guard error.domain == NSURLErrorDomain else {
+                // Not a URL error domain - show generic error
+                return ErrorPageModel(
+                    errorTitle: .NativeErrorPage.GenericError.TitleLabel,
+                    errorDescription: .NativeErrorPage.GenericError.Description,
+                    foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
+                    url: url,
+                    advancedSection: nil,
+                    showProceedButton: false,
+                    showGoBackButton: false
+                )
+            }
+
+            // Check if this is the specific SSL_ERROR_BAD_CERT_DOMAIN error (-9843)
+            if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
+               let certErrorCode = underlyingError.userInfo["_kCFStreamErrorCodeKey"] as? Int,
+               certErrorCode == -9843 {
+                // SSL_ERROR_BAD_CERT_DOMAIN - create model with advanced section
+                let appName = AppName.shortName.description
+                let securityInfo = String.NativeErrorPage.BadCertDomain.AdvancedSecurityInfo
+                let certificateInfo = String(format: String.NativeErrorPage.BadCertDomain.AdvancedInfo,
+                                             appName,
+                                             url.absoluteString)
+                // Combine security info and certificate info with newline
+                let advancedInfo = "\(securityInfo)\n\(certificateInfo)"
+                let warningText = "\(String.NativeErrorPage.BadCertDomain.AdvancedWarning1)\n\(String.NativeErrorPage.BadCertDomain.AdvancedWarning2)"
+
+                let advancedSection = ErrorPageModel.AdvancedSectionConfig(
+                    buttonText: String.NativeErrorPage.BadCertDomain.AdvancedButton,
+                    infoText: advancedInfo,
+                    warningText: warningText,
+                    certificateErrorCode: "SSL_ERROR_BAD_CERT_DOMAIN"
+                )
+
+                return ErrorPageModel(
+                    errorTitle: String.NativeErrorPage.BadCertDomain.TitleLabel,
+                    errorDescription: String.NativeErrorPage.BadCertDomain.Description,
+                    foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
+                    url: url,
+                    advancedSection: advancedSection,
+                    showProceedButton: true,
+                    showGoBackButton: true
+                )
+            } else {
+                // Other certificate errors - show generic error
+                return ErrorPageModel(
+                    errorTitle: .NativeErrorPage.GenericError.TitleLabel,
+                    errorDescription: .NativeErrorPage.GenericError.Description,
+                    foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
+                    url: url,
+                    advancedSection: nil,
+                    showProceedButton: false,
+                    showGoBackButton: false
+                )
+            }
+        }
+
         let model: ErrorPageModel = if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             switch error.code {
             case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
@@ -27,14 +90,26 @@ class NativeErrorPageHelper {
                     errorTitle: .NativeErrorPage.NoInternetConnection.TitleLabel,
                     errorDescription: .NativeErrorPage.NoInternetConnection.Description,
                     foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
-                    url: nil
+                    url: nil,
+                    advancedSection: nil,
+                    showProceedButton: false,
+                    showGoBackButton: false
                 )
+            // Certificate Errors - new cases added
+            case NSURLErrorServerCertificateUntrusted,
+                 NSURLErrorServerCertificateHasBadDate,
+                 NSURLErrorServerCertificateHasUnknownRoot,
+                 NSURLErrorServerCertificateNotYetValid:
+                handleCertificateError(url: url)
             default:
                 ErrorPageModel(
                     errorTitle: .NativeErrorPage.GenericError.TitleLabel,
                     errorDescription: .NativeErrorPage.GenericError.Description,
                     foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
-                    url: url
+                    url: url,
+                    advancedSection: nil,
+                    showProceedButton: false,
+                    showGoBackButton: false
                 )
             }
         } else {
@@ -42,7 +117,10 @@ class NativeErrorPageHelper {
                 errorTitle: .NativeErrorPage.NoInternetConnection.TitleLabel,
                 errorDescription: .NativeErrorPage.NoInternetConnection.Description,
                 foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
-                url: nil
+                url: nil,
+                advancedSection: nil,
+                showProceedButton: false,
+                showGoBackButton: false
             )
         }
         return model
