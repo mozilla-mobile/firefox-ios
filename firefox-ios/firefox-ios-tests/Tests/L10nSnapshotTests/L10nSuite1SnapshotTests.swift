@@ -287,7 +287,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testTakeMarketingScreenshots() {
-        let searchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
 
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
