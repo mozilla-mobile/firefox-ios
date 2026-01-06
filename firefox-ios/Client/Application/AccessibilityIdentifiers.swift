@@ -32,6 +32,7 @@ struct AccessibilityIdentifiers {
         static let translateButton = "TabToolbar.translateButton"
         static let translateLoadingButton = "TabToolbar.translateLoadingButton"
         static let translateActiveButton = "TabToolbar.translateActiveButton"
+        static let topBorder = "TabToolbar.toolbarTopBorderView"
     }
 
     struct Browser {

@@ -13,7 +13,7 @@ public final class CompactBrowserAddressToolbar: BrowserAddressToolbar {
             leadingPageActions: config.leadingPageActions,
             trailingPageActions: config.trailingPageActions,
             browserActions: [],
-            borderPosition: config.borderPosition,
+            borderConfiguration: config.borderConfiguration,
             uxConfiguration: config.uxConfiguration,
             shouldAnimate: config.shouldAnimate
         )

@@ -2089,6 +2089,9 @@ class BrowserViewController: UIViewController,
         microsurvey.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(microsurvey)
 
+        // We opted out from using bottomContentStackView, because the microsurvey
+        // should be associated with the view underneath as if one view.
+        // Hence, no border should exist between microsurvey and below view.
         if isBottomSearchBar {
             overKeyboardContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
@@ -2100,15 +2103,7 @@ class BrowserViewController: UIViewController,
         }
 
         microsurvey.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-
-        updateBarBordersForMicrosurvey()
         updateViewConstraints()
-    }
-
-    // Update border to hide when microsurvey is shown so that
-    // it appears to belong the app and harder to spoof
-    private func updateBarBordersForMicrosurvey() {
-        guard !shouldUseiPadSetup() else { return }
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
@@ -2130,7 +2125,6 @@ class BrowserViewController: UIViewController,
         }
 
         self.microsurvey = nil
-        updateBarBordersForMicrosurvey()
         updateViewConstraints()
     }
 
