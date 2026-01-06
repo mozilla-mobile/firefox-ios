@@ -15,7 +15,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     @MainActor
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
                 let key = String(parts[1])
@@ -26,7 +26,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
                     LaunchArguments.SkipContextualHints]
         }
         currentScreen = 0
-        super.setUp()
+        try await super.setUp()
     }
 
     @MainActor
