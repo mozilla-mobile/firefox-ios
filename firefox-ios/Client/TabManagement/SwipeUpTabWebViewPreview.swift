@@ -34,6 +34,12 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         $0.backgroundColor = UX.deleteOverlayBackgroundColor
         $0.alpha = 0.0
     }
+    private let closeButton: UIButton = .build {
+        if #available(iOS 26, *) {
+            $0.configuration = .prominentClearGlass()
+            $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)
+        }
+    }
     
     private var screenshotViewContainerTopConstraint: NSLayoutConstraint?
     private var screenshotViewContainerBottomConstraint: NSLayoutConstraint?
@@ -60,6 +66,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         addSubview(screenshotViewContainer)
         screenshotViewContainer.addSubview(screenshotView)
         screenshotViewContainer.addSubview(deleteOverlay)
+        addSubview(closeButton)
         
         tabBackgroundHoverTopConstraint = tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor)
         tabBackgroundHoverBottomConstraint = tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor)
@@ -71,6 +78,9 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         screenshotViewContainerTopConstraint?.isActive = true
         screenshotViewContainerBottomConstraint?.isActive = true
         NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            closeButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
             tabBackgroundHover.leadingAnchor.constraint(equalTo: leadingAnchor),
             tabBackgroundHover.trailingAnchor.constraint(equalTo: trailingAnchor),
             
@@ -89,6 +99,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         screenshotView.layer.cornerRadius = 0
         tabBackgroundHoverTopConstraint?.constant = topPadding
         tabBackgroundHoverBottomConstraint?.constant = -bottomPadding
+        closeButton.transform = .identity.translatedBy(x: 0.0, y: closeButton.bounds.height)
         UIView.animate(withDuration: 0.2) { [self] in
             alpha = 1.0
             layer.zPosition = 1000
@@ -106,11 +117,15 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             addHaptics()
         }
         UIView.animate(withDuration: 0.15) {
+            self.closeButton.transform = shouldAnimateOverlay ? .identity : .init(translationX: 0.0,
+                                                                                  y: self.closeButton.bounds.height)
             self.deleteOverlay.alpha = shouldShowRemoveOverlay ? 1 : 0
         }
         let scale = 1 - abs(position.y) / bounds.height
-        screenshotViewContainer.transform = .identity.translatedBy(x: position.x,
-                                                          y: position.y).scaledBy(
+        screenshotViewContainer.transform = .identity.translatedBy(
+            x: position.x,
+            y: position.y
+        ).scaledBy(
             x: scale,
             y: scale
         )
