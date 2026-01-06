@@ -207,7 +207,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
 
     // MARK: ThemeApplicable
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layerSurfaceLow
+        backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textSecondary
         topBorderView.backgroundColor = theme.colors.borderPrimary
