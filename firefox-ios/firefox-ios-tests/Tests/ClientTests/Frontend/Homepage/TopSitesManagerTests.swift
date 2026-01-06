@@ -210,7 +210,9 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.duplicateTile.compactMap { TopSiteConfiguration(site: $0) },
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
+                Site.createSponsoredSite(fromUnifiedTile: $0)
+            }
         )
 
         XCTAssertEqual(topSites.count, 2)
@@ -224,7 +226,9 @@ final class TopSitesManagerTests: XCTestCase {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
         let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteConfiguration(site: $0) },
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
+                Site.createSponsoredSite(fromUnifiedTile: $0)
+            }
         )
 
         XCTAssertEqual(topSites.count, 2)
@@ -239,7 +243,9 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteConfiguration(site: $0) },
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
+                Site.createSponsoredSite(fromUnifiedTile: $0)
+            }
         )
         XCTAssertEqual(topSites.count, 6)
         let expectedTitles = [
@@ -267,7 +273,9 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteConfiguration(site: $0) },
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
+                Site.createSponsoredSite(fromUnifiedTile: $0)
+            }
         )
         XCTAssertEqual(topSites.count, 3)
         let expectedTitles = [
@@ -300,7 +308,9 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = subject.recalculateTopSites(
             otherSites: [],
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
+                Site.createSponsoredSite(fromUnifiedTile: $0)
+            }
         )
 
         XCTAssertEqual(topSites.compactMap { $0.title }, ["Google Test", "Mozilla Sponsored Tile"])

@@ -169,7 +169,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
         coreFeatures[.useMockData] = useMockData
 
         let useStagingUnifiedAdsAPI = CoreFlaggableFeature(withID: .useStagingUnifiedAdsAPI,
-                                                        enabledFor: [.developer])
+                                                           enabledFor: [.developer])
 
         coreFeatures[.useStagingUnifiedAdsAPI] = useStagingUnifiedAdsAPI
     }
