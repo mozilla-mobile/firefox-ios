@@ -139,17 +139,17 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     // MARK: - Mock object
 
     var tileSite: Site {
-        let contile = Contile(
-            id: 0,
-            name: "Test",
+        let tile = UnifiedTile(
+            format: "",
             url: "www.test.com",
-            clickUrl: "https://www.something1.com",
+            callbacks: UnifiedTileCallback(
+                click: "https://www.something1.com",
+                impression: "https://www.something3.com"
+            ),
             imageUrl: "https://www.something2.com",
-            imageSize: 0,
-            impressionUrl: "https://www.something3.com",
-            position: 0
+            name: "Test",
+            blockKey: "Block_key_1"
         )
-
-        return Site.createSponsoredSite(fromContile: contile)
+        return Site.createSponsoredSite(fromUnifiedTile: tile)
     }
 }

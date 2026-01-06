@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
+final class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     // MARK: - Test Lifecycle
     override func setUp() {
         super.setUp()

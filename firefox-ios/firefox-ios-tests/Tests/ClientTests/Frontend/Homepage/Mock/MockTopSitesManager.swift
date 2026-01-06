@@ -22,7 +22,7 @@ final class MockTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
 
     func fetchSponsoredSites() async -> [Site] {
         let contiles = MockSponsoredTileData.defaultSuccessData
-        return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
+        return contiles.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
     }
 
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
