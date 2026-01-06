@@ -76,7 +76,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell])
         mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
         snapshot("Homescreen-first-visit")
     }
@@ -320,7 +319,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // perform a search but don't complete (we're testing autocomplete here)
         navigator.createNewTab()
-        searchBar.waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].typeText("firef")
         sleep(2)
