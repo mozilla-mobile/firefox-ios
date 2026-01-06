@@ -710,6 +710,9 @@ open class BrowserProfile: Profile,
         case .mac: "desktop"
         default: "phone"
         }
+        let regionCode = SystemLocaleProvider().regionCode()
+        let country = regionCode == "und" ? nil : regionCode
+
         return RemoteSettingsContext(
             channel: appInfo.buildChannel?.rawValue ?? "release",
             appVersion: AppInfo.appVersion,
@@ -724,7 +727,7 @@ open class BrowserProfile: Profile,
             os: "iOS",
             osVersion: UIDeviceDetails.systemVersion,
             formFactor: formFactor,
-            country: SystemLocaleProvider().regionCode())
+            country: country)
     }
 
     func hasAccount() -> Bool {
