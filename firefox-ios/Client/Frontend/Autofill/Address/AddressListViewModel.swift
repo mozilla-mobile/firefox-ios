@@ -96,7 +96,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
         self.editAddressWebViewManager = editAddressWebViewManager
         self.themeManager = themeManager
         self.profile = profile
-        self.currentRegionCode = localeProvider.regionCode
+        self.currentRegionCode = localeProvider.regionCode(fallback: "")
     }
 
     // MARK: - Fetch Addresses

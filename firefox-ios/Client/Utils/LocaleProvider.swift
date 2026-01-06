@@ -8,7 +8,15 @@ import Common
 protocol LocaleProvider {
     var current: Locale { get }
     var preferredLanguages: [String] { get }
-    var regionCode: String { get }
+    func regionCode(fallback: String?) -> String
+}
+
+extension LocaleProvider {
+    // Default usage of region code that should be used unless
+    // we explicitly want to set a specific fallback (rare cases).
+    func regionCode() -> String {
+        return regionCode(fallback: nil)
+    }
 }
 
 struct SystemLocaleProvider: LocaleProvider {
@@ -38,12 +46,12 @@ struct SystemLocaleProvider: LocaleProvider {
     /// - On iOS 16 and later, it uses `Locale.region?.identifier`.
     /// - On earlier versions, it falls back to `Locale.regionCode`.
     ///
-    /// If all attempts fail, this method logs a fatal error and returns `"und"`,
+    /// If all attempts fail, this method logs a fatal error and returns a specified fallback or by default `"und"`,
     /// the BCP-47 primary language subtag for *Undetermined* linguistic content.
     ///
-    /// - Returns: A region code string (e.g. `"US"`, `"CA"`), or `"und"` if the
+    /// - Returns: A region code string (e.g. `"US"`, `"CA"`), or fallback string or`"und"` if the
     ///   region cannot be determined.
-    var regionCode: String {
+    func regionCode(fallback: String?) -> String {
         let systemRegion: String?
         if #available(iOS 16, *) {
             systemRegion = current.region?.identifier
@@ -62,7 +70,7 @@ struct SystemLocaleProvider: LocaleProvider {
             // The 'und' (Undetermined) primary language subtag
             // identifies linguistic content whose language is not determined.
             // See https://www.ietf.org/rfc/bcp/bcp47.txt
-            return "und"
+            return fallback ?? "und"
         }
 
         return systemRegion

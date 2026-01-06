@@ -308,7 +308,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
 
         var engineSectionChildren: [Setting] = [bookmarks, history, tabs, passwords, creditCards]
 
-        if AddressLocaleFeatureValidator.isValidRegion(for: SystemLocaleProvider().regionCode) {
+        if AddressLocaleFeatureValidator.isValidRegion(for: SystemLocaleProvider().regionCode()) {
             engineSectionChildren.append(addresses)
         }
 

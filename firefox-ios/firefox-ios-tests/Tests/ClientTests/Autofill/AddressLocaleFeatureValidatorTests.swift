@@ -11,7 +11,7 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
     func testValidRegionCA() {
         let locale = MockLocaleProvider(regionCode: "CA")
         XCTAssertTrue(
-            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode),
+            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode()),
             "Region valid for CA"
         )
     }
@@ -19,7 +19,7 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
     func testValidRegionUS() {
         let locale = MockLocaleProvider(regionCode: "US")
         XCTAssertTrue(
-            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode),
+            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode()),
             "Region valid for US"
         )
     }
@@ -27,7 +27,7 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
     func testValidRegionFR() {
         let locale =  MockLocaleProvider(regionCode: "FR")
         XCTAssertTrue(
-            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode),
+            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode()),
             "Valid region for FR"
         )
     }
@@ -35,7 +35,7 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
     func testValidRegionDE() {
         let locale =  MockLocaleProvider(regionCode: "DE")
         XCTAssertTrue(
-            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode),
+            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode()),
             "Valid region for DE"
         )
     }
@@ -43,7 +43,7 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
     func testValidRegionGB() {
         let locale =  MockLocaleProvider(regionCode: "GB")
         XCTAssertTrue(
-            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode),
+            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode()),
             "Valid region for GB"
         )
     }
@@ -51,7 +51,7 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
     func testInvalidRegionMA() {
         let locale =  MockLocaleProvider(regionCode: "MA")
         XCTAssertFalse(
-            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode),
+            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode()),
             "Invalid region for MA"
         )
     }
@@ -60,7 +60,7 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
         let locale =  MockLocaleProvider(regionCode: "")
 
         XCTAssertFalse(
-            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode),
+            AddressLocaleFeatureValidator.isValidRegion(for: locale.regionCode()),
             "Invalid region for locale without region code"
         )
     }

@@ -25,42 +25,42 @@ final class SystemLocaleProviderTests: XCTestCase {
 
     func test_regionCode_withEnglishUSLocale_returnsProperRegionCode() {
         let subject = createSubject(with: Locale(identifier: "en_US"))
-        XCTAssertEqual(subject.regionCode, "US")
+        XCTAssertEqual(subject.regionCode(), "US")
         XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
     }
 
     func test_regionCode_withEnglishCanadaLocale_returnsProperRegionCode() {
         let subject = createSubject(with: Locale(identifier: "en_CA"))
 
-        XCTAssertEqual(subject.regionCode, "CA")
+        XCTAssertEqual(subject.regionCode(), "CA")
         XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
     }
 
     func test_regionCode_withFrenchCanadaLocale_returnsProperRegionCode() {
         let subject = createSubject(with: Locale(identifier: "fr_CA"))
 
-        XCTAssertEqual(subject.regionCode, "CA")
+        XCTAssertEqual(subject.regionCode(), "CA")
         XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
     }
 
     func test_regionCode_withFrenchFranceLocale_returnsProperRegionCode() {
         let subject = createSubject(with: Locale(identifier: "fr_FR"))
 
-        XCTAssertEqual(subject.regionCode, "FR")
+        XCTAssertEqual(subject.regionCode(), "FR")
         XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
     }
 
     func test_regionCode_withGermanGermanyLocale_returnsProperRegionCode() {
         let subject = createSubject(with: Locale(identifier: "de_DE"))
 
-        XCTAssertEqual(subject.regionCode, "DE")
+        XCTAssertEqual(subject.regionCode(), "DE")
         XCTAssertNil(logger.savedMessage, "No log expected for valid region extraction")
     }
 
     func test_regionCode_whenIdentifierEmpty_returnsUnd_andLogsFatal() {
         let subject = createSubject(with: Locale(identifier: "abc123"))
 
-        let result = subject.regionCode
+        let result = subject.regionCode()
         XCTAssertEqual(result, "und", "Expected 'und' for undetermined locale")
 
         XCTAssertEqual(logger.savedCategory, .locale)
@@ -77,7 +77,7 @@ final class SystemLocaleProviderTests: XCTestCase {
             subject = createSubject(with: Locale(identifier: "mul"))
         }
 
-        let result = subject.regionCode
+        let result = subject.regionCode()
         XCTAssertEqual(result, "und", "Expected 'und' for cases when there are more than one languages")
 
         XCTAssertEqual(logger.savedCategory, .locale)
@@ -94,7 +94,7 @@ final class SystemLocaleProviderTests: XCTestCase {
             subject = createSubject(with: Locale(identifier: "zxx"))
         }
 
-        let result = subject.regionCode
+        let result = subject.regionCode()
         XCTAssertEqual(
             result,
             "und",
@@ -105,6 +105,28 @@ final class SystemLocaleProviderTests: XCTestCase {
         XCTAssertEqual(logger.savedLevel, .fatal)
         XCTAssertEqual(logger.savedMessage, "Unable to retrieve region code from Locale, so return undetermined")
         XCTAssertEqual(logger.savedExtra, Optional(["Locale identifier": "zxx"]))
+    }
+
+    func test_regionCode_withEmptyStringFallback_returnsProperFallback() {
+        let subject = createSubject(with: Locale(identifier: "fakeIdentifier"))
+        let result = subject.regionCode(fallback: "")
+        XCTAssertEqual(result, "")
+
+        XCTAssertEqual(logger.savedCategory, .locale)
+        XCTAssertEqual(logger.savedLevel, .fatal)
+        XCTAssertEqual(logger.savedMessage, "Unable to retrieve region code from Locale, so return undetermined")
+        XCTAssertEqual(logger.savedExtra, Optional(["Locale identifier": "fakeidentifier"]))
+    }
+
+    func test_regionCode_withUSFallback_returnsProperFallback() {
+        let subject = createSubject(with: Locale(identifier: "fakeIdentifier"))
+        let result = subject.regionCode(fallback: "US")
+        XCTAssertEqual(result, "US")
+
+        XCTAssertEqual(logger.savedCategory, .locale)
+        XCTAssertEqual(logger.savedLevel, .fatal)
+        XCTAssertEqual(logger.savedMessage, "Unable to retrieve region code from Locale, so return undetermined")
+        XCTAssertEqual(logger.savedExtra, Optional(["Locale identifier": "fakeidentifier"]))
     }
 
     private func createSubject(with locale: Locale) -> SystemLocaleProvider {

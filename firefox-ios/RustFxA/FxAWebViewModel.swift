@@ -322,7 +322,7 @@ extension FxAWebViewModel {
     /// user info (for settings), or by passing CWTS setup info (in case the user is
     /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView, localeProvider: LocaleProvider = SystemLocaleProvider()) {
-        let addressAutofillStatus = AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode)
+        let addressAutofillStatus = AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode())
 
         let creditCardCapability = ", \"creditcards\""
         let addressAutofillCapability =  addressAutofillStatus ? ", \"addresses\"" : ""
