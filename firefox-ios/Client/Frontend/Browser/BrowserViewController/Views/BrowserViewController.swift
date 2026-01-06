@@ -1608,9 +1608,9 @@ class BrowserViewController: UIViewController,
         // toolbar translucency needs to be updated
         // This also required for iPad rotation
         if isToolbarTranslucencyRefactorEnabled {
-            updateToolbarDisplay(shouldUpdateBlurViews: false)
+            addOrUpdateMaskViewIfNeeded()
         } else {
-            updateToolbarDisplay(shouldUpdateBlurViews: true)
+            updateToolbarDisplay()
         }
 
         // Update available height for the homepage
