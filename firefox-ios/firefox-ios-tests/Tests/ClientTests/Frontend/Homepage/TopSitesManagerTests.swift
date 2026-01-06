@@ -110,7 +110,7 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     func test_recalculateTopSites_shouldShowSponsoredSites_returnOnlyMaxSponsoredSites() throws {
-        // Max contiles is currently at 2, so it should add 2 contiles only.
+        // Max tiles is currently at 2, so it should add 2 tiles only.
         let subject = try createSubject()
         let topSites = subject.recalculateTopSites(
             otherSites: createOtherSites(),

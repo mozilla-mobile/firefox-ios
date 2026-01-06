@@ -21,11 +21,11 @@ final class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     func testExpectedCoreFeatures() {
         let adjustSetting = featureFlags.isCoreFeatureEnabled(.adjustEnvironmentProd)
         let mockDataSetting = featureFlags.isCoreFeatureEnabled(.useMockData)
-        let contileAPISetting = featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI)
+        let unifiedAdsAPISetting = featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI)
 
         XCTAssertFalse(adjustSetting)
         XCTAssertTrue(mockDataSetting)
-        XCTAssertTrue(contileAPISetting)
+        XCTAssertTrue(unifiedAdsAPISetting)
     }
 
     func testDefaultNimbusBoolFlags() {
