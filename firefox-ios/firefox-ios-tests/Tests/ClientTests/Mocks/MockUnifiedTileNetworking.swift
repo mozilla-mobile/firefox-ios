@@ -6,18 +6,18 @@ import Foundation
 
 @testable import Client
 
-final class MockContileNetworking: ContileNetworking, @unchecked Sendable {
+final class MockUnifiedTileNetworking: UnifiedTileNetworking, @unchecked Sendable {
     var error: Error?
     var data: Data?
     var response: HTTPURLResponse?
     var dataFromCalled = 0
 
-    func data(from request: URLRequest, completion: (NetworkingContileResult) -> Void) {
+    func data(from request: URLRequest, completion: (NetworkingUnifiedTileResult) -> Void) {
         dataFromCalled += 1
         if let error {
             completion(.failure(error))
         } else if let data, let response {
-            completion(.success(ContileResultData(data: data, response: response)))
+            completion(.success(UnifiedTileResultData(data: data, response: response)))
         }
     }
 }

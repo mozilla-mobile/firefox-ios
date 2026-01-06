@@ -9,12 +9,12 @@ import XCTest
 
 @MainActor
 class UnifiedAdsProviderTests: XCTestCase {
-    private var networking: MockContileNetworking!
+    private var networking: MockUnifiedTileNetworking!
 
     override func setUp() async throws {
         try await super.setUp()
         TelemetryContextualIdentifier.setupContextId()
-        networking = MockContileNetworking()
+        networking = MockUnifiedTileNetworking()
     }
 
     override func tearDown() async throws {

@@ -6,22 +6,22 @@ import Common
 import Foundation
 import Shared
 
-struct ContileResultData {
+struct UnifiedTileResultData {
     let data: Data
     let response: HTTPURLResponse
 }
 
-typealias NetworkingContileResult = Swift.Result<(ContileResultData), Error>
+typealias NetworkingUnifiedTileResult = Swift.Result<(UnifiedTileResultData), Error>
 
-enum ContileNetworkingError: Error {
+private enum UnifiedTileNetworkingError: Error {
     case dataUnavailable
 }
 
-protocol ContileNetworking: Sendable {
-    func data(from request: URLRequest, completion: @escaping @Sendable (NetworkingContileResult) -> Void)
+protocol UnifiedTileNetworking: Sendable {
+    func data(from request: URLRequest, completion: @escaping @Sendable (NetworkingUnifiedTileResult) -> Void)
 }
 
-final class DefaultContileNetwork: ContileNetworking {
+final class DefaultUnifiedTileNetwork: UnifiedTileNetworking {
     private let urlSession: URLSessionProtocol
     private let logger: Logger
 
@@ -31,7 +31,7 @@ final class DefaultContileNetwork: ContileNetworking {
         self.logger = logger
     }
 
-    func data(from request: URLRequest, completion: @escaping @Sendable (NetworkingContileResult) -> Void) {
+    func data(from request: URLRequest, completion: @escaping @Sendable (NetworkingUnifiedTileResult) -> Void) {
         urlSession.dataTaskWith(request: request) { [weak self] data, response, error in
             guard let self = self else { return }
 
@@ -39,7 +39,7 @@ final class DefaultContileNetwork: ContileNetworking {
                 self.logger.log("An error occurred while fetching data: \(error)",
                                 level: .debug,
                                 category: .homepage)
-                completion(.failure(ContileNetworkingError.dataUnavailable))
+                completion(.failure(UnifiedTileNetworkingError.dataUnavailable))
                 return
             }
 
@@ -49,11 +49,11 @@ final class DefaultContileNetwork: ContileNetworking {
                 self.logger.log("Response isn't valid, data is nil?: \(data == nil)",
                                 level: .debug,
                                 category: .homepage)
-                completion(.failure(ContileNetworkingError.dataUnavailable))
+                completion(.failure(UnifiedTileNetworkingError.dataUnavailable))
                 return
             }
 
-            completion(.success(ContileResultData(data: data, response: response)))
+            completion(.success(UnifiedTileResultData(data: data, response: response)))
         }.resume()
     }
 }

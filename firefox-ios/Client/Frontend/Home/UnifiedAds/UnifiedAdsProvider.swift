@@ -30,7 +30,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     let maxCacheAge: Timestamp = OneMinuteInMilliseconds * 30
     let urlCache: URLCache
     private let logger: Logger
-    private let networking: ContileNetworking
+    private let networking: UnifiedTileNetworking
 
     enum Error: Swift.Error {
         case noDataAvailable
@@ -42,7 +42,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     init(
-        networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
+        networking: UnifiedTileNetworking = DefaultUnifiedTileNetwork(with: NetworkUtils.defaultURLSession()),
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {

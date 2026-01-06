@@ -11,13 +11,13 @@ import Storage
 
 @MainActor
 final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
-    private var networking: MockContileNetworking!
+    private var networking: MockUnifiedTileNetworking!
     private var logger: MockLogger!
     private var gleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
-        networking = MockContileNetworking()
+        networking = MockUnifiedTileNetworking()
         logger = MockLogger()
         gleanWrapper = MockGleanWrapper()
     }
