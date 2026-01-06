@@ -21,7 +21,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
     func testExpectedCoreFeatures() {
         let adjustSetting = featureFlags.isCoreFeatureEnabled(.adjustEnvironmentProd)
         let mockDataSetting = featureFlags.isCoreFeatureEnabled(.useMockData)
-        let contileAPISetting = featureFlags.isCoreFeatureEnabled(.useStagingContileAPI)
+        let contileAPISetting = featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI)
 
         XCTAssertFalse(adjustSetting)
         XCTAssertTrue(mockDataSetting)

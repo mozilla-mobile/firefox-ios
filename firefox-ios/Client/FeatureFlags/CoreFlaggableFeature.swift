@@ -11,7 +11,7 @@ import UIKit
 enum CoreFeatureFlagID {
     case adjustEnvironmentProd
     case useMockData
-    case useStagingContileAPI
+    case useStagingUnifiedAdsAPI
 }
 
 struct CoreFlaggableFeature {

@@ -168,9 +168,9 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
                                                enabledFor: [.developer])
         coreFeatures[.useMockData] = useMockData
 
-        let useStagingContileAPI = CoreFlaggableFeature(withID: .useStagingContileAPI,
+        let useStagingUnifiedAdsAPI = CoreFlaggableFeature(withID: .useStagingUnifiedAdsAPI,
                                                         enabledFor: [.developer])
 
-        coreFeatures[.useStagingContileAPI] = useStagingContileAPI
+        coreFeatures[.useStagingUnifiedAdsAPI] = useStagingUnifiedAdsAPI
     }
 }

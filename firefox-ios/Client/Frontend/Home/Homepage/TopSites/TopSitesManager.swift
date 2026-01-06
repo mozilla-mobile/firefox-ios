@@ -106,8 +106,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         let contiles = await withCheckedContinuation { continuation in
             unifiedAdsProvider.fetchTiles { [weak self] result in
                 if case .success(let unifiedTiles) = result {
-                    let sponsoredTiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
-                    continuation.resume(returning: sponsoredTiles)
+                    continuation.resume(returning: unifiedTiles)
                 } else {
                     self?.logger.log(
                         "Unified ads provider did not return any sponsored tiles when requested",
@@ -119,7 +118,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
             }
         }
 
-        return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
+        return contiles.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
     }
 
     private var shouldLoadSponsoredTiles: Bool {
