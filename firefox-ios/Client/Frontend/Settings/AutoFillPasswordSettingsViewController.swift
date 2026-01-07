@@ -26,7 +26,7 @@ class AutoFillPasswordSettingsViewController: SettingsTableViewController, Featu
         sectionItems.append(PasswordManagerSetting(settings: self, settingsDelegate: parentCoordinator))
         sectionItems.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
 
-        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
+        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion(for: SystemLocaleProvider().regionCode())
         if autofillAddressStatus, let profile {
             sectionItems.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                        profile: profile,
