@@ -855,7 +855,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     // MARK: - Temporary Document handling - PDF Refactor
 
     /// Retrieves the session cookies attached to the current `WKWebView` managed by the `Tab`
-    func getSessionCookies(_ completion: @Sendable @MainActor @escaping ([HTTPCookie]) -> Void) {
+    func getSessionCookies(_ completion: @MainActor @escaping ([HTTPCookie]) -> Void) {
         webView?.configuration.websiteDataStore.httpCookieStore.getAllCookies(completion)
     }
 
@@ -1210,7 +1210,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     override func evaluateJavaScript(
         _ javaScriptString: String,
         completionHandler: (
-            @MainActor @Sendable (Any?, (any Error)?) -> Void
+            @MainActor (Any?, (any Error)?) -> Void
         )? = nil
     ) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)

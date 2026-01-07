@@ -51,7 +51,7 @@ class ClearHistorySheetProvider {
 
     func setupActions(
         for alert: UIAlertController,
-        didComplete: @MainActor @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void
+        didComplete: @MainActor @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         addDeleteSomeData(to: alert, didComplete: didComplete)
         addDeleteEverythingOption(to: alert, didComplete: didComplete)
@@ -60,7 +60,7 @@ class ClearHistorySheetProvider {
 
     func addDeleteSomeData(
         to alert: UIAlertController,
-        didComplete: @MainActor @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void
+        didComplete: @MainActor @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         typealias DateOptions = HistoryDeletionUtilityDateOptions
         [
@@ -85,7 +85,7 @@ class ClearHistorySheetProvider {
 
     func addDeleteEverythingOption(
         to alert: UIAlertController,
-        didComplete: @MainActor @Sendable @escaping (HistoryDeletionUtilityDateOptions) -> Void
+        didComplete: @MainActor @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         alert.addAction(UIAlertAction(title: .LibraryPanel.History.ClearHistorySheet.AllTimeOption,
                                       style: .destructive) { _ in

@@ -56,7 +56,7 @@ final class WebServer: WebServerProtocol, @unchecked Sendable {
         _ method: String,
         module: String,
         resource: String,
-        handler: @escaping @Sendable @MainActor (
+        handler: @escaping @MainActor (
             _ request: GCDWebServerRequest?,
             _ responseCompletion: @escaping @Sendable (GCDWebServerResponse?) -> Void
         ) -> Void

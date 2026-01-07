@@ -6,4 +6,4 @@ import Foundation
 
 /// Provide pure functions, that based on the current `Action` and the current app `State`,
 /// create a new app state. `Reducers` are the only place in which the application state should be modified.
-public typealias Reducer<State> = @Sendable @MainActor (State, Action) -> State
+public typealias Reducer<State> = @MainActor (State, Action) -> State
