@@ -1281,9 +1281,9 @@ workflows:
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
     - deploy-to-bitrise-io@2.10.0: {}
-    - cache-pull@2.7.2:
+    - restore-cache@2.6.0:
         inputs:
-        - cache_paths: "$HOME/sdk/google-cloud-sdk"
+        - key: gcloud-sdk-{{ .OS }}-{{ .Arch }}-v1
     - script@1.2.1:
         title: Install Google Cloud SDK
         inputs:
@@ -1291,20 +1291,28 @@ workflows:
             #!/usr/bin/env bash
             set -ex
 
-            if [ -e $HOME/sdk/google-cloud-sdk ]; then
-              echo "Google Cloud SDK found, skipping installation..."
+            export CLOUDSDK_PYTHON_SITEPACKAGES=1
+            export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+            
+            GCLOUD_SDK_DIR="$HOME/sdk/google-cloud-sdk"
+
+            if [ -e "$GCLOUD_SDK_DIR/bin/gcloud" ]; then
+                echo "Google Cloud SDK found in cache, skipping installation..."
+                source "$GCLOUD_SDK_DIR/path.bash.inc"
             else
-              echo "Google Cloud SDK not found, installing..."
-              curl https://sdk.cloud.google.com > install.sh
-              bash install.sh --disable-prompts --install-dir=$HOME/sdk
-              source $HOME/sdk/google-cloud-sdk/path.bash.inc
-              gcloud components install beta --quiet
+                echo "Google Cloud SDK not found, installing..."
+                curl https://sdk.cloud.google.com > install.sh
+                bash install.sh --disable-prompts --install-dir=$HOME/sdk
+                source "$GCLOUD_SDK_DIR/path.bash.inc"
+                gcloud components install beta --quiet
             fi
-    - cache-push@2.7.1:
+                
+            gcloud version
+
+    - save-cache@1.5.1:
         inputs:
-        - cache_paths: "$HOME/sdk/google-cloud-sdk"
-        - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
-        - compress_archive: "true"
+        - key: gcloud-sdk-{{ .OS }}-{{ .Arch }}-v1
+        - paths: "$HOME/sdk/google-cloud-sdk"
     - script@1.2.1:
         title: Firebase Test Lab Execution
         inputs:
@@ -2439,7 +2447,7 @@ trigger_map:
 - push_branch: release/*
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
-  pipeline: pipeline_build_and_test
+  pipeline: Archive_and_Run_Robo_Test
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: release/v*
