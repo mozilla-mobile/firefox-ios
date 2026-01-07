@@ -23,7 +23,7 @@ class UnifiedAdsProviderTests: XCTestCase {
     }
 
     func testFetchTile_givenErrorResponse_thenFailsWithError() {
-        networking.error = UnifiedAdsProvider.Error.noDataAvailable
+        networking.error = UnifiedTileNetworkingError.dataUnavailable
         let subject = createSubject()
 
         subject.fetchTiles { result in

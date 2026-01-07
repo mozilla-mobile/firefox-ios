@@ -7,7 +7,7 @@ import Foundation
 @testable import Client
 
 final class MockUnifiedTileNetworking: UnifiedTileNetworking, @unchecked Sendable {
-    var error: Error?
+    var error: UnifiedTileNetworkingError?
     var data: Data?
     var response: HTTPURLResponse?
     var dataFromCalled = 0

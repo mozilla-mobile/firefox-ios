@@ -30,7 +30,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     }
 
     func testImpressionTelemetry_givenErrorResponse_thenFailsWithLogMessage() {
-        networking.error = UnifiedAdsProvider.Error.noDataAvailable
+        networking.error = UnifiedTileNetworkingError.dataUnavailable
         let subject = createSubject()
 
         guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
@@ -43,7 +43,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     }
 
     func testClickTelemetry_givenErrorResponse_thenFailsWithLogMessage() {
-        networking.error = UnifiedAdsProvider.Error.noDataAvailable
+        networking.error = UnifiedTileNetworkingError.dataUnavailable
         let subject = createSubject()
 
         guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
