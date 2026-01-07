@@ -35,6 +35,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                                LaunchArguments.SkipContextualHints,
                                LaunchArguments.DisableAnimations]
         }
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         try await super.setUp()
     }
 
