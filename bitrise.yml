@@ -2447,7 +2447,7 @@ trigger_map:
 - push_branch: release/*
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
-  pipeline: pipeline_build_and_test
+  pipeline: Archive_and_Run_Robo_Test
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: release/v*
