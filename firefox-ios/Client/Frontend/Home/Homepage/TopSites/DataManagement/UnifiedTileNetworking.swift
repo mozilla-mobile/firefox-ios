@@ -11,9 +11,9 @@ struct UnifiedTileResultData {
     let response: HTTPURLResponse
 }
 
-typealias NetworkingUnifiedTileResult = Swift.Result<(UnifiedTileResultData), Error>
+typealias NetworkingUnifiedTileResult = Swift.Result<(UnifiedTileResultData), UnifiedTileNetworkingError>
 
-private enum UnifiedTileNetworkingError: Error {
+enum UnifiedTileNetworkingError: Error {
     case dataUnavailable
 }
 
