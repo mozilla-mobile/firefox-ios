@@ -139,10 +139,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             )
         }
     }
-    
+
     private func browserVCSnapshot(bvc: BrowserViewController, selectedTabImage: UIImage?) -> UIView {
         let containerView = UIView(frame: bvc.view.bounds)
-        
+
         if let topBar = bvc.header.snapshotView(afterScreenUpdates: false) {
             topBar.frame = bvc.header.frame
             containerView.addSubview(topBar)
@@ -151,17 +151,17 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             bottomBar.frame = bvc.bottomContainer.frame
             containerView.addSubview(bottomBar)
         }
-        
+
         if let overKeyboardContainer = bvc.overKeyboardContainer.snapshotView(afterScreenUpdates: false) {
             overKeyboardContainer.frame = bvc.overKeyboardContainer.frame
             containerView.addSubview(overKeyboardContainer)
         }
-        
+
         let webViewFillView = UIView(frame: bvc.contentContainer.frame)
         webViewFillView.backgroundColor = DarkTheme().colors.layer3
         webViewFillView.frame = bvc.contentContainer.frame
         containerView.insertSubview(webViewFillView, at: 0)
-        
+
         return containerView
     }
 
@@ -176,7 +176,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         webViewFillView.contentMode = .scaleAspectFill
         webViewFillView.frame = browserVC.contentContainer.frame
         webViewFillView.clipsToBounds = true
-        
+
         // Snapshot of the BVC view
         let bvcSnapshot = browserVCSnapshot(bvc: browserVC, selectedTabImage: selectedTab.screenshot)
 
@@ -273,13 +273,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         fadeAnimation.duration = UX.presentDuration
         fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         borderLayer.add(fadeAnimation, forKey: UX.opacityKeyPath)
-        
+
         let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
             if let frame = cellFrame {
                 snapshotContainer.frame = frame
                 webViewFillView.frame = snapshotContainer.bounds
                 bvcSnapshot.alpha = UX.clearAlpha
-                
+
                 snapshotContainer.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
                 bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
                 // Animate path to match new size
