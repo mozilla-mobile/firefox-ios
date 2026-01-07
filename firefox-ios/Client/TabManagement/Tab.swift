@@ -1228,7 +1228,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     // MARK: - PullRefresh
 
     func addPullRefresh(onReload: @escaping () -> Void) {
-        guard !scrollView.isZooming, scrollView.frame != .zero else { return }
+        guard !scrollView.isZooming else { return }
         guard pullRefresh == nil else {
             pullRefresh?.startObservingContentScroll()
             return
@@ -1243,8 +1243,10 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
             refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
             refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
             refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
+            refresh.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+            refresh.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
+
         refresh.startObservingContentScroll()
         pullRefresh = refresh
         guard let theme else { return }
