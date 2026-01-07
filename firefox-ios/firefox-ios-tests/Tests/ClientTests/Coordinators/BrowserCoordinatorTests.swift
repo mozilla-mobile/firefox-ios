@@ -538,7 +538,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject()
         let mockTab = Tab(profile: profile, windowUUID: windowUUID)
         let URL = URL(string: "https://foo.com")!
-        let webView = WKWebViewMock(URL)
+        let webView = MockWKWebView(URL)
         let frame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
 
         subject.showPasswordGenerator(tab: mockTab, frame: frame)
