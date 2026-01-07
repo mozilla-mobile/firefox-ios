@@ -38,9 +38,7 @@ class LoginTest: BaseTestCase {
         // removeApp() does not work on iOS 15 and 16 intermittently
         if name.contains("testLoginFreshInstallMessage") {
             if #available(iOS 17, *) {
-                if #unavailable(iOS 26) {
-                    removeApp()
-                }
+                removeApp()
             }
         }
         // The app is correctly installed

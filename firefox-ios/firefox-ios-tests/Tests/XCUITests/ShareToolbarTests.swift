@@ -63,7 +63,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeReminders() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         if #available(iOS 17, *) {
             reachReaderModeShareMenuLayoutAndSelectOption(option: "Reminders")
@@ -81,7 +81,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModePrint() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Print")
         validatePrintLayout()
@@ -91,7 +91,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeCopy() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Copy")
         openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
@@ -101,6 +101,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeSendLink() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Send Link to Device")
         // If not signed in, the browser prompts you to sign in
@@ -116,7 +117,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeMarkup() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Markup")
         validateMarkupTool()

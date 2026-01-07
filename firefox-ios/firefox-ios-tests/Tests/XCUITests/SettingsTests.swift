@@ -274,17 +274,14 @@ class SettingsTests: FeatureFlaggedTestBase {
 
     func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)
         let summarizeSettings = table.cells[AccessibilityIdentifiers.Settings.Summarize.title]
-        // https://github.com/mozilla-mobile/firefox-ios/issues/31214
-        if #unavailable(iOS 26) {
-            mozWaitForElementToNotExist(summarizeSettings)
-        }
+        mozWaitForElementToNotExist(summarizeSettings)
     }
 
     func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
