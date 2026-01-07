@@ -64,7 +64,6 @@ class PrintTests: BaseTestCase {
                 app.collectionViews.cells["Page 1 of 1"]
             ])
         }
-        print(app.debugDescription)
         navigator.goto(BrowserTab)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
