@@ -117,13 +117,6 @@ final class AppLaunchUtil: Sendable {
             }
         }
 
-        let rustFxaKeychainEnabled = FxNimbus.shared
-            .features
-            .rustFxaKeychain
-            .value()
-            .rustFxaKeychainEnabled
-        profile.prefs.setBool(rustFxaKeychainEnabled, forKey: PrefsKeys.RustFxaKeychainEnabled)
-
         RustFirefoxAccounts.startup(prefs: profile.prefs) { manager in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
             AppEventQueue.signal(event: .accountManagerInitialized)
