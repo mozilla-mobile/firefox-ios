@@ -22,7 +22,7 @@ class ClearHistorySheetProvider {
     ///   - didComplete: Did complete a recent history clear up action
     func showClearRecentHistory(
         onViewController viewController: UIViewController,
-        didComplete: @MainActor @escaping @Sendable (HistoryDeletionUtilityDateOptions) -> Void
+        didComplete: @MainActor @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
         let alert = createAlertAndConfigureWithArrowIfNeeded(from: viewController)
         setupActions(for: alert, didComplete: didComplete)
