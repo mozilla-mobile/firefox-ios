@@ -84,7 +84,6 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     }
 
     // MARK: - LaunchFinishedLoadingDelegate
-
     func launchWith(launchType: LaunchType) {
         self.coordinator?.launchWith(launchType: launchType)
     }
@@ -98,7 +97,6 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     }
 
     // MARK: - Splash Screen
-
     private func delayStart() async throws {
         guard shouldTriggerSplashScreenExperiment else { return }
         viewModel.setSplashScreenExperimentHasShown()
