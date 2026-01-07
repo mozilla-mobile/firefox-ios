@@ -78,21 +78,30 @@ struct CreditCardValidator {
     }
 
     func isExpirationValidFor(date: String) -> Bool {
+        let userCalendar = Calendar(identifier: .gregorian)
+
         guard date.count == 4,
               let inputMonth = Int(date.prefix(2)),
               let inputYear = Int(date.suffix(2)),
-              let currentYear = Calendar(identifier: .gregorian).dateComponents([.year], from: Date()).year,
-              inputMonth < 13 && inputMonth > 0,
-              (inputYear + 2000) < currentYear + 100 && (inputYear + 2000) >= currentYear else {
+              let currentYear = userCalendar.dateComponents([.year], from: Date()).year,
+              inputMonth >= 1 && inputMonth <= 12,
+              (inputYear + 2000) >= currentYear else {
             return false
         }
 
-        var userInputtedDate = DateComponents()
-        userInputtedDate.year = inputYear + 2000
-        userInputtedDate.month = inputMonth
-        let userCalendar = Calendar(identifier: .gregorian)
+        // Check the expiration date as the last moment of the month
+        var expiryMonth = DateComponents(year: inputYear + 2000, month: inputMonth)
+        guard let expiryDate = userCalendar.date(from: expiryMonth),
+              let expiryDays = userCalendar.range(of: .day, in: .month, for: expiryDate) else {
+            return false
+        }
 
-        guard let userCardExpirationDate = userCalendar.date(from: userInputtedDate),
+        expiryMonth.day = expiryDays.last
+        expiryMonth.hour = 23
+        expiryMonth.minute = 59
+        expiryMonth.second = 59
+
+        guard let userCardExpirationDate = userCalendar.date(from: expiryMonth),
               userCardExpirationDate >= Date() else {
             return false
         }
