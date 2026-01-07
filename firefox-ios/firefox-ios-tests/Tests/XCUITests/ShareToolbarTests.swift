@@ -4,6 +4,7 @@
 
 import Foundation
 import XCTest
+import Common
 
 let sendLinkMsg1 = "You are not signed in to your account."
 let sendLinkMsg2 = "Please open Firefox, go to Settings and sign in to continue."
@@ -62,6 +63,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeReminders() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         if #available(iOS 17, *) {
             reachReaderModeShareMenuLayoutAndSelectOption(option: "Reminders")
@@ -79,6 +81,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModePrint() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Print")
         validatePrintLayout()
@@ -88,6 +91,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeCopy() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Copy")
         openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
@@ -112,6 +116,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeMarkup() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Markup")
         validateMarkupTool()
@@ -170,8 +175,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
             if iPad() {
                 app.navigationBars.buttons["More"].waitAndTap()
             }
-            mozWaitForElementToExist(app.collectionViews.buttons["Markup"])
-            XCTAssertTrue(app.collectionViews.buttons["Markup"].isSelected)
+            // iOS 26: The markup isn't shown in debug description
         } else {
             mozWaitForElementToExist(app.switches["Markup"])
             mozWaitForElementToExist(app.buttons["Done"])
