@@ -139,6 +139,31 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             )
         }
     }
+    
+    private func browserVCSnapshot(bvc: BrowserViewController, selectedTabImage: UIImage?) -> UIView {
+        let containerView = UIView(frame: bvc.view.bounds)
+        
+        if let topBar = bvc.header.snapshotView(afterScreenUpdates: false) {
+            topBar.frame = bvc.header.frame
+            containerView.addSubview(topBar)
+        }
+        if let bottomBar = bvc.bottomContainer.snapshotView(afterScreenUpdates: false) {
+            bottomBar.frame = bvc.bottomContainer.frame
+            containerView.addSubview(bottomBar)
+        }
+        
+        if let overKeyboardContainer = bvc.overKeyboardContainer.snapshotView(afterScreenUpdates: false) {
+            overKeyboardContainer.frame = bvc.overKeyboardContainer.frame
+            containerView.addSubview(overKeyboardContainer)
+        }
+        
+        let webViewFillView = UIView(frame: bvc.contentContainer.frame)
+        webViewFillView.backgroundColor = DarkTheme().colors.layer3
+        webViewFillView.frame = bvc.contentContainer.frame
+        containerView.insertSubview(webViewFillView, at: 0)
+        
+        return containerView
+    }
 
     private func runPresentationAnimation(
         context: UIViewControllerContextTransitioning,
@@ -147,21 +172,20 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
+        let webViewFillView = UIImageView(image: selectedTab.screenshot)
+        webViewFillView.contentMode = .scaleAspectFill
+        webViewFillView.frame = browserVC.contentContainer.frame
+        webViewFillView.clipsToBounds = true
+        
         // Snapshot of the BVC view
-        let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
-        bvcSnapshot.layer.cornerCurve = .continuous
-        bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-        bvcSnapshot.layer.shouldRasterize = true
-        bvcSnapshot.clipsToBounds = true
-        bvcSnapshot.contentMode = .scaleAspectFill
+        let bvcSnapshot = browserVCSnapshot(bvc: browserVC, selectedTabImage: selectedTab.screenshot)
 
         // Wrap bvcSnapshot in a container to support external border
         let snapshotContainer = UIView(frame: bvcSnapshot.frame)
-        snapshotContainer.layer.cornerRadius = bvcSnapshot.layer.cornerRadius
+        snapshotContainer.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
         snapshotContainer.layer.cornerCurve = .continuous
         snapshotContainer.layer.shouldRasterize = true
         snapshotContainer.clipsToBounds = false
-        bvcSnapshot.frame = snapshotContainer.bounds
 
         // Create border layer
         let theme = retrieveTheme()
@@ -180,7 +204,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         borderLayer.opacity = Float(UX.finalOpacity)
 
         snapshotContainer.layer.addSublayer(borderLayer)
-        snapshotContainer.addSubview(bvcSnapshot)
+        snapshotContainer.addSubview(webViewFillView)
 
         // Dimmed background view
         let backgroundView = UIView()
@@ -190,6 +214,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         // Add views to container
         context.containerView.addSubview(destinationController.view)
         context.containerView.addSubview(backgroundView)
+        context.containerView.addSubview(bvcSnapshot)
         context.containerView.addSubview(snapshotContainer)
 
         destinationController.view.frame = finalFrame
@@ -224,13 +249,12 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
         cv.alpha = UX.halfAlpha
 
-        CATransaction.begin()
-        CATransaction.setAnimationDuration(UX.presentDuration)
-        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeOut))
-        CATransaction.setCompletionBlock { [weak self, weak tabCell] in
-            snapshotContainer.removeFromSuperview()
-            self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
-        }
+//        CATransaction.begin()
+//        CATransaction.setAnimationDuration(UX.presentDuration)
+//        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeOut))
+//        CATransaction.setCompletionBlock { [weak self, weak tabCell] in
+//            
+//        }
 
         // IMPORTANT NOTE FOR SIMULATOR TESTING
         // The Debug > Slow Animations setting on the simulator does not render this border animation correctly on XCode 16.2
@@ -249,12 +273,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         fadeAnimation.duration = UX.presentDuration
         fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         borderLayer.add(fadeAnimation, forKey: UX.opacityKeyPath)
-
+        
         let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
             if let frame = cellFrame {
                 snapshotContainer.frame = frame
-                bvcSnapshot.frame = snapshotContainer.bounds
-
+                webViewFillView.frame = snapshotContainer.bounds
+                bvcSnapshot.alpha = UX.clearAlpha
+                
                 snapshotContainer.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
                 bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
                 // Animate path to match new size
@@ -273,7 +298,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 borderLayer.add(pathAnimation, forKey: UX.animationPath)
                 borderLayer.path = newPath
             } else {
-                snapshotContainer.alpha = UX.clearAlpha
+                bvcSnapshot.alpha = UX.clearAlpha
             }
             cv.transform = .identity
             cv.alpha = UX.opaqueAlpha
@@ -290,12 +315,15 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         animator.addCompletion { _ in
             backgroundView.removeFromSuperview()
             borderLayer.removeFromSuperlayer()
+            bvcSnapshot.removeFromSuperview()
+            snapshotContainer.removeFromSuperview()
             context.completeTransition(true)
+            self.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
         }
 
         animator.startAnimation()
 
-        CATransaction.commit()
+//        CATransaction.commit()
     }
 
     private func unhideCellBorder(tabCell: ExperimentTabCell?, isPrivate: Bool, theme: Theme) {
@@ -371,13 +399,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.contentMode = .scaleAspectFill
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-        tabSnapshot.layer.shouldRasterize = true
+//        tabSnapshot.layer.shouldRasterize = true
 
         contentContainer.isHidden = true
 
         toView.layer.cornerCurve = .continuous
         toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-        toView.layer.shouldRasterize = true
+//        toView.layer.shouldRasterize = true
         toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
 
@@ -405,7 +433,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             toView.layer.cornerRadius = UX.zeroCornerRadius
             tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
         } completion: { _ in
-            toView.layer.shouldRasterize = false
+//            toView.layer.shouldRasterize = false
             contentContainer.isHidden = false
             tabCell?.isHidden = false
             self.view.removeFromSuperview()

@@ -1898,7 +1898,7 @@ class BrowserViewController: UIViewController,
     private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
         remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
-        view.layoutIfNeeded()
+//        view.layoutIfNeeded()
     }
 
     private func adjustBottomSearchBarForKeyboard() {

@@ -48,7 +48,6 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
         accessibilityHint = viewModel.a11yHint
 
         configuration = updatedConfiguration
-        layoutIfNeeded()
     }
 
     /// The `TabTraySelectorButton` font is adjusted whenever it is selected
@@ -62,7 +61,6 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
             return outgoing
         }
         configuration = updatedConfiguration
-        layoutIfNeeded()
     }
 
     required init?(coder aDecoder: NSCoder) {
