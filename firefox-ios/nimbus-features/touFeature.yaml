@@ -19,21 +19,42 @@ features:
           Whether to show a drag handle on the prompt and allows users to use it to dismiss the prompt.
         type: Boolean
         default: true
-      bottom-sheet-strings:
+      content-option:
         description: >
-          Which bottom sheet strings to show: 0, 1, or 2.
-        type: Int
-        default: 0
+          Determines which predefined title and "learn more" strings are used for the Terms of Use prompt.
+        type: TermsOfUsePromptContentOption
+        default: value-0
     defaults:
       - channel: beta
         value:
           status: false
           max-reminders-count: 2
           enable-drag-to-dismiss: true
-          bottom-sheet-strings: 0
+          content-option: value-0
       - channel: developer
         value:
           status: false
           max-reminders-count: 2
           enable-drag-to-dismiss: true
-          bottom-sheet-strings: 0
+          content-option: value-0
+
+enums:
+  TermsOfUsePromptContentOption:
+    description: |
+      Determines which predefined title and "learn more" strings are used for the Terms of Use prompt.
+    variants:
+      value-0:
+        description: |
+          Uses the current defaults:
+          - Title: "We've got an update"
+          - Learn more: "Please take a moment to review and accept. Learn more."
+      value-1:
+        description: |
+          Uses the following copy:
+          - Title: "Terms of Use"
+          - Learn more: "You can learn more here."
+      value-2:
+        description: |
+          Uses the following copy:
+          - Title: "A note from Firefox"
+          - Learn more: "You can learn more here."

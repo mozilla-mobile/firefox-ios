@@ -2481,23 +2481,23 @@ public struct TermsOfUse {
         value: "Please take a moment to review and accept. Learn more",
         comment: "Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'."
     )
-    public static let TitleVariant1 = MZLocalizedString(
-        key: "TermsOfUse.TitleVariant1.v147",
+    public static let TitleValue1 = MZLocalizedString(
+        key: "TermsOfUse.TitleValue1.v147",
         tableName: "TermsOfUse",
         value: "Terms of Use",
-        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 1."
+        comment: "Title shown at the top of the Terms of Use bottom sheet for value-1 (content option 1)."
     )
-    public static let TitleVariant2 = MZLocalizedString(
-        key: "TermsOfUse.TitleVariant2.v147",
+    public static let TitleValue2 = MZLocalizedString(
+        key: "TermsOfUse.TitleValue2.v147",
         tableName: "TermsOfUse",
         value: "A note from %@",
-        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox)."
+        comment: "Title shown at the top of the Terms of Use bottom sheet for value-2 (content option 2). %@ is replaced with the app name (e.g., Firefox)."
     )
     public static let LearnMoreHere = MZLocalizedString(
         key: "TermsOfUse.LearnMoreHere.v147",
         tableName: "TermsOfUse",
-        value: "You can learn more here.",
-        comment: "Text shown in the Terms of Use bottom sheet for variants 1 and 2. The word 'here' is a tappable link."
+        value: "You can learn more %@.",
+        comment: "Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text."
     )
     public static let LinkTermsOfUse = MZLocalizedString(
         key: "TermsOfUse.Link.TermsOfUse.v142",

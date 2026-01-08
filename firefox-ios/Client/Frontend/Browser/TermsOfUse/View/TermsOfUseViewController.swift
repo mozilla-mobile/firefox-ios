@@ -117,7 +117,7 @@ final class TermsOfUseViewController: UIViewController,
          windowUUID: UUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          enableDragToDismiss: Bool = true,
-         stringVariant: TermsOfUseStringVariant = .variant0) {
+         stringVariant: TermsOfUseContentOption = .value0) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
@@ -204,7 +204,7 @@ final class TermsOfUseViewController: UIViewController,
         configureTextViewScrolling()
         setupDismissGesture()
         if isDragToDismissEnabled {
-        setupPanGesture()
+            setupPanGesture()
         }
     }
 

@@ -5,28 +5,24 @@ import Common
 import Localizations
 import Shared
 
-enum TermsOfUseStringVariant: Int, CaseIterable {
-    case variant0 = 0
-    case variant1 = 1
-    case variant2 = 2
-
+extension TermsOfUseContentOption {
     var headline: String {
         switch self {
-        case .variant0:
+        case .value0:
             return TermsOfUse.Title
-        case .variant1:
-            return TermsOfUse.TitleVariant1
-        case .variant2:
-            return String.localizedStringWithFormat(TermsOfUse.TitleVariant2, AppName.shortName.rawValue)
+        case .value1:
+            return TermsOfUse.TitleValue1
+        case .value2:
+            return String.localizedStringWithFormat(TermsOfUse.TitleValue2, AppName.shortName.rawValue)
         }
     }
 
     var reviewAndAcceptText: String {
         switch self {
-        case .variant0:
+        case .value0:
             return TermsOfUse.ReviewAndAcceptText
-        case .variant1, .variant2:
-            return TermsOfUse.LearnMoreHere
+        case .value1, .value2:
+            return String.localizedStringWithFormat(TermsOfUse.LearnMoreHere, TermsOfUse.LinkHereText)
         }
     }
 }
@@ -78,9 +74,9 @@ enum TermsOfUseLinkType: CaseIterable {
 }
 
 struct TermsOfUseStrings {
-    let variant: TermsOfUseStringVariant
+    let variant: TermsOfUseContentOption
 
-    init(variant: TermsOfUseStringVariant = .variant0) {
+    init(variant: TermsOfUseContentOption = .value0) {
         self.variant = variant
     }
 

@@ -42,9 +42,9 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         return nimbus.features.touFeature.value().enableDragToDismiss
     }
 
-    private var stringVariant: TermsOfUseStringVariant {
-        let nimbusValue: Int = nimbus.features.touFeature.value().bottomSheetStrings
-        return TermsOfUseStringVariant(rawValue: nimbusValue) ?? .variant0
+    private var stringVariant: TermsOfUseContentOption {
+        let nimbusValue = nimbus.features.touFeature.value().contentOption
+        return TermsOfUseContentOption(rawValue: nimbusValue.rawValue) ?? .value0
     }
 
     init(windowUUID: WindowUUID,
