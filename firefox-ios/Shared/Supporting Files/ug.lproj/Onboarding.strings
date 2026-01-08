@@ -145,6 +145,9 @@
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "قوشۇلۇپ داۋاملاشتۇر";
 
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "داۋاملاشتۇر";
+
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "تېز، بىخەتەر، سىزنى ھەرگىز سېتىۋەتمەيدۇ. تېخىمۇ ياخشى تور زىيارەت تەسىراتىغا ئېرىشتۈرىدۇ.";
 
@@ -180,6 +183,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "زېرىكىشلىك ئىزلىغۇچىلار بىلەن خوشلىشىڭ";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "ئىچكى شەخسىيەت تۈزۈمى بار توركۆرگۈدە ئۇلانمىنى ئاچىدۇ";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "ئاپتوماتىك";

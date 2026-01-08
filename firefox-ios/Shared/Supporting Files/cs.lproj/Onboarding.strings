@@ -88,6 +88,9 @@
 /* Option for the dark theme in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Tmavý";
 
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Vyberte si svůj oblíbený vzhled nebo si ho nechte aplikací %@ nastavit tak, aby odpovídal vašemu zařízení.";
+
 /* Option for the light theme in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "Světlý";
 
@@ -103,6 +106,9 @@
 /* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Vyberte si adresní řádek";
 
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Sdílejte, jak jste objevili aplikaci %1$@ a že ji používáte, s marketingovými partnery aplikace %2$@. Tato data nejsou nikdy prodávána.";
+
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Jak data používáme";
 
@@ -112,6 +118,9 @@
 /* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Pomozte nám vytvořit lepší internet";
 
+/* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Objevte v aplikaci %@ možnosti ochrany soukromí a posílejte si bezpečně panely mezi svými zařízeními.";
+
 /* Button to skip the notification card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "Ne teď";
 
@@ -120,6 +129,9 @@
 
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Zapnout oznámení";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Získejte záložky, hesla a další údaje na libovolném zařízení během okamžiku. Vaše osobní údaje zůstanou v bezpečí díky šifrování.";
 
 /* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "Zahájit synchronizaci";
@@ -132,6 +144,12 @@
 
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Souhlasím a pokračovat";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Pokračovat";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Rychlý, bezpečný a nikdy vás neprozradí. Prohlížení je nyní lepší.";
 
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Spravovat nastavení";
@@ -165,6 +183,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Dejte sbohem strašidelným sledovacím prvkům";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Otevírejte své odkazy se zabudovaným soukromím";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automaticky";

@@ -175,6 +175,9 @@
 /* Title for a link that explains what Mozilla means by Rollouts */
 "Settings.Rollouts.Link.v148" = "เรียนรู้เพิ่มเติม";
 
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "ระหว่างการอัปเดต %@ จะปรับปรุงฟีเจอร์ การตอบสนอง และความเสถียร โดยการเปลี่ยนแปลงสามารถนำไปใช้จากระยะไกลได้";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
 "Settings.Rollouts.Title.v148" = "อนุญาตการปรับปรุงทางไกล";
 
@@ -246,6 +249,9 @@
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "ทดลองใช้คุณสมบัติและไอเดียต่างๆ ก่อนที่จะเผยแพร่ให้ทุกคนได้ใช้งานจริง";
+
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ จะสุ่มผู้ใช้งานเพื่อทดลองฟีเจอร์ ซึ่งช่วยยกระดับคุณภาพให้กับผู้ใช้ทุกคน";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "ติดตั้งและเรียกใช้การศึกษา";
