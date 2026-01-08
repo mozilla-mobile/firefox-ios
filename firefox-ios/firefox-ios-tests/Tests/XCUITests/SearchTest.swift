@@ -179,9 +179,9 @@ class SearchTests: FeatureFlaggedTestBase {
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
         navigator.goto(URLBarOpen)
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
-        urlBarAddress.waitAndTap()
-
+        if !iPad() {
+            urlBarAddress.waitAndTap()
+        }
         app.menuItems["Paste"].waitAndTap()
 
         // Verify that the Paste shows the search controller with prompt
