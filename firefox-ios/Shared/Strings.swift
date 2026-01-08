@@ -2521,7 +2521,7 @@ public struct TermsOfUse {
         key: "TermsOfUse.Link.HereText.v147",
         tableName: "TermsOfUse",
         value: "here",
-        comment: "Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for treatment variants A and B."
+        comment: "Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for variants 1 and 2."
     )
     public static let AcceptButton = MZLocalizedString(
         key: "TermsOfUse.AcceptButton.v142",
