@@ -83,7 +83,7 @@ struct TabTraySelectors: TabTraySelectorsSet {
     }
 
     func tabCellAtIndex(index: Int) -> Selector {
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_\(index)"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_\(index)"
 
         return Selector.cellById(
             identifier,
