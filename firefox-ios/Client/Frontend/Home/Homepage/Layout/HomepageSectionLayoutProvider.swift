@@ -102,7 +102,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 if UIDevice.current.orientation.isLandscape {
                     return redesignedTopSitesBottomSpacingLandscape
                 } else {
-                    return UX.spacingBetweenSections - UX.interGroupSpacing
+                    return UX.spacingBetweenSections
                 }
             }
         }
@@ -339,7 +339,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         section.boundarySupplementaryItems = [header]
 
         let bottomInset = isAnyStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
-                                                      : UX.spacingBetweenSections - UX.interGroupSpacing
+                                                      : UX.spacingBetweenSections
         section.contentInsets.top = 0
         section.contentInsets.bottom = bottomInset
 
