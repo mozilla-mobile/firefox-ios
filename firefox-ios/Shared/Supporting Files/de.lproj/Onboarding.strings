@@ -79,6 +79,108 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Überspringen";
 
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "Automatisch";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "Weiter";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Dunkel";
+
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Wählen Sie Ihr Lieblings-Theme oder lassen Sie %@ das Theme an Ihr Gerät anpassen – Sie haben die Kontrolle.";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "Hell";
+
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "Wählen Sie Ihr Theme";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "Weiter";
+
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "Beginnen Sie mit der Eingabe, um Suchvorschläge, Ihre meistbesuchten Websites, Lesezeichen, Chronik und Suchmaschinen an einem Ort zu erhalten.";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Wählen Sie Ihre Adressleiste";
+
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Teilen Sie mit den Marketingpartnern von %2$@, wie Sie %1$@ entdeckt haben und dass Sie es nutzen. Diese Daten werden nie verkauft.";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Wie wir die Daten nutzen";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "Nicht jetzt";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Helfen Sie uns, ein besseres Internet zu schaffen";
+
+/* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Entdecken Sie Datenschutzfunktionen in %@ und senden Sie Tabs sicher zwischen Ihren Geräten.";
+
+/* Button to skip the notification card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "Nicht jetzt";
+
+/* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Benachrichtigungen helfen Ihnen, %@ noch sicherer zu machen";
+
+/* Button to turn on notifications in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Benachrichtigungen aktivieren";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Holen Sie sich Lesezeichen, Passwörter und mehr auf jedem Gerät im Handumdrehen. Ihre persönlichen Daten bleiben durch Verschlüsselung sicher und geschützt.";
+
+/* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "Mit Synchronisierung beginnen";
+
+/* Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "Nicht jetzt";
+
+/* Title for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "Machen Sie sofort da weiter, wo Sie aufgehört haben";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Zustimmen und fortfahren";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Schnell, sicher und wird Sie nicht verraten. Surfen ist jetzt noch besser.";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Einstellungen verwalten";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "Um den Browser zu verbessern, sendet %1$@ Diagnose- und Interaktionsdaten an %2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ ist Ihre Privatsphäre wichtig. Lesen Sie mehr in unserem %2$@";
+
+/* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "Datenschutzhinweis";
+
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "Indem Sie fortfahren, stimmen Sie den %@ zu.";
+
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "Nutzungsbedingungen von %@";
+
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Machen Sie sich bereit für die Freiheit";
+
+/* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Als Standardbrowser festlegen";
+
+/* Description for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Wir schützen Ihre Daten und verhindern automatisch, dass Unternehmen Ihre Klicks ausspionieren.";
+
+/* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "Nicht jetzt";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Verabschieden Sie sich von gruseligen Verfolgern";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automatisch";
 

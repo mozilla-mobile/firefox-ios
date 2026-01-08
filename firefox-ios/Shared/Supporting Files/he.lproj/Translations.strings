@@ -38,7 +38,7 @@
 "Translations.Sheet.Error.RetryButton.v145" = "ניסיון חוזר";
 
 /* On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page. */
-"Translations.Sheet.Error.SubtitleLabel.v145" = "נא לבדוק את החיבור שלך לרשת ולנסות שוב.";
+"Translations.Sheet.Error.SubtitleLabel.v145" = "נא לבדוק את החיבור שלך לאינטרנט ולנסות שוב.";
 
 /* On the translation feature bottom sheet, this is the text for the error message that appears when a user has no internet connection when trying to translate a page. */
 "Translations.Sheet.Error.TitleLabel.v145" = "לא ניתן לטעון שפות";

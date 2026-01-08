@@ -95,7 +95,7 @@ class InitialViewController: UIViewController {
         }
     }
 
-    func getShareItem(completion: @MainActor @Sendable @escaping (ExtensionUtils.ExtractedShareItem?) -> Void) {
+    func getShareItem(completion: @MainActor @escaping (ExtensionUtils.ExtractedShareItem?) -> Void) {
         ExtensionUtils.extractSharedItem(fromExtensionContext: extensionContext) { item, error in
             DispatchQueue.main.async {
                 if let item = item, error == nil {

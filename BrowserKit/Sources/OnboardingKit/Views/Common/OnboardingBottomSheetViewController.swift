@@ -28,9 +28,12 @@ public class OnboardingBottomSheetViewController: UIViewController,
     /// The last calculated height for the bottom sheet custom detent.
     private var lastCalculatedHeight: CGFloat = 0
     private var child: UIViewController?
+    /// Closure called when the bottom sheet is dismissed via the close button
+    public var onDismiss: (() -> Void)?
 
     private lazy var closeButton: UIButton = .build {
         $0.addAction(UIAction(handler: { [weak self] _ in
+            self?.onDismiss?()
             self?.dismiss(animated: true)
         }), for: .touchUpInside)
         if #available(iOS 26, *) {

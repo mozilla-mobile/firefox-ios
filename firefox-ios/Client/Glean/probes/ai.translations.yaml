@@ -43,7 +43,7 @@ translations:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30820
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
   page_language_identification_failed:
     type: event
     description: |
@@ -60,7 +60,7 @@ translations:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30820
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
   translation_failed:
     type: event
     description: |
@@ -80,7 +80,7 @@ translations:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30820
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never
   webpage_restored:
     type: event
     description: |
@@ -97,4 +97,4 @@ translations:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30820
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-06-01"
+    expires: never

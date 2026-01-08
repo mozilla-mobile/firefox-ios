@@ -151,6 +151,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
         bvcSnapshot.layer.cornerCurve = .continuous
         bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        bvcSnapshot.layer.shouldRasterize = true
         bvcSnapshot.clipsToBounds = true
         bvcSnapshot.contentMode = .scaleAspectFill
 
@@ -158,6 +159,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         let snapshotContainer = UIView(frame: bvcSnapshot.frame)
         snapshotContainer.layer.cornerRadius = bvcSnapshot.layer.cornerRadius
         snapshotContainer.layer.cornerCurve = .continuous
+        snapshotContainer.layer.shouldRasterize = true
         snapshotContainer.clipsToBounds = false
         bvcSnapshot.frame = snapshotContainer.bounds
 
@@ -202,12 +204,12 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
               let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
         else { return }
 
-        cv.layoutIfNeeded()
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
 
         if let indexPath = dataSource.indexPath(for: item) {
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
             cv.layoutIfNeeded()
             if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
                 tabCell = cell
@@ -369,11 +371,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.contentMode = .scaleAspectFill
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        tabSnapshot.layer.shouldRasterize = true
 
         contentContainer.isHidden = true
 
         toView.layer.cornerCurve = .continuous
         toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        toView.layer.shouldRasterize = true
         toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
 
@@ -401,6 +405,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             toView.layer.cornerRadius = UX.zeroCornerRadius
             tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
         } completion: { _ in
+            toView.layer.shouldRasterize = false
             contentContainer.isHidden = false
             tabCell?.isHidden = false
             self.view.removeFromSuperview()

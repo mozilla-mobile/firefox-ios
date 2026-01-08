@@ -79,6 +79,108 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "略過";
 
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "自動";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "繼續";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "暗色";
+
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "挑選您最愛的佈景主題，或讓 %@ 根據裝置設定顯示，完全由您自行控制。";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "亮色";
+
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "挑選佈景主題";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "繼續";
+
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "在網址框輸入，就可以直接獲得搜尋建議、您最常造訪的網站、書籤、瀏覽紀錄與搜尋引擎。";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "選擇網址列位置";
+
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "與 %2$@ 的行銷夥伴分享您如何發現 %1$@ 以及是如何使用的，我們絕不會販售此資料。";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "我們會如何使用該資料";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "現在不要";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "幫助我們打造更好的網路環境";
+
+/* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "探索 %@ 當中的隱私權保護功能，並且安全地在您的裝置間傳送分頁。";
+
+/* Button to skip the notification card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "現在不要";
+
+/* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "透過通知功能，讓您使用 %@ 更安全";
+
+/* Button to turn on notifications in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "開啟通知";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "快速從任何裝置取得書籤、密碼與更多資料，您的個人資料傳輸前會先加密，確保安全。";
+
+/* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "開始同步";
+
+/* Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "現在不要";
+
+/* Title for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "立即從結束的地方繼續";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "同意並繼續";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "快速、安全、絕不把您賣掉。上網功能變得更棒了。";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "管理設定";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "為了幫助改善瀏覽器，%1$@ 會將除錯與互動資料傳送回 %2$@。%3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ 關心您的隱私。到我們的%2$@閱讀更多資訊。";
+
+/* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "隱私權公告";
+
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "若繼續，代表您同意 %@";
+
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ 使用條款";
+
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "準備好自由奔跑";
+
+/* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "設為預設瀏覽器";
+
+/* Description for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "我們會保護您的資料，並自動防止企業偷窺您的點擊行為。";
+
+/* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "現在不要";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "跟怪怪的追蹤器說再見";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "自動";
 

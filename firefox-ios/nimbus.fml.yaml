@@ -34,9 +34,9 @@ include:
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
+  - nimbus-features/privacyNoticeFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
-  - nimbus-features/rustFxAKeychainEnabled.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml

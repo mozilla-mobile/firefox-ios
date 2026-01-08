@@ -140,10 +140,9 @@ final class ToolbarAnimator {
         guard let view else { return }
 
         view.overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
-        view.overKeyboardContainer.superview?.setNeedsLayout()
-
         view.bottomContainerConstraint?.update(offset: bottomContainerOffset)
-        view.bottomContainer.superview?.setNeedsLayout()
+        // Both view shared the same parent so setNeedsLayout is called only once
+        view.overKeyboardContainer.superview?.setNeedsLayout()
     }
 
     private func animateTopToolbar(alpha: CGFloat) {
@@ -153,8 +152,7 @@ final class ToolbarAnimator {
         let headerOffset = isShowing ? 0 : context.headerHeight
         UIView.animate(withDuration: UX.topToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut],
-                       animations: {
+                       options: [.curveEaseOut]) {
             if !isShowing {
                 view.header.transform = .identity.translatedBy(x: 0, y: headerOffset)
                 view.topBlurView.transform = .identity.translatedBy(x: 0, y: headerOffset)
@@ -162,9 +160,7 @@ final class ToolbarAnimator {
                 view.header.transform = .identity
                 view.topBlurView.transform = .identity
             }
-        }, completion: { [weak self] _ in
-            self?.updateTopToolbarConstraints(topContainerOffset: headerOffset)
-        })
+        }
         delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }
 
@@ -172,26 +168,23 @@ final class ToolbarAnimator {
         guard let view else { return }
 
         let isShowing = alpha == 1
-        let customOffset = context.bottomContainerHeight + context.overKeyboardContainerHeight
         let bottomOffset = isShowing ? 0 :  context.bottomContainerHeight
-        let overkeyBoardOffset = isShowing ? 0 : context.overKeyboardContainerHeight
+        let overkeyboardOffset = isShowing ? 0 : context.overKeyboardContainerHeight
         UIView.animate(withDuration: UX.bottomToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut],
-                       animations: {
+                       options: [.curveEaseOut]) { [weak self] in
             if !isShowing {
-                view.bottomContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
-                view.overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
-                view.bottomBlurView.transform = .identity.translatedBy(x: 0, y: customOffset)
+                view.bottomContainer.transform = .identity.translatedBy(x: 0, y: bottomOffset)
+                view.overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: overkeyboardOffset)
+                view.bottomBlurView.transform = .identity.translatedBy(x: 0, y: overkeyboardOffset)
             } else {
                 view.bottomContainer.transform = .identity
                 view.overKeyboardContainer.transform = .identity
                 view.bottomBlurView.transform = .identity
             }
-        }, completion: { [weak self] _ in
             self?.updateBottomToolbarConstraints(bottomContainerOffset: bottomOffset,
-                                                 overKeyboardContainerOffset: overkeyBoardOffset)
-        })
+                                                 overKeyboardContainerOffset: overkeyboardOffset)
+        }
 
         self.delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }

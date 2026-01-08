@@ -7,25 +7,25 @@ import XCTest
 import WebKit
 
 @MainActor
-final class WKEngineWebViewTests: XCTestCase {
+final class WKEngineWebViewTests: XCTestCase, @unchecked Sendable {
     private var delegate: MockWKEngineWebViewDelegate!
     private let testURL = URL(string: "https://www.example.com/")!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         delegate = MockWKEngineWebViewDelegate()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         delegate = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testNoLeaks() {
         let subject = createSubject()
         subject.close()
 
-        // Wait for Webview to fully deallocate
+        // Wait for webView to fully deallocate
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 

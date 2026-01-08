@@ -9,7 +9,7 @@ import Kingfisher
 import GCDWebServers
 
 class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
-    func testDownloadingSVGImage_withKingfisherProcessor_forStandardSVGCase() async {
+    func testDownloadingSVGImage_withKingfisherProcessor_forStandardSVGCase() {
         let assetType: AssetType = .svgCase1
         let expectedRasterSize = CGSize(width: 360, height: 360)
 
@@ -18,7 +18,7 @@ class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
             return
         }
 
-        guard let mockedURL = try? await startMockImageServer(imageData: imageData, forAssetType: assetType) else {
+        guard let mockedURL = try? startMockImageServer(imageData: imageData, forAssetType: assetType) else {
             XCTFail("Check bundle setup for mock server response data")
             return
         }
@@ -39,11 +39,11 @@ class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
             }
         }
 
-        await fulfillment(of: [exp], timeout: 2.0)
+        wait(for: [exp], timeout: 2.0)
     }
 
     /// FXIOS-11361: Tests a special SVG which previously caused crashes in older versions of SwiftDraw.
-    func testDownloadingSVGImage_withKingfisherProcessor_forSpecialSVGCase() async {
+    func testDownloadingSVGImage_withKingfisherProcessor_forSpecialSVGCase() {
         let assetType: AssetType = .svgCase2
         let expectedRasterSize = CGSize(width: 360, height: 360)
 
@@ -52,7 +52,7 @@ class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
             return
         }
 
-        guard let mockedURL = try? await startMockImageServer(imageData: imageData, forAssetType: assetType) else {
+        guard let mockedURL = try? startMockImageServer(imageData: imageData, forAssetType: assetType) else {
             XCTFail("Check bundle setup for mock server response data")
             return
         }
@@ -73,10 +73,10 @@ class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
             }
         }
 
-        await fulfillment(of: [exp], timeout: 2.0)
+        wait(for: [exp], timeout: 2.0)
     }
 
-    func testDownloadingICOImage_withKingfisherProcessor() async {
+    func testDownloadingICOImage_withKingfisherProcessor() {
         let assetType: AssetType = .ico
 
         guard let imageData = try? dataFor(type: assetType) else {
@@ -84,7 +84,7 @@ class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
             return
         }
 
-        guard let mockedURL = try? await startMockImageServer(imageData: imageData, forAssetType: assetType) else {
+        guard let mockedURL = try? startMockImageServer(imageData: imageData, forAssetType: assetType) else {
             XCTFail("Check bundle setup for mock server response data")
             return
         }
@@ -104,16 +104,16 @@ class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
             }
         }
 
-        await fulfillment(of: [exp], timeout: 2.0)
+        wait(for: [exp], timeout: 2.0)
     }
 
-    func testDownloadingGarbageData_withKingfisherProcessor() async {
+    func testDownloadingGarbageData_withKingfisherProcessor() {
         guard let garbageData = try? dataFor(type: .badType) else {
             XCTFail("Could not load test asset")
             return
         }
 
-        guard let mockedURL = try? await startMockImageServer(imageData: garbageData, forAssetType: .badType) else {
+        guard let mockedURL = try? startMockImageServer(imageData: garbageData, forAssetType: .badType) else {
             XCTFail("Check bundle setup for mock server response data")
             return
         }
@@ -131,13 +131,13 @@ class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
             }
         }
 
-        await fulfillment(of: [exp], timeout: 2.0)
+        wait(for: [exp], timeout: 2.0)
     }
 
-    func testDownloadingEmptyImage_withKingfisherProcessor() async {
+    func testDownloadingEmptyImage_withKingfisherProcessor() {
         let emptyData = Data()
 
-        guard let mockedURL = try? await startMockImageServer(imageData: emptyData, forAssetType: .ico) else {
+        guard let mockedURL = try? startMockImageServer(imageData: emptyData, forAssetType: .ico) else {
             XCTFail("Check bundle setup for mock server response data")
             return
         }
@@ -155,7 +155,7 @@ class SVGImageProcessorTests: XCTestCase, @unchecked Sendable {
             }
         }
 
-        await fulfillment(of: [exp], timeout: 2.0)
+        wait(for: [exp], timeout: 2.0)
     }
 }
 
@@ -211,9 +211,6 @@ extension SVGImageProcessorTests {
         throw MockImageServerError.noAssetData
     }
 
-    // GDCWebServer must be initialized for the first time on the main thread
-    // So this @MainActor ensures that if this test file is run alone it will not crash
-    @MainActor
     func startMockImageServer(imageData: Data, forAssetType assetType: AssetType) throws -> URL {
         let webServer = GCDWebServer()
 

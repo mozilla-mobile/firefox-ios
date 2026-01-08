@@ -29,6 +29,7 @@ final class LaunchCoordinator: BaseCoordinator,
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
+    private var onboardingService: OnboardingService?
 
     init(router: Router,
          windowUUID: WindowUUID,
@@ -236,17 +237,6 @@ final class LaunchCoordinator: BaseCoordinator,
         router.present(viewController, animated: false)
     }
 
-    private lazy var onboardingService: OnboardingService = {
-        OnboardingService(
-            windowUUID: windowUUID,
-            profile: profile,
-            themeManager: themeManager,
-            delegate: self,
-            navigationDelegate: self,
-            qrCodeNavigationHandler: self
-        )
-    }()
-
     // MARK: - Intro
     @MainActor
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
@@ -264,11 +254,23 @@ final class LaunchCoordinator: BaseCoordinator,
             onboardingVariant: manager.onboardingVariant
         )
 
+        // Create onboardingService and store it directly - don't create local variable
+        self.onboardingService = OnboardingService(
+            windowUUID: windowUUID,
+            profile: profile,
+            themeManager: themeManager,
+            delegate: self,
+            navigationDelegate: self,
+            qrCodeNavigationHandler: self
+        )
+        self.onboardingService?.telemetryUtility = telemetryUtility
+
         let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
             onboardingCards: onboardingModel.cards,
             skipText: .Onboarding.LaterAction,
-            onActionTap: { @MainActor [weak self] action, cardName, completion in
-                self?.onboardingService.handleAction(
+            onActionTap: { [weak self] action, cardName, completion in
+                guard let onboardingService = self?.onboardingService else { return }
+                onboardingService.handleAction(
                     action,
                     from: cardName,
                     cards: onboardingModel.cards,
@@ -277,7 +279,8 @@ final class LaunchCoordinator: BaseCoordinator,
                 )
             },
             onMultipleChoiceActionTap: { [weak self] action, cardName in
-                self?.onboardingService.handleMultipleChoiceAction(
+                guard let onboardingService = self?.onboardingService else { return }
+                onboardingService.handleMultipleChoiceAction(
                     action,
                     from: cardName
                 )
@@ -286,6 +289,7 @@ final class LaunchCoordinator: BaseCoordinator,
                 guard let self = self else { return }
                 manager.didSeeIntroScreen()
                 SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+                self.onboardingService = nil
                 parentCoordinator?.didFinishLaunch(from: self)
             }
         )
@@ -309,8 +313,10 @@ final class LaunchCoordinator: BaseCoordinator,
             )
         }
 
-        flowViewModel.onDismiss = { cardName in
+        flowViewModel.onDismiss = { [weak self] cardName in
+            guard let self = self else { return }
             telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
+            self.onboardingService = nil
         }
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(

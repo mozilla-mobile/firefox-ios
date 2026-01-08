@@ -6,6 +6,7 @@ import XCTest
 import WebKit
 @testable import WebEngine
 
+@MainActor
 final class WKInternalSchemeHandlerTests: XCTestCase {
     func testSchemeStartIsCalledNonPrivilegedURL() throws {
         let subject = createSubject()

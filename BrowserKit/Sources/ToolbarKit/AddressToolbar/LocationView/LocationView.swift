@@ -494,26 +494,20 @@ final class LocationView: UIView,
         }
         urlAbsolutePath = config.url?.absoluteString
 
-        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
-        _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
-
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.
         if let dropInteraction = urlTextField.textDropInteraction {
             urlTextField.removeInteraction(dropInteraction)
         }
 
-        if configurationIsEditing {
-            let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
-            if isAnimationEnabled {
-                UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
-                    self.urlTextField.clearButton?.alpha = 1
-                }
-            } else {
-                urlTextField.clearButton?.alpha = 1
+        let targetAlpha: CGFloat = configurationIsEditing ? 1 : 0
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        if isAnimationEnabled {
+            UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
+                self.urlTextField.clearButton?.alpha = targetAlpha
             }
         } else {
-            urlTextField.clearButton?.alpha = 0
+            urlTextField.clearButton?.alpha = targetAlpha
         }
 
         // Once the user started typing we should not update the text anymore as that interferes with
@@ -523,12 +517,18 @@ final class LocationView: UIView,
         let text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
         urlTextField.text = text
 
-        // Start overlay mode & select text when in edit mode with a search term
-        if shouldShowKeyboard, config.shouldSelectSearchTerm {
-            DispatchQueue.main.async {
-                self.urlTextField.text = text
-                self.urlTextField.selectAll(nil)
+        // Defer keyboard/first responder to next run loop (non-blocking).
+        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
+        if shouldShowKeyboard {
+            DispatchQueue.main.async { [unowned self] in
+                _ = becomeFirstResponder()
+                if config.shouldSelectSearchTerm {
+                    urlTextField.text = text
+                    urlTextField.selectAll(nil)
+                }
             }
+        } else {
+            _ = resignFirstResponder()
         }
     }
 

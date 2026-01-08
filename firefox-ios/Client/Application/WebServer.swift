@@ -13,14 +13,12 @@ protocol WebServerProtocol {
     func start() throws -> Bool
 }
 
-// FIXME: FXIOS-13989 Make truly thread safe
+/// FIXME: FXIOS-13989 Make truly thread safe
+/// NOTE: FXIOS-14560 -- Be careful; `@MainActor` will cause crashes with GCDWebServer dependency.
 final class WebServer: WebServerProtocol, @unchecked Sendable {
-    private let logger: Logger
-    static let WebServerSharedInstance = WebServer()
+    static let sharedInstance = WebServer()
 
-    class var sharedInstance: WebServer {
-        return WebServerSharedInstance
-    }
+    private let logger: Logger
 
     let server = GCDWebServer()
 
@@ -48,8 +46,6 @@ final class WebServer: WebServerProtocol, @unchecked Sendable {
                 GCDWebServerOption_Port: AppInfo.webserverPort,
                 GCDWebServerOption_BindToLocalhost: true,
                 GCDWebServerOption_AutomaticallySuspendInBackground: false, // done by the app in AppDelegate
-                GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
-                GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
             ])
         }
         return server.isRunning
@@ -60,7 +56,7 @@ final class WebServer: WebServerProtocol, @unchecked Sendable {
         _ method: String,
         module: String,
         resource: String,
-        handler: @escaping @Sendable @MainActor (
+        handler: @escaping @MainActor (
             _ request: GCDWebServerRequest?,
             _ responseCompletion: @escaping @Sendable (GCDWebServerResponse?) -> Void
         ) -> Void

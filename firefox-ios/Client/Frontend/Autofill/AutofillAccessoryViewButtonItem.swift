@@ -58,7 +58,11 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     ///   - image: The image for the accessory image view.
     ///   - labelText: The text for the accessory view label.
     ///   - tappedAction: The closure to be executed when the accessory view is tapped.
-    init(image: UIImage?, labelText: String, tappedAction: (() -> Void)? = nil) {
+    init(
+        image: UIImage?,
+        labelText: String,
+        tappedAction: (@MainActor () -> Void)? = nil
+    ) {
         self.accessoryImageView = .build { imageView in
             imageView.image = image?.withRenderingMode(.alwaysTemplate)
             imageView.contentMode = .scaleAspectFit

@@ -7,7 +7,7 @@
 @MainActor
 struct DefaultTestDependencies {
     var mockTelemetryProxy: MockEngineTelemetryProxy
-    var webviewParameters = WKWebViewParameters(blockPopups: true,
+    var webViewParameters = WKWebViewParameters(blockPopups: true,
                                                 isPrivate: true,
                                                 autoPlay: .all,
                                                 schemeHandler: WKInternalSchemeHandler())
@@ -17,7 +17,7 @@ struct DefaultTestDependencies {
     }
 
     var sessionDependencies: EngineSessionDependencies {
-        return EngineSessionDependencies(webviewParameters: webviewParameters,
+        return EngineSessionDependencies(webviewParameters: webViewParameters,
                                          telemetryProxy: mockTelemetryProxy)
     }
 }

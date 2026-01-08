@@ -9,7 +9,7 @@ import Common
 @MainActor
 class DefaultBrowserUtility {
     let userDefault: UserDefaultsInterface
-    let telemtryWrapper: TelemetryWrapperProtocol
+    let telemetry: DefaultBrowserUtilityTelemetry
     let locale: LocaleProvider
     let application: UIApplicationInterface
     let dmaCountries = ["BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", "HR", "IT", "CY", "LV",
@@ -19,13 +19,13 @@ class DefaultBrowserUtility {
 
     init(
         userDefault: UserDefaultsInterface = UserDefaults.standard,
-        telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+        telemetry: DefaultBrowserUtilityTelemetry = DefaultBrowserUtilityTelemetry(),
         locale: LocaleProvider = SystemLocaleProvider(),
         application: UIApplicationInterface = UIApplication.shared,
         logger: Logger = DefaultLogger.shared
     ) {
         self.userDefault = userDefault
-        self.telemtryWrapper = telemetryWrapper
+        self.telemetry = telemetry
         self.locale = locale
         self.application = application
         self.logger = logger
@@ -34,6 +34,13 @@ class DefaultBrowserUtility {
     struct UserDefaultsKey {
         public static let isBrowserDefault = "com.moz.isBrowserDefault.key"
         public static let shouldNotPerformMigration = "com.moz.shouldNotPerformMigration.key"
+        public static let retryDate = "com.moz.defaultBrowserAPIRetryDate.key"
+        public static let apiQuery = "com.moz.defaultBrowserAPIQuery.key"
+    }
+
+    struct APIErrorDateKeys {
+        static let retryDate = "UIApplicationCategoryDefaultRetryAvailabilityDateErrorKey"
+        static let lastProvidedDate = "UIApplicationCategoryDefaultStatusLastProvidedDateErrorKey"
     }
 
     var isDefaultBrowser: Bool {
@@ -63,28 +70,45 @@ class DefaultBrowserUtility {
             level: .info,
             category: .setup
         )
-        guard let isDefault = try? application.isDefault(.webBrowser) else {
+
+        do {
+            trackNumberOfAPIQueries(forNewUsers: isFirstRun)
+            let isDefault = try application.isDefault(.webBrowser)
+
             logger.log(
-                "UIApplicationInterface.isDefault was not present",
+                "UIApplicationInterface.isDefault was successful",
                 level: .info,
                 category: .setup
             )
-            return
-        }
+            trackIfUserIsDefault(isDefault)
 
-        logger.log(
-            "UIApplicationInterface.isDefault was successful",
-            level: .info,
-            category: .setup
-        )
-        trackIfUserIsDefault(isDefault)
-
-        if isFirstRun {
-            trackIfNewUserIsComingFromBrowserChoiceScreen(isDefault)
-
-            if isDefault {
-                isDefaultBrowser = true
+            if isFirstRun {
+                trackIfNewUserIsComingFromBrowserChoiceScreen(isDefault)
             }
+
+            isDefaultBrowser = isDefault
+        } catch let error as UIApplication.CategoryDefaultError {
+            logger.log(
+                "UIApplicationInterface.isDefault returned retry error: \(error.localizedDescription)",
+                level: .info,
+                category: .setup
+            )
+
+            let (retryDate, lastProvidedDate) = trackDatesForErrorReporting(error.userInfo)
+            let apiQueryCount = userDefault.object(forKey: UserDefaultsKey.apiQuery) as? Int
+
+            telemetry.recordDefaultBrowserAPIError(
+                errorDescription: error.localizedDescription,
+                retryDate: retryDate,
+                lastProvidedDate: lastProvidedDate,
+                apiQueryCount: apiQueryCount
+            )
+        } catch {
+            logger.log(
+                "UIApplicationInterface.isDefault was not present with error: \(error.localizedDescription)",
+                level: .info,
+                category: .setup
+            )
         }
     }
 
@@ -97,22 +121,13 @@ class DefaultBrowserUtility {
 
     private func trackIfUserIsDefault(_ isDefault: Bool) {
         userDefault.set(isDefault, forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser)
-
-        telemtryWrapper.recordEvent(category: .action,
-                                    method: .open,
-                                    object: .defaultBrowser,
-                                    extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: isDefault])
+        telemetry.recordAppIsDefaultBrowser(isDefault)
     }
 
     private func trackIfNewUserIsComingFromBrowserChoiceScreen(_ isDefault: Bool) {
-        guard let regionCode = locale.localeRegionCode else { return }
         // User is in a DMA effective region
-        if dmaCountries.contains(regionCode) {
-            let key = TelemetryWrapper.EventExtraKey.didComeFromBrowserChoiceScreen.rawValue
-            telemtryWrapper.recordEvent(category: .action,
-                                        method: .open,
-                                        object: .choiceScreenAcquisition,
-                                        extras: [key: isDefault])
+        if dmaCountries.contains(locale.regionCode()) {
+            telemetry.recordIsUserChoiceScreenAcquisition(isDefault)
         }
     }
 
@@ -155,5 +170,38 @@ class DefaultBrowserUtility {
         isDefaultBrowser = preAPIStatus || postAPIStatus
 
         userDefault.set(true, forKey: UserDefaultsKey.shouldNotPerformMigration)
+    }
+
+    // MARK: - API Tracking
+    /// This tracks the number of times we've queried the `isDefault` API only for new
+    /// users, in order to understand when the API returns an error. This number will only
+    /// be sent when we receive the error.
+    private func trackNumberOfAPIQueries(forNewUsers shouldStartTracking: Bool) {
+        if shouldStartTracking {
+            userDefault.set(1, forKey: UserDefaultsKey.apiQuery)
+            return
+        }
+
+        // For existing users, if the key doesn't exist, do nothing
+        guard let currentCount = userDefault.object(forKey: UserDefaultsKey.apiQuery) as? Int,
+              userDefault.object(forKey: UserDefaultsKey.apiQuery) != nil
+        else { return }
+
+        userDefault.set(currentCount + 1, forKey: UserDefaultsKey.apiQuery)
+    }
+
+    private func trackDatesForErrorReporting(
+        _ userInfoDict: [AnyHashable: Any]
+    ) -> (retryDate: Date?, lastProvidedDate: Date?) {
+        for (key, value) in userInfoDict {
+            if let keyString = key as? String, let date = value as? Date {
+                userDefault.set(date, forKey: keyString)
+            }
+        }
+
+        let retryDate = userInfoDict[APIErrorDateKeys.retryDate] as? Date
+        let lastProvidedDate = userInfoDict[APIErrorDateKeys.lastProvidedDate] as? Date
+
+        return (retryDate, lastProvidedDate)
     }
 }

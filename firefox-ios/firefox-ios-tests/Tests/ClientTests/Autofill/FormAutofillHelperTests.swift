@@ -14,9 +14,9 @@ final class FormAutofillHelperTests: XCTestCase {
     var formAutofillHelper: FormAutofillHelper!
     var tab: Tab!
     var profile: MockProfile!
-    var validMockWKMessage: WKScriptMessageMock!
+    var validMockWKMessage: MockWKScriptMessage!
     var secureWebviewMock: WKWebViewMock!
-    var secureFrameMock: WKFrameInfoMock!
+    var secureFrameMock: MockWKFrameInfo!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     let validMockPayloadJson = """
         {
@@ -30,7 +30,7 @@ final class FormAutofillHelperTests: XCTestCase {
           }
         }
     """
-    var validPayloadCaptureMockWKMessage: WKScriptMessageMock!
+    var validPayloadCaptureMockWKMessage: MockWKScriptMessage!
     // We need the `capture-credit-card-form`
     // to know when form submission happend
     let validMockPayloadCaptureJson = """
@@ -54,14 +54,14 @@ final class FormAutofillHelperTests: XCTestCase {
         tab = Tab(profile: profile, windowUUID: windowUUID)
         formAutofillHelper = FormAutofillHelper(tab: tab)
         secureWebviewMock = WKWebViewMock(URL(string: "https://foo.com")!)
-        secureFrameMock = WKFrameInfoMock(webView: secureWebviewMock, frameURL: URL(string: "https://foo.com")!)
+        secureFrameMock = MockWKFrameInfo(webView: secureWebviewMock, frameURL: URL(string: "https://foo.com")!)
         guard let jsonData = validMockPayloadJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(
                 with: jsonData,
                 options: []) as? [String: Any] else {
             fatalError("Unable to convert JSON to dictionary")
         }
-        validMockWKMessage = WKScriptMessageMock(
+        validMockWKMessage = MockWKScriptMessage(
             name: "creditCardFormMessageHandler",
             body: dictionary,
             frameInfo: secureFrameMock)
@@ -71,7 +71,7 @@ final class FormAutofillHelperTests: XCTestCase {
                 options: []) as? [String: Any] else {
             fatalError("Unable to convert JSON to dictionary")
         }
-        validPayloadCaptureMockWKMessage = WKScriptMessageMock(
+        validPayloadCaptureMockWKMessage = MockWKScriptMessage(
             name: "validPayloadCaptureMockWKMessage",
             body: dictionaryCapture,
             frameInfo: secureFrameMock)
@@ -137,7 +137,7 @@ final class FormAutofillHelperTests: XCTestCase {
                                                    "postal-code": "12345",
                                                    "tel": "+16509030800",
                                                    "country": "USA"]]
-        let mockAddressScriptMessage = WKScriptMessageMock(
+        let mockAddressScriptMessage = MockWKScriptMessage(
             name: FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue,
             body: mockBody,
             frameInfo: secureFrameMock)
@@ -322,7 +322,7 @@ final class FormAutofillHelperTests: XCTestCase {
                                                    "cc-exp-month": "12",
                                                    "cc-exp": "12",
                                                    "cc-exp-year": "2023"]]
-        let mockCreditCardScriptMessage = WKScriptMessageMock(
+        let mockCreditCardScriptMessage = MockWKScriptMessage(
             name: FormAutofillHelper.HandlerName.creditCardFormMessageHandler.rawValue,
             body: mockBody,
             frameInfo: secureFrameMock)

@@ -1,13 +1,15 @@
 // swift-tools-version: 5.10
 import PackageDescription
 
-let checksum = "8f9b1f2e380278cd0f38470df3c0ef7f71dd2040822e757701e73f263b670565"
-let version = "148.0.20251217050246"
-let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/MozillaRustComponents.xcframework.zip"
+let checksum = "84e88db2d8dccfd14c8dd3985b1c2d8841583951f828005fc74e29516520f72a"
+let version = "148.0.20251231050147"
+let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251231050147/artifacts/public/build/MozillaRustComponents.xcframework.zip"
+    "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/MozillaRustComponents.xcframework.zip"
 
 // Focus xcframework
-let focusChecksum = "64e15b04708f81276ad23357daa396f3805d5a812e98d45521552351329e5f76"
-let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/FocusRustComponents.xcframework.zip"
+let focusChecksum = "d140016e3dd38c5ecdfbb1a8fc97ede66baf24b88982a869a2a8ae8cecf55e7a"
+let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251231050147/artifacts/public/build/FocusRustComponents.xcframework.zip"
+    "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/FocusRustComponents.xcframework.zip"
 
 let package = Package(
     name: "MozillaRustComponentsSwift",
@@ -17,13 +19,15 @@ let package = Package(
         .library(name: "FocusRustComponents", targets: ["FocusAppServices"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/mozilla/glean-swift", from: "66.0.1"),
+        .package(url: "https://github.com/mozilla/glean-swift", from: "66.3.0")
     ],
     targets: [
         // A wrapper around our binary target that combines + any swift files we want to expose to the user
         .target(
             name: "MozillaAppServices",
-            dependencies: ["MozillaRustComponents", .product(name: "Glean", package: "glean-swift")],
+            dependencies: [
+                "MozillaRustComponents", .product(name: "Glean", package: "glean-swift"),
+            ],
             path: "Sources/MozillaRustComponentsWrapper",
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
@@ -45,10 +49,10 @@ let package = Package(
             url: url,
             checksum: checksum
 
-            // For local testing, you can point at an (unzipped) XCFramework that's part of the repo.
-            // Note that you have to actually check it in and make a tag for it to work correctly.
-            //
-            //path: "./MozillaRustComponents.xcframework"
+                // For local testing, you can point at an (unzipped) XCFramework that's part of the repo.
+                // Note that you have to actually check it in and make a tag for it to work correctly.
+                //
+                //path: "./MozillaRustComponents.xcframework"
         ),
         .binaryTarget(
             name: "FocusRustComponents",
@@ -59,10 +63,10 @@ let package = Package(
             url: focusUrl,
             checksum: focusChecksum
 
-            // For local testing, you can point at an (unzipped) XCFramework that's part of the repo.
-            // Note that you have to actually check it in and make a tag for it to work correctly.
-            //
-            //path: "./FocusRustComponents.xcframework"
+                // For local testing, you can point at an (unzipped) XCFramework that's part of the repo.
+                // Note that you have to actually check it in and make a tag for it to work correctly.
+                //
+                //path: "./FocusRustComponents.xcframework"
         ),
         // Tests
         .testTarget(

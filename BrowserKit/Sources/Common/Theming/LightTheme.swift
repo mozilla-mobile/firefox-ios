@@ -36,6 +36,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layerSuccess: UIColor = FXColors.Green20
     var layerWarning: UIColor = FXColors.Yellow20
     var layerCritical: UIColor = FXColors.Red10
+    var layerCriticalSubdued: UIColor = FXColors.Red05.withAlphaComponent(0.7)
     var layerSelectedText: UIColor = FXColors.Blue50
     var layerAutofillText: UIColor = FXColors.DarkGrey05.withAlphaComponent(0.43)
     var layerEmphasis: UIColor = FXColors.LightGrey30
@@ -50,18 +51,6 @@ private struct LightColourPalette: ThemeColourPalette {
         FXColors.Red70,
         FXColors.Orange50
     ])
-
-    // MARK: - Ratings
-    var layerRatingA: UIColor = FXColors.Green20
-    var layerRatingASubdued: UIColor = FXColors.Green05.withAlphaComponent(0.7)
-    var layerRatingB: UIColor = FXColors.Blue10
-    var layerRatingBSubdued: UIColor = FXColors.Blue05.withAlphaComponent(0.4)
-    var layerRatingC: UIColor = FXColors.Yellow20
-    var layerRatingCSubdued: UIColor = FXColors.Yellow05.withAlphaComponent(0.7)
-    var layerRatingD: UIColor = FXColors.Orange20
-    var layerRatingDSubdued: UIColor = FXColors.Orange05.withAlphaComponent(0.7)
-    var layerRatingF: UIColor = FXColors.Red30
-    var layerRatingFSubdued: UIColor = FXColors.Red05.withAlphaComponent(0.6)
 
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue50

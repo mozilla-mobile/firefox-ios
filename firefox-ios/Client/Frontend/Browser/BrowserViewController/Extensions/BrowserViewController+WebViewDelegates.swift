@@ -76,7 +76,7 @@ extension BrowserViewController: WKUIDelegate {
     private func handleJavaScriptAlert<T: WKJavaScriptAlertInfo>(
         _ alert: T,
         for webView: WKWebView,
-        spamCallback: @escaping () -> Void
+        spamCallback: @escaping @MainActor () -> Void
     ) {
         if jsAlertExceedsSpamLimits(webView) {
             handleSpammedJSAlert(spamCallback)
@@ -197,7 +197,7 @@ extension BrowserViewController: WKUIDelegate {
 
     // MARK: - Helpers
 
-    private func handleSpammedJSAlert(_ callback: @escaping () -> Void) {
+    private func handleSpammedJSAlert(_ callback: @escaping @MainActor () -> Void) {
         // User is being spammed. Squelch alert. Note that we have to do this after
         // a delay to avoid JS that could spin the CPU endlessly.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { callback() }
@@ -312,7 +312,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func createActions(isPrivate: Bool,
                        url: URL,
-                       addTab: @escaping (URL, Bool, Tab) -> Void,
+                       addTab: @escaping @MainActor (URL, Bool, Tab) -> Void,
                        title: String?,
                        image: URL?,
                        currentTab: Tab,
@@ -928,7 +928,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // web view don't invoke another download.
         pendingDownloadWebView = nil
 
-        let downloadAction: @Sendable @MainActor (HTTPDownload) -> Void = { [weak self] download in
+        let downloadAction: @MainActor (HTTPDownload) -> Void = { [weak self] download in
             self?.downloadQueue.enqueue(download)
         }
 
@@ -1053,7 +1053,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping @Sendable @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
             handleServerTrust(
@@ -1232,7 +1232,7 @@ private extension BrowserViewController {
 
     // Use for sms and mailto, which do not show a confirmation before opening.
     func showExternalAlert(withText text: String,
-                           completion: @escaping (UIAlertAction) -> Void) {
+                           completion: @escaping @MainActor (UIAlertAction) -> Void) {
         let alert = UIAlertController(title: nil,
                                       message: text,
                                       preferredStyle: .alert)
@@ -1329,7 +1329,7 @@ private extension BrowserViewController {
     func handleServerTrust(
         challenge: URLAuthenticationChallenge,
         dispatchQueue: DispatchQueueInterface,
-        completionHandler: @escaping @Sendable @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         dispatchQueue.async {
             // If this is a certificate challenge, see if the certificate has previously been

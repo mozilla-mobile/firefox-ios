@@ -9,6 +9,7 @@ import XCTest
 /// These types can no longer be created or mocked safely, as WebKit now requires
 /// fully initialized instances. This helper loads a lightweight `WKWebView`
 /// navigation and captures the frame and origin values that WebKit supplies.
+@MainActor
 final class WebKitTestHelpers {
     final class FakeWKNavigationDelegate: NSObject, WKNavigationDelegate {
         let expect: XCTestExpectation
@@ -17,9 +18,9 @@ final class WebKitTestHelpers {
 
         init(expect: XCTestExpectation) { self.expect = expect }
 
-        func webView(_ webView: WKWebView,
-                     decidePolicyFor navigationAction: WKNavigationAction,
-                     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        private func webView(_ webView: WKWebView,
+                             decidePolicyFor navigationAction: WKNavigationAction,
+                             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             let frame = navigationAction.sourceFrame
             capturedFrame = frame
             capturedOrigin = frame.securityOrigin

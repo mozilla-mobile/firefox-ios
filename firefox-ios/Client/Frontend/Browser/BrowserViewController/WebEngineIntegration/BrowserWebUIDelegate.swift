@@ -39,7 +39,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor @Sendable () -> Void
+        completionHandler: @escaping @Sendable () -> Void
     ) {
         legacyResponder?.webView?(
             webView,
@@ -53,7 +53,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptConfirmPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor @Sendable (Bool) -> Void
+        completionHandler: @escaping @MainActor (Bool) -> Void
     ) {
         legacyResponder?.webView?(
             webView,
@@ -68,7 +68,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor @Sendable (String?) -> Void
+        completionHandler: @escaping @MainActor (String?) -> Void
     ) {
         legacyResponder?.webView?(
             webView,
@@ -86,7 +86,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
     func webView(
         _ webView: WKWebView,
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
-        completionHandler: @escaping @MainActor @Sendable (UIContextMenuConfiguration?) -> Void
+        completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
     ) {
         legacyResponder?.webView?(
             webView,
@@ -104,7 +104,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         requestMediaCapturePermissionFor origin: WKSecurityOrigin,
         initiatedByFrame frame: WKFrameInfo,
         type: WKMediaCaptureType,
-        decisionHandler: @escaping @MainActor @Sendable (WKPermissionDecision) -> Void
+        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
     ) {
         legacyResponder?.webView?(
             webView,

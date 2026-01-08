@@ -64,7 +64,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let reducer = browserViewControllerReducer()
         let URL = URL(string: "https://foo.com")!
         let webView = WKWebViewMock(URL)
-        let frame = WKFrameInfoMock(webView: webView, frameURL: URL, isMainFrame: true)
+        let frame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
 
         XCTAssertNil(initialState.displayView)
 
@@ -480,6 +480,28 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let destination = newState.navigationDestination?.destination
         switch destination {
         case .storiesFeed:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+    }
+
+    // MARK: - Privacy Notice Link
+
+    func test_tapOnPrivacyNoticeLink_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        guard let url = URL(string: "https://www.mozilla.com") else { return }
+
+        let action = getNavigationBrowserAction(for: .tapOnPrivacyNoticeLink, destination: .privacyNoticeLink(url))
+        let newState = reducer(initialState, action)
+
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .privacyNoticeLink:
             break
         default:
             XCTFail("destination is not the right type")

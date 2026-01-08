@@ -8,6 +8,7 @@ import WebKit
 
 /// Necessary since some methods of `WKWebView` cannot be overriden. An abstraction need to be used to be able
 /// to mock all methods.
+@MainActor
 @available(iOS 16.0, *)
 class MockWKEngineWebView: UIView, WKEngineWebView {
     weak var delegate: WKEngineWebViewDelegate?
@@ -47,7 +48,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var evaluateJavaScriptCalled = 0
     var savedJavaScript: String?
     var javascriptResult: (Result<Any, Error>)?
-    var pageZoom: CGFloat = 1.0
+    nonisolated(unsafe) var pageZoom: CGFloat = 1.0
     var viewPrintFormatterCalled = 0
 
     var loadFileReadAccessURL: URL?
@@ -135,7 +136,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     func evaluateJavaScript(_ javaScript: String,
                             in frame: WKFrameInfo?,
                             in contentWorld: WKContentWorld,
-                            completionHandler: (@MainActor @Sendable (Result<Any, Error>) -> Void)?) {
+                            completionHandler: (@MainActor (Result<Any, Error>) -> Void)?) {
         evaluateJavaScriptCalled += 1
         savedJavaScript = javaScript
 

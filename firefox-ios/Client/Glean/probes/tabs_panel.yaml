@@ -42,7 +42,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel
@@ -67,7 +67,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel
@@ -95,7 +95,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel
@@ -119,7 +119,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel
@@ -141,7 +141,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel
@@ -163,7 +163,7 @@ tabs_panel.close_old_tabs_sheet:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26584
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel
@@ -194,7 +194,7 @@ tabs_panel.close_all_tabs_sheet:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     metadata:
       tags:
         - TabsPanel
@@ -217,7 +217,7 @@ tabs_tray:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   new_private_tab_tapped:
     type: event
     description: |
@@ -228,4 +228,4 @@ tabs_tray:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15503
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never

@@ -252,7 +252,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     @MainActor
     func testSettings() {
         let table = app.tables.element(boundBy: 0)
-        let scrollview = app.scrollViews.element(boundBy: 0)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -263,9 +262,12 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         allSettingsScreens.forEach { nodeName in
             self.navigator.goto(nodeName)
             if nodeName == "DisplaySettings" {
-                scrollview.forEachScreen { i in
-                    snapshot("Settings-\(nodeName)-\(i)")
-                }
+                snapshot("Settings-\(nodeName)")
+            } else if nodeName == "ToolbarSettings" {
+                snapshot("Settings-\(nodeName)")
+            } else if nodeName == "AppIconSettings" {
+                // forEachScreen may not work with collectionView
+                snapshot("Settings-\(nodeName)")
             } else {
                 table.forEachScreen { i in
                     snapshot("Settings-\(nodeName)-\(i)")
@@ -280,6 +282,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         snapshot("PrivateBrowsingTabsEmptyState-01")
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        snapshot("PrivateBrowsingTabsNewTab-01")
     }
 
     @MainActor

@@ -172,10 +172,10 @@ public struct UserAgentBuilder {
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
         return UserAgentBuilder(
             product: UserAgent.product,
-            systemInfo: "(\(UIDeviceDetails.model); CPU iPhone OS \(UIDeviceDetails.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
+            systemInfo: "(\(UIDeviceDetails.model); CPU iPhone OS 18_7 like Mac OS X)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
-            extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+            extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {

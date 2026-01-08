@@ -11,16 +11,17 @@ import XCTest
 final class WKNavigationHandlerTests: XCTestCase {
     private var webView: MockWKWebView!
     private var sessionHandler: MockSessionHandler!
-    override func setUp() {
-        super.setUp()
+
+    override func setUp() async throws {
+        try await super.setUp()
         webView = MockWKWebView()
         sessionHandler = MockSessionHandler()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         webView = nil
         sessionHandler = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testDidCommitCallsCommitURLChange() {

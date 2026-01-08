@@ -40,7 +40,8 @@ class BrowserViewController: UIViewController,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
-                             BrowserStatusBarScrollDelegate {
+                             BrowserStatusBarScrollDelegate,
+                             LegacyTabScrollController.Delegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
@@ -712,6 +713,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    // MARK: - Translucency and blur helpers
+
     func updateBlurViews(scrollOffset: CGFloat? = nil) {
         guard toolbarHelper.shouldBlur() else {
             topBlurView.alpha = 0
@@ -772,7 +775,8 @@ class BrowserViewController: UIViewController,
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
-
+            // TODO: FXIOS-14536 Can we figure out a way not to do these calls? Sometimes they are needed
+            // for specific layout calls.
             if !isToolbarTranslucencyRefactorEnabled {
                 $0.setNeedsLayout()
                 $0.layoutIfNeeded()
@@ -798,6 +802,24 @@ class BrowserViewController: UIViewController,
             maskView.backgroundColor = .black
             contentContainer.mask = maskView
         }
+    }
+
+    func toolbarDisplayStateDidChange() {
+        updateToolbarTranslucency()
+    }
+
+    /// Updates the toolbar's translucency effects.
+    ///
+    /// This method applies blur effects to the top and bottom toolbars and updates the content
+    /// container's mask view to ensure proper visual effects during toolbar animations and state
+    /// transitions. Only executes when the toolbar translucency refactor feature flag is enabled.
+    func updateToolbarTranslucency() {
+        // If Toolbar translucency flag is disabled TabScroll refactor seems broken,
+        // please enabled both flags to get the right behaviour
+        guard isToolbarTranslucencyRefactorEnabled else { return }
+
+        updateBlurViews()
+        addOrUpdateMaskViewIfNeeded()
     }
 
     fileprivate func appMenuBadgeUpdate() {
@@ -830,7 +852,7 @@ class BrowserViewController: UIViewController,
         notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
     }
 
-    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
+    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, shouldUpdateBlurViews: Bool = true) {
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
 
@@ -851,7 +873,7 @@ class BrowserViewController: UIViewController,
             view.layoutSubviews()
         }
 
-        updateToolbarDisplay()
+        updateToolbarDisplay(shouldUpdateBlurViews: shouldUpdateBlurViews)
     }
 
     private func updateSwipingTabs() {
@@ -1395,7 +1417,8 @@ class BrowserViewController: UIViewController,
             profile: profile,
             searchEnginesManager: searchEnginesManager,
             delegate: self,
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+            isBottomSearchBar: isBottomSearchBar
         )
         addressToolbarContainer.applyTheme(theme: currentTheme())
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
@@ -1484,7 +1507,7 @@ class BrowserViewController: UIViewController,
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        updateToolbarStateForTraitCollection(traitCollection)
+        updateToolbarStateForTraitCollection(traitCollection, shouldUpdateBlurViews: !isToolbarTranslucencyEnabled)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1583,10 +1606,12 @@ class BrowserViewController: UIViewController,
         checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
-        if !isToolbarTranslucencyRefactorEnabled {
-            // when toolbars are hidden/shown the mask on the content view that is used for
-            // toolbar translucency needs to be updated
-            // This also required for iPad rotation
+        // when toolbars are hidden/shown the mask on the content view that is used for
+        // toolbar translucency needs to be updated
+        // This also required for iPad rotation
+        if isToolbarTranslucencyRefactorEnabled {
+            addOrUpdateMaskViewIfNeeded()
+        } else {
             updateToolbarDisplay()
         }
 
@@ -2068,6 +2093,9 @@ class BrowserViewController: UIViewController,
         microsurvey.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(microsurvey)
 
+        // We opted out from using bottomContentStackView, because the microsurvey
+        // should be associated with the view underneath as if one view.
+        // Hence, no border should exist between microsurvey and below view.
         if isBottomSearchBar {
             overKeyboardContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
@@ -2079,15 +2107,7 @@ class BrowserViewController: UIViewController,
         }
 
         microsurvey.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-
-        updateBarBordersForMicrosurvey()
         updateViewConstraints()
-    }
-
-    // Update border to hide when microsurvey is shown so that
-    // it appears to belong the app and harder to spoof
-    private func updateBarBordersForMicrosurvey() {
-        guard !shouldUseiPadSetup() else { return }
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
@@ -2109,7 +2129,6 @@ class BrowserViewController: UIViewController,
         }
 
         self.microsurvey = nil
-        updateBarBordersForMicrosurvey()
         updateViewConstraints()
     }
 
@@ -2814,6 +2833,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showStoriesFeed()
         case .storiesWebView:
             navigationHandler?.showStoriesWebView(url: type.url)
+        case .privacyNoticeLink(let url):
+            navigationHandler?.showPrivacyNoticeLink(url: url)
         }
     }
 
@@ -3306,16 +3327,38 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            guard let selectedTab = tabManager.selectedTab else { return }
-            if selectedTab.isPrivate == isPrivate, selectedTab.isFxHomeTab {
-                focusLocationTextField(forTab: selectedTab)
-            } else {
-                openBlankNewTab(
-                    focusLocationField: options?.contains(.focusLocationField) == true,
-                    isPrivate: isPrivate
-                )
+            let isFocusLocationTextFieldOption = options?.contains(.focusLocationField) == true
+
+            // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-14406]
+            // Wait for tabs restoration because we need the `selectedTab`.
+            // The `selectedTab` is `nil` when open firefox from a widget.
+            guard let selectedTab = tabManager.selectedTab, !tabManager.isRestoringTabs else {
+                AppEventQueue.wait(for: [.tabRestoration(tabManager.windowUUID)]) { [weak self] in
+                    ensureMainThread { [weak self] in
+                        guard let self, let selectedTab = self.tabManager.selectedTab else { return }
+                        self.handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
+                    }
+                }
+                return
             }
+            handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
         }
+    }
+
+    private func handle(_ selectedTab: Tab, _ isPrivate: Bool, _ isFocusLocationTextFieldOption: Bool) {
+        if shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
+            focusLocationTextField(forTab: selectedTab)
+        } else {
+            openBlankNewTab(
+                focusLocationField: isFocusLocationTextFieldOption,
+                isPrivate: isPrivate
+            )
+        }
+    }
+
+    func shouldFocusLocationTextField(for tab: Tab, isPrivate: Bool) -> Bool {
+        guard tab.isPrivate == isPrivate else { return false }
+        return tab.isFxHomeTab || tab.url == nil
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
@@ -3616,9 +3659,10 @@ class BrowserViewController: UIViewController,
     private func handleFoundAddressFieldValue(type: FormAutofillPayloadType?,
                                               tabWebView: TabWebView,
                                               webView: WKWebView,
-                                              frame: WKFrameInfo?) {
+                                              frame: WKFrameInfo?,
+                                              localeProvider: LocaleProvider = SystemLocaleProvider()) {
         guard addressAutofillSettingsUserDefaultsIsEnabled(),
-              AddressLocaleFeatureValidator.isValidRegion(),
+              AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode()),
               // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
               let type = type else { return }
 
@@ -4982,10 +5026,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-
         if isToolbarTranslucencyRefactorEnabled {
-            // Only correct the order of views to not cut off the shadow
-            updateToolbarDisplay(shouldUpdateBlurViews: false)
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
         } else {
             updateToolbarDisplay()
         }

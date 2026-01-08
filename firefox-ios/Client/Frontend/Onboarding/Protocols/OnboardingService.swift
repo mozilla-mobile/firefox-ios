@@ -14,7 +14,7 @@ final class OnboardingService: FeatureFlaggable {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
     private weak var navigationDelegate: OnboardingNavigationDelegate?
-    private let qrCodeNavigationHandler: QRCodeNavigationHandler?
+    private weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     private var hasRegisteredForDefaultBrowserNotification = false
     private var userDefaults: UserDefaultsInterface
     private var windowUUID: WindowUUID
@@ -28,6 +28,7 @@ final class OnboardingService: FeatureFlaggable {
     private let defaultApplicationHelper: ApplicationHelper
     private let notificationCenter: NotificationProtocol
     private let searchBarLocationSaver: SearchBarLocationSaverProtocol
+    weak var telemetryUtility: OnboardingTelemetryProtocol?
 
     init(
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
@@ -61,7 +62,9 @@ final class OnboardingService: FeatureFlaggable {
         from cardName: String,
         cards: [OnboardingKitCardInfoModel],
         with activityEventHelper: ActivityEventHelper,
-        completion: @escaping (Result<OnboardingFlowViewModel<OnboardingKitCardInfoModel>.TabAction, Error>) -> Void
+        completion: @Sendable @escaping @MainActor (
+            Result<OnboardingFlowViewModel<OnboardingKitCardInfoModel>.TabAction, Error>
+        ) -> Void
     ) {
         switch action {
         case .requestNotifications:
@@ -198,12 +201,13 @@ final class OnboardingService: FeatureFlaggable {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
         registerForNotification()
+        telemetryUtility?.sendGoToSettingsButtonTappedTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
     private func handleOpenInstructionsPopup(
         from popupViewModel: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>,
-        completion: @escaping () -> Void
+        completion: @Sendable @escaping @MainActor () -> Void
     ) {
         presentDefaultBrowserPopup(from: popupViewModel, completion: completion)
     }
@@ -213,6 +217,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenIosFxSettings(from cardName: String) {
+        telemetryUtility?.sendGoToSettingsButtonTappedTelemetry()
         defaultApplicationHelper.openSettings()
     }
 
@@ -339,10 +344,16 @@ final class OnboardingService: FeatureFlaggable {
         let instructionsVC = OnboardingInstructionPopupViewController(
             viewModel: popupViewModel,
             windowUUID: windowUUID,
-            buttonTappedFinishFlow: completion
+            buttonTappedFinishFlow: { [weak self] in
+                self?.telemetryUtility?.sendGoToSettingsButtonTappedTelemetry()
+                completion()
+            }
         )
 
         let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
+        bottomSheetVC.onDismiss = { [weak self] in
+            self?.telemetryUtility?.sendDismissButtonTappedTelemetry()
+        }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: .CloseButtonTitle,

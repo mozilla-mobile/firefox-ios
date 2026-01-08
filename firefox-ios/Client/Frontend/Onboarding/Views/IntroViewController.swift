@@ -328,6 +328,7 @@ extension IntroViewController: OnboardingCardDelegate {
             introViewModel.chosenOptions.insert(.setAsDefaultBrowser)
             introViewModel.updateOnboardingUserActivationEvent()
             registerForNotification()
+            viewModel.telemetryUtility.sendGoToSettingsButtonTappedTelemetry()
             DefaultApplicationHelper().openSettings()
         case .openInstructionsPopup:
             /// Setting default browser card action opens an instruction pop up instead of
@@ -344,6 +345,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
         case .openIosFxSettings:
+            viewModel.telemetryUtility.sendGoToSettingsButtonTappedTelemetry()
             DefaultApplicationHelper().openSettings()
             advance(numberOfPages: 1, from: cardName) {
                 self.showNextPageCompletionForLastCard()

@@ -155,7 +155,6 @@ final class AddressToolbarContainer: UIView,
         self.isMinimalAddressBarEnabled = isMinimalAddressBarEnabled
         self.toolbarHelper = toolbarHelper
         super.init(frame: .zero)
-        setupLayout()
     }
 
     required init?(coder: NSCoder) {
@@ -184,12 +183,14 @@ final class AddressToolbarContainer: UIView,
         profile: Profile,
         searchEnginesManager: SearchEnginesManagerProvider,
         delegate: AddressToolbarContainerDelegate,
-        isUnifiedSearchEnabled: Bool
+        isUnifiedSearchEnabled: Bool,
+        isBottomSearchBar: Bool
     ) {
         self.windowUUID = windowUUID
         self.profile = profile
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
+        setupLayout(isBottomSearchBar: isBottomSearchBar)
         subscribeToRedux()
     }
 
@@ -412,7 +413,7 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.alpha = alpha
     }
 
-    private func setupLayout() {
+    private func setupLayout(isBottomSearchBar: Bool) {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onContainerTapped))
         addGestureRecognizer(tapGesture)
 
@@ -424,8 +425,8 @@ final class AddressToolbarContainer: UIView,
             progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
 
-        setupToolbarConstraints()
-        setupSkeletonAddressBarsLayout()
+        setupToolbarConstraints(isBottomSearchBar: isBottomSearchBar)
+        setupSkeletonAddressBarsLayout(isBottomSearchBar: isBottomSearchBar)
 
         addSubview(addNewTabView)
         addNewTabLeadingConstraint = addNewTabView.leadingAnchor.constraint(equalTo: trailingAnchor)
@@ -439,9 +440,9 @@ final class AddressToolbarContainer: UIView,
         addNewTabLeadingConstraint?.isActive = true
     }
 
-    private func setupToolbarConstraints() {
+    private func setupToolbarConstraints(isBottomSearchBar: Bool) {
         addSubview(toolbar)
-        if toolbarHelper.isSwipingTabsEnabled {
+        if toolbarHelper.isSwipingTabsEnabled && isBottomSearchBar {
             insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
             insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
 
@@ -458,8 +459,8 @@ final class AddressToolbarContainer: UIView,
         ])
     }
 
-    private func setupSkeletonAddressBarsLayout() {
-        guard toolbarHelper.isSwipingTabsEnabled else { return }
+    private func setupSkeletonAddressBarsLayout(isBottomSearchBar: Bool) {
+        guard toolbarHelper.isSwipingTabsEnabled, isBottomSearchBar else { return }
 
         NSLayoutConstraint.activate([
             leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),

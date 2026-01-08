@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Fimm ókeypis tölvupósthulur þínar eru í notkun, svo við völdum eina fyrir þig.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Þú hefur notað 5 ókeypis tölvupósthulur, svo við völdum eina fyrir þig til að endurnýta.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Tölvupóstshulur eru ekki tiltækar eins og er. Reyndu aftur eftir nokkrar mínútur.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Tölvupósthula sett inn";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Feldu raunverulegt póstfang þitt til að vernda pósthólfið þitt fyrir ruslpósti. Sum vefsvæði styðja þetta ekki.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Feldu raunverulegt póstfang þitt til að vernda pósthólfið þitt fyrir ruslpósti. Sum vefsvæði styðja ekki tölvupósthulur.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Frekari upplýsingar";

@@ -39,7 +39,7 @@ share_sheet:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
     extra_keys:
       activity_identifier:
         type: string

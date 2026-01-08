@@ -65,7 +65,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   primary_button_tap:
     type: event
     description: |
@@ -105,7 +105,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   secondary_button_tap:
     type: event
     description: |
@@ -145,7 +145,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   multiple_choice_button_tap:
     type: event
     description: |
@@ -183,7 +183,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   close_tap:
     type: event
     description: |
@@ -219,7 +219,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/30798
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   terms_of_service_card:
     type: event
     description: |
@@ -230,7 +230,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   terms_of_service_accepted:
     type: event
     description: |
@@ -241,7 +241,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   terms_of_service_link_clicked:
     type: event
     description: |
@@ -252,7 +252,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   terms_of_service_manage_link_clicked:
     type: event
     description: |
@@ -263,7 +263,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   terms_of_service_privacy_notice_link_clicked:
     type: event
     description: |
@@ -274,7 +274,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   toggle_technical_interaction_data:
     type: event
     description: |
@@ -290,7 +290,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   toggle_automatic_crash_reports:
     type: event
     description: |
@@ -306,7 +306,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   wallpaper_selected:
     type: event
     description: |
@@ -328,7 +328,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   wallpaper_selector_view:
     type: event
     description: |
@@ -341,7 +341,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   wallpaper_selector_close:
     type: event
     description: |
@@ -355,7 +355,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   wallpaper_selector_selected:
     type: event
     description: |
@@ -379,7 +379,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   notification_permission_prompt:
     type: event
     description: |
@@ -396,7 +396,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   engagement_notification_tapped:
     type: event
     description: |
@@ -408,7 +408,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
   engagement_notification_cancel:
     type: event
     description: |
@@ -420,5 +420,52 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
+    expires: never
+
+# Default Browser Sheet
+onboarding.default_browser_sheet:
+  go_to_settings_button_tapped:
+    type: event
+    description: |
+      Records when the Go To Settings button on default browser onboarding
+      is clicked. This applies to both legacy and modern onboarding flows.
+    extra_keys:
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern, legacy, or japan).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+      - https://github.com/mozilla-mobile/firefox-ios/issues/31366
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/31375
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  dismiss_button_tapped:
+    type: event
+    description: |
+      Records when default browser onboarding is dismissed.
+      This applies to both legacy and modern onboarding flows.
+    extra_keys:
+      onboarding_variant:
+        type: string
+        description: |
+          The onboarding variant (modern, legacy, or japan).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+      - https://github.com/mozilla-mobile/firefox-ios/issues/31366
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/31375
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 

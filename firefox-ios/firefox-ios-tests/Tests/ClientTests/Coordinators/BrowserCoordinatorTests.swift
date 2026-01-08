@@ -539,7 +539,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let mockTab = Tab(profile: profile, windowUUID: windowUUID)
         let URL = URL(string: "https://foo.com")!
         let webView = WKWebViewMock(URL)
-        let frame = WKFrameInfoMock(webView: webView, frameURL: URL, isMainFrame: true)
+        let frame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
 
         subject.showPasswordGenerator(tab: mockTab, frame: frame)
 
@@ -674,6 +674,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         XCTAssertNotNil(mockRouter.pushedViewController as? StoriesWebviewViewController)
         XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
+    func testShowPrivacyNoticeLink_showsStoriesWebview() throws {
+        let subject = createSubject()
+
+        guard let url = URL(string: "https://www.mozilla.com") else { return }
+
+        subject.showPrivacyNoticeLink(url: url)
+
+        XCTAssertNotNil(mockRouter.presentedViewController as? TermsOfUseLinkViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
     func testPopToBVC_popsViewControllers() {
