@@ -23,7 +23,7 @@
 "CreditCard.EditCard.EditNavBarButtonLabel.v113" = "Uredi";
 
 /* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
-"CreditCard.EditCard.ExpiredDateTitle.v112" = "Istječe %@";
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "Isteče %@";
 
 /* Title label for user to input their name printed on their credit card in the text box below. */
 "CreditCard.EditCard.NameOnCardTitle.v112" = "Ime na kartici";

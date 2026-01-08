@@ -32,13 +32,13 @@
 "Onboarding.Customization.Theme.Continue.Action.v123" = "保存并继续";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
-"Onboarding.Customization.Theme.Dark.Action.v123" = "深色";
+"Onboarding.Customization.Theme.Dark.Action.v123" = "深邃";
 
 /* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Description.v123" = "选个舒适的氛围浏览网页。";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
-"Onboarding.Customization.Theme.Light.Action.v123" = "浅色";
+"Onboarding.Customization.Theme.Light.Action.v123" = "明亮";
 
 /* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Skip.Action.v123" = "跳过";
@@ -89,13 +89,13 @@
 "Onboarding.Modern.Customization.Theme.Dark.v145" = "深邃";
 
 /* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.Customization.Theme.Description.v145" = "挑选您最喜爱的主题或让 %@ 与您的设备匹配，让您掌控。";
+"Onboarding.Modern.Customization.Theme.Description.v145" = "选取喜欢的主题，或让 %@ 适应设备主题，随您喜好。";
 
 /* Option for the light theme. */
 "Onboarding.Modern.Customization.Theme.Light.v145" = "明亮";
 
 /* Title for the theme selection card. */
-"Onboarding.Modern.Customization.Theme.Title.v145" = "请选择您的主题";
+"Onboarding.Modern.Customization.Theme.Title.v145" = "选取主题";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "底部";
@@ -107,13 +107,13 @@
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "继续";
 
 /* Description for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Description.v145" = "输入即可获得搜索建议，包括您的常用网站、书签、历史记录以及搜索引擎⸺一切尽在此处。";
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "键入即可获取搜索建议、常用网站、书签、历史记录、搜索引擎，尽在一处。";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "选择地址栏的位置";
 
 /* Title for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Title.v145" = "请选择您的地址栏";
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "选择地址栏位置";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "顶部";
@@ -128,7 +128,7 @@
 "Onboarding.Modern.Sync.Description.v140" = "跨设备查看书签、历史记录和密码。";
 
 /* Description for the Sync card in the v2 onboarding flow. */
-"Onboarding.Modern.Sync.Description.v145" = "与任何设备同步书签、密码等数据。所有内容都已被加密保护，只有您可以访问。";
+"Onboarding.Modern.Sync.Description.v145" = "在各设备间同步书签、密码等数据。所有数据均受加密保护，只有您可以访问。";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "开始同步";
@@ -215,7 +215,7 @@
 "Onboarding.Modern.TermsOfService.Title.v140" = "升级您的浏览体验";
 
 /* Title for the Terms of Service screen in the v2 onboarding flow. */
-"Onboarding.Modern.TermsOfService.Title.v145" = "掌控互联网";
+"Onboarding.Modern.TermsOfService.Title.v145" = "掌控上网体验";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ 使用条款";
@@ -284,7 +284,7 @@
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ 重视您的隐私。阅读%2$@可详细了解";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隐私声明。";
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隐私声明";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "详细了解";

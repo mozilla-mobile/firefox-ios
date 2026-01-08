@@ -38,7 +38,7 @@
 "Onboarding.Customization.Theme.Description.v123" = "Privește internetul în cea mai bună lumină.";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
-"Onboarding.Customization.Theme.Light.Action.v123" = "Deschisă";
+"Onboarding.Customization.Theme.Light.Action.v123" = "Luminoasă";
 
 /* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Skip.Action.v123" = "Omite";
@@ -92,7 +92,7 @@
 "Onboarding.Modern.Customization.Theme.Description.v145" = "Alege-ți tema preferată sau fă %@ să se potrivească cu dispozitivul tău, oferindu-ți controlul.";
 
 /* Option for the light theme. */
-"Onboarding.Modern.Customization.Theme.Light.v145" = "Deschisă";
+"Onboarding.Modern.Customization.Theme.Light.v145" = "Luminoasă";
 
 /* Title for the theme selection card. */
 "Onboarding.Modern.Customization.Theme.Title.v145" = "Alege-ți tema";

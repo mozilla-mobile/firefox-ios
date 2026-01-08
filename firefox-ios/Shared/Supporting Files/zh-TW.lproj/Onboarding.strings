@@ -176,10 +176,10 @@
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "%1$@ 關心您的隱私。到我們的%2$@閱讀更多資訊。";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "隱私權公告";
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "隱私權公告。";
 
 /* The text for the Privacy Notice link button. */
-"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "隱私權公告";
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "隱私權公告。";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "更多資訊";
@@ -284,10 +284,10 @@
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ 關心您的隱私。到我們的%2$@閱讀更多資訊。";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隱私權保護政策";
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隱私權公告。";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
-"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "了解更多資訊";
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "更多資訊";
 
 /* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "傳送錯誤報告，可讓我們診斷並修正瀏覽器的問題。%@";

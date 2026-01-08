@@ -11,7 +11,7 @@
 "FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Toate articolele";
 
 /* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
-"FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Populare astăzi";
+"FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Populare azi";
 
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "Povești";
@@ -27,6 +27,9 @@
 
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Nu lăsa urme pe acest dispozitiv";
+
+/* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
+"FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "Reîncarcă pagina";
 
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Caută sau introdu adresa";

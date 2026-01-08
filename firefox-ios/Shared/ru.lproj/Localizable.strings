@@ -185,7 +185,7 @@
 "ContextMenu.CopyLinkButtonTitle" = "Копировать ссылку";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "Загрузить по ссылке";
+"ContextMenu.DownloadLinkButtonTitle" = "Скачать по ссылке";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Открыть в новой вкладке";
@@ -221,7 +221,7 @@
 "CoverSheet.v24.ETP.Description" = "Встроенная улучшенная защита от отслеживания помогает запретить рекламе отслеживать вас. Включите Строгую защиту, чтобы заблокировать ещё больше трекеров, рекламы и всплывающих окон.";
 
 /* Text for the new ETP settings button */
-"CoverSheet.v24.ETP.Settings.Button" = "Перейти в Параметры";
+"CoverSheet.v24.ETP.Settings.Button" = "Перейти в параметры";
 
 /* Title for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Title" = "Защита от рекламного отслеживания";
@@ -254,25 +254,25 @@
 "Downloads" = "Загрузки";
 
 /* The label of the button the user will press to start downloading a file */
-"Downloads.Alert.DownloadNow" = "Загрузить сейчас";
+"Downloads.Alert.DownloadNow" = "Скачать сейчас";
 
 /* Button confirming the cancellation of the download. */
 "Downloads.CancelDialog.Cancel" = "Отмена";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "Вы действительно хотите отменить эту загрузку?";
+"Downloads.CancelDialog.Message" = "Вы действительно хотите отменить это скачивание?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Возобновить";
 
 /* Alert dialog title when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Title" = "Отменить загрузку";
+"Downloads.CancelDialog.Title" = "Отменить скачивание";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
-"Downloads.Toast.Cancelled.LabelText" = "Загрузка отменена";
+"Downloads.Toast.Cancelled.LabelText" = "Скачивание отменено";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
-"Downloads.Toast.Failed.LabelText" = "Загрузка не удалась";
+"Downloads.Toast.Failed.LabelText" = "Скачивание не удалось";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Загрузки";
@@ -290,7 +290,7 @@
 "DownloadsPanel.Delete.Title" = "Удалить";
 
 /* Title for the Downloads Panel empty state. */
-"DownloadsPanel.EmptyState.Title" = "Загруженные файлы появятся здесь.";
+"DownloadsPanel.EmptyState.Title" = "Скачанные файлы появятся здесь.";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
 "DownloadsPanel.Share.Title" = "Поделиться";
@@ -404,7 +404,7 @@
 "FxA.SyncNow" = "Синхронизировать";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Служба Синхронизации Firefox соединилась с %@";
+"FxAPush_DeviceConnected_body" = "Служба синхронизации Firefox соединилась с %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Синхронизация соединилась";
@@ -1160,7 +1160,7 @@
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Внешний вид сайтов";
 
 /* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
-"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Придает веб-сайтам тёмный вид. Некоторые сайты могут выглядеть некорректно.";
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Придаёт веб-сайтам тёмный вид. Некоторые сайты могут выглядеть некорректно.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
 "Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Темный режим веб-сайта";
@@ -1286,7 +1286,7 @@
 "Settings.Home.Option.Shortcuts" = "Ярлыки";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
-"Settings.Home.Option.StartAtHome.AfterFourHours" = "Домашняя страница после четырех часов бездействия";
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Домашняя страница после четырёх часов бездействия";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Always" = "Домашняя страница";
@@ -1775,10 +1775,10 @@
 "Wallpaper.Change.Error.Title.v106" = "Не удалось сменить обои";
 
 /* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
-"Wallpaper.Download.Error.Body.v106" = "Что-то пошло не так с вашей загрузкой.";
+"Wallpaper.Download.Error.Body.v106" = "Что-то пошло не так с вашим скачиванием.";
 
 /* The title of the error displayed if download fails when changing a wallpaper. */
-"Wallpaper.Download.Error.Title.v106" = "Не удалось загрузить обои";
+"Wallpaper.Download.Error.Title.v106" = "Не удалось скачать обои";
 
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "Отмена";

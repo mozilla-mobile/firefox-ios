@@ -5,7 +5,7 @@
 "New Tab" = "Új lap";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Ez lehetővé teszi, hogy fényképeket készítsen és töltsön fel.";
+"NSCameraUsageDescription" = "A Firefox a kameráját használja, hogy QR-kódokat olvasson le, fényképeket és videókat készítsen.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "A Firefox a Face ID-t igényli a mentett jelszavak és a fizetési módok eléréséhez.";
@@ -14,7 +14,7 @@
 "NSLocationWhenInUseUsageDescription" = "A meglátogatott webhelyek kérhetik az Ön helyét.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Ez lehetővé teszi, hogy videókat készítsen és töltsön fel.";
+"NSMicrophoneUsageDescription" = "A Firefox a mikrofonját használja, hogy hangokat vegyen fel és töltsön fel.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ezzel lementheti a képeket.";
