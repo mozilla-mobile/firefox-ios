@@ -15,6 +15,9 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertEqual(initialState.description, "")
         XCTAssertEqual(initialState.foxImage, "")
         XCTAssertNil(initialState.url)
+        XCTAssertNil(initialState.advancedSection)
+        XCTAssertFalse(initialState.showProceedButton)
+        XCTAssertFalse(initialState.showGoBackButton)
     }
 
     @MainActor
@@ -40,6 +43,57 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertEqual(newState.description, mockModel.errorDescription)
         XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
         XCTAssertEqual(newState.url, mockModel.url)
+        XCTAssertEqual(newState.showProceedButton, mockModel.showProceedButton)
+        XCTAssertEqual(newState.showGoBackButton, mockModel.showGoBackButton)
+        if let modelAdvanced = mockModel.advancedSection {
+            XCTAssertNotNil(newState.advancedSection)
+            XCTAssertEqual(newState.advancedSection?.buttonText, modelAdvanced.buttonText)
+            XCTAssertEqual(newState.advancedSection?.infoText, modelAdvanced.infoText)
+            XCTAssertEqual(newState.advancedSection?.warningText, modelAdvanced.warningText)
+            XCTAssertEqual(newState.advancedSection?.certificateErrorCode, modelAdvanced.certificateErrorCode)
+        } else {
+            XCTAssertNil(newState.advancedSection)
+        }
+    }
+
+    func testLoadCertificateErrorWithAdvancedSection() {
+        let initialState = createSubject()
+        let reducer = nativeErrorPageReducer()
+
+        let advancedSection = ErrorPageModel.AdvancedSectionConfig(
+            buttonText: "Advanced",
+            infoText: "Firefox doesn’t trust this site because the certificate provided isn’t valid for example.com.",
+            warningText: """
+You might need to sign in through your network, or check your settings.
+If you’re on a corporate network, your support team might have more info.
+""",
+            certificateErrorCode: "SSL_ERROR_BAD_CERT_DOMAIN"
+        )
+
+        let mockModel = ErrorPageModel(
+            errorTitle: "Be careful. Something doesn’t look right.",
+            errorDescription: "Someone pretending to be the site could try to steal your personal info.",
+            foxImageName: "securityError",
+            url: URL(string: "https://example.com"),
+            advancedSection: advancedSection,
+            showProceedButton: true,
+            showGoBackButton: true
+        )
+
+        let action = getAction(model: mockModel, for: .initialize)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.title, mockModel.errorTitle)
+        XCTAssertEqual(newState.description, mockModel.errorDescription)
+        XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
+        XCTAssertEqual(newState.url, mockModel.url)
+        XCTAssertTrue(newState.showProceedButton)
+        XCTAssertTrue(newState.showGoBackButton)
+        XCTAssertNotNil(newState.advancedSection)
+        XCTAssertEqual(newState.advancedSection?.buttonText, advancedSection.buttonText)
+        XCTAssertEqual(newState.advancedSection?.infoText, advancedSection.infoText)
+        XCTAssertEqual(newState.advancedSection?.warningText, advancedSection.warningText)
+        XCTAssertEqual(newState.advancedSection?.certificateErrorCode, advancedSection.certificateErrorCode)
     }
 
     // MARK: - Private
