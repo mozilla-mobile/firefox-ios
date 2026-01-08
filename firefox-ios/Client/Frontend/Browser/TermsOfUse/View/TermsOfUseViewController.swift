@@ -117,12 +117,12 @@ final class TermsOfUseViewController: UIViewController,
          windowUUID: UUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          enableDragToDismiss: Bool = true,
-         stringValue: TermsOfUseContentOption = .value0) {
+         contentOption: TermsOfUseContentOption = .value0) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
         self.isDragToDismissEnabled = enableDragToDismiss
-        self.strings = TermsOfUseStrings(option: stringValue)
+        self.strings = TermsOfUseStrings(option: contentOption)
         super.init(nibName: nil, bundle: nil)
     }
 
