@@ -9,6 +9,12 @@ import UIKit
 import Redux
 import WebKit
 
+struct PasswordGeneratorFrameContext {
+    let origin: String?
+    let host: String
+    let webView: WKWebView?
+}
+
 class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themeable, Notifiable {
     private enum UX {
         static let containerVerticalPadding: CGFloat = 20
@@ -40,7 +46,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private var currentTab: Tab
-    private var currentFrame: WKFrameInfo
+    private var frameContext: PasswordGeneratorFrameContext?
 
     // MARK: - Views
 
@@ -64,7 +70,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
             store.dispatch(PasswordGeneratorAction(
                 windowUUID: self.windowUUID,
                 actionType: PasswordGeneratorActionType.userTappedRefreshPassword,
-                currentFrame: self.currentFrame)
+                frameContext: self.frameContext)
             )
         }
     }
@@ -77,13 +83,13 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          currentTab: Tab,
-         currentFrame: WKFrameInfo) {
+         frameContext: PasswordGeneratorFrameContext) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.passwordGeneratorState = PasswordGeneratorState(windowUUID: windowUUID)
         self.currentTab = currentTab
-        self.currentFrame = currentFrame
+        self.frameContext = frameContext
         super.init(nibName: nil, bundle: nil)
         self.subscribeToRedux()
         startObservingNotifications(
@@ -181,7 +187,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     func useButtonOnClick() {
         store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
                                                actionType: PasswordGeneratorActionType.userTappedUsePassword,
-                                               currentFrame: currentFrame))
+                                               frameContext: frameContext))
         dismiss(animated: true)
     }
 

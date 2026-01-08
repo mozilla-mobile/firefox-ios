@@ -1212,12 +1212,21 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Password Generator
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
-        let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
+        let frameContext = PasswordGeneratorFrameContext(origin: frame.webView?.url?.origin,
+                                                         host: frame.securityOrigin.host,
+                                                         webView: frame.webView)
+        showPasswordGenerator(tab: tab, frameContext: frameContext)
+    }
+
+    func showPasswordGenerator(tab: Tab, frameContext: PasswordGeneratorFrameContext) {
+        let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID,
+                                                            currentTab: tab,
+                                                            frameContext: frameContext)
 
         let action = PasswordGeneratorAction(
             windowUUID: windowUUID,
             actionType: PasswordGeneratorActionType.showPasswordGenerator,
-            currentFrame: frame
+            frameContext: frameContext
         )
         store.dispatch(action)
 

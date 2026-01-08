@@ -26,12 +26,12 @@ final class PasswordGeneratorViewControllerTests: XCTestCase {
         let currentTab = Tab(profile: mockProfile, windowUUID: windowUUID)
         let URL = URL(string: "https://foo.com")!
         let webView = MockWKWebView(URL)
-        let currentFrame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
-        let passwordGeneratorViewController = PasswordGeneratorViewController(
-            windowUUID: windowUUID,
-            currentTab: currentTab,
-            currentFrame: currentFrame
-        )
+        let frameContext = PasswordGeneratorFrameContext(origin: "https://foo.com",
+                                                         host: "foo.com",
+                                                         webView: webView)
+        let passwordGeneratorViewController = PasswordGeneratorViewController(windowUUID: windowUUID,
+                                                                              currentTab: currentTab,
+                                                                              frameContext: frameContext)
         trackForMemoryLeaks(passwordGeneratorViewController)
     }
 }
