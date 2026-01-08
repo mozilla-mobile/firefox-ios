@@ -139,7 +139,7 @@ tasks:
                                 name: "Decision Task for cron job ${cron.job_name}"
                                 description: 'Created by a [cron task](https://firefox-ci-tc.services.mozilla.com/tasks/${cron.task_id})'
                 provisionerId: "${trustDomain}-${level}"
-                workerType: "decision-gcp"
+                workerType: "decision"
                 tags:
                     $if: 'tasks_for == "github-push" || isPullRequest'
                     then:

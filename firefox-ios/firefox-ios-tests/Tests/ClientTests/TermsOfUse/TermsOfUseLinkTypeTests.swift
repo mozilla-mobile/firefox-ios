@@ -9,22 +9,25 @@ import Shared
 final class TermsOfUseLinkTypeTests: XCTestCase {
     func testAllCases_ContainsAllLinkTypes() {
         let allCases = TermsOfUseLinkType.allCases
-        XCTAssertEqual(allCases.count, 3)
+        XCTAssertEqual(allCases.count, 4)
         XCTAssertTrue(allCases.contains(.termsOfUse))
         XCTAssertTrue(allCases.contains(.privacyNotice))
         XCTAssertTrue(allCases.contains(.learnMore))
+        XCTAssertTrue(allCases.contains(.here))
     }
 
     func testURLs_AreNotNil() {
         XCTAssertNotNil(TermsOfUseLinkType.termsOfUse.url)
         XCTAssertNotNil(TermsOfUseLinkType.privacyNotice.url)
         XCTAssertNotNil(TermsOfUseLinkType.learnMore.url)
+        XCTAssertNotNil(TermsOfUseLinkType.here.url)
     }
 
     func testActionTypes_AreCorrect() {
         XCTAssertEqual(TermsOfUseLinkType.termsOfUse.actionType, .termsLinkTapped)
         XCTAssertEqual(TermsOfUseLinkType.privacyNotice.actionType, .privacyLinkTapped)
         XCTAssertEqual(TermsOfUseLinkType.learnMore.actionType, .learnMoreLinkTapped)
+        XCTAssertEqual(TermsOfUseLinkType.here.actionType, .learnMoreLinkTapped)
     }
 
     func testLinkType_ForURL_ReturnsCorrectType() {
@@ -36,5 +39,14 @@ final class TermsOfUseLinkTypeTests: XCTestCase {
 
         let unknownURL = URL(string: "https://example.com/unknown")!
         XCTAssertNil(TermsOfUseLinkType.linkType(for: unknownURL))
+    }
+
+    func testHereLink_HasSameURLAsLearnMore() {
+        guard let learnMoreURL = TermsOfUseLinkType.learnMore.url,
+              let hereURL = TermsOfUseLinkType.here.url else {
+            XCTFail("Learn more and here URLs should not be nil")
+            return
+        }
+        XCTAssertEqual(learnMoreURL, hereURL, "here link should have the same URL as Learn more")
     }
 }

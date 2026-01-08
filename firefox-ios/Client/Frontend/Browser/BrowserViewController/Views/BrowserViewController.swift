@@ -777,8 +777,10 @@ class BrowserViewController: UIViewController,
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
             // TODO: FXIOS-14536 Can we figure out a way not to do these calls? Sometimes they are needed
             // for specific layout calls.
-            $0.setNeedsLayout()
-            $0.layoutIfNeeded()
+            if !isToolbarTranslucencyRefactorEnabled {
+                $0.setNeedsLayout()
+                $0.layoutIfNeeded()
+            }
         }
     }
 
@@ -5024,7 +5026,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
