@@ -74,14 +74,14 @@ enum TermsOfUseLinkType: CaseIterable {
 }
 
 struct TermsOfUseStrings {
-    let variant: TermsOfUseContentOption
+    let value: TermsOfUseContentOption
 
-    init(variant: TermsOfUseContentOption = .value0) {
-        self.variant = variant
+    init(value: TermsOfUseContentOption = .value0) {
+        self.value = value
     }
 
     var titleText: String {
-        return variant.headline
+        return value.headline
     }
 
     static var descriptionText: String {
@@ -89,7 +89,7 @@ struct TermsOfUseStrings {
     }
 
     var reviewAndAcceptText: String {
-        return variant.reviewAndAcceptText
+        return value.reviewAndAcceptText
     }
 
     static let acceptButtonTitle = TermsOfUse.AcceptButton

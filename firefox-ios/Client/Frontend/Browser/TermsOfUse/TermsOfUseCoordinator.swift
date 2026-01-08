@@ -42,7 +42,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         return nimbus.features.touFeature.value().enableDragToDismiss
     }
 
-    private var stringVariant: TermsOfUseContentOption {
+    private var stringValue: TermsOfUseContentOption {
         let nimbusValue = nimbus.features.touFeature.value().contentOption
         return TermsOfUseContentOption(rawValue: nimbusValue.rawValue) ?? .value0
     }
@@ -72,7 +72,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             windowUUID: windowUUID,
             notificationCenter: notificationCenter,
             enableDragToDismiss: enableDragToDismiss,
-            stringVariant: stringVariant
+            stringValue: stringValue
         )
         vc.coordinator = self
         vc.modalPresentationStyle = .overFullScreen
