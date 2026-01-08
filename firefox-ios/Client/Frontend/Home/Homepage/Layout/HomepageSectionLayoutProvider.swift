@@ -94,19 +94,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             }
         }
 
-        struct TopSitesConstants {
-            static let redesignedTopSitesBottomSpacingLandscape: CGFloat = 16
-
-            @MainActor
-            static func getBottomInset() -> CGFloat {
-                if UIDevice.current.orientation.isLandscape {
-                    return redesignedTopSitesBottomSpacingLandscape
-                } else {
-                    return UX.spacingBetweenSections
-                }
-            }
-        }
-
         struct JumpBackInConstants {
             static let itemHeight: CGFloat = 112
             static let syncedItemHeight: CGFloat = 232
@@ -338,8 +325,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let bottomInset = isAnyStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
-                                                      : UX.spacingBetweenSections
+        let bottomInset = UX.spacingBetweenSections
         section.contentInsets.top = 0
         section.contentInsets.bottom = bottomInset
 
@@ -650,7 +636,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += CGFloat(max(presentedRows - 1, 0)) * UX.standardSpacing
 
         // Add section insets
-        totalHeight += UX.TopSitesConstants.getBottomInset()
+        totalHeight += UX.spacingBetweenSections
         measurementsCache.setHeight(totalHeight, for: measurementKey)
 
         return totalHeight
