@@ -137,6 +137,7 @@ private struct WebViewRepresentable: UIViewRepresentable {
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
+        webView.uiDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = true
 
         if let userAgent = userAgent {
@@ -153,22 +154,23 @@ private struct WebViewRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
-        // No updates needed
+        // No-op: WebView state is managed through bindings and coordinator
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(self, retryCount: retryCount)
+        Coordinator(parent: self)
     }
 
-    class Coordinator: NSObject, WKNavigationDelegate {
+    class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
         let parent: WebViewRepresentable
         private let retryCount: Int
         private var remainingRetries = 0
+        private var blankTargetURLs: Set<String> = []
 
-        init(_ parent: WebViewRepresentable, retryCount: Int) {
+        init(parent: WebViewRepresentable) {
             self.parent = parent
-            self.retryCount = retryCount
-            remainingRetries = retryCount
+            self.retryCount = parent.retryCount
+            self.remainingRetries = parent.retryCount
         }
 
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
@@ -187,6 +189,24 @@ private struct WebViewRepresentable: UIViewRepresentable {
                      decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             guard let url = navigationAction.request.url else {
                 decisionHandler(.allow)
+                return
+            }
+
+            // If this is a back navigation to a page we loaded from a target="_blank" link,
+            // prevent it and go back further (to the page before the blank link was clicked)
+            if navigationAction.navigationType == .backForward,
+               blankTargetURLs.contains(url.absoluteString) {
+                EcosiaLogger.auth.debug("🔐 [WEBVIEW] Preventing navigation back to target='_blank' origin: \(url)")
+                decisionHandler(.cancel)
+
+                // Keep going back to escape the blank-target page
+                if webView.canGoBack {
+                    webView.goBack()
+                } else {
+                    // If we can't go back, reload the initial URL (root)
+                    webView.load(URLRequest(url: parent.url))
+                    blankTargetURLs.removeAll()
+                }
                 return
             }
 
@@ -217,6 +237,34 @@ private struct WebViewRepresentable: UIViewRepresentable {
             parent.isLoading = false
             parent.hasError = true
             parent.errorMessage = error.localizedDescription
+        }
+
+        // MARK: - WKUIDelegate
+
+        func webView(
+            _ webView: WKWebView,
+            createWebViewWith configuration: WKWebViewConfiguration,
+            for navigationAction: WKNavigationAction,
+            windowFeatures: WKWindowFeatures
+        ) -> WKWebView? {
+            // When targetFrame is nil, it means the link should open in a new tab/window
+            // (e.g., target="_blank" or window.open())
+            guard navigationAction.targetFrame == nil,
+                  let url = navigationAction.request.url else {
+                return nil
+            }
+
+            // Record the current page before loading the blank target
+            if let currentURL = webView.url {
+                blankTargetURLs.insert(currentURL.absoluteString)
+                EcosiaLogger.auth.info("🔐 [WEBVIEW] Recorded blank-target origin: \(currentURL)")
+            }
+
+            EcosiaLogger.auth.info("🔐 [WEBVIEW] Loading target='_blank' URL in modal: \(url)")
+            webView.load(URLRequest(url: url))
+
+            // Return nil to prevent creating a new window
+            return nil
         }
     }
 }

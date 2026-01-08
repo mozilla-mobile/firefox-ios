@@ -48,11 +48,10 @@ class EcosiaHomeViewModelTests: XCTestCase {
                                           auth: EcosiaAuth(browserViewController: BrowserViewController(profile: profile, tabManager: tabManager)))
         User.shared.showClimateImpact = true
 
-        XCTAssertEqual(viewModel.shownSections.count, 5)
-        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.header)
-        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.homepageHeader)
-        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.libraryShortcuts)
-        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.impact)
-        XCTAssertEqual(viewModel.shownSections[4], HomepageSectionType.ntpCustomization)
+        XCTAssertEqual(viewModel.shownSections.count, 4)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)
+        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.libraryShortcuts)
+        XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.impact)
+        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.ntpCustomization)
     }
 }
