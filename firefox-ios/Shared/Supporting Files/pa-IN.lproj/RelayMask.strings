@@ -4,6 +4,9 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "ਤੁਹਾਡੇ 5 ਮੁਫ਼ਤ ਈਮੇਲ ਮਾਸਕ ਵਰਤੋਂ ਵਿੱਚ ਹਨ, ਇਸਕਰਕੇ ਅਸੀਂ ਤੁਹਾਡੇ ਲਈ ਇੱਕ ਚੁਣਿਆ ਹੈ।";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "ਤੁਸੀਂ 5 ਮੁਫ਼ਤ ਈਮੇਲ ਮਾਸਕ ਵਰਤੇ ਲਏ ਹਨ ਤਾਂ ਹੀ ਅਸੀਂ ਮੁੜ-ਵਰਤਣ ਵਾਸਤੇ ਇੱਕ ਤੁਹਾਡੇ ਲਈ ਚੁਣਿਆ ਹੈ।";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "ਈਮੇਲ ਮਾਸਕ ਇਸ ਵੇਲੇ ਮੌਜੂਦ ਨਹੀਂ ਹਨ। ਕੁਝ ਕੁ ਮਿੰਟਾਂ ਵਿਚ ਫ਼ੇਰ ਅਜ਼ਮਾ ਕੇ ਵੇਖਿਓ।";
 

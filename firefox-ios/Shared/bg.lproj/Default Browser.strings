@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "Научете как";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Настройте връзките от уебсайтове, имейли и Съобщения да се отварят автоматично във Firefox.";
+"DefaultBrowserCard.Description" = "Задаване на връзките от уебсайтове, поща и съобщения да се отварят автоматично във Firefox.";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Изберете Firefox като ваш браузър по подразбиране, за да направите скоростта, безопасността и поверителността автоматични.";
@@ -20,7 +20,7 @@
 "DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox блокира средно 3000 тракера на потребител всеки месец. Направете ни четец по подразбиране за ваша сигурност.";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox гарантира поверителност";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox гарантира поверителността";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Смяна на браузъра по подразбиране";
@@ -29,20 +29,20 @@
 "DefaultBrowserOnboarding.Button" = "Към настройките";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description1" = "1. Отидете на Настройки";
+"DefaultBrowserOnboarding.Description1" = "1. Отворете настройките";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. Докоснете Приложение за браузър по подразбиране";
+"DefaultBrowserOnboarding.Description2" = "2. Докоснете \"четец по подразбиране\" ";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Изберете Firefox";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "Приложение за браузър по подразбиране";
+"DefaultBrowserOnboarding.Screenshot" = "Четец по подразбиране";
 
 /* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
 "DefaultBrowserOnboarding.SkipButton" = "Ще направя това по-късно";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "Задаване като браузър по подразбиране";
+"Settings.DefaultBrowserMenuItem" = "Задаване като четец по подразбиране";
 

@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "E vostre 5 maschere di messaghjeria di rigalu sò in corsu d’adopru, è n’avemu sceltu unu per voi.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Avete impiegatu e vostre 5 maschere di messaghjeria di rigalu, tandu n’avemu sceltu unu chì vo puderete rimpiegà.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "E maschere di messaghjeria ùn sò micca dispunibule subitu. Pruvate torna trà qualchì minutu.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Maschera di messaghjeria framessa";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Piattate u vostru veru indirizzu elettronicu per prutege a vostra scatula di ricezzione da u merzaghju. Certi siti ùn l’accettenu micca.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Piattate u vostru veru indirizzu elettronicu per prutege a vostra scatula di ricezzione da u merzaghju. Certi siti ùn accettenu micca e maschere di messaghjeria.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Sapene di più";
@@ -23,5 +32,5 @@
 "RelayMask.RelayEmailMaskSuggestMasksToggle.v146" = "Suggerisce maschere di messaghjeria";
 
 /* Displayed inside the keyboard hint when a user is entering an email in a web form. Indicates that the user has the option to use an anonymous Relay email mask instead of their personal email. Tapping on this option will populate the field with a Relay mask automatically. */
-"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "Impiegà un maschera di messaghjeria";
+"RelayMask.UseRelayEmailMaskFromKeyboard.v146" = "Impiegà una maschera di messaghjeria";
 

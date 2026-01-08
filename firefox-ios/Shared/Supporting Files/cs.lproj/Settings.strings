@@ -175,6 +175,9 @@
 /* Title for a link that explains what Mozilla means by Rollouts */
 "Settings.Rollouts.Link.v148" = "Zjistit více";
 
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ vylepší funkce, výkon a stabilitu mezi aktualizacemi. Změny se aplikují vzdáleně.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
 "Settings.Rollouts.Title.v148" = "Povolit vzdálená vylepšení";
 
@@ -247,8 +250,14 @@
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Vyzkoušejte funkce a nápady dříve, než budou veřejně dostupné.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ náhodně vybírá uživatele, aby otestoval nové funkce, s cílem zlepšit jeho kvalitu pro všechny.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Instalovat a spouštět studie";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Povolit studie funkcí";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Poskytuje přístup k souhrnu stránek.";
