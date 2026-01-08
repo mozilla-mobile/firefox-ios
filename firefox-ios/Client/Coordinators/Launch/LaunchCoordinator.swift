@@ -74,7 +74,7 @@ final class LaunchCoordinator: BaseCoordinator,
         TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
 
         let viewModel = TosFlowViewModel(
-            configuration: manager.touConfiguration,
+            configuration: TermsOfServiceManager.brandRefreshTermsOfUseConfiguration,
             onTermsOfServiceTap: { [weak self] in
                 guard let self = self else { return }
                 TermsOfServiceTelemetry().termsOfServiceLinkTapped()

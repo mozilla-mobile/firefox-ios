@@ -27,16 +27,6 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
         featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
     }
 
-    var shouldUseBrandRefreshConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseBrandRefreshConfiguration, checking: .buildAndUser)
-    }
-
-    var touConfiguration: OnboardingKitCardInfoModel {
-        shouldUseBrandRefreshConfiguration
-            ? TermsOfServiceManager.brandRefreshTermsOfUseConfiguration
-            : TermsOfServiceManager.defaultTermsOfUseConfiguration
-    }
-
     var isFeatureEnabled: Bool {
         featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser)
     }
@@ -147,62 +137,6 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
 
     // MARK: - Terms of Use Configuration
 
-    static var defaultTermsOfUseConfiguration: OnboardingKitCardInfoModel {
-        let termsOfServiceLink = String(format: .Onboarding.Modern.TermsOfService.TermsOfUseLink, AppName.shortName.rawValue)
-        let termsOfServiceAgreement = String(
-            format: .Onboarding.Modern.TermsOfService.TermsOfServiceAgreement,
-            termsOfServiceLink
-        )
-        let privacyNoticeLink = String.Onboarding.TermsOfService.PrivacyNoticeLink
-        let privacyAgreement = String(
-            format: .Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement,
-            AppName.shortName.rawValue,
-            privacyNoticeLink
-        )
-        let manageLink = String.Onboarding.TermsOfService.ManageLink
-        let manageAgreement = String(
-            format: String.Onboarding.Modern.TermsOfService.ManagePreferenceAgreement,
-            AppName.shortName.rawValue,
-            MozillaName.shortName.rawValue,
-            manageLink
-        )
-
-        return OnboardingKitCardInfoModel(
-            cardType: .basic,
-            name: "tos",
-            order: 20,
-            title: String.Onboarding.Modern.TermsOfService.Title,
-            body: String.Onboarding.Modern.TermsOfService.Subtitle,
-            buttons: OnboardingButtons(
-                primary: OnboardingButtonInfoModel(
-                    title: String.Onboarding.Modern.TermsOfService.AgreementButtonTitleV3,
-                    action: OnboardingActions.syncSignIn
-                )
-            ),
-            multipleChoiceButtons: [],
-            onboardingType: .freshInstall,
-            a11yIdRoot: AccessibilityIdentifiers.TermsOfService.root,
-            imageID: ImageIdentifiers.homeHeaderLogoBall,
-            embededLinkText: [
-                EmbeddedLink(
-                    fullText: termsOfServiceAgreement,
-                    linkText: termsOfServiceLink,
-                    action: .openTermsOfService
-                ),
-                EmbeddedLink(
-                    fullText: privacyAgreement,
-                    linkText: privacyNoticeLink,
-                    action: .openPrivacyNotice
-                ),
-                EmbeddedLink(
-                    fullText: manageAgreement,
-                    linkText: manageLink,
-                    action: .openManageSettings
-                )
-            ]
-        )
-    }
-
     static var brandRefreshTermsOfUseConfiguration: OnboardingKitCardInfoModel {
         let termsOfServiceLink = String(
             format: .Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink,
@@ -218,9 +152,9 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
             AppName.shortName.rawValue,
             privacyNoticeLink
         )
-        let manageLink = String.Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink
+        let manageLink = String.Onboarding.TermsOfService.ManageLink
         let manageAgreement = String(
-            format: String.Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement,
+            format: String.Onboarding.Modern.TermsOfService.ManagePreferenceAgreement,
             AppName.shortName.rawValue,
             MozillaName.shortName.rawValue,
             manageLink
