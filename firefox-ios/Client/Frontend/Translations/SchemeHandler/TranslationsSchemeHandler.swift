@@ -76,13 +76,15 @@ final class TranslationsSchemeHandler: NSObject, WKURLSchemeHandler {
 
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
-        do {
-            let url = try validateRequest(urlSchemeTask)
-            // Delegate everything for this host to TinyRouter.
-            let reply = try router.route(url)
-            try send(reply, for: url, to: urlSchemeTask)
-        } catch {
-            urlSchemeTask.didFailWithError(mapError(error))
+        Task { @MainActor in
+            do {
+                let url = try validateRequest(urlSchemeTask)
+                // Delegate everything for this host to TinyRouter.
+                let reply = try await router.route(url)
+                try send(reply, for: url, to: urlSchemeTask)
+            } catch {
+                urlSchemeTask.didFailWithError(mapError(error))
+            }
         }
     }
 

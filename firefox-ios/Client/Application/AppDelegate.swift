@@ -170,8 +170,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         /// This will fetch the translator WASM and model attachments for the device language.
         /// Running this on a utility QoS to avoid impacting app launch time.
         if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
-            DispatchQueue.global(qos: .utility).async {
-                ASTranslationModelsFetcher().prewarmResourcesForStartup()
+            Task(priority: .utility) {
+                await ASTranslationModelsFetcher().prewarmResourcesForStartup()
             }
         }
 

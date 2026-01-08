@@ -110,7 +110,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         )
     }
 
-    func testPrewarmResources_directModel_fetchesDirectAttachment() {
+    func testPrewarmResources_directModel_fetchesDirectAttachment() async {
         let record = makeModelRecord(
             id: "direct-fr-de",
             fileType: "model",
@@ -120,7 +120,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
 
         let mock = MockRemoteSettingsClient(records: [record], attachmentsById: ["direct-fr-de": Data([0x01])])
         let subject = createSubject(modelsClient: mock)
-        subject.prewarmResources(for: "fr", to: "de")
+        await subject.prewarmResources(for: "fr", to: "de")
 
         XCTAssertEqual(
             mock.fetchedAttachmentIds,
@@ -129,7 +129,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         )
     }
 
-    func testPrewarmResources_pivotModels_fetchesBothAttachments() {
+    func testPrewarmResources_pivotModels_fetchesBothAttachments() async {
         let frEn = makeModelRecord(id: "fr-en", fileType: "model", from: "fr", to: "en")
         let enIt = makeModelRecord(id: "en-it", fileType: "model", from: "en", to: "it")
 
@@ -140,7 +140,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
 
         let subject = createSubject(modelsClient: mock)
 
-        subject.prewarmResources(for: "fr", to: "it")
+        await subject.prewarmResources(for: "fr", to: "it")
 
         XCTAssertEqual(
             Set(mock.fetchedAttachmentIds),
@@ -149,7 +149,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         )
     }
 
-    func testPrewarmResources_noModels_doesNotFetchAnything() {
+    func testPrewarmResources_noModels_doesNotFetchAnything() async {
         let unrelated = makeModelRecord(
             id: "es-pt",
             fileType: "model",
@@ -164,7 +164,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
 
         let subject = createSubject(modelsClient: mock)
 
-        subject.prewarmResources(for: "fr", to: "it")
+        await subject.prewarmResources(for: "fr", to: "it")
 
         XCTAssertTrue(
             mock.fetchedAttachmentIds.isEmpty,
@@ -172,7 +172,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         )
     }
 
-    func testPrewarmResources_ignoresLexFiles() {
+    func testPrewarmResources_ignoresLexFiles() async {
         let modelRecord = makeModelRecord(
             id: "fr-de-model",
             fileType: "model",
@@ -196,7 +196,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
 
         let subject = createSubject(modelsClient: mock)
 
-        subject.prewarmResources(for: "fr", to: "de")
+        await subject.prewarmResources(for: "fr", to: "de")
 
         XCTAssertEqual(
             mock.fetchedAttachmentIds,
