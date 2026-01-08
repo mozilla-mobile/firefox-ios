@@ -83,29 +83,19 @@ struct CreditCardValidator {
         guard date.count == 4,
               let inputMonth = Int(date.prefix(2)),
               let inputYear = Int(date.suffix(2)),
+              let currentMonth = userCalendar.dateComponents([.month], from: Date()).month,
               let currentYear = userCalendar.dateComponents([.year], from: Date()).year,
-              inputMonth >= 1 && inputMonth <= 12,
-              (inputYear + 2000) >= currentYear else {
+              inputMonth >= 1 && inputMonth <= 12 else {
             return false
         }
 
-        // Check the expiration date as the last moment of the month
-        var expiryMonth = DateComponents(year: inputYear + 2000, month: inputMonth)
-        guard let expiryDate = userCalendar.date(from: expiryMonth),
-              let expiryDays = userCalendar.range(of: .day, in: .month, for: expiryDate) else {
+        let expiryYear = inputYear + 2000
+        if expiryYear < currentYear {
             return false
+        } else if expiryYear == currentYear {
+            return inputMonth >= currentMonth
+        } else {
+            return true
         }
-
-        expiryMonth.day = expiryDays.last
-        expiryMonth.hour = 23
-        expiryMonth.minute = 59
-        expiryMonth.second = 59
-
-        guard let userCardExpirationDate = userCalendar.date(from: expiryMonth),
-              userCardExpirationDate >= Date() else {
-            return false
-        }
-
-        return true
     }
 }
