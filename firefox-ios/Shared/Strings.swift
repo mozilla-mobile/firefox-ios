@@ -2485,13 +2485,13 @@ public struct TermsOfUse {
         key: "TermsOfUse.TitleValue1.v147",
         tableName: "TermsOfUse",
         value: "Terms of Use",
-        comment: "Title shown at the top of the Terms of Use bottom sheet for value-1 (content option 1)."
+        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 1."
     )
     public static let TitleValue2 = MZLocalizedString(
         key: "TermsOfUse.TitleValue2.v147",
         tableName: "TermsOfUse",
         value: "A note from %@",
-        comment: "Title shown at the top of the Terms of Use bottom sheet for value-2 (content option 2). %@ is replaced with the app name (e.g., Firefox)."
+        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox)."
     )
     public static let LearnMoreHere = MZLocalizedString(
         key: "TermsOfUse.LearnMoreHere.v147",

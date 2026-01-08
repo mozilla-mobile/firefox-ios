@@ -15,7 +15,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     @MainActor
-    override func setUp() {
+    override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
                 let key = String(parts[1])
@@ -26,7 +26,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
                     LaunchArguments.SkipContextualHints]
         }
         currentScreen = 0
-        super.setUp()
+        try await super.setUp()
     }
 
     @MainActor
@@ -76,7 +76,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell])
         mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
         snapshot("Homescreen-first-visit")
     }
@@ -288,7 +287,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testTakeMarketingScreenshots() {
-        let searchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
 
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -320,7 +318,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // perform a search but don't complete (we're testing autocomplete here)
         navigator.createNewTab()
-        searchBar.waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].typeText("firef")
         sleep(2)

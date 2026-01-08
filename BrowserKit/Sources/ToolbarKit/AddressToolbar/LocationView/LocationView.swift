@@ -520,8 +520,10 @@ final class LocationView: UIView,
         // Defer keyboard/first responder to next run loop (non-blocking).
         let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
         if shouldShowKeyboard {
+            // cannot be added to dispatch as it would fire delayed and could trigger keyboard to be shown again
+            // despite state already requiring keyboard being dismissed (e.g. tapping on search suggestion)
+            _ = becomeFirstResponder()
             DispatchQueue.main.async { [unowned self] in
-                _ = becomeFirstResponder()
                 if config.shouldSelectSearchTerm {
                     urlTextField.text = text
                     urlTextField.selectAll(nil)
