@@ -179,6 +179,7 @@ class SearchTests: FeatureFlaggedTestBase {
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
         navigator.goto(URLBarOpen)
+
         if !iPad() {
             urlBarAddress.waitAndTap()
         }
@@ -292,7 +293,17 @@ class SearchTests: FeatureFlaggedTestBase {
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         // Click on the > button to get to that option only on iPhone
-        if #available(iOS 16, *) {
+        if #available(iOS 26, *) {
+            while !app.collectionViews.buttons["Search with Firefox"].exists {
+                app.buttons["Forward"].firstMatch.waitAndTap()
+                waitForElementsToExist(
+                    [
+                        app.buttons["Forward"].firstMatch,
+                        app.collectionViews.buttons.firstMatch
+                    ]
+                )
+            }
+        } else if #available(iOS 16, *) {
             while !app.collectionViews.menuItems["Search with Firefox"].exists {
                 app.buttons["Forward"].firstMatch.waitAndTap()
                 waitForElementsToExist(
@@ -313,8 +324,11 @@ class SearchTests: FeatureFlaggedTestBase {
                 )
             }
         }
-
-        app.menuItems["Search with Firefox"].waitAndTap()
+        if #available(iOS 26, *) {
+            app.buttons["Search with Firefox"].waitAndTap()
+        } else {
+            app.menuItems["Search with Firefox"].waitAndTap()
+        }
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: "google")
