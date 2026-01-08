@@ -1582,7 +1582,7 @@ workflows:
         machine_type_id: g2.mac.4large
 
   Firefox_Unit_Tests_iOS_Versions:
-     before_run:
+    before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
@@ -1599,7 +1599,7 @@ workflows:
         - maximum_test_repetitions: 3
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
-        - xcode-test@6.0.1:
+    - xcode-test@6.0.1:
         timeout: 6000
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
