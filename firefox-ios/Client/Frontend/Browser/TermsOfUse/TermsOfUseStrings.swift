@@ -74,22 +74,22 @@ enum TermsOfUseLinkType: CaseIterable {
 }
 
 struct TermsOfUseStrings {
-    let value: TermsOfUseContentOption
+    let option: TermsOfUseContentOption
 
-    init(value: TermsOfUseContentOption = .value0) {
-        self.value = value
+    init(option: TermsOfUseContentOption = .value0) {
+        self.option = option
     }
 
     var titleText: String {
-        return value.headline
+        return option.headline
     }
 
-    static var descriptionText: String {
+    var descriptionText: String {
         return String.localizedStringWithFormat(TermsOfUse.Description, AppName.shortName.rawValue)
     }
 
     var reviewAndAcceptText: String {
-        return value.reviewAndAcceptText
+        return option.reviewAndAcceptText
     }
 
     static let acceptButtonTitle = TermsOfUse.AcceptButton
@@ -97,22 +97,14 @@ struct TermsOfUseStrings {
     static let termsOfUseHasOpenedNotification = TermsOfUse.TermsOfUseHasOpened
 
     var termsOfUseInfoText: String {
-        return "\(Self.descriptionText)\n\n\(reviewAndAcceptText)"
-    }
-
-    static var linkTerms: [String] {
-        return TermsOfUseLinkType.allCases.map { $0.localizedText }
+        return "\(descriptionText)\n\n\(reviewAndAcceptText)"
     }
 
     var linkTerms: [String] {
-        return Self.linkTerms
-    }
-
-    static func linkURL(for term: String) -> URL? {
-        return TermsOfUseLinkType.allCases.first { $0.localizedText == term }?.url
+        return TermsOfUseLinkType.allCases.map { $0.localizedText }
     }
 
     func linkURL(for term: String) -> URL? {
-        return Self.linkURL(for: term)
+        return TermsOfUseLinkType.allCases.first { $0.localizedText == term }?.url
     }
 }

@@ -122,7 +122,7 @@ final class TermsOfUseViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
         self.isDragToDismissEnabled = enableDragToDismiss
-        self.strings = TermsOfUseStrings(value: stringValue)
+        self.strings = TermsOfUseStrings(option: stringValue)
         super.init(nibName: nil, bundle: nil)
     }
 
