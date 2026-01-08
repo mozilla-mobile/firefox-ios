@@ -11,7 +11,6 @@ class CreditCardValidatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-
         creditCardValidator = CreditCardValidator()
     }
 
@@ -22,49 +21,44 @@ class CreditCardValidatorTests: XCTestCase {
 
     func testCardTypeForVisa() {
         let result = creditCardValidator.cardTypeFor("4004100120023003")
-
         XCTAssertEqual(result, .visa)
     }
 
     func testCardTypeForMastercard() {
-        let result = creditCardValidator.cardTypeFor("5502100120023003")
+        var result = creditCardValidator.cardTypeFor("5502100120023003")
+        XCTAssertEqual(result, .mastercard)
 
+        result = creditCardValidator.cardTypeFor("2221001234123456")
         XCTAssertEqual(result, .mastercard)
     }
 
     func testCardTypeForAmex() {
         let result = creditCardValidator.cardTypeFor("347051234512349")
-
         XCTAssertEqual(result, .amex)
     }
 
     func testCardTypeForDiners() {
         let result = creditCardValidator.cardTypeFor("30068114212341234")
-
         XCTAssertEqual(result, .diners)
     }
 
     func testCardTypeForJCB() {
         let result = creditCardValidator.cardTypeFor("1800351313100010001")
-
         XCTAssertEqual(result, .jcb)
     }
 
     func testCardTypeForDiscover() {
         let result = creditCardValidator.cardTypeFor("6011502031234123")
-
         XCTAssertEqual(result, .discover)
     }
 
     func testCardTypeForMIR() {
-        let result = creditCardValidator.cardTypeFor("2060123412341234")
-
+        let result = creditCardValidator.cardTypeFor("2200123456789010")
         XCTAssertEqual(result, .mir)
     }
 
     func testCardTypeForUnionPay() {
         let result = creditCardValidator.cardTypeFor("6240123412341216")
-
         XCTAssertEqual(result, .unionpay)
     }
 
@@ -118,7 +112,7 @@ class CreditCardValidatorTests: XCTestCase {
     }
 
     func testCardNumberIsValidForMir() {
-        let result = creditCardValidator.isCardNumberValidFor(card: "2060123412341234")
+        let result = creditCardValidator.isCardNumberValidFor(card: "2200123456789010")
         XCTAssert(result)
     }
 
