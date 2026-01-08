@@ -189,8 +189,9 @@ class CreditCardsTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
         }
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
         if #available(iOS 26, *) {
-            throw XCTSkip("Autofill does not work on iOS 26")
+            throw XCTSkip("Autofill does not work on iOS 26 simulators")
         }
         addCreditCardAndReachAutofillWebsite()
         // Tap on the "Manage credit cards" option
@@ -314,8 +315,9 @@ class CreditCardsTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
         }
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
         if #available(iOS 26, *) {
-            throw XCTSkip("Autofill does not work on iOS 26")
+            throw XCTSkip("Autofill does not work on iOS 26 simulators")
         }
         addCreditCardAndReachAutofillWebsite()
         // Select the saved credit card
@@ -367,8 +369,9 @@ class CreditCardsTests: BaseTestCase {
         // The credit card number is saved without issues
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1111"))
         // Reach autofill website
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
         if #available(iOS 26, *) {
-            throw XCTSkip("Autofill does not work on iOS 26")
+            throw XCTSkip("Autofill does not work on iOS 26 simulators")
         } else if #available(iOS 16, *) {
             reachAutofillWebsite()
             app.scrollViews.otherElements.tables.cells.firstMatch.tapOnApp()
@@ -412,8 +415,9 @@ class CreditCardsTests: BaseTestCase {
             XCTAssertTrue(cellElement[card[2]].exists, "\(card[2]) info is not displayed")
         }
         // reachAutofillWebsite() not working on iOS 15 and iOS 26
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
         if #available(iOS 26, *) {
-            throw XCTSkip("Autofill does not work on iOS 26")
+            throw XCTSkip("Autofill does not work on iOS 26 simulators")
         } else if #available(iOS 16, *) {
             // Reach used saved cards autofill website
             reachAutofillWebsite()
@@ -592,8 +596,9 @@ class CreditCardsTests: BaseTestCase {
         if #unavailable(iOS 17) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15 and 16")
         }
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31076
         if #available(iOS 26, *) {
-            throw XCTSkip("Autofill does not work on iOS 26")
+            throw XCTSkip("Autofill does not work on iOS 26 simulators")
         }
         // Fill in the form with the details of an already saved credit card
         addCreditCardAndReachAutofillWebsite()

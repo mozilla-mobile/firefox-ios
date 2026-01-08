@@ -177,6 +177,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
                 app.navigationBars.buttons["More"].waitAndTap()
             }
             // iOS 26: The markup isn't shown in debug description
+            // https://github.com/mozilla-mobile/firefox-ios/issues/31552
         } else {
             mozWaitForElementToExist(app.switches["Markup"])
             mozWaitForElementToExist(app.buttons["Done"])
