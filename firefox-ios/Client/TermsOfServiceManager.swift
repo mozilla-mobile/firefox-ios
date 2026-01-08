@@ -138,13 +138,13 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     // MARK: - Terms of Use Configuration
 
     static var brandRefreshTermsOfUseConfiguration: OnboardingKitCardInfoModel {
-        let termsOfServiceLink = String(
+        let termsOfUseLink = String(
             format: .Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink,
             AppName.shortName.rawValue
         )
-        let termsOfServiceAgreement = String(
+        let termsOfUseAgreement = String(
             format: .Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement,
-            termsOfServiceLink
+            termsOfUseLink
         )
         let privacyNoticeLink = String.Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink
         let privacyAgreement = String(
@@ -178,8 +178,8 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
             imageID: ImageIdentifiers.homeHeaderLogoBall,
             embededLinkText: [
                 EmbeddedLink(
-                    fullText: termsOfServiceAgreement,
-                    linkText: termsOfServiceLink,
+                    fullText: termsOfUseAgreement,
+                    linkText: termsOfUseLink,
                     action: .openTermsOfService
                 ),
                 EmbeddedLink(
