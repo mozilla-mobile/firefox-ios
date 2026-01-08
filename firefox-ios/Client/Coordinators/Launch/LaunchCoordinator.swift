@@ -73,62 +73,8 @@ final class LaunchCoordinator: BaseCoordinator,
     ) {
         TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
 
-        let termsOfServiceLink = String(format: .Onboarding.Modern.TermsOfService.TermsOfUseLink, AppName.shortName.rawValue)
-        let termsOfServiceAgreement = String(
-            format: .Onboarding.Modern.TermsOfService.TermsOfServiceAgreement,
-            termsOfServiceLink
-        )
-
-        let privacyNoticeLink = String.Onboarding.TermsOfService.PrivacyNoticeLink
-        let privacyAgreement = String(
-            format: .Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement,
-            AppName.shortName.rawValue,
-            privacyNoticeLink
-        )
-
-        let manageLink = String.Onboarding.TermsOfService.ManageLink
-        let manageAgreement = String(
-            format: String.Onboarding.Modern.TermsOfService.ManagePreferenceAgreement,
-            AppName.shortName.rawValue,
-            MozillaName.shortName.rawValue,
-            manageLink
-        )
-
         let viewModel = TosFlowViewModel(
-            configuration: OnboardingKitCardInfoModel(
-                cardType: .basic,
-                name: "tos",
-                order: 20,
-                title: .Onboarding.Modern.TermsOfService.Title,
-                body: .Onboarding.Modern.TermsOfService.Subtitle,
-                buttons: OnboardingButtons(
-                    primary: OnboardingButtonInfoModel(
-                        title: .Onboarding.Modern.TermsOfService.AgreementButtonTitleV3,
-                        action: OnboardingActions.syncSignIn
-                    )
-                ),
-                multipleChoiceButtons: [],
-                onboardingType: .freshInstall,
-                a11yIdRoot: AccessibilityIdentifiers.TermsOfService.root,
-                imageID: ImageIdentifiers.homeHeaderLogoBall,
-                embededLinkText: [
-                    EmbeddedLink(
-                        fullText: termsOfServiceAgreement,
-                        linkText: termsOfServiceLink,
-                        action: .openTermsOfService
-                    ),
-                    EmbeddedLink(
-                        fullText: privacyAgreement,
-                        linkText: privacyNoticeLink,
-                        action: .openPrivacyNotice
-                    ),
-                    EmbeddedLink(
-                        fullText: manageAgreement,
-                        linkText: manageLink,
-                        action: .openManageSettings
-                    )
-                ]
-            ),
+            configuration: manager.touConfiguration,
             onTermsOfServiceTap: { [weak self] in
                 guard let self = self else { return }
                 TermsOfServiceTelemetry().termsOfServiceLinkTapped()
