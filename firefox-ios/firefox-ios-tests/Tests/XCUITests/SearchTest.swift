@@ -568,6 +568,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
         // The search is conducted through the default search engine
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        app.buttons["Cancel"].waitAndTap()
         waitForValueContains(urlBar, value: "google.com")
 
         // Disable "Show search suggestions" from Settings and type text in a new tab
