@@ -105,17 +105,7 @@ struct TermsOfUseStrings {
     }
 
     var linkTerms: [String] {
-        // All variants have the same 3 links: Terms of Use, Privacy Notice, and a third link
-        var links = Self.linkTerms
-        
-        // For variants 1 and 2, replace "Learn more" with "here" (same link, different text)
-        if value == .value1 || value == .value2 {
-            // Remove "Learn more" and add "here" instead
-            links = links.filter { $0 != TermsOfUseLinkType.learnMore.localizedText }
-            links.append(TermsOfUseLinkType.here.localizedText)
-        }
-        
-        return links
+        return Self.linkTerms
     }
 
     static func linkURL(for term: String) -> URL? {
