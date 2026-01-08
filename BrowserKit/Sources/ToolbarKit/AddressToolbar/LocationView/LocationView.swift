@@ -437,9 +437,16 @@ final class LocationView: UIView,
             hasHomeIndicator ? UX.bottomAddressBarYoffset : UX.bottomAddressBarYoffsetForHomeButton
         }
         let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? bottomAddressBarYoffset : UX.topAddressBarYoffset
-        let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
-        transform = scaledTransformation
-        urlTextField.isUserInteractionEnabled = false
+        UIView.animate(
+            withDuration: UX.identityResetAnimationDuration,
+            delay: 0,
+            options: [.curveEaseInOut],
+            animations: {
+                let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
+                    .translatedBy(x: 0, y: yOffset)
+                self.transform = scaledTransformation
+                self.urlTextField.isUserInteractionEnabled = false
+            })
     }
 
     private func restoreLocationViewSize() {
