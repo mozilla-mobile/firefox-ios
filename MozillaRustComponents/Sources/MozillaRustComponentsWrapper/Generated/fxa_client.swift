@@ -741,7 +741,8 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *    - `scope` - the OAuth scope to be granted by the token.
      *        - This must be one of the scopes requested during the signin flow.
      *        - Only a single scope is supported; for multiple scopes request multiple tokens.
-     *    - `ttl` - optionally, the time for which the token should be valid, in seconds.
+     *    - `use_cache` - optionally set to false to force a new token request.  The fetched
+     *       token will still be cached for later `get_access_token` calls.
      *
      * # Notes
      *
@@ -750,7 +751,7 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *      before requesting a fresh token.
 
      */
-    func getAccessToken(scope: String, ttl: Int64?) throws  -> AccessTokenInfo
+    func getAccessToken(scope: String, useCache: Bool) throws  -> AccessTokenInfo
     
     /**
      * Get the list of all client applications attached to the user's account.
@@ -1507,7 +1508,8 @@ open func gatherTelemetry()throws  -> String  {
      *    - `scope` - the OAuth scope to be granted by the token.
      *        - This must be one of the scopes requested during the signin flow.
      *        - Only a single scope is supported; for multiple scopes request multiple tokens.
-     *    - `ttl` - optionally, the time for which the token should be valid, in seconds.
+     *    - `use_cache` - optionally set to false to force a new token request.  The fetched
+     *       token will still be cached for later `get_access_token` calls.
      *
      * # Notes
      *
@@ -1516,11 +1518,11 @@ open func gatherTelemetry()throws  -> String  {
      *      before requesting a fresh token.
 
      */
-open func getAccessToken(scope: String, ttl: Int64? = nil)throws  -> AccessTokenInfo  {
+open func getAccessToken(scope: String, useCache: Bool = true)throws  -> AccessTokenInfo  {
     return try  FfiConverterTypeAccessTokenInfo_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
     uniffi_fxa_client_fn_method_firefoxaccount_get_access_token(self.uniffiClonePointer(),
         FfiConverterString.lower(scope),
-        FfiConverterOptionInt64.lower(ttl),$0
+        FfiConverterBool.lower(useCache),$0
     )
 })
 }
@@ -5075,7 +5077,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_gather_telemetry() != 61296) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_access_token() != 23448) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_access_token() != 11103) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_get_attached_clients() != 14470) {
