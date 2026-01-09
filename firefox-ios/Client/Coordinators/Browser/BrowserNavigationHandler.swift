@@ -80,6 +80,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     @MainActor
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo)
 
+    @MainActor
+    func showPasswordGenerator(tab: Tab, frameContext: PasswordGeneratorFrameContext)
+
     /// Shows the app menu
     @MainActor
     func showMainMenu()

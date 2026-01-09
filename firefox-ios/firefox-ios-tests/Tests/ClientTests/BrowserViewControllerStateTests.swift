@@ -63,7 +63,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
         let URL = URL(string: "https://foo.com")!
-        let webView = WKWebViewMock(URL)
+        let webView = MockWKWebView(URL)
         let frame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
 
         XCTAssertNil(initialState.displayView)

@@ -11,25 +11,25 @@ final class WKFrameInfoExtensionsTests: XCTestCase {
     let insecureURL = URL(string: "http://bar.com")!
 
     func test_insecureTopFrame_insecureFrame() {
-        let webView = WKWebViewMock(insecureURL)
+        let webView = MockWKWebView(insecureURL)
         let frame = MockWKFrameInfo(webView: webView, frameURL: insecureURL)
         XCTAssertFalse(frame.isFrameLoadedInSecureContext)
     }
 
     func test_insecureTopFrame_secureFrame() {
-        let webView = WKWebViewMock(insecureURL)
+        let webView = MockWKWebView(insecureURL)
         let frame = MockWKFrameInfo(webView: webView, frameURL: secureURL)
         XCTAssertFalse(frame.isFrameLoadedInSecureContext)
     }
 
     func test_secureTopFrame_insecureFrame() {
-        let webView = WKWebViewMock(secureURL)
+        let webView = MockWKWebView(secureURL)
         let frame = MockWKFrameInfo(webView: webView, frameURL: insecureURL)
         XCTAssertFalse(frame.isFrameLoadedInSecureContext)
     }
 
     func test_secureTopFrame_secureFrame() {
-        let webView = WKWebViewMock(secureURL)
+        let webView = MockWKWebView(secureURL)
         let frame = MockWKFrameInfo(webView: webView, frameURL: secureURL)
         XCTAssertTrue(frame.isFrameLoadedInSecureContext)
     }

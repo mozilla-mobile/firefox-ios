@@ -10,12 +10,12 @@ import Glean
 @testable import Client
 // TODO: FXIOS-12158 Add back after investigating why video player is broken
 // class WebviewViewControllerTests: XCTestCase {
-//    var webview: WKWebViewMock!
+//    var webview: MockWKWebView!
 //
 //    override func setUp() {
 //        super.setUp()
 //
-//        webview = WKWebViewMock( URL(string: "https://foo.com")!)
+//        webview = MockWKWebView( URL(string: "https://foo.com")!)
 //    }
 //
 //    override func tearDown() {

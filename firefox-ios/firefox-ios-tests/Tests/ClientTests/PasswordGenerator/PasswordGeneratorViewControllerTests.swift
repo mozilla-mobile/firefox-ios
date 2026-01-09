@@ -24,14 +24,14 @@ final class PasswordGeneratorViewControllerTests: XCTestCase {
     func testPasswordGeneratorViewController_simpleCreation_hasNoLeaks() {
         let mockProfile = MockProfile()
         let currentTab = Tab(profile: mockProfile, windowUUID: windowUUID)
-        let URL = URL(string: "https://foo.com")!
-        let webView = WKWebViewMock(URL)
-        let currentFrame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
-        let passwordGeneratorViewController = PasswordGeneratorViewController(
-            windowUUID: windowUUID,
-            currentTab: currentTab,
-            currentFrame: currentFrame
-        )
+        let mockEvaluator = MockPasswordGeneratorScriptEvaluator()
+        let frameContext = PasswordGeneratorFrameContext(origin: "https://foo.com",
+                                                         host: "foo.com",
+                                                         scriptEvaluator: mockEvaluator,
+                                                         frameInfo: nil)
+        let passwordGeneratorViewController = PasswordGeneratorViewController(windowUUID: windowUUID,
+                                                                              currentTab: currentTab,
+                                                                              frameContext: frameContext)
         trackForMemoryLeaks(passwordGeneratorViewController)
     }
 }

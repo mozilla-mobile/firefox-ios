@@ -15,7 +15,7 @@ final class FormAutofillHelperTests: XCTestCase {
     var tab: Tab!
     var profile: MockProfile!
     var validMockWKMessage: MockWKScriptMessage!
-    var secureWebviewMock: WKWebViewMock!
+    var secureWebviewMock: MockWKWebView!
     var secureFrameMock: MockWKFrameInfo!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     let validMockPayloadJson = """
@@ -53,7 +53,7 @@ final class FormAutofillHelperTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tab = Tab(profile: profile, windowUUID: windowUUID)
         formAutofillHelper = FormAutofillHelper(tab: tab)
-        secureWebviewMock = WKWebViewMock(URL(string: "https://foo.com")!)
+        secureWebviewMock = MockWKWebView(URL(string: "https://foo.com")!)
         secureFrameMock = MockWKFrameInfo(webView: secureWebviewMock, frameURL: URL(string: "https://foo.com")!)
         guard let jsonData = validMockPayloadJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(
