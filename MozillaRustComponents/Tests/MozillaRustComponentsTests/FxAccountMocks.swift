@@ -60,7 +60,7 @@ class MockFxAccount: PersistedFirefoxAccount {
         queue.sync { invocations.append(.clearAccessTokenCache) }
     }
 
-    override func getAccessToken(scope _: String, ttl _: UInt64? = nil) throws -> AccessTokenInfo {
+    override func getAccessToken(scope _: String, useCache _: Bool? = true) throws -> AccessTokenInfo {
         queue.sync { invocations.append(.getAccessToken) }
         return AccessTokenInfo(scope: "profile", token: "toktok", key: nil, expiresAt: Int64.max)
     }
