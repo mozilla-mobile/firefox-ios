@@ -537,12 +537,11 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testShowPasswordGenerator_presentsPasswordGeneratorBottomSheet() {
         let subject = createSubject()
         let mockTab = Tab(profile: profile, windowUUID: windowUUID)
-        let URL = URL(string: "https://foo.com")!
-        let webView = MockWKWebView(URL)
-
+        let mockEvaluator = MockPasswordGeneratorScriptEvaluator()
         let frameContext = PasswordGeneratorFrameContext(origin: "https://foo.com",
                                                          host: "foo.com",
-                                                         webView: webView)
+                                                         scriptEvaluator: mockEvaluator,
+                                                         frameInfo: nil)
         subject.showPasswordGenerator(tab: mockTab, frameContext: frameContext)
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
@@ -1457,5 +1456,25 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
 
         return URL(string: "http://localhost:\(webServer.port)")!
+    }
+}
+
+@MainActor
+final class MockPasswordGeneratorScriptEvaluator: PasswordGeneratorScriptEvaluator {
+    var evaluateScriptCalled: Int = 0
+    var lastEvaluatedScript: String?
+    var lastEvaluatedFrame: WKFrameInfo?
+
+    // Configurable response
+    var resultToReturn: Any?
+    var errorToReturn: Error?
+
+    func evaluateJavascriptInDefaultContentWorld(_ javascript: String,
+                                                 _ frame: WKFrameInfo?,
+                                                 _ completion: @escaping @MainActor (Any?, (any Error)?) -> Void) {
+        evaluateScriptCalled += 1
+        lastEvaluatedScript = javascript
+        lastEvaluatedFrame = frame
+        completion(resultToReturn, errorToReturn)
     }
 }

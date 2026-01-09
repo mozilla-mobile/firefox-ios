@@ -84,7 +84,8 @@ final class PasswordGeneratorMiddleware {
                                      completion: @MainActor @escaping (String) -> Void) {
         let originRules = PasswordGeneratorMiddleware.getPasswordRule(for: frameContext.host)
         let jsFunctionCall = "window.__firefox__.logins.generatePassword(\(originRules ?? "" ))"
-        frameContext.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, nil) { (result, error) in
+        frameContext.scriptEvaluator?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall,
+                                                                              frameContext.frameInfo) { (result, error) in
             if let error = error {
                 self.logger.log("JavaScript evaluation error",
                                 level: .warning,
@@ -98,14 +99,15 @@ final class PasswordGeneratorMiddleware {
 
     private func userTappedUsePassword(frameContext: PasswordGeneratorFrameContext, password: String) {
         passwordGeneratorTelemetry.usePasswordButtonPressed()
-        if let escapedPassword = escapeString(string: password) {
-            let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\(escapedPassword))"
-            frameContext.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, nil) { (result, error) in
-                if error != nil {
-                    self.logger.log("Error filling in password info",
-                                    level: .warning,
-                                    category: .passwordGenerator)
-                }
+        guard let escapedPassword = escapeString(string: password) else { return }
+
+        let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\(escapedPassword))"
+        frameContext.scriptEvaluator?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall,
+                                                                              frameContext.frameInfo) { (result, error) in
+            if error != nil {
+                self.logger.log("Error filling in password info",
+                                level: .warning,
+                                category: .passwordGenerator)
             }
         }
     }
@@ -122,7 +124,7 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func userTappedRefreshPassword(frameContext: PasswordGeneratorFrameContext, windowUUID: WindowUUID) {
-        guard let origin = frameContext.webView?.url?.origin else {return}
+        guard let origin = frameContext.origin else {return}
         generateNewPassword(frameContext: frameContext, completion: { generatedPassword in
             self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
             let newAction = PasswordGeneratorAction(

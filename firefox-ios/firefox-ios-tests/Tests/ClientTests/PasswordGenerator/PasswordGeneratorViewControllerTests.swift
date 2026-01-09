@@ -24,11 +24,11 @@ final class PasswordGeneratorViewControllerTests: XCTestCase {
     func testPasswordGeneratorViewController_simpleCreation_hasNoLeaks() {
         let mockProfile = MockProfile()
         let currentTab = Tab(profile: mockProfile, windowUUID: windowUUID)
-        let URL = URL(string: "https://foo.com")!
-        let webView = MockWKWebView(URL)
+        let mockEvaluator = MockPasswordGeneratorScriptEvaluator()
         let frameContext = PasswordGeneratorFrameContext(origin: "https://foo.com",
                                                          host: "foo.com",
-                                                         webView: webView)
+                                                         scriptEvaluator: mockEvaluator,
+                                                         frameInfo: nil)
         let passwordGeneratorViewController = PasswordGeneratorViewController(windowUUID: windowUUID,
                                                                               currentTab: currentTab,
                                                                               frameContext: frameContext)

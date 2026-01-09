@@ -11,7 +11,7 @@ struct PasswordGeneratorAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
 
-    // Used in the middlwares
+    // Used in the middlewares
     let frameContext: PasswordGeneratorFrameContext?
 
     // Used in some reducers

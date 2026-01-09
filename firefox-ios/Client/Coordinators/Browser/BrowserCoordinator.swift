@@ -1212,9 +1212,11 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Password Generator
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
+        let scriptEvaluator = WebKitPasswordGeneratorScriptEvaluator(webView: frame.webView)
         let frameContext = PasswordGeneratorFrameContext(origin: frame.webView?.url?.origin,
                                                          host: frame.securityOrigin.host,
-                                                         webView: frame.webView)
+                                                         scriptEvaluator: scriptEvaluator,
+                                                         frameInfo: frame)
         showPasswordGenerator(tab: tab, frameContext: frameContext)
     }
 
