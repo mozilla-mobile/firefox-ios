@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Shared
 
-class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+final class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     // MARK: - Initializers
     init(windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
@@ -60,6 +60,15 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
                             actionType: TopSitesActionType.toggleShowSponsoredSettings
                         )
                     )
+
+                    // If sponsored shortcuts are turned off, request to delete the user data
+                    let isSponsoredShortcutsEnabled = profile.prefs.boolForKey(
+                        PrefsKeys.FeatureFlags.SponsoredShortcuts
+                    ) ?? true
+                    if !isSponsoredShortcutsEnabled,
+                       let contextId = TelemetryContextualIdentifier.contextId {
+                        self.deleteUserRequest(contextId: contextId)
+                    }
                 }
             ]
             let toggleSection = SettingSection(title: nil, children: toggleSettings)
@@ -71,6 +80,13 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
         sections.append(rowSection)
 
         return sections
+    }
+
+    private func deleteUserRequest(contextId: String) {
+        Task {
+            let remover = UnifiedAdsUserDataRemover()
+            try await remover.deleteUserData(contextID: contextId)
+        }
     }
 }
 
