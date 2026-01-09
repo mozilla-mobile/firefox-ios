@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Glean
 import MozillaAppServices
+import OnboardingKit
 
 protocol VersionProviding: Sendable {
     func object(forInfoDictionaryKey key: String) -> Any?
@@ -132,5 +133,66 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
             return false
         }
         return branch == Experiment.controlBranch
+    }
+
+    // MARK: - Terms of Use Configuration
+
+    static var brandRefreshTermsOfUseConfiguration: OnboardingKitCardInfoModel {
+        let termsOfUseLink = String(
+            format: .Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink,
+            AppName.shortName.rawValue
+        )
+        let termsOfUseAgreement = String(
+            format: .Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement,
+            termsOfUseLink
+        )
+        let privacyNoticeLink = String.Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink
+        let privacyAgreement = String(
+            format: .Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement,
+            AppName.shortName.rawValue,
+            privacyNoticeLink
+        )
+        let manageLink = String.Onboarding.TermsOfService.ManageLink
+        let manageAgreement = String(
+            format: String.Onboarding.Modern.TermsOfService.ManagePreferenceAgreement,
+            AppName.shortName.rawValue,
+            MozillaName.shortName.rawValue,
+            manageLink
+        )
+
+        return OnboardingKitCardInfoModel(
+            cardType: .basic,
+            name: "tos",
+            order: 20,
+            title: String.Onboarding.Modern.BrandRefresh.TermsOfUse.Title,
+            body: String.Onboarding.Modern.BrandRefresh.TermsOfUse.Description,
+            buttons: OnboardingButtons(
+                primary: OnboardingButtonInfoModel(
+                    title: String.Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitleV2,
+                    action: OnboardingActions.syncSignIn
+                )
+            ),
+            multipleChoiceButtons: [],
+            onboardingType: .freshInstall,
+            a11yIdRoot: AccessibilityIdentifiers.TermsOfService.root,
+            imageID: ImageIdentifiers.homeHeaderLogoBall,
+            embededLinkText: [
+                EmbeddedLink(
+                    fullText: termsOfUseAgreement,
+                    linkText: termsOfUseLink,
+                    action: .openTermsOfService
+                ),
+                EmbeddedLink(
+                    fullText: privacyAgreement,
+                    linkText: privacyNoticeLink,
+                    action: .openPrivacyNotice
+                ),
+                EmbeddedLink(
+                    fullText: manageAgreement,
+                    linkText: manageLink,
+                    action: .openManageSettings
+                )
+            ]
+        )
     }
 }
