@@ -11,6 +11,16 @@ struct NativeErrorPageState: ScreenState {
     var description: String
     var foxImage: String
     var url: URL?
+    var advancedSection: AdvancedSectionModel?
+    var showProceedButton: Bool
+    var showGoBackButton: Bool
+
+    struct AdvancedSectionModel: Equatable {
+        var buttonText: String
+        var infoText: String
+        var warningText: String
+        var certificateErrorCode: String?
+    }
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = appState.screenState(
@@ -27,7 +37,10 @@ struct NativeErrorPageState: ScreenState {
             title: nativeErrorPageState.title,
             description: nativeErrorPageState.description,
             foxImage: nativeErrorPageState.foxImage,
-            url: nativeErrorPageState.url
+            url: nativeErrorPageState.url,
+            advancedSection: nativeErrorPageState.advancedSection,
+            showProceedButton: nativeErrorPageState.showProceedButton,
+            showGoBackButton: nativeErrorPageState.showGoBackButton
         )
     }
 
@@ -36,13 +49,19 @@ struct NativeErrorPageState: ScreenState {
         title: String = "",
         description: String = "",
         foxImage: String = "",
-        url: URL? = nil
+        url: URL? = nil,
+        advancedSection: AdvancedSectionModel? = nil,
+        showProceedButton: Bool = false,
+        showGoBackButton: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.title = title
         self.description = description
         self.foxImage = foxImage
         self.url = url
+        self.advancedSection = advancedSection
+        self.showProceedButton = showProceedButton
+        self.showGoBackButton = showGoBackButton
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -55,12 +74,25 @@ struct NativeErrorPageState: ScreenState {
             guard let action = action as? NativeErrorPageAction, let model = action.nativePageErrorModel else {
                 return defaultState(from: state)
             }
+            let advancedSectionModel: AdvancedSectionModel? = if let advancedSection = model.advancedSection {
+                AdvancedSectionModel(
+                    buttonText: advancedSection.buttonText,
+                    infoText: advancedSection.infoText,
+                    warningText: advancedSection.warningText,
+                    certificateErrorCode: advancedSection.certificateErrorCode
+                )
+            } else {
+                nil
+            }
             return NativeErrorPageState(
                 windowUUID: state.windowUUID,
                 title: model.errorTitle,
                 description: model.errorDescription,
                 foxImage: model.foxImageName,
-                url: model.url
+                url: model.url,
+                advancedSection: advancedSectionModel,
+                showProceedButton: model.showProceedButton,
+                showGoBackButton: model.showGoBackButton
             )
         default:
             return defaultState(from: state)
@@ -73,7 +105,10 @@ struct NativeErrorPageState: ScreenState {
             title: state.title,
             description: state.description,
             foxImage: state.foxImage,
-            url: state.url
+            url: state.url,
+            advancedSection: state.advancedSection,
+            showProceedButton: state.showProceedButton,
+            showGoBackButton: state.showGoBackButton
         )
     }
 }
