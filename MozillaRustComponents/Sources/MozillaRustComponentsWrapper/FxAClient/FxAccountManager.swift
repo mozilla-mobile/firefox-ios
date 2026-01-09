@@ -198,7 +198,7 @@ open class FxAccountManager: @unchecked Sendable {
     /// Try to get an OAuth access token.
     public func getAccessToken(
         scope: String,
-        useCache: Bool? = true,
+        useCache: Bool = true,
         completionHandler: @MainActor @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
     ) {
         DispatchQueue.global().async {
