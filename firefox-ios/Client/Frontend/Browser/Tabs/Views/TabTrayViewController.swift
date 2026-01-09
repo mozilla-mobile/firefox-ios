@@ -123,12 +123,12 @@ final class TabTrayViewController: UIViewController,
         toolbar.isTranslucent = false
     }
 
-    lazy var segmentedControl: UISegmentedControl = {
+    private lazy var segmentedControl: UISegmentedControl = {
         return createSegmentedControl(action: #selector(segmentChanged),
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
     }()
 
-    lazy var experimentSegmentControl: TabTraySelectorView = {
+    private lazy var experimentSegmentControl: TabTraySelectorView = {
         let selectedIndex = experimentConvertSelectedIndex()
         let titles = [TabTrayPanelType.privateTabs.label,
                      TabTrayPanelType.tabs.label,

@@ -1579,9 +1579,9 @@ class BrowserViewController: UIViewController,
         }
 
         // Take screenshot asynchronously to avoid blocking navigation
-        DispatchQueue.main.async {
-            takeScreenshot()
-        }
+//        DispatchQueue.main.async {
+        takeScreenshot()
+//        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -1898,7 +1898,9 @@ class BrowserViewController: UIViewController,
     private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
         remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
-//        view.layoutIfNeeded()
+        if !isToolbarTranslucencyRefactorEnabled {
+            view.layoutIfNeeded()
+        }
     }
 
     private func adjustBottomSearchBarForKeyboard() {

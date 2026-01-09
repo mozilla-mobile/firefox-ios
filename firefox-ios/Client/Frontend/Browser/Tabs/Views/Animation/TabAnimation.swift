@@ -22,9 +22,9 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 
         static let dimmedWhiteValue = 0.0
 
-        static let presentDuration: TimeInterval = 0.4
-        static let dampingFactor: CGFloat = 0.8
+        static let presentDuration: TimeInterval = 0.2
         static let dismissDuration: TimeInterval = 0.2
+        static let bvcScreenshotQuality: CGFloat = 1.0
 
         static let cvScalingFactor = 1.2
         static let initialOpacity = 0.0
@@ -143,9 +143,9 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
-        let webViewScreenshot = UIImageView(image: selectedTab.screenshot)
+        let webViewScreenshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
         webViewScreenshot.contentMode = .scaleAspectFill
-        webViewScreenshot.frame = browserVC.contentContainer.frame
+        webViewScreenshot.frame = browserVC.view.frame
         webViewScreenshot.clipsToBounds = true
 
         // Dimmed background view
@@ -160,11 +160,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         destinationController.view.frame = finalFrame
         destinationController.view.layoutIfNeeded()
-
+        
         guard let panel = currentExperimentPanel as? ThemedNavigationController,
               let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
         else { return }
-
+        
         let cv = panelViewController.tabDisplayView.collectionView
         guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
               let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
@@ -173,13 +173,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
         let theme = retrieveTheme()
+        
         if let indexPath = dataSource.indexPath(for: item) {
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
             // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
             cv.layoutIfNeeded()
             if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
                 tabCell = cell
-                cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
+                cellFrame = cell.convert(cell.backgroundHolder.bounds, to: nil)
                 cell.isHidden = true
                 cell.setUnselectedState(theme: theme)
                 cell.alpha = UX.clearAlpha
@@ -189,17 +190,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         // Animate
         cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
         cv.alpha = UX.halfAlpha
-
-        segmentedControl.alpha = UX.clearAlpha
-        experimentSegmentControl.alpha = UX.clearAlpha
-
-        let animator = UIViewPropertyAnimator(duration: UX.presentDuration, dampingRatio: UX.dampingFactor) {
+        
+        let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
             if let frame = cellFrame {
                 webViewScreenshot.frame = frame
-                self.segmentedControl.alpha = UX.opaqueAlpha
-                self.experimentSegmentControl.alpha = UX.opaqueAlpha
-
                 webViewScreenshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            } else {
+                webViewScreenshot.alpha = UX.clearAlpha
             }
             cv.transform = .identity
             cv.alpha = UX.opaqueAlpha
@@ -301,7 +298,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         toView.layer.cornerCurve = .continuous
         toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-        toView.layer.shouldRasterize = true
         toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
 
@@ -329,7 +325,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             toView.layer.cornerRadius = UX.zeroCornerRadius
             tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
         } completion: { _ in
-            toView.layer.shouldRasterize = false
             contentContainer.isHidden = false
             tabCell?.isHidden = false
             self.view.removeFromSuperview()
