@@ -1588,6 +1588,7 @@ workflows:
     - 3_provisioning_and_npm_installation
     steps: 
     - xcode-test@6.0.1:
+        title: "Running unit tests on iOS 26.1"
         continue_on_fail: true
         timeout: 6000
         inputs:
@@ -1598,20 +1599,24 @@ workflows:
         - test_plan: UnitTest
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
     - xcode-test@6.0.1:
+        title: "Running unit tests on iOS 26.1"
         continue_on_fail: true
         timeout: 6000
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - configuration: Fennec_Testing
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
     - xcode-test@6.0.1:
+        title: "Running unit tests on iOS 26.1"
         continue_on_fail: true
         timeout: 6000
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - configuration: Fennec_Testing
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
 
