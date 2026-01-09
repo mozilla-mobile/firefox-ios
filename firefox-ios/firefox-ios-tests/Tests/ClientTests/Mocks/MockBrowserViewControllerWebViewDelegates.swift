@@ -23,7 +23,6 @@ final class MockFrameInfo: WKFrameInfo {
 class MockNavigationAction: WKNavigationAction {
     private var type: WKNavigationType?
     private var urlRequest: URLRequest
-    private var frame: WKFrameInfo?
 
     override var navigationType: WKNavigationType {
         return type ?? .other
@@ -33,14 +32,9 @@ class MockNavigationAction: WKNavigationAction {
         return urlRequest
     }
 
-    override var targetFrame: WKFrameInfo? {
-       return frame
-    }
-
-    init(url: URL, type: WKNavigationType? = nil, isMainFrame: Bool = true) {
+    init(url: URL, type: WKNavigationType? = nil) {
         self.type = type
         self.urlRequest = URLRequest(url: url)
-        self.frame = MockFrameInfo(isMainFrame: isMainFrame)
     }
 }
 

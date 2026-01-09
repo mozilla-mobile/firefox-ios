@@ -58,6 +58,9 @@ class MockBrowserViewController: BrowserViewController {
 
     var viewControllerToPresent: UIViewController?
 
+    // Mock control for frame navigation
+    var mockIsMainFrameNavigation = true
+
     var createWebViewCalled = 0
     var runJavaScriptAlertPanelCalled = 0
     var runJavaScriptConfirmPanelCalled = 0
@@ -170,6 +173,10 @@ class MockBrowserViewController: BrowserViewController {
     }
 
     override func willNavigateAway(from tab: Tab?) {}
+
+    override func isMainFrameNavigation(_ navigationAction: WKNavigationAction) -> Bool {
+        return mockIsMainFrameNavigation
+    }
 }
 
 class MockContentContainer: ContentContainer {
