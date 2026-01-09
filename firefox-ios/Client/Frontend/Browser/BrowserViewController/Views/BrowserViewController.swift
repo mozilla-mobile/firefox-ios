@@ -1475,7 +1475,10 @@ class BrowserViewController: UIViewController,
     }
 
     private func enqueueTabRestoration() {
-        guard isDeeplinkOptimizationRefactorEnabled else { return }
+        guard isDeeplinkOptimizationRefactorEnabled else {
+            tabManager.restoreTabs()
+            return
+        }
         // Postpone tab restoration after the deeplink has been handled, that is after the start up time record
         // has ended. If there is no deeplink then restore when the startup time record cancellation has been
         // signaled.
@@ -1500,11 +1503,6 @@ class BrowserViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-
-        // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-        if !isDeeplinkOptimizationRefactorEnabled {
-            tabManager.restoreTabs()
-        }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         updateToolbarStateForTraitCollection(traitCollection, shouldUpdateBlurViews: !isToolbarTranslucencyEnabled)
