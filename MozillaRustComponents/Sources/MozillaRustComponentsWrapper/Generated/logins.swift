@@ -1674,12 +1674,26 @@ public struct Login {
     public var passwordField: String
     public var password: String
     public var username: String
+    /**
+     * These fields can be synced from Desktop and are NOT included in LoginEntry,
+     * so update() will not modify them. Use the dedicated API methods to manipulate:
+     * record_breach(), reset_all_breaches(), is_potentially_breached(),
+     * record_breach_alert_dismissal(), record_breach_alert_dismissal_time(),
+     * and is_breach_alert_dismissed().
+     */
     public var timeOfLastBreach: Int64?
     public var timeLastBreachAlertDismissed: Int64?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String, password: String, username: String, timeOfLastBreach: Int64?, timeLastBreachAlertDismissed: Int64?) {
+    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String, password: String, username: String, 
+        /**
+         * These fields can be synced from Desktop and are NOT included in LoginEntry,
+         * so update() will not modify them. Use the dedicated API methods to manipulate:
+         * record_breach(), reset_all_breaches(), is_potentially_breached(),
+         * record_breach_alert_dismissal(), record_breach_alert_dismissal_time(),
+         * and is_breach_alert_dismissed().
+         */timeOfLastBreach: Int64?, timeLastBreachAlertDismissed: Int64?) {
         self.id = id
         self.timesUsed = timesUsed
         self.timeCreated = timeCreated
