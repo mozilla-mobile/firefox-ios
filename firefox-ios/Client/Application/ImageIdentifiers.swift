@@ -62,6 +62,8 @@ struct ImageIdentifiers {
             public static let trackers = "onboardingTrackers"
             public static let syncWithIconsJapan = "onboardingSyncWithIconsJapan"
             public static let trackersJapan = "onboardingTrackersJapan"
+            public static let syncWithIconsBrandRefresh = "onboardingSyncWithIconsBrandRefresh"
+            public static let trackersBrandRefresh = "onboardingTrackersBrandRefresh"
         }
 
         public struct MultipleChoiceButtonImages {
@@ -75,6 +77,11 @@ struct ImageIdentifiers {
             public static let themeLightJapan = "onboardingThemeLightJapan"
             public static let toolbarTopJapan = "onboardingToolbarIconTopJapan"
             public static let toolbarBottomJapan = "onboardingToolbarIconBottomJapan"
+            public static let themeSystemBrandRefresh = "onboardingThemeSystemBrandRefresh"
+            public static let themeDarkBrandRefresh = "onboardingThemeDarkBrandRefresh"
+            public static let themeLightBrandRefresh = "onboardingThemeLightBrandRefresh"
+            public static let toolbarTopBrandRefresh = "onboardingToolbarIconTopBrandRefresh"
+            public static let toolbarBottomBrandRefresh = "onboardingToolbarIconBottomBrandRefresh"
         }
 
         public struct ChallengeTheDefault {

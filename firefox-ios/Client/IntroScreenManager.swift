@@ -27,6 +27,10 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
         featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
     }
 
+    var shouldUseBrandRefreshConfiguration: Bool {
+        featureFlags.isFeatureEnabled(.shouldUseBrandRefreshConfiguration, checking: .buildAndUser)
+    }
+
     var shouldUseJapanConfiguration: Bool {
         featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
     }
@@ -34,6 +38,8 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     var onboardingVariant: OnboardingVariant {
         if isModernOnboardingEnabled && shouldUseJapanConfiguration {
             return .japan
+        } else if isModernOnboardingEnabled && shouldUseBrandRefreshConfiguration {
+            return .brandRefresh
         } else if isModernOnboardingEnabled {
             return .modern
         } else {
