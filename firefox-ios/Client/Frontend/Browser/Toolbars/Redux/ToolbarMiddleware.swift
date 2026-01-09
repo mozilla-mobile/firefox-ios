@@ -221,19 +221,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.addNewTab)
             store.dispatch(action)
 
-        case .qrCode:
-            toolbarTelemetry.qrCodeButtonTapped(isPrivate: toolbarState.isPrivateMode)
-
-            if toolbarState.addressToolbar.isEditing {
-                let toolbarAction = ToolbarAction(windowUUID: action.windowUUID,
-                                                  actionType: ToolbarActionType.cancelEdit)
-                store.dispatch(toolbarAction)
-            }
-
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showQRcodeReader)
-            store.dispatch(action)
-
         case .back:
             toolbarTelemetry.backButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,

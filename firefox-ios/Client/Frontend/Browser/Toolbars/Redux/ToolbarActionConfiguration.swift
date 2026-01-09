@@ -14,7 +14,6 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
         case search
         case tabs
         case menu
-        case qrCode
         case share
         case reload
         case stopLoading
