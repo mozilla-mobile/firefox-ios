@@ -49,7 +49,7 @@ struct SystemLocaleProvider: LocaleProvider {
     /// If all attempts fail, this method logs a fatal error and returns a specified fallback or by default `"und"`,
     /// the BCP-47 primary language subtag for *Undetermined* linguistic content.
     ///
-    /// - Returns: A region code string (e.g. `"US"`, `"CA"`), or fallback string or`"und"` if the
+    /// - Returns: A region code string (e.g. `"US"`, `"CA"`), or fallback string or `"und"` if the
     ///   region cannot be determined.
     func regionCode(fallback: String?) -> String {
         let systemRegion: String?
