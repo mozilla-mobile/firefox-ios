@@ -143,10 +143,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
-        let webViewScreenshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
-        webViewScreenshot.contentMode = .scaleAspectFill
-        webViewScreenshot.frame = browserVC.view.frame
-        webViewScreenshot.clipsToBounds = true
+        let bvcSnapshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
+        bvcSnapshot.contentMode = .scaleAspectFill
+        bvcSnapshot.frame = browserVC.view.frame
+        bvcSnapshot.clipsToBounds = true
 
         // Dimmed background view
         let backgroundView = UIView()
@@ -156,7 +156,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         // Add views to container
         context.containerView.addSubview(destinationController.view)
         context.containerView.addSubview(backgroundView)
-        context.containerView.addSubview(webViewScreenshot)
+        context.containerView.addSubview(bvcSnapshot)
 
         destinationController.view.frame = finalFrame
         destinationController.view.layoutIfNeeded()
@@ -192,11 +192,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.alpha = UX.halfAlpha
 
         let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
-            if let frame = cellFrame {
-                webViewScreenshot.frame = frame
-                webViewScreenshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            if let cellFrame {
+                bvcSnapshot.frame = cellFrame
+                bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
             } else {
-                webViewScreenshot.alpha = UX.clearAlpha
+                bvcSnapshot.alpha = UX.clearAlpha
             }
             cv.transform = .identity
             cv.alpha = UX.opaqueAlpha
@@ -212,7 +212,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         animator.addCompletion { _ in
             backgroundView.removeFromSuperview()
-            webViewScreenshot.removeFromSuperview()
+            bvcSnapshot.removeFromSuperview()
             context.completeTransition(true)
             self.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
         }
