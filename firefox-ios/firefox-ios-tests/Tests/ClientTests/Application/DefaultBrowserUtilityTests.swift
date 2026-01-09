@@ -46,12 +46,12 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertTrue(userDefaults.bool(forKey: DefaultKeys.isBrowserDefault))
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
 
-        let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
-        let savedChoiceScreenMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? BooleanMetricType)
+        let savedChoiceScreenMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[0] as? BooleanMetricType)
+        let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? BooleanMetricType)
         XCTAssert(savedDefaultMetric === expectedBrowserEvent)
         XCTAssert(savedChoiceScreenMetric === expectedChoiceEvent)
 
-        XCTAssertEqual(userDefaults.setCalledCount, 3)
+        XCTAssertEqual(userDefaults.setCalledCount, 5)
     }
 
     @MainActor
@@ -67,7 +67,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
         XCTAssert(savedDefaultMetric === expectedBrowserEvent)
 
-        XCTAssertEqual(userDefaults.setCalledCount, 3)
+        XCTAssertEqual(userDefaults.setCalledCount, 4)
     }
 
     @MainActor
@@ -83,7 +83,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
         XCTAssert(savedDefaultMetric === expectedBrowserEvent)
 
-        XCTAssertEqual(userDefaults.setCalledCount, 2)
+        XCTAssertEqual(userDefaults.setCalledCount, 4)
     }
 
     @MainActor
@@ -99,7 +99,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         let savedDefaultMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? BooleanMetricType)
         XCTAssert(savedDefaultMetric === expectedBrowserEvent)
 
-        XCTAssertEqual(userDefaults.setCalledCount, 2)
+        XCTAssertEqual(userDefaults.setCalledCount, 3)
     }
 
     // MARK: - Migration Flag Tests
@@ -312,7 +312,238 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         XCTAssertEqual(savedLastProvidedDate, lastProvidedDate)
     }
 
+    // MARK: - Default Browser Set Date Tests
+    @MainActor
+    func testDefaultBrowserSetDate_savedWhenSettingToTrue() {
+        setupSubjectWithMocks()
+
+        XCTAssertNil(userDefaults.object(forKey: DefaultKeys.defaultBrowserSetDate))
+        subject.isDefaultBrowser = true
+
+        XCTAssertNotNil(userDefaults.object(forKey: DefaultKeys.defaultBrowserSetDate))
+    }
+
+    @MainActor
+    func testDefaultBrowserSetDate_notUpdatedWhenSettingToFalse() {
+        setupSubjectWithMocks()
+
+        subject.isDefaultBrowser = true
+        let originalDate = userDefaults.object(forKey: DefaultKeys.defaultBrowserSetDate) as? Date
+
+        subject.isDefaultBrowser = false
+
+        let currentDate = userDefaults.object(forKey: DefaultKeys.defaultBrowserSetDate) as? Date
+        XCTAssertEqual(currentDate, originalDate)
+    }
+
+    @MainActor
+    func testDefaultBrowserSetDate_updatedWhenSettingToTrueAgain() {
+        setupSubjectWithMocks()
+
+        subject.isDefaultBrowser = true
+        let originalDate = userDefaults.object(forKey: DefaultKeys.defaultBrowserSetDate) as? Date
+
+        // Wait a tiny bit to ensure new date is different
+        Thread.sleep(forTimeInterval: 0.01)
+
+        subject.isDefaultBrowser = true
+        let newDate = userDefaults.object(forKey: DefaultKeys.defaultBrowserSetDate) as? Date
+
+        XCTAssertNotNil(newDate)
+        XCTAssertGreaterThan(newDate!, originalDate!)
+    }
+
+    // MARK: - API Last Use Date Tests
+    @MainActor
+    func testAppleAPILastUseDate_savedWhenAPIIsCalled_firstRun() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        XCTAssertNil(userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate))
+
+        subject.processUserDefaultState(isFirstRun: true)
+
+        XCTAssertNotNil(userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate))
+    }
+
+    @MainActor
+    func testAppleAPILastUseDate_savedWhenAPIIsCalled_subsequentRuns() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        XCTAssertNil(userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate))
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        XCTAssertNotNil(userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate))
+    }
+
+    // MARK: - Status Expiration Tests (via processUserDefaultState)
+    @MainActor
+    func testProcessUserDefaultState_expiresStatusWhenOlderThanOneMonth() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = false
+
+        // Set up: was default 2 months ago
+        let twoMonthsAgo = Calendar.current.date(byAdding: .month, value: -2, to: Date())!
+        userDefaults.set(true, forKey: DefaultKeys.isBrowserDefault)
+        userDefaults.set(twoMonthsAgo, forKey: DefaultKeys.defaultBrowserSetDate)
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        // Status should be expired to false (regardless of API result)
+        XCTAssertFalse(subject.isDefaultBrowser)
+    }
+
+    @MainActor
+    func testProcessUserDefaultState_doesNotExpireStatusWhenRecent() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        // Set up: was default recently
+        userDefaults.set(true, forKey: DefaultKeys.isBrowserDefault)
+        userDefaults.set(Date(), forKey: DefaultKeys.defaultBrowserSetDate)
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        XCTAssertTrue(subject.isDefaultBrowser)
+    }
+
+    // MARK: - API Query Gating Tests (via processUserDefaultState)
+    @MainActor
+    func testProcessUserDefaultState_callsAPIWhenNeverUsedBefore() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        // No prior API use date
+        XCTAssertNil(userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate))
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        // API should have been called (last use date set)
+        XCTAssertNotNil(userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate))
+    }
+
+    @MainActor
+    func testProcessUserDefaultState_skipsAPIWhenNotPastRetryDate() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        XCTAssertNil(userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate))
+
+        // Set up: used API before, retry date in future
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+        userDefaults.set(yesterday, forKey: DefaultKeys.appleAPILastUseDate)
+        let futureDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+        userDefaults.set(futureDate, forKey: DefaultBrowserUtility.APIErrorDateKeys.retryDate)
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        // API should NOT have been called (last use date unchanged)
+        let lastUseDate = userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate) as? Date
+        XCTAssertEqual(lastUseDate, yesterday)
+    }
+
+    @MainActor
+    func testProcessUserDefaultState_skipsAPIWhenSetAsDefaultInLastMonth() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        // Set up: used API before, set as default recently
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+        userDefaults.set(yesterday, forKey: DefaultKeys.appleAPILastUseDate)
+        userDefaults.set(Date(), forKey: DefaultKeys.defaultBrowserSetDate)
+        userDefaults.set(true, forKey: DefaultKeys.isBrowserDefault)
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        // API should NOT have been called (last use date unchanged)
+        let lastUseDate = userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate) as? Date
+        XCTAssertEqual(lastUseDate, yesterday)
+    }
+
+    @MainActor
+    func testProcessUserDefaultState_callsAPIWhenThreeMonthsSinceLastUse() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        // Set up: used API 4 months ago, set as default 2 months ago
+        let fourMonthsAgo = Calendar.current.date(byAdding: .month, value: -4, to: Date())!
+        userDefaults.set(fourMonthsAgo, forKey: DefaultKeys.appleAPILastUseDate)
+        let twoMonthsAgo = Calendar.current.date(byAdding: .month, value: -2, to: Date())!
+        userDefaults.set(twoMonthsAgo, forKey: DefaultKeys.defaultBrowserSetDate)
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        // API should have been called (last use date updated)
+        let lastUseDate = userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate) as? Date
+        XCTAssertNotEqual(lastUseDate, fourMonthsAgo)
+    }
+
+    @MainActor
+    func testProcessUserDefaultState_threeMonthRefreshTakesPriorityOverRecentDefault() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        // Set up: used API 4 months ago, but set as default only 2 weeks ago
+        // The 3-month refresh should take priority over "set as default recently"
+        let fourMonthsAgo = Calendar.current.date(byAdding: .month, value: -4, to: Date())!
+        userDefaults.set(fourMonthsAgo, forKey: DefaultKeys.appleAPILastUseDate)
+        let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date())!
+        userDefaults.set(twoWeeksAgo, forKey: DefaultKeys.defaultBrowserSetDate)
+        userDefaults.set(true, forKey: DefaultKeys.isBrowserDefault)
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        // API should have been called (3-month refresh takes priority)
+        let lastUseDate = userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate) as? Date
+        XCTAssertNotEqual(lastUseDate, fourMonthsAgo)
+    }
+
+    @MainActor
+    func testProcessUserDefaultState_skipsAPIWhenLessThanThreeMonthsSinceLastUse() {
+        guard #available(iOS 18.2, *) else { return }
+
+        setupSubjectWithMocks()
+        application.mockDefaultApplicationValue = true
+
+        // Set up: used API 2 months ago, set as default 2 months ago
+        let twoMonthsAgo = Calendar.current.date(byAdding: .month, value: -2, to: Date())!
+        userDefaults.set(twoMonthsAgo, forKey: DefaultKeys.appleAPILastUseDate)
+        userDefaults.set(twoMonthsAgo, forKey: DefaultKeys.defaultBrowserSetDate)
+
+        subject.processUserDefaultState(isFirstRun: false)
+
+        // API should NOT have been called (last use date unchanged)
+        let lastUseDate = userDefaults.object(forKey: DefaultKeys.appleAPILastUseDate) as? Date
+        XCTAssertEqual(lastUseDate, twoMonthsAgo)
+    }
+
     // MARK: - Helpers
+    @MainActor
+    private func setupSubjectWithMocks() {
+        let locale = MockLocaleProvider(localeRegionCode: "US")
+        setupSubject(with: locale)
+    }
+
     @MainActor
     private func setupSubjectForTesting(
         region: String,
