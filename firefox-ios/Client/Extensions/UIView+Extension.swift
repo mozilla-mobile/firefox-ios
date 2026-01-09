@@ -70,7 +70,7 @@ extension UIView {
     /// Getting a snapshot from a view using image renderer
     var snapshot: UIImage {
         UIGraphicsImageRenderer(size: bounds.size).image { _ in
-            drawHierarchy(in: bounds, afterScreenUpdates: false)
+            drawHierarchy(in: bounds, afterScreenUpdates: true)
         }
     }
 }

@@ -1579,9 +1579,9 @@ class BrowserViewController: UIViewController,
         }
 
         // Take screenshot asynchronously to avoid blocking navigation
-//        DispatchQueue.main.async {
-        takeScreenshot()
-//        }
+        DispatchQueue.main.async {
+            takeScreenshot()
+        }
     }
 
     override func viewDidLayoutSubviews() {
