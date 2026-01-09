@@ -7,6 +7,13 @@ import Redux
 import Common
 import WebKit
 
+struct PasswordGeneratorFrameContext {
+    let origin: String?
+    let host: String
+    let scriptEvaluator: PasswordGeneratorScriptEvaluator?
+    let frameInfo: WKFrameInfo?
+}
+
 struct PasswordGeneratorAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType

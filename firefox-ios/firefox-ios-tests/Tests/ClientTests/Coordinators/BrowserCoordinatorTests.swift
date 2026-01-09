@@ -1458,23 +1458,3 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         return URL(string: "http://localhost:\(webServer.port)")!
     }
 }
-
-@MainActor
-final class MockPasswordGeneratorScriptEvaluator: PasswordGeneratorScriptEvaluator {
-    var evaluateScriptCalled: Int = 0
-    var lastEvaluatedScript: String?
-    var lastEvaluatedFrame: WKFrameInfo?
-
-    // Configurable response
-    var resultToReturn: Any?
-    var errorToReturn: Error?
-
-    func evaluateJavascriptInDefaultContentWorld(_ javascript: String,
-                                                 _ frame: WKFrameInfo?,
-                                                 _ completion: @escaping @MainActor (Any?, (any Error)?) -> Void) {
-        evaluateScriptCalled += 1
-        lastEvaluatedScript = javascript
-        lastEvaluatedFrame = frame
-        completion(resultToReturn, errorToReturn)
-    }
-}

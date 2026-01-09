@@ -9,35 +9,6 @@ import UIKit
 import Redux
 import WebKit
 
-struct PasswordGeneratorFrameContext {
-    let origin: String?
-    let host: String
-    let scriptEvaluator: PasswordGeneratorScriptEvaluator?
-    let frameInfo: WKFrameInfo?
-}
-
-protocol PasswordGeneratorScriptEvaluator: Sendable {
-    @MainActor
-    func evaluateJavascriptInDefaultContentWorld(_ javascript: String,
-                                                 _ frame: WKFrameInfo?,
-                                                 _ completion: @MainActor @escaping (Any?, Error?) -> Void)
-}
-
-@MainActor
-final class WebKitPasswordGeneratorScriptEvaluator: PasswordGeneratorScriptEvaluator {
-    private weak var webView: WKWebView?
-
-    init(webView: WKWebView?) {
-        self.webView = webView
-    }
-
-    func evaluateJavascriptInDefaultContentWorld(_ javascript: String,
-                                                 _ frame: WKFrameInfo?,
-                                                 _ completion: @MainActor @escaping (Any?, Error?) -> Void) {
-        webView?.evaluateJavascriptInDefaultContentWorld(javascript, frame, completion)
-    }
-}
-
 class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themeable, Notifiable {
     private enum UX {
         static let containerVerticalPadding: CGFloat = 20
