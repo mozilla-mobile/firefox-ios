@@ -160,11 +160,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         destinationController.view.frame = finalFrame
         destinationController.view.layoutIfNeeded()
-        
+
         guard let panel = currentExperimentPanel as? ThemedNavigationController,
               let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
         else { return }
-        
+
         let cv = panelViewController.tabDisplayView.collectionView
         guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
               let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
@@ -173,7 +173,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
         let theme = retrieveTheme()
-        
+
         if let indexPath = dataSource.indexPath(for: item) {
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
             // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
@@ -190,7 +190,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         // Animate
         cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
         cv.alpha = UX.halfAlpha
-        
+
         let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
             if let frame = cellFrame {
                 webViewScreenshot.frame = frame
