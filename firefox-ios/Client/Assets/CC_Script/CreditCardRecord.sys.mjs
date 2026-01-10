@@ -12,6 +12,51 @@ import { FormAutofillNameUtils } from "resource://gre/modules/shared/FormAutofil
  * for processing and consistent data representation.
  */
 export class CreditCardRecord {
+  /**
+   * Computes derived fields from the basic fields in the CreditCard object.
+   *
+   * @param {object} creditCard The credit card object
+   */
+  static computeFields(creditCard) {
+    this.#computeCCNameFields(creditCard);
+    this.#computeCCExpirationDateFields(creditCard);
+    this.#computeCCTypeField(creditCard);
+  }
+
+  static #computeCCExpirationDateFields(creditCard) {
+    if (!("cc-exp" in creditCard)) {
+      if (creditCard["cc-exp-month"] && creditCard["cc-exp-year"]) {
+        creditCard["cc-exp"] =
+          String(creditCard["cc-exp-year"]) +
+          "-" +
+          String(creditCard["cc-exp-month"]).padStart(2, "0");
+      } else {
+        creditCard["cc-exp"] = "";
+      }
+    }
+  }
+
+  static #computeCCNameFields(creditCard) {
+    if (!("cc-given-name" in creditCard)) {
+      const nameParts = FormAutofillNameUtils.splitName(creditCard["cc-name"]);
+      creditCard["cc-given-name"] = nameParts.given;
+      creditCard["cc-additional-name"] = nameParts.middle;
+      creditCard["cc-family-name"] = nameParts.family;
+    }
+  }
+
+  static #computeCCTypeField(creditCard) {
+    const type = CreditCard.getType(creditCard["cc-number"]);
+    if (type) {
+      creditCard["cc-type"] = type;
+    }
+  }
+
+  /**
+   * Normalizes credit card fields by removing derived fields from the CreditCard, leaving the basic fields.
+   *
+   * @param {object} creditCard The credit card object
+   */
   static normalizeFields(creditCard) {
     this.#normalizeCCNameFields(creditCard);
     this.#normalizeCCNumberFields(creditCard);

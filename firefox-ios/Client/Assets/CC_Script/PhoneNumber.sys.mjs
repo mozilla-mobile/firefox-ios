@@ -140,6 +140,28 @@ export var PhoneNumber = (function (dataBase) {
     }
   }
 
+  // Given a telephone country code, optionally prefixed with +, return an
+  // array of two-character country codes that use that telephone country
+  // code. For example, '+590' returns ["GP", "BL", "MF"].
+  function FindCountriesForCountryCode(countryCode) {
+    if (countryCode[0] === "+") {
+      countryCode = countryCode.substring(1);
+    }
+
+    let entry = dataBase[countryCode];
+    if (entry) {
+      if (Array.isArray(entry)) {
+        return entry.map(i => i.substr(2, 2));
+      }
+
+      if (typeof entry == "string") {
+        return [entry.substr(2, 2)];
+      }
+    }
+
+    return [];
+  }
+
   // Format a national number for a given region. The boolean flag "intl"
   // indicates whether we want the national or international format.
   function FormatNumber(regionMetaData, number, intl) {
@@ -470,5 +492,6 @@ export var PhoneNumber = (function (dataBase) {
     IsValid: IsValidNumber,
     Parse: ParseNumber,
     FindMetaDataForRegion,
+    FindCountriesForCountryCode,
   };
 })(PHONE_NUMBER_META_DATA);

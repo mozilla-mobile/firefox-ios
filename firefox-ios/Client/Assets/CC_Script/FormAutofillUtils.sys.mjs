@@ -204,6 +204,24 @@ FormAutofillUtils = {
     );
   },
 
+  isValidSection(fieldDetails) {
+    // If one of the fields has the autocomplete reason, the section is valid,
+    // except for email fields since those are often login forms.
+    // Bug 2008553 - should find a way to display an email dropdown if this
+    // isn't a login form.
+    if (
+      fieldDetails.some(
+        f => f.reason == "autocomplete" && f.fieldName != "email"
+      )
+    ) {
+      return true;
+    }
+
+    // Otherwise, there must be a minimum number of fields.
+    const fields = new Set(fieldDetails.map(f => f.fieldName));
+    return fields.size >= this.AUTOFILL_FIELDS_THRESHOLD;
+  },
+
   queryEligibleElements(element, includeIframe = false) {
     const types = includeIframe
       ? [...ELIGIBLE_ELEMENT_TYPES, "iframe"]
@@ -782,9 +800,14 @@ FormAutofillUtils = {
     return null;
   },
 
-  findSelectOption(selectEl, record, fieldName) {
+  findSelectOption(selectEl, record, fieldName, value) {
     if (this.isAddressField(fieldName)) {
-      return this.findAddressSelectOption(selectEl.options, record, fieldName);
+      return this.findAddressSelectOption(
+        selectEl.options,
+        record,
+        fieldName,
+        value || record[fieldName]
+      );
     }
     if (this.isCreditCardField(fieldName)) {
       return this.findCreditCardSelectOption(selectEl, record, fieldName);
@@ -854,6 +877,53 @@ FormAutofillUtils = {
   },
 
   /**
+   * Attempts to find the full sub-region name from an abbreviated / ISO code,
+   * using the address metadata for the specified country.
+   *
+   * @param   {string} abbreviatedValue A short sub-region code (e.g. "B").
+   * @param   {string} country The country code (e.g. "AR").
+   * @returns {string|null} The full sub-region name (e.g. "Buenos Aires") or null.
+   */
+  getFullSubregionName(abbreviatedValue, country) {
+    if (!abbreviatedValue || !country) {
+      return null;
+    }
+
+    const collators = this.getSearchCollators(country);
+    for (const metadata of this.getCountryAddressDataWithLocales(country)) {
+      const {
+        sub_keys: subKeys,
+        sub_names: subNames,
+        sub_lnames: subLnames,
+        sub_isoids: subIsoids,
+      } = metadata;
+      if (!subKeys) {
+        continue;
+      }
+
+      // Use latin names if available, otherwise use native names.
+      const targetNames = subLnames || subNames || subKeys;
+
+      // Check if the abbreviatedValue matches an ISO ID (e.g. "B") or a key (which may also be an ISO ID).
+      let matchIndex = subKeys.findIndex(key =>
+        this.strCompare(abbreviatedValue, key, collators)
+      );
+
+      if (matchIndex === -1 && subIsoids) {
+        matchIndex = subIsoids.findIndex(isoid =>
+          this.strCompare(abbreviatedValue, isoid, collators)
+        );
+      }
+
+      if (matchIndex !== -1 && targetNames.length > matchIndex) {
+        // Return the full or latin name from the targetNames list at the matching index.
+        return targetNames[matchIndex];
+      }
+    }
+    return null;
+  },
+
+  /**
    * Find the option element from select element.
    * 1. Try to find the locale using the country from address.
    * 2. First pass try to find exact match.
@@ -863,16 +933,13 @@ FormAutofillUtils = {
    * @param   {Array<{text: string, value: string}>} options
    * @param   {object} address
    * @param   {string} fieldName
+   * @param   {string} value
    * @returns {DOMElement}
    */
-  findAddressSelectOption(options, address, fieldName) {
-    if (options.length > 512) {
+  findAddressSelectOption(options, address, fieldName, value) {
+    if (!value || options.length > 512) {
       // Allow enough space for all countries (roughly 300 distinct values) and all
       // timezones (roughly 400 distinct values), plus some extra wiggle room.
-      return null;
-    }
-    let value = address[fieldName];
-    if (!value) {
       return null;
     }
 
@@ -942,6 +1009,7 @@ FormAutofillUtils = {
         }
         break;
       }
+      case "tel-country-code":
       case "country": {
         if (this.getCountryAddressData(value)) {
           for (const option of options) {
@@ -950,6 +1018,20 @@ FormAutofillUtils = {
               this.identifyCountryCode(option.value, value)
             ) {
               return option;
+            }
+          }
+
+          // If the country name was not found, look for an option that
+          // matches the telephone country code next.
+          const countryCode = address["tel-country-code"];
+          if (fieldName == "tel-country-code" && countryCode) {
+            for (const option of options) {
+              if (
+                option.text.includes(countryCode) ||
+                option.value.includes(countryCode)
+              ) {
+                return option;
+              }
             }
           }
         }
@@ -983,7 +1065,12 @@ FormAutofillUtils = {
       menuitem,
     }));
 
-    return this.findAddressSelectOption(options, address, fieldName)?.menuitem;
+    return this.findAddressSelectOption(
+      options,
+      address,
+      fieldName,
+      address[fieldName]
+    )?.menuitem;
   },
 
   findCreditCardSelectOption(selectEl, creditCard, fieldName) {
@@ -1258,7 +1345,8 @@ FormAutofillUtils = {
       ? this.findAddressSelectOption(
           addressLevel1Options,
           record,
-          "address-level1"
+          "address-level1",
+          record["address-level1"]
         )?.value
       : record["address-level1"];
 
