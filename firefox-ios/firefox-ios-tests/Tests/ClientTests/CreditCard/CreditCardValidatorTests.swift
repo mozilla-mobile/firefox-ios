@@ -52,7 +52,7 @@ class CreditCardValidatorTests: XCTestCase {
         XCTAssertEqual(result, .discover)
     }
 
-    func testCardTypeForMIR() {
+    func testCardTypeForMir() {
         let result = creditCardValidator.cardTypeFor("2200123456789010")
         XCTAssertEqual(result, .mir)
     }
@@ -96,7 +96,7 @@ class CreditCardValidatorTests: XCTestCase {
         XCTAssert(result)
     }
 
-    func testCardNumberIsValidForJcb() {
+    func testCardNumberIsValidForJCB() {
         let result = creditCardValidator.isCardNumberValidFor(card: "1800351313100010001")
         XCTAssert(result)
     }
