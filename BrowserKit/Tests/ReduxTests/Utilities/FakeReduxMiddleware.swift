@@ -8,10 +8,12 @@ import Foundation
 
 @MainActor
 class FakeReduxMiddleware {
+    var generateInitialCountValue: (() -> Int)?
+
     lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
         switch action.actionType {
         case FakeReduxActionType.requestInitialValue:
-            let initialValue = self.generateInitialValue()
+            let initialValue = self.generateInitialCountValue?() ?? 0
             let action = FakeReduxAction(counterValue: initialValue,
                                          windowUUID: windowUUID,
                                          actionType: FakeReduxActionType.initialValueLoaded)
@@ -44,9 +46,5 @@ class FakeReduxMiddleware {
 
     private func decreaseCounter(currentValue: Int) -> Int {
         return currentValue - 1
-    }
-
-    private func generateInitialValue() -> Int {
-        return Int.random(in: 1...9)
     }
 }
