@@ -35,6 +35,16 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
         featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
     }
 
+    /// Determines the onboarding variant based on feature flags.
+    ///
+    /// Priority order (if multiple flags are enabled):
+    /// 1. Japan configuration (highest priority)
+    /// 2. Brand refresh configuration
+    /// 3. Modern onboarding
+    /// 4. Legacy onboarding (lowest priority)
+    ///
+    /// Note: If both `shouldUseJapanConfiguration` and `shouldUseBrandRefreshConfiguration`
+    /// are enabled, Japan configuration takes precedence.
     var onboardingVariant: OnboardingVariant {
         if isModernOnboardingEnabled && shouldUseJapanConfiguration {
             return .japan

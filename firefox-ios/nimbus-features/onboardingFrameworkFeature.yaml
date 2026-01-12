@@ -45,7 +45,7 @@ features:
         value:
           enable-modern-ui: true
           should-use-japan-configuration: false
-          should-use-brand-refresh-configuration: true
+          should-use-brand-refresh-configuration: false
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
