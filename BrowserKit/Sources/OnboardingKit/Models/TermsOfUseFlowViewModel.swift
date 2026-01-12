@@ -4,35 +4,35 @@
 
 import SwiftUI
 
-public final class TosFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
+public final class TermsOfUseFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     public let configuration: ViewModel
-    public let onTermsOfServiceTap: () -> Void
+    public let onTermsOfUseTap: () -> Void
     public let onPrivacyNoticeTap: () -> Void
     public let onManageSettingsTap: () -> Void
     public let onComplete: () -> Void
 
     public init(
         configuration: ViewModel,
-        onTermsOfServiceTap: @escaping () -> Void,
+        onTermsOfUseTap: @escaping () -> Void,
         onPrivacyNoticeTap: @escaping () -> Void,
         onManageSettingsTap: @escaping () -> Void = {},
         onComplete: @escaping () -> Void
     ) {
         self.configuration = configuration
-        self.onTermsOfServiceTap = onTermsOfServiceTap
+        self.onTermsOfUseTap = onTermsOfUseTap
         self.onPrivacyNoticeTap = onPrivacyNoticeTap
         self.onManageSettingsTap = onManageSettingsTap
         self.onComplete = onComplete
     }
 
     public func handleEmbededLinkAction(
-        action: TosAction
+        action: TermsOfUseAction
     ) {
         switch action {
         case .accept:
             onComplete()
         case .openTermsOfService:
-            onTermsOfServiceTap()
+            onTermsOfUseTap()
         case .openPrivacyNotice:
             onPrivacyNoticeTap()
         case .openManageSettings:

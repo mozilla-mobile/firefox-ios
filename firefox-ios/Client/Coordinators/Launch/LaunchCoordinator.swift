@@ -73,9 +73,9 @@ final class LaunchCoordinator: BaseCoordinator,
     ) {
         TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
 
-        let viewModel = TosFlowViewModel(
+        let viewModel = TermsOfUseFlowViewModel(
             configuration: TermsOfServiceManager.brandRefreshTermsOfUseConfiguration,
-            onTermsOfServiceTap: { [weak self] in
+            onTermsOfUseTap: { [weak self] in
                 guard let self = self else { return }
                 TermsOfServiceTelemetry().termsOfServiceLinkTapped()
                 presentLink(with: URL(string: Links.termsOfService))
@@ -116,7 +116,7 @@ final class LaunchCoordinator: BaseCoordinator,
             }
         )
 
-        let view = TermsOfServiceView(
+        let view = TermsOfUseView(
             viewModel: viewModel,
             windowUUID: windowUUID,
             themeManager: themeManager

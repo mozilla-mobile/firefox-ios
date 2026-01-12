@@ -6,15 +6,15 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @StateObject private var viewModel: TosFlowViewModel<ViewModel>
+public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: View {
+    @StateObject private var viewModel: TermsOfUseFlowViewModel<ViewModel>
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
     public init(
-        viewModel: TosFlowViewModel<ViewModel>,
+        viewModel: TermsOfUseFlowViewModel<ViewModel>,
         windowUUID: WindowUUID,
         themeManager: ThemeManager
     ) {
@@ -28,16 +28,16 @@ public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: Vi
     public var body: some View {
         Group {
             if horizontalSizeClass == .regular {
-                termsOfServiceViewRegular
+                termsOfUseViewRegular
             } else {
-                termsOfServiceViewCompact
+                termsOfUseViewCompact
             }
         }
     }
 
     // MARK: - Regular Layout
-    private var termsOfServiceViewRegular: some View {
-        TermsOfServiceRegularView(
+    private var termsOfUseViewRegular: some View {
+        TermsOfUseRegularView(
             viewModel: viewModel,
             windowUUID: windowUUID,
             themeManager: themeManager
@@ -45,8 +45,8 @@ public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: Vi
     }
 
     // MARK: - Compact Layout
-    private var termsOfServiceViewCompact: some View {
-        TermsOfServiceCompactView(
+    private var termsOfUseViewCompact: some View {
+        TermsOfUseCompactView(
             viewModel: viewModel,
             windowUUID: windowUUID,
             themeManager: themeManager
