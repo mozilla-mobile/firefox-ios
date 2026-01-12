@@ -46,7 +46,8 @@ final class ShareTelemetry {
         gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.Share.deeplinkOpenUrlStartupTime,
                                              timerId: openURLTimerId)
         time = CACurrentMediaTime() - time
-        logger.log("Startup time handling deeplink took \"\(time)\" seconds", level: .debug, category: .lifecycle)
+        logger.log("Startup time handling deeplink took \"\(time)\" seconds", level: .info, category: .lifecycle)
+        NSLog("FF: Startup time deeplink: \(time) seconds")
     }
 
     func cancelOpenURLTimeRecord() {

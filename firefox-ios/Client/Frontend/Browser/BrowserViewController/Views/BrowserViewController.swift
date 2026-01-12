@@ -1482,19 +1482,19 @@ class BrowserViewController: UIViewController,
 
         // Enqueues the actions only if the opposite action where not signaled, this happen when the app
         // handles a deeplink when was already opened
-        if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
-                ensureMainThread { [weak self] in
-                    self?.tabManager.restoreTabs()
-                }
-            }
-        } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
-                ensureMainThread { [weak self] in
-                    self?.tabManager.restoreTabs()
-                }
-            }
-        }
+//        if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
+//            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
+//                ensureMainThread { [weak self] in
+//                    self?.tabManager.restoreTabs()
+//                }
+//            }
+//        } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
+//            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
+//                ensureMainThread { [weak self] in
+//                    self?.tabManager.restoreTabs()
+//                }
+//            }
+//        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -1502,9 +1502,9 @@ class BrowserViewController: UIViewController,
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-        if !isDeeplinkOptimizationRefactorEnabled {
-            tabManager.restoreTabs()
-        }
+//        if !isDeeplinkOptimizationRefactorEnabled {
+        tabManager.restoreTabs()
+//        }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         updateToolbarStateForTraitCollection(traitCollection, shouldUpdateBlurViews: !isToolbarTranslucencyEnabled)
