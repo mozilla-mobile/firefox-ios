@@ -12,6 +12,12 @@ import Common
 public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     typealias SubscriptionType = SubscriptionWrapper<State>
 
+    private let logger: Logger
+
+    private var reducer: Reducer<State>
+    private var middlewares: [Middleware<State>]
+    private var subscriptions: Set<SubscriptionType> = []
+
     public var state: State {
         didSet {
             // Remove dead subscribers first to avoid modifying set during iteration
@@ -24,14 +30,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
             }
         }
     }
-
-    private var reducer: Reducer<State>
-    private var middlewares: [Middleware<State>]
-    private var subscriptions: Set<SubscriptionType> = []
-    private var actionRunning = false
-    private let logger: Logger
-    private var actionQueue: [Action] = []
-    private var isProcessingActions = false
 
     @MainActor
     public init(state: State,
@@ -74,18 +72,8 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     public func dispatch(_ action: Action) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
-        actionQueue.append(action)
-        processQueuedActions()
-    }
 
-    private func processQueuedActions() {
-        guard !isProcessingActions else { return }
-        isProcessingActions = true
-        while !actionQueue.isEmpty {
-            let action = actionQueue.removeFirst()
-            executeAction(action)
-        }
-        isProcessingActions = false
+        executeAction(action)
     }
 
     private func executeAction(_ action: Action) {
