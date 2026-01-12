@@ -353,8 +353,6 @@ class BrowserCoordinator: BaseCoordinator,
             switch routeAction {
             case .closePrivateTabs:
                 handleClosePrivateTabsWidgetAction()
-            case .showQRCode:
-                return
             case .showIntroOnboarding:
                 showIntroOnboarding()
             }
