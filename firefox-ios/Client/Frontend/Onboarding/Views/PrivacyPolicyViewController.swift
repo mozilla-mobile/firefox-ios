@@ -12,11 +12,11 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     var timer: Timer?
-    
+
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
-    
+
     init(
         url: URL,
         windowUUID: WindowUUID,
@@ -27,26 +27,21 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        
+
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        timer?.invalidate()
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
-    
+
     func setupView() {
         let config = WKWebViewConfiguration()
         config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
@@ -54,10 +49,10 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
-        
+
         view.backgroundColor = .systemBackground
         view.addSubview(webView)
-        
+
         NSLayoutConstraint.activate([
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -65,7 +60,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
+
     // MARK: - Theming
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -75,49 +70,46 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
             navigationItem.rightBarButtonItem?.tintColor = theme.colors.actionPrimary
         }
     }
-    
+
     func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
-    
-    func showErrorAlert() {
-        let alert = UIAlertController(
-            title: "Ошибка",
-            message: "Нет интернет соединения",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "ОК", style: .default))
-        self.present(alert, animated: true)
-    }
 }
 
 extension PrivacyPolicyViewController: WKNavigationDelegate {
-    func webView(
-        _ webView: WKWebView,
-        didFailProvisionalNavigation navigation: WKNavigation?,
-        withError error: any Error
-    ) {
-        let error = error as NSError
-        if error.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
-            ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
-        }
-        stopTimer()
-    }
-    
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 6.0, repeats: false) { [weak self] _ in
+            guard let self else { return }
             Task { @MainActor in
-                self.showErrorAlert()
+                if webView.isLoading {
+                    ErrorPageHelper(certStore: nil).loadPage(
+                        NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet),
+                        forUrl: self.url,
+                        inWebView: webView
+                    )
+                    self.stopTimer()
+                }
             }
-        })
+        }
     }
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
+        let nsError = error as NSError
+
+        if nsError.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue ||
+            nsError.code == NSURLErrorNotConnectedToInternet {
+            ErrorPageHelper(certStore: nil).loadPage(error as NSError, forUrl: url, inWebView: webView)
+        }
+
         stopTimer()
     }
-    
+
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        stopTimer()
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         stopTimer()
     }
 }
