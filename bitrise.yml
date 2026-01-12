@@ -1642,9 +1642,7 @@ workflows:
         - channel: "#mobile-alerts-sandbox"
         - title: ":white_check_mark: Firefox iOS Unit Tests"
         - title_on_error: ":x: Firefox iOS Unit Tests"
-        - title_link: "$BITRISE_BUILD_URL"
         - footer: Created by Mobile Test Engineering
-        - footer_icon: :testops-notify:
         - fields:
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
         - message: |
