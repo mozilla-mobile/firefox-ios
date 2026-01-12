@@ -148,6 +148,11 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
         if type == "clearAccessoryView" {
             tab?.webView?.accessoryView.reloadViewFor(.standard)
         }
+        let scriptEvaluator = WebKitPasswordGeneratorScriptEvaluator(webView: message.frameInfo.webView)
+        let frameContext = PasswordGeneratorFrameContext(origin: message.frameInfo.webView?.url?.origin,
+                                                         host: message.frameInfo.securityOrigin.host,
+                                                         scriptEvaluator: scriptEvaluator,
+                                                         frameInfo: message.frameInfo)
 
         if type == "generatePassword",
             let tab = self.tab,
@@ -156,7 +161,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
             let userDefaults = UserDefaults.standard
             let showPasswordGeneratorClosure = {
                 let newAction = GeneralBrowserAction(
-                    frame: message.frameInfo,
+                    frameContext: frameContext,
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
 
@@ -388,9 +393,13 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
     @MainActor
     private func clearStoredPasswordAfterGeneration(origin: String) {
         if let windowUUID = self.tab?.windowUUID {
+            let frameContext = PasswordGeneratorFrameContext(origin: origin,
+                                                             host: nil,
+                                                             scriptEvaluator: nil,
+                                                             frameInfo: nil)
             let action = PasswordGeneratorAction(windowUUID: windowUUID,
                                                  actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
-                                                 origin: origin)
+                                                 frameContext: frameContext)
             store.dispatch(action)
         }
     }

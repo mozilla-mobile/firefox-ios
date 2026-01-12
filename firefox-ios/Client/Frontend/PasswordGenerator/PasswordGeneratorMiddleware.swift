@@ -82,7 +82,7 @@ final class PasswordGeneratorMiddleware {
 
     private func generateNewPassword(frameContext: PasswordGeneratorFrameContext,
                                      completion: @MainActor @escaping (String) -> Void) {
-        let originRules = PasswordGeneratorMiddleware.getPasswordRule(for: frameContext.host)
+        let originRules = PasswordGeneratorMiddleware.getPasswordRule(for: frameContext.host ?? "")
         let jsFunctionCall = "window.__firefox__.logins.generatePassword(\(originRules ?? "" ))"
         frameContext.scriptEvaluator?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall,
                                                                               frameContext.frameInfo) { (result, error) in

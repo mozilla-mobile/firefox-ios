@@ -62,13 +62,15 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
-        let URL = URL(string: "https://foo.com")!
-        let webView = MockWKWebView(URL)
-        let frame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
+        let mockEvaluator = MockPasswordGeneratorScriptEvaluator()
+        let frameContext = PasswordGeneratorFrameContext(origin: "https://foo.com",
+                                                         host: "foo.com",
+                                                         scriptEvaluator: mockEvaluator,
+                                                         frameInfo: nil)
 
         XCTAssertNil(initialState.displayView)
 
-        let action = GeneralBrowserAction(frame: frame,
+        let action = GeneralBrowserAction(frameContext: frameContext,
                                           windowUUID: .XCTestDefaultUUID,
                                           actionType: GeneralBrowserActionType.showPasswordGenerator)
         let newState = reducer(initialState, action)
@@ -77,7 +79,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         BrowserViewControllerState.DisplayType.passwordGenerator
 
         XCTAssertEqual(displayView, desiredDisplayView)
-        XCTAssertNotNil(newState.frame)
+        XCTAssertNotNil(newState.frameContext)
     }
 
     func testReloadWebsiteAction() {

@@ -7,11 +7,16 @@ import Redux
 import Common
 import WebKit
 
-struct PasswordGeneratorFrameContext {
+struct PasswordGeneratorFrameContext: Equatable {
     let origin: String?
-    let host: String
+    let host: String?
     let scriptEvaluator: PasswordGeneratorScriptEvaluator?
     let frameInfo: WKFrameInfo?
+
+    static func == (lhs: PasswordGeneratorFrameContext, rhs: PasswordGeneratorFrameContext) -> Bool {
+        lhs.origin == rhs.origin &&
+        lhs.host == rhs.host
+    }
 }
 
 struct PasswordGeneratorAction: Action {
@@ -24,18 +29,14 @@ struct PasswordGeneratorAction: Action {
     // Used in some reducers
     let password: String?
 
-    let origin: String?
-
     init(windowUUID: WindowUUID,
          actionType: any ActionType,
          password: String? = nil,
-         frameContext: PasswordGeneratorFrameContext? = nil,
-         origin: String? = nil) {
+         frameContext: PasswordGeneratorFrameContext? = nil) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.password = password
         self.frameContext = frameContext
-        self.origin = origin
     }
 }
 
