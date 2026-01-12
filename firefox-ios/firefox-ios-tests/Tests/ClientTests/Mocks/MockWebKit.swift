@@ -20,7 +20,7 @@ class MockWKFrameInfo: WKFrameInfo {
     let overridenWebView: WKWebView?
     let overridenTargetFrame: Bool
 
-    init(webView: WKWebViewMock? = nil, frameURL: URL? = nil, isMainFrame: Bool? = false) {
+    init(webView: MockWKWebView? = nil, frameURL: URL? = nil, isMainFrame: Bool? = false) {
         overridenSecurityOrigin = WKSecurityOriginMock.new(frameURL)
         overridenWebView = webView
         overridenTargetFrame = isMainFrame ?? false
@@ -65,8 +65,8 @@ class WKSecurityOriginMock: WKSecurityOrigin {
     override var port: Int { overridenPort }
 }
 
-// MARK: WKWebViewMock
-class WKWebViewMock: WKWebView {
+// MARK: MockWKWebView
+class MockWKWebView: WKWebView {
     var overridenURL: URL
     var didLoad: (() -> Void)?
 

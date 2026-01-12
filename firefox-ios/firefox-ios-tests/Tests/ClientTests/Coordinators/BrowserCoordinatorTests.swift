@@ -537,11 +537,12 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testShowPasswordGenerator_presentsPasswordGeneratorBottomSheet() {
         let subject = createSubject()
         let mockTab = Tab(profile: profile, windowUUID: windowUUID)
-        let URL = URL(string: "https://foo.com")!
-        let webView = WKWebViewMock(URL)
-        let frame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
-
-        subject.showPasswordGenerator(tab: mockTab, frame: frame)
+        let mockEvaluator = MockPasswordGeneratorScriptEvaluator()
+        let frameContext = PasswordGeneratorFrameContext(origin: "https://foo.com",
+                                                         host: "foo.com",
+                                                         scriptEvaluator: mockEvaluator,
+                                                         frameInfo: nil)
+        subject.showPasswordGenerator(tab: mockTab, frameContext: frameContext)
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
