@@ -1585,7 +1585,7 @@ extension String {
             value: "Reload",
             comment: "On error page, this is the text on a button that will try to load the page again.")
         public static let GoBackButton = MZLocalizedString(
-            key: "NativeErrorPage.GoBackButton.v135",
+            key: "NativeErrorPage.GoBackButton.v149",
             tableName: "NativeErrorPage",
             value: "Go Back (Recommended)",
             comment: "On error page, this is the text on a button that will go back to the previous page. Recommended action.")
@@ -1615,62 +1615,62 @@ extension String {
         }
         public struct BadCertDomain {
             public static let AdvancedButton = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedButton.v135",
+                key: "NativeErrorPage.BadCertDomain.AdvancedButton.v149",
                 tableName: "NativeErrorPage",
                 value: "Advanced",
                 comment: "On certificate error page, this is the text on a button that will show advanced information about the certificate error.")
             public static let AdvancedInfo = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedInfo.v135",
+                key: "NativeErrorPage.BadCertDomain.AdvancedInfo.v149",
                 tableName: "NativeErrorPage",
                 value: "%1$@ doesn’t trust this site because the certificate found isn’t valid for %2$@.",
                 comment: "On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL.")
             public static let AdvancedSecurityInfo = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v135",
+                key: "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149",
                 tableName: "NativeErrorPage",
                 value: "This site doesn’t allow connections that aren’t secure.",
                 comment: "On certificate error page, this is the security information shown in the advanced section.")
             public static let AdvancedWarning1 = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedWarning1.v135",
+                key: "NativeErrorPage.BadCertDomain.AdvancedWarning1.v149",
                 tableName: "NativeErrorPage",
                 value: "You might need to sign in to your WiFi network, or check your VPN settings.",
                 comment: "On certificate error page, this is the first warning message in the advanced section suggesting possible solutions.")
             public static let AdvancedWarning2 = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.AdvancedWarning2.v135",
+                key: "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149",
                 tableName: "NativeErrorPage",
                 value: "If you’re on a corporate network, your support team might have more info.",
                 comment: "On certificate error page, this is the second warning message in the advanced section for users on corporate networks.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.Description.v135",
+                key: "NativeErrorPage.BadCertDomain.Description.v149",
                 tableName: "NativeErrorPage",
                 value: "Someone pretending to be the site could try to steal your personal info. Your connection settings could also be set up incorrectly.",
                 comment: "On certificate error page, this is the description explaining the security risk.")
             public static let HideAdvancedButton = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.HideAdvancedButton.v135",
+                key: "NativeErrorPage.BadCertDomain.HideAdvancedButton.v149",
                 tableName: "NativeErrorPage",
                 value: "Hide advanced",
                 comment: "On certificate error page, this is the text on a button that will hide the advanced information section.")
             public static let LearnMoreLink = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.LearnMoreLink.v135",
+                key: "NativeErrorPage.BadCertDomain.LearnMoreLink.v149",
                 tableName: "NativeErrorPage",
                 value: "Learn more",
                 comment: "On certificate error page, this is a link to learn more about certificate errors.")
             public static let ProceedButton = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.ProceedButton.v135",
+                key: "NativeErrorPage.BadCertDomain.ProceedButton.v149",
                 tableName: "NativeErrorPage",
                 value: "Proceed to %@ (Risky)",
                 comment: "On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action.")
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.TitleLabel.v135",
+                key: "NativeErrorPage.BadCertDomain.TitleLabel.v149",
                 tableName: "NativeErrorPage",
                 value: "Be careful. Something doesn’t look right.",
                 comment: "On certificate error page, this is the title warning the user about a potential security issue.")
             public static let ViewCertificateLink = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.ViewCertificateLink.v135",
+                key: "NativeErrorPage.BadCertDomain.ViewCertificateLink.v149",
                 tableName: "NativeErrorPage",
                 value: "View the site’s certificate",
                 comment: "On certificate error page, this is a link that will show the site’s certificate details.")
             public static let ErrorCodeLabel = MZLocalizedString(
-                key: "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v135",
+                key: "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149",
                 tableName: "NativeErrorPage",
                 value: "Error code: %@",
                 comment: "On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN).")
