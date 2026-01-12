@@ -39,6 +39,7 @@ class NativeErrorPageHelper {
                 )
             }
 
+            // TODO: FXIOS-14569
             // Check if this is the specific SSL_ERROR_BAD_CERT_DOMAIN error (-9843)
             if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
                let certErrorCode = underlyingError.userInfo["_kCFStreamErrorCodeKey"] as? Int,
@@ -49,7 +50,6 @@ class NativeErrorPageHelper {
                 let certificateInfo = String(format: String.NativeErrorPage.BadCertDomain.AdvancedInfo,
                                              appName,
                                              url.absoluteString)
-                // Combine security info and certificate info with newline
                 let advancedInfo = "\(securityInfo)\n\(certificateInfo)"
                 let warningText = "\(String.NativeErrorPage.BadCertDomain.AdvancedWarning1)\n\(String.NativeErrorPage.BadCertDomain.AdvancedWarning2)"
 
