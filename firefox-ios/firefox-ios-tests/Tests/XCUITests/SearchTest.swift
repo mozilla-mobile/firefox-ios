@@ -773,6 +773,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // MARK: - Pre Search (Trending Searches + Recent Searches)
+    // https://mozilla.testrail.io/index.php?/cases/view/3296489
     func testTrendingSearches_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
 
@@ -795,6 +796,7 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertAddressBarContains(value: "google")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3296488
     func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
 
@@ -817,6 +819,7 @@ class SearchTests: FeatureFlaggedTestBase {
         searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3296487
     func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         app.launch()
@@ -839,6 +842,7 @@ class SearchTests: FeatureFlaggedTestBase {
         searchScreen.assertTrendingSearchesSectionTitleDoesNotExist(with: "Google")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3296486
     func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
 
@@ -863,6 +867,7 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertAddressBarContains(value: "google")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3296485
     func testRecentSearches_recentSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
 
@@ -884,6 +889,7 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertAddressBarContains(value: "google")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3296482
     func testRecentSearchesWithNoRecentSearches_recentSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
 
@@ -897,6 +903,7 @@ class SearchTests: FeatureFlaggedTestBase {
         searchScreen.assertRecentSearchesSectionTitleDoesNotExist()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3296480
     func testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
 
@@ -921,6 +928,7 @@ class SearchTests: FeatureFlaggedTestBase {
         searchScreen.assertRecentSearchesSectionTitle()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3296479
     func testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
         app.launch()
@@ -944,6 +952,7 @@ class SearchTests: FeatureFlaggedTestBase {
         searchScreen.assertRecentSearchesSectionTitleDoesNotExist()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3296478
     func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
