@@ -194,21 +194,8 @@ class MainMenuViewController: UIViewController,
         hintView.removeFromSuperview()
     }
 
-    deinit {
-        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
-        guard Thread.isMainThread else {
-            logger.log(
-                "MainMenuViewController was not deallocated on the main thread. Redux was not cleaned up.",
-                level: .fatal,
-                category: .lifecycle
-            )
-            assertionFailure("The view controller was not deallocated on the main thread. Redux was not cleaned up.")
-            return
-        }
-
-        MainActor.assumeIsolated {
-            unsubscribeFromRedux()
-        }
+    isolated deinit {
+        unsubscribeFromRedux()
     }
 
     private func updateBlur() {

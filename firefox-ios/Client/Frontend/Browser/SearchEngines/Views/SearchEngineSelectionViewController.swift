@@ -49,16 +49,8 @@ class SearchEngineSelectionViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
-        guard Thread.isMainThread else {
-            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
-            return
-        }
-
-        MainActor.assumeIsolated {
-            unsubscribeFromRedux()
-        }
+    isolated deinit {
+        unsubscribeFromRedux()
     }
 
     override func viewDidLoad() {

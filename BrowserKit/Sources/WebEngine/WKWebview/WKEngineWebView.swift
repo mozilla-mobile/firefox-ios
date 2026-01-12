@@ -179,16 +179,8 @@ final class DefaultWKEngineWebView: WKWebView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
-        guard Thread.isMainThread else {
-            assertionFailure("DevicePickerViewController was not deallocated on the main thread. Observer was not removed")
-            return
-        }
-
-        MainActor.assumeIsolated {
-            close()
-        }
+    isolated deinit {
+        close()
     }
 
     func close() {
