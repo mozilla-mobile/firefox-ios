@@ -18,6 +18,9 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     private var middlewares: [Middleware<State>]
     private var subscriptions: Set<SubscriptionType> = []
 
+    private var actionQueue: [Action] = []
+    private var isProcessingActions = false
+
     public var state: State {
         didSet {
             // Remove dead subscribers first to avoid modifying set during iteration
@@ -73,7 +76,20 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
 
-        executeAction(action)
+        // We queue and process actions to ensure each single action completely passes through reducers and middlewares
+        // before the next action fires.
+        actionQueue.append(action)
+        processQueuedActions()
+    }
+
+    private func processQueuedActions() {
+        guard !isProcessingActions else { return }
+        isProcessingActions = true
+        while !actionQueue.isEmpty {
+            let action = actionQueue.removeFirst()
+            executeAction(action)
+        }
+        isProcessingActions = false
     }
 
     private func executeAction(_ action: Action) {
