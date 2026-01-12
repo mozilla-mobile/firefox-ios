@@ -47,7 +47,7 @@ final class LaunchCoordinator: BaseCoordinator,
         switch launchType {
         case .termsOfService(let manager):
             if manager.isModernOnboardingEnabled {
-                presentModernTermsOfService(with: manager, isFullScreen: isFullScreen)
+                presentModernTermsOfUse(with: manager, isFullScreen: isFullScreen)
             } else {
                 presentTermsOfService(with: manager, isFullScreen: isFullScreen)
             }
@@ -66,8 +66,8 @@ final class LaunchCoordinator: BaseCoordinator,
         }
     }
 
-    // MARK: - Terms of Service
-    private func presentModernTermsOfService(
+    // MARK: - Terms of Use
+    private func presentModernTermsOfUse(
         with manager: TermsOfServiceManager,
         isFullScreen: Bool
     ) {
