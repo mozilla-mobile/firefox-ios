@@ -34,11 +34,6 @@ class TabManagerImplementation: NSObject,
     var notificationCenter: NotificationProtocol
     private(set) var tabs: [Tab]
 
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
-    }
-
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
