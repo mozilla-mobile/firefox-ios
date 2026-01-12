@@ -198,12 +198,12 @@ open class FxAccountManager: @unchecked Sendable {
     /// Try to get an OAuth access token.
     public func getAccessToken(
         scope: String,
-        ttl: UInt64? = nil,
+        useCache: Bool = true,
         completionHandler: @MainActor @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {
-                let tokenInfo = try self.requireAccount().getAccessToken(scope: scope, ttl: ttl)
+                let tokenInfo = try self.requireAccount().getAccessToken(scope: scope, useCache: useCache)
                 DispatchQueue.main.async { completionHandler(.success(tokenInfo)) }
             } catch {
                 DispatchQueue.main.async { completionHandler(.failure(error)) }
