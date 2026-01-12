@@ -1639,8 +1639,7 @@ workflows:
     - slack@4.2.1:
         is_always_run: true
         inputs:
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - channel: "#cso-slack-test"
+        - webhook_url: "$SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX"
         - message: |
             :white_check_mark: :firefox: :testops-apple: Firefox iOS Unit Tests completed across multiple iOS versions:
             • iPhone 17 (iOS 26.1)
