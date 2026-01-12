@@ -44,7 +44,6 @@ for lang in $LOCALES; do
         --devices "iPhone 17" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
         --xcodebuild_formatter xcbeautify \
-        --only_testing "L10nSnapshotTests/L10nSuite1SnapshotTests/testSettings" \
         $EXTRA_FAST_LANE_ARGS
     echo "Fastlane exited with code: $?"
 done
