@@ -1,14 +1,18 @@
 settings:
   language_mapping:
-    en_GB: en-GB
-    fr: fr-FR
-    it: it
-    nl: nl-NL
+    ar: ar
+    da: da
     de: de-DE
-    es: es-ES
-    es_MX: es-MX
     en_AU: en-AU
     en_CA: en-CA
+    en_GB: en-GB
+    en_US: en-US
+    es: es-ES
+    es_MX: es-MX
+    fr: fr-FR
+    it: it
+    ja: ja
+    nl: nl-NL
 
 filters:
 
