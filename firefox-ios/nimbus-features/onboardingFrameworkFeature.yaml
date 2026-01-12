@@ -43,7 +43,7 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enable-modern-ui: true
+          enable-modern-ui: false
           should-use-japan-configuration: false
           should-use-brand-refresh-configuration: false
           conditions:
