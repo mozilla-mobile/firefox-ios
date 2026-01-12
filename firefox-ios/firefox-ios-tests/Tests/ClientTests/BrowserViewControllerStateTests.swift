@@ -300,11 +300,11 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
     // MARK: StartAtHomeAction
 
-    func test_shouldStartAtHome_withStartAtHomeAction_returnsTrue() {
+    func test_hasStartedAtHome_withStartAtHomeAction_returnsTrue() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        XCTAssertFalse(initialState.shouldStartAtHome)
+        XCTAssertFalse(initialState.hasStartedAtHome)
 
         let action = StartAtHomeAction(
             shouldStartAtHome: true,
@@ -313,14 +313,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
         let newState = reducer(initialState, action)
 
-        XCTAssertTrue(newState.shouldStartAtHome)
+        XCTAssertTrue(newState.hasStartedAtHome)
     }
 
-    func test_shouldStartAtHome_withStartAtHomeAction_returnsFalse() {
+    func test_hasStartedAtHome_withStartAtHomeAction_returnsFalse() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        XCTAssertFalse(initialState.shouldStartAtHome)
+        XCTAssertFalse(initialState.hasStartedAtHome)
 
         let action = StartAtHomeAction(
             windowUUID: .XCTestDefaultUUID,
@@ -328,7 +328,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
         let newState = reducer(initialState, action)
 
-        XCTAssertFalse(newState.shouldStartAtHome)
+        XCTAssertFalse(newState.hasStartedAtHome)
     }
 
     // MARK: - Summarizer

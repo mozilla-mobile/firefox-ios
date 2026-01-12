@@ -5,7 +5,7 @@
 import Shared
 import Common
 
-class StartAtHomeHelper: FeatureFlaggable {
+final class StartAtHomeHelper: FeatureFlaggable {
     private struct Constants {
         static let hoursToTriggerStartAtHome = 4
         static let secondsToTriggerStartAtHome = 5

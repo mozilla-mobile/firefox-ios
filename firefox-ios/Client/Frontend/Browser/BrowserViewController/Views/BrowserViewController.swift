@@ -1032,11 +1032,6 @@ class BrowserViewController: UIViewController,
         store.dispatch(startAtHomeAction)
     }
 
-    private func dismissModalsIfStartAtHome() {
-        guard browserViewControllerState?.shouldStartAtHome ?? false, presentedViewController != nil else { return }
-        dismissVC()
-    }
-
     // MARK: - Redux
 
     func subscribeToRedux() {
@@ -1096,7 +1091,6 @@ class BrowserViewController: UIViewController,
             }
         }
 
-        dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
         dismissToolbarCFRs(with: windowUUID)
     }

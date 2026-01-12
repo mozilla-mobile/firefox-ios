@@ -26,6 +26,12 @@ final class StartAtHomeMiddleware {
     lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case StartAtHomeActionType.didBrowserBecomeActive:
+            let bvcState = state.screenState(
+                BrowserViewControllerState.self,
+                for: .browserViewController,
+                window: action.windowUUID
+            )
+            guard bvcState?.hasStartedAtHome == false else { return }
             let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
             store.dispatch(
                 StartAtHomeAction(
