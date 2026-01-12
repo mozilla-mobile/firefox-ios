@@ -1641,18 +1641,16 @@ workflows:
         inputs:
         - webhook_url: "$SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX"
         - message: |
-            :white_check_mark: :firefox: :testops-apple: Firefox iOS Unit Tests completed across multiple iOS versions:
+            :white_check_mark: :firefox: :testops-apple: Firefox iOS Unit Tests passed on the following iOS versions:
             • iPhone 17 (iOS 26.1)
             • iPhone 16 (iOS 18.6) 
             • iPhone 15 (iOS 17.5)
-            
             Build: $BITRISE_BUILD_URL
         - message_on_error: |
             :x: :firefox: :testops-apple: Firefox iOS Unit Tests failed on one or more iOS versions:
             • iPhone 17 (iOS 26.1)
             • iPhone 16 (iOS 18.6)
             • iPhone 15 (iOS 17.5)
-            
             Build: $BITRISE_BUILD_URL
 
   Firefox_Unit_Tests:
