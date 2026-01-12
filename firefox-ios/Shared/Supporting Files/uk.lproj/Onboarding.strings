@@ -79,6 +79,108 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Пропустити";
 
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "Автоматично";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "Продовжити";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Темна";
+
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Оберіть улюблену тему або дозвольте %@ адаптуватися до теми вашого пристрою – вибір за вами.";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "Світла";
+
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "Вибір теми";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "Продовжити";
+
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "Почніть вводити текст, щоб побачити пошукові пропозиції, ваші найпопулярніші сайти, закладки, історію та пошукові системи – все в одному місці.";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Налаштування панелі адреси";
+
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Повідомте маркетингових партнерів %2$@ про те, як ви відкрили для себе %1$@ і про те, що ви ним користуєтесь. Ці дані ніколи не продаються.";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Як ми використовуємо дані";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "Не зараз";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Допоможіть нам створити кращий інтернет";
+
+/* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Ознайомтеся з функціями приватності у %@ і безпечно надсилайте вкладки між своїми пристроями.";
+
+/* Button to skip the notification card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "Не зараз";
+
+/* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Сповіщення допомагають вам бути в безпеці з %@";
+
+/* Button to turn on notifications in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Увімкнути сповіщення";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Миттєво отримуйте закладки, паролі й інші дані на будь-якому пристрої. Ваші особисті дані залишаються в безпеці завдяки шифруванню.";
+
+/* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "Почати синхронізацію";
+
+/* Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "Не зараз";
+
+/* Title for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "Миттєво продовжуйте з того місця, де зупинилися";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Погодитись і продовжити";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Швидкий, безпечний і не продає ваші дані. Покращений досвід користування інтернетом.";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Керувати параметрами";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "Щоб вдосконалити браузер, %1$@ надсилає дані діагностики та взаємодії до %2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ піклується про вашу приватність. Читайте %2$@ для докладних відомостей.";
+
+/* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "Положення про приватність";
+
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "Продовжуючи, ви приймаєте %@";
+
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "Умови користування %@";
+
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Приготуйтеся до свободи";
+
+/* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Зробити типовим браузером";
+
+/* Description for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Ми захищаємо ваші дані й автоматично блокуємо стеження компаній за вашими діями.";
+
+/* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "Не зараз";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Попрощайтеся з моторошними елементами стеження";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Автоматично";
 

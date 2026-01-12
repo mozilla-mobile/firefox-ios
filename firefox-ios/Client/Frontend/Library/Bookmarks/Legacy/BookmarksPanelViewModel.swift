@@ -118,7 +118,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
     func createPinUnpinAction(
         for site: Site,
         isPinned: Bool,
-        successHandler: @MainActor @escaping @Sendable (String) -> Void
+        successHandler: @MainActor @escaping (String) -> Void
     ) -> PhotonRowActions {
         return SingleActionViewModel(
             title: isPinned ? .Bookmarks.Menu.RemoveFromShortcutsTitle : .AddToShortcutsActionTitle,

@@ -172,6 +172,15 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "Жекелік ескертуі";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Көбірек білу";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ жаңартулар арасында мүмкіндіктерді, өнімділікті және тұрақтылықты жақсартады. Өзгерістер қашықтан іске асырылады.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Қашықтан жақсартуларға рұқсат беру";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Бетті және адрестік жолақты жасыру үшін айналдырыңыз";
 
@@ -235,11 +244,20 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Көбірек білу";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Көбірек білу";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Мүмкіндіктер мен идеяларды барлығына шығарар алдында қолданып көріңіз.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ мүмкіндіктерді сынау үшін пайдаланушыларды кездейсоқ таңдайды, бұл барлығы үшін сапаны жақсартуға көмектеседі.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Зерттеулерді орнату және жөнелту";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Мүмкіндіктерді зерттеулерге рұқсат беру";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Беттерді қорытындылауға қол жеткізуді қамтамасыз етеді.";

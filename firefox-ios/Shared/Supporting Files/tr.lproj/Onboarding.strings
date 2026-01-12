@@ -145,6 +145,12 @@
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Kabul et ve devam et";
 
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Devam et";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Hızlı, güvenli ve sizi satmayan tarayıcı. İnternette gezinmek artık daha keyifli.";
+
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Ayarları yönet";
 
@@ -163,6 +169,9 @@
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ Kullanım Koşulları";
 
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Özgürleşmeye hazır olun";
+
 /* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Saptanmış tarayıcı yap";
 
@@ -174,6 +183,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Ürpertici takip kodlarına veda edin";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Bağlantıları açarken gizliliğinizi koruyun";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Otomatik";

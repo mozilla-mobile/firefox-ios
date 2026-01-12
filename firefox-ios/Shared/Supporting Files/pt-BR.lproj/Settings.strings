@@ -175,6 +175,9 @@
 /* Title for a link that explains what Mozilla means by Rollouts */
 "Settings.Rollouts.Link.v148" = "Saiba mais";
 
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "O %@ melhora funcionalidades, desempenho e estabilidade a cada atualização. Alterações são aplicadas remotamente.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
 "Settings.Rollouts.Title.v148" = "Permitir melhorias remotas";
 
@@ -247,8 +250,14 @@
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Experimentar recursos e ideias antes de ser liberados para todos.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "O %@ seleciona usuários aleatoriamente para testar funcionalidades, o que melhora a qualidade para todos.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Instalar e executar estudos";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Permitir estudos de funcionalidades";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Fornece acesso para resumir páginas.";

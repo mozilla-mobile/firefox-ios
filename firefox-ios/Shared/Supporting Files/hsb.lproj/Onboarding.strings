@@ -145,6 +145,9 @@
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Přizwolić a pokročować";
 
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Dale";
+
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Spěšny, wěsty a njebudźe was wupředawać. Přehladowanje je prosće lěpše.";
 
@@ -180,6 +183,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Rozžohnujće z hrózbnymi přesćěhowakami";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Wočińće swoje wotkazy ze zatwarjenej priwatnosću";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Awtomatiski";

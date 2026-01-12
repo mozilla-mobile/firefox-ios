@@ -319,7 +319,7 @@ final class DefaultBrowserUtilityTests: XCTestCase {
         setToDefault: Bool,
         isFirstRun: Bool
     ) {
-        let locale = MockLocaleProvider(localeRegionCode: region)
+        let locale = MockLocaleProvider(regionCode: region)
         application.mockDefaultApplicationValue = setToDefault
 
         setupSubject(with: locale)
