@@ -789,8 +789,10 @@ class BrowserViewController: UIViewController,
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
             // TODO: FXIOS-14536 Can we figure out a way not to do these calls? Sometimes they are needed
             // for specific layout calls.
-            $0.setNeedsLayout()
-            $0.layoutIfNeeded()
+            if !isToolbarTranslucencyRefactorEnabled {
+                $0.setNeedsLayout()
+                $0.layoutIfNeeded()
+            }
         }
     }
 
@@ -1623,10 +1625,12 @@ class BrowserViewController: UIViewController,
         checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
-        if !isToolbarTranslucencyRefactorEnabled {
-            // when toolbars are hidden/shown the mask on the content view that is used for
-            // toolbar translucency needs to be updated
-            // This also required for iPad rotation
+        // when toolbars are hidden/shown the mask on the content view that is used for
+        // toolbar translucency needs to be updated
+        // This also required for iPad rotation
+        if isToolbarTranslucencyRefactorEnabled {
+            addOrUpdateMaskViewIfNeeded()
+        } else {
             updateToolbarDisplay()
         }
 
@@ -2112,6 +2116,9 @@ class BrowserViewController: UIViewController,
         microsurvey.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(microsurvey)
 
+        // We opted out from using bottomContentStackView, because the microsurvey
+        // should be associated with the view underneath as if one view.
+        // Hence, no border should exist between microsurvey and below view.
         if isBottomSearchBar {
             overKeyboardContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
@@ -2123,15 +2130,7 @@ class BrowserViewController: UIViewController,
         }
 
         microsurvey.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-
-        updateBarBordersForMicrosurvey()
         updateViewConstraints()
-    }
-
-    // Update border to hide when microsurvey is shown so that
-    // it appears to belong the app and harder to spoof
-    private func updateBarBordersForMicrosurvey() {
-        guard !shouldUseiPadSetup() else { return }
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
@@ -2153,7 +2152,6 @@ class BrowserViewController: UIViewController,
         }
 
         self.microsurvey = nil
-        updateBarBordersForMicrosurvey()
         updateViewConstraints()
     }
 
@@ -3684,9 +3682,10 @@ class BrowserViewController: UIViewController,
     private func handleFoundAddressFieldValue(type: FormAutofillPayloadType?,
                                               tabWebView: TabWebView,
                                               webView: WKWebView,
-                                              frame: WKFrameInfo?) {
+                                              frame: WKFrameInfo?,
+                                              localeProvider: LocaleProvider = SystemLocaleProvider()) {
         guard addressAutofillSettingsUserDefaultsIsEnabled(),
-              AddressLocaleFeatureValidator.isValidRegion(),
+              AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode()),
               // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
               let type = type else { return }
 
@@ -5050,7 +5049,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateToolbarDisplay()
+        if isToolbarTranslucencyRefactorEnabled {
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
+        } else {
+            updateToolbarDisplay()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {

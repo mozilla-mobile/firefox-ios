@@ -53,7 +53,7 @@
 "Menu.ViewDekstopSiteAction.Title" = "Verze stránky pro počítač";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "Mobilní verze stránky";
+"Menu.ViewMobileSiteAction.Title" = "Verze stránky pro mobily";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "SettingsMenu.OpenHomePageAction.Title" = "Domovská stránka";

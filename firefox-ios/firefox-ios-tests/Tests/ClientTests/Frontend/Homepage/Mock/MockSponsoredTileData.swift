@@ -12,45 +12,44 @@ struct MockSponsoredTileData {
         case testError
     }
 
-    static let emptySuccessData: [Contile] = []
+    static let emptySuccessData: [UnifiedTile] = []
 
-    static var defaultSuccessData: [Contile] {
+    static var defaultSuccessData: [UnifiedTile] {
         return [
-            Contile(id: 1,
-                    name: "Firefox Sponsored Tile",
-                    url: "https://firefox.com",
-                    clickUrl: "https://firefox.com/click",
-                    imageUrl: "https://test.com/image1.jpg",
-                    imageSize: 200,
-                    impressionUrl: "https://test.com",
-                    position: 1),
-            Contile(id: 2,
-                    name: "Mozilla Sponsored Tile",
-                    url: "https://mozilla.com",
-                    clickUrl: "https://mozilla.com/click",
-                    imageUrl: "https://test.com/image2.jpg",
-                    imageSize: 200,
-                    impressionUrl: "https://example.com",
-                    position: 2),
-            Contile(id: 3,
-                    name: "Focus Sponsored Tile",
-                    url: "https://support.mozilla.org/en-US/kb/firefox-focus-ios",
-                    clickUrl: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
-                    imageUrl: "https://test.com/image3.jpg",
-                    imageSize: 200,
-                    impressionUrl: "https://another-example.com",
-                    position: 3)]
-    }
-
-    static func convert(contiles: [Contile]) -> [UnifiedTile] {
-        return contiles.enumerated().map { (index, contile) in
-            UnifiedTile(format: "tile",
-                        url: contile.url,
-                        callbacks: UnifiedTileCallback(click: contile.clickUrl, impression: contile.impressionUrl),
-                        imageUrl: contile.imageUrl,
-                        name: contile.name,
-                        blockKey: "Block_key_\(index)")
-        }
+            UnifiedTile(
+                format: "",
+                url: "https://firefox.com",
+                callbacks: UnifiedTileCallback(
+                    click: "https://firefox.com/click",
+                    impression: "https://test.com"
+                ),
+                imageUrl: "https://test.com/image1.jpg",
+                name: "Firefox Sponsored Tile",
+                blockKey: "Block_key_1"
+            ),
+            UnifiedTile(
+                format: "",
+                url: "https://mozilla.com",
+                callbacks: UnifiedTileCallback(
+                    click: "https://mozilla.com/click",
+                    impression: "https://example.com"
+                ),
+                imageUrl: "https://test.com/image2.jpg",
+                name: "Mozilla Sponsored Tile",
+                blockKey: "Block_key_2"
+            ),
+            UnifiedTile(
+                format: "",
+                url: "https://support.mozilla.org/en-US/kb/firefox-focus-ios",
+                callbacks: UnifiedTileCallback(
+                    click: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
+                    impression: "https://another-example.com"
+                ),
+                imageUrl: "https://test.com/image3.jpg",
+                name: "Focus Sponsored Tile",
+                blockKey: "Block_key_3"
+            )
+        ]
     }
 
     static let pinnedTitle = "A pinned title %@"
@@ -58,25 +57,31 @@ struct MockSponsoredTileData {
     static let title = "A title %@"
     static let url = "https://www.aurl%@.com"
 
-    static var pinnedDuplicateTile: Contile {
-        return Contile(id: 1,
-                       name: String(format: MockSponsoredTileData.pinnedTitle, "0"),
-                       url: String(format: MockSponsoredTileData.pinnedURL, "0"),
-                       clickUrl: "https://www.test.com/click",
-                       imageUrl: "https://test.com/image0.jpg",
-                       imageSize: 200,
-                       impressionUrl: "https://test.com",
-                       position: 1)
+    static var pinnedDuplicateTile: UnifiedTile {
+        return UnifiedTile(
+            format: "",
+            url: String(format: MockSponsoredTileData.pinnedURL, "0"),
+            callbacks: UnifiedTileCallback(
+                click: "https://www.test.com/click",
+                impression: "https://test.com"
+            ),
+            imageUrl: "https://test.com/image0.jpg",
+            name: String(format: MockSponsoredTileData.pinnedTitle, "0"),
+            blockKey: "Block_key_3"
+        )
     }
 
-    static var duplicateTile: Contile {
-        return Contile(id: 1,
-                       name: String(format: MockSponsoredTileData.title, "0"),
-                       url: String(format: MockSponsoredTileData.url, "0"),
-                       clickUrl: "https://www.test.com/click",
-                       imageUrl: "https://test.com/image0.jpg",
-                       imageSize: 200,
-                       impressionUrl: "https://test.com",
-                       position: 1)
+    static var duplicateTile: UnifiedTile {
+        return UnifiedTile(
+            format: "",
+            url: String(format: MockSponsoredTileData.url, "0"),
+            callbacks: UnifiedTileCallback(
+                click: "https://www.test.com/click",
+                impression: "https://test.com"
+            ),
+            imageUrl: "https://test.com/image0.jpg",
+            name: String(format: MockSponsoredTileData.title, "0"),
+            blockKey: "Block_key_3"
+        )
     }
 }

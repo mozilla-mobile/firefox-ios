@@ -62,6 +62,14 @@ func registerMiscellanousNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
+    map.addScreenState(PrintPage) { screenState in
+        if #available(iOS 26, *) {
+            screenState.tap(app.navigationBars.buttons["Close"], to: BrowserTab)
+        } else {
+            screenState.tap(app.navigationBars.buttons["Cancel"], to: BrowserTab)
+        }
+    }
+
     map.addScreenState(RequestDesktopSite) { _ in }
 
     map.addScreenState(RequestMobileSite) { _ in }

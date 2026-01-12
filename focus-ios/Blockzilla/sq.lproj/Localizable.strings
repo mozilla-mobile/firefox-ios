@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Kjo na ndihmon të diagnostikojmë dhe ndreqim probleme me shfletuesin.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ do të përmirësojë veçori, funksionim dhe qëndrueshmëri mes përditësimesh. Ndryshimet aplikohen që së largëti.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ do të dërgojë te motori juaj i kërkimeve atë çka shtypni te shtylla e adresave.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla rreket të grumbullojë vetëm sa na duhen për të ofruar dhe përmirësuar %@ për këdo.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla rreket të grumbullojë vetëm sa na duhen për të ofruar dhe përmirësuar %@ për këdo.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@-i mund të instalojë dhe zhvillojë studime herë pas here.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ përzgjedh kuturu përdorues për të testuar veçori, të cilat përmirësojnë cilësinë për gjithkënd.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Të përgjithshme";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Shfaq ndihmëza skene kreu";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Lejo Përmirësime Së Largëti";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Studime";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Lejo Studim Veçorish";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Përdorni Touch ID që të shkyçni aplikacionin";

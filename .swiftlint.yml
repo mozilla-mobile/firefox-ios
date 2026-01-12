@@ -160,6 +160,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - focus-ios-tests/tools/Localizations
   # Application-services specific
   - MozillaRustComponents/
+  - LocalizationTools
+  - firefoxios-l10n
 
 included:
   - /Users/vagrant/git

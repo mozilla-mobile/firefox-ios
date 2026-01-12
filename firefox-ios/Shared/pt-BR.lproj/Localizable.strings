@@ -41,7 +41,7 @@
 "ActivityStream.TopSites.RowSettingFooter" = "Definir linhas";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
-"Add Tab" = "Adicionar aba aos favoritos";
+"Add Tab" = "Adicionar aba";
 
 /* Name for button adding current article to reading list in reader mode */
 "Add to Reading List" = "Adicionar à lista de leitura";
@@ -56,7 +56,7 @@
 "AddPass.Error.Message" = "Ocorreu um erro ao adicionar a senha no Passbook. Tente novamente mais tarde.";
 
 /* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Title" = "Falha ao adicionar senha";
+"AddPass.Error.Title" = "Falha ao adicionar passe";
 
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Endereço e pesquisa";

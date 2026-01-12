@@ -154,6 +154,9 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "സ്വകാര്യത അറിയിപ്പു്";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "കൂടുതലറിയുക";
+
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "തനതുതിരച്ചിൽയന്ത്രം";
 
@@ -198,6 +201,9 @@
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "കൂടുതല്‍ അറിയുക";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "കൂടുതലറിയുക";
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "എല്ലാവൎക്കും കിട്ടുന്നതിനു് മുമ്പെ പുതിയ സവിശേഷകൾ ഉപയോഗിച്ചു നോക്കുക.";

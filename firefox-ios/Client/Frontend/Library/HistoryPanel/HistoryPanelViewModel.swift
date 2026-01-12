@@ -127,7 +127,7 @@ final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
         }
     }
 
-    func performSearch(term: String, completion: @MainActor @Sendable @escaping (Bool) -> Void) {
+    func performSearch(term: String, completion: @MainActor @escaping (Bool) -> Void) {
         isFetchInProgress = true
 
         profile.places.interruptReader()

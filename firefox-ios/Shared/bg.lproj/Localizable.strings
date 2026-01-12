@@ -665,7 +665,7 @@
 "Logins.WelcomeView.Title2" = "Автоматично попълване на пароли за Firefox";
 
 /* Title of the big blue button to enable AutoFill */
-"Logins.WelcomeView.TurnOnAutoFill" = "Включете AutoFill";
+"Logins.WelcomeView.TurnOnAutoFill" = "Включване на автоматично попълване";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Отказ";
@@ -692,7 +692,7 @@
 "LoginsList.SelectPassword.Title" = "Изберете парола за попълване";
 
 /* Title for the list of logins */
-"LoginsList.Title" = "ЗАПАЗЕНИ Влизания";
+"LoginsList.Title" = "Запазени влизания";
 
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Изглежда, че Firefox се е сринал преди. Искате ли разделите да бъдат възстановени?";
@@ -719,7 +719,7 @@
 "Menu.AddToReadingList.Confirm" = "Добавено към списъка за четене";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
-"Menu.AddToShortcuts.v99" = "Добавяне на пряк път";
+"Menu.AddToShortcuts.v99" = "Добавяне към преките пътища";
 
 /* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Отметки";

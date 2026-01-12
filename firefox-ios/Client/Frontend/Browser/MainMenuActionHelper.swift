@@ -123,7 +123,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     func getToolbarActions(navigationController: UINavigationController?,
-                           completion: @escaping @Sendable @MainActor ([[PhotonRowActions]]) -> Void) {
+                           completion: @escaping @MainActor ([[PhotonRowActions]]) -> Void) {
         var actions: [[PhotonRowActions]] = []
         let firstMiscSection = getFirstMiscSection(navigationController)
 
@@ -163,7 +163,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
-    private func updateData(dataLoadingCompletion: (@MainActor @Sendable () -> Void)? = nil) {
+    private func updateData(dataLoadingCompletion: (@MainActor () -> Void)? = nil) {
         var url: String?
 
         if let tabUrl = tabUrl, tabUrl.isReaderModeURL, let tabUrlDecoded = tabUrl.decodeReaderModeURL {
@@ -541,7 +541,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func syncMenuButton() -> PhotonRowActions? {
-        let action: @Sendable @MainActor (SingleActionViewModel) -> Void = { [weak self] action in
+        let action: @MainActor (SingleActionViewModel) -> Void = { [weak self] action in
             let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
             let parameters = FxASignInViewParameters(launchParameters: fxaParams,
                                                      flowType: .emailLoginFlow,

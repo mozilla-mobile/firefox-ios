@@ -58,7 +58,9 @@ public extension Login {
             usernameField: "",
             passwordField: "",
             password: credentials.password ?? "",
-            username: credentials.user ?? ""
+            username: credentials.user ?? "",
+            timeOfLastBreach: 0,
+            timeLastBreachAlertDismissed: 0
         )
     }
 
@@ -112,7 +114,9 @@ public extension Login {
             usernameField: dict["usernameField"] as? String ?? "",
             passwordField: dict["passwordField"] as? String ?? "",
             password: dict["password"] as? String ?? "",
-            username: dict["username"] as? String ?? ""
+            username: dict["username"] as? String ?? "",
+            timeOfLastBreach: (dict["timeOfLastBreach"] as? Int64) ?? 0,
+            timeLastBreachAlertDismissed: (dict["timeLastBreachAlertDismissed"] as? Int64) ?? 0
         )
     }
 }

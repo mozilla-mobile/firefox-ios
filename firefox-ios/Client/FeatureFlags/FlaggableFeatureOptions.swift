@@ -14,3 +14,9 @@ enum StartAtHomeSetting: String, FlaggableFeatureOptions {
     case always
     case disabled
 }
+
+enum TermsOfUseContentOption: String, FlaggableFeatureOptions {
+    case value0 = "value-0"
+    case value1 = "value-1"
+    case value2 = "value-2"
+}

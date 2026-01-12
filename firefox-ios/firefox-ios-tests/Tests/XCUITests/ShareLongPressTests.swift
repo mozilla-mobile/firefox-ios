@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 class ShareLongPressTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864317
@@ -119,6 +120,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     func testReaderModeShareNormalWebsiteReminders() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         if #available(iOS 17, *) {
             longPressReadingListAndReachShareOptions(option: "Reminders")
@@ -136,6 +138,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     func testReaderModeShareNormalWebsiteSendLinkDevice() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         longPressReadingListAndReachShareOptions(option: "Send Link to Device")
         // If not signed in, the browser prompts you to sign in
@@ -151,6 +154,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     func testReaderModeShareNormalWebsiteCopy() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         longPressReadingListAndReachShareOptions(option: "Copy")
         app.buttons["Done"].waitAndTap()

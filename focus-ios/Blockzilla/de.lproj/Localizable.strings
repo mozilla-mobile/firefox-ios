@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Dies hilft uns beim Diagnostizieren und Beheben von Problemen mit dem Browser.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ wird Funktionen, Leistung und Stabilität zwischen den Updates verbessern. Änderungen werden per Fernzugriff angewendet.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ übermittelt Ihre Eingaben in die Adressleiste an Ihre Suchmaschine.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla ist bestrebt, nur die Informationen zu sammeln, mit denen wir %@ anbieten und für alle Nutzer verbessern können.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla ist bestrebt, nur die Informationen zu sammeln, mit denen wir %@ anbieten und für alle Nutzer verbessern können.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ darf von Zeit zu Zeit Studien installieren und laufen lassen.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ wählt zufällig Benutzer aus, um Funktionen zu testen, was die Qualität für alle verbessert.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Allgemein";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Tipps im Startbildschirm anzeigen";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Verbesserungen per Fernzugriff zulassen";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Studien";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Funktionsstudien erlauben";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Touch ID zum Entsperren der App verwenden";

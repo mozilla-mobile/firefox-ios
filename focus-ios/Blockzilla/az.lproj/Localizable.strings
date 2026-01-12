@@ -205,7 +205,7 @@
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ ünvan sətrində yazdıqlarınızı axtarış mühərriyinizə göndərəcək.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla ancaq %@ səyyahını hamı üçün yaxşılaşdırmağa lazım olan məlumatları yığır.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */

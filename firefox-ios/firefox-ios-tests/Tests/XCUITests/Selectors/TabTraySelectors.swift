@@ -72,7 +72,7 @@ struct TabTraySelectors: TabTraySelectorsSet {
     }
 
     func tabCellWithIndex(_ index: Int, _ urlLabel: String, _ selectedTab: String) -> Selector {
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_\(index)"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_\(index)"
         let expectedLabel = "\(urlLabel). \(selectedTab)"
 
         return Selector.cellById(
@@ -83,7 +83,7 @@ struct TabTraySelectors: TabTraySelectorsSet {
     }
 
     func tabCellAtIndex(index: Int) -> Selector {
-        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_\(index)"
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_\(index)"
 
         return Selector.cellById(
             identifier,

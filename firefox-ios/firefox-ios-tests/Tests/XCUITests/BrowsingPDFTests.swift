@@ -100,19 +100,27 @@ class BrowsingPDFTests: BaseTestCase {
         // Long press on a link on the pdf and check the options shown
         longPressOnPdfLink()
 
-        waitForElementsToExist(
-            [
-                app.staticTexts[PDF_website["longUrlValue"]!],
-                app.buttons["Open"],
-                app.buttons["Add to Reading List"]
-            ]
-        )
-        if #available(iOS 16, *) {
+        if #unavailable(iOS 26) {
+            waitForElementsToExist(
+                [
+                    app.staticTexts[PDF_website["longUrlValue"]!],
+                    app.buttons["Open"],
+                    app.buttons["Add to Reading List"]
+                ]
+            )
+        }
+        if #available(iOS 26, *) {
+            mozWaitForElementToExist(app.menuItems["Copy"])
+        } else if #available(iOS 16, *) {
             mozWaitForElementToExist(app.buttons["Copy Link"])
         } else {
             mozWaitForElementToExist(app.buttons["Copy"])
         }
-        mozWaitForElementToExist(app.buttons["Share…"])
+        if #available(iOS 26, *) {
+            mozWaitForElementToExist(app.menuItems["Share…"])
+        } else {
+            mozWaitForElementToExist(app.buttons["Share…"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307119
@@ -122,14 +130,16 @@ class BrowsingPDFTests: BaseTestCase {
         // Long press on a link on the pdf and check the options shown
         longPressOnPdfLink()
 
-        mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
-        app.buttons["Add to Reading List"].waitAndTap()
-        navigator.nowAt(BrowserTab)
+        if #unavailable(iOS 26) {
+            mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
+            app.buttons["Add to Reading List"].waitAndTap()
+            navigator.nowAt(BrowserTab)
 
-        // Go to reading list and check that the item is there
-        navigator.goto(LibraryPanel_ReadingList)
-        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts[PDF_website["longUrlValue"]!]
-        mozWaitForElementToExist(savedToReadingList)
+            // Go to reading list and check that the item is there
+            navigator.goto(LibraryPanel_ReadingList)
+            let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts[PDF_website["longUrlValue"]!]
+            mozWaitForElementToExist(savedToReadingList)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307120

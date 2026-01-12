@@ -175,6 +175,9 @@
 /* Title for a link that explains what Mozilla means by Rollouts */
 "Settings.Rollouts.Link.v148" = "Daha fazla bilgi alın";
 
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ her güncellemede özellikleri, performansı ve kararlılığı iyileştirecektir. Değişiklikler uzaktan uygulanır.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
 "Settings.Rollouts.Title.v148" = "Uzaktan iyileştirmelere izin ver";
 

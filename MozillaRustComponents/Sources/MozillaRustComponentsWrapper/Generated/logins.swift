@@ -945,13 +945,44 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     
     func hasLoginsByBaseDomain(baseDomain: String) throws  -> Bool
     
+    /**
+     * Determines whether a breach alert has been dismissed, based on the breach date and the alert dismissal timestamp.
+     */
+    func isBreachAlertDismissed(id: String) throws  -> Bool
+    
     func isEmpty() throws  -> Bool
     
+    /**
+     * Determines whether a login’s password is potentially breached, based on the breach date and the time of the last password change.
+     */
+    func isPotentiallyBreached(id: String) throws  -> Bool
+    
     func list() throws  -> [Login]
+    
+    /**
+     * Stores a known breach date for a login.
+     * In Firefox Desktop this is updated once per session from Remote Settings.
+     */
+    func recordBreach(id: String, timestamp: Int64) throws 
+    
+    /**
+     * Stores that the user dismissed the breach alert for a login.
+     */
+    func recordBreachAlertDismissal(id: String) throws 
+    
+    /**
+     * Stores the time at which the user dismissed the breach alert for a login.
+     */
+    func recordBreachAlertDismissalTime(id: String, timestamp: Int64) throws 
     
     func registerWithSyncManager() 
     
     func reset() throws 
+    
+    /**
+     * Removes all recorded breaches for all logins (i.e. sets time_of_last_breach to null).
+     */
+    func resetAllBreaches() throws 
     
     /**
      * Run maintenance on the DB
@@ -1179,9 +1210,31 @@ open func hasLoginsByBaseDomain(baseDomain: String)throws  -> Bool  {
 })
 }
     
+    /**
+     * Determines whether a breach alert has been dismissed, based on the breach date and the alert dismissal timestamp.
+     */
+open func isBreachAlertDismissed(id: String)throws  -> Bool  {
+    return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_is_breach_alert_dismissed(self.uniffiClonePointer(),
+        FfiConverterString.lower(id),$0
+    )
+})
+}
+    
 open func isEmpty()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_is_empty(self.uniffiClonePointer(),$0
+    )
+})
+}
+    
+    /**
+     * Determines whether a login’s password is potentially breached, based on the breach date and the time of the last password change.
+     */
+open func isPotentiallyBreached(id: String)throws  -> Bool  {
+    return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_is_potentially_breached(self.uniffiClonePointer(),
+        FfiConverterString.lower(id),$0
     )
 })
 }
@@ -1193,6 +1246,39 @@ open func list()throws  -> [Login]  {
 })
 }
     
+    /**
+     * Stores a known breach date for a login.
+     * In Firefox Desktop this is updated once per session from Remote Settings.
+     */
+open func recordBreach(id: String, timestamp: Int64)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_record_breach(self.uniffiClonePointer(),
+        FfiConverterString.lower(id),
+        FfiConverterInt64.lower(timestamp),$0
+    )
+}
+}
+    
+    /**
+     * Stores that the user dismissed the breach alert for a login.
+     */
+open func recordBreachAlertDismissal(id: String)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_record_breach_alert_dismissal(self.uniffiClonePointer(),
+        FfiConverterString.lower(id),$0
+    )
+}
+}
+    
+    /**
+     * Stores the time at which the user dismissed the breach alert for a login.
+     */
+open func recordBreachAlertDismissalTime(id: String, timestamp: Int64)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_record_breach_alert_dismissal_time(self.uniffiClonePointer(),
+        FfiConverterString.lower(id),
+        FfiConverterInt64.lower(timestamp),$0
+    )
+}
+}
+    
 open func registerWithSyncManager()  {try! rustCall() {
     uniffi_logins_fn_method_loginstore_register_with_sync_manager(self.uniffiClonePointer(),$0
     )
@@ -1201,6 +1287,15 @@ open func registerWithSyncManager()  {try! rustCall() {
     
 open func reset()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_reset(self.uniffiClonePointer(),$0
+    )
+}
+}
+    
+    /**
+     * Removes all recorded breaches for all logins (i.e. sets time_of_last_breach to null).
+     */
+open func resetAllBreaches()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_reset_all_breaches(self.uniffiClonePointer(),$0
     )
 }
 }
@@ -1579,10 +1674,26 @@ public struct Login {
     public var passwordField: String
     public var password: String
     public var username: String
+    /**
+     * These fields can be synced from Desktop and are NOT included in LoginEntry,
+     * so update() will not modify them. Use the dedicated API methods to manipulate:
+     * record_breach(), reset_all_breaches(), is_potentially_breached(),
+     * record_breach_alert_dismissal(), record_breach_alert_dismissal_time(),
+     * and is_breach_alert_dismissed().
+     */
+    public var timeOfLastBreach: Int64?
+    public var timeLastBreachAlertDismissed: Int64?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String, password: String, username: String) {
+    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String, password: String, username: String, 
+        /**
+         * These fields can be synced from Desktop and are NOT included in LoginEntry,
+         * so update() will not modify them. Use the dedicated API methods to manipulate:
+         * record_breach(), reset_all_breaches(), is_potentially_breached(),
+         * record_breach_alert_dismissal(), record_breach_alert_dismissal_time(),
+         * and is_breach_alert_dismissed().
+         */timeOfLastBreach: Int64?, timeLastBreachAlertDismissed: Int64?) {
         self.id = id
         self.timesUsed = timesUsed
         self.timeCreated = timeCreated
@@ -1595,6 +1706,8 @@ public struct Login {
         self.passwordField = passwordField
         self.password = password
         self.username = username
+        self.timeOfLastBreach = timeOfLastBreach
+        self.timeLastBreachAlertDismissed = timeLastBreachAlertDismissed
     }
 }
 
@@ -1641,6 +1754,12 @@ extension Login: Equatable, Hashable {
         if lhs.username != rhs.username {
             return false
         }
+        if lhs.timeOfLastBreach != rhs.timeOfLastBreach {
+            return false
+        }
+        if lhs.timeLastBreachAlertDismissed != rhs.timeLastBreachAlertDismissed {
+            return false
+        }
         return true
     }
 
@@ -1657,6 +1776,8 @@ extension Login: Equatable, Hashable {
         hasher.combine(passwordField)
         hasher.combine(password)
         hasher.combine(username)
+        hasher.combine(timeOfLastBreach)
+        hasher.combine(timeLastBreachAlertDismissed)
     }
 }
 
@@ -1680,7 +1801,9 @@ public struct FfiConverterTypeLogin: FfiConverterRustBuffer {
                 usernameField: FfiConverterString.read(from: &buf), 
                 passwordField: FfiConverterString.read(from: &buf), 
                 password: FfiConverterString.read(from: &buf), 
-                username: FfiConverterString.read(from: &buf)
+                username: FfiConverterString.read(from: &buf), 
+                timeOfLastBreach: FfiConverterOptionInt64.read(from: &buf), 
+                timeLastBreachAlertDismissed: FfiConverterOptionInt64.read(from: &buf)
         )
     }
 
@@ -1697,6 +1820,8 @@ public struct FfiConverterTypeLogin: FfiConverterRustBuffer {
         FfiConverterString.write(value.passwordField, into: &buf)
         FfiConverterString.write(value.password, into: &buf)
         FfiConverterString.write(value.username, into: &buf)
+        FfiConverterOptionInt64.write(value.timeOfLastBreach, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastBreachAlertDismissed, into: &buf)
     }
 }
 
@@ -2452,6 +2577,30 @@ extension LoginsApiError: Foundation.LocalizedError {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionInt64: FfiConverterRustBuffer {
+    typealias SwiftType = Int64?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterInt64.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterInt64.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
     typealias SwiftType = String?
 
@@ -2706,7 +2855,7 @@ public func createManagedEncdec(keyManager: KeyManager) -> EncryptorDecryptor  {
  * Utility function to create a StaticKeyManager to be used for the time
  * being until support lands for [trait implementation of an UniFFI
  * interface](https://mozilla.github.io/uniffi-rs/next/proc_macro/index.html#structs-implementing-traits)
- * in UniFFI. 
+ * in UniFFI.
  */
 public func createStaticKeyManager(key: String) -> KeyManager  {
     return try!  FfiConverterTypeKeyManager_lift(try! rustCall() {
@@ -2806,16 +2955,34 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_has_logins_by_base_domain() != 20011) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_logins_checksum_method_loginstore_is_breach_alert_dismissed() != 11336) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_logins_checksum_method_loginstore_is_empty() != 27766) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_logins_checksum_method_loginstore_is_potentially_breached() != 25379) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_logins_checksum_method_loginstore_list() != 58635) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_record_breach() != 8485) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_record_breach_alert_dismissal() != 30364) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_record_breach_alert_dismissal_time() != 30091) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_register_with_sync_manager() != 7518) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_reset() != 63814) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_reset_all_breaches() != 9253) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_run_maintenance() != 64480) {

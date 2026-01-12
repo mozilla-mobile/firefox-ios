@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "ਤੁਹਾਡੇ 5 ਮੁਫ਼ਤ ਈਮੇਲ ਮਾਸਕ ਵਰਤੋਂ ਵਿੱਚ ਹਨ, ਇਸਕਰਕੇ ਅਸੀਂ ਤੁਹਾਡੇ ਲਈ ਇੱਕ ਚੁਣਿਆ ਹੈ।";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "ਤੁਸੀਂ 5 ਮੁਫ਼ਤ ਈਮੇਲ ਮਾਸਕ ਵਰਤੇ ਲਏ ਹਨ ਤਾਂ ਹੀ ਅਸੀਂ ਮੁੜ-ਵਰਤਣ ਵਾਸਤੇ ਇੱਕ ਤੁਹਾਡੇ ਲਈ ਚੁਣਿਆ ਹੈ।";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "ਈਮੇਲ ਮਾਸਕ ਇਸ ਵੇਲੇ ਮੌਜੂਦ ਨਹੀਂ ਹਨ। ਕੁਝ ਕੁ ਮਿੰਟਾਂ ਵਿਚ ਫ਼ੇਰ ਅਜ਼ਮਾ ਕੇ ਵੇਖਿਓ।";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "ਈਮੇਲ ਮਾਸਕ ਪਾਇਆ";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "ਸਪੈਮ ਤੋਂ ਆਪਣੇ ਈਮੇਲ ਨੂੰ ਸੁਰੱਖਿਅਤ ਰੱਖਣ ਵਾਸਤੇ ਆਪਣੇ ਅਸਲ ਈਮੇਲ ਨੂੰ ਲੁਕਾਓ। ਕੁਝ ਸਾਈਟਾਂ ਇਸ ਲਈ ਸਹਾਇਕ ਨਹੀਂ ਹਨ।";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "ਸਪੈਮ ਤੋਂ ਆਪਣੇ ਈਮੇਲ ਨੂੰ ਸੁਰੱਖਿਅਤ ਰੱਖਣ ਵਾਸਤੇ ਆਪਣੇ ਅਸਲ ਈਮੇਲ ਨੂੰ ਲੁਕਾਓ। ਕੁਝ ਸਾਈਟਾਂ ਈਮੇਲ ਮਾਸਕਾਂ ਸਹਾਇਕ ਨਹੀਂ ਹਨ।";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "ਹੋਰ ਜਾਣੋ";

@@ -191,15 +191,19 @@ class ReadingListTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToExist(app.tables["ReadingTable"])
         // Check that there is one item
-        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        let savedToReadingList = app.tables["ReadingTable"].staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
 
         // Mark it as read/unread
         savedToReadingList.swipeLeft()
-        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Read"])
-        app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).waitAndTap()
-        savedToReadingList.swipeLeft()
-        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
+        mozWaitForElementToExist(app.tables.buttons.staticTexts["Mark as  Read"])
+        app.tables["ReadingTable"].buttons.element(boundBy: 1).waitAndTap()
+        // iOS 26: Once we remove the item, the item is gone.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/31283
+        if #unavailable(iOS 26) {
+            savedToReadingList.swipeLeft()
+            mozWaitForElementToExist(app.tables.buttons.staticTexts["Mark as  Unread"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306998

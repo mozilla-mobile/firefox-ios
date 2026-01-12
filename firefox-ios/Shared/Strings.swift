@@ -1826,18 +1826,30 @@ extension String {
                         tableName: "Onboarding",
                         value: "Manage settings",
                         comment: "The text for the manage settings link button in the v148 brand refresh onboarding flow.")
+                    @available(*, deprecated, message: "Use AgreementButtonTitleV2 instead")
                     public static let AgreementButtonTitle = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148",
                         tableName: "Onboarding",
                         value: "Agree and continue",
                         comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
+                    public static let AgreementButtonTitleV2 = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2",
+                        tableName: "Onboarding",
+                        value: "Continue",
+                        comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
                 }
 
                 public struct Welcome {
+                    @available(*, deprecated, message: "Use TitleV2 instead")
                     public static let Title = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148",
                         tableName: "Onboarding",
                         value: "Say goodbye to creepy trackers",
+                        comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
+                    public static let TitleV2 = MZLocalizedString(
+                        key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2",
+                        tableName: "Onboarding",
+                        value: "Open your links with built-in privacy",
                         comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Welcome.Description.v148",
@@ -2469,6 +2481,24 @@ public struct TermsOfUse {
         value: "Please take a moment to review and accept. Learn more",
         comment: "Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'."
     )
+    public static let TitleValue1 = MZLocalizedString(
+        key: "TermsOfUse.TitleValue1.v147",
+        tableName: "TermsOfUse",
+        value: "Terms of Use",
+        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 1."
+    )
+    public static let TitleValue2 = MZLocalizedString(
+        key: "TermsOfUse.TitleValue2.v147",
+        tableName: "TermsOfUse",
+        value: "A note from %@",
+        comment: "Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox)."
+    )
+    public static let LearnMoreHere = MZLocalizedString(
+        key: "TermsOfUse.LearnMoreHere.v147",
+        tableName: "TermsOfUse",
+        value: "You can learn more %@.",
+        comment: "Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text."
+    )
     public static let LinkTermsOfUse = MZLocalizedString(
         key: "TermsOfUse.Link.TermsOfUse.v142",
         tableName: "TermsOfUse",
@@ -2486,6 +2516,12 @@ public struct TermsOfUse {
         tableName: "TermsOfUse",
         value: "Learn more",
         comment: "Link shown in the Terms of Use sheet to direct users to more details about the update."
+    )
+    public static let LinkHereText = MZLocalizedString(
+        key: "TermsOfUse.Link.HereText.v147",
+        tableName: "TermsOfUse",
+        value: "here",
+        comment: "Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for variants 1 and 2."
     )
     public static let AcceptButton = MZLocalizedString(
         key: "TermsOfUse.AcceptButton.v142",

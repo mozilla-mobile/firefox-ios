@@ -5,15 +5,15 @@
 import Storage
 
 extension Site {
-    /// A helper to instantiate a Site from the Storage target using the Client target `Contile` type.
-    static func createSponsoredSite(fromContile contile: Contile) -> Site {
+    /// A helper to instantiate a Site from the Storage target using the Client target `UnifiedTile` type.
+    static func createSponsoredSite(fromUnifiedTile unifiedTile: UnifiedTile) -> Site {
         let siteInfo = SponsoredSiteInfo(
-            tileId: contile.id,
-            impressionURL: contile.impressionUrl,
-            clickURL: contile.clickUrl,
-            imageURL: contile.imageUrl
+            tileId: 0, // Was used with deprecated `Contile` object, but not with Unified Ads.
+            impressionURL: unifiedTile.callbacks.impression,
+            clickURL: unifiedTile.callbacks.click,
+            imageURL: unifiedTile.imageUrl
         )
 
-        return Site.createSponsoredSite(url: contile.url, title: contile.name, siteInfo: siteInfo)
+        return Site.createSponsoredSite(url: unifiedTile.url, title: unifiedTile.name, siteInfo: siteInfo)
     }
 }

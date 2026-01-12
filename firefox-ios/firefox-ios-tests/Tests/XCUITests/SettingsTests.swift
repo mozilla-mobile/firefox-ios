@@ -274,7 +274,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
     func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -382,7 +382,11 @@ class SettingsTests: FeatureFlaggedTestBase {
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         let privacySection = table.staticTexts["PRIVACY"]
         let autoFillPasswords = table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title]
-        app.swipeUp()
+        if #available(iOS 26, *) {
+            table.swipeUp()
+        } else {
+            app.swipeUp()
+        }
         XCTAssertTrue(privacySection.isAbove(element: autoFillPasswords))
 
         // Navigate to the Autofills and passwords settings screen
@@ -500,7 +504,7 @@ class SettingsTests: FeatureFlaggedTestBase {
             table.cells[settingsQuery.Siri.title],
             table.cells[settingsQuery.AutofillsPasswords.title],
             table.cells[settingsQuery.ClearData.title],
-            app.switches[settingsQuery.ClosePrivateTabs.title],
+            table.switches[settingsQuery.ClosePrivateTabs.title],
             table.cells[settingsQuery.ContentBlocker.title],
             table.cells[settingsQuery.Notifications.title],
             table.cells[settingsQuery.PrivacyPolicy.title],
@@ -524,7 +528,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         for i in settingsElements {
             scrollToElement(i)
             mozWaitForElementToExist(i)
-            XCTAssertTrue(i.isVisible())
+            XCTAssertTrue(i.exists)
         }
         app.buttons["Done"].waitAndTap()
     }

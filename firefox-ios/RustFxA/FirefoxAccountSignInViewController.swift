@@ -302,7 +302,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
 
-    private func showFxAWebViewController(_ url: URL, completion: @escaping @MainActor @Sendable (URL) -> Void) {
+    private func showFxAWebViewController(_ url: URL, completion: @escaping @MainActor (URL) -> Void) {
         if let accountManager = profile.rustFxA.accountManager {
             let entrypoint = self.deepLinkParams.entrypoint.rawValue
             accountManager.getManageAccountURL(entrypoint: "ios_settings_\(entrypoint)") { [weak self] result in

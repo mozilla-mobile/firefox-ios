@@ -7,7 +7,7 @@ import MozillaAppServices
 import Account
 import Shared
 
-typealias RelayPopulateCompletion = @MainActor @Sendable (RelayMaskGenerationResult) -> Void
+typealias RelayPopulateCompletion = @MainActor  (RelayMaskGenerationResult) -> Void
 
 /// Describes public protocol for Relay component to track state and facilitate
 /// messaging between the BVC, keyboard accessory, and A~S Relay APIs.

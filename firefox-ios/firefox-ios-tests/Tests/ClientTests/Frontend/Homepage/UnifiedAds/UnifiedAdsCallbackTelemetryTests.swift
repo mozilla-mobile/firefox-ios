@@ -11,13 +11,13 @@ import Storage
 
 @MainActor
 final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
-    private var networking: MockContileNetworking!
+    private var networking: MockUnifiedTileNetworking!
     private var logger: MockLogger!
     private var gleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
-        networking = MockContileNetworking()
+        networking = MockUnifiedTileNetworking()
         logger = MockLogger()
         gleanWrapper = MockGleanWrapper()
     }
@@ -30,7 +30,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     }
 
     func testImpressionTelemetry_givenErrorResponse_thenFailsWithLogMessage() {
-        networking.error = UnifiedAdsProvider.Error.noDataAvailable
+        networking.error = UnifiedTileNetworkingError.dataUnavailable
         let subject = createSubject()
 
         guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
@@ -43,7 +43,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     }
 
     func testClickTelemetry_givenErrorResponse_thenFailsWithLogMessage() {
-        networking.error = UnifiedAdsProvider.Error.noDataAvailable
+        networking.error = UnifiedTileNetworkingError.dataUnavailable
         let subject = createSubject()
 
         guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
@@ -139,17 +139,17 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     // MARK: - Mock object
 
     var tileSite: Site {
-        let contile = Contile(
-            id: 0,
-            name: "Test",
+        let tile = UnifiedTile(
+            format: "",
             url: "www.test.com",
-            clickUrl: "https://www.something1.com",
+            callbacks: UnifiedTileCallback(
+                click: "https://www.something1.com",
+                impression: "https://www.something3.com"
+            ),
             imageUrl: "https://www.something2.com",
-            imageSize: 0,
-            impressionUrl: "https://www.something3.com",
-            position: 0
+            name: "Test",
+            blockKey: "Block_key_1"
         )
-
-        return Site.createSponsoredSite(fromContile: contile)
+        return Site.createSponsoredSite(fromUnifiedTile: tile)
     }
 }

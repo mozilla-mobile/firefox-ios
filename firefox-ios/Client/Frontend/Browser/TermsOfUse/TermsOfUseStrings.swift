@@ -5,10 +5,33 @@ import Common
 import Localizations
 import Shared
 
+extension TermsOfUseContentOption {
+    var headline: String {
+        switch self {
+        case .value0:
+            return TermsOfUse.Title
+        case .value1:
+            return TermsOfUse.TitleValue1
+        case .value2:
+            return String.localizedStringWithFormat(TermsOfUse.TitleValue2, AppName.shortName.rawValue)
+        }
+    }
+
+    var reviewAndAcceptText: String {
+        switch self {
+        case .value0:
+            return TermsOfUse.ReviewAndAcceptText
+        case .value1, .value2:
+            return String.localizedStringWithFormat(TermsOfUse.LearnMoreHere, TermsOfUse.LinkHereText)
+        }
+    }
+}
+
 enum TermsOfUseLinkType: CaseIterable {
     case termsOfUse
     case privacyNotice
     case learnMore
+    case here
 
     var localizedText: String {
         switch self {
@@ -18,6 +41,8 @@ enum TermsOfUseLinkType: CaseIterable {
             return TermsOfUse.LinkPrivacyNotice
         case .learnMore:
             return TermsOfUse.LinkLearnMore
+        case .here:
+            return TermsOfUse.LinkHereText
         }
     }
 
@@ -27,7 +52,7 @@ enum TermsOfUseLinkType: CaseIterable {
             return SupportUtils.URLForTermsOfUse
         case .privacyNotice:
             return SupportUtils.URLForPrivacyNotice
-        case .learnMore:
+        case .learnMore, .here:
             return SupportUtils.URLForTopic("firefox-terms-of-use-faq", useMobilePath: false)
         }
     }
@@ -38,7 +63,7 @@ enum TermsOfUseLinkType: CaseIterable {
             return .termsLinkTapped
         case .privacyNotice:
             return .privacyLinkTapped
-        case .learnMore:
+        case .learnMore, .here:
             return .learnMoreLinkTapped
         }
     }
@@ -49,26 +74,37 @@ enum TermsOfUseLinkType: CaseIterable {
 }
 
 struct TermsOfUseStrings {
-    static let titleText = TermsOfUse.Title
+    let option: TermsOfUseContentOption
 
-    static var descriptionText: String {
+    init(option: TermsOfUseContentOption = .value0) {
+        self.option = option
+    }
+
+    var titleText: String {
+        return option.headline
+    }
+
+    var descriptionText: String {
         return String.localizedStringWithFormat(TermsOfUse.Description, AppName.shortName.rawValue)
     }
 
-    static let reviewAndAcceptText = TermsOfUse.ReviewAndAcceptText
+    var reviewAndAcceptText: String {
+        return option.reviewAndAcceptText
+    }
+
     static let acceptButtonTitle = TermsOfUse.AcceptButton
     static let remindMeLaterButtonTitle = TermsOfUse.RemindMeLaterButton
     static let termsOfUseHasOpenedNotification = TermsOfUse.TermsOfUseHasOpened
 
-    static var termsOfUseInfoText: String {
+    var termsOfUseInfoText: String {
         return "\(descriptionText)\n\n\(reviewAndAcceptText)"
     }
 
-    static var linkTerms: [String] {
+    var linkTerms: [String] {
         return TermsOfUseLinkType.allCases.map { $0.localizedText }
     }
 
-    static func linkURL(for term: String) -> URL? {
+    func linkURL(for term: String) -> URL? {
         return TermsOfUseLinkType.allCases.first { $0.localizedText == term }?.url
     }
 }

@@ -31,12 +31,12 @@ workers:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
             os: linux
-            worker-type: 'images-gcp'
+            worker-type: 'images'
         misc:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
             os: linux
-            worker-type: 'b-linux-gcp'
+            worker-type: 'b-linux'
         ship-it:
             provisioner: scriptworker-k8s
             implementation: scriptworker-shipit

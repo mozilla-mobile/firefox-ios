@@ -205,7 +205,7 @@
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "आपण जे पत्ता पट्टी मध्ये टाईप कराल ते %@ आपल्या शोध इंजिनला पाठवेल.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "सर्वांसाठी %@ उपलब्ध करण्यासाठी व सुधारण्यास जी गरजेची आहे फक्त तीच माहिती जमा करण्यास Mozilla तत्पर आहे.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */

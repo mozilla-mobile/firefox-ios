@@ -855,7 +855,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     // MARK: - Temporary Document handling - PDF Refactor
 
     /// Retrieves the session cookies attached to the current `WKWebView` managed by the `Tab`
-    func getSessionCookies(_ completion: @Sendable @MainActor @escaping ([HTTPCookie]) -> Void) {
+    func getSessionCookies(_ completion: @MainActor @escaping ([HTTPCookie]) -> Void) {
         webView?.configuration.websiteDataStore.httpCookieStore.getAllCookies(completion)
     }
 
@@ -914,8 +914,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
+        let sourceURL = document.sourceURL
+        let isSourceFileURL = sourceURL?.isFileURL == true
 
-        temporaryDocument?.download { url in
+        temporaryDocument?.download { [weak self] url in
             ensureMainThread { [weak self] in
                 guard let url else { return }
 
@@ -927,7 +929,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
                 }
 
                 // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
-                guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
+                guard let sourceURL, !isSourceFileURL else { return }
                 self?.temporaryDocumentsSession[url] = sourceURL
                 self?.documentLogger.registerDownloadFinish(url: sourceURL)
             }
@@ -1208,7 +1210,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     override func evaluateJavaScript(
         _ javaScriptString: String,
         completionHandler: (
-            @MainActor @Sendable (Any?, (any Error)?) -> Void
+            @MainActor (Any?, (any Error)?) -> Void
         )? = nil
     ) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
@@ -1228,7 +1230,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     // MARK: - PullRefresh
 
     func addPullRefresh(onReload: @escaping () -> Void) {
-        guard !scrollView.isZooming, scrollView.frame != .zero else { return }
+        guard !scrollView.isZooming else { return }
         guard pullRefresh == nil else {
             pullRefresh?.startObservingContentScroll()
             return
@@ -1243,8 +1245,10 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
             refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
             refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
             refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
+            refresh.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+            refresh.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
+
         refresh.startObservingContentScroll()
         pullRefresh = refresh
         guard let theme else { return }

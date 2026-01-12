@@ -21,8 +21,9 @@ public struct AddressToolbarConfiguration {
     /// Browser actions of the address toolbar
     let browserActions: [ToolbarElement]
 
-    /// The position of the toolbar border to be displayed
-    let borderPosition: AddressToolbarBorderPosition?
+    /// The configuration of the toolbar border which contains
+    /// the a11y identifier and the position of the toolbar border to be displayed
+    let borderConfiguration: AddressToolbarBorderConfiguration
 
     /// Whether toolbar change should be displayed animated
     let shouldAnimate: Bool
@@ -36,7 +37,7 @@ public struct AddressToolbarConfiguration {
                 leadingPageActions: [ToolbarElement],
                 trailingPageActions: [ToolbarElement],
                 browserActions: [ToolbarElement],
-                borderPosition: AddressToolbarBorderPosition?,
+                borderConfiguration: AddressToolbarBorderConfiguration,
                 uxConfiguration: AddressToolbarUXConfiguration,
                 shouldAnimate: Bool) {
         self.locationViewConfiguration = locationViewConfiguration
@@ -44,7 +45,7 @@ public struct AddressToolbarConfiguration {
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.browserActions = browserActions
-        self.borderPosition = borderPosition
+        self.borderConfiguration = borderConfiguration
         self.shouldAnimate = shouldAnimate
         self.uxConfiguration = uxConfiguration
     }

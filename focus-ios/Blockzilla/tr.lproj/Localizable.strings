@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Bu, tarayıcıyla ilgili sorunları teşhis edip düzeltmemize yardımcı olur.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ her güncellemede özellikleri, performansı ve kararlılığı iyileştirecektir. Değişiklikler uzaktan uygulanır.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@, adres çubuğuna yazdıklarını arama motorunuza gönderecektir.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla, yalnızca %@’u daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla, yalnızca %@’u daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ zaman zaman araştırmalar yükleyip çalıştırabilir.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ rastgele bazı kullanıcıları seçerek yeni özellikleri test eder. Böylece herkes için kaliteyi artırabiliriz.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Genel";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Ana ekranda ipuçlarını göster";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Uzaktan iyileştirmelere izin ver";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Araştırmalar";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Özellik araştırmalarına izin ver";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Uygulamanın kilidini açmak için Touch ID’yi kullan";

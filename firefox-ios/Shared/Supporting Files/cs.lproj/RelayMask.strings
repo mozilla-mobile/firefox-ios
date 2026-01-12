@@ -16,6 +16,9 @@
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Skryjte svůj skutečný e-mail, abyste ochránili svou doručenou poštu před nevyžádanou poštou. Některé stránky tuto funkci nepodporují.";
 
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Skryjte svůj skutečný e-mail, abyste ochránili svou doručenou poštu před nevyžádanou poštou. Některé servery e-mailové masky nepodporují.";
+
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Zjistit více";
 

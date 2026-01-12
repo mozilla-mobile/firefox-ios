@@ -19,14 +19,14 @@ enum AuthenticationState {
 protocol AppAuthenticationProtocol {
     var canAuthenticateDeviceOwner: Bool { get }
 
-    func getAuthenticationState(completion: @MainActor @escaping @Sendable (AuthenticationState) -> Void)
+    func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void)
     func authenticateWithDeviceOwnerAuthentication(
-        _ completion: @MainActor @escaping @Sendable (Result<Void, AuthenticationError>) -> Void
+        _ completion: @MainActor @escaping (Result<Void, AuthenticationError>) -> Void
     )
 }
 
 class AppAuthenticator: AppAuthenticationProtocol {
-    func getAuthenticationState(completion: @MainActor @escaping @Sendable (AuthenticationState) -> Void) {
+    func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
             authenticateWithDeviceOwnerAuthentication { result in
                 DispatchQueue.main.async {
@@ -46,7 +46,7 @@ class AppAuthenticator: AppAuthenticationProtocol {
     }
 
     func authenticateWithDeviceOwnerAuthentication(
-        _ completion: @MainActor @escaping @Sendable (Result<Void, AuthenticationError>) -> Void
+        _ completion: @MainActor @escaping (Result<Void, AuthenticationError>) -> Void
     ) {
         // Get a fresh context for each login. If you use the same context on multiple attempts
         //  (by commenting out the next line), then a previously successful authentication

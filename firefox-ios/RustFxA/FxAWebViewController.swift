@@ -158,7 +158,7 @@ extension FxAWebViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @escaping @MainActor @Sendable (WKNavigationActionPolicy) -> Void
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
     ) {
         if let blobURL = navigationAction.request.url,
            viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webView.url) {
