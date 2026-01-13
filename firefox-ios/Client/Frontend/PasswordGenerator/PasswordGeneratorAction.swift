@@ -9,13 +9,14 @@ import WebKit
 
 struct PasswordGeneratorFrameContext: Equatable {
     let origin: String?
-    let host: String?
-    let scriptEvaluator: PasswordGeneratorScriptEvaluator?
+    let host: String
+    let scriptEvaluator: PasswordGeneratorScriptEvaluator
     let frameInfo: WKFrameInfo?
 
     static func == (lhs: PasswordGeneratorFrameContext, rhs: PasswordGeneratorFrameContext) -> Bool {
         lhs.origin == rhs.origin &&
-        lhs.host == rhs.host
+        lhs.host == rhs.host &&
+        lhs.frameInfo === rhs.frameInfo
     }
 }
 
