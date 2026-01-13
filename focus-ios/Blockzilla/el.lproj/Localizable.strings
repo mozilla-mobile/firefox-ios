@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Αυτό μας επιτρέπει να διαγνώσουμε και να διορθώσουμε προβλήματα με την εφαρμογή περιήγησης.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "Οι λειτουργίες, οι επιδόσεις και η σταθερότητα του %@ θα βελτιώνονται με κάθε νέα ενημέρωση. Οι αλλαγές εφαρμόζονται απομακρυσμένα.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "Το %@ θα στέλνει όσα πληκτρολογείτε στη γραμμή διευθύνσεων στη μηχανή αναζήτησής σας.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Η Mozilla προσπαθεί να συλλέγει μόνο όσα χρειάζεται για να παρέχει και να βελτιώνει το %@ για όλους.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Η Mozilla προσπαθεί να συλλέγει μόνο όσα χρειάζεται για να παρέχει και να βελτιώνει το %@ για όλους.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "Το %@ ενδέχεται να εγκαθιστά και να εκτελεί περιστασιακά μελέτες.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "Το %@ επιλέγει τυχαίους χρήστες για τη δοκιμή λειτουργιών, βελτιώνοντας την ποιότητα για όλους.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Γενικά";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Εμφάνιση συμβουλών αρχικής οθόνης";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Αποδοχή απομακρυσμένων βελτιώσεων";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Μελέτες";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Αποδοχή μελετών για λειτουργίες";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Χρήση Touch ID για ξεκλείδωμα";

@@ -141,8 +141,8 @@ final class ToolbarAnimator {
 
         view.overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
         view.bottomContainerConstraint?.update(offset: bottomContainerOffset)
-        // Both view shared the same parent so setNeedsLayout is called only once
-        view.overKeyboardContainer.superview?.setNeedsLayout()
+        // Both view shared the same parent so layoutIfNeeded is called only once
+        view.overKeyboardContainer.superview?.layoutIfNeeded()
     }
 
     private func animateTopToolbar(alpha: CGFloat) {
@@ -172,7 +172,7 @@ final class ToolbarAnimator {
         let overkeyboardOffset = isShowing ? 0 : context.overKeyboardContainerHeight
         UIView.animate(withDuration: UX.bottomToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut]) { [weak self] in
+                       options: [.curveEaseOut]) {
             if !isShowing {
                 view.bottomContainer.transform = .identity.translatedBy(x: 0, y: bottomOffset)
                 view.overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: overkeyboardOffset)
@@ -182,8 +182,8 @@ final class ToolbarAnimator {
                 view.overKeyboardContainer.transform = .identity
                 view.bottomBlurView.transform = .identity
             }
-            self?.updateBottomToolbarConstraints(bottomContainerOffset: bottomOffset,
-                                                 overKeyboardContainerOffset: overkeyboardOffset)
+            self.updateBottomToolbarConstraints(bottomContainerOffset: bottomOffset,
+                                                overKeyboardContainerOffset: overkeyboardOffset)
         }
 
         self.delegate?.dispatchScrollAlphaChange(alpha: alpha)

@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Ne ajută să diagnosticăm și să remediem problemele browserului.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ va îmbunătăți funcționalitățile, performanța și stabilitatea între actualizări. Modificările sunt aplicate de la distanță.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ va trimite ce tastezi în bara de adresă la motorul de căutare.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți %@ pentru toți.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți %@ pentru toți.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ poate instala și realiza studii din când în când.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ selectează aleatoriu utilizatori pentru a testa funcționalități, ceea ce îmbunătățește calitatea pentru toți.";
 
 /* Title for section in settings menu */
 "Settings.general" = "General";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Afișează ponturi în ecranul de pornire";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Permite îmbunătățiri de la distanță";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Studii";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Permite studii de funcționalități";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Folosește Touch ID pentru a debloca aplicația";

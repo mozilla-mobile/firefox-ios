@@ -28,7 +28,7 @@ class WebContextMenuActionsProvider {
     }
 
     @MainActor
-    func addOpenInNewTab(url: URL, currentTab: Tab, addTab: @escaping @MainActor @Sendable (URL, Bool, Tab) -> Void) {
+    func addOpenInNewTab(url: URL, currentTab: Tab, addTab: @escaping @MainActor (URL, Bool, Tab) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewTab,
@@ -41,7 +41,7 @@ class WebContextMenuActionsProvider {
     }
 
     @MainActor
-    func addOpenInNewPrivateTab(url: URL, currentTab: Tab, addTab: @escaping @MainActor @Sendable (URL, Bool, Tab) -> Void) {
+    func addOpenInNewPrivateTab(url: URL, currentTab: Tab, addTab: @escaping @MainActor (URL, Bool, Tab) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewPrivateTab,
@@ -161,7 +161,7 @@ class WebContextMenuActionsProvider {
     @MainActor
     func addSaveImage(url: URL,
                       getImageData: @escaping (URL, @Sendable @escaping (Data) -> Void) -> Void,
-                      writeToPhotoAlbum: @escaping @Sendable @MainActor (UIImage) -> Void) {
+                      writeToPhotoAlbum: @escaping @MainActor (UIImage) -> Void) {
         actions.append(UIAction(
             title: .ContextMenuSaveImage,
             identifier: UIAction.Identifier("linkContextMenu.saveImage")

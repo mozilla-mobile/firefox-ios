@@ -202,7 +202,7 @@
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ သည် လိပ်စာဘားတန်းတွင် ရိုက်သမျှကို ရှာဖွေရေးယန္တရားသို့ ပေးပို့ပါမည်။";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla သည် လူတိုင်းအတွက် %@ ကို ပေးစွမ်းရန်နှင့် တိုးတက်ကောင်းမွန်စေရန်အတွက်သာ ကောက်ခံမှုပြုခြင်း ဖြစ်ပါသည်။";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */

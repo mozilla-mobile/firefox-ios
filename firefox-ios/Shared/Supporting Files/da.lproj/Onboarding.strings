@@ -106,6 +106,9 @@
 /* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Vælg din adresselinje";
 
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Del data med %2$@s partnere indenfor markedsføringsteknologi, der viser hvordan du opdagede %1$@ og at du bruger programmet. Disse data vil aldrig blive solgt.";
+
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Sådan bruger vi dataene";
 
@@ -142,6 +145,9 @@
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Accepter og fortsæt";
 
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Hurtig, sikker og pålidelig. Det er lige blevet bedre at browse.";
+
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Håndter indstillinger";
 
@@ -160,8 +166,14 @@
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "betingelser for brug af %@";
 
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Gør dig klar til frihed";
+
 /* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Angiv som standardbrowser";
+
+/* Description for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Vi beskytter dine data og forhindrer automatisk virksomheder i at udspionere dig.";
 
 /* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "Ikke nu";

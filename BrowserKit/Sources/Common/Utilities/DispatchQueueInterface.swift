@@ -10,7 +10,7 @@ public protocol DispatchQueueInterface: Sendable {
                flags: DispatchWorkItemFlags,
                execute work: @escaping @Sendable @convention(block) () -> Void)
 
-    func ensureMainThread(execute work: @escaping @MainActor @Sendable @convention(block) () -> Swift.Void)
+    func ensureMainThread(execute work: @escaping @MainActor @convention(block) () -> Swift.Void)
 
     func asyncAfter(deadline: DispatchTime, execute: DispatchWorkItem)
 
@@ -35,7 +35,7 @@ extension DispatchQueueInterface {
         asyncAfter(deadline: deadline, qos: qos, flags: flags, execute: work)
     }
 
-    public func ensureMainThread(execute work: @escaping @MainActor @Sendable @convention(block) () -> Swift.Void) {
+    public func ensureMainThread(execute work: @escaping @MainActor @convention(block) () -> Swift.Void) {
         if Thread.isMainThread {
             MainActor.assumeIsolated {
                 work()

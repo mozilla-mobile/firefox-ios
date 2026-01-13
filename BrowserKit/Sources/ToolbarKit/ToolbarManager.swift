@@ -4,6 +4,16 @@
 
 import Foundation
 
+public struct AddressToolbarBorderConfiguration {
+    var a11yIdentifier: String
+    var borderPosition: AddressToolbarBorderPosition?
+
+    public init(a11yIdentifier: String, borderPosition: AddressToolbarBorderPosition?) {
+        self.a11yIdentifier = a11yIdentifier
+        self.borderPosition = borderPosition
+    }
+}
+
 public enum AddressToolbarBorderPosition: Sendable {
     case bottom
     case top

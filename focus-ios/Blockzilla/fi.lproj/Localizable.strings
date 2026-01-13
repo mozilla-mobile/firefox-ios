@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Tämä auttaa meitä diagnosoimaan ja korjaamaan selaimen ongelmia.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ parantaa ominaisuuksia, suorituskykyä ja vakautta päivitysten välillä. Muutokset otetaan käyttöön etänä.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ lähettää osoiteriville kirjoittamasi tiedot hakukoneelle.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia %@en jakelun ja kehittämisen kannalta.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia %@in jakelun ja kehittämisen kannalta.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ saattaa asentaa ja suorittaa tutkimuksia silloin tällöin.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ valitsee satunnaisesti käyttäjiä testaamaan ominaisuuksia, mikä parantaa laatua kaikille.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Yleiset";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Näytä kotinäytön vihjeet";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Salli etäparannukset";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Tutkimukset";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Salli ominaisuustutkimukset";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Käytä Touch ID:tä sovelluksen lukituksen avaamiseen";

@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Viaj 5 senpagaj retpoŝtaj maskoj estas uzataj, do ni elektis unu por vi.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Vi jam uzis viajn 5 senpagajn retpoŝtajn maskojn, do ni elektis unu por ke vi reuzu ĝin.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "Retpoŝtaj maskoj ne haveblas en tiu ĉi momento. Provu denove post kelkaj minutoj.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Retpoŝta masko enmetita";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Kaŝu vian realan retpoŝtan adreson por protekti vian enirkeston kontraŭ trudmesaĝoj. Kelkaj retejoj ne subtenas tion.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Kaŝu vian realan retpoŝtan adreson por protekti vian enirkeston kontraŭ trudmesaĝoj. Kelkaj retejoj ne subtenas retpoŝtajn maskojn.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Pli da informo";

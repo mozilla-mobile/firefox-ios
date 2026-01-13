@@ -83,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         ])
 
         // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Contile, Adjust.
+        // Among other things, it toggles on and off Nimbus, Unified ads, Adjust.
         // i.e. this must be run before initializing those systems.
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 

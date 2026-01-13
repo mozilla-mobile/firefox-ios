@@ -75,7 +75,7 @@ protocol WKEngineWebView: UIView {
         _ javaScript: String,
         in frame: WKFrameInfo?,
         in contentWorld: WKContentWorld,
-        completionHandler: (@MainActor @Sendable (Result<Any, Error>) -> Void)?
+        completionHandler: (@MainActor (Result<Any, Error>) -> Void)?
     )
 
     func close()
@@ -86,7 +86,7 @@ extension WKEngineWebView {
         _ javaScript: String,
         in frame: WKFrameInfo? = nil,
         in contentWorld: WKContentWorld,
-        completionHandler: (@MainActor @Sendable (Result<Any, Error>) -> Void)? = nil
+        completionHandler: (@MainActor (Result<Any, Error>) -> Void)? = nil
     ) {
         evaluateJavaScript(javaScript,
                            in: frame,

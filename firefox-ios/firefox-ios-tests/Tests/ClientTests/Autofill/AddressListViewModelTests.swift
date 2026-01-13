@@ -154,7 +154,14 @@ final class AddressListViewModelTests: XCTestCase {
     func testTapAddShowsAddAddressScreenThenTapCancelDismissScreen() {
         let showSectionAddExpectation = XCTestExpectation(description: "Show add section")
         let dismissSectionAddExpectation = XCTestExpectation(description: "Dismiss add section")
-        viewModel.currentRegionCode = { "RO" }
+        let viewModel = AddressListViewModel(
+            logger: mockLogger,
+            windowUUID: WindowUUID(),
+            addressProvider: mockAutofill,
+            themeManager: mockThemeManager,
+            profile: mockProfile,
+            localeProvider: MockLocaleProvider(regionCode: "RO")
+        )
         viewModel.addAddressButtonTap()
 
         let cancellable = viewModel

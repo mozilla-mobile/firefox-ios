@@ -88,14 +88,15 @@ final class MicrosurveyTests: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         generateTriggerForMicrosurvey()
 
-        // Will be updated in FXIOS-13566
-//        XCTAssertFalse(app.otherElements[AccessibilityIdentifiers.Toolbar.urlBarBorder].exists)
+        XCTAssertFalse(app.otherElements[AccessibilityIdentifiers.Toolbar.topBorder].exists)
 
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
         XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
         app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].waitAndTap()
         XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
+
+        XCTAssertTrue(app.otherElements[AccessibilityIdentifiers.Toolbar.topBorder].exists)
     }
 
     private func generateTriggerForMicrosurvey() {

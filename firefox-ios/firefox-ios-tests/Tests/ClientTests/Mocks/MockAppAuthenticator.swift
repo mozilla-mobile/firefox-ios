@@ -11,7 +11,7 @@ class MockAppAuthenticator: AppAuthenticationProtocol, @unchecked Sendable {
     var shouldAuthenticateDeviceOwner = true
     var shouldSucceed = true
 
-    func getAuthenticationState(completion: @MainActor @escaping @Sendable (AuthenticationState) -> Void) {
+    func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         ensureMainThread {
             completion(self.authenticationState)
         }
@@ -22,7 +22,7 @@ class MockAppAuthenticator: AppAuthenticationProtocol, @unchecked Sendable {
     }
 
     func authenticateWithDeviceOwnerAuthentication(
-        _ completion: @MainActor @escaping @Sendable (Result<Void, AuthenticationError>) -> Void
+        _ completion: @MainActor @escaping (Result<Void, AuthenticationError>) -> Void
     ) {
         ensureMainThread {
             if self.shouldSucceed {

@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import XCTest
+import Common
 
 let sendLinkMsg1 = "You are not signed in to your account."
 let sendLinkMsg2 = "Please open Firefox, go to Settings and sign in to continue."
@@ -61,6 +63,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeReminders() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         if #available(iOS 17, *) {
             reachReaderModeShareMenuLayoutAndSelectOption(option: "Reminders")
@@ -78,6 +81,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModePrint() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Print")
         validatePrintLayout()
@@ -87,6 +91,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeCopy() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Copy")
         openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
@@ -96,6 +101,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeSendLink() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Send Link to Device")
         // If not signed in, the browser prompts you to sign in
@@ -111,6 +117,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testShareWebsiteReaderModeMarkup() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Markup")
         validateMarkupTool()
@@ -165,8 +172,16 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
 
     private func validateMarkupTool() {
         // The Markup tool opens
-        mozWaitForElementToExist(app.switches["Markup"])
-        mozWaitForElementToExist(app.buttons["Done"])
+        if #available(iOS 26, *) {
+            if iPad() {
+                app.navigationBars.buttons["More"].waitAndTap()
+            }
+            // iOS 26: The markup isn't shown in debug description
+            // https://github.com/mozilla-mobile/firefox-ios/issues/31552
+        } else {
+            mozWaitForElementToExist(app.switches["Markup"])
+            mozWaitForElementToExist(app.buttons["Done"])
+        }
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {
@@ -176,6 +191,9 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
+        if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
+            app.cells["actionGroupCell"].staticTexts["More"].waitAndTap(timeout: 10)
+        }
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
             app.collectionViews.cells[option].tapOnApp()
@@ -192,6 +210,9 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         navigator.openURL(url)
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
+        if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
+            app.cells["actionGroupCell"].staticTexts["More"].waitAndTap(timeout: 10)
+        }
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
             app.collectionViews.cells[option].tapOnApp()

@@ -32,6 +32,7 @@ struct AccessibilityIdentifiers {
         static let translateButton = "TabToolbar.translateButton"
         static let translateLoadingButton = "TabToolbar.translateLoadingButton"
         static let translateActiveButton = "TabToolbar.translateActiveButton"
+        static let topBorder = "TabToolbar.toolbarTopBorderView"
     }
 
     struct Browser {
@@ -647,10 +648,12 @@ struct AccessibilityIdentifiers {
             static let sendCrashReportsTitle = "SendCrashReports"
             static let sendDailyUsagePingTitle = "SendDailyUsagePing"
             static let studiesTitle = "StudiesToggle"
+            static let rolloutsTitle = "RolloutsToggle"
             static let sendTechnicalDataLearnMoreButton = "SendTechnicalDataLearnMoreButton"
             static let sendCrashReportsLearnMoreButton = "SendCrashReportsLearnMoreButton"
             static let sendDailyUsagePingLearnMoreButton = "SendDailyUsagePingLearnMoreButton"
             static let studiesLearnMoreButton = "StudiesLearnMoreButton"
+            static let rolloutsLearnMoreButton = "RolloutsLearnMoreButton"
         }
 
         struct PrivacyPolicy {

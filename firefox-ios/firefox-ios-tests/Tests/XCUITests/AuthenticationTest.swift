@@ -65,6 +65,6 @@ class AuthenticationTest: BaseTestCase {
         let LoginLabel = "Log in"
         app.alerts.textFields[username].typeText(guestLabel)
         app.alerts.secureTextFields[password].tapAndTypeText(guestLabel)
-        app.alerts.buttons[LoginLabel].waitAndTap()
+        app.alerts.buttons[LoginLabel].firstMatch.waitAndTap()
     }
 }

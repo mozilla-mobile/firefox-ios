@@ -40,7 +40,7 @@ final class TermsOfUseViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
-    private let strings = TermsOfUseStrings()
+    private let strings: TermsOfUseStrings
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -72,7 +72,6 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.text = TermsOfUseStrings.titleText
         label.font = UX.titleFont
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -117,11 +116,13 @@ final class TermsOfUseViewController: UIViewController,
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: UUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         enableDragToDismiss: Bool = true) {
+         enableDragToDismiss: Bool = true,
+         contentOption: TermsOfUseContentOption = .value0) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
         self.isDragToDismissEnabled = enableDragToDismiss
+        self.strings = TermsOfUseStrings(option: contentOption)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -133,6 +134,7 @@ final class TermsOfUseViewController: UIViewController,
         super.viewDidLoad()
         UIAccessibility.post(notification: .announcement, argument:
                             TermsOfUseStrings.termsOfUseHasOpenedNotification)
+        titleLabel.text = strings.titleText
         setupUI()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -263,7 +265,7 @@ final class TermsOfUseViewController: UIViewController,
         paragraphStyle.alignment = .left
 
         let attributed = NSMutableAttributedString(
-            string: TermsOfUseStrings.termsOfUseInfoText,
+            string: strings.termsOfUseInfoText,
             attributes: [
                 // UITextView.attributedText overrides adjustsFontForContentSizeCategory behavior
                 // Unlike UILabel, we must explicitly set scaledFont() in the attributed string
@@ -273,8 +275,8 @@ final class TermsOfUseViewController: UIViewController,
             ]
         )
 
-        for term in TermsOfUseStrings.linkTerms {
-            if let url = TermsOfUseStrings.linkURL(for: term),
+        for term in strings.linkTerms {
+            if let url = strings.linkURL(for: term),
                let range = attributed.string.range(of: term) {
                 let nsRange = NSRange(range, in: attributed.string)
                 attributed.addAttribute(.link, value: url, range: nsRange)

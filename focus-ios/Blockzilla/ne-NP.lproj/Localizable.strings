@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "यसले हामीलाई ब्राउजरमा समस्याहरू निदान र समाधान गर्न मद्दत गर्छ।";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ ले विशेषताहरू, प्रदर्शन, र अद्यावधिकहरू बीच स्थिरता सुधार गर्नेछ। परिवर्तनहरू टाढाबाट लागू गरियो।";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ ले तपाईले ठेगाना पट्टीमा टाइप गर्नुभएका कुराहरुलाई तपाईको खोज इन्जिनमा पठाउनेछ।";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla सबैको लागि %@ प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla सबैको लागि %@ प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ ले समय-समयमा अध्ययनहरू स्थापना गर्न र चलाउन सक्छ।";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ अनियमित रूपमा प्रयोगकर्ताहरूलाई सुविधाहरू परीक्षण गर्न छनौट गर्दछ, जसले सबैका लागि गुणस्तर सुधार गर्दछ।";
 
 /* Title for section in settings menu */
 "Settings.general" = "सामान्य";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "गृह स्क्रिनमा सुझावहरू देखाउनुहोस्";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "टाढाको सुधारहरूलाई अनुमति दिनुहोस्";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "सफारी";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "अध्ययनहरु";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "सुविधा अध्ययनलाई अनुमति दिनुहोस्";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "एप अनलक गर्न टच आईडीको प्रयोग गर्नुहोस्";

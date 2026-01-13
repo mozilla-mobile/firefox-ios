@@ -133,6 +133,7 @@ public class BrowserAddressToolbar: UIView,
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         addressBarPosition = toolbarPosition
         previousConfiguration = config
+        toolbarTopBorderView.accessibilityIdentifier = config.borderConfiguration.a11yIdentifier
         configureUX(config: config.uxConfiguration, toolbarPosition: toolbarPosition)
         updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
         configure(config: config,
@@ -147,7 +148,7 @@ public class BrowserAddressToolbar: UIView,
         addressBarPosition: AddressToolbarPosition,
         animated: Bool
     ) {
-        updateBorder(borderPosition: config.borderPosition)
+        updateBorder(borderPosition: config.borderConfiguration.borderPosition)
 
         locationView.configure(
             config.locationViewConfiguration,

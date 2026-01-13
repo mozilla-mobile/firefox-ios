@@ -73,7 +73,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
 
     // Function added to wait for AccountManager initialization to get
     // if the user is Sign in with Sync Account to decide which cards to show
-    func hasSyncableAccount(completion: @MainActor @escaping @Sendable () -> Void) {
+    func hasSyncableAccount(completion: @MainActor @escaping () -> Void) {
         hasSyncableAccount = profile.hasAccount()
         ensureMainThread {
             completion()

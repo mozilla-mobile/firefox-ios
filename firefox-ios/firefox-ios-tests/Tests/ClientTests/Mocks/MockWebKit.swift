@@ -7,20 +7,20 @@ import WebKit
 
 // MARK: WKNavigationActionMock
 class WKNavigationActionMock: WKNavigationAction {
-    var overridenTargetFrame: WKFrameInfoMock?
+    var overridenTargetFrame: MockWKFrameInfo?
 
     override var targetFrame: WKFrameInfo? {
         return overridenTargetFrame
     }
 }
 
-// MARK: WKFrameInfoMock
-class WKFrameInfoMock: WKFrameInfo {
+// MARK: MockWKFrameInfo
+class MockWKFrameInfo: WKFrameInfo {
     let overridenSecurityOrigin: WKSecurityOrigin
     let overridenWebView: WKWebView?
     let overridenTargetFrame: Bool
 
-    init(webView: WKWebViewMock? = nil, frameURL: URL? = nil, isMainFrame: Bool? = false) {
+    init(webView: MockWKWebView? = nil, frameURL: URL? = nil, isMainFrame: Bool? = false) {
         overridenSecurityOrigin = WKSecurityOriginMock.new(frameURL)
         overridenWebView = webView
         overridenTargetFrame = isMainFrame ?? false
@@ -65,8 +65,8 @@ class WKSecurityOriginMock: WKSecurityOrigin {
     override var port: Int { overridenPort }
 }
 
-// MARK: WKWebViewMock
-class WKWebViewMock: WKWebView {
+// MARK: MockWKWebView
+class MockWKWebView: WKWebView {
     var overridenURL: URL
     var didLoad: (() -> Void)?
 
@@ -94,7 +94,7 @@ class WKWebViewMock: WKWebView {
 }
 
 // MARK: - WKScriptMessageMock
-class WKScriptMessageMock: WKScriptMessage {
+class MockWKScriptMessage: WKScriptMessage {
     let overridenBody: Any
     let overridenName: String
     let overridenFrameInfo: WKFrameInfo

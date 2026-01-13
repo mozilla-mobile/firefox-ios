@@ -308,61 +308,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
-    func testDidTapButton_tapOnQrCodeButton_dispatchesAddNewTab() throws {
-        try didTapButton(buttonType: .qrCode, expectedActionType: GeneralBrowserActionType.showQRcodeReader)
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.QrScanButtonTappedExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.QrScanButtonTappedExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.qrScanButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.isPrivate, false)
-    }
-
-    func testDidTapButton_tapOnQrCodeButton_whenInEditMode_dispatchesCancelEditAndAddNewTab() throws {
-        mockStore = MockStoreForMiddleware(state: setupEditingAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-
-        let subject = createSubject(manager: toolbarManager)
-        let action = ToolbarMiddlewareAction(
-            buttonType: .qrCode,
-            gestureType: .tap,
-            windowUUID: windowUUID,
-            actionType: ToolbarMiddlewareActionType.didTapButton)
-
-        subject.toolbarProvider(mockStore.state, action)
-
-        let firstActionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let firstActionType = try XCTUnwrap(firstActionCalled.actionType as? ToolbarActionType)
-        let secondActionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? GeneralBrowserAction)
-        let secondActionType = try XCTUnwrap(secondActionCalled.actionType as? GeneralBrowserActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
-        XCTAssertEqual(firstActionType, ToolbarActionType.cancelEdit)
-        XCTAssertEqual(secondActionType, GeneralBrowserActionType.showQRcodeReader)
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.QrScanButtonTappedExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.QrScanButtonTappedExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.qrScanButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.isPrivate, false)
-    }
-
     func testDidTapButton_tapOnBackButton_dispatchesNavigateBack() throws {
         try didTapButton(buttonType: .back, expectedActionType: GeneralBrowserActionType.navigateBack)
 
@@ -835,6 +780,51 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
     }
 
+    func test_didSubmitSearchTerm_forPrivateMode_withProperPayload_addsRecentSearchToHistoryStorage() {
+        mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            url: URL(string: "https://example.com")!,
+            searchTerm: "cookies",
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
+    func test_didSubmitSearchTerm_forPrivateMode_withoutURL_doesNotAddRecentSearchToHistoryStorage() {
+        mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            searchTerm: "cookies",
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
+    func test_didSubmitSearchTerm_forPrivateMode_withoutSearchTerm_doesNotAddRecentSearchToHistoryStorage() {
+        mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
     // MARK: - Helpers
     private func createSubject(manager: ToolbarManager) -> ToolbarMiddleware {
         return ToolbarMiddleware(
@@ -900,11 +890,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    func setupEditingAppState() -> AppState {
-        var addressBarState = AddressBarState(windowUUID: windowUUID)
-        addressBarState.isEditing = true
+    func setupPrivateModeAppState() -> AppState {
         var toolbarState = ToolbarState(windowUUID: windowUUID)
-        toolbarState.addressToolbar = addressBarState
+        toolbarState.isPrivateMode = true
 
         return AppState(
             activeScreens: ActiveScreensState(

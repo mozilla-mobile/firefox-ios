@@ -21,7 +21,7 @@ public final class SQLiteQueue: TabQueue {
         return ShareItem(url: url, title: "")
     }
 
-    public func getQueuedTabs(completion: @MainActor @Sendable @escaping ([ShareItem]) -> Void) {
+    public func getQueuedTabs(completion: @MainActor @escaping ([ShareItem]) -> Void) {
         let sql = "SELECT url FROM queue"
         db.runQuery(sql, args: nil, factory: self.factory)
             .uponQueue(.main) { result in

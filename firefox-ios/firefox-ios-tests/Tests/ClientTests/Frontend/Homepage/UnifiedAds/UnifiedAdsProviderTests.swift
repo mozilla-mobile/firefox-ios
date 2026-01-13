@@ -9,12 +9,12 @@ import XCTest
 
 @MainActor
 class UnifiedAdsProviderTests: XCTestCase {
-    private var networking: MockContileNetworking!
+    private var networking: MockUnifiedTileNetworking!
 
     override func setUp() async throws {
         try await super.setUp()
         TelemetryContextualIdentifier.setupContextId()
-        networking = MockContileNetworking()
+        networking = MockUnifiedTileNetworking()
     }
 
     override func tearDown() async throws {
@@ -23,7 +23,7 @@ class UnifiedAdsProviderTests: XCTestCase {
     }
 
     func testFetchTile_givenErrorResponse_thenFailsWithError() {
-        networking.error = UnifiedAdsProvider.Error.noDataAvailable
+        networking.error = UnifiedTileNetworkingError.dataUnavailable
         let subject = createSubject()
 
         subject.fetchTiles { result in

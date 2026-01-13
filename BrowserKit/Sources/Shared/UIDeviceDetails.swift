@@ -36,7 +36,7 @@ public struct UIDeviceDetails {
     /// **DO NOT USE THIS METHOD ELSEWHERE IN THE CODE BASE.**
     /// This is a workaround to access unchanging `UIDevice.current` values that Apple has needlessly main actor-isolated.
     private static func getMainThreadDataSynchronously<T: Sendable>(
-        work: @MainActor @Sendable () -> (T)
+        work: @MainActor () -> (T)
     ) -> T {
         if Thread.isMainThread {
             MainActor.assumeIsolated {

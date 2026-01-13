@@ -109,7 +109,7 @@ class MockTab: Tab {
         return isHomePage
     }
 
-    override func getSessionCookies(_ completion: @escaping @MainActor @Sendable ([HTTPCookie]) -> Void) {
+    override func getSessionCookies(_ completion: @escaping @MainActor ([HTTPCookie]) -> Void) {
         completion([])
     }
 

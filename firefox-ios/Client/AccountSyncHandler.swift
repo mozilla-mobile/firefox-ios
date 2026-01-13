@@ -16,7 +16,7 @@ final class Debouncer {
         self.delay = delay
     }
 
-    func call(action: @escaping @MainActor @Sendable () -> Void) {
+    func call(action: @escaping @MainActor () -> Void) {
         task?.cancel()
 
         let nanos = UInt64(delay) * nanosecondsPerSecond

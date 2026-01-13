@@ -172,6 +172,15 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "プライバシー通知";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "詳細情報";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ は更新ごとに機能、パフォーマンス、安定性が向上しています。変更はリモートで適用されます。";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "リモートの機能向上を許可する";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "スクロールしてタブとアドレスバーを非表示にする";
 
@@ -235,11 +244,20 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "詳細情報";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "詳細情報";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "機能やアイデアを一般公開される前に試してみましょう。";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ はランダムにユーザーを選択して機能をテストし、全員の品質を向上させます。";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "調査のインストールと実行を許可する";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "機能の使用調査を許可する";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "要約ページへのアクセスを提供します。";

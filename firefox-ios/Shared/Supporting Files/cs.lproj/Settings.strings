@@ -175,6 +175,12 @@
 /* Title for a link that explains what Mozilla means by Rollouts */
 "Settings.Rollouts.Link.v148" = "Zjistit více";
 
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ vylepší funkce, výkon a stabilitu mezi aktualizacemi. Změny se aplikují vzdáleně.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Povolit vzdálená vylepšení";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Při rolování skrýt panel a adresní řádek";
 
@@ -244,8 +250,14 @@
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Vyzkoušejte funkce a nápady dříve, než budou veřejně dostupné.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ náhodně vybírá uživatele, aby otestoval nové funkce, s cílem zlepšit jeho kvalitu pro všechny.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Instalovat a spouštět studie";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Povolit studie funkcí";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Poskytuje přístup k souhrnu stránek.";
@@ -272,7 +284,7 @@
 "Settings.TechnicalData.Message.v136" = "Údaje o vašem zařízení, konfiguraci hardwaru a používání nám pomáhají vylepšovat funkce, výkon a stabilitu aplikace %@.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v136" = "Odesílat technická data a data o interakcích";
+"Settings.TechnicalData.Title.v136" = "Odesílat technické údaje a údaje o interakcích";
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "Podmínky použití";

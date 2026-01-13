@@ -106,6 +106,9 @@
 /* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "เลือกแถบที่อยู่ของคุณ";
 
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "แบ่งปันว่าคุณค้นพบ %1$@ ได้อย่างไร และคุณใช้มันอย่างไรกับพันธมิตรด้านการตลาดของ %2$@ โดยข้อมูลนี้จะไม่ถูกนำไปขาย";
+
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "เราใช้ข้อมูลอย่างไร";
 
@@ -127,6 +130,9 @@
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "เปิดการแจ้งเตือน";
 
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "ดึงที่คั่นหน้า รหัสผ่าน และข้อมูลอื่นๆ ไปใช้งานได้ทันทีบนทุกอุปกรณ์ ข้อมูลส่วนตัวถูกเก็บอย่างปลอดภัยด้วยการเข้ารหัส";
+
 /* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "เริ่มซิงค์";
 
@@ -139,11 +145,20 @@
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "ยินยอมและดำเนินต่อ";
 
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "ดำเนินการต่อ";
+
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "เร็ว ปลอดภัย ไม่ทอดทิ้งคุณ ท่องเว็บได้ดีกว่าเดิม";
 
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "จัดการการตั้งค่า";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "เพื่อช่วยปรับปรุงเบราว์เซอร์ %1$@ จะส่งข้อมูลวินิจฉัยและการโต้ตอบไปยัง %2$@ %3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ ห่วงใยเกี่ยวกับความเป็นส่วนตัวของคุณ อ่านเพิ่มเติมใน%2$@ของเรา";
 
 /* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "ประกาศความเป็นส่วนตัว";
@@ -168,6 +183,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "บอกลาตัวติดตามที่น่ารำคาญ";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "เปิดลิงก์พร้อมความเป็นส่วนตัวในตัว";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "อัตโนมัติ";

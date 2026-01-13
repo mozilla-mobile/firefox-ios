@@ -10,9 +10,7 @@ import WebKit
 final class BridgeTests: XCTestCase {
     func test_bridge_receiveFromA_forwardsToB() {
         let subject = createSubject(aName: "a", bName: "b")
-        let message = makeMessage(name: "a", body: ["foo": "bar"])
-
-        subject.bridge.userContentController(.init(), didReceive: message)
+        subject.bridge.receive(handlerName: "a", body: ["foo": "bar"])
 
         XCTAssertEqual(subject.portB.receivedJSON, [#"{"foo":"bar"}"#])
         XCTAssertTrue(subject.portA.receivedJSON.isEmpty)
@@ -20,8 +18,7 @@ final class BridgeTests: XCTestCase {
 
     func test_bridge_receiveFromB_forwardsToA() {
         let subject = createSubject(aName: "a", bName: "b")
-        let message = makeMessage(name: "b", body: ["x": 1])
-        subject.bridge.userContentController(.init(), didReceive: message)
+        subject.bridge.receive(handlerName: "b", body: ["x": 1])
 
         XCTAssertEqual(subject.portA.receivedJSON, [#"{"x":1}"#])
         XCTAssertTrue(subject.portB.receivedJSON.isEmpty)
@@ -30,8 +27,7 @@ final class BridgeTests: XCTestCase {
     func test_bridge_receive_invalidJSON_doesNotForward() {
         let subject = createSubject(aName: "a", bName: "b")
         // Message with invalid JSON object
-        let message = makeMessage(name: "a", body: "not a dict")
-        subject.bridge.userContentController(.init(), didReceive: message)
+        subject.bridge.receive(handlerName: "a", body: "not a dict")
 
         XCTAssertTrue(subject.portA.receivedJSON.isEmpty)
         XCTAssertTrue(subject.portB.receivedJSON.isEmpty)
@@ -76,14 +72,6 @@ final class BridgeTests: XCTestCase {
             portA: portA,
             portB: portB,
             bridge: subject,
-        )
-    }
-
-    private func makeMessage(name: String, body: Any) -> WKScriptMessageMock {
-        return WKScriptMessageMock(
-            name: name,
-            body: body,
-            frameInfo: WKFrameInfoMock()
         )
     }
 }

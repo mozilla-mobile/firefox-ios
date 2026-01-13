@@ -18,6 +18,7 @@ if releaseCheck.isReleaseBranch {
     checkForFunMetrics()
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
     checkForWebEngineFileChange()
+    checkForGleanFileChange()
     CodeUsageDetector().checkForCodeUsage()
     CodeCoverageGate().failOnNewFilesWithoutCoverage()
     BrowserViewControllerChecker().failsOnAddedExtension()
@@ -272,6 +273,50 @@ func checkForWebEngineFileChange() {
         let message = "Ensure that necessary updates are also ported to the WebEngine project if required"
         let contact = "(cc @lmarceau)."
         warn("Changes detected in files: \(affectedFiles.joined(separator: ", ")). \(message) \(contact)")
+    }
+}
+
+// Detect additions to Glean telemetry files and request data review
+func checkForGleanFileChange() {
+    let gleanPath = "firefox-ios/Client/Glean/"
+    let createdFiles = danger.git.createdFiles.filter { $0.contains(gleanPath) }
+    let modifiedFiles = danger.git.modifiedFiles.filter { $0.contains(gleanPath) }
+
+    // For modified files, check if there are actual additions (not just deletions)
+    let modifiedWithAdditions = modifiedFiles.filter { file in
+        switch saferFileDiff(for: file) {
+        case .success(let diff):
+            switch diff.changes {
+            case .modified(let hunks), .renamed(_, let hunks):
+                // Check if any lines were added
+                return hunks.contains { hunk in
+                    hunk.lines.contains { line in
+                        let s = String(describing: line)
+                        return s.hasPrefix("+") && !s.hasPrefix("+++")
+                    }
+                }
+            case .created:
+                return true
+            case .deleted:
+                return false
+            }
+        case .failure:
+            // If diff fails, be conservative and include the file
+            return true
+        }
+    }
+
+    let affectedFiles = createdFiles + modifiedWithAdditions
+    if !affectedFiles.isEmpty {
+        markdown("""
+        ### 📊 **Telemetry changes detected**
+        Changes with additions detected in Glean telemetry files:
+        \(affectedFiles.map { "• `\($0)`" }.joined(separator: "\n"))
+
+        Any additions to telemetry will require a data review. Please fill out a data review form \
+        (found in the [data review repo](https://github.com/mozilla/data-review)) as necessary, \
+        and tag @adudenamedruby for data review.
+        """)
     }
 }
 

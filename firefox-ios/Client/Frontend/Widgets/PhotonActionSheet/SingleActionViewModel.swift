@@ -41,7 +41,7 @@ struct SingleActionViewModel: Sendable {
 
     let bold: Bool
     let tabCount: String?
-    let tapHandler: (@Sendable @MainActor (SingleActionViewModel) -> Void)?
+    let tapHandler: (@MainActor (SingleActionViewModel) -> Void)?
 
     let isEnabled: Bool // Used by toggles like night mode to switch tint color
     // Flip the cells for the main menu (hamburger menu) since content needs to appear at the bottom
@@ -50,10 +50,10 @@ struct SingleActionViewModel: Sendable {
     let isFlipped: Bool
 
     // Enable title customization beyond what the interface provides,
-    let customRender: (@Sendable @MainActor (_ title: UILabel, _ contentView: UIView) -> Void)?
+    let customRender: (@MainActor (_ title: UILabel, _ contentView: UIView) -> Void)?
 
     // Enable height customization
-    let customHeight: (@Sendable @MainActor (SingleActionViewModel) -> CGFloat)?
+    let customHeight: (@MainActor (SingleActionViewModel) -> CGFloat)?
 
     // Normally the icon name is used, but if there is no icon, this is used.
     let accessibilityId: String?
@@ -71,9 +71,9 @@ struct SingleActionViewModel: Sendable {
          bold: Bool? = false,
          tabCount: String? = nil,
          isFlipped: Bool = false,
-         tapHandler: (@Sendable @MainActor (SingleActionViewModel) -> Void)? = nil,
-         customRender: (@Sendable @MainActor (_ title: UILabel, _ contentView: UIView) -> Void)? = nil,
-         customHeight: (@Sendable @MainActor (SingleActionViewModel) -> CGFloat)? = nil,
+         tapHandler: (@MainActor (SingleActionViewModel) -> Void)? = nil,
+         customRender: (@MainActor (_ title: UILabel, _ contentView: UIView) -> Void)? = nil,
+         customHeight: (@MainActor (SingleActionViewModel) -> CGFloat)? = nil,
          accessibilityId: String? = nil
     ) {
         self.title = title

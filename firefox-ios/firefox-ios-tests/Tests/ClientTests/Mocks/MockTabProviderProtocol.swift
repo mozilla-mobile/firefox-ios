@@ -12,7 +12,7 @@ final class MockTabProviderProtocol: TabProviderProtocol {
     var isFindInPageMode = false
     var isLoading = false
 
-    var onLoadingStateChanged: (@MainActor @Sendable () -> Void)?
+    var onLoadingStateChanged: (@MainActor () -> Void)?
 
     var scrollView: UIScrollView?
     var pullToRefreshAddCount = 0

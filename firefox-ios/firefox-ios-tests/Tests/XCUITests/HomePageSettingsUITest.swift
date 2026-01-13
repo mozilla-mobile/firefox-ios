@@ -35,6 +35,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                                LaunchArguments.SkipContextualHints,
                                LaunchArguments.DisableAnimations]
         }
+        launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         try await super.setUp()
     }
 
@@ -137,28 +138,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307031
-    func testSetCustomURLAsHome() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        // Enter a webpage
-        enterWebPageAsHomepage(text: websiteUrl1)
-
-        // Open a new tab and tap on Home option
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitForTabsButton()
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "mozilla.org")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
@@ -273,6 +252,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             navigator.nowAt(HomeSettings)
             navigator.performAction(Action.OpenNewTabFromTabTray)
             checkBookmarks()
+            if iPad() {
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
             app.scrollViews
                 .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
                 .staticTexts[urlExampleLabel].waitAndTap()
@@ -371,8 +353,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 5)
             validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 4, maxBoundary: 9)
         } else {
-            validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 8)
-            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 15)
+            validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 10)
+            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 14)
         }
     }
 
@@ -382,7 +364,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         app.staticTexts["Rows"].waitAndTap()
         let expectedRowValues = ["1", "2"]
         for i in 0...1 {
-            XCTAssertEqual(app.tables.cells.element(boundBy: i).label, expectedRowValues[i])
+            XCTAssertEqual(app.cells.element(boundBy: i).label, expectedRowValues[i])
         }
         app.tables.cells.element(boundBy: row).waitAndTap()
         app.buttons["Shortcuts"].waitAndTap()

@@ -437,9 +437,16 @@ final class LocationView: UIView,
             hasHomeIndicator ? UX.bottomAddressBarYoffset : UX.bottomAddressBarYoffsetForHomeButton
         }
         let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? bottomAddressBarYoffset : UX.topAddressBarYoffset
-        let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
-        transform = scaledTransformation
-        urlTextField.isUserInteractionEnabled = false
+        UIView.animate(
+            withDuration: UX.identityResetAnimationDuration,
+            delay: 0,
+            options: [.curveEaseInOut],
+            animations: {
+                let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
+                    .translatedBy(x: 0, y: yOffset)
+                self.transform = scaledTransformation
+                self.urlTextField.isUserInteractionEnabled = false
+            })
     }
 
     private func restoreLocationViewSize() {
@@ -494,6 +501,15 @@ final class LocationView: UIView,
         }
         urlAbsolutePath = config.url?.absoluteString
 
+        // This code is fragile and needs to be called in this exact location or it will break.
+        // This is because when we rotate the device, a `keyboardWillHide` notification is fired
+        // even though we have set the text field to the first responder. When that notification fires
+        // this notification is re-called for both skeleton toolbars where `shouldShowKeyboard` is false
+        // causing the keyboard to hide.
+        // TODO: FXIOS-14618 don't fire the `keyboardWillHide` notification on device rotation
+        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
+        _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
+
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.
         if let dropInteraction = urlTextField.textDropInteraction {
@@ -517,18 +533,11 @@ final class LocationView: UIView,
         let text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
         urlTextField.text = text
 
-        // Defer keyboard/first responder to next run loop (non-blocking).
-        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
-        if shouldShowKeyboard {
-            DispatchQueue.main.async { [unowned self] in
-                _ = becomeFirstResponder()
-                if config.shouldSelectSearchTerm {
-                    urlTextField.text = text
-                    urlTextField.selectAll(nil)
-                }
+        DispatchQueue.main.async { [unowned self] in
+            if shouldShowKeyboard && config.shouldSelectSearchTerm {
+                urlTextField.text = text
+                urlTextField.selectAll(nil)
             }
-        } else {
-            _ = resignFirstResponder()
         }
     }
 

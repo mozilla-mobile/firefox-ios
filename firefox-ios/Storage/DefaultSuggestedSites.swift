@@ -61,7 +61,7 @@ open class DefaultSuggestedSites {
                 title: .DefaultSuggestedAmazon,
                 trackingId: 630,
                 // NOTE: Amazon does not host a high quality favicon. We are falling back to the one hosted in our
-                // ContileProvider.contileProdResourceEndpoint (https://ads.mozilla.org/v1/tiles).
+                // UnifiedAdsProvider.prodResourceEndpoint (https://ads.mozilla.org/v1/ads).
                 faviconResource: .bundleAsset(
                     name: "amazon",
                     forRemoteResource: URL(string: "https://tiles-cdn.prod.ads.prod.webservices.mozgcp.net/CAP5k4gWqcBGwir7bEEmBWveLMtvldFu-y_kyO3txFA=.9991.jpg")!

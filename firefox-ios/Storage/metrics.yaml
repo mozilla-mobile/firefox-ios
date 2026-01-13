@@ -133,24 +133,6 @@ logins_store_key_regeneration:
       - lougenia@mozilla.com
     expires: never
 
-fxa_keychain_usage:
-  # This metric tracks if the fxa keychain is being used instead of the MZKeychainWrapper logic during the
-  # `useRustKeychainForFxA` Nimbus rollout
-  enabled:
-    type: event
-    description: >
-      The `useRustKeychainForFxA` has been set to true and the fxa keychain is in use
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/30139
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/30138
-    data_sensitivity:
-      - technical
-    notification_emails:
-      - synced-client-integrations@mozilla.com
-      - lougenia@mozilla.com
-    expires: 2026-01-31
-
 pre_sync_key_retrieval_failure:
   # These track when we fail to retrieve the an engine's encryption keys for
   # a sync

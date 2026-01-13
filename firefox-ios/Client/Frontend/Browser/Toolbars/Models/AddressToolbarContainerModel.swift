@@ -96,9 +96,13 @@ final class AddressToolbarContainerModel: Equatable {
             leadingPageActions: leadingPageActions,
             trailingPageActions: trailingPageActions,
             browserActions: browserActions,
-            borderPosition: borderPosition,
+            borderConfiguration: AddressToolbarBorderConfiguration(
+                a11yIdentifier: AccessibilityIdentifiers.Toolbar.topBorder,
+                borderPosition: borderPosition
+            ),
             uxConfiguration: uxConfiguration,
-            shouldAnimate: shouldAnimate)
+            shouldAnimate: shouldAnimate
+        )
     }
 
     /// Returns a skeleton (placeholder) `AddressToolbarConfiguration` for the address bar.
@@ -184,7 +188,10 @@ final class AddressToolbarContainerModel: Equatable {
             leadingPageActions: leadingPageElements,
             trailingPageActions: trailingPageElements,
             browserActions: [],
-            borderPosition: borderPosition,
+            borderConfiguration: AddressToolbarBorderConfiguration(
+                a11yIdentifier: AccessibilityIdentifiers.Toolbar.topBorder,
+                borderPosition: borderPosition
+            ),
             uxConfiguration: uxConfiguration,
             shouldAnimate: shouldAnimate
         )

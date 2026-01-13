@@ -145,7 +145,7 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blocar atros trazadors de contenius puede fer que no s'amuestren bien bells videos u pachinas web.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla s'esfuerza per replegar nomás lo necesario pa fornir y amillorar %@ pa totz.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */

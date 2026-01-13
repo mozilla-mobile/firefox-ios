@@ -1,3 +1,6 @@
+/* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
+"RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "ഇ-തപാൽ പൊയ്മുഖങ്ങൾ നിലവിൽ ലഭ്യമല്ല. കുറച്ചു മിനിറ്റുകൾക്കുള്ളിൽ വീണ്ടും ശ്രമിക്കുക.";
+
 /* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "ഇ-തപാൽ പൊയ്മുഖം തിരുകി";
 

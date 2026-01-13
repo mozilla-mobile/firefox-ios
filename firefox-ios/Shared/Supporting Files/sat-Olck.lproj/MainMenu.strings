@@ -1,8 +1,23 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Body.v142" = "ᱵᱩᱠᱢᱟᱨᱠ, ᱱᱟᱜᱟᱢ, ᱟᱨ ᱥᱮᱴᱤᱝ — ᱡᱚᱛᱚ ᱟᱢᱟᱜ ᱠᱟᱹᱴᱩᱵ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Title.v142" = "ᱱᱟᱶᱟ ᱢᱮᱱᱩ, ᱪᱮᱫ ᱦᱚᱸ ᱵᱟᱹᱲᱤᱡ ᱵᱟᱹᱱᱩᱜᱼᱟ";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
 "ContextualHints.MainMenu.NewMenu.Body.v132" = "ᱯᱨᱟᱭᱣᱮᱴ ᱵᱽᱨᱟᱣᱡᱤᱝ ᱠᱷᱚᱱ ᱠᱟᱹᱴᱷᱤᱦᱚᱨᱟᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱫᱷᱟᱹᱵᱤᱡ, ᱯᱟᱱᱛᱮ ᱢᱮ ᱡᱟᱦᱟᱸ ᱫᱚ ᱟᱢ ᱞᱟᱹᱠᱛᱤᱭᱟᱜ ᱠᱟᱱᱟ ᱾";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "ᱱᱟᱶᱟ ᱺ ᱡᱟᱣᱨᱟ ᱠᱟᱱ ᱢᱮᱱᱩ";
+
+/* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "ᱥᱟᱦᱴᱟ ᱯᱩᱛᱷᱤᱪᱤᱱᱦᱟᱹᱭ ᱢᱮ";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.AccessibilityLabels.CloseButton.142" = "ᱢᱮᱱᱭᱩ ᱵᱚᱱᱫᱚᱭ ᱢᱮ";
+
+/* The accessibility label for the dismiss button, for header banner, on top of the menu. */
+"MainMenu.AccessibilityLabels.DismissBanner.142" = "ᱵᱮᱱᱟᱨ ᱠᱷᱟᱨᱟᱯ ᱢᱮ";
 
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "ᱰᱤᱢ";
@@ -13,11 +28,20 @@
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
 
+/* The accessibility label for the close button of the header menu banner. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
+
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ, ᱴᱮᱵᱽ ᱟᱨ ᱟᱨᱦᱚᱸ ᱟᱭᱢᱟ ᱡᱤᱱᱤᱥᱠᱚ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱞᱟᱹᱜᱤᱫ ᱥᱩᱦᱤ ᱮᱢ ᱢᱮ";
 
+/* On the main menu, when the user is signed in. */
+"MainMenu.Account.SignedIn.Description.v141" = "ᱟᱢ ᱪᱮᱫ ᱵᱮᱠ ᱟᱯ ᱟᱨ ᱥᱤᱱᱠ ᱮᱢ ᱪᱟᱞᱟᱣ ᱢᱮ";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ, ᱴᱮᱵᱽ ᱟᱨ ᱟᱨᱦᱚᱸ ᱟᱭᱢᱟ ᱡᱤᱱᱤᱥᱠᱚ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱢᱮ";
+
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "ᱥᱤᱱᱠ ᱵᱩᱠᱢᱟᱨᱠ, ᱯᱟᱥᱣᱟᱨᱰ, ᱴᱮᱵᱽ, ᱟᱨ ᱟᱭᱢᱟ ᱡᱤᱱᱤᱥ";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ";
@@ -27,6 +51,27 @@
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "ᱥᱭᱝᱠ ᱞᱟᱹᱜᱤᱫ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
+
+/* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.BookmarkPage.Title.v141" = "ᱥᱟᱦᱴᱟ ᱵᱩᱩᱠᱢᱟᱨᱠ ᱢᱮ";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
+"MainMenu.DesktopSiteOff.Title.v142" = "ᱵᱚᱸᱫᱚ";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
+"MainMenu.DesktopSiteOn.Title.v142" = "ᱪᱟᱹᱞᱩ";
+
+/* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
+"MainMenu.HeaderBanner.Subtitle.v142" = "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱥᱮᱠᱮᱱᱰ ᱞᱟᱜᱟᱜᱼᱟ ᱾ ᱡᱟᱦᱟᱸ ᱚᱠᱛᱚ ᱨᱮᱜᱮ ᱵᱚᱫᱚᱞ ᱢᱮ ᱾";
+
+/* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
+"MainMenu.HeaderBanner.Title.v142" = "%@ ᱟᱢᱟᱜ ᱢᱩᱞ ᱞᱮᱠᱷᱟᱛᱮ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* On the main menu, a title for a label that indicate the current option/action state is off. */
+"MainMenu.Off.Title.v141" = "ᱵᱚᱸᱫᱚ";
+
+/* On the main menu, a title for a label that indicate the current option/action state is on. */
+"MainMenu.On.Title.v141" = "ᱪᱟᱹᱞᱩ";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ";
@@ -75,6 +120,9 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "%@ ᱨᱮ ᱱᱟᱶᱟ ᱡᱤᱱᱤᱥ";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
+"MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "ᱡᱩᱲᱟᱹᱣ ᱫᱚ ᱵᱟᱭ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱜᱮᱭᱟ";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "ᱚᱲᱟᱜ";
@@ -231,6 +279,18 @@
 
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v131" = "ᱦᱟᱹᱴᱤᱧ ᱢᱮ";
+
+/* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱰᱟᱨᱠ ᱢᱚᱰ ᱵᱚᱱᱫᱚᱭ ᱢᱮ";
+
+/* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱰᱟᱨᱠ ᱢᱚᱰ ᱪᱟᱹᱞᱩᱭ ᱢᱮ";
+
+/* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
+"MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
+
+/* This string is for the Zoom tool, when Zoom value is positive. (+125%) */
+"MainMenu.Submenus.Tools.Zoom.PositiveSymbol.v137" = "+";
 
 /* On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
 "MainMenu.Submenus.Tools.Zoom.Subtitle.v131" = "ᱡᱩᱢ";

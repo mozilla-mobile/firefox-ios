@@ -27,6 +27,7 @@ public protocol ThemeColourPalette {
     var layerSuccess: UIColor { get }
     var layerWarning: UIColor { get }
     var layerCritical: UIColor { get }
+    var layerCriticalSubdued: UIColor { get }
     var layerSelectedText: UIColor { get }
     var layerAutofillText: UIColor { get }
     var layerEmphasis: UIColor { get }
@@ -35,18 +36,6 @@ public protocol ThemeColourPalette {
     var layerSurfaceMedium: UIColor { get }
     var layerSurfaceMediumAlt: UIColor { get }
     var layerGradientSummary: Gradient { get }
-
-    // MARK: - Ratings
-    var layerRatingA: UIColor { get }
-    var layerRatingASubdued: UIColor { get }
-    var layerRatingB: UIColor { get }
-    var layerRatingBSubdued: UIColor { get }
-    var layerRatingC: UIColor { get }
-    var layerRatingCSubdued: UIColor { get }
-    var layerRatingD: UIColor { get }
-    var layerRatingDSubdued: UIColor { get }
-    var layerRatingF: UIColor { get }
-    var layerRatingFSubdued: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }

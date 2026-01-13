@@ -138,6 +138,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showPasswordGeneratorCalled += 1
     }
 
+    func showPasswordGenerator(tab: Tab, frameContext: PasswordGeneratorFrameContext) {
+        showPasswordGeneratorCalled += 1
+    }
+
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
         showEditBookmarkCalled += 1
     }

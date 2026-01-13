@@ -10,7 +10,7 @@ class MockThrottler: MainThreadThrottlerProtocol {
 
     init() {}
 
-    func throttle(completion: @escaping @MainActor @Sendable () -> Void) {
+    func throttle(completion: @escaping @MainActor () -> Void) {
         didCallThrottle = true
         ensureMainThread {
             completion()

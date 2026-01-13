@@ -432,8 +432,6 @@ extension TelemetryWrapper {
         case showPullRefreshEasterEgg = "show-pull-refresh-easter-egg"
         case keyCommand = "key-command"
         case messaging = "messaging"
-        case qrCodeText = "qr-code-text"
-        case qrCodeURL = "qr-code-url"
         case readerModeCloseButton = "reader-mode-close-button"
         case readerModeOpenButton = "reader-mode-open-button"
         case readingListItem = "reading-list-item"
@@ -823,11 +821,6 @@ extension TelemetryWrapper {
         // MARK: Preferences
         case (.action, .change, .setting, _, _):
             assertionFailure("Please record telemetry for settings using the SettingsTelemetry().changedSetting() method")
-
-        // MARK: - QR Codes
-        case (.action, .scan, .qrCodeText, _, _),
-             (.action, .scan, .qrCodeURL, _, _):
-            GleanMetrics.QrCode.scanned.add()
 
         // MARK: Tabs
         case (.action, .press, .tabToolbar, .tabView, _):

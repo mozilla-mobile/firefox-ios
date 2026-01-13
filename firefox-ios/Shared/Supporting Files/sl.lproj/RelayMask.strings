@@ -4,11 +4,20 @@
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "5 brezplačnih e-poštnih mask že uporabljate, zato smo izbrali eno od njih.";
 
+/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Svojih 5 brezplačnih e-poštnih mask ste že uporabili, zato smo ponovno uporabili eno od njih.";
+
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "E-poštne maske ta trenutek niso na voljo. Poskusite znova čez nekaj minut.";
 
+/* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
+"RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "E-poštna maska vstavljena";
+
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Zakrijte svoj pravi e-poštni naslov in zaščitite nabiralnik pred vsiljeno pošto. Nekatera spletna mesta tega ne podpirajo.";
+
+/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Zakrijte svoj pravi e-poštni naslov in zaščitite nabiralnik pred vsiljeno pošto. Nekatera spletna mesta e-poštnih mask ne podpirajo.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Več o tem";

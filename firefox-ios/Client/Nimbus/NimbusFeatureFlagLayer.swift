@@ -70,6 +70,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
             return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
 
+        case .shouldUseBrandRefreshConfiguration:
+            return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
+
         case .shouldUseJapanConfiguration:
             return checkShouldUseJapanConfigurationFeature(from: nimbus)
 
@@ -523,6 +526,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.webEngineIntegrationRefactor.value().enabled
+    }
+
+    private func checkShouldUseBrandRefreshConfigurationFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().shouldUseBrandRefreshConfiguration
     }
 
     private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {

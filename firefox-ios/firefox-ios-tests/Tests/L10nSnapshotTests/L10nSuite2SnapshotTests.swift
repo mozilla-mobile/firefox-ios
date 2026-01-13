@@ -6,6 +6,7 @@ import XCTest
 import Common
 
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
+    @MainActor
     let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
     @MainActor
     func testPanelsEmptyState() {

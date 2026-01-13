@@ -12,7 +12,7 @@ protocol TopSitesManagerInterface: Sendable {
     /// which is composed of history-based (Frecency) + pinned + default suggested tiles
     func getOtherSites() async -> [TopSiteConfiguration]
 
-    /// Returns a list of sponsored tiles using the contile provider
+    /// Returns a list of sponsored tiles using the `UnifiedAdsProvider`
     func fetchSponsoredSites() async -> [Site]
 
     /// Returns a list of top sites used to show the user
@@ -82,7 +82,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         let googleTopSite = addGoogleTopSite(with: availableSpaceCount)
 
         let updatedSpaceCount = getUpdatedSpaceCount(with: googleTopSite, and: availableSpaceCount)
-        let sponsoredSites = filterSponsoredSites(contiles: sponsoredSites, with: updatedSpaceCount, and: otherSites)
+        let sponsoredSites = filterSponsoredSites(unifiedTiles: sponsoredSites, with: updatedSpaceCount, and: otherSites)
 
         let totalTopSites = googleTopSite + sponsoredSites + otherSites
 
@@ -100,14 +100,13 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         return [TopSiteConfiguration(site: googleSite)]
     }
 
-    // MARK: Sponsored tiles (Contiles)
+    // MARK: Sponsored tiles (Unified Tiles)
     func fetchSponsoredSites() async -> [Site] {
         guard shouldLoadSponsoredTiles else { return [] }
-        let contiles = await withCheckedContinuation { continuation in
+        let unifiedTiles = await withCheckedContinuation { continuation in
             unifiedAdsProvider.fetchTiles { [weak self] result in
                 if case .success(let unifiedTiles) = result {
-                    let sponsoredTiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
-                    continuation.resume(returning: sponsoredTiles)
+                    continuation.resume(returning: unifiedTiles)
                 } else {
                     self?.logger.log(
                         "Unified ads provider did not return any sponsored tiles when requested",
@@ -119,7 +118,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
             }
         }
 
-        return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
+        return unifiedTiles.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
     }
 
     private var shouldLoadSponsoredTiles: Bool {
@@ -128,20 +127,20 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
 
     @MainActor
     private func filterSponsoredSites(
-        contiles: [Site],
+        unifiedTiles: [Site],
         with availableSpaceCount: Int,
         and otherSites: [TopSiteConfiguration]
     ) -> [TopSiteConfiguration] {
         guard availableSpaceCount > 0, shouldLoadSponsoredTiles else { return [] }
 
-        guard !contiles.isEmpty else { return [] }
+        guard !unifiedTiles.isEmpty else { return [] }
 
-        let filteredContiles = contiles
+        let filteredTiles = unifiedTiles
             .prefix(maxNumberOfSponsoredTile)
             .filter { shouldShowSponsoredSite(with: $0, and: otherSites) }
             .compactMap { TopSiteConfiguration(site: $0) }
 
-        return filteredContiles
+        return filteredTiles
     }
 
     /// Show the sponsored site only if site is not already present in the pinned sites
