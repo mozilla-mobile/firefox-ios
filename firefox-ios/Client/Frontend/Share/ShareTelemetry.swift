@@ -47,7 +47,6 @@ final class ShareTelemetry {
                                              timerId: openURLTimerId)
         time = CACurrentMediaTime() - time
         logger.log("Startup time handling deeplink took \"\(time)\" seconds", level: .info, category: .lifecycle)
-        NSLog("FF: Startup time deeplink: \(time) seconds")
     }
 
     func cancelOpenURLTimeRecord() {
