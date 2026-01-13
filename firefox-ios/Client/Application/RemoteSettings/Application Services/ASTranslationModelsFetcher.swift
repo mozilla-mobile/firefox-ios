@@ -106,7 +106,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
     }
 
     func getAttachment(record: RemoteSettingsRecord) async throws -> Data? {
-        // TODO: FXIOS-XXXXX: Should make Rust method async and remove this wrapper method
+        // TODO: FXIOS-14616: Should make Rust method async and remove this wrapper method
         try? translatorsClient?.getAttachment(record: record)
     }
 
