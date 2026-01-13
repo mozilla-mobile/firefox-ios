@@ -1590,7 +1590,7 @@ workflows:
     - slack@4.2.1:
         inputs:
         - api_token: $SLACK_APP_TOKEN
-        - channel: "#mobile-alerts-sandbox"
+        - channel: "#cso-slack-test"
         - author_name: ''
         - pretext: ":info: Firefox iOS Unit Tests"
         - title:
