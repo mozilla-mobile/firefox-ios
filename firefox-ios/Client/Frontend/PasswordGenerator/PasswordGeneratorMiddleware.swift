@@ -49,7 +49,7 @@ final class PasswordGeneratorMiddleware {
             self.userTappedRefreshPassword(frameContext: frameContext, windowUUID: windowUUID)
 
         case PasswordGeneratorActionType.clearGeneratedPasswordForSite:
-            guard let origin = (action as? PasswordGeneratorAction)?.frameContext?.origin else { return }
+            guard let origin = (action as? PasswordGeneratorAction)?.loginEntryOrigin else { return }
             self.clearGeneratedPasswordForSite(origin: origin, windowUUID: windowUUID)
 
         default:

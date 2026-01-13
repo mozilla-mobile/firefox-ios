@@ -393,13 +393,9 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
     @MainActor
     private func clearStoredPasswordAfterGeneration(origin: String) {
         if let windowUUID = self.tab?.windowUUID {
-            let frameContext = PasswordGeneratorFrameContext(origin: origin,
-                                                             host: nil,
-                                                             scriptEvaluator: nil,
-                                                             frameInfo: nil)
             let action = PasswordGeneratorAction(windowUUID: windowUUID,
                                                  actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
-                                                 frameContext: frameContext)
+                                                 loginEntryOrigin: origin)
             store.dispatch(action)
         }
     }

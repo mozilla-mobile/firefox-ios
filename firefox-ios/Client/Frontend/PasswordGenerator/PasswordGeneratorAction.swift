@@ -28,15 +28,18 @@ struct PasswordGeneratorAction: Action {
 
     // Used in some reducers
     let password: String?
+    let loginEntryOrigin: String?
 
     init(windowUUID: WindowUUID,
          actionType: any ActionType,
          password: String? = nil,
-         frameContext: PasswordGeneratorFrameContext? = nil) {
+         frameContext: PasswordGeneratorFrameContext? = nil,
+         loginEntryOrigin: String? = nil) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.password = password
         self.frameContext = frameContext
+        self.loginEntryOrigin = loginEntryOrigin
     }
 }
 
