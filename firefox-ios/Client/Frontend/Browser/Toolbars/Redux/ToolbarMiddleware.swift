@@ -168,8 +168,17 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case ToolbarActionType.didSubmitSearchTerm:
-            // After a user submits a search term, we want to record it in our history storage via recent search provider
-            guard let url = action.url, let searchTerm = action.searchTerm else { return }
+            // After a user submits a search term, we want to record it in our history storage via recent search provider.
+            // We only want to record when in normal mode since recent searches is not available for private mode.
+            guard let toolbarState = state.screenState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: action.windowUUID
+            ) else {
+                return
+            }
+
+            guard let url = action.url, let searchTerm = action.searchTerm, !toolbarState.isPrivateMode else { return }
             recentSearchProvider.addRecentSearch(searchTerm, url: url.absoluteString)
 
         case ToolbarActionType.navigationMiddleButtonDidChange:
