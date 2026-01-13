@@ -1589,8 +1589,7 @@ workflows:
     steps:
     - slack@4.2.1:
         inputs:
-        - api_token: $SLACK_APP_TOKEN
-        - channel: "#cso-slack-test"
+        - webhook_url: $WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX
         - author_name: ''
         - pretext: ":info: Firefox iOS Unit Tests"
         - title:
