@@ -1476,25 +1476,12 @@ class BrowserViewController: UIViewController,
 
     private func enqueueTabRestoration() {
         guard isDeeplinkOptimizationRefactorEnabled else { return }
-        // Postpone tab restoration after the deeplink has been handled, that is after the start up time record
-        // has ended. If there is no deeplink then restore when the startup time record cancellation has been
-        // signaled.
-
-        // Enqueues the actions only if the opposite action where not signaled, this happen when the app
-        // handles a deeplink when was already opened
-//        if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
-//            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
-//                ensureMainThread { [weak self] in
-//                    self?.tabManager.restoreTabs()
-//                }
-//            }
-//        } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
-//            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
-//                ensureMainThread { [weak self] in
-//                    self?.tabManager.restoreTabs()
-//                }
-//            }
-//        }
+        // Postpone tab restoration after the potential deeplink has been handled.
+        // Deeplinks are handled suddenly after the viewDidLoad. In order to give them precedence dispatch the restore
+        // to next run loop.
+        DispatchQueue.main.async { [self] in
+            tabManager.restoreTabs()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -1502,9 +1489,9 @@ class BrowserViewController: UIViewController,
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-//        if !isDeeplinkOptimizationRefactorEnabled {
-        tabManager.restoreTabs()
-//        }
+        if !isDeeplinkOptimizationRefactorEnabled {
+            tabManager.restoreTabs()
+        }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         updateToolbarStateForTraitCollection(traitCollection, shouldUpdateBlurViews: !isToolbarTranslucencyEnabled)
