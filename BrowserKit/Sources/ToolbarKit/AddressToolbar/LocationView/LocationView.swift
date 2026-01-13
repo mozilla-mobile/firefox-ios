@@ -501,8 +501,12 @@ final class LocationView: UIView,
         }
         urlAbsolutePath = config.url?.absoluteString
 
-        // This code is quite fragile. There is a timing issue here, where when this functionality gets called
-        // again for skeleton toolbars and will dismiss the keyboard unexpectedly
+        // This code is fragile and needs to be called in this exact location or it will break.
+        // This is because when we rotate the device, a `keyboardWillHide` notification is fired
+        // even though we have set the text field to the first responder. When that notification fires
+        // this notification is re-called for both skeleton toolbars where `shouldShowKeyboard` is false
+        // causing the keyboard to hide.
+        // TODO: FXIOS-14618 don't fire the `keyboardWillHide` notification on device rotation
         let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
