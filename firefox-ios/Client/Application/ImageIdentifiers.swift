@@ -77,11 +77,6 @@ struct ImageIdentifiers {
             public static let themeLightJapan = "onboardingThemeLightJapan"
             public static let toolbarTopJapan = "onboardingToolbarIconTopJapan"
             public static let toolbarBottomJapan = "onboardingToolbarIconBottomJapan"
-            public static let themeSystemBrandRefresh = "onboardingThemeSystemBrandRefresh"
-            public static let themeDarkBrandRefresh = "onboardingThemeDarkBrandRefresh"
-            public static let themeLightBrandRefresh = "onboardingThemeLightBrandRefresh"
-            public static let toolbarTopBrandRefresh = "onboardingToolbarIconTopBrandRefresh"
-            public static let toolbarBottomBrandRefresh = "onboardingToolbarIconBottomBrandRefresh"
         }
 
         public struct ChallengeTheDefault {

@@ -43,9 +43,9 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enable-modern-ui: false
+          enable-modern-ui: true
           should-use-japan-configuration: false
-          should-use-brand-refresh-configuration: false
+          should-use-brand-refresh-configuration: true
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
@@ -442,10 +442,10 @@ features:
                   action: forward-one-card
               multiple-choice-buttons:
                 - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140
-                  image: toolbar-bottom-brand-refresh
+                  image: toolbar-bottom-japan
                   action: toolbar-bottom
                 - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v140
-                  image: toolbar-top-brand-refresh
+                  image: toolbar-top-japan
                   action: toolbar-top
               onboarding-type: fresh-install
               prerequisites:
@@ -463,13 +463,13 @@ features:
                   action: forward-one-card
               multiple-choice-buttons:
                 - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148
-                  image: theme-system-brand-refresh
+                  image: theme-system-japan
                   action: theme-system-default
                 - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148
-                  image: theme-light-brand-refresh
+                  image: theme-light-japan
                   action: theme-light
                 - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148
-                  image: theme-dark-brand-refresh
+                  image: theme-dark-japan
                   action: theme-dark
               onboarding-type: fresh-install
               prerequisites:
@@ -794,16 +794,16 @@ enums:
           Corresponding to the trackers image
       sync-with-icons-japan:
         description: >
-          Corresponding to the sync-with-icons image for Japan
+          Corresponding to the sync-with-icons image for Japan variant
       trackers-japan:
         description: >
-          Corresponding to the trackers image for Japan
-      sync-with-icons-brand-refresh:
-        description: >
-          Corresponding to the sync-with-icons image for brand refresh
+          Corresponding to the trackers image for Japan variant (contains Japanese text)
       trackers-brand-refresh:
         description: >
-          Corresponding to the trackers image for brand refresh
+          Corresponding to the trackers image for Brand Refresh variant (does not contain Japanese text, different from Japan variant)
+      sync-with-icons-brand-refresh:
+        description: >
+          Corresponding to the sync-with-icons image for Brand Refresh variant (different from Japan variant)
   OnboardingCardType:
     description: >
       The identifiers for the different types of onboarding cards.
@@ -866,31 +866,16 @@ enums:
           Corresponding to the toolbar on the bottom
       theme-system-japan:
         description: >
-          Corresponding to the system theme for Japan
+          Corresponding to the system theme image for Japan variant. Also used by Brand Refresh variant as the images are identical.
       theme-dark-japan:
         description: >
-          Corresponding to the dark theme for Japan
+          Corresponding to the dark theme image for Japan variant. Also used by Brand Refresh variant as the images are identical.
       theme-light-japan:
         description: >
-          Corresponding to the light theme for Japan
+          Corresponding to the light theme image for Japan variant. Also used by Brand Refresh variant as the images are identical.
       toolbar-top-japan:
         description: >
-          Corresponding to the toolbar on top for Japan
+          Corresponding to the toolbar on top image for Japan variant. Also used by Brand Refresh variant as the images are identical.
       toolbar-bottom-japan:
         description: >
-          Corresponding to the toolbar on the bottom for Japan
-      theme-system-brand-refresh:
-        description: >
-          Corresponding to the system theme for brand refresh
-      theme-dark-brand-refresh:
-        description: >
-          Corresponding to the dark theme for brand refresh
-      theme-light-brand-refresh:
-        description: >
-          Corresponding to the light theme for brand refresh
-      toolbar-top-brand-refresh:
-        description: >
-          Corresponding to the toolbar on top for brand refresh
-      toolbar-bottom-brand-refresh:
-        description: >
-          Corresponding to the toolbar on the bottom for brand refresh
+          Corresponding to the toolbar on the bottom image for Japan variant. Also used by Brand Refresh variant as the images are identical.
