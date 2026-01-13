@@ -140,28 +140,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2307031
-    func testSetCustomURLAsHome() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        // Enter a webpage
-        enterWebPageAsHomepage(text: websiteUrl1)
-
-        // Open a new tab and tap on Home option
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitForTabsButton()
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "mozilla.org")
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
     func testDisableTopSitesSettingsRemovesSection() {
         app.launch()

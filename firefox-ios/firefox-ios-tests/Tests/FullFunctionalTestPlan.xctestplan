@@ -176,7 +176,6 @@
         "HomePageSettingsUITests\/testCustomizeHomepage()",
         "HomePageSettingsUITests\/testCustomizeHomepage_TAE()",
         "HomePageSettingsUITests\/testRecentlyVisited()",
-        "HomePageSettingsUITests\/testSetCustomURLAsHome()",
         "HomePageSettingsUITests\/testTyping()",
         "HomePageUITest",
         "HomepageSearchBarTests",
