@@ -246,7 +246,7 @@ class CreditCardsTests: BaseTestCase {
         cardNumber.waitAndTap()
         mozWaitForElementToNotExist(app.buttons[useSavedCard])
         // If Keyboard is open, hit return button
-        app.buttons["KeyboardAccessory.doneButton"].tapIfExists()
+        app.keyboards.buttons["Return"].tapIfExists()
 
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
