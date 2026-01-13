@@ -801,6 +801,7 @@ workflows:
             xcodebuild -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
+        title: Generate screenshots
     - save-cache@1.4.0:
         inputs:
         - key: l10n-screenshots-dd-$GIT_CLONE_COMMIT_HASH
