@@ -51,7 +51,6 @@ enum GeneralBrowserActionType: ActionType {
     case navigateBack
     case navigateForward
     case showTabTray
-    case showQRcodeReader
     case showBackForwardList
     case showTrackingProtectionDetails
     case showTabsLongPressActions

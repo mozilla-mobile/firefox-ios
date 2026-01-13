@@ -1091,20 +1091,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     // MARK: - App action route
 
-    func testHandleHandleQRCode_returnsTrue() {
-        // Given
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        subject.browserHasLoaded()
-
-        // When
-        let result = testCanHandleAndHandle(subject, route: .action(action: .showQRCode))
-
-        // Then
-        XCTAssertTrue(result)
-        XCTAssertEqual(browserViewController.qrCodeCount, 1)
-    }
-
     func testHandleClosePrivateTabs_returnsTrue() {
         // Given
         let subject = createSubject()

@@ -233,8 +233,6 @@ final class RouteBuilder: FeatureFlaggable, @unchecked Sendable {
             } else {
                 return nil
             }
-        case .qrCode:
-            return .action(action: .showQRCode)
         }
     }
 

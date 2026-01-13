@@ -32,7 +32,6 @@ class BrowserViewController: UIViewController,
                              Notifiable,
                              LibraryPanelDelegate,
                              RecentlyClosedPanelDelegate,
-                             QRCodeViewControllerDelegate,
                              StoreSubscriber,
                              BrowserFrameInfoProvider,
                              NavigationToolbarContainerDelegate,
@@ -2840,8 +2839,6 @@ class BrowserViewController: UIViewController,
         guard let displayState = state.displayView else { return }
 
         switch displayState {
-        case .qrCodeReader:
-            navigationHandler?.showQRCode(delegate: self)
         case .backForwardList:
             navigationHandler?.showBackForwardList()
         case .tabsLongPressActions:
@@ -3372,12 +3369,6 @@ class BrowserViewController: UIViewController,
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
-    }
-
-    func handleQRCode() {
-        cancelEditMode()
-        openBlankNewTab(focusLocationField: false, isPrivate: false)
-        navigationHandler?.showQRCode(delegate: self)
     }
 
     // MARK: - Toolbar Refactor Deeplink Helper Method.
@@ -3982,42 +3973,6 @@ class BrowserViewController: UIViewController,
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
-    }
-
-    // MARK: - QRCodeViewControllerDelegate
-
-    func didScanQRCodeWithURL(_ url: URL) {
-        guard let tab = tabManager.selectedTab else { return }
-        finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
-        TelemetryWrapper.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
-    }
-
-    func didScanQRCodeWithTextContent(_ content: TextContentDetector.DetectedType?, rawText text: String) {
-        TelemetryWrapper.recordEvent(category: .action, method: .scan, object: .qrCodeText)
-        let defaultAction: () -> Void = { [weak self] in
-            guard let tab = self?.tabManager.selectedTab else { return }
-            self?.submitSearchText(text, forTab: tab)
-        }
-        switch content {
-        case .some(.link(let url)):
-            if url.isWebPage() {
-                didScanQRCodeWithURL(url)
-            } else {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
-        case .some(.phoneNumber(let phoneNumber)):
-            if let url = URL(string: "tel:\(phoneNumber)") {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                defaultAction()
-            }
-        default:
-            defaultAction()
-        }
-    }
-
-    var qrCodeScanningPermissionLevel: QRCodeScanPermissions {
-        return .default
     }
 
     // MARK: - BrowserFrameInfoProvider

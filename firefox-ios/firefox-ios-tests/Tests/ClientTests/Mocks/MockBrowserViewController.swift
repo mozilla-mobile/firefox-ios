@@ -38,7 +38,6 @@ class MockBrowserViewController: BrowserViewController {
     var presentSignInReferringPage: ReferringPage?
     var presentSignInCount = 0
 
-    var qrCodeCount = 0
     var closePrivateTabsWidgetAction = 0
 
     var embedContentCalled = 0
@@ -120,10 +119,6 @@ class MockBrowserViewController: BrowserViewController {
         openURLInNewTabIsPrivate = isPrivate
         openURLInNewTabCount += 1
         return Tab(profile: MockProfile(), windowUUID: windowUUID)
-    }
-
-    override func handleQRCode() {
-        qrCodeCount += 1
     }
 
     override func closeAllPrivateTabs() {
