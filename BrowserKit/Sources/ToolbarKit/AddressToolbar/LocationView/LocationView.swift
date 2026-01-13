@@ -501,6 +501,15 @@ final class LocationView: UIView,
         }
         urlAbsolutePath = config.url?.absoluteString
 
+        // This code is fragile and needs to be called in this exact location or it will break.
+        // This is because when we rotate the device, a `keyboardWillHide` notification is fired
+        // even though we have set the text field to the first responder. When that notification fires
+        // this notification is re-called for both skeleton toolbars where `shouldShowKeyboard` is false
+        // causing the keyboard to hide.
+        // TODO: FXIOS-14618 don't fire the `keyboardWillHide` notification on device rotation
+        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
+        _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
+
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.
         if let dropInteraction = urlTextField.textDropInteraction {
@@ -524,20 +533,11 @@ final class LocationView: UIView,
         let text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
         urlTextField.text = text
 
-        // Defer keyboard/first responder to next run loop (non-blocking).
-        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
-        if shouldShowKeyboard {
-            // cannot be added to dispatch as it would fire delayed and could trigger keyboard to be shown again
-            // despite state already requiring keyboard being dismissed (e.g. tapping on search suggestion)
-            _ = becomeFirstResponder()
-            DispatchQueue.main.async { [unowned self] in
-                if config.shouldSelectSearchTerm {
-                    urlTextField.text = text
-                    urlTextField.selectAll(nil)
-                }
+        DispatchQueue.main.async { [unowned self] in
+            if shouldShowKeyboard && config.shouldSelectSearchTerm {
+                urlTextField.text = text
+                urlTextField.selectAll(nil)
             }
-        } else {
-            _ = resignFirstResponder()
         }
     }
 
