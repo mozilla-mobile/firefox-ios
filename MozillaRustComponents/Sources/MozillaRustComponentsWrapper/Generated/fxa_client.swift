@@ -1050,7 +1050,7 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *      granted the `https:///identity.mozilla.com/apps/oldsync` scope.
 
      */
-    func sendSingleTab(targetDeviceId: String, title: String, url: String) throws 
+    func sendSingleTab(targetDeviceId: String, title: String, url: String, isPrivate: Bool) throws 
     
     /**
      * Update the display name used for this application instance.
@@ -1922,11 +1922,12 @@ open func processEvent(event: FxaEvent)throws  -> FxaState  {
      *      granted the `https:///identity.mozilla.com/apps/oldsync` scope.
 
      */
-open func sendSingleTab(targetDeviceId: String, title: String, url: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+open func sendSingleTab(targetDeviceId: String, title: String, url: String, isPrivate: Bool = false)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
     uniffi_fxa_client_fn_method_firefoxaccount_send_single_tab(self.uniffiClonePointer(),
         FfiConverterString.lower(targetDeviceId),
         FfiConverterString.lower(title),
-        FfiConverterString.lower(url),$0
+        FfiConverterString.lower(url),
+        FfiConverterBool.lower(isPrivate),$0
     )
 }
 }
@@ -3553,18 +3554,22 @@ public func FfiConverterTypeSendTabPayload_lower(_ value: SendTabPayload) -> Rus
 
 
 /**
- * An individual entry in the navigation history of a sent tab.
+ * A received tab. Mis-named as the original intent was to keep
+ * the full "back" history for a tab, where this would be one such
+ * entry - but that never happened.
 
  */
 public struct TabHistoryEntry {
     public var title: String
     public var url: String
+    public var isPrivate: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(title: String, url: String) {
+    public init(title: String, url: String, isPrivate: Bool) {
         self.title = title
         self.url = url
+        self.isPrivate = isPrivate
     }
 }
 
@@ -3581,12 +3586,16 @@ extension TabHistoryEntry: Equatable, Hashable {
         if lhs.url != rhs.url {
             return false
         }
+        if lhs.isPrivate != rhs.isPrivate {
+            return false
+        }
         return true
     }
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(title)
         hasher.combine(url)
+        hasher.combine(isPrivate)
     }
 }
 
@@ -3600,13 +3609,15 @@ public struct FfiConverterTypeTabHistoryEntry: FfiConverterRustBuffer {
         return
             try TabHistoryEntry(
                 title: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
+                url: FfiConverterString.read(from: &buf), 
+                isPrivate: FfiConverterBool.read(from: &buf)
         )
     }
 
     public static func write(_ value: TabHistoryEntry, into buf: inout [UInt8]) {
         FfiConverterString.write(value.title, into: &buf)
         FfiConverterString.write(value.url, into: &buf)
+        FfiConverterBool.write(value.isPrivate, into: &buf)
     }
 }
 
@@ -5134,7 +5145,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_process_event() != 31348) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_send_single_tab() != 46148) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_send_single_tab() != 33359) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_set_device_name() != 49257) {
