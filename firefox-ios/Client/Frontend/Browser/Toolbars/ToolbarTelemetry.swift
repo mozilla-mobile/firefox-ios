@@ -17,11 +17,6 @@ struct ToolbarTelemetry {
     }
 
     // Tap
-    func qrCodeButtonTapped(isPrivate: Bool) {
-        let isPrivateExtra = GleanMetrics.Toolbar.QrScanButtonTappedExtra(isPrivate: isPrivate)
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.qrScanButtonTapped, extras: isPrivateExtra)
-    }
-
     func clearSearchButtonTapped(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.ClearSearchButtonTappedExtra(isPrivate: isPrivate)
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.clearSearchButtonTapped, extras: isPrivateExtra)

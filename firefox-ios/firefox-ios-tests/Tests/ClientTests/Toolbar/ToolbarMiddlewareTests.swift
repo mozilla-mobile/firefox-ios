@@ -308,61 +308,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
-    func testDidTapButton_tapOnQrCodeButton_dispatchesAddNewTab() throws {
-        try didTapButton(buttonType: .qrCode, expectedActionType: GeneralBrowserActionType.showQRcodeReader)
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.QrScanButtonTappedExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.QrScanButtonTappedExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.qrScanButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.isPrivate, false)
-    }
-
-    func testDidTapButton_tapOnQrCodeButton_whenInEditMode_dispatchesCancelEditAndAddNewTab() throws {
-        mockStore = MockStoreForMiddleware(state: setupEditingAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-
-        let subject = createSubject(manager: toolbarManager)
-        let action = ToolbarMiddlewareAction(
-            buttonType: .qrCode,
-            gestureType: .tap,
-            windowUUID: windowUUID,
-            actionType: ToolbarMiddlewareActionType.didTapButton)
-
-        subject.toolbarProvider(mockStore.state, action)
-
-        let firstActionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        let firstActionType = try XCTUnwrap(firstActionCalled.actionType as? ToolbarActionType)
-        let secondActionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? GeneralBrowserAction)
-        let secondActionType = try XCTUnwrap(secondActionCalled.actionType as? GeneralBrowserActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
-        XCTAssertEqual(firstActionType, ToolbarActionType.cancelEdit)
-        XCTAssertEqual(secondActionType, GeneralBrowserActionType.showQRcodeReader)
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.QrScanButtonTappedExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.QrScanButtonTappedExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.qrScanButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.isPrivate, false)
-    }
-
     func testDidTapButton_tapOnBackButton_dispatchesNavigateBack() throws {
         try didTapButton(buttonType: .back, expectedActionType: GeneralBrowserActionType.navigateBack)
 

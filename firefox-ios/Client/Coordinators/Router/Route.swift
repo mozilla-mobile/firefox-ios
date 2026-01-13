@@ -120,7 +120,6 @@ enum Route {
     /// An enumeration representing different actions that can be performed within the application.
     enum AppAction: String, CaseIterable, Equatable {
         case closePrivateTabs = "close-private-tabs"
-        case showQRCode
         case showIntroOnboarding = "show-intro-onboarding"
     }
 

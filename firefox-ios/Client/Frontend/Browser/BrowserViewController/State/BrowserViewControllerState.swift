@@ -21,7 +21,6 @@ struct BrowserViewControllerState: ScreenState {
     }
 
     enum DisplayType: Equatable {
-        case qrCodeReader
         case backForwardList
         case trackingProtectionDetails
         case tabsLongPressActions
@@ -306,8 +305,6 @@ struct BrowserViewControllerState: ScreenState {
             return handleGoToHomepageAction(state: state, action: action)
         case GeneralBrowserActionType.addNewTab:
             return handleAddNewTabAction(state: state, action: action)
-        case GeneralBrowserActionType.showQRcodeReader:
-            return handleShowQRcodeReaderAction(state: state, action: action)
         case GeneralBrowserActionType.showBackForwardList:
             return handleShowBackForwardListAction(state: state, action: action)
         case GeneralBrowserActionType.showTrackingProtectionDetails:
@@ -402,19 +399,6 @@ struct BrowserViewControllerState: ScreenState {
             hasStartedAtHome: state.hasStartedAtHome,
             browserViewType: state.browserViewType,
             navigateTo: .newTab,
-            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-    }
-
-    @MainActor
-    private static func handleShowQRcodeReaderAction(state: BrowserViewControllerState,
-                                                     action: GeneralBrowserAction) -> BrowserViewControllerState {
-        return BrowserViewControllerState(
-            searchScreenState: state.searchScreenState,
-            toast: state.toast,
-            windowUUID: state.windowUUID,
-            hasStartedAtHome: state.hasStartedAtHome,
-            browserViewType: state.browserViewType,
-            displayView: .qrCodeReader,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
