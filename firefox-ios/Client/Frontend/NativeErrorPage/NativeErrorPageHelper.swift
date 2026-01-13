@@ -6,6 +6,15 @@ import Foundation
 import Shared
 import Common
 
+// Error codes copied from Gecko. The ints corresponding to these codes were determined
+// by inspecting the NSError in each of these cases.
+// This replaces the legacy CertErrorCodes in ErrorPageHelper.swift.
+let CertErrorCodes: [Int: String] = [
+    -9813: "SEC_ERROR_UNKNOWN_ISSUER",
+    -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
+    -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
+]
+
 class NativeErrorPageHelper {
     enum NetworkErrorType {
         case noInternetConnection
@@ -57,7 +66,7 @@ class NativeErrorPageHelper {
                     buttonText: String.NativeErrorPage.BadCertDomain.AdvancedButton,
                     infoText: advancedInfo,
                     warningText: warningText,
-                    certificateErrorCode: "SSL_ERROR_BAD_CERT_DOMAIN"
+                    certificateErrorCode: CertErrorCodes[-9843]!
                 )
 
                 return ErrorPageModel(
