@@ -15,9 +15,16 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         static let screenshotViewContainerShadowCornerRadius: CGFloat = 25.0
         static let screenshotViewContainerVerticalPadding: CGFloat = 100.0
         static let screenshotViewContainerShadowOffset = CGSize(width: 2, height: 4)
-        static let deleteOverlayBackgroundColor: UIColor = .systemRed.withAlphaComponent(0.8)
+        static let triggerBoundsHeightPercentage: CGFloat = 0.25
     }
     
+    private let backgroundView: UIVisualEffectView = .build {
+        if #available(iOS 26, *) {
+            $0.effect = UIGlassEffect(style: .regular)
+        } else {
+            $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+    }
     private let tabBackgroundHover: UIView = .build()
     private let screenshotViewContainer: UIView = .build {
         $0.layer.masksToBounds = false
@@ -29,16 +36,14 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = UX.screenshotViewContainerCornerRadius
     }
-    private let deleteOverlay: UIView = .build {
-        $0.layer.cornerRadius = UX.screenshotViewContainerCornerRadius
-        $0.backgroundColor = UX.deleteOverlayBackgroundColor
-        $0.alpha = 0.0
-    }
     private let closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
-            $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)
+        } else {
+            $0.configuration = .filled()
+            $0.configuration?.cornerStyle = .capsule
         }
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
     }
     
     private var screenshotViewContainerTopConstraint: NSLayoutConstraint?
@@ -56,17 +61,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     }
 
     private func setup() {
-        addSubview(tabBackgroundHover)
-        if #available(iOS 26.0, *) {
-            let background = UIVisualEffectView(effect: UIGlassEffect(style: .clear))
-            addSubview(background)
-            background.pinToSuperview()
-        }
-        
-        addSubview(screenshotViewContainer)
+        addSubviews(tabBackgroundHover, backgroundView, screenshotViewContainer, closeButton)
         screenshotViewContainer.addSubview(screenshotView)
-        screenshotViewContainer.addSubview(deleteOverlay)
-        addSubview(closeButton)
         
         tabBackgroundHoverTopConstraint = tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor)
         tabBackgroundHoverBottomConstraint = tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor)
@@ -88,7 +84,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             screenshotViewContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         screenshotView.pinToSuperview()
-        deleteOverlay.pinToSuperview()
+        backgroundView.pinToSuperview()
     }
 
     func addTabScreenshot(image: UIImage?) {
@@ -99,36 +95,43 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         screenshotView.layer.cornerRadius = 0
         tabBackgroundHoverTopConstraint?.constant = topPadding
         tabBackgroundHoverBottomConstraint?.constant = -bottomPadding
-        closeButton.transform = .identity.translatedBy(x: 0.0, y: closeButton.bounds.height)
+        closeButton.transform = .identity.translatedBy(x: 0.0, y: -closeButton.bounds.height * 2.0)
+        closeButton.alpha = 0.0
         UIView.animate(withDuration: 0.2) { [self] in
             alpha = 1.0
             layer.zPosition = 1000
+            screenshotView.layer.cornerRadius = UX.screenshotViewContainerCornerRadius
+            guard screenshotViewContainerTopConstraint?.constant != topPadding ||
+                  screenshotViewContainerBottomConstraint?.constant != bottomPadding else { return }
             screenshotViewContainerTopConstraint?.constant = topPadding
             screenshotViewContainerBottomConstraint?.constant = -bottomPadding
-            screenshotView.layer.cornerRadius = UX.screenshotViewContainerCornerRadius
             layoutIfNeeded()
         }
     }
 
-    func translate(position: CGPoint) {
-        let shouldShowRemoveOverlay = position.y < -(bounds.size.height / 2.7)
-        let shouldAnimateOverlay = deleteOverlay.alpha != (shouldShowRemoveOverlay ? 1 : 0)
-        if shouldAnimateOverlay {
+    func translate(_ translation: CGPoint) {
+        let shouldShowCloseButton = shouldRemovePreview(translation: translation)
+        let shouldTriggerHaptic = closeButton.alpha != (shouldShowCloseButton ? 1 : 0)
+        if shouldTriggerHaptic {
             addHaptics()
         }
         UIView.animate(withDuration: 0.15) {
-            self.closeButton.transform = shouldAnimateOverlay ? .identity : .init(translationX: 0.0,
-                                                                                  y: self.closeButton.bounds.height)
-            self.deleteOverlay.alpha = shouldShowRemoveOverlay ? 1 : 0
+            self.closeButton.transform = shouldShowCloseButton ? .identity : .init(translationX: 0.0,
+                                                                                   y: -self.closeButton.bounds.height * 2)
+            self.closeButton.alpha = shouldShowCloseButton ? 1.0 : 0.0
         }
-        let scale = 1 - abs(position.y) / bounds.height
+        let scale = 1 - abs(translation.y) / bounds.height
         screenshotViewContainer.transform = .identity.translatedBy(
-            x: position.x,
-            y: position.y
+            x: translation.x,
+            y: translation.y
         ).scaledBy(
             x: scale,
             y: scale
         )
+    }
+    
+    func shouldRemovePreview(translation: CGPoint) -> Bool {
+        return translation.y < -(bounds.size.height * UX.triggerBoundsHeightPercentage)
     }
 
     private func addHaptics() {
@@ -155,6 +158,10 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         tabBackgroundHover.backgroundColor = theme.colors.layer3
+        if #unavailable(iOS 26) {
+            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+        }
+        closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         screenshotViewContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
     }
 }

@@ -65,10 +65,10 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         case .changed:
             tabPreview.addTabScreenshot(image: tab.screenshot)
             let translation = gesture.translation(in: gesture.view)
-            tabPreview.translate(position: translation)
+            tabPreview.translate(translation)
         case .ended:
             let translation = gesture.translation(in: tabPreview)
-            if translation.y < -(tabPreview.bounds.height / 2.7) {
+            if tabPreview.shouldRemovePreview(translation: translation) {
                 UIView.animate(withDuration: 0.1) { [self] in
                     tabPreview.tossPreview()
                 } completion: { [self] _ in
