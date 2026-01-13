@@ -5,15 +5,7 @@
 import Foundation
 import WebKit
 
-// MARK: WKNavigationActionMock
-class WKNavigationActionMock: WKNavigationAction {
-    var overridenTargetFrame: MockWKFrameInfo?
-
-    override var targetFrame: WKFrameInfo? {
-        return overridenTargetFrame
-    }
-}
-
+// TODO: FXIOS-14534 - Merge all existing MockFrameInfo
 // MARK: MockWKFrameInfo
 class MockWKFrameInfo: WKFrameInfo {
     let overridenSecurityOrigin: WKSecurityOrigin
