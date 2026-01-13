@@ -120,19 +120,38 @@ class CreditCardValidatorTests: XCTestCase {
         var result = creditCardValidator.isExpirationValidFor(date: "1230")
         XCTAssert(result)
 
-        result = creditCardValidator.isExpirationValidFor(date: "0926")
+        result = creditCardValidator.isExpirationValidFor(date: "0928")
         XCTAssert(result)
+    }
+
+    func testExpirationIsValidForCurrentMonth() {
+        let t = Date()
+        let c = Calendar(identifier: .gregorian)
+        let f = DateFormatter()
+        f.dateFormat = "MMyy"
+
+        // Uses current month e.g. 0125
+        var result = creditCardValidator.isExpirationValidFor(date: f.string(from: t))
+        XCTAssert(result)
+
+        // Next month too for year boundary corner cases
+        result = creditCardValidator.isExpirationValidFor(date: f.string(from: c.date(byAdding: .month, value: 1, to: t)!))
+        XCTAssert(result)
+
+        // Previous month e.g. 1224 should not pass
+        result = creditCardValidator.isExpirationValidFor(date: f.string(from: c.date(byAdding: .month, value: -1, to: t)!))
+        XCTAssertFalse(result)
     }
 
     func testExpirationIsInvalidOnIncorrectInput() {
         var result = creditCardValidator.isExpirationValidFor(date: "0000")
         XCTAssertFalse(result)
 
-        result = creditCardValidator.isExpirationValidFor(date: "1525")
+        result = creditCardValidator.isExpirationValidFor(date: "1545")
         XCTAssertFalse(result)
     }
 
-    func tetsExpirationIsInvalidOnBlankInput() {
+    func testExpirationIsInvalidOnBlankInput() {
         let result = creditCardValidator.isExpirationValidFor(date: "")
         XCTAssertFalse(result)
     }
