@@ -1474,9 +1474,9 @@ class BrowserViewController: UIViewController,
     }
 
     private func enqueueTabRestoration() {
-        guard isDeeplinkOptimizationRefactorEnabled else { 
+        guard isDeeplinkOptimizationRefactorEnabled else {
             tabManager.restoreTabs()
-            return 
+            return
         }
         // Postpone tab restoration after the potential deeplink has been handled.
         // Deeplinks are handled suddenly after the viewDidLoad. In order to give them precedence dispatch the restore
