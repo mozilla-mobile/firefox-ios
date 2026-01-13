@@ -1587,6 +1587,19 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
+    - slack@4.2.1:
+        inputs:
+        - api_token: $SLACK_APP_TOKEN
+        - channel: "#mobile-alerts-sandbox"
+        - author_name: ''
+        - pretext: ":info: Firefox iOS Unit Tests"
+        - title:
+        - title_on_error:
+        - footer: Created by Mobile Test Engineering
+        - fields:
+        - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
+        - message: |
+            Testing started!
     - xcode-build-for-test@3:
         title: "Build for Testing"
         inputs:
