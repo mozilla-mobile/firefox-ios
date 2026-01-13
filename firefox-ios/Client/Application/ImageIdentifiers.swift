@@ -62,6 +62,8 @@ struct ImageIdentifiers {
             public static let trackers = "onboardingTrackers"
             public static let syncWithIconsJapan = "onboardingSyncWithIconsJapan"
             public static let trackersJapan = "onboardingTrackersJapan"
+            public static let syncWithIconsBrandRefresh = "onboardingSyncWithIconsBrandRefresh"
+            public static let trackersBrandRefresh = "onboardingTrackersBrandRefresh"
         }
 
         public struct MultipleChoiceButtonImages {

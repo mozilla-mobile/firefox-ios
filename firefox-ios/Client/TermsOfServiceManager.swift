@@ -169,7 +169,7 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
             buttons: OnboardingButtons(
                 primary: OnboardingButtonInfoModel(
                     title: String.Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitleV2,
-                    action: OnboardingActions.syncSignIn
+                    action: OnboardingActions.endOnboarding
                 )
             ),
             multipleChoiceButtons: [],
