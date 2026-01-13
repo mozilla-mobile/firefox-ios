@@ -1639,7 +1639,7 @@ workflows:
     - slack@4.2.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX
-        - from_username:
+        - from_username: ""
         - pretext: ":white_check_mark: Firefox iOS Unit Tests"
         - pretext_on_error: ":x: Firefox iOS Unit Tests"
         - title:
@@ -1648,7 +1648,9 @@ workflows:
         - fields:
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
         - message: |
-            iOS simulators used: iPhone 17 (iOS 26.1), iPhone 16 (iOS 18.6), iPhone 15 (iOS 17.5)
+            iOS Simulators: iPhone 17 (iOS 26.1), iPhone 16 (iOS 18.6), iPhone 15 (iOS 17.5)
+            Xcode version: ${BITRISE_XCODE_VERSION}
+            macOS version: ${BITRISE_OS_VERSION}
 
   Firefox_Unit_Tests:
     before_run:
