@@ -1587,14 +1587,6 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - slack@4.2.1:
-        inputs:
-        - webhook_url: $WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX
-        - title: ":info: Starting Firefox iOS Unit Tests"
-        - footer_icon: ":testops-notify:"
-        - footer: Created by Mobile Test Engineering
-        - fields:
-        - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
     - xcode-build-for-test@3:
         title: "Build for Testing"
         inputs:
@@ -1647,9 +1639,11 @@ workflows:
     - slack@4.2.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX
-        - title: ":white_check_mark: Firefox iOS Unit Tests"
-        - title_on_error: ":x: Firefox iOS Unit Tests"
-        - footer_icon: ":testops-notify:"
+        - from_username:
+        - pretext: ":white_check_mark: Firefox iOS Unit Tests"
+        - pretext_on_error: ":x: Firefox iOS Unit Tests"
+        - title:
+        - title_on_error:
         - footer: Created by Mobile Test Engineering
         - fields:
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
