@@ -244,7 +244,14 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowMarketPlaceScheme_whenUserAction() {
-        let subject = createSubject()
+        let subject = MockBrowserViewController(
+            profile: profile,
+            tabManager: tabManager,
+            userInitiatedQueue: MockDispatchQueue()
+        )
+        subject.mockIsMainFrameNavigation = true
+        trackForMemoryLeaks(subject)
+
         let url = URL(string: "marketplace-kit://install?exampleApp.com")!
         let tab = createTab()
         tabManager.tabs = [tab]
@@ -258,11 +265,18 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelMarketPlaceScheme_whenNotMainFrame() {
-        let subject = createSubject()
+        let subject = MockBrowserViewController(
+            profile: profile,
+            tabManager: tabManager,
+            userInitiatedQueue: MockDispatchQueue()
+        )
+        subject.mockIsMainFrameNavigation = false
+        trackForMemoryLeaks(subject)
+
         let url = URL(string: "marketplace-kit://install?exampleApp.com")!
         let tab = createTab()
         tabManager.tabs = [tab]
-        let navigationAction = MockNavigationAction(url: url, type: .linkActivated, isMainFrame: false)
+        let navigationAction = MockNavigationAction(url: url, type: .linkActivated)
 
         subject.webView(tab.webView!,
                         decidePolicyFor: navigationAction) { policy in
@@ -272,7 +286,14 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelMarketPlaceScheme_whenReloadAction() {
-        let subject = createSubject()
+        let subject = MockBrowserViewController(
+            profile: profile,
+            tabManager: tabManager,
+            userInitiatedQueue: MockDispatchQueue()
+        )
+        subject.mockIsMainFrameNavigation = true
+        trackForMemoryLeaks(subject)
+
         let url = URL(string: "marketplace-kit://install?exampleApp.com")!
         let tab = createTab()
         tabManager.tabs = [tab]

@@ -353,8 +353,6 @@ class BrowserCoordinator: BaseCoordinator,
             switch routeAction {
             case .closePrivateTabs:
                 handleClosePrivateTabsWidgetAction()
-            case .showQRCode:
-                handleQRCode()
             case .showIntroOnboarding:
                 showIntroOnboarding()
             }
@@ -375,10 +373,6 @@ class BrowserCoordinator: BaseCoordinator,
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
         startLaunch(with: launchType)
-    }
-
-    private func handleQRCode() {
-        browserViewController.handleQRCode()
     }
 
     private func handleClosePrivateTabsWidgetAction() {
@@ -1212,12 +1206,23 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Password Generator
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
-        let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
+        let scriptEvaluator = WebKitPasswordGeneratorScriptEvaluator(webView: frame.webView)
+        let frameContext = PasswordGeneratorFrameContext(origin: frame.webView?.url?.origin,
+                                                         host: frame.securityOrigin.host,
+                                                         scriptEvaluator: scriptEvaluator,
+                                                         frameInfo: frame)
+        showPasswordGenerator(tab: tab, frameContext: frameContext)
+    }
+
+    func showPasswordGenerator(tab: Tab, frameContext: PasswordGeneratorFrameContext) {
+        let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID,
+                                                            currentTab: tab,
+                                                            frameContext: frameContext)
 
         let action = PasswordGeneratorAction(
             windowUUID: windowUUID,
             actionType: PasswordGeneratorActionType.showPasswordGenerator,
-            currentFrame: frame
+            frameContext: frameContext
         )
         store.dispatch(action)
 

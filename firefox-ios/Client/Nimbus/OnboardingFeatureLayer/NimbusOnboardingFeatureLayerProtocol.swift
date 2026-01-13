@@ -81,6 +81,8 @@ extension NimbusOnboardingFeatureLayerProtocol {
         case .trackers: return ImageIdentifiers.Onboarding.HeaderImages.trackers
         case .syncWithIconsJapan: return ImageIdentifiers.Onboarding.HeaderImages.syncWithIconsJapan
         case .trackersJapan: return ImageIdentifiers.Onboarding.HeaderImages.trackersJapan
+        case .syncWithIconsBrandRefresh: return ImageIdentifiers.Onboarding.HeaderImages.syncWithIconsBrandRefresh
+        case .trackersBrandRefresh: return ImageIdentifiers.Onboarding.HeaderImages.trackersBrandRefresh
         }
     }
 
