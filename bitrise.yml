@@ -801,9 +801,6 @@ workflows:
             xcodebuild -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
-            ls l10n-screenshots/*/*/*.png
-            grep "Settings-" /Users/vagrant/Library/Logs/snapshot/L10nSnapshotTests-L10nSnapshotTests.log
-        title: Generate screenshots
     - save-cache@1.4.0:
         inputs:
         - key: l10n-screenshots-dd-$GIT_CLONE_COMMIT_HASH
