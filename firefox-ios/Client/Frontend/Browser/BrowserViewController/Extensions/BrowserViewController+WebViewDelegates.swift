@@ -542,7 +542,11 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handle MarketplaceKit URL
         if url.scheme == "marketplace-kit" {
-            let shouldAllowNavigation = shouldAllowMarketplaceKitNavigation(navigationAction)
+            let isMainFrame = isMainFrameNavigation(navigationAction)
+            let shouldAllowNavigation = shouldAllowMarketplaceKitNavigation(
+                navigationType: navigationAction.navigationType,
+                isMainFrame: isMainFrame
+            )
             decisionHandler(shouldAllowNavigation ? .allow : .cancel)
             return
         }
@@ -704,9 +708,7 @@ extension BrowserViewController: WKNavigationDelegate {
     @MainActor
     func webView(
         _ webView: WKWebView,
-        decidePolicyFor navigationResponse: WKNavigationResponse,
-        decisionHandler: @escaping @MainActor (WKNavigationResponsePolicy) -> Void
-    ) {
+        decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
         let response = navigationResponse.response
         let responseURL = response.url
 
@@ -728,31 +730,19 @@ extension BrowserViewController: WKNavigationDelegate {
             mimeType: mimeType,
             forceDownload: forceDownload) {
             // Open our helper and nullifies the helper when done with it
-            Task {
-                let passBookHelper = OpenPassBookHelper(presenter: self)
-                await passBookHelper.open(response: response, cookieStore: cookieStore)
-            }
+            let passBookHelper = OpenPassBookHelper(presenter: self)
+            await passBookHelper.open(response: response, cookieStore: cookieStore)
 
             // Cancel this response from the webview.
-            decisionHandler(.cancel)
-            return
+            return .cancel
         }
 
         // For USDZ / Reality 3D model files, we can cancel this response from the webView and open the QL previewer instead
         if OpenQLPreviewHelper.shouldOpenPreviewHelper(response: response, forceDownload: forceDownload),
            let tab = tabManager[webView],
            let request = request {
-            // Certain files are too large to download before the preview presents, so block until we have something to show
-            let group = DispatchGroup()
-            // FIXME: FXIOS-14054 Should not mutate local properties in concurrent code
-            nonisolated(unsafe) var url: URL?
-            group.enter()
             let temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
-            temporaryDocument.download { docURL in
-                url = docURL
-                group.leave()
-            }
-            _ = group.wait(timeout: .distantFuture)
+            let url = await temporaryDocument.download()
 
             let previewHelper = OpenQLPreviewHelper(presenter: self, withTemporaryDocument: temporaryDocument)
             if previewHelper.canOpen(url: url) {
@@ -762,8 +752,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     // Once the preview is closed, we can safely release this object and let the tempory document be deleted
                     tab.quickLookPreviewHelper = nil
                 }
-                decisionHandler(.cancel)
-                return
+                return .cancel
             }
 
             // We don't have a temporary document, fallthrough
@@ -794,8 +783,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 self.present(safariVC, animated: true, completion: nil)
             }))
             present(alert, animated: true)
-            decisionHandler(.cancel)
-            return
+            return .cancel
         }
 
         // Check if this response should be downloaded
@@ -806,8 +794,7 @@ extension BrowserViewController: WKNavigationDelegate {
             /// FXIOS-12201: Need to hold reference to downloadHelper,
             /// so we can use this later in `webView(_:navigationResponse:didBecome:)`
             self.downloadHelper = downloadHelper
-            decisionHandler(.download)
-            return
+            return .download
         }
 
         // If the content type is not HTML, create a temporary document so it can be downloaded and
@@ -818,12 +805,10 @@ extension BrowserViewController: WKNavigationDelegate {
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
             if response.mimeType == MIMEType.PDF, let request {
                 if !tab.shouldDownloadDocument(request) {
-                    decisionHandler(.allow)
-                    return
+                    return .allow
                 }
                 handlePDFDownloadRequest(request: request, tab: tab, filename: response.suggestedFilename)
-                decisionHandler(.cancel)
-                return
+                return .cancel
             }
             if response.mimeType != MIMEType.HTML, let request {
                 tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
@@ -836,7 +821,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
-        decisionHandler(.allow)
+        return .allow
     }
 
     /// Handle a PDF download request by forwarding it to the provided `Tab`.
@@ -1207,12 +1192,9 @@ private extension BrowserViewController {
 
     // Handle MarketPlaceKitNavigation
     // Allow only explicit user tap on a top level link
-    private func shouldAllowMarketplaceKitNavigation(_ navigationAction: WKNavigationAction) -> Bool {
-        guard navigationAction.navigationType == .linkActivated,
-              navigationAction.targetFrame?.isMainFrame == true else {
-            return false
-        }
-        return true
+    private func shouldAllowMarketplaceKitNavigation(navigationType: WKNavigationType,
+                                                     isMainFrame: Bool) -> Bool {
+        return navigationType == .linkActivated && isMainFrame
     }
 
     // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com

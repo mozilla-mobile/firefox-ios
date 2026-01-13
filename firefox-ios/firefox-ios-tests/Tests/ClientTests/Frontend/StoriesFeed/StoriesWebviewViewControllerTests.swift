@@ -27,7 +27,7 @@ final class StoriesWebviewViewControllerTests: XCTestCase {
         let expectation = expectation(description: "WebView finished loading")
 
         let navigationAction = MockNavigationAction(url: URL(string: "http://mozilla.com")!)
-        let webView = WKWebViewMock(URL(string: "http://wikipedia.org")!)
+        let webView = MockWKWebView(URL(string: "http://wikipedia.org")!)
         webView.didLoad = { expectation.fulfill() }
 
         let newWebView = subject.webView(webView,
