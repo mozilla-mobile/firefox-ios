@@ -43,7 +43,7 @@ class DisplaySettingTests: BaseTestCase {
         XCTAssertEqual(darkThemeValue as? String, "0")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2337487
+    // https://mozilla.testrail.io/index.php?/cases/view/3298823
     func testCheckSystemThemeChanges() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
