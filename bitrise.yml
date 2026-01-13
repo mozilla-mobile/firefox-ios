@@ -1652,7 +1652,7 @@ workflows:
     - slack@4.2.1:
         inputs:
         - api_token: $SLACK_APP_TOKEN
-        - channel: "#mobile-alerts-sandbox"
+        - channel: "#cso-slack-test"
         - author_name: ''
         - pretext: ":white_check_mark: Firefox iOS Unit Tests"
         - pretext_on_error: ":x: Firefox iOS Unit Tests"
