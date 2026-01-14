@@ -43,7 +43,6 @@ class NativeErrorPageHelper {
                     foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
                     url: url,
                     advancedSection: nil,
-                    showProceedButton: false,
                     showGoBackButton: false
                 )
             }
@@ -66,7 +65,8 @@ class NativeErrorPageHelper {
                     buttonText: String.NativeErrorPage.BadCertDomain.AdvancedButton,
                     infoText: advancedInfo,
                     warningText: warningText,
-                    certificateErrorCode: CertErrorCodes[-9843]!
+                    certificateErrorCode: CertErrorCodes[-9843]!,
+                    showProceedButton: true
                 )
 
                 return ErrorPageModel(
@@ -75,7 +75,6 @@ class NativeErrorPageHelper {
                     foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
                     url: url,
                     advancedSection: advancedSection,
-                    showProceedButton: true,
                     showGoBackButton: true
                 )
             } else {
@@ -86,7 +85,6 @@ class NativeErrorPageHelper {
                     foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
                     url: url,
                     advancedSection: nil,
-                    showProceedButton: false,
                     showGoBackButton: false
                 )
             }
@@ -101,7 +99,6 @@ class NativeErrorPageHelper {
                     foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
                     url: nil,
                     advancedSection: nil,
-                    showProceedButton: false,
                     showGoBackButton: false
                 )
             // Certificate Errors - new cases added
@@ -117,7 +114,6 @@ class NativeErrorPageHelper {
                     foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
                     url: url,
                     advancedSection: nil,
-                    showProceedButton: false,
                     showGoBackButton: false
                 )
             }
@@ -128,7 +124,6 @@ class NativeErrorPageHelper {
                 foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
                 url: nil,
                 advancedSection: nil,
-                showProceedButton: false,
                 showGoBackButton: false
             )
         }

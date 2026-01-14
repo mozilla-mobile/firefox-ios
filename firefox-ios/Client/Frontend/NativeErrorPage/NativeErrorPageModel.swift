@@ -10,7 +10,6 @@ struct ErrorPageModel: Equatable {
     let foxImageName: String
     let url: URL?
     let advancedSection: AdvancedSectionConfig?
-    let showProceedButton: Bool
     let showGoBackButton: Bool
 
     struct AdvancedSectionConfig: Equatable {
@@ -18,5 +17,6 @@ struct ErrorPageModel: Equatable {
         let infoText: String
         let warningText: String
         let certificateErrorCode: String?
+        let showProceedButton: Bool
     }
 }
