@@ -19,6 +19,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
                                      RemoteTabsEmptyViewProtocol {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
+        static let buttonTopPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
         static let imageSize = CGSize(width: 72, height: 72)
@@ -131,10 +132,9 @@ class ExperimentRemoteTabsEmptyView: UIView,
                                                        constant: -UX.horizontalPadding),
 
             signInButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
-                                              constant: UX.paddingInBetweenItems),
-            signInButton.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor),
-            signInButton.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor),
-            signInButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+                                              constant: UX.buttonTopPadding),
+            signInButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            signInButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             signInButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
                                                  constant: -UX.paddingInBetweenItems),
         ])
