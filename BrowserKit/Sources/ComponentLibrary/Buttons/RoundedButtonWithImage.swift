@@ -65,9 +65,7 @@ public final class RoundedButtonWithImage: UIButton, ThemeApplicable {
             updatedConfiguration.baseForegroundColor = imageTintColor
         }
 
-        // swiftlint:disable line_length
         let transformer = UIConfigurationTextAttributesTransformer { [weak foregroundColor, weak foregroundDisabledColor, weak self] incoming in
-        // swiftlint:disable line_length
             var container = incoming
 
             container.foregroundColor = if self?.viewModel?.image != nil {
