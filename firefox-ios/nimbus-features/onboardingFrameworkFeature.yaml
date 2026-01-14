@@ -30,9 +30,18 @@ features:
         default: {}
       cards:
         description: >
-          The list of available cards for onboarding.
+          The list of available cards for onboarding (legacy mode).
+          If flows are defined, this is ignored.
         type: Map<NimbusOnboardingCardKey, NimbusOnboardingCardData>
         string-alias: NimbusOnboardingCardKey
+        default: {}
+      flows:
+        description: >
+          Flow-based onboarding definitions (new mode).
+          If present and non-empty, takes precedence over cards.
+          If empty or missing, uses legacy mode with cards.
+        type: Map<NimbusOnboardingFlowKey, NimbusOnboardingFlow>
+        string-alias: NimbusOnboardingFlowKey
         default: {}
       dismissable:
         description: >
@@ -492,6 +501,26 @@ features:
               prerequisites:
                 - ALWAYS
               uiVariant: brandRefresh
+          flows:
+            brand-refresh-flow:
+              dismissable: true
+              flow-name: "Brand Refresh Onboarding"
+              onboarding-type: fresh-install
+              prerequisites: []
+              steps:
+                - card-reference: welcome-brand-refresh
+                  order: 1
+                  prerequisites: []
+                - card-reference: customization-toolbar-brand-refresh
+                  order: 2
+                  prerequisites: []
+                - card-reference: customization-theme-brand-refresh
+                  order: 3
+                  prerequisites: []
+                - card-reference: sign-to-sync-brand-refresh
+                  order: 4
+                  prerequisites: []
+              ui-variant: brandRefresh
           dismissable: true
 
 objects:
@@ -682,6 +711,63 @@ objects:
           The action the button should have.
           Default is `dismiss-and-next-card`
         default: dismiss-and-next-card
+  NimbusOnboardingFlow:
+    description: >
+      A flow defines a sequence of onboarding steps that compose cards
+      into a complete onboarding experience.
+    fields:
+      flow-name:
+        type: String
+        description: >
+          Human-readable flow name for identification.
+        default: ""
+      ui-variant:
+        type: Option<OnboardingVariant>
+        description: >
+          UI variant this flow applies to.
+          If null, applies to all variants (legacy behavior).
+        default: null
+      onboarding-type:
+        type: OnboardingType
+        description: >
+          The type of onboarding this flow is for (fresh install or upgrade).
+        default: fresh-install
+      steps:
+        type: List<NimbusOnboardingFlowStep>
+        description: >
+          Ordered list of steps in this flow.
+        default: []
+      prerequisites:
+        type: List<ConditionName>
+        description: >
+          Flow-level prerequisites. All must be met for flow to be used.
+        default: []
+      dismissable:
+        type: Boolean
+        description: >
+          Whether this flow can be dismissed.
+        default: false
+  NimbusOnboardingFlowStep:
+    description: >
+      A step in a flow references a card definition.
+    fields:
+      card-reference:
+        type: NimbusOnboardingCardKey
+        description: >
+          Reference to a card in the cards dictionary.
+          Card must exist.
+        default: ""
+      order:
+        type: Int
+        description: >
+          Step order within the flow.
+          Overrides card's default order.
+        default: 10
+      prerequisites:
+        type: List<ConditionName>
+        description: >
+          Step-level prerequisites. If not met, step is skipped.
+        default: []
 
 enums:
   OnboardingVariant:
