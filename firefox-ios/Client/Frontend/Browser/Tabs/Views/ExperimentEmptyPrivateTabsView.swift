@@ -19,6 +19,7 @@ class ExperimentEmptyPrivateTabsView: UIView,
                                       EmptyPrivateTabView {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
+        static let buttonTopPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
         static let imageSize = CGSize(width: 72, height: 72)
@@ -42,6 +43,7 @@ class ExperimentEmptyPrivateTabsView: UIView,
         label.font = FXFontStyles.Regular.headline.scaledFont()
         label.text =  .PrivateBrowsingTitle
         label.textAlignment = .center
+        label.numberOfLines = 0
     }
 
     private let descriptionLabel: UILabel = .build { label in
@@ -129,10 +131,9 @@ class ExperimentEmptyPrivateTabsView: UIView,
                                                        constant: -UX.horizontalPadding),
 
             learnMoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
-                                                 constant: UX.paddingInBetweenItems),
-            learnMoreButton.leadingAnchor.constraint(greaterThanOrEqualTo: centeredView.leadingAnchor),
-            learnMoreButton.trailingAnchor.constraint(lessThanOrEqualTo: centeredView.trailingAnchor),
-            learnMoreButton.centerXAnchor.constraint(equalTo: centeredView.centerXAnchor),
+                                                 constant: UX.buttonTopPadding),
+            learnMoreButton.leadingAnchor.constraint(equalTo: centeredView.leadingAnchor),
+            learnMoreButton.trailingAnchor.constraint(equalTo: centeredView.trailingAnchor),
             learnMoreButton.bottomAnchor.constraint(equalTo: centeredView.bottomAnchor,
                                                     constant: -UX.paddingInBetweenItems),
         ])
