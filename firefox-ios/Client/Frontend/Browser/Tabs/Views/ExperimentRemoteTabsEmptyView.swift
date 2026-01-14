@@ -47,6 +47,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
     private let titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.headline.scaledFont()
+        label.numberOfLines = 0
         label.textAlignment = .center
     }
 
@@ -72,6 +73,11 @@ class ExperimentRemoteTabsEmptyView: UIView,
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        signInButton.invalidateIntrinsicContentSize()
+        super.layoutSubviews()
     }
 
     func configure(config: RemoteTabsPanelEmptyStateReason,
