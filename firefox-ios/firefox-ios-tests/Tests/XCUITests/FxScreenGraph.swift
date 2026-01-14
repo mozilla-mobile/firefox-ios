@@ -121,7 +121,8 @@ let allSettingsScreens = [
     SiriSettings,
     AutofillPasswordSettings,
     AppIconSettings,
-    ToolbarSettings
+    ToolbarSettings,
+    HomeSettings
 ]
 
 let allHomePanels = [
