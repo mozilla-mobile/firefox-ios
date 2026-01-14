@@ -221,6 +221,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .toolbarSwipeUpToKillTab,
+                titleText: format(string: "Toolbar Swipe up to kill tab"),
+                statusText: format(string: "Toggle to enable the gesture on toolbar to swipe up to kill a tab")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .toolbarRefactor,
                 titleText: format(string: "Toolbar Redesign"),
                 statusText: format(string: "Toggle to enable the toolbar redesign")

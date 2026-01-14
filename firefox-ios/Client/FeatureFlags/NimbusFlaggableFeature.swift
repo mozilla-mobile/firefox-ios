@@ -63,6 +63,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarOneTapNewTab
     case toolbarRefactor
     case toolbarSwipingTabs
+    case toolbarSwipeUpToKillTab
     case toolbarTranslucency
     case toolbarTranslucencyRefactor
     case toolbarMinimalAddressBar

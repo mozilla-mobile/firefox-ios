@@ -162,6 +162,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .toolbarSwipingTabs:
             return checkToolbarSwipingTabsFeature(from: nimbus)
+            
+        case .toolbarSwipeUpToKillTab:
+            return checkToolbarSwipeUpToKillTabFeature(from: nimbus)
 
         case .toolbarTranslucency:
             return checkToolbarTranslucencyFeature(from: nimbus)
@@ -313,6 +316,11 @@ final class NimbusFeatureFlagLayer: Sendable {
     private func checkToolbarSwipingTabsFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.swipingTabs
+    }
+    
+    private func checkToolbarSwipeUpToKillTabFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.swipeUpKillTab
     }
 
     private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
