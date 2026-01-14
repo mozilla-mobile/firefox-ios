@@ -329,6 +329,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
             setupShadow(theme: theme)
         }
     }
+
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         let name = notification.name
