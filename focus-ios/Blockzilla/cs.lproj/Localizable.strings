@@ -491,7 +491,7 @@
 "ShareMenu.RequestDesktop" = "Verze stránky pro počítač";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
-"ShareMenu.RequestMobile" = "Mobilní verze stránky";
+"ShareMenu.RequestMobile" = "Verze stránky pro mobily";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Otevřít v Chrome";
