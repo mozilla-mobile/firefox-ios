@@ -17,6 +17,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   FormAutofillNameUtils:
     "resource://gre/modules/shared/FormAutofillNameUtils.sys.mjs",
   LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
+  PhoneNumber: "resource://gre/modules/shared/PhoneNumber.sys.mjs",
   clearTimeout: "resource://gre/modules/Timer.sys.mjs",
   setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
@@ -436,7 +437,10 @@ export class FormAutofillHandler {
         // Unlike text input, select element is always previewed even if
         // the option is already selected.
         const option = this.matchSelectOptions(fieldDetail, profile);
-        value = option?.text ?? "";
+        if (!option) {
+          continue;
+        }
+        value = option.text ?? "";
       } else {
         continue;
       }
@@ -456,8 +460,10 @@ export class FormAutofillHandler {
    *        An array of IDs for the elements that should be autofilled.
    * @param {object} profile
    *        The data profile containing the values to be autofilled into the form fields.
+   * @param {boolean} isFormChange
+   *        True if this a fill caused by a form change.
    */
-  fillFields(focusedId, elementIds, profile) {
+  fillFields(focusedId, elementIds, profile, isFormChange) {
     this.cancelRefillOnSiteClearingFieldsAction();
 
     this.#isAutofillInProgress = true;
@@ -476,6 +482,7 @@ export class FormAutofillHandler {
 
       element.previewValue = "";
 
+      let filledValue;
       if (FormAutofillUtils.isTextControl(element)) {
         // Bug 1687679: Since profile appears to be presentation ready data, we need to utilize the "x-formatted" field
         // that is generated when presentation ready data doesn't fit into the autofilling element.
@@ -499,8 +506,11 @@ export class FormAutofillHandler {
           element.autofillState == FIELD_STATES.AUTO_FILLED
         ) {
           FormAutofillHandler.fillFieldValue(element, value);
-          this.changeFieldState(fieldDetail, FIELD_STATES.AUTO_FILLED);
-          filledValuesByElement.set(element, value);
+          filledValue = value;
+        } else if (isFormChange && element.value == value) {
+          // If this was a fill caused by a form change, and the value is
+          // identical to the expected filled value, highlight it anyway.
+          filledValue = value;
         }
       } else if (HTMLSelectElement.isInstance(element)) {
         const option = this.matchSelectOptions(fieldDetail, profile);
@@ -523,10 +533,12 @@ export class FormAutofillHandler {
           FormAutofillHandler.fillFieldValue(element, option.value);
         }
         // Autofill highlight appears regardless if value is changed or not
+        filledValue = option.value;
+      }
+
+      if (filledValue) {
         this.changeFieldState(fieldDetail, FIELD_STATES.AUTO_FILLED);
-        filledValuesByElement.set(element, option.value);
-      } else {
-        continue;
+        filledValuesByElement.set(element, filledValue);
       }
     }
 
@@ -946,12 +958,31 @@ export class FormAutofillHandler {
     }
 
     const cache = this.#matchingSelectOption.get(element) || {};
-    const value = profile[fieldName];
+
+    let value;
+    if (fieldName == "tel-country-code") {
+      // Since some telephone country codes are for multiple countries, search
+      // the options by the country name instead.
+      let countries = lazy.PhoneNumber.FindCountriesForCountryCode(
+        profile[fieldName]
+      );
+      if (countries.length > 1 && countries.includes(profile.country)) {
+        value = profile.country;
+      } else {
+        value = countries[0];
+      }
+    } else {
+      value = profile[fieldName];
+    }
 
     let option = cache[value]?.deref();
-
     if (!option || !option.isConnected) {
-      option = FormAutofillUtils.findSelectOption(element, profile, fieldName);
+      option = FormAutofillUtils.findSelectOption(
+        element,
+        profile,
+        fieldName,
+        value
+      );
 
       if (option) {
         cache[value] = new WeakRef(option);
@@ -1186,7 +1217,43 @@ class ProfileTransformer {
     this.#creditCardExpiryDateTransformer();
     this.#creditCardExpMonthAndYearTransformer();
     this.#creditCardNameTransformer();
+    this.#addressLevelOneTransformer();
     this.#adaptFieldMaxLength();
+  }
+
+  /**
+   * Replaces an abbreviated address-level1 code (e.g. "B") with the full
+   * region name (e.g. "Buenos Aires") if the target field is a text input.
+   */
+  #addressLevelOneTransformer() {
+    const fieldName = "address-level1";
+    const fieldDetail = this.getFieldDetailByName(fieldName);
+    if (!fieldDetail || !FormAutofillUtils.isTextControl(fieldDetail.element)) {
+      return;
+    }
+
+    const element = fieldDetail.element;
+    const abbreviatedValue = this.getField(fieldName);
+    const country = this.getField("country");
+
+    const fullSubregionName = FormAutofillUtils.getFullSubregionName(
+      abbreviatedValue,
+      country
+    );
+
+    if (!fullSubregionName || fullSubregionName === abbreviatedValue) {
+      return;
+    }
+
+    // No point in using full subregion name if allowed string length is too small.
+    if (
+      element.maxLength !== -1 &&
+      fullSubregionName.length > element.maxLength
+    ) {
+      return;
+    }
+
+    this.setField(fieldName, fullSubregionName);
   }
 
   // This function mostly uses getUpdatedField as it relies on the modified

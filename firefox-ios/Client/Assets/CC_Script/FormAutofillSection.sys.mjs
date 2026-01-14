@@ -495,8 +495,7 @@ export class FormAutofillSection {
 
 export class FormAutofillAddressSection extends FormAutofillSection {
   isValidSection() {
-    const fields = new Set(this.fieldDetails.map(f => f.fieldName));
-    return fields.size >= lazy.FormAutofillUtils.AUTOFILL_FIELDS_THRESHOLD;
+    return lazy.FormAutofillUtils.isValidSection(this.fieldDetails);
   }
 
   isEnabled() {

@@ -23,6 +23,10 @@ export const LabelUtils = {
   // @type {Map<string, array>}
   _mappedLabels: null,
 
+  // A map of elements that don't have associated <label> elements but there
+  // is nearby text that can form a label. The values in this map are the text.
+  _mappedText: null,
+
   // A weak map consisting of label element and extracted strings pairs.
   // @type {WeakMap<HTMLLabelElement, array>}
   _labelStrings: null,
@@ -116,63 +120,134 @@ export const LabelUtils = {
    *           map of form controls that have already potentially matched
    */
   findNextFormControl(element, reverse, potentialLabels) {
-    // Ignore elements and stop searching for elements that are already potentially
-    // labelled or are form elements that cannot be autofilled.
-    while ((element = this.nextElementInOrder(element, reverse))) {
-      if (potentialLabels.has(element)) {
-        break;
-      } else if (
-        lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
-      ) {
-        return element;
-      } else if (
-        [
-          "button",
-          "input",
-          "label",
-          "meter",
-          "output",
-          "progress",
-          "select",
-          "textarea",
-        ].includes(element.localName)
-      ) {
-        break;
+    let filter = e => {
+      // Ignore elements and stop searching for elements that are already
+      // potentially labelled or are form elements that cannot be autofilled.
+      if (e.nodeType == Node.ELEMENT_NODE) {
+        if (potentialLabels.has(e)) {
+          return null;
+        } else if (lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(e)) {
+          // Return this form element.
+          return e;
+        }
+      }
+
+      return false;
+    };
+
+    return this.iterateNodes(element, reverse, filter);
+  },
+
+  /**
+   * Iterate over the nodes in a tree and call the filter on each one. We
+   * don't use an existing iterator (such as a TreeWalker) because we want
+   * to traverse the tree by visting the parents along the way first. The
+   * filter should return exactly false if the node is not accepted and
+   * iteration should continue. Otherwise, the value returned by the filter
+   * is returned. The iteration also stops and returns null if
+   * shouldStopIterating returns true for an element.
+   */
+  iterateNodes(element, reverse, filter) {
+    while (element) {
+      let next = reverse ? element.previousSibling : element.nextSibling;
+      if (!next) {
+        element = element.parentNode;
+        if (element && this.shouldStopIterating(element)) {
+          return null;
+        }
+      } else {
+        let child = next;
+        while (child) {
+          if (filter) {
+            let filterResult = filter(child);
+            if (filterResult !== false) {
+              return filterResult;
+            }
+          }
+
+          if (
+            child.nodeType == Node.ELEMENT_NODE &&
+            this.shouldStopIterating(child)
+          ) {
+            return null;
+          }
+
+          element = child;
+          child = reverse ? child.lastChild : child.firstChild;
+        }
       }
     }
 
     return null;
   },
 
-  nextElementInOrder(element, reverse) {
-    let result = reverse ? element.lastElementChild : element.firstElementChild;
-    if (result) {
-      return result;
+  // Return true if this is a form control or other element where iterating
+  // should stop.
+  shouldStopIterating(element) {
+    return [
+      "button",
+      "input",
+      "label",
+      "meter",
+      "output",
+      "progress",
+      "select",
+      "textarea",
+      "form",
+      "fieldset",
+      "script",
+      "style",
+    ].includes(element.localName);
+  },
+
+  /**
+   * Given an element that doesn't have an associated label, iterate backwards
+   * and find inline text nearby that likely serves as the label.
+   */
+  findNearbyText(element) {
+    if (this._mappedText.has(element)) {
+      return this._mappedText.get(element);
     }
 
-    while (element) {
-      result = reverse
-        ? element.previousElementSibling
-        : element.nextElementSibling;
-      if (result) {
-        return result;
-      }
+    let txt = "";
+    let current = element;
 
-      element = element.parentNode;
+    // A simple guard to prevent searching too far.
+    let count = 10;
+
+    let returnTextNode = node => {
+      // As a shortcut, if text was already found, stop iterating when a
+      // div element was found.
       if (
-        !element ||
-        element.localName == "form" ||
-        element.localName == "fieldset"
+        !count-- ||
+        (current.nodeType == Node.ELEMENT_NODE &&
+          current.localName == "div" &&
+          txt.length)
       ) {
-        break;
+        return null;
+      }
+
+      return node.nodeType == Node.TEXT_NODE ? node : false;
+    };
+
+    while ((current = this.iterateNodes(current, true, returnTextNode))) {
+      let textContent = current.nodeValue;
+      if (textContent) {
+        // Prepend the found text.
+        txt = textContent + txt;
       }
     }
 
-    return null;
+    // Always add the element even where there is no text, so that it isn't
+    // searched for again.
+    txt = txt.replace(/\s{2,}/g, " ").trim(); // Collapse duplicate whitespaces
+    this._mappedText.set(element, txt);
+    return txt;
   },
 
   generateLabelMap(doc) {
     this._mappedLabels = new Map();
+    this._mappedText = new Map();
     this._labelStrings = new WeakMap();
 
     // A map of potential label -> control for labels that don't have an id or
@@ -214,6 +289,7 @@ export const LabelUtils = {
 
   clearLabelMap() {
     this._mappedLabels = null;
+    this._mappedText = null;
     this._labelStrings = null;
   },
 
