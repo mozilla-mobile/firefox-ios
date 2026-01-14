@@ -159,7 +159,7 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .toolbarOneTapNewTab:
             return checkToolbarOneTapNewTabFeature(from: nimbus)
-            
+
         case .toolbarSwipeUpToKillTab:
             return checkToolbarSwipeUpToKillTabFeature(from: nimbus)
 
@@ -312,7 +312,7 @@ final class NimbusFeatureFlagLayer: Sendable {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.oneTapNewTab
     }
-    
+
     private func checkToolbarSwipeUpToKillTabFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.swipeUpKillTab
