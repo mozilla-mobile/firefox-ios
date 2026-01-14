@@ -2882,8 +2882,8 @@ class BrowserViewController: UIViewController,
         case .summarizer(let config):
             navigationHandler?.showSummarizePanel(.toolbarIcon, config: config)
         case .passwordGenerator:
-            if let tab = tabManager.selectedTab, let frame = state.frame {
-                navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
+            if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
+                navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
             }
         }
     }
