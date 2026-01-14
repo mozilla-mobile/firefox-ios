@@ -39,7 +39,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 
     // MARK: - Properties
-    var shouldReload: (() -> Void)?
     /// Callback invoked when sync flow is started (when user presses scan or email button)
     var onSyncFlowStarted: (() -> Void)?
 
@@ -294,10 +293,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                                             dismissalStyle: fxaDismissStyle,
                                             deepLinkParams: deepLinkParams,
                                             shouldAskForNotificationPermission: shouldAskForNotificationPermission)
-        fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
-            self?.shouldReload?()
-            self?.dismissVC()
-        }
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInUseEmail)
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }

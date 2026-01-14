@@ -172,7 +172,11 @@ class RemoteTabsViewController: UIViewController,
         } else {
             emptyView.isHidden = !isShowingEmptyView
             if isShowingEmptyView {
-                configureEmptyView()
+                if state.refreshState == .syncingTabs {
+                    configureEmptyView(isSyncing: true)
+                } else {
+                    configureEmptyView()
+                }
             }
             tableView.refreshControl?.endRefreshing()
         }
@@ -202,9 +206,9 @@ class RemoteTabsViewController: UIViewController,
         view.backgroundColor = theme.colors.layer3
     }
 
-    private func configureEmptyView() {
+    private func configureEmptyView(isSyncing: Bool = false) {
         guard let emptyStateReason = state.showingEmptyState else { return }
-        emptyView.configure(config: emptyStateReason, delegate: remoteTabsPanel)
+        emptyView.configure(config: emptyStateReason, delegate: remoteTabsPanel, isSyncing: isSyncing)
         emptyView.applyTheme(theme: retrieveTheme())
     }
 
