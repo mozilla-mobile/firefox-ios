@@ -963,6 +963,26 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
+    func setupEditingAppState() -> AppState {
+        var addressBarState = AddressBarState(windowUUID: windowUUID)
+        addressBarState.isEditing = true
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.addressToolbar = addressBarState
+
+        return AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: windowUUID
+                        )
+                    ),
+                    .toolbar(toolbarState)
+                ]
+            )
+        )
+    }
+
     func setupToolbarBottomPositionAppState() -> AppState {
         var toolbarState = ToolbarState(windowUUID: windowUUID)
         toolbarState.toolbarPosition = .bottom
