@@ -192,7 +192,7 @@ extension PreviewModel {
         ),
         multipleChoiceButtons: [],
         onboardingType: .freshInstall,
-        a11yIdRoot: "onboarding_termsOfService",
+        a11yIdRoot: "onboarding_termsOfUse",
         imageID: "fxHomeHeaderLogoBall",
         instructionsPopup: nil,
         embededLinkText: [
@@ -241,10 +241,10 @@ extension PreviewModel {
 }
 
 #Preview("Terms of service") {
-    TermsOfServiceView(
-        viewModel: TosFlowViewModel(
+    TermsOfUseView(
+        viewModel: TermsOfUseFlowViewModel(
             configuration: PreviewModel.tos,
-            onTermsOfServiceTap: {},
+            onTermsOfUseTap: {},
             onPrivacyNoticeTap: {},
             onManageSettingsTap: {},
             onComplete: {}
