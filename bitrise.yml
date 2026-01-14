@@ -1650,14 +1650,14 @@ workflows:
     - deploy-to-bitrise-io@2.10.0: {}
     - slack@4.2.1:
         inputs:
-        - api_token: $SLACK_APP_TOKEN
-        - channel: "#cso-slack-test"
+        - webhook_url: $WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX
         - author_name: ''
         - pretext: ":white_check_mark: Firefox iOS Unit Tests"
         - pretext_on_error: ":x: Firefox iOS Unit Tests"
         - title:
         - title_on_error:
         - footer: Created by Mobile Test Engineering
+        - footer_icon: 
         - fields:
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
         - message: |
