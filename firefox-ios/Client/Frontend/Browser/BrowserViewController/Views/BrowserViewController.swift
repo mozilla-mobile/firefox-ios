@@ -1899,7 +1899,9 @@ class BrowserViewController: UIViewController,
     private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
         remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
-        view.layoutIfNeeded()
+        if !isToolbarTranslucencyRefactorEnabled {
+            view.layoutIfNeeded()
+        }
     }
 
     private func adjustBottomSearchBarForKeyboard() {
@@ -2041,7 +2043,9 @@ class BrowserViewController: UIViewController,
         }
 
         browserDelegate?.show(webView: webView)
-        updateToolbarDisplay()
+        if !isToolbarTranslucencyRefactorEnabled {
+            updateToolbarDisplay()
+        }
     }
 
     // MARK: - Document Loading
