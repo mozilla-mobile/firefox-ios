@@ -37,11 +37,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: false)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:text/html,")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:text/html,")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: false)
     }
 
     @MainActor
@@ -51,10 +48,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-
-        let policy = WKNavigationActionMock()
-        navigationHandler.filterDataScheme(url: URL(string: "data:text/html,")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:text/html,")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: nil)
     }
 
     @MainActor
@@ -64,11 +59,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:text/html,")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:text/html,")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -78,11 +70,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -92,11 +81,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:image/")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:image/")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -106,11 +92,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:image/svg+xml")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:image/svg+xml")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -120,11 +103,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:image/SVG+xml")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:image/SVG+xml")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -134,11 +114,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:image/jpg")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:image/jpg")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -148,11 +125,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:video/")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:video/")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -162,11 +136,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:application/pdf")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:application/pdf")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -176,11 +147,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:application/json")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:application/json")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -190,11 +158,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:;base64,")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:;base64,")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -204,11 +169,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:,")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:,")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -218,11 +180,8 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:text/plain,")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:text/plain,")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 
     @MainActor
@@ -232,10 +191,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
-        let policy = WKNavigationActionMock()
-        policy.overridenTargetFrame = MockWKFrameInfo(isMainFrame: true)
-
-        navigationHandler.filterDataScheme(url: URL(string: "data:text/plain;")!,
-                                           navigationAction: policy)
+        let url = URL(string: "data:text/plain;")!
+        navigationHandler.filterDataScheme(url: url, isMainFrame: true)
     }
 }
