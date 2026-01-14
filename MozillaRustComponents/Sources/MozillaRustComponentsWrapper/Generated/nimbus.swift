@@ -1353,6 +1353,12 @@ public protocol NimbusTargetingHelperProtocol: AnyObject, Sendable {
      */
     func evalJexl(expression: String) throws  -> Bool
     
+    /**
+     * Evaluate a JEXL expression and return debug results as JSON.
+     * For CLI testing and debugging.
+     */
+    func evalJexlDebug(expression: String) throws  -> String
+    
 }
 open class NimbusTargetingHelper: NimbusTargetingHelperProtocol, @unchecked Sendable {
     fileprivate let pointer: UnsafeMutableRawPointer!
@@ -1413,6 +1419,18 @@ open class NimbusTargetingHelper: NimbusTargetingHelperProtocol, @unchecked Send
 open func evalJexl(expression: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
     uniffi_nimbus_fn_method_nimbustargetinghelper_eval_jexl(self.uniffiClonePointer(),
+        FfiConverterString.lower(expression),$0
+    )
+})
+}
+    
+    /**
+     * Evaluate a JEXL expression and return debug results as JSON.
+     * For CLI testing and debugging.
+     */
+open func evalJexlDebug(expression: String)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbustargetinghelper_eval_jexl_debug(self.uniffiClonePointer(),
         FfiConverterString.lower(expression),$0
     )
 })
@@ -4635,6 +4653,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl() != 42395) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl_debug() != 60924) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_recordedcontext_get_event_queries() != 28844) {

@@ -3566,7 +3566,7 @@ public struct TabHistoryEntry {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(title: String, url: String, isPrivate: Bool) {
+    public init(title: String, url: String, isPrivate: Bool = false) {
         self.title = title
         self.url = url
         self.isPrivate = isPrivate
