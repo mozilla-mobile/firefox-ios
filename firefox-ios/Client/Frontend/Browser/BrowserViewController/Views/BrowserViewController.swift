@@ -1067,6 +1067,7 @@ class BrowserViewController: UIViewController,
     }
 
     func newState(state: BrowserViewControllerState) {
+        guard state != browserViewControllerState else { return }
         browserViewControllerState = state
 
         if state.reloadWebView {
