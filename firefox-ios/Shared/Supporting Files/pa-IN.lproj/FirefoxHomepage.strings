@@ -28,6 +28,9 @@
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ ਕੋਈ ਪੈੜ੍ਹਾਂ ਨਾ ਛੱਡੋ";
 
+/* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
+"FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "ਸਫ਼ੇ ਨੂੰ ਮੁੜ-ਲੋਡ ਕਰੋ";
+
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "ਖੋਜੋ ਜਾਂ ਸਿਰਨਾਵਾਂ ਦਿਓ";
 

@@ -56,7 +56,7 @@
 "No logins found" = "找不到登入資訊";
 
 /* Label displayed when no logins are found after searching. */
-"NoLoginsFound.Title.v122" = "未儲存密碼";
+"NoLoginsFound.Title.v122" = "找不到密碼";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "開啟及填入";

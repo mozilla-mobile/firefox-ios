@@ -350,7 +350,7 @@
 "Onboarding.Welcome.Description.v120" = "Den ideelle nettlesaren vår hindrar selskap i å spore aktiviteten din i hemmelegheit på nettet.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Link.Action.v114" = "Les meir i personvern erklæringa vår";
+"Onboarding.Welcome.Link.Action.v114" = "Les meir i personvernfråsegna vår";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Hopp over";

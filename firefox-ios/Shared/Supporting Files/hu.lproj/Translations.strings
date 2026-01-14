@@ -44,7 +44,7 @@
 "Translations.Sheet.Error.TitleLabel.v145" = "A nyelvek betöltése sikertelen";
 
 /* This is a less descriptive text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
-"Translations.Sheet.FromLabel.v145" = "Feladó";
+"Translations.Sheet.FromLabel.v145" = "Forrásnyelv:";
 
 /* This is the text on the secondary button used to indicate that page is being translated and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.LoadingButton.v145" = "Oldal fordítása…";

@@ -64,6 +64,12 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Adrese";
 
+/* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.Description.v145" = "Mijenja gumb u sredini alatne trake.";
+
+/* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "Gumb alatne trake";
+
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "Standardno";
 
@@ -164,7 +170,7 @@
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Uključi obavijesti";
 
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Settings.PrivacyNotice.Title.v137" = "Napomena o privatnosti";
+"Settings.PrivacyNotice.Title.v137" = "Napomene o privatnosti";
 
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Pomicanjem sakrij karticu i adresnu traku";
@@ -235,6 +241,24 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Instaliraj i pokreni istraživanja";
 
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Omogućuje pristup sažetcima stranica.";
+
+/* This is the footer text for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Protresi svoj uređaj za sažimanje stranice.";
+
+/* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Protresi za sažimanje";
+
+/* This is the section title for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.Title.v142" = "Geste";
+
+/* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.SummarizePagesTitle.v142" = "Sažmi stranice";
+
+/* In the settings menu, in the General section, this is the title for the Summarize settings section. */
+"Settings.Summarize.Title.v142" = "Sažetci stranica";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Saznaj više";
 
@@ -246,4 +270,25 @@
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "Uvjeti korištenja";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "Početna stranica";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Nova kartica";
+
+/* This is the section title text for the the Translation feature under the Translation settings section. */
+"Settings.Translation.SectionTitle.v145" = "Postavke prijevoda";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
+"Settings.Translation.SettingOff.v145" = "Isključeno";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
+"Settings.Translation.SettingOn.v145" = "Uključeno";
+
+/* In the settings menu, in the General section, this is the title for the Translation settings section. */
+"Settings.Translation.Title.v145" = "Prijevod";
+
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "Aktiviraj prijevode";
 

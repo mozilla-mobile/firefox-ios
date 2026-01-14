@@ -61,6 +61,9 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background. */
 "Settings.AppIconSelection.AppIconNames.Pink.Title.v136" = "പാടല";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon. */
+"Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136" = "ചിത്രമാത്രപ്പെടുത്തിയ";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a LGBT+ pride fox logo. */
 "Settings.AppIconSelection.AppIconNames.Pride.Title.v136" = "അഭിമാനം";
 

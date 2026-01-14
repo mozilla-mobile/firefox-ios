@@ -88,6 +88,9 @@
 /* Option for the dark theme. */
 "Onboarding.Modern.Customization.Theme.Dark.v145" = "Temna";
 
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Izberite si temo, ki vam ugaja, ali nastavite, naj se %@ ujema s temo naprave.";
+
 /* Option for the light theme. */
 "Onboarding.Modern.Customization.Theme.Light.v145" = "Svetla";
 
@@ -144,6 +147,9 @@
 
 /* Title for the confirmation button on the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Nadaljuj";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "Samodejna zaščita vaših osebnih podatkov\nHitrejše nalaganje strani in pametnejše iskanje\nDelo neprofitne organizacije %@, ki ji zaupate že več kot 20 let";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Upravljaj";

@@ -26,7 +26,7 @@
 "ActivityStream.ContextMenu.UnpinTopsite" = "Anulează fixarea";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
-"ActivityStream.JumpBackIn.SectionTitle" = "Salt la fila aceasta";
+"ActivityStream.JumpBackIn.SectionTitle" = "Revino la fila aceasta";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "File: %d";
@@ -122,7 +122,7 @@
 "BreachAlerts.BreachDate" = "Această încălcare a securității datelor a avut loc la data de";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Parolele au fost divulgate sau furate de când ți-ai schimbat ultima dată parola. Pentru a proteja acest cont, autentifică-te pe site și schimbă-ți parola.";
+"BreachAlerts.Description" = "Parolele au fost divulgate sau furate de când ți-ai schimbat ultima dată parola. Pentru a proteja acest cont, intră în cont pe site și schimbă-ți parola.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Află mai multe";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "Filele tale de pe celelalte dispozitive apar aici.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Autentifică-te pentru a vedea o listă de file de pe celelalte dispozitive.";
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Intră în cont ca să vezi o listă de file de pe celelalte dispozitive.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -632,7 +632,7 @@
 "Licenses" = "Licențe";
 
 /* Light theme setting in Reading View settings */
-"Light" = "Deschis";
+"Light" = "Luminos";
 
 /* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "Load original page" = "Încarcă pagina originală";
@@ -641,7 +641,7 @@
 "Loading content…" = "Se încarcă conținut…";
 
 /* Authentication prompt log in button */
-"Log in" = "Autentifică-te";
+"Log in" = "Intră în cont";
 
 /* Toggle logins syncing setting */
 "Logins" = "Autentificări";
@@ -845,7 +845,7 @@
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Rețelele sociale plasează elemente de urmărire pe alte site-uri web pentru a-ți construi un profil mai complet și mai direcționat. Blocarea acestor elemente de urmărire reduce cât de multe companii de social media pot vedea ce faci online.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Generatoare de amprente digitale";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Detectoare de amprente digitale";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Ce este nou";
@@ -1079,7 +1079,7 @@
 "SendTo.NoDevicesFound.Message" = "Nu mai ai niciun alt dispozitiv conectat la acest cont Firefox disponibil pentru sincronizare.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Te rugăm să deschizi Firefox, intră în Setări și autentifică-te pentru a continua.";
+"SendTo.NotSignedIn.Message" = "Te rugăm să deschizi Firefox, intră în Setări și intră în cont pentru a continua.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Nu ești autentificat(ă) în contul tău Firefox.";
@@ -1223,7 +1223,7 @@
 "Settings.DisplayTheme.OptionDark" = "Întunecată";
 
 /* Option choice in display theme settings for light theme */
-"Settings.DisplayTheme.OptionLight" = "Deschisă";
+"Settings.DisplayTheme.OptionLight" = "Luminoasă";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Tema se va schimba automat în funcție de luminozitatea ecranului. Poți seta pragul în care se schimbă tema. Cercul indică luminozitatea actuală a afișajului.";
@@ -1244,7 +1244,7 @@
 "Settings.DisplayTheme.SystemTheme.SectionHeader" = "Temă de sistem";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Folosește modul deschis/întunecat";
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Folosește modul luminos/întunecat";
 
 /* Theme picker settings section title */
 "Settings.DisplayTheme.ThemePicker.SectionHeader" = "Alegere temă";
@@ -1271,7 +1271,7 @@
 "Settings.Home.Option.Description.v101" = "Alege ce este inclus pe pagina principală Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
-"Settings.Home.Option.JumpBackIn" = "Salt la fila aceasta";
+"Settings.Home.Option.JumpBackIn" = "Revino la fila aceasta";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.Pocket" = "Recomandat de Pocket";
@@ -1586,7 +1586,7 @@
 "Settings.WebsiteData.ConfirmPrompt" = "Această acțiune va șterge toate datele site-urilor web și este ireversibilă.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
-"Settings.WebsiteData.SelectedConfirmPrompt" = "Acțiunea va elimina elementele selectate. Nu poate fi anulată.";
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Acțiunea va elimina elementele selectate. Este ireversibilă.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Date ale site-urilor web";

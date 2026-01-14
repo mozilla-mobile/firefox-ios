@@ -74,7 +74,7 @@
 "Addresses.EditAddress.AutofillAddressPostTown.v129" = "Cidade postal";
 
 /* Label for the prefecture field, essential for addresses in countries like Japan where prefectures are a major administrative division. Aids in precise location specification for autofill. */
-"Addresses.EditAddress.AutofillAddressPrefecture.v129" = "Prefeitura";
+"Addresses.EditAddress.AutofillAddressPrefecture.v129" = "Província";
 
 /* Label for the province field, required in countries where provinces are a primary administrative division. Helps in pinpointing the user's location more accurately for autofill purposes. */
 "Addresses.EditAddress.AutofillAddressProvince.v129" = "Província";

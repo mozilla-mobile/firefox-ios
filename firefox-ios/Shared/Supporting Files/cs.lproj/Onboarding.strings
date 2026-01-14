@@ -164,10 +164,10 @@
 "Onboarding.Modern.TermsOfService.ManageLink.v145" = "Nastavení";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
-"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Pro zlepšení prohlížeče odesílá %1$@ diagnostické údaje a údaje o interakci společnosti %2$@. %3$@";
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "%1$@ odesílá organizaci %2$@ diagnostické údaje a údaje o interakcích, které pomáhají prohlížeč vylepšovat. %3$@";
 
 /* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
-"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "Pro zlepšení prohlížeče odesílá %1$@ diagnostické údaje a údaje o interakci společnosti %2$@. %3$@";
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "%1$@ odesílá organizaci %2$@ diagnostické údaje a údaje o interakcích, které pomáhají prohlížeč vylepšovat. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ se stará o vaše soukromí. Více informací se dozvíte v dokumentu %2$@";
@@ -194,7 +194,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Údaje o vašem zařízení, konfiguraci hardwaru a způsobu používání aplikace %1$@ pomáhají zlepšovat funkce, výkon a stabilitu pro všechny. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Posílat technická data a data o interakcích organizaci %@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Odesílat organizaci %@ technické údaje a údaje o interakcích";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Pomozte nám vylepšit %@";
@@ -203,16 +203,16 @@
 "Onboarding.Modern.TermsOfService.Subtitle.v140" = "Bleskově rychlé načítání stránek\nAutomatická ochrana proti sledování\nSynchronizace na všech vašich zařízeních";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
-"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Pokračováním souhlasíte s %@";
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Pokračováním souhlasíte s dokumentem %@";
 
 /* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
-"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Pokračováním souhlasíte s %@";
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Pokračováním souhlasíte s dokumentem %@";
 
 /* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "Podmínky používání aplikace %@.";
 
 /* Title for the Terms of Service screen in the onboarding process. */
-"Onboarding.Modern.TermsOfService.Title.v140" = "Aktualizujte své prohlížení";
+"Onboarding.Modern.TermsOfService.Title.v140" = "Vylepšete své prohlížení";
 
 /* Title for the Terms of Service screen in the v2 onboarding flow. */
 "Onboarding.Modern.TermsOfService.Title.v145" = "Převezměte kontrolu nad internetem";
@@ -278,7 +278,7 @@
 "Onboarding.TermsOfService.ManageLink.v135" = "Správa";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
-"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Pro zlepšení prohlížeče odesílá %1$@ diagnostické údaje a údaje o interakci společnosti %2$@. %3$@";
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "%1$@ odesílá organizaci %2$@ diagnostické údaje a údaje o interakcích, které pomáhají prohlížeč vylepšovat. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ se stará o vaše soukromí. Více informací se dozvíte v dokumentu %2$@";
@@ -299,7 +299,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Údaje o vašem zařízení, konfiguraci hardwaru a způsobu používání aplikace %1$@ pomáhají zlepšovat funkce, výkon a stabilitu pro všechny. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Posílat technická data a data o interakcích organizaci %@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Odesílat organizaci %@ technické údaje a údaje o interakcích";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "Pomozte nám vylepšit %@";
@@ -308,7 +308,7 @@
 "Onboarding.TermsOfService.Subtitle.v136" = "Rychlé a bezpečné prohlížení webu";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
-"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Pokračováním souhlasíte s %@";
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Pokračováním souhlasíte s dokumentem %@";
 
 /* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "Vítá vás %@";

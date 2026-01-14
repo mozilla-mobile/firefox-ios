@@ -335,7 +335,7 @@
 "MainMenu.TabsSection.NewTab.Title.v131" = "Nuova scheda";
 
 /* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. */
-"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "Raggruppato";
+"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "Compresso";
 
 /* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Sito desktop";

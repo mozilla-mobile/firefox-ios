@@ -1,20 +1,20 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
-"FirefoxHome.Pocket.SectionTitle.v140" = "Články";
+"FirefoxHome.Pocket.SectionTitle.v140" = "Příběhy";
 
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "Domovská stránka";
 
 /* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
-"FirefoxHome.Stories.AllStoriesButtonTitle.v145" = "Všechny články";
+"FirefoxHome.Stories.AllStoriesButtonTitle.v145" = "Všechny příběhy";
 
 /* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
-"FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Všechny články";
+"FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Všechny příběhy";
 
 /* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
 "FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Populární dnes";
 
 /* This is the title of the Stories section on Firefox Homepage. */
-"FirefoxHome.Stories.SectionTitle.v140" = "Články";
+"FirefoxHome.Stories.SectionTitle.v140" = "Příběhy";
 
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Data anonymního prohlížení byla vymazána";
@@ -26,7 +26,10 @@
 "FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Kdo může vidět mou aktivitu?";
 
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
-"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Nezanechávejte na tomto zařízení žádné stopy";
+"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Nezanechá stopy";
+
+/* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
+"FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "Znovu načíst stránku";
 
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Zadejte hledání nebo adresu";

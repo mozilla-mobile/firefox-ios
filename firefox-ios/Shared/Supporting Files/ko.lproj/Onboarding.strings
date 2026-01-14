@@ -242,7 +242,7 @@
 "Onboarding.Modern.Welcome.Title.v140" = "귀찮은 광고는 이제 그만";
 
 /* Title for the welcome card in the v2 onboarding flow. */
-"Onboarding.Modern.Welcome.Title.v145" = "성가신는 추적기와 작별 인사";
+"Onboarding.Modern.Welcome.Title.v145" = "성가신 추적기와 작별 인사";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "계속";
