@@ -76,18 +76,26 @@ class FormAutofillHelper: TabContentScript {
         // to an embedded iframe on a webpage for injecting card info
         frame = message.frameInfo
 
-        guard let frame = frame, frame.isFrameLoadedInSecureContext else {
+        guard let frame = frame else { return }
+        let isSecureContext = frame.isFrameLoadedInSecureContext
+
+        processMessage(name: message.name, body: message.body, isSecureContext: isSecureContext, frame: frame)
+    }
+
+    func processMessage(name: String, body: Any, isSecureContext: Bool, frame: WKFrameInfo?) {
+        guard isSecureContext else {
             logger.log("Ignoring request as it came from an insecure context",
                        level: .info,
                        category: .webview)
             return
         }
 
-        switch HandlerName(rawValue: message.name) {
+        switch HandlerName(rawValue: name) {
         case .addressFormTelemetryMessageHandler:
-            let addressValues = message.decodeBody(as: AddressFormData.self)
-            if addressValues?.object == "address_form" {
-                switch addressValues?.method {
+            guard let addressValues = decode(body, as: AddressFormData.self) else { return }
+
+            if addressValues.object == "address_form" {
+                switch addressValues.method {
                 case .detected:
                     TelemetryWrapper.recordEvent(category: .action, method: .detect, object: .addressForm)
                 case .filled:
@@ -98,9 +106,9 @@ class FormAutofillHelper: TabContentScript {
                     return
                 }
             }
+
         case .addressFormMessageHandler:
-            guard let fieldValues = message.decodeBody(as: FillAddressAutofillForm.self) else {
-                // Log a warning if payload parsing fails
+            guard let fieldValues = decode(body, as: FillAddressAutofillForm.self) else {
                 logger.log("Unable to find the payloadType for the address form JS input",
                            level: .warning,
                            category: .webview)
@@ -110,11 +118,8 @@ class FormAutofillHelper: TabContentScript {
             foundFieldValues?(getFieldTypeValues(payload: fieldValues.payload), fieldValues.type, frame)
 
         case .creditCardFormMessageHandler:
-            // Parse message payload for credit card form autofill
-            guard let fieldValues = message.decodeBody(as: FillCreditCardForm.self),
-                  let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
-            else {
-                // Log a warning if payload parsing fails
+            guard let fieldValues = decode(body, as: FillCreditCardForm.self),
+                  let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type) else {
                 logger.log("Unable to find the payloadType for the credit card form JS input",
                            level: .warning,
                            category: .webview)
@@ -125,7 +130,6 @@ class FormAutofillHelper: TabContentScript {
             foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
 
         case .none:
-            // Do nothing if the handler name is not recognized
             break
         }
     }
@@ -315,6 +319,28 @@ class FormAutofillHelper: TabContentScript {
             if let error = error {
                 logger.log("Unable to remove focus from the current field: \(error)", level: .debug, category: .webview)
             }
+        }
+    }
+
+    /// Helper method to decode message body into a Decodable type
+    ///
+    /// This replaces the need for WKScriptMessage.decodeBody extension by allowing
+    /// us to decode message bodies without requiring a WKScriptMessage instance.
+    /// This is essential for testing, as WKScriptMessage and WKFrameInfo cannot be
+    /// safely mocked (they crash on deallocation).
+    /// - Parameters:
+    ///   - body: The message body to decode (typically a dictionary or string)
+    ///   - type: The Decodable type to decode into
+    /// - Returns: The decoded object, or nil if decoding fails
+    private func decode<T: Decodable>(_ body: Any, as type: T.Type) -> T? {
+        if let dict = body as? [String: Any],
+           let data = try? JSONSerialization.data(withJSONObject: dict, options: []) {
+            return try? JSONDecoder().decode(type, from: data)
+        } else if let bodyString = body as? String,
+                  let data = bodyString.data(using: .utf8) {
+            return try? JSONDecoder().decode(type, from: data)
+        } else {
+            return nil
         }
     }
 }
