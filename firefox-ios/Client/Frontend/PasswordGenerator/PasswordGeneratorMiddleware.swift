@@ -49,7 +49,7 @@ final class PasswordGeneratorMiddleware {
             self.userTappedRefreshPassword(frameContext: frameContext, windowUUID: windowUUID)
 
         case PasswordGeneratorActionType.clearGeneratedPasswordForSite:
-            guard let origin = (action as? PasswordGeneratorAction)?.frameContext?.origin else { return }
+            guard let origin = (action as? PasswordGeneratorAction)?.loginEntryOrigin else { return }
             self.clearGeneratedPasswordForSite(origin: origin, windowUUID: windowUUID)
 
         default:
@@ -84,8 +84,8 @@ final class PasswordGeneratorMiddleware {
                                      completion: @MainActor @escaping (String) -> Void) {
         let originRules = PasswordGeneratorMiddleware.getPasswordRule(for: frameContext.host)
         let jsFunctionCall = "window.__firefox__.logins.generatePassword(\(originRules ?? "" ))"
-        frameContext.scriptEvaluator?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall,
-                                                                              frameContext.frameInfo) { (result, error) in
+        frameContext.scriptEvaluator.evaluateJavascriptInDefaultContentWorld(jsFunctionCall,
+                                                                             frameContext.frameInfo) { (result, error) in
             if let error = error {
                 self.logger.log("JavaScript evaluation error",
                                 level: .warning,
@@ -102,8 +102,8 @@ final class PasswordGeneratorMiddleware {
         guard let escapedPassword = escapeString(string: password) else { return }
 
         let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\(escapedPassword))"
-        frameContext.scriptEvaluator?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall,
-                                                                              frameContext.frameInfo) { (result, error) in
+        frameContext.scriptEvaluator.evaluateJavascriptInDefaultContentWorld(jsFunctionCall,
+                                                                             frameContext.frameInfo) { (result, error) in
             if error != nil {
                 self.logger.log("Error filling in password info",
                                 level: .warning,
