@@ -65,7 +65,7 @@
 "Settings.AddressAutofill.Title.v126" = "Endereços";
 
 /* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
-"Settings.Appearance.NavigationToolbar.Description.v145" = "Altera o botão no centro da barra de ferramentas.";
+"Settings.Appearance.NavigationToolbar.Description.v145" = "Alterar o botão no centro da barra de ferramentas.";
 
 /* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
 "Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "Botão da barra de ferramentas";
@@ -260,10 +260,10 @@
 "Settings.Studies.Title.v148" = "Permitir estudos de funcionalidades";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.FooterTitle.v142" = "Fornece acesso para resumir páginas.";
+"Settings.Summarize.FooterTitle.v142" = "Permitir acesso ao recurso de resumir páginas.";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Agite seu dispositivo de um lado para o outro para resumir uma página.";
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Agitar o dispositivo de um lado para o outro para resumir a página.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Agitar para resumir";
