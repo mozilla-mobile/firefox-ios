@@ -4,11 +4,6 @@ features:
     description: >
       This feature is for managing the roll out of the Homepage New Tab Redesign feature.
     variables:
-      enabled:
-        description: >
-          Enables the feature.
-        type: Boolean
-        default: false
       search-bar:
         description: >
           If true, enables the search bar feature on homepage for users.
@@ -45,7 +40,6 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
           search-bar: false
           shortcuts-library: false
           stories-redesign: true
@@ -57,7 +51,6 @@ features:
 
       - channel: developer
         value:
-          enabled: false
           search-bar: false
           shortcuts-library: false
           stories-redesign: true
