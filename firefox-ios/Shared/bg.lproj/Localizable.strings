@@ -1331,7 +1331,7 @@
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Класически %@";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
-"Settings.Home.Option.Wallpaper.CollectionTitle" = "НАЧАЛЕН ЕКРАН";
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "Начален Екран";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LearnMore.v106" = "Научете повече";

@@ -50,7 +50,7 @@
 "Menu.SharePageAction.Title" = "Podijeli stranicu s …";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Zatraži desktop stranicu";
+"Menu.ViewDekstopSiteAction.Title" = "Zatraži desktop web-stranicu";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Zatraži stranicu za mobitele";

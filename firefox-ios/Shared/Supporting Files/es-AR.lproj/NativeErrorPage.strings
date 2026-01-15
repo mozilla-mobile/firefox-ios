@@ -1,3 +1,39 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Avanzadas";
+
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ no confía en este sitio porque el certificado encontrado no es válido para %2$@.";
+
+/* On certificate error page, this is the security information shown in the advanced section. */
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Este sitio no permite conexiones que no sean seguras.";
+
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Es posible que debas iniciar sesión en tu red Wi-Fi o verificar la configuración de tu VPN.";
+
+/* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Si estás en una red corporativa, tu equipo de soporte puede tener más información.";
+
+/* On certificate error page, this is the description explaining the security risk. */
+"NativeErrorPage.BadCertDomain.Description.v149" = "Alguien que se haga pasar por el sitio podría intentar robar tu información personal. La configuración de tu conexión también podría estar mal configurada.";
+
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Código de error: %@";
+
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Ocultar avanzadas";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Conocer más";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Continuar a %@ (Riesgoso)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Cuidado. Algo no parece estar bien.";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Ver el certificado del sitio";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Recargar";
 
@@ -6,6 +42,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Cuidado. Algo no parece estar bien.";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "Retroceder (recomendado)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "Probá conectarte a un dispositivo diferente. Verificá tu módem o router. Desconectá y volvé a conectarte al wifi.";

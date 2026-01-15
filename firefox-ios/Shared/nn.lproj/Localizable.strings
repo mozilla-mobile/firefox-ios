@@ -1160,7 +1160,7 @@
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Utsjånaden på nettstaden";
 
 /* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
-"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Gir nettsider ein mærk utsjånad. Nokre nettstadar vil kanskje ikkje sjå ut slik dei skal.";
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Gir nettsider ein mørk utsjånad. Nokre nettstadar vil kanskje ikkje sjå ut slik dei skal.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
 "Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Nettstad i mørk modus";
@@ -1220,10 +1220,10 @@
 "Settings.DisplayTheme.Manual.SwitchTitle" = "Manuelt";
 
 /* Option choice in display theme settings for dark theme */
-"Settings.DisplayTheme.OptionDark" = "Mørkt";
+"Settings.DisplayTheme.OptionDark" = "Mørk";
 
 /* Option choice in display theme settings for light theme */
-"Settings.DisplayTheme.OptionLight" = "Ljost";
+"Settings.DisplayTheme.OptionLight" = "Ljos";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Temaet vil endrast automatisk basert på lysstyrken på skjermen. Du kan spesifisere terskelen der temaet skal endrast. Sirkelen indikerer gjeldande lysstyrke til skjermen.";
@@ -1589,7 +1589,7 @@
 "Settings.WebsiteData.SelectedConfirmPrompt" = "Denne handlinga vil fjerne dei valde elementa. Handlinga kan ikkje angrast.";
 
 /* Title displayed in header of the Data Management panel. */
-"Settings.WebsiteData.Title" = "Nettstaddata";
+"Settings.WebsiteData.Title" = "Nettstad-data";
 
 /* Action label on share extension to add page to the Firefox reading list. */
 "ShareExtension.AddToReadingListAction.Title" = "Legg til i leselista";

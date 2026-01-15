@@ -158,7 +158,7 @@
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Saznaj više o korisnim funkcijama i kako najbolje iskoristiti %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
-"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Savjeti i značajke";
+"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Savjeti i funkcije";
 
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Obavijesti";
@@ -200,7 +200,7 @@
 "Settings.Search.EnginesSuggestions.Title.v124" = "Prijedlozi tražilica";
 
 /* Navigation title for search page in the Settings menu. */
-"Settings.Search.PageTitle.v121" = "Traži";
+"Settings.Search.PageTitle.v121" = "Pretraga";
 
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "Prikaži prijedloge tražilica u privatnim sesijama";
@@ -209,7 +209,7 @@
 "Settings.Search.PrivateSession.Setting.v124" = "Prikaži u privatnim sesijama";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
-"Settings.Search.ShowSuggestions.v121" = "Prikaži prijedloge pretraživanja";
+"Settings.Search.ShowSuggestions.v121" = "Prikaži prijedloge pretrage";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
 "Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Adresna traka – Firefox prijedlozi";
@@ -260,7 +260,7 @@
 "Settings.Studies.Title.v148" = "Dopusti istraživanja funkcija";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.FooterTitle.v142" = "Omogućuje pristup sažetcima stranica.";
+"Settings.Summarize.FooterTitle.v142" = "Omogućuje pristup sažecima stranica.";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "Protresi svoj uređaj za sažimanje stranice.";
@@ -275,7 +275,7 @@
 "Settings.Summarize.SummarizePagesTitle.v142" = "Sažmi stranice";
 
 /* In the settings menu, in the General section, this is the title for the Summarize settings section. */
-"Settings.Summarize.Title.v142" = "Sažetci stranica";
+"Settings.Summarize.Title.v142" = "Sažeci stranica";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Saznaj više";

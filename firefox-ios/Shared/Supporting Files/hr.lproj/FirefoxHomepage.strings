@@ -29,7 +29,7 @@
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Podaci privatnog pregledavanja izbrisani";
 
 /* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. %@ is the app name (e.g. Firefox). */
-"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ briše tvoje kolačiće, povijest i podatke web stranica kada zatvoriš sve svoje privatne kartice.";
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ briše tvoje kolačiće, povijest i podatke web-stranica kada zatvoriš sve svoje privatne kartice.";
 
 /* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Tko bi mogao vidjeti moju aktivnost?";
