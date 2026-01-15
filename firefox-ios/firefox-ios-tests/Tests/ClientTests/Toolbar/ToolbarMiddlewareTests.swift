@@ -835,6 +835,51 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
     }
 
+    func test_didSubmitSearchTerm_forPrivateMode_withProperPayload_addsRecentSearchToHistoryStorage() {
+        mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            url: URL(string: "https://example.com")!,
+            searchTerm: "cookies",
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
+    func test_didSubmitSearchTerm_forPrivateMode_withoutURL_doesNotAddRecentSearchToHistoryStorage() {
+        mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            searchTerm: "cookies",
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
+    func test_didSubmitSearchTerm_forPrivateMode_withoutSearchTerm_doesNotAddRecentSearchToHistoryStorage() {
+        mockStore = MockStoreForMiddleware(state: setupPrivateModeAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
     // MARK: - Helpers
     private func createSubject(manager: ToolbarManager) -> ToolbarMiddleware {
         return ToolbarMiddleware(
@@ -898,6 +943,24 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         return FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature(enabled: isEnabled)
         }
+    }
+
+    func setupPrivateModeAppState() -> AppState {
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.isPrivateMode = true
+
+        return AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: windowUUID
+                        )
+                    ),
+                    .toolbar(toolbarState)
+                ]
+            )
+        )
     }
 
     func setupEditingAppState() -> AppState {
