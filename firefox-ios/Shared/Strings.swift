@@ -1632,7 +1632,7 @@ extension String {
             public static let AdvancedWarning1 = MZLocalizedString(
                 key: "NativeErrorPage.BadCertDomain.AdvancedWarning1.v149",
                 tableName: "NativeErrorPage",
-                value: "You might need to sign in to your WiFi network, or check your VPN settings.",
+                value: "You might need to sign in to your Wi-Fi network, or check your VPN settings.",
                 comment: "On certificate error page, this is the first warning message in the advanced section suggesting possible solutions.")
             public static let AdvancedWarning2 = MZLocalizedString(
                 key: "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149",
