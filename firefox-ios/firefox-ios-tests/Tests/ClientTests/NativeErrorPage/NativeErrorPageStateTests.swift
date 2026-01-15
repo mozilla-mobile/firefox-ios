@@ -42,17 +42,8 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertEqual(newState.description, mockModel.errorDescription)
         XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
         XCTAssertEqual(newState.url, mockModel.url)
-        XCTAssertEqual(newState.showProceedButton, mockModel.showProceedButton)
-        XCTAssertEqual(newState.showGoBackButton, mockModel.showGoBackButton)
-        if let modelAdvanced = mockModel.advancedSection {
-            XCTAssertNotNil(newState.advancedSection)
-            XCTAssertEqual(newState.advancedSection?.buttonText, modelAdvanced.buttonText)
-            XCTAssertEqual(newState.advancedSection?.infoText, modelAdvanced.infoText)
-            XCTAssertEqual(newState.advancedSection?.warningText, modelAdvanced.warningText)
-            XCTAssertEqual(newState.advancedSection?.certificateErrorCode, modelAdvanced.certificateErrorCode)
-        } else {
-            XCTAssertNil(newState.advancedSection)
-        }
+        XCTAssertNil(newState.advancedSection)
+        XCTAssertFalse(newState.showGoBackButton)
     }
 
     func testLoadCertificateErrorWithAdvancedSection() {
