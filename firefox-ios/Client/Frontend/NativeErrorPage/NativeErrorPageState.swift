@@ -12,7 +12,6 @@ struct NativeErrorPageState: ScreenState {
     var foxImage: String
     var url: URL?
     var advancedSection: AdvancedSectionModel?
-    var showProceedButton: Bool
     var showGoBackButton: Bool
 
     struct AdvancedSectionModel: Equatable {
@@ -20,6 +19,7 @@ struct NativeErrorPageState: ScreenState {
         var infoText: String
         var warningText: String
         var certificateErrorCode: String?
+        var showProceedButton: Bool
     }
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -39,7 +39,6 @@ struct NativeErrorPageState: ScreenState {
             foxImage: nativeErrorPageState.foxImage,
             url: nativeErrorPageState.url,
             advancedSection: nativeErrorPageState.advancedSection,
-            showProceedButton: nativeErrorPageState.showProceedButton,
             showGoBackButton: nativeErrorPageState.showGoBackButton
         )
     }
@@ -51,7 +50,6 @@ struct NativeErrorPageState: ScreenState {
         foxImage: String = "",
         url: URL? = nil,
         advancedSection: AdvancedSectionModel? = nil,
-        showProceedButton: Bool = false,
         showGoBackButton: Bool = false
     ) {
         self.windowUUID = windowUUID
@@ -60,7 +58,6 @@ struct NativeErrorPageState: ScreenState {
         self.foxImage = foxImage
         self.url = url
         self.advancedSection = advancedSection
-        self.showProceedButton = showProceedButton
         self.showGoBackButton = showGoBackButton
     }
 
@@ -79,7 +76,8 @@ struct NativeErrorPageState: ScreenState {
                     buttonText: advancedSection.buttonText,
                     infoText: advancedSection.infoText,
                     warningText: advancedSection.warningText,
-                    certificateErrorCode: advancedSection.certificateErrorCode
+                    certificateErrorCode: advancedSection.certificateErrorCode,
+                    showProceedButton: advancedSection.showProceedButton
                 )
             } else {
                 nil
@@ -91,7 +89,6 @@ struct NativeErrorPageState: ScreenState {
                 foxImage: model.foxImageName,
                 url: model.url,
                 advancedSection: advancedSectionModel,
-                showProceedButton: model.showProceedButton,
                 showGoBackButton: model.showGoBackButton
             )
         default:
@@ -107,7 +104,6 @@ struct NativeErrorPageState: ScreenState {
             foxImage: state.foxImage,
             url: state.url,
             advancedSection: state.advancedSection,
-            showProceedButton: state.showProceedButton,
             showGoBackButton: state.showGoBackButton
         )
     }
