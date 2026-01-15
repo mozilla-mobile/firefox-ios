@@ -316,7 +316,7 @@ public class BrowserAddressToolbar: UIView,
         if previousConfiguration?.browserActions != config.browserActions {
             updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
         }
-        
+
         // Navigation actions
         if previousConfiguration?.navigationActions != config.navigationActions {
             updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
@@ -328,7 +328,7 @@ public class BrowserAddressToolbar: UIView,
         if previousConfiguration?.trailingPageActions != config.trailingPageActions {
             updateActionStack(stackView: trailingPageActionStack, toolbarElements: config.trailingPageActions)
         }
-        
+
         updateActionSpacing(uxConfig: config.uxConfiguration)
         updateToolbarLayout(config: config, animated: animated)
     }
