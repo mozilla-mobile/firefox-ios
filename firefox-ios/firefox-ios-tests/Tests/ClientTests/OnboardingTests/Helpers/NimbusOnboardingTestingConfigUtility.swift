@@ -38,16 +38,25 @@ struct NimbusOnboardingTestingConfigUtility {
 
     // MARK: - Order-based setups
     func setupNimbus(withOrder order: [CardOrder], uiVariant: OnboardingVariant? = nil) {
-        var dictionary = [String: NimbusOnboardingCardData]()
+        let activeFlowKey = "test-flow"
+        var cards = [NimbusOnboardingCardData]()
 
         for (index, item) in order.enumerated() {
-            dictionary[item.rawValue] = createCard(withID: item, andOrder: index, uiVariant: uiVariant)
+            cards.append(createCard(withID: item, andOrder: index, uiVariant: uiVariant))
         }
 
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
-            OnboardingFrameworkFeature(
-                cards: dictionary,
-                dismissable: true)
+            let flow = NimbusOnboardingFlow(
+                cards: cards,
+                flowName: "Test Flow",
+                onboardingType: .freshInstall,
+                prerequisites: ["ALWAYS"],
+                dismissable: true
+            )
+            return makeFeature(
+                activeFlowKey: activeFlowKey,
+                flows: [activeFlowKey: flow]
+            )
         })
     }
 
@@ -64,6 +73,7 @@ struct NimbusOnboardingTestingConfigUtility {
         disqualifiers: [String] = [],
         uiVariant: OnboardingVariant? = nil
     ) {
+        let activeFlowKey = "test-flow"
         let cards = createCards(
             numbering: primaryAction.count,
             image: image,
@@ -77,9 +87,17 @@ struct NimbusOnboardingTestingConfigUtility {
             uiVariant: uiVariant)
 
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
-            OnboardingFrameworkFeature(
+            let flow = NimbusOnboardingFlow(
                 cards: cards,
-                dismissable: dismissable)
+                flowName: "Test Flow",
+                onboardingType: onboardingType,
+                prerequisites: prerequisites,
+                dismissable: dismissable
+            )
+            return makeFeature(
+                activeFlowKey: activeFlowKey,
+                flows: [activeFlowKey: flow]
+            )
         })
     }
 
@@ -95,11 +113,11 @@ struct NimbusOnboardingTestingConfigUtility {
         prerequisites: [String],
         disqualifiers: [String],
         uiVariant: OnboardingVariant?
-    ) -> [String: NimbusOnboardingCardData] {
-        var dictionary = [String: NimbusOnboardingCardData]()
+    ) -> [NimbusOnboardingCardData] {
+        var cards = [NimbusOnboardingCardData]()
 
         for number in 1...numberOfCards {
-            dictionary["\(CardElementNames.name) \(number)"] = NimbusOnboardingCardData(
+            cards.append(NimbusOnboardingCardData(
                 body: "\(CardElementNames.body) \(number)",
                 buttons: createButtons(
                     withPrimaryAction: primaryButtonAction[number - 1],
@@ -114,9 +132,10 @@ struct NimbusOnboardingTestingConfigUtility {
                 prerequisites: prerequisites,
                 title: "\(CardElementNames.title) \(number)",
                 uiVariant: uiVariant)
+            )
         }
 
-        return dictionary
+        return cards
     }
 
     private func createCard(
@@ -214,5 +233,23 @@ struct NimbusOnboardingTestingConfigUtility {
                 CardElementNames.popupThirdInstruction,
             ],
             title: CardElementNames.popupTitle)
+    }
+
+    private func makeFeature(
+        activeFlowKey: String,
+        flows: [String: NimbusOnboardingFlow]
+    ) -> OnboardingFrameworkFeature {
+        let variables = OnboardingFrameworkFeatureVariables(
+            enableModernUi: true,
+            shouldUseJapanConfiguration: false,
+            shouldUseBrandRefreshConfiguration: false,
+            conditions: [
+                "ALWAYS": "true",
+                "NEVER": "false"
+            ],
+            activeFlowKey: activeFlowKey,
+            flows: flows
+        )
+        return OnboardingFrameworkFeature(variables: variables, defaults: UserDefaults.standard)
     }
 }

@@ -12,14 +12,17 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
+    let onboardingVariantIdentifier: String?
 
     public init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<ViewModel>
+        viewModel: OnboardingFlowViewModel<ViewModel>,
+        onboardingVariantIdentifier: String? = nil
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.onboardingVariantIdentifier = onboardingVariantIdentifier
         _viewModel = StateObject(
             wrappedValue: viewModel
         )
@@ -40,7 +43,8 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: View {
         OnboardingViewRegular(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: viewModel
+            viewModel: viewModel,
+            onboardingVariantIdentifier: onboardingVariantIdentifier
         )
     }
 
@@ -49,7 +53,8 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: View {
         OnboardingViewCompact(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: viewModel
+            viewModel: viewModel,
+            onboardingVariantIdentifier: onboardingVariantIdentifier
         )
     }
 }

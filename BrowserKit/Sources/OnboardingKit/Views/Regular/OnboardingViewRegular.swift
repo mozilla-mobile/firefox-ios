@@ -13,14 +13,17 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
+    let onboardingVariantIdentifier: String?
 
     init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<ViewModel>
+        viewModel: OnboardingFlowViewModel<ViewModel>,
+        onboardingVariantIdentifier: String? = nil
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.onboardingVariantIdentifier = onboardingVariantIdentifier
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
         _viewModel = StateObject(
             wrappedValue: viewModel
@@ -29,7 +32,11 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
+            AnimatedGradientView(
+                windowUUID: windowUUID,
+                themeManager: themeManager,
+                onboardingVariantIdentifier: onboardingVariantIdentifier
+            )
                 .edgesIgnoringSafeArea(.all)
             SheetSizedCard {
                 VStack {

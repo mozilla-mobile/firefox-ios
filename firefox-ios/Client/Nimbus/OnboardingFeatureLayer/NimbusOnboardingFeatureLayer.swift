@@ -15,9 +15,11 @@ import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 /// because defaults are not provided herein, but in the fml.
 class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
+    private let normalizer: OnboardingConfigurationNormalizer
 
     init(with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()) {
         self.helperUtility = helperUtility
+        self.normalizer = OnboardingConfigurationNormalizer(helperUtility: helperUtility)
     }
 
     func getOnboardingModel(
@@ -26,14 +28,33 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ) -> OnboardingKitViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
+        let activeFlow = normalizer.resolveActiveFlow(
+            activeFlowKey: framework.activeFlowKey,
+            flows: framework.flows,
+            conditions: framework.conditions,
+            onboardingType: onboardingType
+        )
+
+        guard let activeFlow else {
+            return OnboardingKitViewModel(cards: [], isDismissible: false)
+        }
+
+        let cardsByKey = Dictionary(
+            uniqueKeysWithValues: activeFlow.cards.enumerated().map { index, card in
+                let key = "\(framework.activeFlowKey ?? "flow")-card-\(index)"
+                return (key, card)
+            }
+        )
+
         let cards = getOrderedOnboardingCards(
             for: onboardingType,
-            from: framework.cards,
-            withConditions: framework.conditions)
+            from: cardsByKey,
+            withConditions: framework.conditions
+        )
 
         return OnboardingKitViewModel(
             cards: cards,
-            isDismissible: framework.dismissable)
+            isDismissible: activeFlow.dismissable)
     }
 
     private func getOrderedOnboardingCards(
@@ -45,7 +66,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
         return getOnboardingCards(
-            from: cardData.filter { $0.value.onboardingType == onboardingType && $0.value.uiVariant == nil },
+            from: cardData.filter { $0.value.onboardingType == onboardingType },
             withConditions: conditionTable
         )
         .sorted(by: { $0.order < $1.order })

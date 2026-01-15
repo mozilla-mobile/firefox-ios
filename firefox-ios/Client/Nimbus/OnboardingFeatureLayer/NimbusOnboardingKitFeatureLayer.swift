@@ -37,50 +37,48 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ) -> OnboardingKitViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
-        // Normalize configuration (handles both legacy and flow modes)
-        // - Legacy mode: flows is empty → cards passed through unchanged
-        // - Flow mode: flows is non-empty → flows expanded to cards
-        // Both modes produce same card dictionary format, ensuring backward compatibility
-        // Note: framework.flows will be available after FML regeneration
-        // For now, use empty dictionary as fallback (legacy mode)
-        // After FML regeneration, replace this with: flows: framework.flows
-        let flows: [String: NimbusOnboardingFlow] = framework.flows
-        
-        let normalizedCards = normalizer.normalize(
-            cards: framework.cards,
-            flows: flows,
+        let activeFlow = normalizer.resolveActiveFlow(
+            activeFlowKey: framework.activeFlowKey,
+            flows: framework.flows,
             conditions: framework.conditions,
-            onboardingVariant: onboardingVariant,
             onboardingType: onboardingType
+        )
+
+        guard let activeFlow else {
+            return OnboardingKitViewModel(cards: [], isDismissible: false)
+        }
+
+        let cardsByKey = Dictionary(
+            uniqueKeysWithValues: activeFlow.cards.enumerated().map { index, card in
+                let key = "\(framework.activeFlowKey ?? "flow")-card-\(index)"
+                return (key, card)
+            }
         )
 
         let cards = getOrderedOnboardingCards(
             for: onboardingType,
-            from: normalizedCards,
-            withConditions: framework.conditions,
-            stepOrderOverrides: normalizer.stepOrderOverrides)
+            from: cardsByKey,
+            withConditions: framework.conditions
+        )
 
         return OnboardingKitViewModel(
             cards: cards,
-            isDismissible: framework.dismissable)
+            isDismissible: activeFlow.dismissable)
     }
 
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
         from cardData: [String: NimbusOnboardingCardData],
-        withConditions conditionTable: [String: String],
-        stepOrderOverrides: [String: Int] = [:]
+        withConditions conditionTable: [String: String]
     ) -> [OnboardingKitCardInfoModel] {
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
         return getOnboardingCards(
             from: cardData.filter {
-                $0.value.onboardingType == onboardingType &&
-                $0.value.uiVariant == onboardingVariant
+                $0.value.onboardingType == onboardingType
             },
-            withConditions: conditionTable,
-            stepOrderOverrides: stepOrderOverrides
+            withConditions: conditionTable
         )
         .sorted(by: { $0.order < $1.order })
         // We have to update the a11yIdRoot using the correct order of the cards
@@ -109,8 +107,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getOnboardingCards(
         from cardData: [String: NimbusOnboardingCardData],
-        withConditions conditionTable: [String: String],
-        stepOrderOverrides: [String: Int] = [:]
+        withConditions conditionTable: [String: String]
     ) -> [OnboardingKitCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
@@ -122,13 +119,10 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
         return cardData.compactMap { cardName, cardData in
             if cardIsValid(with: cardData, using: conditionTable, and: helper) {
-                // Use step order override if available, otherwise use card's order
-                let order = stepOrderOverrides[cardName] ?? cardData.order
-                
                 return OnboardingKitCardInfoModel(
                     cardType: OnboardingKit.OnboardingCardType(rawValue: cardData.cardType.rawValue) ?? .basic,
                     name: cardName,
-                    order: order,
+                    order: cardData.order,
                     title: String(
                         format: cardData.title,
                         AppName.shortName.rawValue),

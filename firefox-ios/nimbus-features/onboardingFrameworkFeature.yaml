@@ -28,500 +28,272 @@ features:
         type: Map<ConditionName, String>
         string-alias: ConditionName
         default: {}
-      cards:
+      active-flow-key:
         description: >
-          The list of available cards for onboarding (legacy mode).
-          If flows are defined, this is ignored.
-        type: Map<NimbusOnboardingCardKey, NimbusOnboardingCardData>
-        string-alias: NimbusOnboardingCardKey
-        default: {}
+          The active onboarding flow key. The selected flow owns its cards and
+          is the only source of onboarding content. If null, onboarding is empty.
+        type: Option<NimbusOnboardingFlowKey>
+        default: null
       flows:
         description: >
-          Flow-based onboarding definitions (new mode).
-          If present and non-empty, takes precedence over cards.
-          If empty or missing, uses legacy mode with cards.
+          Flow-based onboarding definitions. Each flow owns its cards.
+          Flows are selected explicitly via active-flow-key.
         type: Map<NimbusOnboardingFlowKey, NimbusOnboardingFlow>
         string-alias: NimbusOnboardingFlowKey
         default: {}
-      dismissable:
-        description: >
-          Whether or not the entire onboarding is dismissable
-          by pressing an X at the top right corner of the screen.
-        type: Boolean
-        default: false
     defaults:
       - channel: developer, beta, release
         value:
-          enable-modern-ui: false
+          enable-modern-ui: true
           should-use-japan-configuration: false
           should-use-brand-refresh-configuration: false
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
-          cards:
-            welcome:
-              card-type: basic
-              order: 10
-              title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
-              body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
-              image: welcome-globe
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Welcome.ActionTreatementA.v114
-                  action: open-instructions-popup
-                secondary:
-                  title: Onboarding/Onboarding.Welcome.Skip.v114
-                  action: forward-one-card
-              instructions-popup:
-                title: Onboarding/DefaultBrowserPopup.Title.v114
-                button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
-                button-action: open-ios-fx-settings
-                instructions:
-                  - Onboarding/DefaultBrowserPopup.FirstLabel.v114
-                  - Onboarding/DefaultBrowserPopup.SecondLabel.v114
-                  - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-            # multiple-choice-test:
-            #   card-type: multiple-choice
-            #   order: 5
-            #   title: Onboarding/Onboarding.Customization.Theme.Title.v123
-            #   body: Onboarding/Onboarding.Customization.Theme.Description.v123
-            #   image: themeing
-            #   link:
-            #     title: Onboarding/Onboarding.Welcome.Link.Action.v114
-            #     url: "https://www.mozilla.org/privacy/firefox/"
-            #   buttons:
-            #     primary:
-            #       title: Onboarding/Onboarding.Customization.Theme.Continue.Action.v123
-            #       action: forward-one-card
-            #     secondary:
-            #       title: Onboarding/Onboarding.Welcome.Skip.v114
-            #       action: forward-one-card
-            #   multiple-choice-buttons:
-            #     - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
-            #       image: theme-system
-            #       action: theme-system-default
-            #     - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
-            #       image: theme-light
-            #       action: theme-light
-            #     - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
-            #       image: theme-dark
-            #       action: theme-dark
-            #   onboarding-type: fresh-install
-            #   prerequisites:
-            #     - ALWAYS
-            # multiple-choice-test-two:
-            #   card-type: multiple-choice
-            #   order: 7
-            #   title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
-            #   body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
-            #   image: toolbar
-            #   link:
-            #     title: Onboarding/Onboarding.Welcome.Link.Action.v114
-            #     url: "https://www.mozilla.org/privacy/firefox/"
-            #   buttons:
-            #     primary:
-            #       title: Onboarding/Onboarding.Welcome.ActionTreatementA.v114
-            #       action: forward-one-card
-            #     secondary:
-            #       title: Onboarding/Onboarding.Welcome.Skip.v114
-            #       action: forward-one-card
-            #   multiple-choice-buttons:
-            #     - title: "Top"
-            #       image: toolbar-top
-            #       action: toolbar-top
-            #     - title: "Bottom"
-            #       image: toolbar-bottom
-            #       action: toolbar-bottom
-            #   onboarding-type: fresh-install
-            #   prerequisites:
-            #     - ALWAYS
-            notification-permissions:
-              card-type: basic
-              order: 30
-              title: Onboarding/Onboarding.Notification.Title.v120
-              body: Onboarding/Onboarding.Notification.Description.v120
-              image: notifications
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Notification.TurnOnNotifications.Action.v114
-                  action: request-notifications
-                secondary:
-                  title: Onboarding/Onboarding.Notification.Skip.Action.v115
-                  action: forward-one-card
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-            sign-to-sync:
-              card-type: basic
-              order: 20
-              title: Onboarding/Onboarding.Sync.Title.v120
-              body: Onboarding/Onboarding.Sync.Description.v123
-              image: sync-devices
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Sync.SignIn.Action.v114
-                  action: sync-sign-in
-                secondary:
-                  title: Onboarding/Onboarding.Sync.Skip.Action.v114
-                  action: forward-one-card
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-            customization-theme:
-              card-type: multiple-choice
-              order: 40
-              title: Onboarding/Onboarding.Customization.Theme.Title.v123
-              body: Onboarding/Onboarding.Customization.Theme.Description.v123
-              image: themeing
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Customization.Theme.Continue.Action.v123
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
-                  image: theme-system
-                  action: theme-system-default
-                - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
-                  image: theme-light
-                  action: theme-light
-                - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
-                  image: theme-dark
-                  action: theme-dark
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-            customization-toolbar:
-              card-type: multiple-choice
-              order: 41
-              title: Onboarding/Onboarding.Customization.Toolbar.Title.v123
-              body: Onboarding/Onboarding.Customization.Toolbar.Description.v123
-              image: toolbar
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Customization.Toolbar.Continue.Action.v123
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Customization.Toolbar.Top.Action.v123
-                  image: toolbar-top
-                  action: toolbar-top
-                - title: Onboarding/Onboarding.Customization.Toolbar.Bottom.Action.v123
-                  image: toolbar-bottom
-                  action: toolbar-bottom
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-            update-welcome:
-              card-type: basic
-              order: 10
-              title: Upgrade/Upgrade.Welcome.Title.v114
-              body: Upgrade/Upgrade.Welcome.Description.v114
-              image: welcome-globe
-              buttons:
-                primary:
-                  title: Upgrade/Upgrade.Welcome.Action.v114
-                  action: forward-one-card
-              onboarding-type: upgrade
-              prerequisites:
-                - NEVER
-            update-sign-to-sync:
-              card-type: basic
-              order: 20
-              title: Upgrade/Upgrade.SyncSign.Title.v114
-              body: Upgrade/Upgrade.SyncSign.Description.v114
-              image: sync-devices
-              buttons:
-                primary:
-                  title: Upgrade/Upgrade.SyncSign.Action.v114
-                  action: sync-sign-in
-                secondary:
-                  title: Onboarding/Onboarding.LaterAction.v114
-                  action: forward-one-card
-              onboarding-type: upgrade
-              prerequisites:
-                - NEVER
-            welcome-modern:
-              card-type: basic
-              order: 10
-              title: Onboarding/Onboarding.Modern.Welcome.Title.v140
-              body: Onboarding/Onboarding.Modern.Welcome.Description.v140
-              image: trackers
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.Welcome.ActionTreatementA.v140
-                  action: open-instructions-popup
-                secondary:
-                  title: Onboarding/Onboarding.Modern.Welcome.Skip.v140
-                  action: forward-one-card
-              instructions-popup:
-                title: Onboarding/DefaultBrowserPopup.Title.v114
-                button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
-                button-action: open-ios-fx-settings
-                instructions:
-                  - Onboarding/DefaultBrowserPopup.FirstLabel.v114
-                  - Onboarding/DefaultBrowserPopup.SecondLabel.v114
-                  - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: modern
-            sign-to-sync-modern:
-              card-type: basic
-              order: 30
-              title: Onboarding/Onboarding.Modern.Sync.Title.v140
-              body: Onboarding/Onboarding.Modern.Sync.Description.v140
-              image: sync-with-icons
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.Sync.SignIn.Action.v140
-                  action: sync-sign-in
-                secondary:
-                  title: Onboarding/Onboarding.Modern.Sync.Skip.Action.v140
-                  action: forward-one-card
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: modern
-            customization-toolbar-modern:
-              card-type: multiple-choice
-              order: 20
-              title: Onboarding/Onboarding.Modern.Customization.Toolbar.Title.v140
-              image: toolbar
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.Customization.Theme.Continue.Action.v140
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140
-                  image: toolbar-bottom
-                  action: toolbar-bottom
-                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v140
-                  image: toolbar-top
-                  action: toolbar-top
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: modern
-            customization-theme-modern:
-              card-type: multiple-choice
-              order: 25
-              title: Onboarding/Onboarding.Customization.Theme.Title.v143
-              image: themeing
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.Customization.Theme.Continue.Action.v140
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
-                  image: theme-system
-                  action: theme-system-default
-                - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
-                  image: theme-light
-                  action: theme-light
-                - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
-                  image: theme-dark
-                  action: theme-dark
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: modern
-            welcome-modern-japan:
-              card-type: basic
-              order: 10
-              title: Onboarding/Onboarding.Modern.Welcome.Title.v145
-              body: Onboarding/Onboarding.Modern.Welcome.Description.v145
-              image: trackers-japan
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.Welcome.ActionTreatmentA.v145
-                  action: open-instructions-popup
-                secondary:
-                  title: Onboarding/Onboarding.Modern.Welcome.Skip.v145
-                  action: forward-one-card
-              instructions-popup:
-                title: Onboarding/DefaultBrowserPopup.Title.v114
-                button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
-                button-action: open-ios-fx-settings
-                instructions:
-                  - Onboarding/DefaultBrowserPopup.FirstLabel.v114
-                  - Onboarding/DefaultBrowserPopup.SecondLabel.v114
-                  - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: japan
-            sign-to-sync-modern-japan:
-              card-type: basic
-              order: 30
-              title: Onboarding/Onboarding.Modern.Sync.Title.v145
-              body: Onboarding/Onboarding.Modern.Sync.Description.v145
-              image: sync-with-icons-japan
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.Sync.SignIn.Action.v145
-                  action: sync-sign-in
-                secondary:
-                  title: Onboarding/Onboarding.Modern.Sync.Skip.Action.v145
-                  action: forward-one-card
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: japan
-            customization-toolbar-modern-japan:
-              card-type: multiple-choice
-              order: 20
-              title: Onboarding/Onboarding.Modern.Customization.Toolbar.Title.v145
-              body: Onboarding/Onboarding.Modern.Customization.Toolbar.Description.v145
-              image: toolbar
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.Customization.Toolbar.Continue.Action.v145
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145
-                  image: toolbar-bottom-japan
-                  action: toolbar-bottom
-                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v145
-                  image: toolbar-top-japan
-                  action: toolbar-top
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: japan
-            customization-theme-modern-japan:
-              card-type: multiple-choice
-              order: 25
-              title: Onboarding/Onboarding.Modern.Customization.Theme.Title.v145
-              body: Onboarding/Onboarding.Modern.Customization.Theme.Description.v145
-              image: themeing
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.Customization.Toolbar.Continue.Action.v145
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Modern.Customization.Theme.Automatic.v145
-                  image: theme-system-japan
-                  action: theme-system-default
-                - title: Onboarding/Onboarding.Modern.Customization.Theme.Light.v145
-                  image: theme-light-japan
-                  action: theme-light
-                - title: Onboarding/Onboarding.Modern.Customization.Theme.Dark.v145
-                  image: theme-dark-japan
-                  action: theme-dark
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: japan
-            welcome-brand-refresh:
-              card-type: basic
-              order: 10
-              title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2
-              body: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Description.v148
-              image: trackers-brand-refresh
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148
-                  action: open-instructions-popup
-                secondary:
-                  title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Skip.v148
-                  action: forward-one-card
-              instructions-popup:
-                title: Onboarding/DefaultBrowserPopup.Title.v114
-                button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
-                button-action: open-ios-fx-settings
-                instructions:
-                  - Onboarding/DefaultBrowserPopup.FirstLabel.v114
-                  - Onboarding/DefaultBrowserPopup.SecondLabel.v114
-                  - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: brandRefresh
-            customization-toolbar-brand-refresh:
-              card-type: multiple-choice
-              order: 20
-              title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148
-              body: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148
-              image: toolbar
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140
-                  image: toolbar-bottom-japan
-                  action: toolbar-bottom
-                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v140
-                  image: toolbar-top-japan
-                  action: toolbar-top
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: brandRefresh
-            customization-theme-brand-refresh:
-              card-type: multiple-choice
-              order: 25
-              title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148
-              body: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148
-              image: themeing
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148
-                  image: theme-system-japan
-                  action: theme-system-default
-                - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148
-                  image: theme-light-japan
-                  action: theme-light
-                - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148
-                  image: theme-dark-japan
-                  action: theme-dark
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: brandRefresh
-            sign-to-sync-brand-refresh:
-              card-type: basic
-              order: 30
-              title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Title.v148
-              body: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Description.v148
-              image: sync-with-icons-brand-refresh
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148
-                  action: sync-sign-in
-                secondary:
-                  title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148
-                  action: forward-one-card
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-              uiVariant: brandRefresh
+          active-flow-key: brand-refresh-flow
           flows:
             brand-refresh-flow:
-              dismissable: true
               flow-name: "Brand Refresh Onboarding"
               onboarding-type: fresh-install
+              dismissable: true
               prerequisites: []
-              steps:
-                - card-reference: welcome-brand-refresh
-                  order: 1
-                  prerequisites: []
-                - card-reference: customization-toolbar-brand-refresh
-                  order: 2
-                  prerequisites: []
-                - card-reference: customization-theme-brand-refresh
-                  order: 3
-                  prerequisites: []
-                - card-reference: sign-to-sync-brand-refresh
-                  order: 4
-                  prerequisites: []
-              ui-variant: brandRefresh
-          dismissable: true
+              cards:
+                - card-type: basic
+                  order: 10
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2
+                  body: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Description.v148
+                  image: trackers-brand-refresh
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148
+                      action: open-instructions-popup
+                    secondary:
+                      title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Skip.v148
+                      action: forward-one-card
+                  instructions-popup:
+                    title: Onboarding/DefaultBrowserPopup.Title.v114
+                    button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
+                    button-action: open-ios-fx-settings
+                    instructions:
+                      - Onboarding/DefaultBrowserPopup.FirstLabel.v114
+                      - Onboarding/DefaultBrowserPopup.SecondLabel.v114
+                      - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: multiple-choice
+                  order: 20
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148
+                  body: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148
+                  image: toolbar
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148
+                      action: forward-one-card
+                  multiple-choice-buttons:
+                    - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140
+                      image: toolbar-bottom-japan
+                      action: toolbar-bottom
+                    - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v140
+                      image: toolbar-top-japan
+                      action: toolbar-top
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: multiple-choice
+                  order: 25
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148
+                  body: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148
+                  image: themeing
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148
+                      action: forward-one-card
+                  multiple-choice-buttons:
+                    - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148
+                      image: theme-system-japan
+                      action: theme-system-default
+                    - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148
+                      image: theme-light-japan
+                      action: theme-light
+                    - title: Onboarding/Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148
+                      image: theme-dark-japan
+                      action: theme-dark
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: basic
+                  order: 30
+                  title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Title.v148
+                  body: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Description.v148
+                  image: sync-with-icons-brand-refresh
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148
+                      action: sync-sign-in
+                    secondary:
+                      title: Onboarding/Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148
+                      action: forward-one-card
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+            quick-start-flow:
+              flow-name: "Quick Start Onboarding"
+              onboarding-type: fresh-install
+              dismissable: true
+              prerequisites: []
+              cards:
+                - card-type: basic
+                  order: 10
+                  title: Onboarding/Onboarding.Modern.Welcome.Title.v140
+                  body: Onboarding/Onboarding.Modern.Welcome.Description.v140
+                  image: trackers
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.Welcome.ActionTreatementA.v140
+                      action: open-instructions-popup
+                    secondary:
+                      title: Onboarding/Onboarding.Modern.Welcome.Skip.v140
+                      action: forward-one-card
+                  instructions-popup:
+                    title: Onboarding/DefaultBrowserPopup.Title.v114
+                    button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
+                    button-action: open-ios-fx-settings
+                    instructions:
+                      - Onboarding/DefaultBrowserPopup.FirstLabel.v114
+                      - Onboarding/DefaultBrowserPopup.SecondLabel.v114
+                      - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: basic
+                  order: 30
+                  title: Onboarding/Onboarding.Modern.Sync.Title.v140
+                  body: Onboarding/Onboarding.Modern.Sync.Description.v140
+                  image: sync-with-icons
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.Sync.SignIn.Action.v140
+                      action: sync-sign-in
+                    secondary:
+                      title: Onboarding/Onboarding.Modern.Sync.Skip.Action.v140
+                      action: forward-one-card
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: basic
+                  order: 30
+                  title: Onboarding/Onboarding.Notification.Title.v120
+                  body: Onboarding/Onboarding.Notification.Description.v120
+                  image: notifications
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Notification.TurnOnNotifications.Action.v114
+                      action: request-notifications
+                    secondary:
+                      title: Onboarding/Onboarding.Notification.Skip.Action.v115
+                      action: forward-one-card
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+            comprehensive-flow:
+              flow-name: "Comprehensive Onboarding"
+              onboarding-type: fresh-install
+              dismissable: true
+              prerequisites: []
+              cards:
+                - card-type: basic
+                  order: 10
+                  title: Onboarding/Onboarding.Modern.Welcome.Title.v140
+                  body: Onboarding/Onboarding.Modern.Welcome.Description.v140
+                  image: trackers
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.Welcome.ActionTreatementA.v140
+                      action: open-instructions-popup
+                    secondary:
+                      title: Onboarding/Onboarding.Modern.Welcome.Skip.v140
+                      action: forward-one-card
+                  instructions-popup:
+                    title: Onboarding/DefaultBrowserPopup.Title.v114
+                    button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
+                    button-action: open-ios-fx-settings
+                    instructions:
+                      - Onboarding/DefaultBrowserPopup.FirstLabel.v114
+                      - Onboarding/DefaultBrowserPopup.SecondLabel.v114
+                      - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: multiple-choice
+                  order: 20
+                  title: Onboarding/Onboarding.Modern.Customization.Toolbar.Title.v140
+                  image: toolbar
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.Customization.Theme.Continue.Action.v140
+                      action: forward-one-card
+                  multiple-choice-buttons:
+                    - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140
+                      image: toolbar-bottom
+                      action: toolbar-bottom
+                    - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v140
+                      image: toolbar-top
+                      action: toolbar-top
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: multiple-choice
+                  order: 25
+                  title: Onboarding/Onboarding.Customization.Theme.Title.v143
+                  image: themeing
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.Customization.Theme.Continue.Action.v140
+                      action: forward-one-card
+                  multiple-choice-buttons:
+                    - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
+                      image: theme-system
+                      action: theme-system-default
+                    - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
+                      image: theme-light
+                      action: theme-light
+                    - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
+                      image: theme-dark
+                      action: theme-dark
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: basic
+                  order: 30
+                  title: Onboarding/Onboarding.Modern.Sync.Title.v140
+                  body: Onboarding/Onboarding.Modern.Sync.Description.v140
+                  image: sync-with-icons
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Modern.Sync.SignIn.Action.v140
+                      action: sync-sign-in
+                    secondary:
+                      title: Onboarding/Onboarding.Modern.Sync.Skip.Action.v140
+                      action: forward-one-card
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
+                - card-type: basic
+                  order: 30
+                  title: Onboarding/Onboarding.Notification.Title.v120
+                  body: Onboarding/Onboarding.Notification.Description.v120
+                  image: notifications
+                  buttons:
+                    primary:
+                      title: Onboarding/Onboarding.Notification.TurnOnNotifications.Action.v114
+                      action: request-notifications
+                    secondary:
+                      title: Onboarding/Onboarding.Notification.Skip.Action.v115
+                      action: forward-one-card
+                  onboarding-type: fresh-install
+                  prerequisites:
+                    - ALWAYS
 
 objects:
   NimbusOnboardingCardData:
@@ -721,22 +493,11 @@ objects:
         description: >
           Human-readable flow name for identification.
         default: ""
-      ui-variant:
-        type: Option<OnboardingVariant>
-        description: >
-          UI variant this flow applies to.
-          If null, applies to all variants (legacy behavior).
-        default: null
       onboarding-type:
         type: OnboardingType
         description: >
           The type of onboarding this flow is for (fresh install or upgrade).
         default: fresh-install
-      steps:
-        type: List<NimbusOnboardingFlowStep>
-        description: >
-          Ordered list of steps in this flow.
-        default: []
       prerequisites:
         type: List<ConditionName>
         description: >
@@ -747,26 +508,10 @@ objects:
         description: >
           Whether this flow can be dismissed.
         default: false
-  NimbusOnboardingFlowStep:
-    description: >
-      A step in a flow references a card definition.
-    fields:
-      card-reference:
-        type: NimbusOnboardingCardKey
+      cards:
+        type: List<NimbusOnboardingCardData>
         description: >
-          Reference to a card in the cards dictionary.
-          Card must exist.
-        default: ""
-      order:
-        type: Int
-        description: >
-          Step order within the flow.
-          Overrides card's default order.
-        default: 10
-      prerequisites:
-        type: List<ConditionName>
-        description: >
-          Step-level prerequisites. If not met, step is skipped.
+          Ordered list of cards owned by this flow.
         default: []
 
 enums:

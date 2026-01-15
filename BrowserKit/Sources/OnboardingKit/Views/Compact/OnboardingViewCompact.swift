@@ -15,14 +15,17 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     @State var theme: Theme
+    let onboardingVariantIdentifier: String?
 
     init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<ViewModel>
+        viewModel: OnboardingFlowViewModel<ViewModel>,
+        onboardingVariantIdentifier: String? = nil
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.onboardingVariantIdentifier = onboardingVariantIdentifier
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
         _viewModel = StateObject(
             wrappedValue: viewModel
@@ -32,7 +35,11 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
+                AnimatedGradientView(
+                    windowUUID: windowUUID,
+                    themeManager: themeManager,
+                    onboardingVariantIdentifier: onboardingVariantIdentifier
+                )
                     .ignoresSafeArea()
                 VStack {
                     Button(action: viewModel.skipOnboarding) {

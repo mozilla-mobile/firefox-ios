@@ -114,26 +114,74 @@ struct RotatingBlendGradient: View {
 
 struct AnimatedGradientView: ThemeableView {
     @State var theme: Theme
-    @State private var gradientColors: [Color] = []
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
+    let onboardingVariantIdentifier: String?
 
     init(
         windowUUID: WindowUUID,
-        themeManager: ThemeManager
+        themeManager: ThemeManager,
+        onboardingVariantIdentifier: String? = nil
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.onboardingVariantIdentifier = onboardingVariantIdentifier
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
     var body: some View {
-        RotatingBlendGradient(colors: [
+        backgroundViewForVariant
+            .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+    }
+
+    /// Creates background view based on variant identifier.
+    /// All visual values defined in code (design system ownership).
+    /// Can return any View (gradient, image, custom view, etc.)
+    @ViewBuilder
+    private var backgroundViewForVariant: some View {
+        if let customBackground = createBackgroundView(for: onboardingVariantIdentifier) {
+            customBackground
+        } else {
+            // Default: use theme's animated gradient
+            RotatingBlendGradient(colors: defaultGradientColors)
+        }
+    }
+
+    /// Creates background view based on variant identifier.
+    /// Returns nil to use default animated gradient.
+    private func createBackgroundView(for identifier: String?) -> AnyView? {
+        switch identifier {
+        case "brandRefresh":
+            // Brand refresh purple gradient (dummy/test - very obvious purple)
+            // This can be replaced with an image, custom gradient, or any other view
+            return AnyView(
+                LinearGradient(
+                    colors: [
+                        Color(UIColor(rgb: 0x8B2BE2)), // Bright purple
+                        Color(UIColor(rgb: 0x9D4EDD)), // Lighter purple
+                        Color(UIColor(rgb: 0xB298DC)), // Even lighter purple
+                        Color(UIColor(rgb: 0xC77DFF))  // Light purple
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+            )
+        case "japan", "modern", "legacy":
+            // Use default animated gradient (nil = default behavior)
+            return nil
+        default:
+            // Default: use theme's animated gradient
+            return nil
+        }
+    }
+
+    private var defaultGradientColors: [Color] {
+        [
             theme.colors.gradientOnboardingStop1.color,
             theme.colors.gradientOnboardingStop2.color,
             theme.colors.gradientOnboardingStop3.color,
             theme.colors.gradientOnboardingStop4.color
-        ])
-        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+        ]
     }
 }

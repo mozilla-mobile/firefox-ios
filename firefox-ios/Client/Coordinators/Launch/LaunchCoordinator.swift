@@ -8,6 +8,7 @@ import Shared
 import OnboardingKit
 import SwiftUI
 import ComponentLibrary
+import UIKit
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     @MainActor
@@ -265,10 +266,13 @@ final class LaunchCoordinator: BaseCoordinator,
             self.onboardingService = nil
         }
 
+        // Pass variant identifier - OnboardingKit will decide the background
+        // All visual values defined in code (design system ownership)
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: flowViewModel
+            viewModel: flowViewModel,
+            onboardingVariantIdentifier: manager.onboardingVariant.rawValue
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)
