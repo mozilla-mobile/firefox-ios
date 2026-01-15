@@ -333,11 +333,9 @@ class FormAutofillHelper: TabContentScript {
     ///   - type: The Decodable type to decode into
     /// - Returns: The decoded object, or nil if decoding fails
     private func decode<T: Decodable>(_ body: Any, as type: T.Type) -> T? {
-        if let dict = body as? [String: Any],
-           let data = try? JSONSerialization.data(withJSONObject: dict, options: []) {
+        if let dict = body as? [String: Any], let data = try? JSONSerialization.data(withJSONObject: dict, options: []) {
             return try? JSONDecoder().decode(type, from: data)
-        } else if let bodyString = body as? String,
-                  let data = bodyString.data(using: .utf8) {
+        } else if let bodyString = body as? String, let data = bodyString.data(using: .utf8) {
             return try? JSONDecoder().decode(type, from: data)
         } else {
             return nil

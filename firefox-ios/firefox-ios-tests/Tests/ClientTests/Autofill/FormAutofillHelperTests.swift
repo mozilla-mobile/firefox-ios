@@ -16,6 +16,18 @@ final class FormAutofillHelperTests: XCTestCase {
     var profile: MockProfile!
     var secureWebviewMock: MockWKWebView!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    let validMockPayloadCaptureJson = """
+        {
+          "type" : "capture-credit-card-form",
+          "payload" : {
+            "cc-number" : "4520 2991 2039 6788",
+            "cc-name" : "Josh Moustache",
+            "cc-exp-month" : "03",
+            "cc-exp" : "02",
+            "cc-exp-year" : "2999"
+          }
+        }
+    """
 
     override func setUp() async throws {
         try await super.setUp()
@@ -159,18 +171,6 @@ final class FormAutofillHelperTests: XCTestCase {
     }
 
     func test_parseFieldCaptureJsonType_valid() async {
-        let validMockPayloadCaptureJson = """
-            {
-              "type" : "capture-credit-card-form",
-              "payload" : {
-                "cc-number" : "4520 2991 2039 6788",
-                "cc-name" : "Josh Moustache",
-                "cc-exp-month" : "03",
-                "cc-exp" : "02",
-                "cc-exp-year" : "2999"
-              }
-            }
-        """
         guard let jsonData = validMockPayloadCaptureJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
               let data = try? JSONSerialization.data(withJSONObject: dictionary),
@@ -190,18 +190,6 @@ final class FormAutofillHelperTests: XCTestCase {
     // MARK: - Retrieval
 
     func test_getFieldTypeValues() async {
-        let validMockPayloadCaptureJson = """
-            {
-              "type" : "capture-credit-card-form",
-              "payload" : {
-                "cc-number" : "4520 2991 2039 6788",
-                "cc-name" : "Josh Moustache",
-                "cc-exp-month" : "03",
-                "cc-exp" : "02",
-                "cc-exp-year" : "2999"
-              }
-            }
-        """
         guard let jsonData = validMockPayloadCaptureJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
               let data = try? JSONSerialization.data(withJSONObject: dictionary),
