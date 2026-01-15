@@ -16,7 +16,6 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertEqual(initialState.foxImage, "")
         XCTAssertNil(initialState.url)
         XCTAssertNil(initialState.advancedSection)
-        XCTAssertFalse(initialState.showProceedButton)
         XCTAssertFalse(initialState.showGoBackButton)
     }
 
@@ -67,7 +66,8 @@ final class NativeErrorPageStateTests: XCTestCase {
 You might need to sign in through your network, or check your settings.
 If you’re on a corporate network, your support team might have more info.
 """,
-            certificateErrorCode: "SSL_ERROR_BAD_CERT_DOMAIN"
+            certificateErrorCode: "SSL_ERROR_BAD_CERT_DOMAIN",
+            showProceedButton: true
         )
 
         let mockModel = ErrorPageModel(
@@ -76,7 +76,6 @@ If you’re on a corporate network, your support team might have more info.
             foxImageName: "securityError",
             url: URL(string: "https://example.com"),
             advancedSection: advancedSection,
-            showProceedButton: true,
             showGoBackButton: true
         )
 
@@ -87,13 +86,13 @@ If you’re on a corporate network, your support team might have more info.
         XCTAssertEqual(newState.description, mockModel.errorDescription)
         XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
         XCTAssertEqual(newState.url, mockModel.url)
-        XCTAssertTrue(newState.showProceedButton)
         XCTAssertTrue(newState.showGoBackButton)
         XCTAssertNotNil(newState.advancedSection)
         XCTAssertEqual(newState.advancedSection?.buttonText, advancedSection.buttonText)
         XCTAssertEqual(newState.advancedSection?.infoText, advancedSection.infoText)
         XCTAssertEqual(newState.advancedSection?.warningText, advancedSection.warningText)
         XCTAssertEqual(newState.advancedSection?.certificateErrorCode, advancedSection.certificateErrorCode)
+        XCTAssertEqual(newState.advancedSection?.showProceedButton, advancedSection.showProceedButton)
     }
 
     // MARK: - Private
