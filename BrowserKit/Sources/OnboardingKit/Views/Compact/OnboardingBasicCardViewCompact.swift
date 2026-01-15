@@ -11,6 +11,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @State var theme: Theme
     @Environment(\.sizeCategory)
     private var sizeCategory
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -60,7 +62,9 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
         }
         .scrollBounceBehavior(basedOnSize: true)
-        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        .if(horizontalSizeClass != .regular) { view in
+            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        }
     }
 
     var titleView: some View {

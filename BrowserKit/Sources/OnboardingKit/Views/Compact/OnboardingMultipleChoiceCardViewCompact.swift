@@ -11,6 +11,8 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
     @Environment(\.sizeCategory)
     var sizeCategory
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -85,7 +87,9 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
         }
         .scrollBounceBehavior(basedOnSize: true)
-        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        .if(horizontalSizeClass != .regular) { view in
+            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        }
     }
 
     var titleView: some View {
