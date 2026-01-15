@@ -238,13 +238,6 @@ final class LocationView: UIView,
     }
 
     // MARK: - Layout
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        DispatchQueue.main.async { [self] in
-            formatAndTruncateURLTextField()
-        }
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -543,7 +536,6 @@ final class LocationView: UIView,
 
     private func formatAndTruncateURLTextField() {
         guard !isEditing else { return }
-
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 
@@ -703,7 +695,6 @@ final class LocationView: UIView,
     }
 
     func locationTextFieldDidEndEditing(_ textField: UITextField) {
-        formatAndTruncateURLTextField()
         if isURLTextFieldEmpty {
             updateGradient()
         } else {
@@ -759,7 +750,6 @@ final class LocationView: UIView,
             string: urlTextField.placeholder ?? "",
             attributes: [.foregroundColor: colors.textPrimary]
         )
-
         safeListedURLImageColor = colors.iconAccentBlue
         lockIconImageColor = colors.textSecondary
 
