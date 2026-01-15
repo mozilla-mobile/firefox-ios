@@ -132,7 +132,6 @@ public class BrowserAddressToolbar: UIView,
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         addressBarPosition = toolbarPosition
-        previousConfiguration = config
         toolbarTopBorderView.accessibilityIdentifier = config.borderConfiguration.a11yIdentifier
         configureUX(config: config.uxConfiguration, toolbarPosition: toolbarPosition)
         updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
@@ -140,6 +139,7 @@ public class BrowserAddressToolbar: UIView,
                   isUnifiedSearchEnabled: isUnifiedSearchEnabled,
                   addressBarPosition: toolbarPosition,
                   animated: animated)
+        previousConfiguration = config
     }
 
     public func configure(
@@ -313,24 +313,33 @@ public class BrowserAddressToolbar: UIView,
     // MARK: - Toolbar Actions and Layout Updates
     internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
-        updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
-
+        if previousConfiguration?.browserActions != config.browserActions {
+            updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
+        }
+        
         // Navigation actions
-        updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
-
+        if previousConfiguration?.navigationActions != config.navigationActions {
+            updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
+        }
         // Page actions
-        updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
-        updateActionStack(stackView: trailingPageActionStack, toolbarElements: config.trailingPageActions)
-
+        if previousConfiguration?.leadingPageActions != config.leadingPageActions {
+            updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
+        }
+        if previousConfiguration?.trailingPageActions != config.trailingPageActions {
+            updateActionStack(stackView: trailingPageActionStack, toolbarElements: config.trailingPageActions)
+        }
+        
         updateActionSpacing(uxConfig: config.uxConfiguration)
-        updateToolbarLayout(animated: animated)
+        updateToolbarLayout(config: config, animated: animated)
     }
 
-    private func updateToolbarLayout(animated: Bool) {
+    private func updateToolbarLayout(config: AddressToolbarConfiguration, animated: Bool) {
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
                      leadingPageActionStack.arrangedSubviews +
                      trailingPageActionStack.arrangedSubviews
+        let areAllStacksAlreadyVisible = stacks.allSatisfy { $0.alpha == 1.0 }
+        guard !areAllStacksAlreadyVisible else { return }
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
@@ -346,7 +355,6 @@ public class BrowserAddressToolbar: UIView,
             stacks.forEach {
                 $0.alpha = 1.0
             }
-            layoutIfNeeded()
         }
     }
 

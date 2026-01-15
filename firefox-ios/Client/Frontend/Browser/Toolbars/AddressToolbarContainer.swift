@@ -208,11 +208,12 @@ final class AddressToolbarContainer: UIView,
     }
 
     func hideSkeletonBars() {
-        let needsConfiguration = !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden
-
-        if toolbarHelper.isToolbarTranslucencyRefactorEnabled && needsConfiguration {
-            configureSkeletonAddressBars(previousTab: nil, forwardTab: nil)
-        }
+//        let needsConfiguration = !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden
+        
+        // TODO: - why do we need this call
+//        if toolbarHelper.isToolbarTranslucencyRefactorEnabled && needsConfiguration {
+//            configureSkeletonAddressBars(previousTab: nil, forwardTab: nil)
+//        }
 
         leftSkeletonAddressBar.isHidden = true
         rightSkeletonAddressBar.isHidden = true
