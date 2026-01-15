@@ -30,9 +30,8 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     public var body: some View {
         GeometryReader { geo in
-            ZStack(alignment: .topTrailing) {
+            ZStack {
                 backgroundGradient
-
                 if horizontalSizeClass == .regular {
                     regularLayout
                 } else {
@@ -42,7 +41,11 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             .animation(.easeOut, value: geo.size)
         }
         .accessibilityElement(children: .contain)
-        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+        .listenToThemeChanges(
+            theme: $theme,
+            manager: themeManager,
+            windowUUID: windowUUID
+        )
         .onAppear {
             viewModel.handlePageChange()
         }
@@ -51,23 +54,18 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         }
     }
 
-    // MARK: - Background
-
-    private var backgroundGradient: some View {
-        AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
-            .ignoresSafeArea()
-    }
-
-    // MARK: - Regular Layout
-
     private var regularLayout: some View {
-        Group {
+        ZStack(alignment: .topTrailing) {
             SheetSizedCard {
                 VStack {
                     tabView
                     pageControl
+                        .padding(.bottom)
                 }
-                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+                .cardBackground(
+                    theme: theme,
+                    cornerRadius: UX.CardView.cornerRadius
+                )
             }
             .accessibilityScrollAction { edge in
                 handleAccessibilityScroll(from: edge)
@@ -92,7 +90,12 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             Spacer()
 
             compactPageControl
-                .padding(.bottom, pageControllPadding(safeAreaBottomInset: geometry.safeAreaInsets.bottom))
+                .padding(
+                    .bottom,
+                    pageControllPadding(
+                        safeAreaBottomInset: geometry.safeAreaInsets.bottom
+                    )
+                )
         }
         .accessibilityScrollAction { edge in
             handleAccessibilityScroll(from: edge)
@@ -100,7 +103,10 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         .ignoresSafeArea(.all, edges: .bottom)
     }
 
-    // MARK: - Skip Button
+    private var backgroundGradient: some View {
+        AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
+            .ignoresSafeArea()
+    }
 
     private var skipButton: some View {
         Button(action: viewModel.skipOnboarding) {
@@ -110,8 +116,6 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         .skipButtonStyle(theme: theme)
         .accessibilityLabel(viewModel.skipText)
     }
-
-    // MARK: - Tab View
 
     private var tabView: some View {
         TabView(selection: $viewModel.pageCount) {
@@ -124,7 +128,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     }
 
     private func cardView(for card: ViewModel) -> some View {
-        OnboardingCardViewCompact(
+        OnboardingCardView(
             viewModel: card,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -139,8 +143,6 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         }
     }
 
-    // MARK: - Page Control
-
     private var pageControl: some View {
         CustomPageControl(
             currentPage: $viewModel.pageCount,
@@ -148,7 +150,6 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             windowUUID: windowUUID,
             themeManager: themeManager
         )
-        .padding(.bottom)
     }
 
     private var compactPageControl: some View {
@@ -160,8 +161,6 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             style: .compact
         )
     }
-
-    // MARK: - Helpers
 
     private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
         safeAreaBottomInset == 0

@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
     @State var theme: Theme
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
     @Environment(\.sizeCategory)
