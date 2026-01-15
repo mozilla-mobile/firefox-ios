@@ -172,11 +172,7 @@ class RemoteTabsViewController: UIViewController,
         } else {
             emptyView.isHidden = !isShowingEmptyView
             if isShowingEmptyView {
-                if state.refreshState == .syncingTabs {
-                    configureEmptyView(isSyncing: true)
-                } else {
-                    configureEmptyView()
-                }
+                configureEmptyView(isSyncing: state.refreshState == .syncingTabs)
             }
             tableView.refreshControl?.endRefreshing()
         }
