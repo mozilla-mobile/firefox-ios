@@ -5,7 +5,7 @@
 import Common
 import Shared
 
-enum UserDataDeletionError: Error {
+enum UserDataDeletionError: Error, Equatable {
     case invalidURL
     case invalidResponse
     case serverError(statusCode: Int)
@@ -24,9 +24,9 @@ struct UnifiedAdsUserDataRemover: FeatureFlaggable {
     private static let stagingResourceEndpoint = "https://ads.allizom.org/v1/delete_user"
 
     private let logger: Logger
-    private let session: URLSession
+    private let session: URLSessionProtocol
 
-    init(session: URLSession = NetworkUtils.defaultURLSession(),
+    init(session: URLSessionProtocol = NetworkUtils.defaultURLSession(),
          logger: Logger = DefaultLogger.shared) {
         self.logger = logger
         self.session = session
@@ -45,7 +45,7 @@ struct UnifiedAdsUserDataRemover: FeatureFlaggable {
         let payload = DeleteUserRequest(contextID: contextID)
         request.httpBody = try JSONEncoder().encode(payload)
 
-        let (_, response) = try await session.data(for: request)
+        let (_, response) = try await session.data(from: request)
 
         guard let httpResponse = response as? HTTPURLResponse else {
             logger.log("Didn't receive a proper http response", level: .debug, category: .homepage)
