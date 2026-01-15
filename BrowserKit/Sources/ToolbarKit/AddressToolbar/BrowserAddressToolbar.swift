@@ -232,6 +232,7 @@ public class BrowserAddressToolbar: UIView,
         trailingBrowserActionStackConstraint?.isActive = true
 
         locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
+        locationContainerHeightConstraint?.priority = .defaultHigh
         locationContainerHeightConstraint?.isActive = true
 
         toolbarBottomConstraint = toolbarContainerView.bottomAnchor.constraint(
