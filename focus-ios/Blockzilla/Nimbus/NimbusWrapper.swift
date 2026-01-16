@@ -34,7 +34,7 @@ final class NimbusWrapper {
             fatalError("Failed to determine Nimbus database path")
         }
 
-        let urlString = NimbusServerSettings.getNimbusEndpoint(useStagingServer: useStagingServer)?.absoluteString
+        let urlString = NimbusServerSettings.getNimbusEndpoint(useStagingServer: useStagingServer)
 
         let bundles = [
             Bundle.main,
