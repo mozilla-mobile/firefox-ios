@@ -153,7 +153,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return false
         }
         let shouldShow = relayRSClient.shouldShowRelay(host: host, domain: domain, isRelayUser: true)
-        logger.log("Display Relay: \(shouldShow ? "true" : "false"). (Allow-list check.)", level: .info, category: .relay)
+        logger.log("Display Relay: \(shouldShow). (Allow-list check.)", level: .info, category: .relay)
         return shouldShow
     }
 
