@@ -111,7 +111,7 @@ class ShareViewController: UIViewController {
             showProgressIndicator()
 
             let profile = BrowserProfile(localName: "profile")
-            Viaduct.shared.useReqwestBackend()
+            Viaduct.shared.initialize()
             RustFirefoxAccounts.startup(prefs: profile.prefs) { [weak self] _ in
                 // Hide spinner and finish UI setup (Note: this completion
                 // block is currently guaranteed to arrive on main thread.)
