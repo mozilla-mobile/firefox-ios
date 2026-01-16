@@ -5,14 +5,9 @@
 import Common
 import SiteImageView
 
-@MainActor
-protocol JumpBackInCellProtocol: ReusableCell {
-    func configure(config: JumpBackInTabConfiguration, theme: Theme)
-}
-
 /// A cell used in Home page Jump Back In section
 final class JumpBackInCell: UICollectionViewCell,
-                            JumpBackInCellProtocol,
+                            ReusableCell,
                             ThemeApplicable,
                             Blurrable {
     struct UX {

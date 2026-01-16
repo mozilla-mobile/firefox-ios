@@ -11,11 +11,6 @@ extension FeatureFlaggable {
     var featureFlags: LegacyFeatureFlagsManager {
         return LegacyFeatureFlagsManager.shared
     }
-
-    var isAnyStoriesRedesignEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
-               || featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
-    }
 }
 
 /// An enum representing the different types of checks we need to use for features.

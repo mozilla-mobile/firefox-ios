@@ -3189,7 +3189,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchAvailableContentHeightChangedAction() {
-        guard isAnyStoriesRedesignEnabled, let browserViewControllerState,
+        guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
            homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
