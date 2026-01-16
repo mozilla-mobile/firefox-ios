@@ -746,6 +746,7 @@ final class LocationView: UIView,
         searchEngineContentView.applyTheme(theme: theme)
         lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
+        urlTextField.textColor = urlTextFieldColor
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
             attributes: [.foregroundColor: colors.textPrimary]
