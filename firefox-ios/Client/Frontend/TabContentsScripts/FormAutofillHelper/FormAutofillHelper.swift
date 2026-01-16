@@ -77,7 +77,8 @@ class FormAutofillHelper: TabContentScript {
         frame = message.frameInfo
 
         guard let frame = frame else { return }
-        let isSecureContext = frame.isFrameLoadedInSecureContext
+        let isSecureContext = SecurityContextManager.isSecureContext(webViewURL: frame.webView?.url,
+                                                                    frameScheme: frame.securityOrigin.protocol)
 
         processMessage(name: message.name, body: message.body, isSecureContext: isSecureContext, frame: frame)
     }
