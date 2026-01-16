@@ -72,7 +72,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     }
 
     // MARK: - UI Elements
-    private let toolbar: UIToolbar = .build()
+    private let toolbar: TestableUIToolbar = .build()
     private let toolbarTopHeightSpacer: UIView = .build()
 
     private lazy var previousButton: UIButton = {
