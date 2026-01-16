@@ -141,11 +141,19 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         guard Self.isFeatureEnabled,
               profile.prefs.boolForKey(PrefsKeys.ShowRelayMaskSuggestions) ?? true,
               client != nil else {
+            logger.log("Display Relay: false. (Feature / prefs checks.)", level: .info, category: .relay)
             return false
         }
-        guard let relayRSClient, hasRelayAccount() else { return false }
-        guard let domain = url.baseDomain, let host = url.normalizedHost else { return false }
+        guard let relayRSClient, hasRelayAccount() else {
+            logger.log("Display Relay: false. (No client / Relay acct)", level: .info, category: .relay)
+            return false
+        }
+        guard let domain = url.baseDomain, let host = url.normalizedHost else {
+            logger.log("Display Relay: false. (Invalid domain/host.)", level: .info, category: .relay)
+            return false
+        }
         let shouldShow = relayRSClient.shouldShowRelay(host: host, domain: domain, isRelayUser: true)
+        logger.log("Display Relay: \(shouldShow ? "true" : "false"). (Allow-list check.)", level: .info, category: .relay)
         return shouldShow
     }
 
