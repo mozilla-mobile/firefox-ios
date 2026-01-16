@@ -216,25 +216,6 @@ class TabManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testRestoreTabsForced() {
-        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
-        let testUUID = UUID()
-        let subject = createSubject(tabs: generateTabs(count: 5), windowUUID: testUUID)
-
-        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-                                                     activeTabId: UUID(),
-                                                     tabData: getMockTabData(count: 3))
-        subject.restoreTabs(true)
-
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, mockTabStore] in
-            XCTAssertEqual(tabs.count, 3)
-            XCTAssertEqual(mockTabStore?.fetchWindowDataCalledCount, 1)
-            expectation.fulfill()
-        }
-        wait(for: [expectation])
-    }
-
-    @MainActor
     func testRestoreTabs_whenDeeplinkTabPresent_withSameURLAsRestoredTab() throws {
         setIsDeeplinkOptimizationRefactorEnabled(true)
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")

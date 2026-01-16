@@ -431,7 +431,7 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Restore tabs
 
-    func restoreTabs(_ forced: Bool = false) {
+    func restoreTabs() {
         assert(Thread.isMainThread)
         if isDeeplinkOptimizationRefactorEnabled {
             // Deeplinks happens before tab restoration, so we should have a tab already present in the tabs list
@@ -439,16 +439,14 @@ class TabManagerImplementation: NSObject,
             deeplinkTab = tabs.popLast()
         }
 
-        guard !isRestoringTabs,
-              forced || tabs.isEmpty
-        else {
+        guard !isRestoringTabs, tabs.isEmpty else {
             logger.log("No restore tabs running",
                        level: .debug,
                        category: .tabs)
             return
         }
 
-        logger.log("Tabs restore started being force; \(forced), with empty tabs; \(tabs.isEmpty), crashed at last launch is \(logger.crashedLastLaunch)",
+        logger.log("Tabs restore started with empty tabs; \(tabs.isEmpty), crashed at last launch is \(logger.crashedLastLaunch)",
                    level: .debug,
                    category: .tabs)
 
@@ -465,7 +463,7 @@ class TabManagerImplementation: NSObject,
         isRestoringTabs = true
         AppEventQueue.started(.tabRestoration(windowUUID))
 
-        restoreTabs()
+        startRestoreTabsTask()
     }
 
     private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
@@ -511,7 +509,7 @@ class TabManagerImplementation: NSObject,
         }
     }
 
-    private func restoreTabs() {
+    private func startRestoreTabsTask() {
         Task { @MainActor in
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
