@@ -126,5 +126,8 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
             theme: theme,
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
+        .if(horizontalSizeClass == .regular) { view in
+            view.frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
+        }
     }
 }
