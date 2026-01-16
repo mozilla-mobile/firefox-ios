@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "Saznaj kako";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Postavi automatsko otvaranje poveznica web lokacija, e-mailova i poruka u Firefoxu.";
+"DefaultBrowserCard.Description" = "Postavi automatsko otvaranje poveznica web-stranica, e-mailova i poruka u Firefoxu.";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Odaberi Firefox kao standardni preglednik za automatsku brzinu, sigurnost i privatnost.";

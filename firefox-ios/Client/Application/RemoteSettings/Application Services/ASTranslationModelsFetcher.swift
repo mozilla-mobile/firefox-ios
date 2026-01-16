@@ -32,14 +32,14 @@ struct TranslationRecord: Codable {
     let version: String
 }
 
-protocol TranslationModelsFetcherProtocol {
-    func fetchTranslatorWASM() -> Data?
+protocol TranslationModelsFetcherProtocol: Sendable {
+    func fetchTranslatorWASM() async -> Data?
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data?
     func fetchModelBuffer(recordId: String) -> Data?
-    func prewarmResources(for sourceLang: String, to targetLang: String)
+    func prewarmResources(for sourceLang: String, to targetLang: String) async
 }
 
-final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendable {
+final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
     static let shared = ASTranslationModelsFetcher()
     // Pin versions to avoid using unsupported models
     private enum Constants {
@@ -78,7 +78,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     }
 
     /// Fetches the wasm binary for the translator that matches the pinned version.
-    func fetchTranslatorWASM() -> Data? {
+    func fetchTranslatorWASM() async -> Data? {
         guard let records = translatorsClient?.getRecords(syncIfEmpty: true) else {
             logger.log("No translator records found", level: .warning, category: .remoteSettings)
             return nil
@@ -102,7 +102,14 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             extra: ["recordId": record.id]
         )
 
-        return try? translatorsClient?.getAttachment(record: record)
+        return try? await getAttachment(record: record)
+    }
+
+    func getAttachment(record: RemoteSettingsRecord) async throws -> Data? {
+        // TODO: FXIOS-14616: Should make Rust method async and remove this wrapper method
+        // We intentionally mark this method as async so that we don't block the main thread
+        // and `getAttachment` should eventually be an async method as well.
+        try? translatorsClient?.getAttachment(record: record)
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
@@ -160,8 +167,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
 
     /// Pre-warms resources by fetching models and WASM binary to cache them.
     /// Calling this method multiple times for the same language pair is safe and fast.
-    func prewarmResources(for sourceLang: String, to targetLang: String) {
-        _ = fetchTranslatorWASM()
+    func prewarmResources(for sourceLang: String, to targetLang: String) async {
+        _ = await fetchTranslatorWASM()
         let recordsToPreWarm = getRecordsForLanguagePair(from: sourceLang, to: targetLang)
         prewarmAttachments(for: recordsToPreWarm)
     }
@@ -169,7 +176,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
     /// Prewarm translation resources during startup. This fetches both the translator WASM
     /// and model attachments for `Constants.pivotLanguage` -> deviceLanguage (e.g. `en` -> `fr`).
     /// NOTE: We don't fetch the reverse direction since for phase 1 we only support translating into device language.
-    func prewarmResourcesForStartup() {
+    func prewarmResourcesForStartup() async {
         guard let deviceLanguage = Locale.current.languageCode,
           !deviceLanguage.isEmpty else {
             logger.log("Device language code is unavailable.", level: .warning, category: .translations)
@@ -184,7 +191,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol, Sendab
             )
             return
         }
-        prewarmResources(for: Constants.pivotLanguage, to: deviceLanguage)
+        await prewarmResources(for: Constants.pivotLanguage, to: deviceLanguage)
     }
 
     /// Pre-warms attachments for a list of records by fetching them

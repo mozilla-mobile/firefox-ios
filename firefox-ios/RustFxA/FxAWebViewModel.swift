@@ -125,7 +125,7 @@ class FxAWebViewModel: FeatureFlaggable {
                 case .emailLoginFlow:
                     accountManager.beginAuthentication(
                         entrypoint: "email_\(entrypoint)",
-                        scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.relay]
+                        scopes: [OAuthScope.profile, OAuthScope.oldSync]
                     ) { [weak self] result in
                         guard let self = self else { return }
 

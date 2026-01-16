@@ -147,6 +147,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         bvcSnapshot.contentMode = .scaleAspectFill
         bvcSnapshot.frame = browserVC.view.frame
         bvcSnapshot.clipsToBounds = true
+        bvcSnapshot.layer.shouldRasterize = true
 
         // Dimmed background view
         let backgroundView = UIView()
@@ -300,6 +301,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
         toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
+        toView.layer.shouldRasterize = true
 
         context.containerView.addSubview(toView)
         context.containerView.addSubview(tabSnapshot)
@@ -327,6 +329,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         } completion: { _ in
             contentContainer.isHidden = false
             tabCell?.isHidden = false
+            toView.layer.shouldRasterize = false
             self.view.removeFromSuperview()
             tabSnapshot.removeFromSuperview()
             toView.removeFromSuperview()

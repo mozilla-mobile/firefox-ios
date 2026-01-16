@@ -149,6 +149,15 @@ class MainMenuViewController: UIViewController,
                     let customDetent = UISheetPresentationController.Detent.custom { context in
                         return height
                     }
+                    // The detents are large or medium only on the first presentation. We can avoid animating the new
+                    // detent in such case cause the animation is already running.
+                    let shouldAnimateDetentChange = self?.sheetPresentationController?.detents.contains { detent in
+                        return detent.identifier != .medium && detent.identifier != .large
+                    } ?? true
+                    guard shouldAnimateDetentChange else {
+                        self?.sheetPresentationController?.detents = [customDetent]
+                        return
+                    }
                     self?.sheetPresentationController?.animateChanges({
                         self?.sheetPresentationController?.detents = [customDetent]
                     })

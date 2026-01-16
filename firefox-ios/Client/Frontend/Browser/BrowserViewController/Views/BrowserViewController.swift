@@ -2882,8 +2882,8 @@ class BrowserViewController: UIViewController,
         case .summarizer(let config):
             navigationHandler?.showSummarizePanel(.toolbarIcon, config: config)
         case .passwordGenerator:
-            if let tab = tabManager.selectedTab, let frame = state.frame {
-                navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
+            if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
+                navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
             }
         }
     }
@@ -4842,6 +4842,17 @@ extension BrowserViewController: TabManagerDelegate {
             return
         }
 
+        // Due to some layout changes in the toolbar translucency refactor and
+        // reduction of `setNeedsLayout()` and `layoutIfNeeded()` calls, when the keyboard appears it breaks a constraint
+        // causing the toast message to have an incorrect animation.
+        // To fix the issue, we constrain the bottom of the toast
+        // to the top of the keyboard container when the toolbar is at the bottom.
+        let toastBottomConstraint = toast.bottomAnchor.constraint(
+            equalTo: (
+                isToolbarTranslucencyRefactorEnabled && isBottomSearchBar
+            ) ? overKeyboardContainer.topAnchor : bottomContentStackView.bottomAnchor
+        )
+
         scrollController.showToolbars(animated: false)
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
@@ -4849,7 +4860,7 @@ extension BrowserViewController: TabManagerDelegate {
                                                constant: Toast.UX.toastSidePadding),
                 toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
-                toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
+                toastBottomConstraint
             ]
         }
     }

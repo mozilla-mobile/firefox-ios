@@ -12,27 +12,10 @@ import Storage
 @MainActor
 final class FormAutofillHelperTests: XCTestCase {
     var formAutofillHelper: FormAutofillHelper!
-    var tab: Tab!
+    var tab: MockTab!
     var profile: MockProfile!
-    var validMockWKMessage: MockWKScriptMessage!
     var secureWebviewMock: MockWKWebView!
-    var secureFrameMock: MockWKFrameInfo!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
-    let validMockPayloadJson = """
-        {
-          "type" : "fill-credit-card-form",
-          "payload" : {
-            "cc-number" : "4520 2991 2039 6788",
-            "cc-name" : "Josh Moustache",
-            "cc-exp-month" : "03",
-            "cc-exp" : "02",
-            "cc-exp-year" : "2999"
-          }
-        }
-    """
-    var validPayloadCaptureMockWKMessage: MockWKScriptMessage!
-    // We need the `capture-credit-card-form`
-    // to know when form submission happend
     let validMockPayloadCaptureJson = """
         {
           "type" : "capture-credit-card-form",
@@ -51,30 +34,9 @@ final class FormAutofillHelperTests: XCTestCase {
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        tab = Tab(profile: profile, windowUUID: windowUUID)
+        tab = MockTab(profile: profile, windowUUID: windowUUID)
         formAutofillHelper = FormAutofillHelper(tab: tab)
         secureWebviewMock = MockWKWebView(URL(string: "https://foo.com")!)
-        secureFrameMock = MockWKFrameInfo(webView: secureWebviewMock, frameURL: URL(string: "https://foo.com")!)
-        guard let jsonData = validMockPayloadJson.data(using: .utf8),
-              let dictionary = try? JSONSerialization.jsonObject(
-                with: jsonData,
-                options: []) as? [String: Any] else {
-            fatalError("Unable to convert JSON to dictionary")
-        }
-        validMockWKMessage = MockWKScriptMessage(
-            name: "creditCardFormMessageHandler",
-            body: dictionary,
-            frameInfo: secureFrameMock)
-        guard let jsonDataCapture = validMockPayloadCaptureJson.data(using: .utf8),
-              let dictionaryCapture = try? JSONSerialization.jsonObject(
-                with: jsonDataCapture,
-                options: []) as? [String: Any] else {
-            fatalError("Unable to convert JSON to dictionary")
-        }
-        validPayloadCaptureMockWKMessage = MockWKScriptMessage(
-            name: "validPayloadCaptureMockWKMessage",
-            body: dictionaryCapture,
-            frameInfo: secureFrameMock)
     }
 
     override func tearDown() async throws {
@@ -82,9 +44,6 @@ final class FormAutofillHelperTests: XCTestCase {
         DependencyHelperMock().reset()
         tab = nil
         formAutofillHelper = nil
-        validMockWKMessage = nil
-        validPayloadCaptureMockWKMessage = nil
-        secureFrameMock = nil
         secureWebviewMock = nil
         try await super.tearDown()
     }
@@ -120,63 +79,7 @@ final class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(json["tel"] as? String, "+16509030800")
     }
 
-    @MainActor
-    func testUserContentControllerDidReceiveScriptMessage_withAddressHandler() {
-        // Arrange
-        let formAutofillHelper = FormAutofillHelper(tab: tab)
-
-        // Create a mock WKScriptMessage with handler name "addressFormMessageHandler"
-        let mockBody: [String: Any] = ["type": "fill-address-form",
-                                       "payload": ["address-level1": "123 Main St",
-                                                   "address-level2": "Apt 101",
-                                                   "address-level3": "Suburb",
-                                                   "email": "mozilla@mozilla.com",
-                                                   "street-address": "123 Mozilla",
-                                                   "name": "John",
-                                                   "organization": "Mozilla",
-                                                   "postal-code": "12345",
-                                                   "tel": "+16509030800",
-                                                   "country": "USA"]]
-        let mockAddressScriptMessage = MockWKScriptMessage(
-            name: FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue,
-            body: mockBody,
-            frameInfo: secureFrameMock)
-
-        // Create an expectation for the closure to be called
-        let expectation = XCTestExpectation(description: "foundFieldValues closure should be called")
-
-        // Set up the closure to fulfill the expectation
-        formAutofillHelper.foundFieldValues = { payload, _, _ in
-            XCTAssertEqual(payload.fieldValue, .address)
-
-            // Cast fieldData to the expected type directly in the test
-            if let addressPayload = payload.fieldData as? UnencryptedAddressFields {
-                XCTAssertEqual(addressPayload.addressLevel1, "123 Main St")
-                XCTAssertEqual(addressPayload.addressLevel2, "Apt 101")
-                XCTAssertEqual(addressPayload.addressLevel3, "Suburb")
-                XCTAssertEqual(addressPayload.email, "mozilla@mozilla.com")
-                XCTAssertEqual(addressPayload.streetAddress, "123 Mozilla")
-                XCTAssertEqual(addressPayload.name, "John")
-                XCTAssertEqual(addressPayload.organization, "Mozilla")
-                XCTAssertEqual(addressPayload.postalCode, "12345")
-                XCTAssertEqual(addressPayload.country, "USA")
-                XCTAssertEqual(addressPayload.tel, "+16509030800")
-            } else {
-                XCTFail("Failed to cast fieldData to expected type")
-            }
-
-            expectation.fulfill()
-        }
-
-        // Act: Test user content controller's didReceiveScriptMessage method with the mock message
-        formAutofillHelper.userContentController(
-            WKUserContentController(),
-            didReceiveScriptMessage: mockAddressScriptMessage)
-
-        // Assert: Wait for the expectation to be fulfilled
-        wait(for: [expectation], timeout: 1.0)
-    }
-
+    // MARK: injectionJSONBuilder
     func testInjectionJsonBuilder_noSpecialCharacters() {
         let card = UnencryptedCreditCardFields(ccName: "John Doe",
                                                ccNumber: "1234567812345678",
@@ -237,35 +140,67 @@ final class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
     }
 
+    // MARK: - ParseJSON
     func test_parseFieldType_valid() async {
-        let messageFields = validMockWKMessage.decodeBody(as: FillCreditCardForm.self)
+        let validMockPayloadJson = """
+            {
+              "type" : "fill-credit-card-form",
+              "payload" : {
+                "cc-number" : "4520 2991 2039 6788",
+                "cc-name" : "Josh Moustache",
+                "cc-exp-month" : "03",
+                "cc-exp" : "02",
+                "cc-exp-year" : "2999"
+              }
+            }
+        """
+        guard let jsonData = validMockPayloadJson.data(using: .utf8),
+              let dictionary = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
+              let data = try? JSONSerialization.data(withJSONObject: dictionary),
+              let messageFields = try? JSONDecoder().decode(FillCreditCardForm.self, from: data) else {
+            XCTFail("Unable to convert JSON to dictionary")
+            return
+        }
+
         XCTAssertNotNil(messageFields)
-        XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formInput.rawValue)
-        XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
-        XCTAssertEqual(messageFields!.creditCardPayload.ccExpYear, "2999")
-        XCTAssertEqual(messageFields!.creditCardPayload.ccName, "Josh Moustache")
-        XCTAssertEqual(messageFields!.creditCardPayload.ccNumber, "4520 2991 2039 6788")
+        XCTAssertEqual(messageFields.type, FormAutofillPayloadType.formInput.rawValue)
+        XCTAssertEqual(messageFields.creditCardPayload.ccExpMonth, "03")
+        XCTAssertEqual(messageFields.creditCardPayload.ccExpYear, "2999")
+        XCTAssertEqual(messageFields.creditCardPayload.ccName, "Josh Moustache")
+        XCTAssertEqual(messageFields.creditCardPayload.ccNumber, "4520 2991 2039 6788")
     }
 
     func test_parseFieldCaptureJsonType_valid() async {
-        let messageFields = validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
+        guard let jsonData = validMockPayloadCaptureJson.data(using: .utf8),
+              let dictionary = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
+              let data = try? JSONSerialization.data(withJSONObject: dictionary),
+              let messageFields = try? JSONDecoder().decode(FillCreditCardForm.self, from: data) else {
+            XCTFail("Unable to convert JSON to dictionary")
+            return
+        }
 
         XCTAssertNotNil(messageFields)
-        XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formSubmit.rawValue)
-        XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
-        XCTAssertEqual(messageFields!.creditCardPayload.ccExpYear, "2999")
-        XCTAssertEqual(messageFields!.creditCardPayload.ccName, "Josh Moustache")
-        XCTAssertEqual(messageFields!.creditCardPayload.ccNumber, "4520 2991 2039 6788")
+        XCTAssertEqual(messageFields.type, FormAutofillPayloadType.formSubmit.rawValue)
+        XCTAssertEqual(messageFields.creditCardPayload.ccExpMonth, "03")
+        XCTAssertEqual(messageFields.creditCardPayload.ccExpYear, "2999")
+        XCTAssertEqual(messageFields.creditCardPayload.ccName, "Josh Moustache")
+        XCTAssertEqual(messageFields.creditCardPayload.ccNumber, "4520 2991 2039 6788")
     }
 
-    // MARK: Retrieval
+    // MARK: - Retrieval
 
     func test_getFieldTypeValues() async {
-        let messageFields = validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
+        guard let jsonData = validMockPayloadCaptureJson.data(using: .utf8),
+              let dictionary = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
+              let data = try? JSONSerialization.data(withJSONObject: dictionary),
+              let messageFields = try? JSONDecoder().decode(FillCreditCardForm.self, from: data) else {
+            XCTFail("Unable to convert JSON to dictionary")
+            return
+        }
 
         XCTAssertNotNil(messageFields)
         if let fieldValues = formAutofillHelper.getFieldTypeValues(
-            payload: messageFields!.creditCardPayload).fieldData as? UnencryptedCreditCardFields {
+            payload: messageFields.creditCardPayload).fieldData as? UnencryptedCreditCardFields {
             XCTAssertEqual(fieldValues.ccExpMonth, 3)
             XCTAssertEqual(fieldValues.ccExpYear, 2999)
             XCTAssertEqual(fieldValues.ccName, "Josh Moustache")
@@ -311,6 +246,60 @@ final class FormAutofillHelperTests: XCTestCase {
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.addressFormTelemetryMessageHandler.rawValue))
     }
 
+    // MARK: - UserController didReceiveScriptMessage
+    @MainActor
+    func testUserContentControllerDidReceiveScriptMessage_withAddressHandler() {
+        // Arrange
+        let formAutofillHelper = FormAutofillHelper(tab: tab)
+
+        // Create a mock WKScriptMessage with handler name "addressFormMessageHandler"
+        let mockBody: [String: Any] = ["type": "fill-address-form",
+                                       "payload": ["address-level1": "123 Main St",
+                                                   "address-level2": "Apt 101",
+                                                   "address-level3": "Suburb",
+                                                   "email": "mozilla@mozilla.com",
+                                                   "street-address": "123 Mozilla",
+                                                   "name": "John",
+                                                   "organization": "Mozilla",
+                                                   "postal-code": "12345",
+                                                   "tel": "+16509030800",
+                                                   "country": "USA"]]
+        // Create an expectation for the closure to be called
+        let expectation = XCTestExpectation(description: "foundFieldValues closure should be called")
+
+        // Set up the closure to fulfill the expectation
+        formAutofillHelper.foundFieldValues = { payload, _, _ in
+            XCTAssertEqual(payload.fieldValue, .address)
+
+            // Cast fieldData to the expected type directly in the test
+            if let addressPayload = payload.fieldData as? UnencryptedAddressFields {
+                XCTAssertEqual(addressPayload.addressLevel1, "123 Main St")
+                XCTAssertEqual(addressPayload.addressLevel2, "Apt 101")
+                XCTAssertEqual(addressPayload.addressLevel3, "Suburb")
+                XCTAssertEqual(addressPayload.email, "mozilla@mozilla.com")
+                XCTAssertEqual(addressPayload.streetAddress, "123 Mozilla")
+                XCTAssertEqual(addressPayload.name, "John")
+                XCTAssertEqual(addressPayload.organization, "Mozilla")
+                XCTAssertEqual(addressPayload.postalCode, "12345")
+                XCTAssertEqual(addressPayload.country, "USA")
+                XCTAssertEqual(addressPayload.tel, "+16509030800")
+            } else {
+                XCTFail("Failed to cast fieldData to expected type")
+            }
+
+            expectation.fulfill()
+        }
+
+        // Act: Call processMessage directly without WKScriptMessage
+        formAutofillHelper.processMessage(name: FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue,
+                                          body: mockBody,
+                                          isSecureContext: true,
+                                          frame: nil)
+
+        // Assert: Wait for the expectation to be fulfilled
+        wait(for: [expectation], timeout: 1.0)
+    }
+
     @MainActor
     func testUserContentControllerDidReceiveScriptMessage_withCreditCardHandler() {
         let formAutofillHelper = FormAutofillHelper(tab: tab)
@@ -322,10 +311,6 @@ final class FormAutofillHelperTests: XCTestCase {
                                                    "cc-exp-month": "12",
                                                    "cc-exp": "12",
                                                    "cc-exp-year": "2023"]]
-        let mockCreditCardScriptMessage = MockWKScriptMessage(
-            name: FormAutofillHelper.HandlerName.creditCardFormMessageHandler.rawValue,
-            body: mockBody,
-            frameInfo: secureFrameMock)
 
         // Create an expectation for the closure to be called
         let expectation = XCTestExpectation(description: "foundFieldValues closure should be called")
@@ -336,10 +321,11 @@ final class FormAutofillHelperTests: XCTestCase {
             expectation.fulfill()
         }
 
-        // Test user content controller's didReceiveScriptMessage method with the mock message
-        formAutofillHelper.userContentController(
-            WKUserContentController(),
-            didReceiveScriptMessage: mockCreditCardScriptMessage)
+        // Call processMessage directly without WKScriptMessage
+        formAutofillHelper.processMessage(name: FormAutofillHelper.HandlerName.creditCardFormMessageHandler.rawValue,
+                                          body: mockBody,
+                                          isSecureContext: true,
+                                          frame: nil)
 
         // Wait for the expectation to be fulfilled
         wait(for: [expectation], timeout: 1.0)

@@ -119,7 +119,7 @@
 "Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Pomogni nam graditi bolji internet";
 
 /* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Otkrij funkcije privatnosti u aplikaciji %@ i sigurno šalji kartice između svojih uređaja.";
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Otkrij funkcije za privatnost u aplikaciji %@ i sigurno šalji kartice između svojih uređaja.";
 
 /* Button to skip the notification card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "Ne sada";
@@ -144,6 +144,9 @@
 
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Prihvati i nastavi";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Nastavi";
 
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Brzo, sigurno i neće te izdati. Pregledavanje je upravo postalo bolje.";
@@ -180,6 +183,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Riješi se jezivih programa za praćenje";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Otvori poveznice pomoću ugrađene privatnosti";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automatski";
@@ -350,7 +356,7 @@
 "Onboarding.Notification.Continue.Action.v114" = "Nastavi";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Notification.Description.v120" = "Šalji kartice između svojih uređaja na siguran način i otkrij druge %@ funkcije privatnosti.";
+"Onboarding.Notification.Description.v120" = "Šalji kartice između svojih uređaja na siguran način i otkrij druge %@ funkcije za privatnost.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Preskoči";

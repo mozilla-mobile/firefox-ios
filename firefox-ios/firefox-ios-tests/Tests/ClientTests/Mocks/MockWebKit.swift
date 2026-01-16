@@ -5,15 +5,7 @@
 import Foundation
 import WebKit
 
-// MARK: WKNavigationActionMock
-class WKNavigationActionMock: WKNavigationAction {
-    var overridenTargetFrame: MockWKFrameInfo?
-
-    override var targetFrame: WKFrameInfo? {
-        return overridenTargetFrame
-    }
-}
-
+// TODO: FXIOS-14534 - Merge all existing MockFrameInfo
 // MARK: MockWKFrameInfo
 class MockWKFrameInfo: WKFrameInfo {
     let overridenSecurityOrigin: WKSecurityOrigin
@@ -121,7 +113,7 @@ class MockWKScriptMessage: WKScriptMessage {
 // MARK: - WKURLSchemeTaskMock
 
 /// Minimal fake WKURLSchemeTask used to capture callbacks.
-final class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
+final class MockWKURLSchemeTask: NSObject, WKURLSchemeTask {
     private let _request: URLRequest
     var request: URLRequest { _request }
 
@@ -134,19 +126,28 @@ final class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
     private(set) var finishCallCount = 0
     private(set) var failedErrors: [Error] = []
 
+    var onResponse: (() -> Void)?
+    var onBody: (() -> Void)?
+    var onFinish: (() -> Void)?
+    var onFail: (() -> Void)?
+
     func didReceive(_ response: URLResponse) {
         receivedResponses.append(response)
+        onResponse?()
     }
 
     func didReceive(_ data: Data) {
         receivedBodies.append(data)
+        onBody?()
     }
 
     func didFinish() {
         finishCallCount += 1
+        onFinish?()
     }
 
     func didFailWithError(_ error: Error) {
         failedErrors.append(error)
+        onFail?()
     }
 }
