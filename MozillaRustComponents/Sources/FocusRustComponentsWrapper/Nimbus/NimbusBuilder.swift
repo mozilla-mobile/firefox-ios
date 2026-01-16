@@ -191,23 +191,11 @@ public class NimbusBuilder {
         appInfo: NimbusAppSettings,
         remoteSettingsService: RemoteSettingsService? = nil
     ) -> NimbusInterface {
-        let serverSettings: NimbusServerSettings?
-        if let string = url,
-           let url = URL(string: string)
-        {
-            if usePreviewCollection {
-                serverSettings = NimbusServerSettings(url: url, collection: remoteSettingsPreviewCollection)
-            } else {
-                serverSettings = NimbusServerSettings(url: url, collection: remoteSettingsCollection)
-            }
-        } else {
-            serverSettings = nil
-        }
 
         do {
             let nimbus = try newNimbus(
                 appInfo,
-                serverSettings: serverSettings,
+                serverSettings: nil,
                 remoteSettingsService: remoteSettingsService
             )
             let fm = featureManifest
@@ -234,7 +222,7 @@ public class NimbusBuilder {
             // Is the app being built locally, and the nimbus-cli
             // hasn't been used before this run.
             func isLocalBuild() -> Bool {
-                serverSettings == nil && nimbus.isFetchEnabled()
+                nimbus.isFetchEnabled()
             }
 
             if let args = ArgumentProcessor.createCommandLineArgs(args: commandLineArgs) {
@@ -271,16 +259,14 @@ public class NimbusBuilder {
         serverSettings: NimbusServerSettings?,
         remoteSettingsService: RemoteSettingsService?
     ) throws -> NimbusInterface {
-        try Nimbus.create(serverSettings,
+        try Nimbus.create(server: serverSettings,
                           appSettings: appInfo,
                           coenrollingFeatureIds: getCoenrollingFeatureIds(),
                           dbPath: dbFilePath,
                           resourceBundles: resourceBundles,
                           userDefaults: userDefaults,
                           errorReporter: errorReporter,
-                          recordedContext: recordedContext,
-                          remoteSettingsService: remoteSettingsService,
-                          collectionName: serverSettings?.collection)
+                          recordedContext: recordedContext)
     }
 
     func newNimbusDisabled() -> NimbusInterface {
