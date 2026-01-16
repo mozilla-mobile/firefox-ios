@@ -2293,6 +2293,7 @@ extension MozAdsClientApiError: Foundation.LocalizedError {
 public enum MozAdsEnvironment {
     
     case prod
+    case staging
 }
 
 
@@ -2312,6 +2313,8 @@ public struct FfiConverterTypeMozAdsEnvironment: FfiConverterRustBuffer {
         
         case 1: return .prod
         
+        case 2: return .staging
+        
         default: throw UniffiInternalError.unexpectedEnumCase
         }
     }
@@ -2322,6 +2325,10 @@ public struct FfiConverterTypeMozAdsEnvironment: FfiConverterRustBuffer {
         
         case .prod:
             writeInt(&buf, Int32(1))
+        
+        
+        case .staging:
+            writeInt(&buf, Int32(2))
         
         }
     }
