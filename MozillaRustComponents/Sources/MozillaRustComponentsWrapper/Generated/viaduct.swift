@@ -700,16 +700,48 @@ public func FfiConverterTypeBackend_lower(_ value: Backend) -> UnsafeMutableRawP
 
 
 public struct ClientSettings {
+    /**
+     * Timeout for the entire request in ms (0 indicates no timeout).
+     */
     public var timeout: UInt32
+    /**
+     * Maximum amount of redirects to follow (0 means redirects are not allowed)
+     */
     public var redirectLimit: UInt32
+    /**
+     * OHTTP channel to use for all requests (if any)
+     */
     public var ohttpChannel: String?
+    /**
+     * Client default user-agent.
+     *
+     * This overrides the global default user-agent and is used when no `User-agent` header is set
+     * directly in the Request.
+     */
+    public var userAgent: String?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(timeout: UInt32 = UInt32(0), redirectLimit: UInt32 = UInt32(10), ohttpChannel: String?) {
+    public init(
+        /**
+         * Timeout for the entire request in ms (0 indicates no timeout).
+         */timeout: UInt32 = UInt32(0), 
+        /**
+         * Maximum amount of redirects to follow (0 means redirects are not allowed)
+         */redirectLimit: UInt32 = UInt32(10), 
+        /**
+         * OHTTP channel to use for all requests (if any)
+         */ohttpChannel: String?, 
+        /**
+         * Client default user-agent.
+         *
+         * This overrides the global default user-agent and is used when no `User-agent` header is set
+         * directly in the Request.
+         */userAgent: String? = nil) {
         self.timeout = timeout
         self.redirectLimit = redirectLimit
         self.ohttpChannel = ohttpChannel
+        self.userAgent = userAgent
     }
 }
 
@@ -729,6 +761,9 @@ extension ClientSettings: Equatable, Hashable {
         if lhs.ohttpChannel != rhs.ohttpChannel {
             return false
         }
+        if lhs.userAgent != rhs.userAgent {
+            return false
+        }
         return true
     }
 
@@ -736,6 +771,7 @@ extension ClientSettings: Equatable, Hashable {
         hasher.combine(timeout)
         hasher.combine(redirectLimit)
         hasher.combine(ohttpChannel)
+        hasher.combine(userAgent)
     }
 }
 
@@ -750,7 +786,8 @@ public struct FfiConverterTypeClientSettings: FfiConverterRustBuffer {
             try ClientSettings(
                 timeout: FfiConverterUInt32.read(from: &buf), 
                 redirectLimit: FfiConverterUInt32.read(from: &buf), 
-                ohttpChannel: FfiConverterOptionString.read(from: &buf)
+                ohttpChannel: FfiConverterOptionString.read(from: &buf), 
+                userAgent: FfiConverterOptionString.read(from: &buf)
         )
     }
 
@@ -758,6 +795,7 @@ public struct FfiConverterTypeClientSettings: FfiConverterRustBuffer {
         FfiConverterUInt32.write(value.timeout, into: &buf)
         FfiConverterUInt32.write(value.redirectLimit, into: &buf)
         FfiConverterOptionString.write(value.ohttpChannel, into: &buf)
+        FfiConverterOptionString.write(value.userAgent, into: &buf)
     }
 }
 
@@ -1746,6 +1784,18 @@ public func listOhttpChannels() -> [String]  {
     )
 })
 }
+/**
+ * Set the global default user-agent
+ *
+ * This is what's used when no user-agent is set in the `ClientSettings` and no `user-agent`
+ * header is set in the Request.
+ */
+public func setGlobalDefaultUserAgent(userAgent: String)  {try! rustCall() {
+    uniffi_viaduct_fn_func_set_global_default_user_agent(
+        FfiConverterString.lower(userAgent),$0
+    )
+}
+}
 
 private enum InitializationResult {
     case ok
@@ -1778,6 +1828,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_viaduct_checksum_func_list_ohttp_channels() != 59719) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_set_global_default_user_agent() != 33213) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_viaduct_checksum_method_backend_send_request() != 4029) {

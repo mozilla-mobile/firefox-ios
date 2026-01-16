@@ -700,14 +700,40 @@ public func FfiConverterTypeBackend_lower(_ value: Backend) -> UnsafeMutableRawP
 
 
 public struct ClientSettings {
+    /**
+     * Timeout for the entire request in ms (0 indicates no timeout).
+     */
     public var timeout: UInt32
+    /**
+     * Maximum amount of redirects to follow (0 means redirects are not allowed)
+     */
     public var redirectLimit: UInt32
+    /**
+     * Client default user-agent.
+     *
+     * This overrides the global default user-agent and is used when no `User-agent` header is set
+     * directly in the Request.
+     */
+    public var userAgent: String?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(timeout: UInt32 = UInt32(0), redirectLimit: UInt32 = UInt32(10)) {
+    public init(
+        /**
+         * Timeout for the entire request in ms (0 indicates no timeout).
+         */timeout: UInt32 = UInt32(0), 
+        /**
+         * Maximum amount of redirects to follow (0 means redirects are not allowed)
+         */redirectLimit: UInt32 = UInt32(10), 
+        /**
+         * Client default user-agent.
+         *
+         * This overrides the global default user-agent and is used when no `User-agent` header is set
+         * directly in the Request.
+         */userAgent: String? = nil) {
         self.timeout = timeout
         self.redirectLimit = redirectLimit
+        self.userAgent = userAgent
     }
 }
 
@@ -724,12 +750,16 @@ extension ClientSettings: Equatable, Hashable {
         if lhs.redirectLimit != rhs.redirectLimit {
             return false
         }
+        if lhs.userAgent != rhs.userAgent {
+            return false
+        }
         return true
     }
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(timeout)
         hasher.combine(redirectLimit)
+        hasher.combine(userAgent)
     }
 }
 
@@ -743,13 +773,15 @@ public struct FfiConverterTypeClientSettings: FfiConverterRustBuffer {
         return
             try ClientSettings(
                 timeout: FfiConverterUInt32.read(from: &buf), 
-                redirectLimit: FfiConverterUInt32.read(from: &buf)
+                redirectLimit: FfiConverterUInt32.read(from: &buf), 
+                userAgent: FfiConverterOptionString.read(from: &buf)
         )
     }
 
     public static func write(_ value: ClientSettings, into buf: inout [UInt8]) {
         FfiConverterUInt32.write(value.timeout, into: &buf)
         FfiConverterUInt32.write(value.redirectLimit, into: &buf)
+        FfiConverterOptionString.write(value.userAgent, into: &buf)
     }
 }
 
@@ -1288,6 +1320,30 @@ extension ViaductError: Foundation.LocalizedError {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
+    typealias SwiftType = String?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterString.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterString.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionData: FfiConverterRustBuffer {
     typealias SwiftType = Data?
 
@@ -1565,6 +1621,18 @@ public func initBackend(backend: Backend)throws   {try rustCallWithError(FfiConv
     )
 }
 }
+/**
+ * Set the global default user-agent
+ *
+ * This is what's used when no user-agent is set in the `ClientSettings` and no `user-agent`
+ * header is set in the Request.
+ */
+public func setGlobalDefaultUserAgent(userAgent: String)  {try! rustCall() {
+    uniffi_viaduct_fn_func_set_global_default_user_agent(
+        FfiConverterString.lower(userAgent),$0
+    )
+}
+}
 
 private enum InitializationResult {
     case ok
@@ -1585,6 +1653,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_viaduct_checksum_func_init_backend() != 21801) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_set_global_default_user_agent() != 33213) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_viaduct_checksum_method_backend_send_request() != 4029) {
