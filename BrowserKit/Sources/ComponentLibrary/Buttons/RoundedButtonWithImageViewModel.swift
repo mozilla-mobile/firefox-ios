@@ -6,11 +6,13 @@
 public struct RoundedButtonWithImageViewModel {
     public let title: String?
     public let image: String?
+    public let isAnimating: Bool
     public let a11yIdentifier: String
 
-    public init(title: String?, image: String?, a11yIdentifier: String) {
+    public init(title: String?, image: String?, isAnimating: Bool, a11yIdentifier: String) {
         self.title = title
         self.image = image
+        self.isAnimating = isAnimating
         self.a11yIdentifier = a11yIdentifier
     }
 }

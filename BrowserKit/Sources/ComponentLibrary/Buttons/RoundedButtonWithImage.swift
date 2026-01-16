@@ -35,6 +35,9 @@ public final class RoundedButtonWithImage: UIButton, ThemeApplicable {
 
     private var viewModel: RoundedButtonWithImageViewModel?
 
+    // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
+    private let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -94,6 +97,10 @@ public final class RoundedButtonWithImage: UIButton, ThemeApplicable {
             CATransaction.commit()
         }
 
+        if viewModel.isAnimating {
+            animateImage()
+        }
+
         updatedConfiguration.titleAlignment = .center
 
         // Using a nil backgroundColorTransformer will just make the background view
@@ -114,6 +121,18 @@ public final class RoundedButtonWithImage: UIButton, ThemeApplicable {
         for subview in self.subviews where subview is UIVisualEffectView {
             subview.layer.cornerRadius = radiusSize
         }
+    }
+
+    private func animateImage() {
+        // Animation that loops continuously until stopped
+        continuousRotateAnimation.fromValue = 0.0
+        continuousRotateAnimation.toValue = CGFloat(Double.pi)
+        continuousRotateAnimation.isRemovedOnCompletion = true
+        continuousRotateAnimation.duration = 0.5
+        continuousRotateAnimation.repeatCount = .infinity
+        isUserInteractionEnabled = false
+
+        imageView?.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
     }
 
     // MARK: ThemeApplicable

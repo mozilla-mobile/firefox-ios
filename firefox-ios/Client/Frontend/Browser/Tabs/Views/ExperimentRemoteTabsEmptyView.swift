@@ -59,10 +59,6 @@ class ExperimentRemoteTabsEmptyView: UIView,
 
     private let signInButton: RoundedButtonWithImage = .build()
 
-    // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
-    private let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
-    private let syncIcon = UIImage(named: StandardImageIdentifiers.Large.sync)
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -81,31 +77,13 @@ class ExperimentRemoteTabsEmptyView: UIView,
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
         descriptionLabel.text = config.localizedString()
 
-        if isSyncing {
-            let viewModel = RoundedButtonWithImageViewModel(
-                title: .SyncingMessageWithEllipsis,
-                image: StandardImageIdentifiers.Large.sync,
-                a11yIdentifier: AccessibilityIdentifiers.TabTray.syncDataButton
-            )
-            signInButton.configure(viewModel: viewModel)
-
-            // Animation that loops continuously until stopped
-            continuousRotateAnimation.fromValue = 0.0
-            continuousRotateAnimation.toValue = CGFloat(Double.pi)
-            continuousRotateAnimation.isRemovedOnCompletion = true
-            continuousRotateAnimation.duration = 0.5
-            continuousRotateAnimation.repeatCount = .infinity
-            self.signInButton.isUserInteractionEnabled = false
-
-            self.signInButton.imageView?.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
-        } else {
-            let viewModel = RoundedButtonWithImageViewModel(
-                title: .Settings.Sync.ButtonTitle,
-                image: nil,
-                a11yIdentifier: AccessibilityIdentifiers.TabTray.syncDataButton
-            )
-            signInButton.configure(viewModel: viewModel)
-        }
+        let viewModel = RoundedButtonWithImageViewModel(
+            title: isSyncing ? .SyncingMessageWithEllipsis : .Settings.Sync.ButtonTitle,
+            image: isSyncing ? StandardImageIdentifiers.Large.sync : nil,
+            isAnimating: isSyncing,
+            a11yIdentifier: AccessibilityIdentifiers.TabTray.syncDataButton
+        )
+        signInButton.configure(viewModel: viewModel)
 
         if config == .notLoggedIn || config == .failedToSync {
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
