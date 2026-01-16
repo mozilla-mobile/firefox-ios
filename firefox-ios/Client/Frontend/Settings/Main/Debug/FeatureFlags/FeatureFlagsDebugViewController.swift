@@ -193,20 +193,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageStoriesRedesign,
-                titleText: format(string: "Stories Redesign"),
-                statusText: format(string: "Toggle to enable homepage stories section redesign")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .homepageStoriesRedesignV2,
-                titleText: format(string: "Stories Redesign V2"),
-                statusText: format(string: "Toggle to enable homepage stories section redesign V2")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .tabScrollRefactorFeature,
                 titleText: format(string: "Tab scroll refactor"),
                 statusText: format(string: "Toggle to enable tab scroll refactor feature")

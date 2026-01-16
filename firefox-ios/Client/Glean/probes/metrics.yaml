@@ -1306,35 +1306,6 @@ firefox_home_page:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
-  customize_homepage_button:
-    type: counter
-    description: |
-      Counts the number of times a user taps to open the
-      settings menu to customize the Firefox Homepage
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9272
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9272
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  firefox_homepage_view:
-    type: counter
-    description: |
-      The number of times a user sees the Firefox Homepage
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9405
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9405
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
   pocket_stories_visible:
     type: boolean
     description: |
@@ -1399,7 +1370,6 @@ homepage:
       - jump_back_in
       - bookmarks
       - stories
-      - customize_homepage
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/26216
     data_reviews:

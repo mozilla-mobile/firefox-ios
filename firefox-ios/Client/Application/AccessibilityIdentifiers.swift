@@ -105,7 +105,6 @@ struct AccessibilityIdentifiers {
         static let getHelp = "MainMenu.GetHelp"
         static let settings = "MainMenu.Settings"
         static let whatsNew = "MainMenu.WhatsNew"
-        static let customizeHomepage = "MainMenu.CustomizeHomepage"
         static let saveToReadingList = "MainMenu.SaveToReadingList"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
         static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
@@ -193,7 +192,6 @@ struct AccessibilityIdentifiers {
 
         struct OtherButtons {
             static let logoID = "FxHomeLogoID"
-            static let customizeHome = "FxHomeCustomizeHomeSettingButton"
             static let closeButton = "FirefoxHomepage.closeButton"
         }
 
@@ -201,7 +199,6 @@ struct AccessibilityIdentifiers {
             static let shortcuts = "shortcutsSectionMoreButton"
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
-            static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
             static let stories = "storiesSectionMoreButton"
         }
 
