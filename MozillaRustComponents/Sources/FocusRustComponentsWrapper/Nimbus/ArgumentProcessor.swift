@@ -20,6 +20,22 @@ enum ArgumentProcessor {
         if args.logState {
             nimbus.dumpStateToLog()
         }
+        if let expression = args.evalJexl {
+            // Evaluate JEXL and log the result
+            do {
+                let messagingHelper = try nimbus.createMessageHelper()
+                let result = try messagingHelper.evalJexl(expression: expression)
+                let resultJson = #"{"success": true, "result": \#(result)}"#
+                // swiftlint:disable:next nslocalizedstring_key
+                // NSLog is intentionally used here for nimbus-cli to capture structured JSON output from device logs
+                NSLog("JEXL_RESULT: \(resultJson)")
+            } catch {
+                let errorJson = #"{"success": false, "error": "\#(error.localizedDescription)"}"#
+                // swiftlint:disable:next nslocalizedstring_key
+                // NSLog is intentionally used here for nimbus-cli to capture structured JSON output from device logs
+                NSLog("JEXL_RESULT: \(errorJson)")
+            }
+        }
         // We have isLauncher here doing nothing; this is to match the Android implementation.
         // There is nothing to do at this point, because we're unable to affect the flow of the app.
         if args.isLauncher {
@@ -40,6 +56,7 @@ enum ArgumentProcessor {
         var resetDatabase = false
         var logState = false
         var isLauncher = false
+        var evalJexl: String?
         var meantForUs = false
 
         func flag(_ v: String?) -> Bool {
@@ -61,6 +78,8 @@ enum ArgumentProcessor {
                 logState = flag(item.value)
             case "--is-launcher":
                 isLauncher = flag(item.value)
+            case "--eval-jexl":
+                evalJexl = item.value?.removingPercentEncoding
             default:
                 () // NOOP
             }
@@ -74,7 +93,8 @@ enum ArgumentProcessor {
             resetDatabase: resetDatabase,
             experiments: experiments,
             logState: logState,
-            isLauncher: isLauncher
+            isLauncher: isLauncher,
+            evalJexl: evalJexl
         ))
     }
 
@@ -102,6 +122,8 @@ enum ArgumentProcessor {
                 resetDatabase = true
             case "--log-state":
                 logState = true
+            case "--eval-jexl":
+                key = "eval-jexl"
             default:
                 value = arg.replacingOccurrences(of: "&apos;", with: "'")
             }
@@ -118,12 +140,14 @@ enum ArgumentProcessor {
         }
 
         let experiments = argMap["experiments"]
+        let evalJexl = argMap["eval-jexl"]
 
         return check(args: CliArgs(
             resetDatabase: resetDatabase,
             experiments: experiments,
             logState: logState,
-            isLauncher: false
+            isLauncher: false,
+            evalJexl: evalJexl
         ))
     }
 
@@ -143,6 +167,7 @@ struct CliArgs: Equatable {
     let experiments: String?
     let logState: Bool
     let isLauncher: Bool
+    let evalJexl: String?
 }
 
 public extension NimbusInterface {
