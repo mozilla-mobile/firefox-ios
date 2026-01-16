@@ -14,6 +14,8 @@ enum RemoteTabsPanelRefreshState {
     case idle
     /// Currently performing a refresh of the user's tabs.
     case refreshing
+    /// Currently performing a sync of the user's tabs.
+    case syncingTabs
 }
 
 /// Replaces LegacyRemoteTabsErrorDataSource.ErrorType
@@ -116,6 +118,8 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
         case RemoteTabsPanelActionType.remoteDevicesChanged:
             guard let devices = action.devices else { return defaultState(from: state) }
             return handleRemoteDevicesChangedAction(devices: devices, state: state)
+        case RemoteTabsPanelActionType.syncDidBegin:
+            return handleSyncDidBeginAction(state: state)
         default:
             return defaultState(from: state)
         }
@@ -160,6 +164,15 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
                                     clientAndTabs: state.clientAndTabs,
                                     showingEmptyState: state.showingEmptyState,
                                     devices: devices)
+    }
+
+    private static func handleSyncDidBeginAction(state: RemoteTabsPanelState) -> RemoteTabsPanelState {
+        return RemoteTabsPanelState(windowUUID: state.windowUUID,
+                                    refreshState: .syncingTabs,
+                                    allowsRefresh: false,
+                                    clientAndTabs: state.clientAndTabs,
+                                    showingEmptyState: state.showingEmptyState,
+                                    devices: state.devices)
     }
 
     static func defaultState(from state: RemoteTabsPanelState) -> RemoteTabsPanelState {

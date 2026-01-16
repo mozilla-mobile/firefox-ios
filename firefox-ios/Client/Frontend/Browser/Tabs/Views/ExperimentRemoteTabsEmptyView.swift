@@ -12,7 +12,8 @@ protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable, InsetUpdatable {
     @MainActor
     var needsSafeArea: Bool { get }
     func configure(config: RemoteTabsPanelEmptyStateReason,
-                   delegate: RemoteTabsEmptyViewDelegate?)
+                   delegate: RemoteTabsEmptyViewDelegate?,
+                   isSyncing: Bool)
 }
 
 class ExperimentRemoteTabsEmptyView: UIView,
@@ -56,13 +57,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
         label.textAlignment = .center
     }
 
-    private let signInButton: SecondaryRoundedButton = .build { button in
-        let viewModel = SecondaryRoundedButtonViewModel(
-            title: .Settings.Sync.ButtonTitle,
-            a11yIdentifier: AccessibilityIdentifiers.TabTray.syncDataButton
-        )
-        button.configure(viewModel: viewModel)
-    }
+    private let signInButton: RoundedButtonWithImage = .build()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -74,12 +69,21 @@ class ExperimentRemoteTabsEmptyView: UIView,
     }
 
     func configure(config: RemoteTabsPanelEmptyStateReason,
-                   delegate: RemoteTabsEmptyViewDelegate?) {
+                   delegate: RemoteTabsEmptyViewDelegate?,
+                   isSyncing: Bool) {
         self.delegate = delegate
 
         iconImageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cloud)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
         descriptionLabel.text = config.localizedString()
+
+        let viewModel = RoundedButtonWithImageViewModel(
+            title: isSyncing ? .SyncingMessageWithEllipsis : .Settings.Sync.ButtonTitle,
+            image: isSyncing ? StandardImageIdentifiers.Large.sync : nil,
+            isAnimating: isSyncing,
+            a11yIdentifier: AccessibilityIdentifiers.TabTray.syncDataButton
+        )
+        signInButton.configure(viewModel: viewModel)
 
         if config == .notLoggedIn || config == .failedToSync {
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
