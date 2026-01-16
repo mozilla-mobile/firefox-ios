@@ -76,13 +76,14 @@ class FormAutofillHelper: TabContentScript {
         // to an embedded iframe on a webpage for injecting card info
         frame = message.frameInfo
 
-        guard let frame = frame else { return }
+        guard let frame else { return }
         let isSecureContext = SecurityContextManager.isSecureContext(webViewURL: frame.webView?.url,
-                                                                    frameScheme: frame.securityOrigin.protocol)
+                                                                     frameScheme: frame.securityOrigin.protocol)
 
         processMessage(name: message.name, body: message.body, isSecureContext: isSecureContext, frame: frame)
     }
 
+    // TODO: FXIOS-14534 - Revisit if a global solution can be applied
     func processMessage(name: String, body: Any, isSecureContext: Bool, frame: WKFrameInfo?) {
         guard isSecureContext else {
             logger.log("Ignoring request as it came from an insecure context",

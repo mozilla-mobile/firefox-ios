@@ -14,7 +14,8 @@ final class SecurityManagerTests: XCTestCase {
     let insecureFrameScheme = "http"
 
     func test_insecureTopFrame_insecureFrame() {
-        let isSecureContext = SecurityContextManager.isSecureContext(webViewURL: insecureURL, frameScheme: insecureFrameScheme)
+        let isSecureContext = SecurityContextManager.isSecureContext(webViewURL: insecureURL,
+                                                                     frameScheme: insecureFrameScheme)
         XCTAssertFalse(isSecureContext)
     }
 
@@ -30,6 +31,6 @@ final class SecurityManagerTests: XCTestCase {
 
     func test_secureTopFrame_secureFrame() {
         let isSecureContext = SecurityContextManager.isSecureContext(webViewURL: secureURL, frameScheme: secureFrameScheme)
-        XCTAssertFalse(isSecureContext)
+        XCTAssertTrue(isSecureContext)
     }
 }
