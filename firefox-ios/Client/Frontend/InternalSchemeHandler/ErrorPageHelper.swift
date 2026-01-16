@@ -25,7 +25,9 @@ private let CertErrors = [
 
 // Error codes copied from Gecko. The ints corresponding to these codes were determined
 // by inspecting the NSError in each of these cases.
-private let CertErrorCodes = [
+// TODO: This legacy constant should eventually be removed in favor of CertErrorCodes
+// in NativeErrorPageHelper.swift once ErrorPageHelper is fully replaced.
+private let LegacyCertErrorCodes = [
     -9813: "SEC_ERROR_UNKNOWN_ISSUER",
     -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
     -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
@@ -321,7 +323,7 @@ class ErrorPageHelper {
             let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
             queryItems.append(URLQueryItem(name: "badcert", value: encodedCert))
 
-            let certError = CertErrorCodes[certErrorCode] ?? ""
+            let certError = LegacyCertErrorCodes[certErrorCode] ?? ""
             queryItems.append(URLQueryItem(name: "certerror", value: String(certError)))
         }
 
