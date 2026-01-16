@@ -66,6 +66,10 @@ public final class NimbusMessagingHelper: NimbusMessagingHelperProtocol {
         }
     }
 
+    public func evalJexlDebug(expression: String) throws -> String {
+        try targetingHelper.evalJexlDebug(expression: expression)
+    }
+
     public func clearCache() {
         cache.removeAll()
     }
@@ -90,6 +94,12 @@ final class AlwaysConstantTargetingHelper: NimbusTargetingHelperProtocol {
 
     func evalJexl(expression _: String) throws -> Bool {
         constant
+    }
+
+    func evalJexlDebug(expression _: String) throws -> String {
+        """
+        {"success": false, "error": "Not implemented"}
+        """
     }
 }
 

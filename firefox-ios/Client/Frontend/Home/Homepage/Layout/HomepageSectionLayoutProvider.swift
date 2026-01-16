@@ -16,11 +16,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     struct UX {
+        static let topSpacing: CGFloat = 24
         static let standardInset: CGFloat = 16
         static let standardSpacing: CGFloat = 16
         static let interGroupSpacing: CGFloat = 8
         static let iPadInset: CGFloat = 50
-        static let spacingBetweenSections: CGFloat = 62
+        static let spacingBetweenSections: CGFloat = 44
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 75
 
@@ -90,19 +91,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 }
 
                 return collectionViewWidth * fractionalWidth
-            }
-        }
-
-        struct TopSitesConstants {
-            static let redesignedTopSitesBottomSpacingLandscape: CGFloat = 16
-
-            @MainActor
-            static func getBottomInset() -> CGFloat {
-                if UIDevice.current.orientation.isLandscape {
-                    return redesignedTopSitesBottomSpacingLandscape
-                } else {
-                    return UX.spacingBetweenSections - UX.interGroupSpacing
-                }
             }
         }
 
@@ -337,8 +325,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let bottomInset = isAnyStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
-                                                      : UX.spacingBetweenSections - UX.interGroupSpacing
+        let bottomInset = UX.spacingBetweenSections
         section.contentInsets.top = 0
         section.contentInsets.bottom = bottomInset
 
@@ -535,6 +522,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let spacerHeight = max(
             0.1,
             availableContentHeight
+            - UX.topSpacing
             - privacyNoticeHeight
             - topSitesHeight
             - jumpBackInHeight
@@ -648,7 +636,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += CGFloat(max(presentedRows - 1, 0)) * UX.standardSpacing
 
         // Add section insets
-        totalHeight += UX.TopSitesConstants.getBottomInset()
+        totalHeight += UX.spacingBetweenSections
         measurementsCache.setHeight(totalHeight, for: measurementKey)
 
         return totalHeight

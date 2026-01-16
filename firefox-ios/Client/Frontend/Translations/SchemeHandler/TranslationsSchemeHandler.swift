@@ -1,7 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
-
+import Common
 import Foundation
 import WebKit
 
@@ -68,25 +68,43 @@ final class TranslationsSchemeHandler: NSObject, WKURLSchemeHandler {
     }()
 
     private let router: TinyRouter
+    private let logger: Logger
+    private var requestTasks = [ObjectIdentifier: Task<Void, Never>]()
 
-    init(router: TinyRouter = TranslationsSchemeHandler.defaultRouter) {
+    init(router: TinyRouter = TranslationsSchemeHandler.defaultRouter, logger: Logger = DefaultLogger.shared) {
         self.router = router
+        self.logger = logger
         super.init()
     }
 
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
-        do {
-            let url = try validateRequest(urlSchemeTask)
-            // Delegate everything for this host to TinyRouter.
-            let reply = try router.route(url)
-            try send(reply, for: url, to: urlSchemeTask)
-        } catch {
-            urlSchemeTask.didFailWithError(mapError(error))
+        let id = ObjectIdentifier(urlSchemeTask)
+        let requestTask = Task { @MainActor in
+            defer { requestTasks[id] = nil }
+            do {
+                let url = try validateRequest(urlSchemeTask)
+                try Task.checkCancellation()
+                // Delegate everything for this host to TinyRouter.
+                let reply = try await router.route(url)
+                try Task.checkCancellation()
+                try send(reply, for: url, to: urlSchemeTask)
+            } catch is CancellationError {
+                self.logger.log("Scheme task cancelled.",
+                                level: .debug,
+                                category: .translations)
+            } catch {
+                urlSchemeTask.didFailWithError(mapError(error))
+            }
         }
+        requestTasks[id] = requestTask
     }
 
-    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) { }
+    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
+        let id = ObjectIdentifier(urlSchemeTask)
+        requestTasks[id]?.cancel()
+        requestTasks[id] = nil
+    }
 
     /// Bridges a `TinyHTTPReply` into the `WKURLSchemeTask` callbacks.
     private func send(_ reply: TinyHTTPReply, for url: URL, to task: WKURLSchemeTask) throws {

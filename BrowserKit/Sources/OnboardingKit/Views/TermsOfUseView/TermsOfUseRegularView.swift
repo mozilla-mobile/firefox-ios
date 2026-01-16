@@ -6,14 +6,14 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+public struct TermsOfUseRegularView<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
     @State public var theme: Theme
-    @StateObject private var viewModel: TosFlowViewModel<ViewModel>
+    @StateObject private var viewModel: TermsOfUseFlowViewModel<ViewModel>
     public let windowUUID: WindowUUID
     public var themeManager: ThemeManager
 
     public init(
-        viewModel: TosFlowViewModel<ViewModel>,
+        viewModel: TermsOfUseFlowViewModel<ViewModel>,
         windowUUID: WindowUUID,
         themeManager: ThemeManager
     ) {
@@ -24,58 +24,45 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     }
 
     // MARK: - Body
+
     public var body: some View {
-        GeometryReader { geometry in
-            let widthScale = geometry.size.width / UX.CardView.baseWidth
-            let heightScale = geometry.size.height / UX.CardView.baseHeight
-            let scale = min(widthScale, heightScale)
-            ZStack {
-                AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
-                    .ignoresSafeArea()
-                    .accessibilityHidden(true)
-                VStack {
-                    cardContent(geometry: geometry, scale: scale)
-                    Spacer()
-                        .frame(height: UX.CardView.pageControlHeight)
-                        .padding(.bottom)
-                }
-                .padding(.top, UX.CardView.cardTopPadding)
-            }
-            .animation(.easeOut, value: geometry.size)
+        ZStack {
+            AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
+                .ignoresSafeArea()
+                .accessibilityHidden(true)
+            termsContent
         }
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
-    @ViewBuilder
-    private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
-        VStack {
+    // MARK: - Main Content
+
+    private var termsContent: some View {
+        SheetSizedCard {
             GeometryReader { geometry in
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: UX.CardView.spacing * scale) {
-                        Spacer()
-                        VStack(spacing: UX.CardView.spacing * scale) {
-                            imageView(scale: scale)
+                    VStack(spacing: UX.CardView.tosSpacing) {
+                        VStack(spacing: UX.CardView.spacing) {
+                            imageView
                             titleView
                         }
                         bodyView
-                        Spacer()
-                        links
-                        Spacer()
+                        VStack(spacing: UX.CardView.spacing) {
+                            links
+                            primaryButton
+                        }
                     }
-                    .padding(UX.CardView.verticalPadding * scale)
+                    .padding(.vertical, UX.CardView.verticalPadding)
+                    .frame(width: UX.CardView.primaryButtonWidthiPad)
                     .frame(width: geometry.size.width)
                     .frame(minHeight: geometry.size.height)
                 }
                 .scrollBounceBehavior(basedOnSize: true)
             }
-            primaryButton
-                .padding(UX.CardView.verticalPadding * scale)
-                .padding(.bottom)
+            .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+            .padding(.horizontal, UX.CardView.horizontalPadding)
+            .accessibilityElement(children: .contain)
         }
-        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
-        .padding(.horizontal, UX.CardView.horizontalPadding * scale)
-        .accessibilityElement(children: .contain)
-        .padding(.vertical)
     }
 
     // MARK: - Subviews
@@ -83,7 +70,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     var links: some View {
         VStack(alignment: UX.CardView.horizontalAlignmentForCurrentLocale, spacing: UX.Onboarding.Spacing.standard) {
             ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
-                AttributedLinkText<TosAction>(
+                AttributedLinkText<TermsOfUseAction>(
                     theme: theme,
                     fullText: link.fullText,
                     linkText: link.linkText,
@@ -93,16 +80,14 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 )
             }
         }
-        .accessibilityElement(children: .contain)
     }
 
-    @ViewBuilder
-    func imageView(scale: CGFloat) -> some View {
+    @ViewBuilder var imageView: some View {
         if let img = viewModel.configuration.image {
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.tosImageHeight * scale)
+                .frame(height: UX.CardView.tosImageHeight)
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
         }
@@ -114,8 +99,8 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
             .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
+            .accessibilityLabel(viewModel.configuration.title)
             .accessibility(addTraits: .isHeader)
-            .fixedSize(horizontal: false, vertical: true)
     }
 
     var bodyView: some View {
@@ -140,5 +125,6 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
             theme: theme,
             accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
         )
+        .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
     }
 }

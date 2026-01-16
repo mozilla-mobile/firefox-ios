@@ -163,7 +163,6 @@ public final class MenuMainView: UIView, ThemeApplicable {
         if isExpanded {
             let height = tableView.tableViewContentSize + UX.headerTopMargin
             onCalculatedHeight?(height + siteProtectionHeader.frame.height)
-            layoutIfNeeded()
         } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
@@ -176,7 +175,6 @@ public final class MenuMainView: UIView, ThemeApplicable {
                                         UX.headerTopMargin +
                                         siteProtectionHeader.frame.height)
                 }
-                layoutIfNeeded()
             }
         }
     }

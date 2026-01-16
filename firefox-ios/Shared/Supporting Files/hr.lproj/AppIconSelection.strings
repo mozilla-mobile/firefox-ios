@@ -113,7 +113,7 @@
 "Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136" = "U redu";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the message displayed when the app fails to set the user's selected app icon. */
-"Settings.AppIconSelection.Errors.SelectErrorMessage.v136" = "Žao nam je. Došlo je do greške prilikom postavljanja ikone tvoje aplikacije.";
+"Settings.AppIconSelection.Errors.SelectErrorMessage.v136" = "Žao nam je. Dogodila se greška prilikom postavljanja ikone tvoje aplikacije.";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen. */
 "Settings.AppIconSelection.ScreenTitle.v136" = "Ikona aplikacije";
