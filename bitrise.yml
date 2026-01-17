@@ -762,7 +762,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-26.2.x-edge
+        stack: osx-xcode-26.2.x
         machine_type_id: g2.mac.4large
   L10nBuild:
     steps:
