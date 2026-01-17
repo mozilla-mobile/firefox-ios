@@ -2441,15 +2441,15 @@ workflows:
   _run_unit_tests_for_ios_version:
     steps:
     - script@1.2.1:
-      title: "Create .xctestrun file for each platform"
-      inputs:
-      - content: |-
-        #!/usr/bin/env bash
-        SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.1-arm64.xctestrun"
-        DEST_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator$IOS_VERSION-arm64.xctestrun"
-        if [ "$SOURCE_FILE" != "$DEST_FILE" ]; then
-          cp "$SOURCE_FILE" "$DEST_FILE"
-        fi
+        title: "Create .xctestrun file for each platform"
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.1-arm64.xctestrun"
+            DEST_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator$IOS_VERSION-arm64.xctestrun"
+            if [ "$SOURCE_FILE" != "$DEST_FILE" ]; then
+              cp "$SOURCE_FILE" "$DEST_FILE"
+            fi
     - xcode-test-without-building@0.5.1:
         title: "Unit Tests - $DEVICE_NAME (iOS $IOS_VERSION)"
         timeout: 6000
