@@ -1,0 +1,39 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+import CopyWithChanges
+
+@CopyWithChanges
+struct Report {
+    let venue: String
+    let sponsor: String?
+    let drinks: [String]
+    let complexStructure: [Date: [(String, Int)]]
+    let characters: [String]?
+    let budget: Double
+}
+
+let r1 = Report(
+    venue: "Grapefruit",
+    sponsor: "Oumaouma",
+    drinks: ["soda", "tea"],
+    complexStructure: [Date(): [("Blunt!", 200)]],
+    characters: [],
+    budget: 12_345_678.9
+)
+
+let r2 = r1.copyWith(
+    characters: ["Jane Doe"]
+)
+
+print("r2 \(r2) has a sponsor because it uses the same sponsored copied from r1 \(r1)")
+
+let r3 = r1.copyWith(
+    sponsor: nil,
+    complexStructure: [:],
+    budget: 0
+)
+
+print("r3 \(r3) has no sponsor because `nil` was provided")
