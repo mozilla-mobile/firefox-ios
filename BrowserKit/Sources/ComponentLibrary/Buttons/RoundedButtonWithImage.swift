@@ -99,6 +99,8 @@ public final class RoundedButtonWithImage: UIButton, ThemeApplicable {
 
         if viewModel.isAnimating {
             animateImage()
+        } else {
+            stopImageAnimation()
         }
 
         updatedConfiguration.titleAlignment = .center
@@ -131,8 +133,12 @@ public final class RoundedButtonWithImage: UIButton, ThemeApplicable {
         continuousRotateAnimation.duration = 0.5
         continuousRotateAnimation.repeatCount = .infinity
         isUserInteractionEnabled = false
-
         imageView?.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
+    }
+
+    private func stopImageAnimation() {
+        isUserInteractionEnabled = true
+        imageView?.layer.removeAllAnimations()
     }
 
     // MARK: ThemeApplicable
