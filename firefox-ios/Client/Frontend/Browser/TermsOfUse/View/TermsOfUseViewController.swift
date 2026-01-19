@@ -19,7 +19,6 @@ final class TermsOfUseViewController: UIViewController,
         static let logoSize: CGFloat = 40
         static let acceptButtonHeight: CGFloat = 44
         static let remindMeLaterButtonHeight: CGFloat = 44
-        static let buttonCornerRadius: CGFloat = 12
         static let grabberWidth: CGFloat = 36
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
