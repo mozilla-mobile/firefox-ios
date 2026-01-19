@@ -100,7 +100,6 @@ final class TermsOfUseViewController: UIViewController,
             a11yIdentifier: AccessibilityIdentifiers.TermsOfUse.acceptButton
         )
         button.configure(viewModel: viewModel)
-        button.configuration?.background.cornerRadius = UX.buttonCornerRadius
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.acceptButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.acceptTapped), for: .touchUpInside)
     }
@@ -111,7 +110,6 @@ final class TermsOfUseViewController: UIViewController,
             a11yIdentifier: AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
         )
         button.configure(viewModel: viewModel)
-        button.configuration?.background.cornerRadius = UX.buttonCornerRadius
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.remindMeLaterTapped), for: .touchUpInside)
     }
