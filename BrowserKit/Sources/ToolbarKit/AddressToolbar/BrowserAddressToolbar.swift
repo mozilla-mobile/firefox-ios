@@ -132,6 +132,7 @@ public class BrowserAddressToolbar: UIView,
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         addressBarPosition = toolbarPosition
+        previousConfiguration = config
         toolbarTopBorderView.accessibilityIdentifier = config.borderConfiguration.a11yIdentifier
         configureUX(config: config.uxConfiguration, toolbarPosition: toolbarPosition)
         updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
@@ -139,7 +140,6 @@ public class BrowserAddressToolbar: UIView,
                   isUnifiedSearchEnabled: isUnifiedSearchEnabled,
                   addressBarPosition: toolbarPosition,
                   animated: animated)
-        previousConfiguration = config
     }
 
     public func configure(
@@ -314,8 +314,10 @@ public class BrowserAddressToolbar: UIView,
     internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
+
         // Navigation actions
         updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
+
         // Page actions
         updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
         updateActionStack(stackView: trailingPageActionStack, toolbarElements: config.trailingPageActions)
