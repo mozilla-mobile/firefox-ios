@@ -111,7 +111,7 @@ class MockTabManager: TabManager {
 
     func preserveTabs() {}
 
-    func restoreTabs(_ forced: Bool) {}
+    func restoreTabs() {}
 
     func getTabForUUID(uuid: String) -> Tab? {
         return nil
