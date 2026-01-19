@@ -32,10 +32,6 @@ class ExperimentRemoteTabsEmptyView: UIView,
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollview in
         scrollview.backgroundColor = .clear
-        scrollview.contentInset = UIEdgeInsets(top: UX.verticalPadding,
-                                               left: UX.horizontalPadding,
-                                               bottom: UX.verticalPadding,
-                                               right: UX.horizontalPadding)
     }
 
     private lazy var containerView: UIView = .build { _ in }
@@ -75,11 +71,6 @@ class ExperimentRemoteTabsEmptyView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        signInButton.invalidateIntrinsicContentSize()
-        super.layoutSubviews()
-    }
-
     func configure(config: RemoteTabsPanelEmptyStateReason,
                    delegate: RemoteTabsEmptyViewDelegate?) {
         self.delegate = delegate
@@ -95,6 +86,11 @@ class ExperimentRemoteTabsEmptyView: UIView,
         }
 
         signInButton.isHidden = shouldHideButton(config)
+
+        // Recalculate layout after setting text. Labels initialize empty, causing button to clip
+        // multi-line text at large Dynamic Type sizes if intrinsic size isn't updated.
+        signInButton.invalidateIntrinsicContentSize()
+        layoutIfNeeded()
     }
 
     private func shouldHideButton(_ state: RemoteTabsPanelEmptyStateReason) -> Bool {
@@ -116,8 +112,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
             containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
-                                                 constant: -UX.containerWidthConstant),
+            containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
             iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor,
                                                constant: UX.paddingInBetweenItems),
@@ -127,8 +122,10 @@ class ExperimentRemoteTabsEmptyView: UIView,
 
             titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor,
                                             constant: UX.paddingInBetweenItems),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                constant: UX.horizontalPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                 constant: -UX.horizontalPadding),
 
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                   constant: UX.paddingInBetweenItems),
@@ -139,8 +136,10 @@ class ExperimentRemoteTabsEmptyView: UIView,
 
             signInButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
                                               constant: UX.buttonTopPadding),
-            signInButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            signInButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            signInButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                  constant: UX.horizontalPadding),
+            signInButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                   constant: -UX.horizontalPadding),
             signInButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
                                                  constant: -UX.paddingInBetweenItems),
         ])
@@ -171,6 +170,6 @@ class ExperimentRemoteTabsEmptyView: UIView,
 
     func updateInsets(top: CGFloat, bottom: CGFloat) {
         scrollView.contentInset.top = top
-        scrollView.contentInset.bottom = bottom + UX.verticalPadding
+        scrollView.contentInset.bottom = bottom
     }
 }

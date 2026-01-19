@@ -128,7 +128,7 @@ class ExperimentEmptyPrivateTabsView: UIView,
             learnMoreButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                       constant: -UX.horizontalPadding),
             learnMoreButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                    constant: -UX.bottomPadding),
+                                                    constant: -UX.bottomPadding)
         ])
     }
 
