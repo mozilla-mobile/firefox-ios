@@ -5,6 +5,7 @@
 import Foundation
 import CopyWithChanges
 
+// This file contains a simple executable demo of the CopyWithChanges macro.
 @CopyWithChanges
 struct Report {
     let venue: String

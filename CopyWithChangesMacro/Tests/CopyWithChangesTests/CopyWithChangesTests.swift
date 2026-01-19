@@ -11,7 +11,7 @@ import CopyWithChanges
 
 // Macro implementations build for the host, so the corresponding module is not available when cross-compiling.
 // Cross-compiled tests may still make use of the macro itself in end-to-end tests.
-// If you want to run these tests, open the CopyWithChanges package folder separately in Xcode.
+// If you want to run these tests without skipping, open the CopyWithChanges package folder separately in Xcode.
 #if canImport(CopyWithChangesMacros)
 import CopyWithChangesMacros
 
