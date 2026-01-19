@@ -114,6 +114,9 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: Them
             theme: theme,
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
+        .if(horizontalSizeClass == .regular) { view in
+            view.frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
+        }
     }
 
     @ViewBuilder
@@ -130,6 +133,9 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: Them
                 theme: theme,
                 accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
             )
+            .if(horizontalSizeClass == .regular) { view in
+                view.frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
+            }
         }
     }
 }
