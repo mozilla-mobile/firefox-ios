@@ -98,7 +98,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testReloadData_createsDesktopBookmarksFolder() {
-        let bookmarksHandler = BookmarksHandlerMock()
+        let bookmarksHandler = MockBookmarksHandler()
         bookmarksHandler.bookmarksInTreeValue = 1
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: bookmarksHandler)
         let expectation = expectation(description: "Subject reloaded")
@@ -236,7 +236,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     private func createSubject(
         guid: GUID,
-        bookmarksHandler: BookmarksHandler = BookmarksHandlerMock()
+        bookmarksHandler: BookmarksHandler = MockBookmarksHandler()
     ) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: bookmarksHandler,

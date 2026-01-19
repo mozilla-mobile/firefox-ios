@@ -4,7 +4,7 @@
 
 import UIKit
 
-class UIPanGestureRecognizerMock: UIPanGestureRecognizer {
+class MockUIPanGestureRecognizer: UIPanGestureRecognizer {
     var gestureTranslation: CGPoint?
     var gestureVelocity: CGPoint?
 
