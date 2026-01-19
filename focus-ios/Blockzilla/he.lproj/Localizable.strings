@@ -449,7 +449,7 @@
 "Settings.toggleHomeScreenTips" = "הצגת עצות במסך הבית";
 
 /* Label for Rollouts toggle on the settings screen */
-"Settings.toggleRollouts" = "לאפשר שיפורים מרחוק";
+"Settings.toggleRollouts" = "לאפשר שיפורים מרוחקים";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
