@@ -313,33 +313,25 @@ public class BrowserAddressToolbar: UIView,
     // MARK: - Toolbar Actions and Layout Updates
     internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
-        if previousConfiguration?.browserActions != config.browserActions {
-            updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
-        }
-
+        updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
         // Navigation actions
-        if previousConfiguration?.navigationActions != config.navigationActions {
-            updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
-        }
+        updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
         // Page actions
-        if previousConfiguration?.leadingPageActions != config.leadingPageActions {
-            updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
-        }
-        if previousConfiguration?.trailingPageActions != config.trailingPageActions {
-            updateActionStack(stackView: trailingPageActionStack, toolbarElements: config.trailingPageActions)
-        }
+        updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
+        updateActionStack(stackView: trailingPageActionStack, toolbarElements: config.trailingPageActions)
 
         updateActionSpacing(uxConfig: config.uxConfiguration)
-        updateToolbarLayout(config: config, animated: animated)
+        updateToolbarLayout(animated: animated)
     }
 
-    private func updateToolbarLayout(config: AddressToolbarConfiguration, animated: Bool) {
+    private func updateToolbarLayout(animated: Bool) {
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
                      leadingPageActionStack.arrangedSubviews +
                      trailingPageActionStack.arrangedSubviews
         let areAllStacksAlreadyVisible = stacks.allSatisfy { $0.alpha == 1.0 }
         guard !areAllStacksAlreadyVisible else { return }
+
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
