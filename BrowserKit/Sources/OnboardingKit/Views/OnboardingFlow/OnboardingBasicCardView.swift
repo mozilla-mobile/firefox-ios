@@ -6,8 +6,8 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-// MARK: - Updated OnboardingBasicCardViewCompact
-struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+// MARK: - Updated OnboardingBasicCardView
+struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
     @State var theme: Theme
     @Environment(\.sizeCategory)
     private var sizeCategory

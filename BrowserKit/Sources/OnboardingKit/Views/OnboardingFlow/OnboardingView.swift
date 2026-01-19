@@ -124,7 +124,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     }
 
     private func cardView(for card: ViewModel) -> some View {
-        OnboardingCardViewCompact(
+        OnboardingCardView(
             viewModel: card,
             windowUUID: windowUUID,
             themeManager: themeManager,

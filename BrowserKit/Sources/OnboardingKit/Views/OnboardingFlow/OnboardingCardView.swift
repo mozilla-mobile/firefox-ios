@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct OnboardingCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let viewModel: ViewModel
@@ -31,14 +31,14 @@ struct OnboardingCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Vi
         Group {
             switch viewModel.cardType {
             case .basic:
-                OnboardingBasicCardViewCompact(
+                OnboardingBasicCardView(
                     viewModel: viewModel,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
                     onBottomButtonAction: onBottomButtonAction
                 )
             case .multipleChoice:
-                OnboardingMultipleChoiceCardViewCompact(
+                OnboardingMultipleChoiceCardView(
                     viewModel: viewModel,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
