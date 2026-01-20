@@ -376,8 +376,8 @@ final class TabScrollHandler: NSObject,
             return
         }
 
-        let transitioningtState: ToolbarDisplayState = lastValidState == .expanded ? .collapsed : .expanded
-        delegate?.updateToolbarTransition(progress: scrollDelta, towards: transitioningtState)
+        let transitionToState: ToolbarDisplayState = lastValidState == .expanded ? .collapsed : .expanded
+        delegate?.updateToolbarTransition(progress: scrollDelta, towards: transitionToState)
         toolbarDisplayState.update(displayState: .transitioning)
     }
 
