@@ -11,16 +11,8 @@ struct NativeErrorPageState: ScreenState {
     var description: String
     var foxImage: String
     var url: URL?
-    var advancedSection: AdvancedSectionModel?
+    var advancedSection: ErrorPageModel.AdvancedSectionConfig?
     var showGoBackButton: Bool
-
-    struct AdvancedSectionModel: Equatable {
-        var buttonText: String
-        var infoText: String
-        var warningText: String
-        var certificateErrorCode: String?
-        var showProceedButton: Bool
-    }
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = appState.screenState(
@@ -49,7 +41,7 @@ struct NativeErrorPageState: ScreenState {
         description: String = "",
         foxImage: String = "",
         url: URL? = nil,
-        advancedSection: AdvancedSectionModel? = nil,
+        advancedSection: ErrorPageModel.AdvancedSectionConfig? = nil,
         showGoBackButton: Bool = false
     ) {
         self.windowUUID = windowUUID
@@ -71,24 +63,13 @@ struct NativeErrorPageState: ScreenState {
             guard let action = action as? NativeErrorPageAction, let model = action.nativePageErrorModel else {
                 return defaultState(from: state)
             }
-            let advancedSectionModel: AdvancedSectionModel? = if let advancedSection = model.advancedSection {
-                AdvancedSectionModel(
-                    buttonText: advancedSection.buttonText,
-                    infoText: advancedSection.infoText,
-                    warningText: advancedSection.warningText,
-                    certificateErrorCode: advancedSection.certificateErrorCode,
-                    showProceedButton: advancedSection.showProceedButton
-                )
-            } else {
-                nil
-            }
             return NativeErrorPageState(
                 windowUUID: state.windowUUID,
                 title: model.errorTitle,
                 description: model.errorDescription,
                 foxImage: model.foxImageName,
                 url: model.url,
-                advancedSection: advancedSectionModel,
+                advancedSection: model.advancedSection,
                 showGoBackButton: model.showGoBackButton
             )
         default:
