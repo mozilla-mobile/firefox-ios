@@ -43,7 +43,7 @@ final class AddressToolbarContainerModel: Equatable {
         let term = searchTerm ?? searchTermFromURL(url)
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
         let shouldBlur = toolbarHelper.shouldBlur()
-        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(
+        let uxConfiguration: AddressToolbarUXConfiguration = .default(
             backgroundAlpha: backgroundAlpha,
             scrollAlpha: CGFloat(scrollAlpha),
             shouldBlur: shouldBlur,
@@ -120,8 +120,8 @@ final class AddressToolbarContainerModel: Equatable {
     ) -> AddressToolbarConfiguration {
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
         let shouldBlur = toolbarHelper.shouldBlur()
-        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
-                                                                         shouldBlur: shouldBlur)
+        let uxConfiguration: AddressToolbarUXConfiguration = .default(backgroundAlpha: backgroundAlpha,
+                                                                      shouldBlur: shouldBlur)
         // Leading Page Actions
         let shareAction: ToolbarActionConfiguration = .init(
             actionType: .share,

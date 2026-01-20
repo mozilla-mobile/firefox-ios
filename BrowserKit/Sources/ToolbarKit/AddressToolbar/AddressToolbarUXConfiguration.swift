@@ -17,31 +17,15 @@ public struct AddressToolbarUXConfiguration {
     /// Changes between 0 (hidden) and 1 (visible) based on scroll direction.
     let scrollAlpha: CGFloat
 
-    public static func experiment(backgroundAlpha: CGFloat = 1.0,
-                                  scrollAlpha: CGFloat = 1.0,
-                                  shouldBlur: Bool = false,
-                                  hasAlternativeLocationColor: Bool = false) -> AddressToolbarUXConfiguration {
-        AddressToolbarUXConfiguration(
-            browserActionsAddressBarDividerWidth: 0.0,
-            isLocationTextCentered: true,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            locationTextFieldTrailingPadding: 0,
-            shouldBlur: shouldBlur,
-            backgroundAlpha: backgroundAlpha,
-            scrollAlpha: scrollAlpha
-        )
-    }
-
     public static func `default`(backgroundAlpha: CGFloat = 1.0,
                                  scrollAlpha: CGFloat = 1.0,
                                  shouldBlur: Bool = false,
                                  hasAlternativeLocationColor: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
-            toolbarCornerRadius: 8.0,
-            browserActionsAddressBarDividerWidth: 4.0,
-            isLocationTextCentered: false,
+            browserActionsAddressBarDividerWidth: 0.0,
+            isLocationTextCentered: true,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
-            locationTextFieldTrailingPadding: 8.0,
+            locationTextFieldTrailingPadding: 0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
             scrollAlpha: scrollAlpha
