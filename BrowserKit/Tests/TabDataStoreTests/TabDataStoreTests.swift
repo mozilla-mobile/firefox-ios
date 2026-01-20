@@ -6,13 +6,13 @@ import XCTest
 @testable import TabDataStore
 
 final class TabDataStoreTests: XCTestCase, @unchecked Sendable {
-    private var mockFileManager: TabFileManagerMock!
+    private var mockFileManager: MockTabFileManager!
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     private let defaultTestTabWindowUUID = UUID(uuidString: "E3FF60DA-D1E7-407B-AA3B-130D48B3909D")!
 
     override func setUp() {
         super.setUp()
-        mockFileManager = TabFileManagerMock()
+        mockFileManager = MockTabFileManager()
     }
 
     override func tearDown() {

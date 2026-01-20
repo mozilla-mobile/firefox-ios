@@ -13,7 +13,7 @@ class MockWKFrameInfo: WKFrameInfo {
     let overridenTargetFrame: Bool
 
     init(webView: MockWKWebView? = nil, frameURL: URL? = nil, isMainFrame: Bool? = false) {
-        overridenSecurityOrigin = WKSecurityOriginMock.new(frameURL)
+        overridenSecurityOrigin = MockWKSecurityOrigin.new(frameURL)
         overridenWebView = webView
         overridenTargetFrame = isMainFrame ?? false
     }
@@ -31,20 +31,20 @@ class MockWKFrameInfo: WKFrameInfo {
     }
 }
 
-// MARK: WKSecurityOriginMock
-class WKSecurityOriginMock: WKSecurityOrigin {
+// MARK: MockWKSecurityOrigin
+class MockWKSecurityOrigin: WKSecurityOrigin {
     var overridenProtocol: String!
     var overridenHost: String!
     var overridenPort: Int!
 
-    class func new(_ url: URL?) -> WKSecurityOriginMock {
-        // Dynamically allocate a WKSecurityOriginMock instance because
+    class func new(_ url: URL?) -> MockWKSecurityOrigin {
+        // Dynamically allocate a MockWKSecurityOrigin instance because
         // the initializer for WKSecurityOrigin is unavailable
         //  https://github.com/WebKit/WebKit/blob/52222cf447b7215dd9bcddee659884f704001827/Source/WebKit/UIProcess/API/Cocoa/WKSecurityOrigin.h#L40
         guard let instance = self.perform(NSSelectorFromString("alloc"))?.takeUnretainedValue()
-                as? WKSecurityOriginMock
+                as? MockWKSecurityOrigin
         else {
-            fatalError("Could not allocate WKSecurityOriginMock instance")
+            fatalError("Could not allocate MockWKSecurityOrigin instance")
         }
         instance.overridenProtocol = url?.scheme ?? ""
         instance.overridenHost = url?.host ?? ""
