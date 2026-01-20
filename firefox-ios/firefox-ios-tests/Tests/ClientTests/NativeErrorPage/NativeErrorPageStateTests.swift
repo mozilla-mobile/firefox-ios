@@ -46,6 +46,7 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertFalse(newState.showGoBackButton)
     }
 
+    @MainActor
     func testLoadCertificateErrorWithAdvancedSection() {
         let initialState = createSubject()
         let reducer = nativeErrorPageReducer()
