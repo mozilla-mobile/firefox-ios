@@ -10,6 +10,7 @@ protocol ToolbarHelperInterface {
     var isToolbarTranslucencyEnabled: Bool { get }
     var isToolbarTranslucencyRefactorEnabled: Bool { get }
     var isSwipingTabsEnabled: Bool { get }
+    var isSwipingTabsOptimizationEnabled: Bool { get }
     var userInterfaceIdiom: UIUserInterfaceIdiom { get }
 
     @MainActor
@@ -49,6 +50,10 @@ final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
         // Swipe is not enabled on iPads
         let isiPad = userInterfaceIdiom == .pad
         return FxNimbus.shared.features.toolbarRefactorFeature.value().swipingTabs && !isiPad
+    }
+
+    var isSwipingTabsOptimizationEnabled: Bool {
+        return isSwipingTabsEnabled && FxNimbus.shared.features.toolbarRefactorFeature.value().swipingTabsOptimization
     }
 
     var userInterfaceIdiom: UIUserInterfaceIdiom

@@ -34,6 +34,11 @@ features:
           Enables swipe gestures to switch between browser tabs.
         type: Boolean
         default: true
+      swiping_tabs_optimization:
+        description: >
+          Enables swipe gestures optimizations that fix autolayout issues.
+        type: Boolean
+        default: true
       translucency:
         description: >
           Enables translucency for toolbars.
@@ -69,6 +74,7 @@ features:
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
+          swiping_tabs_optimization: true
           translucency: true
           translucency-refactor: false
           minimal_address_bar: true
@@ -82,6 +88,7 @@ features:
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
+          swiping_tabs_optimization: true
           translucency: true
           translucency-refactor: false
           minimal_address_bar: true
