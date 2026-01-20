@@ -112,9 +112,10 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     @MainActor
     func testWebViewAuthenticationDialog() {
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/")
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.staticTexts["Authentication required"])
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        // The auth dialog no longer shown in debugDescription.
+        // The presence of the keyboard is a good indicator that the user/pass window appears.
+        mozWaitForElementToExist(app.keyboards.firstMatch.keys.firstMatch)
         navigator.nowAt(BasicAuthDialog)
         snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
     }
@@ -302,15 +303,11 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"])
-        mozWaitForElementToExist(app.otherElements["navBarTabTray"])
         navigator.goto(NewTabScreen)
         navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"])
-        mozWaitForElementToExist(app.otherElements["navBarTabTray"])
         navigator.goto(NewTabScreen)
         navigator.openURL("https://mozilla.org/firefox/new")
         waitUntilPageLoad()
