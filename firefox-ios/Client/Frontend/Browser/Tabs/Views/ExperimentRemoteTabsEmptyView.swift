@@ -19,12 +19,12 @@ protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable, InsetUpdatable {
 class ExperimentRemoteTabsEmptyView: UIView,
                                      RemoteTabsEmptyViewProtocol {
     struct UX {
+        static let topPadding: CGFloat = 55
+        static let bottomPadding: CGFloat = 35
         static let paddingInBetweenItems: CGFloat = 15
         static let buttonTopPadding: CGFloat = 24
-        static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
         static let imageSize = CGSize(width: 72, height: 72)
-        static let containerWidthConstant = horizontalPadding * 2
     }
 
     var needsSafeArea: Bool { true }
@@ -119,7 +119,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
             containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
             iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor,
-                                               constant: UX.paddingInBetweenItems),
+                                               constant: UX.topPadding),
             iconImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             iconImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
             iconImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
@@ -145,7 +145,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
             signInButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                    constant: -UX.horizontalPadding),
             signInButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                 constant: -UX.paddingInBetweenItems),
+                                                 constant: -UX.bottomPadding),
         ])
     }
 
