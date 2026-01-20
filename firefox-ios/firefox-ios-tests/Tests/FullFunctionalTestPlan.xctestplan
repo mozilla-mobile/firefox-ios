@@ -246,6 +246,7 @@
         "OnboardingTests\/testFirstRunTour_TAE()",
         "OnboardingTests\/testOnboardingSignIn()",
         "OnboardingTests\/testOnboardingSignIn_TAE()",
+        "OnboardingTests\/testValidateContinueButton()",
         "PerformanceTests",
         "PhotonActionSheetTests\/testPinToShortcuts()",
         "PhotonActionSheetTests\/testPinToShortcuts_TAE()",
