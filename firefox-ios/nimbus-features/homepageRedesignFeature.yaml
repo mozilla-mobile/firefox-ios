@@ -14,11 +14,6 @@ features:
           If true, enables the shortcuts library feature, accessible from the homepage
         type: Boolean
         default: false
-      scrim:
-        description: >
-          If true, enables the scrim on the homepage when searching.
-        type: Boolean
-        default: false
       discover-more-feature-configuration:
         description: >
           A configuration for the Discover More feature
