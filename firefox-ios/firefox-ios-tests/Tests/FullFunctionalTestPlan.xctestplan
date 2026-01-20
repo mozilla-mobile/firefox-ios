@@ -173,7 +173,6 @@
         "HistoryTests\/testTabHistory_tabTrayExperimentOff()",
         "HistoryTests\/testTabHistory_tabTrayExperimentOn()",
         "HomePageSettingsTest",
-        "HomePageSettingsUITests\/testCustomizeHomepage_TAE()",
         "HomePageSettingsUITests\/testRecentlyVisited()",
         "HomePageSettingsUITests\/testTyping()",
         "HomePageUITest",
