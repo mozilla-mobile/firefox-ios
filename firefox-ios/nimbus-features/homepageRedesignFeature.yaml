@@ -26,7 +26,6 @@ features:
       - channel: beta
         value:
           search-bar: false
-          shortcuts-library: false
           scrim: false
           discover-more-feature-configuration:
             discover-more-v1-experience: false
@@ -35,7 +34,6 @@ features:
       - channel: developer
         value:
           search-bar: false
-          shortcuts-library: false
           scrim: true
           discover-more-feature-configuration:
             discover-more-v1-experience: false
