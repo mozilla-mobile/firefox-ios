@@ -24,7 +24,7 @@ struct AddressToolbarContainerModel {
             leadingPageActions: leadingPageActions,
             trailingPageActions: trailingPageActions,
             browserActions: browserActions,
-            borderPosition: borderPosition,
+            borderConfiguration: AddressToolbarBorderConfiguration(a11yIdentifier: "border", borderPosition: .top),
             uxConfiguration: AddressToolbarUXConfiguration.default(),
             shouldAnimate: false)
     }
