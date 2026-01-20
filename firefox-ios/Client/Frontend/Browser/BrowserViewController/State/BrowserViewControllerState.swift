@@ -261,18 +261,28 @@ struct BrowserViewControllerState: ScreenState {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case ToolbarActionType.didStartEditingUrl, ToolbarActionType.didDeleteSearchTerm:
+        case ToolbarActionType.didDeleteSearchTerm:
             guard case .webview = state.browserViewType else { return passthroughState(from: state, action: action) }
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                navigationDestination: NavigationDestination(.zeroSearch)
-            )
+            return stateForToolbarAction(action, state)
+        case ToolbarActionType.didStartEditingUrl:
+            return stateForToolbarAction(action, state)
         default:
             return passthroughState(from: state, action: action)
         }
+    }
+
+    @MainActor
+    private static func stateForToolbarAction(
+        _ action: ToolbarAction,
+        _ state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            navigationDestination: NavigationDestination(.zeroSearch)
+        )
     }
 
     @MainActor
