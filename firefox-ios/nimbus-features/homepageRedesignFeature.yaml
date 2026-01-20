@@ -14,43 +14,14 @@ features:
           If true, enables the scrim on the homepage when searching.
         type: Boolean
         default: false
-      discover-more-feature-configuration:
-        description: >
-          A configuration for the Discover More feature
-        type: DiscoverMoreConfiguration
-        default:
-          discover-more-v1-experience: false
-          show-discover-more-button: false
 
     defaults:
       - channel: beta
         value:
           search-bar: false
           scrim: false
-          discover-more-feature-configuration:
-            discover-more-v1-experience: false
-            show-discover-more-button: false
 
       - channel: developer
         value:
           search-bar: false
           scrim: true
-          discover-more-feature-configuration:
-            discover-more-v1-experience: false
-            show-discover-more-button: false
-
-objects:
-  DiscoverMoreConfiguration:
-    description: >
-      A configuration that dictates the behaviour/subfeatures of the Discover More feature
-    fields:
-      discover-more-v1-experience:
-        type: Boolean
-        description: >
-          Whether to show the Discover More experience is enabled
-        default: false
-      show-discover-more-button:
-        type: Boolean
-        description: >
-          Whether to show the Discover More button on the homepage
-        default: false
