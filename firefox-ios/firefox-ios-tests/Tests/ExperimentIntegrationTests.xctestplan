@@ -152,6 +152,7 @@
         "OnboardingTests\/testCloseTour_TAE()",
         "OnboardingTests\/testFirstRunTour_TAE()",
         "OnboardingTests\/testOnboardingSignIn_TAE()",
+        "OnboardingTests\/testValidateContinueButton()",
         "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTests",
