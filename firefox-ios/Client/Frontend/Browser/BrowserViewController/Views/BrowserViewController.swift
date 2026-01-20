@@ -882,10 +882,20 @@ class BrowserViewController: UIViewController,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            !toolbarState.addressToolbar.isEditing {
             addressBarPanGestureHandler?.enablePanGestureRecognizer()
-            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+
+            if !toolbarHelper.isSwipingTabsOptimizationEnabled {
+                addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+            }
         } else {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
-            addressToolbarContainer.hideSkeletonBars()
+
+            if !toolbarHelper.isSwipingTabsOptimizationEnabled {
+                addressToolbarContainer.hideSkeletonBars()
+            }
+        }
+
+        if toolbarHelper.isSwipingTabsOptimizationEnabled {
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
     }
 
@@ -4065,7 +4075,9 @@ class BrowserViewController: UIViewController,
             configureHomepageZeroSearchView()
         }
 
-        if isSwipingTabsEnabled {
+        if toolbarHelper.isSwipingTabsOptimizationEnabled {
+            updateSwipingTabs()
+        } else if isSwipingTabsEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
         }
@@ -4956,7 +4968,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
-        if isSwipingTabsEnabled {
+
+        if toolbarHelper.isSwipingTabsOptimizationEnabled {
+            updateSwipingTabs()
+        } else if isSwipingTabsEnabled {
             addressToolbarContainer.hideSkeletonBars()
         }
 

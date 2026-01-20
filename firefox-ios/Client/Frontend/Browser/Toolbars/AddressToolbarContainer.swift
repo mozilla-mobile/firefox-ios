@@ -207,6 +207,7 @@ final class AddressToolbarContainer: UIView,
         progressBar.setProgress(0, animated: false)
     }
 
+    // Make private once feature flag "swiping_tabs_optimization" is removed
     func hideSkeletonBars() {
         let needsConfiguration = !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden
 
@@ -258,7 +259,8 @@ final class AddressToolbarContainer: UIView,
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {
         let isToolbarAtBottom = state?.toolbarPosition == .bottom
-        guard let selectedTab = tabManager.selectedTab, isToolbarAtBottom else {
+        let isEditing = state?.addressToolbar.isEditing == true
+        guard let selectedTab = tabManager.selectedTab, isToolbarAtBottom, !isEditing else {
             hideSkeletonBars()
             return
         }
