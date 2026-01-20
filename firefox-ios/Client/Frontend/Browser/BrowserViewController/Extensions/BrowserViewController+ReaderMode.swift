@@ -43,8 +43,8 @@ extension BrowserViewController: ReaderModeStyleViewModelDelegate {
         profile.prefs.setObject(encodedStyle, forKey: PrefsKeys.ReaderModeProfileKeyStyle)
 
         // Change the reader mode style on all tabs that have reader mode active
-        for tabIndex in 0..<tabManager.count {
-            guard let tab = tabManager[tabIndex],
+        for tabIndex in 0..<tabManager.tabs.count {
+            guard let tab = tabManager.tabs[safe: tabIndex],
                   let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode,
                   readerMode.state == ReaderModeState.active
             else { continue }

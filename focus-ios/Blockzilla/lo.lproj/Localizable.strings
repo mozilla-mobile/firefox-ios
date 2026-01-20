@@ -439,6 +439,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = " ສະແດງເຄັດລັບໜ້າຈໍຫຼັກ";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "ອະນຸຍາດໃຫ້ມີການປັບປຸງຈາກໄລຍະໄກ";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +450,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "ການສຶກສາ";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "ອະນຸຍາດການສຶກສາຄຸນສົມບັດ";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "ໃຊ້ Touch ID ເພື່ອປົດລັອກແອັບ";
