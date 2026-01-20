@@ -23,8 +23,6 @@ class FxAWebViewController: UIViewController {
     fileprivate var helpBrowser: WKWebView?
     fileprivate let viewModel: FxAWebViewModel
     private let logger: Logger
-    /// Closure for dismissing higher up FxA Sign in view controller
-    var shouldDismissFxASignInViewController: (() -> Void)?
 
     /**
      init() FxAWebView.
@@ -97,14 +95,8 @@ class FxAWebViewController: UIViewController {
      Dismiss according the `dismissType`, depending on whether this view was presented modally or on navigation stack.
      */
     override func dismiss(animated: Bool, completion: (() -> Void)? = nil) {
-        if dismissType == .dismiss {
+        if dismissType == .dismiss || dismissType == .popToTabTray {
             super.dismiss(animated: animated, completion: completion)
-        } else if dismissType == .popToTabTray {
-            if let shouldDismissFxASignInViewController {
-                shouldDismissFxASignInViewController()
-            } else {
-                super.dismiss(animated: animated, completion: completion)
-            }
         } else {
             // Pop to settings view controller
             navigationController?.popToRootViewController(animated: true)

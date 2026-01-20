@@ -40,6 +40,7 @@ enum RemoteTabsPanelActionType: ActionType {
     case refreshTabs
     case refreshTabsWithCache
     case refreshDidBegin
+    case syncDidBegin
     case refreshDidFail
     case refreshDidSucceed
     case closeTabCompatible
