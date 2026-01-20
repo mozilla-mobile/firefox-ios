@@ -61,8 +61,6 @@ public class BrowserAddressToolbar: UIView,
     private var dividerWidthConstraint: NSLayoutConstraint?
     private var toolbarBottomConstraint: NSLayoutConstraint?
     private var toolbarTopConstraint: NSLayoutConstraint?
-    private var toolbarTopBorderHeightConstraint: NSLayoutConstraint?
-    private var toolbarBottomBorderHeightConstraint: NSLayoutConstraint?
     private var leadingNavigationActionStackConstraint: NSLayoutConstraint?
     private var trailingBrowserActionStackConstraint: NSLayoutConstraint?
     private var locationContainerHeightConstraint: NSLayoutConstraint?
@@ -218,11 +216,6 @@ public class BrowserAddressToolbar: UIView,
          trailingPageActionStack,
          browserActionStack].forEach(setZeroWidthConstraint)
 
-        toolbarTopBorderHeightConstraint = toolbarTopBorderView.heightAnchor.constraint(equalToConstant: 0)
-        toolbarBottomBorderHeightConstraint = toolbarBottomBorderView.heightAnchor.constraint(equalToConstant: 0)
-        toolbarTopBorderHeightConstraint?.isActive = true
-        toolbarBottomBorderHeightConstraint?.isActive = true
-
         leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor.constraint(
             equalTo: toolbarContainerView.leadingAnchor)
         leadingNavigationActionStackConstraint?.isActive = true
@@ -249,10 +242,12 @@ public class BrowserAddressToolbar: UIView,
             toolbarTopBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarTopBorderView.topAnchor.constraint(equalTo: topAnchor),
             toolbarTopBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toolbarTopBorderView.heightAnchor.constraint(equalToConstant: UX.borderHeight),
 
             toolbarBottomBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarBottomBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             toolbarBottomBorderView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            toolbarBottomBorderView.heightAnchor.constraint(equalToConstant: UX.borderHeight),
 
             navigationActionStack.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             navigationActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
@@ -424,14 +419,14 @@ public class BrowserAddressToolbar: UIView,
     private func updateBorder(borderPosition: AddressToolbarBorderPosition?) {
         switch borderPosition {
         case .top:
-            toolbarTopBorderHeightConstraint?.constant = UX.borderHeight
-            toolbarBottomBorderHeightConstraint?.constant = 0
+            toolbarTopBorderView.isHidden = false
+            toolbarBottomBorderView.isHidden = true
         case .bottom:
-            toolbarTopBorderHeightConstraint?.constant = 0
-            toolbarBottomBorderHeightConstraint?.constant = UX.borderHeight
+            toolbarTopBorderView.isHidden = true
+            toolbarBottomBorderView.isHidden = false
         default:
-            toolbarTopBorderHeightConstraint?.constant = 0
-            toolbarBottomBorderHeightConstraint?.constant = 0
+            toolbarTopBorderView.isHidden = true
+            toolbarBottomBorderView.isHidden = true
         }
     }
 
