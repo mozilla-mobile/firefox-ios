@@ -186,13 +186,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageShortcutsLibrary,
-                titleText: format(string: "Shortcuts Library"),
-                statusText: format(string: "Toggle to enable the homepage shortcuts library")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .tabScrollRefactorFeature,
                 titleText: format(string: "Tab scroll refactor"),
                 statusText: format(string: "Toggle to enable tab scroll refactor feature")
