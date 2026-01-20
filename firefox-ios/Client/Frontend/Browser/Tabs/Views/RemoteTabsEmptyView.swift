@@ -85,7 +85,8 @@ class RemoteTabsEmptyView: UIView,
     }
 
     func configure(config: RemoteTabsPanelEmptyStateReason,
-                   delegate: RemoteTabsEmptyViewDelegate?) {
+                   delegate: RemoteTabsEmptyViewDelegate?,
+                   isSyncing: Bool) {
         self.delegate = delegate
 
         emptyStateImageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cloud)
