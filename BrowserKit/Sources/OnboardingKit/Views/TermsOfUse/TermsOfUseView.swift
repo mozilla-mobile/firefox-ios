@@ -51,16 +51,68 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     private func regularLayout(geometry: GeometryProxy, scale: CGFloat) -> some View {
         SheetSizedCard {
-            termsContent(geometry: geometry)
+            regularContent
                 .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
         }
+    }
+
+    private var regularContent: some View {
+        GeometryReader { geometry in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: UX.CardView.tosSpacing) {
+                    VStack(spacing: UX.CardView.spacing) {
+                        regularImageView
+                        titleView
+                    }
+                    bodyView
+                    VStack(spacing: UX.CardView.spacing) {
+                        links
+                        regularPrimaryButton
+                    }
+                }
+                .padding(.vertical, UX.CardView.verticalPadding)
+                .frame(width: UX.CardView.primaryButtonWidthiPad)
+                .frame(width: geometry.size.width)
+                .frame(minHeight: geometry.size.height)
+            }
+            .scrollBounceBehavior(basedOnSize: true)
+        }
+        .padding(.horizontal, UX.CardView.horizontalPadding)
+        .accessibilityElement(children: .contain)
+    }
+
+    @ViewBuilder
+    private var regularImageView: some View {
+        if let img = viewModel.configuration.image {
+            Image(uiImage: img)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: UX.CardView.tosImageHeight)
+                .accessibilityHidden(true)
+                .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
+        }
+    }
+
+    private var regularPrimaryButton: some View {
+        OnboardingPrimaryButton(
+            title: viewModel.configuration.buttons.primary.title,
+            action: {
+                viewModel.handleEmbededLinkAction(
+                    action: .accept
+                )
+            },
+            theme: theme,
+            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
+        )
+        .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
     }
 
     // MARK: - Compact Layout
 
     private func compactLayout(geometry: GeometryProxy, scale: CGFloat) -> some View {
         VStack {
-            cardContent(geometry: geometry, scale: scale)
+            compactContent(scale: scale)
+
             Spacer()
                 .frame(height: UX.CardView.pageControlHeight)
                 .padding(.bottom)
@@ -68,8 +120,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         .padding(.top, UX.CardView.cardTopPadding)
     }
 
-    @ViewBuilder
-    private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
+    private func compactContent(scale: CGFloat) -> some View {
         VStack {
             GeometryReader { geometry in
                 ScrollView(showsIndicators: false) {
@@ -94,38 +145,9 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .if(horizontalSizeClass != .regular) { view in
-            view
-                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
-                .padding(.horizontal, UX.CardView.horizontalPadding * scale)
-                .padding(.vertical)
-        }
-        .accessibilityElement(children: .contain)
-    }
-
-    @ViewBuilder
-    private func termsContent(geometry: GeometryProxy) -> some View {
-        GeometryReader { geometry in
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: UX.CardView.tosSpacing) {
-                    VStack(spacing: UX.CardView.spacing) {
-                        imageViewRegular
-                        titleView
-                    }
-                    bodyView
-                    VStack(spacing: UX.CardView.spacing) {
-                        links
-                        primaryButtonRegular
-                    }
-                }
-                .padding(.vertical, UX.CardView.verticalPadding)
-                .frame(width: UX.CardView.primaryButtonWidthiPad)
-                .frame(width: geometry.size.width)
-                .frame(minHeight: geometry.size.height)
-            }
-            .scrollBounceBehavior(basedOnSize: true)
-        }
-        .padding(.horizontal, UX.CardView.horizontalPadding)
+        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        .padding(.horizontal, UX.CardView.horizontalPadding * scale)
+        .padding(.vertical)
         .accessibilityElement(children: .contain)
     }
 
@@ -191,31 +213,5 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             theme: theme,
             accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
         )
-    }
-
-    @ViewBuilder
-    var imageViewRegular: some View {
-        if let img = viewModel.configuration.image {
-            Image(uiImage: img)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.tosImageHeight)
-                .accessibilityHidden(true)
-                .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
-        }
-    }
-
-    var primaryButtonRegular: some View {
-        OnboardingPrimaryButton(
-            title: viewModel.configuration.buttons.primary.title,
-            action: {
-                viewModel.handleEmbededLinkAction(
-                    action: .accept
-                )
-            },
-            theme: theme,
-            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
-        )
-        .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
     }
 }

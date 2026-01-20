@@ -59,8 +59,13 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             SheetSizedCard {
                 VStack {
                     tabView
-                    pageControl
-                        .padding(.bottom)
+                    CustomPageControl(
+                        currentPage: $viewModel.pageCount,
+                        numberOfPages: viewModel.onboardingCards.count,
+                        windowUUID: windowUUID,
+                        themeManager: themeManager
+                    )
+                    .padding(.bottom)
                 }
                 .cardBackground(
                     theme: theme,
@@ -89,13 +94,19 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
             Spacer()
 
-            compactPageControl
-                .padding(
-                    .bottom,
-                    pageControllPadding(
-                        safeAreaBottomInset: geometry.safeAreaInsets.bottom
-                    )
+            CustomPageControl(
+                currentPage: $viewModel.pageCount,
+                numberOfPages: viewModel.onboardingCards.count,
+                windowUUID: windowUUID,
+                themeManager: themeManager,
+                style: .compact
+            )
+            .padding(
+                .bottom,
+                pageControllPadding(
+                    safeAreaBottomInset: geometry.safeAreaInsets.bottom
                 )
+            )
         }
         .accessibilityScrollAction { edge in
             handleAccessibilityScroll(from: edge)
@@ -141,25 +152,6 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 .padding(.bottom, UX.CardView.cardBottomPadding)
                 .padding(.horizontal, UX.CardView.horizontalPadding)
         }
-    }
-
-    private var pageControl: some View {
-        CustomPageControl(
-            currentPage: $viewModel.pageCount,
-            numberOfPages: viewModel.onboardingCards.count,
-            windowUUID: windowUUID,
-            themeManager: themeManager
-        )
-    }
-
-    private var compactPageControl: some View {
-        CustomPageControl(
-            currentPage: $viewModel.pageCount,
-            numberOfPages: viewModel.onboardingCards.count,
-            windowUUID: windowUUID,
-            themeManager: themeManager,
-            style: .compact
-        )
     }
 
     private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
