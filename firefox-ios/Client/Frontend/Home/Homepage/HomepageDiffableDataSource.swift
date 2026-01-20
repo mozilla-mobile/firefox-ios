@@ -23,7 +23,6 @@ final class HomepageDiffableDataSource:
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
-        case customizeHomepage
         case spacer
 
         var canHandleLongPress: Bool {
@@ -46,7 +45,6 @@ final class HomepageDiffableDataSource:
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
         case merino(MerinoStoryConfiguration)
-        case customizeHomepage
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -56,14 +54,10 @@ final class HomepageDiffableDataSource:
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 SearchBarCell.self,
-                LegacyJumpBackInCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
-                LegacyBookmarksCell.self,
                 BookmarksCell.self,
-                MerinoStandardCell.self,
                 StoryCell.self,
-                CustomizeHomepageSectionCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -80,8 +74,6 @@ final class HomepageDiffableDataSource:
                 return .bookmark
             case .merino:
                 return .story
-            case .customizeHomepage:
-                return .customizeHomepage
             default:
                 return nil
             }
@@ -134,11 +126,6 @@ final class HomepageDiffableDataSource:
         if let stories = getPocketStories(with: state.merinoState) {
             snapshot.appendSections([.pocket(textColor)])
             snapshot.appendItems(stories, toSection: .pocket(textColor))
-        }
-
-        if !isAnyStoriesRedesignEnabled {
-            snapshot.appendSections([.customizeHomepage])
-            snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
         }
 
         apply(snapshot, animatingDifferences: false)

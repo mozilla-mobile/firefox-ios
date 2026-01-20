@@ -229,39 +229,11 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNotEqual(actionType, HomepageActionType.viewDidLayoutSubviews)
     }
 
-    @MainActor
-    func test_viewDidAppear_withStoriesRedesignDisabled_triggersHomepageAction() throws {
-        setIsStoriesRedesignEnabled(isEnabled: false)
-        let subject = createSubject()
-        // Need to set up initial state so we can call updateSnapshot [FXIOS-13346 / FXIOS-13343]
-        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
-        subject.newState(state: initialState)
-        // Need to call loadViewIfNeeded and newState to populate the datasource after a state change
-        // used to check whether we should send dispatch action or not
-        // layoutIfNeeded() recalculates the collection view to have items
-        subject.loadViewIfNeeded()
-        subject.newState(state: changeInitialStateToTriggerUpdateInSnapshot())
-        subject.view.layoutIfNeeded()
-
-        subject.viewDidAppear(false)
-
-        XCTAssertTrue(mockThrottler.didCallThrottle)
-        let actionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
-        )
-        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
-        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
-    }
-
-    // This test differs from the one above in that is has the `stories-redesign` feature flag enabled.
-    // When that flag is enabled, we need to add some visible sections in the collection view to trigger impression
-    // telemetry, whereas the test above can rely on the, always visible, customize homepage button section to be present.
-    func test_viewDidAppear_withStoriesRedesignEnabled_triggersHomepageAction() async throws {
-        setIsStoriesRedesignEnabled(isEnabled: true)
+    func test_viewDidAppear_triggersHomepageAction() async throws {
         let subject = createSubject()
         let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
 
+        // Add some visible sections in the collection view to trigger impression telemetry
         let populatedState = await getPopulatedCollectionViewState(from: initialState)
 
         // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
@@ -281,39 +253,11 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    @MainActor
-    func test_scrollViewDidEndDecelerating_withStoriesRedesignDisabled_triggersHomepageAction() throws {
-        setIsStoriesRedesignEnabled(isEnabled: false)
-        let subject = createSubject()
-        // Need to set up initial state so we can call updateSnapshot [FXIOS-13346 / FXIOS-13343]
-        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
-        subject.newState(state: initialState)
-        // Need to call loadViewIfNeeded and newState to populate the datasource after a state change
-        // used to check whether we should send dispatch action or not
-        // layoutIfNeeded() recalculates the collection view to have items
-        subject.loadViewIfNeeded()
-        subject.newState(state: changeInitialStateToTriggerUpdateInSnapshot())
-        subject.view.layoutIfNeeded()
-
-        subject.scrollViewDidEndDecelerating(UIScrollView())
-
-        XCTAssertTrue(mockThrottler.didCallThrottle)
-        let actionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
-        )
-        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
-        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
-    }
-
-    // This test differs from the one above in that is has the `stories-redesign` feature flag enabled.
-    // When that flag is enabled, we need to add some visible sections in the collection view to trigger impression
-    // telemetry, whereas the test above can rely on the, always visible, customize homepage button section to be present.
-    func test_scrollViewDidEndDecelerating_withStoriesRedesignEnabled_triggersHomepageAction() async throws {
-        setIsStoriesRedesignEnabled(isEnabled: true)
+    func test_scrollViewDidEndDecelerating_triggersHomepageAction() async throws {
         let subject = createSubject()
         let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
 
+        // Add some visible sections in the collection view to trigger impression telemetry
         let populatedState = await getPopulatedCollectionViewState(from: initialState)
 
         // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
@@ -333,44 +277,11 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_newState_forTriggeringImpression_withStoriesRedesignDisabled_triggersHomepageAction() throws {
-        setIsStoriesRedesignEnabled(isEnabled: false)
-        let subject = createSubject()
-        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
-        let newState = HomepageState.reducer(
-            initialState,
-            GeneralBrowserAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-            )
-        )
-
-        // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
-        // reload the collectionView so that it's content is visible
-        subject.loadViewIfNeeded()
-        subject.newState(state: newState)
-        subject.view.layoutIfNeeded()
-
-        subject.newState(state: newState)
-
-        XCTAssertTrue(newState.shouldTriggerImpression)
-        XCTAssertTrue(mockThrottler.didCallThrottle)
-        let actionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
-        )
-        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
-        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
-    }
-
-    // This test differs from the one above in that is has the `stories-redesign` feature flag enabled.
-    // When that flag is enabled, we need to add some visible sections in the collection view to trigger impression
-    // telemetry, whereas the test above can rely on the, always visible, customize homepage button section to be present.
-    func test_newState_forTriggeringImpression_withStoriesRedesignEnabled_triggersHomepageAction() async throws {
-        setIsStoriesRedesignEnabled(isEnabled: true)
+    func test_newState_forTriggeringImpression_triggersHomepageAction() async throws {
         let subject = createSubject()
         let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
 
+        // Add some visible sections in the collection view to trigger impression telemetry
         let populatedState = await getPopulatedCollectionViewState(from: initialState)
         let newState = HomepageState.reducer(
             populatedState,
@@ -399,7 +310,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func test_newState_forTriggeringImpression_withNoVisibleSections_doesNotTriggersHomepageAction() throws {
-        setIsStoriesRedesignEnabled(isEnabled: true)
         let subject = createSubject()
         let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
 
@@ -485,12 +395,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             return ToolbarRefactorFeature(
                 enabled: isEnabled
             )
-        }
-    }
-
-    private func setIsStoriesRedesignEnabled(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(storiesRedesign: isEnabled)
         }
     }
 

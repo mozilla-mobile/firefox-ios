@@ -111,50 +111,23 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_storiesDisabled_returnsExpectedState() {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
-
-        let initialState = createSubject()
-        XCTAssertTrue(initialState.shouldShowSection)
-    }
-
-    func test_storiesEnabled_returnsExpectedState() {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
-
+    func test_returnsExpectedState() {
         let initialState = createSubject()
         XCTAssertFalse(initialState.shouldShowSection)
     }
 
-    func test_storiesDisabled_prefDisabled_returnsExpectedState() {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
+    func test_prefDisabled_returnsExpectedState() {
         mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
 
         let initialState = createSubject()
         XCTAssertFalse(initialState.shouldShowSection)
     }
 
-    func test_storiesDisabled_prefEnabled_returnsExpectedState() {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
+    func test_prefEnabled_returnsExpectedState() {
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
 
         let initialState = createSubject()
         XCTAssertTrue(initialState.shouldShowSection)
-    }
-
-    func test_storiesEnabled_prefDisabled_returnsExpectedState() {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
-        mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
-
-        let initialState = createSubject()
-        XCTAssertFalse(initialState.shouldShowSection)
-    }
-
-    func test_storiesEnabled_prefEnabled_returnsExpectedState() {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
-        mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
-
-        let initialState = createSubject()
-        XCTAssertFalse(initialState.shouldShowSection)
     }
 
     // MARK: - Private
@@ -164,13 +137,5 @@ final class BookmarksSectionStateTests: XCTestCase {
 
     private func bookmarksSectionReducer() -> Reducer<BookmarksSectionState> {
         return BookmarksSectionState.reducer
-    }
-
-    private func setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(
-                storiesRedesign: storiesRedesignEnabled
-            )
-        }
     }
 }
