@@ -255,7 +255,6 @@
         "HomePageSettingsUITests\/testChangeHomeSettingsLabel()",
         "HomePageSettingsUITests\/testCheckHomeSettingsByDefault()",
         "HomePageSettingsUITests\/testClipboard()",
-        "HomePageSettingsUITests\/testCustomizeHomepage()",
         "HomePageSettingsUITests\/testDisableTopSitesSettingsRemovesSection()",
         "HomePageSettingsUITests\/testJumpBackIn()",
         "HomePageSettingsUITests\/testJumpBackIn_tabTrayExperimentOff()",

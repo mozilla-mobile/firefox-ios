@@ -107,25 +107,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Navigation Browser Action
-    func test_tapOnCustomizeHomepage_navigationBrowserAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertNil(initialState.navigationDestination)
-
-        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepageButton, destination: .settings(.homePage))
-        let newState = reducer(initialState, action)
-        let destination = newState.navigationDestination?.destination
-        switch destination {
-        case .settings(let route):
-            XCTAssertEqual(route, .homePage)
-        default:
-            XCTFail("destination is not the right type")
-        }
-
-        XCTAssertEqual(newState.navigationDestination?.url, nil)
-    }
-
     func test_tapOnCell_navigationBrowserAction_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()

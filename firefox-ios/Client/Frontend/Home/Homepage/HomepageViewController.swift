@@ -551,11 +551,7 @@ final class HomepageViewController: UIViewController,
             return searchBar
 
         case .jumpBackIn(let tab):
-            let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
-            let cellType: (UICollectionViewCell & JumpBackInCellProtocol).Type =
-                isStoriesRedesignV2Enabled ? JumpBackInCell.self : LegacyJumpBackInCell.self
-
-            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
+            guard let cell = collectionView?.dequeueReusableCell(cellType: JumpBackInCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
 
@@ -585,11 +581,7 @@ final class HomepageViewController: UIViewController,
             return syncedTabCell
 
         case .bookmark(let item):
-            let isStoriesRedesignV2Enabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesignV2, checking: .buildOnly)
-            let cellType: (UICollectionViewCell & BookmarksCellProtocol).Type =
-                isStoriesRedesignV2Enabled ? BookmarksCell.self : LegacyBookmarksCell.self
-
-            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
+            guard let cell = collectionView?.dequeueReusableCell(cellType: BookmarksCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
 
@@ -597,38 +589,15 @@ final class HomepageViewController: UIViewController,
             return cell
 
         case .merino(let story):
-            let cellType: ReusableCell.Type = isAnyStoriesRedesignEnabled ? StoryCell.self : MerinoStandardCell.self
-
-            guard let storyCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
+            guard let storyCell = collectionView?.dequeueReusableCell(cellType: StoryCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
 
-            if let storyCell = storyCell as? StoryCell {
-                let position = indexPath.item + 1
-                let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
-                let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
-                storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
-                return storyCell
-            } else if let legacyPocketCell = storyCell as? MerinoStandardCell {
-                legacyPocketCell.configure(story: story, theme: currentTheme)
-                return legacyPocketCell
-            }
-
-            return UICollectionViewCell()
-
-        case .customizeHomepage:
-            guard let customizeHomeCell = collectionView?.dequeueReusableCell(
-                cellType: CustomizeHomepageSectionCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-
-            customizeHomeCell.configure(onTapAction: { [weak self] _ in
-                self?.navigateToHomepageSettings()
-            }, theme: currentTheme)
-
-            return customizeHomeCell
+            let position = indexPath.item + 1
+            let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
+            let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
+            storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
+            return storyCell
 
         case .spacer:
             guard let spacerCell = collectionView?.dequeueReusableCell(
@@ -804,16 +773,6 @@ final class HomepageViewController: UIViewController,
         if section.canHandleLongPress {
             navigateToContextMenu(for: item, sourceView: sourceView)
         }
-    }
-
-    private func navigateToHomepageSettings() {
-        store.dispatch(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.settings(.homePage)),
-                windowUUID: self.windowUUID,
-                actionType: NavigationBrowserActionType.tapOnCustomizeHomepageButton
-            )
-        )
     }
 
     private func navigateToPocketLearnMore() {
