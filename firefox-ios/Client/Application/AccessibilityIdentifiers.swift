@@ -131,6 +131,8 @@ struct AccessibilityIdentifiers {
 
     struct EnhancedTrackingProtection {
         struct MainScreen {
+            static let scrollView = "TrackingProtection.ScrollView"
+            static let baseView = "TrackingProtection.BaseView"
             static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"
             static let trackingProtectionSettingsButton = "TrackingProtection.SettingsButton"
             static let foxImage = "TrackingProtection.FoxStatusImage"
@@ -144,9 +146,18 @@ struct AccessibilityIdentifiers {
             static let trackersBlockedButton = "TrackingProtection.TrackersBlockedButton"
             static let securityStatusButton = "TrackingProtection.ConnectionSecurityStatusButton"
             static let toggleViewLabelsContainer = "TrackingProtection.ToggleViewLabelsContainer"
+            static let toggleLabel = "TrackingProtection.ToggleLabel"
+            static let toggleSwitch = "TrackingProtection.ToggleSwitch"
+            static let toggleStatusLabel = "TrackingProtection.ToggleStatusLabel"
             static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
             static let closeButton = "TrackingProtection.CloseButton"
             static let faviconImage = "TrackingProtection.FaviconImage"
+            static let trackersLabel  = "TrackingProtection.TrackersLabel"
+            static let trackersHorizontalLine = "TrackingProtection.TrackersHorizontalLine"
+            static let trackersConnectionContainer = "TrackingProtection.TrackersConnectionContainer"
+            static let connectionStatusImage = "TrackingProtection.ConnectionStatusImage"
+            static let connectionStatusLabel = "TrackingProtection.ConnectionStatusLabel"
+            static let connectionHorizontalLine = "TrackingProtection.ConnectionHorizontalLine"
         }
 
         struct DetailsScreen {

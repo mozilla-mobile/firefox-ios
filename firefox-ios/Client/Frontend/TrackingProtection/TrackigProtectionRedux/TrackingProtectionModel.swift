@@ -34,23 +34,35 @@ class TrackingProtectionModel {
     let clearCookiesAlertCancelButton: String = .Menu.EnhancedTrackingProtection.clearDataAlertCancelButton
 
     // MARK: Accessibility Identifiers
-    let foxImageA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.foxImage
-    let shieldImageA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.shieldImage
-    let lockImageA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.lockImage
-    let arrowImageA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.arrowImage
+    typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen
+    let foxImageA11yId: String = A11y.foxImage
+    let shieldImageA11yId: String = A11y.shieldImage
+    let lockImageA11yId: String = A11y.lockImage
+    let arrowImageA11yId: String = A11y.arrowImage
 
-    let settingsA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.trackingProtectionSettingsButton
-    let domainLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.domainLabel
-    let domainHeaderLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.domainHeaderLabel
-    let statusTitleLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.statusTitleLabel
-    let statusBodyLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.statusBodyLabel
-    let trackersBlockedButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.trackersBlockedButton
-    let securityStatusButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton
-    let toggleViewContainerA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewLabelsContainer
-    let toggleViewBodyLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewBodyLabel
-    let closeButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton
+    let scrollViewA11yId = A11y.scrollView
+    let baseViewA11yId = A11y.baseView
+    let settingsA11yId = A11y.trackingProtectionSettingsButton
+    let domainLabelA11yId = A11y.domainLabel
+    let domainHeaderLabelA11yId = A11y.domainHeaderLabel
+    let statusTitleLabelA11yId = A11y.statusTitleLabel
+    let statusBodyLabelA11yId = A11y.statusBodyLabel
+    let trackersBlockedButtonA11yId = A11y.trackersBlockedButton
+    let securityStatusButtonA11yId = A11y.securityStatusButton
+    let toggleViewContainerA11yId = A11y.toggleViewLabelsContainer
+    let toggleLabelA11yId = A11y.toggleLabel
+    let toggleSwitchA11yId = A11y.toggleSwitch
+    let toggleStatusLabelA11yId = A11y.toggleStatusLabel
+    let toggleViewBodyLabelA11yId = A11y.toggleViewBodyLabel
+    let closeButtonA11yId = A11y.closeButton
     let closeButtonA11yLabel = String.Menu.EnhancedTrackingProtection.closeButtonAccessibilityLabel
-    let faviconImageA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.faviconImage
+    let faviconImageA11yId = A11y.faviconImage
+    let trackersLabelA11yId = A11y.trackersLabel
+    let trackersHorizontalLineA11yId = A11y.trackersHorizontalLine
+    let trackersConnectionContainerA11yId = A11y.trackersConnectionContainer
+    let connectionStatusImageA11yId = A11y.connectionStatusImage
+    let connectionStatusLabelA11yId = A11y.connectionStatusLabel
+    let connectionHorizontalLineA11yId = A11y.connectionHorizontalLine
 
     var websiteTitle: String {
         return url.baseDomain ?? ""
