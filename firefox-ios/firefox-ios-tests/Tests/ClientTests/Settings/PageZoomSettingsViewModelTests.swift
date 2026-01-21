@@ -210,6 +210,8 @@ final class PageZoomSettingsViewModelTests: XCTestCase {
         XCTAssertEqual(notificationCenter.postCallCount, 3)
     }
 
+    // MARK: - Private Helpers
+
     private func createSubject() -> PageZoomSettingsViewModel {
         let subject = PageZoomSettingsViewModel(zoomManager: zoomManager,
                                                 notificationCenter: notificationCenter)
