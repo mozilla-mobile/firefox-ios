@@ -17,6 +17,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         mockProfile = MockProfile()
         await DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: false)
     }
 
     override func tearDown() async throws {
