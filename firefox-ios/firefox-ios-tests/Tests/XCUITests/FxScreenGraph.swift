@@ -213,6 +213,7 @@ class Action {
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
+    static let ToggleJumpBackIn = "ToggleJumpBackIn"
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
     static let SelectNewTabAsFirefoxHomePage = "SelectNewTabAsFirefoxHomePage"
