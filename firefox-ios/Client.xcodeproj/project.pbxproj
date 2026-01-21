@@ -214,6 +214,7 @@
 		1D91C1912CF526EF00B24960 /* disconnect-block-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1792CF11EA400B24960 /* disconnect-block-analytics.json */; };
 		1D91C1922CF526EF00B24960 /* disconnect-block-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1772CF11EA400B24960 /* disconnect-block-advertising.json */; };
 		1D91C1932CF526EF00B24960 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17C2CF11EA500B24960 /* disconnect-block-social.json */; };
+		1DA3144E2F21777E009E48FA /* PlainToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3144D2F21777B009E48FA /* PlainToast.swift */; };
 		1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */; };
 		1DA3E4B22DB1C86F0065F7E7 /* ASSearchEngineUtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3E4B12DB1C86A0065F7E7 /* ASSearchEngineUtilitiesTests.swift */; };
 		1DA6F6512B48B42900BB5AD6 /* WindowEventCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA6F6502B48B42900BB5AD6 /* WindowEventCoordinator.swift */; };
@@ -2884,6 +2885,7 @@
 		1D91C17D2CF11EA500B24960 /* disconnect-block-cookies-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-advertising.json"; path = "attachments/tracking-protection-lists-ios/disconnect-block-cookies-advertising.json"; sourceTree = "<group>"; };
 		1D91C1882CF1203F00B24960 /* ContentBlockingListRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockingListRecord.swift; sourceTree = "<group>"; };
 		1DA24C60879E7D4B2073FD63 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/Search.strings; sourceTree = "<group>"; };
+		1DA3144D2F21777B009E48FA /* PlainToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainToast.swift; sourceTree = "<group>"; };
 		1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenTabsWidget.swift; sourceTree = "<group>"; };
 		1DA3E4B12DB1C86A0065F7E7 /* ASSearchEngineUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEngineUtilitiesTests.swift; sourceTree = "<group>"; };
 		1DA64656B1F6A74800D22055 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -15289,6 +15291,7 @@
 				E653422C1C5944F90039DD9E /* BrowserPrompts.swift */,
 				C8F457A61F1FD75A000CB895 /* BrowserViewController */,
 				C4F3B2991CFCF93A00966259 /* ButtonToast.swift */,
+				1DA3144D2F21777B009E48FA /* PlainToast.swift */,
 				31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */,
 				8A927D4A2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift */,
 				D3B6923C1B9F9444004B87A4 /* FindInPageBar.swift */,
@@ -18882,6 +18885,7 @@
 				0E6C1E212C909AD7001A43BB /* PasswordGeneratorAction.swift in Sources */,
 				F637D6732D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift in Sources */,
 				8A9F4F062DC8F592004644B9 /* TabsProvider.swift in Sources */,
+				1DA3144E2F21777E009E48FA /* PlainToast.swift in Sources */,
 				C283EECE2E4D4DC7008EB540 /* RemoteSummarizerConfigSource.swift in Sources */,
 				96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */,
 				0E6C1E232C909E04001A43BB /* PasswordGeneratorState.swift in Sources */,
