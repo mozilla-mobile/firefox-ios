@@ -4,29 +4,6 @@
 
 import UIKit
 
-extension CGRect {
-    public init(width: CGFloat, height: CGFloat) {
-        self.init(x: 0, y: 0, width: width, height: height)
-    }
-
-    public init(size: CGSize) {
-        self.init(origin: .zero, size: size)
-    }
-
-    public var center: CGPoint {
-        get {
-            return CGPoint(x: size.width / 2, y: size.height / 2)
-        }
-        set {
-            self.origin = CGPoint(x: newValue.x - size.width / 2, y: newValue.y - size.height / 2)
-        }
-    }
-
-    public func updateWidth(byPercentage percentage: CGFloat) -> CGRect {
-        return CGRect(x: origin.x, y: origin.y, width: size.width * percentage, height: size.height)
-    }
-}
-
 extension Data {
     public var isGIF: Bool {
         return [0x47, 0x49, 0x46].elementsEqual(prefix(3))

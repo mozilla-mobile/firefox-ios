@@ -5,7 +5,6 @@
 // ADAPTED FROM: work by Felix Mau on 01.03.17.
 
 import UIKit
-import Shared
 
 open class GradientProgressBar: UIProgressView {
     private struct DefaultValues {
@@ -177,5 +176,11 @@ open class GradientProgressBar: UIProgressView {
         }
         super.setProgress(progress, animated: animated)
         updateAlphaMaskLayerWidth(animated: animated)
+    }
+}
+
+extension CGRect {
+    public func updateWidth(byPercentage percentage: CGFloat) -> CGRect {
+        return CGRect(x: origin.x, y: origin.y, width: size.width * percentage, height: size.height)
     }
 }
