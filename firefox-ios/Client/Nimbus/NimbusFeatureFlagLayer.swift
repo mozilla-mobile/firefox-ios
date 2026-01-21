@@ -52,9 +52,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
-        case .homepageShortcutsLibrary:
-            return checkHomepageShortcutsLibraryFeature(from: nimbus)
-
         case .homepageScrim:
             return checkHomepageScrimFeature(from: nimbus)
 
@@ -234,10 +231,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
-    }
-
-    private func checkHomepageShortcutsLibraryFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().shortcutsLibrary
     }
 
     private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {

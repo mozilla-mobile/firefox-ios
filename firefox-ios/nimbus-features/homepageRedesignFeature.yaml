@@ -9,11 +9,6 @@ features:
           If true, enables the search bar feature on homepage for users.
         type: Boolean
         default: false
-      shortcuts-library:
-        description: >
-          If true, enables the shortcuts library feature, accessible from the homepage
-        type: Boolean
-        default: false
       scrim:
         description: >
           If true, enables the scrim on the homepage when searching.
@@ -31,7 +26,6 @@ features:
       - channel: beta
         value:
           search-bar: false
-          shortcuts-library: false
           scrim: false
           discover-more-feature-configuration:
             discover-more-v1-experience: false
@@ -40,7 +34,6 @@ features:
       - channel: developer
         value:
           search-bar: false
-          shortcuts-library: false
           scrim: true
           discover-more-feature-configuration:
             discover-more-v1-experience: false
