@@ -70,6 +70,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case updatedPasswordManager
+    case voiceSearch
     case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -108,6 +109,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .updatedPasswordManager,
+                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
@@ -198,6 +200,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .trendingSearches,
                 .unifiedSearch,
                 .updatedPasswordManager,
+                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return nil
         }

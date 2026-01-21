@@ -242,6 +242,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .voiceSearch,
+                titleText: format(string: "Voice Search"),
+                statusText: format(string: "Toggle to enable the Voice Search feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .webEngineIntegrationRefactor,
                 titleText: format(string: "Web Engine Integration Refactor"),
                 statusText: format(string: "Toggle to enable the use of WebEngine library")
