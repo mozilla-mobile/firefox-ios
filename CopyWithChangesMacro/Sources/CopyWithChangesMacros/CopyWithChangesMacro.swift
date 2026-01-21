@@ -15,8 +15,8 @@ public struct CopyWithChangesMacro: MemberMacro {
         providingMembersOf declaration: some DeclGroupSyntax,
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
-        guard let members = (declaration.as(StructDeclSyntax.self)?.memberBlock.members
-                             ?? declaration.as(ClassDeclSyntax.self)?.memberBlock.members) else {
+        // This macro should only be valid on structs
+        guard let members = declaration.as(StructDeclSyntax.self)?.memberBlock.members else {
             context.diagnose(Diagnostic(
                 node: attribute,
                 message: CopyWithChangesDiagnostic.unsupportedTarget
@@ -25,13 +25,12 @@ public struct CopyWithChangesMacro: MemberMacro {
             return []
         }
 
+        // Get a list of all the properties that should be copied in a struct instance (excludes static properties)
         let variableDecls = members.compactMap { member -> VariableDeclSyntax? in
             guard let variableDecl = member.decl.as(VariableDeclSyntax.self) else {
                 return nil
             }
 
-            // Check if the 'static' modifier is present; we don't want these properties copied into the generated copyWith
-            // method.
             let isStatic = variableDecl.modifiers.contains { modifier in
                 modifier.name.tokenKind == .keyword(.static)
             }
@@ -41,41 +40,45 @@ public struct CopyWithChangesMacro: MemberMacro {
 
         let bindings = variableDecls.flatMap { $0.bindings }
 
-        let with = try {
-            var arguments: [String] = []
-            var assignments: [String] = []
+        // Based on the each property's name and type, construct the copyWith function arguments and internal assignments
+        var arguments: [String] = []
+        var assignments: [String] = []
 
-            for binding in bindings {
-                guard let pattern = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
-                      let type = binding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type else {
-                    context.diagnose(Diagnostic(
-                        node: attribute,
-                        message: CopyWithChangesDiagnostic.unsupportedBinding(binding)
-                    ))
+        for binding in bindings {
+            guard let propertyName = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
+                  let propertyType = binding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type else {
+                context.diagnose(Diagnostic(
+                    node: attribute,
+                    message: CopyWithChangesDiagnostic.unsupportedBinding(binding)
+                ))
 
-                    continue
-                }
-
-                if type.is(OptionalTypeSyntax.self) {
-                    arguments.append("\(pattern): \(type)? = .some(nil)")
-                    assignments.append("\(pattern): \(pattern) == .none ? nil : self.\(pattern)")
-                } else {
-                    arguments.append("\(pattern): \(type)? = nil")
-                    assignments.append("\(pattern): \(pattern) ?? self.\(pattern)")
-                }
+                continue
             }
 
-            return try FunctionDeclSyntax("public func copyWith(\(raw: arguments.joined(separator: ", "))) -> Self") {
-                return """
-                    return Self(
-                    \(raw: assignments.joined(separator: ",\n"))
-                    )
-                """
+            if propertyType.is(OptionalTypeSyntax.self) {
+                /// Optionals are treated as double optionals (`??`)
+                arguments.append("\(propertyName): \(propertyType)? = .some(nil)")
+
+                /// We treat a top-level `nil` argument semantically as setting the property to `nil`, instead of passing
+                /// `.some(nil)`, which would feel odd at call sites.
+                assignments.append("\(propertyName): \(propertyName).map { $0 ?? self.\(propertyName) } ?? nil")
+            } else {
+                arguments.append("\(propertyName): \(propertyType)? = nil")
+                assignments.append("\(propertyName): \(propertyName) ?? self.\(propertyName)")
             }
-        }()
+        }
+
+        // Construct the return statement with proper syntax
+        let copyWithFunction = try FunctionDeclSyntax("public func copyWith(\(raw: arguments.joined(separator: ", "))) -> Self") {
+            return """
+                return Self(
+                \(raw: assignments.joined(separator: ",\n"))
+                )
+            """
+        }
 
         return [
-            DeclSyntax(with),
+            DeclSyntax(copyWithFunction),
         ]
     }
 

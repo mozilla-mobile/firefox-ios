@@ -32,7 +32,7 @@ struct SearchEngineSelectionState: ScreenState {
         self.init(windowUUID: windowUUID, searchEngines: [], selectedSearchEngine: nil)
     }
 
-    private init(
+    init(
         windowUUID: WindowUUID,
         searchEngines: [SearchEngineModel],
         selectedSearchEngine: SearchEngineModel?,

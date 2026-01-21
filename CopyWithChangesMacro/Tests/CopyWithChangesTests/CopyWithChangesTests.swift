@@ -15,12 +15,41 @@ import CopyWithChanges
 #if canImport(CopyWithChangesMacros)
 import CopyWithChangesMacros
 
-let testMacros: [String: Macro.Type] = [
+nonisolated(unsafe) let testMacros: [String: Macro.Type] = [
     "CopyWithChanges": CopyWithChangesMacro.self,
 ]
 #endif
 
 final class CopyWithChangesTests: XCTestCase {
+    func testMacro_withOptionalProperty() throws {
+        #if canImport(CopyWithChangesMacros)
+        assertMacroExpansion(
+            """
+            @CopyWithChanges
+            struct TestType {
+                let prop1: String?
+            }
+            """,
+            expandedSource: """
+            struct TestType {
+                let prop1: String?
+
+                public func copyWith(prop1: String?? = .some(nil)) -> Self {
+                    return Self (
+                    prop1: prop1.map {
+                            $0 ?? self.prop1
+                        } ?? nil
+                    )
+                }
+            }
+            """,
+            macros: testMacros
+        )
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
     func testMacro_forMultiplePropertyTypes() throws {
         // swiftlint:disable line_length
         #if canImport(CopyWithChangesMacros)
@@ -47,11 +76,15 @@ final class CopyWithChangesTests: XCTestCase {
 
                 public func copyWith(venue: String? = nil, sponsor: String?? = .some(nil), drinks: [String]? = nil, complexStructure: [Date: [(String, Int)]]? = nil, characters: [String]?? = .some(nil), budget: Double? = nil) -> Self {
                     return Self (
-                        venue: venue ?? self.venue,
-                        sponsor: sponsor == .none ? nil : self.sponsor,
+                    venue: venue ?? self.venue,
+                        sponsor: sponsor.map {
+                            $0 ?? self.sponsor
+                        } ?? nil,
                         drinks: drinks ?? self.drinks,
                         complexStructure: complexStructure ?? self.complexStructure,
-                        characters: characters == .none ? nil : self.characters,
+                        characters: characters.map {
+                            $0 ?? self.characters
+                        } ?? nil,
                         budget: budget ?? self.budget
                     )
                 }
@@ -90,7 +123,7 @@ final class CopyWithChangesTests: XCTestCase {
 
                 public func copyWith(prop1: UUID? = nil, prop2: String? = nil) -> Self {
                     return Self (
-                        prop1: prop1 ?? self.prop1,
+                    prop1: prop1 ?? self.prop1,
                         prop2: prop2 ?? self.prop2
                     )
                 }
@@ -101,5 +134,63 @@ final class CopyWithChangesTests: XCTestCase {
         #else
         throw XCTSkip("macros are only supported when running tests for the host platform")
         #endif
+    }
+
+    func testIntegration_withOptionalSet() {
+        @CopyWithChanges
+        struct TestType {
+            let property1: String?
+            let property2: Int
+        }
+
+        let initialString = "Initial String"
+        let initialInt = 3
+
+        // Initialize the type to be copied with a non-nil string for property1
+        let testNoOptional = TestType(property1: initialString, property2: initialInt)
+
+        // Change the optional property to a new non-optional value
+        let test1 = testNoOptional.copyWith(property1: "Some value")
+        XCTAssertEqual(test1.property1, "Some value")
+        XCTAssertEqual(test1.property2, initialInt)
+
+        // Change the non-optional property without touching other values
+        let test2 = testNoOptional.copyWith(property2: 6)
+        XCTAssertEqual(test2.property1, initialString)
+        XCTAssertEqual(test2.property2, 6)
+
+        // Change the non-optional value to .some(nil) -- (!) This is considered a misuse, this is a no-op (!)
+        let test3 = testNoOptional.copyWith(property1: .some(nil))
+        XCTAssertEqual(test3.property1, initialString, "This is a no-op outside intended use, so value should NOT change")
+        XCTAssertEqual(test3.property2, initialInt)
+
+        // Change the non-optional value to nil -- Semantically, we expect the value to be set to nil after copy
+        let test4 = testNoOptional.copyWith(property1: nil)
+        XCTAssertEqual(test4.property1, nil)
+        XCTAssertEqual(test4.property2, initialInt)
+    }
+
+    func testIntegration_withOptionalNotSet() {
+        @CopyWithChanges
+        struct TestType {
+            let property1: String?
+            let property2: Int
+        }
+
+        let initialString: String? = nil
+        let initialInt = 3
+
+        // Initialize the type to be copied with nil for property1
+        let testWithOptional = TestType(property1: initialString, property2: initialInt)
+
+        // Change the optional property to a new non-optional value
+        let test1 = testWithOptional.copyWith(property1: "Some value")
+        XCTAssertEqual(test1.property1, "Some value")
+        XCTAssertEqual(test1.property2, initialInt)
+
+        // Change the non-optional property without touching other values
+        let test2 = testWithOptional.copyWith(property2: 2)
+        XCTAssertEqual(test2.property1, initialString)
+        XCTAssertEqual(test2.property2, 2)
     }
 }
