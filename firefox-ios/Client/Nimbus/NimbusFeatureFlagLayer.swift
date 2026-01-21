@@ -52,9 +52,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
-        case .homepageScrim:
-            return checkHomepageScrimFeature(from: nimbus)
-
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
 
@@ -231,10 +228,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
-    }
-
-    private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().scrim
     }
 
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {

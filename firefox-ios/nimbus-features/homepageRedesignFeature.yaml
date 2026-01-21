@@ -9,19 +9,12 @@ features:
           If true, enables the search bar feature on homepage for users.
         type: Boolean
         default: false
-      scrim:
-        description: >
-          If true, enables the scrim on the homepage when searching.
-        type: Boolean
-        default: false
 
     defaults:
       - channel: beta
         value:
           search-bar: false
-          scrim: false
 
       - channel: developer
         value:
           search-bar: false
-          scrim: true
