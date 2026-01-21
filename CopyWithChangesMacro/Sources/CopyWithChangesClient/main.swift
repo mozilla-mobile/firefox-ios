@@ -29,12 +29,8 @@ let r2 = r1.copyWith(
     characters: ["Jane Doe"]
 )
 
-print("r2 \(r2) has a sponsor because it uses the same sponsored copied from r1 \(r1)")
-
 let r3 = r1.copyWith(
     sponsor: nil,
     complexStructure: [:],
     budget: 0
 )
-
-print("r3 \(r3) has no sponsor because `nil` was provided")
