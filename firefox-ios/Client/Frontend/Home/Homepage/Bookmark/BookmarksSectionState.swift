@@ -22,8 +22,8 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         // TODO: FXIOS-11412 - Move profile dependency
-        let shouldShowSection = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection) ?? false
-
+        let shouldShowSection = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageBookmarksSectionDefault,
+                                                                                  checking: .userOnly)
         self.init(
             windowUUID: windowUUID,
             bookmarks: [],

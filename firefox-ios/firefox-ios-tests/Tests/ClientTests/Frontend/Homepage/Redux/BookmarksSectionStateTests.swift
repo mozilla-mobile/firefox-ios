@@ -30,6 +30,7 @@ final class BookmarksSectionStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.bookmarks, [])
+        XCTAssertFalse(initialState.shouldShowSection)
     }
 
     @MainActor
@@ -111,11 +112,6 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_returnsExpectedState() {
-        let initialState = createSubject()
-        XCTAssertFalse(initialState.shouldShowSection)
-    }
-
     func test_prefDisabled_returnsExpectedState() {
         mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
 
@@ -130,6 +126,59 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertTrue(initialState.shouldShowSection)
     }
 
+    // Tests using the homepage redesign `bookmarks-section-default` flag
+    func test_sectionFlagEnabled_withoutUserPref_returnsExpectedState() {
+        setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: true)
+
+        let initialState = createSubject()
+        XCTAssertTrue(initialState.shouldShowSection)
+    }
+
+    func test_sectionFlagDisabled_withoutUserPref_returnsExpectedState() {
+        setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: false)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    @MainActor
+    func test_sectionFlagEnabled_withUserPref_returnsExpectedState() {
+        setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: true)
+
+        let initialState = createSubject()
+        let reducer = bookmarksSectionReducer()
+
+        // Updates the bookmarks section user pref
+        let newState = reducer(
+            initialState,
+            BookmarksAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksActionType.toggleShowSectionSetting
+            )
+        )
+        XCTAssertFalse(newState.shouldShowSection)
+    }
+
+    @MainActor
+    func test_sectionFlagDisabled_withUserPref_returnsExpectedState() {
+        setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: false)
+
+        let initialState = createSubject()
+        let reducer = bookmarksSectionReducer()
+
+        // Updates the bookmarks section user pref
+        let newState = reducer(
+            initialState,
+            BookmarksAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksActionType.toggleShowSectionSetting
+            )
+        )
+        XCTAssertTrue(newState.shouldShowSection)
+    }
+
     // MARK: - Private
     private func createSubject() -> BookmarksSectionState {
         return BookmarksSectionState(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
@@ -137,5 +186,11 @@ final class BookmarksSectionStateTests: XCTestCase {
 
     private func bookmarksSectionReducer() -> Reducer<BookmarksSectionState> {
         return BookmarksSectionState.reducer
+    }
+
+    private func setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(bookmarksSectionDefault: isEnabled)
+        }
     }
 }
