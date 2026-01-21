@@ -51,6 +51,9 @@ let package = Package(
         .library(
             name: "ActionExtensionKit",
             targets: ["ActionExtensionKit"]),
+        .library(
+            name: "VoiceSearchKit",
+            targets: ["VoiceSearchKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
