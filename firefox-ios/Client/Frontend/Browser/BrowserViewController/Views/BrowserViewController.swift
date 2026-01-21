@@ -1094,6 +1094,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func showToastType(toast: ToastType) {
+        /// This toast is generated from GeneralBrowserActionType.showToast
         func showToast() {
             SimpleToast().showAlertWithText(
                 toast.title,
@@ -1102,10 +1103,7 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .clearCookies,
-                .addToReadingList,
-                .removeShortcut,
-                .removeFromReadingList:
+        case .clearCookies:
             showToast()
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
