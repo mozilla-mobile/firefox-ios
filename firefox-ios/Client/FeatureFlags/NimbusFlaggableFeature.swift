@@ -24,7 +24,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
     case homepageSearchBar
-    case homepageShortcutsLibrary
     case homepageScrim
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
@@ -84,7 +83,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .defaultZoomFeature,
                 .downloadLiveActivities,
                 .homepageSearchBar,
-                .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
                 .homepageScrim,
@@ -156,7 +154,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
-                .homepageShortcutsLibrary,
                 .homepageScrim,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
