@@ -87,13 +87,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageScrim,
-                titleText: format(string: "Homepage Scrim"),
-                statusText: format(string: "Toggle to enable the scrim on search")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .menuRefactor,
                 titleText: format(string: "Menu Refactor"),
                 statusText: format(string: "Toggle to use the menu redesign")
