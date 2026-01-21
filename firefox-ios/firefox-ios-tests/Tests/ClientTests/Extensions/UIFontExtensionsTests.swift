@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 final class UIFontExtensionsTests: XCTestCase {
-
     // MARK: - bolded()
     func testBolded_addsTraitBold() {
         let font = UIFont.systemFont(ofSize: 16)
@@ -104,7 +103,6 @@ final class UIFontExtensionsTests: XCTestCase {
         let traits = italicBoldFont.fontDescriptor.symbolicTraits
         XCTAssertTrue(traits.contains(.traitItalic))
         XCTAssertTrue(traits.contains(.traitBold))
-
     }
 
     func testCombinedTraits_preserveOriginalSize() {
