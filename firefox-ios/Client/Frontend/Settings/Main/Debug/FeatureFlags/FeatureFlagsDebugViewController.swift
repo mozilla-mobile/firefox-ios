@@ -80,20 +80,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageDiscoverMoreExperience,
-                titleText: format(string: "HNT Discover More V1 Experience"),
-                statusText: format(string: "Toggle to enable the Discover More experince")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .homepageDiscoverMoreButton,
-                titleText: format(string: "HNT Stories Discover More Button"),
-                statusText: format(string: "Toggle to enable the homepage stories Discover More button")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .homepageSearchBar,
                 titleText: format(string: "Homepage Search Bar"),
                 statusText: format(string: "Toggle to enable homepage search bar for redesign")
@@ -179,13 +165,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageShortcutsLibrary,
-                titleText: format(string: "Shortcuts Library"),
-                statusText: format(string: "Toggle to enable the homepage shortcuts library")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .tabScrollRefactorFeature,
                 titleText: format(string: "Tab scroll refactor"),
                 statusText: format(string: "Toggle to enable tab scroll refactor feature")
@@ -238,6 +217,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .updatedPasswordManager,
                 titleText: format(string: "Updated Password Manager"),
                 statusText: format(string: "Toggle to enable the updated password manager")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .voiceSearch,
+                titleText: format(string: "Voice Search"),
+                statusText: format(string: "Toggle to enable the Voice Search feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },

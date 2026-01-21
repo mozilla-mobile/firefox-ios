@@ -24,9 +24,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
     case homepageSearchBar
-    case homepageShortcutsLibrary
-    case homepageDiscoverMoreButton
-    case homepageDiscoverMoreExperience
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -70,6 +67,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case updatedPasswordManager
+    case voiceSearch
     case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -83,9 +81,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .defaultZoomFeature,
                 .downloadLiveActivities,
                 .homepageSearchBar,
-                .homepageShortcutsLibrary,
-                .homepageDiscoverMoreButton,
-                .homepageDiscoverMoreExperience,
                 .hostedSummarizer,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -108,6 +103,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .updatedPasswordManager,
+                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
@@ -154,9 +150,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
-                .homepageShortcutsLibrary,
-                .homepageDiscoverMoreButton,
-                .homepageDiscoverMoreExperience,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
@@ -198,6 +191,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .trendingSearches,
                 .unifiedSearch,
                 .updatedPasswordManager,
+                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return nil
         }
