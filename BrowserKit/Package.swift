@@ -230,6 +230,17 @@ let package = Package(
                 .unsafeFlags(["-enable-testing"]),
             ]),
         .target(
+            name: "VoiceSearchKit",
+            dependencies: ["Common"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"])
+            ]
+        ),
+        .testTarget(
+            name: "VoiceSearchKitTests",
+            dependencies: ["VoiceSearchKit"]
+        ),
+        .target(
             name: "ContentBlockingGenerator",
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
