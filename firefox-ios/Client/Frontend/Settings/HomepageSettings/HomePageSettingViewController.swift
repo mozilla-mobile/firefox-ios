@@ -149,7 +149,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: false,
+                defaultValue: featureFlags.isFeatureEnabled(.homepageBookmarksSectionDefault, checking: .userOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatch(
