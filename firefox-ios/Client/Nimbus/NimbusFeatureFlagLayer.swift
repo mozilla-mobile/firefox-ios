@@ -55,9 +55,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageScrim:
             return checkHomepageScrimFeature(from: nimbus)
 
-        case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
-            return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
-
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
 
@@ -238,22 +235,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().scrim
-    }
-
-    private func checkHomepageDiscoverMoreFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let feature = nimbus.features.homepageRedesignFeature.value().discoverMoreFeatureConfiguration
-
-        switch featureID {
-        case .homepageDiscoverMoreButton:
-            return feature.showDiscoverMoreButton
-        case .homepageDiscoverMoreExperience:
-            return feature.discoverMoreV1Experience
-        default:
-            return false
-        }
     }
 
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
