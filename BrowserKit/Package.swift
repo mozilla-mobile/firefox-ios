@@ -225,7 +225,7 @@ let package = Package(
         ),
         .target(
             name: "UnifiedSearchKit",
-            dependencies: ["Common", "ComponentLibrary", "MenuKit"],
+            dependencies: ["Common", "ComponentLibrary"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),
