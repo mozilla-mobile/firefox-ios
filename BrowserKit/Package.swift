@@ -222,7 +222,7 @@ let package = Package(
             dependencies: ["JWTKit"],
             swiftSettings: [
             ]
-        ), 
+        ),
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary"],
