@@ -1034,19 +1034,12 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    @MainActor
     func webView(
         _ webView: WKWebView,
-        didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-    ) {
+        respondTo challenge: URLAuthenticationChallenge
+    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
-            handleServerTrust(
-                challenge: challenge,
-                dispatchQueue: self.userInitiatedQueue,
-                completionHandler: completionHandler
-            )
-            return
+            return handleServerTrust(challenge: challenge)
         }
 
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic ||
@@ -1054,31 +1047,27 @@ extension BrowserViewController: WKNavigationDelegate {
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
               let tab = tabManager[webView]
         else {
-            completionHandler(.performDefaultHandling, nil)
-            return
+            return (.performDefaultHandling, nil)
         }
 
         // If this is a request to our local web server, use our private credentials.
         if challenge.protectionSpace.host == "localhost" &&
             challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
-            completionHandler(.useCredential, WebServer.sharedInstance.credentials)
-            return
+            return (.useCredential, WebServer.sharedInstance.credentials)
         }
 
         let loginsHelper = tab.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
-        Authenticator.handleAuthRequest(
-            self,
-            challenge: challenge,
-            loginsHelper: loginsHelper
-        ) { res in
-            Task { @MainActor in
-                switch res {
-                case .success(let credentials):
-                    completionHandler(.useCredential, credentials.credentials)
-                case .failure:
-                    completionHandler(.rejectProtectionSpace, nil)
-                }
-            }
+
+        do {
+            let loginEntry = try await Authenticator.handleAuthRequestAsync(
+                self,
+                challenge: challenge,
+                loginsHelper: loginsHelper,
+            )
+
+            return (.useCredential, loginEntry.credentials)
+        } catch let error {
+            return (.rejectProtectionSpace, nil)
         }
     }
 
@@ -1309,30 +1298,20 @@ private extension BrowserViewController {
     }
 
     func handleServerTrust(
-        challenge: URLAuthenticationChallenge,
-        dispatchQueue: DispatchQueueInterface,
-        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-    ) {
-        dispatchQueue.async {
-            // If this is a certificate challenge, see if the certificate has previously been
-            // accepted by the user.
-            let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
+        challenge: URLAuthenticationChallenge
+    ) -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        // If this is a certificate challenge, see if the certificate has previously been accepted by the user.
+        let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
 
-            guard let trust = challenge.protectionSpace.serverTrust,
-                  let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
-                  self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
-            else {
-                ensureMainThread {
-                    completionHandler(.performDefaultHandling, nil)
-                }
-                return
-            }
-
-            let credential = URLCredential(trust: trust)
-            ensureMainThread {
-                completionHandler(.useCredential, credential)
-            }
+        guard let trust = challenge.protectionSpace.serverTrust,
+              let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
+              self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
+        else {
+            return (.performDefaultHandling, nil)
         }
+
+        let credential = URLCredential(trust: trust)
+        return (.useCredential, credential)
     }
 }
 
