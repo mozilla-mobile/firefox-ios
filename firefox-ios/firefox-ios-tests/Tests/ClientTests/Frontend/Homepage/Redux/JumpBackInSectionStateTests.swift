@@ -16,7 +16,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
         try await super.setUp()
         mockProfile = MockProfile()
         await DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: false)
     }
 
