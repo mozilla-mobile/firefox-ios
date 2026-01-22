@@ -23,10 +23,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
     private var showAllSyncedTabsAction: (@MainActor () -> Void)?
     private var openSyncedTabAction: (@MainActor () -> Void)?
 
-    private var cardCornerRadius: CGFloat {
-        return isAnyStoriesRedesignEnabled ? UX.generalCornerRadius : HomepageUX.generalCornerRadius
-    }
-
     // MARK: - UI Elements
     private var tabHeroImage: HeroImageView = .build { _ in }
 
@@ -126,9 +122,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
 
         syncedDeviceImage.image = configuration.syncedDeviceImage
 
-        let heroImageCornerRadius = isAnyStoriesRedesignEnabled ? UX.heroImageCornerRadius : HomepageUX.generalCornerRadius
         let heroViewModel = HomepageHeroImageViewModel(urlStringRequest: configuration.url.absoluteString,
-                                                       generalCornerRadius: heroImageCornerRadius,
+                                                       generalCornerRadius: UX.heroImageCornerRadius,
                                                        heroImageSize: UX.heroImageSize)
         tabHeroImage.setHeroImage(heroViewModel)
 
@@ -182,7 +177,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
 
         contentView.layer.shadowPath = UIBezierPath(
             roundedRect: contentView.bounds,
-            cornerRadius: cardCornerRadius
+            cornerRadius: UX.generalCornerRadius
         ).cgPath
     }
 
@@ -293,9 +288,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.cornerRadius = cardCornerRadius
+        contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: cardCornerRadius).cgPath
+                                                    cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageUX.shadowRadius
         contentView.layer.shadowOffset = HomepageUX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
@@ -322,13 +317,14 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
         // Add blur
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-            contentView.layer.cornerRadius = cardCornerRadius
+            contentView.layer.cornerRadius = UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5
             setupShadow(theme: theme)
         }
     }
+
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         let name = notification.name

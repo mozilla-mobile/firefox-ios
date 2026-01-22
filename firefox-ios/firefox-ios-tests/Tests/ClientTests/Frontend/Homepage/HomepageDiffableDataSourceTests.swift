@@ -35,7 +35,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
     // MARK: - applyInitialSnapshot
     func test_updateSnapshot_hasCorrectData() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         dataSource.updateSnapshot(
@@ -44,12 +43,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 1)
-        let expectedSections: [HomepageSection] = [
-            .customizeHomepage
-        ]
-        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
+        XCTAssertEqual(snapshot.numberOfSections, 0)
     }
 
     @MainActor
@@ -92,7 +86,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
     @MainActor
     func test_updateSnapshot_withValidState_returnTopSites() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -118,15 +111,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, 4)), 8)
         let expectedSections: [HomepageSection] = [
-            .topSites(nil, 4),
-            .customizeHomepage
+            .topSites(nil, 4)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     @MainActor
     func test_updateSnapshot_withValidState_returnPocketStories() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -143,15 +134,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
         let expectedSections: [HomepageSection] = [
-            .pocket(nil),
-            .customizeHomepage
+            .pocket(nil)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     @MainActor
     func test_updateSnapshot_withValidState_returnMessageCard() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
         let configuration = MessageCardConfiguration(
             title: "Example Title",
@@ -174,18 +163,16 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
         let expectedSections: [HomepageSection] = [
-            .messageCard,
-            .customizeHomepage
+            .messageCard
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     @MainActor
     func test_updateSnapshot_withValidState_returnBookmarks() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = HomepageState.reducer(
+        var state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             BookmarksAction(
                 bookmarks: [BookmarkConfiguration(
@@ -200,23 +187,29 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
+        // Enable the bookmarks section of the homepage since it's off by default
+        state = HomepageState.reducer(
+            state,
+            BookmarksAction(isEnabled: true,
+                            windowUUID: .XCTestDefaultUUID,
+                            actionType: BookmarksActionType.toggleShowSectionSetting)
+        )
+
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
         let expectedSections: [HomepageSection] = [
-            .bookmarks(nil),
-            .customizeHomepage
+            .bookmarks(nil)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     @MainActor
     func test_updateSnapshot_withValidState_returnJumpBackInSection() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = HomepageState.reducer(
+        var state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TabManagerAction(
                 recentTabs: [createTab(urlString: "www.mozilla.org")],
@@ -225,44 +218,26 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
+        // Enable the bookmarks section of the homepage since it's off by default
+        state = HomepageState.reducer(
+            state,
+            JumpBackInAction(isEnabled: true,
+                             windowUUID: .XCTestDefaultUUID,
+                             actionType: JumpBackInActionType.toggleShowSectionSetting)
+        )
+
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .jumpBackIn(nil, mockSectionConfig)), 1)
         let expectedSections: [HomepageSection] = [
-            .jumpBackIn(nil, mockSectionConfig),
-            .customizeHomepage
+            .jumpBackIn(nil, mockSectionConfig)
         ]
-        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
-    }
-
-    func test_customizationSectionShown_returnsExpectedSections() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
-
-        let dataSource = try XCTUnwrap(diffableDataSource)
-        let state = HomepageState(windowUUID: .XCTestDefaultUUID)
-        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
-        let snapshot = dataSource.snapshot()
-        let expectedSections: [HomepageSection] = [
-            .customizeHomepage
-        ]
-        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
-    }
-
-    func test_customizationSectionHidden_returnsExpectedSections() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
-
-        let dataSource = try XCTUnwrap(diffableDataSource)
-        let state = HomepageState(windowUUID: .XCTestDefaultUUID)
-        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
-        let snapshot = dataSource.snapshot()
-        let expectedSections: [HomepageSection] = []
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     @MainActor
     func test_updateSnapshot_withValidState_returnsPrivacyNoticeSection() throws {
-        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -276,7 +251,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
         let snapshot = dataSource.snapshot()
-        let expectedSections: [HomepageSection] = [.privacyNotice, .customizeHomepage]
+        let expectedSections: [HomepageSection] = [.privacyNotice]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
@@ -319,22 +294,5 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: urlString)!
         return tab
-    }
-
-    private func setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: Bool) {
-        if !storiesRedesignEnabled {
-            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-                return HomepageRedesignFeature(
-                    storiesRedesign: false,
-                    storiesRedesignV2: false
-                )
-            }
-        } else {
-            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-                return HomepageRedesignFeature(
-                    storiesRedesign: true
-                )
-            }
-        }
     }
 }

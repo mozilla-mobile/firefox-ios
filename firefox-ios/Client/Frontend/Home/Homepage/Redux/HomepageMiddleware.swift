@@ -34,9 +34,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         case HomepageActionType.viewDidAppear, GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             self.homepageTelemetry.sendHomepageImpressionEvent()
 
-        case NavigationBrowserActionType.tapOnCustomizeHomepageButton:
-            self.homepageTelemetry.sendItemTappedTelemetryEvent(for: .customizeHomepage)
-
         case NavigationBrowserActionType.tapOnBookmarksShowMoreButton:
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: .bookmarkShowAll)
 
@@ -125,7 +122,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func shouldShowSpacer(for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
-        return device == .phone && isAnyStoriesRedesignEnabled
+        return device == .phone
     }
 
     // MARK: - Notifications

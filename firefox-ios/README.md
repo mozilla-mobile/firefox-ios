@@ -12,29 +12,29 @@ For information on how to contribute to this project, including communication ch
 
 1. Install the version of [Xcode](https://developer.apple.com/download/applications/) from Apple that matches what this project uses, as listed in the root [README](../README.md).
 1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
-    ```shell
-    brew update
-    brew install node
-    pip3 install virtualenv
-    ```
+   ```shell
+   brew update
+   brew install node
+   ```
 1. Clone the repository:
-    ```shell
-    git clone https://github.com/mozilla-mobile/firefox-ios
-    ```
+   ```shell
+   git clone https://github.com/mozilla-mobile/firefox-ios
+   ```
 1. Change directories to the project root:
-    ```shell
-    cd firefox-ios
-    ```
+   ```shell
+   cd firefox-ios
+   ```
 1. From the project root, install Node.js dependencies, build user scripts and update content blocker:
-    ```shell
-    sh ./bootstrap.sh
-    ```
+   ```shell
+   sh ./bootstrap.sh
+   ```
 1. Open the `Client.xcodeproj` under the `firefox-ios` folder in Xcode.
 1. Make sure to select the `Fennec` [scheme](https://developer.apple.com/documentation/xcode/build-system?changes=_2) in Xcode.
 1. Select the destination device you want to build on.
 1. Run the app with `Cmd + R` or by pressing the `build and run` button.
 
 ⚠️ Important: In case you have dependencies issues with SPM, please try the following:
+
 - Xcode -> File -> Packages -> Reset Package Caches
 
 ## Building User Scripts
@@ -56,10 +56,10 @@ User Scripts (JavaScript injected into the `WKWebView`) are compiled, concatenat
 
 This reduces the total possible number of User Scripts down to four. The compiled output from concatenating and minifying the User Scripts placed in these folders resides in `/Client/Assets` and is named accordingly:
 
-* `AllFramesAtDocumentEnd.js`
-* `AllFramesAtDocumentStart.js`
-* `MainFrameAtDocumentEnd.js`
-* `MainFrameAtDocumentStart.js`
+- `AllFramesAtDocumentEnd.js`
+- `AllFramesAtDocumentStart.js`
+- `MainFrameAtDocumentEnd.js`
+- `MainFrameAtDocumentStart.js`
 
 To simplify the build process, these compiled files are checked-in to this repository.
 

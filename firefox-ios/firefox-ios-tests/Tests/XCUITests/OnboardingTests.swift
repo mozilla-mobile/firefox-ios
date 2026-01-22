@@ -12,6 +12,7 @@ class OnboardingTests: BaseTestCase {
     }
     var onboardingScreen: OnboardingScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
+    var settingsScreen: SettingScreen!
 
     override func setUp() async throws {
         launchArguments = [LaunchArguments.ClearProfile,
@@ -22,11 +23,14 @@ class OnboardingTests: BaseTestCase {
         try await super.setUp()
         onboardingScreen = OnboardingScreen(app: app)
         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
+        settingsScreen = SettingScreen(app: app)
     }
 
     override func tearDown() async throws {
         if #available(iOS 17.0, *) {
-            if self.name.contains("testSelectBottomPlacement") && iPad() {
+            if self.name.contains("testSelectBottomPlacement")
+                || self.name.contains("testValidateContinueButton")
+                || iPad() {
                 // Toolbar option not available for iPad, so the theme is not changed there.
                 return
             } else {
@@ -416,5 +420,20 @@ class OnboardingTests: BaseTestCase {
         app.buttons["CloseButton"].waitAndTap()
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
+    }
+
+    // Smoketest
+    // https://mozilla.testrail.io/index.php?/cases/view/3193571
+    func testValidateContinueButton() {
+        let onboardingScreen = OnboardingScreen(app: app)
+
+        onboardingScreen.assertContinueButtonIsOnTheBottom()
+        onboardingScreen.agreeAndContinue()
+        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.closeTourIfNeeded()
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        settingsScreen.assertSendTechicalDataIsOn()
+        settingsScreen.assertSendCrashReportsIsOn()
     }
 }

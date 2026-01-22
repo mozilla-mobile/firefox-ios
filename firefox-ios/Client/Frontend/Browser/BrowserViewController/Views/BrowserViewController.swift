@@ -168,13 +168,6 @@ class BrowserViewController: UIViewController,
         view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
-    // Overlay dimming view for zero search mode
-    private lazy var zeroSearchDimmingView: UIView = .build { view in
-        view.accessibilityIdentifier = AccessibilityIdentifiers.ZeroSearch.dimmingView
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedZeroSearchScrim))
-        view.addGestureRecognizer(tapRecognizer)
-    }
-
     // BottomContainer stack view contains toolbar
     lazy var bottomContainer: BaseAlphaStackView = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.bottomContainer
@@ -1111,6 +1104,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func showToastType(toast: ToastType) {
+        /// This toast is generated from GeneralBrowserActionType.showToast
         func showToast() {
             SimpleToast().showAlertWithText(
                 toast.title,
@@ -1119,10 +1113,7 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .clearCookies,
-                .addToReadingList,
-                .removeShortcut,
-                .removeFromReadingList:
+        case .clearCookies:
             showToast()
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
@@ -2293,7 +2284,6 @@ class BrowserViewController: UIViewController,
     }
 
     func destroySearchController() {
-        zeroSearchDimmingView.removeFromSuperview()
         hideSearchController()
 
         searchController = nil
@@ -3199,7 +3189,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchAvailableContentHeightChangedAction() {
-        guard isAnyStoriesRedesignEnabled, let browserViewControllerState,
+        guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
            homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
@@ -3837,26 +3827,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Configures the scrim area for zero search state on homepage which is simply a dimming view
-    private func configureHomepageZeroSearchView() {
-        addressToolbarContainer.isHidden = false
-
-        zeroSearchDimmingView.alpha = 0
-        view.addSubview(zeroSearchDimmingView)
-        view.bringSubviewToFront(zeroSearchDimmingView)
-
-        NSLayoutConstraint.activate([
-            zeroSearchDimmingView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
-            zeroSearchDimmingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
-            zeroSearchDimmingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
-            zeroSearchDimmingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
-        ])
-
-        UIView.animate(withDuration: 0.3) {
-             self.zeroSearchDimmingView.alpha = 1
-        }
-    }
-
     /// Tapping in the scrim area will behave the same as tapping the cancel button on the top toolbar.
     @objc
     private func tappedZeroSearchScrim() {
@@ -3902,7 +3872,6 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        zeroSearchDimmingView.backgroundColor = currentTheme.colors.layerScrim.withAlphaComponent(0.70)
 
         // to make sure on homepage with bottom search bar the status bar is hidden
         // we have to adjust the background color to match the homepage background color
@@ -4069,11 +4038,6 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
-
-        if let isHomeTab = tabManager.selectedTab?.isFxHomeTab,
-           featureFlags.isFeatureEnabled(.homepageScrim, checking: .buildOnly) && isHomeTab {
-            configureHomepageZeroSearchView()
-        }
 
         if toolbarHelper.isSwipingTabsOptimizationEnabled {
             updateSwipingTabs()
