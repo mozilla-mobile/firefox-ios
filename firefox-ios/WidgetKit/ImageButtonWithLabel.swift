@@ -64,7 +64,19 @@ struct ImageButtonWithLabel: View {
         Link(destination: isSmall ? link.smallWidgetUrl : link.mediumWidgetUrl) {
             ZStack(alignment: .leading) {
                 if !isSmall {
-                    background
+                    if #available(iOS 26.0, *) {
+                        BackgroundContent(link: link)
+                    } else {
+                        ContainerRelativeShape()
+                            .fill(
+                                LinearGradient(
+                                    gradient: Gradient(colors: link.backgroundColors),
+                                    startPoint: .bottomLeading,
+                                    endPoint: .topTrailing
+                                )
+                            )
+                            .widgetAccentableCompat()
+                    }
                 }
 
                 VStack(alignment: .center, spacing: 50.0) {
@@ -81,18 +93,6 @@ struct ImageButtonWithLabel: View {
                 .padding([.horizontal, .vertical], paddingValue)
             }
         }
-    }
-
-    private var background: some View {
-        return ContainerRelativeShape()
-            .fill(
-                LinearGradient(
-                    gradient: Gradient(colors: link.backgroundColors),
-                    startPoint: .bottomLeading,
-                    endPoint: .topTrailing
-                )
-            )
-            .widgetAccentableCompat()
     }
 
     private var label: some View {
@@ -130,6 +130,33 @@ struct ImageButtonWithLabel: View {
                 .scaledToFit()
                 .frame(height: 24.0)
         }
+    }
+}
+
+@available(iOS 26.0, *)
+struct BackgroundContent: View {
+    @Environment(\.widgetRenderingMode) private var renderingMode
+    var link: QuickLink
+
+    var body: some View {
+        if renderingMode == .accented {
+            baseBackground
+                .glassEffect(.clear, in: .rect)
+        } else {
+            baseBackground
+        }
+    }
+
+    private var baseBackground: some View {
+        ContainerRelativeShape()
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(colors: link.backgroundColors),
+                    startPoint: .bottomLeading,
+                    endPoint: .topTrailing
+                )
+            )
+            .widgetAccentableCompat()
     }
 }
 #endif
