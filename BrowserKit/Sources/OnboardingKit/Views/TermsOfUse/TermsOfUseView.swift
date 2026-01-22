@@ -6,9 +6,11 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfUseCompactView<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
     @State public var theme: Theme
     @StateObject private var viewModel: TermsOfUseFlowViewModel<ViewModel>
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
     public let windowUUID: WindowUUID
     public var themeManager: ThemeManager
 
@@ -33,21 +35,79 @@ public struct TermsOfUseCompactView<ViewModel: OnboardingCardInfoModelProtocol>:
                 AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
                     .ignoresSafeArea()
                     .accessibilityHidden(true)
-                VStack {
-                    cardContent(geometry: geometry, scale: scale)
-                    Spacer()
-                        .frame(height: UX.CardView.pageControlHeight)
-                        .padding(.bottom)
+
+                if horizontalSizeClass == .regular {
+                    regularLayout
+                } else {
+                    compactLayout(geometry: geometry, scale: scale)
                 }
-                .padding(.top, UX.CardView.cardTopPadding)
             }
             .animation(.easeOut, value: geometry.size)
         }
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
+    // MARK: - Regular Layout
+
+    private var regularLayout: some View {
+        SheetSizedCard {
+            regularContent
+                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        }
+    }
+
+    private var regularContent: some View {
+        GeometryReader { geometry in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: UX.CardView.tosSpacing) {
+                    VStack(spacing: UX.CardView.spacing) {
+                        regularImageView
+                        titleView
+                    }
+                    bodyView
+                    VStack(spacing: UX.CardView.spacing) {
+                        links
+                        primaryButton
+                            .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
+                    }
+                }
+                .padding(.vertical, UX.CardView.verticalPadding)
+                .frame(width: UX.CardView.primaryButtonWidthiPad)
+                .frame(width: geometry.size.width)
+                .frame(minHeight: geometry.size.height)
+            }
+            .scrollBounceBehavior(basedOnSize: true)
+        }
+        .padding(.horizontal, UX.CardView.horizontalPadding)
+        .accessibilityElement(children: .contain)
+    }
+
     @ViewBuilder
-    private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
+    private var regularImageView: some View {
+        if let img = viewModel.configuration.image {
+            Image(uiImage: img)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: UX.CardView.tosImageHeight)
+                .accessibilityHidden(true)
+                .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
+        }
+    }
+
+    // MARK: - Compact Layout
+
+    private func compactLayout(geometry: GeometryProxy, scale: CGFloat) -> some View {
+        VStack {
+            compactContent(scale: scale)
+
+            Spacer()
+                .frame(height: UX.CardView.pageControlHeight)
+                .padding(.bottom)
+        }
+        .padding(.top, UX.CardView.cardTopPadding)
+    }
+
+    private func compactContent(scale: CGFloat) -> some View {
         VStack {
             GeometryReader { geometry in
                 ScrollView(showsIndicators: false) {
@@ -74,8 +134,8 @@ public struct TermsOfUseCompactView<ViewModel: OnboardingCardInfoModelProtocol>:
         }
         .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
-        .accessibilityElement(children: .contain)
         .padding(.vertical)
+        .accessibilityElement(children: .contain)
     }
 
     // MARK: - Subviews
