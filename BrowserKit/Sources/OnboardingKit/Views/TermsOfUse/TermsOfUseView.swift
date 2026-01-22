@@ -37,7 +37,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                     .accessibilityHidden(true)
 
                 if horizontalSizeClass == .regular {
-                    regularLayout(geometry: geometry, scale: scale)
+                    regularLayout
                 } else {
                     compactLayout(geometry: geometry, scale: scale)
                 }
@@ -49,7 +49,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     // MARK: - Regular Layout
 
-    private func regularLayout(geometry: GeometryProxy, scale: CGFloat) -> some View {
+    private var regularLayout: some View {
         SheetSizedCard {
             regularContent
                 .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
@@ -67,7 +67,8 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                     bodyView
                     VStack(spacing: UX.CardView.spacing) {
                         links
-                        regularPrimaryButton
+                        primaryButton
+                            .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
                     }
                 }
                 .padding(.vertical, UX.CardView.verticalPadding)
@@ -91,20 +92,6 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
         }
-    }
-
-    private var regularPrimaryButton: some View {
-        OnboardingPrimaryButton(
-            title: viewModel.configuration.buttons.primary.title,
-            action: {
-                viewModel.handleEmbededLinkAction(
-                    action: .accept
-                )
-            },
-            theme: theme,
-            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
-        )
-        .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
     }
 
     // MARK: - Compact Layout
