@@ -49,20 +49,11 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
 
-        case .homepageRedesign:
-            return checkHomepageRedesignFeature(from: nimbus)
-
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
         case .homepageShortcutsLibrary:
             return checkHomepageShortcutsLibraryFeature(from: nimbus)
-
-        case .homepageStoriesRedesign:
-            return checkHomepageStoriesRedesignFeature(from: nimbus)
-
-        case .homepageStoriesRedesignV2:
-            return checkHomepageStoriesRedesignV2Feature(from: nimbus)
 
         case .homepageScrim:
             return checkHomepageScrimFeature(from: nimbus)
@@ -241,24 +232,12 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
-    private func checkHomepageRedesignFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().enabled
-    }
-
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
     }
 
     private func checkHomepageShortcutsLibraryFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().shortcutsLibrary
-    }
-
-    private func checkHomepageStoriesRedesignFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().storiesRedesign
-    }
-
-    private func checkHomepageStoriesRedesignV2Feature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().storiesRedesignV2
     }
 
     private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {

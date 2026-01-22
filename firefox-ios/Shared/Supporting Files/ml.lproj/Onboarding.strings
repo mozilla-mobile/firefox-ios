@@ -160,6 +160,9 @@
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "പിന്തുടൎച്ചയന്ത്രങ്ങളോടു വിട പറഞ്ഞേറു്";
 
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "ഉൾപ്പണിഞ്ഞ സ്വകാര്യതത്തോടെ കണ്ണികൾ തുറക്കുക";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "തന്നെതാനെ";
 

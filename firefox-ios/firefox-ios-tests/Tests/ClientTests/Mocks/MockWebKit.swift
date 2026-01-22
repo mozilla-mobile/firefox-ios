@@ -5,66 +5,6 @@
 import Foundation
 import WebKit
 
-// MARK: WKNavigationActionMock
-class WKNavigationActionMock: WKNavigationAction {
-    var overridenTargetFrame: MockWKFrameInfo?
-
-    override var targetFrame: WKFrameInfo? {
-        return overridenTargetFrame
-    }
-}
-
-// MARK: MockWKFrameInfo
-class MockWKFrameInfo: WKFrameInfo {
-    let overridenSecurityOrigin: WKSecurityOrigin
-    let overridenWebView: WKWebView?
-    let overridenTargetFrame: Bool
-
-    init(webView: MockWKWebView? = nil, frameURL: URL? = nil, isMainFrame: Bool? = false) {
-        overridenSecurityOrigin = WKSecurityOriginMock.new(frameURL)
-        overridenWebView = webView
-        overridenTargetFrame = isMainFrame ?? false
-    }
-
-    override var isMainFrame: Bool {
-        return overridenTargetFrame
-    }
-
-    override var securityOrigin: WKSecurityOrigin {
-        return overridenSecurityOrigin
-    }
-
-    override var webView: WKWebView? {
-        return overridenWebView
-    }
-}
-
-// MARK: WKSecurityOriginMock
-class WKSecurityOriginMock: WKSecurityOrigin {
-    var overridenProtocol: String!
-    var overridenHost: String!
-    var overridenPort: Int!
-
-    class func new(_ url: URL?) -> WKSecurityOriginMock {
-        // Dynamically allocate a WKSecurityOriginMock instance because
-        // the initializer for WKSecurityOrigin is unavailable
-        //  https://github.com/WebKit/WebKit/blob/52222cf447b7215dd9bcddee659884f704001827/Source/WebKit/UIProcess/API/Cocoa/WKSecurityOrigin.h#L40
-        guard let instance = self.perform(NSSelectorFromString("alloc"))?.takeUnretainedValue()
-                as? WKSecurityOriginMock
-        else {
-            fatalError("Could not allocate WKSecurityOriginMock instance")
-        }
-        instance.overridenProtocol = url?.scheme ?? ""
-        instance.overridenHost = url?.host ?? ""
-        instance.overridenPort = url?.port ?? 0
-        return instance
-    }
-
-    override var `protocol`: String { overridenProtocol }
-    override var host: String { overridenHost }
-    override var port: Int { overridenPort }
-}
-
 // MARK: MockWKWebView
 class MockWKWebView: WKWebView {
     var overridenURL: URL
@@ -121,7 +61,7 @@ class MockWKScriptMessage: WKScriptMessage {
 // MARK: - WKURLSchemeTaskMock
 
 /// Minimal fake WKURLSchemeTask used to capture callbacks.
-final class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
+final class MockWKURLSchemeTask: NSObject, WKURLSchemeTask {
     private let _request: URLRequest
     var request: URLRequest { _request }
 
@@ -134,19 +74,28 @@ final class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
     private(set) var finishCallCount = 0
     private(set) var failedErrors: [Error] = []
 
+    var onResponse: (() -> Void)?
+    var onBody: (() -> Void)?
+    var onFinish: (() -> Void)?
+    var onFail: (() -> Void)?
+
     func didReceive(_ response: URLResponse) {
         receivedResponses.append(response)
+        onResponse?()
     }
 
     func didReceive(_ data: Data) {
         receivedBodies.append(data)
+        onBody?()
     }
 
     func didFinish() {
         finishCallCount += 1
+        onFinish?()
     }
 
     func didFailWithError(_ error: Error) {
         failedErrors.append(error)
+        onFail?()
     }
 }

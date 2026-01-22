@@ -48,7 +48,7 @@ struct BrowserViewControllerState: ScreenState {
     var navigateTo: NavigationType? // use default value when re-creating
     var displayView: DisplayType? // use default value when re-creating
     var buttonTapped: UIButton?
-    var frame: WKFrameInfo?
+    var frameContext: PasswordGeneratorFrameContext?
     var microsurveyState: MicrosurveyPromptState
     var navigationDestination: NavigationDestination?
 
@@ -72,7 +72,7 @@ struct BrowserViewControllerState: ScreenState {
                   navigateTo: bvcState.navigateTo,
                   displayView: bvcState.displayView,
                   buttonTapped: bvcState.buttonTapped,
-                  frame: bvcState.frame,
+                  frameContext: bvcState.frameContext,
                   microsurveyState: bvcState.microsurveyState,
                   navigationDestination: bvcState.navigationDestination)
     }
@@ -102,7 +102,7 @@ struct BrowserViewControllerState: ScreenState {
         navigateTo: NavigationType? = nil,
         displayView: DisplayType? = nil,
         buttonTapped: UIButton? = nil,
-        frame: WKFrameInfo? = nil,
+        frameContext: PasswordGeneratorFrameContext? = nil,
         microsurveyState: MicrosurveyPromptState,
         navigationDestination: NavigationDestination? = nil
     ) {
@@ -116,7 +116,7 @@ struct BrowserViewControllerState: ScreenState {
         self.navigateTo = navigateTo
         self.displayView = displayView
         self.buttonTapped = buttonTapped
-        self.frame = frame
+        self.frameContext = frameContext
         self.microsurveyState = microsurveyState
         self.navigationDestination = navigationDestination
     }
@@ -160,8 +160,7 @@ struct BrowserViewControllerState: ScreenState {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case NavigationBrowserActionType.tapOnCustomizeHomepageButton,
-            NavigationBrowserActionType.tapOnTrackingProtection,
+        case NavigationBrowserActionType.tapOnTrackingProtection,
             NavigationBrowserActionType.tapOnCell,
             NavigationBrowserActionType.tapOnLink,
             NavigationBrowserActionType.tapOnJumpBackInShowAllButton,
@@ -261,18 +260,28 @@ struct BrowserViewControllerState: ScreenState {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case ToolbarActionType.didStartEditingUrl, ToolbarActionType.didDeleteSearchTerm:
+        case ToolbarActionType.didDeleteSearchTerm:
             guard case .webview = state.browserViewType else { return passthroughState(from: state, action: action) }
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                navigationDestination: NavigationDestination(.zeroSearch)
-            )
+            return stateForToolbarAction(action, state)
+        case ToolbarActionType.didStartEditingUrl:
+            return stateForToolbarAction(action, state)
         default:
             return passthroughState(from: state, action: action)
         }
+    }
+
+    @MainActor
+    private static func stateForToolbarAction(
+        _ action: ToolbarAction,
+        _ state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            navigationDestination: NavigationDestination(.zeroSearch)
+        )
     }
 
     @MainActor
@@ -610,7 +619,7 @@ struct BrowserViewControllerState: ScreenState {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             displayView: .passwordGenerator,
-            frame: action.frame,
+            frameContext: action.frameContext,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 

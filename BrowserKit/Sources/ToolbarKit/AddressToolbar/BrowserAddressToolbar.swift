@@ -331,6 +331,9 @@ public class BrowserAddressToolbar: UIView,
                      navigationActionStack.arrangedSubviews +
                      leadingPageActionStack.arrangedSubviews +
                      trailingPageActionStack.arrangedSubviews
+        let areAllStacksAlreadyVisible = stacks.allSatisfy { $0.alpha == 1.0 }
+        guard !areAllStacksAlreadyVisible else { return }
+
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
@@ -346,7 +349,6 @@ public class BrowserAddressToolbar: UIView,
             stacks.forEach {
                 $0.alpha = 1.0
             }
-            layoutIfNeeded()
         }
     }
 

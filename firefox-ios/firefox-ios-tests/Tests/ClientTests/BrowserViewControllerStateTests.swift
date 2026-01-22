@@ -62,13 +62,15 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
-        let URL = URL(string: "https://foo.com")!
-        let webView = MockWKWebView(URL)
-        let frame = MockWKFrameInfo(webView: webView, frameURL: URL, isMainFrame: true)
+        let mockEvaluator = MockPasswordGeneratorScriptEvaluator()
+        let frameContext = PasswordGeneratorFrameContext(origin: "https://foo.com",
+                                                         host: "foo.com",
+                                                         scriptEvaluator: mockEvaluator,
+                                                         frameInfo: nil)
 
         XCTAssertNil(initialState.displayView)
 
-        let action = GeneralBrowserAction(frame: frame,
+        let action = GeneralBrowserAction(frameContext: frameContext,
                                           windowUUID: .XCTestDefaultUUID,
                                           actionType: GeneralBrowserActionType.showPasswordGenerator)
         let newState = reducer(initialState, action)
@@ -77,7 +79,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         BrowserViewControllerState.DisplayType.passwordGenerator
 
         XCTAssertEqual(displayView, desiredDisplayView)
-        XCTAssertNotNil(newState.frame)
+        XCTAssertNotNil(newState.frameContext)
     }
 
     func testReloadWebsiteAction() {
@@ -105,25 +107,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Navigation Browser Action
-    func test_tapOnCustomizeHomepage_navigationBrowserAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertNil(initialState.navigationDestination)
-
-        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepageButton, destination: .settings(.homePage))
-        let newState = reducer(initialState, action)
-        let destination = newState.navigationDestination?.destination
-        switch destination {
-        case .settings(let route):
-            XCTAssertEqual(route, .homePage)
-        default:
-            XCTFail("destination is not the right type")
-        }
-
-        XCTAssertEqual(newState.navigationDestination?.url, nil)
-    }
-
     func test_tapOnCell_navigationBrowserAction_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()

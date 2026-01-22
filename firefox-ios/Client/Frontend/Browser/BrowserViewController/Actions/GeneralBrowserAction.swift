@@ -17,7 +17,7 @@ struct GeneralBrowserAction: Action {
     let showOverlay: Bool?
     let buttonTapped: UIButton?
     let isNativeErrorPage: Bool?
-    let frame: WKFrameInfo?
+    let frameContext: PasswordGeneratorFrameContext?
     let summarizerConfig: SummarizerConfig?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
@@ -25,7 +25,7 @@ struct GeneralBrowserAction: Action {
          showOverlay: Bool? = nil,
          buttonTapped: UIButton? = nil,
          isNativeErrorPage: Bool? = nil,
-         frame: WKFrameInfo? = nil,
+         frameContext: PasswordGeneratorFrameContext? = nil,
          summarizerConfig: SummarizerConfig? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
@@ -37,7 +37,7 @@ struct GeneralBrowserAction: Action {
         self.buttonTapped = buttonTapped
         self.showOverlay = showOverlay
         self.isNativeErrorPage = isNativeErrorPage
-        self.frame = frame
+        self.frameContext = frameContext
         self.summarizerConfig = summarizerConfig
     }
 }

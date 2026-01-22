@@ -28,7 +28,9 @@ final class NativeErrorPageStateTests: XCTestCase {
             foxImageName: "foxLogo",
             url: URL(
                 string: "url.com"
-            )
+            ),
+            advancedSection: nil,
+            showGoBackButton: false
         )
 
         let action = getAction(model: mockModel, for: .initialize)

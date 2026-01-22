@@ -203,7 +203,7 @@
 "Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Usuwamy historię przeglądania po zamknięciu aplikacji, maksymalizując prywatność.";
 
 /* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Ustaw przeglądarkę %@ jako domyślną, aby chronić swoje dane przy każdym otwieranym odnośniku.";
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Ustaw przeglądarkę %@ jako domyślną, by chronić swoje dane przy każdym otwieranym odnośniku.";
 
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.DefaultBrowser.Title.V2" = "%@ nie jest jak inne przeglądarki";

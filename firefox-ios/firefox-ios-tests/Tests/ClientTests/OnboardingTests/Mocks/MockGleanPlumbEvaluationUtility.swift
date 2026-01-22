@@ -20,6 +20,23 @@ final class MockNimbusTargetingHelper: NimbusTargetingHelperProtocol, @unchecked
         default: throw JexlError.unknownJexl
         }
     }
+
+    func evalJexlDebug(expression: String) throws -> String {
+        switch expression {
+        case "true":
+            return """
+            {"success": true, "result": true}
+            """
+        case "false":
+            return """
+            {"success": true, "result": false}
+            """
+        default:
+            return """
+            {"success": false, "error": "Unknown JEXL expression"}
+            """
+        }
+    }
 }
 
 final class MockNimbusStringHelper: NimbusStringHelperProtocol, @unchecked Sendable {

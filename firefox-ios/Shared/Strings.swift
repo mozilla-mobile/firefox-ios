@@ -981,14 +981,6 @@ extension String {
             value: "Homepage",
             comment: "The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu")
 
-        public struct CustomizeHomepage {
-            public static let ButtonTitle = MZLocalizedString(
-                key: "FirefoxHome.CustomizeHomeButton.Title",
-                tableName: nil,
-                value: "Customize Homepage",
-                comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page")
-        }
-
         public struct PrivacyNotice {
             public static let Body = MZLocalizedString(
                 key: "FirefoxHome.PrivacyNotice.Body.v148",
@@ -1632,7 +1624,7 @@ extension String {
             public static let AdvancedWarning1 = MZLocalizedString(
                 key: "NativeErrorPage.BadCertDomain.AdvancedWarning1.v149",
                 tableName: "NativeErrorPage",
-                value: "You might need to sign in to your WiFi network, or check your VPN settings.",
+                value: "You might need to sign in to your Wi-Fi network, or check your VPN settings.",
                 comment: "On certificate error page, this is the first warning message in the advanced section suggesting possible solutions.")
             public static let AdvancedWarning2 = MZLocalizedString(
                 key: "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149",
@@ -8823,6 +8815,15 @@ extension String {
                 tableName: "TabsTray",
                 value: "Close",
                 comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
+        }
+        struct v148 {
+            public struct CustomizeHomepage {
+                public static let ButtonTitle = MZLocalizedString(
+                    key: "FirefoxHome.CustomizeHomeButton.Title",
+                    tableName: nil,
+                    value: "Customize Homepage",
+                    comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page")
+            }
         }
     }
 }
