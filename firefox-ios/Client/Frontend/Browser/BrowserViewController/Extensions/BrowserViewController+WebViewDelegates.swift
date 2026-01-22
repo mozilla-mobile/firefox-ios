@@ -221,7 +221,7 @@ extension BrowserViewController: WKUIDelegate {
 
             let isPrivate = currentTab.isPrivate
 
-            let showPreview = self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true
+            let showPreview = profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true
             let urlTitle = !showPreview ? url.absoluteString : (url.normalizedHost ?? url.absoluteString)
 
             let actions = createActions(isPrivate: isPrivate,
