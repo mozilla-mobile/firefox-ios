@@ -14,14 +14,21 @@ features:
           If true, enables the bookmarks homepage section by default
         type: Boolean
         default: false
+      jbi-section-default:
+        description: >
+          If true, enables the jump back in homepage section by default
+        type: Boolean
+        default: false
 
     defaults:
       - channel: beta
         value:
           search-bar: false
           bookmarks-section-default: false
+          jbi-section-default: false
 
       - channel: developer
         value:
           search-bar: false
           bookmarks-section-default: false
+          jbi-section-default: false

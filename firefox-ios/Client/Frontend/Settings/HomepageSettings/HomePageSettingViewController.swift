@@ -132,7 +132,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
-                defaultValue: false,
+                defaultValue: featureFlags.isFeatureEnabled(.homepageJumpBackinSectionDefault, checking: .userOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatch(
