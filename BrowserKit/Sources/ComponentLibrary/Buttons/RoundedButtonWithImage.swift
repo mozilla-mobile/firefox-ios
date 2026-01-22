@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-public final class RoundedButtonWithImage: UIButton, ThemeApplicable {
+public final class RoundedButtonWithImage: ResizableButton, ThemeApplicable {
     private struct UX {
         static var buttonCornerRadius: CGFloat {
             if #available(iOS 26.0, *) {

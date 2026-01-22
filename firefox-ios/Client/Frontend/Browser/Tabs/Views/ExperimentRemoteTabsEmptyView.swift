@@ -19,11 +19,12 @@ protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable, InsetUpdatable {
 class ExperimentRemoteTabsEmptyView: UIView,
                                      RemoteTabsEmptyViewProtocol {
     struct UX {
+        static let topPadding: CGFloat = 55
+        static let bottomPadding: CGFloat = 35
         static let paddingInBetweenItems: CGFloat = 15
-        static let verticalPadding: CGFloat = 20
+        static let buttonTopPadding: CGFloat = 24
         static let horizontalPadding: CGFloat = 24
         static let imageSize = CGSize(width: 72, height: 72)
-        static let containerWidthConstant = horizontalPadding * 2
     }
 
     var needsSafeArea: Bool { true }
@@ -32,10 +33,6 @@ class ExperimentRemoteTabsEmptyView: UIView,
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollview in
         scrollview.backgroundColor = .clear
-        scrollview.contentInset = UIEdgeInsets(top: UX.verticalPadding,
-                                               left: UX.horizontalPadding,
-                                               bottom: UX.verticalPadding,
-                                               right: UX.horizontalPadding)
     }
 
     private lazy var containerView: UIView = .build { _ in }
@@ -47,6 +44,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
     private let titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.headline.scaledFont()
+        label.numberOfLines = 0
         label.textAlignment = .center
     }
 
@@ -92,6 +90,11 @@ class ExperimentRemoteTabsEmptyView: UIView,
         }
 
         signInButton.isHidden = shouldHideButton(config)
+
+        // Recalculate layout after setting text. Labels initialize empty, causing button to clip
+        // multi-line text at large Dynamic Type sizes if intrinsic size isn't updated.
+        signInButton.invalidateIntrinsicContentSize()
+        signInButton.layoutIfNeeded()
     }
 
     private func shouldHideButton(_ state: RemoteTabsPanelEmptyStateReason) -> Bool {
@@ -113,19 +116,20 @@ class ExperimentRemoteTabsEmptyView: UIView,
             containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
-                                                 constant: -UX.containerWidthConstant),
+            containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
             iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor,
-                                               constant: UX.paddingInBetweenItems),
+                                               constant: UX.topPadding),
             iconImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             iconImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
             iconImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
 
             titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor,
                                             constant: UX.paddingInBetweenItems),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                constant: UX.horizontalPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                 constant: -UX.horizontalPadding),
 
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                   constant: UX.paddingInBetweenItems),
@@ -135,12 +139,13 @@ class ExperimentRemoteTabsEmptyView: UIView,
                                                        constant: -UX.horizontalPadding),
 
             signInButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
-                                              constant: UX.paddingInBetweenItems),
-            signInButton.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor),
-            signInButton.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor),
-            signInButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+                                              constant: UX.buttonTopPadding),
+            signInButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                  constant: UX.horizontalPadding),
+            signInButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                   constant: -UX.horizontalPadding),
             signInButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                 constant: -UX.paddingInBetweenItems),
+                                                 constant: -UX.bottomPadding),
         ])
     }
 
@@ -169,6 +174,6 @@ class ExperimentRemoteTabsEmptyView: UIView,
 
     func updateInsets(top: CGFloat, bottom: CGFloat) {
         scrollView.contentInset.top = top
-        scrollView.contentInset.bottom = bottom + UX.verticalPadding
+        scrollView.contentInset.bottom = bottom
     }
 }
