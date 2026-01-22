@@ -1,3 +1,21 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "ขั้นสูง";
+
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "รหัสข้อผิดพลาด: %@";
+
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "ซ่อนส่วนขั้นสูง";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "เรียนรู้เพิ่มเติม";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "ระวังหน่อย มีบางอย่างผิดปกติ";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "ดูใบรับรองของไซต์นี้";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "โหลดใหม่";
 
@@ -6,6 +24,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "ระวังหน่อย มีบางอย่างผิดปกติ";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "ย้อนกลับ (แนะนำ)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "ลองเชื่อมต่อบนอุปกรณ์อื่น ตรวจสอบโมเด็มหรือเราเตอร์ของคุณ ตัดการเชื่อมต่อและเชื่อมต่อกับ Wi-Fi อีกครั้ง";

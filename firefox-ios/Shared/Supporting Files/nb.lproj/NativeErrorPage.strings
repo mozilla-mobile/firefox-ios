@@ -1,6 +1,9 @@
 /* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
 "NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Avansert";
 
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ stoler ikke på dette nettstedet fordi sertifikatet som ble funnet ikke er gyldig for %2$@.";
+
 /* On certificate error page, this is the security information shown in the advanced section. */
 "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Dette nettstedet tillater ikke tilkoblinger som ikke er sikre.";
 
@@ -12,6 +15,9 @@
 
 /* On certificate error page, this is the description explaining the security risk. */
 "NativeErrorPage.BadCertDomain.Description.v149" = "Noen som utgir seg for å være nettstedet kan prøve å stjele din personlige informasjon. Tilkoblingsinnstillingene dine kan også være feil konfigurert.";
+
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Feilkode: %@";
 
 /* On certificate error page, this is the text on a button that will hide the advanced information section. */
 "NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Skjul avansert";
