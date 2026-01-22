@@ -23,17 +23,13 @@ git clone https://github.com/mozilla-mobile/LocalizationTools.git focus-ios-test
 echo "[*] Building tools/Localizations"
 (cd focus-ios-tests/tools/Localizations && swift build)
 
-echo "[*] Replacing firefox with focus in swift task files"
-sed -i '' 's/firefox-ios.xliff/focus-ios.xliff/g' focus-ios-tests/tools/Localizations/Sources/LocalizationTools/tasks/*.swift
-
-echo "[*] Updating EXPORT_BASE_PATH with (getpid()) in swift export task"
-sed -ri '' 's/\/tmp\/ios-localization/\/tmp\/ios-localization-\\(getpid())/g' focus-ios-tests/tools/Localizations/Sources/LocalizationTools/tasks/ExportTask.swift
-
 echo "[*] Exporting Strings (output in export-strings.log)"
 (cd focus-ios-tests/tools/Localizations && swift run LocalizationTools \
   --export \
   --project-path "$PWD/../../../Blockzilla.xcodeproj" \
   --l10n-project-path "$PWD/../../../focusios-l10n" \
+  --xliff-name focus-ios.xliff \
+  --export-base-path /tmp/ios-localization-focus \
   --locale en-US) > export-strings.log 2>&1
 
 echo "[!] Hooray strings have been succesfully exported."

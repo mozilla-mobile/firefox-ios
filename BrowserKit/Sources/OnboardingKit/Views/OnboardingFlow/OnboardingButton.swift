@@ -90,12 +90,14 @@ struct OnboardingPrimaryButton: View {
     var body: some View {
         Button(action: {
             action()
+            UIAccessibility.post(notification: .announcement, argument: title)
         }, label: {
             Text(title)
                 .frame(maxWidth: .infinity)
                 .paddedVersion(.vertical, old: UX.Button.verticalPadding, new: UX.Button.verticalGlassPadding)
                 .padding(.horizontal, UX.Button.horizontalPadding)
         })
+        .accessibilityLabel(title)
         .accessibility(identifier: accessibilityIdentifier)
         .primaryButtonStyle(theme: theme)
         .backgroundClipShape()
@@ -111,12 +113,14 @@ struct OnboardingSecondaryButton: View {
     var body: some View {
         Button(action: {
             action()
+            UIAccessibility.post(notification: .announcement, argument: title)
         }, label: {
             Text(title)
                 .frame(maxWidth: .infinity)
                 .paddedVersion(.vertical, old: UX.Button.verticalPadding, new: UX.Button.verticalGlassPadding)
                 .padding(.horizontal, UX.Button.horizontalPadding)
         })
+        .accessibilityLabel(title)
         .accessibility(identifier: accessibilityIdentifier)
         .secondaryButtonStyle(theme: theme)
         .backgroundClipShape()
