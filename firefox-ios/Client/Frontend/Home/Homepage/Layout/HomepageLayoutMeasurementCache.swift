@@ -62,7 +62,6 @@ struct HomepageLayoutMeasurementCache {
             let cellWidth: Double
             let containerWidth: Double
             let shouldShowSection: Bool
-            let isStoriesRedesignEnabled: Bool
             let contentSizeCategory: UIContentSizeCategory
         }
 

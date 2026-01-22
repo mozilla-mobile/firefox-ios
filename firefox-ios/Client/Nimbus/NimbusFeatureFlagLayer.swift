@@ -49,23 +49,11 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
 
+        case .homepageBookmarksSectionDefault:
+            return checkHomepageBookmarksSectionDefault(from: nimbus)
+
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
-
-        case .homepageShortcutsLibrary:
-            return checkHomepageShortcutsLibraryFeature(from: nimbus)
-
-        case .homepageStoriesRedesign:
-            return checkHomepageStoriesRedesignFeature(from: nimbus)
-
-        case .homepageStoriesRedesignV2:
-            return checkHomepageStoriesRedesignV2Feature(from: nimbus)
-
-        case .homepageScrim:
-            return checkHomepageScrimFeature(from: nimbus)
-
-        case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
-            return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
 
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
@@ -196,6 +184,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .updatedPasswordManager:
             return checkUpdatedPasswordManagerFeature(from: nimbus)
 
+        case .voiceSearch:
+            return checkVoiceSearchFeature(from: nimbus)
+
         case .webEngineIntegrationRefactor:
             return checkWebEngineIntegrationRefactor(from: nimbus)
         }
@@ -238,40 +229,12 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
+    private func checkHomepageBookmarksSectionDefault(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().bookmarksSectionDefault
+    }
+
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
-    }
-
-    private func checkHomepageShortcutsLibraryFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().shortcutsLibrary
-    }
-
-    private func checkHomepageStoriesRedesignFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().storiesRedesign
-    }
-
-    private func checkHomepageStoriesRedesignV2Feature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().storiesRedesignV2
-    }
-
-    private func checkHomepageScrimFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().scrim
-    }
-
-    private func checkHomepageDiscoverMoreFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let feature = nimbus.features.homepageRedesignFeature.value().discoverMoreFeatureConfiguration
-
-        switch featureID {
-        case .homepageDiscoverMoreButton:
-            return feature.showDiscoverMoreButton
-        case .homepageDiscoverMoreExperience:
-            return feature.discoverMoreV1Experience
-        default:
-            return false
-        }
     }
 
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
@@ -362,6 +325,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkTrendingSearches(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.trendingSearchesFeature.value().enabled
+    }
+
+    private func checkVoiceSearchFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.voiceSearchFeature.value().enabled
     }
 
     private func checkFeltPrivacyFeature(

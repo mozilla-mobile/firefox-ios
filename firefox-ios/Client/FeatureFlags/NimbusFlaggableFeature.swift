@@ -23,13 +23,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
+    case homepageBookmarksSectionDefault
     case homepageSearchBar
-    case homepageShortcutsLibrary
-    case homepageStoriesRedesign
-    case homepageStoriesRedesignV2
-    case homepageScrim
-    case homepageDiscoverMoreButton
-    case homepageDiscoverMoreExperience
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -73,6 +68,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case updatedPasswordManager
+    case voiceSearch
     case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -85,13 +81,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
-                .homepageStoriesRedesign,
-                .homepageStoriesRedesignV2,
                 .homepageSearchBar,
-                .homepageShortcutsLibrary,
-                .homepageDiscoverMoreButton,
-                .homepageDiscoverMoreExperience,
-                .homepageScrim,
                 .hostedSummarizer,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -114,6 +104,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .updatedPasswordManager,
+                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
@@ -142,6 +133,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
+        case .homepageBookmarksSectionDefault:
+            return PrefsKeys.HomepageSettings.BookmarksSection
         case .hntSponsoredShortcuts:
             return FlagKeys.SponsoredShortcuts
         case .sentFromFirefox:
@@ -160,12 +153,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
-                .homepageShortcutsLibrary,
-                .homepageStoriesRedesign,
-                .homepageStoriesRedesignV2,
-                .homepageScrim,
-                .homepageDiscoverMoreButton,
-                .homepageDiscoverMoreExperience,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
@@ -207,6 +194,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .trendingSearches,
                 .unifiedSearch,
                 .updatedPasswordManager,
+                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return nil
         }

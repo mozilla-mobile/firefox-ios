@@ -664,8 +664,8 @@ final class LocationView: UIView,
     func menuHelperPasteAndGo() {
         ensureMainThread {
             guard let pasteboardContents = UIPasteboard.general.string else { return }
-            self.delegate?.locationViewDidSubmitText(pasteboardContents)
             self.urlTextField.text = pasteboardContents
+            self.delegate?.locationViewDidSubmitText(pasteboardContents)
         }
     }
 

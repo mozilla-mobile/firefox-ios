@@ -5,7 +5,7 @@
 import Foundation
 @testable import TabDataStore
 
-final class TabFileManagerMock: TabFileManager, @unchecked Sendable {
+final class MockTabFileManager: TabFileManager, @unchecked Sendable {
     var primaryDirectoryURL: URL?
     var backupDirectoryURL: URL?
     var tabSessionDataDirectoryCalledCount = 0

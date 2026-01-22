@@ -91,14 +91,10 @@ struct MerinoState: StateType, Equatable {
     }
 
     private static func initializeSectionHeaderState() -> SectionHeaderConfiguration {
-        let isDiscoverMoreEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageDiscoverMoreButton,
-                                                                                      checking: .buildOnly)
-        let title: String = isDiscoverMoreEnabled ? .FirefoxHomepage.Pocket.PopularTodaySectionTitle
-                                                  : .FirefoxHomepage.Pocket.SectionTitle
         return SectionHeaderConfiguration(
-            title: title,
+            title: .FirefoxHomepage.Pocket.PopularTodaySectionTitle,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
-            isButtonHidden: !isDiscoverMoreEnabled,
+            isButtonHidden: false,
             buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.stories,
             buttonTitle: String.FirefoxHomepage.Pocket.AllStoriesButtonTitle
         )
