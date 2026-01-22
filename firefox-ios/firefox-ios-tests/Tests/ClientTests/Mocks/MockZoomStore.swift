@@ -6,13 +6,13 @@ import Storage
 
 final class MockZoomStore: ZoomLevelStorage {
     var savedDefaultZoom: CGFloat = 1.0
-    var store = [DomainZoomLevel]()
+    var storeZoomLevels  = [DomainZoomLevel]()
     var saveCalledCount = 0
     var findZoomLevelCalledCount = 0
 
     func findZoomLevel(forDomain host: String) -> DomainZoomLevel? {
         findZoomLevelCalledCount += 1
-        return store.first { $0.host == host }
+        return storeZoomLevels.first { $0.host == host }
     }
 
     func saveDefaultZoomLevel(defaultZoom: CGFloat) {
@@ -20,27 +20,27 @@ final class MockZoomStore: ZoomLevelStorage {
         savedDefaultZoom = defaultZoom
     }
 
-    func saveDomainZoom(_ domainZoomLevel: Storage.DomainZoomLevel, completion: (() -> Void)?) {
+    func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)?) {
         saveCalledCount += 1
-        store.append(domainZoomLevel)
+        storeZoomLevels.append(domainZoomLevel)
     }
 
     func getDefaultZoom() -> CGFloat {
         return savedDefaultZoom
     }
 
-    func getDomainZoomLevel() -> [Storage.DomainZoomLevel] {
-        return [DomainZoomLevel]()
+    func getDomainZoomLevel() -> [DomainZoomLevel] {
+        return storeZoomLevels
     }
 
     func deleteZoomLevel(for host: String) {
-        guard let index = store.firstIndex(where: { return $0.host == host }) else { return }
+        guard let index = storeZoomLevels.firstIndex(where: { return $0.host == host }) else { return }
 
-        store.remove(at: index)
+        storeZoomLevels.remove(at: index)
         saveCalledCount += 1
     }
 
     func resetDomainZoomLevel() {
-        store.removeAll()
+        storeZoomLevels.removeAll()
     }
 }
