@@ -94,7 +94,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
         // Recalculate layout after setting text. Labels initialize empty, causing button to clip
         // multi-line text at large Dynamic Type sizes if intrinsic size isn't updated.
         signInButton.invalidateIntrinsicContentSize()
-        layoutIfNeeded()
+        signInButton.layoutIfNeeded()
     }
 
     private func shouldHideButton(_ state: RemoteTabsPanelEmptyStateReason) -> Bool {
