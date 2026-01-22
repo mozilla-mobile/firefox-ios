@@ -397,9 +397,12 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testLongTapRecentlySavedLink() {
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
+        enableBookmarksInSettings()
         validateLongTapOptionsFromBookmarkLink(isExperiment: true)
         forceRestartApp()
         app.launch()
+        navigator.nowAt(NewTabScreen)
+        enableBookmarksInSettings()
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
             navigator.nowAt(NewTabScreen)
@@ -517,7 +520,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Tap to "Open in New Tab"
         contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
         // The webpage opens in a new tab
-        switchToTabAndValidate(nrOfTabs: "3")
+        switchToTabAndValidate(nrOfTabs: "4")
 
         // Tap to "Open in Private Tab"
         navigator.performAction(Action.GoToHomePage)
@@ -569,7 +572,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
             if isPrivate {
                 app.buttons[AccessibilityIdentifiers.Browser.TopTabs.privateModeButton].waitAndTap()
             } else {
-                app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].cells.element(boundBy: 2)
+                app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].cells.element(boundBy: 3)
                     .waitAndTap()
             }
         }
