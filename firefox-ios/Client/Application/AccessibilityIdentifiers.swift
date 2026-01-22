@@ -196,16 +196,16 @@ struct AccessibilityIdentifiers {
             static let containerView = "BlockedTrackers.BaseView"
             static let trackersTable = "BlockedTrackers.TrackersTable"
             static let totalTrackersBlockedLabel = "BlockedTrackers.TotalTrackersBlockedLabel"
-            
+
             static let crossSiteTitle = "BlockedTrackers.CrossSiteTitle"
             static let crossSiteImage = "BlockedTrackers.CrossSiteImage"
-            
+
             static let fingerPrintersTitle = "BlockedTrackers.FingerPrintersTitle"
             static let fingerPrintersImage = "BlockedTrackers.FingerPrintersImage"
-            
+
             static let trackingContentTitle = "BlockedTrackers.TrackingContentTitle"
             static let trackingContentImage = "BlockedTrackers.TrackingContentImage"
-            
+
             static let socialMediaTitle = "BlockedTrackers.SocialMediaTitle"
             static let socialMediaImage = "BlockedTrackers.SocialMediaImage"
         }
