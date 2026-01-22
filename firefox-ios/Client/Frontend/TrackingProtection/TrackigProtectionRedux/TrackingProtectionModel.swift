@@ -35,7 +35,11 @@ class TrackingProtectionModel {
 
     // MARK: Accessibility Identifiers
     typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen
+    let connectionDetailsContentViewA11yId: String = A11y.connectionDetailsContentView
     let foxImageA11yId: String = A11y.foxImage
+    let connectionDetailsLabelsContainerA11yId: String = A11y.connectionDetailsLabelsContainer
+    let connectionDetailsTitleLabelA11yId: String = A11y.connectionDetailsTitleLabel
+    let connectionDetailsStatusLabelA11yId: String = A11y.connectionDetailsStatusLabel
     let shieldImageA11yId: String = A11y.shieldImage
     let lockImageA11yId: String = A11y.lockImage
     let arrowImageA11yId: String = A11y.arrowImage
@@ -63,6 +67,9 @@ class TrackingProtectionModel {
     let connectionStatusImageA11yId = A11y.connectionStatusImage
     let connectionStatusLabelA11yId = A11y.connectionStatusLabel
     let connectionHorizontalLineA11yId = A11y.connectionHorizontalLine
+    let faviconA11yId = A11y.favicon
+    let titleLabelA11yId = A11y.titleLabel
+    let subtitleLabelA11yId = A11y.subtitleLabel
 
     var websiteTitle: String {
         return url.baseDomain ?? ""
