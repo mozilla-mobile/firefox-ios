@@ -6,28 +6,37 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-// MARK: - Updated OnboardingBasicCardViewCompact
-struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
     @State var theme: Theme
+    @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
     @Environment(\.sizeCategory)
-    private var sizeCategory
+    var sizeCategory
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let viewModel: ViewModel
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
+    let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
 
-    init(
+    init?(
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
+        onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
+        self.onMultipleChoiceAction = onMultipleChoiceAction
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
+        guard let defaultAction = viewModel.defaultSelectedButton?.action else {
+            return nil
+        }
+        _selectedAction = State(initialValue: defaultAction)
     }
 
     var body: some View {
@@ -45,14 +54,32 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                     .padding(.top, UX.CardView.titleCompactTopPadding)
 
                 Spacer(minLength: UX.CardView.minContentSpacing)
-                VStack(spacing: UX.CardView.contentSpacing) {
-                    imageView(geometry: geometry)
-                    bodyView
+                OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
+                    theme: theme,
+                    selection: $selectedAction,
+                    items: viewModel.multipleChoiceButtons
+                )
+                .onChange(of: selectedAction) { newAction in
+                    onMultipleChoiceAction(newAction, viewModel.name)
                 }
                 Spacer(minLength: UX.CardView.minContentSpacing)
+                if !viewModel.body.isEmpty {
+                    bodyView
+                    Spacer(minLength: UX.CardView.minContentSpacing)
+                }
                 VStack(spacing: UX.CardView.buttonsSpacing) {
                     primaryButton
-                    secondaryButton
+                    // Hidden spacer button to maintain consistent layout spacing
+                    // when secondary button is not present
+                    OnboardingSecondaryButton(
+                        title: " ",
+                        action: {
+                        },
+                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                        accessibilityIdentifier: "")
+                    .opacity(0.0)
+                    .disabled(true)
+                    .accessibilityHidden(true)
                 }
                 .padding(.bottom, UX.CardView.buttonsBottomPadding)
             }
@@ -60,7 +87,9 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
         }
         .scrollBounceBehavior(basedOnSize: true)
-        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        .if(horizontalSizeClass != .regular) { view in
+            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        }
     }
 
     var titleView: some View {
@@ -70,23 +99,10 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
-            .if(sizeCategory <= .large) { view in
-                view.frame(minHeight: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
+            .if(sizeCategory <= .extraExtraLarge) { view in
+                view.frame(height: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
             }
             .fixedSize(horizontal: false, vertical: true)
-    }
-
-    @ViewBuilder
-    func imageView(geometry: GeometryProxy) -> some View {
-        if let img = viewModel.image {
-            let imgHeight = min(img.size.height, geometry.size.height * 0.4)
-            Image(uiImage: img)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxHeight: imgHeight)
-                .accessibilityHidden(true)
-                .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
-        }
     }
 
     var bodyView: some View {
@@ -110,22 +126,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             theme: theme,
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
-    }
-
-    @ViewBuilder
-    var secondaryButton: some View {
-        if let secondary = viewModel.buttons.secondary {
-            OnboardingSecondaryButton(
-                title: secondary.title,
-                action: {
-                    onBottomButtonAction(
-                        secondary.action,
-                        viewModel.name
-                    )
-                },
-                theme: theme,
-                accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
-            )
+        .if(horizontalSizeClass == .regular) { view in
+            view.frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
         }
     }
 }
