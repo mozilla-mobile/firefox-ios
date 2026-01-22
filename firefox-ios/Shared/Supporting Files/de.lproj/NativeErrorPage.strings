@@ -26,10 +26,10 @@
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Weitere Informationen";
 
 /* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
-"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Weiter zu %@ (risikoreich)";
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Weiter zu %@ (risikant)";
 
 /* On certificate error page, this is the title warning the user about a potential security issue. */
-"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Seien Sie vorsichtig. Irgendetwas stimmt hier nicht.";
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Seien Sie vorsichtig. Irgendetwas sieht nicht gut aus.";
 
 /* On certificate error page, this is a link that will show the site’s certificate details. */
 "NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Das Zertifikat der Website ansehen";

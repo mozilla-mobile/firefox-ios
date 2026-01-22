@@ -7,6 +7,12 @@
 /* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
 "TermsOfUse.Description.v142" = "Chúng tôi đã đưa ra diều khoản sử dụng %@ và cập nhật thông báo về quyền riêng tư của chúng tôi.";
 
+/* Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text. */
+"TermsOfUse.LearnMoreHere.v147" = "Bạn có thể tìm hiểu thêm %@.";
+
+/* Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for variants 1 and 2. */
+"TermsOfUse.Link.HereText.v147" = "tại đây";
+
 /* Link shown in the Terms of Use sheet to direct users to more details about the update. */
 "TermsOfUse.Link.LearnMore.v142" = "Tìm hiểu thêm";
 
@@ -27,4 +33,10 @@
 
 /* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
 "TermsOfUse.Title.v142" = "Chúng tôi có một bản cập nhật";
+
+/* Title shown at the top of the Terms of Use bottom sheet for variant 1. */
+"TermsOfUse.TitleValue1.v147" = "Điều khoản sử dụng";
+
+/* Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.TitleValue2.v147" = "Một lời nhắn từ %@";
 
