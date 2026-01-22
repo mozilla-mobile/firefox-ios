@@ -1066,7 +1066,7 @@ extension BrowserViewController: WKNavigationDelegate {
             )
 
             return (.useCredential, loginEntry.credentials)
-        } catch let error {
+        } catch {
             return (.rejectProtectionSpace, nil)
         }
     }
