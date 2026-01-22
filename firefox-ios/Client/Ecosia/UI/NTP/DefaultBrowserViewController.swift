@@ -199,7 +199,7 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
             triviaView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             triviaView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
 
-            actionButton.topAnchor.constraint(equalTo: triviaView.bottomAnchor, constant: .ecosia.space._1l).priority(.defaultLow),
+            actionButton.topAnchor.constraint(equalTo: triviaView.bottomAnchor, constant: .ecosia.space._1l),
             actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             actionButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             actionButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
