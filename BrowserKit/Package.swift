@@ -51,6 +51,9 @@ let package = Package(
         .library(
             name: "ActionExtensionKit",
             targets: ["ActionExtensionKit"]),
+        .library(
+            name: "VoiceSearchKit",
+            targets: ["VoiceSearchKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -229,6 +232,17 @@ let package = Package(
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),
+        .target(
+            name: "VoiceSearchKit",
+            dependencies: ["Common"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"])
+            ]
+        ),
+        .testTarget(
+            name: "VoiceSearchKitTests",
+            dependencies: ["VoiceSearchKit"]
+        ),
         .target(
             name: "ContentBlockingGenerator",
             swiftSettings: [
