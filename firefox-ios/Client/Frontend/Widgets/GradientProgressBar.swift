@@ -180,7 +180,7 @@ open class GradientProgressBar: UIProgressView {
 }
 
 extension CGRect {
-    public func updateWidth(byPercentage percentage: CGFloat) -> CGRect {
+    func updateWidth(byPercentage percentage: CGFloat) -> CGRect {
         return CGRect(x: origin.x, y: origin.y, width: size.width * percentage, height: size.height)
     }
 }
