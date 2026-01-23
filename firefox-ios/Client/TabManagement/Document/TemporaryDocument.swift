@@ -121,10 +121,10 @@ final class DefaultTemporaryDocument: NSObject,
     /// Returns a modified request with Cookies header field
     private static func applyCookiesToRequest(_ request: URLRequest, cookies: [HTTPCookie]) -> URLRequest {
         var rawHeaderCookies = cookies.reduce("") { partialResult, cookie in
-            if let domain = request.url?.baseDomain, cookie.domain.contains(domain) {
-                return partialResult.appending("\(cookie.name)=\(cookie.value); ")
-            }
-            return partialResult
+//            if let domain = request.url?.baseDomain, cookie.domain.contains(domain) {
+            return partialResult.appending("\(cookie.name)=\(cookie.value); ")
+//            }
+//            return partialResult
         }
         if rawHeaderCookies.count >= 2 {
             // Removes the last ; and space char since not needed for the request
