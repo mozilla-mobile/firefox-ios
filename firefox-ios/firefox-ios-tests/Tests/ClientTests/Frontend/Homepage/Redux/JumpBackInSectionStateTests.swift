@@ -16,7 +16,8 @@ final class JumpBackInSectionStateTests: XCTestCase {
         try await super.setUp()
         mockProfile = MockProfile()
         await DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: false)
     }
 
     override func tearDown() async throws {
@@ -30,6 +31,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.jumpBackInTabs, [])
+        XCTAssertFalse(initialState.shouldShowSection)
     }
 
     @MainActor
@@ -111,11 +113,6 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_returnsExpectedState() {
-        let initialState = createSubject()
-        XCTAssertFalse(initialState.shouldShowSection)
-    }
-
     func test_prefDisabled_returnsExpectedState() {
         mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
 
@@ -130,6 +127,59 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertTrue(initialState.shouldShowSection)
     }
 
+    // Tests using the homepage redesign `jbi-section-default` flag
+    func test_sectionFlagEnabled_withoutUserPref_returnsExpectedState() {
+        setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: true)
+
+        let initialState = createSubject()
+        XCTAssertTrue(initialState.shouldShowSection)
+    }
+
+    func test_sectionFlagDisabled_withoutUserPref_returnsExpectedState() {
+        setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: false)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    @MainActor
+    func test_sectionFlagEnabled_withUserPref_returnsExpectedState() {
+        setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: true)
+
+        let initialState = createSubject()
+        let reducer = jumpBackInSectionReducer()
+
+        // Updates the jump back in section user pref
+        let newState = reducer(
+            initialState,
+            JumpBackInAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: JumpBackInActionType.toggleShowSectionSetting
+            )
+        )
+        XCTAssertFalse(newState.shouldShowSection)
+    }
+
+    @MainActor
+    func test_sectionFlagDisabled_withUserPref_returnsExpectedState() {
+        setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: false)
+
+        let initialState = createSubject()
+        let reducer = jumpBackInSectionReducer()
+
+        // Updates the jump back in section user pref
+        let newState = reducer(
+            initialState,
+            JumpBackInAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: JumpBackInActionType.toggleShowSectionSetting
+            )
+        )
+        XCTAssertTrue(newState.shouldShowSection)
+    }
+
     // MARK: - Private
     private func createSubject() -> JumpBackInSectionState {
         return JumpBackInSectionState(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
@@ -137,6 +187,12 @@ final class JumpBackInSectionStateTests: XCTestCase {
 
     private func jumpBackInSectionReducer() -> Reducer<JumpBackInSectionState> {
         return JumpBackInSectionState.reducer
+    }
+
+    private func setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(jbiSectionDefault: isEnabled)
+        }
     }
 
     @MainActor

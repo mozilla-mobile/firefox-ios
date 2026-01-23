@@ -195,6 +195,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     func testJumpBackIn() {
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
+        enableJumpBackInInSettings()
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
         navigator.goto(TabTray)
@@ -230,7 +231,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
-        navigator.nowAt(BrowserTab)
+        enableBookmarksInSettings()
         bookmarkPages()
         // iOS 15 does not have the Reader View button available (when experiment Off)
         if #available(iOS 16, *) {

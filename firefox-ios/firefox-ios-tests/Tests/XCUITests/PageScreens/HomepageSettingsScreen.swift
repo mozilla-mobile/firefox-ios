@@ -23,8 +23,18 @@ final class HomepageSettingsScreen {
         return settingTable.cells.switches[toggle]
     }
 
+    private var jumpBackInSwitch: XCUIElement {
+        let settingTable = sel.HOMEPAGE_SETTINGS_TABLE.element(in: app)
+        let toggle = sel.JUMP_BACK_IN_TOGGLE.value
+        return settingTable.cells.switches[toggle]
+    }
+
     func assertBookmarkToggleExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(bookmarkSwitch)
+    }
+
+    func assertJumpBackInToggleExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(jumpBackInSwitch)
     }
 
     func disableBookmarkToggle() {
@@ -36,6 +46,20 @@ final class HomepageSettingsScreen {
 
     func enableBookmarkToggle() {
         let switchElement = bookmarkSwitch
+        if switchElement.value as? String == "0" {
+            switchElement.waitAndTap()
+        }
+    }
+
+    func disableJumpBackInToggle() {
+        let switchElement = jumpBackInSwitch
+        if switchElement.value as? String == "1" {
+            switchElement.waitAndTap()
+        }
+    }
+
+    func enableJumpBackInToggle() {
+        let switchElement = jumpBackInSwitch
         if switchElement.value as? String == "0" {
             switchElement.waitAndTap()
         }

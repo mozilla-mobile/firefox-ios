@@ -8,7 +8,7 @@
 "TermsOfUse.Description.v142" = "Apresentamos os Termos de uso do %@ e atualizamos nosso Aviso de privacidade.";
 
 /* Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text. */
-"TermsOfUse.LearnMoreHere.v147" = "Você pode saber mais %1$s.";
+"TermsOfUse.LearnMoreHere.v147" = "Você pode saber mais %@.";
 
 /* Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for variants 1 and 2. */
 "TermsOfUse.Link.HereText.v147" = "aqui";

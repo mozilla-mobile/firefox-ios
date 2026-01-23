@@ -422,7 +422,7 @@ class OnboardingTests: BaseTestCase {
         mozWaitForElementToExist(topSites)
     }
 
-    // Smoketest TAE
+    // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/3193571
     func testValidateContinueButton() {
         let onboardingScreen = OnboardingScreen(app: app)

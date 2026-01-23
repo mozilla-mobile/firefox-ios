@@ -6,6 +6,7 @@ import XCTest
 
 protocol HomepageSettingsSelectorSet {
     var BOOKMARK_TOGGLE: Selector { get }
+    var JUMP_BACK_IN_TOGGLE: Selector { get }
     var HOMEPAGE_SETTINGS_TABLE: Selector { get }
     var all: [Selector] { get }
 }
@@ -13,6 +14,7 @@ protocol HomepageSettingsSelectorSet {
 struct HomepageSettingsSelectors: HomepageSettingsSelectorSet {
     private enum IDs {
         static let bookmarkToogle = "Bookmarks"
+        static let jumpBackInToggle = "Jump Back In"
     }
 
     let HOMEPAGE_SETTINGS_TABLE = Selector.firstTable(
@@ -26,5 +28,11 @@ struct HomepageSettingsSelectors: HomepageSettingsSelectorSet {
         groups: ["homepage_settings"]
     )
 
-    var all: [Selector] { [BOOKMARK_TOGGLE, HOMEPAGE_SETTINGS_TABLE] }
+    let JUMP_BACK_IN_TOGGLE = Selector.staticTextByLabel(
+        IDs.jumpBackInToggle,
+        description: "Jump back in toggle in homepage settings",
+        groups: ["homepage_settings"]
+    )
+
+    var all: [Selector] { [BOOKMARK_TOGGLE, HOMEPAGE_SETTINGS_TABLE, JUMP_BACK_IN_TOGGLE] }
 }

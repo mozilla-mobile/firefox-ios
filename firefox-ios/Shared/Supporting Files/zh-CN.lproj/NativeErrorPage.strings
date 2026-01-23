@@ -1,3 +1,21 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "高级";
+
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "您可能需要登录 Wi-Fi 网络，或检查 VPN 设置。";
+
+/* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "若您使用的是企业网络，那么你们的支持团队可能了解更多信息。";
+
+/* On certificate error page, this is the description explaining the security risk. */
+"NativeErrorPage.BadCertDomain.Description.v149" = "可能有人冒充该网站试图窃取您的个人信息。也可能是您的连接设置不正确。";
+
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "隐藏高级选项";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "详细了解";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "重新加载";
 
@@ -5,7 +23,10 @@
 "NativeErrorPage.GenericError.Description.v134" = "%@ 的管理员未正确配置此网站，无法创建安全连接。";
 
 /* On error page, this is the title for generic error. */
-"NativeErrorPage.GenericError.TitleLabel.v131" = "当心，看来有异常情况。";
+"NativeErrorPage.GenericError.TitleLabel.v131" = "当心，似乎有异常情况。";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "返回上一页（推荐）";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "请尝试通过其他设备连接、检查调制解调器或路由器、断开 Wi-Fi 连接后重新连接。";
