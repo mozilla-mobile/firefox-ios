@@ -49,7 +49,7 @@ final class AudioWaveformView: UIView, ThemeApplicable {
     private func updateBarFrames() {
         // start laying out at the center of the bounds.
         let y = (bounds.height - UX.minBarHeight) / 2
-        
+
         let spacing = bounds.width / CGFloat(barLayers.count - 1)
         for (index, barLayer) in barLayers.enumerated() {
             let x = spacing * CGFloat(index) - UX.barWidth / 2
@@ -65,11 +65,11 @@ final class AudioWaveformView: UIView, ThemeApplicable {
             animation.repeatCount = .infinity
             animation.autoreverses = true
             animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            
+
             barLayer.add(animation, forKey: UX.heightAnimationKey)
         }
     }
-    
+
     private func generateRandomHeights() -> [CGFloat] {
         if bounds.height.isZero {
             layoutIfNeeded()
@@ -95,7 +95,7 @@ final class AudioWaveformView: UIView, ThemeApplicable {
             barLayer.add(animation, forKey: UX.stopAnimationKey)
         }
     }
-    
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         barLayers.forEach { $0.backgroundColor = theme.colors.iconPrimary.cgColor }

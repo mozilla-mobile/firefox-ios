@@ -51,7 +51,7 @@ final class GradientCircleView: UIView, ThemeApplicable {
         )
         gradientLayer.cornerRadius = bounds.width / 2
     }
-    
+
     func startAnimating() {
         let locationAnimation = CABasicAnimation(keyPath: UX.locationAnimationKeyPath)
         locationAnimation.fromValue = UX.colorsInitialLocation
@@ -60,7 +60,7 @@ final class GradientCircleView: UIView, ThemeApplicable {
         locationAnimation.autoreverses = true
         locationAnimation.repeatCount = .infinity
         locationAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        
+
         let opacityAnimation = CABasicAnimation(keyPath: UX.opacityAnimationKeyPath)
         opacityAnimation.fromValue = UX.initialAnimationOpacity
         opacityAnimation.toValue = UX.finalAnimationOpacity
@@ -68,16 +68,16 @@ final class GradientCircleView: UIView, ThemeApplicable {
         opacityAnimation.autoreverses = true
         opacityAnimation.repeatCount = .infinity
         opacityAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        
+
         gradientLayer.add(locationAnimation, forKey: UX.locationAnimationKey)
         gradientLayer.add(opacityAnimation, forKey: UX.opacityAnimationKey)
     }
-    
+
     func stopAnimating() {
         gradientLayer.removeAnimation(forKey: UX.locationAnimationKey)
         gradientLayer.removeAnimation(forKey: UX.opacityAnimationKey)
     }
-    
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         gradientLayer.colors = [

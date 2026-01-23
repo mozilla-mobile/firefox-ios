@@ -21,7 +21,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         static let audioWaveformTopPadding: CGFloat = 37.0
         static let audioWaveformSize = CGSize(width: 18.0, height: 35)
     }
-    
+
     // MARK: - Properties
     private let backgroundBlur: UIVisualEffectView = .build {
         $0.effect = UIBlurEffect(style: .systemMaterial)
@@ -57,7 +57,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     public var currentWindowUUID: WindowUUID?
     public var themeListenerCancellable: Any?
     private let notificationCenter: NotificationProtocol
-    
+
     init(
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
@@ -68,13 +68,13 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Lifecycle
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         applyTheme()
@@ -82,7 +82,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
     }
-    
+
     private func setupSubviews() {
         let leadingButtonContainerSpacer = UIView()
         let trailingButtonContainerSpacer = UIView()
@@ -98,13 +98,13 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             audioWaveform.heightAnchor.constraint(equalToConstant: UX.audioWaveformSize.height),
             audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
             audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
+
             backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.heightAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                            constant: UX.recordWaveEffectBottomPadding),
-            
+
             buttonsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                      constant: -UX.buttonsContainerBottomPadding),
             buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -115,7 +115,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         ])
         backgroundBlur.pinToSuperview()
     }
-    
+
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
