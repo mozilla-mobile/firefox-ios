@@ -71,7 +71,9 @@ final class AudioWaveformView: UIView, ThemeApplicable {
     }
     
     private func generateRandomHeights() -> [CGFloat] {
-        layoutIfNeeded()
+        if bounds.height.isZero {
+            layoutIfNeeded()
+        }
         return (0..<UX.numberOfRandomHeights).map { _ in
             CGFloat.random(in: UX.minBarHeight...bounds.height)
         }
@@ -98,20 +100,4 @@ final class AudioWaveformView: UIView, ThemeApplicable {
     func applyTheme(theme: any Theme) {
         barLayers.forEach { $0.backgroundColor = theme.colors.iconPrimary.cgColor }
     }
-}
-
-
-@available(iOS 17, *)
-#Preview {
-    let view = AudioWaveformView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 50.0))
-    view.applyTheme(theme: DarkTheme())
-    view.startAnimating()
-    view.backgroundColor = DarkTheme().colors.layer2
-    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-        view.stopAnimating()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            view.startAnimating()
-        }
-    }
-    return view
 }

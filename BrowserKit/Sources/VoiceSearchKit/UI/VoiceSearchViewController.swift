@@ -15,8 +15,11 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             trailing: UX.buttonPadding
         )
         static let buttonsSpacing: CGFloat = 11.0
+        static let buttonsContainerBottomPadding: CGFloat = 12.0
         static let recordWaveEffectSize: CGFloat = 400.0
         static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
+        static let audioWaveformTopPadding: CGFloat = 37.0
+        static let audioWaveformSize = CGSize(width: 18.0, height: 35)
     }
     
     // MARK: - Properties
@@ -32,7 +35,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             $0.configuration = .filled()
         }
         $0.configuration?.cornerStyle = .capsule
-        $0.configuration?.image = UIImage(systemName: "mic.fill")
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.microphone)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.buttonContentInset
     }
     private let closeButton: UIButton = .build {
@@ -42,7 +45,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             $0.configuration = .filled()
         }
         $0.configuration?.cornerStyle = .capsule
-        $0.configuration?.image = UIImage(systemName: "xmark")
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.buttonContentInset
     }
     private let buttonsContainer: UIStackView = .build {
@@ -74,8 +77,8 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
-        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
     }
@@ -90,18 +93,20 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         view.addSubviews(backgroundRecordEffect, backgroundBlur, audioWaveform, buttonsContainer)
 
         NSLayoutConstraint.activate([
-            audioWaveform.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            audioWaveform.heightAnchor.constraint(equalToConstant: 40.0),
-            audioWaveform.widthAnchor.constraint(equalToConstant: 20.0),
+            audioWaveform.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                               constant: UX.audioWaveformTopPadding),
+            audioWaveform.heightAnchor.constraint(equalToConstant: UX.audioWaveformSize.height),
+            audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
             audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.heightAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                                     constant: UX.recordWaveEffectBottomPadding),
+                                                           constant: UX.recordWaveEffectBottomPadding),
             
-            buttonsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            buttonsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                     constant: -UX.buttonsContainerBottomPadding),
             buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
@@ -121,12 +126,4 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
     }
-}
-
-@available(iOS 17, *)
-#Preview {
-    VoiceSearchViewController(
-        windowUUID: .XCTestDefaultUUID,
-        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-    )
 }
