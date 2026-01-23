@@ -255,6 +255,8 @@
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_TAE()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_tabTrayExperimentOn()",
+        "PrivateBrowsingTest\/testMultipleTabsPrivateBrowsingCloseDisabled()",
+        "PrivateBrowsingTest\/testMultipleTabsPrivateBrowsingCloseEnabled()",
         "PrivateBrowsingTest\/testSwitchBetweenPrivateTabsToastButton()",
         "PrivateBrowsingTest\/testiPadDirectAccessPrivateMode()",
         "PrivateBrowsingTest\/testiPadDirectAccessPrivateModeBrowserTab()",
