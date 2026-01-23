@@ -120,6 +120,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        view.backgroundColor = theme.colors.layer2
         recordButton.configuration?.baseBackgroundColor = theme.colors.iconPrimary
         recordButton.configuration?.baseForegroundColor = theme.colors.layer2
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
