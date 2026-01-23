@@ -72,6 +72,8 @@ final class AudioWaveformView: UIView, ThemeApplicable {
 
     private func generateRandomHeights() -> [CGFloat] {
         if bounds.height.isZero {
+            // force layout to get an height that is not zero for the random heights array,
+            // otherwise it crashes.
             layoutIfNeeded()
         }
         return (0..<UX.numberOfRandomHeights).map { _ in
