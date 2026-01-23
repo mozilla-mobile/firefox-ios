@@ -29,25 +29,25 @@ final class TabTrayStateTests: XCTestCase {
     }
 
     func test_init_withPanelType_tabs() {
-          let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .tabs)
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .tabs)
 
-          XCTAssertEqual(state.selectedPanel, .tabs)
-          XCTAssertFalse(state.isPrivateMode)
-      }
+        XCTAssertEqual(state.selectedPanel, .tabs)
+        XCTAssertFalse(state.isPrivateMode)
+    }
 
-      func test_init_withPanelType_privateTabs() {
-          let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .privateTabs)
+    func test_init_withPanelType_privateTabs() {
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .privateTabs)
 
-          XCTAssertEqual(state.selectedPanel, .privateTabs)
-          XCTAssertTrue(state.isPrivateMode)
-      }
+        XCTAssertEqual(state.selectedPanel, .privateTabs)
+        XCTAssertTrue(state.isPrivateMode)
+    }
 
-      func test_init_withPanelType_syncedTabs() {
-          let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .syncedTabs)
+    func test_init_withPanelType_syncedTabs() {
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .syncedTabs)
 
-          XCTAssertEqual(state.selectedPanel, .syncedTabs)
-          XCTAssertFalse(state.isPrivateMode)
-      }
+        XCTAssertEqual(state.selectedPanel, .syncedTabs)
+        XCTAssertFalse(state.isPrivateMode)
+    }
 
     // MARK: - DidLoadTabTray action
 
@@ -100,16 +100,16 @@ final class TabTrayStateTests: XCTestCase {
 
     @MainActor
     func test_reduceTabTray_didLoadTabTray_withNilModel_returnsDefaultState() {
-         let initialState = createSubject()
-         let reducer = tabTrayReducer()
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
 
-         let action = TabTrayAction(windowUUID: .XCTestDefaultUUID,
-                                    actionType: TabTrayActionType.didLoadTabTray)
-         let newState = reducer(initialState, action)
+        let action = TabTrayAction(windowUUID: .XCTestDefaultUUID,
+                                   actionType: TabTrayActionType.didLoadTabTray)
+        let newState = reducer(initialState, action)
 
-         // Should return defaultState when tabTrayModel is nil
-         XCTAssertEqual(newState, TabTrayState.defaultState(from: initialState))
-     }
+        // Should return defaultState when tabTrayModel is nil
+        XCTAssertEqual(newState, TabTrayState.defaultState(from: initialState))
+    }
 
     // MARK: - changePanel action
 
@@ -147,17 +147,17 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertFalse(newState.isPrivateMode)
     }
 
-     @MainActor
-     func test_reduceTabTray_changePanel_withNilPanelType_returnsDefaultState() {
-         let initialState = createSubject()
-         let reducer = tabTrayReducer()
+    @MainActor
+    func test_reduceTabTray_changePanel_withNilPanelType_returnsDefaultState() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
 
-         let action = TabTrayAction(windowUUID: .XCTestDefaultUUID,
-                                    actionType: TabTrayActionType.changePanel)
-         let newState = reducer(initialState, action)
+        let action = TabTrayAction(windowUUID: .XCTestDefaultUUID,
+                                   actionType: TabTrayActionType.changePanel)
+        let newState = reducer(initialState, action)
 
-         XCTAssertEqual(newState, TabTrayState.defaultState(from: initialState))
-     }
+        XCTAssertEqual(newState, TabTrayState.defaultState(from: initialState))
+    }
 
     // MARK: - TabPanelMiddlewareAction Tests
 
@@ -247,28 +247,28 @@ final class TabTrayStateTests: XCTestCase {
     }
 
     @MainActor
-     func test_reduceTabPanelMiddleware_refreshTabs_withNormalTabs() {
-         let initialState = createSubject()
-         let reducer = tabTrayReducer()
+    func test_reduceTabPanelMiddleware_refreshTabs_withNormalTabs() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
 
-         let tabs = [
-             TabModel.emptyState(tabUUID: "tab1", title: "Normal 1", isPrivate: false),
-             TabModel.emptyState(tabUUID: "tab2", title: "Normal 2", isPrivate: false)
-         ]
-         let displayModel = TabDisplayModel(isPrivateMode: false,
-                                            tabs: tabs,
-                                            normalTabsCount: "10",
-                                            privateTabsCount: "3",
-                                            enableDeleteTabsButton: true)
+        let tabs = [
+            TabModel.emptyState(tabUUID: "tab1", title: "Normal 1", isPrivate: false),
+            TabModel.emptyState(tabUUID: "tab2", title: "Normal 2", isPrivate: false)
+        ]
+        let displayModel = TabDisplayModel(isPrivateMode: false,
+                                           tabs: tabs,
+                                           normalTabsCount: "10",
+                                           privateTabsCount: "3",
+                                           enableDeleteTabsButton: true)
 
-         let action = TabPanelMiddlewareAction(tabDisplayModel: displayModel,
-                                               windowUUID: .XCTestDefaultUUID,
-                                               actionType: TabPanelMiddlewareActionType.refreshTabs)
-         let newState = reducer(initialState, action)
+        let action = TabPanelMiddlewareAction(tabDisplayModel: displayModel,
+                                              windowUUID: .XCTestDefaultUUID,
+                                              actionType: TabPanelMiddlewareActionType.refreshTabs)
+        let newState = reducer(initialState, action)
 
-         XCTAssertEqual(newState.normalTabsCount, "10") // Should update for normal tabs
-         XCTAssertEqual(newState.privateTabsCount, "3")
-     }
+        XCTAssertEqual(newState.normalTabsCount, "10") // Should update for normal tabs
+        XCTAssertEqual(newState.privateTabsCount, "3")
+    }
 
     @MainActor
     func test_reduceTabPanelMiddleware_ShowToastAction() {
@@ -303,38 +303,38 @@ final class TabTrayStateTests: XCTestCase {
     }
 
     // MARK: - Computed Properties
-      func test_navigationTitle_forTabsPanel() {
-          let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
-                                   isPrivateMode: false,
-                                   selectedPanel: .tabs,
-                                   normalTabsCount: "5",
-                                   privateTabsCount: "0",
-                                   hasSyncableAccount: false)
+    func test_navigationTitle_forTabsPanel() {
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
+                                 isPrivateMode: false,
+                                 selectedPanel: .tabs,
+                                 normalTabsCount: "5",
+                                 privateTabsCount: "0",
+                                 hasSyncableAccount: false)
 
-          XCTAssertEqual(state.navigationTitle, TabTrayPanelType.tabs.navTitle)
-      }
+        XCTAssertEqual(state.navigationTitle, TabTrayPanelType.tabs.navTitle)
+    }
 
-      func test_navigationTitle_forPrivateTabsPanel() {
-          let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
-                                   isPrivateMode: true,
-                                   selectedPanel: .privateTabs,
-                                   normalTabsCount: "0",
-                                   privateTabsCount: "3",
-                                   hasSyncableAccount: false)
+    func test_navigationTitle_forPrivateTabsPanel() {
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
+                                 isPrivateMode: true,
+                                 selectedPanel: .privateTabs,
+                                 normalTabsCount: "0",
+                                 privateTabsCount: "3",
+                                 hasSyncableAccount: false)
 
-          XCTAssertEqual(state.navigationTitle, TabTrayPanelType.privateTabs.navTitle)
-      }
+        XCTAssertEqual(state.navigationTitle, TabTrayPanelType.privateTabs.navTitle)
+    }
 
-      func test_navigationTitle_forSyncedTabsPanel() {
-          let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
-                                   isPrivateMode: false,
-                                   selectedPanel: .syncedTabs,
-                                   normalTabsCount: "5",
-                                   privateTabsCount: "0",
-                                   hasSyncableAccount: true)
+    func test_navigationTitle_forSyncedTabsPanel() {
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
+                                 isPrivateMode: false,
+                                 selectedPanel: .syncedTabs,
+                                 normalTabsCount: "5",
+                                 privateTabsCount: "0",
+                                 hasSyncableAccount: true)
 
-          XCTAssertEqual(state.navigationTitle, TabTrayPanelType.syncedTabs.navTitle)
-      }
+        XCTAssertEqual(state.navigationTitle, TabTrayPanelType.syncedTabs.navTitle)
+    }
 
     // MARK: Private helpers
     private func createSubject() -> TabTrayState {
