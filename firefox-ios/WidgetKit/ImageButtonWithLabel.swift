@@ -86,14 +86,10 @@ struct ImageButtonWithLabel: View {
                         label
                         Spacer()
                         if #available(iOSApplicationExtension 18.0, *) {
-                            Image(decorative: imageName)
-                                .widgetAccentedRenderingMode(.accentedDesaturated)
-                                .scaledToFit()
+                            Image(decorative: imageName).widgetAccentedRenderingMode(.accentedDesaturated).scaledToFit()
                                 .frame(height: 24.0)
                         } else {
-                            Image(decorative: imageName)
-                                .scaledToFit()
-                                .frame(height: 24.0)
+                            Image(decorative: imageName).scaledToFit().frame(height: 24.0)
                         }
                     }
                     if isSmall {
