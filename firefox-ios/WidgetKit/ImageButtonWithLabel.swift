@@ -61,10 +61,13 @@ struct ImageButtonWithLabel: View {
     }
 
     var body: some View {
+        let isSearchSmall = (link == .search && isSmall)
+        let imageName = isSearchSmall ? StandardImageIdentifiers.Large.search : link.imageName
+
         Link(destination: isSmall ? link.smallWidgetUrl : link.mediumWidgetUrl) {
             ZStack(alignment: .leading) {
                 if !isSmall {
-                    if #available(iOS 26.0, *) {
+                    if #available(iOS 16.0, *) {
                         BackgroundContent(link: link)
                     } else {
                         ContainerRelativeShape()
@@ -75,7 +78,6 @@ struct ImageButtonWithLabel: View {
                                     endPoint: .topTrailing
                                 )
                             )
-                            .widgetAccentableCompat()
                     }
                 }
 
@@ -83,7 +85,16 @@ struct ImageButtonWithLabel: View {
                     HStack(alignment: .top) {
                         label
                         Spacer()
-                        logo
+                        if #available(iOSApplicationExtension 18.0, *) {
+                            Image(decorative: imageName)
+                                .widgetAccentedRenderingMode(.accentedDesaturated)
+                                .scaledToFit()
+                                .frame(height: 24.0)
+                        } else {
+                            Image(decorative: imageName)
+                                .scaledToFit()
+                                .frame(height: 24.0)
+                        }
                     }
                     if isSmall {
                         icon
@@ -111,52 +122,42 @@ struct ImageButtonWithLabel: View {
         }
     }
 
-    private var logo: some View {
-        if link == .search && isSmall {
-            return Image(decorative: StandardImageIdentifiers.Large.search)
-                .scaledToFit()
-                .frame(height: 24.0)
-        } else {
-            return Image(decorative: link.imageName)
-                .scaledToFit()
-                .frame(height: 24.0)
-        }
-    }
-
     private var icon: some View {
         return HStack(alignment: .bottom) {
             Spacer()
-            Image(decorative: "faviconFox")
-                .scaledToFit()
-                .frame(height: 24.0)
+            if #available(iOSApplicationExtension 18.0, *) {
+                Image(decorative: "faviconFox")
+                    .widgetAccentedRenderingMode(.accentedDesaturated)
+                    .scaledToFit()
+                    .frame(height: 24.0)
+            } else {
+                Image(decorative: "faviconFox")
+                    .scaledToFit()
+                    .frame(height: 24.0)
+            }
         }
     }
 }
 
-@available(iOS 26.0, *)
+@available(iOS 16.0, *)
 struct BackgroundContent: View {
     @Environment(\.widgetRenderingMode) private var renderingMode
     var link: QuickLink
 
     var body: some View {
         if renderingMode == .accented {
-            baseBackground
-                .glassEffect(.clear, in: .rect)
+            ContainerRelativeShape()
+                .fill(link.tintedBackgroundColor)
         } else {
-            baseBackground
-        }
-    }
-
-    private var baseBackground: some View {
-        ContainerRelativeShape()
-            .fill(
-                LinearGradient(
-                    gradient: Gradient(colors: link.backgroundColors),
-                    startPoint: .bottomLeading,
-                    endPoint: .topTrailing
+            ContainerRelativeShape()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: link.backgroundColors),
+                        startPoint: .bottomLeading,
+                        endPoint: .topTrailing
+                    )
                 )
-            )
-            .widgetAccentableCompat()
+        }
     }
 }
 #endif
