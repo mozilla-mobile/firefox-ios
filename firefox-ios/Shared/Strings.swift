@@ -1038,11 +1038,6 @@ extension String {
         }
 
         public struct Pocket {
-            public static let SectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.SectionTitle.v140",
-                tableName: "FirefoxHomepage",
-                value: "Stories",
-                comment: "This is the title of the Stories section on Firefox Homepage.")
             public static let PopularTodaySectionTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.PopularTodaySectionTitle.v145",
                 tableName: "FirefoxHomepage",
@@ -8817,13 +8812,16 @@ extension String {
                 comment: "This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray")
         }
         struct v148 {
-            public struct CustomizeHomepage {
-                public static let ButtonTitle = MZLocalizedString(
-                    key: "FirefoxHome.CustomizeHomeButton.Title",
-                    tableName: nil,
-                    value: "Customize Homepage",
-                    comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page")
-            }
+            public static let ButtonTitle = MZLocalizedString(
+                key: "FirefoxHome.CustomizeHomeButton.Title",
+                tableName: nil,
+                value: "Customize Homepage",
+                comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page")
+            public static let SectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.SectionTitle.v140",
+                tableName: "FirefoxHomepage",
+                value: "Stories",
+                comment: "This is the title of the Stories section on Firefox Homepage.")
         }
     }
 }
