@@ -35,7 +35,8 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             $0.configuration = .filled()
         }
         $0.configuration?.cornerStyle = .capsule
-        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.microphone)?.withRenderingMode(.alwaysTemplate)
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.microphone)?
+            .withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.buttonContentInset
     }
     private let closeButton: UIButton = .build {
