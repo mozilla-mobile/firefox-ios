@@ -634,6 +634,10 @@ open class RelayClient: RelayClientProtocol, @unchecked Sendable {
     /**
      * Creates a new `RelayClient` instance.
      *
+     * The client automatically includes an `X-Relay-Client` header with the platform
+     * identifier based on the target OS (e.g., "appservices-ios", "appservices-android",
+     * "appservices-macos", etc.) to help the Relay backend distinguish mobile vs desktop requests.
+     *
      * # Parameters
      * - `server_url`: Base URL for the Relay API.
      * - `auth_token`: Optional relay-scoped access token (see struct docs).
@@ -1807,7 +1811,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_relay_checksum_method_relayremotesettingsclient_should_show_relay() != 53216) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_constructor_relayclient_new() != 25664) {
+    if (uniffi_relay_checksum_constructor_relayclient_new() != 57675) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_relay_checksum_constructor_relayremotesettingsclient_new() != 27724) {

@@ -131,9 +131,15 @@ struct AccessibilityIdentifiers {
 
     struct EnhancedTrackingProtection {
         struct MainScreen {
+            static let scrollView = "TrackingProtection.ScrollView"
+            static let baseView = "TrackingProtection.BaseView"
             static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"
             static let trackingProtectionSettingsButton = "TrackingProtection.SettingsButton"
+            static let connectionDetailsContentView = "TrackingProtection.ConnectionDetailsContentView"
             static let foxImage = "TrackingProtection.FoxStatusImage"
+            static let connectionDetailsLabelsContainer = "TrackingProtection.ConnectionDetailsLabelsContainer"
+            static let connectionDetailsTitleLabel = "TrackingProtection.ConnectionDetailsTitleLabel"
+            static let connectionDetailsStatusLabel = "TrackingProtection.ConnectionDetailsStatusLabel"
             static let shieldImage = "TrackingProtection.ShieldImage"
             static let lockImage = "TrackingProtection.LockImage"
             static let arrowImage = "TrackingProtection.ArrowImage"
@@ -144,12 +150,25 @@ struct AccessibilityIdentifiers {
             static let trackersBlockedButton = "TrackingProtection.TrackersBlockedButton"
             static let securityStatusButton = "TrackingProtection.ConnectionSecurityStatusButton"
             static let toggleViewLabelsContainer = "TrackingProtection.ToggleViewLabelsContainer"
+            static let toggleLabel = "TrackingProtection.ToggleLabel"
+            static let toggleSwitch = "TrackingProtection.ToggleSwitch"
+            static let toggleStatusLabel = "TrackingProtection.ToggleStatusLabel"
             static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
             static let closeButton = "TrackingProtection.CloseButton"
             static let faviconImage = "TrackingProtection.FaviconImage"
+            static let trackersLabel  = "TrackingProtection.TrackersLabel"
+            static let trackersHorizontalLine = "TrackingProtection.TrackersHorizontalLine"
+            static let trackersConnectionContainer = "TrackingProtection.TrackersConnectionContainer"
+            static let connectionStatusImage = "TrackingProtection.ConnectionStatusImage"
+            static let connectionStatusLabel = "TrackingProtection.ConnectionStatusLabel"
+            static let connectionHorizontalLine = "TrackingProtection.ConnectionHorizontalLine"
+            static let favicon = "TrackingProtection.Favicon"
+            static let titleLabel = "TrackingProtection.TitleLabel"
+            static let subtitleLabel = "TrackingProtection.SubtitleLabel"
         }
 
         struct DetailsScreen {
+            static let scrollView = "TrackingProtectionDetails.ScrollView"
             static let headerView = "TrackingProtectionDetails.HeaderView"
             static let mainView = "TrackingProtectionDetails.MainView"
             static let containerView = "TrackingProtectionDetails.BaseView"
@@ -164,12 +183,31 @@ struct AccessibilityIdentifiers {
             static let sectionLabel = "TrackingProtectionDetails.SectionLabel"
             static let allSectionItems = "TrackingProtectionDetails.AllSectionItems"
             static let itemLabel = "TrackingProtectionDetails.ItemLabel"
+            static let connectionImage = "TrackingProtectionDetails.ConnectionImage"
+            static let connectionStatusLabel = "TrackingProtectionDetails.ConnectionStatusLabel"
+            static let dividerView = "TrackingProtectionDetails.DividerView"
+            static let verifiedByView = "TrackingProtectionDetails.VerifiedByView"
+            static let verifiedByLabel = "TrackingProtectionDetails.VerifiedByLabel"
         }
 
         struct BlockedTrackers {
             static let headerView = "BlockedTrackers.HeaderView"
             static let mainView = "BlockedTrackers.MainView"
             static let containerView = "BlockedTrackers.BaseView"
+            static let trackersTable = "BlockedTrackers.TrackersTable"
+            static let totalTrackersBlockedLabel = "BlockedTrackers.TotalTrackersBlockedLabel"
+
+            static let crossSiteTitle = "BlockedTrackers.CrossSiteTitle"
+            static let crossSiteImage = "BlockedTrackers.CrossSiteImage"
+
+            static let fingerPrintersTitle = "BlockedTrackers.FingerPrintersTitle"
+            static let fingerPrintersImage = "BlockedTrackers.FingerPrintersImage"
+
+            static let trackingContentTitle = "BlockedTrackers.TrackingContentTitle"
+            static let trackingContentImage = "BlockedTrackers.TrackingContentImage"
+
+            static let socialMediaTitle = "BlockedTrackers.SocialMediaTitle"
+            static let socialMediaImage = "BlockedTrackers.SocialMediaImage"
         }
 
         struct CertificatesScreen {
