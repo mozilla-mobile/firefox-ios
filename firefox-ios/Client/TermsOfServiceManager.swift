@@ -32,39 +32,37 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     }
 
     var isAccepted: Bool {
-        prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
+        return prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
     }
 
     var shouldShowScreen: Bool {
         guard featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser) else { return false }
-
-        return prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == nil
+        return !isAccepted
     }
 
     func setAccepted(acceptedDate: Date) {
-        prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
-        prefs.setString(String(TermsOfUseTelemetry().termsOfUseVersion), forKey: PrefsKeys.TermsOfServiceAcceptedVersion)
-        prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfServiceAcceptedDate)
+        prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
+        prefs.setString(String(TermsOfUseTelemetry().termsOfUseVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
+        prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
     }
 
     func migrateLegacyToSAcceptance() {
-        // Check if user has accepted ToS, but is missing date/version preferences
-        let hasAcceptedToS = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
-        guard hasAcceptedToS else { return }
+        let hasAcceptedToU = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
+        guard hasAcceptedToU else { return }
 
-        let hasVersion = prefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
-        let hasDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate)
+        let hasVersion = prefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion)
+        let hasDate = prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate)
 
         guard hasDate == nil || hasVersion == nil else { return }
 
         // Use terms of use version 4 as convention,
         // since cannot be determined the exact version that was accepted
         let pastVersion = 4
-        prefs.setString(String(pastVersion), forKey: PrefsKeys.TermsOfServiceAcceptedVersion)
+        prefs.setString(String(pastVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
 
         // Use installation date as accepted date
         let installationDate = InstallationUtils.inferredDateInstalledOn ?? Date()
-        prefs.setTimestamp(installationDate.toTimestamp(), forKey: PrefsKeys.TermsOfServiceAcceptedDate)
+        prefs.setTimestamp(installationDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         // Record date and version telemetry for legacy users who just got migrated
         TermsOfServiceTelemetry().recordDateAndVersion(acceptedDate: installationDate)

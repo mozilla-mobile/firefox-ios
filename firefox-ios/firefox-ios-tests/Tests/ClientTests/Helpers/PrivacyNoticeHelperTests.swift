@@ -31,7 +31,8 @@ final class PrivacyNoticeHelperTests: XCTestCase {
     func test_shouldShowPrivacyNotice_whenAcceptanceAfterUpdate_returnsFalse() {
         let subject = createSubject()
         let now = subject.privacyNoticeUpdateInMilliseconds + 1000
-        prefs.setTimestamp(now, forKey: PrefsKeys.TermsOfServiceAcceptedDate)
+        // Use TermsOfUseAcceptedDate (migrated from TermsOfServiceAcceptedDate)
+        prefs.setTimestamp(now, forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         let result = subject.shouldShowPrivacyNotice()
 
@@ -43,7 +44,8 @@ final class PrivacyNoticeHelperTests: XCTestCase {
 
         // Acceptance was before the update
         let acceptance = subject.privacyNoticeUpdateInMilliseconds - 10000
-        prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfServiceAcceptedDate)
+        // Use TermsOfUseAcceptedDate (migrated from TermsOfServiceAcceptedDate)
+        prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         // Notified after the update
         let notified = subject.privacyNoticeUpdateInMilliseconds + 10000
@@ -59,7 +61,8 @@ final class PrivacyNoticeHelperTests: XCTestCase {
 
         // Acceptance before update
         let acceptance = subject.privacyNoticeUpdateInMilliseconds - 10000
-        prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfServiceAcceptedDate)
+        // Use TermsOfUseAcceptedDate (migrated from TermsOfServiceAcceptedDate)
+        prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         // No prior notification
         XCTAssertNil(prefs.timestampForKey(PrefsKeys.PrivacyNotice.notifiedDate))
@@ -79,7 +82,8 @@ final class PrivacyNoticeHelperTests: XCTestCase {
         let acceptance = subject.privacyNoticeUpdateInMilliseconds - 100000
         let oldNotified = subject.privacyNoticeUpdateInMilliseconds - 200000
 
-        prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfServiceAcceptedDate)
+        // Use TermsOfUseAcceptedDate (migrated from TermsOfServiceAcceptedDate)
+        prefs.setTimestamp(acceptance, forKey: PrefsKeys.TermsOfUseAcceptedDate)
         prefs.setTimestamp(oldNotified, forKey: PrefsKeys.PrivacyNotice.notifiedDate)
 
         let result = subject.shouldShowPrivacyNotice()
