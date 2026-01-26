@@ -1998,7 +1998,6 @@ class BrowserViewController: UIViewController,
             toastContainer: contentContainer
         )
 
-
         // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
         if !isToolbarTranslucencyRefactorEnabled {
             updateToolbarDisplay()
