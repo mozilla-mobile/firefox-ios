@@ -20,7 +20,6 @@ final class AudioWaveformView: UIView, ThemeApplicable {
         static let stopAnimationDuration: CFTimeInterval = 0.3
         static let stopAnimationKey = "stopAnimation"
     }
-
     private var barLayers: [CALayer] = []
 
     override init(frame: CGRect) {
@@ -47,6 +46,10 @@ final class AudioWaveformView: UIView, ThemeApplicable {
     }
 
     private func updateBarFrames() {
+        guard barLayers.count > 1 else {
+            assert(false, "The number of bars must be greater than 1")
+            return
+        }
         // start laying out at the center of the bounds.
         let y = (bounds.height - UX.minBarHeight) / 2
 
