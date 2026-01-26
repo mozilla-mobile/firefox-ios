@@ -201,11 +201,14 @@ final class BrowserScreen {
     }
 
     func tapOnBookOfMozilla() {
-        bookText.waitAndTap()
+        let tableHistory = app.tables.staticTexts["The Book of Mozilla"]
+        tableHistory.waitAndTap()
+        // bookText.waitAndTap()
     }
 
     func waitForBookOfMozillaToDisappear(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToNotExist(bookText, timeout: timeout)
+        let tableHistory = app.tables.staticTexts["The Book of Mozilla"]
+        BaseTestCase().mozWaitForElementToNotExist(tableHistory, timeout: timeout)
     }
 
     func assertAddressBar_LockIconExist(timeout: TimeInterval = TIMEOUT) {
