@@ -168,11 +168,6 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    func setHomepageVisibility(isVisible: Bool) {
-        guard let homepage = homepageViewController else { return }
-        homepage.view.isHidden = !isVisible
-    }
-
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
         store.dispatch(
             HomepageAction(
