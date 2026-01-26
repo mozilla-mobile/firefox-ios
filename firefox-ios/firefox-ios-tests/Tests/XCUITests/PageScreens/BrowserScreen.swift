@@ -203,7 +203,6 @@ final class BrowserScreen {
     func tapOnBookOfMozilla() {
         let tableHistory = app.tables.staticTexts["The Book of Mozilla"]
         tableHistory.waitAndTap()
-        // bookText.waitAndTap()
     }
 
     func waitForBookOfMozillaToDisappear(timeout: TimeInterval = TIMEOUT) {
