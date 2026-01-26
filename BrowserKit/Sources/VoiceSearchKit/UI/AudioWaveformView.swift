@@ -47,7 +47,7 @@ final class AudioWaveformView: UIView, ThemeApplicable {
 
     private func updateBarFrames() {
         guard barLayers.count > 1 else {
-            assert(false, "The number of bars must be greater than 1")
+            assertionFailure("The number of bars must be greater than 1")
             return
         }
         // start laying out at the center of the bounds.
