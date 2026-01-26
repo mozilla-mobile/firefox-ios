@@ -2546,6 +2546,11 @@ class BrowserViewController: UIViewController,
             if let urlOrigin = url.origin,
                let newTabURL = URL(string: urlOrigin) {
                 tab.url = newTabURL
+                // TODO: FXIOS-14738 Follow up with for proper 204 fix
+                // Update UI to reflect the URL we have set the tab to
+                if tab === tabManager.selectedTab {
+                    updateUIForReaderHomeStateForTab(tab)
+                }
             }
             return
         }
