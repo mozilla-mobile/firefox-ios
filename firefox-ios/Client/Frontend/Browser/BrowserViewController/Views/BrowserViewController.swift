@@ -3171,7 +3171,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
-    private func dispatchAvailableContentHeightChangedAction() {
+    func dispatchAvailableContentHeightChangedAction() {
         guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
