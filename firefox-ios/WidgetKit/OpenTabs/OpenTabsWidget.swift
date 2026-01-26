@@ -36,30 +36,24 @@ struct OpenTabsView: View {
                 HStack(alignment: .center, spacing: 15) {
                     if let favIcon = entry.favicons[tab.imageKey] {
                         if #available(iOS 18.0, *) {
-                            favIcon.resizable().widgetAccentedRenderingMode(.accentedDesaturated)
+                            favIcon.resizable()
+                                .widgetAccentedRenderingMode(.accentedDesaturated)
                                 .frame(width: 16, height: 16)
                                 .foregroundColor(Color("openTabsContentColor"))
                         } else {
-                            favIcon.resizable().frame(width: 16, height: 16)
+                            favIcon.resizable()
+                                .frame(width: 16, height: 16)
                                 .foregroundColor(Color("openTabsContentColor"))
                         }
                     } else {
-                        if #available(iOS 18.0, *) {
-                            Image(decorative: StandardImageIdentifiers.Large.globe)
-                                .widgetAccentedRenderingMode(.accentedDesaturated)
-                                .foregroundColor(Color("openTabsContentColor"))
-                                .frame(width: 16, height: 16)
-                        } else {
-                            Image(decorative: StandardImageIdentifiers.Large.globe)
-                                .foregroundColor(Color("openTabsContentColor"))
-                                .frame(width: 16, height: 16)
-                        }
+                        globeIconView
                     }
 
                     Text(tab.title ?? "")
                         .foregroundColor(Color("openTabsContentColor"))
                         .multilineTextAlignment(.leading)
-                        .lineLimit(1).font(.system(size: 15, weight: .regular, design: .default))
+                        .lineLimit(1)
+                        .font(.system(size: 15, weight: .regular, design: .default))
                     Spacer()
                 }.padding(.horizontal)
             }
@@ -69,6 +63,20 @@ struct OpenTabsView: View {
                 .fill(Color("separatorColor"))
                 .frame(height: 0.5)
                 .padding(.leading, 45)
+        }
+    }
+
+    @ViewBuilder
+    private var globeIconView: some View {
+        if #available(iOS 18.0, *) {
+            Image(decorative: StandardImageIdentifiers.Large.globe)
+                .widgetAccentedRenderingMode(.accentedDesaturated)
+                .foregroundColor(Color("openTabsContentColor"))
+                .frame(width: 16, height: 16)
+        } else {
+            Image(decorative: StandardImageIdentifiers.Large.globe)
+                .foregroundColor(Color("openTabsContentColor"))
+                .frame(width: 16, height: 16)
         }
     }
 
