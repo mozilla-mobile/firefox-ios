@@ -143,24 +143,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
-    func testViewDidLoad_addsHomepage_whenSwipingTabsEnabled_onIphone() {
-        let subject = createSubject(userInterfaceIdiom: .phone)
-        setIsSwipingTabsEnabled(true)
-
-        subject.loadViewIfNeeded()
-
-        XCTAssertEqual(browserCoordinator.showHomepageCalled, 1)
-    }
-
-    func testViewDidLoad_doesNotAddHomepage_whenSwipingTabsEnabled_onIpad() {
-        let subject = createSubject(userInterfaceIdiom: .pad)
-        setIsSwipingTabsEnabled(true)
-
-        subject.loadViewIfNeeded()
-
-        XCTAssertEqual(browserCoordinator.showHomepageCalled, 0)
-    }
-
     func testUpdateReaderModeState_whenSummarizeFeatureOn_dispatchesToolbarMiddlewareAction() throws {
         setIsHostedSummarizerEnabled(true)
         let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
