@@ -9,17 +9,17 @@ class VoiceSearchViewModel {
         case loadingSearchResult
         case showSearchResult(SearchResult, SearchResultError?)
     }
-    
+
     private let service: VoiceSearchService
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
     private var recentSpeechResult: SpeechResult?
     var onStateChange: ((State) -> Void)?
-    
+
     init(service: VoiceSearchService) {
         self.service = service
     }
-    
+
     func startRecordingVoice() {
         searchResultTask?.cancel()
         searchResultTask = nil
@@ -27,7 +27,7 @@ class VoiceSearchViewModel {
             await self?.recordVoiceTask()
         }
     }
-    
+
     private func recordVoiceTask() async {
         let stream = service.recordVoice()
         do {
@@ -46,7 +46,7 @@ class VoiceSearchViewModel {
             onStateChange?(.recordVoice(.empty(), error))
         }
     }
-    
+
     func stopRecordingVoice() {
         recordVoiceTask?.cancel()
         recordVoiceTask = nil
@@ -61,7 +61,7 @@ class VoiceSearchViewModel {
             }
         }
     }
-    
+
     private func searchVoiceResult(_ result: SpeechResult) async {
         onStateChange?(.loadingSearchResult)
         let searchResult = await service.search(text: result.text)

@@ -13,7 +13,7 @@ final class VoiceSearchViewModelTests: XCTestCase {
         try await super.setUp()
         mockService = MockTestVoiceSearchService()
     }
-    
+
     override func tearDown() async throws {
         mockService = nil
         try await super.tearDown()
@@ -35,9 +35,9 @@ final class VoiceSearchViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         subject.startRecordingVoice()
-        
+
         wait(for: [expectation])
-        
+
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
         XCTAssertEqual(mockService.searchCalledCount, 1)
         XCTAssertEqual(states[0], .recordVoice(partialResult, nil))
@@ -51,19 +51,19 @@ final class VoiceSearchViewModelTests: XCTestCase {
         let expectation = XCTestExpectation()
         let subject = createSubject()
         var state: VoiceSearchViewModel.State?
-        
+
         subject.onStateChange = {
             state = $0
             expectation.fulfill()
         }
         subject.startRecordingVoice()
-        
+
         wait(for: [expectation])
-        
+
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
         XCTAssertEqual(state, .recordVoice(.empty(), SpeechError.unknown))
     }
-    
+
     func testStartRecordingVoice_withSearchError_receivesError() {
         let speechResult = SpeechResult(text: "Hello", isFinal: true)
         let searchError = SearchResultError.unknown
@@ -72,14 +72,14 @@ final class VoiceSearchViewModelTests: XCTestCase {
         var states = [VoiceSearchViewModel.State]()
         let expectation = XCTestExpectation()
         let subject = createSubject()
-        
+
         subject.onStateChange = { state in
             states.append(state)
             guard states.count == 3 else { return }
             expectation.fulfill()
         }
         subject.startRecordingVoice()
-        
+
         wait(for: [expectation])
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
         XCTAssertEqual(states[0], .recordVoice(speechResult, nil))
@@ -94,11 +94,11 @@ final class VoiceSearchViewModelTests: XCTestCase {
         let searchResult = SearchResult(title: "Test", body: "Test", url: nil)
         mockService.speechResults = [partialResult]
         mockService.searchResult = .success(searchResult)
-        
+
         let expectation = XCTestExpectation()
         var states = [VoiceSearchViewModel.State]()
         let subject = createSubject()
-        
+
         subject.onStateChange = { [weak subject] state in
             states.append(state)
             if state == .recordVoice(partialResult, nil) {
@@ -108,16 +108,16 @@ final class VoiceSearchViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         subject.startRecordingVoice()
-        
+
         wait(for: [expectation])
-        
+
         XCTAssertEqual(mockService.stopRecordingCalledCount, 1)
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
         XCTAssertEqual(states[0], .recordVoice(partialResult, nil))
         XCTAssertEqual(states[1], .loadingSearchResult)
         XCTAssertEqual(states[2], .showSearchResult(searchResult, nil))
     }
-    
+
     // MARK: - Helper
     private func createSubject() -> VoiceSearchViewModel {
         let model = VoiceSearchViewModel(service: mockService)

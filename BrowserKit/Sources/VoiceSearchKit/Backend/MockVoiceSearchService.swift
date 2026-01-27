@@ -33,9 +33,9 @@ final class MockVoiceSearchService: VoiceSearchService, @unchecked Sendable {
             }
         }
     }
-    
+
     func stopRecordingVoice() {}
-    
+
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
         try? await Task.sleep(nanoseconds: 200_000_000)
         if throwSearchError {
