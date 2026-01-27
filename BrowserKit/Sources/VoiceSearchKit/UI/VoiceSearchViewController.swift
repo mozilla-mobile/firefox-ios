@@ -129,25 +129,3 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         audioWaveform.applyTheme(theme: theme)
     }
 }
-
-@available(iOS 17, *)
-#Preview {
-    let controller = VoiceSearchViewController(
-        windowUUID: .XCTestDefaultUUID,
-        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-    )
-    let theme = LightTheme()
-    controller.view.subviews.forEach { view in
-        if let buttonContainer = view as? UIStackView {
-            buttonContainer.arrangedSubviews.forEach { view in
-                guard let button = view as? UIButton else { return }
-                if button.configuration?.baseBackgroundColor == theme.colors.iconPrimary {
-                    button.configuration?.image = UIImage(systemName: "mic.fill")
-                } else {
-                    button.configuration?.image = UIImage(systemName: "xmark")
-                }
-            }
-        }
-    }
-    return controller
-}

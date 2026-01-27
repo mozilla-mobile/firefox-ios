@@ -2536,6 +2536,11 @@ class BrowserViewController: UIViewController,
             if let urlOrigin = url.origin,
                let newTabURL = URL(string: urlOrigin) {
                 tab.url = newTabURL
+                // TODO: FXIOS-14738 Follow up with for proper 204 fix
+                // Update UI to reflect the URL we have set the tab to
+                if tab === tabManager.selectedTab {
+                    updateUIForReaderHomeStateForTab(tab)
+                }
             }
             return
         }
@@ -4118,11 +4123,11 @@ class BrowserViewController: UIViewController,
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
         case .error, .expiredToken:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
-            SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
+            showSimpleToast(message: message)
         case .freeTierLimitReached:
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
             let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
-            SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
+            showSimpleToast(message: message)
         }
     }
 
@@ -4791,6 +4796,12 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
+    }
+
+    func showSimpleToast(message: String) {
+        let viewModel = PlainToastViewModel(labelText: message)
+        let toast = PlainToast(viewModel: viewModel, theme: currentTheme(), completion: nil)
+        show(toast: toast)
     }
 
     func show(toast: Toast,
