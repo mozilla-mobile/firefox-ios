@@ -11,9 +11,9 @@ import WebEngine
 /// to allow forwarding the event. The reason this is needed for prompts from Javascript is we
 /// need to invoke the completionHandler passed to us from the WKWebView delegate or else
 /// a runtime exception is thrown.
-class JSPromptAlertController: UIAlertController, WKJavaScriptPromptAlertController {
-    var alertInfo: WKJavaScriptAlertInfo?
-    weak var delegate: WKJavascriptPromptAlertControllerDelegate?
+class JSPromptAlertController: UIAlertController, JavaScriptPromptAlertController {
+    var alertInfo: JavaScriptAlertInfo?
+    weak var delegate: JavascriptPromptAlertControllerDelegate?
     private var handledAction = false
     private var dismissalResult: Any?
 
@@ -21,7 +21,7 @@ class JSPromptAlertController: UIAlertController, WKJavaScriptPromptAlertControl
         title: String?,
         message: String?,
         preferredStyle: UIAlertController.Style = .alert,
-        alertInfo: WKJavaScriptAlertInfo
+        alertInfo: JavaScriptAlertInfo
     ) {
         self.init(title: title, message: message, preferredStyle: preferredStyle)
         self.alertInfo = alertInfo
@@ -51,14 +51,14 @@ class JSPromptAlertController: UIAlertController, WKJavaScriptPromptAlertControl
     }
 }
 
-struct MessageAlert: WKJavaScriptAlertInfo {
-    let type: WKJavaScriptAlertType = .alert
+struct MessageAlert: JavaScriptAlertInfo {
+    let type: JavaScriptAlertType = .alert
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: () -> Void
+    var continuation: CheckedContinuation<Any?, Never>?
     var logger: Logger = DefaultLogger.shared
 
-    func alertController() -> WKJavaScriptPromptAlertController {
+    func alertController() -> JavaScriptPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
@@ -67,7 +67,7 @@ struct MessageAlert: WKJavaScriptAlertInfo {
         alertController.addAction(
             UIAlertAction(title: .OKString, style: .default) { [weak alertController] _ in
                 alertController?.setDismissalResult(nil)
-                self.completionHandler()
+                self.continuation?.resume(returning: nil)
             }
         )
         alertController.alertInfo = self
@@ -76,7 +76,7 @@ struct MessageAlert: WKJavaScriptAlertInfo {
 
     func cancel() {
         logger.log("Message alert completion handler called through cancel", level: .info, category: .webview)
-        completionHandler()
+        self.continuation?.resume(returning: nil)
     }
 
     func handleAlertDismissal(_ result: Any?) {
@@ -84,14 +84,14 @@ struct MessageAlert: WKJavaScriptAlertInfo {
     }
 }
 
-struct ConfirmPanelAlert: WKJavaScriptAlertInfo {
-    let type: WKJavaScriptAlertType = .confirm
+struct ConfirmPanelAlert: JavaScriptAlertInfo {
+    let type: JavaScriptAlertType = .confirm
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: (Bool) -> Void
+    var continuation: CheckedContinuation<Any?, Never>?
     var logger: Logger = DefaultLogger.shared
 
-    func alertController() -> WKJavaScriptPromptAlertController {
+    func alertController() -> JavaScriptPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
@@ -100,18 +100,18 @@ struct ConfirmPanelAlert: WKJavaScriptAlertInfo {
 
         alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
             alertController.setDismissalResult(true)
-            self.completionHandler(true)
+            self.continuation?.resume(returning: true)
         })
         alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
             alertController.setDismissalResult(false)
-            self.completionHandler(false)
+            self.continuation?.resume(returning: false)
         })
         return alertController
     }
 
     func cancel() {
         logger.log("Confirm panel alert completion handler called through cancel", level: .info, category: .webview)
-        completionHandler(false)
+        continuation?.resume(returning: false)
     }
 
     func handleAlertDismissal(_ result: Any?) {
@@ -123,15 +123,15 @@ struct ConfirmPanelAlert: WKJavaScriptAlertInfo {
     }
 }
 
-struct TextInputAlert: WKJavaScriptAlertInfo {
-    let type: WKJavaScriptAlertType = .textInput
+struct TextInputAlert: JavaScriptAlertInfo {
+    let type: JavaScriptAlertType = .textInput
     let message: String
     let frame: WKFrameInfo
     let defaultText: String?
-    let completionHandler: (String?) -> Void
+    var continuation: CheckedContinuation<Any?, Never>?
     var logger: Logger = DefaultLogger.shared
 
-    func alertController() -> WKJavaScriptPromptAlertController {
+    func alertController() -> JavaScriptPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
@@ -145,12 +145,12 @@ struct TextInputAlert: WKJavaScriptAlertInfo {
         alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
             let result = alertController.textFields?.first?.text
             alertController.setDismissalResult(result)
-            self.completionHandler(result)
+            self.continuation?.resume(returning: result)
         })
 
         alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
             alertController.setDismissalResult(nil)
-            self.completionHandler(nil)
+            self.continuation?.resume(returning: nil)
         })
 
         alertController.alertInfo = self
@@ -159,7 +159,7 @@ struct TextInputAlert: WKJavaScriptAlertInfo {
 
     func cancel() {
         logger.log("Text input alert completion handler called through cancel", level: .info, category: .webview)
-        completionHandler(nil)
+        self.continuation?.resume(returning: nil)
     }
 
     func handleAlertDismissal(_ result: Any?) {
