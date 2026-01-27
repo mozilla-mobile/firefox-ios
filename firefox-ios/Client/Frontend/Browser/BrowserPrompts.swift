@@ -7,6 +7,7 @@ import Foundation
 import WebKit
 import WebEngine
 
+// TODO: Laurie - Adjust comment
 /// A simple version of UIAlertController that attaches a delegate to the viewDidDisappear method
 /// to allow forwarding the event. The reason this is needed for prompts from Javascript is we
 /// need to invoke the completionHandler passed to us from the WKWebView delegate or else
@@ -38,7 +39,7 @@ class JSPromptAlertController: UIAlertController, JavaScriptPromptAlertControlle
 
         // The alert controller is dismissed before the UIAlertAction handler is called so a delay is needed
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
-            // Call the dismissal completion handler if it wasn't handled yet
+            // Call the continuation if it wasn't handled yet
             if !handledAction {
                 alertInfo?.cancel()
             }
@@ -75,7 +76,7 @@ struct MessageAlert: JavaScriptAlertInfo {
     }
 
     func cancel() {
-        logger.log("Message alert completion handler called through cancel", level: .info, category: .webview)
+        logger.log("Message alert continuation called through cancel", level: .info, category: .webview)
         self.continuation?.resume(returning: nil)
     }
 
@@ -110,7 +111,7 @@ struct ConfirmPanelAlert: JavaScriptAlertInfo {
     }
 
     func cancel() {
-        logger.log("Confirm panel alert completion handler called through cancel", level: .info, category: .webview)
+        logger.log("Confirm panel alert continuation called through cancel", level: .info, category: .webview)
         continuation?.resume(returning: false)
     }
 
@@ -158,7 +159,7 @@ struct TextInputAlert: JavaScriptAlertInfo {
     }
 
     func cancel() {
-        logger.log("Text input alert completion handler called through cancel", level: .info, category: .webview)
+        logger.log("Text input alert continuation called through cancel", level: .info, category: .webview)
         self.continuation?.resume(returning: nil)
     }
 
