@@ -29,6 +29,8 @@ let package = Package(
         .library(
             name: "WebEngine",
             targets: ["WebEngine"]),
+        .library(name: "TestKit",
+                 targets: ["TestKit"]),
         .library(
             name: "ToolbarKit",
             targets: ["ToolbarKit"]),
@@ -170,10 +172,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "WebEngineTests",
-            dependencies: ["WebEngine"],
+            dependencies: ["WebEngine", "TestKit"],
             swiftSettings: [
             ]
         ),
+        .target(name: "TestKit"),
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
@@ -182,7 +185,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"],
+            dependencies: ["ToolbarKit", "TestKit"],
             swiftSettings: [
         ]),
         .target(
@@ -209,7 +212,7 @@ let package = Package(
             ]
         ),
         .testTarget(name: "SummarizeKitTests",
-                    dependencies: ["SummarizeKit"],
+                    dependencies: ["SummarizeKit", "TestKit"],
                     swiftSettings: [
                         .unsafeFlags(["-enable-testing"]),
                     ]),
