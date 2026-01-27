@@ -2508,6 +2508,13 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        if webView.url == nil {
+            tab.url = URL(string: "about:blank")
+            if tab === tabManager.selectedTab {
+                updateUIForReaderHomeStateForTab(tab)
+            }
+        }
+
         // Ensure we do have a URL from that observer
         // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
         let url: URL? = if let webURL = webView.url {
