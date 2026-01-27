@@ -7,7 +7,7 @@
 final class MockTestVoiceSearchService: VoiceSearchService, @unchecked Sendable {
     var speechResults: [SpeechResult] = []
     var searchResult: Result<SearchResult, SearchResultError> = .success(.empty())
-    var shouldThrowError = false
+    var shouldThrowSpeechError = false
     var recordVoiceCalledCount = 0
     var stopRecordingCalledCount = 0
     var searchCalledCount = 0
@@ -16,7 +16,7 @@ final class MockTestVoiceSearchService: VoiceSearchService, @unchecked Sendable 
         recordVoiceCalledCount += 1
         return AsyncThrowingStream { continuation in
             Task {
-                if shouldThrowError {
+                if shouldThrowSpeechError {
                     continuation.finish(throwing: SpeechError.unknown)
                     return
                 }

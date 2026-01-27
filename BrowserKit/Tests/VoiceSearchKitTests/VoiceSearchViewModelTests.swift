@@ -47,7 +47,7 @@ final class VoiceSearchViewModelTests: XCTestCase {
     }
 
     func testStartRecordingVoice_withRecordError_receivesError() {
-        mockService.shouldThrowError = true
+        mockService.shouldThrowSpeechError = true
         let expectation = XCTestExpectation()
         let subject = createSubject()
         var state: VoiceSearchViewModel.State?
