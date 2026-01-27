@@ -10,6 +10,7 @@ struct TermsOfUseTelemetry {
     enum Surface: String {
         case bottomSheet = "bottom_sheet"
         case onboarding = "onboarding"
+        case privacyNotice = "privacy_notice_update"
     }
 
     private let gleanWrapper: GleanWrapper
@@ -20,12 +21,14 @@ struct TermsOfUseTelemetry {
     }
 
     func termsOfUseDisplayed(surface: Surface = .bottomSheet) {
-        let shownExtra = GleanMetrics.TermsOfUse.ShownExtra(
-            surface: surface.rawValue,
-            touVersion: String(termsOfUseVersion)
-        )
+        var shownExtra = GleanMetrics.TermsOfUse.ShownExtra(surface: surface.rawValue)
+
+        if surface != .privacyNotice {
+            shownExtra.touVersion = String(termsOfUseVersion)
+            gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.shownCount)
+        }
+
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.shown, extras: shownExtra)
-        gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.shownCount)
     }
 
     func termsOfUseAcceptButtonTapped(surface: Surface = .bottomSheet, acceptedDate: Date) {
@@ -72,12 +75,14 @@ struct TermsOfUseTelemetry {
     }
 
     func termsOfUseDismissed(surface: Surface = .bottomSheet) {
-        let dismissExtra = GleanMetrics.TermsOfUse.DismissedExtra(
-            surface: surface.rawValue,
-            touVersion: String(termsOfUseVersion)
-        )
+        var dismissExtra = GleanMetrics.TermsOfUse.DismissedExtra(surface: surface.rawValue)
+
+        if surface != .privacyNotice {
+            dismissExtra.touVersion = String(termsOfUseVersion)
+            gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.dismissedCount)
+        }
+
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.dismissed, extras: dismissExtra)
-        gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.dismissedCount)
     }
 
     static func setUsageMetrics(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),

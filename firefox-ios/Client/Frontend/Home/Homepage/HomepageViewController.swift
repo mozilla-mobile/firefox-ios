@@ -154,6 +154,8 @@ final class HomepageViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("Matt L - homepage will appear")
+
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
@@ -167,6 +169,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("Matt L - homepage did appear")
         store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,
@@ -178,11 +181,14 @@ final class HomepageViewController: UIViewController,
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        print("Matt L - homepage will disappear")
+
         stopCFRsTimer()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        print("Matt L - homepage did disappear")
         resetTrackedObjects()
     }
 

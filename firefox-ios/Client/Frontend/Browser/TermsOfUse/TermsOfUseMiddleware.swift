@@ -20,7 +20,11 @@ final class TermsOfUseMiddleware {
     }
 
     lazy var termsOfUseProvider: Middleware<AppState> = { _, action in
-        self.handleTermsOfUseAction(action)
+        if let action = action as? TermsOfUseAction {
+            self.handleTermsOfUseAction(action)
+        } else if let action = action as? HomepageAction {
+            self.handleHomepageAction(action)
+        }
     }
 
     private func handleTermsOfUseAction(_ action: Action) {
@@ -50,6 +54,19 @@ final class TermsOfUseMiddleware {
         case TermsOfUseActionType.termsLinkTapped:
             self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseTermsLinkTapDate)
             self.telemetry.termsOfUseTermsOfUseLinkTapped()
+        }
+    }
+
+    private func handleHomepageAction(_ action: Action) {
+        guard let action = action as? HomepageAction else { return }
+
+        switch action.actionType {
+        case HomepageActionType.privacyNoticeCloseButtonTapped:
+            self.telemetry.termsOfUseDismissed(surface: .privacyNotice)
+        case HomepageMiddlewareActionType.configuredPrivacyNotice:
+            self.telemetry.termsOfUseDisplayed(surface: .privacyNotice)
+        default:
+            break
         }
     }
 
