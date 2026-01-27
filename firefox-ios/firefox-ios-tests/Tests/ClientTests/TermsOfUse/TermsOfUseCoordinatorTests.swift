@@ -61,7 +61,7 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
     func testShouldShowTermsOfUse_ReturnsFalse_WhenTermsOfServiceAccepted() {
         // Test that legacy TermsOfServiceAccepted is migrated and recognized
         profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
-        
+
         // Trigger migration explicitly (as it would happen in AppDelegate)
         TermsOfUseMigration(prefs: profile.prefs).migrateTermsOfServicePrefs()
 

@@ -74,5 +74,4 @@ class ProfilePrefsReaderTests: XCTestCase {
         let prefs = ProfilePrefsReader()
         XCTAssertTrue(prefs.hasEnabledTipsNotifications())
     }
-
 }

@@ -7,7 +7,7 @@ import Shared
 @testable import Client
 
 final class TermsOfUseMigrationTests: XCTestCase {
-    
+
     func testMigrateTermsOfServicePrefs_migratesFromTermsOfServiceAccepted() {
         let mockPrefs = MockProfilePrefs()
 
@@ -36,7 +36,7 @@ final class TermsOfUseMigrationTests: XCTestCase {
 
         mockPrefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
         mockPrefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
-        
+
         // Trigger migration - should not migrate since TermsOfUseAccepted already exists
         TermsOfUseMigration(prefs: mockPrefs).migrateTermsOfServicePrefs()
 
@@ -45,4 +45,3 @@ final class TermsOfUseMigrationTests: XCTestCase {
         XCTAssertNotNil(mockPrefs.intForKey(PrefsKeys.TermsOfServiceAccepted))
     }
 }
-

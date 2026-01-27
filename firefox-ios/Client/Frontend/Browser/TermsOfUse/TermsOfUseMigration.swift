@@ -16,23 +16,22 @@ struct TermsOfUseMigration {
     func migrateTermsOfServicePrefs() {
         let hasAcceptedToU = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
         let hasAcceptedToS = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
-        
+
         /// Only migrate if TermsOfUseAccepted doesn't exist but TermsOfServiceAccepted does
         guard hasAcceptedToS && !hasAcceptedToU else { return }
-        
+
         prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        
+
         if let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate) {
             prefs.setTimestamp(acceptedDate, forKey: PrefsKeys.TermsOfUseAcceptedDate)
         }
-        
+
         if let acceptedVersion = prefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion) {
             prefs.setString(acceptedVersion, forKey: PrefsKeys.TermsOfUseAcceptedVersion)
         }
-        
+
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAccepted)
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedDate)
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
     }
 }
-
