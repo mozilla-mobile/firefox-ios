@@ -965,6 +965,9 @@ extension BrowserViewController: WKNavigationDelegate {
         // original web page in the tab instead of replacing it with an error page.
         let error = error as NSError
         if error.domain == "WebKitErrorDomain" && error.code == 102 {
+            if !webView.hasOnlySecureContent {
+                webView.load(URLRequest(url: URL(string: "about:blank")!))
+            }
             return
         }
 
