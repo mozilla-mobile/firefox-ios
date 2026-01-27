@@ -2883,36 +2883,6 @@
         }
       }
     },
-    "Preview of %@" : {
-      "comment" : "Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preview of %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vista previa de %@"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Podgląd %@"
-          }
-        },
-        "te" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ యొక్క పరిదృశ్యం"
-          }
-        }
-      }
-    },
     "Send to Device" : {
       "comment" : "Label for preview action on Tab Tray Tab to send the current tab to another device",
       "localizations" : {
