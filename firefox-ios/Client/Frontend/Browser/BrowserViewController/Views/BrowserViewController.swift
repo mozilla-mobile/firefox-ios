@@ -2503,8 +2503,14 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
-        // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
-        if tab.url?.absoluteString == "about:blank" && webView.url == nil {
+        // Special case: if the webView.url is nil, set the tab url as "about:blank"
+        // This also handles cases where the url has been set to a previous url but the request has been canceled
+        if webView.url == nil {
+            tab.url = URL(string: "about:blank")
+            // Update UI to reflect the URL we have set the tab to
+            if tab === tabManager.selectedTab {
+                updateUIForReaderHomeStateForTab(tab)
+            }
             return
         }
 
@@ -2536,7 +2542,6 @@ class BrowserViewController: UIViewController,
             if let urlOrigin = url.origin,
                let newTabURL = URL(string: urlOrigin) {
                 tab.url = newTabURL
-                // TODO: FXIOS-14738 Follow up with for proper 204 fix
                 // Update UI to reflect the URL we have set the tab to
                 if tab === tabManager.selectedTab {
                     updateUIForReaderHomeStateForTab(tab)
@@ -2546,6 +2551,7 @@ class BrowserViewController: UIViewController,
         }
         tab.url = url
 
+        // Update UI to reflect the URL we have set the tab to
         if tab === tabManager.selectedTab {
             updateUIForReaderHomeStateForTab(tab)
         }
