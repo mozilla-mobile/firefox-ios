@@ -14,11 +14,10 @@ struct TermsOfUseMigration {
 
     /// Migrates TermsOfService prefs  to TermsOfUse if needed and deletes old prefs data
     func migrateTermsOfServicePrefs() {
-        let hasAcceptedToU = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
         let hasAcceptedToS = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
 
-        /// Only migrate if TermsOfUseAccepted doesn't exist, but TermsOfServiceAccepted does
-        guard hasAcceptedToS && !hasAcceptedToU else { return }
+        /// Only migrate if TermsOfServiceAccepted exists and it is true
+        guard hasAcceptedToS else { return }
         prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
 
         if let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate) {

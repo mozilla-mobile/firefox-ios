@@ -29,18 +29,4 @@ final class TermsOfUseMigrationTests: XCTestCase {
         XCTAssertNil(mockPrefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate))
         XCTAssertNil(mockPrefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion))
     }
-
-    func testMigrateTermsOfServicePrefs_doesNotMigrateWhenTermsOfUseAcceptedExists() {
-        let mockPrefs = MockProfilePrefs()
-
-        mockPrefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        mockPrefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
-
-        // Trigger migration - should not migrate since TermsOfUseAccepted already exists
-        TermsOfUseMigration(prefs: mockPrefs).migrateTermsOfServicePrefs()
-
-        XCTAssertTrue(mockPrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false)
-        // Old pref should still exist since migration didn't run
-        XCTAssertNotNil(mockPrefs.intForKey(PrefsKeys.TermsOfServiceAccepted))
-    }
 }
