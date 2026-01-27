@@ -73,70 +73,70 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    private func handleJavaScriptAlert<T: WKJavaScriptAlertInfo>(
+    @discardableResult
+    private func handleJavaScriptAlert<T: JavaScriptAlertInfo>(
         _ alert: T,
         for webView: WKWebView,
-        spamCallback: @escaping @MainActor () -> Void
-    ) {
+    ) async -> Any? {
+        // TODO: Laurie 
+        var alert2 = alert
         if jsAlertExceedsSpamLimits(webView) {
-            handleSpammedJSAlert(spamCallback)
+            await handleSpammedJSAlert()
+            return nil
         } else if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript \(alert.type.rawValue) panel will be presented.", level: .info, category: .webview)
-            let alertController = alert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
+            return await withCheckedContinuation { (continuation: CheckedContinuation<Any?, Never>) in
+                alert2.continuation = continuation
+
+                let alertController = alert2.alertController()
+                alertController.delegate = self
+                present(alertController, animated: true)
+            }
         } else if let promptingTab = tabManager[webView] {
             logger.log("JavaScript \(alert.type.rawValue) panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(alert)
+
+            return await withCheckedContinuation { (continuation: CheckedContinuation<Any?, Never>) in
+                alert2.continuation = continuation
+                promptingTab.queueJavascriptAlertPrompt(alert2)
+            }
         }
+        // TODO: Laurie - I don't like this. 
+        return nil
     }
 
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor () -> Void
-    ) {
+        initiatedByFrame frame: WKFrameInfo
+    ) async {
         let messageAlert = MessageAlert(message: message,
-                                        frame: frame,
-                                        completionHandler: completionHandler)
-
-        handleJavaScriptAlert(messageAlert, for: webView) {
-            completionHandler()
-        }
+                                        frame: frame)
+        await handleJavaScriptAlert(messageAlert, for: webView)
     }
 
     func webView(
         _ webView: WKWebView,
         runJavaScriptConfirmPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (Bool) -> Void
-    ) {
-        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame) { confirm in
-            self.logger.log("JavaScript confirm panel was completed with result: \(confirm)", level: .info, category: .webview)
-            completionHandler(confirm)
-        }
-
-        handleJavaScriptAlert(confirmAlert, for: webView) {
-            completionHandler(false)
-        }
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> Bool {
+        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame)
+        let result = await handleJavaScriptAlert(confirmAlert, for: webView)
+        logger.log("JavaScript confirm panel was completed with result: \(String(describing: result))",
+                   level: .info,
+                   category: .webview)
+        return (result as? Bool) ?? false
     }
 
     func webView(
         _ webView: WKWebView,
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (String?) -> Void
-    ) {
-        let textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText) { input in
-            self.logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
-            completionHandler(input)
-        }
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> String? {
+        let textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText)
 
-        handleJavaScriptAlert(textInputAlert, for: webView) {
-            completionHandler("")
-        }
+        let result = await handleJavaScriptAlert(textInputAlert, for: webView)
+        logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
+        return (result as? String) ?? nil
     }
 
     func webViewDidClose(_ webView: WKWebView) {
@@ -197,10 +197,10 @@ extension BrowserViewController: WKUIDelegate {
 
     // MARK: - Helpers
 
-    private func handleSpammedJSAlert(_ callback: @escaping @MainActor () -> Void) {
+    private func handleSpammedJSAlert() async {
         // User is being spammed. Squelch alert. Note that we have to do this after
         // a delay to avoid JS that could spin the CPU endlessly.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { callback() }
+        try? await Task.sleep(nanoseconds: 5_000_000_000)
     }
 
     private func contextMenuConfiguration(for url: URL,
