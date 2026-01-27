@@ -32,12 +32,12 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     }
 
     var isAccepted: Bool {
-        return prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
+        prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
     }
 
     var shouldShowScreen: Bool {
         guard featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser) else { return false }
-        return !isAccepted
+        return prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == nil
     }
 
     func setAccepted(acceptedDate: Date) {

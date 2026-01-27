@@ -82,9 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             .browserIsReady
         ])
 
-        // Migrate TermsOfServiceAccepted to TermsOfUseAccepted early
-        TermsOfUseMigration(prefs: profile.prefs).migrateTermsOfServicePrefs()
-
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Unified ads, Adjust.
         // i.e. this must be run before initializing those systems.
