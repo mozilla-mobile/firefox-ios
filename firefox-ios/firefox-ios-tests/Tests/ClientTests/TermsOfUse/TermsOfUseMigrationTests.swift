@@ -7,7 +7,6 @@ import Shared
 @testable import Client
 
 final class TermsOfUseMigrationTests: XCTestCase {
-
     func testMigrateTermsOfServicePrefs_migratesFromTermsOfServiceAccepted() {
         let mockPrefs = MockProfilePrefs()
 

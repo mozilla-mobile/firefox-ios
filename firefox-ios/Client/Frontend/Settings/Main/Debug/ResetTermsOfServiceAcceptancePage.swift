@@ -13,26 +13,21 @@ class ResetTermsOfServiceAcceptancePage: HiddenSetting, FeatureFlaggable {
         super.init(settings: settings)
     }
 
-    // Only show this debug setting when Terms Of Service feature is enabled
-    override var hidden: Bool {
-        return !featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser)
-    }
-
     override var title: NSAttributedString? {
         guard let theme else { return nil }
         // Check TermsOfUseAccepted (migrated from TermsOfServiceAccepted)
         let touAccepted = settings.profile?.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
         let status = touAccepted ? "accepted" : "not accepted"
 
-        return NSAttributedString(string: "Reset onboarding ToU accept (\(status))",
+        return NSAttributedString(string: "Reset ToU accept (\(status))",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let prefs = settings.profile?.prefs else { return }
 
-        // Reset onboarding Terms of Use preferences
-        // This allows testing the Terms of Use bottom sheet after onboarding acceptance
+        // Reset Terms of Use preferences
+        // This allows testing the Terms of Use bottom sheet after acceptance
         prefs.removeObjectForKey(PrefsKeys.TermsOfUseAccepted)
         prefs.removeObjectForKey(PrefsKeys.TermsOfUseAcceptedVersion)
         prefs.removeObjectForKey(PrefsKeys.TermsOfUseAcceptedDate)

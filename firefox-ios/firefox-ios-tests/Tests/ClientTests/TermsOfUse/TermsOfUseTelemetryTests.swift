@@ -181,5 +181,4 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
     }
-
 }
