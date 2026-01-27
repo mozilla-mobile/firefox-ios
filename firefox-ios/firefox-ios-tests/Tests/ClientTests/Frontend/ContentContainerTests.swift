@@ -282,7 +282,7 @@ final class ContentContainerTests: XCTestCase {
     }
 
     func testAdd_doesRemoveHomepage() {
-        let subject = createSubject(userInterfaceIdiom: .pad)
+        let subject = createSubject()
 
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
@@ -295,12 +295,8 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertNil(homepage.view.superview)
     }
 
-    private func createSubject(userInterfaceIdiom: UIUserInterfaceIdiom? = nil) -> ContentContainer {
+    private func createSubject() -> ContentContainer {
         let subject = ContentContainer()
-        if let userInterfaceIdiom {
-            let toolbarHelper: ToolbarHelperInterface = ToolbarHelper(userInterfaceIdiom: userInterfaceIdiom)
-            subject.toolbarHelper = toolbarHelper
-        }
         trackForMemoryLeaks(subject)
         return subject
     }

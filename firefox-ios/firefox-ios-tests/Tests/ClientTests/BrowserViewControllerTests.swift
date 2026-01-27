@@ -524,8 +524,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject(userInterfaceIdiom: UIUserInterfaceIdiom? = nil,
-                               file: StaticString = #filePath,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
@@ -535,11 +534,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
         subject.browserDelegate = browserCoordinator
-
-        if let userInterfaceIdiom {
-            let toolbarHelper: ToolbarHelperInterface = ToolbarHelper(userInterfaceIdiom: userInterfaceIdiom)
-            subject.toolbarHelper = toolbarHelper
-        }
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
