@@ -12,7 +12,7 @@ public extension XCTestCase {
             XCTAssertNil(object, "Memory leak detected in \(file):\(line)")
         }
     }
-    
+
     /// Unwraps un async method return optional value.
     func unwrapAsync<T>(asyncMethod: () async throws -> T?,
                         file: StaticString = #filePath,
@@ -48,7 +48,7 @@ public extension XCTestCase {
             XCTFail("Expected error \(expectedType), but got \(error)", file: file, line: line)
         }
     }
-    
+
     /// Asserts that an async throwing methods throws the expected Equatable error type.
     ///
     /// Usage:
