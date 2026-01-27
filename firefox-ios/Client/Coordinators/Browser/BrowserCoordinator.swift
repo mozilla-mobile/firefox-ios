@@ -156,19 +156,6 @@ class BrowserCoordinator: BaseCoordinator,
         webviewController?.update(webView: nil)
     }
 
-    func homepageScreenshotTool() -> (any Screenshotable)? {
-        let newTabSettings = browserViewController.newTabSettings
-        switch newTabSettings {
-        case .blankPage, .homePage:
-            return nil
-        case .topSites:
-            if tabManager.selectedTab?.isPrivate == true {
-                return privateHomepageViewController
-            }
-            return homepageViewController
-        }
-    }
-
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
         store.dispatch(
             HomepageAction(

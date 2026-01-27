@@ -14,7 +14,6 @@ final class ContentContainerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        setIsSwipingTabsEnabled(false)
         self.profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -272,6 +271,30 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertFalse(subject.hasPrivateHomepage)
     }
 
+    func testAdd_doesNotRemoveWebView() {
+        let subject = createSubject()
+
+        let webView = WebviewViewController(webView: WKWebView())
+        subject.add(content: webView)
+        subject.add(content: createHomepage())
+
+        XCTAssertNotNil(webView.view.superview)
+    }
+
+    func testAdd_doesRemoveHomepage() {
+        let subject = createSubject(userInterfaceIdiom: .pad)
+
+        let homepage = HomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager,
+            toastContainer: UIView()
+        )
+        subject.add(content: homepage)
+        subject.add(content: WebviewViewController(webView: WKWebView()))
+
+        XCTAssertNil(homepage.view.superview)
+    }
+
     private func createSubject(userInterfaceIdiom: UIUserInterfaceIdiom? = nil) -> ContentContainer {
         let subject = ContentContainer()
         if let userInterfaceIdiom {
@@ -288,11 +311,5 @@ final class ContentContainerTests: XCTestCase {
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
-    }
-
-    private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(swipingTabs: isEnabled)
-        }
     }
 }
