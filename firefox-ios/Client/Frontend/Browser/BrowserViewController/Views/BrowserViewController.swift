@@ -2504,15 +2504,13 @@ class BrowserViewController: UIViewController,
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
         // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
-        if tab.url?.absoluteString == "about:blank" && webView.url == nil {
-            return
-        }
-
+        // This also handles cases where the url has been set to a previous url but the request has been canceled
         if webView.url == nil {
             tab.url = URL(string: "about:blank")
             if tab === tabManager.selectedTab {
                 updateUIForReaderHomeStateForTab(tab)
             }
+            return
         }
 
         // Ensure we do have a URL from that observer
