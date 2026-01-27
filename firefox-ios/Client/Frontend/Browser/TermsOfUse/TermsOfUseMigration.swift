@@ -17,9 +17,8 @@ struct TermsOfUseMigration {
         let hasAcceptedToU = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
         let hasAcceptedToS = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
 
-        /// Only migrate if TermsOfUseAccepted doesn't exist but TermsOfServiceAccepted does
+        /// Only migrate if TermsOfUseAccepted doesn't exist, but TermsOfServiceAccepted does
         guard hasAcceptedToS && !hasAcceptedToU else { return }
-
         prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
 
         if let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate) {

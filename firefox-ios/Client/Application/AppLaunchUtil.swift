@@ -29,7 +29,7 @@ final class AppLaunchUtil: Sendable {
 
     @MainActor
     func setUpPreLaunchDependencies() {
-        // Migrate TermsOfServiceAccepted to TermsOfUseAccepted early, before any checks
+        /// Migrate TermsOfService prefs to TermsOfUse prefs early, before any checks
         TermsOfUseMigration(prefs: profile.prefs).migrateTermsOfServicePrefs()
 
         // If the 'Save logs to Files app on next launch' toggle

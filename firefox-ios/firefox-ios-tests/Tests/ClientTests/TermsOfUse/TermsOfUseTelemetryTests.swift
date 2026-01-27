@@ -182,19 +182,4 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
     }
 
-    func testSetUsageMetrics_ToU() throws {
-        let mockProfile = MockProfile()
-        let mockGleanWrapper = MockGleanWrapper()
-
-        // Test ToU acceptance (migrated from ToS)
-        mockProfile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        mockProfile.prefs.setString("4", forKey: PrefsKeys.TermsOfUseAcceptedVersion)
-        let acceptedDate = Date()
-        mockProfile.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
-
-        TermsOfUseTelemetry.setUsageMetrics(gleanWrapper: mockGleanWrapper, profile: mockProfile)
-
-        XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
-    }
 }

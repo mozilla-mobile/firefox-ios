@@ -47,6 +47,7 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     }
 
     func migrateLegacyToSAcceptance() {
+        // Check if user has accepted ToU, but is missing date/version preferences
         let hasAcceptedToU = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
         guard hasAcceptedToU else { return }
 
