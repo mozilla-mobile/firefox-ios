@@ -460,9 +460,9 @@ final class URLBar: UIView {
 
     private func addStopReloadButtonConstraints() {
         stopReloadButton.snp.makeConstraints { make in
-            make.trailing.equalTo(urlBarBorderView)
-            make.leading.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize)
-            make.center.equalToSuperview()
+            make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarIconInset)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(UIConstants.layout.urlBarButtonTargetSize)
         }
     }
 
