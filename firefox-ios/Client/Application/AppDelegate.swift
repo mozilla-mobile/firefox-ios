@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         // Set-up Rust network stack. Note that this has to be called
         // before any Application Services component gets used.
-        Viaduct.shared.useReqwestBackend()
+        Viaduct.shared.initialize()
 
         initializeRustErrors(logger: logger)
         logger.log("willFinishLaunchingWithOptions begin",
