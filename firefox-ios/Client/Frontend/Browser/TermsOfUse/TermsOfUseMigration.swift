@@ -52,7 +52,7 @@ struct TermsOfUseMigration {
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAccepted)
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedDate)
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
-        
+
         // Record date and version telemetry if were missing
         if tosAcceptedDate == nil || tosAcceptedVersion == nil {
             let acceptedDate = Date.fromTimestamp(acceptedTimestamp)
