@@ -295,6 +295,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         recordButton.addAction(
             UIAction(
                 handler: { [weak self] _ in
+                    self?.audioWaveform.startAnimating()
                     self?.viewModel.startRecordingVoice()
                 }),
             for: .touchUpInside
