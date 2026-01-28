@@ -959,6 +959,27 @@ extension BrowserViewController: WKNavigationDelegate {
 
         webviewTelemetry.cancel()
 
+        if webView.url == nil {
+            if let tab = tabManager[webView], tab === tabManager.selectedTab {
+                let action = ToolbarAction(
+                    url: URL(string: "about:blank")!,
+                    isPrivate: tab.isPrivate,
+                    canGoBack: tab.canGoBack,
+                    canGoForward: tab.canGoForward,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.urlDidChange
+                )
+                store.dispatch(action)
+                let middlewareAction = ToolbarMiddlewareAction(
+                    scrollOffset: scrollController.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.urlDidChange
+                )
+                store.dispatch(middlewareAction)
+            }
+            return
+        }
+
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
         // will be that we switch to the external app, for example the app store, while keeping the

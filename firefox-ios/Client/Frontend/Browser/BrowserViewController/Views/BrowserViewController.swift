@@ -2506,11 +2506,6 @@ class BrowserViewController: UIViewController,
         // Special case: if the webView.url is nil, set the tab url also nil
         // This also handles cases where the url has been set to a previous url but the request has been canceled
         if webView.url == nil {
-            tab.url = nil
-            // Update UI to reflect the URL we have set the tab to
-            if tab === tabManager.selectedTab {
-                updateUIForReaderHomeStateForTab(tab)
-            }
             return
         }
 
