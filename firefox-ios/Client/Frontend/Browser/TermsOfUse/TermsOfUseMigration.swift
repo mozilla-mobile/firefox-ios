@@ -27,7 +27,7 @@ struct TermsOfUseMigration {
     private func migrateTermsOfServicePrefs() {
         // Migrate TermsOfServiceAccepted
         prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        
+
         // Migrate TermsOfServiceAcceptedDate
         if let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate) {
             prefs.setTimestamp(acceptedDate, forKey: PrefsKeys.TermsOfUseAcceptedDate)
