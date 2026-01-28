@@ -116,7 +116,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
+            dependencies: [
+                "SiteImageView",
+                "TestKit",
+                .product(name: "GCDWebServers", package: "GCDWebServer")
+            ],
             resources: [
                 .copy("Resources/mozilla.ico"),
                 .copy("Resources/inf-nan.svg"),
@@ -147,7 +151,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "TabDataStoreTests",
-            dependencies: ["TabDataStore"],
+            dependencies: ["TabDataStore", "TestKit"],
             swiftSettings: [
             ]
         ),
