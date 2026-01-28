@@ -27681,6 +27681,7 @@
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios-tests/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = Client;
 			};
@@ -27697,6 +27698,7 @@
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/XCUITests/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.XCUITests";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/firefox-ios-tests/Tests/XCUITests/XCUITests-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = Client;
 			};
