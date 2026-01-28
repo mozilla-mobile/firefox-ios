@@ -354,7 +354,6 @@ workflows:
             echo "Found Smoketest .xctestrun: $SMOKE_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
     - xcode-test-without-building@0.5.1:
-        timeout: 1800
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
@@ -412,7 +411,6 @@ workflows:
             echo "Found Smoketest .xctestrun: $SMOKE_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
     - xcode-test-without-building@0.5.1:
-        timeout: 1800
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
