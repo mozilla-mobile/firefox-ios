@@ -2490,10 +2490,10 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
-        // Special case: if the webView.url is nil, set the tab url as "about:blank"
+        // Special case: if the webView.url is nil, set the tab url also nil
         // This also handles cases where the url has been set to a previous url but the request has been canceled
         if webView.url == nil {
-            tab.url = URL(string: "about:blank")
+            tab.url = nil
             // Update UI to reflect the URL we have set the tab to
             if tab === tabManager.selectedTab {
                 updateUIForReaderHomeStateForTab(tab)
@@ -2529,10 +2529,6 @@ class BrowserViewController: UIViewController,
             if let urlOrigin = url.origin,
                let newTabURL = URL(string: urlOrigin) {
                 tab.url = newTabURL
-                // Update UI to reflect the URL we have set the tab to
-                if tab === tabManager.selectedTab {
-                    updateUIForReaderHomeStateForTab(tab)
-                }
             }
             return
         }
