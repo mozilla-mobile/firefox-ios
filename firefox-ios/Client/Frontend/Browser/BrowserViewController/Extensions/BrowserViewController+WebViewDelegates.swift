@@ -430,6 +430,8 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
+        print("🪱 starting prov navigation")
+        print("🪱 webview url \(String(describing: webView.url))")
         if tabManager.selectedTab?.webView !== webView { return }
 
         // Note the main frame JSContext (i.e. document, window) is not available yet.
@@ -709,6 +711,8 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
+            print("🪱 starting decide policy for")
+            print("🪱 webview url \(String(describing: webView.url))")
         let response = navigationResponse.response
         let responseURL = response.url
 
@@ -948,6 +952,9 @@ extension BrowserViewController: WKNavigationDelegate {
         didFailProvisionalNavigation navigation: WKNavigation?,
         withError error: Error
     ) {
+        print("🪱 failed prov navigation")
+        print("🪱 webview url \(String(describing: webView.url))")
+        print("🪱 error \(error.localizedDescription)")
         logger.log("Error occurred during the early navigation process.",
                    level: .warning,
                    category: .webview)
@@ -965,6 +972,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // original web page in the tab instead of replacing it with an error page.
         let error = error as NSError
         if error.domain == "WebKitErrorDomain" && error.code == 102 {
+            print("🪱 updating tab url to be webview display url")
             return
         }
 
@@ -1086,6 +1094,8 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
+        print("🪱 starting did commit")
+        print("🪱 webview url \(String(describing: webView.url))")
         guard let tab = tabManager[webView] else { return }
 
         // The main frame JSContext is available, and DOM parsing has begun.
