@@ -526,7 +526,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         }
 
         for i in settingsElements {
-            scrollToElement(i)
             mozWaitForElementToExist(i)
             XCTAssertTrue(i.exists)
         }
