@@ -58,6 +58,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
+        case .homepageStoriesScrollDirection:
+            return checkHomepageStoriesScrollDirectionFeature(from: nimbus) != .control
+
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
 
@@ -245,6 +248,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
+    }
+
+    private func checkHomepageStoriesScrollDirectionFeature(from nimbus: FxNimbus) -> ScrollDirection {
+        return nimbus.features.homepageRedesignFeature.value().storiesScrollDirection
     }
 
     private func checkSnapKitRemovalRefactor(from nimbus: FxNimbus) -> Bool {

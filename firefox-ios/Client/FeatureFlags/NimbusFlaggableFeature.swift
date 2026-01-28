@@ -26,6 +26,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepageSearchBar
+    case homepageStoriesScrollDirection
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -119,6 +120,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
+    case homepageStoriesScrollDirection
     case searchBarPosition
     case startAtHome
 }
@@ -158,6 +160,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
+                .homepageStoriesScrollDirection,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
@@ -259,6 +262,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
+        case .homepageStoriesScrollDirection:
+            return FxNimbus.shared.features.homepageRedesignFeature.value().storiesScrollDirection.rawValue
         case .splashScreen:
             return nimbusSearchBar.getDefaultPosition().rawValue
         case .startAtHome:

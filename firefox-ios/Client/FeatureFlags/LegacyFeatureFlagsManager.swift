@@ -89,6 +89,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
         switch featureID {
         case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
         case .startAtHome: return StartAtHome(rawValue: userSetting) as? T
+        case .homepageStoriesScrollDirection: return ScrollDirection(rawValue: userSetting) as? T
         }
     }
 
@@ -96,6 +97,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
         switch featureID {
         case .searchBarPosition: return .bottomSearchBar
         case .startAtHome: return .startAtHome
+        case .homepageStoriesScrollDirection: return .homepageStoriesScrollDirection
         }
     }
 
@@ -140,6 +142,8 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
             if let option = desiredState as? StartAtHome {
                 feature.setUserPreference(to: option.rawValue)
             }
+        default:
+            break
         }
     }
 
