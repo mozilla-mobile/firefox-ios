@@ -326,32 +326,19 @@ workflows:
             set -e
             set -x
             ./bootstrap.sh
-    - script@1.1:
-        title: Build Firefox scheme for Testing
+    - xcode-build-for-test@3:
         inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- build-for-testing Firefox scheme --"
-            mkdir -p DerivedData
-
-            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "firefox-ios/Client.xcodeproj" \
-              "-scheme" "Firefox" \
-              -configuration "Firefox" \
-              "CODE_SIGNING_ALLOWED=NO" \
-              -sdk "iphonesimulator" \
-              "-destination" "platform=iOS Simulator,name=iPhone 17,OS=26.2" \
-              "COMPILER_INDEX_STORE_ENABLE=NO" \
-              "build-for-testing" \
-              "CODE_SIGN_IDENTITY=" \
-              "CODE_SIGNING_REQUIRED=NO" \
-              -derivedDataPath "DerivedData" | xcpretty
+        - scheme: Firefox
+        - configuration: Firefox
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
     - xcode-test-without-building@0.5.1:
         timeout: 1800
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "DerivedData/Build/Products/Firefox_Smoketest_iphonesimulator26.2-arm64.xctestrun"
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Firefox_Smoketest_iphonesimulator26.2-arm64.xctestrun
         - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2.10.0: {}
     - slack@4.2.1:
@@ -377,32 +364,19 @@ workflows:
             set -e
             set -x
             ./bootstrap.sh
-    - script@1.1:
-        title: Build FirefoxBeta scheme for Testing
+    - xcode-build-for-test@3:
         inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- build-for-testing FirefoxBeta scheme --"
-            mkdir -p DerivedData
-
-            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "firefox-ios/Client.xcodeproj" \
-              "-scheme" "FirefoxBeta" \
-              -configuration "FirefoxBeta" \
-              "CODE_SIGNING_ALLOWED=NO" \
-              -sdk "iphonesimulator" \
-              "-destination" "platform=iOS Simulator,name=iPhone 17,OS=26.2" \
-              "COMPILER_INDEX_STORE_ENABLE=NO" \
-              "build-for-testing" \
-              "CODE_SIGN_IDENTITY=" \
-              "CODE_SIGNING_REQUIRED=NO" \
-              -derivedDataPath "DerivedData" | xcpretty
+        - scheme: FirefoxBeta
+        - configuration: FirefoxBeta
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
     - xcode-test-without-building@0.5.1:
         timeout: 1800
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "DerivedData/Build/Products/FirefoxBeta_Smoketest_iphonesimulator26.2-arm64.xctestrun"
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/FirefoxBeta_Smoketest_iphonesimulator26.2-arm64.xctestrun
         - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2.10.0: {}
     - slack@4.2.1:
