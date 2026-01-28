@@ -103,6 +103,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .sentFromFirefoxTreatmentA:
             return checkSentFromFirefoxFeatureTreatmentA(from: nimbus)
 
+        case .snapkitRemovalRefactor:
+            return checkSnapKitRemovalRefactor(from: nimbus)
+
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
@@ -242,6 +245,11 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
+    }
+
+    private func checkSnapKitRemovalRefactor(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.snapkitRemovalRefactor.value()
+        return config.enabled
     }
 
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
