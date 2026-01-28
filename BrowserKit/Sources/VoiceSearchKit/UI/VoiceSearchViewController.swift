@@ -98,7 +98,7 @@ final class ContentView: UIView, ThemeApplicable {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubviews(speechResultLabel, loadingSearchLabel, searchResultView)
-        
+
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -110,22 +110,22 @@ final class ContentView: UIView, ThemeApplicable {
             contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -24),
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -48),
-            
+
             speechResultLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             speechResultLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             speechResultLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
+
             loadingSearchLabel.topAnchor.constraint(equalTo: speechResultLabel.bottomAnchor, constant: 32),
             loadingSearchLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             loadingSearchLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
+
             searchResultView.topAnchor.constraint(equalTo: speechResultLabel.bottomAnchor, constant: 32),
             searchResultView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             searchResultView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             searchResultView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
     }
-    
+
     func setSpeechResult(text: String) {
         speechResultLabel.text = text
         if speechResultLabel.alpha != 1.0 {
@@ -136,7 +136,7 @@ final class ContentView: UIView, ThemeApplicable {
             }
         }
     }
-    
+
     func setIsLoadingSearchResult() {
         loadingSearchLabel.transform = .identity.translatedBy(x: 0.0, y: 32.0)
         UIView.animate(withDuration: 0.2) { [self] in
@@ -144,7 +144,7 @@ final class ContentView: UIView, ThemeApplicable {
             loadingSearchLabel.transform = .identity
         }
     }
-    
+
     func setSearchResult(title: String, body: String, url: URL?) {
         searchResultView.configure(title: title, body: body)
         searchResultView.transform = .identity.translatedBy(x: 0.0, y: 32.0)
@@ -220,7 +220,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     public var themeListenerCancellable: Any?
     private let notificationCenter: NotificationProtocol
     private let viewModel: VoiceSearchViewModel
-    
+
     init(
         viewModel: VoiceSearchViewModel,
         windowUUID: WindowUUID,
@@ -274,7 +274,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                            constant: UX.recordWaveEffectBottomPadding),
-            
+
             contentView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor, constant: UX.contentViewTopPadding),
             contentView.bottomAnchor.constraint(equalTo: buttonsContainer.topAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -290,7 +290,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         ])
         backgroundBlur.pinToSuperview()
     }
-    
+
     private func configureButtons() {
         recordButton.addAction(
             UIAction(
@@ -301,7 +301,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             for: .touchUpInside
         )
     }
-    
+
     private func onStateChange(state: VoiceSearchViewModel.State) {
         switch state {
         case .recordVoice(let speechResult, _):
