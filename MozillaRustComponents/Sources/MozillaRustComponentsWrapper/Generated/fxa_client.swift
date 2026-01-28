@@ -387,19 +387,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -408,6 +418,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -1145,13 +1164,13 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
 
  */
 open class FirefoxAccount: FirefoxAccountProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -1161,27 +1180,27 @@ open class FirefoxAccount: FirefoxAccountProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_fxa_client_fn_clone_firefoxaccount(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_fxa_client_fn_clone_firefoxaccount(self.handle, $0) }
     }
     /**
      * Create a new [`FirefoxAccount`] instance, not connected to any account.
@@ -1192,21 +1211,22 @@ open class FirefoxAccount: FirefoxAccountProtocol, @unchecked Sendable {
      * the application to a user's account.
      */
 public convenience init(config: FxaConfig) {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_fxa_client_fn_constructor_firefoxaccount_new(
         FfiConverterTypeFxaConfig_lower(config),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_fxa_client_fn_free_firefoxaccount(pointer, $0) }
+        try! rustCall { uniffi_fxa_client_fn_free_firefoxaccount(handle, $0) }
     }
 
     
@@ -1248,7 +1268,8 @@ public static func fromJson(data: String)throws  -> FirefoxAccount  {
      */
 open func authorizeCodeUsingSessionToken(params: AuthorizationParameters)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_authorize_code_using_session_token(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_authorize_code_using_session_token(
+            self.uniffiCloneHandle(),
         FfiConverterTypeAuthorizationParameters_lower(params),$0
     )
 })
@@ -1281,7 +1302,8 @@ open func authorizeCodeUsingSessionToken(params: AuthorizationParameters)throws 
      */
 open func beginOauthFlow(scopes: [String], entrypoint: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_begin_oauth_flow(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_begin_oauth_flow(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceString.lower(scopes),
         FfiConverterString.lower(entrypoint),$0
     )
@@ -1316,7 +1338,8 @@ open func beginOauthFlow(scopes: [String], entrypoint: String)throws  -> String 
      */
 open func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_begin_pairing_flow(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_begin_pairing_flow(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(pairingUrl),
         FfiConverterSequenceString.lower(scopes),
         FfiConverterString.lower(entrypoint),$0
@@ -1336,7 +1359,8 @@ open func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: Str
      */
 open func checkAuthorizationStatus()throws  -> AuthorizationInfo  {
     return try  FfiConverterTypeAuthorizationInfo_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_check_authorization_status(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_check_authorization_status(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1352,7 +1376,8 @@ open func checkAuthorizationStatus()throws  -> AuthorizationInfo  {
 
      */
 open func clearAccessTokenCache()  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_clear_access_token_cache(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_clear_access_token_cache(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -1373,7 +1398,8 @@ open func clearAccessTokenCache()  {try! rustCall() {
 
      */
 open func clearDeviceName()throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_clear_device_name(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_clear_device_name(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -1388,7 +1414,8 @@ open func clearDeviceName()throws   {try rustCallWithError(FfiConverterTypeFxaEr
      */
 open func closeTabs(targetDeviceId: String, urls: [String])throws  -> CloseTabsResult  {
     return try  FfiConverterTypeCloseTabsResult_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_close_tabs(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_close_tabs(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(targetDeviceId),
         FfiConverterSequenceString.lower(urls),$0
     )
@@ -1412,7 +1439,8 @@ open func closeTabs(targetDeviceId: String, urls: [String])throws  -> CloseTabsR
 
      */
 open func completeOauthFlow(code: String, state: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_complete_oauth_flow(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_complete_oauth_flow(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(code),
         FfiConverterString.lower(state),$0
     )
@@ -1435,7 +1463,8 @@ open func completeOauthFlow(code: String, state: String)throws   {try rustCallWi
 
      */
 open func disconnect()  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_disconnect(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_disconnect(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -1466,7 +1495,8 @@ open func disconnect()  {try! rustCall() {
      */
 open func ensureCapabilities(supportedCapabilities: [DeviceCapability])throws  -> LocalDevice  {
     return try  FfiConverterTypeLocalDevice_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_ensure_capabilities(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_ensure_capabilities(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceTypeDeviceCapability.lower(supportedCapabilities),$0
     )
 })
@@ -1486,7 +1516,8 @@ open func ensureCapabilities(supportedCapabilities: [DeviceCapability])throws  -
      */
 open func gatherTelemetry()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_gather_telemetry(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_gather_telemetry(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1520,7 +1551,8 @@ open func gatherTelemetry()throws  -> String  {
      */
 open func getAccessToken(scope: String, useCache: Bool = true)throws  -> AccessTokenInfo  {
     return try  FfiConverterTypeAccessTokenInfo_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_access_token(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_get_access_token(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(scope),
         FfiConverterBool.lower(useCache),$0
     )
@@ -1546,7 +1578,8 @@ open func getAccessToken(scope: String, useCache: Bool = true)throws  -> AccessT
      */
 open func getAttachedClients()throws  -> [AttachedClient]  {
     return try  FfiConverterSequenceTypeAttachedClient.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_attached_clients(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_get_attached_clients(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1558,7 +1591,8 @@ open func getAttachedClients()throws  -> [AttachedClient]  {
      */
 open func getAuthState() -> FxaRustAuthState  {
     return try!  FfiConverterTypeFxaRustAuthState_lift(try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_auth_state(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_get_auth_state(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1575,7 +1609,8 @@ open func getAuthState() -> FxaRustAuthState  {
      */
 open func getConnectionSuccessUrl()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_connection_success_url(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_get_connection_success_url(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1594,7 +1629,8 @@ open func getConnectionSuccessUrl()throws  -> String  {
      */
 open func getCurrentDeviceId()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_current_device_id(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_get_current_device_id(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1621,7 +1657,8 @@ open func getCurrentDeviceId()throws  -> String  {
      */
 open func getDevices(ignoreCache: Bool)throws  -> [Device]  {
     return try  FfiConverterSequenceTypeDevice.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_devices(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_get_devices(
+            self.uniffiCloneHandle(),
         FfiConverterBool.lower(ignoreCache),$0
     )
 })
@@ -1644,7 +1681,8 @@ open func getDevices(ignoreCache: Bool)throws  -> [Device]  {
      */
 open func getManageAccountUrl(entrypoint: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_manage_account_url(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_get_manage_account_url(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(entrypoint),$0
     )
 })
@@ -1668,7 +1706,8 @@ open func getManageAccountUrl(entrypoint: String)throws  -> String  {
      */
 open func getManageDevicesUrl(entrypoint: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_manage_devices_url(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_get_manage_devices_url(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(entrypoint),$0
     )
 })
@@ -1685,7 +1724,8 @@ open func getManageDevicesUrl(entrypoint: String)throws  -> String  {
      */
 open func getPairingAuthorityUrl()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_pairing_authority_url(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_get_pairing_authority_url(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1715,7 +1755,8 @@ open func getPairingAuthorityUrl()throws  -> String  {
      */
 open func getProfile(ignoreCache: Bool)throws  -> Profile  {
     return try  FfiConverterTypeProfile_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_profile(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_get_profile(
+            self.uniffiCloneHandle(),
         FfiConverterBool.lower(ignoreCache),$0
     )
 })
@@ -1741,7 +1782,8 @@ open func getProfile(ignoreCache: Bool)throws  -> Profile  {
      */
 open func getSessionToken()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_session_token(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_get_session_token(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1751,7 +1793,8 @@ open func getSessionToken()throws  -> String  {
      */
 open func getState() -> FxaState  {
     return try!  FfiConverterTypeFxaState_lift(try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_state(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_get_state(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1764,7 +1807,8 @@ open func getState() -> FxaState  {
      */
 open func getTokenServerEndpointUrl()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_token_server_endpoint_url(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_get_token_server_endpoint_url(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1786,7 +1830,8 @@ open func getTokenServerEndpointUrl()throws  -> String  {
      */
 open func handlePushMessage(payload: String)throws  -> AccountEvent  {
     return try  FfiConverterTypeAccountEvent_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_handle_push_message(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_handle_push_message(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(payload),$0
     )
 })
@@ -1808,7 +1853,8 @@ open func handlePushMessage(payload: String)throws  -> AccountEvent  {
 
      */
 open func handleSessionTokenChange(sessionToken: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_handle_session_token_change(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_handle_session_token_change(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(sessionToken),$0
     )
 }
@@ -1842,7 +1888,8 @@ open func handleSessionTokenChange(sessionToken: String)throws   {try rustCallWi
      */
 open func initializeDevice(name: String, deviceType: DeviceType, supportedCapabilities: [DeviceCapability])throws  -> LocalDevice  {
     return try  FfiConverterTypeLocalDevice_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_initialize_device(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_initialize_device(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(name),
         FfiConverterTypeDeviceType_lower(deviceType),
         FfiConverterSequenceTypeDeviceCapability.lower(supportedCapabilities),$0
@@ -1859,7 +1906,8 @@ open func initializeDevice(name: String, deviceType: DeviceType, supportedCapabi
      * user to re-authenticated.  It transitions the user to the [FxaRustAuthState.AuthIssues] state.
      */
 open func onAuthIssues()  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_on_auth_issues(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_on_auth_issues(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -1884,7 +1932,8 @@ open func onAuthIssues()  {try! rustCall() {
      */
 open func pollDeviceCommands()throws  -> [IncomingDeviceCommand]  {
     return try  FfiConverterSequenceTypeIncomingDeviceCommand.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_poll_device_commands(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_poll_device_commands(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1897,7 +1946,8 @@ open func pollDeviceCommands()throws  -> [IncomingDeviceCommand]  {
      */
 open func processEvent(event: FxaEvent)throws  -> FxaState  {
     return try  FfiConverterTypeFxaState_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_process_event(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_process_event(
+            self.uniffiCloneHandle(),
         FfiConverterTypeFxaEvent_lower(event),$0
     )
 })
@@ -1923,7 +1973,8 @@ open func processEvent(event: FxaEvent)throws  -> FxaState  {
 
      */
 open func sendSingleTab(targetDeviceId: String, title: String, url: String, isPrivate: Bool = false)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_send_single_tab(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_send_single_tab(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(targetDeviceId),
         FfiConverterString.lower(title),
         FfiConverterString.lower(url),
@@ -1952,7 +2003,8 @@ open func sendSingleTab(targetDeviceId: String, title: String, url: String, isPr
      */
 open func setDeviceName(displayName: String)throws  -> LocalDevice  {
     return try  FfiConverterTypeLocalDevice_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_set_device_name(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_set_device_name(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(displayName),$0
     )
 })
@@ -1981,7 +2033,8 @@ open func setDeviceName(displayName: String)throws  -> LocalDevice  {
      */
 open func setPushSubscription(subscription: DevicePushSubscription)throws  -> LocalDevice  {
     return try  FfiConverterTypeLocalDevice_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_set_push_subscription(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_set_push_subscription(
+            self.uniffiCloneHandle(),
         FfiConverterTypeDevicePushSubscription_lower(subscription),$0
     )
 })
@@ -1994,7 +2047,8 @@ open func setPushSubscription(subscription: DevicePushSubscription)throws  -> Lo
      * oauth flow.
      */
 open func setUserData(userData: UserData)  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_set_user_data(self.uniffiClonePointer(),
+    uniffi_fxa_client_fn_method_firefoxaccount_set_user_data(
+            self.uniffiCloneHandle(),
         FfiConverterTypeUserData_lower(userData),$0
     )
 }
@@ -2004,7 +2058,8 @@ open func setUserData(userData: UserData)  {try! rustCall() {
      * Used by the application to test auth token issues
      */
 open func simulateNetworkError()  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_simulate_network_error(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_simulate_network_error(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -2013,7 +2068,8 @@ open func simulateNetworkError()  {try! rustCall() {
      * Used by the application to test auth token issues
      */
 open func simulatePermanentAuthTokenIssue()  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_simulate_permanent_auth_token_issue(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_simulate_permanent_auth_token_issue(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -2022,7 +2078,8 @@ open func simulatePermanentAuthTokenIssue()  {try! rustCall() {
      * Used by the application to test auth token issues
      */
 open func simulateTemporaryAuthTokenIssue()  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_simulate_temporary_auth_token_issue(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_simulate_temporary_auth_token_issue(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -2043,12 +2100,14 @@ open func simulateTemporaryAuthTokenIssue()  {try! rustCall() {
      */
 open func toJson()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_to_json(self.uniffiClonePointer(),$0
+    uniffi_fxa_client_fn_method_firefoxaccount_to_json(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -2056,33 +2115,24 @@ open func toJson()throws  -> String  {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeFirefoxAccount: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = FirefoxAccount
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> FirefoxAccount {
-        return FirefoxAccount(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> FirefoxAccount {
+        return FirefoxAccount(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: FirefoxAccount) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: FirefoxAccount) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxAccount {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: FirefoxAccount, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -2090,14 +2140,14 @@ public struct FfiConverterTypeFirefoxAccount: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeFirefoxAccount_lift(_ pointer: UnsafeMutableRawPointer) throws -> FirefoxAccount {
-    return try FfiConverterTypeFirefoxAccount.lift(pointer)
+public func FfiConverterTypeFirefoxAccount_lift(_ handle: UInt64) throws -> FirefoxAccount {
+    return try FfiConverterTypeFirefoxAccount.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeFirefoxAccount_lower(_ value: FirefoxAccount) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeFirefoxAccount_lower(_ value: FirefoxAccount) -> UInt64 {
     return FfiConverterTypeFirefoxAccount.lower(value)
 }
 
@@ -2113,7 +2163,7 @@ public func FfiConverterTypeFirefoxAccount_lower(_ value: FirefoxAccount) -> Uns
  * associated encryption key.
 
  */
-public struct AccessTokenInfo {
+public struct AccessTokenInfo: Equatable, Hashable {
     /**
      * The scope of access granted by token.
      */
@@ -2179,39 +2229,15 @@ public struct AccessTokenInfo {
         self.key = key
         self.expiresAt = expiresAt
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension AccessTokenInfo: Sendable {}
 #endif
-
-
-extension AccessTokenInfo: Equatable, Hashable {
-    public static func ==(lhs: AccessTokenInfo, rhs: AccessTokenInfo) -> Bool {
-        if lhs.scope != rhs.scope {
-            return false
-        }
-        if lhs.token != rhs.token {
-            return false
-        }
-        if lhs.key != rhs.key {
-            return false
-        }
-        if lhs.expiresAt != rhs.expiresAt {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(scope)
-        hasher.combine(token)
-        hasher.combine(key)
-        hasher.combine(expiresAt)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2264,7 +2290,7 @@ public func FfiConverterTypeAccessTokenInfo_lower(_ value: AccessTokenInfo) -> R
  * contents of the message to what other applications the user has on their account.
 
  */
-public struct AttachedClient {
+public struct AttachedClient: Equatable, Hashable {
     public var clientId: String?
     public var deviceId: String?
     public var deviceType: DeviceType
@@ -2286,55 +2312,15 @@ public struct AttachedClient {
         self.lastAccessTime = lastAccessTime
         self.scope = scope
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension AttachedClient: Sendable {}
 #endif
-
-
-extension AttachedClient: Equatable, Hashable {
-    public static func ==(lhs: AttachedClient, rhs: AttachedClient) -> Bool {
-        if lhs.clientId != rhs.clientId {
-            return false
-        }
-        if lhs.deviceId != rhs.deviceId {
-            return false
-        }
-        if lhs.deviceType != rhs.deviceType {
-            return false
-        }
-        if lhs.isCurrentSession != rhs.isCurrentSession {
-            return false
-        }
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.createdTime != rhs.createdTime {
-            return false
-        }
-        if lhs.lastAccessTime != rhs.lastAccessTime {
-            return false
-        }
-        if lhs.scope != rhs.scope {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(clientId)
-        hasher.combine(deviceId)
-        hasher.combine(deviceType)
-        hasher.combine(isCurrentSession)
-        hasher.combine(name)
-        hasher.combine(createdTime)
-        hasher.combine(lastAccessTime)
-        hasher.combine(scope)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2389,7 +2375,7 @@ public func FfiConverterTypeAttachedClient_lower(_ value: AttachedClient) -> Rus
  * connected to the user's account.
 
  */
-public struct AuthorizationInfo {
+public struct AuthorizationInfo: Equatable, Hashable {
     public var active: Bool
 
     // Default memberwise initializers are never public by default, so we
@@ -2397,27 +2383,15 @@ public struct AuthorizationInfo {
     public init(active: Bool) {
         self.active = active
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension AuthorizationInfo: Sendable {}
 #endif
-
-
-extension AuthorizationInfo: Equatable, Hashable {
-    public static func ==(lhs: AuthorizationInfo, rhs: AuthorizationInfo) -> Bool {
-        if lhs.active != rhs.active {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(active)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2459,7 +2433,7 @@ public func FfiConverterTypeAuthorizationInfo_lower(_ value: AuthorizationInfo) 
  * an OAuth sign-in flow.
 
  */
-public struct AuthorizationParameters {
+public struct AuthorizationParameters: Equatable, Hashable {
     public var clientId: String
     public var scope: [String]
     public var state: String
@@ -2479,51 +2453,15 @@ public struct AuthorizationParameters {
         self.codeChallengeMethod = codeChallengeMethod
         self.keysJwk = keysJwk
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension AuthorizationParameters: Sendable {}
 #endif
-
-
-extension AuthorizationParameters: Equatable, Hashable {
-    public static func ==(lhs: AuthorizationParameters, rhs: AuthorizationParameters) -> Bool {
-        if lhs.clientId != rhs.clientId {
-            return false
-        }
-        if lhs.scope != rhs.scope {
-            return false
-        }
-        if lhs.state != rhs.state {
-            return false
-        }
-        if lhs.accessType != rhs.accessType {
-            return false
-        }
-        if lhs.codeChallenge != rhs.codeChallenge {
-            return false
-        }
-        if lhs.codeChallengeMethod != rhs.codeChallengeMethod {
-            return false
-        }
-        if lhs.keysJwk != rhs.keysJwk {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(clientId)
-        hasher.combine(scope)
-        hasher.combine(state)
-        hasher.combine(accessType)
-        hasher.combine(codeChallenge)
-        hasher.combine(codeChallengeMethod)
-        hasher.combine(keysJwk)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2573,7 +2511,7 @@ public func FfiConverterTypeAuthorizationParameters_lower(_ value: Authorization
  * The payload sent when invoking a "close tabs" command.
 
  */
-public struct CloseTabsPayload {
+public struct CloseTabsPayload: Equatable, Hashable {
     /**
      * The URLs of the tabs to close.
      */
@@ -2587,27 +2525,15 @@ public struct CloseTabsPayload {
          */urls: [String]) {
         self.urls = urls
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CloseTabsPayload: Sendable {}
 #endif
-
-
-extension CloseTabsPayload: Equatable, Hashable {
-    public static func ==(lhs: CloseTabsPayload, rhs: CloseTabsPayload) -> Bool {
-        if lhs.urls != rhs.urls {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(urls)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2649,7 +2575,7 @@ public func FfiConverterTypeCloseTabsPayload_lower(_ value: CloseTabsPayload) ->
  * in a "send tab" menu.
 
  */
-public struct Device {
+public struct Device: Equatable, Hashable {
     public var id: String
     public var displayName: String
     public var deviceType: DeviceType
@@ -2671,55 +2597,15 @@ public struct Device {
         self.isCurrentDevice = isCurrentDevice
         self.lastAccessTime = lastAccessTime
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Device: Sendable {}
 #endif
-
-
-extension Device: Equatable, Hashable {
-    public static func ==(lhs: Device, rhs: Device) -> Bool {
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.displayName != rhs.displayName {
-            return false
-        }
-        if lhs.deviceType != rhs.deviceType {
-            return false
-        }
-        if lhs.capabilities != rhs.capabilities {
-            return false
-        }
-        if lhs.pushSubscription != rhs.pushSubscription {
-            return false
-        }
-        if lhs.pushEndpointExpired != rhs.pushEndpointExpired {
-            return false
-        }
-        if lhs.isCurrentDevice != rhs.isCurrentDevice {
-            return false
-        }
-        if lhs.lastAccessTime != rhs.lastAccessTime {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(displayName)
-        hasher.combine(deviceType)
-        hasher.combine(capabilities)
-        hasher.combine(pushSubscription)
-        hasher.combine(pushEndpointExpired)
-        hasher.combine(isCurrentDevice)
-        hasher.combine(lastAccessTime)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2770,7 +2656,7 @@ public func FfiConverterTypeDevice_lower(_ value: Device) -> RustBuffer {
 /**
  * Device configuration
  */
-public struct DeviceConfig {
+public struct DeviceConfig: Equatable, Hashable {
     public var name: String
     public var deviceType: DeviceType
     public var capabilities: [DeviceCapability]
@@ -2782,35 +2668,15 @@ public struct DeviceConfig {
         self.deviceType = deviceType
         self.capabilities = capabilities
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension DeviceConfig: Sendable {}
 #endif
-
-
-extension DeviceConfig: Equatable, Hashable {
-    public static func ==(lhs: DeviceConfig, rhs: DeviceConfig) -> Bool {
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.deviceType != rhs.deviceType {
-            return false
-        }
-        if lhs.capabilities != rhs.capabilities {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(deviceType)
-        hasher.combine(capabilities)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2859,7 +2725,7 @@ public func FfiConverterTypeDeviceConfig_lower(_ value: DeviceConfig) -> RustBuf
  * Managing a web-push subscription is outside of the scope of this component.
 
  */
-public struct DevicePushSubscription {
+public struct DevicePushSubscription: Equatable, Hashable {
     public var endpoint: String
     public var publicKey: String
     public var authKey: String
@@ -2871,35 +2737,15 @@ public struct DevicePushSubscription {
         self.publicKey = publicKey
         self.authKey = authKey
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension DevicePushSubscription: Sendable {}
 #endif
-
-
-extension DevicePushSubscription: Equatable, Hashable {
-    public static func ==(lhs: DevicePushSubscription, rhs: DevicePushSubscription) -> Bool {
-        if lhs.endpoint != rhs.endpoint {
-            return false
-        }
-        if lhs.publicKey != rhs.publicKey {
-            return false
-        }
-        if lhs.authKey != rhs.authKey {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(endpoint)
-        hasher.combine(publicKey)
-        hasher.combine(authKey)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2937,7 +2783,7 @@ public func FfiConverterTypeDevicePushSubscription_lower(_ value: DevicePushSubs
 }
 
 
-public struct FxaConfig {
+public struct FxaConfig: Equatable, Hashable {
     /**
      * FxaServer to connect with
      */
@@ -2977,39 +2823,15 @@ public struct FxaConfig {
         self.redirectUri = redirectUri
         self.tokenServerUrlOverride = tokenServerUrlOverride
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension FxaConfig: Sendable {}
 #endif
-
-
-extension FxaConfig: Equatable, Hashable {
-    public static func ==(lhs: FxaConfig, rhs: FxaConfig) -> Bool {
-        if lhs.server != rhs.server {
-            return false
-        }
-        if lhs.clientId != rhs.clientId {
-            return false
-        }
-        if lhs.redirectUri != rhs.redirectUri {
-            return false
-        }
-        if lhs.tokenServerUrlOverride != rhs.tokenServerUrlOverride {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(server)
-        hasher.combine(clientId)
-        hasher.combine(redirectUri)
-        hasher.combine(tokenServerUrlOverride)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3055,7 +2877,7 @@ public func FfiConverterTypeFxaConfig_lower(_ value: FxaConfig) -> RustBuffer {
  * This is returned by the device update methods and represents the server's view of the local
  * device.
  */
-public struct LocalDevice {
+public struct LocalDevice: Equatable, Hashable {
     public var id: String
     public var displayName: String
     public var deviceType: DeviceType
@@ -3073,47 +2895,15 @@ public struct LocalDevice {
         self.pushSubscription = pushSubscription
         self.pushEndpointExpired = pushEndpointExpired
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension LocalDevice: Sendable {}
 #endif
-
-
-extension LocalDevice: Equatable, Hashable {
-    public static func ==(lhs: LocalDevice, rhs: LocalDevice) -> Bool {
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.displayName != rhs.displayName {
-            return false
-        }
-        if lhs.deviceType != rhs.deviceType {
-            return false
-        }
-        if lhs.capabilities != rhs.capabilities {
-            return false
-        }
-        if lhs.pushSubscription != rhs.pushSubscription {
-            return false
-        }
-        if lhs.pushEndpointExpired != rhs.pushEndpointExpired {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(displayName)
-        hasher.combine(deviceType)
-        hasher.combine(capabilities)
-        hasher.combine(pushSubscription)
-        hasher.combine(pushEndpointExpired)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3165,7 +2955,7 @@ public func FfiConverterTypeLocalDevice_lower(_ value: LocalDevice) -> RustBuffe
  * for the current user.
 
  */
-public struct Profile {
+public struct Profile: Equatable, Hashable {
     /**
      * The user's account uid
      *
@@ -3225,43 +3015,15 @@ public struct Profile {
         self.avatar = avatar
         self.isDefaultAvatar = isDefaultAvatar
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Profile: Sendable {}
 #endif
-
-
-extension Profile: Equatable, Hashable {
-    public static func ==(lhs: Profile, rhs: Profile) -> Bool {
-        if lhs.uid != rhs.uid {
-            return false
-        }
-        if lhs.email != rhs.email {
-            return false
-        }
-        if lhs.displayName != rhs.displayName {
-            return false
-        }
-        if lhs.avatar != rhs.avatar {
-            return false
-        }
-        if lhs.isDefaultAvatar != rhs.isDefaultAvatar {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(uid)
-        hasher.combine(email)
-        hasher.combine(displayName)
-        hasher.combine(avatar)
-        hasher.combine(isDefaultAvatar)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3311,7 +3073,7 @@ public func FfiConverterTypeProfile_lower(_ value: Profile) -> RustBuffer {
  * format compatible with the common "JWK" standard.
 
  */
-public struct ScopedKey {
+public struct ScopedKey: Equatable, Hashable {
     /**
      * The type of key.
      *
@@ -3365,39 +3127,15 @@ public struct ScopedKey {
         self.k = k
         self.kid = kid
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension ScopedKey: Sendable {}
 #endif
-
-
-extension ScopedKey: Equatable, Hashable {
-    public static func ==(lhs: ScopedKey, rhs: ScopedKey) -> Bool {
-        if lhs.kty != rhs.kty {
-            return false
-        }
-        if lhs.scope != rhs.scope {
-            return false
-        }
-        if lhs.k != rhs.k {
-            return false
-        }
-        if lhs.kid != rhs.kid {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(kty)
-        hasher.combine(scope)
-        hasher.combine(k)
-        hasher.combine(kid)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3441,7 +3179,7 @@ public func FfiConverterTypeScopedKey_lower(_ value: ScopedKey) -> RustBuffer {
  * The payload sent when invoking a "send tab" command.
 
  */
-public struct SendTabPayload {
+public struct SendTabPayload: Equatable, Hashable {
     /**
      * The navigation history of the sent tab.
      *
@@ -3487,35 +3225,15 @@ public struct SendTabPayload {
         self.flowId = flowId
         self.streamId = streamId
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SendTabPayload: Sendable {}
 #endif
-
-
-extension SendTabPayload: Equatable, Hashable {
-    public static func ==(lhs: SendTabPayload, rhs: SendTabPayload) -> Bool {
-        if lhs.entries != rhs.entries {
-            return false
-        }
-        if lhs.flowId != rhs.flowId {
-            return false
-        }
-        if lhs.streamId != rhs.streamId {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(entries)
-        hasher.combine(flowId)
-        hasher.combine(streamId)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3559,7 +3277,7 @@ public func FfiConverterTypeSendTabPayload_lower(_ value: SendTabPayload) -> Rus
  * entry - but that never happened.
 
  */
-public struct TabHistoryEntry {
+public struct TabHistoryEntry: Equatable, Hashable {
     public var title: String
     public var url: String
     public var isPrivate: Bool
@@ -3571,35 +3289,15 @@ public struct TabHistoryEntry {
         self.url = url
         self.isPrivate = isPrivate
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension TabHistoryEntry: Sendable {}
 #endif
-
-
-extension TabHistoryEntry: Equatable, Hashable {
-    public static func ==(lhs: TabHistoryEntry, rhs: TabHistoryEntry) -> Bool {
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.isPrivate != rhs.isPrivate {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(title)
-        hasher.combine(url)
-        hasher.combine(isPrivate)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3637,7 +3335,7 @@ public func FfiConverterTypeTabHistoryEntry_lower(_ value: TabHistoryEntry) -> R
 }
 
 
-public struct UserData {
+public struct UserData: Equatable, Hashable {
     public var sessionToken: String
     public var uid: String
     public var email: String
@@ -3651,39 +3349,15 @@ public struct UserData {
         self.email = email
         self.verified = verified
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension UserData: Sendable {}
 #endif
-
-
-extension UserData: Equatable, Hashable {
-    public static func ==(lhs: UserData, rhs: UserData) -> Bool {
-        if lhs.sessionToken != rhs.sessionToken {
-            return false
-        }
-        if lhs.uid != rhs.uid {
-            return false
-        }
-        if lhs.email != rhs.email {
-            return false
-        }
-        if lhs.verified != rhs.verified {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(sessionToken)
-        hasher.combine(uid)
-        hasher.combine(email)
-        hasher.combine(verified)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3734,7 +3408,7 @@ public func FfiConverterTypeUserData_lower(_ value: UserData) -> RustBuffer {
 
  */
 
-public enum AccountEvent {
+public enum AccountEvent: Equatable, Hashable {
     
     /**
      * Sent when another device has invoked a command for this device to execute.
@@ -3793,8 +3467,12 @@ public enum AccountEvent {
      * When receiving this event, the application should gracefully ignore it.
      */
     case unknown
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension AccountEvent: Sendable {}
@@ -3886,13 +3564,6 @@ public func FfiConverterTypeAccountEvent_lower(_ value: AccountEvent) -> RustBuf
 }
 
 
-extension AccountEvent: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3908,7 +3579,7 @@ extension AccountEvent: Equatable, Hashable {}
  * push message that must show a user-visible notification.
  */
 
-public enum CloseTabsResult {
+public enum CloseTabsResult: Equatable, Hashable {
     
     /**
      * All URLs passed to [`FirefoxAccount::close_tabs`] were chunked and sent
@@ -3926,8 +3597,12 @@ public enum CloseTabsResult {
      */
     case tabsNotClosed(urls: [String]
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension CloseTabsResult: Sendable {}
@@ -3984,13 +3659,6 @@ public func FfiConverterTypeCloseTabsResult_lower(_ value: CloseTabsResult) -> R
 }
 
 
-extension CloseTabsResult: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -4004,12 +3672,16 @@ extension CloseTabsResult: Equatable, Hashable {}
 
  */
 
-public enum DeviceCapability {
+public enum DeviceCapability: Equatable, Hashable {
     
     case sendTab
     case closeTabs
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension DeviceCapability: Sendable {}
@@ -4064,13 +3736,6 @@ public func FfiConverterTypeDeviceCapability_lower(_ value: DeviceCapability) ->
 }
 
 
-extension DeviceCapability: Equatable, Hashable {}
-
-
-
-
-
-
 
 /**
  * Generic error type thrown by many [`FirefoxAccount`] operations.
@@ -4080,7 +3745,7 @@ extension DeviceCapability: Equatable, Hashable {}
  * calling code should respond.
 
  */
-public enum FxaError: Swift.Error {
+public enum FxaError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -4140,8 +3805,21 @@ public enum FxaError: Swift.Error {
      */
     case Other(message: String)
     
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension FxaError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -4236,25 +3914,10 @@ public func FfiConverterTypeFxaError_lower(_ value: FxaError) -> RustBuffer {
     return FfiConverterTypeFxaError.lower(value)
 }
 
-
-extension FxaError: Equatable, Hashable {}
-
-
-
-
-extension FxaError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum FxaEvent {
+public enum FxaEvent: Equatable, Hashable {
     
     case initialize(deviceConfig: DeviceConfig
     )
@@ -4268,8 +3931,12 @@ public enum FxaEvent {
     case checkAuthorizationStatus
     case disconnect
     case callGetProfile
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension FxaEvent: Sendable {}
@@ -4372,23 +4039,20 @@ public func FfiConverterTypeFxaEvent_lower(_ value: FxaEvent) -> RustBuffer {
 }
 
 
-extension FxaEvent: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum FxaRustAuthState {
+public enum FxaRustAuthState: Equatable, Hashable {
     
     case disconnected
     case connected
     case authIssues
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension FxaRustAuthState: Sendable {}
@@ -4449,20 +4113,13 @@ public func FfiConverterTypeFxaRustAuthState_lower(_ value: FxaRustAuthState) ->
 }
 
 
-extension FxaRustAuthState: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * FxA server to connect to
  */
 
-public enum FxaServer {
+public enum FxaServer: Equatable, Hashable {
     
     case release
     case stable
@@ -4471,8 +4128,12 @@ public enum FxaServer {
     case localDev
     case custom(url: String
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension FxaServer: Sendable {}
@@ -4553,17 +4214,10 @@ public func FfiConverterTypeFxaServer_lower(_ value: FxaServer) -> RustBuffer {
 }
 
 
-extension FxaServer: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum FxaState {
+public enum FxaState: Equatable, Hashable {
     
     case uninitialized
     case disconnected
@@ -4571,8 +4225,12 @@ public enum FxaState {
     )
     case connected
     case authIssues
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension FxaState: Sendable {}
@@ -4647,13 +4305,6 @@ public func FfiConverterTypeFxaState_lower(_ value: FxaState) -> RustBuffer {
 }
 
 
-extension FxaState: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -4665,7 +4316,7 @@ extension FxaState: Equatable, Hashable {}
 
  */
 
-public enum IncomingDeviceCommand {
+public enum IncomingDeviceCommand: Equatable, Hashable {
     
     /**
      * Indicates that a tab has been sent to this device.
@@ -4677,8 +4328,12 @@ public enum IncomingDeviceCommand {
      */
     case tabsClosed(sender: Device?, payload: CloseTabsPayload
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension IncomingDeviceCommand: Sendable {}
@@ -4737,13 +4392,6 @@ public func FfiConverterTypeIncomingDeviceCommand_lift(_ buf: RustBuffer) throws
 public func FfiConverterTypeIncomingDeviceCommand_lower(_ value: IncomingDeviceCommand) -> RustBuffer {
     return FfiConverterTypeIncomingDeviceCommand.lower(value)
 }
-
-
-extension IncomingDeviceCommand: Equatable, Hashable {}
-
-
-
-
 
 
 #if swift(>=5.8)
@@ -5049,124 +4697,124 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_fxa_client_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_authorize_code_using_session_token() != 17083) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_authorize_code_using_session_token() != 48815) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_oauth_flow() != 2998) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_oauth_flow() != 16472) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_pairing_flow() != 21843) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_pairing_flow() != 53426) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 52519) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 26020) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_clear_access_token_cache() != 36203) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_clear_access_token_cache() != 10430) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_clear_device_name() != 42324) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_clear_device_name() != 37609) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_close_tabs() != 55044) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_close_tabs() != 4607) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_complete_oauth_flow() != 41338) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_complete_oauth_flow() != 12142) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_disconnect() != 807) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_disconnect() != 2750) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_ensure_capabilities() != 807) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_ensure_capabilities() != 51305) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_gather_telemetry() != 61296) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_gather_telemetry() != 10788) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_access_token() != 11103) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_access_token() != 32591) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_attached_clients() != 14470) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_attached_clients() != 19019) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_auth_state() != 38375) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_auth_state() != 9863) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_connection_success_url() != 7413) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_connection_success_url() != 3679) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_current_device_id() != 45188) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_current_device_id() != 33503) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_devices() != 41982) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_devices() != 51434) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_manage_account_url() != 29173) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_manage_account_url() != 52904) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_manage_devices_url() != 42582) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_manage_devices_url() != 44946) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_pairing_authority_url() != 50743) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_pairing_authority_url() != 33177) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_profile() != 26069) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_profile() != 18322) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_session_token() != 45648) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_session_token() != 45605) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_state() != 37802) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_state() != 11194) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_token_server_endpoint_url() != 42568) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_token_server_endpoint_url() != 15088) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_push_message() != 41561) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_push_message() != 12910) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_session_token_change() != 23593) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_session_token_change() != 61407) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_initialize_device() != 37216) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_initialize_device() != 52372) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_on_auth_issues() != 21675) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_on_auth_issues() != 843) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_poll_device_commands() != 37725) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_poll_device_commands() != 13619) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_process_event() != 31348) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_process_event() != 5087) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_send_single_tab() != 33359) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_send_single_tab() != 17606) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_device_name() != 49257) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_device_name() != 32104) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_push_subscription() != 65018) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_push_subscription() != 27852) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_user_data() != 1025) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_user_data() != 31422) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_network_error() != 61828) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_network_error() != 31630) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_permanent_auth_token_issue() != 25986) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_permanent_auth_token_issue() != 805) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_temporary_auth_token_issue() != 32382) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_temporary_auth_token_issue() != 2885) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_to_json() != 27972) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_to_json() != 55181) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_constructor_firefoxaccount_from_json() != 17872) {

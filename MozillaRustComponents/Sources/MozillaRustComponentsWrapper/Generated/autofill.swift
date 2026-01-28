@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -547,13 +566,13 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
 }
 open class Store: StoreProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -563,44 +582,45 @@ open class Store: StoreProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_autofill_fn_clone_store(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_autofill_fn_clone_store(self.handle, $0) }
     }
 public convenience init(dbpath: String)throws  {
-    let pointer =
+    let handle =
         try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_constructor_store_new(
         FfiConverterString.lower(dbpath),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_autofill_fn_free_store(pointer, $0) }
+        try! rustCall { uniffi_autofill_fn_free_store(handle, $0) }
     }
 
     
@@ -608,7 +628,8 @@ public convenience init(dbpath: String)throws  {
     
 open func addAddress(a: UpdatableAddressFields)throws  -> Address  {
     return try  FfiConverterTypeAddress_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_add_address(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_add_address(
+            self.uniffiCloneHandle(),
         FfiConverterTypeUpdatableAddressFields_lower(a),$0
     )
 })
@@ -616,7 +637,8 @@ open func addAddress(a: UpdatableAddressFields)throws  -> Address  {
     
 open func addCreditCard(cc: UpdatableCreditCardFields)throws  -> CreditCard  {
     return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_add_credit_card(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_add_credit_card(
+            self.uniffiCloneHandle(),
         FfiConverterTypeUpdatableCreditCardFields_lower(cc),$0
     )
 })
@@ -624,7 +646,8 @@ open func addCreditCard(cc: UpdatableCreditCardFields)throws  -> CreditCard  {
     
 open func deleteAddress(guid: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_delete_address(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_delete_address(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),$0
     )
 })
@@ -632,7 +655,8 @@ open func deleteAddress(guid: String)throws  -> Bool  {
     
 open func deleteCreditCard(guid: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_delete_credit_card(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_delete_credit_card(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),$0
     )
 })
@@ -640,7 +664,8 @@ open func deleteCreditCard(guid: String)throws  -> Bool  {
     
 open func getAddress(guid: String)throws  -> Address  {
     return try  FfiConverterTypeAddress_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_get_address(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_get_address(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),$0
     )
 })
@@ -648,28 +673,32 @@ open func getAddress(guid: String)throws  -> Address  {
     
 open func getAllAddresses()throws  -> [Address]  {
     return try  FfiConverterSequenceTypeAddress.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_get_all_addresses(self.uniffiClonePointer(),$0
+    uniffi_autofill_fn_method_store_get_all_addresses(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func getAllCreditCards()throws  -> [CreditCard]  {
     return try  FfiConverterSequenceTypeCreditCard.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_get_all_credit_cards(self.uniffiClonePointer(),$0
+    uniffi_autofill_fn_method_store_get_all_credit_cards(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func getCreditCard(guid: String)throws  -> CreditCard  {
     return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_get_credit_card(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_get_credit_card(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),$0
     )
 })
 }
     
 open func registerWithSyncManager()  {try! rustCall() {
-    uniffi_autofill_fn_method_store_register_with_sync_manager(self.uniffiClonePointer(),$0
+    uniffi_autofill_fn_method_store_register_with_sync_manager(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -681,13 +710,15 @@ open func registerWithSyncManager()  {try! rustCall() {
      * database.
      */
 open func runMaintenance()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_run_maintenance(self.uniffiClonePointer(),$0
+    uniffi_autofill_fn_method_store_run_maintenance(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func scrubEncryptedData()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_scrub_encrypted_data(self.uniffiClonePointer(),$0
+    uniffi_autofill_fn_method_store_scrub_encrypted_data(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -702,28 +733,32 @@ open func scrubEncryptedData()throws   {try rustCallWithError(FfiConverterTypeAu
      */
 open func scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKey: String)throws  -> CreditCardsDeletionMetrics  {
     return try  FfiConverterTypeCreditCardsDeletionMetrics_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(localEncryptionKey),$0
     )
 })
 }
     
 open func touchAddress(guid: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_touch_address(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_touch_address(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),$0
     )
 }
 }
     
 open func touchCreditCard(guid: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_touch_credit_card(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_touch_credit_card(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),$0
     )
 }
 }
     
 open func updateAddress(guid: String, a: UpdatableAddressFields)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_update_address(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_update_address(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),
         FfiConverterTypeUpdatableAddressFields_lower(a),$0
     )
@@ -731,7 +766,8 @@ open func updateAddress(guid: String, a: UpdatableAddressFields)throws   {try ru
 }
     
 open func updateCreditCard(guid: String, cc: UpdatableCreditCardFields)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_store_update_credit_card(self.uniffiClonePointer(),
+    uniffi_autofill_fn_method_store_update_credit_card(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),
         FfiConverterTypeUpdatableCreditCardFields_lower(cc),$0
     )
@@ -739,6 +775,7 @@ open func updateCreditCard(guid: String, cc: UpdatableCreditCardFields)throws   
 }
     
 
+    
 }
 
 
@@ -746,33 +783,24 @@ open func updateCreditCard(guid: String, cc: UpdatableCreditCardFields)throws   
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeStore: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = Store
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> Store {
-        return Store(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> Store {
+        return Store(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: Store) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: Store) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Store {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: Store, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -780,14 +808,14 @@ public struct FfiConverterTypeStore: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeStore_lift(_ pointer: UnsafeMutableRawPointer) throws -> Store {
-    return try FfiConverterTypeStore.lift(pointer)
+public func FfiConverterTypeStore_lift(_ handle: UInt64) throws -> Store {
+    return try FfiConverterTypeStore.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeStore_lower(_ value: Store) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeStore_lower(_ value: Store) -> UInt64 {
     return FfiConverterTypeStore.lower(value)
 }
 
@@ -797,7 +825,7 @@ public func FfiConverterTypeStore_lower(_ value: Store) -> UnsafeMutableRawPoint
 /**
  * What you get back as an address.
  */
-public struct Address {
+public struct Address: Equatable, Hashable {
     public var guid: String
     public var name: String
     public var organization: String
@@ -833,83 +861,15 @@ public struct Address {
         self.timeLastModified = timeLastModified
         self.timesUsed = timesUsed
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Address: Sendable {}
 #endif
-
-
-extension Address: Equatable, Hashable {
-    public static func ==(lhs: Address, rhs: Address) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.organization != rhs.organization {
-            return false
-        }
-        if lhs.streetAddress != rhs.streetAddress {
-            return false
-        }
-        if lhs.addressLevel3 != rhs.addressLevel3 {
-            return false
-        }
-        if lhs.addressLevel2 != rhs.addressLevel2 {
-            return false
-        }
-        if lhs.addressLevel1 != rhs.addressLevel1 {
-            return false
-        }
-        if lhs.postalCode != rhs.postalCode {
-            return false
-        }
-        if lhs.country != rhs.country {
-            return false
-        }
-        if lhs.tel != rhs.tel {
-            return false
-        }
-        if lhs.email != rhs.email {
-            return false
-        }
-        if lhs.timeCreated != rhs.timeCreated {
-            return false
-        }
-        if lhs.timeLastUsed != rhs.timeLastUsed {
-            return false
-        }
-        if lhs.timeLastModified != rhs.timeLastModified {
-            return false
-        }
-        if lhs.timesUsed != rhs.timesUsed {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(name)
-        hasher.combine(organization)
-        hasher.combine(streetAddress)
-        hasher.combine(addressLevel3)
-        hasher.combine(addressLevel2)
-        hasher.combine(addressLevel1)
-        hasher.combine(postalCode)
-        hasher.combine(country)
-        hasher.combine(tel)
-        hasher.combine(email)
-        hasher.combine(timeCreated)
-        hasher.combine(timeLastUsed)
-        hasher.combine(timeLastModified)
-        hasher.combine(timesUsed)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -974,7 +934,7 @@ public func FfiConverterTypeAddress_lower(_ value: Address) -> RustBuffer {
 /**
  * What you get back as a credit-card.
  */
-public struct CreditCard {
+public struct CreditCard: Equatable, Hashable {
     public var guid: String
     public var ccName: String
     public var ccNumberEnc: String
@@ -1002,67 +962,15 @@ public struct CreditCard {
         self.timeLastModified = timeLastModified
         self.timesUsed = timesUsed
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CreditCard: Sendable {}
 #endif
-
-
-extension CreditCard: Equatable, Hashable {
-    public static func ==(lhs: CreditCard, rhs: CreditCard) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.ccName != rhs.ccName {
-            return false
-        }
-        if lhs.ccNumberEnc != rhs.ccNumberEnc {
-            return false
-        }
-        if lhs.ccNumberLast4 != rhs.ccNumberLast4 {
-            return false
-        }
-        if lhs.ccExpMonth != rhs.ccExpMonth {
-            return false
-        }
-        if lhs.ccExpYear != rhs.ccExpYear {
-            return false
-        }
-        if lhs.ccType != rhs.ccType {
-            return false
-        }
-        if lhs.timeCreated != rhs.timeCreated {
-            return false
-        }
-        if lhs.timeLastUsed != rhs.timeLastUsed {
-            return false
-        }
-        if lhs.timeLastModified != rhs.timeLastModified {
-            return false
-        }
-        if lhs.timesUsed != rhs.timesUsed {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(ccName)
-        hasher.combine(ccNumberEnc)
-        hasher.combine(ccNumberLast4)
-        hasher.combine(ccExpMonth)
-        hasher.combine(ccExpYear)
-        hasher.combine(ccType)
-        hasher.combine(timeCreated)
-        hasher.combine(timeLastUsed)
-        hasher.combine(timeLastModified)
-        hasher.combine(timesUsed)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1119,7 +1027,7 @@ public func FfiConverterTypeCreditCard_lower(_ value: CreditCard) -> RustBuffer 
 /**
  * Metrics tracking scrubbing of credit cards that cannot be decrypted, see
  */
-public struct CreditCardsDeletionMetrics {
+public struct CreditCardsDeletionMetrics: Equatable, Hashable {
     public var totalScrubbedRecords: UInt64
 
     // Default memberwise initializers are never public by default, so we
@@ -1127,27 +1035,15 @@ public struct CreditCardsDeletionMetrics {
     public init(totalScrubbedRecords: UInt64) {
         self.totalScrubbedRecords = totalScrubbedRecords
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CreditCardsDeletionMetrics: Sendable {}
 #endif
-
-
-extension CreditCardsDeletionMetrics: Equatable, Hashable {
-    public static func ==(lhs: CreditCardsDeletionMetrics, rhs: CreditCardsDeletionMetrics) -> Bool {
-        if lhs.totalScrubbedRecords != rhs.totalScrubbedRecords {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(totalScrubbedRecords)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1184,7 +1080,7 @@ public func FfiConverterTypeCreditCardsDeletionMetrics_lower(_ value: CreditCard
 /**
  * What you pass to create or update an address.
  */
-public struct UpdatableAddressFields {
+public struct UpdatableAddressFields: Equatable, Hashable {
     public var name: String
     public var organization: String
     public var streetAddress: String
@@ -1210,63 +1106,15 @@ public struct UpdatableAddressFields {
         self.tel = tel
         self.email = email
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension UpdatableAddressFields: Sendable {}
 #endif
-
-
-extension UpdatableAddressFields: Equatable, Hashable {
-    public static func ==(lhs: UpdatableAddressFields, rhs: UpdatableAddressFields) -> Bool {
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.organization != rhs.organization {
-            return false
-        }
-        if lhs.streetAddress != rhs.streetAddress {
-            return false
-        }
-        if lhs.addressLevel3 != rhs.addressLevel3 {
-            return false
-        }
-        if lhs.addressLevel2 != rhs.addressLevel2 {
-            return false
-        }
-        if lhs.addressLevel1 != rhs.addressLevel1 {
-            return false
-        }
-        if lhs.postalCode != rhs.postalCode {
-            return false
-        }
-        if lhs.country != rhs.country {
-            return false
-        }
-        if lhs.tel != rhs.tel {
-            return false
-        }
-        if lhs.email != rhs.email {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(organization)
-        hasher.combine(streetAddress)
-        hasher.combine(addressLevel3)
-        hasher.combine(addressLevel2)
-        hasher.combine(addressLevel1)
-        hasher.combine(postalCode)
-        hasher.combine(country)
-        hasher.combine(tel)
-        hasher.combine(email)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1321,7 +1169,7 @@ public func FfiConverterTypeUpdatableAddressFields_lower(_ value: UpdatableAddre
 /**
  * What you pass to create or update a credit-card.
  */
-public struct UpdatableCreditCardFields {
+public struct UpdatableCreditCardFields: Equatable, Hashable {
     public var ccName: String
     public var ccNumberEnc: String
     public var ccNumberLast4: String
@@ -1339,47 +1187,15 @@ public struct UpdatableCreditCardFields {
         self.ccExpYear = ccExpYear
         self.ccType = ccType
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension UpdatableCreditCardFields: Sendable {}
 #endif
-
-
-extension UpdatableCreditCardFields: Equatable, Hashable {
-    public static func ==(lhs: UpdatableCreditCardFields, rhs: UpdatableCreditCardFields) -> Bool {
-        if lhs.ccName != rhs.ccName {
-            return false
-        }
-        if lhs.ccNumberEnc != rhs.ccNumberEnc {
-            return false
-        }
-        if lhs.ccNumberLast4 != rhs.ccNumberLast4 {
-            return false
-        }
-        if lhs.ccExpMonth != rhs.ccExpMonth {
-            return false
-        }
-        if lhs.ccExpYear != rhs.ccExpYear {
-            return false
-        }
-        if lhs.ccType != rhs.ccType {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ccName)
-        hasher.combine(ccNumberEnc)
-        hasher.combine(ccNumberLast4)
-        hasher.combine(ccExpMonth)
-        hasher.combine(ccExpYear)
-        hasher.combine(ccType)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1423,7 +1239,7 @@ public func FfiConverterTypeUpdatableCreditCardFields_lower(_ value: UpdatableCr
 }
 
 
-public enum AutofillApiError: Swift.Error {
+public enum AutofillApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1436,8 +1252,21 @@ public enum AutofillApiError: Swift.Error {
     )
     case UnexpectedAutofillApiError(reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension AutofillApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1518,21 +1347,6 @@ public func FfiConverterTypeAutofillApiError_lift(_ buf: RustBuffer) throws -> A
 public func FfiConverterTypeAutofillApiError_lower(_ value: AutofillApiError) -> RustBuffer {
     return FfiConverterTypeAutofillApiError.lower(value)
 }
-
-
-extension AutofillApiError: Equatable, Hashable {}
-
-
-
-
-extension AutofillApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1649,7 +1463,7 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_autofill_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
@@ -1664,52 +1478,52 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_func_encrypt_string() != 64714) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_add_address() != 34214) {
+    if (uniffi_autofill_checksum_method_store_add_address() != 29340) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_add_credit_card() != 46430) {
+    if (uniffi_autofill_checksum_method_store_add_credit_card() != 39831) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_delete_address() != 23936) {
+    if (uniffi_autofill_checksum_method_store_delete_address() != 63199) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_delete_credit_card() != 31085) {
+    if (uniffi_autofill_checksum_method_store_delete_credit_card() != 33261) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_get_address() != 50527) {
+    if (uniffi_autofill_checksum_method_store_get_address() != 1991) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_get_all_addresses() != 8878) {
+    if (uniffi_autofill_checksum_method_store_get_all_addresses() != 36726) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_get_all_credit_cards() != 38961) {
+    if (uniffi_autofill_checksum_method_store_get_all_credit_cards() != 8890) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_get_credit_card() != 36642) {
+    if (uniffi_autofill_checksum_method_store_get_credit_card() != 31148) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_register_with_sync_manager() != 24273) {
+    if (uniffi_autofill_checksum_method_store_register_with_sync_manager() != 50761) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_run_maintenance() != 51990) {
+    if (uniffi_autofill_checksum_method_store_run_maintenance() != 61934) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_scrub_encrypted_data() != 8431) {
+    if (uniffi_autofill_checksum_method_store_scrub_encrypted_data() != 13990) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement() != 15563) {
+    if (uniffi_autofill_checksum_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement() != 12482) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_touch_address() != 22966) {
+    if (uniffi_autofill_checksum_method_store_touch_address() != 31779) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_touch_credit_card() != 3986) {
+    if (uniffi_autofill_checksum_method_store_touch_credit_card() != 11199) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_update_address() != 64691) {
+    if (uniffi_autofill_checksum_method_store_update_address() != 21288) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_update_credit_card() != 33521) {
+    if (uniffi_autofill_checksum_method_store_update_credit_card() != 23488) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_constructor_store_new() != 12483) {
