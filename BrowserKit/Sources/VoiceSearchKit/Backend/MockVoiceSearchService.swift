@@ -5,7 +5,7 @@
 import Foundation
 
 /// A Mock Service to drive UI implementation.
-final class MockVoiceSearchService: VoiceSearchService, @unchecked Sendable {
+struct MockVoiceSearchService: VoiceSearchService {
     private let recordPhrase: [String] = [
         "What",
         "is",
@@ -14,8 +14,8 @@ final class MockVoiceSearchService: VoiceSearchService, @unchecked Sendable {
         "in",
         "Paris ?"
     ]
-    private var throwRecordVoiceError = false
-    private var throwSearchError = false
+    private let throwRecordVoiceError = false
+    private let throwSearchError = false
 
     func recordVoice() -> AsyncThrowingStream<SpeechResult, Error> {
         return AsyncThrowingStream<SpeechResult, Error> { continuation in
@@ -44,7 +44,7 @@ final class MockVoiceSearchService: VoiceSearchService, @unchecked Sendable {
         return .success(
             SearchResult(
                 title: "The weather in Paris is cloudy",
-                body: "The wether is cloudy with a chance of rain at 18:00",
+                body: "The weather is cloudy with a chance of rain at 18:00",
                 url: URL(
                     string: "https://weather.com/weather/today"
                 )

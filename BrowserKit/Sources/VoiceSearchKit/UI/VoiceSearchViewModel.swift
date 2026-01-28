@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @MainActor
-class VoiceSearchViewModel {
+final class VoiceSearchViewModel {
     enum State: Equatable {
         case recordVoice(SpeechResult, SpeechError?)
         case loadingSearchResult
