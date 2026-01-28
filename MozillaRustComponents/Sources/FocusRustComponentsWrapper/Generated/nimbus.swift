@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -713,13 +732,13 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
     
 }
 open class NimbusClient: NimbusClientProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -729,30 +748,30 @@ open class NimbusClient: NimbusClientProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_nimbus_fn_clone_nimbusclient(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_nimbus_fn_clone_nimbusclient(self.handle, $0) }
     }
 public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, coenrollingFeatureIds: [String], dbpath: String, metricsHandler: MetricsHandler, geckoPrefHandler: GeckoPrefHandler?, remoteSettingsService: RemoteSettingsService?, collectionName: String?)throws  {
-    let pointer =
+    let handle =
         try rustCallWithError(FfiConverterTypeNimbusError_lift) {
     uniffi_nimbus_fn_constructor_nimbusclient_new(
         FfiConverterTypeAppContext_lower(appCtx),
@@ -765,15 +784,16 @@ public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, c
         FfiConverterOptionString.lower(collectionName),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_nimbus_fn_free_nimbusclient(pointer, $0) }
+        try! rustCall { uniffi_nimbus_fn_free_nimbusclient(handle, $0) }
     }
 
     
@@ -785,7 +805,8 @@ public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, c
      * `by_seconds` must be positive.
      */
 open func advanceEventTime(bySeconds: Int64)throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_advance_event_time(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_advance_event_time(
+            self.uniffiCloneHandle(),
         FfiConverterInt64.lower(bySeconds),$0
     )
 }
@@ -798,13 +819,15 @@ open func advanceEventTime(bySeconds: Int64)throws   {try rustCallWithError(FfiC
      */
 open func applyPendingExperiments()throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_apply_pending_experiments(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_apply_pending_experiments(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func clearEvents()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_clear_events(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_clear_events(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -815,7 +838,8 @@ open func clearEvents()throws   {try rustCallWithError(FfiConverterTypeNimbusErr
      */
 open func createStringHelper(additionalContext: JsonObject? = nil)throws  -> NimbusStringHelper  {
     return try  FfiConverterTypeNimbusStringHelper_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_create_string_helper(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_create_string_helper(
+            self.uniffiCloneHandle(),
         FfiConverterOptionTypeJsonObject.lower(additionalContext),$0
     )
 })
@@ -828,14 +852,16 @@ open func createStringHelper(additionalContext: JsonObject? = nil)throws  -> Nim
      */
 open func createTargetingHelper(additionalContext: JsonObject? = nil)throws  -> NimbusTargetingHelper  {
     return try  FfiConverterTypeNimbusTargetingHelper_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_create_targeting_helper(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_create_targeting_helper(
+            self.uniffiCloneHandle(),
         FfiConverterOptionTypeJsonObject.lower(additionalContext),$0
     )
 })
 }
     
 open func dumpStateToLog()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_dump_state_to_log(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_dump_state_to_log(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -846,7 +872,8 @@ open func dumpStateToLog()throws   {try rustCallWithError(FfiConverterTypeNimbus
      * Fetched experiments are not applied until `apply_pending_updates()` is called.
      */
 open func fetchExperiments()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_fetch_experiments(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_fetch_experiments(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -856,7 +883,8 @@ open func fetchExperiments()throws   {try rustCallWithError(FfiConverterTypeNimb
      */
 open func getActiveExperiments()throws  -> [EnrolledExperiment]  {
     return try  FfiConverterSequenceTypeEnrolledExperiment.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_active_experiments(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_get_active_experiments(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -867,7 +895,8 @@ open func getActiveExperiments()throws  -> [EnrolledExperiment]  {
      */
 open func getAvailableExperiments()throws  -> [AvailableExperiment]  {
     return try  FfiConverterSequenceTypeAvailableExperiment.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_available_experiments(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_get_available_experiments(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -877,7 +906,8 @@ open func getAvailableExperiments()throws  -> [AvailableExperiment]  {
      */
 open func getExperimentBranch(id: String)throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_experiment_branch(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_get_experiment_branch(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(id),$0
     )
 })
@@ -888,7 +918,8 @@ open func getExperimentBranch(id: String)throws  -> String?  {
      */
 open func getExperimentBranches(experimentSlug: String)throws  -> [ExperimentBranch]  {
     return try  FfiConverterSequenceTypeExperimentBranch.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_experiment_branches(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_get_experiment_branches(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(experimentSlug),$0
     )
 })
@@ -902,14 +933,16 @@ open func getExperimentBranches(experimentSlug: String)throws  -> [ExperimentBra
      */
 open func getExperimentParticipation()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_experiment_participation(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_get_experiment_participation(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func getFeatureConfigVariables(featureId: String)throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_feature_config_variables(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_get_feature_config_variables(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(featureId),$0
     )
 })
@@ -917,7 +950,8 @@ open func getFeatureConfigVariables(featureId: String)throws  -> String?  {
     
 open func getPreviousGeckoPrefStates(experimentSlug: String)throws  -> [PreviousGeckoPrefState]?  {
     return try  FfiConverterOptionSequenceTypePreviousGeckoPrefState.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_previous_gecko_pref_states(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_get_previous_gecko_pref_states(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(experimentSlug),$0
     )
 })
@@ -931,7 +965,8 @@ open func getPreviousGeckoPrefStates(experimentSlug: String)throws  -> [Previous
      */
 open func getRolloutParticipation()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_rollout_participation(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_get_rollout_participation(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -947,14 +982,16 @@ open func getRolloutParticipation()throws  -> Bool  {
      * the minimum amount of work to achieve that.
      */
 open func initialize()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_initialize(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_initialize(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func isFetchEnabled()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_is_fetch_enabled(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_is_fetch_enabled(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -965,7 +1002,8 @@ open func isFetchEnabled()throws  -> Bool  {
      */
 open func optInWithBranch(experimentSlug: String, branch: String)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_opt_in_with_branch(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_opt_in_with_branch(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(experimentSlug),
         FfiConverterString.lower(branch),$0
     )
@@ -977,7 +1015,8 @@ open func optInWithBranch(experimentSlug: String, branch: String)throws  -> [Enr
      */
 open func optOut(experimentSlug: String)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_opt_out(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_opt_out(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(experimentSlug),$0
     )
 })
@@ -989,7 +1028,8 @@ open func optOut(experimentSlug: String)throws  -> [EnrollmentChangeEvent]  {
      * targeting such as "core-active" user targeting.
      */
 open func recordEvent(eventId: String, count: Int64 = Int64(1))throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_record_event(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_record_event(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(eventId),
         FfiConverterInt64.lower(count),$0
     )
@@ -1008,7 +1048,8 @@ open func recordEvent(eventId: String, count: Int64 = Int64(1))throws   {try rus
      * the branch. This is useful for coenrolling features.
      */
 open func recordFeatureExposure(featureId: String, slug: String?)  {try! rustCall() {
-    uniffi_nimbus_fn_method_nimbusclient_record_feature_exposure(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_record_feature_exposure(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(featureId),
         FfiConverterOptionString.lower(slug),$0
     )
@@ -1024,7 +1065,8 @@ open func recordFeatureExposure(featureId: String, slug: String?)  {try! rustCal
      * or not.
      */
 open func recordMalformedFeatureConfig(featureId: String, partId: String)  {try! rustCall() {
-    uniffi_nimbus_fn_method_nimbusclient_record_malformed_feature_config(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_record_malformed_feature_config(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(featureId),
         FfiConverterString.lower(partId),$0
     )
@@ -1037,7 +1079,8 @@ open func recordMalformedFeatureConfig(featureId: String, partId: String)  {try!
      * `seconds_ago` must be positive.
      */
 open func recordPastEvent(eventId: String, secondsAgo: Int64, count: Int64 = Int64(1))throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_record_past_event(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_record_past_event(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(eventId),
         FfiConverterInt64.lower(secondsAgo),
         FfiConverterInt64.lower(count),$0
@@ -1046,7 +1089,8 @@ open func recordPastEvent(eventId: String, secondsAgo: Int64, count: Int64 = Int
 }
     
 open func registerPreviousGeckoPrefStates(geckoPrefStates: [GeckoPrefState])throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_register_previous_gecko_pref_states(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_register_previous_gecko_pref_states(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceTypeGeckoPrefState.lower(geckoPrefStates),$0
     )
 }
@@ -1058,7 +1102,8 @@ open func registerPreviousGeckoPrefStates(geckoPrefStates: [GeckoPrefState])thro
      * Reset the enrollments and experiments in the database to an empty state.
      */
 open func resetEnrollments()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_reset_enrollments(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_reset_enrollments(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -1081,14 +1126,16 @@ open func resetEnrollments()throws   {try rustCallWithError(FfiConverterTypeNimb
      */
 open func resetTelemetryIdentifiers()throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_reset_telemetry_identifiers(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_nimbusclient_reset_telemetry_identifiers(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func setExperimentParticipation(optIn: Bool)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_set_experiment_participation(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_set_experiment_participation(
+            self.uniffiCloneHandle(),
         FfiConverterBool.lower(optIn),$0
     )
 })
@@ -1101,7 +1148,8 @@ open func setExperimentParticipation(optIn: Bool)throws  -> [EnrollmentChangeEve
      * Experiments set with this method are not applied until `apply_pending_updates()` is called.
      */
 open func setExperimentsLocally(experimentsJson: String)throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_set_experiments_locally(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_set_experiments_locally(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(experimentsJson),$0
     )
 }
@@ -1114,7 +1162,8 @@ open func setExperimentsLocally(experimentsJson: String)throws   {try rustCallWi
      * `set_experiment_participation` or `set_rollout_participation` instead.
      */
 open func setFetchEnabled(flag: Bool)throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_set_fetch_enabled(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_set_fetch_enabled(
+            self.uniffiCloneHandle(),
         FfiConverterBool.lower(flag),$0
     )
 }
@@ -1122,7 +1171,8 @@ open func setFetchEnabled(flag: Bool)throws   {try rustCallWithError(FfiConverte
     
 open func setRolloutParticipation(optIn: Bool)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_set_rollout_participation(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_set_rollout_participation(
+            self.uniffiCloneHandle(),
         FfiConverterBool.lower(optIn),$0
     )
 })
@@ -1130,7 +1180,8 @@ open func setRolloutParticipation(optIn: Bool)throws  -> [EnrollmentChangeEvent]
     
 open func unenrollForGeckoPref(prefState: GeckoPrefState, prefUnenrollReason: PrefUnenrollReason)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_unenroll_for_gecko_pref(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusclient_unenroll_for_gecko_pref(
+            self.uniffiCloneHandle(),
         FfiConverterTypeGeckoPrefState_lower(prefState),
         FfiConverterTypePrefUnenrollReason_lower(prefUnenrollReason),$0
     )
@@ -1138,6 +1189,7 @@ open func unenrollForGeckoPref(prefState: GeckoPrefState, prefUnenrollReason: Pr
 }
     
 
+    
 }
 
 
@@ -1145,33 +1197,24 @@ open func unenrollForGeckoPref(prefState: GeckoPrefState, prefUnenrollReason: Pr
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeNimbusClient: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = NimbusClient
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> NimbusClient {
-        return NimbusClient(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> NimbusClient {
+        return NimbusClient(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: NimbusClient) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: NimbusClient) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NimbusClient {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: NimbusClient, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1179,14 +1222,14 @@ public struct FfiConverterTypeNimbusClient: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeNimbusClient_lift(_ pointer: UnsafeMutableRawPointer) throws -> NimbusClient {
-    return try FfiConverterTypeNimbusClient.lift(pointer)
+public func FfiConverterTypeNimbusClient_lift(_ handle: UInt64) throws -> NimbusClient {
+    return try FfiConverterTypeNimbusClient.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeNimbusClient_lower(_ value: NimbusClient) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeNimbusClient_lower(_ value: NimbusClient) -> UInt64 {
     return FfiConverterTypeNimbusClient.lower(value)
 }
 
@@ -1211,13 +1254,13 @@ public protocol NimbusStringHelperProtocol: AnyObject, Sendable {
     
 }
 open class NimbusStringHelper: NimbusStringHelperProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -1227,36 +1270,37 @@ open class NimbusStringHelper: NimbusStringHelperProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_nimbus_fn_clone_nimbusstringhelper(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_nimbus_fn_clone_nimbusstringhelper(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_nimbus_fn_free_nimbusstringhelper(pointer, $0) }
+        try! rustCall { uniffi_nimbus_fn_free_nimbusstringhelper(handle, $0) }
     }
 
     
@@ -1268,7 +1312,8 @@ open class NimbusStringHelper: NimbusStringHelperProtocol, @unchecked Sendable {
      */
 open func getUuid(template: String) -> String?  {
     return try!  FfiConverterOptionString.lift(try! rustCall() {
-    uniffi_nimbus_fn_method_nimbusstringhelper_get_uuid(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusstringhelper_get_uuid(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(template),$0
     )
 })
@@ -1280,7 +1325,8 @@ open func getUuid(template: String) -> String?  {
      */
 open func stringFormat(template: String, uuid: String? = nil) -> String  {
     return try!  FfiConverterString.lift(try! rustCall() {
-    uniffi_nimbus_fn_method_nimbusstringhelper_string_format(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbusstringhelper_string_format(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(template),
         FfiConverterOptionString.lower(uuid),$0
     )
@@ -1288,6 +1334,7 @@ open func stringFormat(template: String, uuid: String? = nil) -> String  {
 }
     
 
+    
 }
 
 
@@ -1295,33 +1342,24 @@ open func stringFormat(template: String, uuid: String? = nil) -> String  {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeNimbusStringHelper: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = NimbusStringHelper
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> NimbusStringHelper {
-        return NimbusStringHelper(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> NimbusStringHelper {
+        return NimbusStringHelper(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: NimbusStringHelper) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: NimbusStringHelper) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NimbusStringHelper {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: NimbusStringHelper, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1329,14 +1367,14 @@ public struct FfiConverterTypeNimbusStringHelper: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeNimbusStringHelper_lift(_ pointer: UnsafeMutableRawPointer) throws -> NimbusStringHelper {
-    return try FfiConverterTypeNimbusStringHelper.lift(pointer)
+public func FfiConverterTypeNimbusStringHelper_lift(_ handle: UInt64) throws -> NimbusStringHelper {
+    return try FfiConverterTypeNimbusStringHelper.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeNimbusStringHelper_lower(_ value: NimbusStringHelper) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeNimbusStringHelper_lower(_ value: NimbusStringHelper) -> UInt64 {
     return FfiConverterTypeNimbusStringHelper.lower(value)
 }
 
@@ -1361,13 +1399,13 @@ public protocol NimbusTargetingHelperProtocol: AnyObject, Sendable {
     
 }
 open class NimbusTargetingHelper: NimbusTargetingHelperProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -1377,36 +1415,37 @@ open class NimbusTargetingHelper: NimbusTargetingHelperProtocol, @unchecked Send
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_nimbus_fn_clone_nimbustargetinghelper(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_nimbus_fn_clone_nimbustargetinghelper(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_nimbus_fn_free_nimbustargetinghelper(pointer, $0) }
+        try! rustCall { uniffi_nimbus_fn_free_nimbustargetinghelper(handle, $0) }
     }
 
     
@@ -1418,7 +1457,8 @@ open class NimbusTargetingHelper: NimbusTargetingHelperProtocol, @unchecked Send
      */
 open func evalJexl(expression: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbustargetinghelper_eval_jexl(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbustargetinghelper_eval_jexl(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(expression),$0
     )
 })
@@ -1430,13 +1470,15 @@ open func evalJexl(expression: String)throws  -> Bool  {
      */
 open func evalJexlDebug(expression: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbustargetinghelper_eval_jexl_debug(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_nimbustargetinghelper_eval_jexl_debug(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(expression),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -1444,33 +1486,24 @@ open func evalJexlDebug(expression: String)throws  -> String  {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeNimbusTargetingHelper: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = NimbusTargetingHelper
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> NimbusTargetingHelper {
-        return NimbusTargetingHelper(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> NimbusTargetingHelper {
+        return NimbusTargetingHelper(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: NimbusTargetingHelper) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: NimbusTargetingHelper) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NimbusTargetingHelper {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: NimbusTargetingHelper, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1478,14 +1511,14 @@ public struct FfiConverterTypeNimbusTargetingHelper: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeNimbusTargetingHelper_lift(_ pointer: UnsafeMutableRawPointer) throws -> NimbusTargetingHelper {
-    return try FfiConverterTypeNimbusTargetingHelper.lift(pointer)
+public func FfiConverterTypeNimbusTargetingHelper_lift(_ handle: UInt64) throws -> NimbusTargetingHelper {
+    return try FfiConverterTypeNimbusTargetingHelper.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeNimbusTargetingHelper_lower(_ value: NimbusTargetingHelper) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeNimbusTargetingHelper_lower(_ value: NimbusTargetingHelper) -> UInt64 {
     return FfiConverterTypeNimbusTargetingHelper.lower(value)
 }
 
@@ -1506,13 +1539,13 @@ public protocol RecordedContext: AnyObject, Sendable {
     
 }
 open class RecordedContextImpl: RecordedContext, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -1522,36 +1555,37 @@ open class RecordedContextImpl: RecordedContext, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_nimbus_fn_clone_recordedcontext(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_nimbus_fn_clone_recordedcontext(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_nimbus_fn_free_recordedcontext(pointer, $0) }
+        try! rustCall { uniffi_nimbus_fn_free_recordedcontext(handle, $0) }
     }
 
     
@@ -1559,19 +1593,22 @@ open class RecordedContextImpl: RecordedContext, @unchecked Sendable {
     
 open func getEventQueries() -> [String: String]  {
     return try!  FfiConverterDictionaryStringString.lift(try! rustCall() {
-    uniffi_nimbus_fn_method_recordedcontext_get_event_queries(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_recordedcontext_get_event_queries(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func record()  {try! rustCall() {
-    uniffi_nimbus_fn_method_recordedcontext_record(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_recordedcontext_record(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func setEventQueryValues(eventQueryValues: [String: Double])  {try! rustCall() {
-    uniffi_nimbus_fn_method_recordedcontext_set_event_query_values(self.uniffiClonePointer(),
+    uniffi_nimbus_fn_method_recordedcontext_set_event_query_values(
+            self.uniffiCloneHandle(),
         FfiConverterDictionaryStringDouble.lower(eventQueryValues),$0
     )
 }
@@ -1579,13 +1616,16 @@ open func setEventQueryValues(eventQueryValues: [String: Double])  {try! rustCal
     
 open func toJson() -> JsonObject  {
     return try!  FfiConverterTypeJsonObject_lift(try! rustCall() {
-    uniffi_nimbus_fn_method_recordedcontext_to_json(self.uniffiClonePointer(),$0
+    uniffi_nimbus_fn_method_recordedcontext_to_json(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 
+    
 }
+
 
 
 // Put the implementation in a struct so we don't pollute the top-level namespace
@@ -1597,6 +1637,20 @@ fileprivate struct UniffiCallbackInterfaceRecordedContext {
     // This creates 1-element array, since this seems to be the only way to construct a const
     // pointer that we can pass to the Rust code.
     static let vtable: [UniffiVTableCallbackInterfaceRecordedContext] = [UniffiVTableCallbackInterfaceRecordedContext(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterTypeRecordedContext.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface RecordedContext: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterTypeRecordedContext.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface RecordedContext: handle missing in uniffiClone")
+            }
+        },
         getEventQueries: { (
             uniffiHandle: UInt64,
             uniffiOutReturn: UnsafeMutablePointer<RustBuffer>,
@@ -1686,12 +1740,6 @@ fileprivate struct UniffiCallbackInterfaceRecordedContext {
                 makeCall: makeCall,
                 writeReturn: writeReturn
             )
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterTypeRecordedContext.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface RecordedContext: handle missing in uniffiFree")
-            }
         }
     )]
 }
@@ -1700,42 +1748,43 @@ private func uniffiCallbackInitRecordedContext() {
     uniffi_nimbus_fn_init_callback_vtable_recordedcontext(UniffiCallbackInterfaceRecordedContext.vtable)
 }
 
-
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeRecordedContext: FfiConverter {
     fileprivate static let handleMap = UniffiHandleMap<RecordedContext>()
 
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = RecordedContext
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> RecordedContext {
-        return RecordedContextImpl(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> RecordedContext {
+        if ((handle & 1) == 0) {
+            // Rust-generated handle, construct a new class that uses the handle to implement the
+            // interface
+            return RecordedContextImpl(unsafeFromHandle: handle)
+        } else {
+            // Swift-generated handle, get the object from the handle map
+            return try handleMap.remove(handle: handle)
+        }
     }
 
-    public static func lower(_ value: RecordedContext) -> UnsafeMutableRawPointer {
-        guard let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: handleMap.insert(obj: value))) else {
-            fatalError("Cast to UnsafeMutableRawPointer failed")
-        }
-        return ptr
+    public static func lower(_ value: RecordedContext) -> UInt64 {
+         if let rustImpl = value as? RecordedContextImpl {
+             // Rust-implemented object.  Clone the handle and return it
+            return rustImpl.uniffiCloneHandle()
+         } else {
+            // Swift object, generate a new vtable handle and return that.
+            return handleMap.insert(obj: value)
+         }
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RecordedContext {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: RecordedContext, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1743,21 +1792,21 @@ public struct FfiConverterTypeRecordedContext: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRecordedContext_lift(_ pointer: UnsafeMutableRawPointer) throws -> RecordedContext {
-    return try FfiConverterTypeRecordedContext.lift(pointer)
+public func FfiConverterTypeRecordedContext_lift(_ handle: UInt64) throws -> RecordedContext {
+    return try FfiConverterTypeRecordedContext.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRecordedContext_lower(_ value: RecordedContext) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeRecordedContext_lower(_ value: RecordedContext) -> UInt64 {
     return FfiConverterTypeRecordedContext.lower(value)
 }
 
 
 
 
-public struct AppContext {
+public struct AppContext: Equatable, Hashable {
     public var appName: String
     public var appId: String
     public var channel: String
@@ -1793,83 +1842,15 @@ public struct AppContext {
         self.installationDate = installationDate
         self.customTargetingAttributes = customTargetingAttributes
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension AppContext: Sendable {}
 #endif
-
-
-extension AppContext: Equatable, Hashable {
-    public static func ==(lhs: AppContext, rhs: AppContext) -> Bool {
-        if lhs.appName != rhs.appName {
-            return false
-        }
-        if lhs.appId != rhs.appId {
-            return false
-        }
-        if lhs.channel != rhs.channel {
-            return false
-        }
-        if lhs.appVersion != rhs.appVersion {
-            return false
-        }
-        if lhs.appBuild != rhs.appBuild {
-            return false
-        }
-        if lhs.architecture != rhs.architecture {
-            return false
-        }
-        if lhs.deviceManufacturer != rhs.deviceManufacturer {
-            return false
-        }
-        if lhs.deviceModel != rhs.deviceModel {
-            return false
-        }
-        if lhs.locale != rhs.locale {
-            return false
-        }
-        if lhs.os != rhs.os {
-            return false
-        }
-        if lhs.osVersion != rhs.osVersion {
-            return false
-        }
-        if lhs.androidSdkVersion != rhs.androidSdkVersion {
-            return false
-        }
-        if lhs.debugTag != rhs.debugTag {
-            return false
-        }
-        if lhs.installationDate != rhs.installationDate {
-            return false
-        }
-        if lhs.customTargetingAttributes != rhs.customTargetingAttributes {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(appName)
-        hasher.combine(appId)
-        hasher.combine(channel)
-        hasher.combine(appVersion)
-        hasher.combine(appBuild)
-        hasher.combine(architecture)
-        hasher.combine(deviceManufacturer)
-        hasher.combine(deviceModel)
-        hasher.combine(locale)
-        hasher.combine(os)
-        hasher.combine(osVersion)
-        hasher.combine(androidSdkVersion)
-        hasher.combine(debugTag)
-        hasher.combine(installationDate)
-        hasher.combine(customTargetingAttributes)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1931,7 +1912,7 @@ public func FfiConverterTypeAppContext_lower(_ value: AppContext) -> RustBuffer 
 }
 
 
-public struct AvailableExperiment {
+public struct AvailableExperiment: Equatable, Hashable {
     public var slug: String
     public var userFacingName: String
     public var userFacingDescription: String
@@ -1947,43 +1928,15 @@ public struct AvailableExperiment {
         self.branches = branches
         self.referenceBranch = referenceBranch
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension AvailableExperiment: Sendable {}
 #endif
-
-
-extension AvailableExperiment: Equatable, Hashable {
-    public static func ==(lhs: AvailableExperiment, rhs: AvailableExperiment) -> Bool {
-        if lhs.slug != rhs.slug {
-            return false
-        }
-        if lhs.userFacingName != rhs.userFacingName {
-            return false
-        }
-        if lhs.userFacingDescription != rhs.userFacingDescription {
-            return false
-        }
-        if lhs.branches != rhs.branches {
-            return false
-        }
-        if lhs.referenceBranch != rhs.referenceBranch {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(slug)
-        hasher.combine(userFacingName)
-        hasher.combine(userFacingDescription)
-        hasher.combine(branches)
-        hasher.combine(referenceBranch)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2025,7 +1978,7 @@ public func FfiConverterTypeAvailableExperiment_lower(_ value: AvailableExperime
 }
 
 
-public struct CalculatedAttributes {
+public struct CalculatedAttributes: Equatable, Hashable {
     public var daysSinceInstall: Int32?
     public var daysSinceUpdate: Int32?
     public var language: String?
@@ -2039,39 +1992,15 @@ public struct CalculatedAttributes {
         self.language = language
         self.region = region
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CalculatedAttributes: Sendable {}
 #endif
-
-
-extension CalculatedAttributes: Equatable, Hashable {
-    public static func ==(lhs: CalculatedAttributes, rhs: CalculatedAttributes) -> Bool {
-        if lhs.daysSinceInstall != rhs.daysSinceInstall {
-            return false
-        }
-        if lhs.daysSinceUpdate != rhs.daysSinceUpdate {
-            return false
-        }
-        if lhs.language != rhs.language {
-            return false
-        }
-        if lhs.region != rhs.region {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(daysSinceInstall)
-        hasher.combine(daysSinceUpdate)
-        hasher.combine(language)
-        hasher.combine(region)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2111,7 +2040,7 @@ public func FfiConverterTypeCalculatedAttributes_lower(_ value: CalculatedAttrib
 }
 
 
-public struct EnrolledExperiment {
+public struct EnrolledExperiment: Equatable, Hashable {
     public var featureIds: [String]
     public var slug: String
     public var userFacingName: String
@@ -2127,43 +2056,15 @@ public struct EnrolledExperiment {
         self.userFacingDescription = userFacingDescription
         self.branchSlug = branchSlug
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension EnrolledExperiment: Sendable {}
 #endif
-
-
-extension EnrolledExperiment: Equatable, Hashable {
-    public static func ==(lhs: EnrolledExperiment, rhs: EnrolledExperiment) -> Bool {
-        if lhs.featureIds != rhs.featureIds {
-            return false
-        }
-        if lhs.slug != rhs.slug {
-            return false
-        }
-        if lhs.userFacingName != rhs.userFacingName {
-            return false
-        }
-        if lhs.userFacingDescription != rhs.userFacingDescription {
-            return false
-        }
-        if lhs.branchSlug != rhs.branchSlug {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(featureIds)
-        hasher.combine(slug)
-        hasher.combine(userFacingName)
-        hasher.combine(userFacingDescription)
-        hasher.combine(branchSlug)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2205,7 +2106,7 @@ public func FfiConverterTypeEnrolledExperiment_lower(_ value: EnrolledExperiment
 }
 
 
-public struct EnrollmentChangeEvent {
+public struct EnrollmentChangeEvent: Equatable, Hashable {
     public var experimentSlug: String
     public var branchSlug: String
     public var reason: String?
@@ -2219,39 +2120,15 @@ public struct EnrollmentChangeEvent {
         self.reason = reason
         self.change = change
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension EnrollmentChangeEvent: Sendable {}
 #endif
-
-
-extension EnrollmentChangeEvent: Equatable, Hashable {
-    public static func ==(lhs: EnrollmentChangeEvent, rhs: EnrollmentChangeEvent) -> Bool {
-        if lhs.experimentSlug != rhs.experimentSlug {
-            return false
-        }
-        if lhs.branchSlug != rhs.branchSlug {
-            return false
-        }
-        if lhs.reason != rhs.reason {
-            return false
-        }
-        if lhs.change != rhs.change {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(experimentSlug)
-        hasher.combine(branchSlug)
-        hasher.combine(reason)
-        hasher.combine(change)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2291,7 +2168,7 @@ public func FfiConverterTypeEnrollmentChangeEvent_lower(_ value: EnrollmentChang
 }
 
 
-public struct EnrollmentStatusExtraDef {
+public struct EnrollmentStatusExtraDef: Equatable, Hashable {
     public var branch: String?
     public var conflictSlug: String?
     public var errorString: String?
@@ -2311,51 +2188,15 @@ public struct EnrollmentStatusExtraDef {
         self.status = status
         self.prevGeckoPrefStates = prevGeckoPrefStates
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension EnrollmentStatusExtraDef: Sendable {}
 #endif
-
-
-extension EnrollmentStatusExtraDef: Equatable, Hashable {
-    public static func ==(lhs: EnrollmentStatusExtraDef, rhs: EnrollmentStatusExtraDef) -> Bool {
-        if lhs.branch != rhs.branch {
-            return false
-        }
-        if lhs.conflictSlug != rhs.conflictSlug {
-            return false
-        }
-        if lhs.errorString != rhs.errorString {
-            return false
-        }
-        if lhs.reason != rhs.reason {
-            return false
-        }
-        if lhs.slug != rhs.slug {
-            return false
-        }
-        if lhs.status != rhs.status {
-            return false
-        }
-        if lhs.prevGeckoPrefStates != rhs.prevGeckoPrefStates {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(branch)
-        hasher.combine(conflictSlug)
-        hasher.combine(errorString)
-        hasher.combine(reason)
-        hasher.combine(slug)
-        hasher.combine(status)
-        hasher.combine(prevGeckoPrefStates)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2401,7 +2242,7 @@ public func FfiConverterTypeEnrollmentStatusExtraDef_lower(_ value: EnrollmentSt
 }
 
 
-public struct ExperimentBranch {
+public struct ExperimentBranch: Equatable, Hashable {
     public var slug: String
     public var ratio: Int32
 
@@ -2411,31 +2252,15 @@ public struct ExperimentBranch {
         self.slug = slug
         self.ratio = ratio
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension ExperimentBranch: Sendable {}
 #endif
-
-
-extension ExperimentBranch: Equatable, Hashable {
-    public static func ==(lhs: ExperimentBranch, rhs: ExperimentBranch) -> Bool {
-        if lhs.slug != rhs.slug {
-            return false
-        }
-        if lhs.ratio != rhs.ratio {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(slug)
-        hasher.combine(ratio)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2471,7 +2296,7 @@ public func FfiConverterTypeExperimentBranch_lower(_ value: ExperimentBranch) ->
 }
 
 
-public struct FeatureExposureExtraDef {
+public struct FeatureExposureExtraDef: Equatable, Hashable {
     public var branch: String?
     public var slug: String
     public var featureId: String
@@ -2483,35 +2308,15 @@ public struct FeatureExposureExtraDef {
         self.slug = slug
         self.featureId = featureId
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension FeatureExposureExtraDef: Sendable {}
 #endif
-
-
-extension FeatureExposureExtraDef: Equatable, Hashable {
-    public static func ==(lhs: FeatureExposureExtraDef, rhs: FeatureExposureExtraDef) -> Bool {
-        if lhs.branch != rhs.branch {
-            return false
-        }
-        if lhs.slug != rhs.slug {
-            return false
-        }
-        if lhs.featureId != rhs.featureId {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(branch)
-        hasher.combine(slug)
-        hasher.combine(featureId)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2549,7 +2354,7 @@ public func FfiConverterTypeFeatureExposureExtraDef_lower(_ value: FeatureExposu
 }
 
 
-public struct GeckoPref {
+public struct GeckoPref: Equatable, Hashable {
     public var pref: String
     public var branch: PrefBranch
 
@@ -2559,31 +2364,15 @@ public struct GeckoPref {
         self.pref = pref
         self.branch = branch
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension GeckoPref: Sendable {}
 #endif
-
-
-extension GeckoPref: Equatable, Hashable {
-    public static func ==(lhs: GeckoPref, rhs: GeckoPref) -> Bool {
-        if lhs.pref != rhs.pref {
-            return false
-        }
-        if lhs.branch != rhs.branch {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(pref)
-        hasher.combine(branch)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2619,7 +2408,7 @@ public func FfiConverterTypeGeckoPref_lower(_ value: GeckoPref) -> RustBuffer {
 }
 
 
-public struct GeckoPrefState {
+public struct GeckoPrefState: Equatable, Hashable {
     public var geckoPref: GeckoPref
     public var geckoValue: PrefValue?
     public var enrollmentValue: PrefEnrollmentData?
@@ -2633,39 +2422,15 @@ public struct GeckoPrefState {
         self.enrollmentValue = enrollmentValue
         self.isUserSet = isUserSet
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension GeckoPrefState: Sendable {}
 #endif
-
-
-extension GeckoPrefState: Equatable, Hashable {
-    public static func ==(lhs: GeckoPrefState, rhs: GeckoPrefState) -> Bool {
-        if lhs.geckoPref != rhs.geckoPref {
-            return false
-        }
-        if lhs.geckoValue != rhs.geckoValue {
-            return false
-        }
-        if lhs.enrollmentValue != rhs.enrollmentValue {
-            return false
-        }
-        if lhs.isUserSet != rhs.isUserSet {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(geckoPref)
-        hasher.combine(geckoValue)
-        hasher.combine(enrollmentValue)
-        hasher.combine(isUserSet)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2705,7 +2470,7 @@ public func FfiConverterTypeGeckoPrefState_lower(_ value: GeckoPrefState) -> Rus
 }
 
 
-public struct MalformedFeatureConfigExtraDef {
+public struct MalformedFeatureConfigExtraDef: Equatable, Hashable {
     public var branch: String?
     public var slug: String?
     public var featureId: String
@@ -2719,39 +2484,15 @@ public struct MalformedFeatureConfigExtraDef {
         self.featureId = featureId
         self.part = part
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension MalformedFeatureConfigExtraDef: Sendable {}
 #endif
-
-
-extension MalformedFeatureConfigExtraDef: Equatable, Hashable {
-    public static func ==(lhs: MalformedFeatureConfigExtraDef, rhs: MalformedFeatureConfigExtraDef) -> Bool {
-        if lhs.branch != rhs.branch {
-            return false
-        }
-        if lhs.slug != rhs.slug {
-            return false
-        }
-        if lhs.featureId != rhs.featureId {
-            return false
-        }
-        if lhs.part != rhs.part {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(branch)
-        hasher.combine(slug)
-        hasher.combine(featureId)
-        hasher.combine(part)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2791,7 +2532,7 @@ public func FfiConverterTypeMalformedFeatureConfigExtraDef_lower(_ value: Malfor
 }
 
 
-public struct OriginalGeckoPref {
+public struct OriginalGeckoPref: Equatable, Hashable {
     public var pref: String
     public var branch: PrefBranch
     public var value: PrefValue?
@@ -2803,35 +2544,15 @@ public struct OriginalGeckoPref {
         self.branch = branch
         self.value = value
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension OriginalGeckoPref: Sendable {}
 #endif
-
-
-extension OriginalGeckoPref: Equatable, Hashable {
-    public static func ==(lhs: OriginalGeckoPref, rhs: OriginalGeckoPref) -> Bool {
-        if lhs.pref != rhs.pref {
-            return false
-        }
-        if lhs.branch != rhs.branch {
-            return false
-        }
-        if lhs.value != rhs.value {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(pref)
-        hasher.combine(branch)
-        hasher.combine(value)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2869,7 +2590,7 @@ public func FfiConverterTypeOriginalGeckoPref_lower(_ value: OriginalGeckoPref) 
 }
 
 
-public struct PrefEnrollmentData {
+public struct PrefEnrollmentData: Equatable, Hashable {
     public var experimentSlug: String
     public var prefValue: PrefValue
     public var featureId: String
@@ -2883,39 +2604,15 @@ public struct PrefEnrollmentData {
         self.featureId = featureId
         self.variable = variable
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension PrefEnrollmentData: Sendable {}
 #endif
-
-
-extension PrefEnrollmentData: Equatable, Hashable {
-    public static func ==(lhs: PrefEnrollmentData, rhs: PrefEnrollmentData) -> Bool {
-        if lhs.experimentSlug != rhs.experimentSlug {
-            return false
-        }
-        if lhs.prefValue != rhs.prefValue {
-            return false
-        }
-        if lhs.featureId != rhs.featureId {
-            return false
-        }
-        if lhs.variable != rhs.variable {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(experimentSlug)
-        hasher.combine(prefValue)
-        hasher.combine(featureId)
-        hasher.combine(variable)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2955,7 +2652,7 @@ public func FfiConverterTypePrefEnrollmentData_lower(_ value: PrefEnrollmentData
 }
 
 
-public struct PreviousGeckoPrefState {
+public struct PreviousGeckoPrefState: Equatable, Hashable {
     public var originalValue: OriginalGeckoPref
     public var featureId: String
     public var variable: String
@@ -2967,35 +2664,15 @@ public struct PreviousGeckoPrefState {
         self.featureId = featureId
         self.variable = variable
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension PreviousGeckoPrefState: Sendable {}
 #endif
-
-
-extension PreviousGeckoPrefState: Equatable, Hashable {
-    public static func ==(lhs: PreviousGeckoPrefState, rhs: PreviousGeckoPrefState) -> Bool {
-        if lhs.originalValue != rhs.originalValue {
-            return false
-        }
-        if lhs.featureId != rhs.featureId {
-            return false
-        }
-        if lhs.variable != rhs.variable {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(originalValue)
-        hasher.combine(featureId)
-        hasher.combine(variable)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3035,15 +2712,19 @@ public func FfiConverterTypePreviousGeckoPrefState_lower(_ value: PreviousGeckoP
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum EnrollmentChangeEventType {
+public enum EnrollmentChangeEventType: Equatable, Hashable {
     
     case enrollment
     case enrollFailed
     case disqualification
     case unenrollment
     case unenrollFailed
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension EnrollmentChangeEventType: Sendable {}
@@ -3116,15 +2797,8 @@ public func FfiConverterTypeEnrollmentChangeEventType_lower(_ value: EnrollmentC
 }
 
 
-extension EnrollmentChangeEventType: Equatable, Hashable {}
 
-
-
-
-
-
-
-public enum NimbusError: Swift.Error {
+public enum NimbusError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -3180,8 +2854,21 @@ public enum NimbusError: Swift.Error {
     
     case RegexError(message: String)
     
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension NimbusError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3384,30 +3071,19 @@ public func FfiConverterTypeNimbusError_lower(_ value: NimbusError) -> RustBuffe
     return FfiConverterTypeNimbusError.lower(value)
 }
 
-
-extension NimbusError: Equatable, Hashable {}
-
-
-
-
-extension NimbusError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum PrefBranch {
+public enum PrefBranch: Equatable, Hashable {
     
     case `default`
     case user
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension PrefBranch: Sendable {}
@@ -3462,22 +3138,19 @@ public func FfiConverterTypePrefBranch_lower(_ value: PrefBranch) -> RustBuffer 
 }
 
 
-extension PrefBranch: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum PrefUnenrollReason {
+public enum PrefUnenrollReason: Equatable, Hashable {
     
     case changed
     case failedToSet
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension PrefUnenrollReason: Sendable {}
@@ -3532,13 +3205,6 @@ public func FfiConverterTypePrefUnenrollReason_lower(_ value: PrefUnenrollReason
 }
 
 
-extension PrefUnenrollReason: Equatable, Hashable {}
-
-
-
-
-
-
 
 
 
@@ -3560,6 +3226,20 @@ fileprivate struct UniffiCallbackInterfaceGeckoPrefHandler {
     // This creates 1-element array, since this seems to be the only way to construct a const
     // pointer that we can pass to the Rust code.
     static let vtable: [UniffiVTableCallbackInterfaceGeckoPrefHandler] = [UniffiVTableCallbackInterfaceGeckoPrefHandler(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface GeckoPrefHandler: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface GeckoPrefHandler: handle missing in uniffiClone")
+            }
+        },
         getPrefsWithState: { (
             uniffiHandle: UInt64,
             uniffiOutReturn: UnsafeMutablePointer<RustBuffer>,
@@ -3605,12 +3285,6 @@ fileprivate struct UniffiCallbackInterfaceGeckoPrefHandler {
                 makeCall: makeCall,
                 writeReturn: writeReturn
             )
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface GeckoPrefHandler: handle missing in uniffiFree")
-            }
         }
     )]
 }
@@ -3708,6 +3382,20 @@ fileprivate struct UniffiCallbackInterfaceMetricsHandler {
     // This creates 1-element array, since this seems to be the only way to construct a const
     // pointer that we can pass to the Rust code.
     static let vtable: [UniffiVTableCallbackInterfaceMetricsHandler] = [UniffiVTableCallbackInterfaceMetricsHandler(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterCallbackInterfaceMetricsHandler.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface MetricsHandler: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterCallbackInterfaceMetricsHandler.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface MetricsHandler: handle missing in uniffiClone")
+            }
+        },
         recordEnrollmentStatuses: { (
             uniffiHandle: UInt64,
             enrollmentStatusExtras: RustBuffer,
@@ -3803,12 +3491,6 @@ fileprivate struct UniffiCallbackInterfaceMetricsHandler {
                 makeCall: makeCall,
                 writeReturn: writeReturn
             )
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterCallbackInterfaceMetricsHandler.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface MetricsHandler: handle missing in uniffiFree")
-            }
         }
     )]
 }
@@ -4541,7 +4223,7 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_nimbus_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
@@ -4553,142 +4235,142 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_func_validate_event_queries() != 42746) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_advance_event_time() != 40755) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_advance_event_time() != 56101) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_apply_pending_experiments() != 21020) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_apply_pending_experiments() != 49084) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_clear_events() != 38691) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_clear_events() != 44752) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_create_string_helper() != 48136) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_create_string_helper() != 30632) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_create_targeting_helper() != 37928) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_create_targeting_helper() != 65134) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_dump_state_to_log() != 43374) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_dump_state_to_log() != 11961) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_fetch_experiments() != 7325) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_fetch_experiments() != 19471) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_active_experiments() != 63303) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_active_experiments() != 25661) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_available_experiments() != 53590) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_available_experiments() != 65080) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branch() != 35089) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branch() != 54188) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branches() != 60563) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branches() != 7962) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_participation() != 34974) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_participation() != 29644) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_feature_config_variables() != 7354) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_feature_config_variables() != 28098) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_previous_gecko_pref_states() != 59676) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_previous_gecko_pref_states() != 21530) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_rollout_participation() != 60391) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_rollout_participation() != 29265) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_initialize() != 500) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_initialize() != 5594) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_is_fetch_enabled() != 9890) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_is_fetch_enabled() != 23770) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_opt_in_with_branch() != 54676) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_opt_in_with_branch() != 9173) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_opt_out() != 19195) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_opt_out() != 55760) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_record_event() != 60856) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_record_event() != 48537) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_record_feature_exposure() != 19276) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_record_feature_exposure() != 38243) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_record_malformed_feature_config() != 52482) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_record_malformed_feature_config() != 7534) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_record_past_event() != 4442) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_record_past_event() != 34127) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_register_previous_gecko_pref_states() != 50441) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_register_previous_gecko_pref_states() != 53966) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_reset_enrollments() != 39284) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_reset_enrollments() != 11263) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_reset_telemetry_identifiers() != 44528) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_reset_telemetry_identifiers() != 27291) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_set_experiment_participation() != 639) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_set_experiment_participation() != 56837) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_set_experiments_locally() != 29563) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_set_experiments_locally() != 12966) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_set_fetch_enabled() != 64996) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_set_fetch_enabled() != 24070) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_set_rollout_participation() != 7151) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_set_rollout_participation() != 11964) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_for_gecko_pref() != 40841) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_for_gecko_pref() != 63205) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusstringhelper_get_uuid() != 24293) {
+    if (uniffi_nimbus_checksum_method_nimbusstringhelper_get_uuid() != 61733) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusstringhelper_string_format() != 12685) {
+    if (uniffi_nimbus_checksum_method_nimbusstringhelper_string_format() != 23357) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl() != 42395) {
+    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl() != 55414) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl_debug() != 60924) {
+    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl_debug() != 1185) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_recordedcontext_get_event_queries() != 28844) {
+    if (uniffi_nimbus_checksum_method_recordedcontext_get_event_queries() != 32041) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_recordedcontext_record() != 5916) {
+    if (uniffi_nimbus_checksum_method_recordedcontext_record() != 37535) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_recordedcontext_set_event_query_values() != 40199) {
+    if (uniffi_nimbus_checksum_method_recordedcontext_set_event_query_values() != 29622) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_recordedcontext_to_json() != 46595) {
+    if (uniffi_nimbus_checksum_method_recordedcontext_to_json() != 52035) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 28763) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 54971) {
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 27063) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_state() != 51120) {
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_state() != 3765) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_enrollment_statuses() != 22229) {
+    if (uniffi_nimbus_checksum_method_metricshandler_record_enrollment_statuses() != 14510) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_feature_activation() != 6186) {
+    if (uniffi_nimbus_checksum_method_metricshandler_record_feature_activation() != 33978) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_feature_exposure() != 14029) {
+    if (uniffi_nimbus_checksum_method_metricshandler_record_feature_exposure() != 52324) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_malformed_feature_config() != 29240) {
+    if (uniffi_nimbus_checksum_method_metricshandler_record_malformed_feature_config() != 28930) {
         return InitializationResult.apiChecksumMismatch
     }
 

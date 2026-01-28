@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -593,13 +612,13 @@ public protocol RelayClientProtocol: AnyObject, Sendable {
  * - Clients are responsible for getting a new access token when needed.
  */
 open class RelayClient: RelayClientProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -609,27 +628,27 @@ open class RelayClient: RelayClientProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_relay_fn_clone_relayclient(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_relay_fn_clone_relayclient(self.handle, $0) }
     }
     /**
      * Creates a new `RelayClient` instance.
@@ -646,22 +665,23 @@ open class RelayClient: RelayClientProtocol, @unchecked Sendable {
      * A new [`RelayClient`] configured for the specified server and token.
      */
 public convenience init(serverUrl: String, authToken: String?)throws  {
-    let pointer =
+    let handle =
         try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_constructor_relayclient_new(
         FfiConverterString.lower(serverUrl),
         FfiConverterOptionString.lower(authToken),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_relay_fn_free_relayclient(pointer, $0) }
+        try! rustCall { uniffi_relay_fn_free_relayclient(handle, $0) }
     }
 
     
@@ -680,7 +700,8 @@ public convenience init(serverUrl: String, authToken: String?)throws  {
      * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
      */
 open func acceptTerms()throws   {try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
-    uniffi_relay_fn_method_relayclient_accept_terms(self.uniffiClonePointer(),$0
+    uniffi_relay_fn_method_relayclient_accept_terms(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -702,7 +723,8 @@ open func acceptTerms()throws   {try rustCallWithError(FfiConverterTypeRelayApiE
      */
 open func createAddress(description: String, generatedFor: String, usedOn: String)throws  -> RelayAddress  {
     return try  FfiConverterTypeRelayAddress_lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
-    uniffi_relay_fn_method_relayclient_create_address(self.uniffiClonePointer(),
+    uniffi_relay_fn_method_relayclient_create_address(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(description),
         FfiConverterString.lower(generatedFor),
         FfiConverterString.lower(usedOn),$0
@@ -723,7 +745,8 @@ open func createAddress(description: String, generatedFor: String, usedOn: Strin
      */
 open func fetchAddresses()throws  -> [RelayAddress]  {
     return try  FfiConverterSequenceTypeRelayAddress.lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
-    uniffi_relay_fn_method_relayclient_fetch_addresses(self.uniffiClonePointer(),$0
+    uniffi_relay_fn_method_relayclient_fetch_addresses(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -748,12 +771,14 @@ open func fetchAddresses()throws  -> [RelayAddress]  {
      */
 open func fetchProfile()throws  -> RelayProfile  {
     return try  FfiConverterTypeRelayProfile_lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
-    uniffi_relay_fn_method_relayclient_fetch_profile(self.uniffiClonePointer(),$0
+    uniffi_relay_fn_method_relayclient_fetch_profile(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -761,33 +786,24 @@ open func fetchProfile()throws  -> RelayProfile  {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeRelayClient: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = RelayClient
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> RelayClient {
-        return RelayClient(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> RelayClient {
+        return RelayClient(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: RelayClient) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: RelayClient) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RelayClient {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: RelayClient, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -795,14 +811,14 @@ public struct FfiConverterTypeRelayClient: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRelayClient_lift(_ pointer: UnsafeMutableRawPointer) throws -> RelayClient {
-    return try FfiConverterTypeRelayClient.lift(pointer)
+public func FfiConverterTypeRelayClient_lift(_ handle: UInt64) throws -> RelayClient {
+    return try FfiConverterTypeRelayClient.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRelayClient_lower(_ value: RelayClient) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeRelayClient_lower(_ value: RelayClient) -> UInt64 {
     return FfiConverterTypeRelayClient.lower(value)
 }
 
@@ -888,13 +904,13 @@ public protocol RelayRemoteSettingsClientProtocol: AnyObject, Sendable {
  * collections. It follows the same pattern as SuggestRemoteSettingsClient.
  */
 open class RelayRemoteSettingsClient: RelayRemoteSettingsClientProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -904,47 +920,48 @@ open class RelayRemoteSettingsClient: RelayRemoteSettingsClientProtocol, @unchec
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_relay_fn_clone_relayremotesettingsclient(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_relay_fn_clone_relayremotesettingsclient(self.handle, $0) }
     }
     /**
      * Creates a new RelayRemoteSettingsClient from a RemoteSettingsService
      */
 public convenience init(rsService: RemoteSettingsService) {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_relay_fn_constructor_relayremotesettingsclient_new(
         FfiConverterTypeRemoteSettingsService_lower(rsService),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_relay_fn_free_relayremotesettingsclient(pointer, $0) }
+        try! rustCall { uniffi_relay_fn_free_relayremotesettingsclient(handle, $0) }
     }
 
     
@@ -1011,7 +1028,8 @@ public convenience init(rsService: RemoteSettingsService) {
      */
 open func shouldShowRelay(host: String, domain: String, isRelayUser: Bool) -> Bool  {
     return try!  FfiConverterBool.lift(try! rustCall() {
-    uniffi_relay_fn_method_relayremotesettingsclient_should_show_relay(self.uniffiClonePointer(),
+    uniffi_relay_fn_method_relayremotesettingsclient_should_show_relay(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(host),
         FfiConverterString.lower(domain),
         FfiConverterBool.lower(isRelayUser),$0
@@ -1020,6 +1038,7 @@ open func shouldShowRelay(host: String, domain: String, isRelayUser: Bool) -> Bo
 }
     
 
+    
 }
 
 
@@ -1027,33 +1046,24 @@ open func shouldShowRelay(host: String, domain: String, isRelayUser: Bool) -> Bo
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeRelayRemoteSettingsClient: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = RelayRemoteSettingsClient
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> RelayRemoteSettingsClient {
-        return RelayRemoteSettingsClient(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> RelayRemoteSettingsClient {
+        return RelayRemoteSettingsClient(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: RelayRemoteSettingsClient) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: RelayRemoteSettingsClient) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RelayRemoteSettingsClient {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: RelayRemoteSettingsClient, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1061,14 +1071,14 @@ public struct FfiConverterTypeRelayRemoteSettingsClient: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRelayRemoteSettingsClient_lift(_ pointer: UnsafeMutableRawPointer) throws -> RelayRemoteSettingsClient {
-    return try FfiConverterTypeRelayRemoteSettingsClient.lift(pointer)
+public func FfiConverterTypeRelayRemoteSettingsClient_lift(_ handle: UInt64) throws -> RelayRemoteSettingsClient {
+    return try FfiConverterTypeRelayRemoteSettingsClient.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRelayRemoteSettingsClient_lower(_ value: RelayRemoteSettingsClient) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeRelayRemoteSettingsClient_lower(_ value: RelayRemoteSettingsClient) -> UInt64 {
     return FfiConverterTypeRelayRemoteSettingsClient.lower(value)
 }
 
@@ -1078,7 +1088,7 @@ public func FfiConverterTypeRelayRemoteSettingsClient_lower(_ value: RelayRemote
 /**
  * Represents a bounce status object nested within the profile.
  */
-public struct BounceStatus {
+public struct BounceStatus: Equatable, Hashable {
     public var paused: Bool
     public var bounceType: String
 
@@ -1088,31 +1098,15 @@ public struct BounceStatus {
         self.paused = paused
         self.bounceType = bounceType
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension BounceStatus: Sendable {}
 #endif
-
-
-extension BounceStatus: Equatable, Hashable {
-    public static func ==(lhs: BounceStatus, rhs: BounceStatus) -> Bool {
-        if lhs.paused != rhs.paused {
-            return false
-        }
-        if lhs.bounceType != rhs.bounceType {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(paused)
-        hasher.combine(bounceType)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1157,7 +1151,7 @@ public func FfiConverterTypeBounceStatus_lower(_ value: BounceStatus) -> RustBuf
  * See:
  * https://mozilla.github.io/fx-private-relay/api_docs.html
  */
-public struct RelayAddress {
+public struct RelayAddress: Equatable, Hashable {
     public var maskType: String
     public var enabled: Bool
     public var description: String
@@ -1199,95 +1193,15 @@ public struct RelayAddress {
         self.numReplied = numReplied
         self.numSpam = numSpam
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension RelayAddress: Sendable {}
 #endif
-
-
-extension RelayAddress: Equatable, Hashable {
-    public static func ==(lhs: RelayAddress, rhs: RelayAddress) -> Bool {
-        if lhs.maskType != rhs.maskType {
-            return false
-        }
-        if lhs.enabled != rhs.enabled {
-            return false
-        }
-        if lhs.description != rhs.description {
-            return false
-        }
-        if lhs.generatedFor != rhs.generatedFor {
-            return false
-        }
-        if lhs.blockListEmails != rhs.blockListEmails {
-            return false
-        }
-        if lhs.usedOn != rhs.usedOn {
-            return false
-        }
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.address != rhs.address {
-            return false
-        }
-        if lhs.domain != rhs.domain {
-            return false
-        }
-        if lhs.fullAddress != rhs.fullAddress {
-            return false
-        }
-        if lhs.createdAt != rhs.createdAt {
-            return false
-        }
-        if lhs.lastModifiedAt != rhs.lastModifiedAt {
-            return false
-        }
-        if lhs.lastUsedAt != rhs.lastUsedAt {
-            return false
-        }
-        if lhs.numForwarded != rhs.numForwarded {
-            return false
-        }
-        if lhs.numBlocked != rhs.numBlocked {
-            return false
-        }
-        if lhs.numLevelOneTrackersBlocked != rhs.numLevelOneTrackersBlocked {
-            return false
-        }
-        if lhs.numReplied != rhs.numReplied {
-            return false
-        }
-        if lhs.numSpam != rhs.numSpam {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(maskType)
-        hasher.combine(enabled)
-        hasher.combine(description)
-        hasher.combine(generatedFor)
-        hasher.combine(blockListEmails)
-        hasher.combine(usedOn)
-        hasher.combine(id)
-        hasher.combine(address)
-        hasher.combine(domain)
-        hasher.combine(fullAddress)
-        hasher.combine(createdAt)
-        hasher.combine(lastModifiedAt)
-        hasher.combine(lastUsedAt)
-        hasher.combine(numForwarded)
-        hasher.combine(numBlocked)
-        hasher.combine(numLevelOneTrackersBlocked)
-        hasher.combine(numReplied)
-        hasher.combine(numSpam)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1363,7 +1277,7 @@ public func FfiConverterTypeRelayAddress_lower(_ value: RelayAddress) -> RustBuf
  *
  * See: https://mozilla.github.io/fx-private-relay/api_docs.html#tag/privaterelay/operation/profiles_retrieve
  */
-public struct RelayProfile {
+public struct RelayProfile: Equatable, Hashable {
     public var id: Int64
     public var serverStorage: Bool
     public var storePhoneLog: Bool
@@ -1417,119 +1331,15 @@ public struct RelayProfile {
         self.atMaskLimit = atMaskLimit
         self.metricsEnabled = metricsEnabled
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension RelayProfile: Sendable {}
 #endif
-
-
-extension RelayProfile: Equatable, Hashable {
-    public static func ==(lhs: RelayProfile, rhs: RelayProfile) -> Bool {
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.serverStorage != rhs.serverStorage {
-            return false
-        }
-        if lhs.storePhoneLog != rhs.storePhoneLog {
-            return false
-        }
-        if lhs.subdomain != rhs.subdomain {
-            return false
-        }
-        if lhs.hasPremium != rhs.hasPremium {
-            return false
-        }
-        if lhs.hasPhone != rhs.hasPhone {
-            return false
-        }
-        if lhs.hasVpn != rhs.hasVpn {
-            return false
-        }
-        if lhs.hasMegabundle != rhs.hasMegabundle {
-            return false
-        }
-        if lhs.onboardingState != rhs.onboardingState {
-            return false
-        }
-        if lhs.onboardingFreeState != rhs.onboardingFreeState {
-            return false
-        }
-        if lhs.datePhoneRegistered != rhs.datePhoneRegistered {
-            return false
-        }
-        if lhs.dateSubscribed != rhs.dateSubscribed {
-            return false
-        }
-        if lhs.avatar != rhs.avatar {
-            return false
-        }
-        if lhs.nextEmailTry != rhs.nextEmailTry {
-            return false
-        }
-        if lhs.bounceStatus != rhs.bounceStatus {
-            return false
-        }
-        if lhs.apiToken != rhs.apiToken {
-            return false
-        }
-        if lhs.emailsBlocked != rhs.emailsBlocked {
-            return false
-        }
-        if lhs.emailsForwarded != rhs.emailsForwarded {
-            return false
-        }
-        if lhs.emailsReplied != rhs.emailsReplied {
-            return false
-        }
-        if lhs.levelOneTrackersBlocked != rhs.levelOneTrackersBlocked {
-            return false
-        }
-        if lhs.removeLevelOneEmailTrackers != rhs.removeLevelOneEmailTrackers {
-            return false
-        }
-        if lhs.totalMasks != rhs.totalMasks {
-            return false
-        }
-        if lhs.atMaskLimit != rhs.atMaskLimit {
-            return false
-        }
-        if lhs.metricsEnabled != rhs.metricsEnabled {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(serverStorage)
-        hasher.combine(storePhoneLog)
-        hasher.combine(subdomain)
-        hasher.combine(hasPremium)
-        hasher.combine(hasPhone)
-        hasher.combine(hasVpn)
-        hasher.combine(hasMegabundle)
-        hasher.combine(onboardingState)
-        hasher.combine(onboardingFreeState)
-        hasher.combine(datePhoneRegistered)
-        hasher.combine(dateSubscribed)
-        hasher.combine(avatar)
-        hasher.combine(nextEmailTry)
-        hasher.combine(bounceStatus)
-        hasher.combine(apiToken)
-        hasher.combine(emailsBlocked)
-        hasher.combine(emailsForwarded)
-        hasher.combine(emailsReplied)
-        hasher.combine(levelOneTrackersBlocked)
-        hasher.combine(removeLevelOneEmailTrackers)
-        hasher.combine(totalMasks)
-        hasher.combine(atMaskLimit)
-        hasher.combine(metricsEnabled)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1609,7 +1419,7 @@ public func FfiConverterTypeRelayProfile_lower(_ value: RelayProfile) -> RustBuf
 }
 
 
-public enum RelayApiError: Swift.Error {
+public enum RelayApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1619,8 +1429,21 @@ public enum RelayApiError: Swift.Error {
     )
     case Other(reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension RelayApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1692,21 +1515,6 @@ public func FfiConverterTypeRelayApiError_lift(_ buf: RustBuffer) throws -> Rela
 public func FfiConverterTypeRelayApiError_lower(_ value: RelayApiError) -> RustBuffer {
     return FfiConverterTypeRelayApiError.lower(value)
 }
-
-
-extension RelayApiError: Equatable, Hashable {}
-
-
-
-
-extension RelayApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1790,31 +1598,31 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_relay_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 12387) {
+    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 51078) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_create_address() != 42709) {
+    if (uniffi_relay_checksum_method_relayclient_create_address() != 43654) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 52619) {
+    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 14541) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_fetch_profile() != 54123) {
+    if (uniffi_relay_checksum_method_relayclient_fetch_profile() != 34760) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayremotesettingsclient_should_show_relay() != 53216) {
+    if (uniffi_relay_checksum_method_relayremotesettingsclient_should_show_relay() != 38941) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_constructor_relayclient_new() != 57675) {
+    if (uniffi_relay_checksum_constructor_relayclient_new() != 18968) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_constructor_relayremotesettingsclient_new() != 27724) {
+    if (uniffi_relay_checksum_constructor_relayremotesettingsclient_new() != 14052) {
         return InitializationResult.apiChecksumMismatch
     }
 
