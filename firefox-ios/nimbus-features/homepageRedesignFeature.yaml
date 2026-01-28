@@ -9,6 +9,11 @@ features:
           If true, enables the search bar feature on homepage for users.
         type: Boolean
         default: false
+      stories-scroll-direction:
+        description: >
+          Controls the layout direction for stories on the homepage.
+        type: ScrollDirection
+        default: control
       bookmarks-section-default:
         description: >
           If true, enables the bookmarks homepage section by default
@@ -24,11 +29,24 @@ features:
       - channel: beta
         value:
           search-bar: false
+          stories-scroll-direction: control
           bookmarks-section-default: false
           jbi-section-default: false
 
       - channel: developer
         value:
           search-bar: false
+          stories-scroll-direction: control
           bookmarks-section-default: false
           jbi-section-default: false
+
+enums:
+  ScrollDirection:
+    description: The layout direction for stories on the homepage.
+    variants:
+      control:
+        description: Uses the current default stories layout.
+      vertical:
+        description: Shows stories in a vertical layout.
+      horizontal:
+        description: Shows stories in a horizontal layout.
