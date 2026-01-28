@@ -63,7 +63,6 @@ final class CreditCardsScreen {
     }
 
     func addNewCreditCard(name: String, cardNumber: String, expirationDate: String) {
-        addCardButton.waitAndTap()
         let addCard = AddCreditCardScreen(app: app)
         addCard.addCreditCard(name: name, cardNumber: cardNumber, expirationDate: expirationDate)
     }
