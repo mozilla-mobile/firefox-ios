@@ -12,6 +12,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
+    case adsClient
     case appearanceMenu
     case appIconSelection
     case bottomSearchBar
@@ -79,6 +80,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
+                .adsClient,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -149,6 +151,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
+                .adsClient,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,

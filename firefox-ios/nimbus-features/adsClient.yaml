@@ -1,0 +1,16 @@
+# The configuration for the adsClient feature
+features:
+  ads-client:
+    description: This property defines if the rust ads client is enabled
+    variables:
+      status:
+        description: If true, we will enable the rust ads client
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          status: false
+      - channel: developer
+        value:
+          status: true
