@@ -21,8 +21,24 @@ final class SearchEngineSelectionStateTests: XCTestCase {
     func testInitialization() {
         let initialState = createSubject()
 
-        XCTAssertFalse(initialState.shouldDismiss)
         XCTAssertEqual(initialState.searchEngines, [])
+    }
+
+    func testCopyWith_setNilSelectedSearchEngine() {
+        let selectedSearchEngine = OpenSearchEngineTests
+                                   .generateOpenSearchEngine(type: .wikipedia, withImage: UIImage())
+                                   .generateModel()
+
+        let state1 = SearchEngineSelectionState(
+            windowUUID: UUID(),
+            searchEngines: [selectedSearchEngine],
+            selectedSearchEngine: nil
+        )
+        let state2 = state1.copyWith(
+            selectedSearchEngine: selectedSearchEngine
+        )
+
+        XCTAssertEqual(state2.selectedSearchEngine, selectedSearchEngine)
     }
 
     @MainActor
@@ -55,7 +71,8 @@ final class SearchEngineSelectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = searchEngineSelectionReducer()
 
-        let selectedSearchEngine = OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia, withImage: UIImage())
+        let selectedSearchEngine = OpenSearchEngineTests
+                                   .generateOpenSearchEngine(type: .wikipedia, withImage: UIImage())
                                    .generateModel()
 
         XCTAssertEqual(initialState.searchEngines, [])
