@@ -309,10 +309,8 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.2-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
-  run_scheme_smoke_tests:
-    description: Build and run XCUITests on a specified scheme with Smoketest plan
-    envs:
-    - SCHEME_NAME: Fennec
+  firefox_scheme_smoke_tests:
+    description: Run XCUITests on Firefox scheme
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -321,17 +319,17 @@ workflows:
     - restore-spm-cache@1:
         is_always_run: true
     - script@1.1:
-        title: Build $SCHEME_NAME scheme for Testing
+        title: Build Firefox scheme for Testing
         inputs:
         - content: |
             set -euxo pipefail
-            echo "-- build-for-testing $SCHEME_NAME scheme --"
+            echo "-- build-for-testing Firefox scheme --"
             mkdir -p DerivedData
 
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "firefox-ios/Client.xcodeproj" \
-              "-scheme" "$SCHEME_NAME" \
-              -configuration "$SCHEME_NAME" \
+              "-scheme" "Firefox" \
+              -configuration "Firefox" \
               "CODE_SIGNING_ALLOWED=NO" \
               -sdk "iphonesimulator" \
               "-destination" "platform=iOS Simulator,name=iPhone 17,OS=26.2" \
@@ -345,27 +343,58 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "DerivedData/Build/Products/${SCHEME_NAME}_Smoketest_iphonesimulator26.2-arm64.xctestrun"
+        - xctestrun: "DerivedData/Build/Products/Firefox_Smoketest_iphonesimulator26.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2.10.0: {}
     - slack@4.2.1:
         run_if: ".IsBuildFailed"
         inputs:
         - channel: "#mobile-alerts-ios"
-        - message: "$SCHEME_NAME scheme XCUITests failed on build $BITRISE_BUILD_NUMBER"
+        - message: "Firefox scheme XCUITests failed on build $BITRISE_BUILD_NUMBER"
         - webhook_url: "$SLACK_WEBHOOK"
-  firefox_scheme_smoke_tests:
-    description: Run XCUITests on Firefox scheme
-    envs:
-    - SCHEME_NAME: Firefox
-    after_run:
-    - run_scheme_smoke_tests
   firefox_beta_scheme_smoke_tests:
     description: Run XCUITests on FirefoxBeta scheme
-    envs:
-    - SCHEME_NAME: FirefoxBeta
-    after_run:
-    - run_scheme_smoke_tests
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.2: {}
+    - certificate-and-profile-installer@1: {}
+    - restore-spm-cache@1:
+        is_always_run: true
+    - script@1.1:
+        title: Build FirefoxBeta scheme for Testing
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- build-for-testing FirefoxBeta scheme --"
+            mkdir -p DerivedData
+
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
+            xcodebuild "-project" "firefox-ios/Client.xcodeproj" \
+              "-scheme" "FirefoxBeta" \
+              -configuration "FirefoxBeta" \
+              "CODE_SIGNING_ALLOWED=NO" \
+              -sdk "iphonesimulator" \
+              "-destination" "platform=iOS Simulator,name=iPhone 17,OS=26.2" \
+              "COMPILER_INDEX_STORE_ENABLE=NO" \
+              "build-for-testing" \
+              "CODE_SIGN_IDENTITY=" \
+              "CODE_SIGNING_REQUIRED=NO" \
+              -derivedDataPath "DerivedData" | xcpretty
+    - xcode-test-without-building@0.5.1:
+        timeout: 1800
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: "DerivedData/Build/Products/FirefoxBeta_Smoketest_iphonesimulator26.2-arm64.xctestrun"
+        - maximum_test_repetitions: 2
+    - deploy-to-bitrise-io@2.10.0: {}
+    - slack@4.2.1:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#mobile-alerts-ios"
+        - message: "FirefoxBeta scheme XCUITests failed on build $BITRISE_BUILD_NUMBER"
+        - webhook_url: "$SLACK_WEBHOOK"
   determine_apps_affected:
     steps:
     - git-clone@6.2: {}
