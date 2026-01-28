@@ -12,24 +12,51 @@ struct TermsOfUseMigration {
         self.prefs = prefs
     }
 
-    /// Migrates TermsOfService prefs  to TermsOfUse if needed and deletes old prefs data
-    func migrateTermsOfServicePrefs() {
+    /// Migrate TermsOfService prefs to TermsOfUse
+    /// and add missing ToU date/version if needed
+    func migrateTermsOfService() {
         let hasAcceptedToS = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
 
-        /// Only migrate if TermsOfServiceAccepted exists and it is true
+        // Only migrate if TermsOfServiceAccepted exists and is true.
         guard hasAcceptedToS else { return }
+
+        // Migrate TermsOfServiceAccepted
         prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
 
-        if let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate) {
-            prefs.setTimestamp(acceptedDate, forKey: PrefsKeys.TermsOfUseAcceptedDate)
-        }
+        let tosAcceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate)
+        let tosAcceptedVersion = prefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
 
-        if let acceptedVersion = prefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion) {
-            prefs.setString(acceptedVersion, forKey: PrefsKeys.TermsOfUseAcceptedVersion)
-        }
+        // Migrate TermsOfServiceAcceptedDate
+        let acceptedTimestamp: Timestamp = {
+            if let tosAcceptedDate {
+                return tosAcceptedDate
+            }
+            // Use installation date as accepted date
+            let installationDate = InstallationUtils.inferredDateInstalledOn ?? Date()
+            return installationDate.toTimestamp()
+        }()
+        prefs.setTimestamp(acceptedTimestamp, forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
+        // Migrate TermsOfServiceAcceptedVersion
+        let acceptedVersion: String = {
+            if let tosAcceptedVersion {
+                return tosAcceptedVersion
+            }
+            /// Use terms of use version 4 as convention,
+            /// since cannot be determined the exact version that was accepted
+            return "4"
+        }()
+        prefs.setString(acceptedVersion, forKey: PrefsKeys.TermsOfUseAcceptedVersion)
+
+        // Remove old TermsOfService prefs
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAccepted)
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedDate)
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
+        
+        // Record date and version telemetry if were missing
+        if tosAcceptedDate == nil || tosAcceptedVersion == nil {
+            let acceptedDate = Date.fromTimestamp(acceptedTimestamp)
+            TermsOfServiceTelemetry().recordDateAndVersion(acceptedDate: acceptedDate)
+        }
     }
 }

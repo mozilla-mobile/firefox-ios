@@ -29,9 +29,6 @@ final class AppLaunchUtil: Sendable {
 
     @MainActor
     func setUpPreLaunchDependencies() {
-        /// Migrate TermsOfService prefs to TermsOfUse prefs early, before any checks
-        TermsOfUseMigration(prefs: profile.prefs).migrateTermsOfServicePrefs()
-
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
         if DebugSettingsBundleOptions.saveLogsToDocuments {
@@ -89,6 +86,11 @@ final class AppLaunchUtil: Sendable {
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()
 
+        /// Migrate TermsOfService prefs to TermsOfUse prefs
+        /// before Nimbus is initialized (should be available for experiments)
+        /// and backfill accept date/version if needed - after telemetry set up
+        TermsOfUseMigration(prefs: profile.prefs).migrateTermsOfService()
+
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
@@ -138,10 +140,6 @@ final class AppLaunchUtil: Sendable {
         logger.log("App version \(AppInfo.appVersion), Build number \(AppInfo.buildNumber)",
                    level: .debug,
                    category: .setup)
-
-        // Migrate legacy ToS users who don't have date/version preferences saved
-        // This must be done after telemetry is set up
-        termsOfServiceManager.migrateLegacyToSAcceptance()
 
         AppEventQueue.signal(event: .preLaunchDependenciesComplete)
 
