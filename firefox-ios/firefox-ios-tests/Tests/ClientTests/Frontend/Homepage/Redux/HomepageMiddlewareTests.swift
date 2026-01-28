@@ -77,24 +77,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
-    func test_shouldShowImpressionTriggeredAction_sendsTelemetryData() throws {
-        let subject = createSubject()
-        let action = GeneralBrowserAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-        )
-
-        subject.homepageProvider(AppState(), action)
-
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-    }
-
     func test_tapOnBookmarksShowMoreButtonAction_sendTelemetryData() throws {
         let subject = createSubject()
         let action = NavigationBrowserAction(

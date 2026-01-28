@@ -280,6 +280,7 @@
 		2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */; };
 		2142B12D2D9F1284003AA82F /* ZoomPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142B1292D9F1284003AA82F /* ZoomPageBar.swift */; };
 		214EF4152AC5D5D0005BCCDA /* TabDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */; };
+		2151EBD72F292767007B67A6 /* OnboardingViewControllerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2151EBD62F292767007B67A6 /* OnboardingViewControllerStateTests.swift */; };
 		2152473E2D6E4A4A0078D78A /* AutoFillPasswordSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152473D2D6E4A4A0078D78A /* AutoFillPasswordSettingsViewController.swift */; };
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
 		215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */; };
@@ -2969,6 +2970,7 @@
 		2142B1292D9F1284003AA82F /* ZoomPageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageBar.swift; sourceTree = "<group>"; };
 		2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageManager.swift; sourceTree = "<group>"; };
 		214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayView.swift; sourceTree = "<group>"; };
+		2151EBD62F292767007B67A6 /* OnboardingViewControllerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerStateTests.swift; sourceTree = "<group>"; };
 		2152473D2D6E4A4A0078D78A /* AutoFillPasswordSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillPasswordSettingsViewController.swift; sourceTree = "<group>"; };
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
 		215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageStoreTests.swift; sourceTree = "<group>"; };
@@ -14962,6 +14964,7 @@
 		C8B41E0C29F034E400FE218A /* OnboardingTests */ = {
 			isa = PBXGroup;
 			children = (
+				2151EBD62F292767007B67A6 /* OnboardingViewControllerStateTests.swift */,
 				8CFBBFDB2ECE17AA00E5B22B /* NimbusOnboardingKitFeatureLayerTests.swift */,
 				C8DF92F22A14078F00AA7B05 /* Helpers */,
 				C88012222A40E38D00F4D1D6 /* IntroViewControllerTests.swift */,
@@ -19583,6 +19586,7 @@
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				8CA6FA0E2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift in Sources */,
 				8A48808A2E68DC4300AD43D5 /* MockASOHttpManager.swift in Sources */,
+				2151EBD72F292767007B67A6 /* OnboardingViewControllerStateTests.swift in Sources */,
 				439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */,
 				8A7653C528A2E69100924ABF /* MockMerinoAPI.swift in Sources */,
 				8A83B74A2A265044002FF9AC /* SettingsCoordinatorTests.swift in Sources */,
