@@ -13,7 +13,7 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         let webview = WKWebView(frame: .zero)
         let url = URL(string: "www.example.com")!
         let request = URLRequest(url: url)
-        let task = WKURLSchemeTaskMock(mockRequest: request)
+        let task = MockWKURLSchemeTask(mockRequest: request)
 
         subject.webView(webview, start: task)
 
@@ -29,7 +29,7 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         let privilegedURL = WKInternalURL(url)!
         privilegedURL.authorize()
         let request = URLRequest(url: privilegedURL.url)
-        let task = WKURLSchemeTaskMock(mockRequest: request)
+        let task = MockWKURLSchemeTask(mockRequest: request)
 
         subject.webView(webview, start: task)
 
@@ -47,7 +47,7 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         let privilegedURL = WKInternalURL(url)!
         privilegedURL.authorize()
         let request = URLRequest(url: privilegedURL.url)
-        let task = WKURLSchemeTaskMock(mockRequest: request)
+        let task = MockWKURLSchemeTask(mockRequest: request)
 
         subject.webView(webview, start: task)
 
@@ -65,7 +65,7 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         let privilegedURL = WKInternalURL(url)!
         privilegedURL.authorize()
         let request = URLRequest(url: privilegedURL.url)
-        let task = WKURLSchemeTaskMock(mockRequest: request)
+        let task = MockWKURLSchemeTask(mockRequest: request)
 
         subject.webView(webview, start: task)
 

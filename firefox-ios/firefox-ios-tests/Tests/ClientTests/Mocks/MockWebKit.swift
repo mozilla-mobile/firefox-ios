@@ -58,7 +58,7 @@ class MockWKScriptMessage: WKScriptMessage {
     }
 }
 
-// MARK: - WKURLSchemeTaskMock
+// MARK: - MockWKURLSchemeTask
 
 /// Minimal fake WKURLSchemeTask used to capture callbacks.
 final class MockWKURLSchemeTask: NSObject, WKURLSchemeTask {
