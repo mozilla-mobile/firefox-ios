@@ -25,7 +25,6 @@ public enum JavaScriptAlertType: String {
 
 public protocol JavaScriptAlertInfo {
     var type: JavaScriptAlertType { get }
-    var continuation: CheckedContinuation<Any?, Never>? { get set }
 
     @MainActor
     func alertController() -> JavaScriptPromptAlertController
