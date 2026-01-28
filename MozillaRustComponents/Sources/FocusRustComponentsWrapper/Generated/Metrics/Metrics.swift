@@ -419,7 +419,5 @@ extension GleanMetrics {
             )
             , .millisecond
         )
-
     }
-
 }

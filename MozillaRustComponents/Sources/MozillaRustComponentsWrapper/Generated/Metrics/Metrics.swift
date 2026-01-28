@@ -24,7 +24,6 @@ extension GleanMetrics {
         }
 
         public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 1, day: 27, hour: 5, minute: 13, second: 58))
-    }
 
     enum AdsClient {
         private static let buildCacheErrorLabel = StringMetricType( // generated from ads_client.build_cache_error

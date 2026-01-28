@@ -6,12 +6,15 @@ import UIKit
 import WebKit
 import Common
 import Shared
+import Network
 
 class PrivacyPolicyViewController: UIViewController, Themeable {
+    private var webView: WKWebView!
     private var url: URL
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
+    private var pathMonitor: NWPathMonitor?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -37,18 +40,17 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        startNetworkMonitoring()
     }
 
     func setupView() {
         let config = WKWebViewConfiguration()
         config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
-        let webView = WKWebView(frame: .zero, configuration: config)
+        webView = WKWebView(frame: .zero, configuration: config)
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.navigationDelegate = self
-        webView.load(URLRequest(url: url))
 
         view.backgroundColor = .systemBackground
         view.addSubview(webView)
@@ -70,17 +72,71 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
             navigationItem.rightBarButtonItem?.tintColor = theme.colors.actionPrimary
         }
     }
+
+    private func startNetworkMonitoring() {
+        pathMonitor = NWPathMonitor()
+        pathMonitor?.pathUpdateHandler = { [weak self] path in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if path.status == .satisfied {
+                    self.checkRealConnectivity { hasInternet in
+                        if hasInternet {
+                            if self.webView.url == nil || !self.webView.isLoading {
+                                self.webView.load(URLRequest(url: self.url))
+                            }
+                        } else {
+                            self.showOfflineError()
+                        }
+                    }
+                } else {
+                    self.showOfflineError()
+                }
+            }
+        }
+
+        pathMonitor?.start(queue: DispatchQueue.global(qos: .background))
+    }
+
+    private func checkRealConnectivity(completion: @escaping (Bool) -> Void) {
+        guard let checkURL = URL(string: "https://connectivitycheck.gstatic.com/generate_204") else {
+            completion(false)
+            return
+        }
+
+        var request = URLRequest(url: checkURL)
+        request.httpMethod = "HEAD"
+        request.timeoutInterval = 5.0
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+
+        URLSession.shared.dataTask(with: request) { _, response, error in
+            let hasInternet = (error == nil) && (response as? HTTPURLResponse)?.statusCode == 204
+            DispatchQueue.main.async {
+                completion(hasInternet)
+            }
+        }.resume()
+    }
+
+    private func showOfflineError() {
+        let offlineError = NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: [NSLocalizedDescriptionKey: String.FxANoInternetConnection])
+        handleError(webView: webView, error: offlineError)
+    }
+
+    func handleError(webView: WKWebView, error: Error) {
+        let nsError = error as NSError
+        ErrorPageHelper(certStore: nil).loadPage(nsError, forUrl: url, inWebView: webView)
+    }
+
+    deinit {
+        pathMonitor?.cancel()
+    }
 }
 
 extension PrivacyPolicyViewController: WKNavigationDelegate {
-    func webView(
-        _ webView: WKWebView,
-        didFailProvisionalNavigation navigation: WKNavigation?,
-        withError error: any Error
-    ) {
-        let error = error as NSError
-        if error.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
-            ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
-        }
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
+        handleError(webView: webView, error: error)
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        handleError(webView: webView, error: error)
     }
 }
