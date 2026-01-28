@@ -79,13 +79,14 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func dispatchPrivacyNoticeConfigurationAction(action: Action) {
-        store.dispatch(
-            HomepageAction(
-                shouldShowPrivacyNotice: privacyNoticeHelper.shouldShowPrivacyNotice(),
-                windowUUID: action.windowUUID,
-                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+        if privacyNoticeHelper.shouldShowPrivacyNotice() {
+            store.dispatch(
+                HomepageAction(
+                    windowUUID: action.windowUUID,
+                    actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+                )
             )
-        )
+        }
     }
 
     private func dispatchSearchBarConfigurationAction(action: Action) {

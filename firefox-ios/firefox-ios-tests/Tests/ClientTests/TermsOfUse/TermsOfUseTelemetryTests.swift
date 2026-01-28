@@ -38,6 +38,18 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         XCTAssertEqual(impressionCount, 1)
     }
 
+    func testPrivacyNoticeDisplayed() throws {
+        telemetry.termsOfUseDisplayed(surface: .privacyNotice)
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.shown.testGetValue())
+        XCTAssertEqual(events.count, 1)
+        let event = events[0]
+        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.privacyNotice.rawValue)
+        XCTAssertNil(event.extra?["tou_version"])
+
+        // Test impression counter
+        XCTAssertNil(GleanMetrics.UserTermsOfUse.shownCount.testGetValue())
+    }
+
     func testTermsOfUseAcceptButtonTapped() throws {
         telemetry.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: Date())
 
@@ -128,6 +140,20 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         // Test dismiss counter
         let dismissCount = try XCTUnwrap(GleanMetrics.UserTermsOfUse.dismissedCount.testGetValue())
         XCTAssertEqual(dismissCount, 1)
+    }
+
+    func testPrivacyNoticeDismissed() throws {
+        telemetry.termsOfUseDismissed(surface: .privacyNotice)
+
+        // Test dismiss event
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissed.testGetValue())
+        XCTAssertEqual(events.count, 1)
+        let event = events[0]
+        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.privacyNotice.rawValue)
+        XCTAssertNil(event.extra?["tou_version"])
+
+        // Test dismiss counter
+        XCTAssertNil(GleanMetrics.UserTermsOfUse.dismissedCount.testGetValue())
     }
 
     func testMultipleImpressions_incrementsCounter() throws {
