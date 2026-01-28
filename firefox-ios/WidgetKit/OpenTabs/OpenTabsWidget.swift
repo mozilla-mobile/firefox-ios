@@ -35,12 +35,18 @@ struct OpenTabsView: View {
             Link(destination: linkToContainingApp("?uuid=\(tab.uuid)", query: query)) {
                 HStack(alignment: .center, spacing: 15) {
                     if let favIcon = entry.favicons[tab.imageKey] {
-                        favIcon.resizable().frame(width: 16, height: 16)
-                            .foregroundColor(Color("openTabsContentColor"))
+                        if #available(iOS 18.0, *) {
+                            favIcon.resizable()
+                                .widgetAccentedRenderingMode(.accentedDesaturated)
+                                .frame(width: 16, height: 16)
+                                .foregroundColor(Color("openTabsContentColor"))
+                        } else {
+                            favIcon.resizable()
+                                .frame(width: 16, height: 16)
+                                .foregroundColor(Color("openTabsContentColor"))
+                        }
                     } else {
-                        Image(decorative: StandardImageIdentifiers.Large.globe)
-                            .foregroundColor(Color("openTabsContentColor"))
-                            .frame(width: 16, height: 16)
+                        globeIconView
                     }
 
                     Text(tab.title ?? "")
@@ -57,6 +63,20 @@ struct OpenTabsView: View {
                 .fill(Color("separatorColor"))
                 .frame(height: 0.5)
                 .padding(.leading, 45)
+        }
+    }
+
+    @ViewBuilder
+    private var globeIconView: some View {
+        if #available(iOS 18.0, *) {
+            Image(decorative: StandardImageIdentifiers.Large.globe)
+                .widgetAccentedRenderingMode(.accentedDesaturated)
+                .foregroundColor(Color("openTabsContentColor"))
+                .frame(width: 16, height: 16)
+        } else {
+            Image(decorative: StandardImageIdentifiers.Large.globe)
+                .foregroundColor(Color("openTabsContentColor"))
+                .frame(width: 16, height: 16)
         }
     }
 

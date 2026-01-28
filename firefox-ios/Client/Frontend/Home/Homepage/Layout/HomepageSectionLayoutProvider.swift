@@ -41,7 +41,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         struct PrivacyNoticeConstants {
-            static let topInsets: CGFloat = 12
+            static let bottomInsets: CGFloat = 24
         }
 
         struct MessageCardConstants {
@@ -132,8 +132,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .privacyNotice:
             return createSingleItemSectionLayout(
                 for: traitCollection,
-                itemHeight: UX.MessageCardConstants.height,
-                topInsets: UX.PrivacyNoticeConstants.topInsets
+                bottomInsets: UX.PrivacyNoticeConstants.bottomInsets
             )
         case .messageCard:
             return createSingleItemSectionLayout(
@@ -493,7 +492,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let privacyNoticeCell = PrivacyNoticeCell()
         totalHeight += HomepageDimensionCalculator.fittingHeight(for: privacyNoticeCell, width: containerWidth)
-        totalHeight += UX.PrivacyNoticeConstants.topInsets
+        totalHeight += UX.PrivacyNoticeConstants.bottomInsets
         return totalHeight
     }
 
