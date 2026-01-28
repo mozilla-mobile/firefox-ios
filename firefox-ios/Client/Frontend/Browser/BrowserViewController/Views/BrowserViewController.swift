@@ -2500,9 +2500,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // Ensure we do have a URL from that observer
-//        guard let url = webView.url else { return }
-
         if let url = url, !url.isFxHomeUrl {
             updateToolbarAnimationStateIfNeeded()
         }

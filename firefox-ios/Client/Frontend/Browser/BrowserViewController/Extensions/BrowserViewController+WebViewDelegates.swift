@@ -973,24 +973,6 @@ extension BrowserViewController: WKNavigationDelegate {
         let error = error as NSError
         if error.domain == "WebKitErrorDomain" && error.code == 102 {
             print("🪱 updating tab url to be webview display url")
-            if let tab = tabManager[webView], tab === tabManager.selectedTab {
-                let displayURL = webView.url?.displayURL == nil ? URL(string: "about:blank") : webView.url?.displayURL
-                let action = ToolbarAction(
-                    url: displayURL,
-                    isPrivate: tab.isPrivate,
-                    canGoBack: tab.canGoBack,
-                    canGoForward: tab.canGoForward,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.urlDidChange
-                )
-                store.dispatch(action)
-                let middlewareAction = ToolbarMiddlewareAction(
-                    scrollOffset: scrollController.contentOffset,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.urlDidChange
-                )
-                store.dispatch(middlewareAction)
-            }
             return
         }
 
@@ -998,9 +980,8 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
             if let tab = tabManager[webView], tab === tabManager.selectedTab {
-                let displayURL = webView.url?.displayURL == nil ? URL(string: "about:blank") : webView.url?.displayURL
                 let action = ToolbarAction(
-                    url: displayURL,
+                    url: tab.url?.displayURL,
                     isPrivate: tab.isPrivate,
                     canGoBack: tab.canGoBack,
                     canGoForward: tab.canGoForward,
