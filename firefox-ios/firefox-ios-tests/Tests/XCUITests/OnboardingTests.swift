@@ -17,8 +17,7 @@ class OnboardingTests: BaseTestCase {
     override func setUp() async throws {
         launchArguments = [LaunchArguments.ClearProfile,
                            LaunchArguments.DisableAnimations,
-                           LaunchArguments.SkipSplashScreenExperiment,
-                           LaunchArguments.SkipTermsOfUse]
+                           LaunchArguments.SkipSplashScreenExperiment]
         currentScreen = 0
         try await super.setUp()
         onboardingScreen = OnboardingScreen(app: app)
