@@ -37,7 +37,7 @@ struct MockVoiceSearchService: VoiceSearchService {
     func stopRecordingVoice() {}
 
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
-        try? await Task.sleep(nanoseconds: 200_000_000)
+        try? await Task.sleep(nanoseconds: 1000_000_000)
         if throwSearchError {
             return .failure(SearchResultError.unknown)
         }
