@@ -318,6 +318,14 @@ workflows:
     - certificate-and-profile-installer@1: {}
     - restore-spm-cache@1:
         is_always_run: true
+    - script@1.2.1:
+        title: Run bootstrap
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            ./bootstrap.sh
     - script@1.1:
         title: Build Firefox scheme for Testing
         inputs:
@@ -361,6 +369,14 @@ workflows:
     - certificate-and-profile-installer@1: {}
     - restore-spm-cache@1:
         is_always_run: true
+    - script@1.2.1:
+        title: Run bootstrap
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            ./bootstrap.sh
     - script@1.1:
         title: Build FirefoxBeta scheme for Testing
         inputs:
