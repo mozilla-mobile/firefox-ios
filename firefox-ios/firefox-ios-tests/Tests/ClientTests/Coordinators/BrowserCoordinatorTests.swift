@@ -133,58 +133,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 
-    func testHomepageScreenshotTool_returnsHomepage_forNormalTab() throws {
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        subject.showHomepage(
-            overlayManager: overlayModeManager,
-            isZeroSearch: false,
-            statusBarScrollDelegate: scrollDelegate,
-            toastContainer: UIView()
-        )
-
-        let screenshotTool = try XCTUnwrap(subject.homepageScreenshotTool())
-        XCTAssertTrue(screenshotTool is HomepageViewController)
-    }
-
-    func testHomepageScreenshotTool_returnsNil_forNewBlankNewTab() throws {
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        browserViewController.overrideNewTabSettings = .blankPage
-        subject.showHomepage(
-            overlayManager: overlayModeManager,
-            isZeroSearch: false,
-            statusBarScrollDelegate: scrollDelegate,
-            toastContainer: UIView()
-        )
-        XCTAssertNil(subject.homepageScreenshotTool())
-    }
-
-    func testHomepageScreenshotTool_returnsNil_forNewCustomURLNewTab() throws {
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        browserViewController.overrideNewTabSettings = .homePage
-        subject.showHomepage(
-            overlayManager: overlayModeManager,
-            isZeroSearch: false,
-            statusBarScrollDelegate: scrollDelegate,
-            toastContainer: UIView()
-        )
-
-        XCTAssertNil(subject.homepageScreenshotTool())
-    }
-
-    func testHomepageScreenshotTool_returnsPrivateHomepage_forPrivateTab() throws {
-        let subject = createSubject()
-        browserViewController.overrideNewTabSettings = .topSites
-        let tab = tabManager.addTab(nil, afterTab: nil, zombie: false, isPrivate: true)
-        tabManager.selectTab(tab)
-        subject.showPrivateHomepage(overlayManager: overlayModeManager)
-
-        let screenshotTool = try XCTUnwrap(subject.homepageScreenshotTool())
-        XCTAssertTrue(screenshotTool is PrivateHomepageViewController)
-    }
-
     // MARK: - Show new homepage
 
     func testShowNewHomepage_setsProperViewController() {

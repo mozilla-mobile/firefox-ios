@@ -1452,12 +1452,6 @@ class BrowserViewController: UIViewController,
         view.addSubview(overKeyboardContainer)
 
         if isSwipingTabsEnabled {
-            // Add Homepage to view hierarchy so it is possible to take screenshot from it
-            showEmbeddedHomepage(inline: false, isPrivate: false)
-            browserDelegate?.setHomepageVisibility(isVisible: false)
-            addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
-                return self?.browserDelegate?.homepageScreenshotTool()
-            }
             addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
                 return self?.newTabSettings
             }
@@ -2003,13 +1997,6 @@ class BrowserViewController: UIViewController,
             statusBarScrollDelegate: statusBarOverlay,
             toastContainer: contentContainer
         )
-
-        if isSwipingTabsEnabled {
-            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
-            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
-            // to overlay the homepage.
-            browserDelegate?.setHomepageVisibility(isVisible: true)
-        }
 
         // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
         if !isToolbarTranslucencyRefactorEnabled {
@@ -3189,7 +3176,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
-    private func dispatchAvailableContentHeightChangedAction() {
+    func dispatchAvailableContentHeightChangedAction() {
         guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
@@ -4741,13 +4728,6 @@ extension BrowserViewController: TabManagerDelegate {
 
         if needsReload {
             selectedTab.reloadPage()
-        }
-
-        if isSwipingTabsEnabled {
-            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
-            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
-            // to overlay the homepage.
-            browserDelegate?.setHomepageVisibility(isVisible: true)
         }
     }
 
