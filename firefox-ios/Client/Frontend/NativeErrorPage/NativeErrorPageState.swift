@@ -11,6 +11,8 @@ struct NativeErrorPageState: ScreenState {
     var description: String
     var foxImage: String
     var url: URL?
+    var advancedSection: ErrorPageModel.AdvancedSectionConfig?
+    var showGoBackButton: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = appState.screenState(
@@ -27,7 +29,9 @@ struct NativeErrorPageState: ScreenState {
             title: nativeErrorPageState.title,
             description: nativeErrorPageState.description,
             foxImage: nativeErrorPageState.foxImage,
-            url: nativeErrorPageState.url
+            url: nativeErrorPageState.url,
+            advancedSection: nativeErrorPageState.advancedSection,
+            showGoBackButton: nativeErrorPageState.showGoBackButton
         )
     }
 
@@ -36,13 +40,17 @@ struct NativeErrorPageState: ScreenState {
         title: String = "",
         description: String = "",
         foxImage: String = "",
-        url: URL? = nil
+        url: URL? = nil,
+        advancedSection: ErrorPageModel.AdvancedSectionConfig? = nil,
+        showGoBackButton: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.title = title
         self.description = description
         self.foxImage = foxImage
         self.url = url
+        self.advancedSection = advancedSection
+        self.showGoBackButton = showGoBackButton
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -60,7 +68,9 @@ struct NativeErrorPageState: ScreenState {
                 title: model.errorTitle,
                 description: model.errorDescription,
                 foxImage: model.foxImageName,
-                url: model.url
+                url: model.url,
+                advancedSection: model.advancedSection,
+                showGoBackButton: model.showGoBackButton
             )
         default:
             return defaultState(from: state)
@@ -73,7 +83,9 @@ struct NativeErrorPageState: ScreenState {
             title: state.title,
             description: state.description,
             foxImage: state.foxImage,
-            url: state.url
+            url: state.url,
+            advancedSection: state.advancedSection,
+            showGoBackButton: state.showGoBackButton
         )
     }
 }
