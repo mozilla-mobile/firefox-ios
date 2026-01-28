@@ -27,20 +27,19 @@ struct TermsOfUseMigration {
     private func migrateTermsOfServicePrefs() {
         // Migrate TermsOfServiceAccepted
         prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
+        prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAccepted)
 
         // Migrate TermsOfServiceAcceptedDate
         if let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate) {
             prefs.setTimestamp(acceptedDate, forKey: PrefsKeys.TermsOfUseAcceptedDate)
+            prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedDate)
         }
 
         // Migrate TermsOfServiceAcceptedVersion
         if let acceptedVersion = prefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion) {
             prefs.setString(acceptedVersion, forKey: PrefsKeys.TermsOfUseAcceptedVersion)
+            prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
         }
-
-        prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAccepted)
-        prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedDate)
-        prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
     }
 
     private func migrateLegacyToSAcceptance() {
