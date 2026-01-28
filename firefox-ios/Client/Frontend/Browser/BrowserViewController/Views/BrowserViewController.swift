@@ -2490,28 +2490,20 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
-        // Special case: if the webView.url is nil, set the tab url as "about:blank"
-        // This also handles cases where the url has been set to a previous url but the request has been canceled
-        if webView.url == nil {
-            tab.url = URL(string: "about:blank")
-            // Update UI to reflect the URL we have set the tab to
-            if tab === tabManager.selectedTab {
-                updateUIForReaderHomeStateForTab(tab)
-            }
+        print("🪱 handle url is being called")
+        print("🪱 tab url \(String(describing: tab.url))")
+        print( "🪱 url is \(String(describing: url))")
+        print("🪱 webview url \(String(describing: webView.url))")
+        // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
+        if tab.url?.absoluteString == "about:blank" && webView.url == nil {
+            print("🪱 special case for 'about:blank' popups")
             return
         }
 
         // Ensure we do have a URL from that observer
-        // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
-        let url: URL? = if let webURL = webView.url {
-            webURL
-        } else if let changedURL = url {
-            changedURL
-        } else {
-            nil
-        }
-        guard let url else { return }
-        if !url.isFxHomeUrl {
+//        guard let url = webView.url else { return }
+
+        if let url = url, !url.isFxHomeUrl {
             updateToolbarAnimationStateIfNeeded()
         }
         // Security safety check (Bugzilla #1933079)
@@ -2523,19 +2515,12 @@ class BrowserViewController: UIViewController,
         // To prevent spoofing, only change the URL immediately if the new URL is on
         // the same origin as the current URL. Otherwise, if the origins are different
         // or either origin is nil, set the tab URL to the URL's origin and return.
-        guard let tabURLOrigin = tab.url?.origin,
-              let urlOrigin = url.origin,
-              tabURLOrigin == urlOrigin else {
-            if let urlOrigin = url.origin,
-               let newTabURL = URL(string: urlOrigin) {
-                tab.url = newTabURL
-                // Update UI to reflect the URL we have set the tab to
-                if tab === tabManager.selectedTab {
-                    updateUIForReaderHomeStateForTab(tab)
-                }
-            }
+        guard tab.url?.origin != url?.origin else {
+            print("🪱 origins are not the same we are setting the tab but not updating ui")
+            tab.url = url?.origin == nil ?  URL(string: "about:blank") : URL(string: url!.origin!)
             return
         }
+
         tab.url = url
 
         // Update UI to reflect the URL we have set the tab to
