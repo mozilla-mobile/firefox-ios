@@ -1641,7 +1641,7 @@ workflows:
     - deploy-to-bitrise-io@2.10.0: {}
     - slack@4.2.1:
         inputs:
-        - webhook_url: $WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX
+        - webhook_url: $WEBHOOK_SLACK_FIREFOX_IOS_UNIT_TESTS
         - author_name: ''
         - pretext: ":white_check_mark: Firefox iOS Unit Tests"
         - pretext_on_error: ":x: Firefox iOS Unit Tests"
