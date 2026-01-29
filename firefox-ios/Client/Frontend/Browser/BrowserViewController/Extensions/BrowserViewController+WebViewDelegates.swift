@@ -974,6 +974,10 @@ extension BrowserViewController: WKNavigationDelegate {
 
         webviewTelemetry.cancel()
 
+        if let tab = tabManager[webView], tab === tabManager.selectedTab {
+            tab.isLoadingPopup = false
+        }
+
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
         // will be that we switch to the external app, for example the app store, while keeping the
@@ -985,10 +989,6 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         guard !checkIfWebContentProcessHasCrashed(webView, error: error as NSError) else { return }
-
-        if let tab = tabManager[webView], tab === tabManager.selectedTab {
-            tab.isLoadingPopup = false
-        }
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
             if let tab = tabManager[webView], tab === tabManager.selectedTab {
