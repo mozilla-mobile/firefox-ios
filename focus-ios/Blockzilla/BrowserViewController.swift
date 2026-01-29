@@ -472,6 +472,32 @@ final class BrowserViewController: UIViewController {
         return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelemetry.handle(event:))
     }
 
+    private func handleWidgetAction() -> UIViewController? {
+        urlBar.dismiss()
+        let cardBanner = PortraitHostingController(
+            rootView: CardBannerView(
+                config: .init(
+                    title: UIConstants.strings.widgetOnboardingCardTitle,
+                    subtitle: UIConstants.strings.widgetOnboardingCardSubtitle,
+                    actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
+                    widget: .init(
+                        title: UIConstants.strings.searchInAppInstruction
+                    )),
+                primaryAction: { [weak self] in
+                    self?.onboardingEventsHandler.route = nil
+                    self?.onboardingEventsHandler.send(.widgetDismissed)
+                    self?.onboardingTelemetry.handle(event: .widgetPrimaryButtonTapped)
+                },
+                dismiss: { [weak self] in
+                    self?.onboardingEventsHandler.route = nil
+                    self?.urlBar.activateTextField()
+                    self?.onboardingTelemetry.handle(event: .widgetCloseTapped)
+                }))
+        cardBanner.view.backgroundColor = .clear
+        cardBanner.modalPresentationStyle = .overFullScreen
+        return cardBanner
+    }
+
     private func setupOnboardingEvents() {
         var presentedController: UIViewController?
         onboardingEventsHandler
