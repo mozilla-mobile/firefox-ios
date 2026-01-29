@@ -102,7 +102,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
             spacer.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         insetSpacer = spacer
-        layoutIfNeeded()
     }
 
     func moveSpacerToBack() {
@@ -115,7 +114,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
 
         removeArrangedView(insetSpacer)
         self.insetSpacer = nil
-        layoutIfNeeded()
     }
 
     func applyTheme(theme: Theme) {

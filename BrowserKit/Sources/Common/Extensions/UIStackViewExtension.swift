@@ -39,8 +39,6 @@ extension UIStackView {
                                    animateClosure: @escaping () -> Void,
                                    animated: Bool = true,
                                    completion: (() -> Void)?) {
-        view.layoutIfNeeded()
-
         UIView.animate(
             withDuration: animated ? 0.25 : 0,
             animations: {
