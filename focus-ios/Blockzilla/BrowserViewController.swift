@@ -346,13 +346,7 @@ final class BrowserViewController: UIViewController {
             return handleSearchBarAction()
 
         case .onboarding(let onboardingType):
-            let dismissOnboarding = { [unowned self] in
-                UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
-                urlBar.activateTextField()
-                onboardingEventsHandler.dismissTooltip(route: .onboarding(.v2))
-                onboardingEventsHandler.send(.enterHome)
-            }
-                return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelemetry.handle(event:))
+            return handleOnboardingAction(onboardingType: onboardingType)
 
         case .trackingProtection:
             return nil
