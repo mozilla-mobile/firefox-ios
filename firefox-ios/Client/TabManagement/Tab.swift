@@ -187,6 +187,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return webView?.isLoading ?? false
     }
 
+    // Dumb dumb dumb
+    var isLoadingPopup = false
+
     var estimatedProgress: Double {
         return webView?.estimatedProgress ?? 0
     }

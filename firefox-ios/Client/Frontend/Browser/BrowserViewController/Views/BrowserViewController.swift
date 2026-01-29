@@ -2492,15 +2492,20 @@ class BrowserViewController: UIViewController,
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
         print("🪱 handle url is being called")
         print("🪱 tab url \(String(describing: tab.url))")
-        print( "🪱 url is \(String(describing: url))")
+        print("🪱 url is \(String(describing: url))")
         print("🪱 webview url \(String(describing: webView.url))")
-        // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
-        if tab.url?.absoluteString == "about:blank" && webView.url == nil {
-            print("🪱 special case for 'about:blank' popups")
+        // Special case for popups, do not show URL in the UI until we have loaded
+        if tab.isLoadingPopup {
+            print("🪱 special case for popups")
             return
         }
 
-        if let url = url, !url.isFxHomeUrl {
+        // Ensure we do have a URL from that observer
+        guard let url else {
+            print("🪱 NO URL, returning")
+            return
+        }
+        if !url.isFxHomeUrl {
             updateToolbarAnimationStateIfNeeded()
         }
         // Security safety check (Bugzilla #1933079)
@@ -2512,12 +2517,14 @@ class BrowserViewController: UIViewController,
         // To prevent spoofing, only change the URL immediately if the new URL is on
         // the same origin as the current URL. Otherwise, if the origins are different
         // or either origin is nil, set the tab URL to the URL's origin and return.
-        guard tab.url?.origin != url?.origin else {
-            print("🪱 origins are not the same we are setting the tab but not updating ui")
-            tab.url = url?.origin == nil ?  URL(string: "about:blank") : URL(string: url!.origin!)
+        guard tab.url?.origin == url.origin else {
+            let test = url.origin == nil ? URL(string: "about:blank") : URL(string: url.origin!)
+            print("🪱 origins are not the same we are setting the tab but not updating ui with \(String(describing: test))")
+            tab.url = url.origin == nil ? URL(string: "about:blank") : URL(string: url.origin!)
             return
         }
 
+        print("🪱 origins are the same we are setting the tab and updating the ui")
         tab.url = url
 
         // Update UI to reflect the URL we have set the tab to
