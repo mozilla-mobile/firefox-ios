@@ -2518,6 +2518,19 @@ class BrowserViewController: UIViewController,
         // the same origin as the current URL. Otherwise, if the origins are different
         // or either origin is nil, set the tab URL to the URL's origin and return.
         guard tab.url?.origin == url.origin else {
+            print("🪱 POPUP BYPASS with popupURL: \(String(describing: tab.popupURL))")
+            if tab.popupURL != nil {
+                // Origins aren't the same, but we have an exception for the popup
+                tab.url = url
+                tab.popupURL = nil
+
+                // Update UI to reflect the URL we have set the tab to
+                if tab === tabManager.selectedTab {
+                    updateUIForReaderHomeStateForTab(tab)
+                }
+                return
+            }
+
             let test = url.origin == nil ? URL(string: "about:blank") : URL(string: url.origin!)
             print("🪱 origins are not the same we are setting the tab but not updating ui with \(String(describing: test))")
             tab.url = url.origin == nil ? URL(string: "about:blank") : URL(string: url.origin!)

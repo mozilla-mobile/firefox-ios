@@ -47,7 +47,6 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         let navigationUrl = navigationAction.request.url
-        let navigationUrlString = navigationUrl?.absoluteString ?? ""
 
         // Check for "data" scheme using WebViewNavigationHandlerImplementation
         let navigationHandler = WebViewNavigationHandlerImplementation { _ in }
@@ -69,6 +68,7 @@ extension BrowserViewController: WKUIDelegate {
 
         newTab.isLoadingPopup = true
         newTab.url = URL(string: "about:blank")
+        newTab.popupURL = navigationUrl
         print("🪱 new tab URL is about:blank")
 
         return newTab.webView
