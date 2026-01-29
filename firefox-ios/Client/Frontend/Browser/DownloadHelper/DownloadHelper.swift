@@ -4,7 +4,7 @@
 
 import Common
 import Foundation
-import MobileCoreServices
+import UniformTypeIdentifiers
 import WebKit
 import Shared
 

@@ -3,9 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MobileCoreServices
-import WebKit
 import UniformTypeIdentifiers
+import WebKit
 
 class ShareManager: NSObject, FeatureFlaggable {
     private struct ActivityIdentifiers {
