@@ -19,7 +19,6 @@ extension BrowserViewController: WKUIDelegate {
         for navigationAction: WKNavigationAction,
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
-        print("🪱 createWebViewWith")
         guard let parentTab = tabManager[webView] else { return nil }
         guard parentTab.popupThrottler.canShowAlert(type: .popupWindow) else {
             logger.log("Popup window disallowed for exceeding threshold for tab.", level: .info, category: .webview)
@@ -69,7 +68,6 @@ extension BrowserViewController: WKUIDelegate {
         newTab.isLoadingPopup = true
         newTab.url = URL(string: "about:blank")
         newTab.popupURL = navigationUrl
-        print("🪱 new tab URL is about:blank")
 
         return newTab.webView
     }
@@ -431,8 +429,6 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
-        print("🪱 starting prov navigation")
-        print("🪱 webview url \(String(describing: webView.url)), tab url is \(String(describing: tabManager[webView]?.url))")
         if tabManager.selectedTab?.webView !== webView { return }
 
         // Note the main frame JSContext (i.e. document, window) is not available yet.
@@ -461,8 +457,6 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
     ) {
-        print("🪱 starting decidePolicyFor navigationAction")
-        print("🪱 webview url \(String(describing: webView.url)), tab url is \(String(describing: tabManager[webView]?.url))")
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
         let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
@@ -714,8 +708,6 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        print("🪱 starting decidePolicyFor navigationResponse")
-        print("🪱 webview url \(String(describing: webView.url)), tab url is \(String(describing: tabManager[webView]?.url))")
         let response = navigationResponse.response
         let responseURL = response.url
 
@@ -937,7 +929,6 @@ extension BrowserViewController: WKNavigationDelegate {
         didFail navigation: WKNavigation?,
         withError error: Error
     ) {
-        print("🪱 didFail")
         logger.log("Error occurred during navigation.",
                    level: .warning,
                    category: .webview)
@@ -960,9 +951,6 @@ extension BrowserViewController: WKNavigationDelegate {
         didFailProvisionalNavigation navigation: WKNavigation?,
         withError error: Error
     ) {
-        print("🪱 failed prov navigation")
-        print("🪱 webview url \(String(describing: webView.url)), tab url is \(String(describing: tabManager[webView]?.url))")
-        print("🪱 error \(error.localizedDescription)")
         logger.log("Error occurred during the early navigation process.",
                    level: .warning,
                    category: .webview)

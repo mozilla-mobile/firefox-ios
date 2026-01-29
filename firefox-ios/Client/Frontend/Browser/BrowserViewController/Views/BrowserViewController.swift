@@ -2490,63 +2490,41 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
-        print("🪱 handle url is being called")
-        print("🪱 tab url \(String(describing: tab.url))")
-        print("🪱 url is \(String(describing: url))")
-        print("🪱 webview url \(String(describing: webView.url))")
         // Special case for popups, do not show URL in the UI until we have loaded
-        if tab.isLoadingPopup {
-            print("🪱 special case for popups")
+        // All new popup webViews are created with "about:blank" url
+        if tab.url?.absoluteString == "about:blank" && webView.url == nil {
             return
         }
 
-        // Ensure we do have a URL from that observer
-        guard let url else {
-            print("🪱 NO URL, returning")
-            return
-        }
-        if !url.isFxHomeUrl {
+        if let url, !url.isFxHomeUrl {
             updateToolbarAnimationStateIfNeeded()
         }
+
         // Security safety check (Bugzilla #1933079)
         if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
             tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
             return
         }
 
-        // To prevent spoofing, only change the URL immediately if the new URL is on
-        // the same origin as the current URL. Otherwise, if the origins are different
-        // or either origin is nil, set the tab URL to the URL's origin and return.
-        guard tab.url?.origin == url.origin else {
-            print("🪱 POPUP BYPASS with popupURL: \(String(describing: tab.popupURL))")
-            if tab.popupURL != nil {
-                // Origins aren't the same, but we have an exception for the popup
-                tab.url = url
-                tab.popupURL = nil
-
-                // Update UI to reflect the URL we have set the tab to
-                if tab === tabManager.selectedTab {
-                    updateUIForReaderHomeStateForTab(tab)
-                }
-                return
+        // To prevent spoofing, if the origins are equal update the UI always
+        if tab.url?.origin == url?.origin {
+            tab.url = url
+            // Update UI to reflect the URL we have set the tab to
+            if tab === tabManager.selectedTab {
+                updateUIForReaderHomeStateForTab(tab)
             }
 
-            let test = url.origin == nil ? URL(string: "about:blank") : URL(string: url.origin!)
-            print("🪱 origins are not the same we are setting the tab but not updating ui with \(String(describing: test))")
-            tab.url = url.origin == nil ? URL(string: "about:blank") : URL(string: url.origin!)
-            return
+            // Catch history pushState navigation, but ONLY for same origin navigation,
+            // for reasons above about URL spoofing risk.
+            navigateInTab(tab: tab, webViewStatus: .url)
+        } else {
+            // If the origins are different, only set the tab url and update ui if the tabs current scheme is about
+            // and we are done loading
+            if tab === tabManager.selectedTab, tab.url?.displayURL?.scheme == "about", !tab.isLoading, let url {
+                tab.url = url
+                updateUIForReaderHomeStateForTab(tab)
+            }
         }
-
-        print("🪱 origins are the same we are setting the tab and updating the ui")
-        tab.url = url
-
-        // Update UI to reflect the URL we have set the tab to
-        if tab === tabManager.selectedTab {
-            updateUIForReaderHomeStateForTab(tab)
-        }
-        // Catch history pushState navigation, but ONLY for same origin navigation,
-        // for reasons above about URL spoofing risk.
-        navigateInTab(tab: tab, webViewStatus: .url)
     }
 
     private func handleTitleChanged(tab: Tab) {
