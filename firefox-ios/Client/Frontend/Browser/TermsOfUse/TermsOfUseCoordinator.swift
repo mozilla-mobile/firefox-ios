@@ -105,10 +105,9 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         // 1. Feature must be enabled
         guard featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) else { return false }
 
-        // 2. If user has already accepted (onboarding or bottom sheet), never show again
+        // 2. If user has already accepted, never show again
         let hasAcceptedTermsOfUse = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
-        let hasAcceptedTermsOfService = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
-        guard !hasAcceptedTermsOfUse && !hasAcceptedTermsOfService else { return false }
+        guard !hasAcceptedTermsOfUse else { return false }
 
         // 3. Check if this is the first time it is shown
         // Always show first time - it is not a reminder

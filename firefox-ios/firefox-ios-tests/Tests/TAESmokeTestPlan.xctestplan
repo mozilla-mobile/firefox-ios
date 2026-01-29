@@ -478,6 +478,8 @@
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_tabTrayExperimentOn()",
+        "PrivateBrowsingTest\/testMultipleTabsPrivateBrowsingCloseDisabled()",
+        "PrivateBrowsingTest\/testMultipleTabsPrivateBrowsingCloseEnabled()",
         "PrivateBrowsingTest\/testPrivateBrowserPanelView()",
         "PrivateBrowsingTest\/testPrivateBrowserPanelView_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testPrivateTabDoesNotTrackHistory()",

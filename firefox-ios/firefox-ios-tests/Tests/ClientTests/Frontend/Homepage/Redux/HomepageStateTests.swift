@@ -139,7 +139,6 @@ final class HomepageStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             HomepageAction(
-                shouldShowPrivacyNotice: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
             )

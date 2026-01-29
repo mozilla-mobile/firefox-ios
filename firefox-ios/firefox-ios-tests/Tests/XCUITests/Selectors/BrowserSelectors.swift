@@ -33,7 +33,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let clearTextLabel = "Clear text"
         static let downloadLabel = "Downloads"
         static let cancelButtonUrlBar = AccessibilityIdentifiers.Browser.UrlBar.cancelButton
-        static let privateBrowsdingLabel = "Private Browsing"
+        static let privateBrowsingLabel = "Private Browsing"
         static let cancelButton = "Cancel"
         static let rfc = "RFC 2606"
         static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon
@@ -89,7 +89,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
     )
 
     let PRIVATE_BROWSING = Selector.staticTextId(
-        IDs.privateBrowsdingLabel,
+        IDs.privateBrowsingLabel,
         description: "Private Browsing Label",
         groups: ["browser"]
     )

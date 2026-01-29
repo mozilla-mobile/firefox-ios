@@ -30,11 +30,9 @@ struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol, FeatureFlaggable {
 
     func shouldShowPrivacyNotice() -> Bool {
         guard featureFlags.isFeatureEnabled(.privacyNotice, checking: .buildOnly) else { return false }
-        // 1. User has already accepted ToS (via onboarding or bottom sheet)
-        let termsOfUseAcceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate)
-        let termsOfServiceAcceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate)
-        let acceptedDate = termsOfUseAcceptedDate ?? termsOfServiceAcceptedDate
-        guard let acceptedDate else { return false }
+        // 1. User has already accepted ToU (via onboarding or bottom sheet)
+        // Use TermsOfUseAcceptedDate (migrated from TermsOfServiceAcceptedDate)
+        guard let acceptedDate = prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate) else { return false }
 
         // 2. User has accepted ToS (via onboarding or bottom sheet) before the last privacy notice update
         //    AND has not since seen the homepage privacy notice card since the privacy notice was updated

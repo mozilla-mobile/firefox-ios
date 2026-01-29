@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import TestKit
 
 @testable import Client
 

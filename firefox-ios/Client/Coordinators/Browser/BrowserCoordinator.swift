@@ -142,6 +142,7 @@ class BrowserCoordinator: BaseCoordinator,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
         )
+        browserViewController.dispatchAvailableContentHeightChangedAction()
         homepageController.termsOfUseDelegate = self
         homepageController.view.accessibilityElementsHidden = false
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
@@ -153,24 +154,6 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
         // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
         webviewController?.update(webView: nil)
-    }
-
-    func homepageScreenshotTool() -> (any Screenshotable)? {
-        let newTabSettings = browserViewController.newTabSettings
-        switch newTabSettings {
-        case .blankPage, .homePage:
-            return nil
-        case .topSites:
-            if tabManager.selectedTab?.isPrivate == true {
-                return privateHomepageViewController
-            }
-            return homepageViewController
-        }
-    }
-
-    func setHomepageVisibility(isVisible: Bool) {
-        guard let homepage = homepageViewController else { return }
-        homepage.view.isHidden = !isVisible
     }
 
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {

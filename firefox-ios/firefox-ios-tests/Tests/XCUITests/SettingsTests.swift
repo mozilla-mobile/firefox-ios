@@ -424,18 +424,19 @@ class SettingsTests: FeatureFlaggedTestBase {
             [
                 table.cells[settingsQuery.OpenWithMail.title],
                 app.switches[settingsQuery.OfferToOpen.title],
+                app.switches[settingsQuery.ShowLink.title],
                 table.cells[settingsQuery.Browsing.autoPlay],
                 table.cells[settingsQuery.BlockPopUp.title],
                 table.cells[settingsQuery.NoImageMode.title],
                 app.switches[settingsQuery.BlockExternal.title]
             ]
         )
-        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
-                       "1",
-                       "Show links previews - toggle is not enabled by default")
         XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String,
                        "0",
                        "Offer to Open Copied Links - toggle is not disabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
+                       "1",
+                       "Show links previews - toggle is not enabled by default")
         XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String,
                        "1",
                        "Block Pop-up  Windows - toggle is not enabled by default")
@@ -526,7 +527,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         }
 
         for i in settingsElements {
-            scrollToElement(i)
             mozWaitForElementToExist(i)
             XCTAssertTrue(i.exists)
         }

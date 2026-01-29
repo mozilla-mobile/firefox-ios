@@ -68,10 +68,12 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
 
     func setScreenshot(_ tab: Tab?) {
         guard let tab else {
-            faviconImageView.isHidden = true
+            faviconImageView.isHidden = false
             webPageScreenshotImageView.isHidden = true
+            faviconImageView.image = UIImage(resource: .faviconFox)
             return
         }
+
         faviconImageView.isHidden = !layoutWasInvalidated
         webPageScreenshotImageView.isHidden = layoutWasInvalidated
 
@@ -97,12 +99,6 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         webPageScreenshotImageView.isHidden = true
         faviconImageView.setFavicon(FaviconImageViewModel(siteURLString: url?.absoluteString,
                                                           faviconCornerRadius: UX.faviconCornerRadius))
-    }
-
-    func setScreenshot(_ image: UIImage?) {
-        faviconImageView.isHidden = true
-        webPageScreenshotImageView.isHidden = false
-        webPageScreenshotImageView.image = image
     }
 
     func applyTransform(translationX: CGFloat) {
