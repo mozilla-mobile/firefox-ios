@@ -163,7 +163,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         switch viewModel.variant {
         case .brandRefresh:
             return theme.colors.actionPrimaryBrandRefresh
-        case .legacy, .modern, .japan:
+        default:
             return theme.colors.actionPrimary
         }
     }

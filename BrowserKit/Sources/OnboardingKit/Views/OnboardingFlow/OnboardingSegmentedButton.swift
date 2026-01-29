@@ -91,7 +91,7 @@ struct OnboardingSegmentedButton<Action: Equatable & Hashable & Sendable>: View 
         switch variant {
         case .brandRefresh:
             return Color(theme.colors.actionPrimaryBrandRefresh)
-        case .legacy, .modern, .japan:
+        default:
             return Color(theme.colors.actionPrimary)
         }
     }

@@ -62,6 +62,6 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     /// Returns the OnboardingKit variant corresponding to the onboarding variant.
     /// This avoids duplication of conversion logic across the codebase.
     var onboardingKitVariant: OnboardingKit.OnboardingVariant {
-        OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
+        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
     }
 }

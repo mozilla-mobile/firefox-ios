@@ -27,7 +27,7 @@ extension View {
         switch variant {
         case .brandRefresh:
             return theme.colors.actionPrimaryBrandRefresh
-        case .legacy, .modern, .japan:
+        default:
             return theme.colors.actionPrimary
         }
     }
