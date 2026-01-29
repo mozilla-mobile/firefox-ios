@@ -12,43 +12,6 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // Smoketest
     func testLongPressReload() {
-        if skipPlatform { return }
-        navigator.nowAt(NewTabScreen)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-        navigator.goto(ReloadLongPressMenu)
-        navigator.performAction(Action.ToggleRequestDesktopSite)
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-
-        // Covering scenario that when reloading the page should preserve Desktop site
-        navigator.performAction(Action.ReloadURL)
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        waitUntilPageLoad()
-
-        // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
-        navigator.nowAt(NewTabScreen)
-        navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306852
-    // Smoketest TAE
-    func testLongPressReload_TAE() {
         browserScreen = BrowserScreen(app: app)
 
         if skipPlatform { return }
@@ -177,33 +140,6 @@ class DesktopModeTestsIphone: BaseTestCase {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.desktopSite])
-        navigator.goto(RequestDesktopSite)
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.desktopSite])
-        // Select Mobile site here, the identifier is the same but the Text is not
-        navigator.goto(RequestMobileSite)
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306854
-    // Smoketest TAE
-    func testChangeModeInSameTab_TAE() {
-        if skipPlatform { return }
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
 
         browserScreen.assertMobileUserAgentIsDisplayed()
 
@@ -293,45 +229,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // Smoketest
     func testLongPressReload() {
-        if skipPlatform { return }
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-
-        navigator.nowAt(BrowserTab)
-        if #unavailable(iOS 16) {
-            // iOS 15 displays a toast that covers the reload button
-            sleep(2)
-        }
-        navigator.goto(ReloadLongPressMenu)
-        navigator.performAction(Action.ToggleRequestDesktopSite)
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        // Covering scenario that when reloading the page should preserve Desktop site
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.ReloadURL)
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        // The experiment is not opening the keyboard on a new tab
-        navigator.nowAt(NewTabScreen)
-
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        waitUntilPageLoad()
-        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
-        navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306852
-    // Smoketest TAE
-    func testLongPressReload_TAE() {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
