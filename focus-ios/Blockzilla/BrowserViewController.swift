@@ -460,6 +460,32 @@ final class BrowserViewController: UIViewController {
         }
     }
 
+    private func handleTrashAction(version: OnboardingVersion) -> UIViewController? {
+        switch version {
+        case .v2:
+            let sourceButton = showsToolsetInURLBar ? urlBar.deleteButtonAnchor : browserToolbar.deleteButtonAnchor
+            let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
+            CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
+            return self.tooltipController(
+                anchoredBy: sourceButton,
+                sourceRect: sourceRect,
+                body: UIConstants.strings.tooltipBodyTextForTrashIconV2,
+                dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
+            )
+
+        case .v1:
+            let sourceButton = showsToolsetInURLBar ? urlBar.deleteButtonAnchor : browserToolbar.deleteButtonAnchor
+            let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
+            CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
+            return self.tooltipController(
+                anchoredBy: sourceButton,
+                sourceRect: sourceRect,
+                body: UIConstants.strings.tooltipBodyTextForTrashIcon,
+                dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
+            )
+        }
+    }
+
     private func setupOnboardingEvents() {
         var presentedController: UIViewController?
         onboardingEventsHandler
