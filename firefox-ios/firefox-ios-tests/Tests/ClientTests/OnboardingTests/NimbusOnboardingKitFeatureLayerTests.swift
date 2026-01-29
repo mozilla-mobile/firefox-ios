@@ -954,7 +954,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     }
 
     private func createCard(
-        variant: OnboardingVariant,
+        variant: Client.OnboardingVariant,
         order: Int,
         onboardingType: Client.OnboardingType = .freshInstall,
         title: String = "Test Title",

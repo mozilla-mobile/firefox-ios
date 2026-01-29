@@ -13,7 +13,7 @@ import OnboardingKit
 /// because defaults are not provided herein, but in the fml.
 class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
-    var onboardingVariant: OnboardingVariant
+    var onboardingVariant: Client.OnboardingVariant
     private let isDefaultBrowser: Bool
     private let isIpad: Bool
 
