@@ -476,6 +476,15 @@ final class BrowserViewController: UIViewController {
         return cardBanner
     }
 
+    private func handleMenuAction() -> UIViewController? {
+        return self.tooltipController(
+            anchoredBy: self.urlBar.contextMenuButtonAnchor,
+            sourceRect: CGRect(x: self.urlBar.contextMenuButtonAnchor.bounds.maxX, y: self.urlBar.contextMenuButtonAnchor.bounds.midY + 12, width: 0, height: 0),
+            body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
+            dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
+        )
+    }
+
     private func setupOnboardingEvents() {
         var presentedController: UIViewController?
         onboardingEventsHandler
