@@ -32,9 +32,11 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
             ZStack {
-                AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
-                    .ignoresSafeArea()
-                    .accessibilityHidden(true)
+                OnboardingBackgroundView(
+                    windowUUID: windowUUID,
+                    themeManager: themeManager,
+                    variant: viewModel.variant
+                )
 
                 if horizontalSizeClass == .regular {
                     regularLayout
@@ -52,7 +54,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     private var regularLayout: some View {
         SheetSizedCard {
             regularContent
-                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: viewModel.variant)
         }
     }
 
@@ -132,7 +134,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: viewModel.variant)
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
         .padding(.vertical)
         .accessibilityElement(children: .contain)
@@ -145,6 +147,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
                 AttributedLinkText<TermsOfUseAction>(
                     theme: theme,
+                    linkColor: linkColor,
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
@@ -154,6 +157,15 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             }
         }
         .accessibilityElement(children: .contain)
+    }
+
+    private var linkColor: UIColor {
+        switch viewModel.variant {
+        case .brandRefresh:
+            return theme.colors.actionPrimaryBrandRefresh
+        case .legacy, .modern, .japan:
+            return theme.colors.actionPrimary
+        }
     }
 
     @ViewBuilder
@@ -198,7 +210,8 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 )
             },
             theme: theme,
-            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
+            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton",
+            variant: viewModel.variant
         )
     }
 }

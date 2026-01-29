@@ -8,17 +8,20 @@ import ComponentLibrary
 
 struct OnboardingSegmentedButton<Action: Equatable & Hashable & Sendable>: View {
     let theme: Theme
+    let variant: OnboardingVariant
     let item: OnboardingMultipleChoiceButtonModel<Action>
     let isSelected: Bool
     let action: () -> Void
 
     init(
         theme: Theme,
+        variant: OnboardingVariant,
         item: OnboardingMultipleChoiceButtonModel<Action>,
         isSelected: Bool,
         action: @escaping () -> Void
     ) {
         self.theme = theme
+        self.variant = variant
         self.item = item
         self.isSelected = isSelected
         self.action = action
@@ -63,14 +66,33 @@ struct OnboardingSegmentedButton<Action: Equatable & Hashable & Sendable>: View 
                 .frame(height: UX.SegmentedControl.innerVStackSpacing)
 
             Image(
-                isSelected
-                ? UX.SegmentedControl.radioButtonSelectedImage
-                : UX.SegmentedControl.radioButtonNotSelectedImage,
+                radioButtonImageName(isSelected: isSelected),
                 bundle: .module
             )
+            .renderingMode(.template)
             .resizable()
             .frame(width: UX.SegmentedControl.checkmarkFontSize, height: UX.SegmentedControl.checkmarkFontSize)
+            .foregroundColor(checkmarkColor(isSelected: isSelected))
             .accessibilityHidden(true)
+        }
+    }
+
+    private func radioButtonImageName(isSelected: Bool) -> String {
+        return isSelected
+            ? UX.SegmentedControl.radioButtonSelectedImage
+            : UX.SegmentedControl.radioButtonNotSelectedImage
+    }
+
+    private func checkmarkColor(isSelected: Bool) -> Color {
+        guard isSelected else {
+            return Color(theme.colors.iconSecondary)
+        }
+
+        switch variant {
+        case .brandRefresh:
+            return Color(theme.colors.actionPrimaryBrandRefresh)
+        case .legacy, .modern, .japan:
+            return Color(theme.colors.actionPrimary)
         }
     }
 }

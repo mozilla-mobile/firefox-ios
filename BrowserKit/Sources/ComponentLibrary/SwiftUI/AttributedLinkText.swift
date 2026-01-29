@@ -7,6 +7,7 @@ import Common
 
 public struct AttributedLinkText<Action: RawRepresentable>: View where Action.RawValue == String {
     let theme: Theme
+    let linkColor: UIColor
     let fullText: String
     let linkText: String
     let action: Action
@@ -15,6 +16,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
 
     public init(
         theme: Theme,
+        linkColor: UIColor,
         fullText: String,
         linkText: String,
         action: Action,
@@ -22,6 +24,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
         linkAction: @escaping (Action) -> Void
     ) {
         self.theme = theme
+        self.linkColor = linkColor
         self.fullText = fullText
         self.linkText = linkText
         self.action = action
@@ -58,7 +61,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
         let actionURL = URL(string: "action://\(action.rawValue)")!
         if let range = attrString.range(of: linkText) {
             attrString[range].underlineStyle = .single
-            attrString[range].foregroundColor = Color(uiColor: theme.colors.actionPrimary)
+            attrString[range].foregroundColor = Color(uiColor: linkColor)
             attrString[range].link = actionURL
         }
 
