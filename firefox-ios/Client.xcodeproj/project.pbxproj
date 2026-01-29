@@ -1490,6 +1490,7 @@
 		C25020842ECDE75D0071506F /* MockTranslationsSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25020832ECDE7550071506F /* MockTranslationsSchemeHandler.swift */; };
 		C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */; };
 		C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */; };
+		C26B96D72F29188100D4B140 /* TestKit in Frameworks */ = {isa = PBXBuildFile; productRef = C26B96D62F29188100D4B140 /* TestKit */; };
 		C27EF6132EBA28E100BED719 /* LanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */; };
 		C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */; };
 		C27EF61A2EBA364E00BED719 /* LanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */; };
@@ -11492,6 +11493,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C26B96D72F29188100D4B140 /* TestKit in Frameworks */,
 				EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */,
 				43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */,
 				E5C2BA922EA9054E001E3DEF /* Shared in Frameworks */,
@@ -16979,6 +16981,7 @@
 				EDF5679F2C8B51DC00FDB09D /* SiteImageView */,
 				EDF567A12C8B51E100FDB09D /* Kingfisher */,
 				0BCC26AC2CFF16220072CD5A /* Shared */,
+				C26B96D62F29188100D4B140 /* TestKit */,
 			);
 			productName = ClientTests;
 			productReference = F84B21D31A090F8100AAB793 /* ClientTests.xctest */;
@@ -31714,6 +31717,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AB2AC6612BCFD0A200022AAB /* XCRemoteSwiftPackageReference "swift-certificates" */;
 			productName = X509;
+		};
+		C26B96D62F29188100D4B140 /* TestKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TestKit;
 		};
 		D433852B27ABC8150069DD33 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;

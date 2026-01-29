@@ -14,30 +14,6 @@ extension XCTestCase {
         XCTWaiter().wait(for: [expectation], timeout: timeout)
     }
 
-    @MainActor
-    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(
-                instance,
-                "Instance should have been deallocated, potential memory leak.",
-                file: file,
-                line: line
-            )
-        }
-    }
-
-    /// Unwraps un async method return value.
-    ///
-    /// It is a wrapper of XCTUnwrap. Since is not possible to do ```XCTUnwrap(await asyncMethod())```
-    ///
-    /// it has to be done always in two steps, this method make it one line for users.
-    func unwrapAsync<T>(asyncMethod: () async throws -> T?,
-                        file: StaticString = #filePath,
-                        line: UInt = #line) async throws -> T {
-        let returnValue = try await asyncMethod()
-        return try XCTUnwrap(returnValue, file: file, line: line)
-    }
-
     /// Helper function to cast a value to `AnyHashable`.
     func asAnyHashable<T>(_ value: T) -> AnyHashable? {
         return value as? AnyHashable
@@ -64,38 +40,5 @@ extension XCTestCase {
     static func tearDownTelemetry() {
         TelemetryWrapper.hasTelemetryOverride = false
         DependencyHelperMock().reset()
-    }
-
-    // MARK: Error Handling
-    /// Convenience method to simplify error checking in the test cases for non Equatable types.
-    @MainActor
-    func assertAsyncThrows<E: Error, T>(
-        ofType expectedType: E.Type,
-        _ expression: @MainActor () async throws -> T,
-        file: StaticString = #filePath,
-        line: UInt = #line,
-        verify: (@MainActor (E) -> Void)? = nil
-    ) async {
-        do {
-            _ = try await expression()
-            XCTFail("Expected error \(expectedType), but no error thrown.", file: file, line: line)
-        } catch let error as E {
-            verify?(error)
-        } catch {
-            XCTFail("Expected error \(expectedType), but got \(error)", file: file, line: line)
-        }
-    }
-
-    /// Convenience method to simplify error checking in the test cases for Equatable types.
-    @MainActor
-    func assertAsyncThrowsEqual<E: Error & Equatable, T>(
-        _ expected: E,
-        _ expression: @MainActor () async throws -> T,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) async {
-        await assertAsyncThrows(ofType: E.self, expression, file: file, line: line) { error in
-            XCTAssertEqual(error, expected, file: file, line: line)
-        }
     }
 }
