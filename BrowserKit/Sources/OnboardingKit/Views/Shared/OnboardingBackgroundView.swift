@@ -56,7 +56,8 @@ private struct ImageBackgroundView: ThemeableView {
     var body: some View {
         GeometryReader { geometry in
             let assetName = imageName(for: theme.type)
-            if let image = UIImage(named: assetName, in: .module, with: nil) ?? UIImage(named: assetName, in: .main, with: nil) {
+            if let image = UIImage(named: assetName, in: .module, with: nil)
+                          ?? UIImage(named: assetName, in: .main, with: nil) {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)

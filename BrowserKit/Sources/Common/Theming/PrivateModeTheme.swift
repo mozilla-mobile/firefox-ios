@@ -58,7 +58,12 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var actionPrimary: UIColor = FXColors.Blue30
     var actionPrimaryHover: UIColor = FXColors.Blue20
     var actionPrimaryDisabled: UIColor = FXColors.Blue30.withAlphaComponent(0.5)
-    var actionPrimaryBrandRefresh: UIColor = UIColor(red: 0xB9/255.0, green: 0xA6/255.0, blue: 0xFF/255.0, alpha: 1.0) // #B9A6FF
+    var actionPrimaryBrandRefresh = UIColor(
+        red: 0xB9/255.0,
+        green: 0xA6/255.0,
+        blue: 0xFF/255.0,
+        alpha: 1.0
+    ) // #B9A6FF
     var actionSecondary: UIColor = FXColors.DarkGrey05
     var actionSecondaryDisabled: UIColor = FXColors.DarkGrey05.withAlphaComponent(0.5)
     var actionSecondaryHover: UIColor = FXColors.LightGrey90
