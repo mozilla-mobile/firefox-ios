@@ -118,8 +118,6 @@ class OnboardingTests: BaseTestCase {
             app.buttons["Close"].tapIfExists()
             let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
             mozWaitForElementToExist(topSites)
-
-
     }
 
     // Smoketest TAE
