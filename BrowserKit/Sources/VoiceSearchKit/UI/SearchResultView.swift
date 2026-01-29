@@ -46,7 +46,7 @@ final class SearchResultView: UIView, ThemeApplicable {
         titleLabel.text = title
         bodyLabel.text = body
     }
-    
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         titleLabel.textColor = theme.colors.textPrimary
