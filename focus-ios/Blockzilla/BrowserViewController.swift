@@ -464,6 +464,20 @@ final class BrowserViewController: UIViewController {
         }
     }
 
+    private func handleSearchBarAction() -> UIViewController? {
+        return self.tooltipController(
+            anchoredBy: self.urlBar.textFieldAnchor,
+            sourceRect: CGRect(
+                x: self.urlBar.textFieldAnchor.bounds.minX,
+                y: self.urlBar.textFieldAnchor.bounds.maxY,
+                width: 0,
+                height: 0
+            ),
+            body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
+            dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
+        )
+    }
+
     private func setupOnboardingEvents() {
         var presentedController: UIViewController?
         onboardingEventsHandler
