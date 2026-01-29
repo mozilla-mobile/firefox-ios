@@ -59,7 +59,7 @@ final class NimbusFeatureFlagLayer: Sendable {
             return checkHomepageSearchBarFeature(from: nimbus)
 
         case .homepageStoriesScrollDirection:
-            return checkHomepageStoriesScrollDirectionFeature(from: nimbus) != .control
+            return checkHomepageStoriesScrollDirectionFeature(from: nimbus) != .baseline
 
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)

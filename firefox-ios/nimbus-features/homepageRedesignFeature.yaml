@@ -13,7 +13,7 @@ features:
         description: >
           Controls the layout direction for stories on the homepage.
         type: ScrollDirection
-        default: control
+        default: baseline
       bookmarks-section-default:
         description: >
           If true, enables the bookmarks homepage section by default
@@ -29,14 +29,14 @@ features:
       - channel: beta
         value:
           search-bar: false
-          stories-scroll-direction: control
+          stories-scroll-direction: baseline
           bookmarks-section-default: false
           jbi-section-default: false
 
       - channel: developer
         value:
           search-bar: false
-          stories-scroll-direction: control
+          stories-scroll-direction: baseline
           bookmarks-section-default: false
           jbi-section-default: false
 
@@ -44,7 +44,7 @@ enums:
   ScrollDirection:
     description: The layout direction for stories on the homepage.
     variants:
-      control:
+      baseline:
         description: Uses the current default stories layout.
       vertical:
         description: Shows stories in a vertical layout.
