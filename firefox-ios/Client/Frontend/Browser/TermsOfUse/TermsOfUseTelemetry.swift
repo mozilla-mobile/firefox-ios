@@ -87,19 +87,16 @@ struct TermsOfUseTelemetry {
 
     static func setUsageMetrics(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
                                 profile: Profile = AppContainer.shared.resolve()) {
+        // Use TermsOfUseAccepted (migrated from TermsOfServiceAccepted)
         let hasAcceptedTermsOfUse = profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
-        let hasAcceptedTermsOfService = profile.prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
 
-        if hasAcceptedTermsOfUse || hasAcceptedTermsOfService {
-            let datePref = hasAcceptedTermsOfUse ? PrefsKeys.TermsOfUseAcceptedDate : PrefsKeys.TermsOfServiceAcceptedDate
-            if let acceptedTimestamp = profile.prefs.timestampForKey(datePref) {
+        if hasAcceptedTermsOfUse {
+            if let acceptedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate) {
                 let acceptedDate = Date.fromTimestamp(acceptedTimestamp)
                 gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
             }
 
-            let versionPref = hasAcceptedTermsOfUse ? PrefsKeys.TermsOfUseAcceptedVersion :
-                PrefsKeys.TermsOfServiceAcceptedVersion
-            if let versionString = profile.prefs.stringForKey(versionPref),
+            if let versionString = profile.prefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion),
                let version = Int64(versionString) {
                 gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: version)
             }
