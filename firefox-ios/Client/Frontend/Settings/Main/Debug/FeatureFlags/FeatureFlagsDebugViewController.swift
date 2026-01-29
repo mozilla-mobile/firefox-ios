@@ -165,6 +165,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .snapkitRemovalRefactor,
+                titleText: format(string: "SnapKit Removal Refactor"),
+                statusText: format(string: "Toggle to enable SnapKit removal refactor")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .tabScrollRefactorFeature,
                 titleText: format(string: "Tab scroll refactor"),
                 statusText: format(string: "Toggle to enable tab scroll refactor feature")
