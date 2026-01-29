@@ -358,19 +358,7 @@ final class BrowserViewController: UIViewController {
             return handleMenuAction()
 
         case .widgetTutorial:
-            let controller = PortraitHostingController(
-                rootView: ShowMeHowOnboardingView(
-                    config: .init(
-                        title: UIConstants.strings.titleShowMeHowOnboardingV2,
-                        subtitleStep1: UIConstants.strings.subtitleStepOneShowMeHowOnboardingV2,
-                        subtitleStep2: UIConstants.strings.subtitleStepTwoShowMeHowOnboardingV2,
-                        subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
-                        buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
-                        widgetText: UIConstants.strings.searchInAppInstruction),
-                    dismissAction: { [unowned self] in self.onboardingEventsHandler.route = nil }))
-            controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
-            controller.isModalInPresentation = true
-            return controller
+            return handleWidgetTutorialAction()
         }
     }
 
