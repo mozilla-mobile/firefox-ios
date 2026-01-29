@@ -96,7 +96,6 @@ final class BrowserViewControllerConstraintTests: XCTestCase {
 
     // MARK: - Header Constraints Tests
 
-
     func test_header_hasHorizontalConstraint() {
         let subject = createSubject()
 
@@ -186,6 +185,92 @@ final class BrowserViewControllerConstraintTests: XCTestCase {
         let frame2 = subject.bottomContainer.frame
 
         XCTAssertEqual(frame1, frame2)
+    }
+
+    // MARK: - Frame/Layout Verification Tests
+
+    func test_bottomContainer_isAtBottomOfScreen() {
+        let subject = createSubject()
+        subject.view.layoutIfNeeded()
+
+        let bottomContainer = subject.bottomContainer
+        let viewBottom = subject.view.bounds.maxY
+        let containerBottom = bottomContainer.frame.maxY
+
+        XCTAssertEqual(containerBottom, viewBottom, accuracy: 1.0)
+    }
+
+    func test_overKeyboardContainer_isAboveBottomContainer() {
+        let subject = createSubject()
+        subject.view.layoutIfNeeded()
+
+        let overKeyboard = subject.overKeyboardContainer
+        let bottomContainer = subject.bottomContainer
+
+        // Verifies that the constraint between overKeyboardContainer and bottomContainer
+        // produces the correct layout (no gap, no overlap).
+        // Bottom edge of overKeyboard should exactly touch top edge of bottomContainer
+        XCTAssertEqual(overKeyboard.frame.maxY, bottomContainer.frame.minY, accuracy: 1.0)
+    }
+
+    func test_containerViews_spanFullWidth() {
+        let subject = createSubject()
+        subject.view.layoutIfNeeded()
+
+        let viewWidth = subject.view.bounds.width
+
+        XCTAssertEqual(subject.bottomContainer.frame.width, viewWidth, accuracy: 1.0)
+        XCTAssertEqual(subject.overKeyboardContainer.frame.width, viewWidth, accuracy: 1.0)
+        XCTAssertEqual(subject.header.frame.width, viewWidth, accuracy: 1.0)
+    }
+
+    // MARK: - Height Constraint Tests
+
+    func test_overKeyboardContainer_hasHeightConstraint() {
+        let subject = createSubject()
+
+        let overKeyboard = subject.overKeyboardContainer
+        let hasHeightConstraint = overKeyboard.constraints.contains {
+            $0.firstAttribute == .height || $0.secondAttribute == .height
+        }
+
+        XCTAssertTrue(hasHeightConstraint)
+    }
+
+    // MARK: - Additional Container Tests
+
+    func test_bottomContentStackView_existsInHierarchy() {
+        let subject = createSubject()
+
+        XCTAssertNotNil(subject.bottomContentStackView)
+        XCTAssertNotNil(subject.bottomContentStackView.superview)
+    }
+
+    func test_readerModeBar_hasConstraintsWhenPresent() {
+        let subject = createSubject()
+
+        // ReaderModeBar is optional, but when present should have constraints
+        if let readerModeBar = subject.readerModeBar {
+            XCTAssertNotNil(readerModeBar.superview)
+            XCTAssertGreaterThan(readerModeBar.constraints.count, 0)
+        }
+    }
+
+    // MARK: - Constraint Priority Tests
+
+    func test_bottomContainer_hasRequiredPriorityConstraints() {
+        let subject = createSubject()
+
+        // Important structural constraints should be required priority
+        let bottomConstraints = subject.view.constraints.filter {
+            $0.firstItem === subject.bottomContainer || $0.secondItem === subject.bottomContainer
+        }
+
+        let requiredConstraints = bottomConstraints.filter {
+            $0.priority == .required
+        }
+
+        XCTAssertGreaterThan(requiredConstraints.count, 0)
     }
 
     // MARK: - Helper Methods
