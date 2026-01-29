@@ -468,6 +468,16 @@ final class BrowserViewController: UIViewController {
         )
     }
 
+    private func handleOnboardingAction(onboardingType: OnboardingVersion) -> UIViewController? {
+        let dismissOnboarding = { [unowned self] in
+            UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
+            urlBar.activateTextField()
+            onboardingEventsHandler.dismissTooltip(route: .onboarding(.v2))
+            onboardingEventsHandler.send(.enterHome)
+        }
+        return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelemetry.handle(event:))
+    }
+
     private func setupOnboardingEvents() {
         var presentedController: UIViewController?
         onboardingEventsHandler
