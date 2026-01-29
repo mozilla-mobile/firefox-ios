@@ -46,7 +46,6 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         let navigationUrl = navigationAction.request.url
-        let navigationUrlString = navigationUrl?.absoluteString ?? ""
 
         // Check for "data" scheme using WebViewNavigationHandlerImplementation
         let navigationHandler = WebViewNavigationHandlerImplementation { _ in }
@@ -66,9 +65,8 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        if navigationUrl == nil || navigationUrlString.isEmpty {
-            newTab.url = URL(string: "about:blank")
-        }
+        // Set new tab url to about:blank because webViews created through this callback are always popups
+        newTab.url = URL(string: "about:blank")
 
         return newTab.webView
     }
