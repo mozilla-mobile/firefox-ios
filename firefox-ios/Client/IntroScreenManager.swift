@@ -10,6 +10,7 @@ protocol IntroScreenManagerProtocol {
     var shouldShowIntroScreen: Bool { get }
     var isModernOnboardingEnabled: Bool { get }
     var onboardingVariant: OnboardingVariant { get }
+    var onboardingKitVariant: OnboardingKit.OnboardingVariant { get }
     func didSeeIntroScreen()
 }
 
