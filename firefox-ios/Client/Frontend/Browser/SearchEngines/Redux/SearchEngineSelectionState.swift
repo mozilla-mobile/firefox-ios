@@ -4,10 +4,12 @@
 
 import Common
 import Redux
+import CopyWithChanges
 
+@CopyWithChanges
 struct SearchEngineSelectionState: ScreenState {
     var windowUUID: WindowUUID
-    var shouldDismiss: Bool
+
     // Default search engine should appear in position 0
     var searchEngines: [SearchEngineModel]
     // The currently selected search engine, if different from the default. Nil means the user hasn't changed the default.
@@ -23,28 +25,21 @@ struct SearchEngineSelectionState: ScreenState {
             return
         }
 
-        self.init(
-            windowUUID: state.windowUUID,
-            searchEngines: state.searchEngines,
-            selectedSearchEngine: state.selectedSearchEngine,
-            shouldDismiss: state.shouldDismiss
-        )
+        self = state.copyWith()
     }
 
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID, searchEngines: [], selectedSearchEngine: nil)
     }
 
-    private init(
+    init(
         windowUUID: WindowUUID,
         searchEngines: [SearchEngineModel],
         selectedSearchEngine: SearchEngineModel?,
-        shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.searchEngines = searchEngines
         self.selectedSearchEngine = selectedSearchEngine
-        self.shouldDismiss = shouldDismiss
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -62,11 +57,9 @@ struct SearchEngineSelectionState: ScreenState {
                 return defaultState(from: state)
             }
 
-            return SearchEngineSelectionState(
-                windowUUID: state.windowUUID,
-                searchEngines: searchEngines,
-                // With the current usage, we don't want to reset the selectedSearchEngine to nil for didLoadSearchEngines
-                selectedSearchEngine: state.selectedSearchEngine
+            // With the current usage, we don't want to reset the selectedSearchEngine to nil for didLoadSearchEngines
+            return state.copyWith(
+                searchEngines: searchEngines
             )
 
         case SearchEngineSelectionActionType.didTapSearchEngine:
@@ -74,9 +67,7 @@ struct SearchEngineSelectionState: ScreenState {
                   let selectedSearchEngine = action.selectedSearchEngine
             else { return defaultState(from: state) }
 
-            return SearchEngineSelectionState(
-                windowUUID: state.windowUUID,
-                searchEngines: state.searchEngines,
+            return state.copyWith(
                 selectedSearchEngine: selectedSearchEngine
             )
 
@@ -86,10 +77,6 @@ struct SearchEngineSelectionState: ScreenState {
     }
 
     static func defaultState(from state: SearchEngineSelectionState) -> SearchEngineSelectionState {
-        return SearchEngineSelectionState(
-            windowUUID: state.windowUUID,
-            searchEngines: state.searchEngines,
-            selectedSearchEngine: state.selectedSearchEngine
-        )
+        return state.copyWith()
     }
 }
