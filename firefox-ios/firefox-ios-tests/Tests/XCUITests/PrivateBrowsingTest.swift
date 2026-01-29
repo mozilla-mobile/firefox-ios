@@ -18,12 +18,14 @@ class PrivateBrowsingTest: BaseTestCase {
     private var settingScreen: SettingScreen!
     private var tabTray: TabTrayScreen!
     private var browserScreen: BrowserScreen!
+    private var homePageScreen: HomePageScreen!
 
     override func setUp() async throws {
         try await super.setUp()
         settingScreen = SettingScreen(app: app)
         tabTray = TabTrayScreen(app: app)
         browserScreen = BrowserScreen(app: app)
+        homePageScreen = HomePageScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
@@ -318,6 +320,8 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(NewTabScreen)
         // Force close and reopen Firefox
         restartInBackground()
+        navigator.nowAt(NewTabScreen)
+        homePageScreen.assertTabsButtonExists()
         navigator.goto(TabTray)
         navigator.nowAt(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
