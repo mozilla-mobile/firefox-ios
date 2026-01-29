@@ -17,10 +17,7 @@ extension NimbusServerSettings {
     /// from the `Info.plist`, or if it failes to parse as a valid URL, then `nil` is returned.
     /// - Returns: NimbusServerSettings
     static func createFromInfoDictionary(useStagingServer: Bool, usePreviewCollection: Bool) -> NimbusServerSettings? {
-        guard let serverURL = getNimbusEndpoint(useStagingServer: useStagingServer) else {
-            return nil
-        }
-        return NimbusServerSettings(url: serverURL, collection: usePreviewCollection ? "nimbus-preview" : remoteSettingsCollection)
+        return nil
     }
 
     static func getNimbusEndpoint(useStagingServer: Bool) -> URL? {
