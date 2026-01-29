@@ -146,7 +146,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         VStack(alignment: UX.CardView.horizontalAlignmentForCurrentLocale, spacing: UX.Onboarding.Spacing.standard) {
             ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
                 AttributedLinkText<TermsOfUseAction>(
-                    theme: theme,
+                    textColor: theme.colors.textSecondary,
                     linkColor: linkColor,
                     fullText: link.fullText,
                     linkText: link.linkText,

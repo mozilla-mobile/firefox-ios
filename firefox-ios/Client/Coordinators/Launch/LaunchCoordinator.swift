@@ -75,9 +75,7 @@ final class LaunchCoordinator: BaseCoordinator,
 
         // Get the onboarding variant from IntroScreenManager since ToS is shown before intro
         let introManager = IntroScreenManager(prefs: profile.prefs)
-        // Convert Nimbus OnboardingVariant to OnboardingKit OnboardingVariant
-        let onboardingKitVariant = OnboardingKit.OnboardingVariant(rawValue: introManager.onboardingVariant.rawValue)
-            ?? .modern
+        let onboardingKitVariant = introManager.onboardingKitVariant
 
         let viewModel = TermsOfUseFlowViewModel(
             configuration: TermsOfServiceManager.brandRefreshTermsOfUseConfiguration,
@@ -218,9 +216,7 @@ final class LaunchCoordinator: BaseCoordinator,
         )
         self.onboardingService?.telemetryUtility = telemetryUtility
 
-        // Convert Nimbus OnboardingVariant to OnboardingKit OnboardingVariant
-        let onboardingKitVariant = OnboardingKit.OnboardingVariant(rawValue: manager.onboardingVariant.rawValue)
-            ?? .modern
+        let onboardingKitVariant = manager.onboardingKitVariant
 
         let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
             onboardingCards: onboardingModel.cards,

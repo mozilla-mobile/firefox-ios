@@ -59,10 +59,7 @@ class SceneCoordinator: BaseCoordinator,
         let launchScreenVC: UIViewController
         if introManager.isModernOnboardingEnabled && introManager.shouldShowIntroScreen {
             // Show modern launch screen only for first-time users when modern onboarding is enabled
-            // Convert Nimbus OnboardingVariant to OnboardingKit OnboardingVariant
-            let onboardingKitVariant = OnboardingKit.OnboardingVariant(
-                rawValue: introManager.onboardingVariant.rawValue
-            ) ?? .modern
+            let onboardingKitVariant = introManager.onboardingKitVariant
             launchScreenVC = ModernLaunchScreenViewController(
                 windowUUID: windowUUID,
                 coordinator: self,
