@@ -122,11 +122,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private init(logger: Logger = DefaultLogger.shared,
                  profile: Profile = AppContainer.shared.resolve(),
                  gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
-                 config: RelayClientConfiguration = .prod,
                  notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.logger = logger
         self.profile = profile
-        self.config = config
+        let isStaging = profile.prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
+        self.config = isStaging ? .staging : .prod
         self.notificationCenter = notificationCenter
         self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
 
@@ -138,10 +138,16 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool {
         // Note: the prefs key defaults to On. No value (nil) should be treated as true.
-        guard Self.isFeatureEnabled,
-              profile.prefs.boolForKey(PrefsKeys.ShowRelayMaskSuggestions) ?? true,
-              client != nil else {
-            logger.log("Display Relay: false. (Feature / prefs checks.)", level: .info, category: .relay)
+        guard Self.isFeatureEnabled else {
+            logger.log("Display Relay: false. Feature disabled.", level: .info, category: .relay)
+            return false
+        }
+        guard profile.prefs.boolForKey(PrefsKeys.ShowRelayMaskSuggestions) ?? true else {
+            logger.log("Display Relay: false. Local setting disabled.", level: .info, category: .relay)
+            return false
+        }
+        guard client != nil else {
+            logger.log("Display Relay: false. No Relay client.", level: .info, category: .relay)
             return false
         }
         guard let relayRSClient, hasRelayAccount() else {
@@ -316,7 +322,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
         accountStatus = .updating
-        let isStaging = isFxAStaging()
+        let isStaging = config == .staging
         // Fetch the account status (off the main thread)
         Task {
             await fetchRelayAccountAvailability(isStaging: isStaging)
@@ -360,11 +366,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         self.client = client
         isCreatingClient = false
         logger.log("Relay client created.", level: .info, category: .relay)
-    }
-
-    private func isFxAStaging() -> Bool {
-        let prefs = profile.prefs
-        return prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
     }
 
     private func hasRelayAccount() -> Bool {
