@@ -69,6 +69,10 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
         return stubIsModernOnboardingEnabled
     }
 
+    var onboardingKitVariant: OnboardingKit.OnboardingVariant {
+        OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
+    }
+
     func didSeeIntroScreen() {
         didSeeIntroScreenCalled = true
     }
