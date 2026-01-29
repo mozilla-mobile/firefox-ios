@@ -106,3 +106,14 @@ final class AudioWaveformView: UIView, ThemeApplicable {
         barLayers.forEach { $0.backgroundColor = theme.colors.iconPrimary.cgColor }
     }
 }
+
+@available(iOS 17, *)
+#Preview {
+    let view = AudioWaveformView(frame: CGRect(x: 0.0, y: 0.0, width: 100, height: 100))
+    view.applyTheme(theme: LightTheme())
+    view.startAnimating()
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        view.stopAnimating()
+    }
+    return view
+}
