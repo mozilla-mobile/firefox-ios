@@ -2,7 +2,7 @@
 "NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Avancé";
 
 /* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
-"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ ne fait pas confiance à ce site, car le certificat trouvé n’est pas valide pour %2$@.";
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ ne fait pas confiance à ce site, car le certificat détecté n’est pas valable pour %2$@.";
 
 /* On certificate error page, this is the security information shown in the advanced section. */
 "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Ce site n’autorise pas les connexions non sécurisées.";

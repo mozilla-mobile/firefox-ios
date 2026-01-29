@@ -7,6 +7,12 @@
 /* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
 "TermsOfUse.Description.v142" = "Olemme ottaneet käyttöön %@in käyttöehdot ja päivittäneet tietosuojakäytäntömme.";
 
+/* Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text. */
+"TermsOfUse.LearnMoreHere.v147" = "Lisätietoja on saatavilla %@.";
+
+/* Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for variants 1 and 2. */
+"TermsOfUse.Link.HereText.v147" = "täältä";
+
 /* Link shown in the Terms of Use sheet to direct users to more details about the update. */
 "TermsOfUse.Link.LearnMore.v142" = "Lue lisää";
 
