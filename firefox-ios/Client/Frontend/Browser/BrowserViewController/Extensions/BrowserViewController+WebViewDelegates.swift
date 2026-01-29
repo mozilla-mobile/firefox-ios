@@ -65,9 +65,8 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        newTab.isLoadingPopup = true
+        // Set new tab url to about:blank because webViews created through this callback are always popups
         newTab.url = URL(string: "about:blank")
-        newTab.popupURL = navigationUrl
 
         return newTab.webView
     }
@@ -939,10 +938,6 @@ extension BrowserViewController: WKNavigationDelegate {
                                             value: .webviewFail)
 
         webviewTelemetry.cancel()
-
-        if let tab = tabManager[webView], tab === tabManager.selectedTab {
-            tab.isLoadingPopup = false
-        }
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
@@ -968,15 +963,10 @@ extension BrowserViewController: WKNavigationDelegate {
         // original web page in the tab instead of replacing it with an error page.
         let error = error as NSError
         if error.domain == "WebKitErrorDomain" && error.code == 102 {
-            print("🪱 updating tab url to be webview display url")
             return
         }
 
         guard !checkIfWebContentProcessHasCrashed(webView, error: error as NSError) else { return }
-
-        if let tab = tabManager[webView], tab === tabManager.selectedTab {
-            tab.isLoadingPopup = false
-        }
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
             if let tab = tabManager[webView], tab === tabManager.selectedTab {
@@ -1094,11 +1084,7 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
-        print("🪱 starting did commit")
-        print("🪱 webview url \(String(describing: webView.url)), tab url is \(String(describing: tabManager[webView]?.url))")
         guard let tab = tabManager[webView] else { return }
-
-        tab.isLoadingPopup = false
 
         // The main frame JSContext is available, and DOM parsing has begun.
         // Do not execute JS at this point that requires running prior to DOM parsing.
@@ -1146,8 +1132,6 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
-        print("🪱 didFinish")
-        print("🪱 webview url \(String(describing: webView.url)), tab url is \(String(describing: tabManager[webView]?.url))")
         webviewTelemetry.stop()
 
         if let url = webView.url, InternalURL(url) == nil {
@@ -1164,7 +1148,6 @@ extension BrowserViewController: WKNavigationDelegate {
         navigationHandler?.removeDocumentLoading()
 
         if let tab = tabManager[webView] {
-            tab.isLoadingPopup = false
             if tab == tabManager.selectedTab {
                 screenshotHelper.takeScreenshot(
                     tab,
