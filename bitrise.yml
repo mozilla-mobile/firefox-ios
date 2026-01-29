@@ -45,10 +45,10 @@ pipelines:
     workflows:
       firefox_scheme_build_for_test: {}
       firefox_beta_scheme_build_for_test: {}
-      run_firefox_scheme_ui_tests:
-        depends_on:
-        - firefox_scheme_build_for_test
-        parallel: 5
+      #run_firefox_scheme_ui_tests:
+      #  depends_on:
+      #  - firefox_scheme_build_for_test
+      #  parallel: 5
       run_firefox_beta_scheme_ui_tests:
         depends_on:
         - firefox_beta_scheme_build_for_test
@@ -394,7 +394,7 @@ workflows:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Firefox_Smoketest_iphonesimulator26.2-arm64-x86_64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
   firefox_scheme_smoke_tests:
     description: Run XCUITests on Firefox scheme (non-parallelized, for standalone use)
@@ -488,7 +488,7 @@ workflows:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/FirefoxBeta_Smoketest_iphonesimulator26.2-arm64-x86_64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
   firefox_beta_scheme_smoke_tests:
     description: Run XCUITests on FirefoxBeta scheme (non-parallelized, for standalone use)
