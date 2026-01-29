@@ -741,3 +741,38 @@ extension XCUIElementQuery {
         return containingText(text).element(boundBy: 0)
     }
 }
+
+// MARK: - Scheme Detection
+extension BaseTestCase {
+    /// Detects which scheme/bundle the app is running under by checking the app's bundle identifier
+    var currentScheme: AppScheme {
+        // Check the test target's bundle ID which includes the app's bundle ID as prefix
+        let testBundleID = Bundle(for: type(of: self)).bundleIdentifier ?? ""
+
+        if testBundleID.contains("FirefoxBeta") {
+            return .firefoxBeta
+        } else if testBundleID.contains("Firefox") && !testBundleID.contains("Beta") {
+            return .firefox
+        } else {
+            return .fennec
+        }
+    }
+
+    var isFirefoxBeta: Bool {
+        return currentScheme == .firefoxBeta
+    }
+
+    var isFirefox: Bool {
+        return currentScheme == .firefox
+    }
+
+    var isFennec: Bool {
+        return currentScheme == .fennec
+    }
+}
+
+enum AppScheme {
+    case fennec
+    case firefox
+    case firefoxBeta
+}
