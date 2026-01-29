@@ -337,25 +337,7 @@ final class BrowserViewController: UIViewController {
     func controller(for route: ToolTipRoute) -> UIViewController? {
         switch route {
         case .trackingProtectionShield(let version):
-            switch version {
-            case .v2:
-                return self.tooltipController(
-                    anchoredBy: self.urlBar.shieldIconAnchor,
-                    sourceRect: CGRect(x: self.urlBar.shieldIconAnchor.bounds.midX, y: self.urlBar.shieldIconAnchor.bounds.midY + 10, width: 0, height: 0),
-                    body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
-                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil
-                        self.onboardingEventsHandler.send(.showTrash)
-                    }
-                )
-
-            case .v1:
-                return self.tooltipController(
-                    anchoredBy: self.urlBar.shieldIconAnchor,
-                    sourceRect: CGRect(x: self.urlBar.shieldIconAnchor.bounds.midX, y: self.urlBar.shieldIconAnchor.bounds.midY + 10, width: 0, height: 0),
-                    body: UIConstants.strings.tooltipBodyTextForShieldIcon,
-                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
-                )
-            }
+            return handleTrackingProtectionShieldAction(version: version)
 
         case .trash(let version):
             switch version {
