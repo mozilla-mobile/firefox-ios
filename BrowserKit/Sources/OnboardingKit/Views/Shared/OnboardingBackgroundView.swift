@@ -5,8 +5,6 @@
 import SwiftUI
 import Common
 
-// MARK: - OnboardingBackgroundView
-
 /// Background view that chooses gradient or image based on variant.
 struct OnboardingBackgroundView: ThemeableView {
     @State var theme: Theme

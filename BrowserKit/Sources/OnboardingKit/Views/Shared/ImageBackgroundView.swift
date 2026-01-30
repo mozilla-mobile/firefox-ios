@@ -5,8 +5,6 @@
 import SwiftUI
 import Common
 
-// MARK: - ImageBackgroundView
-
 /// Image background view that selects asset based on theme.
 struct ImageBackgroundView: ThemeableView {
     @State var theme: Theme
@@ -26,7 +24,6 @@ struct ImageBackgroundView: ThemeableView {
             Image(uiImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .clipped()
                 .accessibilityHidden(true)
                 .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
