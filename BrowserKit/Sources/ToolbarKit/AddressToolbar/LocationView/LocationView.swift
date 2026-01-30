@@ -535,8 +535,13 @@ final class LocationView: UIView,
 
         DispatchQueue.main.async { [unowned self] in
             if shouldShowKeyboard && config.shouldSelectSearchTerm {
-                urlTextField.text = text
-                urlTextField.selectAll(nil)
+                self.urlTextField.text = text
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                    guard let self else { return }
+                    let start = self.urlTextField.beginningOfDocument
+                    let end = self.urlTextField.endOfDocument
+                    self.urlTextField.selectedTextRange = self.urlTextField.textRange(from: start, to: end)
+                }
             }
         }
     }
