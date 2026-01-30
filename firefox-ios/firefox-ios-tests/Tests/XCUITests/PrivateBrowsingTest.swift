@@ -261,7 +261,7 @@ class PrivateBrowsingTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
 
         // Tap on "Close All Tabs"
-        app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].firstMatch.waitAndTap()
         if #unavailable(iOS 16) {
             // Wait for the screen to refresh first.
             mozWaitForElementToExist(
