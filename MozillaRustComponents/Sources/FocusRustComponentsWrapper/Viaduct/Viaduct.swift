@@ -8,8 +8,6 @@ import Foundation
 #endif
 
 /// The public interface to viaduct.
-/// Right now it doesn't do any "true" viaduct things,
-/// it simply activated the reqwest backend.
 ///
 /// This is a singleton, and should be used via the
 /// `shared` static member.
@@ -19,9 +17,9 @@ public class Viaduct {
 
     private init() {}
 
-    public func useReqwestBackend() {
-        // Note: Doesn't need to synchronize since
-        // use_reqwest_backend is backend by a CallOnce.
-        viaduct_use_reqwest_backend()
+    public func initialize() {
+        // This method is a no-op that exists for historical reasons. Focus
+        // contains Nimbus code, which depends on viaduct but Nimbus is never
+        // actually used.
     }
 }

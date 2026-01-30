@@ -56,7 +56,7 @@ public final class RustFirefoxSuggest: RustFirefoxSuggestProtocol, Sendable {
     public func ingest(emptyOnly: Bool) async throws {
         // Ensure that the Rust networking stack has been initialized before
         // downloading new suggestions. This is safe to call multiple times.
-        Viaduct.shared.useReqwestBackend()
+        Viaduct.shared.initialize()
 
         try await withCheckedThrowingContinuation { continuation in
             writerQueue.async(qos: .utility) {
