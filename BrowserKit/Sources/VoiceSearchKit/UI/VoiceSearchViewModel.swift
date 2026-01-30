@@ -36,6 +36,7 @@ final class VoiceSearchViewModel {
                 recentSpeechResult = result
                 onStateChange?(.recordVoice(result, nil))
                 guard result.isFinal else { continue }
+                service.stopRecordingVoice()
                 await searchVoiceResult(result)
                 break
             }

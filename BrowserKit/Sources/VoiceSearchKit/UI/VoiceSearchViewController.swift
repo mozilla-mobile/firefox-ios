@@ -74,6 +74,17 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
+    
+    public convenience init(
+        windowUUID: WindowUUID,
+        themeManager: any ThemeManager
+    ) {
+        self.init(
+            viewModel: VoiceSearchViewModel(service: DefaultVoiceSearchService()),
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -86,11 +97,15 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         configureButtons()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
-        backgroundRecordEffect.startAnimating()
-        audioWaveform.startAnimating()
         viewModel.onStateChange = { [weak self] in
             self?.onStateChange(state: $0)
         }
+    }
+    
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        backgroundRecordEffect.startAnimating()
+        audioWaveform.startAnimating()
         viewModel.startRecordingVoice()
     }
 
@@ -136,9 +151,14 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         recordButton.addAction(
             UIAction(
                 handler: { [weak self] _ in
-                    self?.audioWaveform.startAnimating()
-                    self?.viewModel.startRecordingVoice()
+                    self?.viewModel.stopRecordingVoice()
                 }),
+            for: .touchUpInside
+        )
+        closeButton.addAction(
+            UIAction(handler: { [weak self] _ in
+                self?.dismiss(animated: true)
+            }),
             for: .touchUpInside
         )
     }
