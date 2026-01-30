@@ -129,10 +129,8 @@ private final class TPStatsBlocklists {
         for blockList in BlocklistName.all {
             let list: [[String: AnyObject]]
             do {
-                guard let path = Bundle.main.path(forResource: blockList.filename, ofType: "json") else {
-                    assertionFailure("Blocklists: bad file path.")
-                    return
-                }
+                guard let bundle = Bundle(identifier: "org.mozilla.ios.Focus.ContentBlocker"),
+                      let path = bundle.path(forResource: blockList.filename, ofType: "json") else {return}
 
                 let json = try Data(contentsOf: URL(fileURLWithPath: path))
                 guard let data = try JSONSerialization.jsonObject(with: json, options: []) as? [[String: AnyObject]] else {
