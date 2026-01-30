@@ -42,6 +42,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case relayIntegration
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
+    case snapkitRemovalRefactor
     case splashScreen
     case startAtHome
     case appleSummarizer
@@ -94,8 +95,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .privacyNotice,
                 .recentSearches,
                 .relayIntegration,
-                .tabScrollRefactorFeature,
                 .sentFromFirefox,
+                .snapkitRemovalRefactor,
+                .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .toolbarTranslucencyRefactor,
@@ -170,6 +172,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .recentSearches,
                 .reportSiteIssue,
                 .sentFromFirefoxTreatmentA,
+                .snapkitRemovalRefactor,
                 .splashScreen,
                 .appleSummarizer,
                 .appleSummarizerToolbarEntrypoint,

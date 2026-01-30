@@ -15,18 +15,6 @@ protocol BrowserDelegate: AnyObject {
         toastContainer: UIView
     )
 
-    /// Returns a tool which can be used to get a snapshot of the homepage
-    @MainActor
-    func homepageScreenshotTool() -> Screenshotable?
-
-    /// Hides or shows the homepage.
-    ///
-    /// Homepage is added to hierarchy when opening the app when swiping tabs is enabled.
-    /// This method hide or show the homepage and it's needed when opening the app
-    /// to avoid an homepage flash on the background.
-    @MainActor
-    func setHomepageVisibility(isVisible: Bool)
-
     /// Show the private homepage to the user as part of felt privacy
     @MainActor
     func showPrivateHomepage(overlayManager: OverlayModeManager)

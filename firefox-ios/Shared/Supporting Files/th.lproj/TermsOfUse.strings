@@ -37,3 +37,6 @@
 /* Title shown at the top of the Terms of Use bottom sheet for variant 1. */
 "TermsOfUse.TitleValue1.v147" = "เงื่อนไขการใช้งาน";
 
+/* Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.TitleValue2.v147" = "ข้อความจาก %@";
+

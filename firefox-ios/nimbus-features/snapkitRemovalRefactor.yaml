@@ -1,0 +1,16 @@
+# The configuration for the SnapKit removal refactor
+features:
+  snapkit-removal-refactor:
+    description: This property defines if SnapKit removal refactor is enbaled
+    variables:
+      enabled:
+        description: If true the SnapKit removal refactor version will be used
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

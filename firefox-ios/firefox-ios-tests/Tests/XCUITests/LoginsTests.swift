@@ -774,6 +774,7 @@ class LoginTest: BaseTestCase {
 
         app.buttons[passwordssQuery.AddLogin.saveButton].waitAndTap()
         mozWaitForElementToExist(app.tables[loginList].otherElements["SAVED PASSWORDS"])
+        loginSettingsScreen.tapSaveButtonIfExists()
     }
 
     func enterTextInField(typedText: String) {

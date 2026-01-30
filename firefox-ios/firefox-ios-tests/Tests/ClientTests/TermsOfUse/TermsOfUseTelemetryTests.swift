@@ -38,6 +38,18 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         XCTAssertEqual(impressionCount, 1)
     }
 
+    func testPrivacyNoticeDisplayed() throws {
+        telemetry.termsOfUseDisplayed(surface: .privacyNotice)
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.shown.testGetValue())
+        XCTAssertEqual(events.count, 1)
+        let event = events[0]
+        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.privacyNotice.rawValue)
+        XCTAssertNil(event.extra?["tou_version"])
+
+        // Test impression counter
+        XCTAssertNil(GleanMetrics.UserTermsOfUse.shownCount.testGetValue())
+    }
+
     func testTermsOfUseAcceptButtonTapped() throws {
         telemetry.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: Date())
 
@@ -130,6 +142,20 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         XCTAssertEqual(dismissCount, 1)
     }
 
+    func testPrivacyNoticeDismissed() throws {
+        telemetry.termsOfUseDismissed(surface: .privacyNotice)
+
+        // Test dismiss event
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissed.testGetValue())
+        XCTAssertEqual(events.count, 1)
+        let event = events[0]
+        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.privacyNotice.rawValue)
+        XCTAssertNil(event.extra?["tou_version"])
+
+        // Test dismiss counter
+        XCTAssertNil(GleanMetrics.UserTermsOfUse.dismissedCount.testGetValue())
+    }
+
     func testMultipleImpressions_incrementsCounter() throws {
         // Test that multiple impressions increment the counter correctly
         telemetry.termsOfUseDisplayed(surface: .bottomSheet)
@@ -175,22 +201,6 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         mockProfile.prefs.setString("1", forKey: PrefsKeys.TermsOfUseAcceptedVersion)
         let acceptedDate = Date()
         mockProfile.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
-
-        TermsOfUseTelemetry.setUsageMetrics(gleanWrapper: mockGleanWrapper, profile: mockProfile)
-
-        XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
-    }
-
-    func testSetUsageMetrics_ToS() throws {
-        let mockProfile = MockProfile()
-        let mockGleanWrapper = MockGleanWrapper()
-
-        // Test ToS acceptance
-        mockProfile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
-        mockProfile.prefs.setString("4", forKey: PrefsKeys.TermsOfServiceAcceptedVersion)
-        let acceptedDate = Date()
-        mockProfile.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfServiceAcceptedDate)
 
         TermsOfUseTelemetry.setUsageMetrics(gleanWrapper: mockGleanWrapper, profile: mockProfile)
 

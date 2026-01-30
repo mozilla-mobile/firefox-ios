@@ -1452,12 +1452,6 @@ class BrowserViewController: UIViewController,
         view.addSubview(overKeyboardContainer)
 
         if isSwipingTabsEnabled {
-            // Add Homepage to view hierarchy so it is possible to take screenshot from it
-            showEmbeddedHomepage(inline: false, isPrivate: false)
-            browserDelegate?.setHomepageVisibility(isVisible: false)
-            addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
-                return self?.browserDelegate?.homepageScreenshotTool()
-            }
             addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
                 return self?.newTabSettings
             }
@@ -2004,13 +1998,6 @@ class BrowserViewController: UIViewController,
             toastContainer: contentContainer
         )
 
-        if isSwipingTabsEnabled {
-            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
-            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
-            // to overlay the homepage.
-            browserDelegate?.setHomepageVisibility(isVisible: true)
-        }
-
         // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
         if !isToolbarTranslucencyRefactorEnabled {
             updateToolbarDisplay()
@@ -2503,61 +2490,41 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
-        // Special case: if the webView.url is nil, set the tab url as "about:blank"
-        // This also handles cases where the url has been set to a previous url but the request has been canceled
-        if webView.url == nil {
-            tab.url = URL(string: "about:blank")
-            // Update UI to reflect the URL we have set the tab to
-            if tab === tabManager.selectedTab {
-                updateUIForReaderHomeStateForTab(tab)
-            }
+        // Special case for popups, do not show URL in the UI until we have loaded
+        // All new popup webViews are created with "about:blank" url
+        if tab.url?.absoluteString == "about:blank" && webView.url == nil {
             return
         }
 
-        // Ensure we do have a URL from that observer
-        // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
-        let url: URL? = if let webURL = webView.url {
-            webURL
-        } else if let changedURL = url {
-            changedURL
-        } else {
-            nil
-        }
-        guard let url else { return }
-        if !url.isFxHomeUrl {
+        if let url, !url.isFxHomeUrl {
             updateToolbarAnimationStateIfNeeded()
         }
+
         // Security safety check (Bugzilla #1933079)
         if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
             tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
             return
         }
 
-        // To prevent spoofing, only change the URL immediately if the new URL is on
-        // the same origin as the current URL. Otherwise, if the origins are different
-        // or either origin is nil, set the tab URL to the URL's origin and return.
-        guard let tabURLOrigin = tab.url?.origin,
-              let urlOrigin = url.origin,
-              tabURLOrigin == urlOrigin else {
-            if let urlOrigin = url.origin,
-               let newTabURL = URL(string: urlOrigin) {
-                tab.url = newTabURL
-                // Update UI to reflect the URL we have set the tab to
-                if tab === tabManager.selectedTab {
-                    updateUIForReaderHomeStateForTab(tab)
-                }
+        // To prevent spoofing, if the origins are equal update the UI always
+        if tab.url?.origin == url?.origin {
+            tab.url = url
+            // Update UI to reflect the URL we have set the tab to
+            if tab === tabManager.selectedTab {
+                updateUIForReaderHomeStateForTab(tab)
             }
-            return
-        }
-        tab.url = url
 
-        // Update UI to reflect the URL we have set the tab to
-        if tab === tabManager.selectedTab {
-            updateUIForReaderHomeStateForTab(tab)
+            // Catch history pushState navigation, but ONLY for same origin navigation,
+            // for reasons above about URL spoofing risk.
+            navigateInTab(tab: tab, webViewStatus: .url)
+        } else {
+            // If the origins are different, only set the tab url and update ui if the tabs current scheme is about
+            // and we are done loading
+            if tab === tabManager.selectedTab, tab.url?.displayURL?.scheme == "about", !tab.isLoading, let url {
+                tab.url = url
+                updateUIForReaderHomeStateForTab(tab)
+            }
         }
-        // Catch history pushState navigation, but ONLY for same origin navigation,
-        // for reasons above about URL spoofing risk.
-        navigateInTab(tab: tab, webViewStatus: .url)
     }
 
     private func handleTitleChanged(tab: Tab) {
@@ -3189,7 +3156,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
-    private func dispatchAvailableContentHeightChangedAction() {
+    func dispatchAvailableContentHeightChangedAction() {
         guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
@@ -4741,13 +4708,6 @@ extension BrowserViewController: TabManagerDelegate {
 
         if needsReload {
             selectedTab.reloadPage()
-        }
-
-        if isSwipingTabsEnabled {
-            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
-            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
-            // to overlay the homepage.
-            browserDelegate?.setHomepageVisibility(isVisible: true)
         }
     }
 

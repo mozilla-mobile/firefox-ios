@@ -53,7 +53,7 @@
 "TodayWidget.TopSitesGalleryDescription" = "Добавьте ярлыки на часто посещаемые и недавно посещённые сайты.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryTitle" = "Топ сайтов";
+"TodayWidget.TopSitesGalleryTitle" = "Любимые сайты";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitleV2" = "Ярлыки веб-сайтов";

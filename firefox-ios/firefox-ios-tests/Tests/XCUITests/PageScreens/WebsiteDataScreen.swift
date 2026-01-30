@@ -25,7 +25,13 @@ final class WebsiteDataScreen {
         let okButton = sel.ALERT_OK_BUTTON.element(in: app)
         okButton.waitAndTap()
         BaseTestCase().mozWaitForElementToNotExist(okButton)
-        sel.BUTTON_DATA_MANAGEMENT.element(in: app).waitAndTap()
+
+        XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
+
+        // Add wait for back button to be enabled
+        let backButton = sel.BUTTON_DATA_MANAGEMENT.element(in: app)
+        BaseTestCase().mozWaitElementEnabled(element: backButton, timeout: TIMEOUT)
+        backButton.waitAndTap()
         sel.BUTTON_SETTINGS.element(in: app).waitAndTap()
         sel.BUTTON_DONE.element(in: app).waitAndTap()
     }

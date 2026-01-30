@@ -21,4 +21,9 @@ final class HomePageScreen {
             collection.swipeUp()
         }
     }
+
+    func assertTabsButtonExists() {
+        let tabsButton = sel.TABS_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(tabsButton)
+    }
 }

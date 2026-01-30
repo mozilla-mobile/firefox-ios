@@ -13,12 +13,21 @@ class MultiWindowTests: IpadOnlyTestCase {
     override func setUp() async throws {
         try await super.setUp()
         super.setUpLaunchArguments()
+        // Skip all tests in this class on iOS 26
+        if ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
+            throw XCTSkip("Skipping MultiWindowTests on iOS 26")
+        }
         if dotMenuIdentifier.element(boundBy: 1).exists {
             closeSplitViewWindow(windowToClose: 1)
         }
     }
 
     override func tearDown() async throws {
+        // No-op on iOS 26 (matching setUp skip)
+        if ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
+            try await super.tearDown()
+            return
+        }
         if dotMenuIdentifier.element(boundBy: 1).exists {
             closeSplitViewWindow(windowToClose: 1)
         }

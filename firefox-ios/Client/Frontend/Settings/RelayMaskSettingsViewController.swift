@@ -91,8 +91,12 @@ final class ManageRelayMasksSetting: Setting {
     private let parentNav: UINavigationController?
 
     override var accessoryView: UIImageView? {
-        let image = UIImage(named: StandardImageIdentifiers.Small.externalLink)
-        return UIImageView(image: image)
+        let image = UIImage(named: StandardImageIdentifiers.Small.externalLink)?.withRenderingMode(.alwaysTemplate)
+        let imageView = UIImageView(image: image)
+        if let theme {
+            imageView.tintColor = theme.colors.iconPrimary
+        }
+        return imageView
     }
 
     override var accessibilityIdentifier: String? {

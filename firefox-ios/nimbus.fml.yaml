@@ -39,6 +39,7 @@ include:
   - nimbus-features/relayIntegrationFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
+  - nimbus-features/snapkitRemovalRefactor.yaml
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml

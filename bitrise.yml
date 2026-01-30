@@ -1581,6 +1581,83 @@ workflows:
         stack: osx-xcode-16.2.x
         machine_type_id: g2.mac.4large
 
+  # Firefox_Unit_Tests_iOS_Versions ensures all unit tests pass on the supported iOS versions.
+  # This workflow runs weekly on Tuesday.
+  # The results are reported to #tmp-firefox-ios-unit-tests.
+  Firefox_Unit_Tests_iOS_Versions:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - xcode-build-for-test@3:
+        title: "Build for Testing"
+        inputs:
+        - scheme: Fennec
+        - configuration: Fennec_Testing
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+    - script@1.2.1:
+        title: "Create .xctestrun files for all iOS versions"
+        inputs:
+        - content: |-
+            SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun"
+            cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
+            cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
+    - xcode-test-without-building@0.5.1:
+        title: "Unit Tests - iPhone 17 (iOS 26.2)"
+        timeout: 6000
+        is_always_run: true
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - scheme: Fennec
+        - configuration: Fennec_Testing
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+    - xcode-test-without-building@0.5.1:
+        title: "Unit Tests - iPhone 16 (iOS 18.6)"
+        timeout: 6000
+        is_always_run: true
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - scheme: Fennec
+        - configuration: Fennec_Testing
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+    - xcode-test-without-building@0.5.1:
+        title: "Unit Tests - iPhone 15 (iOS 17.5)"
+        timeout: 6000
+        is_always_run: true
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - scheme: Fennec
+        - configuration: Fennec_Testing
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+    - deploy-to-bitrise-io@2.10.0: {}
+    - slack@4.2.1:
+        inputs:
+        - webhook_url: $WEBHOOK_SLACK_FIREFOX_IOS_UNIT_TESTS
+        - author_name: ''
+        - pretext: ":white_check_mark: Firefox iOS Unit Tests"
+        - pretext_on_error: ":x: Firefox iOS Unit Tests"
+        - title:
+        - title_on_error:
+        - footer: Mobile Test Engineering
+        - footer_on_error: Mobile Test Engineering
+        - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
+        - footer_icon_on_error: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
+        - fields: |
+            iOS Simulators | iPhone 17 (iOS 26.2), iPhone 16 (iOS 18.6), iPhone 15 (iOS 17.5)
+            Branch | ${BITRISE_GIT_BRANCH}
+        - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
+
+  # Firefox_Unit_Tests runs the unit tests multiple times on weekdays to identify flaky tests on the latest iOS version.
+  # The trends are reported on Bitrise Insights.
   Firefox_Unit_Tests:
     before_run:
     - 1_git_clone_and_post_clone
