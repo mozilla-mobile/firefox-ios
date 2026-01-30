@@ -54,6 +54,7 @@ extension URL {
             self.init(string: SupportTopic.fallbackURL)!
             return
         }
-        self.init(string: "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")!
+        let productPath = topic == .rollouts ? "firefox" : "mobile"
+        self.init(string: "https://support.mozilla.org/1/\(productPath)/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")!
     }
 }

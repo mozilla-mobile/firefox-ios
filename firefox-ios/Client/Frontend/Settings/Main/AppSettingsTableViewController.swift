@@ -249,7 +249,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             titleText: .RolloutsSettingTitle,
             subtitleText: String(format: .RolloutsSettingMessage, AppName.shortName.rawValue),
             learnMoreText: .RolloutsSettingLink,
-            learnMoreURL: SupportUtils.URLForTopic("remote-improvements"),
+            learnMoreURL: SupportUtils.URLForTopic("remote-improvements", useMobilePath: false),
             a11yId: AccessibilityIdentifiers.Settings.SendData.rolloutsTitle,
             learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.rolloutsLearnMoreButton,
             settingsDelegate: parentCoordinator
