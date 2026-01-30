@@ -100,6 +100,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var isNormal: Bool {
         return !isPrivate
     }
+    var isPopup = false
 
     /// The window associated with the tab (where the tab lives and will be displayed).
     /// Currently tabs cannot be actively moved between windows on iPadOS, however this
@@ -514,8 +515,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func createWebview(with restoreSessionData: Data? = nil, configuration: WKWebViewConfiguration) {
+        print("LM ### createWebview(with restoreSessionData CALLED")
+        // Laurie - should we save the configuraton on init? Or is this fine?
         self.configuration = configuration
         if webView == nil {
+            print("LM ### webView == nil, creating it")
             configuration.userContentController = WKUserContentController()
             configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
@@ -536,17 +540,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             restore(webView, interactionState: restoreSessionData)
 
             self.webView = webView
-
-            // FXIOS-5549
-            // There is a crash in didCreateWebView for when webview becomes nil.
-            // We are adding a check before that method gets called as the webview
-            // should not be nil at this point considering we created it above.
-            guard self.webView != nil else {
-                logger.log("No webview found for didCreateWebView.",
-                           level: .fatal,
-                           category: .tabs)
-                return
-            }
 
             configureEdgeSwipeGestureRecognizers()
 

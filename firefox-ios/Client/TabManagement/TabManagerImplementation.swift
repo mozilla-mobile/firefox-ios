@@ -806,7 +806,7 @@ class TabManagerImplementation: NSObject,
     /// This function updates the selectedIndex.
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+    func selectTab(_ tab: Tab?, previous: Tab? = nil, isPopup: Bool = false) {
         assert(Thread.isMainThread)
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
@@ -841,8 +841,12 @@ class TabManagerImplementation: NSObject,
 
         preserveTabs()
 
-        let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
-        selectTabWithSession(tab: tab, sessionData: sessionData)
+        // Laurie - This always happen when we select the tab
+        if !isPopup {
+            print("LM ### SELECTING TAB WITH SESSION - nooooooo")
+            let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
+            selectTabWithSession(tab: tab, sessionData: sessionData)
+        }
 
         // Default to false if the feature flag is not enabled
         var isPrivate = false
@@ -920,9 +924,11 @@ class TabManagerImplementation: NSObject,
 
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
+        // Laurie - we should use the right popup configuration here
         let configuration: WKWebViewConfiguration = tabConfigurationProvider.configuration(
             isPrivate: tab.isPrivate
         ).webViewConfiguration
+        // Laurie - We're overriding the configuration of the pop up?
         selectedTab?.createWebview(with: sessionData, configuration: configuration)
         selectedTab?.lastExecutedTime = Date.now()
     }
@@ -1058,13 +1064,6 @@ class TabManagerImplementation: NSObject,
                      isPopup: true,
                      requiredConfiguration: configuration)
 
-        // Wait momentarily before selecting the new tab, otherwise the parent tab
-        // may be unable to set `window.location` on the popup immediately after
-        // calling `window.open("")`.
-        DispatchQueue.main.asyncAfter(deadline: .now() + delaySelectingNewPopupTab) {
-            self.selectTab(popup)
-        }
-
         return popup
     }
 
@@ -1078,6 +1077,7 @@ class TabManagerImplementation: NSObject,
         isPopup: Bool = false,
         requiredConfiguration: WKWebViewConfiguration? = nil
     ) {
+        print("LM ### Tab is configured")
         assert(Thread.isMainThread)
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
@@ -1101,10 +1101,13 @@ class TabManagerImplementation: NSObject,
         }
 
         if !zombie {
+            print("LM ### Creating webview")
             let configuration: WKWebViewConfiguration
             if let required = requiredConfiguration {
+                print("LM ### requiredConfiguration used")
                 configuration = required
             } else {
+                print("LM ### wrong config used")
                 configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
             }
             tab.createWebview(configuration: configuration)
@@ -1112,8 +1115,10 @@ class TabManagerImplementation: NSObject,
         tab.navigationDelegate = navigationDelegate
 
         if let request = request {
+            print("LM ### going here? request Not supposed to go HER")
             tab.loadRequest(request)
         } else if !isPopup {
+            print("LM ### going here? !isPopup Not supposed to go HER")
             let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
             tab.newTabPageType = newTabChoice
             switch newTabChoice {
@@ -1203,6 +1208,8 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - SessionCreator
+
+    // This will be deleted soon ?
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
         guard let parentTab = self[parent] else { return nil }
         return addPopupForParentTab(profile: profile, parentTab: parentTab, configuration: configuration).webView

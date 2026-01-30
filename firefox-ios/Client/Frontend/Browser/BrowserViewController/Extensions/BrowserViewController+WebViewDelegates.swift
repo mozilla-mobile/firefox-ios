@@ -59,14 +59,20 @@ extension BrowserViewController: WKUIDelegate {
         // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
         // IMPORTANT!!: WebKit will perform the `URLRequest` automatically!! Attempting to do
         // the request here manually leads to incorrect results!!
+
+        print("LM ### create webview with is called")
+        // Laurie - This won't create the webview, and this wont pass the configuraton
         let newTab = tabManager.addPopupForParentTab(
             profile: profile,
             parentTab: parentTab,
             configuration: configuration
         )
-
+        newTab.isPopup = true
         // Set new tab url to about:blank because webViews created through this callback are always popups
         newTab.url = URL(string: "about:blank")
+
+        // Laurie - Select the new tab immediately, but dont create the webview
+        tabManager.selectTab(newTab, isPopup: true)
 
         return newTab.webView
     }
@@ -451,11 +457,13 @@ extension BrowserViewController: WKNavigationDelegate {
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
     // method.
     @MainActor
+    // swiftlint:disable:next function_body_length
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
     ) {
+        print("LM ### decidePolicyFor navigationAction \(String(describing: navigationAction.request.url))")
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
         let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
@@ -466,6 +474,8 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
+
+        print("LM ### isPopup: \(tab.isPopup)")
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
@@ -502,6 +512,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if url.scheme == "about" {
+            print("LM ### url.scheme == ABOUT")
             decisionHandler(.allow)
             return
         }
@@ -707,6 +718,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
+        print("LM ### decidePolicyFor navigationResponse \(String(describing: navigationResponse.response.url))")
         let response = navigationResponse.response
         let responseURL = response.url
 
@@ -1084,6 +1096,7 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
+        print("LM ### didCommit called")
         guard let tab = tabManager[webView] else { return }
 
         // The main frame JSContext is available, and DOM parsing has begun.

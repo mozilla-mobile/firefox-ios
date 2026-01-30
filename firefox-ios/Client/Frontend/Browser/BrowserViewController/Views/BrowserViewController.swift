@@ -2011,11 +2011,13 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // laurie
         if webView.url == nil {
             // The web view can go gray if it was zombified due to memory pressure.
             // When this happens, the URL is nil, so try restoring the page upon selection.
             logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-            if selectedTab.temporaryDocument == nil {
+            if selectedTab.temporaryDocument == nil, !selectedTab.isPopup {
+                print("LM ### WE DONT WANT TO RELOAD NOOOO")
                 selectedTab.reload()
             }
         }
@@ -2475,6 +2477,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    // Laurie, we have two loading, ./isLoading and KVO loading. Are they the same?
     private func handleLoading(isLoading: Bool?, tab: Tab) {
         guard var loading = isLoading else { return }
         if let doc = tab.temporaryDocument {
@@ -4706,7 +4709,8 @@ extension BrowserViewController: TabManagerDelegate {
             needsReload = false
         }
 
-        if needsReload {
+        if needsReload, !selectedTab.isPopup {
+            print("LM ### DO NOOTTTTT reload")
             selectedTab.reloadPage()
         }
     }
