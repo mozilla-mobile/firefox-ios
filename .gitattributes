@@ -1,3 +1,4 @@
 # Don't include third party files in the Github language stats!
 ThirdParty/* linguist-vendored=true
-FxA/* linguist-vendored=true
+FxA/* linguist-vendored=trueMozillaRustComponents/Package.swift merge=ours
+MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated/Metrics/Metrics.swift merge=ours
