@@ -31,7 +31,11 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     public var body: some View {
         GeometryReader { geo in
             ZStack {
-                backgroundGradient
+                backgroundView
+                    .frame(
+                        width: geo.size.width,
+                        height: geo.size.height
+                    )
                 if horizontalSizeClass == .regular {
                     regularLayout
                 } else {
@@ -63,13 +67,15 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                         currentPage: $viewModel.pageCount,
                         numberOfPages: viewModel.onboardingCards.count,
                         windowUUID: windowUUID,
-                        themeManager: themeManager
+                        themeManager: themeManager,
+                        isBrandRefresh: viewModel.variant == .brandRefresh
                     )
                     .padding(.bottom)
                 }
                 .cardBackground(
                     theme: theme,
-                    cornerRadius: UX.CardView.cornerRadius
+                    cornerRadius: UX.CardView.cornerRadius,
+                    variant: viewModel.variant
                 )
             }
             .accessibilityScrollAction { edge in
@@ -99,7 +105,8 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 numberOfPages: viewModel.onboardingCards.count,
                 windowUUID: windowUUID,
                 themeManager: themeManager,
-                style: .compact
+                style: .compact,
+                isBrandRefresh: viewModel.variant == .brandRefresh
             )
             .padding(
                 .bottom,
@@ -114,9 +121,12 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         .ignoresSafeArea(.all, edges: .bottom)
     }
 
-    private var backgroundGradient: some View {
-        AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
-            .ignoresSafeArea()
+    private var backgroundView: some View {
+        OnboardingBackgroundView(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            variant: viewModel.variant
+        )
     }
 
     private var skipButton: some View {
@@ -143,6 +153,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             viewModel: card,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            variant: viewModel.variant,
             onBottomButtonAction: handleBottomButtonAction,
             onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
         )

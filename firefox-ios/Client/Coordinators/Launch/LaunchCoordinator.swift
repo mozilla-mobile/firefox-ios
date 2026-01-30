@@ -73,8 +73,13 @@ final class LaunchCoordinator: BaseCoordinator,
     ) {
         TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
 
+        // Get the onboarding variant from IntroScreenManager since ToS is shown before intro
+        let introManager = IntroScreenManager(prefs: profile.prefs)
+        let onboardingKitVariant = introManager.onboardingKitVariant
+
         let viewModel = TermsOfUseFlowViewModel(
             configuration: TermsOfServiceManager.brandRefreshTermsOfUseConfiguration,
+            variant: onboardingKitVariant,
             onTermsOfUseTap: { [weak self] in
                 guard let self = self else { return }
                 TermsOfServiceTelemetry().termsOfServiceLinkTapped()
@@ -211,9 +216,12 @@ final class LaunchCoordinator: BaseCoordinator,
         )
         self.onboardingService?.telemetryUtility = telemetryUtility
 
+        let onboardingKitVariant = manager.onboardingKitVariant
+
         let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
             onboardingCards: onboardingModel.cards,
             skipText: .Onboarding.LaterAction,
+            variant: onboardingKitVariant,
             onActionTap: { [weak self] action, cardName, completion in
                 guard let onboardingService = self?.onboardingService else { return }
                 onboardingService.handleAction(

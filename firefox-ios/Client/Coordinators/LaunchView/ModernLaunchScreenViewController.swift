@@ -21,6 +21,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
     private let windowUUID: WindowUUID
+    private let variant: OnboardingKit.OnboardingVariant
 
     // MARK: - Themeable Properties
     var themeManager: ThemeManager
@@ -40,7 +41,11 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     }
     private lazy var backgroundViewController: UIHostingController<LaunchScreenBackgroundView> = {
         let controller = UIHostingController(
-            rootView: LaunchScreenBackgroundView(windowUUID: windowUUID, themeManager: themeManager)
+            rootView: LaunchScreenBackgroundView(
+                windowUUID: windowUUID,
+                themeManager: themeManager,
+                variant: variant
+            )
         )
         controller.view.backgroundColor = .clear
         return controller
@@ -49,12 +54,14 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     init(
         windowUUID: WindowUUID,
         coordinator: LaunchFinishedLoadingDelegate,
+        variant: OnboardingKit.OnboardingVariant = .modern,
         viewModel: LaunchScreenViewModel? = nil,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.windowUUID = windowUUID
         self.coordinator = coordinator
+        self.variant = variant
         self.viewModel = viewModel ?? LaunchScreenViewModel(windowUUID: windowUUID)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
