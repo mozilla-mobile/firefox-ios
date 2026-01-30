@@ -80,8 +80,9 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
 
     func test_fetchStories_cachesManyStories_returnsRequired() async throws {
         let control = await createSubject(thresholdHours: 4)
-        control.cache.seed(items: MerinoTestData().getMockDataFeed(), lastUpdated: Date())
-        control.fetcher.stubbedItems = MerinoTestData().getMockDataFeed()
+        let testData = MerinoTestData().getMockDataFeed(30)
+        control.cache.seed(items: testData, lastUpdated: Date())
+        control.fetcher.stubbedItems = testData
 
         let result = try await control.subject.fetchStories(30)
 
