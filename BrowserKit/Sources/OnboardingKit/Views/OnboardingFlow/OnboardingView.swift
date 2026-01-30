@@ -32,6 +32,10 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         GeometryReader { geo in
             ZStack {
                 backgroundView
+                    .frame(
+                        width: geo.size.width,
+                        height: geo.size.height
+                    )
                 if horizontalSizeClass == .regular {
                     regularLayout
                 } else {
@@ -63,7 +67,8 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                         currentPage: $viewModel.pageCount,
                         numberOfPages: viewModel.onboardingCards.count,
                         windowUUID: windowUUID,
-                        themeManager: themeManager
+                        themeManager: themeManager,
+                        isBrandRefresh: viewModel.variant == .brandRefresh
                     )
                     .padding(.bottom)
                 }
@@ -100,7 +105,8 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 numberOfPages: viewModel.onboardingCards.count,
                 windowUUID: windowUUID,
                 themeManager: themeManager,
-                style: .compact
+                style: .compact,
+                isBrandRefresh: viewModel.variant == .brandRefresh
             )
             .padding(
                 .bottom,

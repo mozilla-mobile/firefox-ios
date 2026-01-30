@@ -20,19 +20,17 @@ struct ImageBackgroundView: ThemeableView {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            let assetName = imageName(for: theme.type)
-            if let image = UIImage(named: assetName, in: .module, with: nil)
-                          ?? UIImage(named: assetName, in: .main, with: nil) {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .clipped()
-                    .accessibilityHidden(true)
-            }
+        let assetName = imageName(for: theme.type)
+        if let image = UIImage(named: assetName, in: .module, with: nil)
+                      ?? UIImage(named: assetName, in: .main, with: nil) {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+                .accessibilityHidden(true)
+                .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
         }
-        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     private func imageName(for themeType: ThemeType) -> String {

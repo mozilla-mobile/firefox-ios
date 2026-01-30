@@ -37,6 +37,10 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                     themeManager: themeManager,
                     variant: viewModel.variant
                 )
+                .frame(
+                    width: geometry.size.width,
+                    height: geometry.size.height
+                )
 
                 if horizontalSizeClass == .regular {
                     regularLayout
