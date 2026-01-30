@@ -264,4 +264,8 @@ final class BrowserScreen {
         let text = sel.webPageElement(with: text).element(in: app)
         BaseTestCase().mozWaitForElementToExist(text)
     }
+
+    func tapWebViewTextIfExists(text: String) {
+        app.webViews.staticTexts[text].tapIfExists()
+    }
 }
