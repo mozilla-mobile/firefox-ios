@@ -219,6 +219,9 @@ extension BrowserViewController: WKUIDelegate {
 
             let isPrivate = currentTab.isPrivate
 
+            let showPreview = profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true
+            let urlTitle = !showPreview ? url.absoluteString : (url.normalizedHost ?? url.absoluteString)
+
             let actions = createActions(isPrivate: isPrivate,
                                         url: url,
                                         addTab: self.addTab,
@@ -226,7 +229,7 @@ extension BrowserViewController: WKUIDelegate {
                                         image: elements.image,
                                         currentTab: currentTab,
                                         webView: webView)
-            return UIMenu(title: url.normalizedHost ?? url.absoluteString, children: actions)
+            return UIMenu(title: urlTitle, children: actions)
         }
     }
 
