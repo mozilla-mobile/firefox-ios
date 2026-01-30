@@ -517,7 +517,7 @@ class BrowserViewController: UIViewController,
 
     private var keyboardPressesHandlerValue: Any?
 
-    private var isAuthenticateSelectCreditCardBottomSheet: Bool = false
+    private var isAuthenticateSelectCreditCardBottomSheet = false
 
     var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
