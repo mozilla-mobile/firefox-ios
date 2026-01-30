@@ -469,6 +469,10 @@ class BrowserViewController: UIViewController,
         return featureFlagStatus
     }
 
+    private var isSnapKitRemovalEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -1779,6 +1783,7 @@ class BrowserViewController: UIViewController,
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
+    // MARK: - Snapkit related
 
     private func updateHeaderConstraints() {
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
@@ -1853,7 +1858,7 @@ class BrowserViewController: UIViewController,
         super.updateViewConstraints()
     }
 
-    func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
         remake.left.equalTo(view.safeArea.left)
         remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
@@ -2220,8 +2225,12 @@ class BrowserViewController: UIViewController,
             keyboardBackdrop = UIView()
             keyboardBackdrop?.backgroundColor = currentTheme().colors.layer1
             view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
-            keyboardBackdrop?.snp.makeConstraints { make in
-                make.edges.equalTo(view)
+            if isSnapKitRemovalEnabled {
+                setupKeyboardBackdropConstraints(for: keyboardBackdrop)
+            } else {
+                keyboardBackdrop?.snp.makeConstraints { make in
+                    make.edges.equalTo(view)
+                }
             }
             view.bringSubviewToFront(bottomContainer)
         }
@@ -2245,6 +2254,17 @@ class BrowserViewController: UIViewController,
         // be read by VoiceOver when reading in the
         // Search Controller
         contentContainer.accessibilityElementsHidden = true
+    }
+
+    private func setupKeyboardBackdropConstraints(for backdrop: UIView?) {
+        guard let backdrop else { return }
+        backdrop.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backdrop.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backdrop.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backdrop.topAnchor.constraint(equalTo: view.topAnchor),
+            backdrop.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     func hideSearchController() {
