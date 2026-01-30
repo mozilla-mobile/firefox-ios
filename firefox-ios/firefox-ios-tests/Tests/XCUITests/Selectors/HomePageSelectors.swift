@@ -26,5 +26,5 @@ struct HomePageSelectors: HomePageSelectorsSet {
         groups: ["homepage", "toolbar"]
     )
 
-    var all: [Selector] { [COLLECTION_VIEW] }
+    var all: [Selector] { [COLLECTION_VIEW, TABS_BUTTON] }
 }
