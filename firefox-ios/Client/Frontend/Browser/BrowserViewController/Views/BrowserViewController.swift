@@ -517,6 +517,8 @@ class BrowserViewController: UIViewController,
 
     private var keyboardPressesHandlerValue: Any?
 
+    private var isAuthenticateSelectCreditCardBottomSheet = false
+
     var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
     @available(iOS 13.4, *)
@@ -1890,29 +1892,36 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustBottomSearchBarForKeyboard() {
-        /// On iOS 26+, we use `UIKeyboardLayoutGuide` (https://developer.apple.com/documentation/uikit/uikeyboardlayoutguide)
-        /// to avoid keyboard frame calculation issues. The legacy `keyboardFrameEndUserInfoKey` API returns
-        /// incorrect keyboard frames when autofill displays suggested credentials above the keyboard.
-        /// It  might be an apple bug.
-        /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
-        let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
-
         let keyboardHeight = keyboardState?.intersectionHeightForView(view)
         let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
 
-        guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
-            overKeyboardContainer.removeKeyboardSpacer()
-            return
-        }
-        let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
-            hasAccessoryView: tabManager.selectedTab?.webView?.accessoryView != nil
-        )
-        let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
-        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
-        overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
+        if !isAuthenticateSelectCreditCardBottomSheet {
+            /// On iOS 26+, we use `UIKeyboardLayoutGuide` (https://developer.apple.com/documentation/uikit/uikeyboardlayoutguide)
+            /// to avoid keyboard frame calculation issues. The legacy `keyboardFrameEndUserInfoKey` API returns
+            /// incorrect keyboard frames when autofill displays suggested credentials above the keyboard.
+            /// It  might be an apple bug.
+            /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
+            let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
 
-        // make sure the keyboard spacer has the right color/translucency
-        overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
+                overKeyboardContainer.removeKeyboardSpacer()
+                return
+            }
+            let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
+                hasAccessoryView: tabManager.selectedTab?.webView?.accessoryView != nil
+            )
+            let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
+            let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
+            overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
+
+            // make sure the keyboard spacer has the right color/translucency
+            overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        } else {
+            guard isBottomSearchBar, isKeyboardVisible, keyboardHeight != nil else {
+                overKeyboardContainer.removeKeyboardSpacer()
+                return
+            }
+        }
     }
 
     private func getKeyboardSpacerHeight(keyboardHeight: CGFloat) -> CGFloat {
@@ -3721,6 +3730,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func authenticateSelectCreditCardBottomSheet(frame: WKFrameInfo? = nil) {
+        isAuthenticateSelectCreditCardBottomSheet = true
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
@@ -3736,6 +3746,7 @@ class BrowserViewController: UIViewController,
             case .passCodeRequired:
                 self.navigationHandler?.showRequiredPassCode()
             }
+            isAuthenticateSelectCreditCardBottomSheet = false
         }
     }
 
