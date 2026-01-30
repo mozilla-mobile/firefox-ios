@@ -5011,8 +5011,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 // MARK: JSPromptAlertControllerDelegate
 
-extension BrowserViewController: WKJavascriptPromptAlertControllerDelegate {
-    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
+extension BrowserViewController: JavascriptPromptAlertControllerDelegate {
+    func promptAlertControllerDidDismiss(_ alertController: JavaScriptPromptAlertController) {
         logger.log("JS prompt was dismissed. Will dequeue next alert.",
                    level: .info,
                    category: .webview)
