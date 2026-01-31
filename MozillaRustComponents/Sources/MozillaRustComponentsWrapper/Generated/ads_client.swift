@@ -572,15 +572,7 @@ open class MozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
     public func uniffiCloneHandle() -> UInt64 {
         return try! rustCall { uniffi_ads_client_fn_clone_mozadsclient(self.handle, $0) }
     }
-public convenience init(clientConfig: MozAdsClientConfig?) {
-    let handle =
-        try! rustCall() {
-    uniffi_ads_client_fn_constructor_mozadsclient_new(
-        FfiConverterOptionTypeMozAdsClientConfig.lower(clientConfig),$0
-    )
-}
-    self.init(unsafeFromHandle: handle)
-}
+    // No primary constructor declared for this class.
 
     deinit {
         if handle == 0 {
@@ -706,6 +698,162 @@ public func FfiConverterTypeMozAdsClient_lift(_ handle: UInt64) throws -> MozAds
 #endif
 public func FfiConverterTypeMozAdsClient_lower(_ value: MozAdsClient) -> UInt64 {
     return FfiConverterTypeMozAdsClient.lower(value)
+}
+
+
+
+
+
+
+public protocol MozAdsClientBuilderProtocol: AnyObject, Sendable {
+    
+    func build()  -> MozAdsClient
+    
+    func cacheConfig(cacheConfig: MozAdsCacheConfig)  -> MozAdsClientBuilder
+    
+    func environment(environment: MozAdsEnvironment)  -> MozAdsClientBuilder
+    
+    func telemetry(telemetry: MozAdsTelemetry)  -> MozAdsClientBuilder
+    
+}
+open class MozAdsClientBuilder: MozAdsClientBuilderProtocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_ads_client_fn_clone_mozadsclientbuilder(self.handle, $0) }
+    }
+public convenience init() {
+    let handle =
+        try! rustCall() {
+    uniffi_ads_client_fn_constructor_mozadsclientbuilder_new($0
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_ads_client_fn_free_mozadsclientbuilder(handle, $0) }
+    }
+
+    
+
+    
+open func build() -> MozAdsClient  {
+    return try!  FfiConverterTypeMozAdsClient_lift(try! rustCall() {
+    uniffi_ads_client_fn_method_mozadsclientbuilder_build(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func cacheConfig(cacheConfig: MozAdsCacheConfig) -> MozAdsClientBuilder  {
+    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
+    uniffi_ads_client_fn_method_mozadsclientbuilder_cache_config(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeMozAdsCacheConfig_lower(cacheConfig),$0
+    )
+})
+}
+    
+open func environment(environment: MozAdsEnvironment) -> MozAdsClientBuilder  {
+    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
+    uniffi_ads_client_fn_method_mozadsclientbuilder_environment(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeMozAdsEnvironment_lower(environment),$0
+    )
+})
+}
+    
+open func telemetry(telemetry: MozAdsTelemetry) -> MozAdsClientBuilder  {
+    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
+    uniffi_ads_client_fn_method_mozadsclientbuilder_telemetry(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeMozAdsTelemetry_lower(telemetry),$0
+    )
+})
+}
+    
+
+    
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsClientBuilder: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = MozAdsClientBuilder
+
+    public static func lift(_ handle: UInt64) throws -> MozAdsClientBuilder {
+        return MozAdsClientBuilder(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: MozAdsClientBuilder) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsClientBuilder {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: MozAdsClientBuilder, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsClientBuilder_lift(_ handle: UInt64) throws -> MozAdsClientBuilder {
+    return try FfiConverterTypeMozAdsClientBuilder.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsClientBuilder_lower(_ value: MozAdsClientBuilder) -> UInt64 {
+    return FfiConverterTypeMozAdsClientBuilder.lower(value)
 }
 
 
@@ -1158,64 +1306,6 @@ public func FfiConverterTypeMozAdsCallbacks_lift(_ buf: RustBuffer) throws -> Mo
 #endif
 public func FfiConverterTypeMozAdsCallbacks_lower(_ value: MozAdsCallbacks) -> RustBuffer {
     return FfiConverterTypeMozAdsCallbacks.lower(value)
-}
-
-
-public struct MozAdsClientConfig {
-    public var environment: MozAdsEnvironment
-    public var cacheConfig: MozAdsCacheConfig?
-    public var telemetry: MozAdsTelemetry?
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(environment: MozAdsEnvironment, cacheConfig: MozAdsCacheConfig?, telemetry: MozAdsTelemetry?) {
-        self.environment = environment
-        self.cacheConfig = cacheConfig
-        self.telemetry = telemetry
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension MozAdsClientConfig: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeMozAdsClientConfig: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsClientConfig {
-        return
-            try MozAdsClientConfig(
-                environment: FfiConverterTypeMozAdsEnvironment.read(from: &buf), 
-                cacheConfig: FfiConverterOptionTypeMozAdsCacheConfig.read(from: &buf), 
-                telemetry: FfiConverterOptionTypeMozAdsTelemetry.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: MozAdsClientConfig, into buf: inout [UInt8]) {
-        FfiConverterTypeMozAdsEnvironment.write(value.environment, into: &buf)
-        FfiConverterOptionTypeMozAdsCacheConfig.write(value.cacheConfig, into: &buf)
-        FfiConverterOptionTypeMozAdsTelemetry.write(value.telemetry, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeMozAdsClientConfig_lift(_ buf: RustBuffer) throws -> MozAdsClientConfig {
-    return try FfiConverterTypeMozAdsClientConfig.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeMozAdsClientConfig_lower(_ value: MozAdsClientConfig) -> RustBuffer {
-    return FfiConverterTypeMozAdsClientConfig.lower(value)
 }
 
 
@@ -2235,78 +2325,6 @@ fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterOptionTypeMozAdsTelemetry: FfiConverterRustBuffer {
-    typealias SwiftType = MozAdsTelemetry?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeMozAdsTelemetry.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeMozAdsTelemetry.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeMozAdsCacheConfig: FfiConverterRustBuffer {
-    typealias SwiftType = MozAdsCacheConfig?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeMozAdsCacheConfig.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeMozAdsCacheConfig.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeMozAdsClientConfig: FfiConverterRustBuffer {
-    typealias SwiftType = MozAdsClientConfig?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeMozAdsClientConfig.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeMozAdsClientConfig.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
 fileprivate struct FfiConverterOptionTypeMozAdsIABContent: FfiConverterRustBuffer {
     typealias SwiftType = MozAdsIabContent?
 
@@ -2687,6 +2705,18 @@ private let initializationResult: InitializationResult = {
     if (uniffi_ads_client_checksum_method_mozadsclient_request_tile_ads() != 26296) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_build() != 36609) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_cache_config() != 25689) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_environment() != 6560) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_telemetry() != 36488) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_ads_client_checksum_method_mozadstelemetry_record_build_cache_error() != 30737) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -2702,7 +2732,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_ads_client_checksum_method_mozadstelemetry_record_http_cache_outcome() != 15209) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_constructor_mozadsclient_new() != 65401) {
+    if (uniffi_ads_client_checksum_constructor_mozadsclientbuilder_new() != 31408) {
         return InitializationResult.apiChecksumMismatch
     }
 

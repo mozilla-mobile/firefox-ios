@@ -1674,6 +1674,43 @@ private func uniffiForeignFutureDroppedCallback(handle: UInt64) {
 public func uniffiForeignFutureHandleCountViaduct() -> Int {
     UNIFFI_FOREIGN_FUTURE_HANDLE_MAP.count
 }
+/**
+ * Send a request through an OHTTP channel.
+ *
+ * This encrypts the request and routes it through the configured OHTTP
+ * relay/gateway for the specified channel.
+ *
+ * # Arguments
+ * * `request` - The request to send
+ * * `channel` - The name of the OHTTP channel to use (e.g., "merino")
+ *
+ * # Example (Kotlin)
+ * ```kotlin
+ * val response = sendOhttpRequest(
+ * Request(
+ * method = Method.GET,
+ * url = "https://example.com/api",
+ * headers = mapOf("Accept" to "application/json"),
+ * body = null
+ * ),
+ * "merino"
+ * )
+ * ```
+ */
+public func sendOhttpRequest(request: Request, channel: String)async throws  -> Response  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_viaduct_fn_func_send_ohttp_request(FfiConverterTypeRequest_lower(request),FfiConverterString.lower(channel)
+                )
+            },
+            pollFunc: ffi_viaduct_rust_future_poll_rust_buffer,
+            completeFunc: ffi_viaduct_rust_future_complete_rust_buffer,
+            freeFunc: ffi_viaduct_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterTypeResponse_lift,
+            errorHandler: FfiConverterTypeViaductError_lift
+        )
+}
 public func initBackend(backend: Backend)throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
     uniffi_viaduct_fn_func_init_backend(
         FfiConverterTypeBackend_lower(backend),$0
@@ -1754,6 +1791,9 @@ private let initializationResult: InitializationResult = {
     let scaffolding_contract_version = ffi_viaduct_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
+    }
+    if (uniffi_viaduct_checksum_func_send_ohttp_request() != 6311) {
+        return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_viaduct_checksum_func_init_backend() != 54406) {
         return InitializationResult.apiChecksumMismatch
