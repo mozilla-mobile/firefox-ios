@@ -129,4 +129,9 @@ enum UX {
         static let cornerRadius: CGFloat = 8
         static let glassCornerRadius: CGFloat = 25
     }
+
+    enum Background {
+        static let brandRefreshLight = "backgroundBrandRefreshLight"
+        static let brandRefreshDark = "backgroundBrandRefreshDark"
+    }
 }

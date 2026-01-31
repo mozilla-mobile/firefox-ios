@@ -7,15 +7,18 @@ import Common
 
 struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View {
     let theme: Theme
+    let variant: OnboardingVariant
     @Binding var selection: Action
     let items: [OnboardingMultipleChoiceButtonModel<Action>]
 
     init(
         theme: Theme,
+        variant: OnboardingVariant,
         selection: Binding<Action>,
         items: [OnboardingMultipleChoiceButtonModel<Action>]
     ) {
         self.theme = theme
+        self.variant = variant
         self._selection = selection
         self.items = items
     }
@@ -35,6 +38,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     private func segmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
         OnboardingSegmentedButton(
             theme: theme,
+            variant: variant,
             item: item,
             isSelected: item.action == selection,
             action: {

@@ -17,6 +17,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let viewModel: ViewModel
+    let variant: OnboardingVariant
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
     let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
 
@@ -24,12 +25,14 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
+        variant: OnboardingVariant,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.variant = variant
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -56,6 +59,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                 Spacer(minLength: UX.CardView.minContentSpacing)
                 OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                     theme: theme,
+                    variant: variant,
                     selection: $selectedAction,
                     items: viewModel.multipleChoiceButtons
                 )
@@ -88,7 +92,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         }
         .scrollBounceBehavior(basedOnSize: true)
         .if(horizontalSizeClass != .regular) { view in
-            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: variant)
         }
     }
 
@@ -124,7 +128,8 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                 )
             },
             theme: theme,
-            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+            variant: variant
         )
         .if(horizontalSizeClass == .regular) { view in
             view.frame(maxWidth: UX.CardView.primaryButtonWidthiPad)

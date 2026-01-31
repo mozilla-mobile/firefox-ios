@@ -920,7 +920,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
 
     private func setupNimbusCardsFromActions(
         _ actions: [OnboardingActions],
-        variant: OnboardingVariant,
+        variant: Client.OnboardingVariant,
         onboardingType: Client.OnboardingType = .freshInstall,
         multipleChoiceButtons: [NimbusOnboardingMultipleChoiceButton] = [],
         instructionsPopup: NimbusOnboardingInstructionPopup? = nil
@@ -954,7 +954,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     }
 
     private func createCard(
-        variant: OnboardingVariant,
+        variant: Client.OnboardingVariant,
         order: Int,
         onboardingType: Client.OnboardingType = .freshInstall,
         title: String = "Test Title",
