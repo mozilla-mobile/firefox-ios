@@ -197,9 +197,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         isGeneratingMask = true
         Task {
             defer { isGeneratingMask = false }
-            let timestamp = Date()
             let (email, result) = await generateRelayMask(for: tab.url?.baseDomain ?? "", client: client)
-            logger.log("Got mask (\(timestamp.timeIntervalSinceNow * -1000.0) ms).", level: .info, category: .relay)
             if result == .expiredToken && !isRetry {
                 // Attempt a single retry of OAuth refresh
                 attemptOAuthTokenRefresh(tab: tab, completion: completion)
