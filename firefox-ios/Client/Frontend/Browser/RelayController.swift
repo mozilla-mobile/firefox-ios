@@ -240,7 +240,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     // MARK: - Private Utilities
 
     private func invalidateClient() {
-        guard let acctManager = RustFirefoxAccounts.shared.accountManager else { return }
         client = nil
     }
 
