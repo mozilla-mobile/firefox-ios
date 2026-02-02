@@ -322,6 +322,7 @@ class PrivateBrowsingTest: BaseTestCase {
         restartInBackground()
         navigator.nowAt(NewTabScreen)
         homePageScreen.assertTabsButtonExists()
+        homePageScreen.waitUntilTabsButtonHittable()
         navigator.goto(TabTray)
         navigator.nowAt(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
