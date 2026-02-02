@@ -168,6 +168,28 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["net1", "net2"])
     }
 
+    func test_fetchStories_returnsCached_whenWithinOneHourThreshold() async throws {
+        let control = await createSubject(thresholdHours: 1)
+        control.cache.seed(items: [.makeItem("cached")], lastUpdated: Date().addingTimeInterval(-30 * 60))
+        control.fetcher.stubbedItems = [.makeItem("network")]
+
+        let result = try await control.subject.fetchStories(10)
+
+        XCTAssertEqual(result.map(\.title), ["cached"])
+        XCTAssertEqual(control.fetcher.callCount, 0)
+    }
+
+    func test_fetchStories_fetchesFromNetwork_whenOneHourThresholdPassed() async throws {
+        let control = await createSubject(thresholdHours: 1)
+        control.cache.seed(items: [.makeItem("old")], lastUpdated: Date().addingTimeInterval(-61 * 60))
+        control.fetcher.stubbedItems = [.makeItem("fresh")]
+
+        let result = try await control.subject.fetchStories(10)
+
+        XCTAssertEqual(result.map(\.title), ["fresh"])
+        XCTAssertEqual(control.fetcher.callCount, 1)
+    }
+
     private func createSubject(
         thresholdHours: Double = 4,
         prefsEnabled: Bool = true,

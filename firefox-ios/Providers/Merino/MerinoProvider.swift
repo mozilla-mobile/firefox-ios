@@ -30,7 +30,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     }
 
     init(
-        withThresholdInHours threshold: Double = 4,
+        withThresholdInHours threshold: Double = 1,
         prefs: Prefs,
         cache: CuratedRecommendationsCacheProtocol = CuratedRecommendationCacheUtility(),
         logger: Logger = DefaultLogger.shared,
@@ -47,9 +47,9 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     }
 
     func fetchStories(_ numberOfRequestedStories: Int) async throws -> [RecommendationDataItem] {
-        if !AppConstants.isRunningTest && shouldUseMockData {
-            return Array(MerinoTestData().getMockDataFeed(numberOfRequestedStories))
-        }
+//        if !AppConstants.isRunningTest && shouldUseMockData {
+//            return Array(MerinoTestData().getMockDataFeed(numberOfRequestedStories))
+//        }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
               MerinoProvider.isLocaleSupported(Locale.current.identifier)
