@@ -1765,6 +1765,8 @@ class BrowserViewController: UIViewController,
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
         } else {
+            // Notes for Winnie
+            // I realize that if the flag is off we should still call this 
             updateHeaderConstraints()
         }
         setupBlurViews()
