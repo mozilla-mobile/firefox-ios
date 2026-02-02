@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -519,13 +538,13 @@ public protocol CuratedRecommendationsClientProtocol: AnyObject, Sendable {
     
 }
 open class CuratedRecommendationsClient: CuratedRecommendationsClientProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -535,44 +554,45 @@ open class CuratedRecommendationsClient: CuratedRecommendationsClientProtocol, @
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_merino_fn_clone_curatedrecommendationsclient(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_merino_fn_clone_curatedrecommendationsclient(self.handle, $0) }
     }
 public convenience init(config: CuratedRecommendationsConfig)throws  {
-    let pointer =
+    let handle =
         try rustCallWithError(FfiConverterTypeCuratedRecommendationsApiError_lift) {
     uniffi_merino_fn_constructor_curatedrecommendationsclient_new(
         FfiConverterTypeCuratedRecommendationsConfig_lower(config),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_merino_fn_free_curatedrecommendationsclient(pointer, $0) }
+        try! rustCall { uniffi_merino_fn_free_curatedrecommendationsclient(handle, $0) }
     }
 
     
@@ -580,13 +600,15 @@ public convenience init(config: CuratedRecommendationsConfig)throws  {
     
 open func getCuratedRecommendations(request: CuratedRecommendationsRequest)throws  -> CuratedRecommendationsResponse  {
     return try  FfiConverterTypeCuratedRecommendationsResponse_lift(try rustCallWithError(FfiConverterTypeCuratedRecommendationsApiError_lift) {
-    uniffi_merino_fn_method_curatedrecommendationsclient_get_curated_recommendations(self.uniffiClonePointer(),
+    uniffi_merino_fn_method_curatedrecommendationsclient_get_curated_recommendations(
+            self.uniffiCloneHandle(),
         FfiConverterTypeCuratedRecommendationsRequest_lower(request),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -594,33 +616,24 @@ open func getCuratedRecommendations(request: CuratedRecommendationsRequest)throw
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeCuratedRecommendationsClient: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = CuratedRecommendationsClient
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> CuratedRecommendationsClient {
-        return CuratedRecommendationsClient(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> CuratedRecommendationsClient {
+        return CuratedRecommendationsClient(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: CuratedRecommendationsClient) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: CuratedRecommendationsClient) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CuratedRecommendationsClient {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: CuratedRecommendationsClient, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -628,21 +641,21 @@ public struct FfiConverterTypeCuratedRecommendationsClient: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeCuratedRecommendationsClient_lift(_ pointer: UnsafeMutableRawPointer) throws -> CuratedRecommendationsClient {
-    return try FfiConverterTypeCuratedRecommendationsClient.lift(pointer)
+public func FfiConverterTypeCuratedRecommendationsClient_lift(_ handle: UInt64) throws -> CuratedRecommendationsClient {
+    return try FfiConverterTypeCuratedRecommendationsClient.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeCuratedRecommendationsClient_lower(_ value: CuratedRecommendationsClient) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeCuratedRecommendationsClient_lower(_ value: CuratedRecommendationsClient) -> UInt64 {
     return FfiConverterTypeCuratedRecommendationsClient.lower(value)
 }
 
 
 
 
-public struct CuratedRecommendationsBucket {
+public struct CuratedRecommendationsBucket: Equatable, Hashable, Codable {
     public var recommendations: [RecommendationDataItem]
     public var title: String?
 
@@ -652,33 +665,15 @@ public struct CuratedRecommendationsBucket {
         self.recommendations = recommendations
         self.title = title
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CuratedRecommendationsBucket: Sendable {}
 #endif
-
-
-extension CuratedRecommendationsBucket: Equatable, Hashable {
-    public static func ==(lhs: CuratedRecommendationsBucket, rhs: CuratedRecommendationsBucket) -> Bool {
-        if lhs.recommendations != rhs.recommendations {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(recommendations)
-        hasher.combine(title)
-    }
-}
-
-extension CuratedRecommendationsBucket: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -714,7 +709,7 @@ public func FfiConverterTypeCuratedRecommendationsBucket_lower(_ value: CuratedR
 }
 
 
-public struct CuratedRecommendationsConfig {
+public struct CuratedRecommendationsConfig: Equatable, Hashable, Codable {
     public var baseHost: String?
     public var userAgentHeader: String
 
@@ -724,33 +719,15 @@ public struct CuratedRecommendationsConfig {
         self.baseHost = baseHost
         self.userAgentHeader = userAgentHeader
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CuratedRecommendationsConfig: Sendable {}
 #endif
-
-
-extension CuratedRecommendationsConfig: Equatable, Hashable {
-    public static func ==(lhs: CuratedRecommendationsConfig, rhs: CuratedRecommendationsConfig) -> Bool {
-        if lhs.baseHost != rhs.baseHost {
-            return false
-        }
-        if lhs.userAgentHeader != rhs.userAgentHeader {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(baseHost)
-        hasher.combine(userAgentHeader)
-    }
-}
-
-extension CuratedRecommendationsConfig: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -786,7 +763,7 @@ public func FfiConverterTypeCuratedRecommendationsConfig_lower(_ value: CuratedR
 }
 
 
-public struct CuratedRecommendationsRequest {
+public struct CuratedRecommendationsRequest: Equatable, Hashable, Codable {
     public var locale: CuratedRecommendationLocale
     public var region: String?
     public var count: Int32?
@@ -810,61 +787,15 @@ public struct CuratedRecommendationsRequest {
         self.experimentBranch = experimentBranch
         self.enableInterestPicker = enableInterestPicker
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CuratedRecommendationsRequest: Sendable {}
 #endif
-
-
-extension CuratedRecommendationsRequest: Equatable, Hashable {
-    public static func ==(lhs: CuratedRecommendationsRequest, rhs: CuratedRecommendationsRequest) -> Bool {
-        if lhs.locale != rhs.locale {
-            return false
-        }
-        if lhs.region != rhs.region {
-            return false
-        }
-        if lhs.count != rhs.count {
-            return false
-        }
-        if lhs.topics != rhs.topics {
-            return false
-        }
-        if lhs.feeds != rhs.feeds {
-            return false
-        }
-        if lhs.sections != rhs.sections {
-            return false
-        }
-        if lhs.experimentName != rhs.experimentName {
-            return false
-        }
-        if lhs.experimentBranch != rhs.experimentBranch {
-            return false
-        }
-        if lhs.enableInterestPicker != rhs.enableInterestPicker {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(locale)
-        hasher.combine(region)
-        hasher.combine(count)
-        hasher.combine(topics)
-        hasher.combine(feeds)
-        hasher.combine(sections)
-        hasher.combine(experimentName)
-        hasher.combine(experimentBranch)
-        hasher.combine(enableInterestPicker)
-    }
-}
-
-extension CuratedRecommendationsRequest: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -914,7 +845,7 @@ public func FfiConverterTypeCuratedRecommendationsRequest_lower(_ value: Curated
 }
 
 
-public struct CuratedRecommendationsResponse {
+public struct CuratedRecommendationsResponse: Equatable, Hashable, Codable {
     public var recommendedAt: Int64
     public var data: [RecommendationDataItem]
     public var feeds: Feeds?
@@ -928,41 +859,15 @@ public struct CuratedRecommendationsResponse {
         self.feeds = feeds
         self.interestPicker = interestPicker
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CuratedRecommendationsResponse: Sendable {}
 #endif
-
-
-extension CuratedRecommendationsResponse: Equatable, Hashable {
-    public static func ==(lhs: CuratedRecommendationsResponse, rhs: CuratedRecommendationsResponse) -> Bool {
-        if lhs.recommendedAt != rhs.recommendedAt {
-            return false
-        }
-        if lhs.data != rhs.data {
-            return false
-        }
-        if lhs.feeds != rhs.feeds {
-            return false
-        }
-        if lhs.interestPicker != rhs.interestPicker {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(recommendedAt)
-        hasher.combine(data)
-        hasher.combine(feeds)
-        hasher.combine(interestPicker)
-    }
-}
-
-extension CuratedRecommendationsResponse: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1002,7 +907,7 @@ public func FfiConverterTypeCuratedRecommendationsResponse_lower(_ value: Curate
 }
 
 
-public struct FakespotCta {
+public struct FakespotCta: Equatable, Hashable, Codable {
     public var ctaCopy: String
     public var url: String
 
@@ -1012,33 +917,15 @@ public struct FakespotCta {
         self.ctaCopy = ctaCopy
         self.url = url
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension FakespotCta: Sendable {}
 #endif
-
-
-extension FakespotCta: Equatable, Hashable {
-    public static func ==(lhs: FakespotCta, rhs: FakespotCta) -> Bool {
-        if lhs.ctaCopy != rhs.ctaCopy {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ctaCopy)
-        hasher.combine(url)
-    }
-}
-
-extension FakespotCta: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1074,7 +961,7 @@ public func FfiConverterTypeFakespotCta_lower(_ value: FakespotCta) -> RustBuffe
 }
 
 
-public struct FakespotFeed {
+public struct FakespotFeed: Equatable, Hashable, Codable {
     public var products: [FakespotProduct]
     public var defaultCategoryName: String
     public var headerCopy: String
@@ -1090,45 +977,15 @@ public struct FakespotFeed {
         self.footerCopy = footerCopy
         self.cta = cta
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension FakespotFeed: Sendable {}
 #endif
-
-
-extension FakespotFeed: Equatable, Hashable {
-    public static func ==(lhs: FakespotFeed, rhs: FakespotFeed) -> Bool {
-        if lhs.products != rhs.products {
-            return false
-        }
-        if lhs.defaultCategoryName != rhs.defaultCategoryName {
-            return false
-        }
-        if lhs.headerCopy != rhs.headerCopy {
-            return false
-        }
-        if lhs.footerCopy != rhs.footerCopy {
-            return false
-        }
-        if lhs.cta != rhs.cta {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(products)
-        hasher.combine(defaultCategoryName)
-        hasher.combine(headerCopy)
-        hasher.combine(footerCopy)
-        hasher.combine(cta)
-    }
-}
-
-extension FakespotFeed: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1170,7 +1027,7 @@ public func FfiConverterTypeFakespotFeed_lower(_ value: FakespotFeed) -> RustBuf
 }
 
 
-public struct FakespotProduct {
+public struct FakespotProduct: Equatable, Hashable, Codable {
     public var id: String
     public var title: String
     public var category: String
@@ -1186,45 +1043,15 @@ public struct FakespotProduct {
         self.imageUrl = imageUrl
         self.url = url
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension FakespotProduct: Sendable {}
 #endif
-
-
-extension FakespotProduct: Equatable, Hashable {
-    public static func ==(lhs: FakespotProduct, rhs: FakespotProduct) -> Bool {
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.category != rhs.category {
-            return false
-        }
-        if lhs.imageUrl != rhs.imageUrl {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(title)
-        hasher.combine(category)
-        hasher.combine(imageUrl)
-        hasher.combine(url)
-    }
-}
-
-extension FakespotProduct: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1266,7 +1093,7 @@ public func FfiConverterTypeFakespotProduct_lower(_ value: FakespotProduct) -> R
 }
 
 
-public struct FeedSection {
+public struct FeedSection: Equatable, Hashable, Codable {
     public var receivedFeedRank: Int32
     public var recommendations: [RecommendationDataItem]
     public var title: String
@@ -1286,53 +1113,15 @@ public struct FeedSection {
         self.isFollowed = isFollowed
         self.isBlocked = isBlocked
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension FeedSection: Sendable {}
 #endif
-
-
-extension FeedSection: Equatable, Hashable {
-    public static func ==(lhs: FeedSection, rhs: FeedSection) -> Bool {
-        if lhs.receivedFeedRank != rhs.receivedFeedRank {
-            return false
-        }
-        if lhs.recommendations != rhs.recommendations {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.subtitle != rhs.subtitle {
-            return false
-        }
-        if lhs.layout != rhs.layout {
-            return false
-        }
-        if lhs.isFollowed != rhs.isFollowed {
-            return false
-        }
-        if lhs.isBlocked != rhs.isBlocked {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(receivedFeedRank)
-        hasher.combine(recommendations)
-        hasher.combine(title)
-        hasher.combine(subtitle)
-        hasher.combine(layout)
-        hasher.combine(isFollowed)
-        hasher.combine(isBlocked)
-    }
-}
-
-extension FeedSection: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1378,7 +1167,7 @@ public func FfiConverterTypeFeedSection_lower(_ value: FeedSection) -> RustBuffe
 }
 
 
-public struct Feeds {
+public struct Feeds: Equatable, Hashable, Codable {
     public var needToKnow: CuratedRecommendationsBucket?
     public var fakespot: FakespotFeed?
     public var topStoriesSection: FeedSection?
@@ -1422,101 +1211,15 @@ public struct Feeds {
         self.educationScience = educationScience
         self.society = society
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Feeds: Sendable {}
 #endif
-
-
-extension Feeds: Equatable, Hashable {
-    public static func ==(lhs: Feeds, rhs: Feeds) -> Bool {
-        if lhs.needToKnow != rhs.needToKnow {
-            return false
-        }
-        if lhs.fakespot != rhs.fakespot {
-            return false
-        }
-        if lhs.topStoriesSection != rhs.topStoriesSection {
-            return false
-        }
-        if lhs.business != rhs.business {
-            return false
-        }
-        if lhs.career != rhs.career {
-            return false
-        }
-        if lhs.arts != rhs.arts {
-            return false
-        }
-        if lhs.food != rhs.food {
-            return false
-        }
-        if lhs.health != rhs.health {
-            return false
-        }
-        if lhs.home != rhs.home {
-            return false
-        }
-        if lhs.finance != rhs.finance {
-            return false
-        }
-        if lhs.government != rhs.government {
-            return false
-        }
-        if lhs.sports != rhs.sports {
-            return false
-        }
-        if lhs.tech != rhs.tech {
-            return false
-        }
-        if lhs.travel != rhs.travel {
-            return false
-        }
-        if lhs.education != rhs.education {
-            return false
-        }
-        if lhs.hobbies != rhs.hobbies {
-            return false
-        }
-        if lhs.societyParenting != rhs.societyParenting {
-            return false
-        }
-        if lhs.educationScience != rhs.educationScience {
-            return false
-        }
-        if lhs.society != rhs.society {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(needToKnow)
-        hasher.combine(fakespot)
-        hasher.combine(topStoriesSection)
-        hasher.combine(business)
-        hasher.combine(career)
-        hasher.combine(arts)
-        hasher.combine(food)
-        hasher.combine(health)
-        hasher.combine(home)
-        hasher.combine(finance)
-        hasher.combine(government)
-        hasher.combine(sports)
-        hasher.combine(tech)
-        hasher.combine(travel)
-        hasher.combine(education)
-        hasher.combine(hobbies)
-        hasher.combine(societyParenting)
-        hasher.combine(educationScience)
-        hasher.combine(society)
-    }
-}
-
-extension Feeds: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1586,7 +1289,7 @@ public func FfiConverterTypeFeeds_lower(_ value: Feeds) -> RustBuffer {
 }
 
 
-public struct InterestPicker {
+public struct InterestPicker: Equatable, Hashable, Codable {
     public var receivedFeedRank: Int32
     public var title: String
     public var subtitle: String
@@ -1600,41 +1303,15 @@ public struct InterestPicker {
         self.subtitle = subtitle
         self.sections = sections
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension InterestPicker: Sendable {}
 #endif
-
-
-extension InterestPicker: Equatable, Hashable {
-    public static func ==(lhs: InterestPicker, rhs: InterestPicker) -> Bool {
-        if lhs.receivedFeedRank != rhs.receivedFeedRank {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.subtitle != rhs.subtitle {
-            return false
-        }
-        if lhs.sections != rhs.sections {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(receivedFeedRank)
-        hasher.combine(title)
-        hasher.combine(subtitle)
-        hasher.combine(sections)
-    }
-}
-
-extension InterestPicker: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1674,7 +1351,7 @@ public func FfiConverterTypeInterestPicker_lower(_ value: InterestPicker) -> Rus
 }
 
 
-public struct InterestPickerSection {
+public struct InterestPickerSection: Equatable, Hashable, Codable {
     public var sectionId: String
 
     // Default memberwise initializers are never public by default, so we
@@ -1682,29 +1359,15 @@ public struct InterestPickerSection {
     public init(sectionId: String) {
         self.sectionId = sectionId
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension InterestPickerSection: Sendable {}
 #endif
-
-
-extension InterestPickerSection: Equatable, Hashable {
-    public static func ==(lhs: InterestPickerSection, rhs: InterestPickerSection) -> Bool {
-        if lhs.sectionId != rhs.sectionId {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(sectionId)
-    }
-}
-
-extension InterestPickerSection: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1738,7 +1401,7 @@ public func FfiConverterTypeInterestPickerSection_lower(_ value: InterestPickerS
 }
 
 
-public struct Layout {
+public struct Layout: Equatable, Hashable, Codable {
     public var name: String
     public var responsiveLayouts: [ResponsiveLayout]
 
@@ -1748,33 +1411,15 @@ public struct Layout {
         self.name = name
         self.responsiveLayouts = responsiveLayouts
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Layout: Sendable {}
 #endif
-
-
-extension Layout: Equatable, Hashable {
-    public static func ==(lhs: Layout, rhs: Layout) -> Bool {
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.responsiveLayouts != rhs.responsiveLayouts {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(responsiveLayouts)
-    }
-}
-
-extension Layout: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1810,7 +1455,7 @@ public func FfiConverterTypeLayout_lower(_ value: Layout) -> RustBuffer {
 }
 
 
-public struct RecommendationDataItem {
+public struct RecommendationDataItem: Equatable, Hashable, Codable {
     public var corpusItemId: String
     public var scheduledCorpusItemId: String
     public var url: String
@@ -1840,73 +1485,15 @@ public struct RecommendationDataItem {
         self.tileId = tileId
         self.receivedRank = receivedRank
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension RecommendationDataItem: Sendable {}
 #endif
-
-
-extension RecommendationDataItem: Equatable, Hashable {
-    public static func ==(lhs: RecommendationDataItem, rhs: RecommendationDataItem) -> Bool {
-        if lhs.corpusItemId != rhs.corpusItemId {
-            return false
-        }
-        if lhs.scheduledCorpusItemId != rhs.scheduledCorpusItemId {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.excerpt != rhs.excerpt {
-            return false
-        }
-        if lhs.topic != rhs.topic {
-            return false
-        }
-        if lhs.publisher != rhs.publisher {
-            return false
-        }
-        if lhs.isTimeSensitive != rhs.isTimeSensitive {
-            return false
-        }
-        if lhs.imageUrl != rhs.imageUrl {
-            return false
-        }
-        if lhs.iconUrl != rhs.iconUrl {
-            return false
-        }
-        if lhs.tileId != rhs.tileId {
-            return false
-        }
-        if lhs.receivedRank != rhs.receivedRank {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(corpusItemId)
-        hasher.combine(scheduledCorpusItemId)
-        hasher.combine(url)
-        hasher.combine(title)
-        hasher.combine(excerpt)
-        hasher.combine(topic)
-        hasher.combine(publisher)
-        hasher.combine(isTimeSensitive)
-        hasher.combine(imageUrl)
-        hasher.combine(iconUrl)
-        hasher.combine(tileId)
-        hasher.combine(receivedRank)
-    }
-}
-
-extension RecommendationDataItem: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1962,7 +1549,7 @@ public func FfiConverterTypeRecommendationDataItem_lower(_ value: Recommendation
 }
 
 
-public struct ResponsiveLayout {
+public struct ResponsiveLayout: Equatable, Hashable, Codable {
     public var columnCount: Int32
     public var tiles: [Tile]
 
@@ -1972,33 +1559,15 @@ public struct ResponsiveLayout {
         self.columnCount = columnCount
         self.tiles = tiles
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension ResponsiveLayout: Sendable {}
 #endif
-
-
-extension ResponsiveLayout: Equatable, Hashable {
-    public static func ==(lhs: ResponsiveLayout, rhs: ResponsiveLayout) -> Bool {
-        if lhs.columnCount != rhs.columnCount {
-            return false
-        }
-        if lhs.tiles != rhs.tiles {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(columnCount)
-        hasher.combine(tiles)
-    }
-}
-
-extension ResponsiveLayout: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2034,7 +1603,7 @@ public func FfiConverterTypeResponsiveLayout_lower(_ value: ResponsiveLayout) ->
 }
 
 
-public struct SectionSettings {
+public struct SectionSettings: Equatable, Hashable, Codable {
     public var sectionId: String
     public var isFollowed: Bool
     public var isBlocked: Bool
@@ -2046,37 +1615,15 @@ public struct SectionSettings {
         self.isFollowed = isFollowed
         self.isBlocked = isBlocked
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SectionSettings: Sendable {}
 #endif
-
-
-extension SectionSettings: Equatable, Hashable {
-    public static func ==(lhs: SectionSettings, rhs: SectionSettings) -> Bool {
-        if lhs.sectionId != rhs.sectionId {
-            return false
-        }
-        if lhs.isFollowed != rhs.isFollowed {
-            return false
-        }
-        if lhs.isBlocked != rhs.isBlocked {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(sectionId)
-        hasher.combine(isFollowed)
-        hasher.combine(isBlocked)
-    }
-}
-
-extension SectionSettings: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2114,7 +1661,7 @@ public func FfiConverterTypeSectionSettings_lower(_ value: SectionSettings) -> R
 }
 
 
-public struct Tile {
+public struct Tile: Equatable, Hashable, Codable {
     public var size: String
     public var position: Int32
     public var hasAd: Bool
@@ -2128,41 +1675,15 @@ public struct Tile {
         self.hasAd = hasAd
         self.hasExcerpt = hasExcerpt
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Tile: Sendable {}
 #endif
-
-
-extension Tile: Equatable, Hashable {
-    public static func ==(lhs: Tile, rhs: Tile) -> Bool {
-        if lhs.size != rhs.size {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        if lhs.hasAd != rhs.hasAd {
-            return false
-        }
-        if lhs.hasExcerpt != rhs.hasExcerpt {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(size)
-        hasher.combine(position)
-        hasher.combine(hasAd)
-        hasher.combine(hasExcerpt)
-    }
-}
-
-extension Tile: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2204,7 +1725,7 @@ public func FfiConverterTypeTile_lower(_ value: Tile) -> RustBuffer {
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum CuratedRecommendationLocale {
+public enum CuratedRecommendationLocale: Equatable, Hashable, Codable {
     
     case fr
     case frFr
@@ -2220,8 +1741,12 @@ public enum CuratedRecommendationLocale {
     case deDe
     case deAt
     case deCh
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension CuratedRecommendationLocale: Sendable {}
@@ -2348,17 +1873,8 @@ public func FfiConverterTypeCuratedRecommendationLocale_lower(_ value: CuratedRe
 }
 
 
-extension CuratedRecommendationLocale: Equatable, Hashable {}
 
-extension CuratedRecommendationLocale: Codable {}
-
-
-
-
-
-
-
-public enum CuratedRecommendationsApiError: Swift.Error {
+public enum CuratedRecommendationsApiError: Swift.Error, Equatable, Hashable, Codable, Foundation.LocalizedError {
 
     
     
@@ -2366,8 +1882,21 @@ public enum CuratedRecommendationsApiError: Swift.Error {
     )
     case Other(code: UInt16?, reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension CuratedRecommendationsApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2429,23 +1958,6 @@ public func FfiConverterTypeCuratedRecommendationsApiError_lift(_ buf: RustBuffe
 public func FfiConverterTypeCuratedRecommendationsApiError_lower(_ value: CuratedRecommendationsApiError) -> RustBuffer {
     return FfiConverterTypeCuratedRecommendationsApiError.lower(value)
 }
-
-
-extension CuratedRecommendationsApiError: Equatable, Hashable {}
-
-extension CuratedRecommendationsApiError: Codable {}
-
-
-
-
-extension CuratedRecommendationsApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2917,22 +2429,22 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_merino_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_merino_checksum_func_all_curated_recommendation_locales() != 53330) {
+    if (uniffi_merino_checksum_func_all_curated_recommendation_locales() != 41991) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_func_curated_recommendation_locale_from_string() != 17864) {
+    if (uniffi_merino_checksum_func_curated_recommendation_locale_from_string() != 9345) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 49968) {
+    if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 26178) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 14537) {
+    if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 3261) {
         return InitializationResult.apiChecksumMismatch
     }
 

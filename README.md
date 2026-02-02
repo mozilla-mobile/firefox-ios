@@ -5,13 +5,13 @@ Download [Firefox iOS](https://apps.apple.com/app/firefox-web-browser/id98980492
 <table>
   <tr>
     <th style="border: none;"><strong>Firefox iOS</strong></th>
-    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-26.1-blue?logo=Xcode&logoColor=white" alt="Firefox-iOS"></td>
+    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-26.2-blue?logo=Xcode&logoColor=white" alt="Firefox-iOS"></td>
     <td style="border: none;"><img src="https://img.shields.io/badge/Swift-6.2-red?logo=Swift&logoColor=white" alt="Firefox-iOS"></td>
     <td style="border: none;"><img src="https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white" alt="Firefox-iOS"></td>
   </tr>
   <tr>
     <th style="border: none;"><strong>Focus iOS</strong></th>
-    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-26.1-blue?logo=Xcode&logoColor=white" alt="Focus-iOS"></td>
+    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-26.2-blue?logo=Xcode&logoColor=white" alt="Focus-iOS"></td>
     <td style="border: none;"><img src="https://img.shields.io/badge/Swift-6.2-red?logo=Swift&logoColor=white" alt="Focus-iOS"></td>
     <td style="border: none;"><img src="https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white" alt="Focus-iOS"></td>
   </tr>

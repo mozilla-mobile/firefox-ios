@@ -14,10 +14,10 @@
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Mail-maske indsat";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Skjul din rigtige mailadresse for at beskytte din indbakke mod span. Nogle websteder understøtter ikke dette.";
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Skjul din rigtige mailadresse for at beskytte din indbakke mod spam. Nogle websteder understøtter ikke dette.";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Skjul din rigtige mailadresse for at beskytte din indbakke mod span. Nogle websteder understøtter mail-masker.";
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Skjul din rigtige mailadresse for at beskytte din indbakke mod spam. Nogle websteder understøtter mail-masker.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Lær mere";

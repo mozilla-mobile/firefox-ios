@@ -170,9 +170,11 @@ public struct UserAgentBuilder {
     }
 
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
+        let device = UIDeviceDetails.model
+        let system = device == "iPad" ? "CPU" : "CPU iPhone"
         return UserAgentBuilder(
             product: UserAgent.product,
-            systemInfo: "(\(UIDeviceDetails.model); CPU iPhone OS 18_7 like Mac OS X)",
+            systemInfo: "(\(device); \(system) OS 18_7 like Mac OS X)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
             extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")

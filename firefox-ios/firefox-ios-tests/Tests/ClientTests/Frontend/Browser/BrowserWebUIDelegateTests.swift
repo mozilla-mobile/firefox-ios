@@ -7,6 +7,13 @@ import WebEngine
 import WebKit
 @testable import Client
 
+// TODO: FXIOS-14534 - Add JavascriptPanel test in responder if WKFrameIngo limitation can be bypass
+// The following WKUIDelegate methods cannot be unit tested due to WKFrameInfo:
+// Technical reason: WKFrameInfo crashes during deallocation in tests, even when mocked.
+// This is a WebKit limitation that cannot be worked around.
+// - BrowserWebUIDelegate is a simple forwarding/routing layer with no business logic
+// so unit test makes more sense to live in actual implementation like (engineResponder/legacyResponder)
+
 @MainActor
 final class BrowserWebUIDelegateTests: XCTestCase {
     private var mockLegacyResponder: MockLegacyResponder!
@@ -50,38 +57,6 @@ final class BrowserWebUIDelegateTests: XCTestCase {
         XCTAssertEqual(mockLegacyResponder.createWebViewCalled, 0)
     }
 
-    func testRunJavascriptAlertPanel_respondsToBrowserViewController() {
-        let subject = createSubject()
-
-        subject.webView(webView, runJavaScriptAlertPanelWithMessage: "", initiatedByFrame: .init()) {}
-
-        XCTAssertEqual(engineResponder.runJavaScriptAlertPanelCalled, 0)
-        XCTAssertEqual(mockLegacyResponder.runJavaScriptAlertPanelCalled, 1)
-    }
-
-    func testRunJavascriptConfirmPanel_respondsToBrowserViewController() {
-        let subject = createSubject()
-
-        subject.webView(webView, runJavaScriptConfirmPanelWithMessage: "", initiatedByFrame: .init()) { _ in }
-
-        XCTAssertEqual(engineResponder.runJavaScriptConfirmPanelCalled, 0)
-        XCTAssertEqual(mockLegacyResponder.runJavaScriptConfirmPanelCalled, 1)
-    }
-
-    func testRunJavascriptTextInputPanel_respondsToBrowserViewController() {
-        let subject = createSubject()
-
-        subject.webView(
-            webView,
-            runJavaScriptTextInputPanelWithPrompt: "",
-            defaultText: nil,
-            initiatedByFrame: .init()
-        ) { _ in }
-
-        XCTAssertEqual(engineResponder.runJavaScriptTextInputPanelCalled, 0)
-        XCTAssertEqual(mockLegacyResponder.runJavaScriptTextInputPanelCalled, 1)
-    }
-
     func testWebViewDidClose_respondsToBrowserViewController() {
         let subject = createSubject()
 
@@ -89,20 +64,6 @@ final class BrowserWebUIDelegateTests: XCTestCase {
 
         XCTAssertEqual(engineResponder.webViewDidCloseCalled, 0)
         XCTAssertEqual(mockLegacyResponder.webViewDidCloseCalled, 1)
-    }
-
-    func testRequestMediaCapturePermission_respondsToBrowserViewController() {
-        let subject = createSubject()
-
-        subject.webView(
-            webView,
-            requestMediaCapturePermissionFor: WKSecurityOriginMock.new(URL(string: "https://www.example.com")),
-            initiatedByFrame: .init(),
-            type: .camera
-        ) { _ in }
-
-        XCTAssertEqual(engineResponder.requestMediaCapturePermissionCalled, 0)
-        XCTAssertEqual(mockLegacyResponder.requestMediaCapturePermissionCalled, 1)
     }
 
     private func createSubject() -> BrowserWebUIDelegate {

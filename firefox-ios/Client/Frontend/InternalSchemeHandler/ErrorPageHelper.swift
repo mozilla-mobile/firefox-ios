@@ -25,7 +25,9 @@ private let CertErrors = [
 
 // Error codes copied from Gecko. The ints corresponding to these codes were determined
 // by inspecting the NSError in each of these cases.
-private let CertErrorCodes = [
+// TODO: This legacy constant should eventually be removed in favor of CertErrorCodes
+// in NativeErrorPageHelper.swift once ErrorPageHelper is fully replaced.
+private let LegacyCertErrorCodes = [
     -9813: "SEC_ERROR_UNKNOWN_ISSUER",
     -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
     -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
@@ -321,7 +323,7 @@ class ErrorPageHelper {
             let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
             queryItems.append(URLQueryItem(name: "badcert", value: encodedCert))
 
-            let certError = CertErrorCodes[certErrorCode] ?? ""
+            let certError = LegacyCertErrorCodes[certErrorCode] ?? ""
             queryItems.append(URLQueryItem(name: "certerror", value: String(certError)))
         }
 
@@ -363,22 +365,25 @@ extension ErrorPageHelper: TabContentScript {
         didReceiveScriptMessage message: WKScriptMessage
     ) {
         guard let errorURL = message.frameInfo.request.url,
-            let internalUrl = InternalURL(errorURL),
-            internalUrl.isErrorPage,
-            let originalURL = internalUrl.originalURLFromErrorPage,
-            let res = message.body as? [String: String],
-            let type = res["type"] else { return }
+              let internalUrl = InternalURL(errorURL),
+              internalUrl.isErrorPage,
+              let originalURL = internalUrl.originalURLFromErrorPage,
+              let res = message.body as? [String: String],
+              let type = res["type"] else {
+            return
+        }
 
         switch type {
         case MessageOpenInSafari:
             UIApplication.shared.open(originalURL, options: [:])
         case MessageCertVisitOnce:
+            // User taps "visit anyway" for an untrusted connection
             if let cert = certFromErrorURL(errorURL),
                 let host = originalURL.host {
                 let origin = "\(host):\(originalURL.port ?? 443)"
                 certStore?.addCertificate(cert, forOrigin: origin)
+                // Note: webview.reload will not change the error URL back to the original URL
                 message.webView?.replaceLocation(with: originalURL)
-                // webview.reload will not change the error URL back to the original URL
             }
         default:
             assertionFailure("Unknown error message")

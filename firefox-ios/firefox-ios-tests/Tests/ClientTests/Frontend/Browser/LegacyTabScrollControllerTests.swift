@@ -13,7 +13,7 @@ import Shared
 final class LegacyTabScrollControllerTests: XCTestCase {
     var tab: Tab!
     var mockProfile: MockProfile!
-    var mockGesture: UIPanGestureRecognizerMock!
+    var mockGesture: MockUIPanGestureRecognizer!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     var header: BaseAlphaStackView = .build()
@@ -27,7 +27,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         tab = Tab(profile: mockProfile, windowUUID: windowUUID)
-        mockGesture = UIPanGestureRecognizerMock()
+        mockGesture = MockUIPanGestureRecognizer()
     }
 
     override func tearDown() async throws {

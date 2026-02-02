@@ -9,11 +9,11 @@ features:
         description: >
           Controls whether users see the fun icons in the app icon settings.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
-          funIconsEnabled: false
+          funIconsEnabled: true
       - channel: developer
         value:
           funIconsEnabled: true

@@ -46,7 +46,7 @@ class StoryTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
         XCTAssertEqual(
             app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino].label,
-            "Stories"
+            "Popular Today"
         )
 
         // There should be at least 8 stories on iPhone and 7 on iPad.

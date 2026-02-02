@@ -9,6 +9,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
     @Published public var pageCount = 0
     public let onboardingCards: [ViewModel]
     public let skipText: String
+    public let variant: OnboardingVariant
     public let onActionTap: @MainActor (
         ViewModel.OnboardingActionType,
         String,
@@ -35,6 +36,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
     public init(
         onboardingCards: [ViewModel],
         skipText: String,
+        variant: OnboardingVariant = .modern,
         onActionTap: @MainActor @escaping (
             ViewModel.OnboardingActionType,
             String,
@@ -47,6 +49,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
     ) {
         self.onboardingCards = onboardingCards
         self.skipText = skipText
+        self.variant = variant
         self.onActionTap = onActionTap
         self.onMultipleChoiceActionTap = onMultipleChoiceActionTap
         self.onComplete = onComplete

@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -529,13 +548,13 @@ public protocol ContextIdComponentProtocol: AnyObject, Sendable {
  * Top-level API for the context_id component
  */
 open class ContextIdComponent: ContextIdComponentProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -545,27 +564,27 @@ open class ContextIdComponent: ContextIdComponentProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_context_id_fn_clone_contextidcomponent(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_context_id_fn_clone_contextidcomponent(self.handle, $0) }
     }
     /**
      * Construct a new [ContextIDComponent].
@@ -573,7 +592,7 @@ open class ContextIdComponent: ContextIdComponentProtocol, @unchecked Sendable {
      * If no creation timestamp is provided, the current time will be used.
      */
 public convenience init(initContextId: String, creationTimestampS: Int64, runningInTestAutomation: Bool, callback: ContextIdCallback) {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_context_id_fn_constructor_contextidcomponent_new(
         FfiConverterString.lower(initContextId),
@@ -582,15 +601,16 @@ public convenience init(initContextId: String, creationTimestampS: Int64, runnin
         FfiConverterCallbackInterfaceContextIdCallback_lower(callback),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_context_id_fn_free_contextidcomponent(pointer, $0) }
+        try! rustCall { uniffi_context_id_fn_free_contextidcomponent(handle, $0) }
     }
 
     
@@ -600,7 +620,8 @@ public convenience init(initContextId: String, creationTimestampS: Int64, runnin
      * Regenerate the context ID.
      */
 open func forceRotation()throws   {try rustCallWithError(FfiConverterTypeApiError_lift) {
-    uniffi_context_id_fn_method_contextidcomponent_force_rotation(self.uniffiClonePointer(),$0
+    uniffi_context_id_fn_method_contextidcomponent_force_rotation(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -610,7 +631,8 @@ open func forceRotation()throws   {try rustCallWithError(FfiConverterTypeApiErro
      */
 open func request(rotationDaysInS: UInt8)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeApiError_lift) {
-    uniffi_context_id_fn_method_contextidcomponent_request(self.uniffiClonePointer(),
+    uniffi_context_id_fn_method_contextidcomponent_request(
+            self.uniffiCloneHandle(),
         FfiConverterUInt8.lower(rotationDaysInS),$0
     )
 })
@@ -621,12 +643,14 @@ open func request(rotationDaysInS: UInt8)throws  -> String  {
      * no-op ContextIdCallback instead.
      */
 open func unsetCallback()throws   {try rustCallWithError(FfiConverterTypeApiError_lift) {
-    uniffi_context_id_fn_method_contextidcomponent_unset_callback(self.uniffiClonePointer(),$0
+    uniffi_context_id_fn_method_contextidcomponent_unset_callback(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 
+    
 }
 
 
@@ -634,33 +658,24 @@ open func unsetCallback()throws   {try rustCallWithError(FfiConverterTypeApiErro
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeContextIDComponent: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = ContextIdComponent
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> ContextIdComponent {
-        return ContextIdComponent(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> ContextIdComponent {
+        return ContextIdComponent(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: ContextIdComponent) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: ContextIdComponent) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ContextIdComponent {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: ContextIdComponent, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -668,28 +683,41 @@ public struct FfiConverterTypeContextIDComponent: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeContextIDComponent_lift(_ pointer: UnsafeMutableRawPointer) throws -> ContextIdComponent {
-    return try FfiConverterTypeContextIDComponent.lift(pointer)
+public func FfiConverterTypeContextIDComponent_lift(_ handle: UInt64) throws -> ContextIdComponent {
+    return try FfiConverterTypeContextIDComponent.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeContextIDComponent_lower(_ value: ContextIdComponent) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeContextIDComponent_lower(_ value: ContextIdComponent) -> UInt64 {
     return FfiConverterTypeContextIDComponent.lower(value)
 }
 
 
 
 
-public enum ApiError: Swift.Error {
+public enum ApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
     case Other(reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension ApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -743,21 +771,6 @@ public func FfiConverterTypeApiError_lower(_ value: ApiError) -> RustBuffer {
 }
 
 
-extension ApiError: Equatable, Hashable {}
-
-
-
-
-extension ApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
-
 
 
 public protocol ContextIdCallback: AnyObject, Sendable {
@@ -778,6 +791,20 @@ fileprivate struct UniffiCallbackInterfaceContextIdCallback {
     // This creates 1-element array, since this seems to be the only way to construct a const
     // pointer that we can pass to the Rust code.
     static let vtable: [UniffiVTableCallbackInterfaceContextIdCallback] = [UniffiVTableCallbackInterfaceContextIdCallback(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterCallbackInterfaceContextIdCallback.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface ContextIdCallback: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterCallbackInterfaceContextIdCallback.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface ContextIdCallback: handle missing in uniffiClone")
+            }
+        },
         persist: { (
             uniffiHandle: UInt64,
             contextId: RustBuffer,
@@ -827,12 +854,6 @@ fileprivate struct UniffiCallbackInterfaceContextIdCallback {
                 makeCall: makeCall,
                 writeReturn: writeReturn
             )
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterCallbackInterfaceContextIdCallback.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface ContextIdCallback: handle missing in uniffiFree")
-            }
         }
     )]
 }
@@ -910,28 +931,28 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_context_id_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcomponent_force_rotation() != 57248) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_force_rotation() != 61947) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcomponent_request() != 62689) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_request() != 61547) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcomponent_unset_callback() != 21655) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_unset_callback() != 16438) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_constructor_contextidcomponent_new() != 28490) {
+    if (uniffi_context_id_checksum_constructor_contextidcomponent_new() != 59882) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcallback_persist() != 51609) {
+    if (uniffi_context_id_checksum_method_contextidcallback_persist() != 13731) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcallback_rotated() != 3858) {
+    if (uniffi_context_id_checksum_method_contextidcallback_rotated() != 19936) {
         return InitializationResult.apiChecksumMismatch
     }
 

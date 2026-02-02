@@ -11,7 +11,7 @@
 "Copy" = "Kopiraj";
 
 /* Label describing when the current login was created. %@ is the timestamp. */
-"Created %@" = "Izrađeno %@";
+"Created %@" = "%@ stvoreno";
 
 /* Label for the button used to delete the current login. */
 "Delete" = "Izbriši";
@@ -35,7 +35,7 @@
 "Deselect All" = "Poništi odabir";
 
 /* Accessibility label for entering search mode for logins */
-"Enter Search Mode" = "Uključi modus pretraživanja";
+"Enter Search Mode" = "Uđi u modus pretraživanja";
 
 /* Hide password text selection menu item */
 "Hide" = "Sakrij";
@@ -50,7 +50,7 @@
 "Logins will be removed from all connected devices." = "Prijave će biti uklonjene sa svih povezanih uređaja.";
 
 /* Label describing when the current login was last modified. %@ is the timestamp. */
-"Modified %@" = "Promijenjeno %@";
+"Modified %@" = "%@ promijenjeno";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Nema pronađenih prijava";
@@ -83,5 +83,5 @@
 "Username" = "Korisničko ime";
 
 /* Label displayed above the website row in Login Detail View. */
-"Website" = "Web stranica";
+"Website" = "Web-stranica";
 

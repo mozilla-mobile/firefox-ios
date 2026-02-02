@@ -12,8 +12,8 @@ final class TranslatorRoute: TinyRoute {
         self.fetcher = fetcher
     }
 
-    func handle(url: URL, components: URLComponents) throws -> TinyHTTPReply? {
-        guard let data = fetcher.fetchTranslatorWASM() else {
+    func handle(url: URL, components: URLComponents) async throws -> TinyHTTPReply? {
+        guard let data = await fetcher.fetchTranslatorWASM() else {
             throw TinyRouterError.notFound
         }
         return try? TinyRouter.ok(data: data, contentType: MIMEType.OctetStream, url: url)

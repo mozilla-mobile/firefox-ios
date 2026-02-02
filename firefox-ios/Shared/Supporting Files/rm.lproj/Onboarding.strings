@@ -79,17 +79,65 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Sursiglir";
 
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "Automatic";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "Cuntinuar";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Stgir";
+
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Tscherna tes design preferì u adattescha %@ a tes apparat – ti decidas.";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "Cler";
+
+/* Option for the automatic theme. */
+"Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automatic";
+
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
 "Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "Cuntinuar";
+
+/* Option for the dark theme. */
+"Onboarding.Modern.Customization.Theme.Dark.v145" = "Stgir";
+
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Tscherna tes design preferì u adattescha %@ a tes apparat – ti decidas.";
+
+/* Option for the light theme. */
+"Onboarding.Modern.Customization.Theme.Light.v145" = "Cler";
+
+/* Title for the theme selection card. */
+"Onboarding.Modern.Customization.Theme.Title.v145" = "Tscherna in design";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "Sut";
 
+/* Action to set the toolbar to the bottom. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "Sut";
+
+/* Continue button on the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Cuntinuar";
+
+/* Description for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Cumenza a tippar per vesair propostas da tschertga, tias websites frequentas, la cronologia e maschinas da tschertgar – tut en il medem lieu.";
+
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Tscherna nua plazzar tia trav d’adressas";
 
+/* Title for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "Tscherna tia trav d’adressas";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Sura";
+
+/* Action to set the toolbar to the top. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "Sura";
+
+/* Button to skip the entire onboarding flow. */
+"Onboarding.Modern.General.Skip.v145" = "Sursiglir";
 
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "Access a tes segnapaginas, a tia cronologia ed a tes pleds-clav sin mintga apparat.";

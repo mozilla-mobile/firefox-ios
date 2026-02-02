@@ -5,6 +5,7 @@
 import Common
 import Shared
 import Redux
+import ComponentLibrary
 
 final class TermsOfUseViewController: UIViewController,
                                       Themeable,
@@ -18,7 +19,6 @@ final class TermsOfUseViewController: UIViewController,
         static let logoSize: CGFloat = 40
         static let acceptButtonHeight: CGFloat = 44
         static let remindMeLaterButtonHeight: CGFloat = 44
-        static let buttonCornerRadius: CGFloat = 12
         static let grabberWidth: CGFloat = 36
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
@@ -93,22 +93,22 @@ final class TermsOfUseViewController: UIViewController,
         textView.delegate = self
     }
 
-    private lazy var acceptButton: UIButton = .build { button in
-        button.setTitle(TermsOfUseStrings.acceptButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.buttonFont
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
+    private lazy var acceptButton: PrimaryRoundedButton = .build { [self] button in
+        let viewModel = PrimaryRoundedButtonViewModel(
+            title: TermsOfUseStrings.acceptButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.TermsOfUse.acceptButton
+        )
+        button.configure(viewModel: viewModel)
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.acceptButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.acceptTapped), for: .touchUpInside)
     }
 
-    private lazy var remindMeLaterButton: UIButton = .build { button in
-        button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
-        button.titleLabel?.font = UX.buttonFont
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
+    private lazy var remindMeLaterButton: SecondaryRoundedButton = .build { [self] button in
+        let viewModel = SecondaryRoundedButtonViewModel(
+            title: TermsOfUseStrings.remindMeLaterButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
+        )
+        button.configure(viewModel: viewModel)
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.remindMeLaterTapped), for: .touchUpInside)
     }
@@ -346,10 +346,8 @@ final class TermsOfUseViewController: UIViewController,
         grabberView.isHidden = !isDragToDismissEnabled
         grabberView.alpha = isDragToDismissEnabled ? 1.0 : 0.0
         titleLabel.textColor = currentTheme().colors.textPrimary
-        acceptButton.tintColor = currentTheme().colors.textOnDark
-        acceptButton.backgroundColor = currentTheme().colors.actionPrimary
-        remindMeLaterButton.backgroundColor = currentTheme().colors.actionSecondary
-        remindMeLaterButton.setTitleColor(currentTheme().colors.textPrimary, for: .normal)
+        acceptButton.applyTheme(theme: currentTheme())
+        remindMeLaterButton.applyTheme(theme: currentTheme())
         descriptionTextView.linkTextAttributes = [
             .foregroundColor: currentTheme().colors.textAccent,
             .underlineStyle: NSUnderlineStyle.single.rawValue

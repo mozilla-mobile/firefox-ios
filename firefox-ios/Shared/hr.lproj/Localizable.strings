@@ -53,7 +53,7 @@
 "AddPass.Error.Dismiss" = "U redu";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Message" = "Došlo je do greške prilikom dodavanja propusnice u Wallet. Pokušaj ponovo kasnije.";
+"AddPass.Error.Message" = "Dogodila se greška prilikom dodavanja propusnice u Wallet. Pokušaj ponovo kasnije.";
 
 /* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Title" = "Neuspjelo dodavanje propusnice";
@@ -131,7 +131,7 @@
 "BreachAlerts.Link" = "Idi na";
 
 /* Title for the Breached Login Detail View. */
-"BreachAlerts.Title" = "Hakirana web stranica";
+"BreachAlerts.Title" = "Hakirana web-stranica";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Svjetlina";
@@ -236,7 +236,7 @@
 "Decrease text size" = "Smanji veličinu teksta";
 
 /* Title for default search engine picker. */
-"Default Search Engine" = "Glavna tražilica";
+"Default Search Engine" = "Standardna tražilica";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
 "DefaultBrowserCloseButtonAccessibility.v102" = "Zatvori";
@@ -533,7 +533,7 @@
 "Increase text size" = "Povećaj veličinu teksta";
 
 /* Relative time for a tab that was visited within the last few moments. */
-"just now" = "upravo";
+"just now" = "Upravo";
 
 /* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ActualSize" = "Stvarna veličina";
@@ -542,7 +542,7 @@
 "Keyboard.Shortcuts.AddBookmark" = "Dodaj zabilješku";
 
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ClearRecentHistory" = "Očisti nedavnu povijest";
+"Keyboard.Shortcuts.ClearRecentHistory" = "Izbriši nedavnu povijest";
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Ponovno pronađi";
@@ -830,7 +830,7 @@
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Kriptorudari";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Web stranice mogu učitati vanjske reklame, video materijal i drugi sadržaj koji sadrži programe za praćenje. Blokiranjem se može ubrzati učitavanje stranica, ali neki gumbi, obrasci ili polja za prijavu možda neće raditi.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Web-stranice mogu učitati vanjske reklame, video materijal i drugi sadržaj koji sadrži programe za praćenje. Blokiranjem se može ubrzati učitavanje stranica, ali neki gumbi, obrasci ili polja za prijavu možda neće raditi.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Ovi te kolačići prate od jednog mjesta do drugoga, kako bi prikupili podatke o tome što radiš na mreži. Njih postavljaju treće strane poput oglašivača i analitičkih tvrtki.";
@@ -926,7 +926,7 @@
 "ProtectionStatus.Secure" = "Veza je sigurna";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "Tražilice za brzo pretraživanje";
+"Quick-Search Engines" = "Tražilice za brzu pretragu";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "Ocijeni na App Storeu";
@@ -1001,7 +1001,7 @@
 "ScanQRCode.View.Title" = "Snimi QR kod";
 
 /* Open search section of settings */
-"Search" = "Traži";
+"Search" = "Pretraga";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Traži ili upiši adresu";
@@ -1013,13 +1013,13 @@
 "Search.SuggestSectionTitle.v102" = "Firefoxovi prijedlozi";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "Nova tražilica će se pojavit na traci za brzo pretraživanje.";
+"Search.ThirdPartyEngines.AddMessage" = "Nova tražilica će se pojavit u traci za brzu pretragu.";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
 "Search.ThirdPartyEngines.AddSuccess" = "Tražilica je dodana!";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Dodati pružatelja usluge pretraživanja?";
+"Search.ThirdPartyEngines.AddTitle" = "Dodati tražilicu?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Odustani";
@@ -1031,7 +1031,7 @@
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Neuspješno";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedMessage" = "Nije moguće dodati pružatelja usluge pretraživanja.";
+"Search.ThirdPartyEngines.FailedMessage" = "Tražilica se nije mogla dodati.";
 
 /* A title explaining that we failed to add a search engine */
 "Search.ThirdPartyEngines.FailedTitle" = "Neuspješno";
@@ -1130,7 +1130,7 @@
 "Settings.AddCustomEngine.TitleLabel" = "Naslov";
 
 /* The placeholder for Title Field when saving a custom search engine. */
-"Settings.AddCustomEngine.TitlePlaceholder" = "Pretraživač";
+"Settings.AddCustomEngine.TitlePlaceholder" = "Tražilica";
 
 /* The title for URL Field */
 "Settings.AddCustomEngine.URLLabel" = "URL";
@@ -1160,10 +1160,10 @@
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Izgled web stranice";
 
 /* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
-"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Web stranicama daje taman izgled. Neke web stranice možda neće dobro izgledati.";
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Web-stranicama daje taman izgled. Neke web-stranice možda neće dobro izgledati.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
-"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Tamni modus za web stranice";
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Tamni modus za web-stranice";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Blokiraj otvaranje eksternih aplikacija";
@@ -1172,13 +1172,13 @@
 "Settings.ClearAllWebsiteData.Clear.Button" = "Obriši sve podatke web lokacije";
 
 /* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "Očisti privatne podatke";
+"Settings.ClearPrivateData.Clear.Button" = "Izbriši privatne podatke";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.ClearPrivateData.SectionName" = "Očisti privatne podatke";
+"Settings.ClearPrivateData.SectionName" = "Izbriši privatne podatke";
 
 /* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
-"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Očisti stavke: %1$@";
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Izbriši stavke: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Kopirano u međuspremnik";
@@ -1187,10 +1187,10 @@
 "Settings.DataManagement.SearchLabel" = "Filtriraj web lokacije";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.DataManagement.SectionName" = "Upravljanje podatcima";
+"Settings.DataManagement.SectionName" = "Upravljanje podacima";
 
 /* Title displayed in header of the setting panel. */
-"Settings.DataManagement.Title" = "Upravljanje podatcima";
+"Settings.DataManagement.Title" = "Upravljanje podacima";
 
 /* Body of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Body" = "Firefox će prestati sinkroniziranje s tvojim računom, ali neće izbrisati podatke o tvom pregledavanju na ovom uređaju.";
@@ -1421,10 +1421,10 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Blokiraj slike";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Prilikom otvaranja Firefoxa";
+"Settings.OfferClipboardBar.Status" = "Kada otvoriš Firefox";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name. */
-"Settings.OfferClipboardBar.Status.v128" = "Prilikom otvaranja %@";
+"Settings.OfferClipboardBar.Status.v128" = "Kada otvoriš %@";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Ponudi otvoriti kopirane poveznice";
@@ -1532,7 +1532,7 @@
 "Settings.TrackingProtection.Alert.Button" = "U redu, razumijem";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Ako web stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
+"Settings.TrackingProtection.Alert.Description" = "Ako web-stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Oprez!";
@@ -1547,13 +1547,13 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "Smanjuje broj ciljanih oglasa i pomaže spriječiti oglašivače da prate tvoje kretanje internetom.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ako web stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ako web-stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ako web stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ako web-stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
 
 /* Description for standard level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dopušta neke programe za praćenje, kako bi web stranice mogle ispravno funkcionirati.";
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dopušta neke programe za praćenje, kako bi web-stranice mogle ispravno funkcionirati.";
 
 /* Description for strict level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Blokira više programa za praćenje, oglasa i skočnih prozora. Stranice se brže učitavaju, ali neke funkcije možda neće raditi.";
@@ -1586,7 +1586,7 @@
 "Settings.WebsiteData.ConfirmPrompt" = "Ova će radnja izbrisati sve podatke tvoje web stranice. To se ne može poništiti.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
-"Settings.WebsiteData.SelectedConfirmPrompt" = "Ova radnja će očistiti odabrane stavke. Ona se ne može poništiti.";
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Ova radnja će izbrisati odabrane stavke. Brisanje se ne može poništiti.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Podaci web stranice";
@@ -1622,7 +1622,7 @@
 "ShareSheet.SendToDevice.Title.v108" = "Pošalji poveznicu na uređaj";
 
 /* Label for show search suggestions setting. */
-"Show Search Suggestions" = "Prikaži prijedloge za pretraživanje";
+"Show Search Suggestions" = "Prikaži prijedloge pretrage";
 
 /* Accessibility label for the tabs button in the (top) tab toolbar */
 "Show Tabs" = "Prikaži kartice";
@@ -1808,7 +1808,7 @@
 "You don’t have any tabs open in Firefox on your other devices." = "Na tvojim drugim uređajima nemaš otvorenih kartica u Firefoxu.";
 
 /* Your Rights settings section title */
-"Your Rights" = "Vaša prava";
+"Your Rights" = "Tvoja prava";
 
 /* Tile title for YouTube */
 "YouTube" = "YouTube";

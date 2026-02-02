@@ -145,6 +145,9 @@
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Setuju dan lanjutkan";
 
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Lanjutkan";
+
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Cepat, aman, dan tidak akan menjual Anda. Penjelajahan menjadi lebih baik.";
 
@@ -180,6 +183,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Ucapkan selamat tinggal pada pelacak menyeramkan";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Buka tautan Anda dengan privasi bawaan";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Otomatis";

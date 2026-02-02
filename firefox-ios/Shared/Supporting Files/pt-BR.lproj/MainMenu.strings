@@ -65,7 +65,7 @@
 "MainMenu.HeaderBanner.Subtitle.v142" = "Leva segundos. Mude quando quiser.";
 
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
-"MainMenu.HeaderBanner.Title.v142" = "Tornar o %@ como padrão";
+"MainMenu.HeaderBanner.Title.v142" = "Definir o %@ como padrão";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "Desativado";

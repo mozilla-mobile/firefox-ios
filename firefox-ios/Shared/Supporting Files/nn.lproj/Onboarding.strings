@@ -32,7 +32,7 @@
 "Onboarding.Customization.Theme.Continue.Action.v123" = "Lagre og hald fram";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
-"Onboarding.Customization.Theme.Dark.Action.v123" = "Mørkt";
+"Onboarding.Customization.Theme.Dark.Action.v123" = "Mørk";
 
 /* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Description.v123" = "Sjå nettet i det beste lyset.";

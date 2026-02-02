@@ -145,6 +145,9 @@
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "ਸਹਿਮਤ ਅਤੇ ਜਾਰੀ ਰੱਖੋ";
 
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "ਜਾਰੀ ਰੱਖੋ";
+
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "ਤੇਜ਼, ਸੁਰੱਖਿਅਤ ਅਤੇ ਤੁਹਾਨੂੰ ਵੇਚਦਾ ਨਹੀਂ ਹੈ। ਬੱਸ ਬਰਾਊਜ਼ ਕਰਨਾ ਬੇਹਤਰ ਹੋ ਗਿਆ ਹੈ।";
 
@@ -180,6 +183,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "ਡਰਾਉਣੇ ਟਰੈਕਰਾਂ ਤੋਂ ਖਹਿੜਾ ਛੁਡਾਓ";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "ਆਪਣੇ ਲਿੰਕਾਂ ਨੂੰ ਪਰਦੇਦਾਰੀ ਸਹਿਤ ਖੋਲ੍ਹੋ";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "ਆਟੋਮੈਟਿਕ";

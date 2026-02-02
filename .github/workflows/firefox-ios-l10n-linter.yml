@@ -19,14 +19,14 @@ jobs:
       max-parallel: 4
       matrix:
         xcode:
-          - "26.0"
+          - "26.2"
     steps:
       - name: Clone code repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: "code_repo"
       - name: Clone l10n repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "mozilla-l10n/firefoxios-l10n"
           path: "l10n_repo"
@@ -34,9 +34,9 @@ jobs:
         run: |
           sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
       - name: Set up Python 3
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Install Python dependencies
         run: |
           pip install -r l10n_repo/.github/scripts/requirements.txt
@@ -64,7 +64,7 @@ jobs:
         run: |
           (cd code_repo && moz-xliff-lint --path ../l10n_repo/en-US --config .github/l10n/linter_config_ios.json)
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: firefox-xliff-file
           path: l10n_repo/en-US/*.xliff

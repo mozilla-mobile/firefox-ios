@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import Shared
 
 private struct UX {
     // The amount of pixels the toggle button will expand over the normal size.

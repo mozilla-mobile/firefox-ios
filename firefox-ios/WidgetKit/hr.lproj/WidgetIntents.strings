@@ -5,7 +5,7 @@
 "ctDNmu" = "Brzi pristup raznim Firefoxovim radnjama";
 
 /* (No Comment) */
-"eHmH1H" = "Očisti privatne kartice";
+"eHmH1H" = "Izbriši privatne kartice";
 
 /* (No Comment) */
 "eqyNJg" = "Brza radnja";
@@ -17,7 +17,7 @@
 "fi3W24-2GqvPe" = "S ‘Idi na kopiranu poveznicu’ podudara se ${count} opcija.";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "S ‘Očisti privatne kartice’ podudara se ${count} opcija.";
+"fi3W24-eHmH1H" = "Postoji ${count} opcija koje se poklapaju s „Izbriši privatne kartice”.";
 
 /* (No Comment) */
 "fi3W24-scEmjs" = "S ‘Novo privatno pretraživanje’ podudara se ${count} opcija.";
@@ -26,23 +26,23 @@
 "fi3W24-xRJbBP" = "S ‘Novo pretraživanje’ podudara se ${count} opcija.";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Samo da potvrdimo, željeli ste ‘Idi na kopiranu poveznicu’?";
+"PzSrmZ-2GqvPe" = "Samo da potvrdimo, htio/htjela si opciju „Idi na kopiranu poveznicu”?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Samo da potvrdimo, željeli ste ‘Očisti privatne kartice’?";
+"PzSrmZ-eHmH1H" = "Samo da potvrdimo, htio/htjela si opciju „Izbriši privatne kartice”?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Samo da potvrdimo, željeli ste ‘Novo privatno pretraživanje’?";
+"PzSrmZ-scEmjs" = "Samo da potvrdimo, htio/htjela si opciju „Nova privatna pretraga”?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Samo da potvrdimo, željeli ste ‘Novo pretraživanje’?";
+"PzSrmZ-xRJbBP" = "Samo da potvrdimo, htio/htjela si opciju „Nova pretraga”?";
 
 /* (No Comment) */
-"scEmjs" = "Novo privatno pretraživanje";
+"scEmjs" = "Nova privatna pretraga";
 
 /* (No Comment) */
 "w9jdPK" = "Brza radnja";
 
 /* (No Comment) */
-"xRJbBP" = "Novo pretraživanje";
+"xRJbBP" = "Nova pretraga";
 

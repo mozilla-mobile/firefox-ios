@@ -1298,12 +1298,6 @@ gov.gy
 net.gy
 org.gy
 
-// Hercules : https://hercules.app
-// Submitted by Brendan Falk <security@hercules.app>
-onhercules.app
-hercules-app.com
-hercules-dev.com
-
 // hk : https://www.hkirc.hk
 // Submitted by registry <hk.tech@hkirc.hk>
 hk
@@ -5693,7 +5687,6 @@ com.sn
 edu.sn
 gouv.sn
 org.sn
-perso.sn
 univ.sn
 
 // so : http://sonic.so/policies/
@@ -6821,7 +6814,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-12-06T15:17:27Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2026-01-08T15:25:34Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -10463,7 +10456,7 @@ tokyo
 // https://www.iana.org/domains/root/db/tools.html
 tools
 
-// top : .TOP Registry
+// top : Hong Kong Zhongze International Limited
 // https://www.iana.org/domains/root/db/top.html
 top
 
@@ -12426,18 +12419,10 @@ myasustor.com
 // Submitted by Sam Smyth <devloop@atlassian.com>
 cdn.prod.atlassian-dev.net
 
-// Authentick UG (haftungsbeschränkt) : https://authentick.net
-// Submitted by Lukas Reschke <lukas@authentick.net>
-translated.page
-
 // AVM : https://avm.de
 // Submitted by Andreas Weise <a.weise@avm.de>
 myfritz.link
 myfritz.net
-
-// AVStack Pte. Ltd. : https://avstack.io
-// Submitted by Jasper Hugo <jasper@avstack.io>
-onavstack.net
 
 // AW AdvisorWebsites.com Software Inc : https://advisorwebsites.com
 // Submitted by James Kennedy <domains@advisorwebsites.com>
@@ -12558,6 +12543,10 @@ radio.fm
 // Submitted by Merlin Zhao <devops@bubble.io>
 cdn.bubble.io
 bubbleapps.io
+
+// bwCloud-OS : https://bwcloud-os.de/
+// Submitted by Klara Mall <dns@bwcloud-os.de>
+*.bwcloud-os-instance.de
 
 // Bytemark Hosting : https://www.bytemark.co.uk
 // Submitted by Paul Cammish <paul.cammish@bytemark.co.uk>
@@ -12894,6 +12883,11 @@ dedyn.io
 // Submitted by Aavash Shrestha <aavash@deta.sh>
 deta.app
 deta.dev
+
+// Deuxfleurs : https://deuxfleurs.fr
+// Submitted by Aeddis Desauw <ca@deuxfleurs.fr>
+deuxfleurs.eu
+deuxfleurs.page
 
 // Developed Methods LLC : https://methods.dev
 // Submitted by Patrick Lorio <security@playit.gg>
@@ -13957,6 +13951,12 @@ heliohost.us
 // Submitted by David Grellscheid <admin@hepforge.org>
 hepforge.org
 
+// Hercules : https://hercules.app
+// Submitted by Brendan Falk <security@hercules.app>
+onhercules.app
+hercules-app.com
+hercules-dev.com
+
 // Heroku : https://www.heroku.com/
 // Submitted by Shumon Huque <public-dns@salesforce.com>
 herokuapp.com
@@ -14057,10 +14057,6 @@ wphostedmail.com
 wpmucdn.com
 tempurl.host
 wpmudev.host
-
-// Indevs : https://indevs.in
-// Submitted by Sudheer Bhuvana <security@admin.indevs.in>
-indevs.in
 
 // Individual Network Berlin e.V. : https://www.in-berlin.de/
 // Submitted by Christian Seitz <chris@in-berlin.de>
@@ -14975,7 +14971,6 @@ can.re
 // Submitted by Authgear Team <hello@authgear.com> & Skygear Developer <hello@skygear.io>
 authgear-staging.com
 authgearapps.com
-skygearapp.com
 
 // OutSystems
 // Submitted by Duarte Santos <domain-admin@outsystemscloud.com>
@@ -15092,8 +15087,9 @@ xen.prgmr.com
 priv.at
 
 // PROJECT ELIV : https://eliv.kr/
-// Submitted by PROJECT ELIV Domain Team <team@eliv.kr>
+// Submitted by PROJECT ELIV DomainName Team <team@eliv.kr>
 c01.kr
+eliv-api.kr
 eliv-cdn.kr
 eliv-dns.kr
 mmv.kr
@@ -15669,6 +15665,10 @@ stackit.rocks
 stackit.run
 stackit.zone
 
+// Stackryze : https://stackryze.com
+// Submitted by Sudheer Bhuvana <security@stackryze.com>
+indevs.in
+
 // Staclar : https://staclar.com
 // Submitted by Q Misell <q@staclar.com>
 // Submitted by Matthias Merkel <matthias.merkel@staclar.com>
@@ -15909,22 +15909,6 @@ tunnelmole.net
 // Submitted by TuxFamily administrators <adm@staff.tuxfamily.org>
 tuxfamily.org
 
-// TwoDNS : https://www.twodns.de/
-// Submitted by TwoDNS-Support <support@two-dns.de>
-dd-dns.de
-dray-dns.de
-draydns.de
-dyn-vpn.de
-dynvpn.de
-mein-vigor.de
-my-vigor.de
-my-wan.de
-syno-ds.de
-synology-diskstation.de
-synology-ds.de
-diskstation.eu
-diskstation.org
-
 // Typedream : https://typedream.com
 // Submitted by Putri Karunia <putri@typedream.com>
 typedream.app
@@ -16114,6 +16098,8 @@ daemon.panel.gg
 
 // Wix.com, Inc. : https://www.wix.com
 // Submitted by Shahar Talmi / Alon Kochba <publicsuffixlist@wix.com>
+base44.app
+base44-sandbox.com
 wixsite.com
 wixstudio.com
 editorx.io

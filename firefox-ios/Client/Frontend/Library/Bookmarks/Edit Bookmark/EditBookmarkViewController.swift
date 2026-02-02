@@ -105,7 +105,7 @@ class EditBookmarkViewController: UIViewController,
         super.viewWillAppear(animated)
         setTheme(theme)
         _ = viewModel.getBackNavigationButtonTitle
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         onViewWillAppear?()
     }
@@ -121,7 +121,7 @@ class EditBookmarkViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let isDragging = transitionCoordinator?.isInteractive, !isDragging {
-            navigationController?.setNavigationBarHidden(true, animated: true)
+            navigationController?.setNavigationBarHidden(true, animated: false)
         }
         // Save when popping the view off the navigation stack (when in library)
         if isMovingFromParent {

@@ -104,7 +104,14 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate(viewConstraints)
     }
 
-    func setupAccessibilityIdentifiers(arrowImageA11yId: String, securityStatusButtonA11yId: String) {
+    func setupAccessibilityIdentifiers(
+        connectionStatusImageA11yId: String,
+        connectionStatusLabelA11yId: String,
+        arrowImageA11yId: String,
+        securityStatusButtonA11yId: String
+    ) {
+        connectionStatusImage.accessibilityIdentifier = connectionStatusImageA11yId
+        connectionStatusLabel.accessibilityIdentifier = connectionStatusLabelA11yId
         connectionDetailArrow.accessibilityIdentifier = arrowImageA11yId
         connectionButton.accessibilityIdentifier = securityStatusButtonA11yId
     }

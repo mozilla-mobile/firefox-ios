@@ -31,11 +31,8 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
 
     lazy var homepageProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case HomepageActionType.viewDidAppear, GeneralBrowserActionType.didSelectedTabChangeToHomepage:
+        case HomepageActionType.viewDidAppear:
             self.homepageTelemetry.sendHomepageImpressionEvent()
-
-        case NavigationBrowserActionType.tapOnCustomizeHomepageButton:
-            self.homepageTelemetry.sendItemTappedTelemetryEvent(for: .customizeHomepage)
 
         case NavigationBrowserActionType.tapOnBookmarksShowMoreButton:
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: .bookmarkShowAll)
@@ -82,13 +79,14 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func dispatchPrivacyNoticeConfigurationAction(action: Action) {
-        store.dispatch(
-            HomepageAction(
-                shouldShowPrivacyNotice: privacyNoticeHelper.shouldShowPrivacyNotice(),
-                windowUUID: action.windowUUID,
-                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+        if privacyNoticeHelper.shouldShowPrivacyNotice() {
+            store.dispatch(
+                HomepageAction(
+                    windowUUID: action.windowUUID,
+                    actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+                )
             )
-        )
+        }
     }
 
     private func dispatchSearchBarConfigurationAction(action: Action) {
@@ -125,7 +123,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func shouldShowSpacer(for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
-        return device == .phone && isAnyStoriesRedesignEnabled
+        return device == .phone
     }
 
     // MARK: - Notifications

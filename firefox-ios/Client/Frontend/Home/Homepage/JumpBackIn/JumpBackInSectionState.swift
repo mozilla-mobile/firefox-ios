@@ -26,19 +26,9 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         profile: Profile = AppContainer.shared.resolve(),
         windowUUID: WindowUUID
     ) {
-        // TODO: FXIOS-11412 / 11226 - Move profile dependency and show section also based on feature flags
-        let isStoriesRedesignEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesign,
-                                                                                         checking: .buildOnly)
-        let isStoriesRedesignV2Enabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesignV2,
-                                                                                           checking: .buildOnly)
-
-        // Jump back in section default value without nimbus is true
-        let jumpBackInSectionDefaultValue = !isStoriesRedesignV2Enabled
-        let isJumpBackInSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.JumpBackInSection)
-                                            ?? jumpBackInSectionDefaultValue
-
-        let shouldShowSection = isStoriesRedesignEnabled ? false : isJumpBackInSectionPrefEnabled
-
+        // TODO: FXIOS-11412 - Move profile dependency
+        let shouldShowSection = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageJumpBackinSectionDefault,
+                                                                                  checking: .userOnly)
         self.init(
             windowUUID: windowUUID,
             jumpBackInTabs: [],

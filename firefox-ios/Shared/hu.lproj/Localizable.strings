@@ -1241,7 +1241,7 @@
 "Settings.DisplayTheme.SwitchTitle" = "Automatikusan";
 
 /* System theme settings section title */
-"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Rendszertéma";
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Rendszer";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
 "Settings.DisplayTheme.SystemTheme.SwitchTitle" = "A rendszer világos/sötét módjának használata";

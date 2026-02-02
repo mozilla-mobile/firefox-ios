@@ -77,50 +77,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
-    func test_shouldShowImpressionTriggeredAction_sendsTelemetryData() throws {
-        let subject = createSubject()
-        let action = GeneralBrowserAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-        )
-
-        subject.homepageProvider(AppState(), action)
-
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-    }
-
-    func test_tapOnCustomizeHomepageAction_sendTelemetryData() throws {
-        let subject = createSubject()
-        let action = NavigationBrowserAction(
-            navigationDestination: NavigationDestination(.settings(.homePage)),
-            windowUUID: .XCTestDefaultUUID,
-            actionType: NavigationBrowserActionType.tapOnCustomizeHomepageButton
-        )
-
-        subject.homepageProvider(AppState(), action)
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.type, "customize_homepage_button")
-        XCTAssertEqual(savedExtras.section, "customize_homepage")
-    }
-
     func test_tapOnBookmarksShowMoreButtonAction_sendTelemetryData() throws {
         let subject = createSubject()
         let action = NavigationBrowserAction(
@@ -535,7 +491,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Spacer
     func test_initializeAction_configuresSpacer() throws {
-        setupNimbusStoriesRedesignTesting(isEnabled: true)
         let subject = createSubject()
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
@@ -557,31 +512,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(configuredSpacerActionCount, 1)
         XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
         XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, true)
-    }
-
-    func test_initializeAction_doesNotConfigureSpacer() throws {
-        setupNimbusStoriesRedesignTesting(isEnabled: false)
-        let subject = createSubject()
-        let action = HomepageAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.initialize
-        )
-        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
-
-        mockStore.dispatchCalled = {
-            dispatchExpectation.fulfill()
-        }
-
-        subject.homepageProvider(AppState(), action)
-
-        wait(for: [dispatchExpectation], timeout: 1)
-
-        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
-        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
-
-        XCTAssertEqual(configuredSpacerActionCount, 1)
-        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
-        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, false)
     }
 
     func test_initializeAction_dispatchesConfiguresPrivacyNotice_withTrueValue() throws {
@@ -614,10 +544,9 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredPrivacyNoticeActionCount, 1)
         XCTAssertEqual(configuredPrivacyNoticeActionType, .configuredPrivacyNotice)
-        XCTAssertEqual(configuredPrivacyNoticeAction.shouldShowPrivacyNotice, mockPrivacyNoticeHelper.shouldShowResult)
     }
 
-    func test_initializeAction_dispatchesConfiguresPrivacyNotice_withFalseValue() throws {
+    func test_initializeAction_doesNotDispatchConfiguresPrivacyNotice() throws {
         let mockPrivacyNoticeHelper = MockPrivacyNoticeHelper()
         mockPrivacyNoticeHelper.shouldShowResult = false
         let subject = createSubject(privacyNoticeHelper: mockPrivacyNoticeHelper)
@@ -627,27 +556,12 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.initialize
         )
 
-        let dispatchExpectation = XCTestExpectation(description: "Privacy notice configured middleware action dispatched")
-
-        mockStore.dispatchCalled = {
-            dispatchExpectation.fulfill()
-        }
-
         subject.homepageProvider(AppState(), action)
 
-        wait(for: [dispatchExpectation], timeout: 1)
+        let configuredPrivacyNoticeActions = mockStore.dispatchedActions.compactMap { $0 as? HomepageAction }
+            .filter { ($0.actionType as? HomepageMiddlewareActionType) == .configuredPrivacyNotice }
 
-        let (configuredPrivacyNoticeAction, configuredPrivacyNoticeActionCount) = try getActionInfo(
-            for: .configuredPrivacyNotice
-        )
-
-        let configuredPrivacyNoticeActionType = try XCTUnwrap(
-            configuredPrivacyNoticeAction.actionType as? HomepageMiddlewareActionType
-        )
-
-        XCTAssertEqual(configuredPrivacyNoticeActionCount, 1)
-        XCTAssertEqual(configuredPrivacyNoticeActionType, .configuredPrivacyNotice)
-        XCTAssertEqual(configuredPrivacyNoticeAction.shouldShowPrivacyNotice, mockPrivacyNoticeHelper.shouldShowResult)
+        XCTAssertEqual(configuredPrivacyNoticeActions.count, 0)
     }
 
     // MARK: - Helpers
@@ -664,23 +578,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     private func setupNimbusSearchBarTesting(isEnabled: Bool) {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             return HomepageRedesignFeature(searchBar: isEnabled)
-        }
-    }
-
-    private func setupNimbusStoriesRedesignTesting(isEnabled: Bool) {
-        if !isEnabled {
-            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-                return HomepageRedesignFeature(
-                    storiesRedesign: false,
-                    storiesRedesignV2: false
-                )
-            }
-        } else {
-            FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-                return HomepageRedesignFeature(
-                    storiesRedesign: true
-                )
-            }
         }
     }
 

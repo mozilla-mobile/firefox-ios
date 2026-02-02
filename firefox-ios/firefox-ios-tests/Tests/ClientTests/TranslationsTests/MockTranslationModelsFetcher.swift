@@ -6,7 +6,7 @@ import Foundation
 @testable import Client
 
 /// Minimal mock  for TranslationModelsFetcherProtocol tests. This avoids going through remote settings.
-final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol {
+final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unchecked Sendable {
     var translatorWASMResult: Data?
     var modelsResult: Data?
     var modelBufferResult: Data?

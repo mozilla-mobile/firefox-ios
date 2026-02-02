@@ -98,7 +98,7 @@
 "Settings.AppIconSelection.AppIconNames.Sunset.Title.v137" = "Naplemente";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon which automatically adjusts the white/black background according to the iOS 18+ system light/dark/tinted home screen themes. */
-"Settings.AppIconSelection.AppIconNames.SystemAuto.Title.v139" = "Rendszertéma";
+"Settings.AppIconSelection.AppIconNames.SystemAuto.Title.v139" = "Rendszer";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of dark blue fading to light blue. */
 "Settings.AppIconSelection.AppIconNames.Twilight.Title.v137" = "Alkonyat";

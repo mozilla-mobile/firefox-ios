@@ -50,24 +50,6 @@ class O_AddressesTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
-        reachAddNewAddressScreen()
-        // Enter valid date for all fields
-        addNewAddress()
-        tapSave()
-        // The address is saved
-        mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
-        let addressInfo = ["Test", "test address", "city test, AL, 123456"]
-        for i in addressInfo {
-            mozWaitForElementToExist(app.staticTexts[i])
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2618637
-    // Smoketest TAE
-    func testAddNewAddressAllFieldsFilled_TAE() throws {
-        if #unavailable(iOS 16) {
-            throw XCTSkip("Addresses setting is not available for iOS 15")
-        }
         navigateToAddressScreen()
         addressScreen.reachAddNewAddressScreen()
         addressScreen.addNewAddress()
@@ -283,22 +265,6 @@ class O_AddressesTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
-        reachAddNewAddressScreen()
-        addNewAddress()
-        tapSave()
-        reachEditAndRemoveAddress()
-        let addressInfo = ["Test2", "test address2", "city test2, AL, 100000"]
-        for i in addressInfo {
-            mozWaitForElementToNotExist(app.staticTexts[i])
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2618655
-    // Smoketest TAE
-    func testDeleteAddress_TAE() throws {
-        if #unavailable(iOS 16) {
-            throw XCTSkip("Addresses setting is not available for iOS 15")
-        }
         navigateToAddressScreen()
         addressScreen.reachAddNewAddressScreen()
         addressScreen.addNewAddress()
@@ -378,15 +344,6 @@ class O_AddressesTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
-        addAddressAndReachAutofillForm(indexField: 0)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2548189
-    // Smoketest TAE
-    func testAutofillAddressesByTapingNameField_TAE() throws {
-        if #unavailable(iOS 16) {
-            throw XCTSkip("Addresses setting is not available for iOS 15")
-        }
         navigateToAddressScreen()
         addressScreen.reachAddNewAddressScreen()
         addressScreen.addNewAddress()
@@ -458,64 +415,6 @@ class O_AddressesTests: BaseTestCase {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
         // While in Portrait mode check for the options
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        validatePrivacyOptions()
-        navigator.goto(AutofillPasswordSettings)
-        validateAutofillPasswordOptions()
-        // While in landscape mode check for the options
-        XCUIDevice.shared.orientation = .landscapeLeft
-        validateAutofillPasswordOptions()
-        XCUIDevice.shared.orientation = .portrait
-        // While in dark mode check for the options
-        sleep(1)
-        navigator.nowAt(AutofillPasswordSettings)
-        navigator.goto(SettingsScreen)
-        app.buttons["Done"].waitAndTap()
-        // Adding sleep to avoid loading screen on bitrise
-        sleep(3)
-        switchThemeToDarkOrLight(theme: "Dark")
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        navigator.goto(AutofillPasswordSettings)
-        validateAutofillPasswordOptions()
-        // While in light mode check for the options
-        navigator.nowAt(AutofillPasswordSettings)
-        navigator.goto(SettingsScreen)
-        app.buttons["Done"].waitAndTap()
-        // Adding sleep to avoid loading screen on bitrise
-        sleep(3)
-        switchThemeToDarkOrLight(theme: "Light")
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        navigator.goto(AutofillPasswordSettings)
-        validateAutofillPasswordOptions()
-        navigator.nowAt(AutofillPasswordSettings)
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(NewTabScreen)
-        // Go to a webpage, and select night mode on and off, check options
-        navigator.openURL(path(forTestPage: "test-example.html"))
-        waitUntilPageLoad()
-        navigator.goto(SettingsScreen)
-        navigator.goto(DisplaySettings)
-        navigator.performAction(Action.SelectDarkTheme)
-        navigator.goto(BrowserTab)
-        navigator.goto(SettingsScreen)
-        navigator.goto(DisplaySettings)
-        navigator.performAction(Action.SelectLightTheme)
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(BrowserTab)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2546293
-    // Smoketest TAE
-    func testAddressOptionIsAvailableInSettingsMenu_TAE() throws {
-        if #unavailable(iOS 16) {
-            throw XCTSkip("Addresses setting is not available for iOS 15")
-        }
-        // While in Portrait mode check for the options
         toolbar.assertSettingsButtonExists()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -554,27 +453,6 @@ class O_AddressesTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
-        reachAddNewAddressScreen()
-        addNewAddress()
-        tapSave()
-        app.switches.element(boundBy: 1).waitAndTap()
-        navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
-        // Using indexes to tap on text fields to comodate with iOS 16 OS
-        for index in 0...8 {
-            app.webViews.textFields.element(boundBy: index).waitAndTap()
-            // The option to open saved Addresses is not available
-            let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
-            mozWaitForElementToNotExist(app.buttons[addressAutofillButton])
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2549853
-    // Smoketest TAE
-    func testAutofillOptionNotAvailableToggleOFF_TAE() throws {
-        if #unavailable(iOS 16) {
-            throw XCTSkip("Addresses setting is not available for iOS 15")
-        }
         navigateToAddressScreen()
         addressScreen.reachAddNewAddressScreen()
         addressScreen.addNewAddress()
@@ -593,33 +471,6 @@ class O_AddressesTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2667453
     // Smoketest
     func testRedirectToSettingsByTappingManageAddresses() throws {
-        if #unavailable(iOS 16) {
-            throw XCTSkip("Addresses setting is not available for iOS 15")
-        }
-        reachAddNewAddressScreen()
-        addNewAddress()
-        tapSave()
-        navigator.goto(NewTabScreen)
-        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
-        app.webViews.textFields.element(boundBy: 1).waitAndTap()
-        if iPad() {
-            app.buttons["_previousTapped"].waitAndTap()
-        }
-        let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
-        let manageAddresses = AccessibilityIdentifiers.Autofill.footerPrimaryAction
-        if #unavailable(iOS 26) {
-            app.buttons[addressAutofillButton].waitAndTap()
-            // Tap the "Manage addresses" link
-            app.otherElements.buttons[manageAddresses].waitAndTap()
-            // User is redirected to the Settings -> addresses menu
-            let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
-            mozWaitForElementToExist(app.navigationBars[addresses.title])
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2667453
-    // Smoketest TAE
-    func testRedirectToSettingsByTappingManageAddresses_TAE() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }

@@ -25,11 +25,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         // "Jump Back In" is enabled by default. See Settings -> Homepage
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
-        navigator.goto(HomeSettings)
-        mozWaitForElementToExist(app.switches["Jump Back In"])
-        XCTAssertEqual(app.switches["Jump Back In"].value as? String, "1")
-
-        navigator.goto(NewTabScreen)
+        enableJumpBackInInSettings()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306922

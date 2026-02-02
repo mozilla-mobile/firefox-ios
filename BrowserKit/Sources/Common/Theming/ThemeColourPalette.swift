@@ -41,6 +41,7 @@ public protocol ThemeColourPalette {
     var actionPrimary: UIColor { get }
     var actionPrimaryHover: UIColor { get }
     var actionPrimaryDisabled: UIColor { get }
+    var actionPrimaryBrandRefresh: UIColor { get }
     var actionSecondary: UIColor { get }
     var actionSecondaryDisabled: UIColor { get }
     var actionSecondaryHover: UIColor { get }

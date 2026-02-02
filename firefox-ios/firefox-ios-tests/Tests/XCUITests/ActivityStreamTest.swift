@@ -59,28 +59,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // Smoketest
     func testDefaultSites() throws {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
-        }
-        mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
-        // There should be 5 top sites by default
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
-        // Check their names so that test is added to Smoketest
-        waitForElementsToExist(
-            [
-                app.collectionViews.links.staticTexts["X"],
-                app.collectionViews.links.staticTexts["Amazon"],
-                app.collectionViews.links.staticTexts["Wikipedia"],
-                app.collectionViews.links.staticTexts["YouTube"],
-                app.collectionViews.links.staticTexts["Facebook"]
-            ]
-        )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2273342
-    // Smoketest TAE
-    func testDefaultSites_TAE() throws {
-        app.launch()
 
         XCTExpectFailure("The app was not launched", strict: false) {
             topSites.assertVisible()
@@ -217,34 +195,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     func testTopSitesOpenInNewPrivateTab_HomepageOff() throws {
         addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
-        }
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        // Long tap on Wikipedia top site
-        waitForExistence(app.collectionViews.links.staticTexts["Wikipedia"])
-        app.collectionViews.links.staticTexts["Wikipedia"].press(forDuration: 1)
-        app.tables["Context Menu"].cells.buttons["Open in a Private Tab"].waitAndTap()
-        mozWaitForElementToExist(TopSiteCellgroup)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts.element(boundBy: 0))
-        navigator.nowAt(TabTray)
-        XCTAssertFalse(
-            app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].isHittable,
-            "TopSitesCell should not be visible or interactable on the current screen"
-        )
-        app.otherElements[tabsTray].collectionViews.cells["Wikipedia"].waitAndTap()
-        // The website is open
-        waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                             value: "wikipedia.org")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2273338
-    // Smoketest TAE
-    func testTopSitesOpenInNewPrivateTab_HomepageOff_TAE() throws {
-        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
-        app.launch()
 
         // Assert that the Top Sites are visible upon launch
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -253,30 +203,22 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
         // Wait for the toolbar to exist, which includes the settings menu button
         toolbar.assertSettingsButtonExists()
-
         // Long press on the Wikipedia top site using the screen object
         topSites.longPressOnSite(named: "Wikipedia")
-
         // Open the private tab using the context menu screen object
         contextMenu.openInPrivateTab()
-
         // Assert the homepage is visible again after the context menu action
         topSites.assertVisible()
-
         // Toggle private mode and navigate to the Tab Tray
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(TabTray)
-
         // Assert that the first cell in the Tab Tray is visible and that the navigator is now at the Tab Tray
         tabTray.assertFirstCellVisible()
         navigator.nowAt(TabTray)
-
         // Use the new method from the TopSitesScreen object to check the hittable status
         topSites.assertNotHittable()
-
         // Tap on the Wikipedia cell in the Tab Tray and ensure the website is open
         tabTray.tapOnCell(named: "Wikipedia")
-
         // Use the new BrowserScreen to validate the URL in the address bar
         browser.assertAddressBarContains(value: "wikipedia.org")
     }
@@ -285,56 +227,23 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
-        }
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        // Open one of the sites from Topsites and wait until page is loaded
-        // Long tap on apple top site, second cell
-        mozWaitForElementToExist(app.collectionViews["FxCollectionView"].links[defaultTopSite["bookmarkLabel"]!])
-        app.collectionViews["FxCollectionView"].links[defaultTopSite["bookmarkLabel"]!].press(forDuration: 1)
-        selectOptionFromContextMenu(option: "Open in a Private Tab")
-        // Check that two tabs are open and one of them is the default top site one
-        navigator.nowAt(HomePanelsScreen)
-        waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        waitForExistence(app.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        if iPad() {
-            navigator.goto(TabTray)
-        }
-        waitForExistence(app.otherElements[tabsTray].collectionViews.cells.firstMatch)
-        let numTabsOpen = app.otherElements[tabsTray].collectionViews.cells.count
-        XCTAssertEqual(numTabsOpen, 1, "New tab not open")
-    }
-
-    // SmokeTest TAE
-    func testTopSitesOpenInNewPrivateTabDefaultTopSite_TAE() {
-        XCTExpectFailure("The app was not launched", strict: false) {
             topSites.assertVisible()
         }
-
         toolbar.assertSettingsButtonExists()
         navigator.nowAt(NewTabScreen)
 
         // Long tap on the default Top Site
         let siteName = defaultTopSite["bookmarkLabel"]!
         topSites.longPressOnSite(named: siteName)
-
         contextMenu.openInPrivateTab()
-
         navigator.nowAt(HomePanelsScreen)
         BaseTestCase().waitForTabsButton()
-
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-
         tabTray.assertCellExists(named: siteName)
-
         if iPad() {
             navigator.goto(TabTray)
         }
-
         tabTray.assertFirstCellVisible()
-
         tabTray.assertTabCount(1)
     }
 

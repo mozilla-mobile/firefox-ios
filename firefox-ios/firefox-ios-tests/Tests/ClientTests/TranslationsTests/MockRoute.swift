@@ -8,7 +8,7 @@ import Foundation
 /// Minimal mock route for TinyRouter tests.
 /// Can simulate: returning a reply, returning nil (fall-through),
 /// or throwing an error. Tracks how many times it was called.
-final class MockRoute: TinyRoute {
+final class MockRoute: TinyRoute, @unchecked Sendable {
     var calls: [URL] = []
     var reply: TinyHTTPReply?
     var error: Error?

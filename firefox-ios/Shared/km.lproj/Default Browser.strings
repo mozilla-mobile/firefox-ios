@@ -1,8 +1,26 @@
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "ការធ្វើឱ្យ Firefox កម្មវិធីរុករកលំនាំដើមរបស់អ្នកគឺជាការបោះឆ្នោតសម្រាប់អ៊ីនធឺណិតដែលបើកចំហ និងអាចចូលប្រើបាន។";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "លំនាំដើមទៅអ៊ីនធឺណិតកាន់តែប្រសើរ";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "ស្វែងយល់​របៀប";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "កំណត់​តំណ​ពី​គេហទំព័រ អ៊ីមែល និង Messages ដើម្បីបើក​នៅក្នុង Firefox ដោយ​ស្វ័យប្រវត្តិ។";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = " ជ្រើសរើស Firefox ជាកម្មវិធីរុករកលំនាំដើមរបស់អ្នក ដើម្បីធ្វើឱ្យល្បឿន សុវត្ថិភាព និងឯកជនភាព ស្វ័យប្រវត្តិ។\n";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "លើកកម្ពស់ការរុករកប្រចាំថ្ងៃ";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox រារាំងកម្មវិធីតាមដានជាង 3,000+ ក្នុងអ្នកប្រើប្រាស់ម្នាក់ៗជារៀងរាល់ខែ។ ធ្វើឱ្យយើងក្លាយជាកម្មវិធីរុករកតាមអ៊ីនធឺណិតលំនាំដើមរបស់អ្នក ដើម្បីភាពឯកជន និងសន្តិភាពនៃចិត្ត។";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox គ្របដណ្តប់លើភាពឯកជន";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "ប្ដូរ​កម្មវិធី​រុករក​តាមអ៊ីនធឺណិត​លំនាំដើម​របស់​អ្នក";
@@ -21,6 +39,9 @@
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "កម្មវិធី​រុករក​តាម​អ៊ីនធឺណិត​លំនាំដើម";
+
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "ខ្ញុំនឹងធ្វើវានៅពេលក្រោយ";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "កំណត់​ជា​កម្មវិធី​រុករក​តាម​អ៊ីនធឺណិត​លំនាំដើម";

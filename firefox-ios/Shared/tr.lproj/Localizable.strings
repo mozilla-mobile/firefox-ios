@@ -1157,7 +1157,7 @@
 "Settings.Appearance.Title.v137" = "Görünüm";
 
 /* Website Appearance settings section title in Appearance settings */
-"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Web Sitesi Görünümü";
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "WEB SİTESİ GÖRÜNÜMÜ";
 
 /* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
 "Settings.Appearance.WebsiteDarkMode.Description.v137" = "Web sitelerine koyu bir görünüm verir. Bazı siteler düzgün görünmeyebilir.";
@@ -1301,7 +1301,7 @@
 "Settings.Home.Option.StartAtHome.Title" = "Açılış ekranı";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title.v101" = "Giriş sayfasına dahil et";
+"Settings.Home.Option.Title.v101" = "GİRİŞ SAYFASINA DAHİL ET";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "Duvar kâğıdı";

@@ -262,10 +262,6 @@ struct HomepageState: ScreenState, Equatable {
 
     @MainActor
     private static func handlePrivacyNoticeInitialization(action: Action, state: Self) -> HomepageState {
-        guard let shouldShowPrivacyNotice = (action as? HomepageAction)?.shouldShowPrivacyNotice else {
-            return defaultState(from: state)
-        }
-
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: HeaderState.reducer(state.headerState, action),
@@ -278,7 +274,7 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: shouldShowPrivacyNotice,
+            shouldShowPrivacyNotice: true,
             shouldShowSpacer: state.shouldShowSpacer,
             availableContentHeight: state.availableContentHeight
         )

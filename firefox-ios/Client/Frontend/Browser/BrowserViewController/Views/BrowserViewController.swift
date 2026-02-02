@@ -168,13 +168,6 @@ class BrowserViewController: UIViewController,
         view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
-    // Overlay dimming view for zero search mode
-    private lazy var zeroSearchDimmingView: UIView = .build { view in
-        view.accessibilityIdentifier = AccessibilityIdentifiers.ZeroSearch.dimmingView
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedZeroSearchScrim))
-        view.addGestureRecognizer(tapRecognizer)
-    }
-
     // BottomContainer stack view contains toolbar
     lazy var bottomContainer: BaseAlphaStackView = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.bottomContainer
@@ -1101,6 +1094,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func showToastType(toast: ToastType) {
+        /// This toast is generated from GeneralBrowserActionType.showToast
         func showToast() {
             SimpleToast().showAlertWithText(
                 toast.title,
@@ -1109,10 +1103,7 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .clearCookies,
-                .addToReadingList,
-                .removeShortcut,
-                .removeFromReadingList:
+        case .clearCookies:
             showToast()
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
@@ -1461,12 +1452,6 @@ class BrowserViewController: UIViewController,
         view.addSubview(overKeyboardContainer)
 
         if isSwipingTabsEnabled {
-            // Add Homepage to view hierarchy so it is possible to take screenshot from it
-            showEmbeddedHomepage(inline: false, isPrivate: false)
-            browserDelegate?.setHomepageVisibility(isVisible: false)
-            addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
-                return self?.browserDelegate?.homepageScreenshotTool()
-            }
             addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
                 return self?.newTabSettings
             }
@@ -2013,13 +1998,6 @@ class BrowserViewController: UIViewController,
             toastContainer: contentContainer
         )
 
-        if isSwipingTabsEnabled {
-            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
-            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
-            // to overlay the homepage.
-            browserDelegate?.setHomepageVisibility(isVisible: true)
-        }
-
         // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
         if !isToolbarTranslucencyRefactorEnabled {
             updateToolbarDisplay()
@@ -2283,7 +2261,6 @@ class BrowserViewController: UIViewController,
     }
 
     func destroySearchController() {
-        zeroSearchDimmingView.removeFromSuperview()
         hideSearchController()
 
         searchController = nil
@@ -2513,50 +2490,41 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleURL(url: URL?, tab: Tab, webView: WKWebView) {
-        // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
+        // Special case for popups, do not show URL in the UI until we have loaded
+        // All new popup webViews are created with "about:blank" url
         if tab.url?.absoluteString == "about:blank" && webView.url == nil {
             return
         }
 
-        // Ensure we do have a URL from that observer
-        // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
-        let url: URL? = if let webURL = webView.url {
-            webURL
-        } else if let changedURL = url {
-            changedURL
-        } else {
-            nil
-        }
-        guard let url else { return }
-        if !url.isFxHomeUrl {
+        if let url, !url.isFxHomeUrl {
             updateToolbarAnimationStateIfNeeded()
         }
+
         // Security safety check (Bugzilla #1933079)
         if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
             tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
             return
         }
 
-        // To prevent spoofing, only change the URL immediately if the new URL is on
-        // the same origin as the current URL. Otherwise, if the origins are different
-        // or either origin is nil, set the tab URL to the URL's origin and return.
-        guard let tabURLOrigin = tab.url?.origin,
-              let urlOrigin = url.origin,
-              tabURLOrigin == urlOrigin else {
-            if let urlOrigin = url.origin,
-               let newTabURL = URL(string: urlOrigin) {
-                tab.url = newTabURL
+        // To prevent spoofing, if the origins are equal update the UI always
+        if tab.url?.origin == url?.origin {
+            tab.url = url
+            // Update UI to reflect the URL we have set the tab to
+            if tab === tabManager.selectedTab {
+                updateUIForReaderHomeStateForTab(tab)
             }
-            return
-        }
-        tab.url = url
 
-        if tab === tabManager.selectedTab {
-            updateUIForReaderHomeStateForTab(tab)
+            // Catch history pushState navigation, but ONLY for same origin navigation,
+            // for reasons above about URL spoofing risk.
+            navigateInTab(tab: tab, webViewStatus: .url)
+        } else {
+            // If the origins are different, only set the tab url and update ui if the tabs current scheme is about
+            // and we are done loading
+            if tab === tabManager.selectedTab, tab.url?.displayURL?.scheme == "about", !tab.isLoading, let url {
+                tab.url = url
+                updateUIForReaderHomeStateForTab(tab)
+            }
         }
-        // Catch history pushState navigation, but ONLY for same origin navigation,
-        // for reasons above about URL spoofing risk.
-        navigateInTab(tab: tab, webViewStatus: .url)
     }
 
     private func handleTitleChanged(tab: Tab) {
@@ -3188,8 +3156,8 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
-    private func dispatchAvailableContentHeightChangedAction() {
-        guard isAnyStoriesRedesignEnabled, let browserViewControllerState,
+    func dispatchAvailableContentHeightChangedAction() {
+        guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
            homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
@@ -3827,26 +3795,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Configures the scrim area for zero search state on homepage which is simply a dimming view
-    private func configureHomepageZeroSearchView() {
-        addressToolbarContainer.isHidden = false
-
-        zeroSearchDimmingView.alpha = 0
-        view.addSubview(zeroSearchDimmingView)
-        view.bringSubviewToFront(zeroSearchDimmingView)
-
-        NSLayoutConstraint.activate([
-            zeroSearchDimmingView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
-            zeroSearchDimmingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
-            zeroSearchDimmingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
-            zeroSearchDimmingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
-        ])
-
-        UIView.animate(withDuration: 0.3) {
-             self.zeroSearchDimmingView.alpha = 1
-        }
-    }
-
     /// Tapping in the scrim area will behave the same as tapping the cancel button on the top toolbar.
     @objc
     private func tappedZeroSearchScrim() {
@@ -3892,7 +3840,6 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        zeroSearchDimmingView.backgroundColor = currentTheme.colors.layerScrim.withAlphaComponent(0.70)
 
         // to make sure on homepage with bottom search bar the status bar is hidden
         // we have to adjust the background color to match the homepage background color
@@ -4060,11 +4007,6 @@ class BrowserViewController: UIViewController,
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
 
-        if let isHomeTab = tabManager.selectedTab?.isFxHomeTab,
-           featureFlags.isFeatureEnabled(.homepageScrim, checking: .buildOnly) && isHomeTab {
-            configureHomepageZeroSearchView()
-        }
-
         if isSwipingTabsEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
@@ -4154,11 +4096,11 @@ class BrowserViewController: UIViewController,
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
         case .error, .expiredToken:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
-            SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
+            showSimpleToast(message: message)
         case .freeTierLimitReached:
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
             let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
-            SimpleToast().showAlertWithText(message, bottomContainer: contentContainer, theme: currentTheme())
+            showSimpleToast(message: message)
         }
     }
 
@@ -4767,13 +4709,6 @@ extension BrowserViewController: TabManagerDelegate {
         if needsReload {
             selectedTab.reloadPage()
         }
-
-        if isSwipingTabsEnabled {
-            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
-            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
-            // to overlay the homepage.
-            browserDelegate?.setHomepageVisibility(isVisible: true)
-        }
     }
 
     // TODO: FXIOS-14347 This function will be removed when toolbarTranslucencyRefactor is on for everyone
@@ -4827,6 +4762,12 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
+    }
+
+    func showSimpleToast(message: String) {
+        let viewModel = PlainToastViewModel(labelText: message)
+        let toast = PlainToast(viewModel: viewModel, theme: currentTheme(), completion: nil)
+        show(toast: toast)
     }
 
     func show(toast: Toast,

@@ -27,7 +27,8 @@ class RemoteTabsPanel: UIViewController,
                        RemoteTabsEmptyViewDelegate,
                        StoreSubscriber,
                        FeatureFlaggable,
-                       TabTrayThemeable {
+                       TabTrayThemeable,
+                       Notifiable {
     typealias SubscriberStateType = RemoteTabsPanelState
 
     // MARK: - Properties
@@ -62,6 +63,15 @@ class RemoteTabsPanel: UIViewController,
         super.init(nibName: nil, bundle: nil)
 
         self.tabsDisplayViewController.remoteTabsPanel = self
+
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                .ProfileDidStartSyncing,
+                .ProfileDidFinishSyncing
+            ]
+        )
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -277,5 +287,26 @@ class RemoteTabsPanel: UIViewController,
         store.dispatch(action)
 
         refreshTabs(useCache: true)
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .ProfileDidStartSyncing:
+            ensureMainThread {
+                if self.state.refreshState == .idle {
+                    let action = RemoteTabsPanelAction(clientAndTabs: [],
+                                                       devices: nil,
+                                                       windowUUID: self.windowUUID,
+                                                       actionType: RemoteTabsPanelActionType.syncDidBegin)
+                    store.dispatch(action)
+                }
+            }
+        case .ProfileDidFinishSyncing:
+            ensureMainThread {
+                self.refreshTabs()
+            }
+        default: return
+        }
     }
 }

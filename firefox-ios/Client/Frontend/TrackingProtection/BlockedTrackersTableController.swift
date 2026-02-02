@@ -11,6 +11,8 @@ struct BlockedTrackerItem: Hashable {
     let identifier = UUID()
     let title: String
     let image: UIImage
+    let titleIdentifier: String
+    let imageIdentifier: String
 }
 
 // MARK: BlockedTrackersTableViewController
@@ -25,8 +27,10 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     private lazy var trackersTable: BlockedTrackersTableView = .build { tableView in
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers
         tableView.delegate = self
         tableView.isScrollEnabled = true
+        tableView.accessibilityIdentifier = A11y.trackersTable
     }
 
     // MARK: Navigation View

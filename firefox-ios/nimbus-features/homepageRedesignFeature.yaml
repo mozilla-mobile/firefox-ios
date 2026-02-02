@@ -4,81 +4,49 @@ features:
     description: >
       This feature is for managing the roll out of the Homepage New Tab Redesign feature.
     variables:
-      enabled:
-        description: >
-          Enables the feature.
-        type: Boolean
-        default: false
       search-bar:
         description: >
           If true, enables the search bar feature on homepage for users.
         type: Boolean
         default: false
-      shortcuts-library:
+      stories-scroll-direction:
         description: >
-          If true, enables the shortcuts library feature, accessible from the homepage
+          Controls the layout direction for stories on the homepage.
+        type: ScrollDirection
+        default: baseline
+      bookmarks-section-default:
+        description: >
+          If true, enables the bookmarks homepage section by default
         type: Boolean
         default: false
-      stories-redesign:
+      jbi-section-default:
         description: >
-          If true, enables the stories section redesign on homepage, which also includes the removal of other sections (i.e. jump back in, bookmarks)
+          If true, enables the jump back in homepage section by default
         type: Boolean
         default: false
-      stories-redesign-v2:
-        description: >
-          If true, enables the redesigned story cards and homepage layout, and disables the bookmarks and jump-back-in homepage sections by default.
-        type: Boolean
-        default: false
-      scrim:
-        description: >
-          If true, enables the scrim on the homepage when searching.
-        type: Boolean
-        default: false
-      discover-more-feature-configuration:
-        description: >
-          A configuration for the Discover More feature
-        type: DiscoverMoreConfiguration
-        default:
-          discover-more-v1-experience: false
-          show-discover-more-button: false
 
     defaults:
       - channel: beta
         value:
-          enabled: false
           search-bar: false
-          shortcuts-library: false
-          stories-redesign: true
-          stories-redesign-v2: false
-          scrim: false
-          discover-more-feature-configuration:
-            discover-more-v1-experience: false
-            show-discover-more-button: false
+          stories-scroll-direction: baseline
+          bookmarks-section-default: false
+          jbi-section-default: false
 
       - channel: developer
         value:
-          enabled: false
           search-bar: false
-          shortcuts-library: false
-          stories-redesign: true
-          stories-redesign-v2: false
-          scrim: true
-          discover-more-feature-configuration:
-            discover-more-v1-experience: false
-            show-discover-more-button: false
+          stories-scroll-direction: baseline
+          bookmarks-section-default: false
+          jbi-section-default: false
 
-objects:
-  DiscoverMoreConfiguration:
-    description: >
-      A configuration that dictates the behaviour/subfeatures of the Discover More feature
-    fields:
-      discover-more-v1-experience:
-        type: Boolean
-        description: >
-          Whether to show the Discover More experience is enabled
-        default: false
-      show-discover-more-button:
-        type: Boolean
-        description: >
-          Whether to show the Discover More button on the homepage
-        default: false
+enums:
+  ScrollDirection:
+    description: The layout direction for stories on the homepage.
+    variants:
+      baseline:
+        description: Uses the current default stories layout.
+      vertical:
+        description: Shows stories in a vertical layout.
+      horizontal:
+        description: Shows stories in a horizontal layout.

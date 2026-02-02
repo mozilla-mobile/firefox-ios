@@ -1,3 +1,18 @@
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Κωδικός σφάλματος: %@";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Μάθετε περισσότερα";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Συνέχεια στο %@ (Επικίνδυνο)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Να προσέχετε. Κάτι δεν πάει καλά.";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Προβολή πιστοποιητικού ιστοτόπου";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Ανανέωση";
 
@@ -6,6 +21,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Να προσέχετε. Κάτι δεν πάει καλά.";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "Επιστροφή (Προτείνεται)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "Δοκιμάστε να συνδεθείτε από διαφορετική συσκευή. Ελέγξτε το modem ή το router σας. Αποσυνδέστε και επανασυνδέστε το Wi-Fi.";

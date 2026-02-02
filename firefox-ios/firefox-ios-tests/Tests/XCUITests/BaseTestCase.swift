@@ -261,6 +261,26 @@ class BaseTestCase: XCTestCase {
         navigator.performAction(Action.Bookmark)
     }
 
+    func enableBookmarksInSettings() {
+        navigator.goto(HomeSettings)
+        let homepageSettings = HomepageSettingsScreen(app: app)
+        homepageSettings.assertBookmarkToggleExists()
+        homepageSettings.enableBookmarkToggle()
+        navigator.nowAt(HomeSettings)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+    }
+
+    func enableJumpBackInInSettings() {
+        navigator.goto(HomeSettings)
+        let homepageSettings = HomepageSettingsScreen(app: app)
+        homepageSettings.assertJumpBackInToggleExists()
+        homepageSettings.enableJumpBackInToggle()
+        navigator.nowAt(HomeSettings)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+    }
+
     func unbookmark(url: String) {
         navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_Bookmarks)

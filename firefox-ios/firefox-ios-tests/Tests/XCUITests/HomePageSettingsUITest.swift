@@ -195,6 +195,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     func testJumpBackIn() {
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
+        enableJumpBackInInSettings()
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
         navigator.goto(TabTray)
@@ -230,7 +231,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
-        navigator.nowAt(BrowserTab)
+        enableBookmarksInSettings()
         bookmarkPages()
         // iOS 15 does not have the Reader View button available (when experiment Off)
         if #available(iOS 16, *) {
@@ -268,75 +269,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             checkBookmarksUpdated()
         }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306871
-    // Smoketest
-    func testCustomizeHomepage() {
-        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
-        app.launch()
-        if !iPad() {
-            mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
-            app.collectionViews["FxCollectionView"].swipeUp()
-            app.collectionViews["FxCollectionView"].swipeUp()
-            mozWaitForElementToExist(
-                app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage]
-            )
-        }
-        app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].waitAndTap()
-        // Verify default settings
-        waitForElementsToExist(
-            [
-            app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar],
-            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always],
-            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled]
-            ]
-        )
-        mozWaitForElementToExist(
-            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours]
-        )
-        // Commented due to experimental features
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
-//            "1"
-//        )
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
-//            "1"
-//        )
-
-        if #available(iOS 17, *) {
-            XCTAssertEqual(
-                app.cells.switches["Stories"].value as? String,
-                "1"
-            )
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306871
-    // Smoketest TAE
-    func testCustomizeHomepage_TAE() {
-        let fxHomePageScreen = FirefoxHomePageScreen(app: app)
-        let homePageScreen = HomePageScreen(app: app)
-        let settingHomePageScreen = SettingsHomepageScreen(app: app)
-
-        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
-        app.launch()
-        homePageScreen.swipeToCustomizeHomeOption()
-        fxHomePageScreen.tapOnCustomizeHomePageOption(timeout: TIMEOUT)
-        // Verify default settings
-        settingHomePageScreen.assertDefaultOptionsVisible()
-        // Commented due to experimental features
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
-//            "1"
-//        )
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
-//            "1"
-//        )
-
-        settingHomePageScreen.assertStoriesSwitch(isOn: true)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032

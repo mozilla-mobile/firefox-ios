@@ -6,7 +6,7 @@ import Foundation
 
 /// Protocol defining a route that can handle incoming URL requests.
 /// Conforming types can process URLs and return appropriate HTTP responses.
-protocol TinyRoute {
+protocol TinyRoute: Sendable {
     /// Attempts to handle an incoming URL request. Throws If the request is malformed or processing fails
-    func handle(url: URL, components: URLComponents) throws -> TinyHTTPReply?
+    func handle(url: URL, components: URLComponents) async throws -> TinyHTTPReply?
 }

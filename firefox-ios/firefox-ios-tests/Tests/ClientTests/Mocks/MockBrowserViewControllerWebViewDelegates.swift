@@ -8,17 +8,6 @@ import WebKit
 
 @testable import Client
 
-// MARK: - WKFrameInfo
-final class MockFrameInfo: WKFrameInfo {
-    private let main: Bool
-
-    init(isMainFrame: Bool) {
-        self.main = isMainFrame
-        super.init()
-    }
-    override var isMainFrame: Bool { main }
-}
-
 // MARK: - MockNavigationAction
 class MockNavigationAction: WKNavigationAction {
     private var type: WKNavigationType?

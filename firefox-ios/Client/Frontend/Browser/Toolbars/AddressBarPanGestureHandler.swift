@@ -50,7 +50,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     private let tabManager: TabManager
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
-    var homepageScreenshotToolProvider: (() -> Screenshotable?)?
     var newTabSettingsProvider: (() -> NewTabPage?)?
     weak var delegate: AddressBarPanGestureHandler.Delegate?
     private var homepageScreenshot: UIImage?
@@ -189,15 +188,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
             delegate?.swipeGestureDidBegin()
         case .changed:
-            if nextTab == nil, homepageScreenshot == nil {
-                let homepageScreenshotTool = homepageScreenshotToolProvider?()
-                homepageScreenshot = homepageScreenshotTool?.screenshot(bounds: CGRect(
-                    x: 0.0,
-                    y: -contentContainer.frame.origin.y,
-                    width: webPagePreview.frame.width,
-                    height: webPagePreview.frame.height
-                ))
-            }
             handleGestureChangedState(translation: translation, nextTab: nextTab)
         case .ended, .cancelled, .failed:
             let velocity = gesture.velocity(in: contentContainer)
@@ -228,7 +218,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             case .homePage:
                 webPagePreview.setScreenshot(url: NewTabHomePageAccessors.getHomePage(prefs))
             case .topSites:
-                webPagePreview.setScreenshot(homepageScreenshot)
+                webPagePreview.setScreenshot(nil)
             case nil, .blankPage:
                 webPagePreview.setScreenshot(url: nil)
             }

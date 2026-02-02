@@ -79,7 +79,9 @@ class BlockedTrackerCell: UITableViewCell,
 
     func configure(with item: BlockedTrackerItem, hideDivider: Bool) {
         trackerImageView.image = item.image
+        trackerImageView.accessibilityIdentifier = item.imageIdentifier
         trackerLabel.text = item.title
+        trackerLabel.accessibilityIdentifier = item.titleIdentifier
         dividerView.isHidden = hideDivider
 
         let iconSize = TPMenuUX.UX.iconSize

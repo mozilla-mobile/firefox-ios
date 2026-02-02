@@ -71,9 +71,16 @@ struct TopSitesView: View {
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
             Group {
                 if let image = entry.favicons[site.faviconImageCacheKey] {
-                    image
-                        .resizable()
-                        .scaledToFit()
+                    if #available(iOSApplicationExtension 18.0, *) {
+                        image
+                            .resizable()
+                            .widgetAccentedRenderingMode(.accentedDesaturated)
+                            .scaledToFit()
+                    } else {
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    }
                 } else {
                     Rectangle()
                         .fill(UX.emptySquareFillColor)

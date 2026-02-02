@@ -11,7 +11,7 @@
 "Alerts.AddToCalendar.Title.v134" = "Dodati u kalendar?";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
-"Alerts.FeltDeletion.Body.v122" = "Zatvori sve privatne kartice i izbriši povijest, kolačiće i sve ostale podatke web stranica.";
+"Alerts.FeltDeletion.Body.v122" = "Zatvori sve privatne kartice i izbriši povijest, kolačiće i sve ostale podatke web-stranica.";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
 "Alerts.FeltDeletion.Button.Cancel.v122" = "Odustani";

@@ -1,8 +1,26 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle.v140" = "Artitgels";
 
+/* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
+"FirefoxHome.PrivacyNotice.Body.v148" = "Nus avain actualisà nossas %1$@ per resguardar las funcziuns las pli novas en %2$@. %3$@";
+
+/* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
+"FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "Ulteriuras infurmaziuns";
+
+/* Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice. */
+"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "Infurmaziuns davart la protecziun da datas";
+
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "Pagina da partenza";
+
+/* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
+"FirefoxHome.Stories.AllStoriesButtonTitle.v145" = "Tut ils artitgels";
+
+/* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
+"FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Tut ils artitgels";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Oz popular";
 
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "Artitgels";
@@ -18,6 +36,9 @@
 
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Na lascha nagins fastizs sin quest apparat";
+
+/* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
+"FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "Rechargiar la pagina";
 
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Tschertgar u endatar in’adressa";

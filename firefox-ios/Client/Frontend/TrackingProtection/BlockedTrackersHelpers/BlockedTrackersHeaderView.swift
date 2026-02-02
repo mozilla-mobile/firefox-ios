@@ -17,7 +17,9 @@ class BlockedTrackersHeaderView: UITableViewHeaderFooterView,
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers.headerView
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers
+        accessibilityIdentifier = A11y.headerView
+        totalTrackersBlockedLabel.accessibilityIdentifier = A11y.totalTrackersBlockedLabel
         setupView()
     }
 

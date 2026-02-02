@@ -39,6 +39,10 @@ protocol SettingsSelectorsSet {
     var BROWSING_CELL_TITLE: Selector { get }
     var BLOCK_IMAGES_SWITCH_TITLE: Selector { get }
 
+    // Send Data
+    var SEND_DATA_CELL: Selector { get }
+    var SEND_CRASH_REPORTS_CELL: Selector { get }
+
     // Translation
     var TRANSLATION_CELL_TITLE: Selector { get }
 
@@ -72,6 +76,8 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
         static let noImageModeStatus = "NoImageModeStatus"
         static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
+        static let sendData = "settings.sendUsageData"
+        static let sendCrashReports = "settings.sendCrashReports"
     }
 
     // Core Element Selector
@@ -237,6 +243,18 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "translation"]
     )
 
+    let SEND_DATA_CELL = Selector.switchById(
+        IDs.sendData,
+        description: "Send Technical Data settings cell",
+        groups: ["settings", "send data"]
+    )
+
+    let SEND_CRASH_REPORTS_CELL = Selector.switchById(
+        IDs.sendCrashReports,
+        description: "Send Crash Reports settings cell",
+        groups: ["settings", "send data"]
+    )
+
     func ALL_CELLS() -> [Selector] {
         let s = AccessibilityIdentifiers.Settings.self
         return [
@@ -324,6 +342,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
          CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, DEFAULT_BROWSER_CELL,
-         BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH, TRANSLATION_CELL_TITLE]
+         BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH, TRANSLATION_CELL_TITLE,
+         SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL]
     }
 }

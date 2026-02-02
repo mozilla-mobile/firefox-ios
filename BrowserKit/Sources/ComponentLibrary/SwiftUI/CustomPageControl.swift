@@ -14,9 +14,15 @@ public enum PageControlStyle {
 
     /// Returns the primary and secondary colors for this style from the given palette.
     ///
-    /// - Parameter palette: The theme palette to pull colors from.
+    /// - Parameters:
+    ///   - palette: The theme palette to pull colors from.
+    ///   - isBrandRefresh: Whether this is for the brand refresh variant.
     /// - Returns: A tuple containing `(primary: UIColor, secondary: UIColor)`.
-    func colors(from palette: ThemeColourPalette) -> (primary: UIColor, secondary: UIColor) {
+    func colors(from palette: ThemeColourPalette, isBrandRefresh: Bool = false) -> (primary: UIColor, secondary: UIColor) {
+        if isBrandRefresh {
+            return (palette.iconPrimary, palette.iconDisabled)
+        }
+
         switch self {
         case .regular:
             return (palette.actionPrimary, palette.iconDisabled)
@@ -27,14 +33,14 @@ public enum PageControlStyle {
 }
 
 /// A customizable SwiftUI page control that adapts to theme changes.
-public struct CustomPageControl: View {
-    @State private var primaryActionColor: Color = .clear
-    @State private var secondaryActionColor: Color = .clear
+public struct CustomPageControl: ThemeableView {
+    @State public var theme: Theme
     @Binding var currentPage: Int
-    let windowUUID: WindowUUID
-    let themeManager: ThemeManager
+    public let windowUUID: WindowUUID
+    public var themeManager: ThemeManager
     let numberOfPages: Int
     let style: PageControlStyle
+    let isBrandRefresh: Bool
 
     /// Creates a new page control.
     ///
@@ -44,21 +50,29 @@ public struct CustomPageControl: View {
     ///   - windowUUID: The window identifier for theme updates.
     ///   - themeManager: Provides theme info.
     ///   - style: Visual style (regular or compact). Defaults to `.regular`.
+    ///   - isBrandRefresh: Whether this is for the brand refresh variant. Defaults to `false`.
     public init(
         currentPage: Binding<Int>,
         numberOfPages: Int,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        style: PageControlStyle = .regular
+        style: PageControlStyle = .regular,
+        isBrandRefresh: Bool = false
     ) {
         self._currentPage = currentPage
         self.numberOfPages = numberOfPages
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.style = style
+        self.isBrandRefresh = isBrandRefresh
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
     public var body: some View {
+        let colors = style.colors(from: theme.colors, isBrandRefresh: isBrandRefresh)
+        let primaryActionColor = Color(colors.primary)
+        let secondaryActionColor = Color(colors.secondary)
+
         HStack(spacing: 8) {
             ForEach(0..<numberOfPages, id: \.self) { index in
                 Circle()
@@ -68,18 +82,10 @@ public struct CustomPageControl: View {
                     .animation(.easeInOut(duration: 0.2), value: currentPage)
             }
         }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-    }
-
-    private func applyTheme(theme: Theme) {
-        let colors = style.colors(from: theme.colors)
-        primaryActionColor = Color(colors.primary)
-        secondaryActionColor = Color(colors.secondary)
+        .listenToThemeChanges(
+            theme: $theme,
+            manager: themeManager,
+            windowUUID: windowUUID
+        )
     }
 }

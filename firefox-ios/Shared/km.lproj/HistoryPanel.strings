@@ -1,3 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "លុប";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "គ្រប់ពេល";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "កាលពី ៤ សប្ដាហ៍មុន";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "ម៉ោង​ចុងក្រោយ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = " 7 ថ្ងៃចុងក្រោយ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "24 ម៉ោងចុងក្រោយ";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "លុបប្រវត្តិ (រួមទាំងប្រវត្តិដែលបានធ្វើសមកាលកម្មពីឧបករណ៍ផ្សេងទៀត) ខូគី និងទិន្នន័យរុករកផ្សេងទៀត។";
+

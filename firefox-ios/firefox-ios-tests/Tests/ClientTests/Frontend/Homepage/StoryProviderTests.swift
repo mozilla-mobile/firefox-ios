@@ -11,7 +11,7 @@ import MozillaAppServices
 class StoryProviderTests: XCTestCase, FeatureFlaggable {
     func testFetchingStories_forHomepage_returnsList() async {
         let stories: [RecommendationDataItem] = (0..<30).map { .makeItem("feed\($0)") }
-        let expectedNumberOfStories = isAnyStoriesRedesignEnabled ? 9 : 12
+        let expectedNumberOfStories = 9
         let expectedResult = Array(stories.prefix(expectedNumberOfStories)).map(MerinoStory.init)
 
         let subject = createSubject(with: MockMerinoAPI(result: .success(stories)))

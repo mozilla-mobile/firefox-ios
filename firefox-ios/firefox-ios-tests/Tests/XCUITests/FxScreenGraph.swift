@@ -213,6 +213,7 @@ class Action {
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
+    static let ToggleJumpBackIn = "ToggleJumpBackIn"
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
     static let SelectNewTabAsFirefoxHomePage = "SelectNewTabAsFirefoxHomePage"
@@ -381,20 +382,7 @@ extension XCUIElement {
             if cellNum == UInt.min {
                 return
             }
-
-            let lastCell = self.cells.element(boundBy: Int(cellNum))
-            let bottom: XCUICoordinate
-            // If the cell is a little bit on the table.
-            // We shouldn't drag from too close to the edge of the screen,
-            // because Control Center gets summoned.
-            if lastCell.frame.minY < self.frame.maxY * 0.95 {
-                bottom = lastCell.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.0))
-            } else {
-                bottom = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
-            }
-
-            let top = firstCell.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.0))
-            bottom.press(forDuration: 0.1, thenDragTo: top)
+            firstCell.swipeUp()
             screenNum += 1
         }
     }

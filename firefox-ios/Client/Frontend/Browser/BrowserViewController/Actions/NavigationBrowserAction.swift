@@ -25,7 +25,6 @@ enum NavigationBrowserActionType: ActionType {
     // Native views
     case tapOnTrackingProtection
     case tapOnShareSheet
-    case tapOnCustomizeHomepageButton
     case tapOnSettingsSection
 
     // link related

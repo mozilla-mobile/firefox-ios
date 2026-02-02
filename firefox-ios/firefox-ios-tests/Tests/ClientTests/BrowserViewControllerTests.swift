@@ -143,24 +143,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
-    func testViewDidLoad_addsHomepage_whenSwipingTabsEnabled_onIphone() {
-        let subject = createSubject(userInterfaceIdiom: .phone)
-        setIsSwipingTabsEnabled(true)
-
-        subject.loadViewIfNeeded()
-
-        XCTAssertEqual(browserCoordinator.showHomepageCalled, 1)
-    }
-
-    func testViewDidLoad_doesNotAddHomepage_whenSwipingTabsEnabled_onIpad() {
-        let subject = createSubject(userInterfaceIdiom: .pad)
-        setIsSwipingTabsEnabled(true)
-
-        subject.loadViewIfNeeded()
-
-        XCTAssertEqual(browserCoordinator.showHomepageCalled, 0)
-    }
-
     func testUpdateReaderModeState_whenSummarizeFeatureOn_dispatchesToolbarMiddlewareAction() throws {
         setIsHostedSummarizerEnabled(true)
         let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
@@ -542,8 +524,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject(userInterfaceIdiom: UIUserInterfaceIdiom? = nil,
-                               file: StaticString = #filePath,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
@@ -553,11 +534,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
         subject.browserDelegate = browserCoordinator
-
-        if let userInterfaceIdiom {
-            let toolbarHelper: ToolbarHelperInterface = ToolbarHelper(userInterfaceIdiom: userInterfaceIdiom)
-            subject.toolbarHelper = toolbarHelper
-        }
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

@@ -23,14 +23,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
-    case homepageRedesign
+    case homepageBookmarksSectionDefault
+    case homepageJumpBackinSectionDefault
     case homepageSearchBar
-    case homepageShortcutsLibrary
-    case homepageStoriesRedesign
-    case homepageStoriesRedesignV2
-    case homepageScrim
-    case homepageDiscoverMoreButton
-    case homepageDiscoverMoreExperience
+    case homepageStoriesScrollDirection
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -47,6 +43,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case relayIntegration
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
+    case snapkitRemovalRefactor
     case splashScreen
     case startAtHome
     case appleSummarizer
@@ -74,6 +71,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case updatedPasswordManager
+    case voiceSearch
     case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -86,13 +84,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
-                .homepageStoriesRedesign,
-                .homepageStoriesRedesignV2,
                 .homepageSearchBar,
-                .homepageShortcutsLibrary,
-                .homepageDiscoverMoreButton,
-                .homepageDiscoverMoreExperience,
-                .homepageScrim,
                 .hostedSummarizer,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -104,8 +96,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .privacyNotice,
                 .recentSearches,
                 .relayIntegration,
-                .tabScrollRefactorFeature,
                 .sentFromFirefox,
+                .snapkitRemovalRefactor,
+                .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .toolbarTranslucencyRefactor,
@@ -115,6 +108,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .updatedPasswordManager,
+                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
@@ -126,6 +120,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
+    case homepageStoriesScrollDirection
     case searchBarPosition
     case startAtHome
 }
@@ -143,6 +138,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
+        case .homepageBookmarksSectionDefault:
+            return PrefsKeys.HomepageSettings.BookmarksSection
+        case .homepageJumpBackinSectionDefault:
+            return PrefsKeys.HomepageSettings.JumpBackInSection
         case .hntSponsoredShortcuts:
             return FlagKeys.SponsoredShortcuts
         case .sentFromFirefox:
@@ -160,14 +159,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
-                .homepageRedesign,
                 .homepageSearchBar,
-                .homepageShortcutsLibrary,
-                .homepageStoriesRedesign,
-                .homepageStoriesRedesignV2,
-                .homepageScrim,
-                .homepageDiscoverMoreButton,
-                .homepageDiscoverMoreExperience,
+                .homepageStoriesScrollDirection,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
@@ -182,6 +175,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .recentSearches,
                 .reportSiteIssue,
                 .sentFromFirefoxTreatmentA,
+                .snapkitRemovalRefactor,
                 .splashScreen,
                 .appleSummarizer,
                 .appleSummarizerToolbarEntrypoint,
@@ -209,6 +203,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .trendingSearches,
                 .unifiedSearch,
                 .updatedPasswordManager,
+                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return nil
         }
@@ -267,6 +262,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
+        case .homepageStoriesScrollDirection:
+            return FxNimbus.shared.features.homepageRedesignFeature.value().storiesScrollDirection.rawValue
         case .splashScreen:
             return nimbusSearchBar.getDefaultPosition().rawValue
         case .startAtHome:

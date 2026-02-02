@@ -318,10 +318,6 @@ class TrackingProtectionViewController: UIViewController,
         headerContainer.closeButtonCallback = { [weak self] in
             self?.enhancedTrackingProtectionMenuDelegate?.didFinish()
         }
-        headerContainer.setupAccessibility(
-            closeButtonA11yLabel: model.closeButtonA11yLabel,
-            closeButtonA11yId: model.closeButtonA11yId
-        )
         headerContainer.updateHeaderLineView(isHidden: true)
     }
 
@@ -543,18 +539,40 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: - Accessibility
     private func setupAccessibilityIdentifiers() {
-        connectionDetailsHeaderView.setupAccessibilityIdentifiers(foxImageA11yId: model.foxImageA11yId)
+        scrollView.accessibilityIdentifier = model.scrollViewA11yId
+        baseView.accessibilityIdentifier = model.baseViewA11yId
+        headerContainer.setupAccessibility(
+            faviconA11yId: model.faviconA11yId,
+            titleLabelA11yId: model.titleLabelA11yId,
+            subtitleLabelA11yId: model.subtitleLabelA11yId,
+            closeButtonA11yLabel: model.closeButtonA11yLabel,
+            closeButtonA11yId: model.closeButtonA11yId
+        )
+        connectionDetailsHeaderView.setupAccessibilityIdentifiers(
+            connectionDetailsContentViewA11yId: model.connectionDetailsContentViewA11yId,
+            foxImageA11yId: model.foxImageA11yId,
+            connectionDetailsLabelsContainerA11yId: model.connectionDetailsLabelsContainerA11yId,
+            connectionDetailsTitleLabelA11yId: model.connectionDetailsTitleLabelA11yId,
+            connectionDetailsStatusLabelA11yId: model.connectionDetailsStatusLabelA11yId,
+        )
         trackersView.setupAccessibilityIdentifiers(
             arrowImageA11yId: model.arrowImageA11yId,
             trackersBlockedButtonA11yId: model.trackersBlockedButtonA11yId,
-            shieldImageA11yId: model.settingsA11yId)
+            shieldImageA11yId: model.shieldImageA11yId,
+            trackersLabelA11yId: model.trackersLabelA11yId,
+            trackersHorizontalLineA11yId: model.trackersHorizontalLineA11yId)
+        trackersConnectionContainer.accessibilityIdentifier = model.trackersConnectionContainerA11yId
         connectionStatusView.setupAccessibilityIdentifiers(
+            connectionStatusImageA11yId: model.connectionStatusImageA11yId,
+            connectionStatusLabelA11yId: model.connectionStatusLabelA11yId,
             arrowImageA11yId: model.arrowImageA11yId,
             securityStatusButtonA11yId: model.securityStatusButtonA11yId)
+        connectionHorizontalLine.accessibilityIdentifier = model.connectionHorizontalLineA11yId
         toggleView.setupAccessibilityIdentifiers(
-            toggleViewLabelsContainerA11yId: model.toggleViewContainerA11yId)
-        headerContainer.setupAccessibility(closeButtonA11yLabel: model.closeButtonA11yLabel,
-                                           closeButtonA11yId: model.closeButtonA11yId)
+            toggleViewLabelsContainerA11yId: model.toggleViewContainerA11yId,
+            toggleLabelA11yId: model.toggleLabelA11yId,
+            toggleSwitchA11yId: model.toggleSwitchA11yId,
+            toggleStatusLabelA11yId: model.toggleStatusLabelA11yId)
         clearCookiesButton.accessibilityIdentifier = model.clearCookiesButtonA11yId
         settingsLinkButton.accessibilityIdentifier = model.settingsA11yId
     }

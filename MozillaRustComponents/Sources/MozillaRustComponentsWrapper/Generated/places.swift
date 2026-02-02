@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -561,13 +580,13 @@ public protocol PlacesApiProtocol: AnyObject, Sendable {
     
 }
 open class PlacesApi: PlacesApiProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -577,50 +596,53 @@ open class PlacesApi: PlacesApiProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_places_fn_clone_placesapi(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_places_fn_clone_placesapi(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_places_fn_free_placesapi(pointer, $0) }
+        try! rustCall { uniffi_places_fn_free_placesapi(handle, $0) }
     }
 
     
 
     
 open func bookmarksReset()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_bookmarks_reset(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesapi_bookmarks_reset(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func bookmarksSync(keyId: String, accessToken: String, syncKey: String, tokenserverUrl: Url)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_bookmarks_sync(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesapi_bookmarks_sync(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(keyId),
         FfiConverterString.lower(accessToken),
         FfiConverterString.lower(syncKey),
@@ -631,7 +653,8 @@ open func bookmarksSync(keyId: String, accessToken: String, syncKey: String, tok
     
 open func historySync(keyId: String, accessToken: String, syncKey: String, tokenserverUrl: Url)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_history_sync(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesapi_history_sync(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(keyId),
         FfiConverterString.lower(accessToken),
         FfiConverterString.lower(syncKey),
@@ -642,25 +665,29 @@ open func historySync(keyId: String, accessToken: String, syncKey: String, token
     
 open func newConnection(connType: ConnectionType)throws  -> PlacesConnection  {
     return try  FfiConverterTypePlacesConnection_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_new_connection(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesapi_new_connection(
+            self.uniffiCloneHandle(),
         FfiConverterTypeConnectionType_lower(connType),$0
     )
 })
 }
     
 open func registerWithSyncManager()  {try! rustCall() {
-    uniffi_places_fn_method_placesapi_register_with_sync_manager(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesapi_register_with_sync_manager(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func resetHistory()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_reset_history(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesapi_reset_history(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 
+    
 }
 
 
@@ -668,33 +695,24 @@ open func resetHistory()throws   {try rustCallWithError(FfiConverterTypePlacesAp
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypePlacesApi: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = PlacesApi
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> PlacesApi {
-        return PlacesApi(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> PlacesApi {
+        return PlacesApi(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: PlacesApi) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: PlacesApi) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PlacesApi {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: PlacesApi, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -702,14 +720,14 @@ public struct FfiConverterTypePlacesApi: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypePlacesApi_lift(_ pointer: UnsafeMutableRawPointer) throws -> PlacesApi {
-    return try FfiConverterTypePlacesApi.lift(pointer)
+public func FfiConverterTypePlacesApi_lift(_ handle: UInt64) throws -> PlacesApi {
+    return try FfiConverterTypePlacesApi.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypePlacesApi_lower(_ value: PlacesApi) -> UnsafeMutableRawPointer {
+public func FfiConverterTypePlacesApi_lower(_ value: PlacesApi) -> UInt64 {
     return FfiConverterTypePlacesApi.lower(value)
 }
 
@@ -857,13 +875,13 @@ public protocol PlacesConnectionProtocol: AnyObject, Sendable {
     
 }
 open class PlacesConnection: PlacesConnectionProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -873,36 +891,37 @@ open class PlacesConnection: PlacesConnectionProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_places_fn_clone_placesconnection(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_places_fn_clone_placesconnection(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_places_fn_free_placesconnection(pointer, $0) }
+        try! rustCall { uniffi_places_fn_free_placesconnection(handle, $0) }
     }
 
     
@@ -913,7 +932,8 @@ open class PlacesConnection: PlacesConnectionProtocol, @unchecked Sendable {
      * handles malformed urls
      */
 open func acceptResult(searchString: String, url: String)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_accept_result(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_accept_result(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(searchString),
         FfiConverterString.lower(url),$0
     )
@@ -921,7 +941,8 @@ open func acceptResult(searchString: String, url: String)throws   {try rustCallW
 }
     
 open func applyObservation(visit: VisitObservation)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_apply_observation(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_apply_observation(
+            self.uniffiCloneHandle(),
         FfiConverterTypeVisitObservation_lower(visit),$0
     )
 }
@@ -935,7 +956,8 @@ open func applyObservation(visit: VisitObservation)throws   {try rustCallWithErr
      */
 open func bookmarksCountBookmarksInTrees(folderGuids: [Guid])throws  -> UInt32  {
     return try  FfiConverterUInt32.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_count_bookmarks_in_trees(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_count_bookmarks_in_trees(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceTypeGuid.lower(folderGuids),$0
     )
 })
@@ -943,21 +965,24 @@ open func bookmarksCountBookmarksInTrees(folderGuids: [Guid])throws  -> UInt32  
     
 open func bookmarksDelete(id: Guid)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_delete(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_delete(
+            self.uniffiCloneHandle(),
         FfiConverterTypeGuid_lower(id),$0
     )
 })
 }
     
 open func bookmarksDeleteEverything()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_delete_everything(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesconnection_bookmarks_delete_everything(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func bookmarksGetAllWithUrl(url: String)throws  -> [BookmarkItem]  {
     return try  FfiConverterSequenceTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_get_all_with_url(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_get_all_with_url(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(url),$0
     )
 })
@@ -965,7 +990,8 @@ open func bookmarksGetAllWithUrl(url: String)throws  -> [BookmarkItem]  {
     
 open func bookmarksGetByGuid(guid: Guid, getDirectChildren: Bool)throws  -> BookmarkItem?  {
     return try  FfiConverterOptionTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_get_by_guid(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_get_by_guid(
+            self.uniffiCloneHandle(),
         FfiConverterTypeGuid_lower(guid),
         FfiConverterBool.lower(getDirectChildren),$0
     )
@@ -974,7 +1000,8 @@ open func bookmarksGetByGuid(guid: Guid, getDirectChildren: Bool)throws  -> Book
     
 open func bookmarksGetRecent(limit: Int32)throws  -> [BookmarkItem]  {
     return try  FfiConverterSequenceTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_get_recent(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_get_recent(
+            self.uniffiCloneHandle(),
         FfiConverterInt32.lower(limit),$0
     )
 })
@@ -982,7 +1009,8 @@ open func bookmarksGetRecent(limit: Int32)throws  -> [BookmarkItem]  {
     
 open func bookmarksGetTree(itemGuid: Guid)throws  -> BookmarkItem?  {
     return try  FfiConverterOptionTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_get_tree(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_get_tree(
+            self.uniffiCloneHandle(),
         FfiConverterTypeGuid_lower(itemGuid),$0
     )
 })
@@ -990,7 +1018,8 @@ open func bookmarksGetTree(itemGuid: Guid)throws  -> BookmarkItem?  {
     
 open func bookmarksGetUrlForKeyword(keyword: String)throws  -> Url?  {
     return try  FfiConverterOptionTypeUrl.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_get_url_for_keyword(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_get_url_for_keyword(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(keyword),$0
     )
 })
@@ -998,7 +1027,8 @@ open func bookmarksGetUrlForKeyword(keyword: String)throws  -> Url?  {
     
 open func bookmarksInsert(bookmark: InsertableBookmarkItem)throws  -> Guid  {
     return try  FfiConverterTypeGuid_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_insert(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_insert(
+            self.uniffiCloneHandle(),
         FfiConverterTypeInsertableBookmarkItem_lower(bookmark),$0
     )
 })
@@ -1006,7 +1036,8 @@ open func bookmarksInsert(bookmark: InsertableBookmarkItem)throws  -> Guid  {
     
 open func bookmarksSearch(query: String, limit: Int32)throws  -> [BookmarkItem]  {
     return try  FfiConverterSequenceTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_search(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_search(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(query),
         FfiConverterInt32.lower(limit),$0
     )
@@ -1014,20 +1045,23 @@ open func bookmarksSearch(query: String, limit: Int32)throws  -> [BookmarkItem] 
 }
     
 open func bookmarksUpdate(data: BookmarkUpdateInfo)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_bookmarks_update(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_bookmarks_update(
+            self.uniffiCloneHandle(),
         FfiConverterTypeBookmarkUpdateInfo_lower(data),$0
     )
 }
 }
     
 open func deleteEverythingHistory()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_delete_everything_history(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesconnection_delete_everything_history(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func deleteVisit(url: String, timestamp: PlacesTimestamp)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_delete_visit(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_delete_visit(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(url),
         FfiConverterTypePlacesTimestamp_lower(timestamp),$0
     )
@@ -1035,7 +1069,8 @@ open func deleteVisit(url: String, timestamp: PlacesTimestamp)throws   {try rust
 }
     
 open func deleteVisitsBetween(start: PlacesTimestamp, end: PlacesTimestamp)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_delete_visits_between(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_delete_visits_between(
+            self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(start),
         FfiConverterTypePlacesTimestamp_lower(end),$0
     )
@@ -1043,7 +1078,8 @@ open func deleteVisitsBetween(start: PlacesTimestamp, end: PlacesTimestamp)throw
 }
     
 open func deleteVisitsFor(url: String)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_delete_visits_for(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_delete_visits_for(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(url),$0
     )
 }
@@ -1051,7 +1087,8 @@ open func deleteVisitsFor(url: String)throws   {try rustCallWithError(FfiConvert
     
 open func getHistoryHighlights(weights: HistoryHighlightWeights, limit: Int32)throws  -> [HistoryHighlight]  {
     return try  FfiConverterSequenceTypeHistoryHighlight.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_history_highlights(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_history_highlights(
+            self.uniffiCloneHandle(),
         FfiConverterTypeHistoryHighlightWeights_lower(weights),
         FfiConverterInt32.lower(limit),$0
     )
@@ -1060,7 +1097,8 @@ open func getHistoryHighlights(weights: HistoryHighlightWeights, limit: Int32)th
     
 open func getHistoryMetadataBetween(start: PlacesTimestamp, end: PlacesTimestamp)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_history_metadata_between(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_history_metadata_between(
+            self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(start),
         FfiConverterTypePlacesTimestamp_lower(end),$0
     )
@@ -1069,7 +1107,8 @@ open func getHistoryMetadataBetween(start: PlacesTimestamp, end: PlacesTimestamp
     
 open func getHistoryMetadataSince(since: PlacesTimestamp)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_history_metadata_since(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_history_metadata_since(
+            self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(since),$0
     )
 })
@@ -1077,7 +1116,8 @@ open func getHistoryMetadataSince(since: PlacesTimestamp)throws  -> [HistoryMeta
     
 open func getLatestHistoryMetadataForUrl(url: Url)throws  -> HistoryMetadata?  {
     return try  FfiConverterOptionTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_latest_history_metadata_for_url(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_latest_history_metadata_for_url(
+            self.uniffiCloneHandle(),
         FfiConverterTypeUrl_lower(url),$0
     )
 })
@@ -1085,7 +1125,8 @@ open func getLatestHistoryMetadataForUrl(url: Url)throws  -> HistoryMetadata?  {
     
 open func getMostRecentHistoryMetadata(limit: Int32)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_most_recent_history_metadata(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_most_recent_history_metadata(
+            self.uniffiCloneHandle(),
         FfiConverterInt32.lower(limit),$0
     )
 })
@@ -1093,7 +1134,8 @@ open func getMostRecentHistoryMetadata(limit: Int32)throws  -> [HistoryMetadata]
     
 open func getMostRecentSearchEntriesInHistoryMetadata(limit: Int32)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_most_recent_search_entries_in_history_metadata(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_most_recent_search_entries_in_history_metadata(
+            self.uniffiCloneHandle(),
         FfiConverterInt32.lower(limit),$0
     )
 })
@@ -1101,7 +1143,8 @@ open func getMostRecentSearchEntriesInHistoryMetadata(limit: Int32)throws  -> [H
     
 open func getTopFrecentSiteInfos(numItems: Int32, thresholdOption: FrecencyThresholdOption)throws  -> [TopFrecentSiteInfo]  {
     return try  FfiConverterSequenceTypeTopFrecentSiteInfo.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_top_frecent_site_infos(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_top_frecent_site_infos(
+            self.uniffiCloneHandle(),
         FfiConverterInt32.lower(numItems),
         FfiConverterTypeFrecencyThresholdOption_lower(thresholdOption),$0
     )
@@ -1110,7 +1153,8 @@ open func getTopFrecentSiteInfos(numItems: Int32, thresholdOption: FrecencyThres
     
 open func getVisitCount(excludeTypes: VisitTransitionSet)throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_visit_count(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_visit_count(
+            self.uniffiCloneHandle(),
         FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
     )
 })
@@ -1118,7 +1162,8 @@ open func getVisitCount(excludeTypes: VisitTransitionSet)throws  -> Int64  {
     
 open func getVisitCountForHost(host: String, before: PlacesTimestamp, excludeTypes: VisitTransitionSet)throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_visit_count_for_host(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_visit_count_for_host(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(host),
         FfiConverterTypePlacesTimestamp_lower(before),
         FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
@@ -1128,7 +1173,8 @@ open func getVisitCountForHost(host: String, before: PlacesTimestamp, excludeTyp
     
 open func getVisitInfos(startDate: PlacesTimestamp, endDate: PlacesTimestamp, excludeTypes: VisitTransitionSet)throws  -> [HistoryVisitInfo]  {
     return try  FfiConverterSequenceTypeHistoryVisitInfo.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_visit_infos(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_visit_infos(
+            self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(startDate),
         FfiConverterTypePlacesTimestamp_lower(endDate),
         FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
@@ -1138,7 +1184,8 @@ open func getVisitInfos(startDate: PlacesTimestamp, endDate: PlacesTimestamp, ex
     
 open func getVisitPage(offset: Int64, count: Int64, excludeTypes: VisitTransitionSet)throws  -> [HistoryVisitInfo]  {
     return try  FfiConverterSequenceTypeHistoryVisitInfo.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_visit_page(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_visit_page(
+            self.uniffiCloneHandle(),
         FfiConverterInt64.lower(offset),
         FfiConverterInt64.lower(count),
         FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
@@ -1148,7 +1195,8 @@ open func getVisitPage(offset: Int64, count: Int64, excludeTypes: VisitTransitio
     
 open func getVisitPageWithBound(bound: Int64, offset: Int64, count: Int64, excludeTypes: VisitTransitionSet)throws  -> HistoryVisitInfosWithBound  {
     return try  FfiConverterTypeHistoryVisitInfosWithBound_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_visit_page_with_bound(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_visit_page_with_bound(
+            self.uniffiCloneHandle(),
         FfiConverterInt64.lower(bound),
         FfiConverterInt64.lower(offset),
         FfiConverterInt64.lower(count),
@@ -1159,7 +1207,8 @@ open func getVisitPageWithBound(bound: Int64, offset: Int64, count: Int64, exclu
     
 open func getVisited(urls: [String])throws  -> [Bool]  {
     return try  FfiConverterSequenceBool.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_visited(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_visited(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceString.lower(urls),$0
     )
 })
@@ -1167,7 +1216,8 @@ open func getVisited(urls: [String])throws  -> [Bool]  {
     
 open func getVisitedUrlsInRange(start: PlacesTimestamp, end: PlacesTimestamp, includeRemote: Bool)throws  -> [Url]  {
     return try  FfiConverterSequenceTypeUrl.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_get_visited_urls_in_range(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_get_visited_urls_in_range(
+            self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(start),
         FfiConverterTypePlacesTimestamp_lower(end),
         FfiConverterBool.lower(includeRemote),$0
@@ -1177,14 +1227,16 @@ open func getVisitedUrlsInRange(start: PlacesTimestamp, end: PlacesTimestamp, in
     
 open func matchUrl(query: String)throws  -> Url?  {
     return try  FfiConverterOptionTypeUrl.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_match_url(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_match_url(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(query),$0
     )
 })
 }
     
 open func metadataDelete(url: Url, referrerUrl: Url?, searchTerm: String?)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_metadata_delete(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_metadata_delete(
+            self.uniffiCloneHandle(),
         FfiConverterTypeUrl_lower(url),
         FfiConverterOptionTypeUrl.lower(referrerUrl),
         FfiConverterOptionString.lower(searchTerm),$0
@@ -1193,27 +1245,31 @@ open func metadataDelete(url: Url, referrerUrl: Url?, searchTerm: String?)throws
 }
     
 open func metadataDeleteOlderThan(olderThan: PlacesTimestamp)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_metadata_delete_older_than(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_metadata_delete_older_than(
+            self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(olderThan),$0
     )
 }
 }
     
 open func metadataDeleteSearchTerms()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_metadata_delete_search_terms(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesconnection_metadata_delete_search_terms(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func newInterruptHandle() -> SqlInterruptHandle  {
     return try!  FfiConverterTypeSqlInterruptHandle_lift(try! rustCall() {
-    uniffi_places_fn_method_placesconnection_new_interrupt_handle(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesconnection_new_interrupt_handle(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func noteHistoryMetadataObservation(data: HistoryMetadataObservation, options: NoteHistoryMetadataObservationOptions)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_note_history_metadata_observation(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_note_history_metadata_observation(
+            self.uniffiCloneHandle(),
         FfiConverterTypeHistoryMetadataObservation_lower(data),
         FfiConverterTypeNoteHistoryMetadataObservationOptions_lower(options),$0
     )
@@ -1222,7 +1278,8 @@ open func noteHistoryMetadataObservation(data: HistoryMetadataObservation, optio
     
 open func placesHistoryImportFromIos(dbPath: String, lastSyncTimestamp: Int64)throws  -> HistoryMigrationResult  {
     return try  FfiConverterTypeHistoryMigrationResult_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_places_history_import_from_ios(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_places_history_import_from_ios(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(dbPath),
         FfiConverterInt64.lower(lastSyncTimestamp),$0
     )
@@ -1231,7 +1288,8 @@ open func placesHistoryImportFromIos(dbPath: String, lastSyncTimestamp: Int64)th
     
 open func queryAutocomplete(search: String, limit: Int32)throws  -> [SearchResult]  {
     return try  FfiConverterSequenceTypeSearchResult.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_query_autocomplete(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_query_autocomplete(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(search),
         FfiConverterInt32.lower(limit),$0
     )
@@ -1240,7 +1298,8 @@ open func queryAutocomplete(search: String, limit: Int32)throws  -> [SearchResul
     
 open func queryHistoryMetadata(query: String, limit: Int32)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_query_history_metadata(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_query_history_metadata(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(query),
         FfiConverterInt32.lower(limit),$0
     )
@@ -1256,7 +1315,8 @@ open func queryHistoryMetadata(query: String, limit: Int32)throws  -> [HistoryMe
      * it supports a stop-watch style API, not recording specific values).
      */
 open func runMaintenanceCheckpoint()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_run_maintenance_checkpoint(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesconnection_run_maintenance_checkpoint(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -1270,7 +1330,8 @@ open func runMaintenanceCheckpoint()throws   {try rustCallWithError(FfiConverter
      * it supports a stop-watch style API, not recording specific values).
      */
 open func runMaintenanceOptimize()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_run_maintenance_optimize(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesconnection_run_maintenance_optimize(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -1290,7 +1351,8 @@ open func runMaintenanceOptimize()throws   {try rustCallWithError(FfiConverterTy
      */
 open func runMaintenancePrune(dbSizeLimit: UInt32, pruneLimit: UInt32)throws  -> RunMaintenanceMetrics  {
     return try  FfiConverterTypeRunMaintenanceMetrics_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_run_maintenance_prune(self.uniffiClonePointer(),
+    uniffi_places_fn_method_placesconnection_run_maintenance_prune(
+            self.uniffiCloneHandle(),
         FfiConverterUInt32.lower(dbSizeLimit),
         FfiConverterUInt32.lower(pruneLimit),$0
     )
@@ -1306,12 +1368,14 @@ open func runMaintenancePrune(dbSizeLimit: UInt32, pruneLimit: UInt32)throws  ->
      * it supports a stop-watch style API, not recording specific values).
      */
 open func runMaintenanceVacuum()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesconnection_run_maintenance_vacuum(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_placesconnection_run_maintenance_vacuum(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 
+    
 }
 
 
@@ -1319,33 +1383,24 @@ open func runMaintenanceVacuum()throws   {try rustCallWithError(FfiConverterType
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypePlacesConnection: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = PlacesConnection
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> PlacesConnection {
-        return PlacesConnection(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> PlacesConnection {
+        return PlacesConnection(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: PlacesConnection) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: PlacesConnection) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PlacesConnection {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: PlacesConnection, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1353,14 +1408,14 @@ public struct FfiConverterTypePlacesConnection: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypePlacesConnection_lift(_ pointer: UnsafeMutableRawPointer) throws -> PlacesConnection {
-    return try FfiConverterTypePlacesConnection.lift(pointer)
+public func FfiConverterTypePlacesConnection_lift(_ handle: UInt64) throws -> PlacesConnection {
+    return try FfiConverterTypePlacesConnection.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypePlacesConnection_lower(_ value: PlacesConnection) -> UnsafeMutableRawPointer {
+public func FfiConverterTypePlacesConnection_lower(_ value: PlacesConnection) -> UInt64 {
     return FfiConverterTypePlacesConnection.lower(value)
 }
 
@@ -1375,13 +1430,13 @@ public protocol SqlInterruptHandleProtocol: AnyObject, Sendable {
     
 }
 open class SqlInterruptHandle: SqlInterruptHandleProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -1391,48 +1446,51 @@ open class SqlInterruptHandle: SqlInterruptHandleProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_places_fn_clone_sqlinterrupthandle(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_places_fn_clone_sqlinterrupthandle(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_places_fn_free_sqlinterrupthandle(pointer, $0) }
+        try! rustCall { uniffi_places_fn_free_sqlinterrupthandle(handle, $0) }
     }
 
     
 
     
 open func interrupt()  {try! rustCall() {
-    uniffi_places_fn_method_sqlinterrupthandle_interrupt(self.uniffiClonePointer(),$0
+    uniffi_places_fn_method_sqlinterrupthandle_interrupt(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 
+    
 }
 
 
@@ -1440,33 +1498,24 @@ open func interrupt()  {try! rustCall() {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeSqlInterruptHandle: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = SqlInterruptHandle
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> SqlInterruptHandle {
-        return SqlInterruptHandle(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> SqlInterruptHandle {
+        return SqlInterruptHandle(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: SqlInterruptHandle) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: SqlInterruptHandle) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SqlInterruptHandle {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: SqlInterruptHandle, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1474,21 +1523,21 @@ public struct FfiConverterTypeSqlInterruptHandle: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSqlInterruptHandle_lift(_ pointer: UnsafeMutableRawPointer) throws -> SqlInterruptHandle {
-    return try FfiConverterTypeSqlInterruptHandle.lift(pointer)
+public func FfiConverterTypeSqlInterruptHandle_lift(_ handle: UInt64) throws -> SqlInterruptHandle {
+    return try FfiConverterTypeSqlInterruptHandle.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSqlInterruptHandle_lower(_ value: SqlInterruptHandle) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeSqlInterruptHandle_lower(_ value: SqlInterruptHandle) -> UInt64 {
     return FfiConverterTypeSqlInterruptHandle.lower(value)
 }
 
 
 
 
-public struct BookmarkData {
+public struct BookmarkData: Equatable, Hashable {
     public var guid: Guid
     public var parentGuid: Guid
     public var position: UInt32
@@ -1508,51 +1557,15 @@ public struct BookmarkData {
         self.url = url
         self.title = title
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension BookmarkData: Sendable {}
 #endif
-
-
-extension BookmarkData: Equatable, Hashable {
-    public static func ==(lhs: BookmarkData, rhs: BookmarkData) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.parentGuid != rhs.parentGuid {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        if lhs.dateAdded != rhs.dateAdded {
-            return false
-        }
-        if lhs.lastModified != rhs.lastModified {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(parentGuid)
-        hasher.combine(position)
-        hasher.combine(dateAdded)
-        hasher.combine(lastModified)
-        hasher.combine(url)
-        hasher.combine(title)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1598,7 +1611,7 @@ public func FfiConverterTypeBookmarkData_lower(_ value: BookmarkData) -> RustBuf
 }
 
 
-public struct BookmarkFolder {
+public struct BookmarkFolder: Equatable, Hashable {
     public var guid: Guid
     public var dateAdded: PlacesTimestamp
     public var lastModified: PlacesTimestamp
@@ -1620,55 +1633,15 @@ public struct BookmarkFolder {
         self.childGuids = childGuids
         self.childNodes = childNodes
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension BookmarkFolder: Sendable {}
 #endif
-
-
-extension BookmarkFolder: Equatable, Hashable {
-    public static func ==(lhs: BookmarkFolder, rhs: BookmarkFolder) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.dateAdded != rhs.dateAdded {
-            return false
-        }
-        if lhs.lastModified != rhs.lastModified {
-            return false
-        }
-        if lhs.parentGuid != rhs.parentGuid {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.childGuids != rhs.childGuids {
-            return false
-        }
-        if lhs.childNodes != rhs.childNodes {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(dateAdded)
-        hasher.combine(lastModified)
-        hasher.combine(parentGuid)
-        hasher.combine(position)
-        hasher.combine(title)
-        hasher.combine(childGuids)
-        hasher.combine(childNodes)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1716,7 +1689,7 @@ public func FfiConverterTypeBookmarkFolder_lower(_ value: BookmarkFolder) -> Rus
 }
 
 
-public struct BookmarkSeparator {
+public struct BookmarkSeparator: Equatable, Hashable {
     public var guid: Guid
     public var dateAdded: PlacesTimestamp
     public var lastModified: PlacesTimestamp
@@ -1732,43 +1705,15 @@ public struct BookmarkSeparator {
         self.parentGuid = parentGuid
         self.position = position
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension BookmarkSeparator: Sendable {}
 #endif
-
-
-extension BookmarkSeparator: Equatable, Hashable {
-    public static func ==(lhs: BookmarkSeparator, rhs: BookmarkSeparator) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.dateAdded != rhs.dateAdded {
-            return false
-        }
-        if lhs.lastModified != rhs.lastModified {
-            return false
-        }
-        if lhs.parentGuid != rhs.parentGuid {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(dateAdded)
-        hasher.combine(lastModified)
-        hasher.combine(parentGuid)
-        hasher.combine(position)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1810,7 +1755,7 @@ public func FfiConverterTypeBookmarkSeparator_lower(_ value: BookmarkSeparator) 
 }
 
 
-public struct BookmarkUpdateInfo {
+public struct BookmarkUpdateInfo: Equatable, Hashable {
     public var guid: Guid
     public var title: String?
     public var url: String?
@@ -1826,43 +1771,15 @@ public struct BookmarkUpdateInfo {
         self.parentGuid = parentGuid
         self.position = position
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension BookmarkUpdateInfo: Sendable {}
 #endif
-
-
-extension BookmarkUpdateInfo: Equatable, Hashable {
-    public static func ==(lhs: BookmarkUpdateInfo, rhs: BookmarkUpdateInfo) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.parentGuid != rhs.parentGuid {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(title)
-        hasher.combine(url)
-        hasher.combine(parentGuid)
-        hasher.combine(position)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1907,7 +1824,7 @@ public func FfiConverterTypeBookmarkUpdateInfo_lower(_ value: BookmarkUpdateInfo
 /**
  * Exists just to convince uniffi to generate `liftSequence*` helpers!
  */
-public struct Dummy {
+public struct Dummy: Equatable, Hashable {
     public var md: [HistoryMetadata]?
 
     // Default memberwise initializers are never public by default, so we
@@ -1915,27 +1832,15 @@ public struct Dummy {
     public init(md: [HistoryMetadata]?) {
         self.md = md
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Dummy: Sendable {}
 #endif
-
-
-extension Dummy: Equatable, Hashable {
-    public static func ==(lhs: Dummy, rhs: Dummy) -> Bool {
-        if lhs.md != rhs.md {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(md)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1969,7 +1874,7 @@ public func FfiConverterTypeDummy_lower(_ value: Dummy) -> RustBuffer {
 }
 
 
-public struct HistoryHighlight {
+public struct HistoryHighlight: Equatable, Hashable {
     public var score: Double
     public var placeId: Int32
     public var url: String
@@ -1985,43 +1890,15 @@ public struct HistoryHighlight {
         self.title = title
         self.previewImageUrl = previewImageUrl
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension HistoryHighlight: Sendable {}
 #endif
-
-
-extension HistoryHighlight: Equatable, Hashable {
-    public static func ==(lhs: HistoryHighlight, rhs: HistoryHighlight) -> Bool {
-        if lhs.score != rhs.score {
-            return false
-        }
-        if lhs.placeId != rhs.placeId {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.previewImageUrl != rhs.previewImageUrl {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(score)
-        hasher.combine(placeId)
-        hasher.combine(url)
-        hasher.combine(title)
-        hasher.combine(previewImageUrl)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2063,7 +1940,7 @@ public func FfiConverterTypeHistoryHighlight_lower(_ value: HistoryHighlight) ->
 }
 
 
-public struct HistoryHighlightWeights {
+public struct HistoryHighlightWeights: Equatable, Hashable {
     public var viewTime: Double
     public var frequency: Double
 
@@ -2073,31 +1950,15 @@ public struct HistoryHighlightWeights {
         self.viewTime = viewTime
         self.frequency = frequency
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension HistoryHighlightWeights: Sendable {}
 #endif
-
-
-extension HistoryHighlightWeights: Equatable, Hashable {
-    public static func ==(lhs: HistoryHighlightWeights, rhs: HistoryHighlightWeights) -> Bool {
-        if lhs.viewTime != rhs.viewTime {
-            return false
-        }
-        if lhs.frequency != rhs.frequency {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(viewTime)
-        hasher.combine(frequency)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2136,7 +1997,7 @@ public func FfiConverterTypeHistoryHighlightWeights_lower(_ value: HistoryHighli
 /**
  * This is what is returned.
  */
-public struct HistoryMetadata {
+public struct HistoryMetadata: Equatable, Hashable {
     public var url: String
     public var title: String?
     public var previewImageUrl: String?
@@ -2160,59 +2021,15 @@ public struct HistoryMetadata {
         self.documentType = documentType
         self.referrerUrl = referrerUrl
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension HistoryMetadata: Sendable {}
 #endif
-
-
-extension HistoryMetadata: Equatable, Hashable {
-    public static func ==(lhs: HistoryMetadata, rhs: HistoryMetadata) -> Bool {
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.previewImageUrl != rhs.previewImageUrl {
-            return false
-        }
-        if lhs.createdAt != rhs.createdAt {
-            return false
-        }
-        if lhs.updatedAt != rhs.updatedAt {
-            return false
-        }
-        if lhs.totalViewTime != rhs.totalViewTime {
-            return false
-        }
-        if lhs.searchTerm != rhs.searchTerm {
-            return false
-        }
-        if lhs.documentType != rhs.documentType {
-            return false
-        }
-        if lhs.referrerUrl != rhs.referrerUrl {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(url)
-        hasher.combine(title)
-        hasher.combine(previewImageUrl)
-        hasher.combine(createdAt)
-        hasher.combine(updatedAt)
-        hasher.combine(totalViewTime)
-        hasher.combine(searchTerm)
-        hasher.combine(documentType)
-        hasher.combine(referrerUrl)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2265,7 +2082,7 @@ public func FfiConverterTypeHistoryMetadata_lower(_ value: HistoryMetadata) -> R
 /**
  * This is used as an "input" to the api.
  */
-public struct HistoryMetadataObservation {
+public struct HistoryMetadataObservation: Equatable, Hashable {
     public var url: String
     public var referrerUrl: String?
     public var searchTerm: String?
@@ -2283,47 +2100,15 @@ public struct HistoryMetadataObservation {
         self.documentType = documentType
         self.title = title
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension HistoryMetadataObservation: Sendable {}
 #endif
-
-
-extension HistoryMetadataObservation: Equatable, Hashable {
-    public static func ==(lhs: HistoryMetadataObservation, rhs: HistoryMetadataObservation) -> Bool {
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.referrerUrl != rhs.referrerUrl {
-            return false
-        }
-        if lhs.searchTerm != rhs.searchTerm {
-            return false
-        }
-        if lhs.viewTime != rhs.viewTime {
-            return false
-        }
-        if lhs.documentType != rhs.documentType {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(url)
-        hasher.combine(referrerUrl)
-        hasher.combine(searchTerm)
-        hasher.combine(viewTime)
-        hasher.combine(documentType)
-        hasher.combine(title)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2367,7 +2152,7 @@ public func FfiConverterTypeHistoryMetadataObservation_lower(_ value: HistoryMet
 }
 
 
-public struct HistoryMigrationResult {
+public struct HistoryMigrationResult: Equatable, Hashable {
     public var numTotal: UInt32
     public var numSucceeded: UInt32
     public var numFailed: UInt32
@@ -2381,39 +2166,15 @@ public struct HistoryMigrationResult {
         self.numFailed = numFailed
         self.totalDuration = totalDuration
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension HistoryMigrationResult: Sendable {}
 #endif
-
-
-extension HistoryMigrationResult: Equatable, Hashable {
-    public static func ==(lhs: HistoryMigrationResult, rhs: HistoryMigrationResult) -> Bool {
-        if lhs.numTotal != rhs.numTotal {
-            return false
-        }
-        if lhs.numSucceeded != rhs.numSucceeded {
-            return false
-        }
-        if lhs.numFailed != rhs.numFailed {
-            return false
-        }
-        if lhs.totalDuration != rhs.totalDuration {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(numTotal)
-        hasher.combine(numSucceeded)
-        hasher.combine(numFailed)
-        hasher.combine(totalDuration)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2453,7 +2214,7 @@ public func FfiConverterTypeHistoryMigrationResult_lower(_ value: HistoryMigrati
 }
 
 
-public struct HistoryVisitInfo {
+public struct HistoryVisitInfo: Equatable, Hashable {
     public var url: Url
     public var title: String?
     public var timestamp: PlacesTimestamp
@@ -2473,51 +2234,15 @@ public struct HistoryVisitInfo {
         self.previewImageUrl = previewImageUrl
         self.isRemote = isRemote
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension HistoryVisitInfo: Sendable {}
 #endif
-
-
-extension HistoryVisitInfo: Equatable, Hashable {
-    public static func ==(lhs: HistoryVisitInfo, rhs: HistoryVisitInfo) -> Bool {
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.timestamp != rhs.timestamp {
-            return false
-        }
-        if lhs.visitType != rhs.visitType {
-            return false
-        }
-        if lhs.isHidden != rhs.isHidden {
-            return false
-        }
-        if lhs.previewImageUrl != rhs.previewImageUrl {
-            return false
-        }
-        if lhs.isRemote != rhs.isRemote {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(url)
-        hasher.combine(title)
-        hasher.combine(timestamp)
-        hasher.combine(visitType)
-        hasher.combine(isHidden)
-        hasher.combine(previewImageUrl)
-        hasher.combine(isRemote)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2563,7 +2288,7 @@ public func FfiConverterTypeHistoryVisitInfo_lower(_ value: HistoryVisitInfo) ->
 }
 
 
-public struct HistoryVisitInfosWithBound {
+public struct HistoryVisitInfosWithBound: Equatable, Hashable {
     public var infos: [HistoryVisitInfo]
     public var bound: Int64
     public var offset: Int64
@@ -2575,35 +2300,15 @@ public struct HistoryVisitInfosWithBound {
         self.bound = bound
         self.offset = offset
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension HistoryVisitInfosWithBound: Sendable {}
 #endif
-
-
-extension HistoryVisitInfosWithBound: Equatable, Hashable {
-    public static func ==(lhs: HistoryVisitInfosWithBound, rhs: HistoryVisitInfosWithBound) -> Bool {
-        if lhs.infos != rhs.infos {
-            return false
-        }
-        if lhs.bound != rhs.bound {
-            return false
-        }
-        if lhs.offset != rhs.offset {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(infos)
-        hasher.combine(bound)
-        hasher.combine(offset)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2641,7 +2346,7 @@ public func FfiConverterTypeHistoryVisitInfosWithBound_lower(_ value: HistoryVis
 }
 
 
-public struct InsertableBookmark {
+public struct InsertableBookmark: Equatable, Hashable {
     public var guid: Guid?
     public var parentGuid: Guid
     public var position: BookmarkPosition
@@ -2661,51 +2366,15 @@ public struct InsertableBookmark {
         self.url = url
         self.title = title
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension InsertableBookmark: Sendable {}
 #endif
-
-
-extension InsertableBookmark: Equatable, Hashable {
-    public static func ==(lhs: InsertableBookmark, rhs: InsertableBookmark) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.parentGuid != rhs.parentGuid {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        if lhs.dateAdded != rhs.dateAdded {
-            return false
-        }
-        if lhs.lastModified != rhs.lastModified {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(parentGuid)
-        hasher.combine(position)
-        hasher.combine(dateAdded)
-        hasher.combine(lastModified)
-        hasher.combine(url)
-        hasher.combine(title)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2751,7 +2420,7 @@ public func FfiConverterTypeInsertableBookmark_lower(_ value: InsertableBookmark
 }
 
 
-public struct InsertableBookmarkFolder {
+public struct InsertableBookmarkFolder: Equatable, Hashable {
     public var guid: Guid?
     public var parentGuid: Guid
     public var position: BookmarkPosition
@@ -2771,51 +2440,15 @@ public struct InsertableBookmarkFolder {
         self.title = title
         self.children = children
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension InsertableBookmarkFolder: Sendable {}
 #endif
-
-
-extension InsertableBookmarkFolder: Equatable, Hashable {
-    public static func ==(lhs: InsertableBookmarkFolder, rhs: InsertableBookmarkFolder) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.parentGuid != rhs.parentGuid {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        if lhs.dateAdded != rhs.dateAdded {
-            return false
-        }
-        if lhs.lastModified != rhs.lastModified {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.children != rhs.children {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(parentGuid)
-        hasher.combine(position)
-        hasher.combine(dateAdded)
-        hasher.combine(lastModified)
-        hasher.combine(title)
-        hasher.combine(children)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2861,7 +2494,7 @@ public func FfiConverterTypeInsertableBookmarkFolder_lower(_ value: InsertableBo
 }
 
 
-public struct InsertableBookmarkSeparator {
+public struct InsertableBookmarkSeparator: Equatable, Hashable {
     public var guid: Guid?
     public var parentGuid: Guid
     public var position: BookmarkPosition
@@ -2877,43 +2510,15 @@ public struct InsertableBookmarkSeparator {
         self.dateAdded = dateAdded
         self.lastModified = lastModified
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension InsertableBookmarkSeparator: Sendable {}
 #endif
-
-
-extension InsertableBookmarkSeparator: Equatable, Hashable {
-    public static func ==(lhs: InsertableBookmarkSeparator, rhs: InsertableBookmarkSeparator) -> Bool {
-        if lhs.guid != rhs.guid {
-            return false
-        }
-        if lhs.parentGuid != rhs.parentGuid {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        if lhs.dateAdded != rhs.dateAdded {
-            return false
-        }
-        if lhs.lastModified != rhs.lastModified {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(guid)
-        hasher.combine(parentGuid)
-        hasher.combine(position)
-        hasher.combine(dateAdded)
-        hasher.combine(lastModified)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2958,7 +2563,7 @@ public func FfiConverterTypeInsertableBookmarkSeparator_lower(_ value: Insertabl
 /**
  * Options for recording history metadata observations.
  */
-public struct NoteHistoryMetadataObservationOptions {
+public struct NoteHistoryMetadataObservationOptions: Equatable, Hashable {
     public var ifPageMissing: HistoryMetadataPageMissingBehavior
 
     // Default memberwise initializers are never public by default, so we
@@ -2966,27 +2571,15 @@ public struct NoteHistoryMetadataObservationOptions {
     public init(ifPageMissing: HistoryMetadataPageMissingBehavior = .ignoreObservation) {
         self.ifPageMissing = ifPageMissing
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension NoteHistoryMetadataObservationOptions: Sendable {}
 #endif
-
-
-extension NoteHistoryMetadataObservationOptions: Equatable, Hashable {
-    public static func ==(lhs: NoteHistoryMetadataObservationOptions, rhs: NoteHistoryMetadataObservationOptions) -> Bool {
-        if lhs.ifPageMissing != rhs.ifPageMissing {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ifPageMissing)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3020,7 +2613,7 @@ public func FfiConverterTypeNoteHistoryMetadataObservationOptions_lower(_ value:
 }
 
 
-public struct RunMaintenanceMetrics {
+public struct RunMaintenanceMetrics: Equatable, Hashable {
     public var prunedVisits: Bool
     public var dbSizeBefore: UInt32
     public var dbSizeAfter: UInt32
@@ -3032,35 +2625,15 @@ public struct RunMaintenanceMetrics {
         self.dbSizeBefore = dbSizeBefore
         self.dbSizeAfter = dbSizeAfter
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension RunMaintenanceMetrics: Sendable {}
 #endif
-
-
-extension RunMaintenanceMetrics: Equatable, Hashable {
-    public static func ==(lhs: RunMaintenanceMetrics, rhs: RunMaintenanceMetrics) -> Bool {
-        if lhs.prunedVisits != rhs.prunedVisits {
-            return false
-        }
-        if lhs.dbSizeBefore != rhs.dbSizeBefore {
-            return false
-        }
-        if lhs.dbSizeAfter != rhs.dbSizeAfter {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(prunedVisits)
-        hasher.combine(dbSizeBefore)
-        hasher.combine(dbSizeAfter)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3098,7 +2671,7 @@ public func FfiConverterTypeRunMaintenanceMetrics_lower(_ value: RunMaintenanceM
 }
 
 
-public struct SearchResult {
+public struct SearchResult: Equatable, Hashable {
     public var url: Url
     public var title: String
     public var frecency: Int64
@@ -3110,35 +2683,15 @@ public struct SearchResult {
         self.title = title
         self.frecency = frecency
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SearchResult: Sendable {}
 #endif
-
-
-extension SearchResult: Equatable, Hashable {
-    public static func ==(lhs: SearchResult, rhs: SearchResult) -> Bool {
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.frecency != rhs.frecency {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(url)
-        hasher.combine(title)
-        hasher.combine(frecency)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3176,7 +2729,7 @@ public func FfiConverterTypeSearchResult_lower(_ value: SearchResult) -> RustBuf
 }
 
 
-public struct TopFrecentSiteInfo {
+public struct TopFrecentSiteInfo: Equatable, Hashable {
     public var url: Url
     public var title: String?
 
@@ -3186,31 +2739,15 @@ public struct TopFrecentSiteInfo {
         self.url = url
         self.title = title
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension TopFrecentSiteInfo: Sendable {}
 #endif
-
-
-extension TopFrecentSiteInfo: Equatable, Hashable {
-    public static func ==(lhs: TopFrecentSiteInfo, rhs: TopFrecentSiteInfo) -> Bool {
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(url)
-        hasher.combine(title)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3250,7 +2787,7 @@ public func FfiConverterTypeTopFrecentSiteInfo_lower(_ value: TopFrecentSiteInfo
  * Encapsulates either information about a visit to a page, or meta information about the page,
  * or both. Use [VisitType.UPDATE_PLACE] to differentiate an update from a visit.
  */
-public struct VisitObservation {
+public struct VisitObservation: Equatable, Hashable {
     public var url: Url
     public var title: String?
     public var visitType: VisitType?
@@ -3276,63 +2813,15 @@ public struct VisitObservation {
         self.isRemote = isRemote
         self.previewImageUrl = previewImageUrl
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension VisitObservation: Sendable {}
 #endif
-
-
-extension VisitObservation: Equatable, Hashable {
-    public static func ==(lhs: VisitObservation, rhs: VisitObservation) -> Bool {
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.visitType != rhs.visitType {
-            return false
-        }
-        if lhs.isError != rhs.isError {
-            return false
-        }
-        if lhs.isRedirectSource != rhs.isRedirectSource {
-            return false
-        }
-        if lhs.isPermanentRedirectSource != rhs.isPermanentRedirectSource {
-            return false
-        }
-        if lhs.at != rhs.at {
-            return false
-        }
-        if lhs.referrer != rhs.referrer {
-            return false
-        }
-        if lhs.isRemote != rhs.isRemote {
-            return false
-        }
-        if lhs.previewImageUrl != rhs.previewImageUrl {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(url)
-        hasher.combine(title)
-        hasher.combine(visitType)
-        hasher.combine(isError)
-        hasher.combine(isRedirectSource)
-        hasher.combine(isPermanentRedirectSource)
-        hasher.combine(at)
-        hasher.combine(referrer)
-        hasher.combine(isRemote)
-        hasher.combine(previewImageUrl)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -3386,7 +2875,7 @@ public func FfiConverterTypeVisitObservation_lower(_ value: VisitObservation) ->
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum BookmarkItem {
+public enum BookmarkItem: Equatable, Hashable {
     
     case bookmark(b: BookmarkData
     )
@@ -3394,8 +2883,12 @@ public enum BookmarkItem {
     )
     case folder(f: BookmarkFolder
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension BookmarkItem: Sendable {}
@@ -3462,26 +2955,23 @@ public func FfiConverterTypeBookmarkItem_lower(_ value: BookmarkItem) -> RustBuf
 }
 
 
-extension BookmarkItem: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * Where the item should be placed.
  */
 
-public enum BookmarkPosition {
+public enum BookmarkPosition: Equatable, Hashable {
     
     case specific(pos: UInt32
     )
     case append
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension BookmarkPosition: Sendable {}
@@ -3538,23 +3028,20 @@ public func FfiConverterTypeBookmarkPosition_lower(_ value: BookmarkPosition) ->
 }
 
 
-extension BookmarkPosition: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum ConnectionType {
+public enum ConnectionType: Equatable, Hashable {
     
     case readOnly
     case readWrite
     case sync
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension ConnectionType: Sendable {}
@@ -3615,17 +3102,10 @@ public func FfiConverterTypeConnectionType_lower(_ value: ConnectionType) -> Rus
 }
 
 
-extension ConnectionType: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum DocumentType {
+public enum DocumentType: Equatable, Hashable {
     
     /**
      * A page that isn't described by any other more specific types.
@@ -3635,8 +3115,12 @@ public enum DocumentType {
      * A media page.
      */
     case media
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension DocumentType: Sendable {}
@@ -3691,13 +3175,6 @@ public func FfiConverterTypeDocumentType_lower(_ value: DocumentType) -> RustBuf
 }
 
 
-extension DocumentType: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3705,7 +3182,7 @@ extension DocumentType: Equatable, Hashable {}
  * with a frecency score greater or equal to the value associated with the enums
  */
 
-public enum FrecencyThresholdOption {
+public enum FrecencyThresholdOption: Equatable, Hashable {
     
     /**
      * Returns all visited pages. The frecency score is 0
@@ -3715,8 +3192,12 @@ public enum FrecencyThresholdOption {
      * Skip visited pages that were only visited once. The frecency score is 101
      */
     case skipOneTimePages
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension FrecencyThresholdOption: Sendable {}
@@ -3771,13 +3252,6 @@ public func FfiConverterTypeFrecencyThresholdOption_lower(_ value: FrecencyThres
 }
 
 
-extension FrecencyThresholdOption: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3785,7 +3259,7 @@ extension FrecencyThresholdOption: Equatable, Hashable {}
  * a page that doesn't have an entry in the history database.
  */
 
-public enum HistoryMetadataPageMissingBehavior {
+public enum HistoryMetadataPageMissingBehavior: Equatable, Hashable {
     
     /**
      * Insert an entry for the page into the history database.
@@ -3795,8 +3269,12 @@ public enum HistoryMetadataPageMissingBehavior {
      * Ignore and discard the observation. This is the default behavior.
      */
     case ignoreObservation
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension HistoryMetadataPageMissingBehavior: Sendable {}
@@ -3851,17 +3329,10 @@ public func FfiConverterTypeHistoryMetadataPageMissingBehavior_lower(_ value: Hi
 }
 
 
-extension HistoryMetadataPageMissingBehavior: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum InsertableBookmarkItem {
+public enum InsertableBookmarkItem: Equatable, Hashable {
     
     case bookmark(b: InsertableBookmark
     )
@@ -3869,8 +3340,12 @@ public enum InsertableBookmarkItem {
     )
     case separator(s: InsertableBookmarkSeparator
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension InsertableBookmarkItem: Sendable {}
@@ -3937,15 +3412,8 @@ public func FfiConverterTypeInsertableBookmarkItem_lower(_ value: InsertableBook
 }
 
 
-extension InsertableBookmarkItem: Equatable, Hashable {}
 
-
-
-
-
-
-
-public enum PlacesApiError: Swift.Error {
+public enum PlacesApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -3961,8 +3429,21 @@ public enum PlacesApiError: Swift.Error {
     )
     case InvalidBookmarkOperation(reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension PlacesApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -4055,25 +3536,10 @@ public func FfiConverterTypePlacesApiError_lower(_ value: PlacesApiError) -> Rus
     return FfiConverterTypePlacesApiError.lower(value)
 }
 
-
-extension PlacesApiError: Equatable, Hashable {}
-
-
-
-
-extension PlacesApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum VisitType {
+public enum VisitType: Equatable, Hashable {
     
     /**
      * This transition type means the user followed a link.
@@ -4095,8 +3561,12 @@ public enum VisitType {
      * Internal visit type used for meta data updates. Doesn't represent an actual page visit
      */
     case updatePlace
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension VisitType: Sendable {}
@@ -4197,13 +3667,6 @@ public func FfiConverterTypeVisitType_lift(_ buf: RustBuffer) throws -> VisitTyp
 public func FfiConverterTypeVisitType_lower(_ value: VisitType) -> RustBuffer {
     return FfiConverterTypeVisitType.lower(value)
 }
-
-
-extension VisitType: Equatable, Hashable {}
-
-
-
-
 
 
 #if swift(>=5.8)
@@ -5009,7 +4472,7 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_places_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
@@ -5018,157 +4481,157 @@ private let initializationResult: InitializationResult = {
     if (uniffi_places_checksum_func_places_api_new() != 61152) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesapi_bookmarks_reset() != 55149) {
+    if (uniffi_places_checksum_method_placesapi_bookmarks_reset() != 9496) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesapi_bookmarks_sync() != 54759) {
+    if (uniffi_places_checksum_method_placesapi_bookmarks_sync() != 10687) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesapi_history_sync() != 17496) {
+    if (uniffi_places_checksum_method_placesapi_history_sync() != 37447) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesapi_new_connection() != 52100) {
+    if (uniffi_places_checksum_method_placesapi_new_connection() != 496) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesapi_register_with_sync_manager() != 51829) {
+    if (uniffi_places_checksum_method_placesapi_register_with_sync_manager() != 34707) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesapi_reset_history() != 6106) {
+    if (uniffi_places_checksum_method_placesapi_reset_history() != 11417) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_accept_result() != 37823) {
+    if (uniffi_places_checksum_method_placesconnection_accept_result() != 5027) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_apply_observation() != 21237) {
+    if (uniffi_places_checksum_method_placesconnection_apply_observation() != 42778) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_count_bookmarks_in_trees() != 42888) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_count_bookmarks_in_trees() != 6281) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_delete() != 45103) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_delete() != 61181) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_delete_everything() != 63220) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_delete_everything() != 47280) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_all_with_url() != 14617) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_all_with_url() != 43867) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_by_guid() != 61351) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_by_guid() != 50991) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_recent() != 42501) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_recent() != 39796) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_tree() != 63569) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_tree() != 7349) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_url_for_keyword() != 36697) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_url_for_keyword() != 8678) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_insert() != 60832) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_insert() != 41248) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_search() != 33699) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_search() != 5069) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_update() != 21797) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_update() != 55026) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_delete_everything_history() != 49787) {
+    if (uniffi_places_checksum_method_placesconnection_delete_everything_history() != 34149) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_delete_visit() != 24294) {
+    if (uniffi_places_checksum_method_placesconnection_delete_visit() != 37437) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_delete_visits_between() != 25398) {
+    if (uniffi_places_checksum_method_placesconnection_delete_visits_between() != 46647) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_delete_visits_for() != 29015) {
+    if (uniffi_places_checksum_method_placesconnection_delete_visits_for() != 45911) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_history_highlights() != 47165) {
+    if (uniffi_places_checksum_method_placesconnection_get_history_highlights() != 33627) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_history_metadata_between() != 11598) {
+    if (uniffi_places_checksum_method_placesconnection_get_history_metadata_between() != 18749) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_history_metadata_since() != 26978) {
+    if (uniffi_places_checksum_method_placesconnection_get_history_metadata_since() != 58266) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_latest_history_metadata_for_url() != 4169) {
+    if (uniffi_places_checksum_method_placesconnection_get_latest_history_metadata_for_url() != 42673) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_most_recent_history_metadata() != 25879) {
+    if (uniffi_places_checksum_method_placesconnection_get_most_recent_history_metadata() != 51076) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_most_recent_search_entries_in_history_metadata() != 58751) {
+    if (uniffi_places_checksum_method_placesconnection_get_most_recent_search_entries_in_history_metadata() != 25650) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_top_frecent_site_infos() != 4671) {
+    if (uniffi_places_checksum_method_placesconnection_get_top_frecent_site_infos() != 51768) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_count() != 5900) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_count() != 1687) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_count_for_host() != 44234) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_count_for_host() != 64658) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_infos() != 53292) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_infos() != 23804) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_page() != 49538) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_page() != 18361) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_page_with_bound() != 17277) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_page_with_bound() != 48926) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visited() != 7835) {
+    if (uniffi_places_checksum_method_placesconnection_get_visited() != 32501) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visited_urls_in_range() != 48399) {
+    if (uniffi_places_checksum_method_placesconnection_get_visited_urls_in_range() != 11583) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_match_url() != 17169) {
+    if (uniffi_places_checksum_method_placesconnection_match_url() != 8297) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_metadata_delete() != 29409) {
+    if (uniffi_places_checksum_method_placesconnection_metadata_delete() != 47660) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_metadata_delete_older_than() != 30473) {
+    if (uniffi_places_checksum_method_placesconnection_metadata_delete_older_than() != 20307) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_metadata_delete_search_terms() != 63321) {
+    if (uniffi_places_checksum_method_placesconnection_metadata_delete_search_terms() != 36196) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_new_interrupt_handle() != 5418) {
+    if (uniffi_places_checksum_method_placesconnection_new_interrupt_handle() != 3754) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_note_history_metadata_observation() != 31493) {
+    if (uniffi_places_checksum_method_placesconnection_note_history_metadata_observation() != 309) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_places_history_import_from_ios() != 596) {
+    if (uniffi_places_checksum_method_placesconnection_places_history_import_from_ios() != 58273) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_query_autocomplete() != 35323) {
+    if (uniffi_places_checksum_method_placesconnection_query_autocomplete() != 12559) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_query_history_metadata() != 21791) {
+    if (uniffi_places_checksum_method_placesconnection_query_history_metadata() != 42147) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_run_maintenance_checkpoint() != 3524) {
+    if (uniffi_places_checksum_method_placesconnection_run_maintenance_checkpoint() != 53937) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_run_maintenance_optimize() != 56373) {
+    if (uniffi_places_checksum_method_placesconnection_run_maintenance_optimize() != 19276) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_run_maintenance_prune() != 54740) {
+    if (uniffi_places_checksum_method_placesconnection_run_maintenance_prune() != 45926) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_run_maintenance_vacuum() != 17497) {
+    if (uniffi_places_checksum_method_placesconnection_run_maintenance_vacuum() != 6384) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_sqlinterrupthandle_interrupt() != 10423) {
+    if (uniffi_places_checksum_method_sqlinterrupthandle_interrupt() != 3328) {
         return InitializationResult.apiChecksumMismatch
     }
 

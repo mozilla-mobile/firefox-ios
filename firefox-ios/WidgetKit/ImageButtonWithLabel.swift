@@ -83,16 +83,20 @@ struct ImageButtonWithLabel: View {
         }
     }
 
+    @ViewBuilder
     private var background: some View {
-        return ContainerRelativeShape()
-            .fill(
-                LinearGradient(
-                    gradient: Gradient(colors: link.backgroundColors),
-                    startPoint: .bottomLeading,
-                    endPoint: .topTrailing
+        if #available(iOS 16.0, *) {
+            BackgroundContent(link: link)
+        } else {
+            ContainerRelativeShape()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: link.backgroundColors),
+                        startPoint: .bottomLeading,
+                        endPoint: .topTrailing
+                    )
                 )
-            )
-            .widgetAccentableCompat()
+        }
     }
 
     private var label: some View {
@@ -111,13 +115,18 @@ struct ImageButtonWithLabel: View {
         }
     }
 
+    @ViewBuilder
     private var logo: some View {
-        if link == .search && isSmall {
-            return Image(decorative: StandardImageIdentifiers.Large.search)
+        let isSearchSmall = (link == .search && isSmall)
+        let imageName = isSearchSmall ? StandardImageIdentifiers.Large.search : link.imageName
+
+        if #available(iOSApplicationExtension 18.0, *) {
+            Image(decorative: imageName)
+                .widgetAccentedRenderingMode(.accentedDesaturated)
                 .scaledToFit()
                 .frame(height: 24.0)
         } else {
-            return Image(decorative: link.imageName)
+            Image(decorative: imageName)
                 .scaledToFit()
                 .frame(height: 24.0)
         }
@@ -126,9 +135,38 @@ struct ImageButtonWithLabel: View {
     private var icon: some View {
         return HStack(alignment: .bottom) {
             Spacer()
-            Image(decorative: "faviconFox")
-                .scaledToFit()
-                .frame(height: 24.0)
+            if #available(iOSApplicationExtension 18.0, *) {
+                Image(decorative: "faviconFox")
+                    .widgetAccentedRenderingMode(.accentedDesaturated)
+                    .scaledToFit()
+                    .frame(height: 24.0)
+            } else {
+                Image(decorative: "faviconFox")
+                    .scaledToFit()
+                    .frame(height: 24.0)
+            }
+        }
+    }
+}
+
+@available(iOS 16.0, *)
+struct BackgroundContent: View {
+    @Environment(\.widgetRenderingMode) private var renderingMode
+    var link: QuickLink
+
+    var body: some View {
+        if renderingMode == .accented {
+            ContainerRelativeShape()
+                .fill(link.tintedBackgroundColor)
+        } else {
+            ContainerRelativeShape()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: link.backgroundColors),
+                        startPoint: .bottomLeading,
+                        endPoint: .topTrailing
+                    )
+                )
         }
     }
 }

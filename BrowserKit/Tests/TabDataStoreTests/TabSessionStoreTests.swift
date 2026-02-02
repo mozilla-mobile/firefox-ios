@@ -7,11 +7,11 @@ import XCTest
 @testable import TabDataStore
 
 final class TabSessionStoreTests: XCTestCase {
-    var mockFileManager: TabFileManagerMock!
+    var mockFileManager: MockTabFileManager!
 
     override func setUp() {
         super.setUp()
-        mockFileManager = TabFileManagerMock()
+        mockFileManager = MockTabFileManager()
     }
 
     override func tearDown() {

@@ -10,6 +10,7 @@ protocol OnboardingSelectorsSet {
     func primaryButton(rootId: String) -> Selector
     func secondaryButton(rootId: String) -> Selector
     var AGREE_AND_CONTINUE_BUTTON: Selector { get }
+    var MANAGE_TEXT_BUTTON: Selector { get }
     var QR_SIGN_IN_BUTTON: Selector { get }
     var EMAIL_SIGN_IN_BUTTON: Selector { get }
     var DONE_BUTTON: Selector { get }
@@ -22,6 +23,7 @@ protocol OnboardingSelectorsSet {
 struct OnboardingSelectors: OnboardingSelectorsSet {
     private enum IDs {
         static let termsAndService_AgreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+        static let manage_Text = "TermsOfService.ManageDataCollectionAgreement"
         static let QRCode_SignIn = "QRCodeSignIn.button"
         static let emailSignIn = "EmailSignIn.button"
         static let doneButton = "Done"
@@ -33,6 +35,12 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     let AGREE_AND_CONTINUE_BUTTON = Selector.buttonId(
         IDs.termsAndService_AgreeAndContinueButton,
         description: "Agree & Continue button on first onboarding screen",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_TEXT_BUTTON = Selector.buttonId(
+        IDs.manage_Text,
+        description: "Help improve button on first onboarding screen",
         groups: ["onboarding"]
     )
 

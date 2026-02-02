@@ -10,13 +10,13 @@ import XCTest
 
 class CanRemoveQuickActionBookmarkTests: XCTestCase {
     private var subject: MockCanRemoveQuickActionBookmark!
-    private var mockBookmarksHandler: BookmarksHandlerMock!
+    private var mockBookmarksHandler: MockBookmarksHandler!
     private var mockQuickActions: MockQuickActions!
 
     override func setUp() async throws {
         try await super.setUp()
         mockQuickActions = MockQuickActions()
-        mockBookmarksHandler = BookmarksHandlerMock()
+        mockBookmarksHandler = MockBookmarksHandler()
         subject = await MockCanRemoveQuickActionBookmark(bookmarksHandler: mockBookmarksHandler)
     }
 

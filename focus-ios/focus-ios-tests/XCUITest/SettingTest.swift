@@ -263,8 +263,8 @@ class SettingTest: BaseTestCase {
         app.tables.cells["settingsViewController.themeCell"].swipeUp()
 
         // Check that Safari toggle is off, swipe to get to Safari Integration menu
-        waitForExistence(app.otherElements["SIRI SHORTCUTS"])
-        app.otherElements["SIRI SHORTCUTS"].swipeUp()
+        waitForExistence(app.otherElements["SEARCH"])
+        app.otherElements["SEARCH"].swipeUp()
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "0")
 
         iOS_Settings.activate()

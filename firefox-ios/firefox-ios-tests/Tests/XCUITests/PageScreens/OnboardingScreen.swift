@@ -25,6 +25,13 @@ final class OnboardingScreen {
         button.tap()
     }
 
+    func assertContinueButtonIsOnTheBottom() {
+        let continueButton = sel.AGREE_AND_CONTINUE_BUTTON.element(in: app)
+        let manageButton = sel.MANAGE_TEXT_BUTTON.element(in: app)
+        XCTAssertTrue(continueButton.isBelow(element: manageButton),
+                      "Continue button is not displayed at the bottom of The ToS card")
+    }
+
     func assertTextsOnCurrentScreen(expectedTitle: String,
                                     expectedDescription: String,
                                     expectedPrimary: String,

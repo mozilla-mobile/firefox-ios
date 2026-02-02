@@ -15,6 +15,18 @@ let url3Label = "Internet for people, not profit — Mozilla"
 
 class PrivateBrowsingTest: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
+    private var settingScreen: SettingScreen!
+    private var tabTray: TabTrayScreen!
+    private var browserScreen: BrowserScreen!
+    private var homePageScreen: HomePageScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        settingScreen = SettingScreen(app: app)
+        tabTray = TabTrayScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        homePageScreen = HomePageScreen(app: app)
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
     func testPrivateTabDoesNotTrackHistory() {
@@ -272,6 +284,54 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(TabTray)
         numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+    }
+
+    // Smoketest
+    // https://mozilla.testrail.io/index.php?/cases/view/3168541
+    func testMultipleTabsPrivateBrowsingCloseEnabled() {
+        openMultipleTabsInPrivateModeAndForceRestart()
+        // None of the previously opened tabs are displayed
+        browserScreen.assertPrivateBrowsingLabelExist()
+    }
+
+    // Smoketest
+    // https://mozilla.testrail.io/index.php?/cases/view/3168545
+    func testMultipleTabsPrivateBrowsingCloseDisabled() {
+        openMultipleTabsInPrivateModeAndForceRestart(isClosePrivateTabEnabled: false)
+        // All of the previously opened tabs are displayed
+        tabTray.assertTabCount(2)
+    }
+
+    private func openMultipleTabsInPrivateModeAndForceRestart(isClosePrivateTabEnabled: Bool = true) {
+        navigator.goto(SettingsScreen)
+        if isClosePrivateTabEnabled {
+            settingScreen.enableClosePrivateTabs()
+        } else {
+            settingScreen.disableClosePrivateTabs()
+        }
+        // Go to Private mode and open multiple tabs with different websites
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        openNewTabAndLoadURL(URL: urlExample)
+        openNewTabAndLoadURL(URL: path(forTestPage: url_2["url"]!))
+        navigator.goto(TabTray)
+        // The multiple tabs with different websites are correctly displayed
+        tabTray.assertTabCount(2)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        navigator.goto(NewTabScreen)
+        // Force close and reopen Firefox
+        restartInBackground()
+        navigator.nowAt(NewTabScreen)
+        homePageScreen.assertTabsButtonExists()
+        navigator.goto(TabTray)
+        navigator.nowAt(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+    }
+
+    private func openNewTabAndLoadURL(URL: String) {
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(URL)
+        waitUntilPageLoad()
     }
 }
 
