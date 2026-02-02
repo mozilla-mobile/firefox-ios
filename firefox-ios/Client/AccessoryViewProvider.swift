@@ -41,10 +41,6 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     var useStrongPasswordClosure: (() -> Void)?
     var useRelayMaskClosure: (() -> Void)?
 
-    var hasAccessoryView: Bool {
-        return autofillAccessoryView != nil
-    }
-
     private var searchBarPosition: SearchBarPosition {
         return featureFlags.getCustomState(for: .searchBarPosition) ?? .bottom
     }
