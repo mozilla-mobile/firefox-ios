@@ -57,6 +57,13 @@ class BaseTestCase: XCTestCase {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
         app.activate()
+        // Wait until the app is fully opened (running in foreground) before continuing
+        let predicate = NSPredicate(format: "state == %d", XCUIApplication.State.runningForeground.rawValue)
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: app)
+        let waitResult = XCTWaiter.wait(for: [exp], timeout: 30)
+        if waitResult != .completed {
+            XCTFail("App did not reach runningForeground state after restart")
+        }
     }
 
     func closeFromAppSwitcherAndRelaunch() {
