@@ -104,7 +104,7 @@
 "Autocomplete.mySitesDesc" = "Включить автодополнение %@ URL ваших любимых сайтов.";
 
 /* Label for enabling or disabling top sites */
-"Autocomplete.topSites" = "Популярные сайты";
+"Autocomplete.topSites" = "Любимые сайты";
 
 /* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
 "BiometricAuthentication.UnlockButton.Title" = "Разблокировать";
