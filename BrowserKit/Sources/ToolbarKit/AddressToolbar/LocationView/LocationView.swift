@@ -182,7 +182,6 @@ final class LocationView: UIView,
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
-        formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: uxConfig.toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
