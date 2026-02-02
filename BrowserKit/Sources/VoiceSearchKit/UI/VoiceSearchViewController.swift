@@ -5,6 +5,94 @@
 import UIKit
 import Common
 
+// MARK: - Custom Presentation Animation
+final class VoiceSearchPresentationAnimator: NSObject,
+                                             UIViewControllerTransitioningDelegate,UIViewControllerAnimatedTransitioning {
+    private struct UX {
+        static let presentationAnimationSpringDumping: CGFloat = 0.8
+        static let presentationAnimationSpringVelocity: CGFloat = 1.0
+        static let 
+        @MainActor
+        var screenCornerRadius: CGFloat {
+            return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
+        }
+    }
+    // MARK: - UIViewControllerTransitioningDelegate
+    func animationController(forDismissed dismissed: UIViewController) -> (any UIViewControllerAnimatedTransitioning)? {
+        return self
+    }
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> (any UIViewControllerAnimatedTransitioning)? {
+        return self
+    }
+    
+    // MARK: - UIViewControllerAnimatedTransitioning
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 4.0
+    }
+    
+
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let isPresenting = transitionContext.viewController(forKey: .to) is VoiceSearchViewController
+        if isPresenting {
+            animatePresentation(transitionContext)
+        } else {
+            animateDismissal(transitionContext)
+        }
+    }
+    
+    private func animatePresentation(_ transitionContext: UIViewControllerContextTransitioning) {
+        guard let voiceSearchController = transitionContext.viewController(forKey: .to) as? VoiceSearchViewController else {
+            transitionContext.completeTransition(false)
+            return
+        }
+
+        let containerView = transitionContext.containerView
+        containerView.addSubview(voiceSearchController.view)
+        
+        voiceSearchController.view.frame = containerView.bounds
+        voiceSearchController.view.alpha = 0.0
+        voiceSearchController.buttonsContainer.transform = .identity.translatedBy(x: 0.0, y: 100.0)
+
+        UIView.animate(
+            withDuration: transitionDuration(using: transitionContext),
+            delay: 0,
+            usingSpringWithDamping: UX.presentationAnimationSpringDumping,
+            initialSpringVelocity: UX.presentationAnimationSpringVelocity,
+            options: .curveEaseOut,
+            animations: {
+                voiceSearchController.view.alpha = 1.0
+                voiceSearchController.buttonsContainer.transform = .identity
+            },
+            completion: { _ in
+                transitionContext.completeTransition(true)
+            }
+        )
+    }
+    
+    private func animateDismissal(_ transitionContext: UIViewControllerContextTransitioning) {
+        guard let presentedController = transitionContext.viewController(forKey: .to),
+              let dismissedController = transitionContext.viewController(forKey: .from) else {
+            transitionContext.completeTransition(false)
+            return
+        }
+        
+        let containerView = transitionContext.containerView
+        presentedController.view.transform = .identity.translatedBy(x: containerView.bounds.width, y: 0.0)
+        
+        
+        containerView.addSubview(dismissedController.view)
+        containerView.addSubview(presentedController.view)
+        
+        UIView.animate(withDuration: transitionDuration(using: transitionContext)) {
+            presentedController.view.transform = .identity
+        } completion: { _ in
+            dismissedController.view.removeFromSuperview()
+            transitionContext.completeTransition(true)
+        }
+    }
+}
+
 public final class VoiceSearchViewController: UIViewController, Themeable {
     private struct UX {
         static let buttonPadding: CGFloat = 26.0
@@ -49,10 +137,11 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.buttonContentInset
     }
-    private let buttonsContainer: UIStackView = .build {
+    let buttonsContainer: UIStackView = .build {
         $0.axis = .horizontal
         $0.spacing = UX.buttonsSpacing
     }
+    private let transitionAnimator = VoiceSearchPresentationAnimator()
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -68,6 +157,8 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .custom
+        transitioningDelegate = transitionAnimator
     }
 
     required init?(coder: NSCoder) {
@@ -82,6 +173,9 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
+        closeButton.addAction(UIAction(handler: { _ in
+            self.dismiss(animated: true)
+        }), for: .touchUpInside)
     }
 
     private func setupSubviews() {
@@ -128,4 +222,24 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
     }
+}
+
+@available(iOS 17, *)
+#Preview {
+    class MockPresentingViewController: UIViewController {
+        override func viewDidAppear(_ animated: Bool) {
+            view.backgroundColor = .red
+            super.viewDidAppear(animated)
+
+            let voiceSearchVC = VoiceSearchViewController(
+                windowUUID: .XCTestDefaultUUID,
+                themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+            )
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.present(voiceSearchVC, animated: true)
+            }
+        }
+    }
+
+    return MockPresentingViewController()
 }
