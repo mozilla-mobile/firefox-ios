@@ -534,7 +534,12 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    let browserLayoutManager: BrowserViewControllerLayoutManager
+    private lazy var browserLayoutManager: BrowserViewControllerLayoutManager = {
+        return BrowserViewControllerLayoutManager(
+            parentView: view,
+            headerView: header
+        )
+    }()
 
     init(
         profile: Profile,
@@ -572,7 +577,6 @@ class BrowserViewController: UIViewController,
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
-        self.browserLayoutManager = BrowserViewControllerLayoutManager()
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -1757,11 +1761,12 @@ class BrowserViewController: UIViewController,
             ])
         }
 
-//        updateHeaderConstraints(isSetupView: true)
-        browserLayoutManager.setupHeaderConstraints(parentView: view,
-                                                    headerView: header,
-                                                    isBottomSearchBar: isBottomSearchBar,
-                                                    toolbarHelper: toolbarHelper)
+        if isSnapKitRemovalEnabled {
+            browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
+            browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+        } else {
+            updateHeaderConstraints()
+        }
         setupBlurViews()
     }
 
@@ -1799,18 +1804,13 @@ class BrowserViewController: UIViewController,
     /// searchBarPositionDidChange (multiple times based on settings changes)
     private func updateHeaderConstraints() {
         guard !isSnapKitRemovalEnabled else {
-            print("YRD - updateHeaderConstraints without SnapKit")
-            browserLayoutManager.updateHeaderConstraints(parentView: view,
-                                                         headerView: header,
-                                                         shouldShowToolbar: false,
-                                                         isBottomSearchBar: isBottomSearchBar)
+            browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
             return
         }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
 
-        print("YRD - updateHeaderConstraints with SnapKit")
         header.snp.remakeConstraints { make in
             // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
             // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
@@ -1828,7 +1828,8 @@ class BrowserViewController: UIViewController,
                 make.height.equalTo(0)
             } else {
                 if let scrollController = scrollController as? LegacyTabScrollProvider {
-                    scrollController.headerTopConstraint = make.top.equalTo(topConstraint).constraint
+                    let topConstraint = make.top.equalTo(topConstraint).constraint
+                    scrollController.headerTopConstraint = ConstraintReference(snapKit: topConstraint)
                 } else {
                     headerTopConstraint = make.top.equalTo(topConstraint).constraint
                 }
