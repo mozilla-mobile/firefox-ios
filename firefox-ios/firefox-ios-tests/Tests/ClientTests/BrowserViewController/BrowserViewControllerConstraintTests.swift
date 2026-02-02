@@ -40,7 +40,7 @@ final class BrowserViewControllerConstraintTests: XCTestCase {
 
     func test_containerViews_addedToViewHierarchy() {
         let subject = createSubject()
-        XCTAssertNotNil(subject.header.superview, )
+        XCTAssertNotNil(subject.header.superview)
         XCTAssertNotNil(subject.overKeyboardContainer.superview)
         XCTAssertNotNil(subject.bottomContainer.superview)
     }
