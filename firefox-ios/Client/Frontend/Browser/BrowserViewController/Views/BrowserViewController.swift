@@ -534,6 +534,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    let browserLayoutManager: BrowserViewControllerLayoutManager
+
     init(
         profile: Profile,
         tabManager: TabManager,
@@ -570,6 +572,7 @@ class BrowserViewController: UIViewController,
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
+        self.browserLayoutManager = BrowserViewControllerLayoutManager()
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -1682,6 +1685,7 @@ class BrowserViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        print("YRD BrowserViewController: traitCollectionDidChange")
         DispatchQueue.main.async { [self] in
             // Only update position if device size class changed (rotation, split view, etc.)
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
@@ -1753,7 +1757,11 @@ class BrowserViewController: UIViewController,
             ])
         }
 
-        updateHeaderConstraints()
+//        updateHeaderConstraints(isSetupView: true)
+        browserLayoutManager.setupHeaderConstraints(parentView: view,
+                                                    headerView: header,
+                                                    isBottomSearchBar: isBottomSearchBar,
+                                                    toolbarHelper: toolbarHelper)
         setupBlurViews()
     }
 
@@ -1785,9 +1793,24 @@ class BrowserViewController: UIViewController,
     }
     // MARK: - Snapkit related
 
+    // Called:
+    /// setupConstraints (once)
+    /// traitCollectionDidChange (multiple times, rotation and size classes)
+    /// searchBarPositionDidChange (multiple times based on settings changes)
     private func updateHeaderConstraints() {
+        guard !isSnapKitRemovalEnabled else {
+            print("YRD - updateHeaderConstraints without SnapKit")
+            browserLayoutManager.updateHeaderConstraints(parentView: view,
+                                                         headerView: header,
+                                                         shouldShowToolbar: false,
+                                                         isBottomSearchBar: isBottomSearchBar)
+            return
+        }
+
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
+
+        print("YRD - updateHeaderConstraints with SnapKit")
         header.snp.remakeConstraints { make in
             // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
             // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
