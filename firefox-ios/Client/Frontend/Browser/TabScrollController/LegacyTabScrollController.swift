@@ -11,7 +11,7 @@ import Common
 protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     var tab: Tab? { get set }
     var zoomPageBar: ZoomPageBar? { get set }
-    var headerTopConstraint: Constraint? { get set }
+    var headerTopConstraint: ConstraintReference? { get set }
     var overKeyboardContainerConstraint: Constraint? { get set }
     var bottomContainerConstraint: Constraint? { get set }
 
@@ -85,7 +85,7 @@ final class LegacyTabScrollController: NSObject,
     private weak var bottomContainer: BaseAlphaStackView?
 
     // Toolbar Constraints
-    var headerTopConstraint: Constraint?
+    var headerTopConstraint: ConstraintReference?
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
 
