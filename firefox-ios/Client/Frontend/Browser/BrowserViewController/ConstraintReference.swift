@@ -5,6 +5,11 @@
 import UIKit
 import SnapKit
 
+// Notes for Winnie
+// Lets chat about it tomorrow I still haven't wrapped my head around how to deal with Tab scrolls and its two versions
+// this ConstraintReference will allow us to use either of the two and right now is working with SnapKit constraint
+// once we switch to TabScrollHandler we will not need this so this class is only temporary
+
 /// A wrapper that can hold either a SnapKit Constraint or NSLayoutConstraint
 /// and provides a unified API for updating constraint offsets.
 /// This allows gradual migration from SnapKit to native NSLayoutConstraint
