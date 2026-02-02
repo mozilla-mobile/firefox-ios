@@ -1008,13 +1008,8 @@ extension Tab: TabWebViewDelegate {
     }
 
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool {
-        // Hide the default WKWebView accessory view panel for PDF documents and
-        // there is no accessory view to display (but only for iPad cases)
-        let isPDF = mimeType == MIMEType.PDF
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return !isPDF && tabWebView.accessoryView.hasAccessoryView
-        }
-        return !isPDF
+        // Hide the default WKWebView accessory view panel for PDF documents.
+        return mimeType != MIMEType.PDF
     }
 }
 
@@ -1121,7 +1116,9 @@ protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, FeatureFlaggable {
-    lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
+    lazy var accessoryView: AccessoryViewProvider = .build(nil, {
+        AccessoryViewProvider(windowUUID: self.windowUUID)
+    })
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
@@ -1139,8 +1136,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
-
-        translatesAutoresizingMaskIntoConstraints = false
 
         return accessoryView
     }
