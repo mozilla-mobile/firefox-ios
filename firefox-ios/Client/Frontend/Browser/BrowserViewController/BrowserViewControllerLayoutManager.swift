@@ -6,15 +6,28 @@ import UIKit
 
 @MainActor
 class BrowserViewControllerLayoutManager {
+    private unowned let parentView: UIView
+    private unowned let headerView: UIView
+    private let toolbarHelper: ToolbarHelperInterface
+    private weak var scrollController: LegacyTabScrollProvider?
+
+    // Constraints
     private var headerTopConstraint: NSLayoutConstraint?
 
-    func setupHeaderConstraints(parentView: UIView,
-                                headerView: UIView,
-                                isBottomSearchBar: Bool,
-                                toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
+    init(parentView: UIView,
+         headerView: UIView,
+         toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
+        self.parentView = parentView
+        self.headerView = headerView
+        self.toolbarHelper = toolbarHelper
+    }
+
+    func setScrollController(_ scrollController: LegacyTabScrollProvider?) {
+        self.scrollController = scrollController
+    }
+
+    func setupHeaderConstraints(isBottomSearchBar: Bool) {
         print("YRD - setupHeaderConstraints")
-        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: parentView.traitCollection)
-        let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: parentView.traitCollection)
 
         if isBottomSearchBar {
             // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
@@ -31,36 +44,61 @@ class BrowserViewControllerLayoutManager {
                 // if we don't have the URL bar at the top then header height is 0
                 headerView.heightAnchor.constraint(equalToConstant: 0)
             ])
-            headerTopConstraint = headerView.topAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.topAnchor)
+            let topAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
+            headerTopConstraint = headerView.topAnchor.constraint(equalTo: topAnchor)
         } else {
-            // TODO: Yoana & Winnie deal with scrollController
-            let topConstraint = (isNavToolbar || shouldShowTopTabs) ?
-                parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
             NSLayoutConstraint.activate([
                 headerView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
                 headerView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
             ])
-            headerTopConstraint = headerView.topAnchor.constraint(equalTo: topConstraint)
+            let topAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
+            headerTopConstraint = headerView.topAnchor.constraint(equalTo: topAnchor)
         }
 
         headerTopConstraint?.isActive = true
+        updateScrollControllerConstraint()
     }
 
-    func updateHeaderConstraints(parentView: UIView,
-                                 headerView: UIView,
-                                 shouldShowToolbar: Bool,
-                                 isBottomSearchBar: Bool) {
-        // TODO: Yoana & Winnie Just update the topConstraint
+    func updateHeaderConstraints(isBottomSearchBar: Bool) {
         print("YRD - updateHeaderConstraints without SnapKit")
-        switch (isBottomSearchBar, shouldShowToolbar) {
-        case (false, false):
-            headerTopConstraint?.constant = 20
-        case (false, true):
-            headerTopConstraint?.constant = -headerView.frame.height
-        default:
-            headerTopConstraint?.constant = 0
+
+        // Get the correct anchor based on current conditions
+        let targetAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
+
+        // Preserve current offset
+        let currentConstant = headerTopConstraint?.constant ?? 0
+        headerTopConstraint?.isActive = false
+
+        // Create new with correct anchor
+        headerTopConstraint = headerView.topAnchor.constraint(equalTo: targetAnchor)
+        headerTopConstraint?.constant = currentConstant
+        headerTopConstraint?.isActive = true
+
+        updateScrollControllerConstraint()
+
+    }
+
+    private func updateScrollControllerConstraint() {
+        guard let scrollController = scrollController,
+              let constraint = headerTopConstraint else { return }
+        scrollController.headerTopConstraint = ConstraintReference(native: constraint)
+    }
+
+    /// Returns the correct top anchor for the header based on search bar position and trait collection
+    /// - Parameter isBottomSearchBar: Whether the search bar is positioned at the bottom
+    /// - Returns: The appropriate NSLayoutYAxisAnchor to constrain the header to
+    private func getHeaderTopAnchor(isBottomSearchBar: Bool) -> NSLayoutYAxisAnchor {
+        // Bottom search bar always uses safeArea
+        guard !isBottomSearchBar else {
+            return parentView.safeAreaLayoutGuide.topAnchor
         }
 
-        headerTopConstraint?.isActive = true
+        // Top toolbar: depends on nav toolbar visibility
+        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: parentView.traitCollection)
+        let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: parentView.traitCollection)
+
+        return (isNavToolbar || shouldShowTopTabs) ?
+            parentView.safeAreaLayoutGuide.topAnchor :
+            parentView.topAnchor
     }
 }
