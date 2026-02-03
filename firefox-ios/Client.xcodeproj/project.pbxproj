@@ -260,6 +260,8 @@
 		21304C8C2F217A59007ECEDA /* ThemeSettingsStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21304C8B2F217A59007ECEDA /* ThemeSettingsStateTests.swift */; };
 		21365E392F30FD700000C369 /* BrowserViewControllerLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E382F30FD580000C369 /* BrowserViewControllerLayoutManager.swift */; };
 		21365E3B2F312A0C0000C369 /* ConstraintReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E3A2F312A0C0000C369 /* ConstraintReference.swift */; };
+		21365E3E2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */; };
+		21365E3F2F314D1D0000C369 /* ConstraintReferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E3D2F314D1D0000C369 /* ConstraintReferenceTests.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */; };
 		21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA328AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift */; };
 		2137785D297F1F2800D01309 /* DownloadedFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137785C297F1F2800D01309 /* DownloadedFile.swift */; };
@@ -281,6 +283,7 @@
 		21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */; };
 		2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */; };
 		2142B12D2D9F1284003AA82F /* ZoomPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142B1292D9F1284003AA82F /* ZoomPageBar.swift */; };
+		214703452F32821C003FFAD9 /* MockToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214703442F32821C003FFAD9 /* MockToolbarHelper.swift */; };
 		214EF4152AC5D5D0005BCCDA /* TabDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */; };
 		2151EBD72F292767007B67A6 /* OnboardingViewControllerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2151EBD62F292767007B67A6 /* OnboardingViewControllerStateTests.swift */; };
 		2151EF572F2AB94A007B67A6 /* BrowserViewControllerConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2151EF562F2AB94A007B67A6 /* BrowserViewControllerConstraintTests.swift */; };
@@ -2955,6 +2958,8 @@
 		21304C8B2F217A59007ECEDA /* ThemeSettingsStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsStateTests.swift; sourceTree = "<group>"; };
 		21365E382F30FD580000C369 /* BrowserViewControllerLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLayoutManager.swift; sourceTree = "<group>"; };
 		21365E3A2F312A0C0000C369 /* ConstraintReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintReference.swift; sourceTree = "<group>"; };
+		21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLayoutManagerTests.swift; sourceTree = "<group>"; };
+		21365E3D2F314D1D0000C369 /* ConstraintReferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintReferenceTests.swift; sourceTree = "<group>"; };
 		21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTelemetryUtilityTests.swift; sourceTree = "<group>"; };
 		21371FA328AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModelProtocol.swift; sourceTree = "<group>"; };
 		2137785C297F1F2800D01309 /* DownloadedFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadedFile.swift; sourceTree = "<group>"; };
@@ -2976,6 +2981,7 @@
 		21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinatorTests.swift; sourceTree = "<group>"; };
 		2142B1292D9F1284003AA82F /* ZoomPageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageBar.swift; sourceTree = "<group>"; };
 		2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageManager.swift; sourceTree = "<group>"; };
+		214703442F32821C003FFAD9 /* MockToolbarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockToolbarHelper.swift; sourceTree = "<group>"; };
 		214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayView.swift; sourceTree = "<group>"; };
 		2151EBD62F292767007B67A6 /* OnboardingViewControllerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerStateTests.swift; sourceTree = "<group>"; };
 		2151EF562F2AB94A007B67A6 /* BrowserViewControllerConstraintTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerConstraintTests.swift; sourceTree = "<group>"; };
@@ -11859,6 +11865,8 @@
 		2151EF582F2AB962007B67A6 /* BrowserViewController */ = {
 			isa = PBXGroup;
 			children = (
+				21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */,
+				21365E3D2F314D1D0000C369 /* ConstraintReferenceTests.swift */,
 				E16941B32C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift */,
 				BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */,
 				2151EF562F2AB94A007B67A6 /* BrowserViewControllerConstraintTests.swift */,
@@ -14861,6 +14869,7 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				214703442F32821C003FFAD9 /* MockToolbarHelper.swift */,
 				C705FA792EF31F0000AC5EE7 /* MockPrivacyNoticeHelper.swift */,
 				8A387FEC2EF066BC0015C429 /* MockUnifiedAdsProvider.swift */,
 				C7A492752EBE81770098845C /* MockDismissalNotifiableViewController.swift */,
@@ -19457,6 +19466,8 @@
 				8A832A9729DCBD3C0025D5DD /* LaunchTypeTests.swift in Sources */,
 				219AEECE2E5E524300BF5F6F /* MockTabProviderProtocol.swift in Sources */,
 				8A28C628291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift in Sources */,
+				21365E3E2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift in Sources */,
+				21365E3F2F314D1D0000C369 /* ConstraintReferenceTests.swift in Sources */,
 				8A2F21C62DEDC17900C9F4DE /* StartAtHomeMiddlewareTests.swift in Sources */,
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
@@ -19727,6 +19738,7 @@
 				C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */,
 				03911AC02F27CA5D0010967A /* TermsOfUseMigrationTests.swift in Sources */,
 				03D9946C2EE8214F0081D209 /* TermsOfUseCoordinatorTests.swift in Sources */,
+				214703452F32821C003FFAD9 /* MockToolbarHelper.swift in Sources */,
 				8A7835372D5107810052E328 /* BookmarksMiddlewareTests.swift in Sources */,
 				45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */,
 				5AE371852A4DD6FE0092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */,

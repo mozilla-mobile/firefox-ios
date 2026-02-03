@@ -65,6 +65,8 @@ final class BrowserViewControllerLayoutManager {
         readerModeBar.heightAnchor.constraint(equalToConstant: UIConstants.ToolbarHeight).isActive = true
     }
 
+    // MARK - Private helpers
+
     private func updateHeaderHeightConstraint(isBottomSearchBar: Bool) {
         guard isBottomSearchBar else {
             headerHeightConstraint?.isActive = false
@@ -80,12 +82,6 @@ final class BrowserViewControllerLayoutManager {
         // if we don't have the URL bar at the top then header height is 0
         headerHeightConstraint = headerView.heightAnchor.constraint(equalToConstant: 0)
         headerHeightConstraint?.isActive = true
-    }
-
-    private func updateScrollControllerConstraint() {
-        guard let scrollController = scrollController,
-              let constraint = headerTopConstraint else { return }
-        scrollController.headerTopConstraint = ConstraintReference(native: constraint)
     }
 
     /// Returns the correct top anchor for the header based on search bar position and trait collection
@@ -109,5 +105,11 @@ final class BrowserViewControllerLayoutManager {
         // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
         // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
         return (isNavToolbar || shouldShowTopTabs) ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
+    }
+
+    private func updateScrollControllerConstraint() {
+        guard let scrollController = scrollController,
+              let constraint = headerTopConstraint else { return }
+        scrollController.headerTopConstraint = ConstraintReference(native: constraint)
     }
 }
