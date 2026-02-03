@@ -25,11 +25,11 @@ let r1 = Report(
     budget: 12_345_678.9
 )
 
-let r2 = r1.copyWith(
+let r2 = r1.copyWithUpdates(
     characters: ["Jane Doe"]
 )
 
-let r3 = r1.copyWith(
+let r3 = r1.copyWithUpdates(
     sponsor: nil,
     complexStructure: [:],
     budget: 0
