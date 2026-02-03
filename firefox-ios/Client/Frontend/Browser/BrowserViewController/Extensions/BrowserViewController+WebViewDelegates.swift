@@ -38,8 +38,6 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        guard !isPayPalPopUp(navigationAction) else { return nil }
-
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -60,8 +58,6 @@ extension BrowserViewController: WKUIDelegate {
         // IMPORTANT!!: WebKit will perform the `URLRequest` automatically!! Attempting to do
         // the request here manually leads to incorrect results!!
 
-        print("LM ### create webview with is called")
-        // Laurie - This won't create the webview, and this wont pass the configuraton
         let newTab = tabManager.addPopupForParentTab(
             profile: profile,
             parentTab: parentTab,
@@ -71,7 +67,7 @@ extension BrowserViewController: WKUIDelegate {
         // Set new tab url to about:blank because webViews created through this callback are always popups
         newTab.url = URL(string: "about:blank")
 
-        // Laurie - Select the new tab immediately, but dont create the webview
+        // Select the new tab immediately
         tabManager.selectTab(newTab, isPopup: true)
 
         return newTab.webView
@@ -463,7 +459,6 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
     ) {
-        print("LM ### decidePolicyFor navigationAction \(String(describing: navigationAction.request.url))")
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
         let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
@@ -475,7 +470,6 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        print("LM ### isPopup: \(tab.isPopup)")
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
@@ -512,7 +506,6 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if url.scheme == "about" {
-            print("LM ### url.scheme == ABOUT")
             decisionHandler(.allow)
             return
         }
@@ -656,7 +649,8 @@ extension BrowserViewController: WKNavigationDelegate {
     private func handleStoreURLNavigation(url: URL) {
         // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
         // Otherwise the AppStoreAlert is shown on the wrong tab
-        let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
+        let delaySelectingNewPopupTab: TimeInterval = 0.2
+        let delay: DispatchTime = .now() + delaySelectingNewPopupTab
         DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
             self?.showAppStoreAlert { isOpened in
                 if isOpened {
@@ -718,7 +712,6 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        print("LM ### decidePolicyFor navigationResponse \(String(describing: navigationResponse.response.url))")
         let response = navigationResponse.response
         let responseURL = response.url
 
@@ -1096,7 +1089,6 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
-        print("LM ### didCommit called")
         guard let tab = tabManager[webView] else { return }
 
         // The main frame JSContext is available, and DOM parsing has begun.
@@ -1287,14 +1279,6 @@ private extension BrowserViewController {
         }
 
         return false
-    }
-
-    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
-    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
-    // so we will block the creation of a new Webview with this check
-    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
-        let domain = navigationAction.sourceFrame.request.url?.baseDomain ?? ""
-        return ["paypal.com", "shopify.com"].contains(domain)
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {

@@ -515,11 +515,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func createWebview(with restoreSessionData: Data? = nil, configuration: WKWebViewConfiguration) {
-        print("LM ### createWebview(with restoreSessionData CALLED")
-        // Laurie - should we save the configuraton on init? Or is this fine?
         self.configuration = configuration
         if webView == nil {
-            print("LM ### webView == nil, creating it")
             configuration.userContentController = WKUserContentController()
             configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
