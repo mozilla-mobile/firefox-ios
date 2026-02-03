@@ -64,7 +64,7 @@ class BrowserViewControllerLayoutManager {
         readerModeBar.heightAnchor.constraint(equalToConstant: UIConstants.ToolbarHeight).isActive = true
     }
 
-    // MARK - Private helpers
+    // MARK: - Private helpers
 
     private func updateHeaderHeightConstraint(isBottomSearchBar: Bool) {
         guard isBottomSearchBar else {
