@@ -1688,7 +1688,7 @@ class BrowserViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        print("YRD BrowserViewController: traitCollectionDidChange")
+
         DispatchQueue.main.async { [self] in
             // Only update position if device size class changed (rotation, split view, etc.)
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
@@ -1764,8 +1764,6 @@ class BrowserViewController: UIViewController,
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
         } else {
-            // Notes for Winnie
-            // I realize that if the flag is off we should still call this 
             updateHeaderConstraints()
         }
         setupBlurViews()

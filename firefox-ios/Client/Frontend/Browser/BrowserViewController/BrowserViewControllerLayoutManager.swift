@@ -28,9 +28,6 @@ class BrowserViewControllerLayoutManager {
         self.scrollController = scrollController
     }
 
-    // Notes for Winnie
-    // this function didn't change much after our sync
-    // I just removed the parameters and added to the class
     func setupHeaderConstraints(isBottomSearchBar: Bool) {
         NSLayoutConstraint.activate([
             headerView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
@@ -47,13 +44,6 @@ class BrowserViewControllerLayoutManager {
         updateScrollControllerConstraint()
     }
 
-    // Notes for Winnie
-    // After our talk I realize this function is only called related to rotation and search
-    // so we don't need to handle show/hide toolbar here so I removed the parameter
-    // The problem with rotation is that we either pin the top anchor to the
-    // safeAreaLayoutGuide or the top anchor of the view so I moved that logic to a helper func
-    // getHeaderTopAnchor and here we only deactivate the old constraint and create a new one
-    // Again we still need to think about scrolling but is working
     func updateHeaderConstraints(isBottomSearchBar: Bool) {
         updateHeaderHeightConstraint(isBottomSearchBar: isBottomSearchBar)
 
@@ -88,8 +78,6 @@ class BrowserViewControllerLayoutManager {
         headerHeightConstraint?.isActive = true
     }
 
-    // Notes for Winnie
-    // Before we were recreating the constraint so we need to update tabScrollController
     private func updateScrollControllerConstraint() {
         guard let scrollController = scrollController,
               let constraint = headerTopConstraint else { return }
