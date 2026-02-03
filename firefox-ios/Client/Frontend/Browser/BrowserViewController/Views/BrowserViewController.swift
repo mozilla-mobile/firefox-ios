@@ -1795,12 +1795,8 @@ class BrowserViewController: UIViewController,
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
-    // MARK: - Snapkit related
 
-    // Called:
-    /// setupConstraints (once)
-    /// traitCollectionDidChange (multiple times, rotation and size classes)
-    /// searchBarPositionDidChange (multiple times based on settings changes)
+    // MARK: - Snapkit related
     private func updateHeaderConstraints() {
         guard !isSnapKitRemovalEnabled else {
             browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
