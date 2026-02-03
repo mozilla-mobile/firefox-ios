@@ -61,6 +61,10 @@ final class BrowserViewControllerLayoutManager {
         updateScrollControllerConstraint()
     }
 
+    func addReaderModeBarHeight(_ readerModeBar: ReaderModeBarView) {
+        readerModeBar.heightAnchor.constraint(equalToConstant: UIConstants.ToolbarHeight).isActive = true
+    }
+
     private func updateHeaderHeightConstraint(isBottomSearchBar: Bool) {
         guard isBottomSearchBar else {
             headerHeightConstraint?.isActive = false
