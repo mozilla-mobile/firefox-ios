@@ -14,6 +14,7 @@ class BrowserViewControllerLayoutManager {
 
     // Constraints to store
     private var headerTopConstraint: NSLayoutConstraint?
+    private var headerHeightConstraint: NSLayoutConstraint?
 
     init(parentView: UIView,
          headerView: UIView,
@@ -40,9 +41,7 @@ class BrowserViewControllerLayoutManager {
         headerTopConstraint?.isActive = true
 
         if isBottomSearchBar {
-            // The status bar is covered by the statusBarOverlay,
-            // if we don't have the URL bar at the top then header height is 0
-            headerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            updateHeaderHeightConstraint(isBottomSearchBar: isBottomSearchBar)
         }
 
         updateScrollControllerConstraint()
@@ -56,6 +55,8 @@ class BrowserViewControllerLayoutManager {
     // getHeaderTopAnchor and here we only deactivate the old constraint and create a new one
     // Again we still need to think about scrolling but is working
     func updateHeaderConstraints(isBottomSearchBar: Bool) {
+        updateHeaderHeightConstraint(isBottomSearchBar: isBottomSearchBar)
+
         let targetAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
 
         // Preserve current offset
@@ -68,6 +69,23 @@ class BrowserViewControllerLayoutManager {
         headerTopConstraint?.isActive = true
 
         updateScrollControllerConstraint()
+    }
+
+    private func updateHeaderHeightConstraint(isBottomSearchBar: Bool) {
+        guard isBottomSearchBar else {
+            headerHeightConstraint?.isActive = false
+            return
+        }
+
+        guard headerHeightConstraint == nil else {
+            headerHeightConstraint?.isActive = true
+            return
+        }
+
+        // The status bar is covered by the statusBarOverlay,
+        // if we don't have the URL bar at the top then header height is 0
+        headerHeightConstraint = headerView.heightAnchor.constraint(equalToConstant: 0)
+        headerHeightConstraint?.isActive = true
     }
 
     // Notes for Winnie
