@@ -452,7 +452,6 @@ extension BrowserViewController: WKNavigationDelegate {
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
     // method.
     @MainActor
-    // swiftlint:disable:next function_body_length
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,

@@ -537,6 +537,17 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
             self.webView = webView
 
+            // FXIOS-5549
+            // There is a crash in didCreateWebView for when webview becomes nil.
+            // We are adding a check before that method gets called as the webview
+            // should not be nil at this point considering we created it above.
+            guard self.webView != nil else {
+                logger.log("No webview found for didCreateWebView.",
+                           level: .fatal,
+                           category: .tabs)
+                return
+            }
+
             configureEdgeSwipeGestureRecognizers()
 
             UserScriptManager.shared.injectUserScriptsIntoWebView(
