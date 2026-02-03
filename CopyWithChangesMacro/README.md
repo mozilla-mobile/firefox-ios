@@ -39,9 +39,9 @@ let s6 = s1.with(f: nil)
 
 The complete behavior is:
 - providing a value for any field will use that value for the field;
-- providing `nil` for a field that is non-optional is the same as not including that field in the call, i.e. the value from the originalk struct will be used;
+- providing `nil` for a field that is non-optional is the same as not including that field in the call, i.e. the value from the original struct will be used;
 - providing `nil` for an optional field will make that field `nil`;
-- providing `.some(nil)` for an optional field is the same as not including that field in the call, i.e. the value from the originalk struct will be used.
+- providing `.some(nil)` for an optional field is the same as not including that field in the call, i.e. the value from the original struct will be used.
 
 The macro can also apply to classes. In either classes or structs, there will have to be a memberwise `init`. In structs this is automatically synthesised by the compiler unless a custom init is defined in the struct declaration. It can also be generated via Xcode's autocompletion features.
 
