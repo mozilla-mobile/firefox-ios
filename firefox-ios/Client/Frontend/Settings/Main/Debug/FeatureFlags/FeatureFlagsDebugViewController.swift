@@ -31,6 +31,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         // For better code readability and parsability in-app, please keep in alphabetical order by title
         var children: [Setting] =  [
             FeatureFlagsBoolSetting(
+                with: .adsClient,
+                titleText: format(string: "Ads Client"),
+                statusText: format(string: "Toggle to enable the rust ads client")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .appearanceMenu,
                 titleText: format(string: "Appearance Menu"),
                 statusText: format(string: "Toggle to show the new apperance menu")

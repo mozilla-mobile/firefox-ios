@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import MozillaAppServices
 import Shared
 
 typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
@@ -15,19 +16,20 @@ protocol UnifiedAdsProviderInterface: Sendable {
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
     ///   - completion: Returns an array of Tiles, can be empty
-    func fetchTiles(timestamp: Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void)
+    func fetchTiles(timestamp: Shared.Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void)
 }
 
 extension UnifiedAdsProviderInterface {
-    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
+    func fetchTiles(timestamp: Shared.Timestamp = Date.now(), completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
         fetchTiles(timestamp: timestamp, completion: completion)
     }
 }
 
 final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable, Sendable {
+    private let overrideAdsClient: MozAdsClientProtocol?
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
-    let maxCacheAge: Timestamp = OneMinuteInMilliseconds * 30
+    let maxCacheAge: Shared.Timestamp = OneMinuteInMilliseconds * 30
     let urlCache: URLCache
     private let logger: Logger
     private let networking: UnifiedTileNetworking
@@ -42,13 +44,25 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     init(
+        adsClient: MozAdsClientProtocol? = nil,
         networking: UnifiedTileNetworking = DefaultUnifiedTileNetwork(with: NetworkUtils.defaultURLSession()),
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {
+        self.overrideAdsClient = adsClient
         self.logger = logger
         self.networking = networking
         self.urlCache = urlCache
+    }
+
+    private var adsClient: MozAdsClientProtocol {
+        if let overrideAdsClient = overrideAdsClient {
+            return overrideAdsClient
+        }
+        if featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI) {
+            return RustAdsClient.staging
+        }
+        return RustAdsClient.production
     }
 
     private struct AdPlacement: Codable {
@@ -61,20 +75,24 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         let placements: [AdPlacement]
     }
 
-    func fetchTiles(timestamp: Timestamp = Date.now(),
+    func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
                     completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        guard let request = buildRequest() else {
-            completion(.failure(Error.noDataAvailable))
-            return
-        }
-
-        // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
-        var cacheRequest = request
-        cacheRequest.httpBody = nil
-        if let cachedData = findCachedData(for: cacheRequest, timestamp: timestamp, maxCacheAge: maxCacheAge) {
-            decode(data: cachedData, completion: completion)
+        if featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly) {
+            fetchTilesWithAdsClient(completion: completion)
         } else {
-            fetchTiles(request: request, completion: completion)
+            guard let request = buildRequest() else {
+                completion(.failure(Error.noDataAvailable))
+                return
+            }
+
+            // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
+            var cacheRequest = request
+            cacheRequest.httpBody = nil
+            if let cachedData = findCachedData(for: cacheRequest, timestamp: timestamp, maxCacheAge: maxCacheAge) {
+                decode(data: cachedData, completion: completion)
+            } else {
+                fetchTiles(request: request, completion: completion)
+            }
         }
     }
 
@@ -134,6 +152,26 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         }
     }
 
+    private func fetchTilesWithAdsClient(completion: @escaping (UnifiedTileResult) -> Void) {
+        logger.log("Fetching tiles with ads client", level: .info, category: .homepage)
+        let mozAdRequests = [
+            MozAdsPlacementRequest(placementId: TileOrder.position1.rawValue, iabContent: nil),
+            MozAdsPlacementRequest(placementId: TileOrder.position2.rawValue, iabContent: nil)
+        ]
+        do {
+            let mozAdsTiles = try self.adsClient.requestTileAds(
+                mozAdRequests: mozAdRequests, options: nil)
+            let unifiedTiles: [UnifiedTile] = mozAdsTiles.map { name, mozAdsTile in
+                UnifiedTile.from(name: name, mozAdsTile: mozAdsTile)
+            }
+            logger.log("Ads client request successful", level: .info, category: .homepage)
+            completion(.success(unifiedTiles))
+        } catch let error {
+            logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
+            completion(.failure(Error.noDataAvailable))
+        }
+    }
+
     private func decode(data: Data, completion: @escaping (UnifiedTileResult) -> Void) {
         do {
             let decoder = JSONDecoder()
@@ -148,9 +186,10 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             }
             completion(.success(tiles))
         } catch let error {
-            self.logger.log("Unable to parse with error: \(error)",
-                            level: .warning,
-                            category: .homepage)
+            logger.log(
+                "Unable to parse with error: \(error)",
+                level: .warning,
+                category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
     }

@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+
 #if canImport(MozillaRustComponents)
     import MozillaRustComponents
 #endif
@@ -18,19 +19,15 @@ public class Viaduct {
 
     private init() {}
 
-    public func initialize() {
+    public func initialize(userAgent: String) {
         // Note: This function doesn't need to synchronize since the Rust functions are thread-safe.
 
-        // This value comes from a very old workaround for FxA/Push.  We should probably get rid of
-        // this at some point and move to the value from `UserAgent.swift`.  However, make sure to
-        // first investigate that this old comment no longer applies:
-        //
-        // > The FxA servers rely on the UA agent to filter
-        // > some push messages directed to iOS devices.
-        // > This is obviously a terrible hack and we should
-        // > probably do https://github.com/mozilla/application-services/issues/1326
-        // > instead, but this will unblock us for now.
-        setGlobalDefaultUserAgent(userAgent: "Firefox-iOS-FxA/24")
+        // Historical context: The FxA servers rely on the UA string to filter some push messages
+        // directed to iOS devices. Ideally we should use the default user agent instead of FxA-specific
+        // one, but we're currently using the FxA user agent to avoid breaking existing functionality.
+        // See https://github.com/mozilla/application-services/issues/1326 for more context.
+        // TODO: Investigate if we can safely switch to the default user agent.
+        setGlobalDefaultUserAgent(userAgent: userAgent)
         do {
             try viaductInitBackendHyper()
         } catch {
