@@ -5,16 +5,16 @@ import PackageDescription
 import CompilerPluginSupport
 
 let package = Package(
-    name: "CopyWithChangesMacro",
+    name: "CopyWithUpdatesMacro",
     platforms: [.macOS(.v10_15), .iOS(.v15), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
     products: [
         .library(
-            name: "CopyWithChanges",
-            targets: ["CopyWithChanges"]
+            name: "CopyWithUpdates",
+            targets: ["CopyWithUpdates"]
         ),
         .executable(
-            name: "CopyWithChangesClient",
-            targets: ["CopyWithChangesClient"]
+            name: "CopyWithUpdatesClient",
+            targets: ["CopyWithUpdatesClient"]
         ),
     ],
     dependencies: [
@@ -22,18 +22,18 @@ let package = Package(
     ],
     targets: [
         .macro(
-            name: "CopyWithChangesMacros",
+            name: "CopyWithUpdatesMacros",
             dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ]
         ),
-        .target(name: "CopyWithChanges", dependencies: ["CopyWithChangesMacros"]),
-        .executableTarget(name: "CopyWithChangesClient", dependencies: ["CopyWithChanges"]),
+        .target(name: "CopyWithUpdates", dependencies: ["CopyWithUpdatesMacros"]),
+        .executableTarget(name: "CopyWithUpdatesClient", dependencies: ["CopyWithUpdates"]),
         .testTarget(
-            name: "CopyWithChangesTests",
+            name: "CopyWithUpdatesTests",
             dependencies: [
-                "CopyWithChangesMacros",
+                "CopyWithUpdatesMacros",
                 .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
             ]
         ),

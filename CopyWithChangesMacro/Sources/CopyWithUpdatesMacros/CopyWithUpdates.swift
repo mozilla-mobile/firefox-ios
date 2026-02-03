@@ -8,8 +8,8 @@ import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
-/// Implementation of the `CopyWithChanges` macro.
-public struct CopyWithChangesMacro: MemberMacro {
+/// Implementation of the `CopyWithUpdates` macro.
+public struct CopyWithUpdatesMacro: MemberMacro {
     public static func expansion(
         of attribute: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
@@ -19,7 +19,7 @@ public struct CopyWithChangesMacro: MemberMacro {
                              ?? declaration.as(ClassDeclSyntax.self)?.memberBlock.members) else {
             context.diagnose(Diagnostic(
                 node: attribute,
-                message: CopyWithChangesDiagnostic.unsupportedTarget
+                message: CopyWithUpdatesDiagnostic.unsupportedTarget
             ))
 
             return []
@@ -50,7 +50,7 @@ public struct CopyWithChangesMacro: MemberMacro {
                   let propertyType = binding.typeAnnotation?.as(TypeAnnotationSyntax.self)?.type else {
                 context.diagnose(Diagnostic(
                     node: attribute,
-                    message: CopyWithChangesDiagnostic.unsupportedBinding(binding)
+                    message: CopyWithUpdatesDiagnostic.unsupportedBinding(binding)
                 ))
 
                 continue
@@ -83,7 +83,7 @@ public struct CopyWithChangesMacro: MemberMacro {
         ]
     }
 
-    enum CopyWithChangesDiagnostic: DiagnosticMessage {
+    enum CopyWithUpdatesDiagnostic: DiagnosticMessage {
         case unsupportedTarget
         case unsupportedBinding(PatternBindingSyntax)
 
@@ -97,21 +97,21 @@ public struct CopyWithChangesMacro: MemberMacro {
         var message: String {
             switch self {
             case .unsupportedTarget:
-                "'@CopyWithChanges' can only be applied to a struct or a class"
+                "'@CopyWithUpdates' can only be applied to a struct or a class"
             case .unsupportedBinding(let binding):
-                "'@CopyWithChanges' cannot copy field '\(binding)'"
+                "'@CopyWithUpdates' cannot copy field '\(binding)'"
             }
         }
 
         var diagnosticID: MessageID {
-            MessageID(domain: "CopyWithChangesMacros", id: String(describing: self))
+            MessageID(domain: "CopyWithUpdatesMacros", id: String(describing: self))
         }
     }
 }
 
 @main
-struct CopyWithChangesPlugin: CompilerPlugin {
+struct CopyWithUpdatesPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
-        CopyWithChangesMacro.self,
+        CopyWithUpdatesMacro.self,
     ]
 }

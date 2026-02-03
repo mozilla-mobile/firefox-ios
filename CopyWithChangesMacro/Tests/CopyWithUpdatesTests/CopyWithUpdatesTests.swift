@@ -7,25 +7,25 @@ import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
-import CopyWithChanges
+import CopyWithUpdates
 
 // Macro implementations build for the host, so the corresponding module is not available when cross-compiling.
 // Cross-compiled tests may still make use of the macro itself in end-to-end tests.
-// If you want to run these tests without skipping, open the CopyWithChanges package folder separately in Xcode.
-#if canImport(CopyWithChangesMacros)
-import CopyWithChangesMacros
+// If you want to run these tests without skipping, open the CopyWithUpdates package folder separately in Xcode.
+#if canImport(CopyWithUpdatesMacros)
+import CopyWithUpdatesMacros
 
-let testMacros: [String: Macro.Type] = [
-    "CopyWithChanges": CopyWithChangesMacro.self,
+nonisolated(unsafe) let testMacros: [String: Macro.Type] = [
+    "CopyWithUpdates": CopyWithUpdatesMacro.self,
 ]
 #endif
 
-final class CopyWithChangesTests: XCTestCase {
+final class CopyWithUpdatesTests: XCTestCase {
     func testMacro_withOptionalProperty() throws {
-        #if canImport(CopyWithChangesMacros)
+        #if canImport(CopyWithUpdatesMacros)
         assertMacroExpansion(
             """
-            @CopyWithChanges
+            @CopyWithUpdates
             struct TestType {
                 let prop1: String?
             }
@@ -52,10 +52,10 @@ final class CopyWithChangesTests: XCTestCase {
 
     func testMacro_forMultiplePropertyTypes() throws {
         // swiftlint:disable line_length
-        #if canImport(CopyWithChangesMacros)
+        #if canImport(CopyWithUpdatesMacros)
         assertMacroExpansion(
             """
-            @CopyWithChanges
+            @CopyWithUpdates
             struct Report {
                 let venue: String
                 let sponsor: String?
@@ -95,10 +95,10 @@ final class CopyWithChangesTests: XCTestCase {
     }
 
     func testMacro_withStaticProperty() throws {
-        #if canImport(CopyWithChangesMacros)
+        #if canImport(CopyWithUpdatesMacros)
         assertMacroExpansion(
             """
-            @CopyWithChanges
+            @CopyWithUpdates
             struct SomeState {
                 var prop1: UUID
                 var prop2: String
@@ -133,7 +133,7 @@ final class CopyWithChangesTests: XCTestCase {
     }
 
     func testIntegration_withOptionalSet() {
-        @CopyWithChanges
+        @CopyWithUpdates
         struct TestType {
             let property1: String?
             let property2: Int
@@ -167,7 +167,7 @@ final class CopyWithChangesTests: XCTestCase {
     }
 
     func testIntegration_withOptionalNotSet() {
-        @CopyWithChanges
+        @CopyWithUpdates
         struct TestType {
             let property1: String?
             let property2: Int

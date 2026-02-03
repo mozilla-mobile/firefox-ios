@@ -3,10 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import CopyWithChanges
+import CopyWithUpdates
 
-// This file contains a simple executable demo of the CopyWithChanges macro.
-@CopyWithChanges
+// This file contains a simple executable demo of the CopyWithUpdates macro.
+@CopyWithUpdates
 struct Report {
     let venue: String
     let sponsor: String?

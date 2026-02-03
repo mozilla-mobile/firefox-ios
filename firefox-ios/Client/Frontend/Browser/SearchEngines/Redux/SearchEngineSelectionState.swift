@@ -3,10 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Redux
-import CopyWithChanges
 
-@CopyWithChanges
+@CopyWithUpdates
 struct SearchEngineSelectionState: ScreenState {
     var windowUUID: WindowUUID
 
@@ -16,11 +16,13 @@ struct SearchEngineSelectionState: ScreenState {
     var selectedSearchEngine: SearchEngineModel?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let state = appState.screenState(
-            SearchEngineSelectionState.self,
-            for: .searchEngineSelection,
-            window: uuid
-        ) else {
+        guard
+            let state = appState.screenState(
+                SearchEngineSelectionState.self,
+                for: .searchEngineSelection,
+                window: uuid
+            )
+        else {
             self.init(windowUUID: uuid)
             return
         }
@@ -52,22 +54,22 @@ struct SearchEngineSelectionState: ScreenState {
         switch action.actionType {
         case SearchEngineSelectionActionType.didLoadSearchEngines:
             guard let action = action as? SearchEngineSelectionAction,
-                  let searchEngines = action.searchEngines
+                let searchEngines = action.searchEngines
             else {
                 return defaultState(from: state)
             }
 
             // With the current usage, we don't want to reset the selectedSearchEngine to nil for didLoadSearchEngines
-            return state.copyWith(
+            return state.copyWithChanges(
                 searchEngines: searchEngines
             )
 
         case SearchEngineSelectionActionType.didTapSearchEngine:
             guard let action = action as? SearchEngineSelectionAction,
-                  let selectedSearchEngine = action.selectedSearchEngine
+                let selectedSearchEngine = action.selectedSearchEngine
             else { return defaultState(from: state) }
 
-            return state.copyWith(
+            return state.copyWithChanges(
                 selectedSearchEngine: selectedSearchEngine
             )
 
@@ -77,6 +79,6 @@ struct SearchEngineSelectionState: ScreenState {
     }
 
     static func defaultState(from state: SearchEngineSelectionState) -> SearchEngineSelectionState {
-        return state.copyWith()
+        return state.copyWithChanges()
     }
 }

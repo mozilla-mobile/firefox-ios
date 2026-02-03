@@ -1,10 +1,10 @@
-# CopyWithChanges
+# CopyWithUpdates
 
 Allows copying a Swift class or struct while changing arbitrary fields.
 
 ## Overview
 
-The `@CopyWithChanges` macro can be applied to a struct or a class to generate a function that takes facultative arguments, one for each of the target's fields, and returns a new instance that is a copy of the original, except for the provided arguments. It supports optionals.
+The `@CopyWithUpdates` macro can be applied to a struct or a class to generate a function that takes facultative arguments, one for each of the target's fields, and returns a new instance that is a copy of the original, except for the provided arguments. It supports optionals.
 
 ## Rationale
 
@@ -22,19 +22,19 @@ var s3 = s1
 s3.b = 2
 ```
 
-Making the instance mutable is a small trade-off, that can even be solved by using some variant of an initialisation block. However, making the **fields** mutable just for the sake of convenient initialisation can be seen as a big anti-pattern.
+Making the instance mutable is a small trade-off, that can even be solved by using some variant of an initialization block. However, making the **fields** mutable just for the sake of convenient initialization can be seen as a big anti-pattern.
 
-To avoid this need to make the fields mutable, `@CopyWithChanges` provides the boilerplate needed in the form of `func with(...)`, that handles the boilerplate of calling `init` with both the changed and the kept values:
+To avoid this need to make the fields mutable, `@CopyWithUpdates` provides the boilerplate needed in the form of `func with(...)`, that handles the boilerplate of calling `init` with both the changed and the kept values:
 
 ```swift
 // the solution proposed here
-let s4 = s1.with(b: 2)
+let s4 = s1.copyWithUpdates(b: 2)
 
 // the same, but changing two fields
-let s5 = s1.with(c: 4, g: 7)
+let s5 = s1.copyWithUpdates(c: 4, g: 7)
 
 // will change f to nil (if field f is defined as Optional)
-let s6 = s1.with(f: nil)
+let s6 = s1.copyWithUpdates(f: nil)
 ```
 
 The complete behavior is:
@@ -43,16 +43,16 @@ The complete behavior is:
 - providing `nil` for an optional field will make that field `nil`;
 - providing `.some(nil)` for an optional field is the same as not including that field in the call, i.e. the value from the original struct will be used.
 
-The macro can also apply to classes. In either classes or structs, there will have to be a memberwise `init`. In structs this is automatically synthesised by the compiler unless a custom init is defined in the struct declaration. It can also be generated via Xcode's autocompletion features.
+The macro can also apply to classes. In either classes or structs, there will have to be a memberwise `init`. In structs this is automatically synthesized by the compiler unless a custom init is defined in the struct declaration. It can also be generated via Xcode's autocompletion features.
 
 ## Usage
 
-Annotate the target type with the `@CopyWithChanges` macro to generate `func with(...) -> Self`:
+Annotate the target type with the `@CopyWithUpdates` macro to generate `func with(...) -> Self`:
 
 ```swift
-import CopyWithChanges
+import CopyWithUpdates
 
-@CopyWithChanges
+@CopyWithUpdates
 struct Report {
     let venue: String
     let sponsor: String?
@@ -74,7 +74,7 @@ struct Report {
     let characters: [String]?
     let budget: Double
 
-    public func with(venue: String? = nil, sponsor: String?? = .some(nil), drinks: [String]? = nil, complexStructure: [Date: [(String, Int)]]? = nil, characters: [String]?? = .some(nil), budget: Double? = nil) -> Self {
+    public func copyWithUpdates(venue: String? = nil, sponsor: String?? = .some(nil), drinks: [String]? = nil, complexStructure: [Date: [(String, Int)]]? = nil, characters: [String]?? = .some(nil), budget: Double? = nil) -> Self {
         Self (
             venue: venue ?? self.venue,
             sponsor: sponsor == .none ? nil : self.sponsor,
@@ -85,24 +85,6 @@ struct Report {
         )
     }
 }
-```
-
-## Installation
-
-<summary><h3>Swift Package Manager</h3></summary>
-
-The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler.
-
-Once you have your Swift package set up, adding `CopyWithChanges` as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
-
-```swift
-.package(url: "https://github.com/entonio/CopyWithChanges/tree/main", from: "1.1.0"),
-```
-
-Then you can add the `CopyWithChanges` module product as dependency to the `target`s of your choosing, by adding it to the `dependencies` value of your `target`s.
-
-```swift
-.product(name: "CopyWithChanges", package: "CopyWithChanges"),
 ```
 
 ## License

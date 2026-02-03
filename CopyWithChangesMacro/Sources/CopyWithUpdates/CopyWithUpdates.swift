@@ -3,4 +3,4 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @attached(member, names: named(copyWithUpdates))
-public macro CopyWithChanges() = #externalMacro(module: "CopyWithChangesMacros", type: "CopyWithChangesMacro")
+public macro CopyWithUpdates() = #externalMacro(module: "CopyWithUpdatesMacros", type: "CopyWithUpdatesMacro")
