@@ -31,33 +31,20 @@ class BrowserViewControllerLayoutManager {
     // this function didn't change much after our sync
     // I just removed the parameters and added to the class
     func setupHeaderConstraints(isBottomSearchBar: Bool) {
+        NSLayoutConstraint.activate([
+            headerView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+        ])
+        let topAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
+        headerTopConstraint = headerView.topAnchor.constraint(equalTo: topAnchor)
+        headerTopConstraint?.isActive = true
+
         if isBottomSearchBar {
-            // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
-            // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
-            // on iOS 26. Prior to iOS 26, safe area inset was updating correctly on rotation.
-            // Impact: Header remains partially visible when scrolling.
-            // Workaround: Manually adjust constraints based on orientation.
-            // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
-            // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-            NSLayoutConstraint.activate([
-                headerView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
-                headerView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
-                // The status bar is covered by the statusBarOverlay,
-                // if we don't have the URL bar at the top then header height is 0
-                headerView.heightAnchor.constraint(equalToConstant: 0)
-            ])
-            let topAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
-            headerTopConstraint = headerView.topAnchor.constraint(equalTo: topAnchor)
-        } else {
-            NSLayoutConstraint.activate([
-                headerView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
-                headerView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
-            ])
-            let topAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
-            headerTopConstraint = headerView.topAnchor.constraint(equalTo: topAnchor)
+            // The status bar is covered by the statusBarOverlay,
+            // if we don't have the URL bar at the top then header height is 0
+            headerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
         }
 
-        headerTopConstraint?.isActive = true
         updateScrollControllerConstraint()
     }
 
@@ -104,6 +91,13 @@ class BrowserViewControllerLayoutManager {
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: parentView.traitCollection)
         let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: parentView.traitCollection)
 
+        // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
+        // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
+        // on iOS 26. Prior to iOS 26, safe area inset was updating correctly on rotation.
+        // Impact: Header remains partially visible when scrolling.
+        // Workaround: Manually adjust constraints based on orientation.
+        // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
+        // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
         return (isNavToolbar || shouldShowTopTabs) ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
     }
 }
