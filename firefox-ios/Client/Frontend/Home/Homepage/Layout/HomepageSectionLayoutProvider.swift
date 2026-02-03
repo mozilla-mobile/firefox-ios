@@ -750,6 +750,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             environment: environment,
             cellWidth: cellWidth
         )
+        if isStoriesScrollDirectionVertical {
+            let headerHeight = getHeaderHeight(
+                headerState: storiesState.sectionHeaderState,
+                environment: environment
+            )
+            let cellHeight = max(storiesMeasurement.tallestCellHeight, UX.PocketConstants.minimumCellHeight)
+            return headerHeight + cellHeight + UX.standardInset
+        }
         return storiesMeasurement.totalHeight
     }
 
@@ -927,9 +935,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let storyCells: [UIView] = storiesState.merinoData.map { story in
-            let cell = StoryCell()
-            cell.configure(story: story, theme: LightTheme())
-            return cell
+            if isStoriesScrollDirectionVertical {
+                let cell = StoriesFeedCell()
+                cell.configure(story: story, theme: LightTheme())
+                return cell
+            } else {
+                let cell = StoryCell()
+                cell.configure(story: story, theme: LightTheme())
+                return cell
+            }
         }
 
         let tallestCellHeight = HomepageDimensionCalculator.getTallestViewHeight(
