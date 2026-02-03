@@ -6,7 +6,6 @@ import UIKit
 
 @MainActor
 class BrowserViewControllerLayoutManager {
-    // Notes to Winnie: To prevent cyclical retention
     private unowned let parentView: UIView
     private unowned let headerView: UIView
     private let toolbarHelper: ToolbarHelperInterface
