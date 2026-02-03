@@ -25,7 +25,7 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     }
 
     func fetchHomepageStories() async -> [MerinoStory] {
-        let numberOfRequestedStories = isHomepageStoriesScrollDirectionCustomized
+        let numberOfRequestedStories = await isHomepageStoriesScrollDirectionCustomized
             ? Constants.defaultNumberOfHomepageStoriesForCustomizedScrollDirection
             : Constants.defaultNumberOfHomepageStories
         return await fetchStories(numberOfRequestedStories)

@@ -516,16 +516,16 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
 
         // Calculate each individual sections height
+        // Note: If showing vertical stories, no need to calculate stories height, since that is handled by
+        // storiesPeakOffset to create the peak-above-the-fold effect
         let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
-        let storiesHeight = getStoriesSectionHeight(environment: environment)
+        let storiesHeight = isStoriesScrollDirectionVertical ? 0 : getStoriesSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
         // Calculate the spacer height, which is determined by the total height available minus the height of each section
-        // Note: If showing vertical stories, don't subtract stories height since that is handled by the storiesPeakOffset
-        // for the peak-above-the-fold effect
         let rawSpacerHeight = availableContentHeight
             - UX.topSpacing
             - privacyNoticeHeight
@@ -533,7 +533,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             - jumpBackInHeight
             - bookmarksHeight
             - searchBarHeight
-            - (isStoriesScrollDirectionVertical ? 0 : storiesHeight)
+            - storiesHeight
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
         var spacerHeight = max(0.1, rawSpacerHeight)
@@ -750,14 +750,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             environment: environment,
             cellWidth: cellWidth
         )
-        if isStoriesScrollDirectionVertical {
-            let headerHeight = getHeaderHeight(
-                headerState: storiesState.sectionHeaderState,
-                environment: environment
-            )
-            let cellHeight = max(storiesMeasurement.tallestCellHeight, UX.PocketConstants.minimumCellHeight)
-            return headerHeight + cellHeight + UX.standardInset
-        }
         return storiesMeasurement.totalHeight
     }
 
@@ -935,15 +927,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let storyCells: [UIView] = storiesState.merinoData.map { story in
-            if isStoriesScrollDirectionVertical {
-                let cell = StoriesFeedCell()
-                cell.configure(story: story, theme: LightTheme())
-                return cell
-            } else {
-                let cell = StoryCell()
-                cell.configure(story: story, theme: LightTheme())
-                return cell
-            }
+            let cell = StoryCell()
+            cell.configure(story: story, theme: LightTheme())
+            return cell
         }
 
         let tallestCellHeight = HomepageDimensionCalculator.getTallestViewHeight(
@@ -952,22 +938,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
 
         let headerHeight = getHeaderHeight(headerState: storiesState.sectionHeaderState, environment: environment)
-        let cellHeight = max(tallestCellHeight, UX.PocketConstants.minimumCellHeight)
-        let totalHeight: CGFloat
-        if isStoriesScrollDirectionVertical {
-            let storyCount = CGFloat(storyCells.count)
-            let interItemSpacing = storyCount > 1
-                ? UX.PocketConstants.verticalStoriesSpacing * (storyCount - 1)
-                : 0
-            totalHeight = headerHeight
-                + (cellHeight * storyCount)
-                + interItemSpacing
-                + UX.standardInset
-        } else {
-            totalHeight = headerHeight
-                + cellHeight
-                + UX.standardInset
-        }
+        let totalHeight = headerHeight + max(tallestCellHeight, UX.PocketConstants.minimumCellHeight) + UX.standardInset
 
         let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
             tallestCellHeight: tallestCellHeight,
