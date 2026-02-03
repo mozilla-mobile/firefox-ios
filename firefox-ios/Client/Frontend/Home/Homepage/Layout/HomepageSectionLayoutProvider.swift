@@ -135,6 +135,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return storiesScrollDirection == .vertical && UIDevice.current.userInterfaceIdiom == .phone
     }
 
+    private var isStoriesScrollDirectionHorizontal: Bool {
+        return storiesScrollDirection == .horizontal && UIDevice.current.userInterfaceIdiom == .phone
+    }
+
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
         self.logger = logger
@@ -927,6 +931,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let storyCells: [UIView] = storiesState.merinoData.map { story in
+            if isStoriesScrollDirectionHorizontal {
+                let cell = StoriesFeedCell()
+                cell.configure(story: story, theme: LightTheme())
+                return cell
+            }
+
             let cell = StoryCell()
             cell.configure(story: story, theme: LightTheme())
             return cell
