@@ -469,7 +469,7 @@ class BrowserViewController: UIViewController,
         return featureFlagStatus
     }
 
-    private var isSnapKitRemovalEnabled: Bool {
+    var isSnapKitRemovalEnabled: Bool {
         return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
     }
 
@@ -534,7 +534,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private lazy var browserLayoutManager: BrowserViewControllerLayoutManager = {
+    lazy var browserLayoutManager: BrowserViewControllerLayoutManager = {
         return BrowserViewControllerLayoutManager(
             parentView: view,
             headerView: header
@@ -1836,8 +1836,10 @@ class BrowserViewController: UIViewController,
     override func updateViewConstraints() {
         topTouchAreaHeightConstraint?.constant = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
 
-        readerModeBar?.snp.remakeConstraints { make in
-            make.height.equalTo(UIConstants.ToolbarHeight)
+        if !isSnapKitRemovalEnabled {
+            readerModeBar?.snp.remakeConstraints { make in
+                make.height.equalTo(UIConstants.ToolbarHeight)
+            }
         }
 
         overKeyboardContainer.snp.remakeConstraints { make in
