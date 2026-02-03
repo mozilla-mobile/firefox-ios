@@ -38,6 +38,8 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
+        guard !isPayPalPopUp(navigationAction) else { return nil }
+
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -57,12 +59,12 @@ extension BrowserViewController: WKUIDelegate {
         // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
         // IMPORTANT!!: WebKit will perform the `URLRequest` automatically!! Attempting to do
         // the request here manually leads to incorrect results!!
-
         let newTab = tabManager.addPopupForParentTab(
             profile: profile,
             parentTab: parentTab,
             configuration: configuration
         )
+
         // Set new tab url to about:blank because webViews created through this callback are always popups
         newTab.url = URL(string: "about:blank")
 
@@ -1277,6 +1279,14 @@ private extension BrowserViewController {
         }
 
         return false
+    }
+
+    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
+    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
+    // so we will block the creation of a new Webview with this check
+    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
+        let domain = navigationAction.sourceFrame.request.url?.baseDomain ?? ""
+        return ["paypal.com", "shopify.com"].contains(domain)
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
