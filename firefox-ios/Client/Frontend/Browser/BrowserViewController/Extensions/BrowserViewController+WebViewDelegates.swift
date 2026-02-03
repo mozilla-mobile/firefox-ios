@@ -63,12 +63,11 @@ extension BrowserViewController: WKUIDelegate {
             parentTab: parentTab,
             configuration: configuration
         )
-        newTab.isPopup = true
         // Set new tab url to about:blank because webViews created through this callback are always popups
         newTab.url = URL(string: "about:blank")
 
         // Select the new tab immediately
-        tabManager.selectTab(newTab, isPopup: true)
+        tabManager.selectTab(newTab)
 
         return newTab.webView
     }

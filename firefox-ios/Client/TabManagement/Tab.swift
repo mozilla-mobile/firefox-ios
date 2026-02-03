@@ -100,7 +100,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var isNormal: Bool {
         return !isPrivate
     }
-    var isPopup = false
 
     /// The window associated with the tab (where the tab lives and will be displayed).
     /// Currently tabs cannot be actively moved between windows on iPadOS, however this
