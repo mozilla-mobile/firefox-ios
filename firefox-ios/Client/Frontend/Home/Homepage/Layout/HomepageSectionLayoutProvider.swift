@@ -76,7 +76,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
             @MainActor
             static func getStoriesCellWidth(for environment: NSCollectionLayoutEnvironment,
-                                             isStoriesScrollDirectionVertical: Bool) -> CGFloat {
+                                            isStoriesScrollDirectionVertical: Bool) -> CGFloat {
                 let containerWidth = environment.container.contentSize.width
                 if isStoriesScrollDirectionVertical {
                     let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
