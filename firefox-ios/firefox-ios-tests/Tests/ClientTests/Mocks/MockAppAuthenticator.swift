@@ -21,6 +21,10 @@ class MockAppAuthenticator: AppAuthenticationProtocol, @unchecked Sendable {
         return shouldAuthenticateDeviceOwner
     }
 
+    var isAuthenticatingAutofill: Bool {
+        return false
+    }
+
     func authenticateWithDeviceOwnerAuthentication(
         _ completion: @MainActor @escaping (Result<Void, AuthenticationError>) -> Void
     ) {
