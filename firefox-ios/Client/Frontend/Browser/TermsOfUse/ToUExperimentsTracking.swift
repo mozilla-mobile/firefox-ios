@@ -17,8 +17,14 @@ struct ToUExperimentsTracking {
     
     /// Resets dismissal state if experiment configuration changed.
     /// Users who have already accepted ToU are excluded.
+    /// Does not reset if bottom sheet hasn't been shown yet (first launch).
     func resetToUDataIfNeeded(currentExperiment: EnrolledExperiment? = nil) {
         guard !(prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false) else { return }
+        
+        // Don't reset if bottom sheet hasn't been shown yet (first launch scenario)
+        // This prevents resetting when observer fires before bottom sheet is displayed
+        let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
+        guard hasShownFirstTime else { return }
         
         let experiment = currentExperiment ?? getCurrentToUExperiment()
         resetDismissalStateIfExperimentChanged(currentExperiment: experiment)

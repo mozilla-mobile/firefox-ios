@@ -47,70 +47,74 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         )
     }
     
-    // MARK: - resetToUDataIfNeeded
+    private func setupExperiment(slug: String, branch: String) {
+        profile.prefs.setString(slug, forKey: PrefsKeys.TermsOfUseExperimentSlug)
+        profile.prefs.setString(branch, forKey: PrefsKeys.TermsOfUseExperimentBranch)
+    }
     
+    private func setupDismissalData(remindersCount: Int = 2) {
+        profile.prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.TermsOfUseDismissedDate)
+        profile.prefs.setInt(Int32(remindersCount), forKey: PrefsKeys.TermsOfUseRemindersCount)
+    }
+    
+    private func assertDismissalDataReset() {
+        XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
+        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+    }
+
+    private func assertDismissalDataNotReset(expectedCount: Int) {
+        XCTAssertNotNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
+        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), Int32(expectedCount))
+    }
+
+    // MARK: - resetToUDataIfNeeded
     func testResetToUDataIfNeeded_DoesNotReset_WhenUserHasAccepted() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        profile.prefs.setString("exp-1", forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        profile.prefs.setString("branch-a", forKey: PrefsKeys.TermsOfUseExperimentBranch)
-        profile.prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-        profile.prefs.setInt(5, forKey: PrefsKeys.TermsOfUseRemindersCount)
+        setupExperiment(slug: "exp-1", branch: "branch-a")
+        setupDismissalData(remindersCount: 5)
         
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
         
-        XCTAssertNotNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
-        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 5)
+        assertDismissalDataNotReset(expectedCount: 5)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
     }
     
     func testResetToUDataIfNeeded_Resets_WhenExperimentSlugChanges() {
-        profile.prefs.setString("exp-1", forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        profile.prefs.setString("branch-a", forKey: PrefsKeys.TermsOfUseExperimentBranch)
-        profile.prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-        profile.prefs.setInt(3, forKey: PrefsKeys.TermsOfUseRemindersCount)
+        setupExperiment(slug: "exp-1", branch: "branch-a")
+        setupDismissalData(remindersCount: 3)
         
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-a"))
         
-        XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
-        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+        assertDismissalDataReset()
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
     }
     
     func testResetToUDataIfNeeded_Resets_WhenBranchChanges() {
-        profile.prefs.setString("exp-1", forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        profile.prefs.setString("branch-a", forKey: PrefsKeys.TermsOfUseExperimentBranch)
-        profile.prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-        profile.prefs.setInt(2, forKey: PrefsKeys.TermsOfUseRemindersCount)
+        setupExperiment(slug: "exp-1", branch: "branch-a")
+        setupDismissalData(remindersCount: 2)
         
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-b"))
         
-        XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
-        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+        assertDismissalDataReset()
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch), "branch-b")
     }
     
     func testResetToUDataIfNeeded_DoesNotReset_WhenSameExperimentAndBranch() {
-        profile.prefs.setString("exp-1", forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        profile.prefs.setString("branch-a", forKey: PrefsKeys.TermsOfUseExperimentBranch)
-        profile.prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-        profile.prefs.setInt(3, forKey: PrefsKeys.TermsOfUseRemindersCount)
+        setupExperiment(slug: "exp-1", branch: "branch-a")
+        setupDismissalData(remindersCount: 3)
         
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
         
-        XCTAssertNotNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
-        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 3)
+        assertDismissalDataNotReset(expectedCount: 3)
     }
     
     func testResetToUDataIfNeeded_Resets_WhenUserUnenrolled() {
-        profile.prefs.setString("exp-1", forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        profile.prefs.setString("branch-a", forKey: PrefsKeys.TermsOfUseExperimentBranch)
-        profile.prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-        profile.prefs.setInt(2, forKey: PrefsKeys.TermsOfUseRemindersCount)
+        setupExperiment(slug: "exp-1", branch: "branch-a")
+        setupDismissalData(remindersCount: 2)
         
         tracking.resetToUDataIfNeeded(currentExperiment: nil)
         
-        XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
-        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+        assertDismissalDataReset()
         XCTAssertNil(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug))
     }
     
@@ -134,6 +138,17 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+    }
+    
+    func testResetToUDataIfNeeded_DoesNotReset_WhenExperimentChangesButNoDismissalData() {
+        setupExperiment(slug: "exp-1", branch: "branch-a")
+        
+        tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
+        
+        XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
+        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
     }
     
     // MARK: - identifyToUExperiment
@@ -165,14 +180,16 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     }
     
     func testIdentifyToUExperiment_ReturnsNil_WhenNoToUExperiments() {
-        let experiments = [
+        let identified = tracking.identifyToUExperiment(from: [
             createNonToUExperiment(slug: "other-1", branch: "control"),
             createNonToUExperiment(slug: "other-2", branch: "treatment")
-        ]
-        
-        let identified = tracking.identifyToUExperiment(from: experiments)
+        ])
         
         XCTAssertNil(identified)
+    }
+    
+    func testIdentifyToUExperiment_ReturnsNil_WhenEmptyList() {
+        XCTAssertNil(tracking.identifyToUExperiment(from: []))
     }
     
     func testIdentifyToUExperiment_ReturnsFirst_WhenStoredExperimentNotInList() {
