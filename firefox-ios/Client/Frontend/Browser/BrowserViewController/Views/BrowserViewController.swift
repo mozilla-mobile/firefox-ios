@@ -1588,6 +1588,8 @@ class BrowserViewController: UIViewController,
         ])
         NSLayoutConstraint.activate(statusBarOverlayConstraints)
 
+        // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
+        checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
         // when toolbars are hidden/shown the mask on the content view that is used for
