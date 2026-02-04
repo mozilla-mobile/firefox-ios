@@ -33,6 +33,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     private let prefs: Prefs
     private let hoursSinceDismissedTerms = 120 // 120 hours (5 days)
     private let debugMinutesSinceDismissed = 1 // 1 minute used for testing
+    private let experimentChangeObserver: AnyObject
+    private let experimentsTracking: ToUExperimentsTracking
 
     private var maxRemindersCount: Int {
         return nimbus.features.touFeature.value().maxRemindersCount
@@ -58,6 +60,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         self.notificationCenter = notificationCenter
         self.prefs = prefs
         self.nimbus = nimbus
+        self.experimentsTracking = ToUExperimentsTracking(prefs: prefs)
+        self.experimentChangeObserver = experimentsTracking.setupExperimentChangeObserver()
         super.init(router: router)
     }
 
@@ -108,6 +112,9 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         // 2. If user has already accepted, never show again
         let hasAcceptedTermsOfUse = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
         guard !hasAcceptedTermsOfUse else { return false }
+
+        // If experiment configuration changed, reset dismissal state
+        experimentsTracking.resetToUDataIfNeeded()
 
         // 3. Check if this is the first time it is shown
         // Always show first time - it is not a reminder

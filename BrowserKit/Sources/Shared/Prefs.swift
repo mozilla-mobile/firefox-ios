@@ -39,6 +39,9 @@ public struct PrefsKeys {
     public static let TermsOfUseLearnMoreTapDate = "TermsOfUseLearnMoreTapDate"
     public static let TermsOfUsePrivacyNoticeTapDate = "TermsOfUsePrivacyNoticeTapDate"
     public static let TermsOfUseTermsLinkTapDate = "TermsOfUseTermsLinkTapDate"
+    /// Stores ToU experiment slug and branch to detect changes
+    public static let TermsOfUseExperimentSlug = "TermsOfUseExperimentSlug"
+    public static let TermsOfUseExperimentBranch = "TermsOfUseExperimentBranch"
     public static let HomePageTab = "HomePageTab"
     public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
     public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
