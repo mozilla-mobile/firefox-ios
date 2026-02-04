@@ -68,8 +68,14 @@ github:
 manual:
   - name: "Mozilla Rust Components"
     file: "Mozilla Public License Version 2.txt"
+  # Manually add Down's license so we can correct some run-on text in the generated HTML
+  - name: "Down"
+    file: "Down License.txt"
 
 # Rename a few packages to more human-readable names
 rename:
   firefox-ios: Firefox for iOS
   ios_sdk: Adjust
+
+exclude:
+  - Down
