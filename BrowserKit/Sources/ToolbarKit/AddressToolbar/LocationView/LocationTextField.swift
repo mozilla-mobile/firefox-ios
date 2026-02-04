@@ -17,7 +17,7 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextFieldNeedsSearchReset(_ textField: UITextField)
 }
 
-class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
+final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
 
@@ -120,11 +120,11 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         super.touchesBegan(touches, with: event)
     }
 
-    override open func caretRect(for position: UITextPosition) -> CGRect {
+    override public func caretRect(for position: UITextPosition) -> CGRect {
         return hideCursor ? CGRect.zero : super.caretRect(for: position)
     }
 
-    override open func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
+    override public func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
         isSettingMarkedText = true
         removeCompletion()
         super.setMarkedText(markedText, selectedRange: selectedRange)
@@ -156,6 +156,12 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
+
+        // Force marked text to refresh with new style
+        if let markedRange = markedTextRange,
+           let markedText = text(in: markedRange) {
+            setMarkedText(markedText, selectedRange: .init())
+        }
         tintClearButton()
     }
 
