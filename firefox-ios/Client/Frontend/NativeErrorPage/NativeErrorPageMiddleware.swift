@@ -28,7 +28,7 @@ final class NativeErrorPageMiddleware {
             self.initializeNativeErrorPage(windowUUID: windowUUID)
         case GeneralBrowserActionType.bypassCertificateWarning:
             Task { @MainActor in
-                await self.handleBypassCertificateWarning(windowUUID: windowUUID)
+                self.handleBypassCertificateWarning(windowUUID: windowUUID)
             }
 
         default:
@@ -47,7 +47,7 @@ final class NativeErrorPageMiddleware {
     }
     
     @MainActor
-    private func handleBypassCertificateWarning(windowUUID: WindowUUID) async {
+    private func handleBypassCertificateWarning(windowUUID: WindowUUID) {
         guard
             let tabManager = try? windowManager.tabManager(for: windowUUID),
             let selectedTab = tabManager.selectedTab,
@@ -58,6 +58,11 @@ final class NativeErrorPageMiddleware {
             let cert = certChain.first,
             let host = failingURL.host
         else {
+            DefaultLogger.shared.log(
+                "handleBypassCertificateWarning: Missing required data (tab, webView, cert, host)",
+                level: .warning,
+                category: .certificate
+            )
             return
         }
 
