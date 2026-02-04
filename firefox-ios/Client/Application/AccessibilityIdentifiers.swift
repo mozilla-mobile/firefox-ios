@@ -882,6 +882,11 @@ struct AccessibilityIdentifiers {
         static let titleLabel = "NativeErrorPage.titleLabel"
         static let errorDescriptionLabel = "NativeErrorPage.errorDescriptionLabel"
         static let reloadButton = "NativeErrorPage.reloadButton"
+        static let goBackButton = "NativeErrorPage.goBackButton"
+        static let proceedButton = "NativeErrorPage.proceedButton"
+        static let advancedSectionHeader = "NativeErrorPage.advancedSectionHeader"
+        static let viewCertificateLink = "NativeErrorPage.viewCertificateLink"
+        static let learnMoreLink = "NativeErrorPage.learnMoreLink"
     }
 
     struct SaveLoginAlert {
