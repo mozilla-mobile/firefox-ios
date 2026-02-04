@@ -66,7 +66,7 @@ final class TransitionAnimator: NSObject,
         }
         animatePresentation(transitionContext)
     }
-    
+
     // MARK: - Presentation
     private func animatePresentation(_ transitionContext: UIViewControllerContextTransitioning) {
         switch presentationTransitionType {
@@ -108,7 +108,7 @@ final class TransitionAnimator: NSObject,
             }
         )
     }
-    
+
     private func animatePresentationViaSliding(_ transitionContext: UIViewControllerContextTransitioning) {
         guard let presentedController = transitionContext.viewController(forKey: .to),
               let presentingController = transitionContext.viewController(forKey: .from),
@@ -119,19 +119,19 @@ final class TransitionAnimator: NSObject,
         }
 
         let containerView = transitionContext.containerView
-        
+
         presentingControllerSnapshotView.layer.cornerRadius = UX.screenCornerRadius
         presentingControllerSnapshotView.layer.masksToBounds = true
-        
+
         presentedController.view.transform = CGAffineTransform(
             translationX: -containerView.bounds.width * UX.animationTranslationFactor,
             y: 0.0
         )
-        
+
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let scrimView = UIView(frame: containerView.bounds)
         scrimView.backgroundColor = theme.colors.layerScrim.withAlphaComponent(UX.scrimAlpha)
-        
+
         containerView.addSubview(presentedController.view)
         containerView.addSubview(scrimView)
         containerView.addSubview(presentingControllerSnapshotView)
@@ -152,7 +152,7 @@ final class TransitionAnimator: NSObject,
             transitionContext.completeTransition(true)
         }
     }
-    
+
     // MARK: - Dismissal
     private func animateDismissal(_ transitionContext: UIViewControllerContextTransitioning) {
         switch dismissTransitionType {
@@ -162,7 +162,7 @@ final class TransitionAnimator: NSObject,
             animateDismissalViaSliding(transitionContext)
         }
     }
-    
+
     private func animateDismissalViaCrossDissolve(_ transitionContext: UIViewControllerContextTransitioning) {
         guard let presentedController = transitionContext.viewController(forKey: .to),
               let snapshotView = presentedController.view.snapshotView(afterScreenUpdates: false),
@@ -170,14 +170,14 @@ final class TransitionAnimator: NSObject,
             transitionContext.completeTransition(false)
             return
         }
-        
+
         let containerView = transitionContext.containerView
-        
+
         snapshotView.alpha = 0.0
-        
+
         containerView.addSubview(dismissedController.view)
         containerView.addSubview(snapshotView)
-        
+
         UIView.animate(
             withDuration: UX.springAnimationDuration,
             delay: 0,
@@ -210,12 +210,12 @@ final class TransitionAnimator: NSObject,
         snapshotView.layer.cornerRadius = UX.screenCornerRadius
         snapshotView.layer.masksToBounds = true
         snapshotView.transform = CGAffineTransform(translationX: containerView.bounds.width, y: 0.0)
-        
+
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let scrimView = UIView(frame: containerView.bounds)
         scrimView.backgroundColor = theme.colors.layerScrim
         scrimView.alpha = 0.0
-    
+
         containerView.addSubview(dismissedController.view)
         containerView.addSubview(scrimView)
         containerView.addSubview(snapshotView)
