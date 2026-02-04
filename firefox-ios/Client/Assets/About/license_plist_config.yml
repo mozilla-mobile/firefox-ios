@@ -45,6 +45,9 @@ github:
   - owner: mozilla-mobile
     name: firefox-ios
     version: 1.0
+  - owner: mono0926
+    name: LicensePlist
+    version: 3.72.2
 
 # Specify libraries manually
 manual:
