@@ -159,7 +159,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             MozAdsPlacementRequest(placementId: TileOrder.position2.rawValue, iabContent: nil)
         ]
         do {
-            let mozAdsTiles = try self.adsClient.requestTileAds(
+            let mozAdsTiles = try adsClient.requestTileAds(
                 mozAdRequests: mozAdRequests, options: nil)
             let unifiedTiles: [UnifiedTile] = mozAdsTiles.map { name, mozAdsTile in
                 UnifiedTile.from(name: name, mozAdsTile: mozAdsTile)

@@ -62,7 +62,7 @@ class UnifiedAdsProviderTests: XCTestCase {
         try await super.setUp()
         TelemetryContextualIdentifier.setupContextId()
         mockAdsClient = MockMozAdsClient()
-        LegacyFeatureFlagsManager.shared.set(feature: .adsClient, to: false, isDebug: true)
+        setupNimbusAdsClientTesting(isEnabled: false)
         networking = MockUnifiedTileNetworking()
     }
 
@@ -70,6 +70,14 @@ class UnifiedAdsProviderTests: XCTestCase {
         mockAdsClient = nil
         networking = nil
         try await super.tearDown()
+    }
+
+    private func setupNimbusAdsClientTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.adsClient.with { _, _ in
+            return AdsClient(
+                status: isEnabled
+            )
+        }
     }
 
     func testFetchTile_givenErrorResponse_thenFailsWithError() {
@@ -235,7 +243,7 @@ class UnifiedAdsProviderTests: XCTestCase {
     // MARK: - Ads Client Tests
 
     func testFetchTilesWithAdsClient_whenSuccessful_thenReturnsTiles() {
-        LegacyFeatureFlagsManager.shared.set(feature: .adsClient, to: true, isDebug: true)
+        setupNimbusAdsClientTesting(isEnabled: true)
 
         let adTile1 = MozAdsTile(
             blockKey: "12345",
@@ -287,7 +295,7 @@ class UnifiedAdsProviderTests: XCTestCase {
     }
 
     func testFetchTilesWithAdsClient_whenError_thenFailsWithError() {
-        LegacyFeatureFlagsManager.shared.set(feature: .adsClient, to: true, isDebug: true)
+        setupNimbusAdsClientTesting(isEnabled: true)
 
         mockAdsClient.mockError = NSError(domain: "test", code: 1)
 
