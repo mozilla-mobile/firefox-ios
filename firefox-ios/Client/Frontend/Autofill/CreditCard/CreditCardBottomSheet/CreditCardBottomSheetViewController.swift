@@ -219,6 +219,7 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     func updateConstraints() {
         if let contentViewHeightConstraint {
+            cardTableView.layoutIfNeeded()
             let buttonsHeight = buttonsContainerStackView.frame.height
             let estimatedContentHeight = cardTableView.contentSize.height +
                 buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
