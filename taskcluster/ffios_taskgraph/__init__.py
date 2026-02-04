@@ -22,7 +22,7 @@ def register(graph_config):
     # Setup mozilla-taskgraph
     register_mozilla_taskgraph(graph_config)
 
-    _import_modules(["job", "parameters", "routes", "target_tasks", "release_promotion", "worker_types"])
+    _import_modules(["job", "parameters", "routes", "target_tasks", "release_promotion", "worker_types", "actions.merge_automation"])
 
 
 def _import_modules(modules):
