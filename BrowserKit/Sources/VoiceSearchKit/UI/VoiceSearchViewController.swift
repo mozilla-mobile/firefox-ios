@@ -5,157 +5,6 @@
 import UIKit
 import Common
 
-// MARK: - Custom Presentation Animation
-final class VoiceSearchPresentationAnimator: NSObject,
-                                             UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning {
-    private struct UX {
-        static let transitionDuration: TimeInterval = 2.0
-        static let presentationAnimationSpringDumping: CGFloat = 0.8
-        static let presentationAnimationSpringVelocity: CGFloat = 1.0
-        static let buttonsContainerInitialTranslationY: CGFloat = 100.0
-        static let scrimAlpha: CGFloat = 0.25
-        static let dismissalTranslationFactor: CGFloat = 0.25
-        @MainActor
-        static var screenCornerRadius: CGFloat {
-            return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
-        }
-    }
-    private let theme: any Theme
-    /// Wether the dismiss is done via cross dissolve transition.
-    /// If set to false the dismiss animation presents the presenting controller sliding it from left to right.
-    var dismissWithCrossDissolveTransition = false
-
-    init(theme: any Theme) {
-        self.theme = theme
-    }
-
-    // MARK: - UIViewControllerTransitioningDelegate
-    func animationController(forDismissed dismissed: UIViewController) -> (any UIViewControllerAnimatedTransitioning)? {
-        return self
-    }
-
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> (any UIViewControllerAnimatedTransitioning)? {
-        return self
-    }
-
-    // MARK: - UIViewControllerAnimatedTransitioning
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return UX.transitionDuration
-    }
-
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let isPresenting = transitionContext.viewController(forKey: .to) is VoiceSearchViewController
-        guard isPresenting else {
-            if dismissWithCrossDissolveTransition {
-                animateDismissalViaCrossDissolve(transitionContext)
-            } else {
-                animateDismissalViaSliding(transitionContext)
-            }
-            return
-        }
-        animatePresentation(transitionContext)
-    }
-
-    private func animatePresentation(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let voiceSearchController = transitionContext.viewController(forKey: .to) as? VoiceSearchViewController else {
-            transitionContext.completeTransition(false)
-            return
-        }
-
-        let containerView = transitionContext.containerView
-        containerView.addSubview(voiceSearchController.view)
-
-        voiceSearchController.view.frame = containerView.bounds
-        voiceSearchController.view.alpha = 0.0
-        voiceSearchController.buttonsContainer.transform = .identity.translatedBy(x: 0.0, y: UX.buttonsContainerInitialTranslationY)
-
-        UIView.animate(
-            withDuration: transitionDuration(using: transitionContext),
-            delay: 0,
-            usingSpringWithDamping: UX.presentationAnimationSpringDumping,
-            initialSpringVelocity: UX.presentationAnimationSpringVelocity,
-            options: .curveEaseOut,
-            animations: {
-                voiceSearchController.view.alpha = 1.0
-                voiceSearchController.buttonsContainer.transform = .identity
-            },
-            completion: { _ in
-                transitionContext.completeTransition(true)
-            }
-        )
-    }
-    
-    private func animateDismissalViaCrossDissolve(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let presentedController = transitionContext.viewController(forKey: .to),
-              let snapshotView = presentedController.view.snapshotView(afterScreenUpdates: false),
-              let dismissedController = transitionContext.viewController(forKey: .from) as? VoiceSearchViewController else {
-            transitionContext.completeTransition(false)
-            return
-        }
-        
-        let containerView = transitionContext.containerView
-        
-        snapshotView.alpha = 0.0
-        
-        containerView.addSubview(dismissedController.view)
-        containerView.addSubview(snapshotView)
-        
-        UIView.animate(
-            withDuration: transitionDuration(using: transitionContext),
-            delay: 0,
-            usingSpringWithDamping: UX.presentationAnimationSpringDumping,
-            initialSpringVelocity: UX.presentationAnimationSpringVelocity,
-            options: .curveEaseOut,
-            animations: {
-                snapshotView.alpha = 1.0
-                dismissedController.buttonsContainer.transform = CGAffineTransform(
-                    translationX: 0.0,
-                    y: UX.buttonsContainerInitialTranslationY
-                )
-            },
-            completion: { _ in
-                transitionContext.completeTransition(true)
-            }
-        )
-    }
-
-    private func animateDismissalViaSliding(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let presentedController = transitionContext.viewController(forKey: .to),
-              let snapshotView = presentedController.view.snapshotView(afterScreenUpdates: false),
-              let dismissedController = transitionContext.viewController(forKey: .from) else {
-            transitionContext.completeTransition(false)
-            return
-        }
-
-        let containerView = transitionContext.containerView
-
-        snapshotView.layer.cornerRadius = UX.screenCornerRadius
-        snapshotView.layer.masksToBounds = true
-        snapshotView.transform = CGAffineTransform(translationX: containerView.bounds.width, y: 0.0)
-        
-        let scrimView = UIView(frame: containerView.bounds)
-        scrimView.backgroundColor = theme.colors.layerScrim.withAlphaComponent(UX.scrimAlpha)
-    
-        containerView.addSubview(dismissedController.view)
-        containerView.addSubview(scrimView)
-        containerView.addSubview(snapshotView)
-
-        UIView.animate(
-            withDuration: transitionDuration(using: transitionContext),
-            delay: 0.0,
-            options: .curveEaseOut
-        ) {
-            snapshotView.transform = .identity
-            dismissedController.view.transform = CGAffineTransform(
-                translationX: -containerView.bounds.width * UX.dismissalTranslationFactor,
-                y: 0.0
-            )
-        } completion: { _ in
-            transitionContext.completeTransition(true)
-        }
-    }
-}
-
 public final class VoiceSearchViewController: UIViewController, Themeable {
     private struct UX {
         static let buttonPadding: CGFloat = 26.0
@@ -204,7 +53,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         $0.axis = .horizontal
         $0.spacing = UX.buttonsSpacing
     }
-    private lazy var transitionAnimator = VoiceSearchPresentationAnimator(theme: themeManager.getCurrentTheme(for: currentWindowUUID))
+    private let transitionAnimator: TransitionAnimator
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -212,6 +61,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     private let notificationCenter: NotificationProtocol
 
     public init(
+        presentationTransitionType: VoiceSearchTransitionType = .crossDissolve,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -219,6 +69,11 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.transitionAnimator = TransitionAnimator(
+            presentationTransitionType: presentationTransitionType,
+            themeManager: themeManager,
+            windowUUID: windowUUID
+        )
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         transitioningDelegate = transitionAnimator
@@ -236,15 +91,6 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
-        closeButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.transitionAnimator.dismissWithCrossDissolveTransition = false
-            self?.dismiss(animated: true)
-        }), for: .touchUpInside)
-        
-        recordButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.transitionAnimator.dismissWithCrossDissolveTransition = true
-            self?.dismiss(animated: true)
-        }), for: .touchUpInside)
     }
 
     private func setupSubviews() {
@@ -291,21 +137,4 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
     }
-}
-
-@available(iOS 17, *)
-#Preview {
-    class MockPresentingViewController: UIViewController {
-        override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
-            view.backgroundColor = .cyan
-            let voiceSearchVC = VoiceSearchViewController(
-                windowUUID: .XCTestDefaultUUID,
-                themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-            )
-            present(voiceSearchVC, animated: true)
-        }
-    }
-
-    return MockPresentingViewController()
 }
