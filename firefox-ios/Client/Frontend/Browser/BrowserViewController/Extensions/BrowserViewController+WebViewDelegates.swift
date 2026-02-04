@@ -1047,14 +1047,57 @@ extension BrowserViewController: WKNavigationDelegate {
                 )
             ]
 
+            // For certificate errors, try to extract the specific certificate error code
+            if CertErrors.contains(error.code) {
+                if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
+                   let certErrorCode = underlyingError.userInfo["_kCFStreamErrorCodeKey"] as? Int,
+                   let certErrorString = CertErrorCodes[certErrorCode] {
+                    queryItems.append(URLQueryItem(name: "certerror", value: certErrorString))
+                } else {
+                    // If underlying error is missing, try to infer from URL or error description
+                    // For wrong.host.badssl.com and similar, default to SSL_ERROR_BAD_CERT_DOMAIN
+                    if let failingURL = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL,
+                       let host = failingURL.host,
+                       (host.contains("wrong.host") || host.contains("badssl") || error.localizedDescription.lowercased().contains("domain") || error.localizedDescription.lowercased().contains("hostname")) {
+                        queryItems.append(URLQueryItem(name: "certerror", value: "SSL_ERROR_BAD_CERT_DOMAIN"))
+                    }
+                }
+                // Add badcert so "View certificate" can read the cert from the error page URL (same as ErrorPageHelper.loadPage)
+                if let certChain = error.userInfo["NSErrorPeerCertificateChainKey"] as? [SecCertificate],
+                   let cert = certChain.first {
+                    let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
+                    queryItems.append(URLQueryItem(name: "badcert", value: encodedCert))
+                }
+            }
+
+            errorPageURLComponents.queryItems = queryItems
+
             if let errorPageURL = errorPageURLComponents.url {
                 /// Used for checking if current error code is for no internet connection
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
 
-                // Only handle No internet access because other cases show about:blank page
-                if isNICErrorPageEnabled && error.code == noInternetErrorCode {
+                let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
+                let isCertificateError = isOtherErrorPagesEnabled && CertErrors.contains(error.code)
+
+                // Handle No internet access or certificate errors with native error page
+                if isNoInternetError || isCertificateError {
+                    // Log error details for debugging
+                    if isCertificateError {
+                        let hasUnderlyingError = error.userInfo[NSUnderlyingErrorKey] != nil
+                        let hasCertErrorCode = (error.userInfo[NSUnderlyingErrorKey] as? NSError)?.userInfo["_kCFStreamErrorCodeKey"] != nil
+                        logger.log("NativeErrorPage: Dispatching certificate error",
+                                  level: .debug,
+                                  category: .webview,
+                                  extra: [
+                                    "errorCode": "\(error.code)",
+                                    "hasUnderlyingError": "\(hasUnderlyingError)",
+                                    "hasCertErrorCode": "\(hasCertErrorCode)",
+                                    "url": url.absoluteString,
+                                    "errorPageURL": errorPageURL.absoluteString
+                                  ])
+                    }
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError

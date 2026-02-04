@@ -428,6 +428,10 @@ class BrowserViewController: UIViewController,
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
+    var isOtherErrorPagesEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isOtherErrorPagesEnabled
+    }
+
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
@@ -2294,9 +2298,17 @@ class BrowserViewController: UIViewController,
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
 
+        // Extract error code from URL query parameters to check if it's a certificate error
+        var isCertificateError = false
+        if isOtherErrorPagesEnabled, let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+           let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
+           let errCode = Int(codeString) {
+            isCertificateError = CertErrors.contains(errCode)
+        }
+
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && noInternetConnectionEnabled {
+        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
