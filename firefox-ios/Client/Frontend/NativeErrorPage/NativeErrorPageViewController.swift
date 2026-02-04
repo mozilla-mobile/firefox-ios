@@ -7,6 +7,7 @@ import Common
 import ComponentLibrary
 import Redux
 import Shared
+import X509
 
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,
@@ -47,6 +48,27 @@ final class NativeErrorPageViewController: UIViewController,
             bottom: -16,
             trailing: -64
         )
+        // Advanced section (bad cert) – layout only
+        static let advancedSectionBorderWidth: CGFloat = 1
+        static let advancedSectionCornerRadius: CGFloat = 12
+        static let advancedSectionPadding: CGFloat = 11
+        static let advancedSectionPaddingBottom: CGFloat = 10
+        static let advancedSectionListItemPadding: CGFloat = 6.5
+        static let advancedSectionListItemHorizontalPadding: CGFloat = 16
+        static let advancedSectionHeaderHeight: CGFloat = 24
+        static let advancedSectionChevronSize: CGFloat = 24
+        static let advancedSectionLinkRowHeight: CGFloat = 44
+        static let buttonCornerRadius: CGFloat = 12
+        static let buttonHeight: CGFloat = 45
+        static let buttonPaddingVertical: CGFloat = 12
+        static let buttonPaddingHorizontal: CGFloat = 16
+        static let badCertContentWidth: CGFloat = 311
+        static let badCertContentGap: CGFloat = 16
+        static let badCertImageSize: CGFloat = 160
+        static let badCertGapBetweenImageAndContent: CGFloat = 40
+        // Proceed button container (layout only)
+        static let badCertProceedContainerPadding: CGFloat = 8
+        static let badCertProceedContainerGap: CGFloat = 10
     }
 
     private lazy var scrollView: UIScrollView = .build()
@@ -75,7 +97,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.text = .NativeErrorPage.NoInternetConnection.TitleLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.titleLabel
         label.accessibilityTraits = .header
@@ -85,7 +107,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.text = .NativeErrorPage.NoInternetConnection.Description
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.errorDescriptionLabel
     }
@@ -94,10 +116,68 @@ final class NativeErrorPageViewController: UIViewController,
         button.addTarget(self, action: #selector(self.didTapReload), for: .touchUpInside)
         button.isEnabled = true
     }
+    // Bad cert: advanced section + buttons 
+    private var isAdvancedSectionExpanded: Bool = false
+    private lazy var advancedSectionContainer: UIView = .build { view in
+        view.layer.borderWidth = UX.advancedSectionBorderWidth
+        view.layer.cornerRadius = UX.advancedSectionCornerRadius
+        view.clipsToBounds = true
+    }
+
+    private lazy var advancedSectionStack: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 0
+    }
+    
+    private lazy var advancedSectionHeader: UIView = .build()
+    private lazy var advancedSectionHeaderButton: UIButton = .build { button in
+        button.addTarget(self, action: #selector(self.toggleAdvancedSection), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.advancedSectionHeader
+    }
+    
+    private lazy var advancedSectionTitleLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
+    }
+    
+    private lazy var advancedSectionChevron: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+    }
+    
+    private lazy var advancedSectionContent: UIView = .build()
+    private lazy var advancedSectionContentStack: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 0
+    }
+    
+    private lazy var goBackButton: UIButton = .build { button in
+        button.addTarget(self, action: #selector(self.didTapGoBack), for: .touchUpInside)
+        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.titleLabel?.font = FXFontStyles.Bold.callout.scaledFont()
+        button.titleLabel?.textAlignment = .center
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonPaddingVertical, left: UX.buttonPaddingHorizontal, bottom: UX.buttonPaddingVertical, right: UX.buttonPaddingHorizontal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.goBackButton
+    }
+    
+    private lazy var proceedButton: UIButton = .build { button in
+        button.addTarget(self, action: #selector(self.didTapProceed), for: .touchUpInside)
+        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.titleLabel?.font = FXFontStyles.Bold.callout.scaledFont()
+        button.titleLabel?.textAlignment = .center
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonPaddingVertical, left: UX.buttonPaddingHorizontal, bottom: UX.buttonPaddingVertical, right: UX.buttonPaddingHorizontal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.proceedButton
+    }
 
     private var commonConstraintsList = [NSLayoutConstraint]()
     private var portraitConstraintsList = [NSLayoutConstraint]()
     private var landscapeConstraintsList = [NSLayoutConstraint]()
+    private var contentStackWidthConstraint: NSLayoutConstraint?
+    private var foxImageWidthConstraint: NSLayoutConstraint?
+    private var foxImageHeightConstraint: NSLayoutConstraint?
 
     private var isLandscape: Bool {
         return UIDevice.current.isIphoneLandscape
@@ -163,22 +243,77 @@ final class NativeErrorPageViewController: UIViewController,
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
 
-        if !state.title.isEmpty {
+        if state.title.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                guard let self = self else { return }
+                store.dispatch(NativeErrorPageAction(windowUUID: self.windowUUID,
+                                                     actionType: NativeErrorPageActionType.errorPageLoaded))
+            }
+            return
+        }
+
+        let isBadCert = state.advancedSection != nil && state.showGoBackButton
+        if isBadCert {
+            setupBadCertDomainUI()
+            updateBadCertDomainContent()
+        } else {
+            setupRegularErrorPageUI()
             titleLabel.text = state.title
             foxImage.image = UIImage(named: nativeErrorPageState.foxImage)
-
             if let validURL = state.url {
-                let errorDescription = getDescriptionWithHostName(
+                errorDescriptionLabel.attributedText = getDescriptionWithHostName(
                     errorURL: validURL,
                     description: state.description
                 )
-                errorDescriptionLabel.attributedText = errorDescription
             } else {
                 errorDescriptionLabel.text = state.description
             }
-        } else {
-            return
         }
+    }
+
+    private func setupRegularErrorPageUI() {
+        reloadButton.isHidden = false
+        advancedSectionContainer.isHidden = true
+        goBackButton.isHidden = true
+        scrollContainer.spacing = UX.mainStackSpacing
+        contentStack.spacing = UX.textStackSpacing
+        contentStackWidthConstraint?.isActive = false
+        foxImageWidthConstraint?.constant = UX.logoSizeWidth
+        foxImageHeightConstraint?.isActive = false
+        applyTheme()
+    }
+
+    private func setupBadCertDomainUI() {
+        reloadButton.isHidden = true
+        advancedSectionContainer.isHidden = false
+        goBackButton.isHidden = false
+        scrollContainer.spacing = UX.badCertGapBetweenImageAndContent
+        contentStack.spacing = UX.badCertContentGap
+        contentStackWidthConstraint?.constant = UX.badCertContentWidth
+        contentStackWidthConstraint?.isActive = true
+        foxImageWidthConstraint?.constant = UX.badCertImageSize
+        foxImageHeightConstraint?.isActive = true
+        applyTheme()
+    }
+
+    private func updateBadCertDomainContent() {
+        guard let state = nativeErrorPageState.advancedSection else { return }
+
+        foxImage.image = !nativeErrorPageState.foxImage.isEmpty
+            ? UIImage(named: nativeErrorPageState.foxImage)
+            : UIImage(named: ImageIdentifiers.NativeErrorPage.securityError)
+        let titleString: String
+        if let range = nativeErrorPageState.title.range(of: ". ") {
+            titleString = nativeErrorPageState.title.replacingCharacters(in: range, with: ".\n")
+        } else {
+            titleString = nativeErrorPageState.title
+        }
+        titleLabel.text = titleString
+        titleLabel.font = FXFontStyles.Bold.title2.scaledFont()
+        errorDescriptionLabel.text = nativeErrorPageState.description
+        errorDescriptionLabel.font = FXFontStyles.Regular.subheadline.scaledFont()
+        updateAdvancedSection(state: state)
+        goBackButton.setTitle(String.NativeErrorPage.GoBackButton, for: .normal)
     }
 
     func subscribeToRedux() {
@@ -223,8 +358,13 @@ final class NativeErrorPageViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        store.dispatch(NativeErrorPageAction(windowUUID: windowUUID,
-                                             actionType: NativeErrorPageActionType.errorPageLoaded))
+        // Dispatch errorPageLoaded to trigger initialization
+        // Use a small delay to ensure receivedError has been processed first
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            store.dispatch(NativeErrorPageAction(windowUUID: self.windowUUID,
+                                                 actionType: NativeErrorPageActionType.errorPageLoaded))
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -259,10 +399,63 @@ final class NativeErrorPageViewController: UIViewController,
         contentStack.addArrangedSubview(errorDescriptionLabel)
         contentStack.setCustomSpacing(UX.mainStackSpacing, after: errorDescriptionLabel)
         contentStack.addArrangedSubview(reloadButton)
+        contentStack.addArrangedSubview(advancedSectionContainer)
+        contentStack.addArrangedSubview(goBackButton)
         scrollContainer.addArrangedSubview(foxImage)
         scrollContainer.addArrangedSubview(contentStack)
         scrollView.addSubview(scrollContainer)
         view.addSubview(scrollView)
+        setupAdvancedSectionLayout()
+        contentStackWidthConstraint = contentStack.widthAnchor.constraint(equalToConstant: UX.badCertContentWidth)
+        contentStackWidthConstraint?.isActive = false
+        foxImageWidthConstraint = foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
+        foxImageWidthConstraint?.isActive = true
+        foxImageHeightConstraint = foxImage.heightAnchor.constraint(equalToConstant: UX.badCertImageSize)
+        foxImageHeightConstraint?.isActive = false
+        advancedSectionContainer.widthAnchor.constraint(equalTo: contentStack.widthAnchor).isActive = true
+        goBackButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight).isActive = true
+
+        advancedSectionContainer.isHidden = true
+        goBackButton.isHidden = true
+    }
+
+    private func setupAdvancedSectionLayout() {
+        advancedSectionContainer.addSubview(advancedSectionStack)
+        advancedSectionStack.translatesAutoresizingMaskIntoConstraints = false
+        advancedSectionHeader.addSubview(advancedSectionHeaderButton)
+        advancedSectionHeaderButton.translatesAutoresizingMaskIntoConstraints = false
+        advancedSectionHeaderButton.addSubview(advancedSectionTitleLabel)
+        advancedSectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        advancedSectionHeaderButton.addSubview(advancedSectionChevron)
+        advancedSectionChevron.translatesAutoresizingMaskIntoConstraints = false
+        let chevronConfig = UIImage.SymbolConfiguration(pointSize: UX.advancedSectionChevronSize, weight: .regular)
+        advancedSectionChevron.image = UIImage(systemName: "chevron.right", withConfiguration: chevronConfig)
+        advancedSectionContent.addSubview(advancedSectionContentStack)
+        advancedSectionContentStack.translatesAutoresizingMaskIntoConstraints = false
+        advancedSectionStack.addArrangedSubview(advancedSectionHeader)
+        advancedSectionStack.addArrangedSubview(advancedSectionContent)
+
+        NSLayoutConstraint.activate([
+            advancedSectionStack.topAnchor.constraint(equalTo: advancedSectionContainer.topAnchor, constant: UX.advancedSectionPadding),
+            advancedSectionStack.leadingAnchor.constraint(equalTo: advancedSectionContainer.leadingAnchor),
+            advancedSectionStack.trailingAnchor.constraint(equalTo: advancedSectionContainer.trailingAnchor),
+            advancedSectionStack.bottomAnchor.constraint(equalTo: advancedSectionContainer.bottomAnchor, constant: -UX.advancedSectionPaddingBottom),
+            advancedSectionHeaderButton.topAnchor.constraint(equalTo: advancedSectionHeader.topAnchor),
+            advancedSectionHeaderButton.leadingAnchor.constraint(equalTo: advancedSectionHeader.leadingAnchor),
+            advancedSectionHeaderButton.trailingAnchor.constraint(equalTo: advancedSectionHeader.trailingAnchor),
+            advancedSectionHeaderButton.bottomAnchor.constraint(equalTo: advancedSectionHeader.bottomAnchor),
+            advancedSectionHeaderButton.heightAnchor.constraint(equalToConstant: UX.advancedSectionHeaderHeight),
+            advancedSectionTitleLabel.leadingAnchor.constraint(equalTo: advancedSectionHeaderButton.leadingAnchor, constant: UX.advancedSectionListItemHorizontalPadding),
+            advancedSectionTitleLabel.centerYAnchor.constraint(equalTo: advancedSectionHeaderButton.centerYAnchor),
+            advancedSectionChevron.trailingAnchor.constraint(equalTo: advancedSectionHeaderButton.trailingAnchor, constant: -UX.advancedSectionListItemHorizontalPadding),
+            advancedSectionChevron.centerYAnchor.constraint(equalTo: advancedSectionHeaderButton.centerYAnchor),
+            advancedSectionChevron.widthAnchor.constraint(equalToConstant: UX.advancedSectionChevronSize),
+            advancedSectionChevron.heightAnchor.constraint(equalToConstant: UX.advancedSectionChevronSize),
+            advancedSectionContentStack.topAnchor.constraint(equalTo: advancedSectionContent.topAnchor),
+            advancedSectionContentStack.leadingAnchor.constraint(equalTo: advancedSectionContent.leadingAnchor),
+            advancedSectionContentStack.trailingAnchor.constraint(equalTo: advancedSectionContent.trailingAnchor),
+            advancedSectionContentStack.bottomAnchor.constraint(equalTo: advancedSectionContent.bottomAnchor)
+        ])
     }
 
     func adjustConstraints() {
@@ -300,17 +493,17 @@ final class NativeErrorPageViewController: UIViewController,
         ]
 
         portraitConstraintsList = [
-            foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
+            goBackButton.widthAnchor.constraint(equalTo: contentStack.widthAnchor)
         ]
 
         landscapeConstraintsList = [
             foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
-            reloadButton.widthAnchor.constraint(
-                equalTo: contentStack.widthAnchor
-            )
+            reloadButton.widthAnchor.constraint(equalTo: contentStack.widthAnchor),
+            goBackButton.widthAnchor.constraint(equalTo: contentStack.widthAnchor)
         ]
 
         NSLayoutConstraint.activate(commonConstraintsList)
+        foxImageWidthConstraint?.isActive = !shouldUseHorizontalLayout
 
         if shouldUseHorizontalLayout {
             NSLayoutConstraint.activate(landscapeConstraintsList)
@@ -330,16 +523,26 @@ final class NativeErrorPageViewController: UIViewController,
         titleLabel.textColor = theme.colors.textPrimary
         errorDescriptionLabel.textColor = theme.colors.textPrimary
         reloadButton.applyTheme(theme: theme)
+        goBackButton.backgroundColor = theme.colors.actionPrimary
+        goBackButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        proceedButton.backgroundColor = theme.colors.actionSecondary
+        proceedButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        advancedSectionContainer.backgroundColor = theme.colors.layer2
+        advancedSectionContainer.layer.borderColor = theme.colors.borderPrimary.cgColor
+        advancedSectionTitleLabel.textColor = theme.colors.textPrimary
+        advancedSectionChevron.tintColor = theme.colors.actionPrimary
     }
 
-    @objc
-    private func didTapReload() {
+    private func dispatchBrowserAction(
+        actionType: GeneralBrowserActionType,
+        isNativeErrorPage: Bool = false
+    ) {
         ensureMainThread {
             store.dispatch(
                 GeneralBrowserAction(
-                    isNativeErrorPage: true,
+                    isNativeErrorPage: isNativeErrorPage,
                     windowUUID: self.windowUUID,
-                    actionType: GeneralBrowserActionType.reloadWebsite
+                    actionType: actionType
                 )
             )
         }
