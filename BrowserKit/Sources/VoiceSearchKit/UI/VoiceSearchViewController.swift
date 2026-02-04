@@ -74,7 +74,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     public convenience init(
         windowUUID: WindowUUID,
         themeManager: any ThemeManager
@@ -101,7 +101,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             self?.onStateChange(state: $0)
         }
     }
-    
+
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         backgroundRecordEffect.startAnimating()

@@ -35,13 +35,13 @@ actor DefaultVoiceSearchService: VoiceSearchService {
         guard !isRecording else {
             throw SpeechError.unknown
         }
-        
+
         try await requestPermissions()
-            
+
         guard let speechRecognizer = speechRecognizer, speechRecognizer.isAvailable else {
             throw SpeechError.unknown
         }
-        
+
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
@@ -84,7 +84,7 @@ actor DefaultVoiceSearchService: VoiceSearchService {
 
         isRecording = true
     }
-    
+
     private func requestPermissions() async throws {
         try await withCheckedThrowingContinuation { continuation in
             if #available(iOS 17, *) {
@@ -97,7 +97,7 @@ actor DefaultVoiceSearchService: VoiceSearchService {
                 }
             }
         }
-        
+
         try await withCheckedThrowingContinuation { continuation in
             SFSpeechRecognizer.requestAuthorization { status in
                 status == .authorized ? continuation.resume() : continuation.resume(throwing: SpeechError.unknown)
