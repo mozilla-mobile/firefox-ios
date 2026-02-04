@@ -517,8 +517,6 @@ class BrowserViewController: UIViewController,
 
     private var keyboardPressesHandlerValue: Any?
 
-    private var isAuthenticatingAutofill = false
-
     var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
     @available(iOS 13.4, *)
@@ -1895,7 +1893,7 @@ class BrowserViewController: UIViewController,
         let keyboardHeight = keyboardState?.intersectionHeightForView(view)
         let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
 
-        guard !isAuthenticatingAutofill else {
+        guard !appAuthenticator.isAuthenticatingAutofill else {
             guard isBottomSearchBar, isKeyboardVisible, keyboardHeight != nil else {
                 overKeyboardContainer.removeKeyboardSpacer()
                 return
@@ -3731,7 +3729,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func authenticateSelectCreditCardBottomSheet(frame: WKFrameInfo? = nil) {
-        isAuthenticatingAutofill = true
+        appAuthenticator.isAuthenticatingAutofill = true
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
@@ -3747,7 +3745,7 @@ class BrowserViewController: UIViewController,
             case .passCodeRequired:
                 self.navigationHandler?.showRequiredPassCode()
             }
-            isAuthenticatingAutofill = false
+            appAuthenticator.isAuthenticatingAutofill = false
         }
     }
 

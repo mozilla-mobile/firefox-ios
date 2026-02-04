@@ -18,6 +18,7 @@ enum AuthenticationState {
 
 protocol AppAuthenticationProtocol {
     var canAuthenticateDeviceOwner: Bool { get }
+    var isAuthenticatingAutofill: Bool { get set }
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void)
     func authenticateWithDeviceOwnerAuthentication(
@@ -26,6 +27,8 @@ protocol AppAuthenticationProtocol {
 }
 
 class AppAuthenticator: AppAuthenticationProtocol {
+    var isAuthenticatingAutofill = false
+
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
             authenticateWithDeviceOwnerAuthentication { result in
