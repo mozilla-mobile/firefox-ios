@@ -336,6 +336,47 @@ final class NativeErrorPageViewController: UIViewController,
                 )
             )
         }
+
+    @objc
+    private func didTapViewCertificate() {
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        guard let tabManager = try? windowManager.tabManager(for: windowUUID),
+              let selectedTab = tabManager.selectedTab,
+              let errorURL = selectedTab.webView?.url else { return }
+        let internalURL = InternalURL(errorURL)
+        guard internalURL?.isErrorPage == true else { return }
+        let originalURL = nativeErrorPageState.url ?? internalURL?.originalURLFromErrorPage ?? errorURL
+        let certificates = ErrorPageHelper.certificatesFromErrorURL(errorURL, logger: DefaultLogger.shared)
+        guard !certificates.isEmpty else { return }
+
+        let topLevelDomain = originalURL.host ?? originalURL.absoluteString
+        let certificatesModel = CertificatesModel(
+            topLevelDomain: topLevelDomain,
+            title: nativeErrorPageState.title,
+            URL: originalURL.absoluteString,
+            certificates: certificates
+        )
+
+        let certificatesController = CertificatesViewController(
+            with: certificatesModel,
+            windowUUID: windowUUID
+        )
+
+        if let navigationController = navigationController {
+            navigationController.pushViewController(certificatesController, animated: true)
+        } else {
+            let navController = UINavigationController(rootViewController: certificatesController)
+            present(navController, animated: true)
+        }
+    }
+    
+    @objc
+    private func didTapLearnMore() {
+        guard let url = SupportUtils.URLForTopic("what-does-your-connection-is-not-secure-mean") else { return }
+
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        guard let tabManager = try? windowManager.tabManager(for: windowUUID) else { return }
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
     }
 
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {
