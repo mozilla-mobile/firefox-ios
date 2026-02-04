@@ -7,6 +7,9 @@ import MozillaAppServices
 import Account
 import Shared
 
+// NOTE: This is a WIP as part of the Relay Phase 1 MVP. This code will be restructured
+// soon; unit tests are also forthcoming. For now, tracking that here: FXIOS-14222. -MR
+
 typealias RelayPopulateCompletion = @MainActor  (RelayMaskGenerationResult) -> Void
 
 /// Describes public protocol for Relay component to track state and facilitate
