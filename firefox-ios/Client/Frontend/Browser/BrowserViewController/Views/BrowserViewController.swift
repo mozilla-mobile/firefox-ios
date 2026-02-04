@@ -1588,8 +1588,6 @@ class BrowserViewController: UIViewController,
         ])
         NSLayoutConstraint.activate(statusBarOverlayConstraints)
 
-        // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
-        checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
         // when toolbars are hidden/shown the mask on the content view that is used for
@@ -1946,6 +1944,10 @@ class BrowserViewController: UIViewController,
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+
+        // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
+        // FXIOS-11036 - Investigate improvement to JavaScript alert are dequeueing
+        checkForJSAlerts()
     }
 
     /// Embed a ContentContainable inside the content container
