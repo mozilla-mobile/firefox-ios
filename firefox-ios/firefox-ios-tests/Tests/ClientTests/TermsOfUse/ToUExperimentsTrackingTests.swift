@@ -12,21 +12,21 @@ import struct MozillaAppServices.EnrolledExperiment
 final class ToUExperimentsTrackingTests: XCTestCase {
     private var profile: MockProfile!
     private var tracking: ToUExperimentsTracking!
-    
+
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         tracking = ToUExperimentsTracking(prefs: profile.prefs)
     }
-    
+
     override func tearDown() async throws {
         tracking = nil
         profile = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
-    
+
     private func createToUExperiment(slug: String, branch: String, featureIds: [String] = ["tou-feature"]) -> EnrolledExperiment {
         EnrolledExperiment(
             featureIds: featureIds,
@@ -36,7 +36,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
             branchSlug: branch
         )
     }
-    
+
     private func createNonToUExperiment(slug: String, branch: String) -> EnrolledExperiment {
         EnrolledExperiment(
             featureIds: ["other-feature"],
@@ -46,17 +46,17 @@ final class ToUExperimentsTrackingTests: XCTestCase {
             branchSlug: branch
         )
     }
-    
+
     private func setupExperiment(slug: String, branch: String) {
         profile.prefs.setString(slug, forKey: PrefsKeys.TermsOfUseExperimentSlug)
         profile.prefs.setString(branch, forKey: PrefsKeys.TermsOfUseExperimentBranch)
     }
-    
+
     private func setupDismissalData(remindersCount: Int = 2) {
         profile.prefs.setTimestamp(Date().toTimestamp(), forKey: PrefsKeys.TermsOfUseDismissedDate)
         profile.prefs.setInt(Int32(remindersCount), forKey: PrefsKeys.TermsOfUseRemindersCount)
     }
-    
+
     private func assertDismissalDataReset() {
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
@@ -72,9 +72,9 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
         setupExperiment(slug: "exp-1", branch: "branch-a")
         setupDismissalData(remindersCount: 5)
-        
+
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
-        
+
         assertDismissalDataNotReset(expectedCount: 5)
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
     }
