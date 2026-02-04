@@ -82,6 +82,7 @@ extension BrowserViewController: WKUIDelegate {
         if jsAlertExceedsSpamLimits(webView) {
             await handleSpammedJSAlert()
         } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(messageAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
             await withCheckedContinuation { (continuation: CheckedContinuation<Void?, Never>) in
                 messageAlert.continuation = continuation
 
@@ -110,6 +111,7 @@ extension BrowserViewController: WKUIDelegate {
             await handleSpammedJSAlert()
             return false
         } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(confirmAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
             return await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
                 confirmAlert.continuation = continuation
 
@@ -144,6 +146,7 @@ extension BrowserViewController: WKUIDelegate {
             await handleSpammedJSAlert()
             return nil
         } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(textInputAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
             return await withCheckedContinuation { (continuation: CheckedContinuation<String?, Never>) in
                 textInputAlert.continuation = continuation
 

@@ -1946,7 +1946,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
-        // FXIOS-11036 - Investigate improvement to JavaScript alert are dequeueing
+        // FXIOS-11036 - Investigate improvement to JavaScript alert dequeueing
         checkForJSAlerts()
     }
 

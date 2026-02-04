@@ -7,11 +7,13 @@ import Foundation
 import WebKit
 import WebEngine
 
-/// A simple version of UIAlertController that attaches a delegate to the viewDidDisappear method
-/// to allow forwarding the event. This is needed since when we queue JS alerts, we need to return
-/// the alerts results to the WKWebView delegate methods at the expected moment. If we cancel, or
-/// there's no results from the JS alert, we still need to return otherwise a runtime expection is thrown.
-/// Continuations are used to work with the async methods from WKWebView delegate.
+/// A note on async handling of JavaScript alerts: WebKit expects your app to present the alert and await user interaction
+/// before returning. Meanwhile, the web page will pause JavaScript execution until the method execution ends. If the
+/// `WKNavigationDelegate` JS alert async methods return prematurely, the web page may resume early, leading to incorrect
+/// behavior.
+/// Previously we used the `WKNavigationDelegate` JS alert methods with `completionHandler`s. Failing to call the
+/// `completionHandler` would crash the app with a runtime exception. We've replace them with `continuation`s to
+/// work with the async methods from WKWebView delegate.
 class JSPromptAlertController: UIAlertController, JavaScriptPromptAlertController {
     var alertInfo: JavaScriptAlertInfo?
     weak var delegate: JavascriptPromptAlertControllerDelegate?
