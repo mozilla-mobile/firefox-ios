@@ -79,7 +79,7 @@ public struct CopyWithUpdatesMacro: MemberMacro {
         }
 
         return [
-            DeclSyntax(with),
+            DeclSyntax(copyWithFunction),
         ]
     }
 

@@ -2092,7 +2092,6 @@
 		ED07C0F52CCB020B006C0627 /* SearchEngineSelectionMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0F32CCB0200006C0627 /* SearchEngineSelectionMiddlewareTests.swift */; };
 		ED232EA02DFA3BF30046DA47 /* UserTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED232E9F2DFA3BF00046DA47 /* UserTelemetry.swift */; };
 		ED26BFD72DE5260700FB2B3F /* glean_index.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED26BFD62DE5260700FB2B3F /* glean_index.yaml */; };
-		ED27142E2F1EBE3F008070C2 /* CopyWithChanges in Frameworks */ = {isa = PBXBuildFile; productRef = ED27142D2F1EBE3F008070C2 /* CopyWithChanges */; };
 		ED287B752E4D4C0500527204 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = ED287B722E4D4C0500527204 /* AppIcon.icon */; };
 		ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */; };
 		ED33E3572D0A4CE9002265A7 /* URLActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */; };
@@ -2136,6 +2135,7 @@
 		EDD21F2E2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD21F2D2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift */; };
 		EDD2A7F82CDACE7C00ED464C /* UnifiedSearchKit in Frameworks */ = {isa = PBXBuildFile; productRef = EDD2A7F72CDACE7C00ED464C /* UnifiedSearchKit */; };
 		EDD2A7FA2CDBD1D100ED464C /* SearchEngineElement+initFromSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD2A7F92CDBD1D000ED464C /* SearchEngineElement+initFromSearchEngine.swift */; };
+		EDD2E9C02F33B394004FF72A /* CopyWithUpdates in Frameworks */ = {isa = PBXBuildFile; productRef = EDD2E9BF2F33B394004FF72A /* CopyWithUpdates */; };
 		EDD3348E2D109458004516D0 /* ShareTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3348D2D109458004516D0 /* ShareTelemetryTests.swift */; };
 		EDD334902D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3348F2D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift */; };
 		EDD334952D10BEEB004516D0 /* UserDefaults+valueExists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD334942D10BEEB004516D0 /* UserDefaults+valueExists.swift */; };
@@ -11353,6 +11353,7 @@
 			files = (
 				5A70EF0E295DFCCF00790249 /* Common in Frameworks */,
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
+				EDD2E9C02F33B394004FF72A /* CopyWithUpdates in Frameworks */,
 				0BF802E22CFF0937005633E5 /* Shared in Frameworks */,
 				8A08EC6227EBDCA400E119C7 /* iAd.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */,
@@ -11368,7 +11369,6 @@
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */,
-				ED27142E2F1EBE3F008070C2 /* CopyWithChanges in Frameworks */,
 				5A984D362C8A3407007938C9 /* Kingfisher in Frameworks */,
 				819656172C80C6F300E62323 /* MenuKit in Frameworks */,
 				8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */,
@@ -16989,7 +16989,7 @@
 				0BF802E12CFF0937005633E5 /* Shared */,
 				8C51ED732DE0A64D00B3E58A /* OnboardingKit */,
 				0B6D1C872E15456F00919F1E /* SummarizeKit */,
-				ED27142D2F1EBE3F008070C2 /* CopyWithChanges */,
+				EDD2E9BF2F33B394004FF72A /* CopyWithUpdates */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -31807,10 +31807,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
 		};
-		ED27142D2F1EBE3F008070C2 /* CopyWithChanges */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CopyWithChanges;
-		};
 		ED6C8DAB2CE6A4BB00D7F7F3 /* Sentry-Dynamic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5A37861729A2C337006B3A34 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
@@ -31819,6 +31815,10 @@
 		EDD2A7F72CDACE7C00ED464C /* UnifiedSearchKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = UnifiedSearchKit;
+		};
+		EDD2E9BF2F33B394004FF72A /* CopyWithUpdates */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CopyWithUpdates;
 		};
 		EDF5679F2C8B51DC00FDB09D /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -16,18 +16,16 @@ struct SearchEngineSelectionState: ScreenState {
     var selectedSearchEngine: SearchEngineModel?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard
-            let state = appState.screenState(
-                SearchEngineSelectionState.self,
-                for: .searchEngineSelection,
-                window: uuid
-            )
-        else {
+        guard let state = appState.screenState(
+            SearchEngineSelectionState.self,
+            for: .searchEngineSelection,
+            window: uuid
+        ) else {
             self.init(windowUUID: uuid)
             return
         }
 
-        self = state.copyWith()
+        self = state.copyWithUpdates()
     }
 
     init(windowUUID: WindowUUID) {
@@ -46,21 +44,20 @@ struct SearchEngineSelectionState: ScreenState {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else {
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return defaultState(from: state)
         }
 
         switch action.actionType {
         case SearchEngineSelectionActionType.didLoadSearchEngines:
             guard let action = action as? SearchEngineSelectionAction,
-                let searchEngines = action.searchEngines
+                  let searchEngines = action.searchEngines
             else {
                 return defaultState(from: state)
             }
 
             // With the current usage, we don't want to reset the selectedSearchEngine to nil for didLoadSearchEngines
-            return state.copyWithChanges(
+            return state.copyWithUpdates(
                 searchEngines: searchEngines
             )
 
@@ -69,7 +66,7 @@ struct SearchEngineSelectionState: ScreenState {
                 let selectedSearchEngine = action.selectedSearchEngine
             else { return defaultState(from: state) }
 
-            return state.copyWithChanges(
+            return state.copyWithUpdates(
                 selectedSearchEngine: selectedSearchEngine
             )
 
@@ -79,6 +76,6 @@ struct SearchEngineSelectionState: ScreenState {
     }
 
     static func defaultState(from state: SearchEngineSelectionState) -> SearchEngineSelectionState {
-        return state.copyWithChanges()
+        return state.copyWithUpdates()
     }
 }
