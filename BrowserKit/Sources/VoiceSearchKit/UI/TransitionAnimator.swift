@@ -16,7 +16,7 @@ final class TransitionAnimator: NSObject,
                                 UIViewControllerAnimatedTransitioning {
     private struct UX {
         static let springAnimationDuration: TimeInterval = 0.4
-        static let easeOutAnimationDuration: TimeInterval = 0.25
+        static let easeOutAnimationDuration: TimeInterval = 0.3
         static let presentationAnimationSpringDumping: CGFloat = 0.8
         static let presentationAnimationSpringVelocity: CGFloat = 1.0
         static let buttonsContainerInitialTranslationY: CGFloat = 100.0
