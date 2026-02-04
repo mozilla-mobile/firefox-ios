@@ -7,6 +7,8 @@ import Common
 @testable import Client
 
 class MockAppAuthenticator: AppAuthenticationProtocol, @unchecked Sendable {
+    var isAuthenticatingAutofill = false
+
     var authenticationState: AuthenticationState = .deviceOwnerAuthenticated
     var shouldAuthenticateDeviceOwner = true
     var shouldSucceed = true
@@ -19,10 +21,6 @@ class MockAppAuthenticator: AppAuthenticationProtocol, @unchecked Sendable {
 
     var canAuthenticateDeviceOwner: Bool {
         return shouldAuthenticateDeviceOwner
-    }
-
-    var isAuthenticatingAutofill: Bool {
-        return false
     }
 
     func authenticateWithDeviceOwnerAuthentication(
