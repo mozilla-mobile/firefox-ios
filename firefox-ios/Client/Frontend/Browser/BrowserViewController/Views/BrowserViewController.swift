@@ -1842,6 +1842,26 @@ class BrowserViewController: UIViewController,
             }
         }
 
+        updateOverKeyboardContainerConstraints()
+        updateBottomContainerConstraints()
+        updateBottomContentStackViewConstraints()
+        updateConstraintsForKeyboard()
+
+        super.updateViewConstraints()
+    }
+
+    private func updateBottomContainerConstraints() {
+        bottomContainer.snp.remakeConstraints { make in
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            } else {
+                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            }
+            make.leading.trailing.equalTo(view)
+        }
+    }
+
+    private func updateOverKeyboardContainerConstraints() {
         overKeyboardContainer.snp.remakeConstraints { make in
             if let scrollController = scrollController as? LegacyTabScrollProvider {
                 scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
@@ -1856,27 +1876,20 @@ class BrowserViewController: UIViewController,
             }
             make.leading.trailing.equalTo(view)
         }
+    }
 
-        bottomContainer.snp.remakeConstraints { make in
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-            } else {
-                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-            }
-            make.leading.trailing.equalTo(view)
-        }
-
+    private func updateBottomContentStackViewConstraints() {
         bottomContentStackView.snp.remakeConstraints { remake in
             adjustBottomContentStackView(remake)
         }
+    }
 
+    func updateConstraintsForKeyboard() {
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
             scrollController.hideToolbars(animated: true)
         } else {
             adjustBottomSearchBarForKeyboard()
         }
-
-        super.updateViewConstraints()
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
@@ -2097,6 +2110,8 @@ class BrowserViewController: UIViewController,
         )
     }
 
+    // TODO: Yoana microsurvey is added to overKeyboardContainer (bottom)
+    // bottomContainer (top)
     private func updateMicrosurveyConstraints() {
         guard let microsurvey else { return }
 
@@ -2129,6 +2144,7 @@ class BrowserViewController: UIViewController,
         updateMicrosurveyConstraints()
     }
 
+    // TODO: Should we react to removing the views
     private func removeMicrosurveyPrompt() {
         guard let microsurvey else { return }
 
@@ -3235,6 +3251,7 @@ class BrowserViewController: UIViewController,
         }
 
         // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage
+        // TODO: Yoana we use bottomContentStackView we need to be carefull not to break homepageContentHeight
         return view.frame.height - statusBarOverlay.frame.height
                                  - bottomContentStackView.frame.height
                                  - bottomContainer.frame.height
