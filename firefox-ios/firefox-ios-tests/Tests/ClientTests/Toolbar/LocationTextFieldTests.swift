@@ -7,7 +7,6 @@ import XCTest
 
 @MainActor
 final class LocationTextFieldTests: XCTestCase {
-
     private var textField: LocationTextField!
     private var themeManager: MockThemeManager!
 
