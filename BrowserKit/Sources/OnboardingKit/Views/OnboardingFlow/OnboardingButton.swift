@@ -15,6 +15,7 @@ extension View {
             self.buttonStyle(.glassProminent)
                 .tint(buttonColor.color)
                 .font(UX.CardView.primaryActionGlassFont)
+                .foregroundStyle(theme.colors.textInverted.color)
         } else {
             self.buttonStyle(.borderless)
                 .background(buttonColor.color)

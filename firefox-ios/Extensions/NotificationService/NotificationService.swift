@@ -24,7 +24,7 @@ class NotificationService: UNNotificationServiceExtension, @unchecked Sendable {
     ) {
         // Set-up Rust network stack. This is needed in addition to the call
         // from the AppDelegate due to the fact that this uses a separate process
-        Viaduct.shared.useReqwestBackend()
+        Viaduct.shared.initialize()
         MozillaAppServices.initialize()
 
         // FIXME: FXIOS-14273 Dictionaries are non-Sendable

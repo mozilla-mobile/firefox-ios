@@ -221,13 +221,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .updatedPasswordManager,
-                titleText: format(string: "Updated Password Manager"),
-                statusText: format(string: "Toggle to enable the updated password manager")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .voiceSearch,
                 titleText: format(string: "Voice Search"),
                 statusText: format(string: "Toggle to enable the Voice Search feature")

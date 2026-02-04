@@ -14,7 +14,7 @@ protocol StoryProviderInterface: Sendable {
 final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     private struct Constants {
         static let defaultNumberOfHomepageStories = 9
-        static let defaultNumberOfDiscoverMoreStories = 20
+        static let defaultNumberOfDiscoverMoreStories = 100
     }
 
     private let merinoAPI: MerinoStoriesProviding
@@ -28,7 +28,7 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     }
 
     func fetchDiscoverMoreStories() async -> [MerinoStory] {
-        return await fetchStories(Constants.defaultNumberOfDiscoverMoreStories).shuffled()
+        return await fetchStories(Constants.defaultNumberOfDiscoverMoreStories)
     }
 
     private func fetchStories(_ numberOfRequestedStories: Int) async -> [MerinoStory] {
