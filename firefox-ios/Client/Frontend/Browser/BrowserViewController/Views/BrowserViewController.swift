@@ -85,7 +85,7 @@ class BrowserViewController: UIViewController,
 
     nonisolated let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
-    private var observedWebViews = WeakList<WKWebView>()
+    var observedWebViews = WeakList<WKWebView>()
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
@@ -589,7 +589,7 @@ class BrowserViewController: UIViewController,
         MainActor.assumeIsolated {
             logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
             unsubscribeFromRedux()
-            observedWebViews.forEach({ stopObserving(webView: $0) })
+            stopObservingAllWebViews()
         }
     }
 
@@ -923,6 +923,11 @@ class BrowserViewController: UIViewController,
         logTelemetryForAppDidEnterBackground()
     }
 
+    /// FXIOS-13996: Remove KVO observers on terminate to prevent crashes during force-close.
+    private func applicationWillTerminate() {
+        stopObservingAllWebViews()
+    }
+
     @objc
     func tappedTopArea() {
         scrollController.showToolbars(animated: true)
@@ -981,6 +986,7 @@ class BrowserViewController: UIViewController,
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
             if !isMinimalAddressBarEnabled { scrollController.showToolbars(animated: false) }
         }
+
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
         browserDidBecomeActive()
     }
@@ -1267,6 +1273,15 @@ class BrowserViewController: UIViewController,
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
+
+        // FXIOS-13996: Handle synchronously to remove KVO observers before termination.
+        if notificationName == UIApplication.willTerminateNotification {
+            ensureMainThread { [weak self] in
+                self?.applicationWillTerminate()
+            }
+            return
+        }
+
         let windowScene = notification.object as? UIWindowScene
         let announcementText = notification.userInfo?[UIAccessibility.announcementStringValueUserInfoKey] as? String
         let dictionary = notification.object as? NSDictionary
@@ -1323,6 +1338,7 @@ class BrowserViewController: UIViewController,
                 UIApplication.willResignActiveNotification,
                 UIApplication.didBecomeActiveNotification,
                 UIApplication.didEnterBackgroundNotification,
+                UIApplication.willTerminateNotification,
                 UIScene.didEnterBackgroundNotification,
                 UIScene.didActivateNotification,
                 UIAccessibility.announcementDidFinishNotification,
@@ -4360,7 +4376,8 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
-        DispatchQueue.main.async { [weak self] in
+        // FXIOS-13996: Cleanup synchronously to prevent crashes from stale KVO observers.
+        ensureMainThread { [weak self] in
             guard let self else { return }
             tab.cancelQueuedAlerts()
             stopObserving(webView: webView)
@@ -4380,7 +4397,9 @@ extension BrowserViewController: LegacyTabDelegate {
         openSearchNewTab(isPrivate: tab.isPrivate, selection)
     }
 
-    private func beginObserving(webView: WKWebView) {
+    // MARK: - KVO Observation
+
+    func beginObserving(webView: WKWebView) {
         guard !observedWebViews.contains(webView) else {
             logger.log("Duplicate observance of webView", level: .warning, category: .webview)
             return
@@ -4389,13 +4408,19 @@ extension BrowserViewController: LegacyTabDelegate {
         KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
     }
 
-    private func stopObserving(webView: WKWebView) {
+    func stopObserving(webView: WKWebView) {
         guard observedWebViews.contains(webView) else {
             logger.log("Duplicate KVO de-registration of webView", level: .warning, category: .webview)
             return
         }
         observedWebViews.remove(webView)
         KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
+    }
+
+    /// FXIOS-13996: Copy collection first to avoid mutation during iteration.
+    func stopObservingAllWebViews() {
+        let webViewsToCleanup = Array(observedWebViews)
+        webViewsToCleanup.forEach { stopObserving(webView: $0) }
     }
 
     // MARK: Save Login Alert

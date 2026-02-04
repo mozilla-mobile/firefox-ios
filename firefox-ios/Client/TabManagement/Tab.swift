@@ -583,6 +583,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     deinit {
         webViewLoadingObserver?.invalidate()
+
         deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
 
 #if DEBUG
@@ -613,6 +614,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func close() {
+        webView?.stopLoading()
+
         contentScriptManager.uninstall(tab: self)
         webView?.configuration.userContentController.removeAllUserScripts()
         webView?.configuration.userContentController.removeAllScriptMessageHandlers()
