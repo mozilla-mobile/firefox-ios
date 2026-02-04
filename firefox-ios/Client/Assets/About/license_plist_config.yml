@@ -39,15 +39,30 @@ options:
   force: true
   suppressOpeningDirectory: true
   failIfMissingLicense: true
+  # Generate a GitHub personal access token and add it here if your requests are rate limited
+  # gitHubToken: # Your token here
 
 # Manually specify additional remote respositories not picked up by LicensePlist
+# You should also add your NPM packages here too and add license files as needed (as per package.json).
 github:
   - owner: mozilla-mobile
     name: firefox-ios
-    version: 1.0
+    version:
+  - owner: mozilla
+    name: page-metadata-parser
   - owner: mono0926
     name: LicensePlist
     version: 3.72.2
+  - owner: bignerdranch
+    name: Deferred
+    version:
+  - owner: mozilla
+    name: readability
+    version:
+  - owner: darkreader
+    name: darkreader
+  - owner: cure53
+    name: dompurify
 
 # Manually specify additional non-remote respositories not picked up by LicensePlist
 manual:
