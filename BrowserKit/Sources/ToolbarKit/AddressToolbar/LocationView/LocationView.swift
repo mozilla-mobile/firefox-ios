@@ -533,8 +533,9 @@ final class LocationView: UIView,
         let text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
         urlTextField.text = text
 
-        Task { @MainActor in
+        DispatchQueue.main.async { [unowned self] in
             if shouldShowKeyboard && config.shouldSelectSearchTerm {
+                urlTextField.becomeFirstResponder()
                 let start = urlTextField.beginningOfDocument
                 let end = urlTextField.endOfDocument
                 urlTextField.selectedTextRange = urlTextField.textRange(from: start, to: end)
