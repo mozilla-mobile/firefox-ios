@@ -4104,10 +4104,8 @@ class BrowserViewController: UIViewController,
                    let buttonView = toolbarButton.customView {
                     self?.configureRelayContextualHint(for: buttonView)
                 } else {
-
                     self?.configureRelayContextualHint(for: targetView)
                 }
-
             }
         }
     }
