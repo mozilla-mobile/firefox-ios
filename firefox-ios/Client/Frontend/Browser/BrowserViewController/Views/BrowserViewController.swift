@@ -137,7 +137,6 @@ class BrowserViewController: UIViewController,
     private lazy var statusBarOverlay: StatusBarOverlay = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.statusBarOverlay
     }
-    private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
         AddressToolbarContainer(isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled,
                                 toolbarHelper: self.toolbarHelper)
@@ -1575,19 +1574,6 @@ class BrowserViewController: UIViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        // Remove existing constraints
-        statusBarOverlay.removeConstraints(statusBarOverlayConstraints)
-        statusBarOverlayConstraints.removeAll()
-
-        // Set new constraints for the statusBarOverlay
-        statusBarOverlayConstraints.append(contentsOf: [
-            statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
-            statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            statusBarOverlay.bottomAnchor.constraint(equalTo: header.bottomAnchor)
-        ])
-        NSLayoutConstraint.activate(statusBarOverlayConstraints)
-
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
@@ -1738,6 +1724,11 @@ class BrowserViewController: UIViewController,
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            statusBarOverlay.bottomAnchor.constraint(equalTo: header.bottomAnchor),
         ])
 
         let topTouchAreaHeight = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
