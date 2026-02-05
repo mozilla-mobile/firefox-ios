@@ -47,7 +47,6 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     }
 
     func shouldSendTechnicalData(telemetryValue: Bool, studiesValue: Bool) {
-        // AdjustHelper.setEnabled($0)
         DefaultGleanWrapper().setUpload(isEnabled: telemetryValue)
         Experiments.setStudiesSetting(studiesValue)
         Experiments.setTelemetrySetting(telemetryValue)
