@@ -10,46 +10,46 @@ import struct MozillaAppServices.EnrolledExperiment
 @MainActor
 struct ToUExperimentsTracking {
     private let prefs: Prefs
-    
+
     init(prefs: Prefs) {
         self.prefs = prefs
     }
-    
+
     /// Resets dismissal state if experiment configuration changed.
     /// Users who have already accepted ToU are excluded.
     /// Does not reset if bottom sheet hasn't been shown yet (first launch).
     func resetToUDataIfNeeded(currentExperiment: EnrolledExperiment? = nil) {
         guard !(prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false) else { return }
-        
+
         // Don't reset if bottom sheet hasn't been shown yet (first launch scenario)
         // This prevents resetting when observer fires before bottom sheet is displayed
         let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
         guard hasShownFirstTime else { return }
-        
+
         let experiment = currentExperiment ?? getCurrentToUExperiment()
         resetDismissalStateIfExperimentChanged(currentExperiment: experiment)
     }
-    
+
     /// Gets the current ToU experiment from Nimbus.
     /// Filters to experiments with "tou-feature" in featureIds.
     func getCurrentToUExperiment() -> EnrolledExperiment? {
         let activeExperiments = Experiments.shared.getActiveExperiments()
         return identifyToUExperiment(from: activeExperiments)
     }
-    
+
     /// Identifies the ToU experiment from a list of active experiments.
     /// Filters to experiments with "tou-feature" in featureIds.
     /// Prioritizes stored experiment slug if it exists in the list.
     func identifyToUExperiment(from experiments: [EnrolledExperiment]) -> EnrolledExperiment? {
         let touExperiments = experiments.filter { $0.featureIds.contains("tou-feature") }
-        
+
         guard !touExperiments.isEmpty else { return nil }
-        
+
         if let storedSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug),
            let storedExperiment = touExperiments.first(where: { $0.slug == storedSlug }) {
             return storedExperiment
         }
-        
+
         return touExperiments.first
     }
     
@@ -57,14 +57,14 @@ struct ToUExperimentsTracking {
     /// Observer is automatically cleaned up when returned object is deallocated.
     func setupExperimentChangeObserver() -> ExperimentChangeObserver {
         let prefs = self.prefs
-        
+
         let observer = NotificationCenter.default.addObserver(
             forName: .nimbusExperimentsApplied,
             object: nil,
             queue: .main
         ) { notification in
             let experiments = notification.object as? [EnrolledExperiment]
-            
+
             Task { @MainActor in
                 let tracking = ToUExperimentsTracking(prefs: prefs)
                 let touExperiment: EnrolledExperiment?
@@ -76,20 +76,20 @@ struct ToUExperimentsTracking {
                 tracking.resetToUDataIfNeeded(currentExperiment: touExperiment)
             }
         }
-        
+
         return ExperimentChangeObserver(observer: observer)
     }
-    
+
     private func resetDismissalStateIfExperimentChanged(currentExperiment: EnrolledExperiment?) {
         let storedSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug)
         let storedBranch = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch)
         let currentSlug = currentExperiment?.slug
         let currentBranch = currentExperiment?.branchSlug
-        
+
         // Check if we have dismissal data to reset
         let hasDismissalData = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil ||
                                (prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0) > 0
-        
+
         // Determine if experiment changed
         let experimentChanged: Bool
         if storedSlug != nil {
@@ -101,13 +101,13 @@ struct ToUExperimentsTracking {
             // hasShownFirstTime check in resetToUDataIfNeeded prevents reset on first launch
             experimentChanged = hasDismissalData && currentSlug != nil
         }
-        
+
         // Reset dismissal data if experiment changed and we have data to reset
         if experimentChanged && hasDismissalData {
             prefs.removeObjectForKey(PrefsKeys.TermsOfUseDismissedDate)
             prefs.setInt(0, forKey: PrefsKeys.TermsOfUseRemindersCount)
         }
-        
+
         // Update stored experiment info to current state
         // Remove keys when unenrolled since user is no longer in any experiment
         if let slug = currentSlug {
@@ -115,7 +115,7 @@ struct ToUExperimentsTracking {
         } else {
             prefs.removeObjectForKey(PrefsKeys.TermsOfUseExperimentSlug)
         }
-        
+
         if let branch = currentBranch {
             prefs.setString(branch, forKey: PrefsKeys.TermsOfUseExperimentBranch)
         } else {
@@ -126,11 +126,11 @@ struct ToUExperimentsTracking {
 
 final class ExperimentChangeObserver {
     private let observer: NSObjectProtocol
-    
+
     init(observer: NSObjectProtocol) {
         self.observer = observer
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(observer)
     }
