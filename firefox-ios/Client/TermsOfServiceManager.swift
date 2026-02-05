@@ -140,7 +140,7 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
             cardType: .basic,
             name: "tos",
             order: 20,
-            title: String.Onboarding.Modern.BrandRefresh.TermsOfUse.Title,
+            title: String(format: .Onboarding.TermsOfService.Title, AppName.shortName.rawValue),
             body: String.Onboarding.Modern.BrandRefresh.TermsOfUse.Description,
             buttons: OnboardingButtons(
                 primary: OnboardingButtonInfoModel(
