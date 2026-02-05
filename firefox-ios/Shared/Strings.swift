@@ -1900,7 +1900,7 @@ extension String {
                         value: "Open your links with built-in privacy",
                         comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
                     public static let TitleV3 = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v149",
+                        key: "Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149",
                         tableName: "Onboarding",
                         value: "Open all your links with built-in privacy",
                         comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
