@@ -168,8 +168,8 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch), "branch-b")
     }
 
-    func testSetupExperimentChangeObserver_ReturnsValidObserver() {
-        let observer = tracking.setupExperimentChangeObserver()
+    func testExperimentChangeObserver_InitializesCorrectly() {
+        let observer = ExperimentChangeObserver(prefs: profile.prefs)
         XCTAssertNotNil(observer)
     }
 }

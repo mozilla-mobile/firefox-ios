@@ -7,12 +7,15 @@ import struct MozillaAppServices.EnrolledExperiment
 
 /// Handles tracking of Terms of Use experiment enrollment and resets dismissal state
 /// when users switch between experiments or branches.
+/// Automatically sets up observer for experiment changes on initialization.
 @MainActor
-struct ToUExperimentsTracking {
+final class ToUExperimentsTracking {
     private let prefs: Prefs
+    private let experimentChangeObserver: ExperimentChangeObserver
 
     init(prefs: Prefs) {
         self.prefs = prefs
+        self.experimentChangeObserver = ExperimentChangeObserver(prefs: prefs)
     }
 
     /// Resets dismissal state if experiment configuration changed.
@@ -97,12 +100,12 @@ struct ToUExperimentsTracking {
             prefs.removeObjectForKey(PrefsKeys.TermsOfUseExperimentBranch)
         }
     }
+}
 
-    /// Sets up observer for Nimbus experiment changes.
-    /// Observer is automatically cleaned up when returned object is deallocated.
-    func setupExperimentChangeObserver() -> ExperimentChangeObserver {
-        let prefs = self.prefs
+final class ExperimentChangeObserver {
+    private let observer: NSObjectProtocol
 
+    init(prefs: Prefs) {
         let observer = NotificationCenter.default.addObserver(
             forName: .nimbusExperimentsApplied,
             object: nil,
@@ -113,16 +116,9 @@ struct ToUExperimentsTracking {
                 tracking.resetToUDataIfNeeded()
             }
         }
-        return ExperimentChangeObserver(observer: observer)
-    }
-}
-
-final class ExperimentChangeObserver {
-    private let observer: NSObjectProtocol
-
-    init(observer: NSObjectProtocol) {
         self.observer = observer
     }
+
     deinit {
         NotificationCenter.default.removeObserver(observer)
     }

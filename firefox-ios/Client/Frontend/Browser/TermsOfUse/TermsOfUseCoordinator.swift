@@ -33,7 +33,6 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     private let prefs: Prefs
     private let hoursSinceDismissedTerms = 120 // 120 hours (5 days)
     private let debugMinutesSinceDismissed = 1 // 1 minute used for testing
-    private let experimentChangeObserver: AnyObject
     private let experimentsTracking: ToUExperimentsTracking
 
     private var maxRemindersCount: Int {
@@ -61,7 +60,6 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         self.prefs = prefs
         self.nimbus = nimbus
         self.experimentsTracking = ToUExperimentsTracking(prefs: prefs)
-        self.experimentChangeObserver = experimentsTracking.setupExperimentChangeObserver()
         super.init(router: router)
     }
 
