@@ -34,19 +34,12 @@ struct ToUExperimentsTracking {
     /// Filters to experiments with "tou-feature" in featureIds.
     func getCurrentToUExperiment() -> EnrolledExperiment? {
         let activeExperiments = Experiments.shared.getActiveExperiments()
-        let touExperiments = activeExperiments.filter { $0.featureIds.contains("tou-feature") }
-        
-        guard !touExperiments.isEmpty else { return nil }
-        
-        if let storedSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug),
-           let storedExperiment = touExperiments.first(where: { $0.slug == storedSlug }) {
-            return storedExperiment
-        }
-        
-        return touExperiments.first
+        return identifyToUExperiment(from: activeExperiments)
     }
     
-    /// Identifies the specific ToU experiment from a list of active experiments.
+    /// Identifies the ToU experiment from a list of active experiments.
+    /// Filters to experiments with "tou-feature" in featureIds.
+    /// Prioritizes stored experiment slug if it exists in the list.
     func identifyToUExperiment(from experiments: [EnrolledExperiment]) -> EnrolledExperiment? {
         let touExperiments = experiments.filter { $0.featureIds.contains("tou-feature") }
         
@@ -93,32 +86,30 @@ struct ToUExperimentsTracking {
         let currentSlug = currentExperiment?.slug
         let currentBranch = currentExperiment?.branchSlug
         
-        // Only consider it a change if we had a stored experiment before
-        // This prevents resetting on first launch when stored is nil and current exists
+        // Check if we have dismissal data to reset
+        let hasDismissalData = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil ||
+                               (prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0) > 0
+        
+        // Determine if experiment changed
         let experimentChanged: Bool
         if storedSlug != nil {
             // Had a stored experiment - check if it changed
+            // Unenroll (currentSlug == nil) is always considered a change
             experimentChanged = storedSlug != currentSlug || storedBranch != currentBranch
         } else {
-            // No stored experiment - only consider it changed if we're unenrolling (current is nil)
-            // If current exists, it's first enrollment, don't reset dismissal state
-            experimentChanged = currentSlug == nil
+            // No stored experiment - reset if re-enrolling (allows re-targeting)
+            // hasShownFirstTime check in resetToUDataIfNeeded prevents reset on first launch
+            experimentChanged = hasDismissalData && currentSlug != nil
         }
         
-        // Only reset if experiment actually changed AND we have dismissal data to reset
-        // This prevents resetting when bottom sheet is already shown (first launch scenario)
-        if experimentChanged {
-            // Check if there's dismissal data to reset - if not, it's first launch, don't reset
-            let hasDismissalData = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil ||
-                                   (prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0) > 0
-            
-            if hasDismissalData {
-                prefs.removeObjectForKey(PrefsKeys.TermsOfUseDismissedDate)
-                prefs.setInt(0, forKey: PrefsKeys.TermsOfUseRemindersCount)
-            }
+        // Reset dismissal data if experiment changed and we have data to reset
+        if experimentChanged && hasDismissalData {
+            prefs.removeObjectForKey(PrefsKeys.TermsOfUseDismissedDate)
+            prefs.setInt(0, forKey: PrefsKeys.TermsOfUseRemindersCount)
         }
         
-        // Always update stored experiment info to current state
+        // Update stored experiment info to current state
+        // Remove keys when unenrolled since user is no longer in any experiment
         if let slug = currentSlug {
             prefs.setString(slug, forKey: PrefsKeys.TermsOfUseExperimentSlug)
         } else {
