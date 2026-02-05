@@ -2110,8 +2110,6 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    // TODO: Yoana microsurvey is added to overKeyboardContainer (bottom)
-    // bottomContainer (top)
     private func updateMicrosurveyConstraints() {
         guard let microsurvey else { return }
 
@@ -2144,7 +2142,6 @@ class BrowserViewController: UIViewController,
         updateMicrosurveyConstraints()
     }
 
-    // TODO: Should we react to removing the views
     private func removeMicrosurveyPrompt() {
         guard let microsurvey else { return }
 
@@ -3251,7 +3248,6 @@ class BrowserViewController: UIViewController,
         }
 
         // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage
-        // TODO: Yoana we use bottomContentStackView we need to be carefull not to break homepageContentHeight
         return view.frame.height - statusBarOverlay.frame.height
                                  - bottomContentStackView.frame.height
                                  - bottomContainer.frame.height
