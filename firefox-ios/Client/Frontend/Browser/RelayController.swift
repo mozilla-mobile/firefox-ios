@@ -130,6 +130,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         self.logger = logger
         self.profile = profile
         let isStaging = profile.prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
+        logger.log("Relay server: \(isStaging ? "staging" : "prod")", level: .info, category: .relay)
         self.config = isStaging ? .staging : .prod
         self.notificationCenter = notificationCenter
         self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
@@ -332,6 +333,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private func updateRelayAccountStatus() {
         guard Self.isFeatureEnabled else { return }
         guard profile.hasAccount() else {
+            logger.log("No sync account. Relay disabled.", level: .info, category: .relay)
             accountStatus = .unavailable
             return
         }
