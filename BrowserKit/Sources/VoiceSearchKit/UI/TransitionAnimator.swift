@@ -238,7 +238,7 @@ final class TransitionAnimator: NSObject,
             transitionContext.completeTransition(true)
         }
     }
-    
+
     // MARK: - Helpers
     private func makeScrimView(bounds: CGRect) -> UIView {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -246,7 +246,7 @@ final class TransitionAnimator: NSObject,
         scrimView.backgroundColor = theme.colors.layerScrim.withAlphaComponent(UX.scrimAlpha)
         return scrimView
     }
-    
+
     private func makeRoundedSnapshotView(from viewController: UIViewController) -> UIView? {
         guard let view = viewController.view.snapshotView(afterScreenUpdates: false) else {
             return nil
