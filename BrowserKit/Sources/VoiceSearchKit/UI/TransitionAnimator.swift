@@ -24,7 +24,7 @@ final class TransitionAnimator: NSObject,
         static let animationTranslationFactor: CGFloat = 0.25
         @MainActor
         static let screenCornerRadius: CGFloat = {
-            return UIScreen.main.value(forKey: "_disp\("layCorn")erRadius") as? CGFloat ?? 0.0
+            return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
         }()
     }
     private let themeManager: any ThemeManager
