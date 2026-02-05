@@ -27,7 +27,7 @@ final class ToUExperimentsTracking {
         // Read previous values BEFORE storing new ones
         let previousSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug)
         let previousBranch = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch)
-        
+
         // Store experiment info BEFORE checking if reset is needed
         // This ensures slug is stored before we check if user is already in experiment
         storeExperimentInfo(currentExperiment: experiment)
