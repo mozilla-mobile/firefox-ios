@@ -23,7 +23,7 @@
     "babel-loader": "^8.2.5",
     "glob": "^8.0.1",
     "script-loader": "^0.7.2",
-    "webpack": "^5.94.0",
+    "webpack": "^5.105.0",
     "webpack-cli": "^4.9.2"
   }
 }
