@@ -2152,7 +2152,9 @@ class BrowserViewController: UIViewController,
         }
 
         self.microsurvey = nil
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
     }
 
     // MARK: - Native Error Page
