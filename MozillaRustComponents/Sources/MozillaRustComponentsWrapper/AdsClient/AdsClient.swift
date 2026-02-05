@@ -7,7 +7,7 @@ import Glean
 
 
 // There is already a class AdsClient in FxAClient so we need to use a different name here.
-public final class RustAdsClient {
+public struct RustAdsClient {
     public static let production: MozAdsClient = {
         let cacheConfig = MozAdsCacheConfig(dbPath: getDatabaseURL(environment: .prod), defaultCacheTtlSeconds: nil, maxSizeMib: nil)
         return MozAdsClientBuilder()
@@ -16,7 +16,7 @@ public final class RustAdsClient {
             .telemetry(telemetry: AdsClientTelemetry())
             .build()
     }()
-    
+
     public static let staging: MozAdsClient = {
         let cacheConfig = MozAdsCacheConfig(dbPath: getDatabaseURL(environment: .staging), defaultCacheTtlSeconds: nil, maxSizeMib: nil)
         return MozAdsClientBuilder()

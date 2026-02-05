@@ -20,13 +20,6 @@ public class Viaduct {
     private init() {}
 
     public func initialize(userAgent: String) {
-        // Note: This function doesn't need to synchronize since the Rust functions are thread-safe.
-
-        // Historical context: The FxA servers rely on the UA string to filter some push messages
-        // directed to iOS devices. Ideally we should use the default user agent instead of FxA-specific
-        // one, but we're currently using the FxA user agent to avoid breaking existing functionality.
-        // See https://github.com/mozilla/application-services/issues/1326 for more context.
-        // TODO: Investigate if we can safely switch to the default user agent.
         setGlobalDefaultUserAgent(userAgent: userAgent)
         do {
             try viaductInitBackendHyper()

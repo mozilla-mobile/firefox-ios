@@ -10,7 +10,7 @@ import Glean
 import TabDataStore
 
 import class MozillaAppServices.Viaduct
-import class MozillaAppServices.RustAdsClient
+import struct MozillaAppServices.RustAdsClient
 import enum MozillaAppServices.MozAdsEnvironment
 
 class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {

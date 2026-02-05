@@ -26,7 +26,7 @@ extension UnifiedAdsProviderInterface {
 }
 
 final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable, Sendable {
-    private let overrideAdsClient: MozAdsClientProtocol?
+    private let adsClient: MozAdsClientProtocol
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
     let maxCacheAge: Shared.Timestamp = OneMinuteInMilliseconds * 30
@@ -44,25 +44,15 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     init(
-        adsClient: MozAdsClientProtocol? = nil,
+        adsClientFactory: MozAdsClientFactory = DefaultMozAdsClientFactory(),
         networking: UnifiedTileNetworking = DefaultUnifiedTileNetwork(with: NetworkUtils.defaultURLSession()),
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {
-        self.overrideAdsClient = adsClient
+        self.adsClient = adsClientFactory.createClient()
         self.logger = logger
         self.networking = networking
         self.urlCache = urlCache
-    }
-
-    private var adsClient: MozAdsClientProtocol {
-        if let overrideAdsClient = overrideAdsClient {
-            return overrideAdsClient
-        }
-        if featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI) {
-            return RustAdsClient.staging
-        }
-        return RustAdsClient.production
     }
 
     private struct AdPlacement: Codable {

@@ -315,7 +315,12 @@ class UnifiedAdsProviderTests: XCTestCase {
 
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsProvider {
         let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
-        let subject = UnifiedAdsProvider(adsClient: mockAdsClient, networking: networking, urlCache: cache)
+        let factory = MockMozAdsClientFactory(mockClient: mockAdsClient)
+        let subject = UnifiedAdsProvider(
+            adsClientFactory: factory,
+            networking: networking,
+            urlCache: cache
+        )
 
         trackForMemoryLeaks(subject, file: file, line: line)
 
