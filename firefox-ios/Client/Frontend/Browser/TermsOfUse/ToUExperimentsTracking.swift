@@ -5,10 +5,8 @@ import Common
 import Shared
 import struct MozillaAppServices.EnrolledExperiment
 
-/// Handles tracking of Terms of Use experiment enrollment and resets dismissal state
-/// when users switch between experiments or branches.
-/// Automatically sets up observer for experiment changes on initialization.
-@MainActor
+/// Handles tracking of Terms of Use experiments and resets dismissal state
+/// when users enrollment status changes.
 final class ToUExperimentsTracking {
     private let prefs: Prefs
     private let experimentChangeObserver: ExperimentChangeObserver
@@ -19,23 +17,32 @@ final class ToUExperimentsTracking {
     }
 
     /// Resets dismissal state if experiment configuration changed.
-    /// Users who have already accepted ToU are excluded.
-    /// Does not reset if bottom sheet hasn't been shown yet (first launch).
-    /// Always stores experiment info to track user's enrollment, even on first launch.
+    /// Excludes users who have already accepted ToU.
+    /// Only resets if bottom sheet has been shown at least once.
     func resetToUDataIfNeeded(currentExperiment: EnrolledExperiment? = nil) {
         guard !(prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false) else { return }
 
         let experiment = currentExperiment ?? getCurrentToUExperiment()
+
+        // Read previous values BEFORE storing new ones
+        let previousSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug)
+        let previousBranch = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch)
+        
+        // Store experiment info BEFORE checking if reset is needed
+        // This ensures slug is stored before we check if user is already in experiment
+        storeExperimentInfo(currentExperiment: experiment)
+
         let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
         if hasShownFirstTime {
-            // Compare previous stored experiment with current one and reset if needed.
-            resetDismissalStateIfExperimentChanged(currentExperiment: experiment)
+            resetDismissalStateIfExperimentChanged(
+                currentExperiment: experiment,
+                previousSlug: previousSlug,
+                previousBranch: previousBranch
+            )
         }
-        storeExperimentInfo(currentExperiment: experiment)
     }
 
-    /// Gets the current ToU experiment from Nimbus where user is enrolled.
-    /// Prioritizes stored experiment slug if it exists, otherwise returns the first ToU experiment.
+    /// Find the current ToU experiment from Nimbus, where user is enrolled
     func getCurrentToUExperiment() -> EnrolledExperiment? {
         let activeExperiments = Experiments.shared.getActiveExperiments()
         let touExperiments = activeExperiments.filter { $0.featureIds.contains("tou-feature") }
@@ -51,29 +58,38 @@ final class ToUExperimentsTracking {
         return sortedExperiments.first
     }
 
-    /// Resets dismissal state if the tracked experiment changed or disappeared.
-    /// Handles: slug changes, branch changes, and unenrollment.
-    /// Note: If storedSlug is nil (first run with new code), we don't reset to avoid affecting
-    /// users who are already in an experiment. We only reset when we have a stored slug that changes.
-    private func resetDismissalStateIfExperimentChanged(currentExperiment: EnrolledExperiment?) {
-        let storedSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug)
-        let storedBranch = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch)
+    /// Resets dismissal state if the tracked experiment changed.
+    /// Handles slug, branch, and enrollment status changes.
+    /// Only called when TermsOfUseFirstShown = true.
+    private func resetDismissalStateIfExperimentChanged(
+        currentExperiment: EnrolledExperiment?,
+        previousSlug: String?,
+        previousBranch: String?
+    ) {
         let currentSlug = currentExperiment?.slug
         let currentBranch = currentExperiment?.branchSlug
 
         let hasDismissalData = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil ||
                                (prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0) > 0
 
-        // Only reset if we have a stored slug that changed (slug/branch change or unenrollment).
-        // If storedSlug is nil, it means first run with new code - don't reset to avoid affecting
-        // users who are already in an experiment.
+        // Compare previous stored values with current experiment.
+        // Since we store before comparing, we can detect slug/branch changes and unenrollment.
         let experimentChanged: Bool
-        if let storedSlug = storedSlug {
-            // We have a stored slug - check if it changed or user was unenrolled
-            experimentChanged = storedSlug != currentSlug || storedBranch != currentBranch
+        if let previousSlug = previousSlug {
+            // Previous slug exists: user was already enrolled
+            // Compare with current to detect changes (slug, branch, or unenrollment)
+            experimentChanged = previousSlug != currentSlug || previousBranch != currentBranch
         } else {
-            // No stored slug - first run with new code, don't reset
-            experimentChanged = false
+            // No previous slug: user was not enrolled, now enrolling
+            // Reset to allow retargeting (user was unenrolled and now enrolling)
+            // Users already enrolled have slug stored before, so previousSlug won't be nil
+            if currentExperiment != nil && hasDismissalData {
+                // User enrolling after being unenrolled: reset to allow retargeting
+                experimentChanged = true
+            } else {
+                // User enrolling for first time (no dismissal data): don't reset
+                experimentChanged = false
+            }
         }
 
         if experimentChanged && hasDismissalData {
@@ -82,8 +98,6 @@ final class ToUExperimentsTracking {
         }
     }
 
-    /// Stores experiment info to track user's enrollment.
-    /// Called even on first launch to ensure we know which experiment user is in.
     private func storeExperimentInfo(currentExperiment: EnrolledExperiment?) {
         let currentSlug = currentExperiment?.slug
         let currentBranch = currentExperiment?.branchSlug
@@ -102,24 +116,26 @@ final class ToUExperimentsTracking {
     }
 }
 
-final class ExperimentChangeObserver {
-    private let observer: NSObjectProtocol
+final class ExperimentChangeObserver: Notifiable {
+    private let prefs: Prefs
+    private let notificationCenter: NotificationProtocol
 
-    init(prefs: Prefs) {
-        let observer = NotificationCenter.default.addObserver(
-            forName: .nimbusExperimentsApplied,
-            object: nil,
-            queue: .main
-        ) { notification in
-            Task { @MainActor in
-                let tracking = ToUExperimentsTracking(prefs: prefs)
-                tracking.resetToUDataIfNeeded()
-            }
-        }
-        self.observer = observer
+    init(prefs: Prefs, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.prefs = prefs
+        self.notificationCenter = notificationCenter
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.nimbusExperimentsApplied]
+        )
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(observer)
+    nonisolated func handleNotifications(_ notification: Notification) {
+        guard notification.name == .nimbusExperimentsApplied else { return }
+        let prefs = self.prefs
+        ensureMainThread {
+            let tracking = ToUExperimentsTracking(prefs: prefs)
+            tracking.resetToUDataIfNeeded()
+        }
     }
 }

@@ -137,6 +137,8 @@ final class ToUExperimentsTrackingTests: XCTestCase {
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenFirstRunWithNewCode() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+        // User already in experiment when receiving new code, so slug is already stored
+        setupExperiment(slug: "exp-1", branch: "branch-a")
         setupDismissalData(remindersCount: 2)
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
@@ -166,6 +168,19 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         assertDismissalDataReset()
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch), "branch-b")
+    }
+
+    func testResetToUDataIfNeeded_Resets_WhenUnenrolledBeforeNewCodeThenEnrolls() {
+        // User was unenrolled when receiving new code, has dismissal data, then enrolls
+        // Reset to allow retargeting
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+        setupDismissalData(remindersCount: 2)
+        // No stored slug (user was unenrolled when receiving new code)
+
+        tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
+
+        assertDismissalDataReset()
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
     }
 
     func testExperimentChangeObserver_InitializesCorrectly() {
