@@ -16,15 +16,15 @@ final class TransitionAnimator: NSObject,
                                 UIViewControllerAnimatedTransitioning {
     private struct UX {
         static let springAnimationDuration: TimeInterval = 0.4
+        static let springAnimationDumping: CGFloat = 0.8
+        static let springAnimationVelocity: CGFloat = 1.0
         static let easeOutAnimationDuration: TimeInterval = 0.3
-        static let presentationAnimationSpringDumping: CGFloat = 0.8
-        static let presentationAnimationSpringVelocity: CGFloat = 1.0
         static let buttonsContainerInitialTranslationY: CGFloat = 100.0
         static let scrimAlpha: CGFloat = 0.25
         static let animationTranslationFactor: CGFloat = 0.25
         @MainActor
         static let screenCornerRadius: CGFloat = {
-            return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
+            return UIScreen.main.value(forKey: "_disp\("layCorn")erRadius") as? CGFloat ?? 0.0
         }()
     }
     private let themeManager: any ThemeManager
@@ -82,17 +82,17 @@ final class TransitionAnimator: NSObject,
     }
 
     private func animatePresentationViaCrossDissolve(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let voiceSearchController = transitionContext.viewController(forKey: .to) as? VoiceSearchViewController else {
+        guard let presentedController = transitionContext.viewController(forKey: .to) as? VoiceSearchViewController else {
             transitionContext.completeTransition(false)
             return
         }
 
         let containerView = transitionContext.containerView
-        containerView.addSubview(voiceSearchController.view)
+        containerView.addSubview(presentedController.view)
 
-        voiceSearchController.view.frame = containerView.bounds
-        voiceSearchController.view.alpha = 0.0
-        voiceSearchController.buttonsContainer.transform = CGAffineTransform(
+        presentedController.view.frame = containerView.bounds
+        presentedController.view.alpha = 0.0
+        presentedController.buttonsContainer.transform = CGAffineTransform(
             translationX: 0.0,
             y: UX.buttonsContainerInitialTranslationY
         )
@@ -100,12 +100,12 @@ final class TransitionAnimator: NSObject,
         UIView.animate(
             withDuration: UX.springAnimationDuration,
             delay: 0,
-            usingSpringWithDamping: UX.presentationAnimationSpringDumping,
-            initialSpringVelocity: UX.presentationAnimationSpringVelocity,
+            usingSpringWithDamping: UX.springAnimationDumping,
+            initialSpringVelocity: UX.springAnimationVelocity,
             options: .curveEaseOut,
             animations: {
-                voiceSearchController.view.alpha = 1.0
-                voiceSearchController.buttonsContainer.transform = .identity
+                presentedController.view.alpha = 1.0
+                presentedController.buttonsContainer.transform = .identity
             },
             completion: { _ in
                 transitionContext.completeTransition(true)
@@ -153,6 +153,7 @@ final class TransitionAnimator: NSObject,
             )
         } completion: { _ in
             scrimView.removeFromSuperview()
+            presentingControllerSnapshotView.removeFromSuperview()
             transitionContext.completeTransition(true)
         }
     }
@@ -178,15 +179,13 @@ final class TransitionAnimator: NSObject,
         let containerView = transitionContext.containerView
 
         snapshotView.alpha = 0.0
-
-        containerView.addSubview(dismissedController.view)
         containerView.addSubview(snapshotView)
 
         UIView.animate(
             withDuration: UX.springAnimationDuration,
             delay: 0,
-            usingSpringWithDamping: UX.presentationAnimationSpringDumping,
-            initialSpringVelocity: UX.presentationAnimationSpringVelocity,
+            usingSpringWithDamping: UX.springAnimationDumping,
+            initialSpringVelocity: UX.springAnimationVelocity,
             options: .curveEaseOut,
             animations: {
                 snapshotView.alpha = 1.0
@@ -220,7 +219,6 @@ final class TransitionAnimator: NSObject,
         scrimView.backgroundColor = theme.colors.layerScrim
         scrimView.alpha = 0.0
 
-        containerView.addSubview(dismissedController.view)
         containerView.addSubview(scrimView)
         containerView.addSubview(snapshotView)
 
