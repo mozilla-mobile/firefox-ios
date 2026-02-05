@@ -75,7 +75,7 @@ manual:
 # Rename a few packages to more human-readable names
 rename:
   firefox-ios: Firefox for iOS
-  ios_sdk: Adjust
 
 exclude:
+  # This one is included manually above to provide a customized README
   - Down
