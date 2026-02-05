@@ -27,7 +27,8 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         try await super.tearDown()
     }
 
-    private func createToUExperiment(slug: String, branch: String,
+    private func createToUExperiment(slug: String,
+                                     branch: String,
                                      featureIds: [String] = ["tou-feature"]) -> EnrolledExperiment {
         EnrolledExperiment(
             featureIds: featureIds,
@@ -68,7 +69,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), Int32(expectedCount))
     }
 
-    // MARK: - resetToUDataIfNeeded
+    // MARK: ResetToUDataIfNeeded
     func testResetToUDataIfNeeded_DoesNotReset_WhenUserHasAccepted() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
         setupExperiment(slug: "exp-1", branch: "branch-a")
@@ -81,6 +82,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     }
 
     func testResetToUDataIfNeeded_Resets_WhenExperimentSlugChanges() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
         setupExperiment(slug: "exp-1", branch: "branch-a")
         setupDismissalData(remindersCount: 3)
 
@@ -91,6 +93,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     }
 
     func testResetToUDataIfNeeded_Resets_WhenBranchChanges() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
         setupExperiment(slug: "exp-1", branch: "branch-a")
         setupDismissalData(remindersCount: 2)
 
@@ -101,15 +104,17 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenSameExperimentAndBranch() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
         setupExperiment(slug: "exp-1", branch: "branch-a")
         setupDismissalData(remindersCount: 3)
-        
+
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
 
         assertDismissalDataNotReset(expectedCount: 3)
     }
 
     func testResetToUDataIfNeeded_Resets_WhenUserUnenrolled() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
         setupExperiment(slug: "exp-1", branch: "branch-a")
         setupDismissalData(remindersCount: 2)
 
@@ -120,6 +125,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     }
 
     func testResetToUDataIfNeeded_StoresExperiment_WhenFirstEnrollment() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
         let experiment = createToUExperiment(slug: "exp-1", branch: "branch-a")
         tracking.resetToUDataIfNeeded(currentExperiment: experiment)
 
@@ -134,101 +140,58 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenFirstEnrollmentAndNoDismissalData() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
         let experiment = createToUExperiment(slug: "exp-1", branch: "branch-a")
         tracking.resetToUDataIfNeeded(currentExperiment: experiment)
 
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
-        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+        XCTAssertNil(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount))
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenExperimentChangesButNoDismissalData() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
         setupExperiment(slug: "exp-1", branch: "branch-a")
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
 
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
-        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+        XCTAssertNil(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount))
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
     }
 
-    // MARK: - identifyToUExperiment
+    func testResetToUDataIfNeeded_DoesNotReset_WhenFirstRunWithNewCode() {
+        // Simulate user was already in experiment before new code, dismissed, but slug was never stored
+        // This should NOT reset to avoid affecting users already in experiment
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+        setupDismissalData(remindersCount: 2)
+        // No stored experiment (first run with new code)
 
-    func testIdentifyToUExperiment_FindsStoredExperiment_WhenMultipleExist() {
-        profile.prefs.setString("exp-1", forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        let experiments = [
-            createToUExperiment(slug: "exp-0", branch: "branch-a"),
-            createToUExperiment(slug: "exp-1", branch: "branch-a"),
-            createToUExperiment(slug: "exp-2", branch: "branch-b"),
-            createNonToUExperiment(slug: "other", branch: "control")
-        ]
+        tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
 
-        let identified = tracking.identifyToUExperiment(from: experiments)
-
-        XCTAssertEqual(identified?.slug, "exp-1")
-        XCTAssertEqual(identified?.branchSlug, "branch-a")
+        // Should NOT reset dismissal data (user already in experiment, shouldn't be affected)
+        assertDismissalDataNotReset(expectedCount: 2)
+        // But should store experiment info for future tracking
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
     }
 
-    func testIdentifyToUExperiment_ReturnsFirst_WhenNoStoredExperiment() {
-        let experiments = [
-            createToUExperiment(slug: "exp-0", branch: "branch-a"),
-            createToUExperiment(slug: "exp-1", branch: "branch-b")
-        ]
+    func testResetToUDataIfNeeded_Retargeting_UnenrollThenReEnroll() {
+        // Simulate retargeting scenario: user dismiss-uit, unenrolled (reset + slug cleared), then re-enrolled
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+        setupExperiment(slug: "exp-1", branch: "branch-a")
+        setupDismissalData(remindersCount: 2)
 
-        let identified = tracking.identifyToUExperiment(from: experiments)
+        // Step 1: Unenroll - should reset dismissal data and clear slug
+        tracking.resetToUDataIfNeeded(currentExperiment: nil)
+        assertDismissalDataReset()
+        XCTAssertNil(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug))
 
-        XCTAssertEqual(identified?.slug, "exp-0")
-    }
-
-    func testIdentifyToUExperiment_ReturnsNil_WhenNoToUExperiments() {
-        let identified = tracking.identifyToUExperiment(from: [
-            createNonToUExperiment(slug: "other-1", branch: "control"),
-            createNonToUExperiment(slug: "other-2", branch: "treatment")
-        ])
-        
-        XCTAssertNil(identified)
-    }
-
-    func testIdentifyToUExperiment_ReturnsNil_WhenEmptyList() {
-        XCTAssertNil(tracking.identifyToUExperiment(from: []))
-    }
-
-    func testIdentifyToUExperiment_ReturnsFirst_WhenStoredExperimentNotInList() {
-        profile.prefs.setString("exp-1", forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        let experiments = [
-            createToUExperiment(slug: "exp-0", branch: "branch-a"),
-            createToUExperiment(slug: "exp-2", branch: "branch-b")
-        ]
-
-        let identified = tracking.identifyToUExperiment(from: experiments)
-
-        XCTAssertEqual(identified?.slug, "exp-0")
-    }
-
-    func testIdentifyToUExperiment_FiltersOnlyToUExperiments() {
-        let experiments = [
-            createNonToUExperiment(slug: "other-1", branch: "control"),
-            createToUExperiment(slug: "exp-1", branch: "branch-a"),
-            createNonToUExperiment(slug: "other-2", branch: "treatment"),
-            createToUExperiment(slug: "exp-2", branch: "branch-b")
-        ]
-        
-        let identified = tracking.identifyToUExperiment(from: experiments)
-        
-        XCTAssertTrue(identified?.featureIds.contains("tou-feature") ?? false)
-        XCTAssertEqual(identified?.slug, "exp-1")
-    }
-
-    func testIdentifyToUExperiment_HandlesMultipleFeatureIds() {
-        let experiment = createToUExperiment(
-            slug: "exp-1",
-            branch: "branch-a",
-            featureIds: ["tou-feature", "other-feature"]
-        )
-        
-        let identified = tracking.identifyToUExperiment(from: [experiment])
-        
-        XCTAssertEqual(identified?.slug, "exp-1")
+        // Step 2: Re-enroll in different experiment - should store new slug, dismissal data already reset
+        tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
+        // Dismissal data should remain reset (no dismissal data to reset, but that's OK - it was already reset)
+        assertDismissalDataReset()
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch), "branch-b")
     }
 
     func testSetupExperimentChangeObserver_ReturnsValidObserver() {

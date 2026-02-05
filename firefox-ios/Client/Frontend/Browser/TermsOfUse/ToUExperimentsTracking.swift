@@ -5,7 +5,7 @@ import Common
 import Shared
 import struct MozillaAppServices.EnrolledExperiment
 
-/// Handles tracking of Terms of Use (ToU) experiment enrollment and resets dismissal state
+/// Handles tracking of Terms of Use experiment enrollment and resets dismissal state
 /// when users switch between experiments or branches.
 @MainActor
 struct ToUExperimentsTracking {
@@ -18,30 +18,24 @@ struct ToUExperimentsTracking {
     /// Resets dismissal state if experiment configuration changed.
     /// Users who have already accepted ToU are excluded.
     /// Does not reset if bottom sheet hasn't been shown yet (first launch).
+    /// Always stores experiment info to track user's enrollment, even on first launch.
     func resetToUDataIfNeeded(currentExperiment: EnrolledExperiment? = nil) {
         guard !(prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false) else { return }
 
-        // Don't reset if bottom sheet hasn't been shown yet (first launch scenario)
-        // This prevents resetting when observer fires before bottom sheet is displayed
-        let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
-        guard hasShownFirstTime else { return }
-
         let experiment = currentExperiment ?? getCurrentToUExperiment()
-        resetDismissalStateIfExperimentChanged(currentExperiment: experiment)
+        let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
+        if hasShownFirstTime {
+            // Compare previous stored experiment with current one and reset if needed.
+            resetDismissalStateIfExperimentChanged(currentExperiment: experiment)
+        }
+        storeExperimentInfo(currentExperiment: experiment)
     }
 
-    /// Gets the current ToU experiment from Nimbus.
-    /// Filters to experiments with "tou-feature" in featureIds.
+    /// Gets the current ToU experiment from Nimbus where user is enrolled.
+    /// Prioritizes stored experiment slug if it exists, otherwise returns the first ToU experiment.
     func getCurrentToUExperiment() -> EnrolledExperiment? {
         let activeExperiments = Experiments.shared.getActiveExperiments()
-        return identifyToUExperiment(from: activeExperiments)
-    }
-
-    /// Identifies the ToU experiment from a list of active experiments.
-    /// Filters to experiments with "tou-feature" in featureIds.
-    /// Prioritizes stored experiment slug if it exists in the list.
-    func identifyToUExperiment(from experiments: [EnrolledExperiment]) -> EnrolledExperiment? {
-        let touExperiments = experiments.filter { $0.featureIds.contains("tou-feature") }
+        let touExperiments = activeExperiments.filter { $0.featureIds.contains("tou-feature") }
 
         guard !touExperiments.isEmpty else { return nil }
 
@@ -50,66 +44,47 @@ struct ToUExperimentsTracking {
             return storedExperiment
         }
 
-        return touExperiments.first
-    }
-    
-    /// Sets up observer for Nimbus experiment changes.
-    /// Observer is automatically cleaned up when returned object is deallocated.
-    func setupExperimentChangeObserver() -> ExperimentChangeObserver {
-        let prefs = self.prefs
-
-        let observer = NotificationCenter.default.addObserver(
-            forName: .nimbusExperimentsApplied,
-            object: nil,
-            queue: .main
-        ) { notification in
-            let experiments = notification.object as? [EnrolledExperiment]
-
-            Task { @MainActor in
-                let tracking = ToUExperimentsTracking(prefs: prefs)
-                let touExperiment: EnrolledExperiment?
-                if let experiments = experiments {
-                    touExperiment = tracking.identifyToUExperiment(from: experiments)
-                } else {
-                    touExperiment = nil
-                }
-                tracking.resetToUDataIfNeeded(currentExperiment: touExperiment)
-            }
-        }
-
-        return ExperimentChangeObserver(observer: observer)
+        let sortedExperiments = touExperiments.sorted { $0.slug < $1.slug }
+        return sortedExperiments.first
     }
 
+    /// Resets dismissal state if the tracked experiment changed or disappeared.
+    /// Handles: slug changes, branch changes, and unenrollment.
+    /// Note: If storedSlug is nil (first run with new code), we don't reset to avoid affecting
+    /// users who are already in an experiment. We only reset when we have a stored slug that changes.
     private func resetDismissalStateIfExperimentChanged(currentExperiment: EnrolledExperiment?) {
         let storedSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug)
         let storedBranch = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch)
         let currentSlug = currentExperiment?.slug
         let currentBranch = currentExperiment?.branchSlug
 
-        // Check if we have dismissal data to reset
         let hasDismissalData = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil ||
                                (prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0) > 0
 
-        // Determine if experiment changed
+        // Only reset if we have a stored slug that changed (slug/branch change or unenrollment).
+        // If storedSlug is nil, it means first run with new code - don't reset to avoid affecting
+        // users who are already in an experiment.
         let experimentChanged: Bool
-        if storedSlug != nil {
-            // Had a stored experiment - check if it changed
-            // Unenroll (currentSlug == nil) is always considered a change
+        if let storedSlug = storedSlug {
+            // We have a stored slug - check if it changed or user was unenrolled
             experimentChanged = storedSlug != currentSlug || storedBranch != currentBranch
         } else {
-            // No stored experiment - reset if re-enrolling (allows re-targeting)
-            // hasShownFirstTime check in resetToUDataIfNeeded prevents reset on first launch
-            experimentChanged = hasDismissalData && currentSlug != nil
+            // No stored slug - first run with new code, don't reset
+            experimentChanged = false
         }
 
-        // Reset dismissal data if experiment changed and we have data to reset
         if experimentChanged && hasDismissalData {
             prefs.removeObjectForKey(PrefsKeys.TermsOfUseDismissedDate)
             prefs.setInt(0, forKey: PrefsKeys.TermsOfUseRemindersCount)
         }
+    }
 
-        // Update stored experiment info to current state
-        // Remove keys when unenrolled since user is no longer in any experiment
+    /// Stores experiment info to track user's enrollment.
+    /// Called even on first launch to ensure we know which experiment user is in.
+    private func storeExperimentInfo(currentExperiment: EnrolledExperiment?) {
+        let currentSlug = currentExperiment?.slug
+        let currentBranch = currentExperiment?.branchSlug
+
         if let slug = currentSlug {
             prefs.setString(slug, forKey: PrefsKeys.TermsOfUseExperimentSlug)
         } else {
@@ -122,6 +97,24 @@ struct ToUExperimentsTracking {
             prefs.removeObjectForKey(PrefsKeys.TermsOfUseExperimentBranch)
         }
     }
+
+    /// Sets up observer for Nimbus experiment changes.
+    /// Observer is automatically cleaned up when returned object is deallocated.
+    func setupExperimentChangeObserver() -> ExperimentChangeObserver {
+        let prefs = self.prefs
+
+        let observer = NotificationCenter.default.addObserver(
+            forName: .nimbusExperimentsApplied,
+            object: nil,
+            queue: .main
+        ) { notification in
+            Task { @MainActor in
+                let tracking = ToUExperimentsTracking(prefs: prefs)
+                tracking.resetToUDataIfNeeded()
+            }
+        }
+        return ExperimentChangeObserver(observer: observer)
+    }
 }
 
 final class ExperimentChangeObserver {
@@ -130,7 +123,6 @@ final class ExperimentChangeObserver {
     init(observer: NSObjectProtocol) {
         self.observer = observer
     }
-
     deinit {
         NotificationCenter.default.removeObserver(observer)
     }
