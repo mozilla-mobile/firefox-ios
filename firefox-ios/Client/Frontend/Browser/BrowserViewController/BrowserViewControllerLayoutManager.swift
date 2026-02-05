@@ -5,7 +5,7 @@
 import UIKit
 
 @MainActor
-class BrowserViewControllerLayoutManager {
+final class BrowserViewControllerLayoutManager {
     private unowned let parentView: UIView
     private unowned let headerView: UIView
     private let toolbarHelper: ToolbarHelperInterface
@@ -23,6 +23,7 @@ class BrowserViewControllerLayoutManager {
         self.toolbarHelper = toolbarHelper
     }
 
+    // TODO: Snapkit removal support tab scroll controller
     func setScrollController(_ scrollController: LegacyTabScrollProvider?) {
         self.scrollController = scrollController
     }

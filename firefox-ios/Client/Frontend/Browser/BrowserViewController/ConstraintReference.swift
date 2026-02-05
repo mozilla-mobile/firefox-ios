@@ -48,11 +48,9 @@ struct ConstraintReference {
         }
     }
 
-    // The underlying NSLayoutConstraint
-    ///
+    /// The underlying NSLayoutConstraint
     /// - For SnapKit: Returns the first NSLayoutConstraint from layoutConstraints array
     /// - For NSLayoutConstraint: Returns the constraint directly
-    ///
     /// - Returns: The underlying NSLayoutConstraint, or nil if unavailable
     var layoutConstraint: NSLayoutConstraint? {
         if let constraint = nativeConstraint {
