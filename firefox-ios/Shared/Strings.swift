@@ -8821,7 +8821,7 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "Stories",
                 comment: "This is the title of the Stories section on Firefox Homepage.")
-            public static let WelcomeTitle = MZLocalizedString(
+            public static let Title = MZLocalizedString(
                 key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148",
                 tableName: "Onboarding",
                 value: "Say goodbye to creepy trackers",
