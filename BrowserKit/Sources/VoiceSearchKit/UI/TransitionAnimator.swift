@@ -116,7 +116,9 @@ final class TransitionAnimator: NSObject,
     private func animatePresentationViaSliding(_ transitionContext: UIViewControllerContextTransitioning) {
         guard let presentedController = transitionContext.viewController(forKey: .to),
               let presentingController = transitionContext.viewController(forKey: .from),
-              let presentingControllerSnapshotView = presentingController.view.snapshotView(afterScreenUpdates: false)
+              // We can't add the presenting controller to the containerView since it is going to be removed
+              // from its original superview, thus we need a snapshot.
+              let presentingControllerSnapshotView = makeRoundedSnapshotView(from: presentingController)
         else {
             transitionContext.completeTransition(false)
             return
@@ -124,17 +126,12 @@ final class TransitionAnimator: NSObject,
 
         let containerView = transitionContext.containerView
 
-        presentingControllerSnapshotView.layer.cornerRadius = UX.screenCornerRadius
-        presentingControllerSnapshotView.layer.masksToBounds = true
-
         presentedController.view.transform = CGAffineTransform(
             translationX: -containerView.bounds.width * UX.animationTranslationFactor,
             y: 0.0
         )
 
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let scrimView = UIView(frame: containerView.bounds)
-        scrimView.backgroundColor = theme.colors.layerScrim.withAlphaComponent(UX.scrimAlpha)
+        let scrimView = makeScrimView(bounds: containerView.bounds)
 
         containerView.addSubview(presentedController.view)
         containerView.addSubview(scrimView)
@@ -169,8 +166,10 @@ final class TransitionAnimator: NSObject,
     }
 
     private func animateDismissalViaCrossDissolve(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let presentedController = transitionContext.viewController(forKey: .to),
-              let snapshotView = presentedController.view.snapshotView(afterScreenUpdates: false),
+        guard let presentingController = transitionContext.viewController(forKey: .to),
+              // We can't add the presenting controller to the containerView since it is going to be removed
+              // from its original superview, thus we need a snapshot.
+              let snapshotView = presentingController.view.snapshotView(afterScreenUpdates: false),
               let dismissedController = transitionContext.viewController(forKey: .from) as? VoiceSearchViewController else {
             transitionContext.completeTransition(false)
             return
@@ -195,14 +194,18 @@ final class TransitionAnimator: NSObject,
                 )
             },
             completion: { _ in
+                // We don't need to remove the snapshot view since during the dismissal the container view
+                // is removed from its superview.
                 transitionContext.completeTransition(true)
             }
         )
     }
 
     private func animateDismissalViaSliding(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let presentedController = transitionContext.viewController(forKey: .to),
-              let snapshotView = presentedController.view.snapshotView(afterScreenUpdates: false),
+        guard let presentingController = transitionContext.viewController(forKey: .to),
+              // We can't add the presenting controller to the containerView since it is going to be removed
+              // from its original superview, thus we need a snapshot.
+              let presentingControllerSnapshotView = makeRoundedSnapshotView(from: presentingController),
               let dismissedController = transitionContext.viewController(forKey: .from) else {
             transitionContext.completeTransition(false)
             return
@@ -210,17 +213,13 @@ final class TransitionAnimator: NSObject,
 
         let containerView = transitionContext.containerView
 
-        snapshotView.layer.cornerRadius = UX.screenCornerRadius
-        snapshotView.layer.masksToBounds = true
-        snapshotView.transform = CGAffineTransform(translationX: containerView.bounds.width, y: 0.0)
+        presentingControllerSnapshotView.transform = CGAffineTransform(translationX: containerView.bounds.width, y: 0.0)
 
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let scrimView = UIView(frame: containerView.bounds)
-        scrimView.backgroundColor = theme.colors.layerScrim
+        let scrimView = makeScrimView(bounds: containerView.bounds)
         scrimView.alpha = 0.0
 
         containerView.addSubview(scrimView)
-        containerView.addSubview(snapshotView)
+        containerView.addSubview(presentingControllerSnapshotView)
 
         UIView.animate(
             withDuration: UX.easeOutAnimationDuration,
@@ -228,13 +227,32 @@ final class TransitionAnimator: NSObject,
             options: .curveEaseOut
         ) {
             scrimView.alpha = UX.scrimAlpha
-            snapshotView.transform = .identity
+            presentingControllerSnapshotView.transform = .identity
             dismissedController.view.transform = CGAffineTransform(
                 translationX: -containerView.bounds.width * UX.animationTranslationFactor,
                 y: 0.0
             )
         } completion: { _ in
+            // We don't need to remove the snapshot view and the scrim view
+            // since during the dismissal the container view is removed from its superview.
             transitionContext.completeTransition(true)
         }
+    }
+    
+    // MARK: - Helpers
+    private func makeScrimView(bounds: CGRect) -> UIView {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let scrimView = UIView(frame: bounds)
+        scrimView.backgroundColor = theme.colors.layerScrim.withAlphaComponent(UX.scrimAlpha)
+        return scrimView
+    }
+    
+    private func makeRoundedSnapshotView(from viewController: UIViewController) -> UIView? {
+        guard let view = viewController.view.snapshotView(afterScreenUpdates: false) else {
+            return nil
+        }
+        view.layer.cornerRadius = UX.screenCornerRadius
+        view.layer.masksToBounds = true
+        return view
     }
 }
