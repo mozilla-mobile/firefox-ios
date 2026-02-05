@@ -1903,7 +1903,7 @@ extension String {
                         key: "Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149",
                         tableName: "Onboarding",
                         value: "Open all your links with built-in privacy",
-                        comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
+                        comment: "Title for the welcome card in the v149 brand refresh onboarding flow.")
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Welcome.Description.v148",
                         tableName: "Onboarding",
