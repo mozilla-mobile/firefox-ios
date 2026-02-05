@@ -232,8 +232,8 @@ final class HomepageViewController: UIViewController,
 
     // called when the homepage is displayed to make sure it's scrolled to top while considering content offset
     func scrollToTop(animated: Bool = false) {
-        collectionView?.setContentOffset(CGPoint(x: 0, y: -HomepageSectionLayoutProvider.UX.topSpacing), animated: animated)
         if let collectionView = collectionView {
+            collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
             handleScroll(collectionView, isUserInteraction: false)
         }
     }
