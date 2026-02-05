@@ -4097,7 +4097,17 @@ class BrowserViewController: UIViewController,
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
             Task { @MainActor [weak self] in
                 guard let targetView = tab.webView?.accessoryView else { return }
-                self?.configureRelayContextualHint(for: targetView)
+                // For iPad, try to make the CFR point more precisely to the actual autofill button, since
+                // the keyboards are significantly larger and the accessory is offset to the side of the screen.
+                if UIDevice.current.userInterfaceIdiom == .pad,
+                   let toolbarButton = targetView.toolbarItems.first(where: { $0 is AutofillAccessoryViewButtonItem }),
+                   let buttonView = toolbarButton.customView {
+                    self?.configureRelayContextualHint(for: buttonView)
+                } else {
+
+                    self?.configureRelayContextualHint(for: targetView)
+                }
+
             }
         }
     }
