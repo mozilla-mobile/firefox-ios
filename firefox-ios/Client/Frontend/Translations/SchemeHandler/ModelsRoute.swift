@@ -12,7 +12,7 @@ final class ModelsRoute: TinyRoute {
         self.fetcher = fetcher
     }
 
-    func handle(url: URL, components: URLComponents) throws -> TinyHTTPReply? {
+    func handle(url: URL, components: URLComponents) async throws -> TinyHTTPReply? {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             throw TinyRouterError.badURL
         }
@@ -27,7 +27,7 @@ final class ModelsRoute: TinyRoute {
             let to = value("to")
         else { throw TinyRouterError.badURL }
 
-        guard let data = fetcher.fetchModels(from: from, to: to) else {
+        guard let data = await fetcher.fetchModels(from: from, to: to) else {
             // Either no models for this pair or fetch failed.
             throw TinyRouterError.notFound
         }
