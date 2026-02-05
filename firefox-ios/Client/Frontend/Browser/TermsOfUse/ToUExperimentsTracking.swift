@@ -73,12 +73,18 @@ final class ToUExperimentsTracking {
                                (prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0) > 0
 
         // Compare previous stored values with current experiment.
-        // Since we store before comparing, we can detect slug/branch changes and unenrollment.
+        // Since we store before comparing, we can detect slug/branch changes and enrollment.
         let experimentChanged: Bool
         if let previousSlug = previousSlug {
             // Previous slug exists: user was already enrolled
-            // Compare with current to detect changes (slug, branch, or unenrollment)
-            experimentChanged = previousSlug != currentSlug || previousBranch != currentBranch
+            // Don't reset on unenrollment, only reset when enrolling in a different experiment/branch
+            if currentSlug == nil {
+                // User unenrolled: don't reset, just clear stored slug
+                experimentChanged = false
+            } else {
+                // User enrolled in different experiment or branch: reset to allow retargeting
+                experimentChanged = previousSlug != currentSlug || previousBranch != currentBranch
+            }
         } else {
             // No previous slug: user was not enrolled, now enrolling
             // Reset to allow retargeting (user was unenrolled and now enrolling)
