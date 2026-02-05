@@ -318,7 +318,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             withNotificationCenter: notificationCenter,
             forObserver: self,
             observing: [Notification.Name.ProfileDidStartSyncing,
-                        Notification.Name.ProfileDidFinishSyncing,
                         Notification.Name.FirefoxAccountChanged]
         )
     }
