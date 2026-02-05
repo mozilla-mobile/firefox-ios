@@ -136,6 +136,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
         configureRelayRSClient()
         beginObserving()
+        performPostLaunchUpdate()
     }
 
     // MARK: - RelayControllerProtocol
@@ -241,6 +242,16 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     // MARK: - Private Utilities
+
+    private func performPostLaunchUpdate() {
+        let postLaunchDelay: TimeInterval = 5.0
+        Timer.scheduledTimer(withTimeInterval: postLaunchDelay, repeats: false) { [weak self] _ in
+            self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
+            Task { @MainActor in
+                self?.updateRelayAccountStatus()
+            }
+        }
+    }
 
     private func invalidateClient() {
         client = nil
