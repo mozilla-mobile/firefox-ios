@@ -273,4 +273,19 @@ final class BrowserScreen {
         let microsurveyCloseButton = sel.MICROSURVEY_CLOSE_BUTTON.element(in: app)
         microsurveyCloseButton.tapIfExists()
     }
-}
+
+    func tapWebViewButton(buttonText: String) {
+        app.webViews.buttons[buttonText].waitAndTap()
+    }
+
+    func assertWebElements(shouldExist: Bool = true, _ elements: XCUIElement..., timeout: TimeInterval = TIMEOUT) {
+        let base = BaseTestCase()
+        for element in elements {
+            if shouldExist {
+                base.mozWaitForElementToExist(element, timeout: timeout)
+            } else {
+                base.mozWaitForElementToNotExist(element, timeout: timeout)
+            }
+        }
+    }
+ }

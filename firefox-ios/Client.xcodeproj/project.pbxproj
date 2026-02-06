@@ -1400,6 +1400,7 @@
 		B123D01E2E1555E200D1368B /* SwipingTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B123D01D2E1555E200D1368B /* SwipingTabsTests.swift */; };
 		B126B8AA2D2FFD93002F4EFC /* ShareMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B126B8A92D2FFD93002F4EFC /* ShareMenuTests.swift */; };
 		B12DDFED2A8DE825008CE9CF /* ToolbarMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */; };
+		B1383C532F34BD2F00AA374F /* SecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1383C522F34BD2F00AA374F /* SecurityTests.swift */; };
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B1664E9E2B163B7A005D4C71 /* CreditCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */; };
 		B1B95C622D3680DB00FD1337 /* ShareToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B95C612D3680DB00FD1337 /* ShareToolbarTests.swift */; };
@@ -9667,6 +9668,7 @@
 		B123D01D2E1555E200D1368B /* SwipingTabsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipingTabsTests.swift; sourceTree = "<group>"; };
 		B126B8A92D2FFD93002F4EFC /* ShareMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuTests.swift; sourceTree = "<group>"; };
 		B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMenuTests.swift; sourceTree = "<group>"; };
+		B1383C522F34BD2F00AA374F /* SecurityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityTests.swift; sourceTree = "<group>"; };
 		B15058802AA0A878008B7382 /* OpeningScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningScreenTests.swift; sourceTree = "<group>"; };
 		B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardsTests.swift; sourceTree = "<group>"; };
 		B1864C62B7F68815AA1FE0C2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
@@ -12515,6 +12517,7 @@
 				EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */,
 				0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */,
 				B1F90EC02BB3F6B600A4D431 /* ZoomingTests.swift */,
+				B1383C522F34BD2F00AA374F /* SecurityTests.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -18173,6 +18176,7 @@
 				39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */,
 				787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */,
 				B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */,
+				B1383C532F34BD2F00AA374F /* SecurityTests.swift in Sources */,
 				B1B95C622D3680DB00FD1337 /* ShareToolbarTests.swift in Sources */,
 				5FDE66032D94528A003961DC /* A11ySettingsTests.swift in Sources */,
 				B1F90EC12BB3F6B600A4D431 /* ZoomingTests.swift in Sources */,
