@@ -241,7 +241,7 @@ class UITestAppDelegate: AppDelegate {
         KingfisherManager.shared.cache.clearDiskCache()
 
         // Clear the cookie/url cache
-        URLCache.shared.removeAllCachedResponses()
+        // URLCache.shared.removeAllCachedResponses() 
         let storage = HTTPCookieStorage.shared
         if let cookies = storage.cookies {
             for cookie in cookies {
