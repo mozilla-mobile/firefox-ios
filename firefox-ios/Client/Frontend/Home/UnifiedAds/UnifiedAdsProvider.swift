@@ -176,10 +176,9 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             }
             completion(.success(tiles))
         } catch let error {
-            logger.log(
-                "Unable to parse with error: \(error)",
-                level: .warning,
-                category: .homepage)
+            logger.log("Unable to parse with error: \(error)",
+                       level: .warning,
+                       category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
     }

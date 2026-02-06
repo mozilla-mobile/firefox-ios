@@ -18,15 +18,3 @@ final class DefaultMozAdsClientFactory: MozAdsClientFactory, FeatureFlaggable {
         return RustAdsClient.production
     }
 }
-
-final class MockMozAdsClientFactory: MozAdsClientFactory {
-    private let mockClient: MozAdsClientProtocol
-
-    init(mockClient: MozAdsClientProtocol) {
-        self.mockClient = mockClient
-    }
-
-    func createClient() -> MozAdsClientProtocol {
-        return mockClient
-    }
-}
