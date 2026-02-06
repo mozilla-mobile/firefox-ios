@@ -7,14 +7,17 @@ import Common
 @testable import Client
 
 class MockAppAuthenticator: AppAuthenticationProtocol, @unchecked Sendable {
-    var isAuthenticatingAutofill = false
+    var isAuthenticating = false
 
     var authenticationState: AuthenticationState = .deviceOwnerAuthenticated
     var shouldAuthenticateDeviceOwner = true
     var shouldSucceed = true
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
-        ensureMainThread {
+        isAuthenticating = true
+        ensureMainThread { [weak self] in
+            guard let self else { return }
+            self.isAuthenticating = false
             completion(self.authenticationState)
         }
     }

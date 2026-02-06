@@ -16,9 +16,10 @@ enum AuthenticationState {
     case passCodeRequired
 }
 
+@MainActor
 protocol AppAuthenticationProtocol {
     var canAuthenticateDeviceOwner: Bool { get }
-    var isAuthenticatingAutofill: Bool { get set }
+    var isAuthenticating: Bool { get }
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void)
     func authenticateWithDeviceOwnerAuthentication(
@@ -26,12 +27,13 @@ protocol AppAuthenticationProtocol {
     )
 }
 
-class AppAuthenticator: AppAuthenticationProtocol {
-    var isAuthenticatingAutofill = false
+final class AppAuthenticator: AppAuthenticationProtocol {
+    private(set) var isAuthenticating = false
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
-            authenticateWithDeviceOwnerAuthentication { result in
+            isAuthenticating = true
+            authenticateWithDeviceOwnerAuthentication { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
@@ -40,6 +42,7 @@ class AppAuthenticator: AppAuthenticationProtocol {
                         completion(.deviceOwnerFailed)
                     }
                 }
+                self?.isAuthenticating = false
             }
         } else {
             DispatchQueue.main.async {

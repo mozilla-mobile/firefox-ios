@@ -49,6 +49,16 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.showDevicePassCodeCalled, 0)
     }
 
+    func testIsAuthenticating() {
+        XCTAssertFalse(appAuthenticator.isAuthenticating)
+
+        appAuthenticator.isAuthenticating = true
+        appAuthenticator.getAuthenticationState { [weak self] _ in
+            guard let self else { return }
+            XCTAssertFalse(self.appAuthenticator.isAuthenticating)
+        }
+    }
+
     func testCreditCard_whenDeviceOwnerAuthenticated_showCreditCardSettings() {
         appAuthenticator.authenticationState = .deviceOwnerAuthenticated
         let subject = createSubject()

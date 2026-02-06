@@ -1893,7 +1893,9 @@ class BrowserViewController: UIViewController,
         let keyboardHeight = keyboardState?.intersectionHeightForView(view)
         let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
 
-        guard !appAuthenticator.isAuthenticatingAutofill else {
+        // To avoid some UI glitches, when authentication is in progress
+        // we don't need to update/change keyboard spacer
+        guard !appAuthenticator.isAuthenticating else {
             guard isBottomSearchBar, isKeyboardVisible, keyboardHeight != nil else {
                 overKeyboardContainer.removeKeyboardSpacer()
                 return
@@ -3729,7 +3731,6 @@ class BrowserViewController: UIViewController,
     }
 
     private func authenticateSelectCreditCardBottomSheet(frame: WKFrameInfo? = nil) {
-        appAuthenticator.isAuthenticatingAutofill = true
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
@@ -3745,7 +3746,6 @@ class BrowserViewController: UIViewController,
             case .passCodeRequired:
                 self.navigationHandler?.showRequiredPassCode()
             }
-            appAuthenticator.isAuthenticatingAutofill = false
         }
     }
 
