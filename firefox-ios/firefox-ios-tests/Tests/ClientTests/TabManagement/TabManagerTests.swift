@@ -96,7 +96,7 @@ final class TabManagerTests: XCTestCase {
         subject.removeAllTabs(isPrivateMode: true)
         try await Task.sleep(nanoseconds: sleepTime)
 
-        XCTAssertGreaterThanOrEqual(mockTabStore.saveWindowDataCalledCount, 1,
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1,
                                     "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         XCTAssertEqual(subject.tabs.count, 5)
     }
@@ -110,8 +110,8 @@ final class TabManagerTests: XCTestCase {
         subject.removeAllTabs(isPrivateMode: false)
         try await Task.sleep(nanoseconds: sleepTime)
 
-        XCTAssertGreaterThanOrEqual(mockTabStore.saveWindowDataCalledCount, 1,
-                                    "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1,
+                       "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         // Save tab session is actually called 3 times for one remove all call
         // 1. Save tab session for currently selected tab before delete to preserve scroll position
         // 1. AddTab for the new created homepage tab calls commitChanges
@@ -129,7 +129,7 @@ final class TabManagerTests: XCTestCase {
         subject.removeAllTabs(isPrivateMode: false)
         try await Task.sleep(nanoseconds: sleepTime)
 
-        XCTAssertGreaterThanOrEqual(mockTabStore.saveWindowDataCalledCount, 1,
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1,
                                     "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         // 5, private mode tabs (4) plus one new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 5)
@@ -145,7 +145,7 @@ final class TabManagerTests: XCTestCase {
         subject.removeAllTabs(isPrivateMode: false)
         try await Task.sleep(nanoseconds: sleepTime)
 
-        XCTAssertGreaterThanOrEqual(mockTabStore.saveWindowDataCalledCount, 1,
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1,
                                     "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         // One new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 1)
