@@ -31,6 +31,7 @@ final class NativeErrorPageViewController: UIViewController,
     private var nativeErrorPageState: NativeErrorPageState
 
     // MARK: UI Elements
+    /// Layout-only constants (no-internet and bad cert). Typography and colors come from FXFontStyles + theme.
     private struct UX {
         static let logoSizeWidth: CGFloat = 221
         static let logoSizeWidthiPad: CGFloat = 240
@@ -48,7 +49,7 @@ final class NativeErrorPageViewController: UIViewController,
             bottom: -16,
             trailing: -64
         )
-        // Advanced section (bad cert) – layout only
+        // Advanced section (bad cert) – layout only; typography/colors from FXFontStyles + theme
         static let advancedSectionBorderWidth: CGFloat = 1
         static let advancedSectionCornerRadius: CGFloat = 12
         static let advancedSectionPadding: CGFloat = 11
@@ -66,7 +67,7 @@ final class NativeErrorPageViewController: UIViewController,
         static let badCertContentGap: CGFloat = 16
         static let badCertImageSize: CGFloat = 160
         static let badCertGapBetweenImageAndContent: CGFloat = 40
-        // Proceed button container (layout only)
+        // Proceed button container 
         static let badCertProceedContainerPadding: CGFloat = 8
         static let badCertProceedContainerGap: CGFloat = 10
     }
@@ -116,8 +117,9 @@ final class NativeErrorPageViewController: UIViewController,
         button.addTarget(self, action: #selector(self.didTapReload), for: .touchUpInside)
         button.isEnabled = true
     }
+
     // Bad cert: advanced section + buttons 
-    private var isAdvancedSectionExpanded: Bool = false
+    private var isAdvancedSectionExpanded = false
     private lazy var advancedSectionContainer: UIView = .build { view in
         view.layer.borderWidth = UX.advancedSectionBorderWidth
         view.layer.cornerRadius = UX.advancedSectionCornerRadius
@@ -130,22 +132,22 @@ final class NativeErrorPageViewController: UIViewController,
         stackView.distribution = .fill
         stackView.spacing = 0
     }
-    
+
     private lazy var advancedSectionHeader: UIView = .build()
     private lazy var advancedSectionHeaderButton: UIButton = .build { button in
         button.addTarget(self, action: #selector(self.toggleAdvancedSection), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.advancedSectionHeader
     }
-    
+
     private lazy var advancedSectionTitleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
     }
-    
+
     private lazy var advancedSectionChevron: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
     }
-    
+
     private lazy var advancedSectionContent: UIView = .build()
     private lazy var advancedSectionContentStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
@@ -153,22 +155,36 @@ final class NativeErrorPageViewController: UIViewController,
         stackView.distribution = .fill
         stackView.spacing = 0
     }
-    
+
     private lazy var goBackButton: UIButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapGoBack), for: .touchUpInside)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.font = FXFontStyles.Bold.callout.scaledFont()
         button.titleLabel?.textAlignment = .center
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonPaddingVertical, left: UX.buttonPaddingHorizontal, bottom: UX.buttonPaddingVertical, right: UX.buttonPaddingHorizontal)
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonPaddingVertical,
+            leading: UX.buttonPaddingHorizontal,
+            bottom: UX.buttonPaddingVertical,
+            trailing: UX.buttonPaddingHorizontal
+        )
+        button.configuration = config
         button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.goBackButton
     }
-    
+
     private lazy var proceedButton: UIButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapProceed), for: .touchUpInside)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.font = FXFontStyles.Bold.callout.scaledFont()
         button.titleLabel?.textAlignment = .center
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonPaddingVertical, left: UX.buttonPaddingHorizontal, bottom: UX.buttonPaddingVertical, right: UX.buttonPaddingHorizontal)
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonPaddingVertical,
+            leading: UX.buttonPaddingHorizontal,
+            bottom: UX.buttonPaddingVertical,
+            trailing: UX.buttonPaddingHorizontal
+        )
+        button.configuration = config
         button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.proceedButton
     }
 
@@ -302,6 +318,7 @@ final class NativeErrorPageViewController: UIViewController,
         foxImage.image = !nativeErrorPageState.foxImage.isEmpty
             ? UIImage(named: nativeErrorPageState.foxImage)
             : UIImage(named: ImageIdentifiers.NativeErrorPage.securityError)
+        // Title on two lines (e.g. "Be careful." / "Something doesn't look right.")
         let titleString: String
         if let range = nativeErrorPageState.title.range(of: ". ") {
             titleString = nativeErrorPageState.title.replacingCharacters(in: range, with: ".\n")
@@ -312,6 +329,7 @@ final class NativeErrorPageViewController: UIViewController,
         titleLabel.font = FXFontStyles.Bold.title2.scaledFont()
         errorDescriptionLabel.text = nativeErrorPageState.description
         errorDescriptionLabel.font = FXFontStyles.Regular.subheadline.scaledFont()
+
         updateAdvancedSection(state: state)
         goBackButton.setTitle(String.NativeErrorPage.GoBackButton, for: .normal)
     }
@@ -395,6 +413,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private func setupLayout() {
+        // Single content area for both no internet and bad cert (same format: image, title, description, then action)
         contentStack.addArrangedSubview(titleLabel)
         contentStack.addArrangedSubview(errorDescriptionLabel)
         contentStack.setCustomSpacing(UX.mainStackSpacing, after: errorDescriptionLabel)
@@ -405,6 +424,7 @@ final class NativeErrorPageViewController: UIViewController,
         scrollContainer.addArrangedSubview(contentStack)
         scrollView.addSubview(scrollContainer)
         view.addSubview(scrollView)
+
         setupAdvancedSectionLayout()
         contentStackWidthConstraint = contentStack.widthAnchor.constraint(equalToConstant: UX.badCertContentWidth)
         contentStackWidthConstraint?.isActive = false
@@ -422,6 +442,7 @@ final class NativeErrorPageViewController: UIViewController,
     private func setupAdvancedSectionLayout() {
         advancedSectionContainer.addSubview(advancedSectionStack)
         advancedSectionStack.translatesAutoresizingMaskIntoConstraints = false
+
         advancedSectionHeader.addSubview(advancedSectionHeaderButton)
         advancedSectionHeaderButton.translatesAutoresizingMaskIntoConstraints = false
         advancedSectionHeaderButton.addSubview(advancedSectionTitleLabel)
@@ -430,31 +451,54 @@ final class NativeErrorPageViewController: UIViewController,
         advancedSectionChevron.translatesAutoresizingMaskIntoConstraints = false
         let chevronConfig = UIImage.SymbolConfiguration(pointSize: UX.advancedSectionChevronSize, weight: .regular)
         advancedSectionChevron.image = UIImage(systemName: "chevron.right", withConfiguration: chevronConfig)
+
         advancedSectionContent.addSubview(advancedSectionContentStack)
         advancedSectionContentStack.translatesAutoresizingMaskIntoConstraints = false
         advancedSectionStack.addArrangedSubview(advancedSectionHeader)
         advancedSectionStack.addArrangedSubview(advancedSectionContent)
 
+        let padding = UX.advancedSectionPadding
+        let listPadding = UX.advancedSectionListItemHorizontalPadding
         NSLayoutConstraint.activate([
-            advancedSectionStack.topAnchor.constraint(equalTo: advancedSectionContainer.topAnchor, constant: UX.advancedSectionPadding),
-            advancedSectionStack.leadingAnchor.constraint(equalTo: advancedSectionContainer.leadingAnchor),
-            advancedSectionStack.trailingAnchor.constraint(equalTo: advancedSectionContainer.trailingAnchor),
-            advancedSectionStack.bottomAnchor.constraint(equalTo: advancedSectionContainer.bottomAnchor, constant: -UX.advancedSectionPaddingBottom),
-            advancedSectionHeaderButton.topAnchor.constraint(equalTo: advancedSectionHeader.topAnchor),
-            advancedSectionHeaderButton.leadingAnchor.constraint(equalTo: advancedSectionHeader.leadingAnchor),
-            advancedSectionHeaderButton.trailingAnchor.constraint(equalTo: advancedSectionHeader.trailingAnchor),
-            advancedSectionHeaderButton.bottomAnchor.constraint(equalTo: advancedSectionHeader.bottomAnchor),
-            advancedSectionHeaderButton.heightAnchor.constraint(equalToConstant: UX.advancedSectionHeaderHeight),
-            advancedSectionTitleLabel.leadingAnchor.constraint(equalTo: advancedSectionHeaderButton.leadingAnchor, constant: UX.advancedSectionListItemHorizontalPadding),
-            advancedSectionTitleLabel.centerYAnchor.constraint(equalTo: advancedSectionHeaderButton.centerYAnchor),
-            advancedSectionChevron.trailingAnchor.constraint(equalTo: advancedSectionHeaderButton.trailingAnchor, constant: -UX.advancedSectionListItemHorizontalPadding),
-            advancedSectionChevron.centerYAnchor.constraint(equalTo: advancedSectionHeaderButton.centerYAnchor),
-            advancedSectionChevron.widthAnchor.constraint(equalToConstant: UX.advancedSectionChevronSize),
-            advancedSectionChevron.heightAnchor.constraint(equalToConstant: UX.advancedSectionChevronSize),
-            advancedSectionContentStack.topAnchor.constraint(equalTo: advancedSectionContent.topAnchor),
-            advancedSectionContentStack.leadingAnchor.constraint(equalTo: advancedSectionContent.leadingAnchor),
-            advancedSectionContentStack.trailingAnchor.constraint(equalTo: advancedSectionContent.trailingAnchor),
-            advancedSectionContentStack.bottomAnchor.constraint(equalTo: advancedSectionContent.bottomAnchor)
+            advancedSectionStack.topAnchor.constraint(
+                equalTo: advancedSectionContainer.topAnchor, constant: padding),
+            advancedSectionStack.leadingAnchor.constraint(
+                equalTo: advancedSectionContainer.leadingAnchor),
+            advancedSectionStack.trailingAnchor.constraint(
+                equalTo: advancedSectionContainer.trailingAnchor),
+            advancedSectionStack.bottomAnchor.constraint(
+                equalTo: advancedSectionContainer.bottomAnchor,
+                constant: -UX.advancedSectionPaddingBottom),
+            advancedSectionHeaderButton.topAnchor.constraint(
+                equalTo: advancedSectionHeader.topAnchor),
+            advancedSectionHeaderButton.leadingAnchor.constraint(
+                equalTo: advancedSectionHeader.leadingAnchor),
+            advancedSectionHeaderButton.trailingAnchor.constraint(
+                equalTo: advancedSectionHeader.trailingAnchor),
+            advancedSectionHeaderButton.bottomAnchor.constraint(
+                equalTo: advancedSectionHeader.bottomAnchor),
+            advancedSectionHeaderButton.heightAnchor.constraint(
+                equalToConstant: UX.advancedSectionHeaderHeight),
+            advancedSectionTitleLabel.leadingAnchor.constraint(
+                equalTo: advancedSectionHeaderButton.leadingAnchor, constant: listPadding),
+            advancedSectionTitleLabel.centerYAnchor.constraint(
+                equalTo: advancedSectionHeaderButton.centerYAnchor),
+            advancedSectionChevron.trailingAnchor.constraint(
+                equalTo: advancedSectionHeaderButton.trailingAnchor, constant: -listPadding),
+            advancedSectionChevron.centerYAnchor.constraint(
+                equalTo: advancedSectionHeaderButton.centerYAnchor),
+            advancedSectionChevron.widthAnchor.constraint(
+                equalToConstant: UX.advancedSectionChevronSize),
+            advancedSectionChevron.heightAnchor.constraint(
+                equalToConstant: UX.advancedSectionChevronSize),
+            advancedSectionContentStack.topAnchor.constraint(
+                equalTo: advancedSectionContent.topAnchor),
+            advancedSectionContentStack.leadingAnchor.constraint(
+                equalTo: advancedSectionContent.leadingAnchor),
+            advancedSectionContentStack.trailingAnchor.constraint(
+                equalTo: advancedSectionContent.trailingAnchor),
+            advancedSectionContentStack.bottomAnchor.constraint(
+                equalTo: advancedSectionContent.bottomAnchor)
         ])
     }
 
