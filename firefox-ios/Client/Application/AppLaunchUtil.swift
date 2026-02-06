@@ -44,12 +44,6 @@ final class AppLaunchUtil: Sendable {
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true
 
-        if termsOfServiceManager.isAffectedUser {
-            logger.setup(sendCrashReports: sendCrashReports)
-            TelemetryWrapper.shared.setup(profile: profile)
-            TelemetryWrapper.shared.recordStartUpTelemetry()
-        }
-
         if termsOfServiceManager.isFeatureEnabled {
             // Two cases:
             // 1. when ToS screen has been presented and user accepted it
