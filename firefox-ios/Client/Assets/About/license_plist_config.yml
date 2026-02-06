@@ -63,6 +63,9 @@ github:
     name: darkreader
   - owner: cure53
     name: dompurify
+    # We used CopyWithChanges in our project, modified and renamed to CopyWithUpdates. Credit author here.
+  - owner: entonio
+    name: CopyWithChanges
 
 # Manually specify additional non-remote respositories not picked up by LicensePlist
 manual:
