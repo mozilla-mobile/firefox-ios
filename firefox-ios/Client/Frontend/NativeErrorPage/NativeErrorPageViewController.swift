@@ -369,7 +369,7 @@ final class NativeErrorPageViewController: UIViewController,
             present(navController, animated: true)
         }
     }
-    
+
     @objc
     private func didTapLearnMore() {
         guard let url = SupportUtils.URLForTopic("what-does-your-connection-is-not-secure-mean") else { return }
