@@ -14,7 +14,7 @@ import Common
 // This is unavoidable with the current architecture given a new tab is created as a side effect. For these tabs, if the test
 // isn't run on the main thread, then in its deinit the webView.navigationDelegate is updated not on the main thread, causing
 // failures in Bitrise. This should be improved. [FXIOS-10110]
-class TabManagerTests: XCTestCase {
+final class TabManagerTests: XCTestCase {
     var tabWindowUUID: WindowUUID!
     var mockTabStore: MockTabDataStore!
     var mockSessionStore: MockTabSessionStore!
@@ -88,23 +88,30 @@ class TabManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testRemoveAllTabsForPrivateMode() {
+    func testRemoveAllTabsForPrivateMode() async throws {
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
         subject.removeAllTabs(isPrivateMode: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertGreaterThanOrEqual(mockTabStore.saveWindowDataCalledCount, 1,
+                                    "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
     // This test has to be run on the main thread since we are messing with the WebView.
     @MainActor
-    func testRemoveAllTabsCallsSaveTabSession() {
+    func testRemoveAllTabsCallsSaveTabSession() async throws {
         let subject = createSubject()
         let tab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
         subject.selectTab(tab)
         subject.removeAllTabs(isPrivateMode: false)
+        try await Task.sleep(nanoseconds: sleepTime)
 
+        XCTAssertGreaterThanOrEqual(mockTabStore.saveWindowDataCalledCount, 1,
+                                    "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         // Save tab session is actually called 3 times for one remove all call
         // 1. Save tab session for currently selected tab before delete to preserve scroll position
         // 1. AddTab for the new created homepage tab calls commitChanges
@@ -113,25 +120,33 @@ class TabManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() {
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() async throws {
         (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = false
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
         subject.removeAllTabs(isPrivateMode: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertGreaterThanOrEqual(mockTabStore.saveWindowDataCalledCount, 1,
+                                    "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         // 5, private mode tabs (4) plus one new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
     @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() {
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() async throws {
         (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
         subject.removeAllTabs(isPrivateMode: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertGreaterThanOrEqual(mockTabStore.saveWindowDataCalledCount, 1,
+                                    "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         // One new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 1)
     }

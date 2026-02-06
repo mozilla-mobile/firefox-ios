@@ -245,6 +245,11 @@ class TabManagerImplementation: NSObject,
         }
         // Save the tab state that existed prior to removals (preserves original selected tab)
         backupCloseTab = currentSelectedTab
+
+        // Force immediate disk write to avoid closing the app with the old tab state still on disk.
+        // Without this, quickly closing and reopening the app after removing all tabs,
+        // could restore tabs that were just closed.
+        preserveTabs(forced: true)
     }
 
     /// Remove a tab, will notify delegate of the tab removal
