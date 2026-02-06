@@ -97,7 +97,7 @@ final class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1,
-                                    "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
+                       "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
@@ -130,7 +130,7 @@ final class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1,
-                                    "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
+                       "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         // 5, private mode tabs (4) plus one new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 5)
     }
@@ -146,7 +146,7 @@ final class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1,
-                                    "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
+                       "`removeAllTabs(isPrivateMode:)` should persist tabs to disk.")
         // One new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 1)
     }
