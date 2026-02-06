@@ -219,10 +219,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return createVerticalStoriesSectionLayout(for: environment)
         }
 
-        return createBaselineStoriesSectionLayout(for: environment)
+        return createHorizontalStoriesSectionLayout(for: environment)
     }
 
-    private func createBaselineStoriesSectionLayout(
+    private func createHorizontalStoriesSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
