@@ -268,4 +268,9 @@ final class BrowserScreen {
     func tapWebViewTextIfExists(text: String) {
         app.webViews.staticTexts[text].tapIfExists()
     }
+
+    func dismissMicrosurveyIfExists() {
+        let microsurveyCloseButton = sel.MICROSURVEY_CLOSE_BUTTON.element(in: app)
+        microsurveyCloseButton.tapIfExists()
+    }
 }

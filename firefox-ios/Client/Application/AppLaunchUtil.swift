@@ -11,7 +11,6 @@ import MozillaAppServices
 
 final class AppLaunchUtil: Sendable {
     private let logger: Logger
-//    private var adjustHelper: AdjustHelper
     private let profile: Profile
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
@@ -22,7 +21,6 @@ final class AppLaunchUtil: Sendable {
     ) {
         self.logger = logger
         self.profile = profile
-//        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
     }
@@ -173,7 +171,6 @@ final class AppLaunchUtil: Sendable {
         }
 
         updateSessionCount()
-//        adjustHelper.setupAdjust()
         AppEventQueue.signal(event: .postLaunchDependenciesComplete)
     }
 

@@ -1,0 +1,93 @@
+/* Title for the cancel button in the remove address alert. */
+"Addresses.EditAddress.Alert.CancelButton.v129" = "បោះបង់";
+
+/* Title for the remove button in the remove address alert. */
+"Addresses.EditAddress.Alert.RemoveButton.v129" = "យកចេញ";
+
+/* Title for the alert indicating the action to remove an address. */
+"Addresses.EditAddress.Alert.Title.v129" = "លុបអាសយដ្ឋានចេញ";
+
+/* Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information. */
+"Addresses.EditAddress.AutofillAddAddressTitle.v129" = "បន្ថែមអាសយដ្ឋាន";
+
+/* Label for the area field, allowing users to specify a particular area within a city or region. This detail can improve the specificity and accuracy of autofilled addresses. */
+"Addresses.EditAddress.AutofillAddressArea.v129" = "តំបន់";
+
+/* Label for the field where users input the city part of their address. This information is crucial for mail delivery and service provision, ensuring accurate city identification in autofill settings. */
+"Addresses.EditAddress.AutofillAddressCity.v129" = "ទីក្រុង";
+
+/* Label for the field where users can specify just the country, used in contexts where full address details are not required. Simplifies autofill when only country information is necessary. */
+"Addresses.EditAddress.AutofillAddressCountryOnly.v129" = "ប្រទេស";
+
+/* Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders. */
+"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "ប្រទេស ឬ តំបន់";
+
+/* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
+"Addresses.EditAddress.AutofillAddressDepartment.v129" = "នាយកដ្ឋាន";
+
+/* Label for the district field in the address form, allowing users to specify their district for more precise location identification. This aids in refining address details for accurate autofill. */
+"Addresses.EditAddress.AutofillAddressDistrict.v129" = "ស្រុក";
+
+/* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
+"Addresses.EditAddress.AutofillAddressEmail.v129" = "អ៊ីមែល";
+
+/* Label for the field where the user inputs their full name as part of an address form. Essential for personalized form submissions and ensuring information accuracy in autofilled forms. */
+"Addresses.EditAddress.AutofillAddressName.v129" = "ឈ្មោះ";
+
+/* Label for the PIN (Postal Index Number) field, used in India. It's a code representing a specific area, crucial for accurate mail delivery and autofill functionality. */
+"Addresses.EditAddress.AutofillAddressPin.v129" = "ខ្ទាស់";
+
+/* Label for the province field, required in countries where provinces are a primary administrative division. Helps in pinpointing the user's location more accurately for autofill purposes. */
+"Addresses.EditAddress.AutofillAddressProvince.v129" = "ខេត្ត";
+
+/* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
+"Addresses.EditAddress.AutofillAddressState.v129" = "ស្ថានភាព";
+
+/* Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly. */
+"Addresses.EditAddress.AutofillAddressTel.v129" = "ទូរសព្ទ​";
+
+/* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
+"Addresses.EditAddress.AutofillCancelButton.v129" = "បោះបង់";
+
+/* Title for the option allowing users to edit an existing saved address. This is used within the settings for autofill, enabling users to update their address details for accurate form autofilling. */
+"Addresses.EditAddress.AutofillEditAddressTitle.v129" = "កែសម្រួលអាសយដ្ឋាន";
+
+/* Title for the input field where users can enter their street address. This is used within the settings for autofill, allowing users to provide their street address for accurate form autofilling. */
+"Addresses.EditAddress.AutofillEditStreetAddressTitle.v129" = "អាសយដ្ឋានផ្លូវ";
+
+/* Label for the button to save the current address details entered or edited by the user. This action confirms the user's changes and updates their autofill settings accordingly. */
+"Addresses.EditAddress.AutofillSaveButton.v129" = "រក្សា​ទុក";
+
+/* Title for the option allowing users to view an existing saved address. This is used within the settings for autofill, enabling users to see their address details for accurate form autofilling. */
+"Addresses.EditAddress.AutofillViewAddressTitle.v129" = "មើលអាសយដ្ឋាន";
+
+/* Button label for closing the view where user can view their address info. */
+"Addresses.EditAddress.CloseNavBarButtonLabel.v129" = "បិទ";
+
+/* Button label for editing the address details shown in the form. */
+"Addresses.EditAddress.EditNavBarButtonLabel.v129" = "កែសម្រួល";
+
+/* Title for button that offers the user the option to remove an address. */
+"Addresses.EditAddress.RemoveAddressButtonTitle.v129" = "លុបអាសយដ្ឋានចេញ";
+
+/* Toast message confirming that an address has been successfully removed. */
+"Addresses.Toast.AddressRemovedConfirmation.v129" = "អាសយដ្ឋានត្រូវបានដកចេញ";
+
+/* Toast message confirming that an address has been successfully saved. */
+"Addresses.Toast.AddressSavedConfirmation.v129" = "អាសយដ្ឋានត្រូវបានរក្សាទុក";
+
+/* Toast message indicating an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveError.v129" = "មិនអាចរក្សាទុកអាសយដ្ឋានបានទេ";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "មិនអាចលុបអាសយដ្ឋានបានទេ";
+
+/* Suggestion to try again after an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "ព្យាយាម​ម្ដងទៀត";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v129" = "ព័ត៌មានអាសយដ្ឋានត្រូវបានធ្វើបច្ចុប្បន្នភាព";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "អាសយដ្ឋានត្រូវបានរក្សាទុក";
+

@@ -20,7 +20,7 @@
 "TabTray.TabsSelectorNormalTabsTitle.v140" = "Onglets";
 
 /* The title on the button to look at synced tabs. */
-"TabTray.TabsSelectorSyncedTabsTitle.v140" = "Synchronisation";
+"TabTray.TabsSelectorSyncedTabsTitle.v140" = "Synchronisés";
 
 /* Text for a button in the tabs tray used to open another menu to close older tabs. */
 "TabTrayCloseOldTabsTitle.v140" = "Fermer les anciens onglets…";

@@ -281,7 +281,7 @@
 "Settings.TechnicalData.Link.v136" = "Докладніше";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v136" = "Дані про ваш пристрій, конфігурацію обладнання та використання допомагають нам покращити функції, продуктивність і стабільність %@.";
+"Settings.TechnicalData.Message.v136" = "Дані про ваш пристрій, конфігурацію обладнання та використання допомагають нам покращити функції, швидкодію і стабільність %@.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Надсилати технічні й аналітичні дані";

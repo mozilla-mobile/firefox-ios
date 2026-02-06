@@ -16,7 +16,6 @@ final class BrowserViewControllerConstraintTests: XCTestCase {
         try await super.setUp()
         tabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
-
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
@@ -96,16 +95,31 @@ final class BrowserViewControllerConstraintTests: XCTestCase {
 
     // MARK: - Header Constraints Tests
 
-    func test_header_hasHorizontalConstraint() {
+    func test_header_hasHorizontalConstraint_WithSnapKitRefactorDisabled() {
         let subject = createSubject()
 
         // Header view uses .left and .right instead of .leading and .trailing
+        let hasLeft = hasConstraint(for: subject.header,
+                                    attribute: .left,
+                                    relatedTo: subject.view)
+
+        let hasRight = hasConstraint(for: subject.header,
+                                     attribute: .right,
+                                     relatedTo: subject.view)
+        XCTAssertTrue(hasLeft)
+        XCTAssertTrue(hasRight)
+    }
+
+    func test_header_hasHorizontalConstraint_WithSnapKitRefactorEnabled() {
+        let subject = createSubject(isFeatureFlagEnabled: true)
+
+        // As part of the refactor header view is using .leading and .trailing as the other views
         let hasLeading = hasConstraint(for: subject.header,
-                                       attribute: .left,
+                                       attribute: .leading,
                                        relatedTo: subject.view)
 
         let hasTrailing = hasConstraint(for: subject.header,
-                                        attribute: .right,
+                                        attribute: .trailing,
                                         relatedTo: subject.view)
         XCTAssertTrue(hasLeading)
         XCTAssertTrue(hasTrailing)
@@ -275,7 +289,9 @@ final class BrowserViewControllerConstraintTests: XCTestCase {
 
     // MARK: - Helper Methods
 
-    private func createSubject() -> BrowserViewController {
+    private func createSubject(isFeatureFlagEnabled: Bool = false) -> BrowserViewController {
+        // Setup feature flag to disabled by default and override only in the test that need it
+        setupNimbusSnapKitRemovalTesting(isEnabled: isFeatureFlagEnabled)
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager)
         trackForMemoryLeaks(subject)
@@ -288,6 +304,12 @@ final class BrowserViewControllerConstraintTests: XCTestCase {
         subject.view.layoutIfNeeded()
 
         return subject
+    }
+
+    private func setupNimbusSnapKitRemovalTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.snapkitRemovalRefactor.with { _, _ in
+            return SnapkitRemovalRefactor(enabled: isEnabled)
+        }
     }
 
     /// Check if a view has a constraint with the given attribute related to another view

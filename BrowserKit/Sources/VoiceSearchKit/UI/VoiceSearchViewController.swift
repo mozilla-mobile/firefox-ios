@@ -49,17 +49,19 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.buttonContentInset
     }
-    private let buttonsContainer: UIStackView = .build {
+    let buttonsContainer: UIStackView = .build {
         $0.axis = .horizontal
         $0.spacing = UX.buttonsSpacing
     }
+    private let transitionAnimator: TransitionAnimator
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
     public var themeListenerCancellable: Any?
     private let notificationCenter: NotificationProtocol
 
-    init(
+    public init(
+        presentationTransitionType: VoiceSearchTransitionType = .crossDissolve,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -67,7 +69,14 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.transitionAnimator = TransitionAnimator(
+            presentationTransitionType: presentationTransitionType,
+            themeManager: themeManager,
+            windowUUID: windowUUID
+        )
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .custom
+        transitioningDelegate = transitionAnimator
     }
 
     required init?(coder: NSCoder) {

@@ -1,0 +1,15 @@
+/* Settings section title for the old Firefox account */
+"FxA.FirefoxAccount.v119" = "គណនី";
+
+/* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "ប៊ូតុងរបារឧបករណ៍";
+
+/* This is the title for Links customization under the Browsing settings section. */
+"Settings.Browsing.Links.v137" = "តំណភ្ជាប់";
+
+/* This is the title for Media customization under the Browsing settings section. */
+"Settings.Browsing.Media.v137" = "មេឌៀ";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title.v119" = "គណនី";
+

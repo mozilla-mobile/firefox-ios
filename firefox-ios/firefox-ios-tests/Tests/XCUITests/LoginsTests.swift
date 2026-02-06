@@ -32,6 +32,7 @@ class LoginTest: BaseTestCase {
     var settingsScreen: SettingScreen!
     var webFormScreen: WebFormScreen!
     var saveLoginAlertScreen: SaveLoginAlertScreen!
+    var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
         // Fresh install the app
@@ -49,12 +50,14 @@ class LoginTest: BaseTestCase {
         settingsScreen = SettingScreen(app: app)
         webFormScreen = WebFormScreen(app: app)
         saveLoginAlertScreen = SaveLoginAlertScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
     }
 
     let passwordssQuery = AccessibilityIdentifiers.Settings.Logins.Passwords.self
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
+        browserScreen.dismissMicrosurveyIfExists()
         app.buttons["submit"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
     }

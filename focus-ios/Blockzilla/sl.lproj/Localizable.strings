@@ -322,6 +322,9 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "To nam omogoča diagnosticiranje in odpravljanje težav z brskalnikom.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ bo izboljševal zmogljivosti, zanesljivost in učinkovitost delovanja med posodobitvami. Spremembe se uveljavljajo na daljavo.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ bo natipkano v naslovno vrstico poslal iskalniku.";
 

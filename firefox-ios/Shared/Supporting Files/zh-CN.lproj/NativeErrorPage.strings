@@ -1,6 +1,9 @@
 /* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
 "NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "高级";
 
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ 不信任此网站，因为找到的证书对 %2$@ 无效。";
+
 /* On certificate error page, this is the security information shown in the advanced section. */
 "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "此网站不允许不安全连接。";
 
@@ -21,6 +24,12 @@
 
 /* On certificate error page, this is a link to learn more about certificate errors. */
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "详细了解";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "继续前往 %@（有风险）";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "当心，似乎有异常情况。";
 
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "重新加载";

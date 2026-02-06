@@ -728,7 +728,7 @@
 "Menu.Copy.Title" = "Zkopírovat adresu";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "URL adresa zkopírována do schránky";
+"Menu.CopyURL.Confirm" = "Adresa URL zkopírována do schránky";
 
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Přizpůsobit";

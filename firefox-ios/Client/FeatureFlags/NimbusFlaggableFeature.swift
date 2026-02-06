@@ -70,7 +70,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case translation
     case trendingSearches
     case unifiedSearch
-    case updatedPasswordManager
     case voiceSearch
     case webEngineIntegrationRefactor
 
@@ -107,7 +106,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .translation,
                 .trendingSearches,
                 .unifiedSearch,
-                .updatedPasswordManager,
                 .voiceSearch,
                 .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
@@ -202,7 +200,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .translation,
                 .trendingSearches,
                 .unifiedSearch,
-                .updatedPasswordManager,
                 .voiceSearch,
                 .webEngineIntegrationRefactor:
             return nil
