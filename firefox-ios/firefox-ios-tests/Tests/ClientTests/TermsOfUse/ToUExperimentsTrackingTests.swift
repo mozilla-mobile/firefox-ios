@@ -55,6 +55,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     private func assertDismissalDataReset() {
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount), 0)
+        XCTAssertFalse(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? true)
     }
 
     private func assertDismissalDataNotReset(expectedCount: Int) {

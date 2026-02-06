@@ -83,6 +83,7 @@ final class ToUExperimentsTracking {
 
         prefs.removeObjectForKey(PrefsKeys.TermsOfUseDismissedDate)
         prefs.setInt(0, forKey: PrefsKeys.TermsOfUseRemindersCount)
+        prefs.setBool(false, forKey: PrefsKeys.TermsOfUseFirstShown)
     }
 
     private func storeExperimentInfo(currentExperiment: EnrolledExperiment?) {
