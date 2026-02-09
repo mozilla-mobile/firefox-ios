@@ -419,7 +419,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307025
     // Smoke
-    func testTabHistory_TAE() {
+    func testTabHistory() {
         openBookOfMozilla()
         toolbarScreen.waitUntilBackButtonHittable(timeout: 2.0)
         toolbarScreen.pressBackButton(duration: 1.5)
