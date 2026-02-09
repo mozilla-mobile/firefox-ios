@@ -207,6 +207,59 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(finalCount, 0)
     }
 
+    // MARK: - Notification & Crash Safety Tests
+
+    func testWillTerminateNotification_removesAllObservers() {
+        let subject = createSubject()
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.createWebview(configuration: .init())
+        guard let webView = tab.webView else { XCTFail("WebView should not be nil"); return }
+
+        subject.beginObserving(webView: webView)
+        XCTAssertTrue(subject.observedWebViews.contains(webView))
+
+        // Simulate the willTerminate notification by calling handleNotifications directly.
+        // The BVC only subscribes to notifications during viewDidLoad, so we invoke the
+        // handler without loading the full view hierarchy.
+        let notification = Notification(name: UIApplication.willTerminateNotification)
+        subject.handleNotifications(notification)
+
+        XCTAssertFalse(subject.observedWebViews.contains(webView))
+    }
+
+    func testStopObservingAllWebViews_calledTwice_doesNotCrash() {
+        let subject = createSubject()
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.createWebview(configuration: .init())
+        guard let webView = tab.webView else { XCTFail("WebView should not be nil"); return }
+
+        subject.beginObserving(webView: webView)
+        subject.stopObservingAllWebViews()
+        subject.stopObservingAllWebViews()
+
+        var count = 0
+        for _ in subject.observedWebViews { count += 1 }
+        XCTAssertEqual(count, 0)
+    }
+
+    func testStopObservingAllWebViews_withDeallocatedWebViews_doesNotCrash() {
+        let subject = createSubject()
+
+        autoreleasepool {
+            let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+            tab.createWebview(configuration: .init())
+            if let webView = tab.webView {
+                subject.beginObserving(webView: webView)
+            }
+        }
+
+        subject.stopObservingAllWebViews()
+
+        var count = 0
+        for _ in subject.observedWebViews { count += 1 }
+        XCTAssertEqual(count, 0)
+    }
+
     // MARK: - Private
 
     private func createSubject(file: StaticString = #filePath,
