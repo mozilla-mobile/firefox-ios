@@ -20,6 +20,7 @@ protocol BrowserSelectorsSet {
     var ADDRESSTOOLBAR_LOCKICON: Selector { get }
     var TOPTABS_COLLECTIONVIEW: Selector { get }
     var MICROSURVEY_CLOSE_BUTTON: Selector { get }
+    var BOOK_OF_MOZILLA_TEXT_IN_TABLE: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -132,6 +133,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "microsurvey"]
     )
 
+    let BOOK_OF_MOZILLA_TEXT_IN_TABLE = Selector.staticTextInTablesByLabel(
+        "The Book of Mozilla",
+        description: "StaticText 'The Book of Mozilla' within table",
+        groups: ["browser", "visualCheck"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -160,6 +167,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, TOPTABS_COLLECTIONVIEW,
-                           MICROSURVEY_CLOSE_BUTTON]
+                           MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE]
     }
 }

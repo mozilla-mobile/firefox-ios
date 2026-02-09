@@ -143,4 +143,9 @@ final class LoginSettingsScreen {
         passcode.tapAndTypeText(passcodeValue)
         BaseTestCase().mozWaitForElementToNotExist(passcode)
     }
+
+    func assertLoginCreatedFirstMatch() {
+        let firstStaticText = sel.LOGIN_LIST.element(in: app).staticTexts.firstMatch
+        BaseTestCase().mozWaitForElementToExist(firstStaticText)
+    }
 }

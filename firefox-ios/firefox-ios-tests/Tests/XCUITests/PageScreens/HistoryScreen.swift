@@ -52,9 +52,7 @@ final class HistoryScreen {
 
     func waitForHistoryEntriesNotExist(_ entries: [String]) {
         for entry in entries {
-            let element = app.tables.cells.staticTexts
-                .containing(NSPredicate(format: "label CONTAINS[c] %@", entry))
-                .firstMatch
+            let element = app.tables.cells.staticTexts[entry]
             BaseTestCase().mozWaitForElementToNotExist(element)
         }
     }
