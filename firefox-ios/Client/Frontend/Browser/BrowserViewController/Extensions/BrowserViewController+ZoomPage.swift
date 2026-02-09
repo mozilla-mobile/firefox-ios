@@ -35,7 +35,12 @@ extension BrowserViewController: ZoomPageBarDelegate {
         zoomPageBar.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
         if UIDevice.current.userInterfaceIdiom != .pad {
-            updateViewConstraints()
+            if !isSnapKitRemovalEnabled {
+                updateViewConstraints()
+            } else if !isBottomSearchBar {
+                // Existing condition for zoom bar in top position
+                updateOverKeyboardContainerConstraints()
+            }
         }
     }
 
@@ -46,7 +51,9 @@ extension BrowserViewController: ZoomPageBarDelegate {
             overKeyboardContainer.removeArrangedView(zoomPageBar)
         }
         self.zoomPageBar = nil
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
     }
 
     private func toggleZoomPageBar(_ visible: Bool) {

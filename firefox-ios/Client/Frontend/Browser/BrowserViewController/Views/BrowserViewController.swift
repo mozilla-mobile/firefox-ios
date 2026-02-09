@@ -1852,7 +1852,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateOverKeyboardContainerConstraints() {
+    func updateOverKeyboardContainerConstraints() {
         overKeyboardContainer.snp.remakeConstraints { make in
             if let scrollController = scrollController as? LegacyTabScrollProvider {
                 scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
@@ -1883,6 +1883,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    // TODO: Yoana maybe for zoombar?
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
         remake.left.equalTo(view.safeArea.left)
         remake.right.equalTo(view.safeArea.right)
