@@ -53,6 +53,13 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
             // depending if summarize content setting toggle is On or Off
             self.settings = self.generateSettings()
             self.tableView.reloadData()
+
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.reloadWebsite
+                )
+            )
         }
         return SettingSection(
             title: nil,
