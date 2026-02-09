@@ -91,9 +91,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .otherErrorPages:
             return checkOtherErrorPagesFeature(from: nimbus)
 
-        case .privacyNotice:
-            return checkPrivacyNoticeFeature(from: nimbus)
-
         case .recentSearches:
             return checkRecentSearchesFeature(from: nimbus)
 
@@ -459,10 +456,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkOtherErrorPagesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().otherErrorPages
-    }
-
-    private func checkPrivacyNoticeFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.privacyNoticeFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature
