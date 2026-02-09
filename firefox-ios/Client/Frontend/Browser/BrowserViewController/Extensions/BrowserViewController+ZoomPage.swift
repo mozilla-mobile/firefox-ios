@@ -20,12 +20,12 @@ extension BrowserViewController: ZoomPageBarDelegate {
         zoomPageBar.delegate = self
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            header.addArrangedViewToBottom(zoomPageBar, animated: false, completion: {
-                self.view.layoutIfNeeded()
+            header.addArrangedViewToBottom(zoomPageBar, animated: false, completion: { [weak self] in
+                self?.view.layoutIfNeeded()
             })
         } else {
-            overKeyboardContainer.addArrangedViewToTop(zoomPageBar, animated: false, completion: {
-                self.view.layoutIfNeeded()
+            overKeyboardContainer.addArrangedViewToTop(zoomPageBar, animated: false, completion: { [weak self] in
+                self?.view.layoutIfNeeded()
             })
         }
 
@@ -53,6 +53,8 @@ extension BrowserViewController: ZoomPageBarDelegate {
         self.zoomPageBar = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
+        } else {
+            updateOverKeyboardContainerConstraints()
         }
     }
 
