@@ -17,31 +17,31 @@ public protocol SummarizeNavigationHandler: AnyObject {
     func dismissSummary()
 }
 
-public final class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
+public final class SummarizeController: UIViewController, Themeable {
     private struct UX {
-        @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
-        static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)
-
-        static let tabSnapshotInitialTransformPercentage: CGFloat = 0.5
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
+        static let tabSnapshotLoadingTransformPercentage: CGFloat = 0.5
         static let summaryViewEdgePadding: CGFloat = 12.0
-        static let initialTransformAnimationDuration = 0.9
-        static let infoViewAnimationDuration: CGFloat = 0.3
-        static let panEndAnimationDuration: CGFloat = 0.3
-        static let showSummaryAnimationDuration: CGFloat = 0.3
         static let streamingRevealDelay: TimeInterval = 4.0
         static let summaryLabelHorizontalPadding: CGFloat = 12.0
         static let panCloseSummaryVelocityThreshold: CGFloat = 600.0
         static let panCloseSummaryHeightPercentageThreshold: CGFloat = 0.25
-        static let tabSnapshotBringToFrontAnimationDuration: CGFloat = 0.25
-        static let tabSnapshotCornerRadius: CGFloat = 32.0
         static let tabSnapshotShadowRadius: CGFloat = 64.0
         static let tabSnapshotShadowOffset = CGSize(width: 0.0, height: -10.0)
         static let tabSnapshotShadowOpacity: Float = 1.0
-        static let tabSnapshotTranslationKeyPath = "transform.translation.y"
         static let labelShimmeringColorAlpha: CGFloat = 0.5
     }
 
+    lazy var animationController: AnimationController = DefaultAnimationController(
+        view: view,
+        loadingLabel: loadingLabel,
+        snapshotContainer: tabSnapshotContainer,
+        snapshotView: tabSnapshot,
+        summaryView: summaryView,
+        infoView: infoView,
+        backgroundGradient: backgroundGradient,
+        borderOverlayController: borderOverlayHostingController
+    )
     private let configuration: SummarizeViewConfiguration
     private let viewModel: SummarizeViewModel
     private let webView: WKWebView
@@ -67,7 +67,7 @@ public final class SummarizeController: UIViewController, Themeable, CAAnimation
             for: .normal
         )
         $0.addAction(UIAction(handler: { [weak self] _ in
-            self?.triggerDismissingAnimation()
+            self?.dismissSummary()
         }), for: .touchUpInside)
         $0.showsLargeContentViewer = true
     }
@@ -155,7 +155,15 @@ public final class SummarizeController: UIViewController, Themeable, CAAnimation
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        animateTabSnapshotToMidScreen()
+        animationController.animateViewDidAppear(
+            snapshotTransform: CGAffineTransform(
+                translationX: 0.0,
+                y: view.frame.height * UX.tabSnapshotLoadingTransformPercentage
+            )
+        ) { [weak self] in
+            self?.viewModel.unblockSummarization()
+            self?.setupDismissGestures()
+        }
         // Ensure that the layout is resolved before shimmering
         let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textOnDark
         loadingLabel.startShimmering(light: textColor, dark: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha))
@@ -248,27 +256,6 @@ public final class SummarizeController: UIViewController, Themeable, CAAnimation
         borderOverlayHostingController.didMove(toParent: self)
     }
 
-    private func animateTabSnapshotToMidScreen() {
-        let frameHeight = view.frame.height
-        let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
-        transformAnimation.fromValue = 0
-        transformAnimation.toValue = frameHeight / 2
-        transformAnimation.duration = UX.initialTransformAnimationDuration
-        transformAnimation.timingFunction = UX.initialTransformTimingCurve
-        transformAnimation.fillMode = .forwards
-        transformAnimation.delegate = self
-        transformAnimation.isRemovedOnCompletion = true
-        tabSnapshotContainer.layer.add(transformAnimation, forKey: "translation")
-        tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0,
-                                                           y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
-        UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
-            self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
-            self.loadingLabel.alpha = 1.0
-        } completion: { [weak self] _ in
-            self?.viewModel.unblockSummarization()
-        }
-    }
-
     private func setupLoadingBackgroundGradient() {
         backgroundGradient.frame = view.bounds
         backgroundGradient.locations = [0.0, 1.0]
@@ -297,29 +284,18 @@ public final class SummarizeController: UIViewController, Themeable, CAAnimation
 
     private func showSummary(_ summary: String) {
         tabSnapshotContainer.addGestureRecognizer(tabSnapshotPanGesture)
+        configureSummaryView(summary: summary)
 
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
-
-        configureSummaryView(summary: summary)
-
-        // show the summary and related animation only if summary wasn't showed yet
-        guard summaryView.alpha == 0.0 else { return }
-        triggerImpactHaptics()
-        UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
-            removeBorderOverlayView()
-            backgroundGradient.removeFromSuperlayer()
-            tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
-            summaryView.alpha = 1.0
-            applyTheme()
-            loadingLabel.alpha = 0.0
-            loadingLabel.stopShimmering()
-        } completion: { [weak self] _ in
-            guard let tabSnapshotView = self?.tabSnapshotContainer else { return }
-            UIView.animate(withDuration: UX.tabSnapshotBringToFrontAnimationDuration) {
-                self?.onSummaryDisplayed()
-                self?.view.bringSubviewToFront(tabSnapshotView)
-            }
+        animationController.animateToSummary(
+            snapshotTransform: CGAffineTransform(
+                translationX: 0.0,
+                y: tabSnapshotYTransform
+            ),
+            applyTheme: applyTheme
+        ) { [weak self] in
+            self?.onSummaryDisplayed()
         }
     }
 
@@ -372,40 +348,28 @@ public final class SummarizeController: UIViewController, Themeable, CAAnimation
                         self?.summarize()
                     }
                 }, linkCallback: { [weak self] url in
-                    self?.triggerDismissingAnimation {
+                    self?.dismissSummary {
                         self?.navigationHandler?.openURL(url: url)
                     }
                 }
             )
         )
-        loadingLabel.alpha = 0.0
+
         tabSnapshotContainer.removeGestureRecognizer(tabSnapshotPanGesture)
-        let shouldInsertBackgroundGradient = backgroundGradient.superlayer == nil
-        UIView.animate(withDuration: UX.infoViewAnimationDuration) { [self] in
-            onSummaryDisplayed()
-            summaryView.alpha = 0.0
-            infoView.alpha = 1.0
-            tabSnapshotContainer.transform = .identity.translatedBy(x: 0.0, y: view.frame.height / 2)
-            guard shouldInsertBackgroundGradient else { return }
-            view.layer.insertSublayer(backgroundGradient, at: 0)
-        } completion: { [weak self] _ in
+        animationController.animateToInfo(
+            snapshotTransform: CGAffineTransform(
+                translationX: 0.0,
+                y: view.frame.height * UX.tabSnapshotLoadingTransformPercentage
+            )
+        ) { [weak self] in
+            self?.onSummaryDisplayed()
             self?.applyTheme()
         }
     }
 
-    private func removeBorderOverlayView() {
-        borderOverlayHostingController.willMove(toParent: nil)
-        borderOverlayHostingController.view.removeFromSuperview()
-        borderOverlayHostingController.removeFromParent()
-    }
-
-    private func dismissSummary() {
-        UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
-            infoView.alpha = 0.0
-            loadingLabel.alpha = 0.0
-            tabSnapshotContainer.transform = .identity
-            tabSnapshot.layer.cornerRadius = 0.0
-        } completion: { [weak self] _ in
+    private func dismissSummary(completion: (() -> Void)? = nil) {
+        animationController.animateToDismiss(snapshotTransform: .identity) { [weak self] in
+            completion?()
             self?.dismiss(animated: true)
         }
     }
@@ -421,17 +385,7 @@ public final class SummarizeController: UIViewController, Themeable, CAAnimation
 
     @objc
     private func dismissSummaryFromGesture(_ gesture: UITapGestureRecognizer) {
-        triggerDismissingAnimation()
-    }
-
-    private func triggerDismissingAnimation(completion: (() -> Void)? = nil) {
-        UIView.animate(withDuration: UX.panEndAnimationDuration) { [weak self] in
-            self?.tabSnapshotContainer.transform = .identity
-            self?.tabSnapshot.layer.cornerRadius = 0.0
-        } completion: { [weak self] _ in
-            completion?()
-            self?.dismiss(animated: true)
-        }
+        dismissSummary()
     }
 
     @objc
@@ -467,22 +421,7 @@ public final class SummarizeController: UIViewController, Themeable, CAAnimation
         if shouldCloseSummary {
             dismissSummary()
         } else {
-            UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
-                summaryView.alpha = 1.0
-                summaryView.transform = .identity
-                tabSnapshotContainer.transform = tabSnapshotTransform
-            }
-        }
-    }
-
-    // MARK: - CAAnimationDelegate
-    nonisolated public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        guard flag,
-              let animation = anim as? CABasicAnimation,
-              animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
-
-        ensureMainThread {
-            self.setupDismissGestures()
+            animationController.animateToPanEnded(snapshotTransform: tabSnapshotTransform)
         }
     }
 
