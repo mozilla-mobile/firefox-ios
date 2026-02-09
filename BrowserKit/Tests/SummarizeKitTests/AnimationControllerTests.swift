@@ -41,7 +41,7 @@ final class AnimationControllerTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func test_animateToLoading() {
+    func test_animateViewDidAppear() {
         let controller = createSubject()
 
         controller.animateViewDidAppear(snapshotTransform: transform) {}
