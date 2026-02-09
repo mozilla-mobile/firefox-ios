@@ -2,8 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-/// Concrete implementation of `AppAttestKeyIDStore` that keeps the `keyID` in memory. 
-/// This is only used for testing since the keychain implementation is not easily testable 
+import SummarizeKit
+
+/// Concrete implementation of `AppAttestKeyIDStore` that keeps the `keyID` in memory.
+/// This is only used for testing since the keychain implementation is not easily testable
 /// and might fail sometimes on non-signed builds on CI.
 final class InMemoryAppAttestKeyIDStore: AppAttestKeyIDStore {
     private var value: String?
