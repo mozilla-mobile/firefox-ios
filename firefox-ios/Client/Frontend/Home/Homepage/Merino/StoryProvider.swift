@@ -37,6 +37,8 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     }
 
     func prefetchStories() async {
+        // Because a prefetch basically warms the cache, we don't actually need
+        // to do anything with the results
         _ = try? await merinoAPI.fetchStories(Constants.defaultNumberOfDiscoverMoreStories)
     }
 
