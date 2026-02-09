@@ -241,6 +241,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             ) { [weak self] _ in
                 self?.reloadView()
             },
+            FeatureFlagsBoolSetting(
+                with: .summarizerAppAttestAuth,
+                titleText: format(string: "Summarizer App Attest Auth Feature"),
+                statusText: format(string: "Toggle to enable the app attest authentication for the summarizer feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
         ]
 
         // Conditionally add the Apple Summarizer only if the compile time check for the FoundationModels is true
