@@ -5,6 +5,8 @@
 import XCTest
 @testable import SummarizeKit
 
+/// NOTE: This test is intentionally in `ClientTests` instead of `BrowserKit/Tests` since bare SPM packages
+/// cannot have keychain entitlement meaning these tests will always fail for the wrong reasons.
 final class KeychainAppAttestKeyIDStoreTests: XCTestCase {
     // Use a unique service per test run to avoid polluting real keychain entries.
     private static let testService = "org.mozilla.browserkit.appattest.keyid.test"

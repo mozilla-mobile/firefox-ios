@@ -1473,6 +1473,7 @@
 		C23889E32A50319A00429673 /* ShareSheetCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E22A50319A00429673 /* ShareSheetCoordinatorTests.swift */; };
 		C23889E52A50329200429673 /* MockParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E42A50329200429673 /* MockParentCoordinator.swift */; };
 		C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */; };
+		C24A0D2F2F3A7E7E00BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */; };
 		C24B31272E8686460049134A /* NavigationBarMiddleButtonSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */; };
 		C24B31292E86B8470049134A /* GenericSelectableItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */; };
 		C24E2D2A2ECF960000BBCFA7 /* MockTranslationsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */; };
@@ -9886,6 +9887,7 @@
 		C23889E22A50319A00429673 /* ShareSheetCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetCoordinatorTests.swift; sourceTree = "<group>"; };
 		C23889E42A50329200429673 /* MockParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParentCoordinator.swift; sourceTree = "<group>"; };
 		C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLibraryCoordinatorDelegate.swift; sourceTree = "<group>"; };
+		C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainAppAttestKeyIDStoreTests.swift; sourceTree = "<group>"; };
 		C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarMiddleButtonSelectionView.swift; sourceTree = "<group>"; };
 		C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSelectableItemCellView.swift; sourceTree = "<group>"; };
 		C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationsTelemetry.swift; sourceTree = "<group>"; };
@@ -16221,6 +16223,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */,
 				2151EF582F2AB962007B67A6 /* BrowserViewController */,
 				218457C42F22A3FA00B4FF23 /* Downloads */,
 				EDADF7822D70D59900C39295 /* AppIconSelection */,
@@ -19816,6 +19819,7 @@
 				5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */,
 				8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */,
 				8AEF41622D15EDBC0013925D /* TopSitesMiddlewareTests.swift in Sources */,
+				C24A0D2F2F3A7E7E00BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift in Sources */,
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
