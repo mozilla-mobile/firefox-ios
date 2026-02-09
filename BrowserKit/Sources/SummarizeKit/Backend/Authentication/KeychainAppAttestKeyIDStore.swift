@@ -16,7 +16,7 @@ import Security
 /// `kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly` that means:
 /// - Available after the first unlock each boot.
 /// - Excluded from backups and device migrations (the key is device-specific).
-/// NOTE(FXIOS-xxx): This closely resembles how we store encryption keys for autofill,
+/// NOTE(FXIOS-14838): This closely resembles how we store encryption keys for autofill,
 /// but with stricter accessibility values. We should consolidate under one Keychain helper in the future.
 public final class KeychainAppAttestKeyIDStore: AppAttestKeyIDStore {
     private enum Constants {
@@ -36,19 +36,19 @@ public final class KeychainAppAttestKeyIDStore: AppAttestKeyIDStore {
         /// We store the `keyId` as a generic password. 
         /// This is the simplest simplest Keychain class for arbitrary secret strings.
         /// See: https://developer.apple.com/documentation/security/ksecclassgenericpassword
-        static let genericPassword = kSecClassGenericPassword
+        static let genericPassword = kSecClassGenericPassword as String
         /// Tells `SecItemCopyMatching` to return the stored bytes (`Data`),
         /// not just a success/failure or metadata like creation date.
         /// See: https://developer.apple.com/documentation/security/ksecreturnattributes
-        static let returnTrue = kCFBooleanTrue as Any
+        static let returnTrue = true
         /// Return at most one matching item. Without this, Keychain may
         /// return an array via `kSecMatchLimitAll`.
         /// See: https://developer.apple.com/documentation/security/ksecmatchlimit
-        static let limitOne = kSecMatchLimitOne
+        static let limitOne = kSecMatchLimitOne as String
         /// Tells keychain to make this value available after first unlock per boot; excluded from backups
         /// and device migrations. This is appropriate since the `keyId` is tied to this device's generated secret keypair.
         /// See: https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
-        static let accessibleAfterFirstUnlock = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        static let accessibleAfterFirstUnlock = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String
     }
 
     private let service: String
