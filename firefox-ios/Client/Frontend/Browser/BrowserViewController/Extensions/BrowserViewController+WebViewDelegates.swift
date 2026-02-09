@@ -68,55 +68,72 @@ extension BrowserViewController: WKUIDelegate {
         // Set new tab url to about:blank because webViews created through this callback are always popups
         newTab.url = URL(string: "about:blank")
 
-        return newTab.webView
-    }
+        // Select the new tab immediately
+        tabManager.selectTab(newTab)
 
-    private func handleJavaScriptAlert<T: WKJavaScriptAlertInfo>(
-        _ alert: T,
-        for webView: WKWebView,
-        spamCallback: @escaping @MainActor () -> Void
-    ) {
-        if jsAlertExceedsSpamLimits(webView) {
-            handleSpammedJSAlert(spamCallback)
-        } else if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript \(alert.type.rawValue) panel will be presented.", level: .info, category: .webview)
-            let alertController = alert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
-        } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript \(alert.type.rawValue) panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(alert)
-        }
+        return newTab.webView
     }
 
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor () -> Void
-    ) {
-        let messageAlert = MessageAlert(message: message,
-                                        frame: frame,
-                                        completionHandler: completionHandler)
+        initiatedByFrame frame: WKFrameInfo
+    ) async {
+        var messageAlert = MessageAlert(message: message,
+                                        frame: frame)
 
-        handleJavaScriptAlert(messageAlert, for: webView) {
-            completionHandler()
+        if jsAlertExceedsSpamLimits(webView) {
+            await handleSpammedJSAlert()
+        } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(messageAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
+            await withCheckedContinuation { (continuation: CheckedContinuation<Void?, Never>) in
+                messageAlert.continuation = continuation
+
+                let alertController = messageAlert.alertController()
+                alertController.delegate = self
+                present(alertController, animated: true)
+            }
+        } else if let promptingTab = tabManager[webView] {
+            logger.log("JavaScript \(messageAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
+
+            await withCheckedContinuation { (continuation: CheckedContinuation<Void?, Never>) in
+                messageAlert.continuation = continuation
+                promptingTab.queueJavascriptAlertPrompt(messageAlert)
+            }
         }
     }
 
     func webView(
         _ webView: WKWebView,
         runJavaScriptConfirmPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (Bool) -> Void
-    ) {
-        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame) { confirm in
-            self.logger.log("JavaScript confirm panel was completed with result: \(confirm)", level: .info, category: .webview)
-            completionHandler(confirm)
-        }
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> Bool {
+        var confirmAlert = ConfirmPanelAlert(message: message, frame: frame)
 
-        handleJavaScriptAlert(confirmAlert, for: webView) {
-            completionHandler(false)
+        if jsAlertExceedsSpamLimits(webView) {
+            await handleSpammedJSAlert()
+            return false
+        } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(confirmAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
+            return await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
+                confirmAlert.continuation = continuation
+
+                let alertController = confirmAlert.alertController()
+                alertController.delegate = self
+                present(alertController, animated: true)
+            }
+        } else if let promptingTab = tabManager[webView] {
+            logger.log("JavaScript \(confirmAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
+
+            return await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
+                confirmAlert.continuation = continuation
+                promptingTab.queueJavascriptAlertPrompt(confirmAlert)
+            }
+        } else {
+            logger.log("JavaScript \(confirmAlert.type.rawValue) not shown. This shouldn't happen.",
+                       level: .warning,
+                       category: .webview)
+            return false
         }
     }
 
@@ -124,16 +141,34 @@ extension BrowserViewController: WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (String?) -> Void
-    ) {
-        let textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText) { input in
-            self.logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
-            completionHandler(input)
-        }
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> String? {
+        var textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText)
 
-        handleJavaScriptAlert(textInputAlert, for: webView) {
-            completionHandler("")
+        if jsAlertExceedsSpamLimits(webView) {
+            await handleSpammedJSAlert()
+            return nil
+        } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(textInputAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
+            return await withCheckedContinuation { (continuation: CheckedContinuation<String?, Never>) in
+                textInputAlert.continuation = continuation
+
+                let alertController = textInputAlert.alertController()
+                alertController.delegate = self
+                present(alertController, animated: true)
+            }
+        } else if let promptingTab = tabManager[webView] {
+            logger.log("JavaScript \(textInputAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
+
+            return await withCheckedContinuation { (continuation: CheckedContinuation<String?, Never>) in
+                textInputAlert.continuation = continuation
+                promptingTab.queueJavascriptAlertPrompt(textInputAlert)
+            }
+        } else {
+            logger.log("JavaScript \(textInputAlert.type.rawValue) not shown. This shouldn't happen.",
+                       level: .warning,
+                       category: .webview)
+            return nil
         }
     }
 
@@ -195,10 +230,10 @@ extension BrowserViewController: WKUIDelegate {
 
     // MARK: - Helpers
 
-    private func handleSpammedJSAlert(_ callback: @escaping @MainActor () -> Void) {
+    private func handleSpammedJSAlert() async {
         // User is being spammed. Squelch alert. Note that we have to do this after
         // a delay to avoid JS that could spin the CPU endlessly.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { callback() }
+        try? await Task.sleep(nanoseconds: 5_000_000_000)
     }
 
     private func contextMenuConfiguration(for url: URL,
@@ -466,6 +501,7 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
+
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
@@ -645,7 +681,9 @@ extension BrowserViewController: WKNavigationDelegate {
     private func handleStoreURLNavigation(url: URL) {
         // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
         // Otherwise the AppStoreAlert is shown on the wrong tab
-        let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
+        // TODO: FXIOS-14796 - Investigate if we can remove the handleStoreURLNavigation delay
+        let delaySelectingNewPopupTab: TimeInterval = 0.2
+        let delay: DispatchTime = .now() + delaySelectingNewPopupTab
         DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
             self?.showAppStoreAlert { isOpened in
                 if isOpened {

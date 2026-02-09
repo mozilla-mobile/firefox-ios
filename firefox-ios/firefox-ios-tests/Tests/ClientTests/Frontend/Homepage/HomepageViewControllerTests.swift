@@ -101,7 +101,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         homepageVC.newState(state: newState)
         homepageVC.scrollToTop()
 
-        XCTAssertEqual(collectionView.contentOffset, .zero)
+        XCTAssertEqual(collectionView.contentOffset, CGPoint(x: 0, y: -collectionView.adjustedContentInset.top))
         XCTAssertEqual(mockStatusBarScrollDelegate.savedScrollView, collectionView)
     }
 
@@ -353,7 +353,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.newState(state: newState)
 
-        XCTAssertEqual(collectionView.contentOffset, .zero)
+        XCTAssertEqual(collectionView.contentOffset, CGPoint(x: 0, y: -collectionView.adjustedContentInset.top))
     }
 
     private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {

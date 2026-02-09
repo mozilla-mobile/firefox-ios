@@ -139,3 +139,6 @@ ContentBlockingLists/disconnect-*
 focus-ios/shavar-*
 firefox-ios/shavar-*
 shavar-*
+
+# Licenses.html generation
+LicensePlistTemp

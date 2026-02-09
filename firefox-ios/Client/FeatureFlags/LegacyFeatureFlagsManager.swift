@@ -11,6 +11,13 @@ extension FeatureFlaggable {
     var featureFlags: LegacyFeatureFlagsManager {
         return LegacyFeatureFlagsManager.shared
     }
+
+    @MainActor
+    var isHomepageStoriesScrollDirectionCustomized: Bool {
+        let scrollDirection: ScrollDirection = featureFlags
+            .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
+        return scrollDirection != .baseline && UIDevice.current.userInterfaceIdiom == .phone
+    }
 }
 
 /// An enum representing the different types of checks we need to use for features.

@@ -388,6 +388,15 @@
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "គ្មានការតភ្ជាប់អ៊ីនធឺណិត";
 
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "ចូលដោយប្រើកាមេរ៉ារបស់អ្នក";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "រួចរាល់ដើម្បីស្កេន";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "ប្រើអ៊ីមែលជំនួសវិញ";
+
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "ធ្វើសមកាលកម្មឥឡូវនេះ";
 
@@ -462,6 +471,9 @@
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "លុបចេញ​ពី​ប្រវត្តិ";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "បើកនៅក្នុងផ្ទាំងឯកជន";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "បើក​ក្នុង​ផ្ទាំង​ថ្មី";
@@ -556,6 +568,18 @@
 /* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowDownloads" = "បង្ហាញ​ការទាញយក";
 
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "បង្ហាញផ្ទាំងដំបូង";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "បង្ហាញ​ប្រវត្តិ";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "បង្ហាញផ្ទាំងចុងក្រោយ";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "​ពង្រីក";
+
 /* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomOut" = "​បង្រួម";
 
@@ -570,6 +594,36 @@
 
 /* Panel accessibility label */
 "LibraryPanel.Accessibility.History.v106" = "ប្រវត្តិ";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "បោះបង់";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "លុប";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "លុបគេហទំព័រទាំងអស់នៅក្នុង %@?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "លុបប្រវត្តិ (រួមទាំងប្រវត្តិដែលបានធ្វើសមកាលកម្មពីឧបករណ៍ផ្សេងទៀត) ខូគី និងទិន្នន័យរុករកផ្សេងទៀត។";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "លុប";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "រកមិនឃើញប្រវត្តិទេ";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "ផ្ទាំង​ដែល​បិទ​ថ្មីៗ";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "បញ្ចូលពាក្យស្វែងរក";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "ប្រវត្តិ​ដែល​បាន​ធ្វើ​សមកាលកម្ម";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "ចាស់ជាង";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "អាជ្ញាប័ណ្ណ";
@@ -598,6 +652,18 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "ស្វែងយល់បន្ថែម";
 
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "ដើម្បីប្រើមុខងារ AutoFill សម្រាប់ Firefox អ្នកត្រូវតែបើកលេខសម្ងាត់ឧបករណ៍។";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "នាំ​យក​ពាក្យ​សម្ងាត់​របស់​អ្នក​គ្រប់​ទីកន្លែង";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "បំពេញពាក្យសម្ងាត់ Firefox ដោយស្វ័យប្រវត្តិ";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "បើក​ការបំពេញ​ដោយស្វ័យប្រវត្តិ";
+
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "កុំ​រក្សាទុក";
 
@@ -612,6 +678,15 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "តម្រង";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "មិនមានលទ្ធផលត្រូវនឹងការស្វែងរករបស់អ្នកទេ។";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "បោះបង់";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "ជ្រើសរើសពាក្យសម្ងាត់ដើម្បីបំពេញ";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ការចូល​ដែល​បាន​រក្សាទុក";
@@ -628,11 +703,20 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "បាន​បញ្ចូល​​ចំណាំ";
 
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "បន្ថែម";
+
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "បន្ថែមទៅផ្លូវកាត់";
 
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "បន្ថែម";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ចម្លងអាសយដ្ឋាន";
+
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "បន្ថែមទៅផ្លូវកាត់";
 
 /* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "ចំណាំ​";
@@ -643,11 +727,29 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "បាន​ចម្លង​ URL ទៅ​អង្គចងចាំ";
 
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "កែ​គេហទំព័រ​តាមបំណង";
+
 /* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ទាញយក";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "ការការពារត្រូវបានបិទសម្រាប់គេហទំព័រនេះ";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "ការការពារត្រូវបានបើកសម្រាប់គេហទំព័រនេះ";
+
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "ជំនួយ";
+
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "ប្រវត្តិ";
+
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "ផ្ទាំង​ឯកជន​ថ្មី";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "ផ្ទាំង​ថ្មី";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "បិទម៉ូតងងិត";
@@ -676,8 +778,38 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "បាន​យក​ចំណាំ​ចេញ";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "យកចេញ";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "លុបចេញពីផ្លូវកាត់";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2.v99" = "បានយកចេញពីផ្លូវកាត់";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "បានលុបចេញពីបញ្ជីអាន";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "យកចេញ";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "ចែក​រំលែក";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "ធ្វើសមកាលកម្ម និងរក្សាទុកទិន្នន័យ";
+
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "បានផ្ញើផ្ទាំង";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "ចំណាំ";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "ទំព័រដើម";
+
+/* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "បានផ្ទៀងផ្ទាត់ដោយ %@";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "ការកំណត់ការការពារ";
@@ -703,6 +835,9 @@
 /* Description of cryptominers. */
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Cryptominers ប្រើប្រាស់​ថាមពលគណនា​របស់​ប្រព័ន្ធ​ដោយសម្ងាត់ ដើម្បីរកប្រាក់ឌីជីថល។ Cryptominers ធ្វើឱ្យថ្មរបស់អ្នកអន់ថយ កុំព្យូទ័ររបស់អ្នកយឺត និងអាចបង្កើនវិក្កយបត្រថាមពលរបស់អ្នក។";
 
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "ការកំណត់នៅលើកម្មវិធីរុករកតាមអ៊ីនធឺណិត និងកុំព្យូទ័ររបស់អ្នកគឺមានលក្ខណៈប្លែកពីគេ។ Fingerprinters ប្រមូលការកំណត់ប្លែកៗជាច្រើនទាំងនេះ ដើម្បីបង្កើតប្រវត្តិរូបរបស់អ្នក ដែលអាចត្រូវបានប្រើដើម្បីតាមដានអ្នកនៅពេលអ្នករុករក។";
+
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "បណ្តាញ​សង្គម​ដាក់​កម្មវិធី​តាម​ដាន​នៅ​លើ​គេហទំព័រ​ផ្សេងៗ ​ដើម្បី​បង្កើត​​កម្រង​ព័ត៌មាន​​របស់​អ្នក​ពេញលេញ​ និង​ស្មុគ្រស្មាញ។ ទប់ស្កាត់​កម្មវិធី​តាម​ដាន​ទាំង​នេះ​អាច​កាត់​បន្ថយ​ចំនួន​ប្រព័ន្ធ​ផ្សព្វផ្សាយ​សង្គម​អាច​​មើល​ឃើញ​ព័ត៌មាន​ដែល​អ្នក​ប្រើប្រាស់​នៅ​លើ​អ៊ីនធឺណិត ។";
 
@@ -711,6 +846,9 @@
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "មានអ្វី​​ថ្មី";
+
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "ពង្រីក (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "ឧបករណ៍​ចល័ត";
@@ -738,6 +876,9 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "យល់ព្រម";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "ចាប់​ផ្ដើម​រុករក";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "អូ! Firefox បាន​គាំង​ហើយ";
@@ -775,8 +916,17 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "គោលនយោបាយ​ឯកជន";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "ការតភ្ជាប់មិនមានសុវត្ថិភាពទេ";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "ការតភ្ជាប់មានសុវត្ថិភាព";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "ម៉ាស៊ីនស្វែងរកឆាប់រហ័ស";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "វាយតម្លៃនៅលើ App Store";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "អាន";
@@ -787,11 +937,20 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "មាន​មុខងារ​អ្នក​អាន";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "សម្គាល់​ថា​អាន";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "សម្គាល់​ថា​មិន​ទាន់​អាន";
+
 /* Panel accessibility label */
 "Reading list" = "បញ្ជី​អាន";
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "បាន​បិទ​ថ្មីៗ";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "បង្ហាញ​ទាំងអស់";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "ផ្ទុក​ឡើងវិញ";
@@ -832,6 +991,9 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "ទិន្នន័យនេះមិនត្រឹមត្រូវ​ទេ";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "ចូលទៅកាន់ ‘ការកំណត់’ ឧបករណ៍ > ‘Firefox’។ អនុញ្ញាតឱ្យ Firefox ចូលប្រើកាមេរ៉ា។";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "ស្កេនកូដ QR";
 
@@ -843,6 +1005,9 @@
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "ប្ដូរ​ទៅ​ផ្ទាំង";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "ការណែនាំរបស់ Firefox";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "ម៉ាស៊ីន​ស្វែងរក​ថ្មី​នឹង​បង្ហាញ​នៅ​ក្នុង​របារ​ស្វែងរក​រហ័ស។";
@@ -888,6 +1053,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "បោះបង់​";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "បិទ";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "ឧបករណ៍​​ដែល​អាចប្រើបាន៖";
@@ -967,6 +1135,36 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (ជំនួសសំណួរជាមួយ %s)";
 
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "បាត";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "ការដាក់របារអាសយដ្ឋាន";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "របារអាសយដ្ឋាន";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "នៅលើ";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "ស្បែកកម្មវិធីរុករកតាមអ៊ីនធឺណិត";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "រូបរាង";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "រូបរាងគេហទំព័រ";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "ផ្តល់ឱ្យគេហទំព័រនូវរូបរាងងងឹត។ គេហទំព័រមួយចំនួនអាចមើលទៅមិនត្រឹមត្រូវ។";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "គេហទំព័រម៉ូដខ្មៅ";
+
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "ប្លុកបើកកម្មវិធីខាងក្រៅ";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "ជម្រះទិន្នន័យគេហទំព័រទាំងអស់";
 
@@ -975,6 +1173,9 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "សម្អាត​ទិន្នន័យ​ឯកជន​";
+
+/* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "សម្អាត​របស់របរ៖ %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "​ចម្លង​ទៅកាន់​អង្គ​ចងចាំ";
@@ -1024,6 +1225,9 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "រចនាប័ទ្ម​នឹងផ្លាស់ប្តូរដោយស្វ័យប្រវត្តិតាម​ពន្លឺបង្ហាញរបស់អ្នក។ អ្នកអាចកំណត់ចំណុច​ដែលរចនាប័ទ្ម​ផ្លាស់ប្តូរ។ រង្វង់បង្ហាញពីពន្លឺបច្ចុប្បន្ននៃអេក្រង់របស់អ្នក។";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "ស្វ័យប្រវត្តិ";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "ប្ដូរមុខងារ";
 
@@ -1057,8 +1261,122 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ទូទៅ";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "ជ្រើសរើសអ្វីដែលបង្ហាញជាទំព័រដើម។";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "ជ្រើសរើសអ្វីដែលបានរួមបញ្ចូលនៅលើទំព័រដើម Firefox។";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "រំលង​ត្រឡប់វិញ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "បាន​ណែនាំ​ដោយ Pocket";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "បានរក្សាទុក​ថ្មីៗ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "បាន​ចូលមើល​ថ្មីៗ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "ផ្លូវកាត់";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "ទំព័រដើមបន្ទាប់ពីអសកម្មបួនម៉ោង";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "ទំព័រ​ដើម";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "ជ្រើសរើសអ្វីដែលអ្នកឃើញនៅពេលអ្នកត្រឡប់ទៅ Firefox វិញ។";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "ផ្ទាំងចុងក្រោយ";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "កំពុងបើកអេក្រង់";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "រួមបញ្ចូលនៅលើទំព័រដើម";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "ផ្ទាំងរូបភាព";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "ផ្ទាំងរូបភាព Firefox លំនាំអាមេទីស។";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "ផ្ទាំងរូបភាព Firefox លំនាំភ្នំឆ្នេរ។";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "ផ្ទាំងរូបភាព Firefox លំនាំពណ៌ខៀវស្រងាត់។";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "ជម្រើសដើមមផ្ទាំងរូបភាពលាត។";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "ផ្ទាំងរូបភាព Firefox លំនាំថ្ងៃរះ។";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "វដ្តបិទ/បើកផ្ទាំងរូបភាពទំព័រដើម";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "ផ្ទាំងរូបភាព Firefox លំនាំភ្នំពេលព្រលប់។";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "បុរាណ %@";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "អេក្រង់បើក";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "ស្វែងយល់​បន្ថែម";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "សាកល្បងការប្រមូលថ្មី។";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "ការប្រមូលផ្ដុំសំឡេងឯករាជ្យថ្មី។";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "កំណែពិសេស";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "ផ្លាស់ប្តូរផ្ទាំងរូបភាពដោយចុចលើឡូហ្គោទំព័រដើម Firefox";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "ផ្ទាំងរូបភាព";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "ផ្ទាំងរូបភាពបានធ្វើបច្ចុប្បន្នភាព!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "មើល";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "គេហទំព័រ​";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "ជួរ";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "ជួរ";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "ផ្លូវកាត់";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "ផ្លូវកាត់";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "ផ្លូវកាត់ដែលឧបត្ថម្ភ";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "បិទ";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "បើក";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "គេហ​ទំព័រ​បច្ចុប្បន្ន";
@@ -1074,6 +1392,9 @@
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ទំព័រទទេ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "ផ្ទាល់ខ្លួន";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "ទំព័រដើម Firefox";
@@ -1093,8 +1414,14 @@
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "ជ្រើសរើសអ្វីដែលត្រូវផ្ទុកនៅពេលបើកផ្ទាំងថ្មី";
 
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "ទប់ស្កាត់​រូបភាព";
+
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "នៅពេលបើក Firefox";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "ពេលបើក %@";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "ផ្តល់ជូនឲ្យបើកតំណដែលបានចម្លង";
@@ -1104,6 +1431,18 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "កម្មវិធី Mail";
+
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "ប្រើស្នាមម្រាមដៃរបស់អ្នកដើម្បីចូលប្រើពាក្យសម្ងាត់ឥឡូវនេះ។";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "ឥឡូវនេះ ពាក្យសម្ងាត់របស់អ្នកត្រូវបានការពារដោយ Face ID, Touch ID ឬលេខកូដសម្ងាត់ឧបករណ៍។";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "រក្សាទុកពាក្យសម្ងាត់";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "ពាក្យ​សម្ងាត់";
 
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "រក្សាទុក​ការ​ចូល";
@@ -1153,8 +1492,44 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "ការសិក្សា";
 
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "ចូល​ដើម្បី​សមកាលកម្ម​ពាក្យសម្ងាត់ ថេប ចំណាំ និងច្រើនទៀត។";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "ធ្វើសមកាលកម្ម និងរក្សាទុកទិន្នន័យ";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "ធ្វើសមកាលកម្ម និងរក្សាទុកទិន្នន័យ";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "ផ្ទាំងអសកម្ម";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "ផ្ទាំងដែលអ្នកមិនបានមើលរយៈពេលពីរសប្តាហ៍នឹងត្រូវបានផ្លាស់ទីទៅផ្នែកអសកម្ម។";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "ក្រុមផ្ទាំង";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "ប្ដូរ​ថាស​ផ្ទាំង​តាម​បំណង";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "ផ្ទាំង";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "បាត";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "របារឧបករណ៍";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "កំពូល";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ទទួលបានហើយ";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "ប្រសិនបើគេហទំព័រមួយមិនដំណើរការដូចការរំពឹងទុកទេ សូមចុចលើសោនៅក្នុងរបារអាសយដ្ឋាន ហើយបិទការការពារការតាមដានដែលបានបង្កើនប្រសិទ្ធភាពសម្រាប់ទំព័រនោះ។";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ងើយក្បាល!";
@@ -1165,6 +1540,21 @@
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "ស្វែងយល់​បន្ថែម";
 
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "កាត់បន្ថយការផ្សាយពាណិជ្ជកម្មដែលមានគោលដៅ និងជួយបញ្ឈប់អ្នកផ្សាយពាណិជ្ជកម្មពីការតាមដានការរុករករបស់អ្នក។";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "ប្រសិនបើគេហទំព័រមួយមិនដំណើរការដូចការរំពឹងទុកទេ សូមចុចលើសោនៅក្នុងរបារអាសយដ្ឋាន ហើយបិទការការពារការតាមដានដែលបានបង្កើនប្រសិទ្ធភាពសម្រាប់ទំព័រនោះ។";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "ប្រសិនបើគេហទំព័រមួយមិនដំណើរការដូចការរំពឹងទុកទេ សូមចុចលើសោនៅក្នុងរបារអាសយដ្ឋាន ហើយបិទការការពារការតាមដានដែលបានបង្កើនប្រសិទ្ធភាពសម្រាប់ទំព័រនោះ។";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "អនុញ្ញាតឱ្យមានការតាមដានការផ្សាយពាណិជ្ជកម្មមួយចំនួន ដើម្បីឱ្យគេហទំព័រដំណើរការបានត្រឹមត្រូវ។";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "រារាំងកម្មវិធីតាមដាន ការផ្សាយពាណិជ្ជកម្ម និងបង្អួចលេចឡើងជាច្រើនទៀត។ ទំព័រផ្ទុកលឿនជាងមុន ប៉ុន្តែមុខងារមួយចំនួនអាចនឹងមិនដំណើរការ។";
+
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "កម្រិតការការពារ";
 
@@ -1173,6 +1563,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "ស្តង់ដារ (លំនាំដើម)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "ស្តង់ដារ";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "តឹងរ៉ឹង";
@@ -1188,6 +1581,9 @@
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "សកម្មភាពនេះនឹងលុបទិន្នន័យគេហទំព័ររបស់អ្នកទាំងអស់។ វាមិនអាចធ្វើវិញបានទេ។";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "សកម្មភាពនេះនឹងសម្អាតធាតុដែលបានជ្រើសរើស។ វាមិនអាចត្រឡប់វិញបានទេ។";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "ទិន្នន័យគេហទំព័រ";
@@ -1215,6 +1611,12 @@
 
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "ស្វែងរកក្នុង Firefox";
+
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "ចម្លង";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "ផ្ញើ​តំណ​ទៅ​ឧបករណ៍";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "បង្ហាញ​​សំណើ​ស្វែងរក";
@@ -1255,11 +1657,44 @@
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "មិន​ធ្វើ​វិញ​";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "មើលផ្ទាំងអសកម្ម";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "លាក់ផ្ទាំងអសកម្ម";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "ស្វែងរក";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "បន្ថែម​ផ្ទាំង";
+
 /* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "បិទ​ផ្ទាំង​ទាំងអស់";
 
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”. */
+"TabTray.Header.FilteredTabs.SectionHeader" = "ផ្សេងទៀត";
+
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "ផ្ទាំងអសកម្ម";
+
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "បើក​​ផ្ទាំង​ថ្មី";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "ឯកជន";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "បានធ្វើសមកាលកម្ម";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "ផ្ទាំង";
+
+/* The title for the tab tray */
+"TabTray.Title" = "បើក​ផ្ទាំង";
+
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "បង្ហាញ​ផ្ទាំង";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "មិន​អាច​បង្ហាញ​ទំព័រ​នៅ​ក្នុង​ទិដ្ឋភាព​អ្នក​អាន​បាន​ទេ។";
@@ -1273,11 +1708,17 @@
 /* Relative date for date in past week. */
 "this week" = "សប្ដាហ៍​នេះ";
 
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "ម្សិលមិញ";
+
 /* label for Not Now button */
 "Toasts.NotNow" = "កុំទាន់អាល";
 
 /* Open App Store button */
 "Toasts.OpenAppStore" = "បើក App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "មិនធ្វើវិញ";
 
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "ថ្ងៃ​នេះ";
@@ -1317,6 +1758,12 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "ឈ្មោះ​អ្នក​ប្រើប្រាស់";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "បោះបង់";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "ព្យាយាម​ម្ដងទៀត";
 
 /* Accessibility label for the main web content view */
 "Web content" = "មាតិកា​បណ្ដាញ";

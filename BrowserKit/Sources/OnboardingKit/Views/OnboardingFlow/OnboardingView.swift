@@ -134,7 +134,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             Text(viewModel.skipText)
                 .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
         }
-        .skipButtonStyle(theme: theme)
+        .skipButtonStyle(theme: theme, variant: viewModel.variant)
         .accessibilityLabel(viewModel.skipText)
     }
 

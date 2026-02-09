@@ -3214,6 +3214,8 @@ public protocol GeckoPrefHandler: AnyObject, Sendable {
     
     func setGeckoPrefsState(newPrefsState: [GeckoPrefState]) 
     
+    func setGeckoPrefsOriginalValues(originalGeckoPrefs: [OriginalGeckoPref]) 
+    
 }
 
 
@@ -3275,6 +3277,30 @@ fileprivate struct UniffiCallbackInterfaceGeckoPrefHandler {
                 }
                 return uniffiObj.setGeckoPrefsState(
                      newPrefsState: try FfiConverterSequenceTypeGeckoPrefState.lift(newPrefsState)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        setGeckoPrefsOriginalValues: { (
+            uniffiHandle: UInt64,
+            originalGeckoPrefs: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.setGeckoPrefsOriginalValues(
+                     originalGeckoPrefs: try FfiConverterSequenceTypeOriginalGeckoPref.lift(originalGeckoPrefs)
                 )
             }
 
@@ -3977,6 +4003,31 @@ fileprivate struct FfiConverterSequenceTypeGeckoPrefState: FfiConverterRustBuffe
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeOriginalGeckoPref: FfiConverterRustBuffer {
+    typealias SwiftType = [OriginalGeckoPref]
+
+    public static func write(_ value: [OriginalGeckoPref], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeOriginalGeckoPref.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [OriginalGeckoPref] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [OriginalGeckoPref]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeOriginalGeckoPref.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypePreviousGeckoPrefState: FfiConverterRustBuffer {
     typealias SwiftType = [PreviousGeckoPrefState]
 
@@ -4359,6 +4410,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_state() != 3765) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_original_values() != 37179) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_metricshandler_record_enrollment_statuses() != 14510) {

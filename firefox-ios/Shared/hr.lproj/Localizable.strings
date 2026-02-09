@@ -1763,7 +1763,7 @@
 "unread" = "nepročitano";
 
 /* Debug option */
-"Use stage servers" = "Koristi testni poslužitelj";
+"Use stage servers" = "Koristi testni server";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Korisničko ime";

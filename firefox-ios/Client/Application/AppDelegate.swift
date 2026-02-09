@@ -68,7 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         // before any Application Services component gets used.
         Viaduct.shared.initialize()
 
-        initializeRustErrors(logger: logger)
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,
                    category: .lifecycle)

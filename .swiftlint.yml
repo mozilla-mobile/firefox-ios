@@ -131,6 +131,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   # Firefox specific
   - build/
   - .build/
+  - "**/.build"
   - firefox-ios/Client/Assets/Search/get_supported_locales.swift
   - firefox-ios/Client/Generated
   - firefox-ios/fastlane/
@@ -146,14 +147,10 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/firefox-ios-tests/Tests/UITests/
   - l10n-screenshots-dd/
   - DerivedData/
-  # Package.swift files need a custom header for swift-tools-version
-  # so must be excluded due to file_header rule
-  - firefox-ios/Package.swift
-  - BrowserKit/Package.swift
+  # Package.swift files need a custom header for swift-tools-version so must be excluded due to file_header rule. Ignore at all levels.
+  - "**/Package.swift"
   - BrowserKit/Sources/Shared/Deferred/
   - BrowserKit/.build/
-  - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
-  - Package.swift
   - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
   # Focus specific
   - focus-ios/Blockzilla/Generated

@@ -76,3 +76,9 @@ To create a production build of the User Scripts, run the following `npm` comman
 ```shell
 npm run build
 ```
+
+## Updating License Acknowledgements
+
+In the app, the Settings > Licenses screen credits open source packages we use to build Firefox for iOS. 
+
+If you add a new third party package or resource, please update the credits. Follow the instructions in our `license_plist_config.yml` file.

@@ -230,10 +230,10 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    // called when the homepage is displayed to make sure it's scrolled to top
+    // called when the homepage is displayed to make sure it's scrolled to top while considering content offset
     func scrollToTop(animated: Bool = false) {
-        collectionView?.setContentOffset(.zero, animated: animated)
         if let collectionView = collectionView {
+            collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
             handleScroll(collectionView, isUserInteraction: false)
         }
     }
@@ -591,15 +591,28 @@ final class HomepageViewController: UIViewController,
             return cell
 
         case .merino(let story):
-            guard let storyCell = collectionView?.dequeueReusableCell(cellType: StoryCell.self, for: indexPath) else {
+            let shouldShowStoriesFeedCell = isHomepageStoriesScrollDirectionCustomized
+                && UIDevice.current.userInterfaceIdiom == .phone
+            let cellType: ReusableCell.Type = shouldShowStoriesFeedCell ? StoriesFeedCell.self
+                                                                        : StoryCell.self
+
+            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
 
             let position = indexPath.item + 1
             let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
             let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
-            storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
-            return storyCell
+
+            if let storiesFeedCell = cell as? StoriesFeedCell {
+                storiesFeedCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
+                return storiesFeedCell
+            } else if let storyCell = cell as? StoryCell {
+                storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
+                return storyCell
+            }
+
+            return UICollectionViewCell()
 
         case .spacer:
             guard let spacerCell = collectionView?.dequeueReusableCell(

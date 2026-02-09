@@ -1,6 +1,9 @@
 /* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
 "NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Napredno";
 
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ temu spletnemu mestu ne zaupa, ker najdeno potrdilo ni veljavno za %2$@.";
+
 /* On certificate error page, this is the security information shown in the advanced section. */
 "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "To spletno mesto ne dovoljuje povezav, ki niso zavarovane.";
 

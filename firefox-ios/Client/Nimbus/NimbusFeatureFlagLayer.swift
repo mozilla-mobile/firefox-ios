@@ -190,9 +190,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
-        case .updatedPasswordManager:
-            return checkUpdatedPasswordManagerFeature(from: nimbus)
-
         case .voiceSearch:
             return checkVoiceSearchFeature(from: nimbus)
 
@@ -495,11 +492,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHostedSummarizerShakeGesture(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hostedSummarizerFeature.value().shakeGesture
-    }
-
-    private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.updatedPasswordManagerFeature.value()
-        return config.status
     }
 
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {

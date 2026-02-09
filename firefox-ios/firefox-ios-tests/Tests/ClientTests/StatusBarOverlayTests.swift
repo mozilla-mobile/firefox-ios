@@ -561,52 +561,9 @@ final class StatusBarOverlayTests: XCTestCase {
     private func createToolbarMock(
         isTranslucencyEnabled: Bool = true,
         isReduceTransparencyEnabled: Bool = false) -> ToolbarHelperInterface {
-        let toolbarHelper = ToolbarHelperMock()
+        let toolbarHelper = MockToolbarHelper()
         toolbarHelper.isToolbarTranslucencyEnabled = isTranslucencyEnabled
         toolbarHelper.isReduceTransparencyEnabled = isReduceTransparencyEnabled
         return toolbarHelper
-    }
-}
-
-private class ToolbarHelperMock: ToolbarHelperInterface {
-    private enum UX {
-        static let backgroundAlphaForBlur: CGFloat = 0.85
-    }
-
-    var isToolbarRefactorEnabled = true
-    var isToolbarTranslucencyEnabled = true
-    var isToolbarTranslucencyRefactorEnabled = false
-    var isReduceTransparencyEnabled = false
-    var isSwipingTabsEnabled = true
-    var userInterfaceIdiom: UIUserInterfaceIdiom = .phone
-
-    @MainActor
-    var glassEffectAlpha: CGFloat {
-        guard shouldBlur() else { return 1 }
-        if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
-    }
-
-    func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
-        return traitCollection.verticalSizeClass != .compact
-               && traitCollection.horizontalSizeClass != .regular
-    }
-
-    func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool {
-        return traitCollection.verticalSizeClass == .regular
-               && traitCollection.horizontalSizeClass == .regular
-    }
-
-    @MainActor
-    func shouldBlur() -> Bool {
-        return isToolbarRefactorEnabled &&
-            isToolbarTranslucencyEnabled &&
-            !isReduceTransparencyEnabled
-    }
-
-    @MainActor
-    func backgroundAlpha() -> CGFloat {
-        guard shouldBlur() else { return 1.0 }
-
-        return UX.backgroundAlphaForBlur
     }
 }
