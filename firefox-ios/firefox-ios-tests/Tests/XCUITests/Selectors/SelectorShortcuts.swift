@@ -374,15 +374,14 @@ extension Selector {
         )
      }
 
-    static func linkStaticTextById(_ id: String, description: String, groups: [String] = []) -> Selector
-       {
+    static func linkStaticTextById(_ id: String, description: String, groups: [String] = []) -> Selector {
           Selector(
               strategy: .linkStaticTextById(id),
               value: id,
               description: description,
               groups: groups
           )
-      }
+    }
 }
 
 extension XCUIElement {
