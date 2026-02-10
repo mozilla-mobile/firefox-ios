@@ -98,7 +98,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFontForCurrentLocale)
+            .font(UX.CardView.titleFont())
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -113,7 +113,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
             .foregroundColor(theme.colors.textSecondary.color)
-            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
+            .multilineTextAlignment(UX.CardView.textAlignment())
             .lineLimit(nil)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
