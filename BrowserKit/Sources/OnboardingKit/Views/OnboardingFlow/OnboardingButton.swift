@@ -25,12 +25,7 @@ extension View {
     }
 
     private func primaryButtonColor(theme: Theme, variant: OnboardingVariant) -> UIColor {
-        switch variant {
-        case .brandRefresh:
-            return theme.colors.actionPrimaryBrandRefresh
-        default:
-            return theme.colors.actionPrimary
-        }
+        return theme.colors.actionPrimary
     }
 
     @ViewBuilder

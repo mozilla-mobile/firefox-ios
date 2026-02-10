@@ -171,12 +171,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     }
 
     private var linkColor: UIColor {
-        switch viewModel.variant {
-        case .brandRefresh:
-            return theme.colors.actionPrimaryBrandRefresh
-        default:
-            return theme.colors.actionPrimary
-        }
+        return theme.colors.actionPrimary
     }
 
     @ViewBuilder
