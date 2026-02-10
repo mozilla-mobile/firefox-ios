@@ -498,8 +498,7 @@ final class NimbusFeatureFlagLayer: Sendable {
     }
 
     private func checkSummarizerAppAttestAuthFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.summarizerAppAttestAuthFeature.value()
-        return config.enabled
+        return nimbus.features.summarizerAppAttestAuthFeature.value().enabled
     }
 
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
