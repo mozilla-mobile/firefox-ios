@@ -76,13 +76,16 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         let finalFrame = context.finalFrame(for: destinationController)
 
-        runPresentationAnimation(
-            context: context,
-            browserVC: bvc,
-            destinationController: destinationController,
-            finalFrame: finalFrame,
-            selectedTab: selectedTab
-        )
+        // Don't block the UI rendering with the animation to make the snapshotting code more performant
+        DispatchQueue.main.async {
+            self.runPresentationAnimation(
+                context: context,
+                browserVC: bvc,
+                destinationController: destinationController,
+                finalFrame: finalFrame,
+                selectedTab: selectedTab
+            )
+        }
     }
 
     func animateDismissal(context: UIViewControllerContextTransitioning) {
@@ -147,7 +150,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         bvcSnapshot.contentMode = .scaleAspectFill
         bvcSnapshot.frame = browserVC.view.frame
         bvcSnapshot.clipsToBounds = true
-        bvcSnapshot.layer.shouldRasterize = true
 
         // Dimmed background view
         let backgroundView = UIView()
@@ -162,18 +164,18 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         destinationController.view.frame = finalFrame
         destinationController.view.layoutIfNeeded()
 
-        guard let panel = currentExperimentPanel as? ThemedNavigationController,
+        guard let panel = self.currentExperimentPanel as? ThemedNavigationController,
               let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
         else { return }
 
         let cv = panelViewController.tabDisplayView.collectionView
         guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
-              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
+              let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
         else { return }
 
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
-        let theme = retrieveTheme()
+        let theme = self.retrieveTheme()
 
         if let indexPath = dataSource.indexPath(for: item) {
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
@@ -187,7 +189,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 cell.alpha = UX.clearAlpha
             }
         }
-
         // Animate
         cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
         cv.alpha = UX.halfAlpha
@@ -244,17 +245,21 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         // if the selectedTab screenshot is nil we assume we have tapped the new tab button
         // from the tab tray, learn more in private, or opened a tab from the sync'd tabs
         if selectedTab.screenshot == nil {
-            dismissWithoutTabScreenshot(panelViewController: panelViewController,
-                                        contentContainer: contentContainer,
-                                        toView: toView,
-                                        context: context)
+            self.dismissWithoutTabScreenshot(
+                panelViewController: panelViewController,
+                contentContainer: contentContainer,
+                toView: toView,
+                context: context
+            )
         } else {
-            dismissWithTabScreenshot(panelViewController: panelViewController,
-                                     contentContainer: contentContainer,
-                                     toView: toView,
-                                     context: context,
-                                     selectedTab: selectedTab,
-                                     browserVC: browserVC)
+            self.dismissWithTabScreenshot(
+                panelViewController: panelViewController,
+                contentContainer: contentContainer,
+                toView: toView,
+                context: context,
+                selectedTab: selectedTab,
+                browserVC: browserVC
+            )
         }
     }
 
@@ -293,48 +298,50 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.contentMode = .scaleAspectFill
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-        tabSnapshot.layer.shouldRasterize = true
 
-        contentContainer.isHidden = true
+        // swiftlint:disable closure_body_length
+        DispatchQueue.main.async {
+            contentContainer.isHidden = true
 
-        toView.layer.cornerCurve = .continuous
-        toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-        toView.clipsToBounds = true
-        toView.alpha = UX.clearAlpha
-        toView.layer.shouldRasterize = true
+            toView.layer.cornerCurve = .continuous
+            toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            toView.clipsToBounds = true
+            toView.alpha = UX.clearAlpha
 
-        context.containerView.addSubview(toView)
-        context.containerView.addSubview(tabSnapshot)
+            context.containerView.addSubview(toView)
+            context.containerView.addSubview(tabSnapshot)
 
-        var tabCell: ExperimentTabCell?
-        if let indexPath = dataSource.indexPath(for: item),
-           let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
-            tabCell = cell
-            tabSnapshot.frame = cv.convert(cell.frame, to: browserVC.view)
+            var tabCell: ExperimentTabCell?
+            if let indexPath = dataSource.indexPath(for: item),
+               let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
+                tabCell = cell
+                tabSnapshot.frame = cv.convert(cell.frame, to: browserVC.view)
 
-            cell.isHidden = true
+                cell.isHidden = true
+            }
+
+            UIView.animate(
+                withDuration: UX.dismissDuration,
+                delay: 0.0,
+                options: .curveEaseOut) {
+                    cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+                    cv.alpha = UX.opaqueAlpha
+
+                    tabSnapshot.frame = contentContainer.frame
+                    toView.alpha = UX.opaqueAlpha
+                    toView.layer.cornerRadius = UX.zeroCornerRadius
+                    tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
+                } completion: { _ in
+                    contentContainer.isHidden = false
+                    tabCell?.isHidden = false
+                    toView.layer.shouldRasterize = false
+                    self.view.removeFromSuperview()
+                    tabSnapshot.removeFromSuperview()
+                    toView.removeFromSuperview()
+                    context.completeTransition(true)
+                }
         }
-
-        UIView.animate(
-            withDuration: UX.dismissDuration,
-            delay: 0.0,
-            options: .curveEaseOut) {
-            cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            cv.alpha = UX.opaqueAlpha
-
-            tabSnapshot.frame = contentContainer.frame
-            toView.alpha = UX.opaqueAlpha
-            toView.layer.cornerRadius = UX.zeroCornerRadius
-            tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
-        } completion: { _ in
-            contentContainer.isHidden = false
-            tabCell?.isHidden = false
-            toView.layer.shouldRasterize = false
-            self.view.removeFromSuperview()
-            tabSnapshot.removeFromSuperview()
-            toView.removeFromSuperview()
-            context.completeTransition(true)
-        }
+        // swiftlint:enable closure_body_length
     }
 
     private func dismissWithoutTabScreenshot(
