@@ -98,9 +98,9 @@ func checkCodeCoverage() {
 }
 
 class CodeCoverageGate {
-    private let coverageBypassLabel = "coverage-exception"
+    private let coverageBypassLabel = "Ignore-code-coverage"
     private let jsonPath = "coverage.json"
-    private let threshold: Double = 35
+    private let threshold: Double = 70
     private let minimumAddedLines = 5
 
     func failOnNewFilesWithoutCoverage() {
@@ -112,11 +112,13 @@ class CodeCoverageGate {
         }
 
         let coverageFiles: [[String: Any]] = targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
-        // Consider created + modified Swift files, excluding Tests & Generated
-        let candidates = (danger.git.createdFiles + danger.git.modifiedFiles).filter {
+        // Consider created Swift files, excluding Tests & Generated
+        // Exclusing `danger.git.modifiedFiles` for now
+        let candidates = (danger.git.createdFiles).filter {
             $0.hasSuffix(".swift") &&
             !$0.contains("Tests/") &&
             !$0.contains("/Generated/") &&
+            !$0.contains("MozillaRustComponents/") &&
             !$0.contains("/Strings.swift") &&
             !$0.contains("/AccessibilityIdentifiers.swift")
         }
@@ -163,30 +165,29 @@ class CodeCoverageGate {
 
         guard !rows.isEmpty else {
             markdown("""
-            ### ✅ Per-file coverage
-            All changed files meet the threshold of **\(formatPct(threshold))**.
+            ### ✅ New file code coverage
+            All new files meet the threshold of **\(formatPct(threshold))**.
             """)
             return
         }
 
         let header = """
-        ### ❌ Per-file test coverage gate
-        The following changed file(s) are below **\(formatPct(threshold))** coverage:
+        ### ❌ New file code coverage
+        The following new file(s) are below **\(formatPct(threshold))** coverage:
 
         | File | Coverage | Required |
         |---|---:|---:|
         \(rows.joined(separator: "\n"))
         """
 
-        markdown("\(header)")
-        // If we want to fail the PRs at one point, then uncomment this and remove the markdown
-//        let hasBypass = danger.github.issue.labels.contains { $0.name == coverageBypassLabel }
-//        if hasBypass {
-//            warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
-//        } else {
-//            let tip = "*Tip:* Add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
-//            fail("\(header)\n\n\(tip)")
-//        }
+        let hasBypass = danger.github.issue.labels.contains { $0.name == coverageBypassLabel }
+        if hasBypass {
+            warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
+        } else {
+            let tip = "You can add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
+            let owners = "Please also tag a member of the @fxios-unit-test-owners if the bypass is used."
+            fail("\(header)\n\n\(tip) \(owners)")
+        }
     }
 
     // Small helper to format percentages
