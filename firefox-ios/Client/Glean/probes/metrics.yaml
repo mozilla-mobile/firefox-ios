@@ -3014,4 +3014,45 @@ nimbus_system:
     expires: never
     send_in_pings:
       - nimbus
+  enrollment_status:
+    type: event
+    description: >
+      Recorded for each enrollment status each time the SDK completes application of pending experiments.
+    extra_keys:
+      slug:
+        type: string
+        description: The slug/unique identifier of the experiment
+      status:
+        type: string
+        description: The status of this enrollment
+      reason:
+        type: string
+        description: The reason the client is in the noted status
+      branch:
+        type: string
+        description: The branch slug/identifier that was randomly chosen (if the client is enrolled)
+      error_string:
+        type: string
+        description: If the enrollment resulted in an error, the associated error string
+      conflict_slug:
+        type: string
+        description: If the enrollment hit a feature conflict, the slug of the conflicting experiment/rollout
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/EXP-3827
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1996105
+      - https://mozilla-hub.atlassian.net/browse/EXP-6084
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1996120
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-14851
+    data_reviews:
+      - https://github.com/mozilla/application-services/pull/5857#issuecomment-1749722071
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - dthorn@mozilla.com
+      - beth@mozilla.com
+      - project-nimbus@mozilla.com
+    expires: never
+    disabled: true
+    send_in_pings:
+      - nimbus
 

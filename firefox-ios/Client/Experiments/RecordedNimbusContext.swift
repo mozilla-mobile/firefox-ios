@@ -9,6 +9,7 @@ import Shared
 
 import func MozillaAppServices.getCalculatedAttributes
 import func MozillaAppServices.getLocaleTag
+import struct MozillaAppServices.EnrollmentStatusExtraDef
 import struct MozillaAppServices.JsonObject
 import protocol MozillaAppServices.RecordedContext
 import MozillaRustComponents
@@ -131,12 +132,12 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
     }
 
     /**
-     * [record] is called when experiment enrollments are evolved. It should apply the
+     * [recordContext] is called when experiment enrollments are evolved. It should apply the
      * [RecordedNimbusContext]'s values to a [NimbusSystem.RecordedNimbusContextObject] instance,
      * and use that instance to record the values to Glean.
      */
-    func record() {
-        logger.log("record start", level: .debug, category: .experiments)
+    func recordContext() {
+        logger.log("recordContext start", level: .debug, category: .experiments)
         let eventQueryValuesObject = GleanMetrics.NimbusSystem.RecordedNimbusContextObjectItemEventQueryValuesObject(
             daysOpenedInLast28: eventQueryValues[RecordedNimbusContext.DAYS_OPENED_IN_LAST_28].toInt64()
         )
@@ -161,8 +162,34 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
                 touExperiencePoints: touExperiencePoints.toInt64()
             )
         )
+        logger.log("recordContext end", level: .debug, category: .experiments)
+    }
+
+    /**
+     * [recordEnrollmentStatuses] is called when experiment enrollments are evolved. It should apply the
+     * [EnrollmentStatusExtraDef]'s values to a [NimbusSystem.EnrollmentStatusExtra] instance,
+     * and use that instance to record the events to Glean.
+     */
+    func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef]) {
+        for extra in enrollmentStatusExtras {
+            GleanMetrics.NimbusSystem.enrollmentStatus
+                .record(GleanMetrics.NimbusSystem.EnrollmentStatusExtra(
+                    branch: extra.branch,
+                    conflictSlug: extra.conflictSlug,
+                    errorString: extra.errorString,
+                    reason: extra.reason,
+                    slug: extra.slug,
+                    status: extra.status
+                ))
+        }
+    }
+
+    /**
+     * [submit] is called when experiment enrollments are evolved. It should submit the ping for
+     * [NimbusSystem] metrics to Glean.
+     */
+    func submit() {
         GleanMetrics.Pings.shared.nimbus.submit()
-        logger.log("record end", level: .debug, category: .experiments)
     }
 
     /**
@@ -206,7 +233,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
             "cannot_use_apple_intelligence": cannotUseAppleIntelligence,
             "tou_experience_points": touExperiencePoints as Any
         ]),
-            let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
+        let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
         else {
             logger.log("toJson error thrown while creating JSON string", level: .warning, category: .experiments)
             return "{}"

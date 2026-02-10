@@ -90,6 +90,15 @@ class RecordedNimbusContextTests: XCTestCase {
     }
 
     func testObjectRecordedToGleanMatchesExpected() throws {
+        let metricConfig = """
+            {
+                "metrics_enabled": {
+                    "nimbus_system.enrollment_status": true
+                }
+            }
+        """
+        Glean.shared.applyServerKnobsConfig(metricConfig)
+
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
             isDefaultBrowser: true,
@@ -99,16 +108,29 @@ class RecordedNimbusContextTests: XCTestCase {
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
+        let enrollmentStatusExtra = EnrollmentStatusExtraDef(
+            branch: "branch",
+            conflictSlug: "conflictSlug",
+            errorString: "errorString",
+            reason: "reason",
+            slug: "slug",
+            status: "status",
+            prevGeckoPrefStates: nil
+        )
 
         var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
+        var events: [RecordedEvent]?
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
         GleanMetrics.Pings.shared.nimbus.testBeforeNextSubmit { e in
             value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue()
+            events = GleanMetrics.NimbusSystem.enrollmentStatus.testGetValue()
             expectation.fulfill()
         }
 
         recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
-        recordedContext.record()
+        recordedContext.recordContext()
+        recordedContext.recordEnrollmentStatuses(enrollmentStatusExtras: [enrollmentStatusExtra])
+        recordedContext.submit()
 
         wait(for: [expectation], timeout: 5.0)
 
@@ -138,6 +160,18 @@ class RecordedNimbusContextTests: XCTestCase {
 
         XCTAssertNotNil(value?.eventQueryValues)
         XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
+
+        XCTAssertEqual(
+            events?.map { $0.extra },
+            [[
+                "branch": "branch",
+                "conflict_slug": "conflictSlug",
+                "error_string": "errorString",
+                "reason": "reason",
+                "slug": "slug",
+                "status": "status"
+            ]]
+        )
     }
 
     func testGetEventQueries() throws {
