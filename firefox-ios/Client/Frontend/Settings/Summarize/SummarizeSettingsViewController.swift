@@ -55,9 +55,10 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
             self.tableView.reloadData()
 
             store.dispatch(
-                GeneralBrowserAction(
-                    windowUUID: windowUUID,
-                    actionType: GeneralBrowserActionType.reloadWebsite
+                ToolbarAction(
+                    canSummarize: isOn,
+                    windowUUID: self.windowUUID,
+                    actionType: ToolbarActionType.didSummarizeSettingsChange
                 )
             )
         }

@@ -154,6 +154,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
             ToolbarActionType.didTranslationSettingsChange:
             return handleLeadingPageChangedAction(state: state, action: action)
 
+        case ToolbarActionType.didSummarizeSettingsChange:
+            return handleReaderModeStateChangedAction(state: state, action: action)
+
         case ToolbarActionType.readerModeStateChanged:
             return handleReaderModeStateChangedAction(state: state, action: action)
 
