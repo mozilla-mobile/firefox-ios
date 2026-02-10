@@ -522,6 +522,10 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func addCreditCard(cc: UpdatableCreditCardFields) throws  -> CreditCard
     
+    func countAllAddresses() throws  -> Int64
+    
+    func countAllCreditCards() throws  -> Int64
+    
     func deleteAddress(guid: String) throws  -> Bool
     
     func deleteCreditCard(guid: String) throws  -> Bool
@@ -640,6 +644,22 @@ open func addCreditCard(cc: UpdatableCreditCardFields)throws  -> CreditCard  {
     uniffi_autofill_fn_method_store_add_credit_card(
             self.uniffiCloneHandle(),
         FfiConverterTypeUpdatableCreditCardFields_lower(cc),$0
+    )
+})
+}
+    
+open func countAllAddresses()throws  -> Int64  {
+    return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_count_all_addresses(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func countAllCreditCards()throws  -> Int64  {
+    return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_count_all_credit_cards(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1482,6 +1502,12 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_add_credit_card() != 39831) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_count_all_addresses() != 51483) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_count_all_credit_cards() != 16961) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_delete_address() != 63199) {

@@ -770,7 +770,7 @@ open class NimbusClient: NimbusClientProtocol, @unchecked Sendable {
     public func uniffiCloneHandle() -> UInt64 {
         return try! rustCall { uniffi_nimbus_fn_clone_nimbusclient(self.handle, $0) }
     }
-public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, coenrollingFeatureIds: [String], dbpath: String, metricsHandler: MetricsHandler, geckoPrefHandler: GeckoPrefHandler?, remoteSettingsService: RemoteSettingsService?, collectionName: String?)throws  {
+public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, coenrollingFeatureIds: [String], dbpath: String, metricsHandler: MetricsHandler, geckoPrefHandler: GeckoPrefHandler?, remoteSettingsInfo: NimbusServerSettings?)throws  {
     let handle =
         try rustCallWithError(FfiConverterTypeNimbusError_lift) {
     uniffi_nimbus_fn_constructor_nimbusclient_new(
@@ -780,8 +780,7 @@ public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, c
         FfiConverterString.lower(dbpath),
         FfiConverterCallbackInterfaceMetricsHandler_lower(metricsHandler),
         FfiConverterOptionCallbackInterfaceGeckoPrefHandler.lower(geckoPrefHandler),
-        FfiConverterOptionTypeRemoteSettingsService.lower(remoteSettingsService),
-        FfiConverterOptionString.lower(collectionName),$0
+        FfiConverterOptionTypeNimbusServerSettings.lower(remoteSettingsInfo),$0
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -2532,6 +2531,60 @@ public func FfiConverterTypeMalformedFeatureConfigExtraDef_lower(_ value: Malfor
 }
 
 
+public struct NimbusServerSettings {
+    public var rsService: RemoteSettingsService
+    public var collectionName: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(rsService: RemoteSettingsService, collectionName: String) {
+        self.rsService = rsService
+        self.collectionName = collectionName
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension NimbusServerSettings: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeNimbusServerSettings: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NimbusServerSettings {
+        return
+            try NimbusServerSettings(
+                rsService: FfiConverterTypeRemoteSettingsService.read(from: &buf), 
+                collectionName: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: NimbusServerSettings, into buf: inout [UInt8]) {
+        FfiConverterTypeRemoteSettingsService.write(value.rsService, into: &buf)
+        FfiConverterString.write(value.collectionName, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeNimbusServerSettings_lift(_ buf: RustBuffer) throws -> NimbusServerSettings {
+    return try FfiConverterTypeNimbusServerSettings.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeNimbusServerSettings_lower(_ value: NimbusServerSettings) -> RustBuffer {
+    return FfiConverterTypeNimbusServerSettings.lower(value)
+}
+
+
 public struct OriginalGeckoPref: Equatable, Hashable {
     public var pref: String
     public var branch: PrefBranch
@@ -3684,8 +3737,8 @@ fileprivate struct FfiConverterOptionTypeRecordedContext: FfiConverterRustBuffer
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterOptionTypeRemoteSettingsService: FfiConverterRustBuffer {
-    typealias SwiftType = RemoteSettingsService?
+fileprivate struct FfiConverterOptionTypeNimbusServerSettings: FfiConverterRustBuffer {
+    typealias SwiftType = NimbusServerSettings?
 
     public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
         guard let value = value else {
@@ -3693,13 +3746,13 @@ fileprivate struct FfiConverterOptionTypeRemoteSettingsService: FfiConverterRust
             return
         }
         writeInt(&buf, Int8(1))
-        FfiConverterTypeRemoteSettingsService.write(value, into: &buf)
+        FfiConverterTypeNimbusServerSettings.write(value, into: &buf)
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
-        case 1: return try FfiConverterTypeRemoteSettingsService.read(from: &buf)
+        case 1: return try FfiConverterTypeNimbusServerSettings.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -4403,7 +4456,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_recordedcontext_to_json() != 52035) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 28763) {
+    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 32755) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 27063) {
