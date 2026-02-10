@@ -10,7 +10,7 @@ import Shared
 
 @testable import Client
 
-/// Tests for FXIOS-13996: KVO observer management in BrowserViewController.
+/// Tests for KVO observer management in BrowserViewController.
 /// Verifies that the fix for the collection mutation bug correctly removes all observers.
 @MainActor
 final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
@@ -112,7 +112,7 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
 
     // MARK: - stopObservingAllWebViews Tests
 
-    /// FXIOS-13996: This test verifies that the fix for the collection mutation bug
+    /// This test verifies that the fix for the collection mutation bug
     /// correctly removes ALL observers, not just some of them.
     func testStopObservingAllWebViews_removesAllObservers() {
         let subject = createSubject()

@@ -928,7 +928,7 @@ class BrowserViewController: UIViewController,
         logTelemetryForAppDidEnterBackground()
     }
 
-    /// FXIOS-13996: Remove KVO observers on terminate to prevent crashes during force-close.
+    /// Remove KVO observers on terminate to prevent crashes during force-close.
     private func applicationWillTerminate() {
         stopObservingAllWebViews()
     }
@@ -1279,7 +1279,7 @@ class BrowserViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
 
-        // FXIOS-13996: Handle synchronously to remove KVO observers before termination.
+        // Handle synchronously to remove KVO observers before termination.
         if notificationName == UIApplication.willTerminateNotification {
             ensureMainThread { [weak self] in
                 self?.applicationWillTerminate()
@@ -4401,7 +4401,7 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
-        // FXIOS-13996: Cleanup synchronously to prevent crashes from stale KVO observers.
+        // Cleanup on the main thread to prevent crashes from stale KVO observers.
         ensureMainThread { [weak self] in
             guard let self else { return }
             tab.cancelQueuedAlerts()
@@ -4442,7 +4442,7 @@ extension BrowserViewController: LegacyTabDelegate {
         KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
     }
 
-    /// FXIOS-13996: Copy collection first to avoid mutation during iteration.
+    /// Copy collection first to avoid mutation during iteration.
     func stopObservingAllWebViews() {
         let webViewsToCleanup = Array(observedWebViews)
         webViewsToCleanup.forEach { stopObserving(webView: $0) }

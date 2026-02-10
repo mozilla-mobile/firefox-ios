@@ -412,7 +412,7 @@ final class LegacyTabScrollController: NSObject,
         scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
     }
 
-    /// FXIOS-13996: Copy collection first to avoid mutation during iteration.
+    /// Copy collection first to avoid mutation during iteration.
     private func stopObservingAllScrollViews() {
         let scrollViewsToCleanup = Array(observedScrollViews)
         scrollViewsToCleanup.forEach { stopObserving(scrollView: $0) }
