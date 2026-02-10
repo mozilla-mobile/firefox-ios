@@ -7,11 +7,12 @@ import struct MozillaAppServices.EnrolledExperiment
 
 /// Tracking ToU experiments and reset dismissal data when experiment changes
 /// Avoid reset data for users who accepted ToU or already enrolled
-private enum ToUExperimentConstants {
-    static let featureId = "tou-feature"
-}
 
 final class ToUExperimentsTracking {
+    private enum ToUExperimentConstants {
+        static let featureId = "tou-feature"
+    }
+
     private let prefs: Prefs
     private let experimentChangeObserver: ExperimentChangeObserver
 
@@ -73,10 +74,16 @@ final class ToUExperimentsTracking {
         let experimentChanged: Bool
         switch (previousSlug, currentSlug) {
         case let (previous?, current?):
+            /// User was enrolled before and is still enrolled: reset only if experiment slug
+            /// or branch changed (retargeting user)
             experimentChanged = previous != current || previousBranch != currentBranch
         case (.some, nil):
+            /// User was enrolled and is now unenrolled: do not reset here;
+            /// dismissal data is reset when users enroll again into a new experiment
             experimentChanged = false
         case (nil, _):
+            /// Legacy user with no stored slug: reset only after tracking is initialized,
+            /// to avoid affecting users that are already enrolled
             experimentChanged = trackingInitialized && currentExperiment != nil && hasDismissalData
         }
         guard experimentChanged, hasDismissalData else { return }
@@ -86,9 +93,12 @@ final class ToUExperimentsTracking {
         prefs.setBool(false, forKey: PrefsKeys.TermsOfUseFirstShown)
     }
 
+    /// Store current experiment slug/branch only when enrolled,
+    /// so we can avoid unwanted data reset
     private func storeExperimentInfo(currentExperiment: EnrolledExperiment?) {
-        updatePersistedValue(currentExperiment?.slug, forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        updatePersistedValue(currentExperiment?.branchSlug, forKey: PrefsKeys.TermsOfUseExperimentBranch)
+        guard let experiment = currentExperiment else { return }
+        updatePersistedValue(experiment.slug, forKey: PrefsKeys.TermsOfUseExperimentSlug)
+        updatePersistedValue(experiment.branchSlug, forKey: PrefsKeys.TermsOfUseExperimentBranch)
     }
 
     private func updatePersistedValue(_ value: String?, forKey key: String) {
@@ -98,28 +108,28 @@ final class ToUExperimentsTracking {
             prefs.removeObjectForKey(key)
         }
     }
-}
 
-final class ExperimentChangeObserver: Notifiable {
-    private let prefs: Prefs
-    private let notificationCenter: NotificationProtocol
+    private final class ExperimentChangeObserver: Notifiable {
+        private let prefs: Prefs
+        private let notificationCenter: NotificationProtocol
 
-    init(prefs: Prefs, notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.prefs = prefs
-        self.notificationCenter = notificationCenter
-        startObservingNotifications(
-            withNotificationCenter: notificationCenter,
-            forObserver: self,
-            observing: [.nimbusExperimentsApplied]
-        )
-    }
+        init(prefs: Prefs, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+            self.prefs = prefs
+            self.notificationCenter = notificationCenter
+            startObservingNotifications(
+                withNotificationCenter: notificationCenter,
+                forObserver: self,
+                observing: [.nimbusExperimentsApplied]
+            )
+        }
 
-    nonisolated func handleNotifications(_ notification: Notification) {
-        guard notification.name == .nimbusExperimentsApplied else { return }
-        let prefs = self.prefs
-        ensureMainThread {
-            let tracking = ToUExperimentsTracking(prefs: prefs)
-            tracking.resetToUDataIfNeeded()
+        nonisolated func handleNotifications(_ notification: Notification) {
+            guard notification.name == .nimbusExperimentsApplied else { return }
+            let prefs = self.prefs
+            ensureMainThread {
+                let tracking = ToUExperimentsTracking(prefs: prefs)
+                tracking.resetToUDataIfNeeded()
+            }
         }
     }
 }
