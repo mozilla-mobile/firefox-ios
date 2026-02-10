@@ -123,6 +123,14 @@ class CodeCoverageGate {
             !$0.contains("/AccessibilityIdentifiers.swift")
         }
 
+        guard !candidates.isEmpty else {
+            markdown("""
+            ### ✅ New file code coverage
+            No new file detected so code coverage gate wasn't ran.
+            """)
+            return
+        }
+
         // Ignore tiny edits: only gate files with at least `minimumAddedLines`
         func addedLines(_ file: String) -> Int {
             switch saferFileDiff(for: file) {
