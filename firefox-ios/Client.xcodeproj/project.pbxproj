@@ -170,6 +170,7 @@
 		1D1933772AF2C8CE005089C9 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
 		1D1933782AF2C8CE005089C9 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
 		1D1933792AF2C8CF005089C9 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
+		1D2A1B592F3BAB5200157ACB /* RelayMaskSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2A1B582F3BAB4B00157ACB /* RelayMaskSettingsViewControllerTests.swift */; };
 		1D2F68AB2ACB262900524B92 /* RemoteTabsPanelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */; };
 		1D2F68AD2ACB266300524B92 /* RemoteTabsPanelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */; };
 		1D2F68AF2ACB272500524B92 /* RemoteTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AE2ACB272500524B92 /* RemoteTabsViewController.swift */; };
@@ -2854,6 +2855,7 @@
 		1D06AE6924FEE8D6000B092B /* TabProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabProvider.swift; sourceTree = "<group>"; };
 		1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesProvider.swift; sourceTree = "<group>"; };
 		1D1418772DC92DFC004BBFAD /* ChangeRSServerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeRSServerSetting.swift; sourceTree = "<group>"; };
+		1D2A1B582F3BAB4B00157ACB /* RelayMaskSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayMaskSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelAction.swift; sourceTree = "<group>"; };
 		1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelState.swift; sourceTree = "<group>"; };
 		1D2F68AE2ACB272500524B92 /* RemoteTabsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsViewController.swift; sourceTree = "<group>"; };
@@ -13400,6 +13402,7 @@
 				212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
 				215360642D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift */,
+				1D2A1B582F3BAB4B00157ACB /* RelayMaskSettingsViewControllerTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -19406,6 +19409,7 @@
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
 				C869916528918C8E007ACC5C /* MockURLSession.swift in Sources */,
 				961577942A39008100391E8D /* SponsoredTileDataUtilityTests.swift in Sources */,
+				1D2A1B592F3BAB5200157ACB /* RelayMaskSettingsViewControllerTests.swift in Sources */,
 				8A093D812A4B58330099ABA5 /* MockSettingsFlowDelegate.swift in Sources */,
 				431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */,
 				BDB4E7212F337AAB000DB45F /* LocationTextFieldTests.swift in Sources */,
