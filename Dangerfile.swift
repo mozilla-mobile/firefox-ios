@@ -193,7 +193,8 @@ class CodeCoverageGate {
             warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
         } else {
             let tip = "You can add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
-            let owners = "Please also tag a member of the @fxios-unit-test-owners if the bypass is used."
+            let team = "[@fxios-unit-test-owners](https://github.com/orgs/mozilla-mobile/teams/fxios-unit-test-owners)"
+            let owners = "Please also tag a member of the \(team) if the bypass is used."
             fail("\(header)\n\n\(tip) \(owners)")
         }
     }
