@@ -2259,8 +2259,12 @@ class BrowserViewController: UIViewController,
                 keyboardBackdrop = UIView()
                 keyboardBackdrop?.backgroundColor = currentTheme().colors.layer1
                 view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
-                keyboardBackdrop?.snp.makeConstraints { make in
-                    make.edges.equalTo(view)
+                if isSnapKitRemovalEnabled {
+                    setupKeyboardBackdropConstraints(for: keyboardBackdrop)
+                } else {
+                    keyboardBackdrop?.snp.makeConstraints { make in
+                        make.edges.equalTo(view)
+                    }
                 }
                 view.bringSubviewToFront(bottomContainer)
             }
