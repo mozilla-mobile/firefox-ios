@@ -278,7 +278,7 @@ final class BrowserScreen {
     func assertWebViewLoaded(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(app.webViews.firstMatch, timeout: timeout)
     }
-  
+
     func tapWebViewButton(buttonText: String) {
         app.webViews.buttons[buttonText].waitAndTap()
     }
