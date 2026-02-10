@@ -17,7 +17,7 @@ if releaseCheck.isReleaseBranch {
     checkStringsFile()
     checkForFunMetrics()
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
-    checkForWebEngineFileChange()
+    checkForSpecificFileChange()
     checkForGleanFileChange()
     CodeUsageDetector().checkForCodeUsage()
     CodeCoverageGate().failOnNewFilesWithoutCoverage()
@@ -261,18 +261,53 @@ func checkBigPullRequest() {
     }
 }
 
-// Detect and warn about some changes related to WebView management to ensure we port changes to the WebEngine project
-func checkForWebEngineFileChange() {
-    let webEngineFiles = ["Tab.swift", "BrowserViewController+WebViewDelegates.swift"]
+// Detect and tag specific people whenever specific files are modified
+func checkForSpecificFileChange() {
     let modifiedFiles = danger.git.modifiedFiles
-    let affectedFiles = modifiedFiles.filter { file in
-        webEngineFiles.contains { webFile in file.hasSuffix(webFile) }
+
+    struct FileCheck {
+        let fileMatches: (String) -> Bool
+        let message: String
+        let contacts: String
+        var foundMatches: [String] = []
     }
 
-    if !affectedFiles.isEmpty {
-        let message = "Ensure that necessary updates are also ported to the WebEngine project if required"
-        let contact = "(cc @lmarceau)."
-        warn("Changes detected in files: \(affectedFiles.joined(separator: ", ")). \(message) \(contact)")
+    var fileChecks = [
+        FileCheck(
+            fileMatches: { file in
+                ["Tab.swift",
+                 "TabManager.swift",
+                 "TabManagerImplementation.swift",
+                 "BrowserViewController+WebViewDelegates.swift"
+                ].contains { file.hasSuffix($0) }
+            },
+            message: "Detected tab related changes in:",
+            contacts: "(cc @lmarceau)"
+        ),
+        FileCheck(
+            fileMatches: { $0.hasSuffix(".sh") },
+            message: "Detected shell script changes in:",
+            contacts: "(cc @adudenamedruby)"
+        ),
+        FileCheck(
+            fileMatches: { file in
+                file.contains("firefox-ios/Client/Glean/") && (file.hasSuffix(".yaml"))
+            },
+            message: "Detected telemetry changes in:",
+            contacts: "(cc @ih-codes @adudenamedruby)"
+        )
+    ]
+
+    for file in modifiedFiles {
+        for fileIndex in fileChecks.indices where fileChecks[fileIndex].fileMatches(file) {
+            fileChecks[fileIndex].foundMatches.append(file)
+        }
+    }
+
+    // Issue warnings only for categories with matches
+    for check in fileChecks where !check.foundMatches.isEmpty {
+        let matches = check.foundMatches.joined(separator: ", ")
+        warn("\(check.message) \(matches) \(check.contacts)")
     }
 }
 

@@ -500,7 +500,7 @@
 "ShareMenu.RemoveFromShortcuts" = "Remover del accessos directe";
 
 /* Toast displayed to the user after removing the item from the Shortcuts. */
-"ShareMenu.RemoveShortcut.Confirm" = "Via breve removite";
+"ShareMenu.RemoveShortcut.Confirm" = "Accesso directe removite";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Requestar sito de scriptorio";
@@ -527,10 +527,10 @@
 "ShortcutView.RemoveFromShortcuts" = "Remover del accessos directe";
 
 /* Text for the long press on a shortcut rename option in context menu. */
-"ShortcutView.Rename" = "Renominar via-breve";
+"ShortcutView.Rename" = "Renominar accesso directe";
 
 /* Text for the placeholder textfield on rename shortcut alert. */
-"ShortcutView.RenameShortcutAlertPlaceholder" = "Nomine via-breve";
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Nomine del accesso directe";
 
 /* Text for the rename shortcut alert primary action. */
 "ShortcutView.RenameShortcutAlertPrimaryAction" = "Salvar";

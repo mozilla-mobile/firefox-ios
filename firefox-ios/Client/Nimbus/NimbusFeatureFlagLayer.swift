@@ -16,6 +16,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
+        case .adsClient:
+            return checkAdsClientFeature(from: nimbus)
+
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
@@ -90,9 +93,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .otherErrorPages:
             return checkOtherErrorPagesFeature(from: nimbus)
-
-        case .privacyNotice:
-            return checkPrivacyNoticeFeature(from: nimbus)
 
         case .recentSearches:
             return checkRecentSearchesFeature(from: nimbus)
@@ -391,6 +391,11 @@ final class NimbusFeatureFlagLayer: Sendable {
         return config.status
     }
 
+    private func checkAdsClientFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.adsClient.value()
+        return config.status
+    }
+
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
         return config.status
@@ -459,10 +464,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkOtherErrorPagesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().otherErrorPages
-    }
-
-    private func checkPrivacyNoticeFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.privacyNoticeFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature

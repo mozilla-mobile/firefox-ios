@@ -14,6 +14,7 @@ channels:
   - release
 include:
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/adsClient.yaml
   - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/appleSummarizerFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
@@ -34,7 +35,6 @@ include:
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
-  - nimbus-features/privacyNoticeFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
   - nimbus-features/searchFeature.yaml

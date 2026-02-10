@@ -12,6 +12,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
+    case adsClient
     case appearanceMenu
     case appIconSelection
     case bottomSearchBar
@@ -37,7 +38,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case otherErrorPages
-    case privacyNotice
     case recentSearches
     case reportSiteIssue
     case relayIntegration
@@ -80,6 +80,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
+                .adsClient,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -92,7 +93,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
-                .privacyNotice,
                 .recentSearches,
                 .relayIntegration,
                 .sentFromFirefox,
@@ -151,6 +151,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
+                .adsClient,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -169,7 +170,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
-                .privacyNotice,
                 .recentSearches,
                 .reportSiteIssue,
                 .sentFromFirefoxTreatmentA,

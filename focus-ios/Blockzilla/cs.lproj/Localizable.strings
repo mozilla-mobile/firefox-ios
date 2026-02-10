@@ -59,25 +59,25 @@
 "Authentication.reason" = "Ověření pro návrat do aplikace %@";
 
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "Přidat vlastní URL adresu";
+"Autocomplete.addCustomUrl" = "Přidat vlastní adresu URL";
 
 /* Label for error state when entering an invalid URL */
-"Autocomplete.addCustomUrlError" = "Zkontrolujte zadanou URL adresu.";
+"Autocomplete.addCustomUrlError" = "Zkontrolujte zadanou adresu URL.";
 
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Příklad: example.com";
 
 /* Label for the input to add a custom URL */
-"Autocomplete.addCustomUrlLabel" = "URL adresa k přidání";
+"Autocomplete.addCustomUrlLabel" = "Adresa URL k přidání";
 
 /* Placeholder for the input field to add a custom URL */
-"Autocomplete.addCustomUrlPlaceholder" = "Vložte nebo napište URL adresu";
+"Autocomplete.addCustomUrlPlaceholder" = "Vložte nebo zadejte adresu URL";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ Přidat vlastní URL adresu";
+"Autocomplete.addCustomUrlWithPlus" = "+ Přidat vlastní adresu URL";
 
 /* Label for toast alerting a custom URL has been added */
-"Autocomplete.customUrlAdded" = "Vlastní URL adresa přidána.";
+"Autocomplete.customUrlAdded" = "Vlastní adresa URL přidána.";
 
 /* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "Po zapnutí bude %@ našeptávat více než 450 populárních URL adres.";
@@ -86,10 +86,10 @@
 "Autocomplete.disabled" = "Zakázáno";
 
 /* Label for toast alerting that the custom URL being added is a duplicate */
-"Autocomplete.duplicateUrl" = "URL adresa už existuje";
+"Autocomplete.duplicateUrl" = "Adresa URL už existuje";
 
 /* Label for button to add a custom URL */
-"Autocomplete.emptyState" = "Žádné vlastní URL adresy k zobrazení";
+"Autocomplete.emptyState" = "Žádné vlastní adresy URL k zobrazení";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Povoleno";
@@ -116,7 +116,7 @@
 "Browser.backLabel" = "Zpět";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL adresa zkopírována do schránky";
+"browser.copyAddressToast" = "Adresa URL zkopírována do schránky";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopírovat";

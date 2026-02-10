@@ -23,7 +23,7 @@ extension GleanMetrics {
             // Intentionally left private, no external user can instantiate a new global object.
         }
 
-        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 2, day: 3, hour: 5, minute: 17, second: 45))
+        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 2, day: 9, hour: 5, minute: 17, second: 28))
     }
 
     enum AdsClient {
@@ -598,84 +598,6 @@ extension GleanMetrics {
                 lifetime: .ping,
                 disabled: false
             )
-        )
-
-        /// The total number of read operations performed on the logins store. The count
-        /// only includes operations triggered by the application, not e.g. incidental
-        /// reads performed as part of a sync. It is intended to be used together with
-        /// `read_query_error_count` to measure the overall error rate of read operations
-        /// on the logins store.
-        static let readQueryCount = CounterMetricType( // generated from logins_store.read_query_count
-            CommonMetricData(
-                category: "logins_store",
-                name: "read_query_count",
-                sendInPings: ["metrics"],
-                lifetime: .ping,
-                disabled: false
-            )
-        )
-
-        private static let readQueryErrorCountLabel = CounterMetricType( // generated from logins_store.read_query_error_count
-            CommonMetricData(
-                category: "logins_store",
-                name: "read_query_error_count",
-                sendInPings: ["metrics"],
-                lifetime: .ping,
-                disabled: false
-            )
-        )
-
-        /// The total number of errors encountered during read operations on the logins
-        /// store, labeled by type. It is intended to be used together with
-        /// `read_query_count` to measure the overall error rate of read operations on the
-        /// logins store.
-        static let readQueryErrorCount = try! LabeledMetricType<CounterMetricType>( // generated from logins_store.read_query_error_count
-            category: "logins_store",
-            name: "read_query_error_count",
-            sendInPings: ["metrics"],
-            lifetime: .ping,
-            disabled: false,
-            subMetric: readQueryErrorCountLabel,
-            labels: ["interrupted", "storage_error"]
-        )
-
-        /// The total number of write operations performed on the logins store. The count
-        /// only includes operations triggered by the application, not e.g. incidental
-        /// writes performed as part of a sync. It is intended to be used together with
-        /// `write_query_error_count` to measure the overall error rate of write operations
-        /// on the logins store.
-        static let writeQueryCount = CounterMetricType( // generated from logins_store.write_query_count
-            CommonMetricData(
-                category: "logins_store",
-                name: "write_query_count",
-                sendInPings: ["metrics"],
-                lifetime: .ping,
-                disabled: false
-            )
-        )
-
-        private static let writeQueryErrorCountLabel = CounterMetricType( // generated from logins_store.write_query_error_count
-            CommonMetricData(
-                category: "logins_store",
-                name: "write_query_error_count",
-                sendInPings: ["metrics"],
-                lifetime: .ping,
-                disabled: false
-            )
-        )
-
-        /// The total number of errors encountered during write operations on the logins
-        /// store, labeled by type. It is intended to be used together with
-        /// `write_query_count` to measure the overall error rate of write operations on
-        /// the logins store.
-        static let writeQueryErrorCount = try! LabeledMetricType<CounterMetricType>( // generated from logins_store.write_query_error_count
-            category: "logins_store",
-            name: "write_query_error_count",
-            sendInPings: ["metrics"],
-            lifetime: .ping,
-            disabled: false,
-            subMetric: writeQueryErrorCountLabel,
-            labels: ["interrupted", "invalid_record", "no_such_record", "storage_error"]
         )
 
     }

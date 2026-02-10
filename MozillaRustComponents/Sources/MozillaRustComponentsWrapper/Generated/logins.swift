@@ -961,6 +961,15 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     
     func addWithMeta(entryWithMeta: LoginEntryWithMeta) throws  -> Login
     
+    /**
+     * Checks multiple logins for password reuse in a single batch operation.
+     *
+     * Returns the GUIDs of logins whose passwords match any password in the breach database.
+     * This is more efficient than calling `is_potentially_vulnerable_password()` repeatedly,
+     * as it decrypts the breach database only once.
+     */
+    func arePotentiallyVulnerablePasswords(ids: [String]) throws  -> [String]
+    
     func count() throws  -> Int64
     
     func countByFormActionOrigin(formActionOrigin: String) throws  -> Int64
@@ -1003,6 +1012,15 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
      */
     func isPotentiallyBreached(id: String) throws  -> Bool
     
+    /**
+     * Checks if a login's password matches any password in the local breach database.
+     *
+     * Returns true if this login's password appears in the breachesL table, indicating
+     * that the same password has been breached on a different domain (password reuse).
+     * This is independent of whether this specific login has been marked as breached.
+     */
+    func isPotentiallyVulnerablePassword(id: String) throws  -> Bool
+    
     func list() throws  -> [Login]
     
     /**
@@ -1020,6 +1038,15 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
      * Stores the time at which the user dismissed the breach alert for a login.
      */
     func recordBreachAlertDismissalTime(id: String, timestamp: Int64) throws 
+    
+    /**
+     * Records a list of potentially vulnerable passwords in the breach database.
+     *
+     * This is used to bulk-populate the breachesL table with known breached passwords,
+     * typically during import operations or when syncing breach data.
+     * Passwords are encrypted before storage and duplicates are automatically filtered out.
+     */
+    func recordPotentiallyVulnerablePasswords(passwords: [String]) throws 
     
     func registerWithSyncManager() 
     
@@ -1169,6 +1196,22 @@ open func addWithMeta(entryWithMeta: LoginEntryWithMeta)throws  -> Login  {
 })
 }
     
+    /**
+     * Checks multiple logins for password reuse in a single batch operation.
+     *
+     * Returns the GUIDs of logins whose passwords match any password in the breach database.
+     * This is more efficient than calling `is_potentially_vulnerable_password()` repeatedly,
+     * as it decrypts the breach database only once.
+     */
+open func arePotentiallyVulnerablePasswords(ids: [String])throws  -> [String]  {
+    return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_are_potentially_vulnerable_passwords(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceString.lower(ids),$0
+    )
+})
+}
+    
 open func count()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_count(
@@ -1305,6 +1348,22 @@ open func isPotentiallyBreached(id: String)throws  -> Bool  {
 })
 }
     
+    /**
+     * Checks if a login's password matches any password in the local breach database.
+     *
+     * Returns true if this login's password appears in the breachesL table, indicating
+     * that the same password has been breached on a different domain (password reuse).
+     * This is independent of whether this specific login has been marked as breached.
+     */
+open func isPotentiallyVulnerablePassword(id: String)throws  -> Bool  {
+    return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_is_potentially_vulnerable_password(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(id),$0
+    )
+})
+}
+    
 open func list()throws  -> [Login]  {
     return try  FfiConverterSequenceTypeLogin.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_list(
@@ -1345,6 +1404,21 @@ open func recordBreachAlertDismissalTime(id: String, timestamp: Int64)throws   {
             self.uniffiCloneHandle(),
         FfiConverterString.lower(id),
         FfiConverterInt64.lower(timestamp),$0
+    )
+}
+}
+    
+    /**
+     * Records a list of potentially vulnerable passwords in the breach database.
+     *
+     * This is used to bulk-populate the breachesL table with known breached passwords,
+     * typically during import operations or when syncing breach data.
+     * Passwords are encrypted before storage and duplicates are automatically filtered out.
+     */
+open func recordPotentiallyVulnerablePasswords(passwords: [String])throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_record_potentially_vulnerable_passwords(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceString.lower(passwords),$0
     )
 }
 }
@@ -1724,6 +1798,8 @@ public struct Login: Equatable, Hashable {
     public var timeCreated: Int64
     public var timeLastUsed: Int64
     public var timePasswordChanged: Int64
+    public var timeOfLastBreach: Int64?
+    public var timeLastBreachAlertDismissed: Int64?
     public var origin: String
     public var httpRealm: String?
     public var formActionOrigin: String?
@@ -1731,31 +1807,17 @@ public struct Login: Equatable, Hashable {
     public var passwordField: String
     public var password: String
     public var username: String
-    /**
-     * These fields can be synced from Desktop and are NOT included in LoginEntry,
-     * so update() will not modify them. Use the dedicated API methods to manipulate:
-     * record_breach(), reset_all_breaches(), is_potentially_breached(),
-     * record_breach_alert_dismissal(), record_breach_alert_dismissal_time(),
-     * and is_breach_alert_dismissed().
-     */
-    public var timeOfLastBreach: Int64?
-    public var timeLastBreachAlertDismissed: Int64?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String, password: String, username: String, 
-        /**
-         * These fields can be synced from Desktop and are NOT included in LoginEntry,
-         * so update() will not modify them. Use the dedicated API methods to manipulate:
-         * record_breach(), reset_all_breaches(), is_potentially_breached(),
-         * record_breach_alert_dismissal(), record_breach_alert_dismissal_time(),
-         * and is_breach_alert_dismissed().
-         */timeOfLastBreach: Int64?, timeLastBreachAlertDismissed: Int64?) {
+    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, timeOfLastBreach: Int64?, timeLastBreachAlertDismissed: Int64?, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String, password: String, username: String) {
         self.id = id
         self.timesUsed = timesUsed
         self.timeCreated = timeCreated
         self.timeLastUsed = timeLastUsed
         self.timePasswordChanged = timePasswordChanged
+        self.timeOfLastBreach = timeOfLastBreach
+        self.timeLastBreachAlertDismissed = timeLastBreachAlertDismissed
         self.origin = origin
         self.httpRealm = httpRealm
         self.formActionOrigin = formActionOrigin
@@ -1763,8 +1825,6 @@ public struct Login: Equatable, Hashable {
         self.passwordField = passwordField
         self.password = password
         self.username = username
-        self.timeOfLastBreach = timeOfLastBreach
-        self.timeLastBreachAlertDismissed = timeLastBreachAlertDismissed
     }
 
     
@@ -1788,15 +1848,15 @@ public struct FfiConverterTypeLogin: FfiConverterRustBuffer {
                 timeCreated: FfiConverterInt64.read(from: &buf), 
                 timeLastUsed: FfiConverterInt64.read(from: &buf), 
                 timePasswordChanged: FfiConverterInt64.read(from: &buf), 
+                timeOfLastBreach: FfiConverterOptionInt64.read(from: &buf), 
+                timeLastBreachAlertDismissed: FfiConverterOptionInt64.read(from: &buf), 
                 origin: FfiConverterString.read(from: &buf), 
                 httpRealm: FfiConverterOptionString.read(from: &buf), 
                 formActionOrigin: FfiConverterOptionString.read(from: &buf), 
                 usernameField: FfiConverterString.read(from: &buf), 
                 passwordField: FfiConverterString.read(from: &buf), 
                 password: FfiConverterString.read(from: &buf), 
-                username: FfiConverterString.read(from: &buf), 
-                timeOfLastBreach: FfiConverterOptionInt64.read(from: &buf), 
-                timeLastBreachAlertDismissed: FfiConverterOptionInt64.read(from: &buf)
+                username: FfiConverterString.read(from: &buf)
         )
     }
 
@@ -1806,6 +1866,8 @@ public struct FfiConverterTypeLogin: FfiConverterRustBuffer {
         FfiConverterInt64.write(value.timeCreated, into: &buf)
         FfiConverterInt64.write(value.timeLastUsed, into: &buf)
         FfiConverterInt64.write(value.timePasswordChanged, into: &buf)
+        FfiConverterOptionInt64.write(value.timeOfLastBreach, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastBreachAlertDismissed, into: &buf)
         FfiConverterString.write(value.origin, into: &buf)
         FfiConverterOptionString.write(value.httpRealm, into: &buf)
         FfiConverterOptionString.write(value.formActionOrigin, into: &buf)
@@ -1813,8 +1875,6 @@ public struct FfiConverterTypeLogin: FfiConverterRustBuffer {
         FfiConverterString.write(value.passwordField, into: &buf)
         FfiConverterString.write(value.password, into: &buf)
         FfiConverterString.write(value.username, into: &buf)
-        FfiConverterOptionInt64.write(value.timeOfLastBreach, into: &buf)
-        FfiConverterOptionInt64.write(value.timeLastBreachAlertDismissed, into: &buf)
     }
 }
 
@@ -1971,8 +2031,9 @@ public func FfiConverterTypeLoginEntryWithMeta_lower(_ value: LoginEntryWithMeta
 
 
 /**
- * Login data specific to database records.
- * The add_with_record API inputs this.
+ * Metadata fields managed internally by the library.
+ * These are automatically set on `add()` and updated on operations like `touch()` and `update()`.
+ * Not included in LoginEntry; use `add_with_meta()` when importing records with existing metadata.
  */
 public struct LoginMeta: Equatable, Hashable {
     public var id: String
@@ -1980,15 +2041,19 @@ public struct LoginMeta: Equatable, Hashable {
     public var timeCreated: Int64
     public var timeLastUsed: Int64
     public var timePasswordChanged: Int64
+    public var timeOfLastBreach: Int64?
+    public var timeLastBreachAlertDismissed: Int64?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64) {
+    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, timeOfLastBreach: Int64?, timeLastBreachAlertDismissed: Int64?) {
         self.id = id
         self.timesUsed = timesUsed
         self.timeCreated = timeCreated
         self.timeLastUsed = timeLastUsed
         self.timePasswordChanged = timePasswordChanged
+        self.timeOfLastBreach = timeOfLastBreach
+        self.timeLastBreachAlertDismissed = timeLastBreachAlertDismissed
     }
 
     
@@ -2011,7 +2076,9 @@ public struct FfiConverterTypeLoginMeta: FfiConverterRustBuffer {
                 timesUsed: FfiConverterInt64.read(from: &buf), 
                 timeCreated: FfiConverterInt64.read(from: &buf), 
                 timeLastUsed: FfiConverterInt64.read(from: &buf), 
-                timePasswordChanged: FfiConverterInt64.read(from: &buf)
+                timePasswordChanged: FfiConverterInt64.read(from: &buf), 
+                timeOfLastBreach: FfiConverterOptionInt64.read(from: &buf), 
+                timeLastBreachAlertDismissed: FfiConverterOptionInt64.read(from: &buf)
         )
     }
 
@@ -2021,6 +2088,8 @@ public struct FfiConverterTypeLoginMeta: FfiConverterRustBuffer {
         FfiConverterInt64.write(value.timeCreated, into: &buf)
         FfiConverterInt64.write(value.timeLastUsed, into: &buf)
         FfiConverterInt64.write(value.timePasswordChanged, into: &buf)
+        FfiConverterOptionInt64.write(value.timeOfLastBreach, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastBreachAlertDismissed, into: &buf)
     }
 }
 
@@ -2811,6 +2880,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_add_with_meta() != 23643) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_logins_checksum_method_loginstore_are_potentially_vulnerable_passwords() != 24759) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_logins_checksum_method_loginstore_count() != 14902) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -2853,6 +2925,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_is_potentially_breached() != 55152) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_logins_checksum_method_loginstore_is_potentially_vulnerable_password() != 30881) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_logins_checksum_method_loginstore_list() != 12147) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -2863,6 +2938,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_record_breach_alert_dismissal_time() != 38845) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_record_potentially_vulnerable_passwords() != 19976) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_register_with_sync_manager() != 13477) {

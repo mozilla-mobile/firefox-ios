@@ -322,6 +322,9 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ შეძლებს გააუმჯობესოს შესაძლებლობები, წარმადობა და მდგრადობა განახლებებს შორის შუალედშიც. ცვლილებები დაშორებული რეჟიმით.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას მისამართების ველში აკრეფილ ტექსტს.";
 
@@ -439,6 +442,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "ცნობები საწყის გვერდზე";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "დაშორებულად გაუმჯობესების ნებართვა";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +453,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "კვლევები";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "შესაძლებლობათა კვლევის ნებართვა";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "გამოიყენეთ თითის ანაბეჭდი, პროგრამის გასახსნელად";
