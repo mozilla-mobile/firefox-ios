@@ -230,5 +230,4 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
         XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch), "branch-b")
     }
-
 }
