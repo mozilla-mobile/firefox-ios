@@ -98,7 +98,7 @@ func checkCodeCoverage() {
 }
 
 class CodeCoverageGate {
-    private let coverageBypassLabel = "Ignore-code-coverage"
+    private let coverageBypassLabel = "ignore-code-coverage"
     private let jsonPath = "coverage.json"
     private let threshold: Double = 70
     private let minimumAddedLines = 5
