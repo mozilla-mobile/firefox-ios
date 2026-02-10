@@ -155,7 +155,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return handleLeadingPageChangedAction(state: state, action: action)
 
         case ToolbarActionType.didSummarizeSettingsChange:
-            return handleReaderModeStateChangedAction(state: state, action: action)
+            return handleSummarizeStateChangedAction(state: state, action: action)
 
         case ToolbarActionType.readerModeStateChanged:
             return handleReaderModeStateChangedAction(state: state, action: action)
@@ -313,6 +313,39 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
+    }
+
+    @MainActor
+    private static func handleSummarizeStateChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else {
+            return defaultState(from: state)
+        }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing,
+                                                     isEmptySearch: state.isEmptySearch),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: toolbarAction.canSummarize,
+            translationConfiguration: state.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine)
     }
 
     @MainActor
