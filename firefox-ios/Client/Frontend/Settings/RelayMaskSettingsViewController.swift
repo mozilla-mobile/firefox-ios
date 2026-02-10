@@ -117,8 +117,9 @@ final class ManageRelayMasksSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         RelayController.shared.telemetry.manageMasksTapped()
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
-        viewController.url = SupportUtils.URLForRelayAccountManagement
-        parentNav?.pushViewController(viewController, animated: true)
+        guard let url = SupportUtils.URLForRelayAccountManagement else { return }
+        let tabManager = (AppContainer.shared.resolve() as WindowManager).tabManager(for: windowUUID)
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+        navigationController?.dismissVC()
     }
 }
