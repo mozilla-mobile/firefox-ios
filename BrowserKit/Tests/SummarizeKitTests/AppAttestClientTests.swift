@@ -44,7 +44,7 @@ final class AppAttestClientTests: XCTestCase {
     }
 
     func test_performAttestation_generatesKeyAndAttests_whenNoStoredKey() async throws {
-        let keyStore = InMemoryAppAttestKeyIDStore()
+        let keyStore = MockAppAttestKeyIDStore()
         let server = makeServer(challenge: TestData.attestationChallenge)
         let service = makeService(
             keyToReturn: TestData.keyID,
@@ -60,7 +60,7 @@ final class AppAttestClientTests: XCTestCase {
     }
 
     func test_performAttestation_doesNotPersistKey_whenServerRejectsAttestation() async throws {
-        let keyStore = InMemoryAppAttestKeyIDStore()
+        let keyStore = MockAppAttestKeyIDStore()
         let server = makeServer(challenge: TestData.attestationChallenge, sendAttestationError: .invalidPayload)
         let service = makeService(keyToReturn: TestData.keyID, attestationToReturn: TestData.attestationBlob)
         let subject = try createSubject(appAttestService: service, remoteServer: server, keyStore: keyStore)
@@ -107,7 +107,7 @@ final class AppAttestClientTests: XCTestCase {
     private func createSubject(
         appAttestService: AppAttestServiceProtocol = MockAppAttestService(isSupported: true),
         remoteServer: AppAttestRemoteServerProtocol = MockAppAttestRemoteServer(),
-        keyStore: AppAttestKeyIDStore = InMemoryAppAttestKeyIDStore()
+        keyStore: AppAttestKeyIDStore = MockAppAttestKeyIDStore()
     ) throws -> AppAttestClient {
         try AppAttestClient(
             appAttestService: appAttestService,
@@ -116,8 +116,8 @@ final class AppAttestClientTests: XCTestCase {
         )
     }
 
-    private func createKeyStore(with keyID: String) throws -> InMemoryAppAttestKeyIDStore {
-        let store = InMemoryAppAttestKeyIDStore()
+    private func createKeyStore(with keyID: String) throws -> MockAppAttestKeyIDStore {
+        let store = MockAppAttestKeyIDStore()
         try store.saveKeyID(keyID)
         return store
     }
