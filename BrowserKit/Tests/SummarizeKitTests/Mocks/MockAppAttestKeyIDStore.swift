@@ -7,7 +7,7 @@ import SummarizeKit
 /// Concrete implementation of `AppAttestKeyIDStore` that keeps the `keyID` in memory.
 /// This is only used for testing since the keychain implementation is not easily testable
 /// and might fail sometimes on non-signed builds on CI.
-final class InMemoryAppAttestKeyIDStore: AppAttestKeyIDStore {
+final class MockAppAttestKeyIDStore: AppAttestKeyIDStore {
     private var value: String?
 
     init(initial: String? = nil) {

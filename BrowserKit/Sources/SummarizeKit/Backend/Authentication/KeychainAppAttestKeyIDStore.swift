@@ -59,7 +59,7 @@ public struct KeychainAppAttestKeyIDStore: AppAttestKeyIDStore {
         self.account = account
     }
 
-    public convenience init() {
+    public init() {
         self.init(service: Constants.defaultService, account: Constants.defaultAccount)
     }
 
@@ -89,9 +89,6 @@ public struct KeychainAppAttestKeyIDStore: AppAttestKeyIDStore {
         return string
     }
 
-    /// Saves the `keyId` to keychain, inserting or updating as needed.
-    /// Uses `SecItemAdd` or `SecItemUpdate` depending on whether the item already exists.
-    /// See: https://developer.apple.com/documentation/security/1401659-secitemadd
     public func saveKeyID(_ keyID: String) throws {
         let data = Data(keyID.utf8)
 

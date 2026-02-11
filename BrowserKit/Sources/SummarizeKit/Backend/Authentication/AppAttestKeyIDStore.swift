@@ -13,7 +13,7 @@
 ///
 /// There are two implementations of this protocol:
 /// - `KeychainAppAttestKeyIDStore`: Production (Keychain-backed) used for MLPA ( Mozilla LLM Proxy Auth).
-/// - `InMemoryAppAttestKeyIDStore`: Unit tests (lightweight, deterministic).
+/// - `MockAppAttestKeyIDStore`: Unit tests (lightweight, deterministic).
 ///
 /// For details on the attestation/assertion flow, see:
 /// - Establishing Your App's Integrity: https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity
