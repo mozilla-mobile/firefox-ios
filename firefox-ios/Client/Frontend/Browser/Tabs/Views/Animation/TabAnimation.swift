@@ -164,7 +164,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         destinationController.view.frame = finalFrame
         destinationController.view.layoutIfNeeded()
 
-        guard let panel = self.currentExperimentPanel as? ThemedNavigationController,
+        guard let panel = currentExperimentPanel as? ThemedNavigationController,
               let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
         else { return }
 
@@ -175,7 +175,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
-        let theme = self.retrieveTheme()
+        let theme = retrieveTheme()
 
         if let indexPath = dataSource.indexPath(for: item) {
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
@@ -245,14 +245,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         // if the selectedTab screenshot is nil we assume we have tapped the new tab button
         // from the tab tray, learn more in private, or opened a tab from the sync'd tabs
         if selectedTab.screenshot == nil {
-            self.dismissWithoutTabScreenshot(
+            dismissWithoutTabScreenshot(
                 panelViewController: panelViewController,
                 contentContainer: contentContainer,
                 toView: toView,
                 context: context
             )
         } else {
-            self.dismissWithTabScreenshot(
+            dismissWithTabScreenshot(
                 panelViewController: panelViewController,
                 contentContainer: contentContainer,
                 toView: toView,
@@ -299,18 +299,18 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
 
-        // swiftlint:disable closure_body_length
+        contentContainer.isHidden = true
+
+        toView.layer.cornerCurve = .continuous
+        toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        toView.clipsToBounds = true
+        toView.alpha = UX.clearAlpha
+
+        context.containerView.addSubview(toView)
+        context.containerView.addSubview(tabSnapshot)
+
+        // Trigger animation async to be non blocking and allow UI to render
         DispatchQueue.main.async {
-            contentContainer.isHidden = true
-
-            toView.layer.cornerCurve = .continuous
-            toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-            toView.clipsToBounds = true
-            toView.alpha = UX.clearAlpha
-
-            context.containerView.addSubview(toView)
-            context.containerView.addSubview(tabSnapshot)
-
             var tabCell: ExperimentTabCell?
             if let indexPath = dataSource.indexPath(for: item),
                let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
@@ -342,7 +342,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 context.completeTransition(true)
             }
         }
-        // swiftlint:enable closure_body_length
     }
 
     private func dismissWithoutTabScreenshot(
