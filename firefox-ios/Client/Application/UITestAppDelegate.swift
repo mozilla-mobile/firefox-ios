@@ -225,8 +225,12 @@ class UITestAppDelegate: AppDelegate {
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         // If the app is running from a XCUITest reset all settings in the app
+        // removeAllCachedResponses() crashes on iOS 17 simulators from Xcode 26
+        // https://github.com/mozilla-mobile/firefox-ios/issues/30947
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
-            resetApplication()
+            if !UIDevice.current.systemVersion.hasPrefix("17.") {
+                resetApplication()
+            }
         }
 
         Tab.ChangeUserAgent.clear()
@@ -243,7 +247,7 @@ class UITestAppDelegate: AppDelegate {
         // Clear the cookie/url cache
         // removeAllCachedResponses() crashes on iOS 17 simulators from Xcode 26
         // https://github.com/mozilla-mobile/firefox-ios/issues/30947
-        // URLCache.shared.removeAllCachedResponses()
+        URLCache.shared.removeAllCachedResponses()
         let storage = HTTPCookieStorage.shared
         if let cookies = storage.cookies {
             for cookie in cookies {
