@@ -1130,8 +1130,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         var actions = [ToolbarActionConfiguration]()
 
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
+        let isSummarizeModeAction = action.actionType as? ToolbarActionType == .didSummarizeSettingsChange
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
-        let canSummarize = isReaderModeAction ? action.canSummarize : addressBarState.canSummarize
+        let canSummarize = isSummarizeModeAction ? action.canSummarize : addressBarState.canSummarize
         let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
         let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
 
