@@ -32,19 +32,38 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         try await super.tearDown()
     }
 
-    private func createToUExperiment(slug: String, branch: String) -> EnrolledExperiment {
+    private func createToUExperiment(
+        slug: String,
+        branch: String,
+        name: String = "Test"
+    ) -> EnrolledExperiment {
         EnrolledExperiment(
             featureIds: ["tou-feature"],
             slug: slug,
-            userFacingName: "Test",
+            userFacingName: name,
             userFacingDescription: "Test",
             branchSlug: branch
         )
     }
 
-    private func setupStoredExperiment(slug: String, branch: String) {
-        profile.prefs.setString(slug, forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        profile.prefs.setString(branch, forKey: PrefsKeys.TermsOfUseExperimentBranch)
+    /// Build experiment key string (slug|branch|name)
+    private func experimentKey(slug: String, branch: String, name: String = "Test") -> String {
+        "\(slug)|\(branch)|\(name)"
+    }
+
+    private func setupStoredExperimentKey(_ key: String) {
+        profile.prefs.setString(key, forKey: PrefsKeys.TermsOfUseExperimentKey)
+    }
+
+    private func storedSlug() -> String? {
+        let fp = profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentKey)
+        return fp?.split(separator: "|").first.map(String.init)
+    }
+
+    private func storedBranch() -> String? {
+        let fp = profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentKey)
+        guard let parts = fp?.split(separator: "|"), parts.count > 1 else { return nil }
+        return String(parts[1])
     }
 
     private func setupDismissalData(remindersCount: Int = 2) {
@@ -67,40 +86,56 @@ final class ToUExperimentsTrackingTests: XCTestCase {
 
     func testResetToUDataIfNeeded_Resets_WhenDifferentExperiment() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
         setupDismissalData(remindersCount: 3)
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-a"))
 
         assertDismissalDataReset()
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
+        XCTAssertEqual(storedSlug(), "exp-2")
     }
 
     func testResetToUDataIfNeeded_Resets_WhenDifferentBranchSameExperiment() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
         setupDismissalData(remindersCount: 2)
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-b"))
 
         assertDismissalDataReset()
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch), "branch-b")
+        XCTAssertEqual(storedBranch(), "branch-b")
+    }
+
+    func testResetToUDataIfNeeded_Resets_WhenSameSlugAndBranchButNameChanged() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+        setupStoredExperimentKey("exp-1|branch-a|Old Name")
+        setupDismissalData(remindersCount: 2)
+
+        tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(
+            slug: "exp-1",
+            branch: "branch-a",
+            name: "New Name"
+        ))
+
+        assertDismissalDataReset()
+        XCTAssertEqual(storedSlug(), "exp-1")
+        XCTAssertEqual(storedBranch(), "branch-a")
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenUnenrolled() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
         setupDismissalData(remindersCount: 2)
 
         tracking.resetToUDataIfNeeded(currentExperiment: nil)
 
         assertDismissalDataNotReset(expectedCount: 2)
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+        XCTAssertEqual(storedSlug(), "exp-1")
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenUnenrolledThenReEnrolledInSameExperiment() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
         setupDismissalData(remindersCount: 2)
 
         tracking.resetToUDataIfNeeded(currentExperiment: nil)
@@ -108,25 +143,25 @@ final class ToUExperimentsTrackingTests: XCTestCase {
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
         assertDismissalDataNotReset(expectedCount: 2)
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+        XCTAssertEqual(storedSlug(), "exp-1")
     }
 
     // MARK: No reset
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenUserHasAcceptedToU() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
         setupDismissalData(remindersCount: 5)
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
 
         assertDismissalDataNotReset(expectedCount: 5)
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+        XCTAssertEqual(storedSlug(), "exp-1")
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenSameExperimentAndSameBranch() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
         setupDismissalData(remindersCount: 3)
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
@@ -135,24 +170,24 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenBottomSheetNotShownYet() {
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
         setupDismissalData(remindersCount: 2)
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
 
         assertDismissalDataNotReset(expectedCount: 2)
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
+        XCTAssertEqual(storedSlug(), "exp-2")
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenNoDismissalData_ExperimentChange() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
 
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
         XCTAssertNil(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount))
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
+        XCTAssertEqual(storedSlug(), "exp-2")
     }
 
     func testResetToUDataIfNeeded_DoesNotReset_WhenNoDismissalData_FirstEnrollment() {
@@ -162,7 +197,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
 
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
         XCTAssertNil(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount))
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+        XCTAssertEqual(storedSlug(), "exp-1")
     }
 
     // MARK: Legacy users
@@ -174,7 +209,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
 
         assertDismissalDataNotReset(expectedCount: 2)
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+        XCTAssertEqual(storedSlug(), "exp-1")
     }
 
     func testResetToUDataIfNeeded_LegacyUnenrolled_FirstRun_NoReset_ThenEnrolled_Resets() {
@@ -183,11 +218,11 @@ final class ToUExperimentsTrackingTests: XCTestCase {
 
         tracking.resetToUDataIfNeeded(currentExperiment: nil)
         assertDismissalDataNotReset(expectedCount: 2)
-        XCTAssertNil(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug))
+        XCTAssertNil(storedSlug())
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
         assertDismissalDataReset()
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+        XCTAssertEqual(storedSlug(), "exp-1")
     }
 
     func testResetToUDataIfNeeded_LegacyNeverEnrolled_NoExperiment_NoReset() {
@@ -195,7 +230,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
 
         tracking.resetToUDataIfNeeded(currentExperiment: nil)
 
-        XCTAssertNil(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug))
+        XCTAssertNil(storedSlug())
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
     }
 
@@ -204,7 +239,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-1", branch: "branch-a"))
 
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+        XCTAssertEqual(storedSlug(), "exp-1")
         XCTAssertNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
     }
 
@@ -213,21 +248,21 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     func testResetToUDataIfNeeded_NoExperimentAndNoStoredSlug_StoresNothing() {
         tracking.resetToUDataIfNeeded(currentExperiment: nil)
 
-        XCTAssertNil(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug))
+        XCTAssertNil(storedSlug())
     }
 
     func testResetToUDataIfNeeded_UnenrollThenReEnroll_NoResetOnUnenroll_ResetOnReEnroll() {
         profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
-        setupStoredExperiment(slug: "exp-1", branch: "branch-a")
+        setupStoredExperimentKey(experimentKey(slug: "exp-1", branch: "branch-a"))
         setupDismissalData(remindersCount: 2)
 
         tracking.resetToUDataIfNeeded(currentExperiment: nil)
         assertDismissalDataNotReset(expectedCount: 2)
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-1")
+        XCTAssertEqual(storedSlug(), "exp-1")
 
         tracking.resetToUDataIfNeeded(currentExperiment: createToUExperiment(slug: "exp-2", branch: "branch-b"))
         assertDismissalDataReset()
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug), "exp-2")
-        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch), "branch-b")
+        XCTAssertEqual(storedSlug(), "exp-2")
+        XCTAssertEqual(storedBranch(), "branch-b")
     }
 }

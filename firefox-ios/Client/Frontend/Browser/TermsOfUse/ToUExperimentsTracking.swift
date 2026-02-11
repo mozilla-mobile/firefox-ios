@@ -30,8 +30,8 @@ final class ToUExperimentsTracking {
         guard !(prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false) else { return }
 
         let experiment = currentExperiment ?? getCurrentToUExperiment()
-        let previousSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug)
-        let previousBranch = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentBranch)
+        let previousExperimentKey = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentKey)
+        let currentExperimentKey = experiment.map { experimentKey($0) }
         let trackingInitialized = prefs.boolForKey(PrefsKeys.TermsOfUseExperimentTrackingInitialized) ?? false
 
         storeExperimentInfo(currentExperiment: experiment)
@@ -40,8 +40,8 @@ final class ToUExperimentsTracking {
         if hasShownFirstTime {
             resetDismissalStateIfExperimentChanged(
                 currentExperiment: experiment,
-                previousSlug: previousSlug,
-                previousBranch: previousBranch,
+                previousExperimentKey: previousExperimentKey,
+                currentExperimentKey: currentExperimentKey,
                 trackingInitialized: trackingInitialized
             )
         }
@@ -54,36 +54,35 @@ final class ToUExperimentsTracking {
 
         guard !touExperiments.isEmpty else { return nil }
 
-        if let storedSlug = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentSlug),
-           let storedExperiment = touExperiments.first(where: { $0.slug == storedSlug }) {
+        /// Select the experiment previously tracked since can be multiple ToU experiments active
+        if let previousExperimentKey = prefs.stringForKey(PrefsKeys.TermsOfUseExperimentKey),
+           let storedExperiment = touExperiments.first(where: { experimentKey($0) == previousExperimentKey }) {
             return storedExperiment
         }
+
         let sortedExperiments = touExperiments.sorted { $0.slug < $1.slug }
         return sortedExperiments.first
     }
 
     private func resetDismissalStateIfExperimentChanged(
         currentExperiment: EnrolledExperiment?,
-        previousSlug: String?,
-        previousBranch: String?,
+        previousExperimentKey: String?,
+        currentExperimentKey: String?,
         trackingInitialized: Bool
     ) {
-        let currentSlug = currentExperiment?.slug
-        let currentBranch = currentExperiment?.branchSlug
-
         let experimentChanged: Bool
-        switch (previousSlug, currentSlug) {
-        case let (previous?, current?):
-            /// User was enrolled before and is still enrolled: reset only if experiment slug
-            /// or branch changed (retargeting user)
-            experimentChanged = previous != current || previousBranch != currentBranch
+        switch (previousExperimentKey, currentExperimentKey) {
+        case let (prev?, curr?):
+            /// User was enrolled before and is still enrolled: reset only if experiment
+            /// key changed (retargeting user)
+            experimentChanged = prev != curr
         case (.some, nil):
             /// User was enrolled and is now unenrolled: do not reset here;
             /// dismissal data is reset when users enroll again into a new experiment
             experimentChanged = false
         case (nil, _):
-            /// Legacy user with no stored slug: reset only after tracking is initialized,
-            /// to avoid affecting users that are already enrolled
+            /// No stored experiment key (legacy users): reset only
+            /// after tracking initialized, to avoid affecting users already enrolled
             experimentChanged = trackingInitialized && currentExperiment != nil && hasDismissalData
         }
         guard experimentChanged, hasDismissalData else { return }
@@ -93,20 +92,14 @@ final class ToUExperimentsTracking {
         prefs.setBool(false, forKey: PrefsKeys.TermsOfUseFirstShown)
     }
 
-    /// Store current experiment slug/branch only when enrolled,
-    /// so we can avoid unwanted data reset
-    private func storeExperimentInfo(currentExperiment: EnrolledExperiment?) {
-        guard let experiment = currentExperiment else { return }
-        updatePersistedValue(experiment.slug, forKey: PrefsKeys.TermsOfUseExperimentSlug)
-        updatePersistedValue(experiment.branchSlug, forKey: PrefsKeys.TermsOfUseExperimentBranch)
+    /// Experiment key: slug|branch|name. New experiment variant = new name in Experimenter
+    private func experimentKey(_ experiment: EnrolledExperiment) -> String {
+        "\(experiment.slug)|\(experiment.branchSlug)|\(experiment.userFacingName)"
     }
 
-    private func updatePersistedValue(_ value: String?, forKey key: String) {
-        if let value = value {
-            prefs.setString(value, forKey: key)
-        } else {
-            prefs.removeObjectForKey(key)
-        }
+    private func storeExperimentInfo(currentExperiment: EnrolledExperiment?) {
+        guard let experiment = currentExperiment else { return }
+        prefs.setString(experimentKey(experiment), forKey: PrefsKeys.TermsOfUseExperimentKey)
     }
 
     private final class ExperimentChangeObserver: Notifiable {
