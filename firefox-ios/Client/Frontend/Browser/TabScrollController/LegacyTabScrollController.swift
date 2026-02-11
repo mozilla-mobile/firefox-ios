@@ -472,8 +472,11 @@ final class LegacyTabScrollController: NSObject,
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willTerminateNotification:
-            ensureMainThread { [weak self] in
-                self?.applicationWillTerminate()
+            // ensureMainThread is used instead of Task { @MainActor } because Task always
+            // defers execution. KVO cleanup must complete before this handler returns,
+            // otherwise the process may terminate with observers still registered.
+            ensureMainThread {
+                self.applicationWillTerminate()
             }
         default:
             return

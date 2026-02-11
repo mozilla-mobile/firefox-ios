@@ -4401,16 +4401,12 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
-        // Cleanup on the main thread to prevent crashes from stale KVO observers.
-        ensureMainThread { [weak self] in
-            guard let self else { return }
-            tab.cancelQueuedAlerts()
-            stopObserving(webView: webView)
-            self.scrollController.stopObserving(scrollView: webView.scrollView)
-            webView.uiDelegate = nil
-            webView.scrollView.delegate = nil
-            webView.removeFromSuperview()
-        }
+        tab.cancelQueuedAlerts()
+        stopObserving(webView: webView)
+        scrollController.stopObserving(scrollView: webView.scrollView)
+        webView.uiDelegate = nil
+        webView.scrollView.delegate = nil
+        webView.removeFromSuperview()
     }
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
