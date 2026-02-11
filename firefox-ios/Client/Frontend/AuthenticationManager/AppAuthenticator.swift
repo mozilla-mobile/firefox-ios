@@ -32,8 +32,7 @@ final class AppAuthenticator: AppAuthenticationProtocol {
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
-            isAuthenticating = true
-            authenticateWithDeviceOwnerAuthentication { [weak self] result in
+            authenticateWithDeviceOwnerAuthentication { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
@@ -42,7 +41,6 @@ final class AppAuthenticator: AppAuthenticationProtocol {
                         completion(.deviceOwnerFailed)
                     }
                 }
-                self?.isAuthenticating = false
             }
         } else {
             DispatchQueue.main.async {
@@ -60,6 +58,8 @@ final class AppAuthenticator: AppAuthenticationProtocol {
         //  That's usually not what you want.
         let context = LAContext()
 
+        isAuthenticating = true
+
         // First check if we have the needed hardware support.
         var error: NSError?
         let localizedErrorMessage = String.Biometry.Screen.UniversalAuthenticationReasonV2
@@ -70,10 +70,12 @@ final class AppAuthenticator: AppAuthenticationProtocol {
             ) { success, error in
                 if success {
                     DispatchQueue.main.async {
+                        self.isAuthenticating = false
                         completion(.success(()))
                     }
                 } else {
                     DispatchQueue.main.async {
+                        self.isAuthenticating = false
                         completion(
                             .failure(
                                 .failedAuthentication(message: error?.localizedDescription ?? "Failed to authenticate")
@@ -85,6 +87,7 @@ final class AppAuthenticator: AppAuthenticationProtocol {
         } else {
             let failureError = error
             DispatchQueue.main.async {
+                self.isAuthenticating = false
                 completion(.failure(
                     .failedEvaluation(
                         message: failureError?.localizedDescription ?? "Can't evaluate policy"
