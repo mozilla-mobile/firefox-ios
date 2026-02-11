@@ -18,7 +18,7 @@ import Security
 /// - Excluded from backups and device migrations (the key is device-specific).
 /// NOTE(FXIOS-14838): This closely resembles how we store encryption keys for autofill,
 /// but with stricter accessibility values. We should consolidate under one Keychain helper in the future.
-public final class KeychainAppAttestKeyIDStore: AppAttestKeyIDStore {
+public struct KeychainAppAttestKeyIDStore: AppAttestKeyIDStore {
     private enum Constants {
         static let defaultService = "org.mozilla.browserkit.appattest.keyid"
         static let defaultAccount = "default"
