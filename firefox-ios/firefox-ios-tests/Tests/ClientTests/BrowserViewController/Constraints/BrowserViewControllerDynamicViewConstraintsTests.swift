@@ -8,26 +8,7 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class BrowserViewControllerDynamicViewConstraintsTests: XCTestCase {
-    var profile: MockProfile!
-    var tabManager: MockTabManager!
-
-    override func setUp() async throws {
-        try await super.setUp()
-        tabManager = MockTabManager()
-        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
-        profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-    }
-
-    override func tearDown() async throws {
-        profile.shutdown()
-        profile = nil
-        tabManager = nil
-        DependencyHelperMock().reset()
-        try await super.tearDown()
-    }
-
+final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControllerConstraintTestsBase {
     // MARK: - Reader Mode Bar Tests
 
     func test_readerModeBar_bottomToolbar_withNativeConstraints() {
@@ -273,30 +254,5 @@ final class BrowserViewControllerDynamicViewConstraintsTests: XCTestCase {
 
         let finalFrame = subject.overKeyboardContainer.frame
         XCTAssertEqual(initialFrame, finalFrame)
-    }
-
-    // MARK: - Helper Methods
-
-    private func createSubject(isFeatureFlagEnabled: Bool = false) -> BrowserViewController {
-        // Setup feature flag to disabled by default and override only in the test that need it
-        setupNimbusSnapKitRemovalTesting(isEnabled: isFeatureFlagEnabled)
-        let subject = BrowserViewController(profile: profile,
-                                            tabManager: tabManager)
-        trackForMemoryLeaks(subject)
-
-        // Trigger view loading and constraint setup
-        // SnapKit constraints are created in updateViewConstraints(), so we need to explicitly trigger it
-        subject.loadViewIfNeeded()
-        subject.view.setNeedsUpdateConstraints()
-        subject.view.updateConstraintsIfNeeded()
-        subject.view.layoutIfNeeded()
-
-        return subject
-    }
-
-    private func setupNimbusSnapKitRemovalTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.snapkitRemovalRefactor.with { _, _ in
-            return SnapkitRemovalRefactor(enabled: isEnabled)
-        }
     }
 }
