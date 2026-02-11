@@ -189,7 +189,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 canSummarize: true,
                 readerModeState: .available,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSummarizeSettingsChange
+                actionType: ToolbarActionType.readerModeStateChanged
             )
         )
 

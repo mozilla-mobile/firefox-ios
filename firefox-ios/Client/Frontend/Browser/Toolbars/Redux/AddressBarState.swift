@@ -321,14 +321,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return defaultState(from: state)
         }
 
+        let trailingPageActions = trailingPageActions(action: toolbarAction,
+                                                      addressBarState: state,
+                                                      isEditing: state.isEditing,
+                                                      isEmptySearch: state.isEmptySearch)
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
             leadingPageActions: state.leadingPageActions,
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing,
-                                                     isEmptySearch: state.isEmptySearch),
+            trailingPageActions: trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -353,15 +354,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let lockIconImageName = toolbarAction.readerModeState == .active ? nil : state.lockIconImageName
-
+        let trailingPageActions = trailingPageActions(action: toolbarAction,
+                                                      addressBarState: state,
+                                                      isEditing: state.isEditing,
+                                                      isEmptySearch: state.isEmptySearch)
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
             leadingPageActions: state.leadingPageActions,
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing,
-                                                     isEmptySearch: state.isEmptySearch),
+            trailingPageActions: trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -1132,7 +1133,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
         let isSummarizeModeAction = action.actionType as? ToolbarActionType == .didSummarizeSettingsChange
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
-        let canSummarize = isSummarizeModeAction ? action.canSummarize : addressBarState.canSummarize
+        let canSummarize = isSummarizeModeAction || isReaderModeAction ? action.canSummarize : addressBarState.canSummarize
         let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
         let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
 
