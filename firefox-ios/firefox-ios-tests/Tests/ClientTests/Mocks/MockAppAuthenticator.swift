@@ -14,10 +14,8 @@ class MockAppAuthenticator: AppAuthenticationProtocol, @unchecked Sendable {
     var shouldSucceed = true
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
-        isAuthenticating = true
         ensureMainThread { [weak self] in
             guard let self else { return }
-            self.isAuthenticating = false
             completion(self.authenticationState)
         }
     }

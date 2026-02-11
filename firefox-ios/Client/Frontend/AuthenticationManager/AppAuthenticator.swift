@@ -5,6 +5,13 @@
 import LocalAuthentication
 import WebKit
 
+protocol LAContextProtocol {
+    func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool
+    func evaluatePolicy(_ policy: LAPolicy, localizedReason: String, reply: @escaping @Sendable (Bool, Error?) -> Void)
+}
+
+extension LAContext: LAContextProtocol {}
+
 enum AuthenticationError: Error {
     case failedEvaluation(message: String)
     case failedAuthentication(message: String)
@@ -28,7 +35,12 @@ protocol AppAuthenticationProtocol {
 }
 
 final class AppAuthenticator: AppAuthenticationProtocol {
+    private let context: LAContextProtocol
     private(set) var isAuthenticating = false
+
+    init(context: LAContextProtocol = LAContext()) {
+        self.context = context
+    }
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
@@ -56,7 +68,7 @@ final class AppAuthenticator: AppAuthenticationProtocol {
         //  (by commenting out the next line), then a previously successful authentication
         //  causes the next policy evaluation to succeed without testing biometry again.
         //  That's usually not what you want.
-        let context = LAContext()
+        let context = self.context
 
         isAuthenticating = true
 
