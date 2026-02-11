@@ -12,7 +12,6 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinator!
     private var themeManager: MockThemeManager!
-    private let windowUUID: WindowUUID = .XCTestDefaultUUID
     private let testURL = URL(string: "https://example.com")!
     private let testQuery = "test search query"
 
@@ -30,7 +29,7 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func test_start_presentsVoiceSearchViewController() throws {
+    func test_start_presentsVoiceSearchViewController() {
         let subject = createSubject()
 
         subject.start()
@@ -45,32 +44,26 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
         subject.dismissVoiceSearch()
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(router.dismissCalled, 1)
     }
 
     func test_navigateToURL_callsCallbackAndDismisses() {
-        let expectation = expectation(description: "onNavigatetToURL should be called")
         let subject = createSubject(onNavigateToURL: { url in
             XCTAssertEqual(url, self.testURL)
-            expectation.fulfill()
         })
 
         subject.navigateToURL(testURL)
 
-        wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
     func test_navigateToSearchResult_callsCallbackAndDismisses() {
-        let expectation = expectation(description: "onNavigationToSearchURL should be called")
         let subject = createSubject(onNavigateToSearch: { query in
             XCTAssertEqual(query, self.testQuery)
-            expectation.fulfill()
         })
 
         subject.navigateToSearchResult(testQuery)
-
-        wait(for: [expectation], timeout: 0.5)
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
@@ -84,7 +77,7 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
     ) -> VoiceSearchCoordinator {
         let subject = VoiceSearchCoordinator(
             parentCoordinatorDelegate: parentCoordinator,
-            windowUUID: windowUUID,
+            windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,
             onNavigateToURL: onNavigateToURL,

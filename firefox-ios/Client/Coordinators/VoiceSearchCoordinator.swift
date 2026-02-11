@@ -13,11 +13,6 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
     private let themeManager: ThemeManager
     private let onNavigateToURL: (URL) -> Void
     private let onNavigateToSearch: (String) -> Void
-    private lazy var controller = VoiceSearchViewController(
-        navigationHandler: self,
-        windowUUID: windowUUID,
-        themeManager: themeManager
-    )
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
@@ -39,6 +34,11 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
     }
 
     func start() {
+        let controller = VoiceSearchViewController(
+            navigationHandler: self,
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
         router.present(controller, animated: shouldAnimateTransition)
     }
 
