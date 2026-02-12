@@ -121,6 +121,7 @@
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
         "JumpBackInTests",
+        "LibraryTests",
         "LibraryTestsIpad",
         "LibraryTestsIphone",
         "LoginTest",
