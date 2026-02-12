@@ -41,49 +41,65 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
     func test_dismissVoiceSearch_dismissesControllerAndNotifiesParent() {
         let subject = createSubject()
 
-        subject.dismissVoiceSearch()
+        subject.dismissVoiceSearch(with: nil)
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
-    func test_navigateToURL_callsCallbackAndDismisses() {
-        let subject = createSubject(onNavigateToURL: { url in
-            XCTAssertEqual(url, self.testURL)
+    func test_dismissVoiceSearch_withNilNavigationType_doesntCallCallback() {
+        var didCallCallback = false
+        let subject = createSubject(onNavigateTo: { _ in
+            didCallCallback = true
         })
 
-        subject.navigateToURL(testURL)
+        subject.dismissVoiceSearch(with: nil)
 
+        XCTAssertFalse(didCallCallback, "The onNavigateTo closure should not have been called")
+    }
+
+    func test_dismissVoiceSearch_withNavigateToURLType_callsCallback() {
+        var didCallCallback = false
+        let subject = createSubject(onNavigateTo: { type in
+            XCTAssertEqual(type, .navigateToURL(self.testURL))
+            didCallCallback = true
+        })
+
+        subject.dismissVoiceSearch(with: .navigateToURL(testURL))
+
+        XCTAssertTrue(didCallCallback, "The onNavigateTo closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
-    func test_navigateToSearchResult_callsCallbackAndDismisses() {
-        let subject = createSubject(onNavigateToSearch: { query in
-            XCTAssertEqual(query, self.testQuery)
+    func test_dismissVoiceSearch_withNavigateToSearchResultType_callsCallback() {
+        var didCallCallback = false
+        let subject = createSubject(onNavigateTo: { type in
+            XCTAssertEqual(type, .navigateToSearchResult(self.testQuery))
+            didCallCallback = true
         })
 
-        subject.navigateToSearchResult(testQuery)
+        subject.dismissVoiceSearch(with: .navigateToSearchResult(testQuery))
 
+        XCTAssertTrue(didCallCallback, "The onNavigateTo closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
     // MARK: - Helper Methods
-
     private func createSubject(
-        onNavigateToURL: @escaping (URL) -> Void = { _ in },
-        onNavigateToSearch: @escaping (String) -> Void = { _ in }
+        onNavigateTo: @escaping (VoiceSearchNavigationType) -> Void = { _ in },
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) -> VoiceSearchCoordinator {
         let subject = VoiceSearchCoordinator(
             parentCoordinatorDelegate: parentCoordinator,
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,
-            onNavigateToURL: onNavigateToURL,
-            onNavigateToSearch: onNavigateToSearch
+            onNavigateTo: onNavigateTo
         )
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }

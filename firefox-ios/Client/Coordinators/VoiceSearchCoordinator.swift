@@ -11,8 +11,7 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
-    private let onNavigateToURL: (URL) -> Void
-    private let onNavigateToSearch: (String) -> Void
+    private let onNavigateTo: (VoiceSearchNavigationType) -> Void
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
@@ -22,14 +21,12 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         router: Router,
-        onNavigateToURL: @escaping (URL) -> Void,
-        onNavigateToSearch: @escaping (String) -> Void
+        onNavigateTo: @escaping (VoiceSearchNavigationType) -> Void,
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.onNavigateToURL = onNavigateToURL
-        self.onNavigateToSearch = onNavigateToSearch
+        self.onNavigateTo = onNavigateTo
         super.init(router: router)
     }
 
@@ -43,18 +40,11 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
     }
 
     // MARK: - VoiceSearchNavigationHandler
-    func dismissVoiceSearch() {
+    func dismissVoiceSearch(with navigationType: VoiceSearchNavigationType?) {
+        if let navigationType {
+            onNavigateTo(navigationType)
+        }
         router.dismiss(animated: shouldAnimateTransition)
         parentCoordinatorDelegate?.didFinish(from: self)
-    }
-
-    func navigateToURL(_ url: URL) {
-        onNavigateToURL(url)
-        dismissVoiceSearch()
-    }
-
-    func navigateToSearchResult(_ query: String) {
-        onNavigateToSearch(query)
-        dismissVoiceSearch()
     }
 }
