@@ -46,7 +46,9 @@ public final class AppAttestClient {
     /// 4. Send the attestation to the server for validation and public key storage.
     /// 5. Persist the `keyId` locally so subsequent calls skip re-attestation.
     public func performAttestation() async throws -> String {
-        if let existingKey = keyStore.loadKeyID() { return existingKey }
+        if let existingKey = keyStore.loadKeyID() { 
+            return existingKey 
+        }
 
         let keyID = try await appAttestService.generateKey()
         let challenge = try await remoteServer.fetchChallenge(for: keyID)
@@ -78,7 +80,9 @@ public final class AppAttestClient {
     /// 4. Ask the Secure Enclave to sign the hash via `appAttestService.generateAssertion()`.
     /// 5. Send the assertion + payload to the server for verification.
     public func performAssertion(payload: [String: Any]) async throws {
-        guard let keyId = keyStore.loadKeyID() else { throw AppAttestServiceError.missingKeyID }
+        guard let keyId = keyStore.loadKeyID() else { 
+            throw AppAttestServiceError.missingKeyID 
+        }
 
         let challenge = try await remoteServer.fetchChallenge(for: keyId)
 
