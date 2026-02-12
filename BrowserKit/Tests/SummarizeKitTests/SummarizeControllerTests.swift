@@ -33,11 +33,12 @@ final class MockSummarizeNavigationHandler: SummarizeNavigationHandler {
 }
 
 @MainActor
-final class SummarizeControllerTests: XCTestCase, @unchecked Sendable {
+final class SummarizeControllerTests: XCTestCase {
     private var summarizer: MockSummarizer!
     private var navigationHandler: MockSummarizeNavigationHandler!
     private var webView: MockWebView!
     private var viewModel: MockSummarizeViewModel!
+    private var animationController: MockAnimationController!
     private let configuration = SummarizeViewConfiguration(
         titleLabelA11yId: "",
         compactTitleLabelA11yId: "",
@@ -85,59 +86,65 @@ final class SummarizeControllerTests: XCTestCase, @unchecked Sendable {
             allowButtonA11yLabel: ""
         )
     )
-    private let maxWords = 5000
 
     override func setUp() async throws {
         try await super.setUp()
-        UIView.setAnimationsEnabled(false)
         summarizer = MockSummarizer(shouldRespond: ["Response"], shouldThrowError: nil)
         navigationHandler = MockSummarizeNavigationHandler()
         webView = MockWebView(URL(string: "https://www.example.com")!)
         viewModel = MockSummarizeViewModel()
+        animationController = MockAnimationController()
         AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
     }
 
     override func tearDown() async throws {
-        UIView.setAnimationsEnabled(true)
         summarizer = nil
         navigationHandler = nil
         webView = nil
         viewModel = nil
+        animationController = nil
         AppContainer.shared.reset()
         try await super.tearDown()
     }
 
-    func test_viewDidLoad_startSummarizing() async {
-        let subject = createSubject()
-
-        // Calls view did load just once, instead of calling directly viewDidLoad()
-        _ = subject.view
-
-        await MainActor.run {
-            XCTAssertEqual(viewModel.summarizeCalled, 1)
+    func test_viewDidLoad_whenShowToSError() {
+        var onSummarizeDisplayCalled = false
+        let subject = createSubject {
+            onSummarizeDisplayCalled = true
         }
-    }
-
-    func test_viewDidLoad_whenTosIsNotShown() async {
-        let subject = createSubject()
         viewModel.injectedSummarizeResult = .failure(.tosConsentMissing)
 
         _ = subject.view
 
-        await MainActor.run {
-            XCTAssertEqual(viewModel.summarizeCalled, 1)
-            XCTAssertEqual(viewModel.setTosScreenShownCalled, 1)
-        }
+        XCTAssertEqual(viewModel.summarizeCalled, 1)
+        XCTAssertEqual(viewModel.setTosScreenShownCalled, 1)
+        XCTAssertEqual(animationController.animateToInfoCalled, 1)
+        XCTAssertEqual(animationController.animateToSummaryCalled, 0)
+        XCTAssertTrue(onSummarizeDisplayCalled)
     }
 
-    func test_viewDidAppear_unblocksSummarization() async {
+    func test_viewDidLoad_whenSummarizeSucceeds() {
+        var onSummarizeDisplayCalled = false
+        let subject = createSubject {
+            onSummarizeDisplayCalled = true
+        }
+        viewModel.injectedSummarizeResult = .success("Test")
+
+        _ = subject.view
+
+        XCTAssertEqual(viewModel.summarizeCalled, 1)
+        XCTAssertEqual(animationController.animateToSummaryCalled, 1)
+        XCTAssertEqual(animationController.animateToInfoCalled, 0)
+        XCTAssertTrue(onSummarizeDisplayCalled)
+    }
+
+    func test_viewDidAppear() {
         let subject = createSubject()
 
         subject.viewDidAppear(false)
 
-        await MainActor.run {
-            XCTAssertEqual(viewModel.unblockSummarizationCalled, 1)
-        }
+        XCTAssertEqual(viewModel.unblockSummarizationCalled, 1)
+        XCTAssertEqual(animationController.animateViewDidAppearCalled, 1)
     }
 
     func test_dismiss() {
@@ -162,6 +169,7 @@ final class SummarizeControllerTests: XCTestCase, @unchecked Sendable {
             webView: webView,
             onSummaryDisplayed: onSummaryDisplayed
         )
+        controller.animationController = animationController
         trackForMemoryLeaks(controller)
         return controller
     }
