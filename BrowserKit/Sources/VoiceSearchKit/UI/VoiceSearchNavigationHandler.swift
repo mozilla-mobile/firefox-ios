@@ -6,19 +6,18 @@ import Foundation
 
 /// Identifies the possible navigation types for `VoiceSearchViewController`
 public enum VoiceSearchNavigationType: Equatable {
-    /// An option that species an `URL` to navigate to.
-    case navigateToURL(URL)
-    /// An option that species a search result to navigate to.
-    /// The parameter is a `String` which represents the query to search.
-    case navigateToSearchResult(String)
+    /// Navigates to the specified URL.
+    case url(URL)
+    /// Performs a search with the specified query string.
+    case searchResult(String)
 }
 
 /// Handles navigation for the `VoiceSearchViewController`
 @MainActor
 public protocol VoiceSearchNavigationHandler: AnyObject {
-    /// Dismisses the `VoiceSearchViewController` with an optional `VoiceSearchNavigationType`.
+    /// Dismisses the voice search interface and optionally performs a navigation action.
     ///
-    /// When the `navigationType` is nil the dismiss of the controller is done via the close button.
-    /// Otherwise the user pressed a search result which is of type `VoiceSearchNavigationType`.
+    /// - Parameter navigationType: The navigation action to perform after dismissal.
+    ///   Pass `nil` when dismissing via the close button without navigation.
     func dismissVoiceSearch(with navigationType: VoiceSearchNavigationType?)
 }

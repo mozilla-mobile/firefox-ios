@@ -49,7 +49,7 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
 
     func test_dismissVoiceSearch_withNilNavigationType_doesntCallCallback() {
         var didCallCallback = false
-        let subject = createSubject(onNavigateTo: { _ in
+        let subject = createSubject(onNavigate: { _ in
             didCallCallback = true
         })
 
@@ -60,12 +60,12 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
 
     func test_dismissVoiceSearch_withNavigateToURLType_callsCallback() {
         var didCallCallback = false
-        let subject = createSubject(onNavigateTo: { type in
-            XCTAssertEqual(type, .navigateToURL(self.testURL))
+        let subject = createSubject(onNavigate: { type in
+            XCTAssertEqual(type, .url(self.testURL))
             didCallCallback = true
         })
 
-        subject.dismissVoiceSearch(with: .navigateToURL(testURL))
+        subject.dismissVoiceSearch(with: .url(testURL))
 
         XCTAssertTrue(didCallCallback, "The onNavigateTo closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
@@ -74,12 +74,12 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
 
     func test_dismissVoiceSearch_withNavigateToSearchResultType_callsCallback() {
         var didCallCallback = false
-        let subject = createSubject(onNavigateTo: { type in
-            XCTAssertEqual(type, .navigateToSearchResult(self.testQuery))
+        let subject = createSubject(onNavigate: { type in
+            XCTAssertEqual(type, .searchResult(self.testQuery))
             didCallCallback = true
         })
 
-        subject.dismissVoiceSearch(with: .navigateToSearchResult(testQuery))
+        subject.dismissVoiceSearch(with: .searchResult(testQuery))
 
         XCTAssertTrue(didCallCallback, "The onNavigateTo closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
@@ -88,7 +88,7 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
 
     // MARK: - Helper Methods
     private func createSubject(
-        onNavigateTo: @escaping (VoiceSearchNavigationType) -> Void = { _ in },
+        onNavigate: @escaping (VoiceSearchNavigationType) -> Void = { _ in },
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> VoiceSearchCoordinator {
@@ -97,7 +97,7 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,
-            onNavigateTo: onNavigateTo
+            onNavigate: onNavigate
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

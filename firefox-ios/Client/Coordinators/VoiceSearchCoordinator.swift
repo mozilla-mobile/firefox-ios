@@ -11,7 +11,7 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
-    private let onNavigateTo: (VoiceSearchNavigationType) -> Void
+    private let onNavigate: (VoiceSearchNavigationType) -> Void
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
@@ -21,12 +21,12 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         router: Router,
-        onNavigateTo: @escaping (VoiceSearchNavigationType) -> Void,
+        onNavigate: @escaping (VoiceSearchNavigationType) -> Void,
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.onNavigateTo = onNavigateTo
+        self.onNavigate = onNavigate
         super.init(router: router)
     }
 
@@ -42,7 +42,7 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
     // MARK: - VoiceSearchNavigationHandler
     func dismissVoiceSearch(with navigationType: VoiceSearchNavigationType?) {
         if let navigationType {
-            onNavigateTo(navigationType)
+            onNavigate(navigationType)
         }
         router.dismiss(animated: shouldAnimateTransition)
         parentCoordinatorDelegate?.didFinish(from: self)
