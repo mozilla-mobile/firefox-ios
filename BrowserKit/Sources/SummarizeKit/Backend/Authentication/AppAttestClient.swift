@@ -17,7 +17,7 @@ import DeviceCheck
 /// - Apple Docs: https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity
 /// For concrete usage for MLPA (Mozilla LLM Proxy Auth), See:
 /// - https://docs.google.com/document/d/1xnCHRxNolNS25sKiAZPxtrovKahkYHZ3aVqc_FMyJv0/edit?usp=sharing
-public final class AppAttestClient {
+public struct AppAttestClient {
     private let appAttestService: AppAttestServiceProtocol
     private let remoteServer: AppAttestRemoteServerProtocol
     private let keyStore: AppAttestKeyIDStore
