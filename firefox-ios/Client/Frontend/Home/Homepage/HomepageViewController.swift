@@ -273,6 +273,7 @@ final class HomepageViewController: UIViewController,
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         saveVerticalScrollOffset()
+        trackVisibleItemImpressions()
     }
 
     private func saveVerticalScrollOffset() {
