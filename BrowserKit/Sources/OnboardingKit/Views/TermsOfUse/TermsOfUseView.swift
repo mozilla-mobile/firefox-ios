@@ -32,9 +32,15 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
             ZStack {
-                AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
-                    .ignoresSafeArea()
-                    .accessibilityHidden(true)
+                OnboardingBackgroundView(
+                    windowUUID: windowUUID,
+                    themeManager: themeManager,
+                    variant: viewModel.variant
+                )
+                .frame(
+                    width: geometry.size.width,
+                    height: geometry.size.height
+                )
 
                 if horizontalSizeClass == .regular {
                     regularLayout
@@ -52,7 +58,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     private var regularLayout: some View {
         SheetSizedCard {
             regularContent
-                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: viewModel.variant)
         }
     }
 
@@ -84,14 +90,18 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     @ViewBuilder
     private var regularImageView: some View {
-        if let img = viewModel.configuration.image {
+        if let img = imageForVariant {
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.tosImageHeight)
+                .frame(height: UX.CardView.tosImageHeight(for: viewModel.variant))
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
         }
+    }
+
+    private var imageForVariant: UIImage? {
+        return UX.Image.tosImage(for: viewModel.variant, fallback: viewModel.configuration.image)
     }
 
     // MARK: - Compact Layout
@@ -132,7 +142,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: viewModel.variant)
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
         .padding(.vertical)
         .accessibilityElement(children: .contain)
@@ -141,14 +151,18 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     // MARK: - Subviews
 
     var links: some View {
-        VStack(alignment: UX.CardView.horizontalAlignmentForCurrentLocale, spacing: UX.Onboarding.Spacing.standard) {
+        VStack(
+            alignment: UX.CardView.linksHorizontalAlignment(for: viewModel.variant),
+            spacing: UX.Onboarding.Spacing.standard
+        ) {
             ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
                 AttributedLinkText<TermsOfUseAction>(
-                    theme: theme,
+                    textColor: theme.colors.textSecondary,
+                    linkColor: linkColor,
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
-                    textAlignment: UX.CardView.textAlignmentForCurrentLocale,
+                    textAlignment: UX.CardView.linksTextAlignment(for: viewModel.variant),
                     linkAction: viewModel.handleEmbededLinkAction(action:)
                 )
             }
@@ -156,13 +170,17 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         .accessibilityElement(children: .contain)
     }
 
+    private var linkColor: UIColor {
+        return theme.colors.actionPrimary
+    }
+
     @ViewBuilder
     func imageView(scale: CGFloat) -> some View {
-        if let img = viewModel.configuration.image {
+        if let img = imageForVariant {
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.tosImageHeight * scale)
+                .frame(height: UX.CardView.tosImageHeight(for: viewModel.variant) * scale)
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
         }
@@ -198,7 +216,8 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 )
             },
             theme: theme,
-            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
+            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton",
+            variant: viewModel.variant
         )
     }
 }

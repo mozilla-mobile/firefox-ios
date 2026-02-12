@@ -10,3 +10,9 @@
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
 "LibraryPanel.History.LastHourOption.v138" = "Última hora";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "Los últimos 7 días";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Últimas 24 horas";
+

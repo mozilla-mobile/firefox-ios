@@ -172,6 +172,9 @@
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Πείτε αντίο στους παρεμβατικούς ιχνηλάτες";
 
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Ανοίξτε τους συνδέσμους σας με ενσωματωμένο απόρρητο";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Αυτόματο";
 

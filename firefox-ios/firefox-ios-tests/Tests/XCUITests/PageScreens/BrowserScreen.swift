@@ -17,6 +17,7 @@ final class BrowserScreen {
     private var addressBar: XCUIElement { sel.ADDRESS_BAR.element(in: app) }
     private var cancelButton: XCUIElement { sel.CANCEL_BUTTON_URL_BAR.element(in: app) }
     private var bookText: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT.element(in: app) }
+    private var bookTextInTable: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT_IN_TABLE.element(in: app) }
 
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
@@ -205,7 +206,7 @@ final class BrowserScreen {
     }
 
     func waitForBookOfMozillaToDisappear(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToNotExist(bookText, timeout: timeout)
+        BaseTestCase().mozWaitForElementToNotExist(bookTextInTable, timeout: timeout)
     }
 
     func assertAddressBar_LockIconExist(timeout: TimeInterval = TIMEOUT) {
@@ -264,4 +265,32 @@ final class BrowserScreen {
         let text = sel.webPageElement(with: text).element(in: app)
         BaseTestCase().mozWaitForElementToExist(text)
     }
-}
+
+    func tapWebViewTextIfExists(text: String) {
+        app.webViews.staticTexts[text].tapIfExists()
+    }
+
+    func dismissMicrosurveyIfExists() {
+        let microsurveyCloseButton = sel.MICROSURVEY_CLOSE_BUTTON.element(in: app)
+        microsurveyCloseButton.tapIfExists()
+    }
+
+    func assertWebViewLoaded(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(app.webViews.firstMatch, timeout: timeout)
+    }
+
+    func tapWebViewButton(buttonText: String) {
+        app.webViews.buttons[buttonText].waitAndTap()
+    }
+
+    func assertWebElements(shouldExist: Bool = true, _ elements: XCUIElement..., timeout: TimeInterval = TIMEOUT) {
+        let base = BaseTestCase()
+        for element in elements {
+            if shouldExist {
+                base.mozWaitForElementToExist(element, timeout: timeout)
+            } else {
+                base.mozWaitForElementToNotExist(element, timeout: timeout)
+            }
+        }
+    }
+ }

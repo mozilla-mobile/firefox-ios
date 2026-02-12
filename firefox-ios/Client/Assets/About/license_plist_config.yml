@@ -1,0 +1,84 @@
+###########################################################################################################
+# Licenses.html Generation
+#
+# This configuration file is for use with LicensePlist (https://github.com/mono0926/LicensePlist). 
+# You can install LicensePlist via Homebrew.
+#
+# Configuration options are listed here: 
+# https://github.com/mono0926/LicensePlist/blob/main/Tests/LicensePlistTests/Resources/license_plist.yml
+#
+# Our `.gitignore` file currently ignores the `LicensePlistTemp` folder. If we ever want to use 
+# LicensePlist as part of the Xcode build process, we will want to make sure that folder is present
+# to avoid redundant checks when no licenses have changed.
+#
+# Usage: From the repo's root directory, run the following command:
+# 
+# license-plist --config-path "./firefox-ios/Client/Assets/About/license_plist.yml" \
+#			  --package-paths "BrowserKit/Package.swift" \
+#			  --xcodeproj-path "firefox-ios/Client.xcodeproj"
+#
+# The `package-paths` argument must include all `Package.swift` files. New `Package.swift` files should be
+# added to this command to keep the licenses fully up to date. Also, you should add any additional GitHub
+# repositoroies or local repositories (e.g. Mozilla Rust Components) manually as needed if they are not
+# automatically picked up in the Client.xcodeproj SPM packages or Package.swift files.
+###########################################################################################################
+
+# Configuration Options
+options:
+  outputPath: "./LicensePlistTemp"
+  ###########################################################################################################
+  # <!!> Unfortunately, as of Feb 2026, there's a bug in LicensePlist where you can't define (from the YAML)
+  #      both the `xcodeprojPath` and the `packagePaths`. But, it works when using the CLI arguments. So,
+  #      use those instead. Eventually we might be able to use the config.
+  ###########################################################################################################
+  # xcodeprojPath: "firefox-ios/Client.xcodeproj"
+  # packagePaths:
+  #   - "BrowserKit/Package.swift"
+  htmlPath: Licenses.html
+  prefix: Licenses
+  force: true
+  suppressOpeningDirectory: true
+  failIfMissingLicense: true
+  # Generate a GitHub personal access token and add it here if your requests are rate limited
+  # gitHubToken: # Your token here
+
+# Manually specify additional remote respositories not picked up by LicensePlist
+# You should also add your NPM packages here too and add license files as needed (as per package.json).
+github:
+  - owner: mozilla-mobile
+    name: firefox-ios
+    version:
+  - owner: mozilla
+    name: page-metadata-parser
+  - owner: mono0926
+    name: LicensePlist
+    version: 3.72.2
+  - owner: bignerdranch
+    name: Deferred
+    version:
+  - owner: mozilla
+    name: readability
+    version:
+  - owner: darkreader
+    name: darkreader
+  - owner: cure53
+    name: dompurify
+    # We used CopyWithChanges in our project, modified and renamed to CopyWithUpdates. Credit author here.
+  - owner: entonio
+    name: CopyWithChanges
+
+# Manually specify additional non-remote respositories not picked up by LicensePlist
+manual:
+  - name: "Mozilla Rust Components"
+    file: "LicenseFiles/Mozilla Public License Version 2.txt"
+  # Manually add Down's license so we can correct some run-on text in the generated HTML
+  - name: "Down"
+    file: "LicenseFiles/Down License.txt"
+
+# Rename a few packages to more human-readable names
+rename:
+  firefox-ios: Firefox for iOS
+
+exclude:
+  # This one is included manually above to provide a customized README
+  - Down

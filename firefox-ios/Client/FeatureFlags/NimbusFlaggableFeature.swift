@@ -12,6 +12,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
+    case adsClient
     case appearanceMenu
     case appIconSelection
     case bottomSearchBar
@@ -26,6 +27,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepageSearchBar
+    case homepageStoriesScrollDirection
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -36,7 +38,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case otherErrorPages
-    case privacyNotice
     case recentSearches
     case reportSiteIssue
     case relayIntegration
@@ -51,6 +52,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case summarizerAppAttestAuth
     case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case tabTrayTranslucency
@@ -69,7 +71,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case translation
     case trendingSearches
     case unifiedSearch
-    case updatedPasswordManager
     case voiceSearch
     case webEngineIntegrationRefactor
 
@@ -80,6 +81,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
+                .adsClient,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -92,11 +94,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
-                .privacyNotice,
                 .recentSearches,
                 .relayIntegration,
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
+                .summarizerAppAttestAuth,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -106,7 +108,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .translation,
                 .trendingSearches,
                 .unifiedSearch,
-                .updatedPasswordManager,
                 .voiceSearch,
                 .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
@@ -119,6 +120,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
+    case homepageStoriesScrollDirection
     case searchBarPosition
     case startAtHome
 }
@@ -151,6 +153,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
+                .adsClient,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -158,6 +161,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
+                .homepageStoriesScrollDirection,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
@@ -168,7 +172,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
-                .privacyNotice,
                 .recentSearches,
                 .reportSiteIssue,
                 .sentFromFirefoxTreatmentA,
@@ -181,6 +184,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
                 .relayIntegration,
+                .summarizerAppAttestAuth,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
@@ -199,7 +203,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .translation,
                 .trendingSearches,
                 .unifiedSearch,
-                .updatedPasswordManager,
                 .voiceSearch,
                 .webEngineIntegrationRefactor:
             return nil
@@ -259,6 +262,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
+        case .homepageStoriesScrollDirection:
+            return FxNimbus.shared.features.homepageRedesignFeature.value().storiesScrollDirection.rawValue
         case .splashScreen:
             return nimbusSearchBar.getDefaultPosition().rawValue
         case .startAtHome:

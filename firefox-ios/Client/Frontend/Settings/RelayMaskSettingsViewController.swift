@@ -14,25 +14,28 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
         static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
 
-    init(profile: Profile, windowUUID: WindowUUID) {
+    init(profile: Profile, windowUUID: WindowUUID, tabManager: TabManager) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
+        self.tabManager = tabManager
         self.title = .RelayMask.RelayEmailMaskSettingsTitle
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not implemented") }
 
     override func generateSettings() -> [SettingSection] {
-        guard let profile else { return [] }
+        guard let profile, let tabManager else { return [] }
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let showEmailMaskSuggestions = BoolSetting(prefs: profile.prefs,
                                                    theme: theme,
                                                    prefKey: PrefsKeys.ShowRelayMaskSuggestions,
                                                    defaultValue: true,
                                                    titleText: .RelayMask.RelayEmailMaskSuggestMasksToggle)
+
         let manageMaskSetting = ManageRelayMasksSetting(theme: theme,
                                                         prefs: profile.prefs,
                                                         windowUUID: windowUUID,
+                                                        tabManager: tabManager,
                                                         navigationController: navigationController)
 
         return [SettingSection(footerTitle: NSAttributedString(string: .RelayMask.RelayEmailMaskSettingsDetailInfo),
@@ -89,6 +92,24 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
 final class ManageRelayMasksSetting: Setting {
     private let windowUUID: WindowUUID
     private let parentNav: UINavigationController?
+    private let tabManager: TabManager
+    private(set) var manageMasksURL: URL?
+
+    init(theme: Theme,
+         prefs: Prefs,
+         windowUUID: WindowUUID,
+         tabManager: TabManager,
+         navigationController: UINavigationController?) {
+        self.parentNav = navigationController
+        self.windowUUID = windowUUID
+        self.tabManager = tabManager
+        self.manageMasksURL = SupportUtils.URLForRelayAccountManagement
+        let color = theme.colors.textPrimary
+        let attributes = [NSAttributedString.Key.foregroundColor: color]
+        super.init(title: NSAttributedString(string: String.RelayMask.RelayEmailMaskSettingsManageEmailMasks,
+                                             attributes: attributes))
+        self.theme = theme
+    }
 
     override var accessoryView: UIImageView? {
         let image = UIImage(named: StandardImageIdentifiers.Small.externalLink)?.withRenderingMode(.alwaysTemplate)
@@ -105,20 +126,10 @@ final class ManageRelayMasksSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .default }
 
-    init(theme: Theme, prefs: Prefs, windowUUID: WindowUUID, navigationController: UINavigationController?) {
-        self.parentNav = navigationController
-        self.windowUUID = windowUUID
-        let color = theme.colors.textPrimary
-        let attributes = [NSAttributedString.Key.foregroundColor: color]
-        super.init(title: NSAttributedString(string: String.RelayMask.RelayEmailMaskSettingsManageEmailMasks,
-                                             attributes: attributes))
-        self.theme = theme
-    }
-
     override func onClick(_ navigationController: UINavigationController?) {
         RelayController.shared.telemetry.manageMasksTapped()
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
-        viewController.url = SupportUtils.URLForRelayAccountManagement
-        parentNav?.pushViewController(viewController, animated: true)
+        guard let url = manageMasksURL else { return }
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+        navigationController?.dismissVC()
     }
 }

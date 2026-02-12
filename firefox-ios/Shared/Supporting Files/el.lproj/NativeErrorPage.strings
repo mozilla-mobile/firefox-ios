@@ -1,3 +1,9 @@
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "Το %1$@ δεν εμπιστεύεται αυτόν τον ιστότοπο, επειδή το πιστοποιητικό που βρέθηκε δεν είναι έγκυρο για το %2$@.";
+
+/* On certificate error page, this is the security information shown in the advanced section. */
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Αυτός ο ιστότοπος δεν επιτρέπει επισφαλείς συνδέσεις.";
+
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
 "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Κωδικός σφάλματος: %@";
 

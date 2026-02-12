@@ -146,11 +146,15 @@ final class LocationView: UIView,
 
     override func becomeFirstResponder() -> Bool {
         super.becomeFirstResponder()
+        // Skip if urlTextField is already first responder to avoid triggering duplicate delegate callbacks
+        guard !urlTextField.isFirstResponder else { return true }
         return urlTextField.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
+        // Skip if urlTextField has already resigned to avoid redundant state changes
+        guard urlTextField.isFirstResponder else { return true }
         return urlTextField.resignFirstResponder()
     }
 
@@ -182,7 +186,6 @@ final class LocationView: UIView,
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
-        formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: uxConfig.toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
@@ -238,13 +241,6 @@ final class LocationView: UIView,
     }
 
     // MARK: - Layout
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        DispatchQueue.main.async { [self] in
-            formatAndTruncateURLTextField()
-        }
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -543,7 +539,6 @@ final class LocationView: UIView,
 
     private func formatAndTruncateURLTextField() {
         guard !isEditing else { return }
-
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 
@@ -703,7 +698,6 @@ final class LocationView: UIView,
     }
 
     func locationTextFieldDidEndEditing(_ textField: UITextField) {
-        formatAndTruncateURLTextField()
         if isURLTextFieldEmpty {
             updateGradient()
         } else {
@@ -755,11 +749,11 @@ final class LocationView: UIView,
         searchEngineContentView.applyTheme(theme: theme)
         lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
+        urlTextField.textColor = urlTextFieldColor
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
             attributes: [.foregroundColor: colors.textPrimary]
         )
-
         safeListedURLImageColor = colors.iconAccentBlue
         lockIconImageColor = colors.textSecondary
 

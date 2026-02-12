@@ -55,7 +55,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(siteInfo.clickURL)")
     }
 
-    func testLegacyImpressionTelemetry() throws {
+    func testGleanImpressionTelemetry() throws {
         let subject = createSubject()
         subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
 
@@ -89,7 +89,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
     }
 
-    func testLegacyClickTelemetry() throws {
+    func testGleanClickTelemetry() throws {
         let subject = createSubject()
         subject.sendClickTelemetry(tileSite: tileSite, position: 1)
 

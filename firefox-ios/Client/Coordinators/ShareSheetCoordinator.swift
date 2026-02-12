@@ -11,7 +11,7 @@ import WebEngine
 class ShareSheetCoordinator: BaseCoordinator,
                              DevicePickerViewControllerDelegate,
                              InstructionsViewDelegate,
-                             WKJavascriptPromptAlertControllerDelegate {
+                             JavascriptPromptAlertControllerDelegate {
     // MARK: - Properties
 
     private let tabManager: TabManager
@@ -234,7 +234,7 @@ class ShareSheetCoordinator: BaseCoordinator,
 
     // MARK: - JSPromptAlertControllerDelegate
 
-    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
+    func promptAlertControllerDidDismiss(_ alertController: JavaScriptPromptAlertController) {
         dequeueNotShownJSAlert()
     }
 }

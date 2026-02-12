@@ -123,7 +123,7 @@ final class TopSitesScreen {
     }
 
     func assertYoutubeTopSitesNotExist() {
-        BaseTestCase().mozWaitForElementToNotExist(sel.COLLECTION_VIEW.element(in: app))
+        BaseTestCase().mozWaitForElementToNotExist(sel.TOP_SITE_ITEM_CELL.element(in: app))
         BaseTestCase().mozWaitForElementToNotExist(sel.TOPSITE_YOUTUBE.element(in: app))
     }
 }

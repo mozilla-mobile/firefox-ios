@@ -7,6 +7,9 @@ import MozillaAppServices
 import Account
 import Shared
 
+// NOTE: This is a WIP as part of the Relay Phase 1 MVP. This code will be restructured
+// soon; unit tests are also forthcoming. For now, tracking that here: FXIOS-14222. -MR
+
 typealias RelayPopulateCompletion = @MainActor  (RelayMaskGenerationResult) -> Void
 
 /// Describes public protocol for Relay component to track state and facilitate
@@ -109,6 +112,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private var relayRSClient: RelayRemoteSettingsClient?
     private var client: RelayClient?
     private var isCreatingClient = false
+    private var isGeneratingMask = false
     private let notificationCenter: NotificationProtocol
     private weak var focusedTab: Tab?
     private var accountStatus: RelayAccountStatus = .unknown {
@@ -126,12 +130,14 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         self.logger = logger
         self.profile = profile
         let isStaging = profile.prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
+        logger.log("Relay server: \(isStaging ? "staging" : "prod")", level: .info, category: .relay)
         self.config = isStaging ? .staging : .prod
         self.notificationCenter = notificationCenter
         self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
 
         configureRelayRSClient()
         beginObserving()
+        performPostLaunchUpdate()
     }
 
     // MARK: - RelayControllerProtocol
@@ -171,6 +177,10 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private func populateEmailFieldWithRelayMask(for tab: Tab,
                                                  isRetry: Bool,
                                                  completion: @escaping RelayPopulateCompletion) {
+        guard !isGeneratingMask || isRetry else {
+            logger.log("Duplicate generate mask actions. Bailing.", level: .info, category: .relay)
+            return
+        }
         guard focusedTab == nil || focusedTab === tab else {
             logger.log("Attempting to populate Relay mask after tab has changed. Bailing.",
                        level: .warning,
@@ -188,9 +198,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             completion(.error)
             return
         }
+        logger.log("Will generate Relay mask.", level: .info, category: .relay)
+        isGeneratingMask = true
         Task {
+            defer { isGeneratingMask = false }
             let (email, result) = await generateRelayMask(for: tab.url?.baseDomain ?? "", client: client)
-
             if result == .expiredToken && !isRetry {
                 // Attempt a single retry of OAuth refresh
                 attemptOAuthTokenRefresh(tab: tab, completion: completion)
@@ -206,6 +218,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                 completion(.error)
                 return
             }
+
+            logger.log("Will send payload to WKWebView", level: .info, category: .relay)
 
             let jsFunctionCall = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
             let closureLogger = logger
@@ -230,13 +244,17 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     // MARK: - Private Utilities
 
+    private func performPostLaunchUpdate() {
+        let postLaunchDelay: TimeInterval = 5.0
+        Timer.scheduledTimer(withTimeInterval: postLaunchDelay, repeats: false) { [weak self] _ in
+            self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
+            Task { @MainActor in
+                self?.updateRelayAccountStatus()
+            }
+        }
+    }
+
     private func invalidateClient() {
-        guard let acctManager = RustFirefoxAccounts.shared.accountManager else { return }
-        // Needs additional clarification from services team. This is currently required for token refresh to work.
-        // TODO: Revisit this soon.
-        // See also: [FXIOS-14492] &&
-        // https://mozilla.slack.com/archives/C0559DDDPQF/p1765996942015839?thread_ts=1765823236.913449&cid=C0559DDDPQF
-        acctManager.clearAccessTokenCache()
         client = nil
     }
 
@@ -244,7 +262,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         // Attempt to refresh OAuth token and retry.
         logger.log("Attempting OAuth refresh. Will re-create Relay client.", level: .info, category: .relay)
         invalidateClient()
-        createRelayClientIfNeeded { [weak self] in
+        createRelayClientIfNeeded(isRefresh: true) { [weak self] in
             // This completion will be called async after we attempt to re-create a new RelayClient
             // with a fresh OAuth token. At this point we can re-try to populate.
             self?.populateEmailFieldWithRelayMask(for: tab, isRetry: true, completion: completion)
@@ -255,6 +273,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                                                client: RelayClient) async -> (mask: String?,
                                                                               result: RelayMaskGenerationResult) {
         do {
+            logger.log("Relay: createAddress()", level: .info, category: .relay)
             let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
             telemetry.autofilled(newMask: true)
             return (relayAddress.fullAddress, .newMaskGenerated)
@@ -299,7 +318,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             withNotificationCenter: notificationCenter,
             forObserver: self,
             observing: [Notification.Name.ProfileDidStartSyncing,
-                        Notification.Name.ProfileDidFinishSyncing,
                         Notification.Name.FirefoxAccountChanged]
         )
     }
@@ -314,6 +332,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private func updateRelayAccountStatus() {
         guard Self.isFeatureEnabled else { return }
         guard profile.hasAccount() else {
+            logger.log("No sync account. Relay disabled.", level: .info, category: .relay)
             accountStatus = .unavailable
             return
         }
@@ -335,15 +354,18 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     /// Creates the Relay client, if needed. This is safe to call redundantly.
-    /// Optional completion block.
-    private func createRelayClientIfNeeded(completion: (() -> Void)? = nil) {
+    /// - Parameters:
+    ///   - isRefresh: true if we are refreshing an expired token. If so we want to avoid the use of the OAuth cache.
+    ///   - completion: completion to be called upon success/failure.
+    private func createRelayClientIfNeeded(isRefresh: Bool = false, completion: (() -> Void)? = nil) {
         guard client == nil, !isCreatingClient else { return }
         guard let acctManager = RustFirefoxAccounts.shared.accountManager else {
             logger.log("Couldn't create client, no account manager.", level: .debug, category: .relay)
             return
         }
         isCreatingClient = true
-        acctManager.getAccessToken(scope: config.scope) { [config, weak self] result in
+        let useCache = !isRefresh
+        acctManager.getAccessToken(scope: config.scope, useCache: useCache) { [config, weak self] result in
             switch result {
             case .failure(let error):
                 self?.logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)

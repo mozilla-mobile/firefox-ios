@@ -41,15 +41,11 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     var useStrongPasswordClosure: (() -> Void)?
     var useRelayMaskClosure: (() -> Void)?
 
-    var hasAccessoryView: Bool {
-        return autofillAccessoryView != nil
-    }
-
     private var searchBarPosition: SearchBarPosition {
         return featureFlags.getCustomState(for: .searchBarPosition) ?? .bottom
     }
 
-    private var toolbarItems: [UIBarButtonItem] {
+    var toolbarItems: [UIBarButtonItem] {
         guard #available(iOS 26.0, *) else {
             return [
                 navigationButtonsBarItem,

@@ -16,7 +16,7 @@ protocol MerinoStoriesProviding: Sendable {
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
     private struct Constants {
         static let merinoServicesBaseURL = "https://merino.services.mozilla.com"
-        static let numberOfStoriesToFetchForCaching = 30
+        static let numberOfStoriesToFetchForCaching = 100
     }
 
     private let thresholdInHours: Double
@@ -48,7 +48,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
 
     func fetchStories(_ numberOfRequestedStories: Int) async throws -> [RecommendationDataItem] {
         if !AppConstants.isRunningTest && shouldUseMockData {
-            return Array(MerinoTestData().getMockDataFeed().prefix(numberOfRequestedStories))
+            return Array(MerinoTestData().getMockDataFeed(numberOfRequestedStories))
         }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
