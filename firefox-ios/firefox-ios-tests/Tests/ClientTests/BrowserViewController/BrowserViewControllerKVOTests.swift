@@ -183,7 +183,7 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Notification & Crash Safety Tests
 
-    func testWillTerminateNotification_removesAllObservers() {
+    func testWillTerminateNotification_removesAllObservers() async {
         let subject = createSubject()
         let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
         tab.createWebview(configuration: .init())
@@ -197,6 +197,9 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         // handler without loading the full view hierarchy.
         let notification = Notification(name: UIApplication.willTerminateNotification)
         subject.handleNotifications(notification)
+
+        // Wait for the async Task { @MainActor } to complete
+        await Task.yield()
 
         XCTAssertFalse(subject.observedWebViews.contains(webView))
     }

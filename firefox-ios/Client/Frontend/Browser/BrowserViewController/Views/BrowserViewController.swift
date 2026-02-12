@@ -1279,15 +1279,6 @@ class BrowserViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
 
-        if notificationName == UIApplication.willTerminateNotification {
-            // This notification should always be posted on the main thread, so attempt to handle it
-            // synchronously to ensure KVO observers are removed before termination.
-            ensureMainThread {
-                self.applicationWillTerminate()
-            }
-            return
-        }
-
         let windowScene = notification.object as? UIWindowScene
         let announcementText = notification.userInfo?[UIAccessibility.announcementStringValueUserInfoKey] as? String
         let dictionary = notification.object as? NSDictionary
@@ -1297,6 +1288,8 @@ class BrowserViewController: UIViewController,
         // swiftlint:disable:next closure_body_length
         Task { @MainActor in
             switch notificationName {
+            case UIApplication.willTerminateNotification:
+                applicationWillTerminate()
             case UIApplication.willResignActiveNotification:
                 appWillResignActiveNotification()
             case UIApplication.didBecomeActiveNotification:
