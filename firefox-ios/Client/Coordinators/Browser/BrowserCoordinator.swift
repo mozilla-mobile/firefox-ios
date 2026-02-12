@@ -152,10 +152,8 @@ class BrowserCoordinator: BaseCoordinator,
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
         }
         self.homepageViewController = homepageController
+        homepageController.restoreVerticalScrollOffset()
 
-        if homepageController.isHomepageStoriesScrollDirectionCustomized {
-            homepageController.restoreVerticalScrollOffset()
-        }
         if didEmbed {
             // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
             webviewController?.update(webView: nil)

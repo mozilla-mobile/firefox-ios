@@ -241,7 +241,7 @@ final class HomepageViewController: UIViewController,
     // If no scroll position exists for tab, scroll the homepage to the top
     func restoreVerticalScrollOffset() {
         activeTabUUID = tabManager.selectedTab?.tabUUID
-        guard let activeTabUUID,
+        guard let activeTabUUID, isHomepageStoriesScrollDirectionCustomized,
               let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
         else {
             scrollToTop()
