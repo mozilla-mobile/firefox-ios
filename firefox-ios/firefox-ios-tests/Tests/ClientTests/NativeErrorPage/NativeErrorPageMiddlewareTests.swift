@@ -11,6 +11,7 @@ import XCTest
 final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockTabManager: MockTabManager!
     private var mockWindowManager: MockWindowManager!
+    private var mockLogger: MockLogger!
     private var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
@@ -21,6 +22,7 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
             wrappedManager: WindowManagerImplementation(),
             tabManager: mockTabManager
         )
+        mockLogger = MockLogger()
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
         setupStore()
     }
@@ -28,6 +30,7 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
     override func tearDown() async throws {
         mockTabManager = nil
         mockWindowManager = nil
+        mockLogger = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
@@ -39,29 +42,35 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         mockTabManager.selectedTab = nil
 
-        let action = GeneralBrowserAction(
+        let action = NativeErrorPageAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.bypassCertificateWarning
+            actionType: NativeErrorPageActionType.bypassCertificateWarning
         )
 
         subject.nativeErrorPageProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockLogger.savedLevel, .warning)
+        XCTAssertEqual(mockLogger.savedCategory, .certificate)
     }
 
     func testBypassCertificateWarning_withNoStoredError_returnsEarly() {
         let subject = createSubject()
 
-        let action = GeneralBrowserAction(
+        let action = NativeErrorPageAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.bypassCertificateWarning
+            actionType: NativeErrorPageActionType.bypassCertificateWarning
         )
 
         subject.nativeErrorPageProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockLogger.savedLevel, .warning)
+        XCTAssertEqual(mockLogger.savedCategory, .certificate)
     }
 
     // MARK: - Helpers
 
     private func createSubject() -> NativeErrorPageMiddleware {
-        return NativeErrorPageMiddleware(windowManager: mockWindowManager)
+        return NativeErrorPageMiddleware(windowManager: mockWindowManager, logger: mockLogger)
     }
 
     // MARK: - StoreTestUtility

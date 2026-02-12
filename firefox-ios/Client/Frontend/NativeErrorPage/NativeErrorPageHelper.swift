@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Common
+import Security
 
 // Error codes copied from Gecko. The ints corresponding to these codes were determined
 // by inspecting the NSError in each of these cases.
@@ -15,7 +16,24 @@ let CertErrorCodes: [Int: String] = [
     -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
 ]
 
+/// NSURLError codes for certificate errors that should trigger native error page.
+/// Used consistently across BrowserViewController, ErrorPageHelper, and middleware.
+let CertErrors: [Int] = [
+    NSURLErrorServerCertificateUntrusted,
+    NSURLErrorServerCertificateHasBadDate,
+    NSURLErrorServerCertificateHasUnknownRoot,
+    NSURLErrorServerCertificateNotYetValid
+]
+
 class NativeErrorPageHelper {
+    /// Holds the parsed certificate details extracted from an NSError.
+    struct CertDetails {
+        let failingURL: URL
+        let host: String
+        let certChain: [SecCertificate]
+        let cert: SecCertificate
+    }
+
     enum NetworkErrorType {
         case noInternetConnection
         case badCertDomain
@@ -128,5 +146,23 @@ class NativeErrorPageHelper {
             )
         }
         return model
+    }
+
+    /// Parses certificate details from the stored error.
+    /// Returns nil if any required data (failing URL, host, cert chain) is missing.
+    func getCertDetails() -> CertDetails? {
+        guard
+            let failingURL = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL,
+            let certChain = error.userInfo["NSErrorPeerCertificateChainKey"] as? [SecCertificate],
+            let cert = certChain.first,
+            let host = failingURL.host
+        else { return nil }
+
+        return CertDetails(
+            failingURL: failingURL,
+            host: host,
+            certChain: certChain,
+            cert: cert
+        )
     }
 }

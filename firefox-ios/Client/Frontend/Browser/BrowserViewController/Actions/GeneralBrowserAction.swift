@@ -74,7 +74,6 @@ enum GeneralBrowserActionType: ActionType {
     case didUnhideToolbar
     case didCloseTabFromToolbar
     case shakeMotionEnded
-    case bypassCertificateWarning
 }
 
 struct GeneralBrowserMiddlewareAction: Action {
