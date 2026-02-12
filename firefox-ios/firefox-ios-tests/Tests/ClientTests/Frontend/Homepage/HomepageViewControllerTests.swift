@@ -357,6 +357,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func test_restoreContentOffset_withStoredOffset_setsCollectionViewOffset() {
+        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .vertical)
         let tabManager = HomepageRestoreContentOffsetTabManager()
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.homepageScrollOffset = 180
@@ -518,6 +519,12 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             return ToolbarRefactorFeature(
                 enabled: isEnabled
             )
+        }
+    }
+
+    private func setupNimbusStoriesScrollDirectionTesting(scrollDirection: ScrollDirection) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
         }
     }
 
