@@ -299,10 +299,10 @@
 "Settings.Translation.SectionTitle.v145" = "번역 설정";
 
 /* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
-"Settings.Translation.SettingOff.v145" = "끄기";
+"Settings.Translation.SettingOff.v145" = "꺼짐";
 
 /* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
-"Settings.Translation.SettingOn.v145" = "켜기";
+"Settings.Translation.SettingOn.v145" = "켜짐";
 
 /* In the settings menu, in the General section, this is the title for the Translation settings section. */
 "Settings.Translation.Title.v145" = "번역";

@@ -1,0 +1,30 @@
+/* Accessibility label for the Main Menu button in the toolbar, specifing that the button will open Main Menu */
+"Toolbar.Menu.Button.A11y.Label.v135" = "ម៉ឺនុយដើម";
+
+/* Accessibility label for the new tab button that can be displayed in the navigation or address toolbar. */
+"Toolbar.NewTab.Button.v130" = "ផ្ទាំង​ថ្មី";
+
+/* Accessibility label for the summarize button that can be displayed in the address toolbar. */
+"Toolbar.NewTab.Button.v142" = "សង្ខេបទំព័រ";
+
+/* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
+"Toolbar.Tab.CloseThisTab.Button.v130" = "បិទ​ផ្ទាំង​នេះ";
+
+/* Accessibility label for the tabs button in the toolbar, specifing the number of tabs open. */
+"Toolbar.Tabs.Button.A11y.Label.v135" = "ផ្ទាំងបើក";
+
+/* Large content title for the tabs button in the toolbar, specifying the number of tabs open. %@ is the number of open tabs. */
+"Toolbar.Tabs.Button.A11y.LargeContentTitle.v137" = "ផ្ទាំងបើក៖ %@";
+
+/* Large content title for the tabs button in the toolbar, specifying that more than 99 tabs are open. */
+"Toolbar.Tabs.Button.A11y.OverflowLargeContentTitle.v137" = "ផ្ទាំងបើក៖ 99+";
+
+/* Accessibility label for the translation button that can be displayed in the address toolbar and is shown to indicate the page is already translated. */
+"Toolbar.Translation.ButtonActive.AccessibilityLabel.v145" = "បង្ហាញទំព័រជាភាសាដើម";
+
+/* Accessibility label for the translation button that can be displayed in the address toolbar and used to translate a webpage. */
+"Toolbar.Translation.ButtonInactive.AccessibilityLabel.v145" = "បកប្រែទំព័រ";
+
+/* Accessibility label for a loading button that can be displayed in the address toolbar to indicate that the page is in the process of being translated. */
+"Toolbar.Translation.LoadingButton.AccessibilityLabel.v145" = "ទំព័រកំពុងបកប្រែ";
+

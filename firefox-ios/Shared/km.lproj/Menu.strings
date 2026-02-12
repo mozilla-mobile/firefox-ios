@@ -40,6 +40,9 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "ផ្ទាំង​​ដែល​​បាន​​ធ្វើ​​សមកាល​កម្ម";
 
+/* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
+"Menu.ReportSiteIssueAction.Title" = "រាយការណ៍​បញ្ហា​វេបសាយ";
+
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "មើល​ទាំងអស់";
 

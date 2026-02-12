@@ -1,8 +1,17 @@
 /* Close Private Tabs button label */
 "TodayWidget.ClosePrivateTabsButton" = "បិទ​ផ្ទាំង​ឯកជន";
 
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "បិទ\nផ្ទាំងឯកជន";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "បន្ថែមផ្លូវកាត់ Firefox ទៅអេក្រង់ដើមរបស់អ្នក។";
+
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "ទៅ​កាន់​តំណ​ដែល​បាន​ចម្លង";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "ចូលទៅកាន់\nតំណភ្ជាប់ដែលបានចម្លង";
 
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d ច្រើនទៀត…";
@@ -10,11 +19,17 @@
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "ការស្វែងរកថ្មី";
 
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "គ្មានផ្ទាំងបើកទេ។";
+
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.OpenFirefoxLabel" = "បើក Firefox";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "ការស្វែងរកឯកជន";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "បន្ថែមផ្លូវកាត់ Firefox ទៅក្នុងអេក្រង់ដើមរបស់អ្នក។ បន្ទាប់ពីបន្ថែមធាតុក្រាហ្វិករួច សូមចុចឱ្យជាប់ដើម្បីកែសម្រួលវា ហើយជ្រើសរើសផ្លូវកាត់ផ្សេង។";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "សកម្មភាពរហ័ស";
@@ -22,8 +37,20 @@
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "ផ្លូវកាត់ Firefox";
 
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "បន្ថែមផ្លូវកាត់ទៅផ្ទាំងរបស់អ្នកដែលបើក។";
+
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "មើលរហ័ស";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "ស្វែងរកនៅក្នុង\nFirefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "ស្វែងរកនៅក្នុង\nផ្ទាំងឯកជន";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "បន្ថែមផ្លូវកាត់ទៅកាន់គេហទំព័រដែលចូលមើលញឹកញាប់ និងថ្មីៗ។";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "ទំព័រ​ដែល​ពេញនិយម";
