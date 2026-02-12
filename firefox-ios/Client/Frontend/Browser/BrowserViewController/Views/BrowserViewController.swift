@@ -1282,8 +1282,8 @@ class BrowserViewController: UIViewController,
         if notificationName == UIApplication.willTerminateNotification {
             // This notification should always be posted on the main thread, so attempt to handle it
             // synchronously to ensure KVO observers are removed before termination.
-            ensureMainThread { [weak self] in
-                self?.applicationWillTerminate()
+            ensureMainThread {
+                self.applicationWillTerminate()
             }
             return
         }
