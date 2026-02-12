@@ -99,6 +99,9 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
             return
         }
 
+        // Verify list starts empty (webView was never observed)
+        XCTAssertTrue(subject.observedWebViews.isEmpty, "Should start with no observers")
+
         // This should not crash or throw - just log a warning
         subject.stopObserving(webView: webView)
 
@@ -134,21 +137,13 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         subject.beginObserving(webView: webView3)
 
         // Verify all are being observed
-        var initialCount = 0
-        for _ in subject.observedWebViews {
-            initialCount += 1
-        }
-        XCTAssertEqual(initialCount, 3, "Should have 3 observed webViews")
+        XCTAssertEqual(subject.observedWebViews.count, 3, "Should have 3 observed webViews")
 
         // Remove all observers - this is the fix being tested
         subject.stopObservingAllWebViews()
 
         // Verify ALL observers were removed (not just some)
-        var finalCount = 0
-        for _ in subject.observedWebViews {
-            finalCount += 1
-        }
-        XCTAssertEqual(finalCount, 0, "All observers should be removed")
+        XCTAssertTrue(subject.observedWebViews.isEmpty, "All observers should be removed")
         XCTAssertFalse(subject.observedWebViews.contains(webView1))
         XCTAssertFalse(subject.observedWebViews.contains(webView2))
         XCTAssertFalse(subject.observedWebViews.contains(webView3))
@@ -158,21 +153,13 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
 
         // Verify list starts empty
-        var initialCount = 0
-        for _ in subject.observedWebViews {
-            initialCount += 1
-        }
-        XCTAssertEqual(initialCount, 0)
+        XCTAssertTrue(subject.observedWebViews.isEmpty)
 
         // This should not crash
         subject.stopObservingAllWebViews()
 
         // Verify still empty
-        var finalCount = 0
-        for _ in subject.observedWebViews {
-            finalCount += 1
-        }
-        XCTAssertEqual(finalCount, 0)
+        XCTAssertTrue(subject.observedWebViews.isEmpty)
     }
 
     func testStopObservingAllWebViews_handlesSingleObserver() {
@@ -187,19 +174,11 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
 
         subject.beginObserving(webView: webView)
 
-        var initialCount = 0
-        for _ in subject.observedWebViews {
-            initialCount += 1
-        }
-        XCTAssertEqual(initialCount, 1)
+        XCTAssertEqual(subject.observedWebViews.count, 1)
 
         subject.stopObservingAllWebViews()
 
-        var finalCount = 0
-        for _ in subject.observedWebViews {
-            finalCount += 1
-        }
-        XCTAssertEqual(finalCount, 0)
+        XCTAssertTrue(subject.observedWebViews.isEmpty)
     }
 
     // MARK: - Notification & Crash Safety Tests
@@ -232,9 +211,7 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         subject.stopObservingAllWebViews()
         subject.stopObservingAllWebViews()
 
-        var count = 0
-        for _ in subject.observedWebViews { count += 1 }
-        XCTAssertEqual(count, 0)
+        XCTAssertTrue(subject.observedWebViews.isEmpty)
     }
 
     func testStopObservingAllWebViews_withDeallocatedWebViews_doesNotCrash() {
@@ -250,9 +227,7 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
 
         subject.stopObservingAllWebViews()
 
-        var count = 0
-        for _ in subject.observedWebViews { count += 1 }
-        XCTAssertEqual(count, 0)
+        XCTAssertTrue(subject.observedWebViews.isEmpty)
     }
 
     // MARK: - Private
