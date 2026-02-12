@@ -1279,8 +1279,8 @@ class BrowserViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
 
-        // Handle synchronously to remove KVO observers before termination.
         if notificationName == UIApplication.willTerminateNotification {
+            // This notification should always be posted on the main thread, so attempt to handle it synchronously to ensure KVO observers are removed before termination.
             ensureMainThread { [weak self] in
                 self?.applicationWillTerminate()
             }

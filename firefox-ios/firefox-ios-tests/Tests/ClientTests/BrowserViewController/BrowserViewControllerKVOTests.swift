@@ -67,12 +67,7 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         subject.beginObserving(webView: webView)
         subject.beginObserving(webView: webView)
 
-        // Count elements in WeakList
-        var count = 0
-        for _ in subject.observedWebViews {
-            count += 1
-        }
-        XCTAssertEqual(count, 1, "WebView should only be added once")
+        XCTAssertEqual(subject.observedWebViews.count, 1, "WebView should only be added once")
     }
 
     // MARK: - stopObserving Tests
