@@ -10,6 +10,8 @@ import Glean
 import TabDataStore
 
 import class MozillaAppServices.Viaduct
+import struct MozillaAppServices.RustAdsClient
+import enum MozillaAppServices.MozAdsEnvironment
 
 class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     let logger = DefaultLogger.shared
@@ -66,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         // Set-up Rust network stack. Note that this has to be called
         // before any Application Services component gets used.
-        Viaduct.shared.initialize()
+        Viaduct.shared.initialize(userAgent: UserAgent.fxaUserAgent)
 
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,

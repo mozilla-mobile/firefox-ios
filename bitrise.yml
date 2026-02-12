@@ -1639,6 +1639,20 @@ workflows:
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
     - deploy-to-bitrise-io@2.10.0: {}
+    - script@1.2.1:
+        title: "Capture Xcode Version Info"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            
+            # Get Xcode version
+            XCODE_VER=$(xcodebuild -version | head -n 1 | sed 's/Xcode //g)
+            echo "Xcode Version: $XCODE_VER"
+
+            # Export to environment for Slack notification
+            envman add --key XCODE_VERSION_INFO --value "$XCODE_VER"
     - slack@4.2.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_FIREFOX_IOS_UNIT_TESTS
@@ -1647,6 +1661,8 @@ workflows:
         - pretext_on_error: ":x: Firefox iOS Unit Tests"
         - title:
         - title_on_error:
+        - message:
+        - message_on_error:
         - footer: Mobile Test Engineering
         - footer_on_error: Mobile Test Engineering
         - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
@@ -1654,7 +1670,12 @@ workflows:
         - fields: |
             iOS Simulators | iPhone 17 (iOS 26.2), iPhone 16 (iOS 18.6), iPhone 15 (iOS 17.5)
             Branch | ${BITRISE_GIT_BRANCH}
+            Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
+    meta:
+        bitrise.io:
+            stack: osx-xcode-26.3.x-edge
+            machine_type_id: g2.mac.4large
 
   # Firefox_Unit_Tests runs the unit tests multiple times on weekdays to identify flaky tests on the latest iOS version.
   # The trends are reported on Bitrise Insights.

@@ -182,6 +182,7 @@
         "SearchTests\/testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn()",
         "SearchTests\/testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn()",
         "SearchTests\/testTrendingSearches_trendingSearchesExperimentOn()",
+        "SecurityTests",
         "SettingsTests\/testImageOnOff_TAE()",
         "SettingsTests\/testSettingsOptionSubtitles_TAE()",
         "SettingsTests\/testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff()",

@@ -105,7 +105,6 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var actionPrimary: UIColor { base.actionPrimary }
     var actionPrimaryHover: UIColor { base.actionPrimaryHover }
     var actionPrimaryDisabled: UIColor { base.actionPrimaryDisabled }
-    var actionPrimaryBrandRefresh: UIColor { base.actionPrimaryBrandRefresh }
     var actionSecondaryDisabled: UIColor { base.actionSecondaryDisabled }
     var actionSecondaryHover: UIColor { base.actionSecondaryHover }
     var formSurfaceOff: UIColor { base.formSurfaceOff }

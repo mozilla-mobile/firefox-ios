@@ -131,31 +131,6 @@ class HistoryTests: BaseTestCase {
     // Smoketest
     func testClearPrivateData() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        // Clear private data from settings and confirm
-        navigator.goto(ClearPrivateDataSettings)
-        app.tables.cells["ClearPrivateData"].waitAndTap()
-        mozWaitForElementToExist(app.tables.cells["ClearPrivateData"])
-        app.alerts.buttons["OK"].waitAndTap()
-
-        // Wait for OK pop-up to disappear after confirming
-        mozWaitForElementToNotExist(app.alerts.buttons["OK"])
-
-        // Try to tap on the disabled Clear Private Data button
-        app.tables.cells["ClearPrivateData"].waitAndTap()
-
-        // If the button is disabled, the confirmation pop-up should not exist
-        // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
-        // After this issue is clarified the assertion will be re-enabled or changed.
-        // XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307014
-    // Smoketest TAE
-    func testClearPrivateData_TAE() throws {
-        XCTExpectFailure("The app was not launched", strict: false) {
             navigator.nowAt(NewTabScreen)
             toolbarScreen.assertSettingsButtonExists()
             // Clear private data from settings and confirm
@@ -446,30 +421,6 @@ class HistoryTests: BaseTestCase {
     // Smoke
     func testTabHistory() {
         openBookOfMozilla()
-        let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
-        let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
-        mozWaitElementHittable(element: urlBarBackButton, timeout: 2.0)
-        urlBarBackButton.press(forDuration: 1.5)
-        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
-        mozWaitForElementToNotExist(app.tables.staticTexts["The Book of Mozilla"])
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        openBookOfMozilla()
-        mozWaitForElementToExist(urlBarBackButton)
-        urlBarBackButton.press(forDuration: 1)
-        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
-        urlBarBackButton.waitAndTap()
-        XCTAssertFalse(urlBarBackButton.isEnabled)
-        urlBarForwardButton.press(forDuration: 1)
-        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: "localhost")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307025
-    // Smoke TAE
-    func testTabHistory_TAE() {
-        openBookOfMozilla()
         toolbarScreen.waitUntilBackButtonHittable(timeout: 2.0)
         toolbarScreen.pressBackButton(duration: 1.5)
         browserScreen.tapOnBookOfMozilla()
@@ -560,60 +511,6 @@ class HistoryTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306894
     // Smoke
     func testClearRecentHistory() {
-        // Visit a page to create a recent history entry.
-        navigateToPage(isTabTrayOff: false)
-        navigator.performAction(Action.ClearRecentHistory)
-        // Recent data will be removed after calling tapOnClearRecentHistoryOption(optionSelected: "Last 24 Hours").
-        // Older data will not be removed
-        tapOnClearRecentHistoryOption(optionSelected: "Last 24 Hours")
-        for entry in oldHistoryEntries {
-            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
-        }
-        mozWaitForElementToNotExist(app.staticTexts["Last 24 Hours"])
-        mozWaitForElementToExist(app.staticTexts["Older"])
-
-        // Begin Test for Last 7 Days
-        // Visit a page to create a recent history entry.
-        navigateToPage(isTabTrayOff: false)
-        navigator.performAction(Action.ClearRecentHistory)
-        // Tapping "Today and Yesterday" will remove recent data (from yesterday and today).
-        // Older data will not be removed
-        tapOnClearRecentHistoryOption(optionSelected: "Last 7 Days")
-        for entry in oldHistoryEntries {
-            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
-        }
-        mozWaitForElementToNotExist(app.staticTexts["Last 7 Days"])
-        mozWaitForElementToExist(app.staticTexts["Older"])
-
-        // Begin Test for Last 4 Weeks
-        // Visit a page to create a recent history entry.
-        navigateToPage(isTabTrayOff: false)
-        navigator.performAction(Action.ClearRecentHistory)
-        // Tapping "Today and Yesterday" will remove recent data (from yesterday and today).
-        // Older data will not be removed
-        tapOnClearRecentHistoryOption(optionSelected: "Last 4 Weeks")
-        for entry in oldHistoryEntries {
-            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
-        }
-        mozWaitForElementToNotExist(app.staticTexts["Last 4 Weeks"])
-        mozWaitForElementToExist(app.staticTexts["Older"])
-
-        // Begin Test for All Time
-        // Visit a page to create a recent history entry.
-        navigateToPage(isTabTrayOff: false)
-        navigator.performAction(Action.ClearRecentHistory)
-        // Tapping everything removes both current data and older data.
-        tapOnClearRecentHistoryOption(optionSelected: "All Time")
-        for entry in oldHistoryEntries {
-            mozWaitForElementToNotExist(app.tables.cells.staticTexts[entry])
-        }
-        mozWaitForElementToNotExist(app.staticTexts["All Time"])
-        mozWaitForElementToNotExist(app.staticTexts["Older"])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306894
-    // Smoke TAE
-    func testClearRecentHistory_TAE() {
         clearRecentHistoryAndValidate(
             option: "Last 24 Hours",
             shouldKeepOldEntries: true,
@@ -642,18 +539,6 @@ class HistoryTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306890
     // Smoketest
     func testDeleteHistoryEntryBySwiping() {
-        navigateToPage(isTabTrayOff: false)
-        navigator.goto(LibraryPanel_History)
-        mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"])
-        app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
-        app.buttons["Delete"].waitAndTap()
-        mozWaitForElementToNotExist(app.staticTexts["http://example.com"])
-        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306890
-    // Smoketest TAE
-    func testDeleteHistoryEntryBySwiping_TAE() {
         navigateToPage(isTabTrayOff: false)
         navigator.goto(LibraryPanel_History)
         historyScreen.waitForExampleEntry()

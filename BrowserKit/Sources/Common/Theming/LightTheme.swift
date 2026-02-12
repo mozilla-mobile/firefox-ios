@@ -56,8 +56,6 @@ private struct LightColourPalette: ThemeColourPalette {
     var actionPrimary: UIColor = FXColors.Blue50
     var actionPrimaryHover: UIColor = FXColors.Blue60
     var actionPrimaryDisabled: UIColor = FXColors.Blue50.withAlphaComponent(0.5)
-    // TODO: FXIOS-14760 Update brand refresh primary action color to match design system
-    var actionPrimaryBrandRefresh = UIColor(colorString: "7543E3")
     var actionSecondary: UIColor = FXColors.LightGrey30
     var actionSecondaryDisabled: UIColor = FXColors.LightGrey30.withAlphaComponent(0.5)
     var actionSecondaryHover: UIColor = FXColors.LightGrey40

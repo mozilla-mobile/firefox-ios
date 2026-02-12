@@ -17,7 +17,7 @@ if releaseCheck.isReleaseBranch {
     checkStringsFile()
     checkForFunMetrics()
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
-    checkForWebEngineFileChange()
+    checkForSpecificFileChange()
     checkForGleanFileChange()
     CodeUsageDetector().checkForCodeUsage()
     CodeCoverageGate().failOnNewFilesWithoutCoverage()
@@ -98,9 +98,9 @@ func checkCodeCoverage() {
 }
 
 class CodeCoverageGate {
-    private let coverageBypassLabel = "coverage-exception"
+    private let coverageBypassLabel = "ignore-code-coverage"
     private let jsonPath = "coverage.json"
-    private let threshold: Double = 35
+    private let threshold: Double = 70
     private let minimumAddedLines = 5
 
     func failOnNewFilesWithoutCoverage() {
@@ -112,13 +112,23 @@ class CodeCoverageGate {
         }
 
         let coverageFiles: [[String: Any]] = targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
-        // Consider created + modified Swift files, excluding Tests & Generated
-        let candidates = (danger.git.createdFiles + danger.git.modifiedFiles).filter {
+        // Consider created Swift files, excluding Tests & Generated
+        // Exclusing `danger.git.modifiedFiles` for now
+        let candidates = (danger.git.createdFiles).filter {
             $0.hasSuffix(".swift") &&
             !$0.contains("Tests/") &&
             !$0.contains("/Generated/") &&
+            !$0.contains("MozillaRustComponents/") &&
             !$0.contains("/Strings.swift") &&
             !$0.contains("/AccessibilityIdentifiers.swift")
+        }
+
+        guard !candidates.isEmpty else {
+            markdown("""
+            ### ✅ New file code coverage
+            No new file detected so code coverage gate wasn't ran.
+            """)
+            return
         }
 
         // Ignore tiny edits: only gate files with at least `minimumAddedLines`
@@ -163,30 +173,30 @@ class CodeCoverageGate {
 
         guard !rows.isEmpty else {
             markdown("""
-            ### ✅ Per-file coverage
-            All changed files meet the threshold of **\(formatPct(threshold))**.
+            ### ✅ New file code coverage
+            All new files meet the threshold of **\(formatPct(threshold))**.
             """)
             return
         }
 
         let header = """
-        ### ❌ Per-file test coverage gate
-        The following changed file(s) are below **\(formatPct(threshold))** coverage:
+        ### ❌ New file code coverage
+        The following new file(s) are below **\(formatPct(threshold))** coverage:
 
         | File | Coverage | Required |
         |---|---:|---:|
         \(rows.joined(separator: "\n"))
         """
 
-        markdown("\(header)")
-        // If we want to fail the PRs at one point, then uncomment this and remove the markdown
-//        let hasBypass = danger.github.issue.labels.contains { $0.name == coverageBypassLabel }
-//        if hasBypass {
-//            warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
-//        } else {
-//            let tip = "*Tip:* Add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
-//            fail("\(header)\n\n\(tip)")
-//        }
+        let hasBypass = danger.github.issue.labels.contains { $0.name == coverageBypassLabel }
+        if hasBypass {
+            warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
+        } else {
+            let tip = "You can add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
+            let team = "[@fxios-unit-test-owners](https://github.com/orgs/mozilla-mobile/teams/fxios-unit-test-owners)"
+            let owners = "Please also tag a member of the \(team) if the bypass is used."
+            fail("\(header)\n\n\(tip) \(owners)")
+        }
     }
 
     // Small helper to format percentages
@@ -261,18 +271,53 @@ func checkBigPullRequest() {
     }
 }
 
-// Detect and warn about some changes related to WebView management to ensure we port changes to the WebEngine project
-func checkForWebEngineFileChange() {
-    let webEngineFiles = ["Tab.swift", "BrowserViewController+WebViewDelegates.swift"]
+// Detect and tag specific people whenever specific files are modified
+func checkForSpecificFileChange() {
     let modifiedFiles = danger.git.modifiedFiles
-    let affectedFiles = modifiedFiles.filter { file in
-        webEngineFiles.contains { webFile in file.hasSuffix(webFile) }
+
+    struct FileCheck {
+        let fileMatches: (String) -> Bool
+        let message: String
+        let contacts: String
+        var foundMatches: [String] = []
     }
 
-    if !affectedFiles.isEmpty {
-        let message = "Ensure that necessary updates are also ported to the WebEngine project if required"
-        let contact = "(cc @lmarceau)."
-        warn("Changes detected in files: \(affectedFiles.joined(separator: ", ")). \(message) \(contact)")
+    var fileChecks = [
+        FileCheck(
+            fileMatches: { file in
+                ["Tab.swift",
+                 "TabManager.swift",
+                 "TabManagerImplementation.swift",
+                 "BrowserViewController+WebViewDelegates.swift"
+                ].contains { file.hasSuffix($0) }
+            },
+            message: "Detected tab related changes in:",
+            contacts: "(cc @lmarceau)"
+        ),
+        FileCheck(
+            fileMatches: { $0.hasSuffix(".sh") },
+            message: "Detected shell script changes in:",
+            contacts: "(cc @adudenamedruby)"
+        ),
+        FileCheck(
+            fileMatches: { file in
+                file.contains("firefox-ios/Client/Glean/") && (file.hasSuffix(".yaml"))
+            },
+            message: "Detected telemetry changes in:",
+            contacts: "(cc @ih-codes @adudenamedruby)"
+        )
+    ]
+
+    for file in modifiedFiles {
+        for fileIndex in fileChecks.indices where fileChecks[fileIndex].fileMatches(file) {
+            fileChecks[fileIndex].foundMatches.append(file)
+        }
+    }
+
+    // Issue warnings only for categories with matches
+    for check in fileChecks where !check.foundMatches.isEmpty {
+        let matches = check.foundMatches.joined(separator: ", ")
+        warn("\(check.message) \(matches) \(check.contacts)")
     }
 }
 

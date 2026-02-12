@@ -9,7 +9,7 @@ Object.defineProperty(window.__firefox__, "download", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: function(url, appIdToken, fileName = null) {
+  value: function(url, appIdToken) {
     if (appIdToken !== APP_ID_TOKEN) {
       return;
     }
@@ -38,18 +38,20 @@ Object.defineProperty(window.__firefox__, "download", {
 
         var blob = this.response;
         
-        // Checking if the blob is a pkpass (Passbook Pass) or download, if not, continue navigation
-        if (blob.type != "application/vnd.apple.pkpass" && !fileName) {
+        // Checking if the blob is a pkpass (Passbook Pass) or a pdf, if not, continue navigation
+        if (blob.type != "application/vnd.apple.pkpass" && blob.type != "application/pdf") {
           window.location.href = url;
           return
         }
+        const header = xhr.getResponseHeader("Content-Disposition");
+        const fileName = header ? header.split("filename=")?.[1] : getLastPathComponent(url);
       
         blobToBase64String(blob, function(base64String) {
           webkit.messageHandlers.downloadManager.postMessage({
-            url: url,
+            url,
             mimeType: blob.type,
             size: blob.size,
-            base64String: base64String,
+            base64String,
             fileName
           });
         });

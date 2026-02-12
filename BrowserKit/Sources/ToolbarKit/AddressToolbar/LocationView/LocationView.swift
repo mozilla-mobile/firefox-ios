@@ -146,11 +146,15 @@ final class LocationView: UIView,
 
     override func becomeFirstResponder() -> Bool {
         super.becomeFirstResponder()
+        // Skip if urlTextField is already first responder to avoid triggering duplicate delegate callbacks
+        guard !urlTextField.isFirstResponder else { return true }
         return urlTextField.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
+        // Skip if urlTextField has already resigned to avoid redundant state changes
+        guard urlTextField.isFirstResponder else { return true }
         return urlTextField.resignFirstResponder()
     }
 

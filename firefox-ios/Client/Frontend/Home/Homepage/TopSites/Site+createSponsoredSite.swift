@@ -8,7 +8,6 @@ extension Site {
     /// A helper to instantiate a Site from the Storage target using the Client target `UnifiedTile` type.
     static func createSponsoredSite(fromUnifiedTile unifiedTile: UnifiedTile) -> Site {
         let siteInfo = SponsoredSiteInfo(
-            tileId: 0, // Was used with deprecated `Contile` object, but not with Unified Ads.
             impressionURL: unifiedTile.callbacks.impression,
             clickURL: unifiedTile.callbacks.click,
             imageURL: unifiedTile.imageUrl
