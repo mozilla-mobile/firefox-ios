@@ -55,7 +55,7 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
 
         subject.dismissVoiceSearch(with: nil)
 
-        XCTAssertFalse(didCallCallback, "The onNavigateTo closure should not have been called")
+        XCTAssertFalse(didCallCallback, "The onNavigate closure should not have been called")
     }
 
     func test_dismissVoiceSearch_withNavigateToURLType_callsCallback() {
@@ -67,7 +67,7 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
 
         subject.dismissVoiceSearch(with: .url(testURL))
 
-        XCTAssertTrue(didCallCallback, "The onNavigateTo closure should have been called")
+        XCTAssertTrue(didCallCallback, "The onNavigate closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
     }
@@ -81,7 +81,7 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
 
         subject.dismissVoiceSearch(with: .searchResult(testQuery))
 
-        XCTAssertTrue(didCallCallback, "The onNavigateTo closure should have been called")
+        XCTAssertTrue(didCallCallback, "The onNavigate closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
     }
