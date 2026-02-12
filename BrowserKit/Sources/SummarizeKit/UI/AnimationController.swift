@@ -35,13 +35,11 @@ struct DefaultAnimationController: AnimationController {
     private struct UX {
         @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
         static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)
-        static let tabSnapshotTranslationKeyPath = "transform.translation.y"
+        static let snapshotTranslationKeyPath = "transform.translation.y"
+        static let snapshotAnimationKey = "snapshotAnimation"
         static let initialTransformAnimationDuration = 0.9
         static let tabSnapshotCornerRadius: CGFloat = 32.0
-        static let summaryAnimationDuration: CGFloat = 0.3
-        static let infoViewAnimationDuration: CGFloat = 0.3
-        static let panEndedAnimationDuration: CGFloat = 0.3
-        static let dismissAnimationDuration: CGFloat = 0.3
+        static let animationDuration: CGFloat = 0.3
     }
 
     let view: UIView
@@ -57,14 +55,14 @@ struct DefaultAnimationController: AnimationController {
         snapshotTransform: CGAffineTransform,
         completion: @escaping () -> Void
     ) {
-        let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
+        let transformAnimation = CABasicAnimation(keyPath: UX.snapshotTranslationKeyPath)
         transformAnimation.fromValue = 0
         transformAnimation.toValue = snapshotTransform.ty
         transformAnimation.duration = UX.initialTransformAnimationDuration
         transformAnimation.timingFunction = UX.initialTransformTimingCurve
         transformAnimation.fillMode = .forwards
         transformAnimation.isRemovedOnCompletion = true
-        snapshotContainer.layer.add(transformAnimation, forKey: "translation")
+        snapshotContainer.layer.add(transformAnimation, forKey: UX.snapshotAnimationKey)
         snapshotContainer.transform = snapshotTransform
 
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
@@ -84,7 +82,7 @@ struct DefaultAnimationController: AnimationController {
         guard summaryView.alpha == 0.0 else { return }
         triggerImpactHaptics()
 
-        UIView.animate(withDuration: UX.summaryAnimationDuration) {
+        UIView.animate(withDuration: UX.animationDuration) {
             borderOverlayController.willMove(toParent: nil)
             borderOverlayController.view.removeFromSuperview()
             borderOverlayController.removeFromParent()
@@ -111,7 +109,7 @@ struct DefaultAnimationController: AnimationController {
     ) {
         loadingLabel.alpha = 0
         let shouldInsertBackgroundGradient = backgroundGradient.superlayer == nil
-        UIView.animate(withDuration: UX.infoViewAnimationDuration) {
+        UIView.animate(withDuration: UX.animationDuration) {
             summaryView.alpha = 0.0
             infoView.alpha = 1.0
             snapshotContainer.transform = snapshotTransform
@@ -123,7 +121,7 @@ struct DefaultAnimationController: AnimationController {
     }
 
     func animateToPanEnded(snapshotTransform: CGAffineTransform) {
-        UIView.animate(withDuration: UX.panEndedAnimationDuration) {
+        UIView.animate(withDuration: UX.animationDuration) {
             summaryView.alpha = 1.0
             snapshotContainer.transform = snapshotTransform
         }
@@ -133,7 +131,7 @@ struct DefaultAnimationController: AnimationController {
         snapshotTransform: CGAffineTransform,
         completion: @escaping () -> Void
     ) {
-        UIView.animate(withDuration: UX.dismissAnimationDuration) {
+        UIView.animate(withDuration: UX.animationDuration) {
             infoView.alpha = 0.0
             loadingLabel.alpha = 0.0
             snapshotContainer.transform = snapshotTransform
