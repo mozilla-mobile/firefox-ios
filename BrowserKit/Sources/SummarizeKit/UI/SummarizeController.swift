@@ -17,10 +17,6 @@ public protocol SummarizeNavigationHandler: AnyObject {
     func dismissSummary()
 }
 
-// MARK: - Layout Calculator
-
-
-
 public final class SummarizeController: UIViewController, Themeable {
     private struct UX {
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
@@ -281,7 +277,7 @@ public final class SummarizeController: UIViewController, Themeable {
     
     private func adjustLayoutForRotation() {
         layoutCalculator.didRotateInterface = true
-        // remove the animate tab to mid screen animation cause it is going to look off on rotation
+        // remove any running animation cause they will look off on rotation
         tabSnapshotContainer.layer.removeAllAnimations()
         
         setupLoadingBackgroundGradient()
