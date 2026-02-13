@@ -14,11 +14,11 @@ final class ToUExperimentsTracking {
     }
 
     private let prefs: Prefs
-    private let experimentChangeObserver: ExperimentChangeObserver
+    private let experimentChangeObserver: ExperimentChangeObserver?
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs, subscribeToExperimentChanges: Bool = true) {
         self.prefs = prefs
-        self.experimentChangeObserver = ExperimentChangeObserver(prefs: prefs)
+        self.experimentChangeObserver = subscribeToExperimentChanges ? ExperimentChangeObserver(prefs: prefs) : nil
     }
 
     private var hasDismissalData: Bool {
@@ -120,7 +120,7 @@ final class ToUExperimentsTracking {
             guard notification.name == .nimbusExperimentsApplied else { return }
             let prefs = self.prefs
             ensureMainThread {
-                let tracking = ToUExperimentsTracking(prefs: prefs)
+                let tracking = ToUExperimentsTracking(prefs: prefs, subscribeToExperimentChanges: false)
                 tracking.resetToUDataIfNeeded()
             }
         }

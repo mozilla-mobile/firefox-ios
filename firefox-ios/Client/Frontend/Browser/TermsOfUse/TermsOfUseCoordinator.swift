@@ -53,13 +53,14 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          prefs: Prefs,
+         experimentsTracking: ToUExperimentsTracking,
          nimbus: FxNimbus = FxNimbus.shared) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.prefs = prefs
         self.nimbus = nimbus
-        self.experimentsTracking = ToUExperimentsTracking(prefs: prefs)
+        self.experimentsTracking = experimentsTracking
         super.init(router: router)
     }
 

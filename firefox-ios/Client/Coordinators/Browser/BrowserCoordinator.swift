@@ -43,6 +43,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     private var profile: Profile
     private let tabManager: TabManager
+    private lazy var touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
     private let themeManager: ThemeManager
     private let windowManager: WindowManager
     private let screenshotService: ScreenshotService
@@ -1179,7 +1180,8 @@ class BrowserCoordinator: BaseCoordinator,
             router: router,
             themeManager: AppContainer.shared.resolve(),
             notificationCenter: NotificationCenter.default,
-            prefs: profile.prefs
+            prefs: profile.prefs,
+            experimentsTracking: touExperimentsTracking
         )
         guard coordinator.shouldShowTermsOfUse(context: context) else { return }
         coordinator.parentCoordinator = self
