@@ -65,12 +65,22 @@ final actor SFSpeechRecognizerEngine: TranscriptionEngine {
         }
 
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
-            let chunk = result?.bestTranscription.formattedString
+            // TODO: FXIOS-14878 - To refactor when we create the bridge
+            if let error {
+                continuation.finish(throwing: error)
+                return
+            }
+            guard let result else { return }
+            let chunk = result.bestTranscription.formattedString
             let speechResult = SpeechResult(
-                text: chunk ?? "",
-                isFinal: result?.isFinal ?? false
+                text: chunk,
+                isFinal: result.isFinal
             )
             continuation.yield(speechResult)
+            // TODO: FXIOS-14893 - Improve detection
+            if result.isFinal || result.speechRecognitionMetadata != nil {
+                continuation.finish()
+            }
         }
     }
 
