@@ -67,6 +67,7 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         subject.beginObserving(webView: webView)
         subject.beginObserving(webView: webView)
 
+        // Note: WeakList.count includes deallocated references. Safe here since all refs are alive.
         XCTAssertEqual(subject.observedWebViews.count, 1, "WebView should only be added once")
     }
 
@@ -137,6 +138,7 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         subject.beginObserving(webView: webView3)
 
         // Verify all are being observed
+        // Note: WeakList.count includes deallocated references. Safe here since all refs are alive.
         XCTAssertEqual(subject.observedWebViews.count, 3, "Should have 3 observed webViews")
 
         // Remove all observers - this is the fix being tested
@@ -174,6 +176,7 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
 
         subject.beginObserving(webView: webView)
 
+        // Note: WeakList.count includes deallocated references. Safe here since all refs are alive.
         XCTAssertEqual(subject.observedWebViews.count, 1)
 
         subject.stopObservingAllWebViews()
