@@ -193,6 +193,41 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
     }
 
     /**
+     * [record] is called when experiment enrollments are evolved. It should apply the
+     * [RecordedNimbusContext]'s values to a [NimbusSystem.RecordedNimbusContextObject] instance,
+     * and use that instance to record the values to Glean.
+     */
+    func record() {
+        logger.log("recordContext start", level: .debug, category: .experiments)
+        let eventQueryValuesObject = GleanMetrics.NimbusSystem.RecordedNimbusContextObjectItemEventQueryValuesObject(
+            daysOpenedInLast28: eventQueryValues[RecordedNimbusContext.DAYS_OPENED_IN_LAST_28].toInt64()
+        )
+
+        GleanMetrics.NimbusSystem.recordedNimbusContext.set(
+            GleanMetrics.NimbusSystem.RecordedNimbusContextObject(
+                isFirstRun: isFirstRun,
+                eventQueryValues: eventQueryValuesObject,
+                isPhone: isPhone,
+                appVersion: appVersion,
+                locale: locale,
+                daysSinceInstall: daysSinceInstall.toInt64(),
+                daysSinceUpdate: daysSinceUpdate.toInt64(),
+                language: language,
+                region: region,
+                isDefaultBrowser: isDefaultBrowser,
+                isBottomToolbarUser: isBottomToolbarUser,
+                hasEnabledTipsNotifications: hasEnabledTipsNotifications,
+                hasAcceptedTermsOfUse: hasAcceptedTermsOfUse,
+                isAppleIntelligenceAvailable: isAppleIntelligenceAvailable,
+                cannotUseAppleIntelligence: cannotUseAppleIntelligence,
+                touExperiencePoints: touExperiencePoints.toInt64()
+            )
+        )
+        GleanMetrics.Pings.shared.nimbus.submit()
+        logger.log("recordContext end", level: .debug, category: .experiments)
+    }
+
+    /**
      * [setEventQueryValues] is called by the Nimbus SDK Rust code after the event queries have been
      * executed. The [eventQueryValues] should be written back to the Kotlin object.
      *

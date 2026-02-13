@@ -20,6 +20,20 @@ public let defaultErrorReporter: NimbusErrorReporter = { err in
 }
 
 class GleanMetricsHandler: MetricsHandler {
+    func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef]) {
+        for extra in enrollmentStatusExtras {
+            GleanMetrics.NimbusEvents.enrollmentStatus
+                .record(GleanMetrics.NimbusEvents.EnrollmentStatusExtra(
+                    branch: extra.branch,
+                    conflictSlug: extra.conflictSlug,
+                    errorString: extra.errorString,
+                    reason: extra.reason,
+                    slug: extra.slug,
+                    status: extra.status
+                ))
+        }
+    }
+
     func recordFeatureActivation(event: FeatureExposureExtraDef) {
         GleanMetrics.NimbusEvents.activation
             .record(GleanMetrics.NimbusEvents.ActivationExtra(
