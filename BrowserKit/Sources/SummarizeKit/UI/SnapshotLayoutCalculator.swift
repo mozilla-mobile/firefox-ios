@@ -23,7 +23,7 @@ struct LayoutContext {
 protocol SnapshotLayoutCalculator {
     /// Wether the interface was rotated
     var didRotateInterface: Bool { get set }
-    
+
     /// Calculate transform for showing summary content
     func calculateSummaryTransform(context: LayoutContext) -> CGAffineTransform
 
@@ -35,7 +35,7 @@ protocol SnapshotLayoutCalculator {
 
     /// Calculate transform for the `viewDidAppear` state
     func calculateViewDidAppearTransform(context: LayoutContext) -> CGAffineTransform
-    
+
     /// Calculate the transform for rotation state change
     func calculateDidRotateTransform(context: LayoutContext) -> CGAffineTransform
 }
@@ -101,7 +101,7 @@ struct DefaultSnapshotLayoutCalculator: SnapshotLayoutCalculator {
         configuration.transformPercentagePortrait
         return CGAffineTransform(translationX: 0, y: context.viewSize.height * multiplier)
     }
-    
+
     func calculateDidRotateTransform(context: LayoutContext) -> CGAffineTransform {
         // On rotation the transform invalidates the snapshot and moves it off screen
         return CGAffineTransform(translationX: 0.0, y: context.viewSize.height)

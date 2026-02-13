@@ -41,7 +41,7 @@ public final class SummarizeController: UIViewController, Themeable {
         backgroundGradient: backgroundGradient,
         borderOverlayController: borderOverlayHostingController
     )
-    var layoutCalculator: SnapshotLayoutCalculator = DefaultSnapshotLayoutCalculator()
+    var snapshotLayoutCalculator: SnapshotLayoutCalculator = DefaultSnapshotLayoutCalculator()
     private let configuration: SummarizeViewConfiguration
     private let viewModel: SummarizeViewModel
     private let webView: WKWebView
@@ -96,7 +96,7 @@ public final class SummarizeController: UIViewController, Themeable {
     }
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
     private lazy var tabSnapshotPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan))
-    
+
     private lazy var backgroundGradient = CAGradientLayer()
     /// The Layout Guide for the top half of the bounds when in Portrait,
     /// Otherwise in Landscape it becomes equal to the controller's `view` layout guide.
@@ -164,7 +164,7 @@ public final class SummarizeController: UIViewController, Themeable {
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         animationController.animateViewDidAppear(
-            snapshotTransform: layoutCalculator.calculateViewDidAppearTransform(context: layoutContext)
+            snapshotTransform: snapshotLayoutCalculator.calculateViewDidAppearTransform(context: layoutContext)
         ) { [weak self] in
             self?.viewModel.unblockSummarization()
             self?.setupDismissGestures()
@@ -173,7 +173,7 @@ public final class SummarizeController: UIViewController, Themeable {
         let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textOnDark
         loadingLabel.startShimmering(light: textColor, dark: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha))
     }
-    
+
     override public func viewWillTransition(
         to size: CGSize,
         with coordinator: any UIViewControllerTransitionCoordinator
@@ -227,7 +227,7 @@ public final class SummarizeController: UIViewController, Themeable {
         tabSnapshotTopConstraint?.constant = configuration.tabSnapshot.tabSnapshotTopOffset
 
         view.addLayoutGuide(topHalfBoundGuide)
-        
+
         if layoutContext.isLandscapeLayout {
             topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         } else {
@@ -274,12 +274,12 @@ public final class SummarizeController: UIViewController, Themeable {
         // Notify the hosting controller that it has been moved to the current view controller.
         borderOverlayHostingController.didMove(toParent: self)
     }
-    
+
     private func adjustLayoutForRotation() {
-        layoutCalculator.didRotateInterface = true
+        snapshotLayoutCalculator.didRotateInterface = true
         // remove any running animation cause they will look off on rotation
         tabSnapshotContainer.layer.removeAllAnimations()
-        
+
         setupLoadingBackgroundGradient()
         topHalfBoundGuideBottomAnchor?.isActive = false
         if layoutContext.isLandscapeLayout {
@@ -288,7 +288,7 @@ public final class SummarizeController: UIViewController, Themeable {
             topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.centerYAnchor)
         }
         topHalfBoundGuideBottomAnchor?.isActive = true
-        tabSnapshotContainer.transform = layoutCalculator.calculateDidRotateTransform(context: layoutContext)
+        tabSnapshotContainer.transform = snapshotLayoutCalculator.calculateDidRotateTransform(context: layoutContext)
     }
 
     private func setupLoadingBackgroundGradient() {
@@ -322,7 +322,7 @@ public final class SummarizeController: UIViewController, Themeable {
         configureSummaryView(summary: summary)
 
         animationController.animateToSummary(
-            snapshotTransform: layoutCalculator.calculateSummaryTransform(context: layoutContext),
+            snapshotTransform: snapshotLayoutCalculator.calculateSummaryTransform(context: layoutContext),
             applyTheme: applyTheme
         ) { [weak self] in
             self?.onSummaryDisplayed()
@@ -387,7 +387,7 @@ public final class SummarizeController: UIViewController, Themeable {
 
         tabSnapshotContainer.removeGestureRecognizer(tabSnapshotPanGesture)
         animationController.animateToInfo(
-            snapshotTransform: layoutCalculator.calculateInfoTransform(context: layoutContext)
+            snapshotTransform: snapshotLayoutCalculator.calculateInfoTransform(context: layoutContext)
         ) { [weak self] in
             self?.onSummaryDisplayed()
             self?.applyTheme()
@@ -396,13 +396,13 @@ public final class SummarizeController: UIViewController, Themeable {
 
     private func dismissSummary(completion: (() -> Void)? = nil) {
         animationController.animateToDismiss(
-            snapshotTransform: layoutCalculator.calculateDismissTransform(context: layoutContext)
+            snapshotTransform: snapshotLayoutCalculator.calculateDismissTransform(context: layoutContext)
         ) { [weak self] in
             completion?()
             self?.dismiss(animated: true)
         }
     }
-    
+
     override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         viewModel.closeSummarization()
         viewModel.logConsentStatus()
