@@ -6,7 +6,17 @@ import Common
 import Foundation
 
 class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable {
-    private lazy var launchScreen = LaunchScreenView.fromNib()
+    private let backgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+
+    private lazy var launchScreen: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "splash"))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
 
@@ -68,18 +78,22 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     // MARK: - Setup
 
     private func setupLayout() {
-        guard let launchScreen = launchScreen else {
-            fatalError("LaunchScreen view is nil during layout setup")
-        }
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(backgroundView)
 
         launchScreen.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(launchScreen)
 
         NSLayoutConstraint.activate([
-            launchScreen.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            launchScreen.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            launchScreen.topAnchor.constraint(equalTo: view.topAnchor),
-            launchScreen.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            launchScreen.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            launchScreen.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            launchScreen.widthAnchor.constraint(equalToConstant: 130),
+            launchScreen.heightAnchor.constraint(equalToConstant: 130)
         ])
     }
 
@@ -90,7 +104,29 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     }
 
     func launchBrowser() {
-        self.coordinator?.launchBrowser()
+        guard let window = view.window else {
+            coordinator?.launchBrowser()
+            return
+        }
+
+        // First, set the browser as root without animation
+        coordinator?.launchBrowser()
+
+        // Create a snapshot of our launch screen to animate on top
+        guard let snapshotView = view.snapshotView(afterScreenUpdates: false) else { return }
+        window.addSubview(snapshotView)
+
+        // Animate the snapshot scaling and fading, revealing the browser underneath
+        UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseIn, animations: {
+            snapshotView.transform = .identity.scaledBy(x: 20.0, y: 20.0)
+            snapshotView.alpha = 0.0
+        }, completion: { _ in
+            snapshotView.removeFromSuperview()
+        })
+    }
+    
+    deinit {
+        print("FF: deinti LaunchScreenViewController")
     }
 
     func finishedLoadingLaunchOrder() {
@@ -110,7 +146,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         setupLayout()
         guard shouldTriggerSplashScreenExperiment else { return }
         if !UIAccessibility.isReduceMotionEnabled {
-            splashScreenAnimation.configureAnimation(with: launchScreen!)
+            splashScreenAnimation.configureAnimation(with: launchScreen)
         }
     }
 }
