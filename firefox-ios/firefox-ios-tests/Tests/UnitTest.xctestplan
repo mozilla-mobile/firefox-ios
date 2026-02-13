@@ -325,9 +325,6 @@
       }
     },
     {
-      "skippedTests" : [
-        "WKEngineWebViewTests\/testLoad_callsObservers()"
-      ],
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "WebEngineTests",
