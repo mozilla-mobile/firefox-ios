@@ -9,10 +9,12 @@ import Testing
 
 @Suite
 struct SFSpeechRecognizerEngineTests {
+    // TODO: FXIOS-14891 Add more test to improve code coverage and check for memory leaks
+    let session = MockAudioSession()
+
     @Test
     func test_prepare_microphoneDenied_speechDenied_throwsError() async {
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false)
-        let session = MockAudioSession()
         let subject = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
@@ -26,7 +28,6 @@ struct SFSpeechRecognizerEngineTests {
     @Test
     func test_prepare_microphoneDenied_speechGranted_throwsError() async {
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: true)
-        let session = MockAudioSession()
         let subject = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
@@ -40,7 +41,6 @@ struct SFSpeechRecognizerEngineTests {
     @Test
     func test_prepare_microphoneGranted_speechDenied_throwsError() async {
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: false)
-        let session = MockAudioSession()
         let engine = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
@@ -54,7 +54,6 @@ struct SFSpeechRecognizerEngineTests {
     @Test
     func test_prepare_microphoneGranted_speechGranted_returnsExpectedCalls() async throws {
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let session = MockAudioSession()
         let subject = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
         try await subject.prepare()
 
@@ -72,7 +71,6 @@ struct SFSpeechRecognizerEngineTests {
     @Test
     func test_stop_returnsExpectedCalls() async throws {
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let session = MockAudioSession()
         let subject = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
         try await subject.prepare()
 
@@ -90,7 +88,6 @@ struct SFSpeechRecognizerEngineTests {
     @Test
     func test_stop_createsRecognitionTask() async throws {
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let session = MockAudioSession()
         let engine = MockAudioEngine()
         let subject = SFSpeechRecognizerEngine(audioEngine: engine, audioSession: session, authorizer: authorizer)
 
