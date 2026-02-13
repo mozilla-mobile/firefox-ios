@@ -31,7 +31,6 @@ protocol LegacyWebControllerDelegate: AnyObject {
     func webControllerDidNavigateBack(_ controller: LegacyWebController)
     func webControllerDidNavigateForward(_ controller: LegacyWebController)
     func webControllerDidReload(_ controller: LegacyWebController)
-    func webControllerWillCancelNavigation(_ controller: LegacyWebController, isMainFrame: Bool)
     func webControllerURLDidChange(_ controller: LegacyWebController, url: URL)
     func webController(_ controller: LegacyWebController, didFailNavigationWithError error: Error)
     func webController(_ controller: LegacyWebController, didUpdateCanGoBack canGoBack: Bool)
@@ -432,7 +431,6 @@ extension LegacyWebViewController: WKNavigationDelegate {
         let isMainFrame = navigationAction.targetFrame?.isMainFrame == true
         // Bugzilla #1979804
         if let scheme = navigationAction.request.url?.scheme, scheme.lowercased() == "fido" {
-            delegate?.webControllerWillCancelNavigation(self, isMainFrame: isMainFrame)
             decisionHandler(.cancel, preferences)
             return
         }
@@ -466,7 +464,6 @@ extension LegacyWebViewController: WKNavigationDelegate {
         // Prevent Focus from opening deeplinks from links
         if let scheme = navigationAction.request.url?.scheme,
            scheme.caseInsensitiveCompare(AppInfo.appScheme) == .orderedSame {
-            delegate?.webControllerWillCancelNavigation(self, isMainFrame: isMainFrame)
             decisionHandler(.cancel, preferences)
             return
         }
@@ -478,9 +475,6 @@ extension LegacyWebViewController: WKNavigationDelegate {
 
         let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? allowDecision : .cancel
 
-        if decision == .cancel {
-            delegate?.webControllerWillCancelNavigation(self, isMainFrame: isMainFrame)
-        }
         decisionHandler(decision, preferences)
     }
 
