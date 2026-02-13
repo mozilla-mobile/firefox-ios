@@ -34,8 +34,6 @@ final class ToUExperimentsTracking {
         let currentExperimentKey = experiment.map { experimentKey($0) }
         let trackingInitialized = prefs.boolForKey(PrefsKeys.TermsOfUseExperimentTrackingInitialized) ?? false
 
-        storeExperimentInfo(currentExperiment: experiment)
-
         let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
         if hasShownFirstTime {
             resetDismissalStateIfExperimentChanged(
@@ -45,6 +43,7 @@ final class ToUExperimentsTracking {
                 trackingInitialized: trackingInitialized
             )
         }
+        storeExperimentInfo(currentExperiment: experiment)
         prefs.setBool(true, forKey: PrefsKeys.TermsOfUseExperimentTrackingInitialized)
     }
 

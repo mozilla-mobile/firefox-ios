@@ -43,13 +43,13 @@ class BrowserCoordinator: BaseCoordinator,
 
     private var profile: Profile
     private let tabManager: TabManager
-    private lazy var touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
     private let themeManager: ThemeManager
     private let windowManager: WindowManager
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private let summarizerNimbusUtils: SummarizerNimbusUtils
+    private let touExperimentsTracking: ToUExperimentsTracking
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
@@ -76,6 +76,7 @@ class BrowserCoordinator: BaseCoordinator,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowManager = windowManager
+        self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
