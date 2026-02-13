@@ -998,10 +998,6 @@ final class BrowserViewController: UIViewController {
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
         webViewController.load(URLRequest(url: url))
 
-        if urlBar.url != url {
-            urlBar.url = url
-        }
-
         onboardingEventsHandler.route = nil
         onboardingEventsHandler.send(.startBrowsing)
 

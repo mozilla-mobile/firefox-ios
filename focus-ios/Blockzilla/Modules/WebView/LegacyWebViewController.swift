@@ -428,7 +428,6 @@ extension LegacyWebViewController: WKNavigationDelegate {
         if let redirectedURL = navigationAction.request.url {
             adsTelemetryHelper.trackClickedAds(with: redirectedURL)
         }
-        let isMainFrame = navigationAction.targetFrame?.isMainFrame == true
         // Bugzilla #1979804
         if let scheme = navigationAction.request.url?.scheme, scheme.lowercased() == "fido" {
             decisionHandler(.cancel, preferences)
