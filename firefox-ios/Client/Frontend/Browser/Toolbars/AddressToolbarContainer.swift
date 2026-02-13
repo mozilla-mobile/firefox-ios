@@ -379,13 +379,13 @@ final class AddressToolbarContainer: UIView,
         guard let model else { return }
         leftSkeletonAddressBar.configureNonInteractive(
             config: model.configureSkeletonAddressBar(for: previousTab),
-                leadingSpace: UX.skeletonBarOffset,
-                trailingSpace: -UX.skeletonBarOffset
+            leadingSpace: UX.skeletonBarOffset,
+            trailingSpace: -UX.skeletonBarOffset
         )
         rightSkeletonAddressBar.configureNonInteractive(
             config: model.configureSkeletonAddressBar(for: forwardTab),
-                leadingSpace: -UX.skeletonBarOffset,
-                trailingSpace: UX.skeletonBarOffset
+            leadingSpace: -UX.skeletonBarOffset,
+            trailingSpace: UX.skeletonBarOffset
         )
         leftSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.leadingSkeleton
         rightSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton

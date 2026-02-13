@@ -120,7 +120,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         let config = model.configureSkeletonAddressBar(for: tab)
 
         XCTAssertEqual(config.locationViewConfiguration.lockIconImageName,
-                      StandardImageIdentifiers.Small.shieldCheckmarkFill)
+                       StandardImageIdentifiers.Small.shieldCheckmarkFill)
         XCTAssertTrue(config.locationViewConfiguration.lockIconNeedsTheming)
     }
 
@@ -135,7 +135,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         let config = model.configureSkeletonAddressBar(for: tab)
 
         XCTAssertEqual(config.locationViewConfiguration.lockIconImageName,
-                      StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+                       StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
         XCTAssertFalse(config.locationViewConfiguration.lockIconNeedsTheming)
     }
 

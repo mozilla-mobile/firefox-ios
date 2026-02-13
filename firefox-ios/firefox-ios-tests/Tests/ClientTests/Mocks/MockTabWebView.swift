@@ -19,7 +19,7 @@ final class MockTabWebView: TabWebView {
     var loadedURL: URL?
     var takeSnapshotWasCalled = false
     var takeSnapshotShouldFail = false
-    var mockHasOnlySecureContent: Bool = false
+    var mockHasOnlySecureContent = false
 
     override var title: String? {
         return mockTitle
