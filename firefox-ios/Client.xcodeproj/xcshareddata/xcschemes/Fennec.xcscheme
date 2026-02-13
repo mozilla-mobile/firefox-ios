@@ -453,9 +453,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ReduxTests"
-               BuildableName = "ReduxTests"
-               BlueprintName = "ReduxTests"
+               BlueprintIdentifier = "VoiceSearchKitTests"
+               BuildableName = "VoiceSearchKitTests"
+               BlueprintName = "VoiceSearchKitTests"
                ReferencedContainer = "container:../BrowserKit">
             </BuildableReference>
          </TestableReference>

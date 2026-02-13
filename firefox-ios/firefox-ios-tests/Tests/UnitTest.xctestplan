@@ -13,11 +13,6 @@
       "targets" : [
         {
           "containerPath" : "container:..\/BrowserKit",
-          "identifier" : "Common",
-          "name" : "Common"
-        },
-        {
-          "containerPath" : "container:..\/BrowserKit",
           "identifier" : "ComponentLibrary",
           "name" : "ComponentLibrary"
         },
@@ -125,6 +120,11 @@
           "containerPath" : "container:..\/BrowserKit",
           "identifier" : "UnifiedSearchKit",
           "name" : "UnifiedSearchKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "Common",
+          "name" : "Common"
         }
       ]
     }
