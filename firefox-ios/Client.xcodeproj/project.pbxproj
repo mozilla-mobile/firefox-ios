@@ -36,6 +36,7 @@
 		0A93C8AA2C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93C8A92C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift */; };
 		0A93C8AC2C870E7100BEA143 /* TrackingProtectionToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */; };
 		0AB768FA2F3DF280009458EB /* BlockedTrackersFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB768F92F3DF257009458EB /* BlockedTrackersFooterView.swift */; };
+		0AB76B562F3F67E3009458EB /* BlockedTrackersFooterViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB76B552F3F678A009458EB /* BlockedTrackersFooterViewTests.swift */; };
 		0ABCD45B2D355260005D704A /* TermsOfServiceTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCD45A2D355255005D704A /* TermsOfServiceTelemetry.swift */; };
 		0ABCD45D2D356015005D704A /* TermsOfServiceTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */; };
 		0AC0F9482E3CA17900E826D8 /* MainMenuConfigurationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */; };
@@ -2621,6 +2622,7 @@
 		0A93C8A92C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionConnectionStatusView.swift; sourceTree = "<group>"; };
 		0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionToggleView.swift; sourceTree = "<group>"; };
 		0AB768F92F3DF257009458EB /* BlockedTrackersFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersFooterView.swift; sourceTree = "<group>"; };
+		0AB76B552F3F678A009458EB /* BlockedTrackersFooterViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersFooterViewTests.swift; sourceTree = "<group>"; };
 		0ABCD45A2D355255005D704A /* TermsOfServiceTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceTelemetry.swift; sourceTree = "<group>"; };
 		0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceTelemetryTests.swift; sourceTree = "<group>"; };
 		0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuConfigurationUtilityTests.swift; sourceTree = "<group>"; };
@@ -14338,6 +14340,7 @@
 		AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */ = {
 			isa = PBXGroup;
 			children = (
+				0AB76B552F3F678A009458EB /* BlockedTrackersFooterViewTests.swift */,
 				0AFF7F652C7784F000265214 /* TrackingProtectionModelTests.swift */,
 				AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */,
 				0A7693602C7DD19500103A6D /* CertificatesViewModelTests.swift */,
@@ -19604,6 +19607,7 @@
 				AA3CEBAD2ECB853400DDEFEF /* SearchTelemetryTests.swift in Sources */,
 				8A03FFA32DB12AFF00509A72 /* MockSponsoredTelemetry.swift in Sources */,
 				8A09A9E32D77552C0069B005 /* HomepageMiddlewareTests.swift in Sources */,
+				0AB76B562F3F67E3009458EB /* BlockedTrackersFooterViewTests.swift in Sources */,
 				033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */,
 				C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */,
 				C869915728917809007ACC5C /* NetworkingMock.swift in Sources */,
