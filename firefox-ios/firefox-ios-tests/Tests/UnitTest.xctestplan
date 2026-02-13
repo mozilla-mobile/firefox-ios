@@ -153,7 +153,7 @@
     },
     {
       "target" : {
-        "containerPath" : "container:",
+        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "ComponentLibraryTests",
         "name" : "ComponentLibraryTests"
       }
@@ -220,7 +220,7 @@
     },
     {
       "target" : {
-        "containerPath" : "container:",
+        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "VoiceSearchKitTests",
         "name" : "VoiceSearchKitTests"
       }
