@@ -198,7 +198,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
      * and use that instance to record the values to Glean.
      */
     func record() {
-        logger.log("recordContext start", level: .debug, category: .experiments)
+        logger.log("record start", level: .debug, category: .experiments)
         let eventQueryValuesObject = GleanMetrics.NimbusSystem.RecordedNimbusContextObjectItemEventQueryValuesObject(
             daysOpenedInLast28: eventQueryValues[RecordedNimbusContext.DAYS_OPENED_IN_LAST_28].toInt64()
         )
@@ -224,7 +224,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
             )
         )
         GleanMetrics.Pings.shared.nimbus.submit()
-        logger.log("recordContext end", level: .debug, category: .experiments)
+        logger.log("record end", level: .debug, category: .experiments)
     }
 
     /**
@@ -268,7 +268,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
             "cannot_use_apple_intelligence": cannotUseAppleIntelligence,
             "tou_experience_points": touExperiencePoints as Any
         ]),
-        let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
+            let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
         else {
             logger.log("toJson error thrown while creating JSON string", level: .warning, category: .experiments)
             return "{}"

@@ -90,6 +90,69 @@ class RecordedNimbusContextTests: XCTestCase {
     }
 
     func testObjectRecordedToGleanMatchesExpected() throws {
+        enum RecordedContextApi {
+            case record, recordContextAndSubmit
+        }
+
+        for api: RecordedContextApi in [.record, .recordContextAndSubmit] {
+            let recordedContext = RecordedNimbusContext(
+                isFirstRun: true,
+                isDefaultBrowser: true,
+                isBottomToolbarUser: true,
+                hasEnabledTipsNotifications: true,
+                hasAcceptedTermsOfUse: true,
+                isAppleIntelligenceAvailable: true,
+                cannotUseAppleIntelligence: true
+            )
+
+            var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
+            let expectation = expectation(description: "The Firefox Suggest ping was sent")
+            GleanMetrics.Pings.shared.nimbus.testBeforeNextSubmit { e in
+                value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue()
+                expectation.fulfill()
+            }
+
+            recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
+            switch api {
+            case .record:
+                recordedContext.record()
+            case .recordContextAndSubmit:
+                recordedContext.recordContext()
+                recordedContext.submit()
+            }
+
+            wait(for: [expectation], timeout: 5.0)
+
+            XCTAssertNotNil(value)
+            XCTAssertEqual(value?.appVersion, recordedContext.appVersion)
+            XCTAssertEqual(value?.isFirstRun, recordedContext.isFirstRun)
+            XCTAssertEqual(value?.isPhone, recordedContext.isPhone)
+            XCTAssertEqual(value?.locale, recordedContext.locale)
+            XCTAssertEqual(value?.region, recordedContext.region)
+            XCTAssertEqual(value?.language, recordedContext.language)
+            XCTAssertEqual(value?.daysSinceInstall, recordedContext.daysSinceInstall.toInt64())
+            XCTAssertEqual(value?.daysSinceUpdate, recordedContext.daysSinceUpdate.toInt64())
+            XCTAssertEqual(value?.isDefaultBrowser, recordedContext.isDefaultBrowser)
+            XCTAssertEqual(value?.isBottomToolbarUser, recordedContext.isBottomToolbarUser)
+            XCTAssertEqual(
+                value?.hasEnabledTipsNotifications,
+                recordedContext.hasEnabledTipsNotifications
+            )
+            XCTAssertEqual(
+                value?.hasAcceptedTermsOfUse,
+                recordedContext.hasAcceptedTermsOfUse
+            )
+            XCTAssertEqual(
+                value?.touExperiencePoints,
+                recordedContext.touExperiencePoints.toInt64()
+            )
+
+            XCTAssertNotNil(value?.eventQueryValues)
+            XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
+        }
+    }
+
+    func testEventsRecordedToGleanMatchExpected() throws {
         let metricConfig = """
             {
                 "metrics_enabled": {
@@ -118,48 +181,17 @@ class RecordedNimbusContextTests: XCTestCase {
             prevGeckoPrefStates: nil
         )
 
-        var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
         var events: [RecordedEvent]?
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
         GleanMetrics.Pings.shared.nimbus.testBeforeNextSubmit { e in
-            value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue()
             events = GleanMetrics.NimbusSystem.enrollmentStatus.testGetValue()
             expectation.fulfill()
         }
 
-        recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
-        recordedContext.recordContext()
         recordedContext.recordEnrollmentStatuses(enrollmentStatusExtras: [enrollmentStatusExtra])
         recordedContext.submit()
 
         wait(for: [expectation], timeout: 5.0)
-
-        XCTAssertNotNil(value)
-        XCTAssertEqual(value?.appVersion, recordedContext.appVersion)
-        XCTAssertEqual(value?.isFirstRun, recordedContext.isFirstRun)
-        XCTAssertEqual(value?.isPhone, recordedContext.isPhone)
-        XCTAssertEqual(value?.locale, recordedContext.locale)
-        XCTAssertEqual(value?.region, recordedContext.region)
-        XCTAssertEqual(value?.language, recordedContext.language)
-        XCTAssertEqual(value?.daysSinceInstall, recordedContext.daysSinceInstall.toInt64())
-        XCTAssertEqual(value?.daysSinceUpdate, recordedContext.daysSinceUpdate.toInt64())
-        XCTAssertEqual(value?.isDefaultBrowser, recordedContext.isDefaultBrowser)
-        XCTAssertEqual(value?.isBottomToolbarUser, recordedContext.isBottomToolbarUser)
-        XCTAssertEqual(
-            value?.hasEnabledTipsNotifications,
-            recordedContext.hasEnabledTipsNotifications
-        )
-        XCTAssertEqual(
-            value?.hasAcceptedTermsOfUse,
-            recordedContext.hasAcceptedTermsOfUse
-        )
-        XCTAssertEqual(
-            value?.touExperiencePoints,
-            recordedContext.touExperiencePoints.toInt64()
-        )
-
-        XCTAssertNotNil(value?.eventQueryValues)
-        XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
 
         XCTAssertEqual(
             events?.map { $0.extra },
