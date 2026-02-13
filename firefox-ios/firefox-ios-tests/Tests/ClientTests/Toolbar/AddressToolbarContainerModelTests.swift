@@ -85,7 +85,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     @MainActor
     func testConfigureSkeletonAddressBar_withNilParameters() {
         let model = createSubject(withState: createToolbarState())
-        let config = model.configureSkeletonAddressBar(with: nil, isReaderModeAvailableOrActive: nil)
+        let config = model.configureSkeletonAddressBar(for: nil)
 
         XCTAssertTrue(config.leadingPageActions.isEmpty)
         XCTAssertTrue(config.trailingPageActions.isEmpty)
@@ -93,35 +93,135 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     @MainActor
-    func testConfigureSkeletonAddressBar_withNilURL_andReaderModeAvailable() {
-        let model = createSubject(withState: createToolbarState())
-        let config = model.configureSkeletonAddressBar(with: nil, isReaderModeAvailableOrActive: true)
-
-        XCTAssertTrue(config.leadingPageActions.isEmpty)
-        XCTAssertTrue(config.trailingPageActions.isEmpty)
-        XCTAssertNil(config.locationViewConfiguration.url)
-    }
-
-    @MainActor
-    func testConfigureSkeletonAddressBar_withURL_andReaderModeAvailable() {
+    func testConfigureSkeletonAddressBar_withURL() {
         let model = createSubject(withState: createToolbarState())
         let testURL = URL(string: "https://example.com")
-        let config = model.configureSkeletonAddressBar(with: testURL, isReaderModeAvailableOrActive: true)
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        tab.url = testURL
+        tab.webView = MockTabWebView(tab: tab)
 
-        XCTAssertEqual(config.leadingPageActions.count, 1)
-        XCTAssertEqual(config.trailingPageActions.count, 2)
-        XCTAssertEqual(config.locationViewConfiguration.url, testURL)
-    }
-
-    @MainActor
-    func testConfigureSkeletonAddressBar_withURL_andReaderModeNotAvailable() {
-        let model = createSubject(withState: createToolbarState())
-        let testURL = URL(string: "https://example.com")
-        let config = model.configureSkeletonAddressBar(with: testURL, isReaderModeAvailableOrActive: false)
+        let config = model.configureSkeletonAddressBar(for: tab)
 
         XCTAssertEqual(config.leadingPageActions.count, 1)
         XCTAssertEqual(config.trailingPageActions.count, 1)
         XCTAssertEqual(config.locationViewConfiguration.url, testURL)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_withSecureHTTPS_showsSecureLockIcon() {
+        let model = createSubject(withState: createToolbarState())
+        let testURL = URL(string: "https://secure-example.com")
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        tab.url = testURL
+        let mockWebView = MockTabWebView(tab: tab)
+        mockWebView.mockHasOnlySecureContent = true
+        tab.webView = mockWebView
+
+        let config = model.configureSkeletonAddressBar(for: tab)
+
+        XCTAssertEqual(config.locationViewConfiguration.lockIconImageName,
+                      StandardImageIdentifiers.Small.shieldCheckmarkFill)
+        XCTAssertTrue(config.locationViewConfiguration.lockIconNeedsTheming)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_withInsecureHTTP_showsInsecureLockIcon() {
+        let model = createSubject(withState: createToolbarState())
+        let testURL = URL(string: "http://insecure-example.com")
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        tab.url = testURL
+        let mockWebView = MockTabWebView(tab: tab)
+        mockWebView.mockHasOnlySecureContent = false
+        let config = model.configureSkeletonAddressBar(for: tab)
+
+        XCTAssertEqual(config.locationViewConfiguration.lockIconImageName,
+                      StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+        XCTAssertFalse(config.locationViewConfiguration.lockIconNeedsTheming)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_inReaderMode_hidesLockIcon() {
+        let model = createSubject(withState: createToolbarState())
+        let readerURL = URL(string: "http://localhost/reader-mode/page?url=https://example.com")
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        tab.url = readerURL
+
+        let config = model.configureSkeletonAddressBar(for: tab)
+
+        XCTAssertNil(config.locationViewConfiguration.lockIconImageName)
+        XCTAssertTrue(config.locationViewConfiguration.lockIconNeedsTheming)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_containsCorrectActions() {
+        let model = createSubject(withState: createToolbarState())
+        let testURL = URL(string: "https://example.com")
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        tab.url = testURL
+
+        let config = model.configureSkeletonAddressBar(for: tab)
+
+        // Verify share and reload actions are present.
+        XCTAssertEqual(config.leadingPageActions.count, 1)
+        XCTAssertEqual(config.trailingPageActions.count, 1)
+
+        // Verify leading action (share).
+        let leadingAction = config.leadingPageActions.first
+        XCTAssertNotNil(leadingAction)
+        XCTAssertEqual(leadingAction?.iconName, StandardImageIdentifiers.Medium.share)
+        XCTAssertTrue(leadingAction?.isEnabled ?? false)
+
+        // Verify trailing action (reload).
+        let trailingAction = config.trailingPageActions.first
+        XCTAssertNotNil(trailingAction)
+        XCTAssertEqual(trailingAction?.iconName, StandardImageIdentifiers.Medium.arrowClockwise)
+        XCTAssertTrue(trailingAction?.isEnabled ?? false)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_locationViewConfiguration() {
+        let model = createSubject(withState: createToolbarState())
+        let testURL = URL(string: "https://example.com")
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        tab.url = testURL
+
+        let config = model.configureSkeletonAddressBar(for: tab)
+        let locationConfig = config.locationViewConfiguration
+
+        // Verify essential location view properties.
+        XCTAssertEqual(locationConfig.url, testURL)
+        XCTAssertEqual(locationConfig.urlTextFieldPlaceholder, .AddressToolbar.LocationPlaceholder)
+        XCTAssertFalse(locationConfig.isEditing)
+        XCTAssertFalse(locationConfig.didStartTyping)
+        XCTAssertFalse(locationConfig.shouldShowKeyboard)
+        XCTAssertFalse(locationConfig.shouldSelectSearchTerm)
+        XCTAssertNil(locationConfig.searchEngineImage)
+        XCTAssertNil(locationConfig.searchTerm)
+        XCTAssertNil(locationConfig.droppableUrl)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_uxConfiguration() {
+        let model = createSubject(withState: createToolbarState())
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+
+        let config = model.configureSkeletonAddressBar(for: tab)
+
+        XCTAssertNotNil(config.uxConfiguration)
+        XCTAssertFalse(config.shouldAnimate)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_emptyNavigationAndBrowserActions() {
+        let model = createSubject(withState: createToolbarState())
+        let testURL = URL(string: "https://example.com")
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        tab.url = testURL
+
+        let config = model.configureSkeletonAddressBar(for: tab)
+
+        XCTAssertTrue(config.navigationActions.isEmpty)
+        XCTAssertTrue(config.browserActions.isEmpty)
     }
 
     @MainActor
