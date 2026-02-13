@@ -19,7 +19,8 @@ struct BlockedTrackerItem: Hashable {
 class BlockedTrackersTableViewController: UIViewController,
                                           Themeable,
                                           UITableViewDelegate,
-                                          Notifiable {
+                                          Notifiable,
+                                          UITextViewDelegate {
     private struct UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
@@ -182,6 +183,29 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0 {
+            guard let footerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: BlockedTrackersFooterView.cellIdentifier
+            ) as? BlockedTrackersFooterView else { return UIView() }
+
+            footerView.trackersBlockedInfoTextView.delegate = self
+            footerView.makeAttributedDescription(
+                with: model.getTrackersBlockedModeText(),
+                linkedText: .Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink,
+                url: SupportUtils.URLForTopic("tracking-protection-ios"),
+                and: currentTheme()
+            )
+            footerView.applyTheme(theme: currentTheme())
+            return footerView
+        }
+        return nil
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
 
