@@ -16,7 +16,7 @@ import Foundation
 /// For full details on how these steps fit together, See:
 /// - Secure API Access using App Attest: https://docs.google.com/document/d/1uI5pl2h60_9tjiAqEdKBZD9JANQdcHP7lXSe5uxCPrg/edit?usp=sharing
 /// - Apple Docs: https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity
-public protocol AppAttestRemoteServerProtocol {
+public protocol AppAttestRemoteServerProtocol: Sendable {
     /// Fetches a server-generated challenge (nonce) for the given `keyId`.
     /// The challenge is used exactly once to prevent replay attacks.
     func fetchChallenge(for keyId: String) async throws -> String

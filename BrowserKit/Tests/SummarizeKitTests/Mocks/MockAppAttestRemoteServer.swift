@@ -5,7 +5,7 @@
 import Foundation
 @testable import SummarizeKit
 
-final class MockAppAttestRemoteServer: AppAttestRemoteServerProtocol {
+final class MockAppAttestRemoteServer: AppAttestRemoteServerProtocol, @unchecked Sendable {
     var challengeToReturn = "mock-challenge"
     var sendAttestationError: Error?
 
