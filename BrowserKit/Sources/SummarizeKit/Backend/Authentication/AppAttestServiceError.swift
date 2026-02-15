@@ -6,9 +6,11 @@ import Foundation
 
 /// Errors produced by AppAttestService
 public enum AppAttestServiceError: Error, Equatable {
+    case invalidKeyID
     case invalidChallenge
     case invalidPayload
     case missingKeyID
     case keychain(description: String)
     case appAttestNotSupported
+    case serverError(description: String)
 }
