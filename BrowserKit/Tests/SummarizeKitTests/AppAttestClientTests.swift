@@ -73,28 +73,29 @@ final class AppAttestClientTests: XCTestCase {
         }
     }
 
-    func test_performAssertion_throwsMissingKeyID_whenNoStoredKey() async throws {
+    func test_generateAssertion_throwsMissingKeyID_whenNoStoredKey() async throws {
         let subject = try createSubject()
 
         do {
-            try await subject.performAssertion(payload: ["prompt": "hello"])
-            XCTFail("Expected performAssertion to throw when no keyId is stored.")
+            _ = try await subject.generateAssertion(payload: ["prompt": "hello"])
+            XCTFail("Expected generateAssertion to throw when no keyId is stored.")
         } catch {
             XCTAssertEqual(error as? AppAttestServiceError, .missingKeyID)
         }
     }
 
-    func test_performAssertion_signsAndSendsPayload() async throws {
+    func test_generateAssertion_returnsSignedResult() async throws {
         let keyStore = try createKeyStore(with: TestData.keyID)
         let server = makeServer(challenge: TestData.assertionChallenge)
         let service = makeService(assertionToReturn: TestData.assertionBlob)
         let subject = try createSubject(appAttestService: service, remoteServer: server, keyStore: keyStore)
 
-        try await subject.performAssertion(payload: ["prompt": "summarize this"])
+        let result = try await subject.generateAssertion(payload: ["prompt": "summarize this"])
 
+        XCTAssertEqual(result.keyId, TestData.keyID)
+        XCTAssertEqual(result.assertion, TestData.assertionBlob)
+        XCTAssertEqual(result.challenge, TestData.assertionChallenge)
         XCTAssertEqual(server.fetchChallengeCallCount, 1)
-        XCTAssertEqual(server.sendAssertionCallCount, 1)
-        XCTAssertEqual(server.lastAssertionKeyId, TestData.keyID)
     }
 
     func test_resetKey_clearsStoredKeyID() throws {

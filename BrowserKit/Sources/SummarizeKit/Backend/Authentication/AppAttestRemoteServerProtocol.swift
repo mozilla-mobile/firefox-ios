@@ -23,7 +23,4 @@ public protocol AppAttestRemoteServerProtocol {
     /// Sends the attestation object to the server for one-time trust establishment.
     /// The server validates Apple's certificate chain and persists the public key.
     func sendAttestation(keyId: String, attestationObject: Data, challenge: String) async throws
-    /// Sends an assertion-signed request to the server.
-    /// The server verifies the signature against the stored public key.
-    func sendAssertion(keyId: String, assertionObject: Data, payload: Data, challenge: String) async throws
 }

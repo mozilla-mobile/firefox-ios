@@ -71,15 +71,14 @@ public struct AppAttestClient {
         return keyID
     }
 
-    /// Performs a per-request assertion, meaning it signs the payload and sends it to the server.
+    /// Generates a per-request assertion, meaning it signs the payload.
     ///
     /// Steps:
     /// 1. Load the previously attested `keyId` from the store.
     /// 2. Fetch a fresh challenge from the server (prevents replay attacks).
     /// 3. Serialize the payload as sorted-key JSON and hash it with SHA-256.
     /// 4. Ask the Secure Enclave to sign the hash via `appAttestService.generateAssertion()`.
-    /// 5. Send the assertion + payload to the server for verification.
-    public func performAssertion(payload: [String: Any]) async throws {
+    public func generateAssertion(payload: [String: Any]) async throws -> AssertionResult {
         guard let keyId = keyStore.loadKeyID() else {
             throw AppAttestServiceError.missingKeyID
         }
@@ -95,11 +94,11 @@ public struct AppAttestClient {
 
         let payloadData = try JSONSerialization.data(withJSONObject: payload)
 
-        try await remoteServer.sendAssertion(
+        return AssertionResult(
             keyId: keyId,
-            assertionObject: assertion,
-            payload: payloadData,
-            challenge: challenge
+            assertion: assertion,
+            challenge: challenge,
+            payload: payloadData
         )
     }
 
