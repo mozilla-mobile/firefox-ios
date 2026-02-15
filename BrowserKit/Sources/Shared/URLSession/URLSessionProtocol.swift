@@ -61,8 +61,9 @@ extension URLSession: URLSessionProtocol {
         return dataTask(with: request, completionHandler: completionHandler)
     }
 
-    public func dataTaskWith(_ url: URL,
-                      completionHandler: @escaping DataTaskResult
+    public func dataTaskWith(
+        _ url: URL,
+        completionHandler: @escaping DataTaskResult
     ) -> URLSessionDataTaskProtocol {
         dataTask(with: url, completionHandler: completionHandler) as URLSessionDataTaskProtocol
     }

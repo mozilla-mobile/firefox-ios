@@ -3,25 +3,24 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
-@testable import Client
-
-final class MockURLSessionDataTask: URLSessionDataTaskProtocol {
+public final class MockURLSessionDataTask: URLSessionDataTaskProtocol {
     private(set) var resumeWasCalled = false
 
-    func resume() {
+    public func resume() {
         resumeWasCalled = true
     }
 }
 
-final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
-    var dataTask = MockURLSessionDataTask()
-    var uploadTask = MockURLSessionUploadTask()
+public final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
+    public var dataTask = MockURLSessionDataTask()
+    public var uploadTask = MockURLSessionUploadTask()
     private let data: Data?
     private let response: URLResponse?
     private let error: Error?
 
-    init(
+    public init(
         with data: Data? = nil,
         response: URLResponse? = nil,
         and error: Error? = nil
@@ -31,7 +30,7 @@ final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
         self.error = error
     }
 
-    func data(from url: URL) async throws -> (Data, URLResponse) {
+    public func data(from url: URL) async throws -> (Data, URLResponse) {
         if let error = error {
             throw error
         }
@@ -39,25 +38,26 @@ final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
         return (data ?? Data(), response ?? URLResponse())
     }
 
-    func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse) {
+    public func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse) {
         try await data(from: urlRequest.url!)
     }
 
-    func dataTaskWith(_ url: URL,
-                      completionHandler completion: @escaping DataTaskResult
+    public func dataTaskWith(
+        _ url: URL,
+        completionHandler completion: @escaping DataTaskResult
     ) -> URLSessionDataTaskProtocol {
         completion(data, response, error)
         return dataTask
     }
 
-    func dataTaskWith(
+    public func dataTaskWith(
         request: URLRequest,
         completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void
     ) -> URLSessionDataTaskProtocol {
         return MockURLSessionDataTask()
     }
 
-    func uploadTaskWith(
+    public func uploadTaskWith(
         with request: URLRequest,
         from bodyData: Data?,
         completionHandler: @escaping (Data?, URLResponse?, (any Error)?) -> Void
@@ -67,11 +67,11 @@ final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
     }
 }
 
-class MockURLSessionUploadTask: URLSessionUploadTaskProtocol {
-    var resumeCount = 0
-    var countOfBytesClientExpectsToSend: Int64 = 0
-    var countOfBytesClientExpectsToReceive: Int64 = 0
-    func resume() {
+public class MockURLSessionUploadTask: URLSessionUploadTaskProtocol {
+    public var resumeCount = 0
+    public var countOfBytesClientExpectsToSend: Int64 = 0
+    public var countOfBytesClientExpectsToReceive: Int64 = 0
+    public func resume() {
         resumeCount += 1
     }
 }
