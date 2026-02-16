@@ -3,45 +3,44 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import JWTKit
+import Common
 
+/// Bridges App Attest authentication into the `RequestAuthProtocol` pipeline.
+///
+/// For each outgoing request, this authenticator:
+/// 1. Extracts the JSON body as the assertion payload.
+/// 2. Asks `AppAttestClient` to generate a signed assertion.
+/// 3. Wraps the assertion metadata in a JWT and attaches it as a Bearer token.
 struct AppAttestRequestAuth: RequestAuthProtocol {
-    private enum Constants {
-        static let authorizationHeader = "Authorization"
-        static let bearerPrefix = "Bearer "
-        static let keyIdParam = "key_id_b64"
-        static let challengeParam = "challenge_b64"
-        static let attestationParam = "assertion_obj_b64"
-        static let bundleIDParam = "bundle_id"
-        static let serviceTypeHeader = "service-type"
-        static let useAppAttestHeader = "use-app-attest"
-        static let serviceTypeValue = "s2s"
-        static let jwtSecret = UUID().uuidString
-    }
-
     private let appAttestClient: AppAttestClient
+    private let bundleIdentifier: String
 
-    public init(appAttestClient: AppAttestClient) {
+    public init(appAttestClient: AppAttestClient, bundleIdentifier: String = AppInfo.bundleIdentifier) {
         self.appAttestClient = appAttestClient
+        self.bundleIdentifier = bundleIdentifier
     }
 
     public func authenticate(request: inout URLRequest) async throws {
+        // Make sure the server trust is established before sending any requests.
+        // This should only be needed for the first request, subsequent requests will reuse the same attestation.
+        _ = try await appAttestClient.performAttestation()
+
         let body = request.httpBody ?? Data()
         let payload = try JSONSerialization.jsonObject(with: body) as? [String: Any] ?? [:]
 
         let result = try await appAttestClient.generateAssertion(payload: payload)
 
-        let jwtPayload: [String: Any] = [
-            Constants.keyIdParam: result.keyId,
-            Constants.challengeParam: result.challenge.data(using: .utf8)!.base64EncodedString(),
-            Constants.attestationParam: result.assertion.base64EncodedString(),
-            Constants.bundleIDParam: AppInfo.bundleIdentifier
-        ]
-        let jwt = try JWTEncoder(algorithm: .hs256(secret: Constants.jwtSecret)).encode(payload: jwtPayload)
+        let jwt = try MLPAJWTPayload(
+            keyId: result.keyId,
+            challenge: result.challenge,
+            objectKey: MLPAConstants.assertionObjParam,
+            objectData: result.assertion,
+            bundleIdentifier: bundleIdentifier
+        ).encode()
 
-        request.setValue(Constants.bearerPrefix + jwt, forHTTPHeaderField: Constants.authorizationHeader)
-        request.setValue(Constants.serviceTypeValue, forHTTPHeaderField: Constants.serviceTypeHeader)
-        request.setValue("true", forHTTPHeaderField: Constants.useAppAttestHeader)
+        request.setValue(MLPAConstants.bearerPrefix + jwt, forHTTPHeaderField: MLPAConstants.authorizationHeader)
+        request.setValue(MLPAConstants.serviceTypeValue, forHTTPHeaderField: MLPAConstants.serviceTypeHeader)
+        request.setValue("true", forHTTPHeaderField: MLPAConstants.useAppAttestHeader)
         request.httpBody = result.payload
     }
 }

@@ -3,32 +3,20 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import JWTKit
 import Shared
+import Common
 
 public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
     private struct ChallengeResponse: Decodable {
         let challenge: String
     }
 
-    private enum Constants {
-        static let baseURL = URL(string: "https://mlpa-dev.llm-proxy.nonprod.dataservices.mozgcp.net")!
-        static let challengeEndpoint = baseURL.appendingPathComponent("/verify/challenge")
-        static let attestEndpoint = baseURL.appendingPathComponent("/verify/attest")
-        static let contentTypeHeader = "Content-Type"
-        static let authorizationHeader = "authorization"
-        static let contentTypeJSON = "application/json"
-        static let bearerPrefix = "Bearer "
-        static let keyIdParam = "key_id_b64"
-        static let challengeParam = "challenge_b64"
-        static let attestationParam = "attestation_obj_b64"
-        static let jwtSecret = UUID().uuidString
-    }
-
+    private let bundleIdentifier: String
     private let urlSession: URLSessionProtocol
 
-    public init(urlSession: URLSessionProtocol = URLSession.shared) {
+    public init(urlSession: URLSessionProtocol = URLSession.shared, bundleIdentifier: String = AppInfo.bundleIdentifier) {
         self.urlSession = urlSession
+        self.bundleIdentifier = bundleIdentifier
     }
 
     /// Fetches a random server-generated challenge for the given `keyId`.
@@ -38,8 +26,12 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
     /// because Base64 values can contain `+`, `/`, and `=` characters that
     /// would otherwise break the URL.
     public func fetchChallenge(for keyId: String) async throws -> String {
-        guard let encodedKeyId = keyId.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-            let url = URL(string: "\(Constants.challengeEndpoint.absoluteString)?\(Constants.keyIdParam)=\(encodedKeyId)") else {
+        var components = URLComponents(url: MLPAConstants.challengeEndpoint, resolvingAgainstBaseURL: false)
+        components?.queryItems = [
+            URLQueryItem(name: MLPAConstants.keyIdParam, value: keyId)
+        ]
+
+        guard let url = components?.url else {
             throw AppAttestServiceError.invalidKeyID
         }
 
@@ -57,21 +49,21 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         attestationObject: Data,
         challenge: String
     ) async throws {
-        let jwtPayload: [String: Any] = [
-            Constants.keyIdParam: keyId,
-            Constants.challengeParam: challenge.data(using: .utf8)!.base64EncodedString(),
-            Constants.attestationParam: attestationObject.base64EncodedString()
-        ]
+        let jwt = try MLPAJWTPayload(
+            keyId: keyId,
+            challenge: challenge,
+            objectKey: MLPAConstants.attestationObjParam,
+            objectData: attestationObject,
+            bundleIdentifier: bundleIdentifier
+        ).encode()
 
-        let jwt = try JWTEncoder(algorithm: .hs256(secret: Constants.jwtSecret)).encode(payload: jwtPayload)
-
-        var request = URLRequest(url: Constants.attestEndpoint)
-        request.httpMethod = "POST"
-        request.setValue(Constants.contentTypeJSON, forHTTPHeaderField: Constants.contentTypeHeader)
-        request.setValue(Constants.bearerPrefix + jwt, forHTTPHeaderField: Constants.authorizationHeader)
-        /// TODO(FXIOS-xxx): Since signing happens at the hardware level we don't have access to the signing certificates.
-        /// This means app attest attestation and assertions can only be generated on real devices, not simulators. 
-        /// To enable testing on simulators, we can use a special header to tell the server to accept test certificates. 
+        var request = URLRequest(url: MLPAConstants.attestEndpoint)
+        request.httpMethod = MLPAConstants.POST
+        request.setValue(MLPAConstants.contentTypeJSON, forHTTPHeaderField: MLPAConstants.contentTypeHeader)
+        request.setValue(MLPAConstants.bearerPrefix + jwt, forHTTPHeaderField: MLPAConstants.authorizationHeader)
+        /// TODO(FXIOS-14902): Since signing happens at the hardware level we don't have access to the signing certificates.
+        /// This means app attest attestation and assertions can only be generated on real devices, not simulators.
+        /// To enable testing on simulators, we can use a special header to tell the server to accept test certificates.
         /// request.setValue("true", forHTTPHeaderField: "use-qa-certificates")
 
         let (data, response) = try await urlSession.data(from: request)
