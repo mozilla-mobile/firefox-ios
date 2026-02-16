@@ -19,6 +19,7 @@ class PrivateBrowsingTest: BaseTestCase {
     private var tabTray: TabTrayScreen!
     private var browserScreen: BrowserScreen!
     private var homePageScreen: HomePageScreen!
+    private var contextMenuScreen: ContextMenuScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -26,6 +27,7 @@ class PrivateBrowsingTest: BaseTestCase {
         tabTray = TabTrayScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         homePageScreen = HomePageScreen(app: app)
+        contextMenuScreen = ContextMenuScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
@@ -210,30 +212,6 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-example.html"))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
-        app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        mozWaitForElementToExist(
-            app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!]
-        )
-        mozWaitForElementToNotExist(app.buttons["Open in New Tab"])
-        waitForElementsToExist(
-            [
-                app.buttons["Open in New Private Tab"],
-                app.buttons["Copy Link"],
-                app.buttons["Download Link"]
-            ]
-        )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307012
-    // Smoketest TAE
-    func testLongPressLinkOptionsPrivateMode_TAE() {
-        let browserScreen = BrowserScreen(app: app)
-        let contextMenuScreen = ContextMenuScreen(app: app)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-example.html"))
-        mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
         browserScreen.longPressLink(named: website_2["link"]!)
         browserScreen.waitForLinkPreview(named: website_2["moreLinkLongPressUrl"]!)
 
@@ -370,39 +348,6 @@ class PrivateBrowsingTestIphone: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307013
     // Smoketest
     func testSwitchBetweenPrivateTabsToastButton() {
-        if skipPlatform { return }
-
-        // Go to Private mode
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(BrowserTab)
-        navigator.openURL(urlExample)
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.links.firstMatch)
-        app.webViews.links.firstMatch.press(forDuration: 1)
-        mozWaitForElementToExist(app.buttons["Open in New Private Tab"])
-        app.buttons["Open in New Private Tab"].press(forDuration: 1)
-        app.buttons["Switch"].waitAndTap()
-
-        // Check that the tab has changed
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "iana")
-        waitForElementsToExist(
-            [
-                app.links["RFC 2606"],
-                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-            ]
-        )
-        let numPrivTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
-        XCTAssertEqual("2", numPrivTab)
-    }
-
-    // This test is disabled for iPad because the toast menu is not shown there
-    // https://mozilla.testrail.io/index.php?/cases/view/2307013
-    // Smoketest TAE
-    func testSwitchBetweenPrivateTabsToastButton_TAE() {
         if skipPlatform { return }
 
         let browserScreen = BrowserScreen(app: app)

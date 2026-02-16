@@ -31,46 +31,19 @@ class URLValidationTests: BaseTestCase {
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
-            mozWaitForElementToExist(app.buttons["Menu"])
-            XCTAssertTrue(app.otherElements.staticTexts.elementContainingText("Mozilla").exists)
-            mozWaitForValueContains(urlField, value: "mozilla.org")
-            clearURL()
-        }
-
-        for url in urlHttpTypes {
-            navigator.openURL(url)
-            waitUntilPageLoad()
-            mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
-            mozWaitForValueContains(urlField, value: "example.com")
-            clearURL()
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2460854
-    // Smoketest TAE
-    func testDifferentURLTypes_TAE() {
-        for url in urlTypes {
-            navigator.openURL(url)
-            waitUntilPageLoad()
             browserScreen.assertMozillaPageLoaded(urlField: urlField)
-            clearURL_TAE()
+            clearURL()
         }
 
         for url in urlHttpTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
             browserScreen.assertExampleDomainLoaded(urlField: urlField)
-            clearURL_TAE()
+            clearURL()
         }
     }
 
     private func clearURL() {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
-        app.buttons["Clear text"].waitAndTap()
-    }
-
-    private func clearURL_TAE() {
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         browserScreen.clearURL()
