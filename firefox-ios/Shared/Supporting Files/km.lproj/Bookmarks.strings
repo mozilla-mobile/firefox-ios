@@ -1,8 +1,41 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Body.v135" = "បន្ថែមចំណាំនៅពេលអ្នករុករក ដើម្បីអ្នកអាចស្វែងរកគេហទំព័រដែលអ្នកចូលចិត្តនៅពេលក្រោយ។";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Title.v135" = "ថតឯកសារនេះទទេ";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.Body.v135" = "រក្សាទុកគេហទំព័រនៅពេលអ្នករុករក។ យើងក៏នឹងទាញយកចំណាំពីឧបករណ៍ដែលបានធ្វើសមកាលកម្មផ្សេងទៀតផងដែរ។";
+
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "រក្សាទុកគេហទំព័រនៅពេលអ្នករុករក។ ចូលដើម្បីទាញយកចំណាំពីឧបករណ៍ដែលបានធ្វើសមកាលកម្មផ្សេងទៀត។";
+
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "ចូល​ដើម្បី​ធ្វើ​សមកាលកម្ម";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.Title.v135" = "មិនទាន់មានចំណាំនៅឡើយទេ";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "ទាំងអស់";
 
 /* Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text */
 "Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139" = "សម្អាត";
+
+/* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
+"Bookmarks.Menu.DeleteBookmark.v132" = "លុបចំណាំ";
+
+/* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
+"Bookmarks.Menu.DeletedBookmark.v131" = "បានលុប “%@”";
+
+/* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
+"Bookmarks.Menu.DeleteFolder.v131" = "លុបថតឯកសារ";
+
+/* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
+"Bookmarks.Menu.EditBookmark.v131" = "កែសម្រួល​ចំណាំ";
+
+/* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
+"Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "ចំណាំលើតុ";
 
 /* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
 "Bookmarks.Menu.EditBookmarkSave.v135" = "រក្សា​ទុក";

@@ -36,11 +36,11 @@ final class LiteLLMSummarizer: SummarizerProtocol {
     /// - Parameters:
     ///   - contentToSummarize: The text to be summarized.
     /// - Returns: An `AsyncThrowingStream` yielding chunks of the summary.
-    func summarizeStreamed(_ contentToSummarize: String) -> AsyncThrowingStream<String, Error> {
+    func summarizeStreamed(_ contentToSummarize: String) async throws -> AsyncThrowingStream<String, Error> {
         let messages = makeMessages(modelInstructions: config.instructions, contentToSummarize: contentToSummarize)
 
         // TODO: FXIOS-13418 Capture of 'stream' with non-Sendable type in a '@Sendable' closure
-        nonisolated(unsafe) var stream = client.requestChatCompletionStreamed(messages: messages, config: config)
+        nonisolated(unsafe) var stream = try await client.requestChatCompletionStreamed(messages: messages, config: config)
                                          .makeAsyncIterator()
         // TODO: FXIOS-13418 We need to avoid mutation of captured var 'accumulator' in concurrently-executing code
         nonisolated(unsafe) var accumulator = ""

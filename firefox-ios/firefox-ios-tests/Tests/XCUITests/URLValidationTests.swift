@@ -16,8 +16,11 @@ class URLValidationTests: BaseTestCase {
         continueAfterFailure = true
         navigator.goto(SearchSettings)
         app.tables.switches["Show Search Suggestions"].waitAndTap()
-        scrollToElement(app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"])
-        app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].waitAndTap()
+        // Skip FirefoxSuggest setting for FirefoxBeta and Firefox
+        if isFennec {
+            scrollToElement(app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"])
+            app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].waitAndTap()
+        }
         navigator.goto(NewTabScreen)
         browserScreen = BrowserScreen(app: app)
     }

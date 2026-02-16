@@ -9,7 +9,10 @@ protocol OnboardingSelectorsSet {
     func descriptionLabel(rootId: String) -> Selector
     func primaryButton(rootId: String) -> Selector
     func secondaryButton(rootId: String) -> Selector
+    func betaPrimaryButton(screenIndex: Int) -> Selector
+    func betaSecondaryButton(screenIndex: Int) -> Selector
     var AGREE_AND_CONTINUE_BUTTON: Selector { get }
+    var CONTINUE_BUTTON: Selector { get }
     var MANAGE_TEXT_BUTTON: Selector { get }
     var QR_SIGN_IN_BUTTON: Selector { get }
     var EMAIL_SIGN_IN_BUTTON: Selector { get }
@@ -23,6 +26,7 @@ protocol OnboardingSelectorsSet {
 struct OnboardingSelectors: OnboardingSelectorsSet {
     private enum IDs {
         static let termsAndService_AgreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+        static let continueButton = "Continue"
         static let manage_Text = "TermsOfService.ManageDataCollectionAgreement"
         static let QRCode_SignIn = "QRCodeSignIn.button"
         static let emailSignIn = "EmailSignIn.button"
@@ -35,6 +39,12 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     let AGREE_AND_CONTINUE_BUTTON = Selector.buttonId(
         IDs.termsAndService_AgreeAndContinueButton,
         description: "Agree & Continue button on first onboarding screen",
+        groups: ["onboarding"]
+    )
+
+    let CONTINUE_BUTTON = Selector.buttonByLabel(
+        IDs.continueButton,
+        description: "Continue button on first screen for Firefox/Firefox Beta",
         groups: ["onboarding"]
     )
 
@@ -76,6 +86,22 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         )
     }
 
+    func betaPrimaryButton(screenIndex: Int) -> Selector {
+        Selector.buttonId(
+            "onboarding.\(screenIndex)PrimaryButton",
+            description: "Beta-specific primary button for screen \(screenIndex)",
+            groups: ["onboarding", "beta"]
+        )
+    }
+
+    func betaSecondaryButton(screenIndex: Int) -> Selector {
+        Selector.buttonId(
+            "onboarding.\(screenIndex)SecondaryButton",
+            description: "Beta-specific secondary button for screen \(screenIndex)",
+            groups: ["onboarding", "beta"]
+        )
+    }
+
     let QR_SIGN_IN_BUTTON = Selector.buttonId(
         IDs.QRCode_SignIn,
         description: "QR Code Sign-In button",
@@ -113,7 +139,7 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     )
 
     var all: [Selector] {
-        [AGREE_AND_CONTINUE_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
+        [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
          DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON]
     }
 }

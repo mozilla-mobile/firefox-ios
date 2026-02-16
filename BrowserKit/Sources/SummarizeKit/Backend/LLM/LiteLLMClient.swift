@@ -7,7 +7,7 @@ import Foundation
 /// A lightweight client for interacting with an OpenAI style API chat completions endpoint.
 /// TODO(FXIOS-12942): Implement proper thread-safety
 final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
-    private let apiKey: String
+    private let authenticator: RequestAuthProtocol
     private let baseURL: URL
 
     private let session: URLSession
@@ -15,15 +15,15 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
 
     /// Initializes the client.
     /// - Parameters:
-    ///   - apiKey: Your API key for authentication.
+    ///   - authenticator: Strategy for authenticating outgoing requests.
     ///   - baseURL: Base URL of the server.
     ///   - urlSession: Custom URL session for network requests. Defaults to `URLSession.shared`.
     init(
-        apiKey: String,
+        authenticator: RequestAuthProtocol,
         baseURL: URL,
         urlSession: URLSession = URLSession.shared
     ) {
-        self.apiKey = apiKey
+        self.authenticator = authenticator
         self.baseURL = baseURL
         self.session = urlSession
     }
@@ -38,7 +38,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     ) async throws -> String {
         let request: URLRequest
         do {
-            request = try makeRequest(messages: messages, config: config)
+            request = try await makeRequest(messages: messages, config: config)
         } catch {
             throw LiteLLMClientError.requestCreationFailed
         }
@@ -52,10 +52,10 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
         config: SummarizerConfig
-    ) -> AsyncThrowingStream<String, Error> {
+    ) async throws -> AsyncThrowingStream<String, Error> {
         let request: URLRequest
         do {
-            request = try makeRequest(messages: messages, config: config)
+            request = try await makeRequest(messages: messages, config: config)
         } catch {
             return AsyncThrowingStream<String, Error>(unfolding: { throw LiteLLMClientError.requestCreationFailed })
         }
@@ -103,12 +103,11 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     func makeRequest(
         messages: [LiteLLMMessage],
         config: SummarizerConfig
-    ) throws -> URLRequest {
+    ) async throws -> URLRequest {
         let endpoint = baseURL.appendingPathComponent("chat/completions")
         var request = URLRequest(url: endpoint)
         request.httpMethod = Self.postMethod
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
         // config.options is the base value for the payload
         var payload = config.options.compactMapValues { $0 }
@@ -125,6 +124,11 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
         /// responds with a cached response if the hash matches a previous request.
         /// For more context, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
         request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys])
+
+        /// Authenticate last since some strategies (e.g. App Attest) need to read
+        /// request.httpBody to compute a signature over the payload.
+        try await authenticator.authenticate(request: &request)
+
         return request
     }
 

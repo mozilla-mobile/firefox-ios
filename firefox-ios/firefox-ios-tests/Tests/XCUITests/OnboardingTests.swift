@@ -26,6 +26,13 @@ class OnboardingTests: BaseTestCase {
     }
 
     override func tearDown() async throws {
+        // Skip theme switching for FirefoxBeta since test exits early
+        if isFirefoxBeta {
+            app.terminate()
+            try await super.tearDown()
+            return
+        }
+
         if #available(iOS 17.0, *) {
             if self.name.contains("testSelectBottomPlacement")
                 || self.name.contains("testValidateContinueButton")
@@ -40,110 +47,25 @@ class OnboardingTests: BaseTestCase {
         try await super.tearDown()
     }
 
-    // Smoketest
+    // Smoketest TAE
     // https://mozilla.testrail.io/index.php?/cases/view/2575178
     func testFirstRunTour() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
 
-        // Complete the First run from first screen to the latest one
-        // Check that the first's tour screen is shown as well as all the elements in there
-        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
-        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
-        waitForElementsToExist(
-            [
-                app.images["\(rootA11yId)ImageView"],
-                app.staticTexts["\(rootA11yId)TitleLabel"],
-                app.staticTexts["\(rootA11yId)DescriptionLabel"],
-                app.buttons["\(rootA11yId)PrimaryButton"],
-                app.buttons["\(rootA11yId)SecondaryButton"],
-                app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"],
-                app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"]
-            ]
-        )
+        // Handle initial gate (ToS for Fennec, Continue for Firefox/Beta)
+        onboardingScreen.handleFirstRunGate(isFirefoxBeta: isFirefoxBeta, isFirefox: isFirefox)
 
-        // Swipe to the second screen
-        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
-        currentScreen += 1
-        waitForElementsToExist(
-            [
-                app.images["\(rootA11yId)ImageView"],
-                app.staticTexts["\(rootA11yId)TitleLabel"],
-                app.staticTexts["\(rootA11yId)DescriptionLabel"],
-                app.buttons["\(rootA11yId)PrimaryButton"],
-            ]
-        )
-
-        // Swipe to the third screen
-        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
-        currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
-        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-        XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
-        XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-
-        // Swipe to the fourth screen
-        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
-        currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
-        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-        XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
-        XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertFalse(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-
-        // Swipe to the fifth screen
-        if !iPad() {
-            app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
-            currentScreen += 1
-            mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
-            XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-            XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
-            XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
-            XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-            XCTAssertFalse(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        // Firefox Beta has a different onboarding flow and exits early
+        if isFirefoxBeta {
+            onboardingScreen.completeBetaOnboardingFlow()
+            // Beta test exits here - no verification needed
+            return
         }
 
-        // Finish onboarding
-        app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
-        // Dismiss new changes pop up if exists
-        app.buttons["Close"].tapIfExists()
-        let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        mozWaitForElementToExist(topSites)
-    }
+        // Complete the standard onboarding tour (Firefox/Fennec)
+        onboardingScreen.completeStandardOnboardingFlow(isIPad: iPad())
 
-    // Smoketest TAE
-    // https://mozilla.testrail.io/index.php?/cases/view/2575178
-    func testFirstRunTour_TAE() throws {
-        guard #available(iOS 17.0, *), !skipPlatform else { return }
-
-        // Complete the First run from first screen to the latest one
-        // Check that the first's tour screen is shown as well as all the elements in there
-        onboardingScreen.agreeAndContinue()
-        onboardingScreen.waitForCurrentScreenElements()
-
-        // Swipe to the second screen
-        onboardingScreen.goToNextScreen()
-        onboardingScreen.waitForCurrentScreenElements()
-
-        // Swipe to the third screen
-        onboardingScreen.goToNextScreen()
-        onboardingScreen.assertCurrentScreenElements()
-
-        // Swipe to the fourth screen
-        onboardingScreen.goToNextScreen()
-        onboardingScreen.assertCurrentScreenElements(secondaryExists: false)
-
-        // Swipe to the fifth screen (only iPhone)
-        if !iPad() {
-            onboardingScreen.goToNextScreenViaPrimary()
-            onboardingScreen.assertCurrentScreenElements(secondaryExists: false)
-        }
-
-        // Finish onboarding
-        onboardingScreen.finishOnboarding()
-        // Dismiss new changes pop up if exists
+        // Verify we landed on homepage with TopSites
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 

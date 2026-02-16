@@ -391,6 +391,9 @@
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "ចូលដោយប្រើកាមេរ៉ារបស់អ្នក";
 
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "លើកុំព្យូទ័ររបស់អ្នក សូមបើក Firefox ហើយទៅកាន់ firefox.com/pair";
+
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "រួចរាល់ដើម្បីស្កេន";
 
@@ -1672,6 +1675,9 @@
 /* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "បិទ​ផ្ទាំង​ទាំងអស់";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "ផ្ទាំងដែលបានជ្រើសរើសបច្ចុប្បន្ន។";
+
 /* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”. */
 "TabTray.Header.FilteredTabs.SectionHeader" = "ផ្សេងទៀត";
 
@@ -1756,8 +1762,23 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "មិន​ទាន់​អាន";
 
+/* Debug option */
+"Use stage servers" = "ប្រើម៉ាស៊ីនមេដំណាក់កាលសាកល្បង";
+
 /* Username textbox in Authentication prompt */
 "Username" = "ឈ្មោះ​អ្នក​ប្រើប្រាស់";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "មានបញ្ហាកើតឡើងជាមួយផ្ទៃខាងក្រោយនេះ។";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "មិនអាចផ្លាស់ប្តូរផ្ទៃខាងក្រោយបាន";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "មានបញ្ហាកើតឡើងជាមួយការទាញយករបស់អ្នក។";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "មិនអាចទាញយកផ្ទៃខាងក្រោយបាន";
 
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "បោះបង់";

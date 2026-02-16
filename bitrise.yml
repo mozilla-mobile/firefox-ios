@@ -41,6 +41,18 @@ pipelines:
         depends_on:
         - focus_configure_build
         parallel: 1
+  pipeline_build_and_test_release:
+    workflows:
+      firefox_scheme_build_for_test: {}
+      firefox_beta_scheme_build_for_test: {}
+      run_firefox_scheme_ui_tests:
+        depends_on:
+        - firefox_scheme_build_for_test
+        parallel: 5
+      run_firefox_beta_scheme_ui_tests:
+        depends_on:
+        - firefox_beta_scheme_build_for_test
+        parallel: 5
 
 workflows:
   firefox_accessibility_test:
@@ -309,6 +321,194 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.2-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
+  firefox_scheme_build_for_test:
+    description: Build Firefox scheme and shard XCUITests for parallel execution
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.2: {}
+    - certificate-and-profile-installer@1: {}
+    - restore-spm-cache@1:
+        is_always_run: true
+    - script@1.2.1:
+        title: Run bootstrap
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            ./bootstrap.sh
+    - xcode-build-for-test@3:
+        inputs:
+        - scheme: Firefox
+        - configuration: Firefox
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+    - script@1.2.1:
+        title: Find Smoketest xctestrun file
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+            echo "Listing all .xctestrun files in $BITRISE_TEST_BUNDLE_PATH"
+            ls -la "$BITRISE_TEST_BUNDLE_PATH"
+
+            # Find the Smoketest xctestrun file (handles any architecture suffix)
+            SMOKE_UI_XCTESTRUN=$(find "$BITRISE_TEST_BUNDLE_PATH" -name "Firefox_Smoketest_*.xctestrun" | head -n 1)
+
+            if [ -z "$SMOKE_UI_XCTESTRUN" ] || [ ! -f "$SMOKE_UI_XCTESTRUN" ]; then
+              echo "ERROR: Smoketest .xctestrun file not found"
+              exit 1
+            fi
+
+            echo "Found Smoketest .xctestrun: $SMOKE_UI_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
+    - xcode-test-shard-calculation@0:
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        inputs:
+        - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        - shard_count: 5
+        - destination: $BITRISE_DESTINATION
+        outputs:
+        - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME
+        is_always_run: true
+    - deploy-to-bitrise-io@2.10.0:
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        inputs:
+        - pipeline_intermediate_files: |-
+            BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME
+            BITRISE_TEST_BUNDLE_PATH
+            BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        is_always_run: true
+  run_firefox_scheme_ui_tests:
+    description: Run Firefox scheme XCUITests in parallel
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    steps:
+    - pull-intermediate-files@1: {}
+    - xcode-test-without-building@0.5.1:
+        inputs:
+        - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME/$BITRISE_IO_PARALLEL_INDEX
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Firefox_Smoketest_iphonesimulator26.2-arm64-x86_64.xctestrun
+    - deploy-to-bitrise-io@2.10.0: {}
+  firefox_scheme_smoke_tests:
+    description: Run XCUITests on Firefox scheme (non-parallelized, for standalone use)
+    before_run:
+    - firefox_scheme_build_for_test
+    steps:
+    - pull-intermediate-files@1: {}
+    - xcode-test-without-building@0.5.1:
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        - maximum_test_repetitions: 2
+    - deploy-to-bitrise-io@2.10.0: {}
+    - slack@4.2.1:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#mobile-alerts-ios"
+        - message: "Firefox scheme XCUITests failed on build $BITRISE_BUILD_NUMBER"
+        - webhook_url: "$SLACK_WEBHOOK"
+  firefox_beta_scheme_build_for_test:
+    description: Build FirefoxBeta scheme and shard XCUITests for parallel execution
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.2: {}
+    - certificate-and-profile-installer@1: {}
+    - restore-spm-cache@1:
+        is_always_run: true
+    - script@1.2.1:
+        title: Run bootstrap
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            ./bootstrap.sh
+    - xcode-build-for-test@3:
+        inputs:
+        - scheme: FirefoxBeta
+        - configuration: FirefoxBeta
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+    - script@1.2.1:
+        title: Find Smoketest xctestrun file
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+            echo "Listing all .xctestrun files in $BITRISE_TEST_BUNDLE_PATH"
+            ls -la "$BITRISE_TEST_BUNDLE_PATH"
+
+            # Find the Smoketest xctestrun file (handles any architecture suffix)
+            SMOKE_UI_XCTESTRUN=$(find "$BITRISE_TEST_BUNDLE_PATH" -name "FirefoxBeta_Smoketest_*.xctestrun" | head -n 1)
+
+            if [ -z "$SMOKE_UI_XCTESTRUN" ] || [ ! -f "$SMOKE_UI_XCTESTRUN" ]; then
+              echo "ERROR: Smoketest .xctestrun file not found"
+              exit 1
+            fi
+
+            echo "Found Smoketest .xctestrun: $SMOKE_UI_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
+    - xcode-test-shard-calculation@0:
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        inputs:
+        - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        - shard_count: 5
+        - destination: $BITRISE_DESTINATION
+        outputs:
+        - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME
+        is_always_run: true
+    - deploy-to-bitrise-io@2.10.0:
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        inputs:
+        - pipeline_intermediate_files: |-
+            BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME
+            BITRISE_TEST_BUNDLE_PATH
+            BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        is_always_run: true
+  run_firefox_beta_scheme_ui_tests:
+    description: Run FirefoxBeta scheme XCUITests in parallel
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    steps:
+    - pull-intermediate-files@1: {}
+    - xcode-test-without-building@0.5.1:
+        inputs:
+        - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME/$BITRISE_IO_PARALLEL_INDEX
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/FirefoxBeta_Smoketest_iphonesimulator26.2-arm64-x86_64.xctestrun
+    - deploy-to-bitrise-io@2.10.0: {}
+  firefox_beta_scheme_smoke_tests:
+    description: Run XCUITests on FirefoxBeta scheme (non-parallelized, for standalone use)
+    before_run:
+    - firefox_beta_scheme_build_for_test
+    steps:
+    - pull-intermediate-files@1: {}
+    - xcode-test-without-building@0.5.1:
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        - maximum_test_repetitions: 2
+    - deploy-to-bitrise-io@2.10.0: {}
+    - slack@4.2.1:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#mobile-alerts-ios"
+        - message: "FirefoxBeta scheme XCUITests failed on build $BITRISE_BUILD_NUMBER"
+        - webhook_url: "$SLACK_WEBHOOK"
   determine_apps_affected:
     steps:
     - git-clone@6.2: {}

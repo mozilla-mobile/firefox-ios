@@ -123,6 +123,7 @@ enum ToolbarActionType: ActionType {
     case clearSearch
     case didDeleteSearchTerm
     case didEnterSearchTerm
+    case didSummarizeSettingsChange
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
     case didSetSearchTerm

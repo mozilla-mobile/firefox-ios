@@ -6,6 +6,7 @@ import Foundation
 
 protocol MerinoManagerProvider: Sendable {
     func getMerinoItems(source: StorySource) async -> [MerinoStoryConfiguration]
+    func prefetchStories() async
 }
 
 final class MerinoManager: MerinoManagerProvider {
@@ -24,6 +25,10 @@ final class MerinoManager: MerinoManagerProvider {
             stories = await storyProvider.fetchDiscoverMoreStories()
         }
         return stories.compactMap { MerinoStoryConfiguration(story: $0) }
+    }
+
+    func prefetchStories() async {
+        await storyProvider.prefetchStories()
     }
 }
 

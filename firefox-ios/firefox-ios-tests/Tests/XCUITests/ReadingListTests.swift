@@ -28,7 +28,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        app.buttons["Reader View"].waitAndTap()
+        enterReaderMode()
         // The settings of reader view are shown as well as the content of the web site
         waitForElementsToExist(
             [
@@ -63,7 +63,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306991
     // Smoketest
-    func testAddToReadingList() {
+    func testAddToReadingList() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
@@ -77,6 +77,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
         // Add item to reading list and check that it appears
         addContentToReaderView()
+
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
 
