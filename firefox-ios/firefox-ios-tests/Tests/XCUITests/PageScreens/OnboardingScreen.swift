@@ -209,7 +209,7 @@ final class OnboardingScreen {
 
         // Navigate to second screen
         goToNextScreen()
-        waitForCurrentScreenElements()
+        waitForCurrentScreenElements(checkCloseButton: true, checkPageControl: true)
 
         // Navigate to third screen
         goToNextScreen()

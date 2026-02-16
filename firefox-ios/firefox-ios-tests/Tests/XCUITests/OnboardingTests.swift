@@ -65,32 +65,6 @@ class OnboardingTests: BaseTestCase {
         // Complete the standard onboarding tour (Firefox/Fennec)
         onboardingScreen.completeStandardOnboardingFlow(isIPad: iPad())
 
-        // Verify we landed on homepage with TopSites
-        // Complete the First run from first screen to the latest one
-        // Check that the first's tour screen is shown as well as all the elements in there
-        onboardingScreen.agreeAndContinue()
-        onboardingScreen.waitForCurrentScreenElements(checkCloseButton: true, checkPageControl: true)
-
-        // Swipe to the second screen
-        onboardingScreen.goToNextScreen()
-        onboardingScreen.waitForCurrentScreenElements(checkCloseButton: false, checkPageControl: false)
-
-        // Swipe to the third screen
-        onboardingScreen.goToNextScreen()
-        onboardingScreen.assertCurrentScreenElements()
-
-        // Swipe to the fourth screen
-        onboardingScreen.goToNextScreen()
-        onboardingScreen.assertCurrentScreenElements(secondaryExists: false)
-
-        // Swipe to the fifth screen (only iPhone)
-        if !iPad() {
-            onboardingScreen.goToNextScreenViaPrimary()
-            onboardingScreen.assertCurrentScreenElements(secondaryExists: false)
-        }
-
-        // Finish onboarding
-        onboardingScreen.finishOnboarding()
         // Dismiss new changes pop up if exists
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
