@@ -85,7 +85,6 @@ public final class SummarizeController: UIViewController, Themeable {
         $0.clipsToBounds = true
         $0.contentMode = .top
     }
-    // MARK: - TabSnapshot
     private let tabSnapshotContainer: UIView = .build {
         $0.layer.masksToBounds = false
         $0.layer.shadowOffset = UX.tabSnapshotShadowOffset

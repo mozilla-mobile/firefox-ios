@@ -38,7 +38,6 @@ final class MockUIViewControllerTransitionCoordinator: NSObject, UIViewControlle
     }
 
     func notifyWhenInteractionEnds(_ handler: @escaping (any UIViewControllerTransitionCoordinatorContext) -> Void) {
-        // No-op for mock
     }
 
     func notifyWhenInteractionChanges(_ handler: @escaping (any UIViewControllerTransitionCoordinatorContext) -> Void) {
