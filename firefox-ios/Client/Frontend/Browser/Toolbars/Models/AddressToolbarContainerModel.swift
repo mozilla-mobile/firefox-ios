@@ -113,7 +113,7 @@ final class AddressToolbarContainerModel: Equatable {
     ///   used to determine trailing actions.
     /// - Returns: A skeleton `AddressToolbarConfiguration` suitable for placeholder or loading UI.
     @MainActor
-    func configureSkeletonAddressBar(for tab: Tab?) -> AddressToolbarConfiguration {
+    func getSkeletonAddressBarConfiguration(for tab: Tab?) -> AddressToolbarConfiguration {
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
         let shouldBlur = toolbarHelper.shouldBlur()
         let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,

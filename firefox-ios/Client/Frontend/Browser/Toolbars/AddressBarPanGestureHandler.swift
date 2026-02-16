@@ -31,6 +31,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         static let offset: CGFloat = 48
         static let swipingDuration: TimeInterval = 0.25
         static let swipingVelocity: CGFloat = 250
+        static let minSwipeThresholdDivisor: CGFloat = 20
+        static let halfwayThresholdDivisor: CGFloat = 2
         static let webPagePreviewAddNewTabScale: CGFloat = 0.6
         static let webPagePreviewAddNewTabXOffset: CGFloat = 40.0
         static let webPagePreviewAddNewTabScaleCoefficientA: CGFloat = 0.2
@@ -293,9 +295,9 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         // Minimum horizontal distance required for fast swipes to prevent unintended tab switches
         // when swiping vertically (e.g., scrolling content). This ensures that high-velocity gestures
         // must have sufficient horizontal movement before triggering a tab transition.
-        let minThreshold = contentContainer.frame.width / 20
+        let minThreshold = contentContainer.frame.width / UX.minSwipeThresholdDivisor
         let translationX = abs(translation.x)
-        let passedHalfway = translationX > contentContainer.frame.width / 2
+        let passedHalfway = translationX > contentContainer.frame.width / UX.halfwayThresholdDivisor
         let fastSwipeWithMinDistance = abs(velocity.x) > UX.swipingVelocity && translationX > minThreshold
 
         return passedHalfway || fastSwipeWithMinDistance

@@ -378,12 +378,12 @@ final class AddressToolbarContainer: UIView,
     private func configureSkeletonAddressBars(previousTab: Tab?, forwardTab: Tab?) {
         guard let model else { return }
         leftSkeletonAddressBar.configureNonInteractive(
-            config: model.configureSkeletonAddressBar(for: previousTab),
+            config: model.getSkeletonAddressBarConfiguration(for: previousTab),
             leadingSpace: UX.skeletonBarOffset,
             trailingSpace: -UX.skeletonBarOffset
         )
         rightSkeletonAddressBar.configureNonInteractive(
-            config: model.configureSkeletonAddressBar(for: forwardTab),
+            config: model.getSkeletonAddressBarConfiguration(for: forwardTab),
             leadingSpace: -UX.skeletonBarOffset,
             trailingSpace: UX.skeletonBarOffset
         )
