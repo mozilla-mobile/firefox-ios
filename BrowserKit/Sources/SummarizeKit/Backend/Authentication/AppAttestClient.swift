@@ -92,13 +92,11 @@ public struct AppAttestClient: Sendable {
         let clientDataHash = Data(SHA256.hash(data: clientData))
         let assertion = try await appAttestService.generateAssertion(keyId, clientDataHash: clientDataHash)
 
-        let payloadData = try JSONSerialization.data(withJSONObject: payload)
-
         return AssertionResult(
             keyId: keyId,
             assertion: assertion,
             challenge: challenge,
-            payload: payloadData
+            payload: clientData
         )
     }
 
