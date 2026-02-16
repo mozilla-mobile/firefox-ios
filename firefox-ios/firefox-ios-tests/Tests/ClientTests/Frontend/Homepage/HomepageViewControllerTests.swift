@@ -356,7 +356,130 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(collectionView.contentOffset, CGPoint(x: 0, y: -collectionView.adjustedContentInset.top))
     }
 
-    private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
+    func test_restoreContentOffset_withStoredOffset_setsCollectionViewOffset() {
+        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .vertical)
+        let tabManager = HomepageRestoreContentOffsetTabManager()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.homepageScrollOffset = 180
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(tabManager: tabManager)
+
+        subject.loadViewIfNeeded()
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        collectionView.contentOffset = CGPoint(x: 0, y: 0)
+
+        subject.restoreVerticalScrollOffset()
+
+        XCTAssertEqual(collectionView.contentOffset.y, 180)
+    }
+
+    func test_restoreContentOffset_withoutStoredOffset_scrollsToTop() {
+        let tabManager = HomepageRestoreContentOffsetTabManager()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(tabManager: tabManager)
+
+        subject.loadViewIfNeeded()
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        collectionView.contentOffset = CGPoint(x: 0, y: 75)
+
+        subject.restoreVerticalScrollOffset()
+
+        XCTAssertEqual(collectionView.contentOffset, CGPoint(x: 0, y: -collectionView.adjustedContentInset.top))
+    }
+
+    func test_viewDidDisappear_savesVerticalScrollOffset() {
+        let tabManager = HomepageRestoreContentOffsetTabManager()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(tabManager: tabManager)
+
+        subject.loadViewIfNeeded()
+        subject.viewWillAppear(false)
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        collectionView.contentOffset = CGPoint(x: 0, y: 140)
+
+        subject.viewWillDisappear(false)
+
+        XCTAssertEqual(tab.homepageScrollOffset, 140)
+    }
+
+    func test_scrollViewDidEndDragging_savesVerticalScrollOffset() {
+        let tabManager = HomepageRestoreContentOffsetTabManager()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(tabManager: tabManager)
+
+        subject.loadViewIfNeeded()
+        subject.viewWillAppear(false)
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        collectionView.contentOffset = CGPoint(x: 0, y: 140)
+
+        subject.scrollViewDidEndDragging(UIScrollView(), willDecelerate: false)
+
+        XCTAssertEqual(tab.homepageScrollOffset, 140)
+    }
+
+    func test_scrollViewDidEndDecelerating_savesVerticalScrollOffset() {
+        let tabManager = HomepageRestoreContentOffsetTabManager()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(tabManager: tabManager)
+
+        subject.loadViewIfNeeded()
+        subject.viewWillAppear(false)
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        collectionView.contentOffset = CGPoint(x: 0, y: 140)
+
+        subject.scrollViewDidEndDecelerating(UIScrollView())
+
+        XCTAssertEqual(tab.homepageScrollOffset, 140)
+    }
+
+    private func createSubject(
+        tabManager: TabManager = MockTabManager(),
+        statusBarScrollDelegate: StatusBarScrollDelegate? = nil
+    ) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
         let mockOverlayManager = MockOverlayModeManager()
@@ -367,6 +490,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let homepageViewController = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
+            tabManager: tabManager,
             overlayManager: mockOverlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: UIView(),
@@ -398,6 +522,12 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    private func setupNimbusStoriesScrollDirectionTesting(scrollDirection: ScrollDirection) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
+        }
+    }
+
     private func getPopulatedCollectionViewState(from currentState: HomepageState) async -> HomepageState {
         let merinoManager = MockMerinoManager()
         let merinoStories = await merinoManager.getMerinoItems(source: .homepage)
@@ -422,4 +552,10 @@ private func changeInitialStateToTriggerUpdateInSnapshot() -> HomepageState {
             actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
         )
     )
+}
+
+private final class HomepageRestoreContentOffsetTabManager: MockTabManager {
+    override func getTabForUUID(uuid: TabUUID) -> Tab? {
+        return tabs.first(where: { $0.tabUUID == uuid })
+    }
 }

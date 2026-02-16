@@ -518,8 +518,6 @@ public protocol MozAdsClientProtocol: AnyObject, Sendable {
     
     func clearCache() throws 
     
-    func cycleContextId() throws  -> String
-    
     func recordClick(clickUrl: String) throws 
     
     func recordImpression(impressionUrl: String) throws 
@@ -591,14 +589,6 @@ open func clearCache()throws   {try rustCallWithError(FfiConverterTypeMozAdsClie
             self.uniffiCloneHandle(),$0
     )
 }
-}
-    
-open func cycleContextId()throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
-    uniffi_ads_client_fn_method_mozadsclient_cycle_context_id(
-            self.uniffiCloneHandle(),$0
-    )
-})
 }
     
 open func recordClick(clickUrl: String)throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
@@ -2682,9 +2672,6 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.contractVersionMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclient_clear_cache() != 63953) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_ads_client_checksum_method_mozadsclient_cycle_context_id() != 28028) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclient_record_click() != 2) {

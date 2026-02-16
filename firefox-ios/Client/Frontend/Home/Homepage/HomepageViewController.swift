@@ -45,6 +45,8 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
+    // Tracks which tab the shared homepage instance is currently representing.
+    private var activeTabUUID: TabUUID?
 
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
@@ -63,6 +65,7 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Private constants
+    private let tabManager: TabManager
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
@@ -76,6 +79,7 @@ final class HomepageViewController: UIViewController,
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         tabManager: TabManager,
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -86,6 +90,7 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.tabManager = tabManager
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
@@ -155,6 +160,7 @@ final class HomepageViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        activeTabUUID = tabManager.selectedTab?.tabUUID
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
@@ -181,6 +187,7 @@ final class HomepageViewController: UIViewController,
         super.viewWillDisappear(animated)
 
         stopCFRsTimer()
+        saveVerticalScrollOffset()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -230,7 +237,19 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    // called when the homepage is displayed to make sure it's scrolled to top while considering content offset
+    // Called when the homepage is displayed to make sure it's vertical scroll position is persisted.
+    // If no scroll position exists for tab, scroll the homepage to the top
+    func restoreVerticalScrollOffset() {
+        activeTabUUID = tabManager.selectedTab?.tabUUID
+        guard let activeTabUUID, isHomepageStoriesScrollDirectionCustomized,
+              let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
+        else {
+            scrollToTop()
+            return
+        }
+        collectionView?.contentOffset.y = homepageScrollOffset
+    }
+
     func scrollToTop(animated: Bool = false) {
         if let collectionView = collectionView {
             collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
@@ -248,7 +267,18 @@ final class HomepageViewController: UIViewController,
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        saveVerticalScrollOffset()
         trackVisibleItemImpressions()
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        saveVerticalScrollOffset()
+        trackVisibleItemImpressions()
+    }
+
+    private func saveVerticalScrollOffset() {
+        guard let activeTabUUID, let tab = tabManager.getTabForUUID(uuid: activeTabUUID) else { return }
+        tab.homepageScrollOffset = collectionView?.contentOffset.y
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -343,7 +373,6 @@ final class HomepageViewController: UIViewController,
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
         if state.shouldTriggerImpression {
-            scrollToTop()
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }

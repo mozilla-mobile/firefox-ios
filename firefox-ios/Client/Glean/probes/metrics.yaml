@@ -808,56 +808,10 @@ top_sites:
     metadata:
       tags:
         - TopSites
-  contile_tile_id:
-    type: quantity
-    description: |
-      A unique identifier provided by the AdM for the sponsored TopSites tile
-    lifetime: ping
-    send_in_pings:
-      - topsites-impression
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - technical
-      - interaction
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-    unit: integer
-    metadata:
-      tags:
-        - TopSites
   contile_advertiser:
     type: string
     description: |
       Advertiser brand for the sponsored TopSites tile
-    lifetime: ping
-    send_in_pings:
-      - topsites-impression
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - technical
-      - interaction
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-    metadata:
-      tags:
-        - TopSites
-  contile_reporting_url:
-    type: url
-    description: |
-      The AdM reporting endpoint (impression_url for “impression” event,
-      click_url for “click” event).
     lifetime: ping
     send_in_pings:
       - topsites-impression

@@ -1,3 +1,81 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "សង្ខេបដោយ Apple Intelligence";
+
+/* The a11y label for the close button in the summary view. */
+"Summarizer.CloseButton.Accessibility.Label.v145" = "បិទ​សេចក្ដីសង្ខេប";
+
+/* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
+"Summarizer.CloseButton.Label.v142" = "បិទ";
+
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "ទំព័រនៅតែកំពុងផ្ទុក។ រង់ចាំវាបញ្ចប់ បន្ទាប់មកចុចសង្ខេប។";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "មិនអាចដោះស្រាយរឿងនេះនៅពេលនេះបានទេ។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ!";
+
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "មាន​បញ្ហា​ក្នុង​ការ​សង្ខេប​ទំព័រ។ សូម​ព្យាយាម​ម្ដង​ទៀត​នៅ​ពេល​ក្រោយ។";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "រកឃើញខ្លឹមសារមានកំណត់។ ទំព័រនេះអាចត្រូវបានដាក់កម្រិត ឬអាចមើលបានភាគច្រើន។";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "គេហទំព័រនេះមិនអនុញ្ញាតឱ្យមានការសង្ខេបខ្លឹមសារទេ។ សាកល្បងទំព័រផ្សេង។";
+
+/* The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors. */
+"Summarizer.Footnote.Label.v144" = "ចំណាំ៖ ការសង្ខេបអាចមានកំហុស។";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "សង្ខេបដោយ %@";
+
+/* The a11y label for the loading label on the summarize loading screen. */
+"Summarizer.Loading.Accessibility.Label.v145" = "កំពុងផ្ទុកសេចក្ដីសង្ខេប";
+
+/* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
+"Summarizer.Loading.Label.v142" = "កំពុងសង្ខេប…";
+
+/* The a11y label for the retry button in the summary view when the summarizer fails with an error that allows retrying to summarize the page. */
+"Summarizer.RetryButton.Accessibility.Label.v145" = "ព្យាយាមសង្ខេបទំព័របណ្ដាញឡើងវិញ";
+
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "ព្យាយាម​ម្តង​ទៀត";
+
+/* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "អូស ឬប៉ះទំព័របណ្ដាញដើម្បីបិទសេចក្ដីសង្ខេប";
+
+/* The label for the allow button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.AllowButton.Label.v142" = "អនុញ្ញាត";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ ប្រើប្រាស់ Apple Intelligence ដើម្បីសង្ខេបទំព័រនានា។";
+
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "បោះបង់";
+
+/* The label for the continue button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "បន្ត";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ ប្រើប្រាស់ AI ដែលមានមូលដ្ឋានលើពពក ដើម្បីសង្ខេបទំព័រនានា ហើយប្រគល់សេចក្តីសង្ខេបទាំងនោះទៅឧបករណ៍របស់អ្នក។";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "ស្វែងយល់​បន្ថែម";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "អនុញ្ញាតឱ្យមានសេចក្ដីសង្ខេបទំព័រ?";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "របៀបដែលវាដំណើរការ";
+
+/* The a11y label for the allow button on the info panel when the user has not yet accepted the ToS. */
+"Summarizer.ToS.InfoPanel.AllowButton.Accessibility.Label.v145" = "យល់ព្រម";
+
+/* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
+"Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "បន្ត";
+
+/* The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.InfoPanel.Label.v143" = "មើលចំណុចសំខាន់ៗ ប៉ុន្មានវិនាទីជាមួយ %@។";
+
+/* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
+"Summarizer.ToS.InfoPanel.Title.Label.v143" = "សង្ខេបទំព័រនេះ?";
 

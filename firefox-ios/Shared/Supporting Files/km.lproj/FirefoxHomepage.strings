@@ -1,6 +1,9 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle.v140" = "រឿងរ៉ាវ";
 
+/* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
+"FirefoxHome.PrivacyNotice.Body.v148" = "យើងបានធ្វើបច្ចុប្បន្នភាព %1$@ របស់យើង ដើម្បីឆ្លុះបញ្ចាំងពីមុខងារចុងក្រោយបំផុតនៅក្នុង %2$@។ %3$@";
+
 /* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
 "FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "ស្វែងយល់​បន្ថែម";
 
@@ -21,6 +24,18 @@
 
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "រឿងរ៉ាវ";
+
+/* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
+"FirefoxHomepage.FeltDeletion.Link.v122" = "ទិន្នន័យរុករកឯកជនត្រូវបានលុប";
+
+/* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. %@ is the app name (e.g. Firefox). */
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ លុបខូឃីស៍ ប្រវត្តិ និងទិន្នន័យគេហទំព័ររបស់អ្នក នៅពេលអ្នកបិទផ្ទាំងឯកជនរបស់អ្នកទាំងអស់។";
+
+/* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "តើអ្នកណាអាចមើលឃើញសកម្មភាពរបស់ខ្ញុំ?";
+
+/* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "កុំទុកដាននៅលើឧបករណ៍នេះ";
 
 /* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
 "FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "ផ្ទុក​ទំព័រ​​ឡើងវិញ";

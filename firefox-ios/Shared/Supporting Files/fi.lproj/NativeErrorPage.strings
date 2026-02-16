@@ -1,11 +1,32 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Yksityiskohdat";
+
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ ei luota tähän sivustoon, koska löydetty varmenne ei ole kelvollinen sivustolle %2$@.";
+
 /* On certificate error page, this is the security information shown in the advanced section. */
 "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Tämä sivusto ei salli suojaamattomia yhteyksiä.";
+
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Sinun on ehkä kirjauduttava sisään Wi-Fi-verkkoon tai tarkistettava VPN-asetukset.";
+
+/* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Jos käytät yrityksen verkkoa, tukitiimillä saattaa olla lisätietoja.";
+
+/* On certificate error page, this is the description explaining the security risk. */
+"NativeErrorPage.BadCertDomain.Description.v149" = "Sivustona esiintyvä taho voi yrittää varastaa tietosi. Myös yhteysasetuksesi voi olla määritetty väärin.";
 
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
 "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Virhekoodi: %@";
 
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Piilota yksityiskohdat";
+
 /* On certificate error page, this is a link to learn more about certificate errors. */
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Lue lisää";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Jatka sivustolle %@ (Riskialtista)";
 
 /* On certificate error page, this is the title warning the user about a potential security issue. */
 "NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Ole varovainen. Jokin ei vaikuta olevan oikein.";

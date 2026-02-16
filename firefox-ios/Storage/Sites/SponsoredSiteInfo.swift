@@ -5,13 +5,11 @@
 import Foundation
 
 public struct SponsoredSiteInfo: Equatable, Codable, Hashable {
-    public let tileId: Int
     public let impressionURL: String
     public let clickURL: String
     public let imageURL: String
 
-    public init(tileId: Int, impressionURL: String, clickURL: String, imageURL: String) {
-        self.tileId = tileId
+    public init(impressionURL: String, clickURL: String, imageURL: String) {
         self.impressionURL = impressionURL
         self.clickURL = clickURL
         self.imageURL = imageURL

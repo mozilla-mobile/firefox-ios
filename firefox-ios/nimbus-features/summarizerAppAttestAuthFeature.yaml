@@ -1,0 +1,18 @@
+# The configuration for the app attest authentication feature for the summarizer
+features:
+  summarizer-app-attest-auth-feature:
+    description: >
+      This feature enables app attest authentication for the summarizer.
+    variables:
+      enabled:
+        description: >
+          Enables app attest authentication for the summarizer.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

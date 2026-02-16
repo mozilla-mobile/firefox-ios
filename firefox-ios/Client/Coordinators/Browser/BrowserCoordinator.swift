@@ -138,6 +138,7 @@ class BrowserCoordinator: BaseCoordinator,
     ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
+            tabManager: tabManager,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
@@ -146,14 +147,17 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.termsOfUseDelegate = self
         homepageController.view.accessibilityElementsHidden = false
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
-        guard browserViewController.embedContent(homepageController) else {
+        let didEmbed = browserViewController.embedContent(homepageController)
+        if !didEmbed {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
-            return
         }
         self.homepageViewController = homepageController
-        homepageController.scrollToTop()
-        // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
-        webviewController?.update(webView: nil)
+        homepageController.restoreVerticalScrollOffset()
+
+        if didEmbed {
+            // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
+            webviewController?.update(webView: nil)
+        }
     }
 
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {

@@ -62,7 +62,7 @@
 "MainMenu.DesktopSiteOn.Title.v142" = "On";
 
 /* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
-"MainMenu.HeaderBanner.Subtitle.v142" = "Takes seconds. Change anytime.";
+"MainMenu.HeaderBanner.Subtitle.v142" = "Takes seconds. Change at any time.";
 
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
 "MainMenu.HeaderBanner.Title.v142" = "Make %@ your default";

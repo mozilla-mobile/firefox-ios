@@ -965,6 +965,9 @@ public protocol RemoteSettingsServiceProtocol: AnyObject, Sendable {
     
     /**
      * Sync collections for all active clients
+     *
+     * The returned list is the list of collections for which updates were seen
+     * and then synced.
      */
     func sync() throws  -> [String]
     
@@ -1084,6 +1087,9 @@ open func makeClient(collectionName: String) -> RemoteSettingsClient  {
     
     /**
      * Sync collections for all active clients
+     *
+     * The returned list is the list of collections for which updates were seen
+     * and then synced.
      */
 open func sync()throws  -> [String]  {
     return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
@@ -2230,7 +2236,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_make_client() != 46337) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsservice_sync() != 28157) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_sync() != 41684) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_update_config() != 29011) {

@@ -1833,6 +1833,26 @@ class BrowserViewController: UIViewController,
             }
         }
 
+        updateOverKeyboardContainerConstraints()
+        updateBottomContainerConstraints()
+        updateBottomContentStackViewConstraints()
+        updateConstraintsForKeyboard()
+
+        super.updateViewConstraints()
+    }
+
+    private func updateBottomContainerConstraints() {
+        bottomContainer.snp.remakeConstraints { make in
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            } else {
+                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            }
+            make.leading.trailing.equalTo(view)
+        }
+    }
+
+    func updateOverKeyboardContainerConstraints() {
         overKeyboardContainer.snp.remakeConstraints { make in
             if let scrollController = scrollController as? LegacyTabScrollProvider {
                 scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
@@ -1847,27 +1867,20 @@ class BrowserViewController: UIViewController,
             }
             make.leading.trailing.equalTo(view)
         }
+    }
 
-        bottomContainer.snp.remakeConstraints { make in
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-            } else {
-                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-            }
-            make.leading.trailing.equalTo(view)
-        }
-
+    private func updateBottomContentStackViewConstraints() {
         bottomContentStackView.snp.remakeConstraints { remake in
             adjustBottomContentStackView(remake)
         }
+    }
 
+    func updateConstraintsForKeyboard() {
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
             scrollController.hideToolbars(animated: true)
         } else {
             adjustBottomSearchBarForKeyboard()
         }
-
-        super.updateViewConstraints()
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
@@ -2108,7 +2121,9 @@ class BrowserViewController: UIViewController,
         }
 
         microsurvey.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
@@ -2130,7 +2145,9 @@ class BrowserViewController: UIViewController,
         }
 
         self.microsurvey = nil
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
     }
 
     // MARK: - Native Error Page

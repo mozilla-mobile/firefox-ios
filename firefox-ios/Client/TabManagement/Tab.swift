@@ -153,6 +153,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var hasHomeScreenshot = false
     var shouldScrollToTop = false
     var isFindInPageMode = false
+    // Stores the vertical homepage offset for this tab when reusing the shared HomepageViewController.
+    var homepageScrollOffset: CGFloat?
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {

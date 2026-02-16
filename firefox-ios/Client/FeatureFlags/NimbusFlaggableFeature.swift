@@ -12,6 +12,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
+    case adsClient
     case appearanceMenu
     case appIconSelection
     case bottomSearchBar
@@ -37,7 +38,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case otherErrorPages
-    case privacyNotice
     case recentSearches
     case reportSiteIssue
     case relayIntegration
@@ -52,6 +52,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case summarizerAppAttestAuth
     case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case tabTrayTranslucency
@@ -80,6 +81,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
+                .adsClient,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -92,11 +94,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
-                .privacyNotice,
                 .recentSearches,
                 .relayIntegration,
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
+                .summarizerAppAttestAuth,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -151,6 +153,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
+                .adsClient,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -169,7 +172,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
-                .privacyNotice,
                 .recentSearches,
                 .reportSiteIssue,
                 .sentFromFirefoxTreatmentA,
@@ -182,6 +184,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
                 .relayIntegration,
+                .summarizerAppAttestAuth,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,

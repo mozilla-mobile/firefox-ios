@@ -1,0 +1,20 @@
+/* On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "សូមផ្សព្វផ្សាយអំពី %1$@ រាល់ពេលដែលអ្នកចែករំលែកតំណភ្ជាប់នៅលើ %2$@។";
+
+/* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "រួមបញ្ចូលតំណទាញយក %1$@ នៅក្នុងការចែករំលែកលើ %2$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v134" = "%1$@ បានផ្ញើពី %2$@ 🦊 សាកល្បងកម្មវិធីរុករកតាមទូរស័ព្ទ៖ %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v137" = "%1$@\n\nបានផ្ញើពី %2$@ 🦊 សាកល្បងកម្មវិធីរុករកតាមទូរស័ព្ទ៖ %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. */
+"SentFromFirefox.SocialShare.ShareMessageB.Title.v134" = "%1$@ ផ្ញើពី %2$@ 🦊 %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"SentFromFirefox.SocialShare.ShareMessageB.Title.v137" = "%1$@\n\nបានផ្ញើពី %2$@ 🦊 %3$@";
+
