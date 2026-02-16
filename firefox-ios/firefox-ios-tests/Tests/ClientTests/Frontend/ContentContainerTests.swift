@@ -11,19 +11,21 @@ import XCTest
 final class ContentContainerTests: XCTestCase {
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
+    private var tabManager: MockTabManager!
 
     override func setUp() async throws {
         try await super.setUp()
-        setIsSwipingTabsEnabled(false)
         self.profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.overlayModeManager = MockOverlayModeManager()
+        self.tabManager = MockTabManager()
     }
 
     override func tearDown() async throws {
         self.profile = nil
         self.overlayModeManager = nil
+        self.tabManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -51,6 +53,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -62,6 +65,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -124,6 +128,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -177,6 +182,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -219,6 +225,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -242,6 +249,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -272,35 +280,8 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertFalse(subject.hasPrivateHomepage)
     }
 
-    // MARK: - Swiping Tabs Enabled
-
-    func testAdd_doesNotRemovePrivateHomepage_onIphone() {
-        let subject = createSubject(userInterfaceIdiom: .phone)
-        setIsSwipingTabsEnabled(true)
-
-        let privateHomepage = PrivateHomepageViewController(windowUUID: .XCTestDefaultUUID,
-                                                            overlayManager: overlayModeManager)
-        subject.add(content: privateHomepage)
-        subject.add(content: WebviewViewController(webView: WKWebView()))
-
-        XCTAssertNotNil(privateHomepage.view.superview)
-    }
-
-    func testAdd_doesRemovePrivateHomepage_onIpad() {
-        let subject = createSubject(userInterfaceIdiom: .pad)
-        setIsSwipingTabsEnabled(true)
-
-        let privateHomepage = PrivateHomepageViewController(windowUUID: .XCTestDefaultUUID,
-                                                            overlayManager: overlayModeManager)
-        subject.add(content: privateHomepage)
-        subject.add(content: WebviewViewController(webView: WKWebView()))
-
-        XCTAssertNil(privateHomepage.view.superview)
-    }
-
     func testAdd_doesNotRemoveWebView() {
         let subject = createSubject()
-        setIsSwipingTabsEnabled(true)
 
         let webView = WebviewViewController(webView: WKWebView())
         subject.add(content: webView)
@@ -309,27 +290,12 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertNotNil(webView.view.superview)
     }
 
-    func testAdd_doesNotRemoveHomepage_onIphone() {
-        let subject = createSubject(userInterfaceIdiom: .phone)
-        setIsSwipingTabsEnabled(true)
+    func testAdd_doesRemoveHomepage() {
+        let subject = createSubject()
 
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
-            overlayManager: overlayModeManager,
-            toastContainer: UIView()
-        )
-        subject.add(content: homepage)
-        subject.add(content: WebviewViewController(webView: WKWebView()))
-
-        XCTAssertNotNil(homepage.view.superview)
-    }
-
-    func testAdd_doesRemoveHomepage_onIpad() {
-        let subject = createSubject(userInterfaceIdiom: .pad)
-        setIsSwipingTabsEnabled(true)
-
-        let homepage = HomepageViewController(
-            windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -339,38 +305,8 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertNil(homepage.view.superview)
     }
 
-    func testUpdate_bringsSubviewToFront_onIphone() {
-        let subject = createSubject(userInterfaceIdiom: .phone)
-        setIsSwipingTabsEnabled(true)
-
-        let homepage = createHomepage()
-
-        subject.add(content: homepage)
-        subject.add(content: WebviewViewController(webView: WKWebView()))
-
-        subject.update(content: homepage)
-        XCTAssertEqual(subject.subviews.last, homepage.view)
-    }
-
-    func testUpdate_bringsSubviewToFront_onIpad() {
-        let subject = createSubject(userInterfaceIdiom: .pad)
-        setIsSwipingTabsEnabled(true)
-
-        let homepage = createHomepage()
-
-        subject.add(content: homepage)
-        subject.add(content: WebviewViewController(webView: WKWebView()))
-
-        subject.update(content: homepage)
-        XCTAssertNotEqual(subject.subviews.last, homepage.view)
-    }
-
-    private func createSubject(userInterfaceIdiom: UIUserInterfaceIdiom? = nil) -> ContentContainer {
+    private func createSubject() -> ContentContainer {
         let subject = ContentContainer()
-        if let userInterfaceIdiom {
-            let toolbarHelper: ToolbarHelperInterface = ToolbarHelper(userInterfaceIdiom: userInterfaceIdiom)
-            subject.toolbarHelper = toolbarHelper
-        }
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -378,14 +314,9 @@ final class ContentContainerTests: XCTestCase {
     private func createHomepage() -> HomepageViewController {
         return HomepageViewController(
             windowUUID: WindowUUID.XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
-    }
-
-    private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(swipingTabs: isEnabled)
-        }
     }
 }

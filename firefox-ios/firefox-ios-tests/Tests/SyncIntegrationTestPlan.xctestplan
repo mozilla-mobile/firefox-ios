@@ -145,6 +145,7 @@
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "SearchTests",
+        "SecurityTests",
         "SettingsTests",
         "ShareLongPressTests",
         "ShareMenuTests",

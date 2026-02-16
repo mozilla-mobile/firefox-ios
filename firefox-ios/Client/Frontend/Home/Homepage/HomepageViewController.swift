@@ -45,6 +45,8 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
+    // Tracks which tab the shared homepage instance is currently representing.
+    private var activeTabUUID: TabUUID?
 
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
@@ -63,6 +65,7 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Private constants
+    private let tabManager: TabManager
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
@@ -76,6 +79,7 @@ final class HomepageViewController: UIViewController,
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         tabManager: TabManager,
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -86,6 +90,7 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.tabManager = tabManager
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
@@ -154,6 +159,8 @@ final class HomepageViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        activeTabUUID = tabManager.selectedTab?.tabUUID
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
@@ -178,7 +185,9 @@ final class HomepageViewController: UIViewController,
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+
         stopCFRsTimer()
+        saveVerticalScrollOffset()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -228,10 +237,22 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    // called when the homepage is displayed to make sure it's scrolled to top
+    // Called when the homepage is displayed to make sure it's vertical scroll position is persisted.
+    // If no scroll position exists for tab, scroll the homepage to the top
+    func restoreVerticalScrollOffset() {
+        activeTabUUID = tabManager.selectedTab?.tabUUID
+        guard let activeTabUUID, isHomepageStoriesScrollDirectionCustomized,
+              let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
+        else {
+            scrollToTop()
+            return
+        }
+        collectionView?.contentOffset.y = homepageScrollOffset
+    }
+
     func scrollToTop(animated: Bool = false) {
-        collectionView?.setContentOffset(.zero, animated: animated)
         if let collectionView = collectionView {
+            collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
             handleScroll(collectionView, isUserInteraction: false)
         }
     }
@@ -246,7 +267,18 @@ final class HomepageViewController: UIViewController,
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        saveVerticalScrollOffset()
         trackVisibleItemImpressions()
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        saveVerticalScrollOffset()
+        trackVisibleItemImpressions()
+    }
+
+    private func saveVerticalScrollOffset() {
+        guard let activeTabUUID, let tab = tabManager.getTabForUUID(uuid: activeTabUUID) else { return }
+        tab.homepageScrollOffset = collectionView?.contentOffset.y
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -341,7 +373,6 @@ final class HomepageViewController: UIViewController,
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
         if state.shouldTriggerImpression {
-            scrollToTop()
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
@@ -589,15 +620,28 @@ final class HomepageViewController: UIViewController,
             return cell
 
         case .merino(let story):
-            guard let storyCell = collectionView?.dequeueReusableCell(cellType: StoryCell.self, for: indexPath) else {
+            let shouldShowStoriesFeedCell = isHomepageStoriesScrollDirectionCustomized
+                && UIDevice.current.userInterfaceIdiom == .phone
+            let cellType: ReusableCell.Type = shouldShowStoriesFeedCell ? StoriesFeedCell.self
+                                                                        : StoryCell.self
+
+            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
 
             let position = indexPath.item + 1
             let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
             let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
-            storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
-            return storyCell
+
+            if let storiesFeedCell = cell as? StoriesFeedCell {
+                storiesFeedCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
+                return storiesFeedCell
+            } else if let storyCell = cell as? StoryCell {
+                storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
+                return storyCell
+            }
+
+            return UICollectionViewCell()
 
         case .spacer:
             guard let spacerCell = collectionView?.dequeueReusableCell(

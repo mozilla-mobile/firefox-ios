@@ -39,7 +39,8 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
                   let model = config.options["model"] as? String, !model.isEmpty,
                   let key = LiteLLMConfig.apiKey else { return nil }
-            let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
+            let authenticator = BearerRequestAuth(apiKey: key)
+            let llmClient = LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
             let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
             return DefaultSummarizerService(
                 summarizer: llmSummarizer,
@@ -52,7 +53,8 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
               let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
               let model = config.options["model"] as? String, !model.isEmpty,
               let key = LiteLLMConfig.apiKey else { return nil }
-        let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
+        let authenticator = BearerRequestAuth(apiKey: key)
+        let llmClient = LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
         let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
         return DefaultSummarizerService(
             summarizer: llmSummarizer,

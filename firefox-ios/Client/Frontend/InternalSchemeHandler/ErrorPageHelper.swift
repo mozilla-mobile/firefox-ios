@@ -365,22 +365,25 @@ extension ErrorPageHelper: TabContentScript {
         didReceiveScriptMessage message: WKScriptMessage
     ) {
         guard let errorURL = message.frameInfo.request.url,
-            let internalUrl = InternalURL(errorURL),
-            internalUrl.isErrorPage,
-            let originalURL = internalUrl.originalURLFromErrorPage,
-            let res = message.body as? [String: String],
-            let type = res["type"] else { return }
+              let internalUrl = InternalURL(errorURL),
+              internalUrl.isErrorPage,
+              let originalURL = internalUrl.originalURLFromErrorPage,
+              let res = message.body as? [String: String],
+              let type = res["type"] else {
+            return
+        }
 
         switch type {
         case MessageOpenInSafari:
             UIApplication.shared.open(originalURL, options: [:])
         case MessageCertVisitOnce:
+            // User taps "visit anyway" for an untrusted connection
             if let cert = certFromErrorURL(errorURL),
                 let host = originalURL.host {
                 let origin = "\(host):\(originalURL.port ?? 443)"
                 certStore?.addCertificate(cert, forOrigin: origin)
+                // Note: webview.reload will not change the error URL back to the original URL
                 message.webView?.replaceLocation(with: originalURL)
-                // webview.reload will not change the error URL back to the original URL
             }
         default:
             assertionFailure("Unknown error message")

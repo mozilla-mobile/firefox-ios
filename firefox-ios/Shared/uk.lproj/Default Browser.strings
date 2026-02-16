@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "Навчитися";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Відкривайте посилання з пошти й повідомлень автоматично в Firefox.";
+"DefaultBrowserCard.Description" = "Автоматично відкривайте посилання з вебсайтів, пошти та повідомлень у Firefox.";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Оберіть Firefox типовим браузером, щоб швидкість, безпека та приватність стали автоматичними.";

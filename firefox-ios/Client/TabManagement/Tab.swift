@@ -153,6 +153,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var hasHomeScreenshot = false
     var shouldScrollToTop = false
     var isFindInPageMode = false
+    // Stores the vertical homepage offset for this tab when reusing the shared HomepageViewController.
+    var homepageScrollOffset: CGFloat?
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
@@ -433,7 +435,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
-    private var alertQueue = [WKJavaScriptAlertInfo]()
+    private var alertQueue = [JavaScriptAlertInfo]()
 
     var onWebViewLoadingStateChanged: (@MainActor () -> Void)?
     private var webViewLoadingObserver: NSKeyValueObservation?
@@ -792,11 +794,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     /// Queues a JS Alert for later display
     /// Do not call completionHandler until the alert is displayed and dismissed
-    func queueJavascriptAlertPrompt(_ alert: WKJavaScriptAlertInfo) {
+    func queueJavascriptAlertPrompt(_ alert: JavaScriptAlertInfo) {
         alertQueue.append(alert)
     }
 
-    func dequeueJavascriptAlertPrompt() -> WKJavaScriptAlertInfo? {
+    func dequeueJavascriptAlertPrompt() -> JavaScriptAlertInfo? {
         guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
     }
@@ -1008,13 +1010,8 @@ extension Tab: TabWebViewDelegate {
     }
 
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool {
-        // Hide the default WKWebView accessory view panel for PDF documents and
-        // there is no accessory view to display (but only for iPad cases)
-        let isPDF = mimeType == MIMEType.PDF
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return !isPDF && tabWebView.accessoryView.hasAccessoryView
-        }
-        return !isPDF
+        // Hide the default WKWebView accessory view panel for PDF documents.
+        return mimeType != MIMEType.PDF
     }
 }
 
@@ -1121,7 +1118,9 @@ protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, FeatureFlaggable {
-    lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
+    lazy var accessoryView: AccessoryViewProvider = .build(nil, {
+        AccessoryViewProvider(windowUUID: self.windowUUID)
+    })
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
@@ -1139,8 +1138,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
-
-        translatesAutoresizingMaskIntoConstraints = false
 
         return accessoryView
     }

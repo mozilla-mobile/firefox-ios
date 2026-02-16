@@ -9,6 +9,7 @@ import MozillaAppServices
 
 final class MockMerinoManager: MerinoManagerProvider, @unchecked Sendable {
     var getMerinoItemsCalled = 0
+    var prefetchStoriesCalled = 0
 
     func getMerinoItems(source: StorySource) async -> [MerinoStoryConfiguration] {
         getMerinoItemsCalled += 1
@@ -19,5 +20,9 @@ final class MockMerinoManager: MerinoManagerProvider, @unchecked Sendable {
         ]
 
         return stories.compactMap { MerinoStoryConfiguration(story: MerinoStory(from: $0)) }
+    }
+
+    func prefetchStories() async {
+        prefetchStoriesCalled += 1
     }
 }

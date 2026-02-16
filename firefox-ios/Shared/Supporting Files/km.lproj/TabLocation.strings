@@ -1,0 +1,33 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "ចុចពីរដង ហើយសង្កត់ឱ្យជាប់សម្រាប់ជម្រើសបន្ថែម";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "ការតភ្ជាប់មិនមានសុវត្ថិភាព។ ការការពារការតាមដានកម្រិតខ្ពស់ត្រូវបានបិទ។";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "ការតភ្ជាប់មានសុវត្ថិភាព។ ការការពារការតាមដានកម្រិតខ្ពស់ត្រូវបានបិទ។";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "ការតភ្ជាប់មិនមានសុវត្ថិភាពទេ";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "ការ​តភ្ជាប់​សុវត្ថិភាព";
+
+/* Accessibility label for the lock / tracking protection button on the URL bar */
+"TabLocation.LockButton.AccessibilityLabel.v122" = "ការពារ​ការ​តាមដាន";
+
+/* Large content title for the lock button. This title is displayed when accessible font sizes are enabled */
+"TabLocation.LockButton.LargeContentTitle.v122" = "ការពារ​ការ​តាមដាន";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "ចែករំលែក​ទំព័រ​នេះ";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "ចែករំលែក";
+
+/* Large content title for the tabs button. %@ is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "បង្ហាញផ្ទាំង៖ %@";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "លុបទំព័រចេញ";
+

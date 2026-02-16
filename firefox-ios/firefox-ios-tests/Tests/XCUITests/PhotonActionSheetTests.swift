@@ -165,7 +165,11 @@ class PhotonActionSheetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306841
     // Smoketest
-    func testSharePageWithShareSheetOptions() {
+    func testSharePageWithShareSheetOptions() throws {
+        try XCTSkipIf(
+            isFirefoxBeta || isFirefox,
+            "Skipping test because Firefox and FirefoxBeta are not yet supported"
+        )
         openNewShareSheet()
         waitForElementsToExist(
             [

@@ -114,18 +114,15 @@ public final class HeroImageView: UIView, SiteImageView {
         addSubviews(heroImageView, fallbackFaviconBackground)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: viewModel.heroImageSize.height),
-            widthAnchor.constraint(equalToConstant: viewModel.heroImageSize.width),
-
             heroImageView.topAnchor.constraint(equalTo: topAnchor),
             heroImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             heroImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             heroImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            fallbackFaviconBackground.centerXAnchor.constraint(equalTo: centerXAnchor),
-            fallbackFaviconBackground.centerYAnchor.constraint(equalTo: centerYAnchor),
-            fallbackFaviconBackground.heightAnchor.constraint(equalToConstant: viewModel.heroImageSize.height),
-            fallbackFaviconBackground.widthAnchor.constraint(equalToConstant: viewModel.heroImageSize.width),
+            fallbackFaviconBackground.topAnchor.constraint(equalTo: topAnchor),
+            fallbackFaviconBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
+            fallbackFaviconBackground.trailingAnchor.constraint(equalTo: trailingAnchor),
+            fallbackFaviconBackground.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             fallbackFaviconImageView.heightAnchor.constraint(equalToConstant: viewModel.fallbackFaviconSize.height),
             fallbackFaviconImageView.widthAnchor.constraint(equalToConstant: viewModel.fallbackFaviconSize.width),

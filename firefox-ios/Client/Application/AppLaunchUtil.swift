@@ -11,7 +11,6 @@ import MozillaAppServices
 
 final class AppLaunchUtil: Sendable {
     private let logger: Logger
-//    private var adjustHelper: AdjustHelper
     private let profile: Profile
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
@@ -22,7 +21,6 @@ final class AppLaunchUtil: Sendable {
     ) {
         self.logger = logger
         self.profile = profile
-//        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
     }
@@ -45,12 +43,6 @@ final class AppLaunchUtil: Sendable {
 
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true
-
-        if termsOfServiceManager.isAffectedUser {
-            logger.setup(sendCrashReports: sendCrashReports)
-            TelemetryWrapper.shared.setup(profile: profile)
-            TelemetryWrapper.shared.recordStartUpTelemetry()
-        }
 
         if termsOfServiceManager.isFeatureEnabled {
             // Two cases:
@@ -85,6 +77,11 @@ final class AppLaunchUtil: Sendable {
 
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()
+
+        /// Migrate TermsOfService prefs to TermsOfUse prefs
+        /// before Nimbus is initialized (should be available for experiments)
+        /// and backfill accept date/version if needed - after telemetry set up
+        TermsOfUseMigration(prefs: profile.prefs).migrateTermsOfService()
 
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
@@ -136,10 +133,6 @@ final class AppLaunchUtil: Sendable {
                    level: .debug,
                    category: .setup)
 
-        // Migrate legacy ToS users who don't have date/version preferences saved
-        // This must be done after telemetry is set up
-        termsOfServiceManager.migrateLegacyToSAcceptance()
-
         AppEventQueue.signal(event: .preLaunchDependenciesComplete)
 
         if #available(iOS 26, *) {
@@ -172,7 +165,6 @@ final class AppLaunchUtil: Sendable {
         }
 
         updateSessionCount()
-//        adjustHelper.setupAdjust()
         AppEventQueue.signal(event: .postLaunchDependenciesComplete)
     }
 

@@ -1376,10 +1376,10 @@
 "Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "후원된 바로가기";
 
 /* Toggled OFF to hide the shortcuts section */
-"Settings.Homepage.Shortcuts.ToggleOff.v100" = "끄기";
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "꺼짐";
 
 /* Toggled ON to show the shortcuts section */
-"Settings.Homepage.Shortcuts.ToggleOn.v100" = "켜기";
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "켜짐";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "현재 홈페이지";

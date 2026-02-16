@@ -8,18 +8,24 @@ import Common
 public struct LaunchScreenBackgroundView: View {
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
+    private let variant: OnboardingVariant
 
-    public init(windowUUID: WindowUUID, themeManager: ThemeManager) {
+    public init(
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager,
+        variant: OnboardingVariant = .modern
+    ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.variant = variant
     }
 
     public var body: some View {
-        AnimatedGradientView(
+        OnboardingBackgroundView(
             windowUUID: windowUUID,
-            themeManager: themeManager
+            themeManager: themeManager,
+            variant: variant
         )
-        .ignoresSafeArea()
     }
 }
 

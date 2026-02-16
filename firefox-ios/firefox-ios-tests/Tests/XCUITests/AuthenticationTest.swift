@@ -11,6 +11,7 @@ class AuthenticationTest: BaseTestCase {
     let password = "Password"
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisibleAndLogin() {
+        let browserScreen = BrowserScreen(app: app)
         navigator.openURL(testBasicHTTPAuthURL)
         waitUntilPageLoad()
 
@@ -29,6 +30,8 @@ class AuthenticationTest: BaseTestCase {
             app.buttons["TabLocationView.reloadButton"].waitAndTap()
             waitUntilPageLoad()
         }
+        browserScreen.tapWebViewTextIfExists(text: "Verify you are human")
+        waitUntilPageLoad()
         mozWaitForElementToExist(app.staticTexts[
             "A username and password are being requested by jigsaw.w3.org. The site says: test"
         ])

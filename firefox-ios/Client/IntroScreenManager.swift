@@ -4,11 +4,13 @@
 
 import Foundation
 import Shared
+import OnboardingKit
 
 protocol IntroScreenManagerProtocol {
     var shouldShowIntroScreen: Bool { get }
     var isModernOnboardingEnabled: Bool { get }
     var onboardingVariant: OnboardingVariant { get }
+    var onboardingKitVariant: OnboardingKit.OnboardingVariant { get }
     func didSeeIntroScreen()
 }
 
@@ -55,5 +57,11 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
         } else {
             return .legacy
         }
+    }
+
+    /// Returns the OnboardingKit variant corresponding to the onboarding variant.
+    /// This avoids duplication of conversion logic across the codebase.
+    var onboardingKitVariant: OnboardingKit.OnboardingVariant {
+        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
     }
 }

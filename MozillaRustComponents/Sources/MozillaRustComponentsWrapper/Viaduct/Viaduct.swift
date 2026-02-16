@@ -3,13 +3,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+
 #if canImport(MozillaRustComponents)
     import MozillaRustComponents
 #endif
 
 /// The public interface to viaduct.
-/// Right now it doesn't do any "true" viaduct things,
-/// it simply activated the reqwest backend.
 ///
 /// This is a singleton, and should be used via the
 /// `shared` static member.
@@ -20,9 +19,13 @@ public class Viaduct {
 
     private init() {}
 
-    public func useReqwestBackend() {
-        // Note: Doesn't need to synchronize since
-        // use_reqwest_backend is backend by a CallOnce.
-        viaduct_use_reqwest_backend()
+    public func initialize(userAgent: String) {
+        setGlobalDefaultUserAgent(userAgent: userAgent)
+        do {
+            try viaductInitBackendHyper()
+        } catch {
+            // The last line will throw if we try to initialize more than once.
+            // Just ignore the error in this case.
+        }
     }
 }

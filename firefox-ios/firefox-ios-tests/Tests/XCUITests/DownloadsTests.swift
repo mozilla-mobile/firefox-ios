@@ -82,24 +82,6 @@ class DownloadsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306898
     // Smoketest
     func testDownloadFile() {
-        downloadFile(fileName: testFileName, numberOfDownloads: 1)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_Downloads)
-
-        mozWaitForElementToExist(app.tables["DownloadsTable"])
-        // There should be one item downloaded. It's name and size should be shown
-        checkTheNumberOfDownloadedItems(items: 1)
-        waitForElementsToExist(
-            [
-                app.tables.cells.staticTexts[testFileNameDownloadPanel],
-                app.tables.cells.staticTexts[testFileSize]
-            ]
-        )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306898
-    // Smoketest TAE
-    func testDownloadFile_TAE() {
         downloadsScreen = DownloadsScreen(app: app)
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -307,15 +289,6 @@ class DownloadsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306895
     // Smoketest
     func testToastButtonToGoToDownloads() {
-        downloadFile(fileName: testFileName, numberOfDownloads: 1)
-        app.buttons["Downloads"].waitAndTap()
-        mozWaitForElementToExist(app.tables["DownloadsTable"])
-        checkTheNumberOfDownloadedItems(items: 1)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306895
-    // Smoketest TAE
-    func testToastButtonToGoToDownloads_TAE() {
         browserScreen = BrowserScreen(app: app)
         downloadsScreen = DownloadsScreen(app: app)
         downloadFile(fileName: testFileName, numberOfDownloads: 1)

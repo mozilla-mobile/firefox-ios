@@ -73,6 +73,23 @@ enum UX {
         static var frameAlignmentForCurrentLocale: Alignment {
             isJapanLocale ? .leading : .center
         }
+
+        static func linksTextAlignment(for variant: OnboardingVariant) -> TextAlignment {
+            return (variant == .brandRefresh || isJapanLocale) ? .leading : .center
+        }
+
+        static func linksHorizontalAlignment(for variant: OnboardingVariant) -> HorizontalAlignment {
+            return (variant == .brandRefresh || isJapanLocale) ? .leading : .center
+        }
+
+        static func tosImageHeight(for variant: OnboardingVariant) -> CGFloat {
+            if variant == .brandRefresh {
+                return 180
+            } else {
+                return tosImageHeight
+            }
+        }
+
         static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
         static let primaryActionGlassFont = FXFontStyles.Bold.headline.scaledSwiftUIFont()
         static let secondaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
@@ -128,5 +145,21 @@ enum UX {
         static let horizontalPadding: CGFloat = 12
         static let cornerRadius: CGFloat = 8
         static let glassCornerRadius: CGFloat = 25
+    }
+
+    enum Background {
+        static let brandRefreshLight = "backgroundBrandRefreshLight"
+        static let brandRefreshDark = "backgroundBrandRefreshDark"
+    }
+
+    enum Image {
+        static let welcomeBrandRefreshName = "onboardingWelcomeBrandRefresh"
+
+        static func tosImage(for variant: OnboardingVariant, fallback: UIImage?) -> UIImage? {
+            if variant == .brandRefresh {
+                return UIImage(named: welcomeBrandRefreshName, in: .module, with: nil)
+            }
+            return fallback
+        }
     }
 }

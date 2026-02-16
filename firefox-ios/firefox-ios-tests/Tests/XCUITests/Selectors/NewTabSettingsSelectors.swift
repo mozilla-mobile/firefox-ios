@@ -22,25 +22,25 @@ struct NewTabSettingsSelectors: NewTabSettingsSelectorsSet {
         static let customUrlTextField = "NewTabAsCustomURLTextField"
     }
 
-    let NAVIGATION_BAR = Selector.navigationBarId(
+    let NAVIGATION_BAR = Selector.navigationBarByIdOrLabel(
         IDs.navBarTitle,
         description: "Navigation Bar with title 'New Tab'",
         groups: ["settings"]
     )
 
-    let FIREFOX_HOME_CELL = Selector.cellByLabel(
+    let FIREFOX_HOME_CELL = Selector.tableCellById(
         IDs.firefoxHomeCell,
         description: "New Tab setting cell for Firefox Home",
         groups: ["settings"]
     )
 
-    let BLANK_PAGE_CELL = Selector.cellByLabel(
+    let BLANK_PAGE_CELL = Selector.tableCellById(
         IDs.blankPageCell,
         description: "New Tab setting cell for Blank Page",
         groups: ["settings"]
     )
 
-    let CUSTOM_URL_CELL = Selector.cellById(
+    let CUSTOM_URL_CELL = Selector.tableCellById(
         IDs.customURLCell,
         description: "New Tab setting cell for Custom URL",
         groups: ["settings"]

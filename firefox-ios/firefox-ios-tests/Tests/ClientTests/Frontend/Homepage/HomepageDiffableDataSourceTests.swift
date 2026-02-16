@@ -243,7 +243,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             HomepageAction(
-                shouldShowPrivacyNotice: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
             )

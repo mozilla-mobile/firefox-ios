@@ -263,10 +263,10 @@
 "Settings.Summarize.FooterTitle.v142" = "Permitir acesso ao recurso de resumir páginas.";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Agitar o dispositivo de um lado para o outro para resumir a página.";
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Balançar o dispositivo de um lado para outro para resumir a página.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Agitar para resumir";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Balançar para resumir";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Gestos";
@@ -275,7 +275,7 @@
 "Settings.Summarize.SummarizePagesTitle.v142" = "Resumir páginas";
 
 /* In the settings menu, in the General section, this is the title for the Summarize settings section. */
-"Settings.Summarize.Title.v142" = "Resumos de páginas";
+"Settings.Summarize.Title.v142" = "Resumo de páginas";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Saiba mais";

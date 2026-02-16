@@ -7,7 +7,7 @@ import XCTest
 import MozillaAppServices
 
 final class ASTranslationModelsFetcherTests: XCTestCase {
-    func testFetchModels_directModel_returnsSingleEntry() throws {
+    func testFetchModels_directModel_returnsSingleEntry() async throws {
         let directRecord = makeModelRecord(
             id: "direct-fr-de",
             fileType: "model",
@@ -17,7 +17,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
 
         let subject = createSubject(records: [directRecord])
 
-        let data = subject.fetchModels(from: "fr", to: "de")
+        let data = await subject.fetchModels(from: "fr", to: "de")
         XCTAssertNotNil(data, "Expected direct model to produce non-nil data")
 
         let json = try XCTUnwrap(data).toJSONObject() as? [[String: Any]]
@@ -32,7 +32,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         XCTAssertTrue(files?.keys.contains("model") == true, "Expected a fileType key 'model'")
     }
 
-    func testFetchModels_pivotModels_returnsTwoEntries() throws {
+    func testFetchModels_pivotModels_returnsTwoEntries() async throws {
         let frEnRecord = makeModelRecord(
             id: "fr-en",
             fileType: "model",
@@ -47,7 +47,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         )
 
         let subject = createSubject(records: [frEnRecord, enItRecord])
-        let data = subject.fetchModels(from: "fr", to: "it")
+        let data = await subject.fetchModels(from: "fr", to: "it")
         XCTAssertNotNil(data, "Expected pivoting to produce non-nil data")
 
         let json = try XCTUnwrap(data).toJSONObject() as? [[String: Any]]
@@ -62,7 +62,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         XCTAssertEqual(second["targetLanguage"] as? String, "it")
     }
 
-    func testFetchModels_noDirectOrPivotModels_returnsNil() {
+    func testFetchModels_noDirectOrPivotModels_returnsNil() async {
         let unrelatedRecord = makeModelRecord(
             id: "es-pt",
             fileType: "model",
@@ -72,11 +72,11 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
 
         let subject = createSubject(records: [unrelatedRecord])
 
-        let data = subject.fetchModels(from: "fr", to: "it")
+        let data = await subject.fetchModels(from: "fr", to: "it")
         XCTAssertNil(data, "Expected nil when neither direct nor pivot models exist")
     }
 
-    func testFetchModels_ignoresLexFiles() throws {
+    func testFetchModels_ignoresLexFiles() async throws {
         let modelRecord = makeModelRecord(
             id: "fr-de-model",
             fileType: "model",
@@ -92,7 +92,7 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
 
         let subject = createSubject(records: [modelRecord, vocabRecord])
 
-        let data = subject.fetchModels(from: "fr", to: "de")
+        let data = await subject.fetchModels(from: "fr", to: "de")
         XCTAssertNotNil(data, "Expected fetchModels to return data when model exists")
 
         let json = try XCTUnwrap(data).toJSONObject() as? [[String: Any]]
@@ -205,14 +205,14 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         )
     }
 
-    func testFetchModels_picksHighestStableVersionBelowMax() throws {
+    func testFetchModels_picksHighestStableVersionBelowMax() async throws {
         let v1Model = makeModelRecord(id: "model-v1", fileType: "model", from: "fr", to: "de", version: "1.0")
         let v1Vocab = makeModelRecord(id: "vocab-v1", fileType: "vocab", from: "fr", to: "de", version: "1.0")
         let v2Model = makeModelRecord(id: "model-v2", fileType: "model", from: "fr", to: "de", version: "2.0")
         let v2Vocab = makeModelRecord(id: "vocab-v2", fileType: "vocab", from: "fr", to: "de", version: "2.0")
 
         let subject = createSubject(records: [v1Model, v2Vocab, v2Model, v1Vocab])
-        let data = subject.fetchModels(from: "fr", to: "de")
+        let data = await subject.fetchModels(from: "fr", to: "de")
         XCTAssertNotNil(data, "Expected fetchModels to return data")
 
         let json = try XCTUnwrap(data).toJSONObject() as? [[String: Any]]

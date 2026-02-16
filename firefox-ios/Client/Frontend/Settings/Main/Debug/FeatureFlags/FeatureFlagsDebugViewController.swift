@@ -31,6 +31,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         // For better code readability and parsability in-app, please keep in alphabetical order by title
         var children: [Setting] =  [
             FeatureFlagsBoolSetting(
+                with: .adsClient,
+                titleText: format(string: "Ads Client"),
+                statusText: format(string: "Toggle to enable the rust ads client")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .appearanceMenu,
                 titleText: format(string: "Appearance Menu"),
                 statusText: format(string: "Toggle to show the new apperance menu")
@@ -123,20 +130,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .privacyNotice,
-                titleText: format(string: "Privacy Notice"),
-                statusText: format(string: "Toggle to enable the Privacy Notice homepage card")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .otherErrorPages,
-                titleText: format(string: "Other Error Pages"),
-                statusText: format(string: "Toggle to display natively created error pages for certificate and other errors")
-                ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")
@@ -161,6 +154,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .sentFromFirefox,
                 titleText: format(string: "Sent from Firefox"),
                 statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .snapkitRemovalRefactor,
+                titleText: format(string: "SnapKit Removal Refactor"),
+                statusText: format(string: "Toggle to enable SnapKit removal refactor")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -214,13 +214,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .updatedPasswordManager,
-                titleText: format(string: "Updated Password Manager"),
-                statusText: format(string: "Toggle to enable the updated password manager")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .voiceSearch,
                 titleText: format(string: "Voice Search"),
                 statusText: format(string: "Toggle to enable the Voice Search feature")
@@ -238,6 +231,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .hostedSummarizer,
                 titleText: format(string: "Hosted Summarizer Feature"),
                 statusText: format(string: "Toggle to enable the hosted summarizer feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .summarizerAppAttestAuth,
+                titleText: format(string: "Summarizer App Attest Auth Feature"),
+                statusText: format(string: "Toggle to enable the app attest authentication for the summarizer feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },

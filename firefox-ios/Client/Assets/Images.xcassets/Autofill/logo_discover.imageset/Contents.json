@@ -3,6 +3,16 @@
     {
       "filename" : "logo_discover.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "logo_discover-white.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

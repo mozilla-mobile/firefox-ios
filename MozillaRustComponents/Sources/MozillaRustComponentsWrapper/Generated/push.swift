@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -639,13 +658,13 @@ public protocol PushManagerProtocol: AnyObject, Sendable {
  * and persists state representing subscriptions.
  */
 open class PushManager: PushManagerProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -655,27 +674,27 @@ open class PushManager: PushManagerProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_push_fn_clone_pushmanager(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_push_fn_clone_pushmanager(self.handle, $0) }
     }
     /**
      * Creates a new [`PushManager`] object, not subscribed to any
@@ -690,21 +709,22 @@ open class PushManager: PushManagerProtocol, @unchecked Sendable {
      *   - PushManager is unable to open the `database_path` given
      */
 public convenience init(config: PushConfiguration)throws  {
-    let pointer =
+    let handle =
         try rustCallWithError(FfiConverterTypePushApiError_lift) {
     uniffi_push_fn_constructor_pushmanager_new(
         FfiConverterTypePushConfiguration_lower(config),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_push_fn_free_pushmanager(pointer, $0) }
+        try! rustCall { uniffi_push_fn_free_pushmanager(handle, $0) }
     }
 
     
@@ -729,7 +749,8 @@ public convenience init(config: PushConfiguration)throws  {
      */
 open func decrypt(payload: [String: String])throws  -> DecryptResponse  {
     return try  FfiConverterTypeDecryptResponse_lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
-    uniffi_push_fn_method_pushmanager_decrypt(self.uniffiClonePointer(),
+    uniffi_push_fn_method_pushmanager_decrypt(
+            self.uniffiCloneHandle(),
         FfiConverterDictionaryStringString.lower(payload),$0
     )
 })
@@ -754,7 +775,8 @@ open func decrypt(payload: [String: String])throws  -> DecryptResponse  {
      */
 open func getSubscription(scope: String)throws  -> SubscriptionResponse?  {
     return try  FfiConverterOptionTypeSubscriptionResponse.lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
-    uniffi_push_fn_method_pushmanager_get_subscription(self.uniffiClonePointer(),
+    uniffi_push_fn_method_pushmanager_get_subscription(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(scope),$0
     )
 })
@@ -781,7 +803,8 @@ open func getSubscription(scope: String)throws  -> SubscriptionResponse?  {
      */
 open func subscribe(scope: String, appServerSey: String? = nil)throws  -> SubscriptionResponse  {
     return try  FfiConverterTypeSubscriptionResponse_lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
-    uniffi_push_fn_method_pushmanager_subscribe(self.uniffiClonePointer(),
+    uniffi_push_fn_method_pushmanager_subscribe(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(scope),
         FfiConverterOptionString.lower(appServerSey),$0
     )
@@ -805,7 +828,8 @@ open func subscribe(scope: String, appServerSey: String? = nil)throws  -> Subscr
      */
 open func unsubscribe(scope: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
-    uniffi_push_fn_method_pushmanager_unsubscribe(self.uniffiClonePointer(),
+    uniffi_push_fn_method_pushmanager_unsubscribe(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(scope),$0
     )
 })
@@ -821,7 +845,8 @@ open func unsubscribe(scope: String)throws  -> Bool  {
      *   - An error occurred accessing the PushManager's persisted storage
      */
 open func unsubscribeAll()throws   {try rustCallWithError(FfiConverterTypePushApiError_lift) {
-    uniffi_push_fn_method_pushmanager_unsubscribe_all(self.uniffiClonePointer(),$0
+    uniffi_push_fn_method_pushmanager_unsubscribe_all(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -839,7 +864,8 @@ open func unsubscribeAll()throws   {try rustCallWithError(FfiConverterTypePushAp
      *   - An error occurred accessing the PushManager's persisted storage
      */
 open func update(registrationToken: String)throws   {try rustCallWithError(FfiConverterTypePushApiError_lift) {
-    uniffi_push_fn_method_pushmanager_update(self.uniffiClonePointer(),
+    uniffi_push_fn_method_pushmanager_update(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(registrationToken),$0
     )
 }
@@ -866,13 +892,15 @@ open func update(registrationToken: String)throws   {try rustCallWithError(FfiCo
      */
 open func verifyConnection(forceVerify: Bool = false)throws  -> [PushSubscriptionChanged]  {
     return try  FfiConverterSequenceTypePushSubscriptionChanged.lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
-    uniffi_push_fn_method_pushmanager_verify_connection(self.uniffiClonePointer(),
+    uniffi_push_fn_method_pushmanager_verify_connection(
+            self.uniffiCloneHandle(),
         FfiConverterBool.lower(forceVerify),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -880,33 +908,24 @@ open func verifyConnection(forceVerify: Bool = false)throws  -> [PushSubscriptio
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypePushManager: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = PushManager
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> PushManager {
-        return PushManager(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> PushManager {
+        return PushManager(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: PushManager) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: PushManager) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PushManager {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: PushManager, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -914,21 +933,21 @@ public struct FfiConverterTypePushManager: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypePushManager_lift(_ pointer: UnsafeMutableRawPointer) throws -> PushManager {
-    return try FfiConverterTypePushManager.lift(pointer)
+public func FfiConverterTypePushManager_lift(_ handle: UInt64) throws -> PushManager {
+    return try FfiConverterTypePushManager.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypePushManager_lower(_ value: PushManager) -> UnsafeMutableRawPointer {
+public func FfiConverterTypePushManager_lower(_ value: PushManager) -> UInt64 {
     return FfiConverterTypePushManager.lower(value)
 }
 
 
 
 
-public struct DecryptResponse {
+public struct DecryptResponse: Equatable, Hashable {
     public var result: [Int8]
     public var scope: String
 
@@ -938,31 +957,15 @@ public struct DecryptResponse {
         self.result = result
         self.scope = scope
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension DecryptResponse: Sendable {}
 #endif
-
-
-extension DecryptResponse: Equatable, Hashable {
-    public static func ==(lhs: DecryptResponse, rhs: DecryptResponse) -> Bool {
-        if lhs.result != rhs.result {
-            return false
-        }
-        if lhs.scope != rhs.scope {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(result)
-        hasher.combine(scope)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1001,7 +1004,7 @@ public func FfiConverterTypeDecryptResponse_lower(_ value: DecryptResponse) -> R
 /**
  * Key Information that can be used to encrypt payloads
  */
-public struct KeyInfo {
+public struct KeyInfo: Equatable, Hashable {
     public var auth: String
     public var p256dh: String
 
@@ -1011,31 +1014,15 @@ public struct KeyInfo {
         self.auth = auth
         self.p256dh = p256dh
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension KeyInfo: Sendable {}
 #endif
-
-
-extension KeyInfo: Equatable, Hashable {
-    public static func ==(lhs: KeyInfo, rhs: KeyInfo) -> Bool {
-        if lhs.auth != rhs.auth {
-            return false
-        }
-        if lhs.p256dh != rhs.p256dh {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(auth)
-        hasher.combine(p256dh)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1071,7 +1058,7 @@ public func FfiConverterTypeKeyInfo_lower(_ value: KeyInfo) -> RustBuffer {
 }
 
 
-public struct PushConfiguration {
+public struct PushConfiguration: Equatable, Hashable {
     public var serverHost: String
     public var httpProtocol: PushHttpProtocol
     public var bridgeType: BridgeType
@@ -1089,47 +1076,15 @@ public struct PushConfiguration {
         self.databasePath = databasePath
         self.verifyConnectionRateLimiter = verifyConnectionRateLimiter
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension PushConfiguration: Sendable {}
 #endif
-
-
-extension PushConfiguration: Equatable, Hashable {
-    public static func ==(lhs: PushConfiguration, rhs: PushConfiguration) -> Bool {
-        if lhs.serverHost != rhs.serverHost {
-            return false
-        }
-        if lhs.httpProtocol != rhs.httpProtocol {
-            return false
-        }
-        if lhs.bridgeType != rhs.bridgeType {
-            return false
-        }
-        if lhs.senderId != rhs.senderId {
-            return false
-        }
-        if lhs.databasePath != rhs.databasePath {
-            return false
-        }
-        if lhs.verifyConnectionRateLimiter != rhs.verifyConnectionRateLimiter {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(serverHost)
-        hasher.combine(httpProtocol)
-        hasher.combine(bridgeType)
-        hasher.combine(senderId)
-        hasher.combine(databasePath)
-        hasher.combine(verifyConnectionRateLimiter)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1179,7 +1134,7 @@ public func FfiConverterTypePushConfiguration_lower(_ value: PushConfiguration) 
  * [`PushManager::verify_connection`], one entry for each channel that the
  * caller should resubscribe to
  */
-public struct PushSubscriptionChanged {
+public struct PushSubscriptionChanged: Equatable, Hashable {
     public var channelId: String
     public var scope: String
 
@@ -1189,31 +1144,15 @@ public struct PushSubscriptionChanged {
         self.channelId = channelId
         self.scope = scope
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension PushSubscriptionChanged: Sendable {}
 #endif
-
-
-extension PushSubscriptionChanged: Equatable, Hashable {
-    public static func ==(lhs: PushSubscriptionChanged, rhs: PushSubscriptionChanged) -> Bool {
-        if lhs.channelId != rhs.channelId {
-            return false
-        }
-        if lhs.scope != rhs.scope {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(channelId)
-        hasher.combine(scope)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1253,7 +1192,7 @@ public func FfiConverterTypePushSubscriptionChanged_lower(_ value: PushSubscript
  * Subscription Information, the endpoint to send push messages to and
  * the key information that can be used to encrypt payloads
  */
-public struct SubscriptionInfo {
+public struct SubscriptionInfo: Equatable, Hashable {
     public var endpoint: String
     public var keys: KeyInfo
 
@@ -1263,31 +1202,15 @@ public struct SubscriptionInfo {
         self.endpoint = endpoint
         self.keys = keys
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SubscriptionInfo: Sendable {}
 #endif
-
-
-extension SubscriptionInfo: Equatable, Hashable {
-    public static func ==(lhs: SubscriptionInfo, rhs: SubscriptionInfo) -> Bool {
-        if lhs.endpoint != rhs.endpoint {
-            return false
-        }
-        if lhs.keys != rhs.keys {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(endpoint)
-        hasher.combine(keys)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1326,7 +1249,7 @@ public func FfiConverterTypeSubscriptionInfo_lower(_ value: SubscriptionInfo) ->
 /**
  * The subscription response object returned from [`PushManager::subscribe`]
  */
-public struct SubscriptionResponse {
+public struct SubscriptionResponse: Equatable, Hashable {
     public var channelId: String
     public var subscriptionInfo: SubscriptionInfo
 
@@ -1336,31 +1259,15 @@ public struct SubscriptionResponse {
         self.channelId = channelId
         self.subscriptionInfo = subscriptionInfo
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SubscriptionResponse: Sendable {}
 #endif
-
-
-extension SubscriptionResponse: Equatable, Hashable {
-    public static func ==(lhs: SubscriptionResponse, rhs: SubscriptionResponse) -> Bool {
-        if lhs.channelId != rhs.channelId {
-            return false
-        }
-        if lhs.subscriptionInfo != rhs.subscriptionInfo {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(channelId)
-        hasher.combine(subscriptionInfo)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1408,13 +1315,17 @@ public func FfiConverterTypeSubscriptionResponse_lower(_ value: SubscriptionResp
 
  */
 
-public enum BridgeType {
+public enum BridgeType: Equatable, Hashable {
     
     case fcm
     case adm
     case apns
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension BridgeType: Sendable {}
@@ -1475,19 +1386,12 @@ public func FfiConverterTypeBridgeType_lower(_ value: BridgeType) -> RustBuffer 
 }
 
 
-extension BridgeType: Equatable, Hashable {}
-
-
-
-
-
-
 
 /**
  * The main Error returned from the Push component, each
  * variant describes a different error
  */
-public enum PushApiError: Swift.Error {
+public enum PushApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1497,8 +1401,21 @@ public enum PushApiError: Swift.Error {
     
     case InternalError(message: String)
     
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension PushApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1563,21 +1480,6 @@ public func FfiConverterTypePushApiError_lower(_ value: PushApiError) -> RustBuf
     return FfiConverterTypePushApiError.lower(value)
 }
 
-
-extension PushApiError: Equatable, Hashable {}
-
-
-
-
-extension PushApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -1586,12 +1488,16 @@ extension PushApiError: Foundation.LocalizedError {
  *  supported  for tests
  */
 
-public enum PushHttpProtocol {
+public enum PushHttpProtocol: Equatable, Hashable {
     
     case https
     case http
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension PushHttpProtocol: Sendable {}
@@ -1644,13 +1550,6 @@ public func FfiConverterTypePushHttpProtocol_lift(_ buf: RustBuffer) throws -> P
 public func FfiConverterTypePushHttpProtocol_lower(_ value: PushHttpProtocol) -> RustBuffer {
     return FfiConverterTypePushHttpProtocol.lower(value)
 }
-
-
-extension PushHttpProtocol: Equatable, Hashable {}
-
-
-
-
 
 
 #if swift(>=5.8)
@@ -1810,31 +1709,31 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_push_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_decrypt() != 37159) {
+    if (uniffi_push_checksum_method_pushmanager_decrypt() != 18499) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_get_subscription() != 33736) {
+    if (uniffi_push_checksum_method_pushmanager_get_subscription() != 26476) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_subscribe() != 22482) {
+    if (uniffi_push_checksum_method_pushmanager_subscribe() != 20176) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_unsubscribe() != 2365) {
+    if (uniffi_push_checksum_method_pushmanager_unsubscribe() != 32827) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_unsubscribe_all() != 12972) {
+    if (uniffi_push_checksum_method_pushmanager_unsubscribe_all() != 31080) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_update() != 17445) {
+    if (uniffi_push_checksum_method_pushmanager_update() != 64331) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_verify_connection() != 64398) {
+    if (uniffi_push_checksum_method_pushmanager_verify_connection() != 49423) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_push_checksum_constructor_pushmanager_new() != 17838) {

@@ -1,5 +1,5 @@
 {
-  "originHash" : "8e4e4df87f14a9940451e64286d5469d4efa8c163c4dc6180cb11640a9d49b7f",
+  "originHash" : "2cefd613340556961f3595a55172db331fe9441c927117d9f85365a22aaf7007",
   "pins" : [
     {
       "identity" : "a-star",
@@ -53,15 +53,6 @@
       "state" : {
         "revision" : "8470fb7d0ff00d1d0f845ec445fbc70b4c6cbab3",
         "version" : "66.3.0"
-      }
-    },
-    {
-      "identity" : "ios_sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/adjust/ios_sdk.git",
-      "state" : {
-        "revision" : "f7a0ad4a9f99fcbfc4c73dcad557ea3c86c5aaf6",
-        "version" : "4.37.0"
       }
     },
     {
@@ -143,6 +134,15 @@
       "state" : {
         "revision" : "21f7878f2b39d46fd8ba2b06459ccb431cdf876c",
         "version" : "3.8.1"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax.git",
+      "state" : {
+        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
+        "version" : "509.1.1"
       }
     },
     {
