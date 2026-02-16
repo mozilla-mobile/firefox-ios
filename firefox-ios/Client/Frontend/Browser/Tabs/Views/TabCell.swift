@@ -117,16 +117,28 @@ final class TabCell: UICollectionViewCell,
 
         animator?.animateBackToCenter()
 
-        titleText.text = tabModel.tabTitle
-        accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
+        // When homepage is blank, we need to use firefoxFavIcon and
+        // "New Tab" title
+        if tabModel.url == nil {
+            let title = String.TabsTray.TabsSelectorBlankTabsTitle
+            titleText.text = title
+            accessibilityLabel = getA11yTitleLabel(tabModel: tabModel, tabTitle: title)
+            let identifier = ImageIdentifiers.firefoxFavicon
+            if let firefoxFavicon = UIImage(named: identifier) {
+                favicon.manuallySetImage(firefoxFavicon)
+            }
+        } else {
+            titleText.text = tabModel.tabTitle
+            accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
+            let identifier = StandardImageIdentifiers.Large.globe
+            if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
+                favicon.manuallySetImage(globeFavicon)
+            }
+        }
+
         isAccessibilityElement = true
         accessibilityHint = .TabsTray.TabTraySwipeToCloseAccessibilityHint
         accessibilityIdentifier = a11yId
-
-        let identifier = StandardImageIdentifiers.Large.globe
-        if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
-            favicon.manuallySetImage(globeFavicon)
-        }
 
         if !tabModel.isFxHomeTab, let tabURL = tabModel.url?.absoluteString {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
@@ -310,8 +322,8 @@ final class TabCell: UICollectionViewCell,
         return true
     }
 
-    private func getA11yTitleLabel(tabModel: TabModel) -> String? {
-        let baseName = tabModel.tabTitle
+    private func getA11yTitleLabel(tabModel: TabModel, tabTitle: String? = nil) -> String? {
+        let baseName = tabTitle ?? tabModel.tabTitle
 
         if isSelectedTab, !baseName.isEmpty {
             return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
