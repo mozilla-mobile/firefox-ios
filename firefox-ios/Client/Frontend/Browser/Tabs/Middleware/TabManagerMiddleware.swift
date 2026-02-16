@@ -776,7 +776,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let isSummarizerEnabled = isSummarizerEnabled
         fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
             assert(Thread.isMainThread)
-            if isSummarizerEnabled {
+            if isSummarizerEnabled, !selectedTab.isFxHomeTab {
                 Task {
                     let summarizeMiddleware = SummarizerMiddleware()
                     let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)

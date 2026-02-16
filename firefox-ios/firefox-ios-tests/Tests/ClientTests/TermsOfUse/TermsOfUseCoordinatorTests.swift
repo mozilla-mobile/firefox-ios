@@ -35,7 +35,8 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
             router: router,
             themeManager: AppContainer.shared.resolve(),
             notificationCenter: notificationCenter,
-            prefs: profile.prefs
+            prefs: profile.prefs,
+            experimentsTracking: ToUExperimentsTracking(prefs: profile.prefs)
         )
     }
 

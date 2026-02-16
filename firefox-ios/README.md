@@ -11,10 +11,10 @@ For information on how to contribute to this project, including communication ch
 ## Building the code
 
 1. Install the version of [Xcode](https://developer.apple.com/download/applications/) from Apple that matches what this project uses, as listed in the root [README](../README.md).
-1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
+1. Node.js is required, e.g. installed via [Brew](https://brew.sh), with [n](https://github.com/tj/n#readme), or just [n-install](https://github.com/mklement0/n-install#readme) depending whether you want to use a package manager:
    ```shell
-   brew update
-   brew install node
+   brew install n  # or, skipping brew:  curl -L https://bit.ly/n-install | bash
+   n lts
    ```
 1. Clone the repository:
    ```shell
