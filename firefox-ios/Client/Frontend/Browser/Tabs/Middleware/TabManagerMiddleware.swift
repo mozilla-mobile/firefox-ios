@@ -1129,7 +1129,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
     private func preserveTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        tabManager.preserveTabs()
+        tabManager.preserveTabs(immediate: false)
     }
 
     /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section

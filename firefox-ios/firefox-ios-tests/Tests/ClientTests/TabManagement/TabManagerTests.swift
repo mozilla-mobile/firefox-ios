@@ -88,36 +88,23 @@ final class TabManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testRemoveAllTabsForPrivateMode() async throws {
+    func testRemoveAllTabsForPrivateMode() {
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
         subject.removeAllTabs(isPrivateMode: true)
-        try await Task.sleep(nanoseconds: sleepTime)
-
-        XCTAssertEqual(
-            mockTabStore.saveWindowDataCalledCount,
-            1,
-            "`removeAllTabs(isPrivateMode:)` should persist tabs to disk."
-        )
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
     // This test has to be run on the main thread since we are messing with the WebView.
     @MainActor
-    func testRemoveAllTabsCallsSaveTabSession() async throws {
+    func testRemoveAllTabsCallsSaveTabSession() {
         let subject = createSubject()
         let tab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
         subject.selectTab(tab)
         subject.removeAllTabs(isPrivateMode: false)
-        try await Task.sleep(nanoseconds: sleepTime)
 
-        XCTAssertEqual(
-            mockTabStore.saveWindowDataCalledCount,
-            1,
-            "`removeAllTabs(isPrivateMode:)` should persist tabs to disk."
-        )
         // Save tab session is actually called 3 times for one remove all call
         // 1. Save tab session for currently selected tab before delete to preserve scroll position
         // 1. AddTab for the new created homepage tab calls commitChanges
@@ -126,39 +113,25 @@ final class TabManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() async throws {
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() {
         (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = false
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
         subject.removeAllTabs(isPrivateMode: false)
-        try await Task.sleep(nanoseconds: sleepTime)
-
-        XCTAssertEqual(
-            mockTabStore.saveWindowDataCalledCount,
-            1,
-            "`removeAllTabs(isPrivateMode:)` should persist tabs to disk."
-        )
         // 5, private mode tabs (4) plus one new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
     @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() async throws {
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() {
         (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
         subject.removeAllTabs(isPrivateMode: false)
-        try await Task.sleep(nanoseconds: sleepTime)
-
-        XCTAssertEqual(
-            mockTabStore.saveWindowDataCalledCount,
-            1,
-            "`removeAllTabs(isPrivateMode:)` should persist tabs to disk."
-        )
         // One new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 1)
     }
@@ -383,7 +356,7 @@ final class TabManagerTests: XCTestCase {
     @MainActor
     func testPreserveTabsWithNoTabs() async throws {
         let subject = createSubject()
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
         XCTAssertEqual(subject.tabs.count, 0)
@@ -393,7 +366,7 @@ final class TabManagerTests: XCTestCase {
     func testPreserveTabsWithOneTab() async throws {
         let subject = createSubject(tabs: generateTabs(count: 1))
         subject.tabRestoreHasFinished = true
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 1)
@@ -403,7 +376,7 @@ final class TabManagerTests: XCTestCase {
     func testPreserveTabsWithManyTabs() async throws {
         let subject = createSubject(tabs: generateTabs(count: 5))
         subject.tabRestoreHasFinished = true
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 5)

@@ -75,7 +75,7 @@ protocol TabManager: AnyObject {
     // MARK: Other Tab Actions
     func clearAllTabsHistory()
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
-    func preserveTabs()
+    func preserveTabs(immediate: Bool)
 
     /// Commits the pending changes to the persistent store.
     func commitChanges()

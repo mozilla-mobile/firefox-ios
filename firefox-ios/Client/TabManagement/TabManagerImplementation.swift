@@ -245,11 +245,6 @@ class TabManagerImplementation: NSObject,
         }
         // Save the tab state that existed prior to removals (preserves original selected tab)
         backupCloseTab = currentSelectedTab
-
-        // Force immediate disk write to avoid closing the app with the old tab state still on disk.
-        // Without this, quickly closing and reopening the app after removing all tabs,
-        // could restore tabs that were just closed.
-        preserveTabs(forced: true)
     }
 
     /// Remove a tab, will notify delegate of the tab removal
@@ -719,12 +714,12 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Save tabs
 
-    func preserveTabs() {
+    func preserveTabs(immediate: Bool) {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished else { return }
 
         logger.log("Preserve tabs started", level: .debug, category: .tabs)
-        preserveTabs(forced: false)
+        preserveTabs(forced: immediate)
     }
 
     private func preserveTabs(forced: Bool) {
@@ -778,7 +773,7 @@ class TabManagerImplementation: NSObject,
     }
 
     func commitChanges() {
-        preserveTabs()
+        preserveTabs(immediate: false)
         saveSessionData(forTab: selectedTab)
     }
 
@@ -843,7 +838,7 @@ class TabManagerImplementation: NSObject,
 
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
 
-        preserveTabs()
+        preserveTabs(immediate: tabs.count == 1)
 
         let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
         selectTabWithSession(tab: tab, sessionData: sessionData)
