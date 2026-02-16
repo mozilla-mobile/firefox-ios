@@ -1,0 +1,7 @@
+project: Client.xcodeproj
+
+schemes:
+- Fennec
+
+index_exclude:
+- "../BrowserKit/Sources/Common/Theming/FxColors.swift"
