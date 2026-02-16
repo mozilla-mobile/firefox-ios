@@ -259,8 +259,8 @@ struct SettingsSelectors: SettingsSelectorsSet {
         let s = AccessibilityIdentifiers.Settings.self
         return [
             Selector.tableCellById(s.DefaultBrowser.defaultBrowser,
-                                    description: "Default Browser setting",
-                                    groups: ["settings"]),
+                                   description: "Default Browser setting",
+                                   groups: ["settings"]),
             Selector.tableCellById(s.ConnectSetting.title,
                                    description: "Connect setting",
                                    groups: ["settings"]),

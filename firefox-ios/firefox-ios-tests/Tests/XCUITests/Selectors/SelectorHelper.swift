@@ -83,7 +83,8 @@ extension Selector {
         case .linkStaticTextById(let id):
             return app.links.staticTexts[id]
         case .pageIndicatorById:
-            return app.pageIndicators[value]        }
+            return app.pageIndicators[value]
+        }
     }
 
     @MainActor
