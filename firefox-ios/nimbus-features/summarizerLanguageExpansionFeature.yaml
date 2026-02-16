@@ -1,0 +1,65 @@
+# The configuration for the summarizerLanguageExpansionFeature feature
+# Please remember to add this feature to the feature flag spreadsheet.
+features:
+  summarizer-language-expansion-feature:
+    description: >
+      The feature flag to manage the rollout of the summarizer language expansion.
+    variables:
+      enabled:
+        description: >
+          Wether the feature is enabled or not.
+        type: Boolean
+        default: false
+      supportWebsiteLanguage:
+        description: >
+          Whether to support the website language for summarization.
+        type: Boolean
+        default: false
+      supportDeviceLanguage:
+        description: >
+          Whether to support the device language for summarization.
+        type: Boolean
+        default: false
+      supportedLocales:
+        description: >
+          The list of supported locales for the summarizer language expansion.
+        type: List<NimbusLocale>
+        default:
+          - {
+              languageCode: "en",
+          }
+          - {
+              languageCode: "fr",
+          }
+          - {
+              languageCode: "es",
+          }
+          - {
+              languageCode: "de",
+          }
+          - {
+              languageCode: "pt",
+          }
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
+
+objects:
+  NimbusLocale:
+    description: >
+      The Locale object represents a specific region with language and geographical information.
+    fields:
+      languageCode:
+        description: >
+          A two letters code defyning the language of the locale, following the ISO 639-1 standard (e.g., "en" for English, "fr" for French).
+        type: String
+        default: "en"
+      countryCode:
+        description: >
+          A two letters code definying the geographical information of the language, following the ISO 3166-1 alpha-2 standard (e.g., "US" for United States, "FR" for France).
+        type: Option<String>
+        default: null
