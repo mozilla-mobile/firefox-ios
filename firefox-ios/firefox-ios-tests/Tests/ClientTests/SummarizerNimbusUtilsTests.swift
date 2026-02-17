@@ -26,8 +26,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - isSummarizeFeatureToggledOn Tests
-
+    // MARK: - isSummarizeFeatureToggledOn
     func test_isSummarizeFeatureToggledOn_whenFeatureEnabledAndUserEnabled() {
         let subject = createSubject()
         profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
@@ -205,7 +204,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         XCTAssertEqual(config.supportedLocales[1].identifier, "es")
     }
 
-    // MARK: - Helper
+    // MARK: - Helpers
     private func createSubject(
         locale: Locale = Locale(identifier: "en")
     ) -> DefaultSummarizerNimbusUtils {
