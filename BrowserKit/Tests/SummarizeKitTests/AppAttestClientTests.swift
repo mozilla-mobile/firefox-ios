@@ -6,14 +6,6 @@ import XCTest
 @testable import SummarizeKit
 
 final class AppAttestClientTests: XCTestCase {
-    private enum TestData {
-        static let keyID = "foo-key"
-        static let attestationChallenge = "test-challenge"
-        static let assertionChallenge = "assertion-challenge"
-        static let attestationBlob = Data("attestation-blob".utf8)
-        static let assertionBlob = Data("assertion-blob".utf8)
-    }
-
     func test_init_throwsWhenAppAttestNotSupported() {
         let service = MockAppAttestService(isSupported: false)
         // NOTE: This shouldn't happen in real devices since they all have access to this API.
@@ -33,36 +25,36 @@ final class AppAttestClientTests: XCTestCase {
     }
 
     func test_performAttestation_returnsExistingKeyID_whenAlreadyStored() async throws {
-        let keyStore = try createKeyStore(with: TestData.keyID)
+        let keyStore = try createKeyStore(with: AppAttestTestData.keyID)
         let server = MockAppAttestRemoteServer()
         let subject = try createSubject(remoteServer: server, keyStore: keyStore)
 
         let result = try await subject.performAttestation()
 
-        XCTAssertEqual(result, TestData.keyID, "Expected to return the stored keyId without re-attesting.")
+        XCTAssertEqual(result, AppAttestTestData.keyID, "Expected to return the stored keyId without re-attesting.")
         XCTAssertEqual(server.fetchChallengeCallCount, 0, "Expected no server calls when key already exists.")
     }
 
     func test_performAttestation_generatesKeyAndAttests_whenNoStoredKey() async throws {
         let keyStore = MockAppAttestKeyIDStore()
-        let server = makeServer(challenge: TestData.attestationChallenge)
+        let server = makeServer(challenge: AppAttestTestData.attestationChallenge)
         let service = makeService(
-            keyToReturn: TestData.keyID,
-            attestationToReturn: TestData.attestationBlob
+            keyToReturn: AppAttestTestData.keyID,
+            attestationToReturn: AppAttestTestData.attestationBlob
         )
         let subject = try createSubject(appAttestService: service, remoteServer: server, keyStore: keyStore)
         let result = try await subject.performAttestation()
 
-        XCTAssertEqual(result, TestData.keyID)
-        XCTAssertEqual(keyStore.loadKeyID(), TestData.keyID, "Expected keyId to be persisted after attestation.")
+        XCTAssertEqual(result, AppAttestTestData.keyID)
+        XCTAssertEqual(keyStore.loadKeyID(), AppAttestTestData.keyID, "Expected keyId to be persisted after attestation.")
         XCTAssertEqual(server.fetchChallengeCallCount, 1)
         XCTAssertEqual(server.sendAttestationCallCount, 1)
     }
 
     func test_performAttestation_doesNotPersistKey_whenServerRejectsAttestation() async throws {
         let keyStore = MockAppAttestKeyIDStore()
-        let server = makeServer(challenge: TestData.attestationChallenge, sendAttestationError: .invalidPayload)
-        let service = makeService(keyToReturn: TestData.keyID, attestationToReturn: TestData.attestationBlob)
+        let server = makeServer(challenge: AppAttestTestData.attestationChallenge, sendAttestationError: .invalidPayload)
+        let service = makeService(keyToReturn: AppAttestTestData.keyID, attestationToReturn: AppAttestTestData.attestationBlob)
         let subject = try createSubject(appAttestService: service, remoteServer: server, keyStore: keyStore)
 
         do {
@@ -85,21 +77,21 @@ final class AppAttestClientTests: XCTestCase {
     }
 
     func test_generateAssertion_returnsSignedResult() async throws {
-        let keyStore = try createKeyStore(with: TestData.keyID)
-        let server = makeServer(challenge: TestData.assertionChallenge)
-        let service = makeService(assertionToReturn: TestData.assertionBlob)
+        let keyStore = try createKeyStore(with: AppAttestTestData.keyID)
+        let server = makeServer(challenge: AppAttestTestData.assertionChallenge)
+        let service = makeService(assertionToReturn: AppAttestTestData.assertionBlob)
         let subject = try createSubject(appAttestService: service, remoteServer: server, keyStore: keyStore)
 
         let result = try await subject.generateAssertion(payload: ["prompt": "summarize this"])
 
-        XCTAssertEqual(result.keyId, TestData.keyID)
-        XCTAssertEqual(result.assertion, TestData.assertionBlob)
-        XCTAssertEqual(result.challenge, TestData.assertionChallenge)
+        XCTAssertEqual(result.keyId, AppAttestTestData.keyID)
+        XCTAssertEqual(result.assertion, AppAttestTestData.assertionBlob)
+        XCTAssertEqual(result.challenge, AppAttestTestData.assertionChallenge)
         XCTAssertEqual(server.fetchChallengeCallCount, 1)
     }
 
     func test_resetKey_clearsStoredKeyID() throws {
-        let keyStore = try createKeyStore(with: TestData.keyID)
+        let keyStore = try createKeyStore(with: AppAttestTestData.keyID)
         let subject = try createSubject(keyStore: keyStore)
         try subject.resetKey()
         XCTAssertNil(keyStore.loadKeyID(), "Expected keyId to be cleared after resetKey().")
