@@ -61,6 +61,10 @@ class GleanMetricsHandler: MetricsHandler {
                 partId: event.part
             ))
     }
+
+    func submitTargetingContext() {
+        GleanMetrics.Pings.shared.nimbusTargetingContext.submit()
+    }
 }
 
 public extension Nimbus {

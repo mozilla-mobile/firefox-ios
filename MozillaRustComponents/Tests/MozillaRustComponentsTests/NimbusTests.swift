@@ -582,6 +582,52 @@ class NimbusTests: XCTestCase {
         XCTAssertEqual("en", calculatedAttributes.language)
         XCTAssertEqual("US", calculatedAttributes.region)
     }
+
+    func testRecordEnrollmentStatuses() throws {
+        let metricConfig = """
+            {
+                "metrics_enabled": {
+                    "nimbus_events.enrollment_status": true
+                }
+            }
+        """
+        Glean.shared.applyServerKnobsConfig(metricConfig)
+
+        var events: [RecordedEvent]?
+        let expectation = expectation(description: "The nimbus targeting context ping was sent")
+        GleanMetrics.Pings.shared.nimbusTargetingContext.testBeforeNextSubmit { e in
+            events = GleanMetrics.NimbusEvents.enrollmentStatus.testGetValue()
+            expectation.fulfill()
+        }
+
+        let metricsHandler = GleanMetricsHandler()
+        metricsHandler.recordEnrollmentStatuses(enrollmentStatusExtras: [
+            EnrollmentStatusExtraDef(
+                branch: "branch",
+                conflictSlug: "conflictSlug",
+                errorString: "errorString",
+                reason: "reason",
+                slug: "slug",
+                status: "status",
+                prevGeckoPrefStates: nil
+            )
+        ])
+        metricsHandler.submitTargetingContext()
+
+        wait(for: [expectation], timeout: 5.0)
+
+        XCTAssertEqual(
+            events?.map { $0.extra },
+            [[
+                "branch": "branch",
+                "conflict_slug": "conflictSlug",
+                "error_string": "errorString",
+                "reason": "reason",
+                "slug": "slug",
+                "status": "status"
+            ]]
+        )
+    }
 }
 
 private extension Device {
