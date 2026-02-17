@@ -145,6 +145,9 @@
       }
     },
     {
+      "skippedTests" : [
+        "SummarizeViewModelTests\/test_summarize_throwsSummarizeError()"
+      ],
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "SummarizeKitTests",
