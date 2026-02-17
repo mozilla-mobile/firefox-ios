@@ -2382,27 +2382,35 @@ class BrowserViewController: UIViewController,
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
             if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
                recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
+                // Ensure the recentBookmarkFolderGuid exists in the places db
                 profile.places.getBookmark(guid: recentBookmarkFolderGuid)
                     .uponQueue(.main) { result in
                         // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                         MainActor.assumeIsolated {
-                            guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
+                            guard let bookmarkFolder = result.successValue as? BookmarkFolderData else {
+                                self.showDefaultBookmarkToast(urlString: urlString, title: title)
+                                return
+                            }
                             let folderName = bookmarkFolder.title
                             let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
                             self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
                         }
                     }
-                // If recent bookmarks folder is nil or the mobile (default) folder
+            // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showToast(
-                    urlString,
-                    title,
-                    message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
-                    toastAction: .bookmarkPage
-                )
+                showDefaultBookmarkToast(urlString: urlString, title: title)
             }
         default: break
         }
+    }
+
+    private func showDefaultBookmarkToast(urlString: String?, title: String?) {
+        showToast(
+            urlString,
+            title,
+            message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
+            toastAction: .bookmarkPage
+        )
     }
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
