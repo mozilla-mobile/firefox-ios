@@ -209,6 +209,7 @@
         "JumpBackInTests\/testLongTapOnJumpBackInLink()",
         "JumpBackInTests\/testPrivateTab_tabTrayExperimentOff()",
         "JumpBackInTests\/testPrivateTab_tabTrayExperimentOn()",
+        "LibraryTests",
         "LibraryTestsIpad",
         "LibraryTestsIpad\/testLibraryShortcut()",
         "LoginTest",

@@ -67,10 +67,10 @@ class MultiWindowTests: IpadOnlyTestCase {
         XCTAssertEqual(tabButtonFirstWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3374336
     func testOpenWindowFromTabSwitcher() {
         if skipPlatform { return }
         openWindowFromTabSwitcher(windowsNumber: 1)
-        // selectTabFromSwitcher()
     }
 
     private func splitViewFromHomeScreen() {
@@ -94,9 +94,4 @@ class MultiWindowTests: IpadOnlyTestCase {
         dotMenuIdentifier.element(boundBy: windowToClose).tapWithRetry()
         springboard.buttons["top-affordance-close-window"].tapWithRetry()
     }
-
-    // Coudn't find a way to select a tab from switcher
-//    private func selectTabFromSwitcher() {
-//        let tabIdentifier = "card:org.mozilla.ios.Fennec:sceneID:org.mozilla.ios.Fennec"
-//    }
 }

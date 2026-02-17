@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "ນີ້ຈະຊ່ວຍໃຫ້ພວກເຮົາວິນິດໄສ ແລະ ແກ້ໄຂບັນຫາກັບຕົວທ່ອງເວັບ.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ ຈະປັບປຸງຄຸນສົມບັດ, ປະສິດທິພາບ ແລະ ຄວາມໝັ້ນຄົງລະຫວ່າງການອັບເດດ. ການປ່ຽນແປງຈະຖືກນຳໃຊ້ຈາກໄລຍະໄກ.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ ຈະສົ່ງສິ່ງທີ່ທ່ານພີມໃນແຖບທີ່ຢູ່ໄປຍັງເຄື່ອງມືຄົ້ນຫາຂອງທ່ານ";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ %@ ສຳລັບທຸກໆຄົນ.";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ %@ ສຳລັບທຸກໆຄົນ.";
+
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ ອາດຈະຕິດຕັ້ງ ແລະດໍາເນີນການສຶກສາເປັນບາງໂອກາດ.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ ຈະເລືອກຜູ້ໃຊ້ແບບສຸ່ມເພື່ອທົດສອບຄຸນສົມບັດຕ່າງໆ, ເຊິ່ງຊ່ວຍປັບປຸງຄຸນນະພາບໃຫ້ກັບທຸກຄົນ.";
 
 /* Title for section in settings menu */
 "Settings.general" = "ທົ່ວໄປ";

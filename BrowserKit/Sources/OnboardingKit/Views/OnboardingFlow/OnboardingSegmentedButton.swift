@@ -79,8 +79,8 @@ struct OnboardingSegmentedButton<Action: Equatable & Hashable & Sendable>: View 
 
     private func radioButtonImageName(isSelected: Bool) -> String {
         return isSelected
-            ? UX.SegmentedControl.radioButtonSelectedImage
-            : UX.SegmentedControl.radioButtonNotSelectedImage
+            ? OnboardingImageIdentifiers.radioButtonSelected
+            : OnboardingImageIdentifiers.radioButtonNotSelected
     }
 
     private func checkmarkColor(isSelected: Bool) -> Color {

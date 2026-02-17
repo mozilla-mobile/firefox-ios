@@ -641,7 +641,7 @@
 "TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Got ‘em! We stopped this site from spying on you. Tap the shield any time to see what we’re blocking.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon" = "Tap the trash any time to remove all traces of your current session.";
+"TooltipBodyText.TrashIcon" = "Tap the trash at any time to remove all traces of your current session.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon.V2" = "Tap here to trash it all — history, cookies, everything — and start fresh on a new tab.";

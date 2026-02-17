@@ -5,7 +5,7 @@
 import Foundation
 @testable import SummarizeKit
 
-final class MockAppAttestService: AppAttestServiceProtocol {
+final class MockAppAttestService: AppAttestServiceProtocol, @unchecked Sendable {
     let isSupported: Bool
     var keyToReturn = "mock-key-id"
     var attestationToReturn = Data()
