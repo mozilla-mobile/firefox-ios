@@ -26,7 +26,11 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
     /// because Base64 values can contain `+`, `/`, and `=` characters that
     /// would otherwise break the URL.
     public func fetchChallenge(for keyId: String) async throws -> String {
-        var components = URLComponents(url: MLPAConstants.challengeEndpoint, resolvingAgainstBaseURL: false)
+        guard let challengeEndpoint = MLPAConstants.challengeEndpoint else {
+            throw AppAttestServiceError.invalidURL(description: "challengeEndpoint")
+        }
+
+        var components = URLComponents(url: challengeEndpoint, resolvingAgainstBaseURL: false)
         components?.queryItems = [
             URLQueryItem(name: MLPAConstants.keyIdParam, value: keyId)
         ]
@@ -49,6 +53,10 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         attestationObject: Data,
         challenge: String
     ) async throws {
+        guard let attestEndpoint = MLPAConstants.attestEndpoint else {
+            throw AppAttestServiceError.invalidURL(description: "attestEndpoint")
+        }
+
         let jwt = try MLPAJWTPayload(
             keyId: keyId,
             challenge: challenge,
@@ -57,7 +65,7 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
             bundleIdentifier: bundleIdentifier
         ).encode()
 
-        var request = URLRequest(url: MLPAConstants.attestEndpoint)
+        var request = URLRequest(url: attestEndpoint)
         request.httpMethod = MLPAConstants.POST
         request.setValue(MLPAConstants.contentTypeJSON, forHTTPHeaderField: MLPAConstants.contentTypeHeader)
         request.setValue(MLPAConstants.bearerPrefix + jwt, forHTTPHeaderField: MLPAConstants.authorizationHeader)

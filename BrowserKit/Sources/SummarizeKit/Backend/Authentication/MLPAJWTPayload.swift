@@ -26,10 +26,11 @@ enum MLPAConstants {
     static let contentTypeJSON = "application/json"
     static let POST = "POST"
 
-    static let baseURL = URL(string: "https://mlpa-prod-prod-mozilla.global.ssl.fastly.net")!
-    static let completionsEndpoint = baseURL.appendingPathComponent("v1")
-    static let challengeEndpoint = baseURL.appendingPathComponent("verify/challenge")
-    static let attestEndpoint = baseURL.appendingPathComponent("verify/attest")
+    static let baseURL = URL(string: "https://mlpa-prod-prod-mozilla.global.ssl.fastly.net")
+
+    static var completionsEndpoint: URL? { baseURL?.appendingPathComponent("v1") }
+    static var challengeEndpoint: URL? { baseURL?.appendingPathComponent("verify/challenge") }
+    static var attestEndpoint: URL? { baseURL?.appendingPathComponent("verify/attest") }
 }
 
 /// The shared fields that every MLPA JWT envelope carries.
