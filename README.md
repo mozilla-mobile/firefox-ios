@@ -21,7 +21,7 @@ Download [Firefox iOS](https://apps.apple.com/app/firefox-web-browser/id98980492
 
 This is a monolithic-repository, containing both the Firefox and Focus iOS projects.
 
-As this is an iOS project, it is required to have Xcode on your system.
+As this is an iOS project, it is required to have Xcode on your system, and you should check that `xcode-select -p` points to `/Applications/Xcode.app/Contents/Developer` (or however you've named your `Xcode.app`).
 
 ### Automatic Installation
 
