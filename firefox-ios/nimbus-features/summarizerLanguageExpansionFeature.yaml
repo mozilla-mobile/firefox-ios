@@ -55,11 +55,11 @@ objects:
     fields:
       languageCode:
         description: >
-          A two letters code defyning the language of the locale, following the ISO 639-1 standard (e.g., "en" for English, "fr" for French).
+          A two letters code defining the language of the locale, following the ISO 639-1 standard (e.g., "en" for English, "fr" for French).
         type: String
         default: "en"
       countryCode:
         description: >
-          A two letters code definying the geographical information of the language, following the ISO 3166-1 alpha-2 standard (e.g., "US" for United States, "FR" for France).
+          A two letters code defining the geographical information of the language, following the ISO 3166-1 alpha-2 standard (e.g., "US" for United States, "FR" for France).
         type: Option<String>
         default: null
