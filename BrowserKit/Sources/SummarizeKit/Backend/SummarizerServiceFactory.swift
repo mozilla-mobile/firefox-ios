@@ -78,18 +78,23 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         config: SummarizerConfig,
         isAppAttestAuthEnabled: Bool
     ) -> LiteLLMClient? {
-//        guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
-//                let model = config.options["model"] as? String, !model.isEmpty,
-//                let key = LiteLLMConfig.apiKey else { return nil }
-        if true {
+        guard let model = config.options["model"] as? String, !model.isEmpty else {
+            return nil
+        }
+
+        if isAppAttestAuthEnabled {
             guard let client = try? AppAttestClient(remoteServer: MLPAAppAttestServer()) else {
                 return nil
             }
             let authenticator = AppAttestRequestAuth(appAttestClient: client)
             return LiteLLMClient(authenticator: authenticator, baseURL: MLPAConstants.completionsEndpoint)
         } else {
-            let authenticator = BearerRequestAuth(apiKey: "ddddddd")
-            return LiteLLMClient(authenticator: authenticator, baseURL: URL(string: "https://whateverdhjdhjdhddd.weer")!)
+            guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
+                  let key = LiteLLMConfig.apiKey else {
+                return nil
+            }
+            let authenticator = BearerRequestAuth(apiKey: key)
+            return LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
         }
     }
 }
