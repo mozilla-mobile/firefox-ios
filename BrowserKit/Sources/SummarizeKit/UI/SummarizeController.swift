@@ -280,7 +280,7 @@ public final class SummarizeController: UIViewController, Themeable {
         makeTopHalfBoundGuideBottomAnchor()
         tabSnapshotContainer.transform = snapshotLayoutCalculator.calculateDidRotateTransform(context: layoutContext)
     }
-    
+
     private func makeTopHalfBoundGuideBottomAnchor() {
         if layoutContext.isLandscapeLayout {
             topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor)
