@@ -1797,12 +1797,12 @@ workflows:
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.4
     - script@1.2.1:
         title: "Create .xctestrun files for all iOS versions"
         inputs:
         - content: |-
-            SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun"
+            SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.4-arm64.xctestrun"
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
     - xcode-test-without-building@0.5.1:
@@ -1813,8 +1813,8 @@ workflows:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - configuration: Fennec_Testing
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.4
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.4-arm64.xctestrun
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
     - xcode-test-without-building@0.5.1:
         title: "Unit Tests - iPhone 16 (iOS 18.6)"
@@ -1868,13 +1868,13 @@ workflows:
         - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - footer_icon_on_error: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - fields: |
-            iOS Simulators | iPhone 17 (iOS 26.2), iPhone 16 (iOS 18.6), iPhone 15 (iOS 17.5)
+            iOS Simulators | iPhone 17 (iOS 26.4), iPhone 16 (iOS 18.6), iPhone 15 (iOS 17.5)
             Branch | ${BITRISE_GIT_BRANCH}
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
     meta:
         bitrise.io:
-            stack: osx-xcode-26.3.x-edge
+            stack: osx-xcode-26.4.x-edge
             machine_type_id: g2.mac.4large
 
   # Firefox_Unit_Tests runs the unit tests multiple times on weekdays to identify flaky tests on the latest iOS version.
