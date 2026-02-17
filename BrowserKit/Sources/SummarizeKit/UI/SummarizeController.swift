@@ -177,6 +177,7 @@ public final class SummarizeController: UIViewController, Themeable {
         to size: CGSize,
         with coordinator: any UIViewControllerTransitionCoordinator
     ) {
+        super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate { [self] _ in
             adjustLayoutForRotation()
         }
@@ -227,13 +228,7 @@ public final class SummarizeController: UIViewController, Themeable {
 
         view.addLayoutGuide(topHalfBoundGuide)
 
-        if layoutContext.isLandscapeLayout {
-            topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        } else {
-            topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.centerYAnchor)
-        }
-        topHalfBoundGuideBottomAnchor?.isActive = true
-
+        makeTopHalfBoundGuideBottomAnchor()
         NSLayoutConstraint.activate([
             topHalfBoundGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             topHalfBoundGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -275,19 +270,24 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     private func adjustLayoutForRotation() {
+        // TODO: - FXIOS-14913 store initial layout to be able to restore the snapshot when rotating back to original layout
         snapshotLayoutCalculator.didRotateInterface = true
         // remove any running animation cause they will look off on rotation
         tabSnapshotContainer.layer.removeAllAnimations()
 
         setupLoadingBackgroundGradient()
         topHalfBoundGuideBottomAnchor?.isActive = false
+        makeTopHalfBoundGuideBottomAnchor()
+        tabSnapshotContainer.transform = snapshotLayoutCalculator.calculateDidRotateTransform(context: layoutContext)
+    }
+    
+    private func makeTopHalfBoundGuideBottomAnchor() {
         if layoutContext.isLandscapeLayout {
             topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         } else {
             topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.centerYAnchor)
         }
         topHalfBoundGuideBottomAnchor?.isActive = true
-        tabSnapshotContainer.transform = snapshotLayoutCalculator.calculateDidRotateTransform(context: layoutContext)
     }
 
     private func setupLoadingBackgroundGradient() {
