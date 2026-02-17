@@ -2967,5 +2967,5 @@ nimbus_system:
       - project-nimbus@mozilla.com
     expires: never
     send_in_pings:
-      - nimbus
+      - nimbus-targeting-context
 
