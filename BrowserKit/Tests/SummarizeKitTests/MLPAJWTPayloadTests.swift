@@ -97,7 +97,7 @@ final class MLPAJWTPayloadTests: XCTestCase {
         objectData: Data = AppAttestTestData.assertionBlob,
         bundleIdentifier: String = AppAttestTestData.bundleID
     ) -> MLPAJWTPayload {
-        MLPAJWTPayload(
+        return MLPAJWTPayload(
             keyId: keyId,
             challenge: challenge,
             objectKey: objectKey,

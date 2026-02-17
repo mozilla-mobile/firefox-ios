@@ -31,10 +31,9 @@ final class MLPAAppAttestServerTests: XCTestCase {
         let req = try XCTUnwrap(session.lastURLRequest, "Expected a request to be made")
         let url = try XCTUnwrap(req.url)
 
-        XCTAssertEqual(url.path, "/verify/challenge")
-
         let components = try XCTUnwrap(URLComponents(url: url, resolvingAgainstBaseURL: false))
         let items = components.queryItems ?? []
+        XCTAssertEqual(url.path, "/verify/challenge")
         XCTAssertEqual(items.first(where: { $0.name == "key_id_b64" })?.value, AppAttestTestData.keyID)
     }
 
@@ -78,12 +77,11 @@ final class MLPAAppAttestServerTests: XCTestCase {
 
         let req = try XCTUnwrap(session.lastURLRequest, "Expected a request to be made")
         let url = try XCTUnwrap(req.url)
+        let auth = req.value(forHTTPHeaderField: "Authorization")
 
         XCTAssertEqual(url.path, "/verify/attest")
         XCTAssertEqual(req.httpMethod, "POST")
         XCTAssertEqual(req.value(forHTTPHeaderField: "Content-Type"), "application/json")
-
-        let auth = req.value(forHTTPHeaderField: "Authorization")
         XCTAssertNotNil(auth)
         XCTAssertTrue(auth?.hasPrefix("Bearer ") == true)
     }
@@ -115,7 +113,7 @@ final class MLPAAppAttestServerTests: XCTestCase {
     }
 
     private func httpResponse(statusCode: Int) -> HTTPURLResponse {
-        HTTPURLResponse(
+        return HTTPURLResponse(
             url: URL(string: "https://example.com")!,
             statusCode: statusCode,
             httpVersion: nil,
