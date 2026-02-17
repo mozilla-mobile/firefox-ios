@@ -52,23 +52,34 @@ final class NativeErrorPageMiddleware {
         )
     }
 
-    @MainActor
     private func handleBypassCertificateWarning(windowUUID: WindowUUID) {
-        guard
-            let webView = try? windowManager.tabManager(for: windowUUID).selectedTab?.webView,
-            let certDetails = nativeErrorPageHelper?.getCertDetails()
-        else {
+        let selectedTab: Tab?
+        do {
+            selectedTab = try windowManager.tabManager(for: windowUUID).selectedTab
+        } catch {
             logger.log(
-                "handleBypassCertificateWarning: Missing required data (tab, webView, cert, host)",
+                "handleBypassCertificateWarning: Failed to fetch selected tab - \(String(describing: error))",
                 level: .warning,
                 category: .certificate
             )
             return
         }
 
-        let selectedTab = try? windowManager.tabManager(for: windowUUID).selectedTab
+        guard
+            let selectedTab = selectedTab,
+            let webView = selectedTab.webView,
+            let certDetails = nativeErrorPageHelper?.getCertDetails()
+        else {
+            logger.log(
+                "handleBypassCertificateWarning: Missing required data (tab, webView, cert)",
+                level: .warning,
+                category: .certificate
+            )
+            return
+        }
+
         let origin = "\(certDetails.host):\(certDetails.failingURL.port ?? 443)"
-        selectedTab?.profile.certStore.addCertificate(certDetails.cert, forOrigin: origin)
+        selectedTab.profile.certStore.addCertificate(certDetails.cert, forOrigin: origin)
         // Note: webview.reload will not change the error URL back to the original URL
         webView.replaceLocation(with: certDetails.failingURL)
     }
