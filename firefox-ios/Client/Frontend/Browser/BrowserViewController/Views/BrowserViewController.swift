@@ -697,6 +697,8 @@ class BrowserViewController: UIViewController,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
         updateSwipingTabs()
+
+        searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: newPositionIsBottom)
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil, shouldUpdateBlurViews: Bool = true) {
