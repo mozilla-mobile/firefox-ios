@@ -18,6 +18,7 @@ let CertErrorCodes: [Int: String] = [
 
 /// NSURLError codes for certificate errors that should trigger native error page.
 /// Used consistently across BrowserViewController, ErrorPageHelper, and middleware.
+/// This replaces the legacy CertErrors in ErrorPageHelper.swift.
 let CertErrors: [Int] = [
     NSURLErrorServerCertificateUntrusted,
     NSURLErrorServerCertificateHasBadDate,
