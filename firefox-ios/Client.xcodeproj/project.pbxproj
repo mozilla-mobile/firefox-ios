@@ -1525,6 +1525,7 @@
 		C2886E0A2EC608F5007AE6C3 /* ModelsBufferRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886E092EC608F0007AE6C3 /* ModelsBufferRoute.swift */; };
 		C2886E0C2EC60E63007AE6C3 /* TranslationsSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886E0B2EC60E59007AE6C3 /* TranslationsSchemeHandlerTests.swift */; };
 		C28CAABF2E5C8C660049D7C7 /* InsetUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */; };
+		C28D67832F4491180032D0B2 /* DeleteAppAttestKeySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28D67822F4491160032D0B2 /* DeleteAppAttestKeySetting.swift */; };
 		C29B64812AD6959E00F3244B /* QRCodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */; };
 		C29B64832AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */; };
 		C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */; };
@@ -9984,6 +9985,7 @@
 		C2886E092EC608F0007AE6C3 /* ModelsBufferRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsBufferRoute.swift; sourceTree = "<group>"; };
 		C2886E0B2EC60E59007AE6C3 /* TranslationsSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsSchemeHandlerTests.swift; sourceTree = "<group>"; };
 		C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetUpdatable.swift; sourceTree = "<group>"; };
+		C28D67822F4491160032D0B2 /* DeleteAppAttestKeySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAppAttestKeySetting.swift; sourceTree = "<group>"; };
 		C29B428A81B120AFF0666037 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Menu.strings; sourceTree = "<group>"; };
 		C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinator.swift; sourceTree = "<group>"; };
 		C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockQRCodeParentCoordinator.swift; sourceTree = "<group>"; };
@@ -13293,6 +13295,7 @@
 		8A3EF7EE2A2FCF0000796E3A /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				C28D67822F4491160032D0B2 /* DeleteAppAttestKeySetting.swift */,
 				F82F68B02E86EF4D002E42D1 /* DeleteAutofillKeysSetting.swift */,
 				033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */,
 				0BD049CD2DFC4A9C00614E61 /* PopupHTMLSetting.swift */,
@@ -19111,6 +19114,7 @@
 				AB936A692C05F2B100600F82 /* TrackingProtectionButton.swift in Sources */,
 				74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */,
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
+				C28D67832F4491180032D0B2 /* DeleteAppAttestKeySetting.swift in Sources */,
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
 				8A9F4EF62DC8F164004644B9 /* AutofillProvider.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
