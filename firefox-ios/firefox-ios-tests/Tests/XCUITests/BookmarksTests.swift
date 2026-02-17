@@ -248,7 +248,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306909
     // Smoketest
-    func testBookmarkLibraryAddDelete() {
+    func testBookmarkLibraryAddDeleteBookmark() {
         app.launch()
         navigator.nowAt(NewTabScreen)
         toolbarScreen.assertTabsButtonExists()
