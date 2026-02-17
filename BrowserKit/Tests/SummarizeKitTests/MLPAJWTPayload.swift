@@ -105,7 +105,7 @@ final class MLPAJWTPayloadTests: XCTestCase {
             bundleIdentifier: bundleIdentifier
         )
     }
-    
+
     /// NOTE: This is only used in tests.
     /// If we ever need a proper decoder, it should be added in `JWTKit`.
     private func decodeJWTPayload(_ jwt: String) throws -> [String: Any] {

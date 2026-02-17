@@ -54,7 +54,10 @@ final class AppAttestClientTests: XCTestCase {
     func test_performAttestation_doesNotPersistKey_whenServerRejectsAttestation() async throws {
         let keyStore = MockAppAttestKeyIDStore()
         let server = makeServer(challenge: AppAttestTestData.attestationChallenge, sendAttestationError: .invalidPayload)
-        let service = makeService(keyToReturn: AppAttestTestData.keyID, attestationToReturn: AppAttestTestData.attestationBlob)
+        let service = makeService(
+            keyToReturn: AppAttestTestData.keyID,
+            attestationToReturn: AppAttestTestData.attestationBlob
+        )
         let subject = try createSubject(appAttestService: service, remoteServer: server, keyStore: keyStore)
 
         do {

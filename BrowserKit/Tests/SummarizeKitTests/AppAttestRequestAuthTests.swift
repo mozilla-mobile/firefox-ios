@@ -54,16 +54,15 @@ final class AppAttestRequestAuthTests: XCTestCase {
         XCTAssertEqual(json["prompt"] as? String, "summarize this")
     }
 
-    func test_authenticate_throwsMissingKeyID_whenNoStoredKey() async throws {
+    func test_authenticate_succeeds_whenNoStoredKey_byPerformingAttestation() async throws {
         let subject = try createSubject(storedKeyID: nil)
         var request = try makeRequest()
 
-        do {
-            try await subject.authenticate(request: &request)
-            XCTFail("Expected authenticate to throw when no keyId is stored.")
-        } catch {
-            XCTAssertEqual(error as? AppAttestServiceError, .missingKeyID)
-        }
+        try await subject.authenticate(request: &request)
+
+        let auth = request.value(forHTTPHeaderField: MLPAConstants.authorizationHeader)
+        XCTAssertNotNil(auth)
+        XCTAssertTrue(auth?.hasPrefix(MLPAConstants.bearerPrefix) == true)
     }
 
     func test_authenticate_jwtContainsAssertionKey() async throws {
