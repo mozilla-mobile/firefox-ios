@@ -38,8 +38,8 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
                 maxWords: maxWords
             )
         } else {
-            guard isHostedSummarizerEnabled else { return nil }
-            guard let llmClient = makeLiteLLMClient(config: config, isAppAttestAuthEnabled: isAppAttestAuthEnabled) else {
+            guard isHostedSummarizerEnabled,
+                  let llmClient = makeLiteLLMClient(config: config, isAppAttestAuthEnabled: isAppAttestAuthEnabled) else {
                 return nil
             }
 
@@ -51,8 +51,8 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             )
         }
         #else
-        guard isHostedSummarizerEnabled else { return nil }
-        guard let llmClient = makeLiteLLMClient(config: config, isAppAttestAuthEnabled: isAppAttestAuthEnabled) else {
+        guard isHostedSummarizerEnabled,
+              let llmClient = makeLiteLLMClient(config: config, isAppAttestAuthEnabled: isAppAttestAuthEnabled) else {
             return nil
         }
         let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
