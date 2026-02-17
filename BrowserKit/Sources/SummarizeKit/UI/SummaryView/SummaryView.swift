@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import UIKit
-import ComponentLibrary
 
 struct SummaryViewModel {
     let title: String?
