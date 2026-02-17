@@ -16,6 +16,7 @@ protocol SummarizerNimbusUtils {
     var isSummarizeFeatureEnabled: Bool { get }
     var isShakeGestureEnabled: Bool { get }
     var isToolbarButtonEnabled: Bool { get }
+    var isLanguageExpansionEnabled: Bool { get }
 
     func isAppleSummarizerEnabled() -> Bool
     func isHostedSummarizerEnabled() -> Bool
@@ -25,60 +26,11 @@ protocol SummarizerNimbusUtils {
     ) -> SummarizerLanguageExpansionConfiguration
 }
 
-struct SummarizerLanguageExpansionConfiguration {
-    enum PrefState {
-        case websiteLanguage
-        case deviceLanguage
-        case customLocale
-    }
-    let isFeatureEnabled: Bool
-    /// Wether the summarizer supports summarizing with the web site language
-    let isWebsiteDeviceLanguageSupported: Bool
-    /// Whether the summarizer supports summarizing with the Device language
-    let isDeviceLanguageSupported: Bool
-    let supportedLocales: [Locale]
-    let deviceLocale: Locale
-    
-    /// The localized names of the `supportedLocales` property.
-    /// It uses the `deviceLocale` to localized names.
-    var localizedLocaleNames: [String] {
-        supportedLocales.compactMap {
-            return $0.localizedString(forIdentifier: deviceLocale.identifier)
-        }
-    }
-    var settingsOptions: [String] {
-        var options: [String] = []
-        if isWebsiteDeviceLanguageSupported {
-            // TODO: - FXIOS-14879 add the string to Strings.swift
-            options.append("Website Language")
-        }
-        if isDeviceLanguageSupported {
-            // TODO: - FXIOS-14879 add the string to Strings.swift
-            options.append("Preferred App Language")
-        }
-        return options + localizedLocaleNames
-    }
-    
-    init(
-        isFeatureEnabled: Bool,
-        isWebsiteDeviceLanguageSupported: Bool,
-        isDeviceLanguageSupported: Bool,
-        supportedLocales: [Locale],
-        deviceLocale: Locale = .current,
-    ) {
-        self.isFeatureEnabled = isFeatureEnabled
-        self.isWebsiteDeviceLanguageSupported = isWebsiteDeviceLanguageSupported
-        self.isDeviceLanguageSupported = isDeviceLanguageSupported
-        self.supportedLocales = supportedLocales
-        self.deviceLocale = deviceLocale
-    }
-    
-    
-}
-
 /// Tiny utility to simplify checking for availability of the summarizers
 struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
-    let prefs: Prefs
+    private let prefs: Prefs
+    private let deviceLocale: Locale
+    private let appleIntelligenceUtil: AppleIntelligenceUtil
 
     var isSummarizeFeatureToggledOn: Bool {
         return isSummarizeFeatureEnabled && didUserEnableSummarizeFeature
@@ -93,7 +45,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         let isToolbarFeatureEnabled = isHostedSummarizerToolbarEndpointEnabled() || isAppleSummarizerToolbarEndpointEnabled()
         return summarizeFeatureOn && isToolbarFeatureEnabled
     }
-    
+
     var isLanguageExpansionEnabled: Bool {
         return featureFlags.isFeatureEnabled(.summarizerLanguageExpansion, checking: .buildOnly)
     }
@@ -107,8 +59,14 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         return summarizeFeatureOn && isShakeFlagEnabled && userSettingEnabled
     }
 
-    init(profile: Profile = AppContainer.shared.resolve()) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(),
+        deviceLocale: Locale = Locale.current,
+        appleIntelligenceUtil: AppleIntelligenceUtil = AppleIntelligenceUtil()
+    ) {
         self.prefs = profile.prefs
+        self.deviceLocale = deviceLocale
+        self.appleIntelligenceUtil = appleIntelligenceUtil
     }
 
     /// Retrieves user preference for enabling the summarize content feature from settings
@@ -123,8 +81,12 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     func isAppleSummarizerEnabled() -> Bool {
         #if canImport(FoundationModels)
-            let isEngLang = NSLocale.current.languageCode == "en"
-            return isEngLang && AppleIntelligenceUtil().isAppleIntelligenceAvailable
+            // if the language expansion is enabled don't check the en locale cause we support multiple locales
+            if languageExpansionConfiguration().isFeatureEnabled {
+                return appleIntelligenceUtil.isAppleIntelligenceAvailable
+            }
+            let isEngLang = deviceLocale.languageCode == "en"
+            return isEngLang && appleIntelligenceUtil.isAppleIntelligenceAvailable
         #else
             return false
         #endif
@@ -135,8 +97,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
-        let isEngLang = NSLocale.current.languageCode == "en"
-        return isEngLang && isAppleSummarizerEnabled()
+        return isAppleSummarizerEnabled()
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
@@ -145,8 +106,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerShakeGestureEnabled() -> Bool {
-        let isEngLang = NSLocale.current.languageCode == "en"
-        return isEngLang && isAppleSummarizerEnabled()
+        return isAppleSummarizerEnabled()
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
@@ -157,15 +117,16 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     func isShakeGestureFeatureFlagEnabled() -> Bool {
         return isAppleSummarizerShakeGestureEnabled() || isHostedSummarizerShakeGestureEnabled()
     }
-    
+
     func languageExpansionConfiguration(
-        from nimbusFeature: SummarizerLanguageExpansionFeature
+        from nimbusFeature: SummarizerLanguageExpansionFeature =
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.value()
     ) -> SummarizerLanguageExpansionConfiguration {
         return SummarizerLanguageExpansionConfiguration(
             isFeatureEnabled: nimbusFeature.enabled,
-            isWebsiteDeviceLanguageSupported: false,
-            isDeviceLanguageSupported: false,
-            supportedLocales: nimbusFeature.supportedLanguageCodes.map({
+            isWebsiteDeviceLanguageSupported: nimbusFeature.supportWebsiteLanguage,
+            isDeviceLanguageSupported: nimbusFeature.supportDeviceLanguage,
+            supportedLocales: nimbusFeature.supportedLocales.map({
                 var identifier = $0.languageCode
                 if let countryCode = $0.countryCode {
                     identifier.append("-\(countryCode)")
