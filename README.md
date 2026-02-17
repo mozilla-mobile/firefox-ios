@@ -25,12 +25,12 @@ As this is an iOS project, it is required to have Xcode on your system.
 
 ### Automatic Installation
 
-The recommended way of setting up the repo is through the [fxios](https://github.com/adudenamedruby/fxios-ctl) tool. This tool provides multiple helpful commands to help manage the repo. Check out its documentation, or the repo, if you'd like to find out more. Setup allows cloning from an https or an ssh url.
+The recommended way of setting up the repo is through the [fxios](https://github.com/mozilla-mobile/fxios-ctl) tool. This tool provides multiple helpful commands to help manage the repo. Check out its documentation, or the repo, if you'd like to find out more. Setup allows cloning from an https or an ssh url.
 
 Note that, if you're using a fork, you'll have to use the `--with-fork <fork-url>` option. This will set your fork as `origin` and the main firefox-ios repo as `upstream`. `fork-url` can be either the ssh or the https version.
 
 ```bash
-brew tap adudenamedruby/fxios
+brew tap mozilla-mobile/fxios
 brew install fxios
 
 # Installing from the main repo
