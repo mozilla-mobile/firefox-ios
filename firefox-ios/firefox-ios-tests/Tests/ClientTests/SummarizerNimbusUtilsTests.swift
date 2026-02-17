@@ -88,6 +88,20 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         XCTAssertFalse(subject.isToolbarButtonEnabled)
     }
 
+    // MARK: - isLanguageExpansionEnabled
+    func test_isLanguageExpansionEnabled() {
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.isLanguageExpansionEnabled)
+    }
+
+    func test_isLanguageExpansionEnabled_whenFeatureFlagOff() {
+        let subject = createSubject()
+        setLanguageExpansionFeature(isEnabled: false)
+
+        XCTAssertFalse(subject.isLanguageExpansionEnabled)
+    }
+
     // MARK: - isShakeGestureEnabled
     func test_isShakeGestureEnabled_whenAllConditionsMet() {
         let subject = createSubject()
