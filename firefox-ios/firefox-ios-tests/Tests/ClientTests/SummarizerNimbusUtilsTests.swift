@@ -8,7 +8,7 @@ import Shared
 
 final class SummarizerNimbusUtilsTests: XCTestCase {
     private var profile: MockProfile!
-    private let testLocale = Locale(identifier: "it")
+    private let itTestLocale = Locale(identifier: "it")
     private let userDefaults = UserDefaults.standard
 
     override func setUp() {
@@ -18,6 +18,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         setHostedSummarizerFeature()
         setIsAppleIntelligenceAvailable()
         setLanguageExpansionFeature()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -50,34 +51,22 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         XCTAssertFalse(subject.isSummarizeFeatureToggledOn)
     }
 
-    func test_isSummarizeFeatureToggledOn_whenBothDisabled() {
+    // MARK: - isSummarizeFeatureEnabled
+    func test_isSummarizeFeatureEnabled_whenHostedSummarizerDisabled() {
         let subject = createSubject()
-        profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-        setIsAppleIntelligenceAvailable(isEnabled: false)
-        setHostedSummarizerFeature(isEnabled: false)
-
-        XCTAssertFalse(subject.isSummarizeFeatureToggledOn)
-    }
-
-    // MARK: - isSummarizeFeatureEnabled Tests
-
-    func test_isSummarizeFeatureEnabled_whenAppleSummarizerEnabled() {
-        let subject = createSubject()
-        // disable the hosted to make sure it returns true for the apple summarizer that is enabled by default
         setHostedSummarizerFeature(isEnabled: false)
 
         XCTAssertTrue(subject.isSummarizeFeatureEnabled)
     }
 
-    func test_isSummarizeFeatureEnabled_whenHostedSummarizerEnabled() {
+    func test_isSummarizeFeatureEnabled_whenAppleSummarizerDisabled() {
         let subject = createSubject()
-        // disable the apple summarizer to make sure it returns true for the hosted summarizer that is enabled by default
         setIsAppleIntelligenceAvailable(isEnabled: false)
 
         XCTAssertTrue(subject.isSummarizeFeatureEnabled)
     }
 
-    func test_isSummarizeFeatureEnabled_whenBothDisabled() {
+    func test_isSummarizeFeatureEnabled_whenBothExperimentsDisabled() {
         let subject = createSubject()
         setIsAppleIntelligenceAvailable(isEnabled: false)
         setHostedSummarizerFeature(isEnabled: false)
@@ -85,32 +74,22 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         XCTAssertFalse(subject.isSummarizeFeatureEnabled)
     }
 
-    // MARK: - isToolbarButtonEnabled Tests
-
-    func test_isToolbarButtonEnabled_whenFeatureOnAndToolbarEndpointEnabled() {
+    // MARK: - isToolbarButtonEnabled
+    func test_isToolbarButtonEnabled() {
         let subject = createSubject()
-        profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
 
         XCTAssertTrue(subject.isToolbarButtonEnabled)
     }
 
-    func test_isToolbarButtonEnabled_whenFeatureOff() {
+    func test_isToolbarButtonEnabled_whenFeatureFlagOff() {
         let subject = createSubject()
-        profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-
-        XCTAssertFalse(subject.isToolbarButtonEnabled)
-    }
-
-    func test_isToolbarButtonEnabled_whenToolbarEndpointDisabled() {
-        let subject = createSubject()
-        profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
         setHostedSummarizerFeature(toolbarEntrypoint: false)
+        setIsAppleIntelligenceAvailable(isEnabled: false)
 
         XCTAssertFalse(subject.isToolbarButtonEnabled)
     }
 
-    // MARK: - isShakeGestureEnabled Tests
-
+    // MARK: - isShakeGestureEnabled
     func test_isShakeGestureEnabled_whenAllConditionsMet() {
         let subject = createSubject()
         profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
@@ -119,24 +98,24 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         XCTAssertTrue(subject.isShakeGestureEnabled)
     }
 
-    func test_isShakeGestureEnabled_whenFeatureOff() {
+    func test_isShakeGestureEnabled_whenFeatureToggledOff() {
         let subject = createSubject()
         profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-        profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
 
         XCTAssertFalse(subject.isShakeGestureEnabled)
     }
 
-    func test_isShakeGestureEnabled_whenFlagDisabled() {
+    func test_isShakeGestureEnabled_whenFeatureFlagDisabled() {
         let subject = createSubject()
         profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
         profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
+        setIsAppleIntelligenceAvailable(isEnabled: false)
         setHostedSummarizerFeature(shakeGesture: false)
 
         XCTAssertFalse(subject.isShakeGestureEnabled)
     }
 
-    func test_isShakeGestureEnabled_whenUserSettingDisabled() {
+    func test_isShakeGestureEnabled_whenShakeGestureUserSettingDisabled() {
         let subject = createSubject()
         profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
         profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
@@ -148,33 +127,31 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
     func test_isAppleSummarizerEnabled_whenLangExpansionDisabled() {
         let subject = createSubject()
         setLanguageExpansionFeature(isEnabled: false)
-        
+
         XCTAssertTrue(subject.isAppleSummarizerEnabled())
     }
-    
+
     func test_isAppleSummarizerEnabled_whenLangExpansionDisabledAndNonEnLocale() {
-        let subject = createSubject(locale: testLocale)
+        let subject = createSubject(locale: itTestLocale)
         setLanguageExpansionFeature(isEnabled: false)
-        
+
         XCTAssertFalse(subject.isAppleSummarizerEnabled())
     }
-    
+
     func test_isAppleSummarizerEnabled_whenLangExpansionDisabledAndAppleIntelligenceDisabled() {
-        let subject = createSubject(locale: testLocale)
+        let subject = createSubject(locale: itTestLocale)
         setLanguageExpansionFeature(isEnabled: false)
         setIsAppleIntelligenceAvailable(isEnabled: false)
-        
         XCTAssertFalse(subject.isAppleSummarizerEnabled())
     }
-    
-    func test_isAppleSummarizerEnabled_whenLangExpansionEnabled() {
-        let subject = createSubject()
-        
+
+    func test_isAppleSummarizerEnabled_whenLangExpansionEnabledAndLocaleNotEn() {
+        let subject = createSubject(locale: itTestLocale)
+
         XCTAssertTrue(subject.isAppleSummarizerEnabled())
     }
 
-    // MARK: - isHostedSummarizerEnabled Tests
-
+    // MARK: - isHostedSummarizerEnabled
     func test_isHostedSummarizerEnabled_whenFeatureFlagEnabled() {
         let subject = createSubject()
         setHostedSummarizerFeature(isEnabled: true)
@@ -189,8 +166,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         XCTAssertFalse(subject.isHostedSummarizerEnabled())
     }
 
-    // MARK: - isShakeGestureFeatureFlagEnabled Tests
-
+    // MARK: - isShakeGestureFeatureFlagEnabled
     func test_isShakeGestureFeatureFlagEnabled_whenAppleShakeEnabled() {
         let subject = createSubject()
         setHostedSummarizerFeature(shakeGesture: false)
@@ -255,7 +231,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
             )
         }
     }
-    
+
     private func setIsAppleIntelligenceAvailable(isEnabled: Bool = true) {
         userDefaults.set(
             isEnabled,
