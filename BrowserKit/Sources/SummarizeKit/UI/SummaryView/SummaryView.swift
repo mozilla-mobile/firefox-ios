@@ -22,7 +22,7 @@ struct SummaryViewModel {
 final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
     private struct UX {
         static let tableViewHorizontalPadding: CGFloat = 16.0
-        static let titleVisbilityThreshold: CGFloat = 30.0
+        static let titleVisibilityThreshold: CGFloat = 30.0
         static let titleVisibilityAnimationDuration: CGFloat = 0.1
     }
     private enum Section: Int, CaseIterable {
@@ -141,7 +141,7 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         // hide or show the title cell gradually as the table view scrolls.
         let titleCellAlpha = abs(offset / (titleCell.frame.height))
 
-        let isShowingTitleCell = offset < -UX.titleVisbilityThreshold
+        let isShowingTitleCell = offset < -UX.titleVisibilityThreshold
         UIView.animate(withDuration: UX.titleVisibilityAnimationDuration) {
             titleCell.alpha = titleCellAlpha
             self.onDidChangeTitleCellVisibility?(isShowingTitleCell)
