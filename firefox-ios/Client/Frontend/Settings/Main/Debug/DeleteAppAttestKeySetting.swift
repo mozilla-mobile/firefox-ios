@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import SummarizeKit
 
 class DeleteAppAttestKeySetting: HiddenSetting {
     override var title: NSAttributedString? {
@@ -15,6 +16,6 @@ class DeleteAppAttestKeySetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        try? KeychainAppAttestKeyIDStore()
+        try? KeychainAppAttestKeyIDStore().clearKeyID()
     }
 }
