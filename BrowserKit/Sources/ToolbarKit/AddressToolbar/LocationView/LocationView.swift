@@ -78,6 +78,7 @@ final class LocationView: UIView,
     }
 
     private lazy var urlTextFieldColor: UIColor = .label
+    // FXIOS-14906: https://mozilla-hub.atlassian.net/browse/FXIOS-14906
     private lazy var urlTextFieldPlaceholderColor: UIColor = .clear
     private lazy var urlTextFieldSubdomainColor: UIColor = .clear
     private lazy var lockIconImageColor: UIColor = .clear
