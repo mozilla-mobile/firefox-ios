@@ -17,7 +17,7 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextFieldNeedsSearchReset(_ textField: UITextField)
 }
 
-final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
+final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
 
@@ -33,8 +33,9 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     // The last string used as a replacement in shouldChangeCharactersInRange.
     private var lastReplacement: String?
-    private var hideCursor = false
+    var hideCursor = false
     private var isSettingMarkedText = false
+    var lastMarkedText: String? = ""
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
@@ -74,6 +75,12 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
                 )
             }
         })
+
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [UITextInputMode.currentInputModeDidChangeNotification]
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -101,6 +108,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     override func deleteBackward() {
+        lastMarkedText = ""
         lastReplacement = ""
         hideCursor = false
 
@@ -126,6 +134,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     override public func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
         isSettingMarkedText = true
+        lastMarkedText = markedText
         removeCompletion()
         super.setMarkedText(markedText, selectedRange: selectedRange)
         isSettingMarkedText = false
@@ -148,6 +157,24 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         let suggestionText = String(suggestion.dropFirst(normalized.count))
         setMarkedText(suggestionText, selectedRange: NSRange())
         hideCursor = true
+    }
+
+    func handleInputModeDidChange() {
+        if let lastMarkedText, !lastMarkedText.isEmpty {
+            if let currentText = self.text {
+                self.text = currentText.replacingOccurrences(of: lastMarkedText, with: "")
+                hideCursor = true
+                setMarkedText(lastMarkedText, selectedRange: NSRange())
+            }
+        }
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == UITextInputMode.currentInputModeDidChangeNotification else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.handleInputModeDidChange()
+        }
     }
 
     // MARK: - ThemeApplicable
@@ -185,6 +212,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     /// Commits the completion by setting the text and removing the highlight.
     private func applyCompletion() {
         // Clear the current completion, then set the text without the attributed style.
+        lastMarkedText = ""
         let text = (self.text ?? "")
         let didRemoveCompletion = removeCompletion()
         self.text = text
