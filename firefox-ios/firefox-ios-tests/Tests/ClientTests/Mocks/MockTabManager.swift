@@ -26,7 +26,6 @@ class MockTabManager: TabManager {
     var lastSelectedTabs = [Tab]()
     var lastSelectedPreviousTabs = [Tab]()
 
-    var delaySelectingNewPopupTab: TimeInterval = 0
     var count = 0
     var normalTabs = [Tab]()
     var privateTabs = [Tab]()

@@ -16,6 +16,7 @@ class SwipingTabsTests: BaseTestCase {
     let localhostValue = "localhost"
     let searchValue = "Search or enter address"
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3167438&group_id=654433
     func testSwipeToSwitchTabs_swipingTabsExperimentOn() throws {
         guard !iPad() else {
             throw XCTSkip("Swiping tabs is not available for iPad")

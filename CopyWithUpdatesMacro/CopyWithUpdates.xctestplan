@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "40C422E3-9DA1-429B-AF8F-A94DD239F89A",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CopyWithUpdatesTests",
+        "name" : "CopyWithUpdatesTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -26,7 +26,6 @@ class TabManagerImplementation: NSObject,
                                 FeatureFlaggable,
                                 SessionCreator {
     let windowUUID: WindowUUID
-    let delaySelectingNewPopupTab: TimeInterval = 0.1
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
     var isRestoringTabs = false
@@ -920,9 +919,8 @@ class TabManagerImplementation: NSObject,
 
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
-        let configuration: WKWebViewConfiguration = tabConfigurationProvider.configuration(
-            isPrivate: tab.isPrivate
-        ).webViewConfiguration
+        // TODO: FXIOS-14784 - Investigate configuration since we override pop-up configuration here
+        let configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
         selectedTab?.createWebview(with: sessionData, configuration: configuration)
         selectedTab?.lastExecutedTime = Date.now()
     }
@@ -1057,13 +1055,6 @@ class TabManagerImplementation: NSObject,
                      zombie: false,
                      isPopup: true,
                      requiredConfiguration: configuration)
-
-        // Wait momentarily before selecting the new tab, otherwise the parent tab
-        // may be unable to set `window.location` on the popup immediately after
-        // calling `window.open("")`.
-        DispatchQueue.main.asyncAfter(deadline: .now() + delaySelectingNewPopupTab) {
-            self.selectTab(popup)
-        }
 
         return popup
     }
@@ -1203,6 +1194,7 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - SessionCreator
+
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
         guard let parentTab = self[parent] else { return nil }
         return addPopupForParentTab(profile: profile, parentTab: parentTab, configuration: configuration).webView

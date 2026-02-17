@@ -351,6 +351,37 @@ extension Selector {
                  description: description,
                  groups: groups)
     }
+
+    static func staticTextInTablesByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+          Selector(
+              strategy: .staticTextInTablesByLabel(label),
+              value: label,
+              description: description,
+              groups: groups
+          )
+      }
+
+    static func tableCellButtonById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .tableCellButtonById(id), value: id, description: description, groups: groups)
+    }
+
+    static func navigationBarByIdOrLabel(_ value: String, description: String, groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .navigationBarByIdOrLabel(value),
+            value: value,
+            description: description,
+            groups: groups
+        )
+     }
+
+    static func linkStaticTextById(_ id: String, description: String, groups: [String] = []) -> Selector {
+          Selector(
+              strategy: .linkStaticTextById(id),
+              value: id,
+              description: description,
+              groups: groups
+          )
+    }
 }
 
 extension XCUIElement {

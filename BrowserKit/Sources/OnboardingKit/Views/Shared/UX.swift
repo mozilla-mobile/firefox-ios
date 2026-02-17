@@ -58,21 +58,44 @@ enum UX {
         static let titleFontRegular = FXFontStyles.Regular.title1.scaledSwiftUIFont()
         static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
         // TODO: FXIOS-14022 Check Japanese alignment depeding on the experiment branch
-        private static var isJapanLocale: Bool {
-            Locale.current.languageCode == "ja"
+        static func isJapanLocale(languageCode: String? = Locale.current.languageCode) -> Bool {
+            languageCode == "ja"
         }
-        static var titleFontForCurrentLocale: DynamicFont {
-            isJapanLocale ? titleFontRegular : titleFont
+
+        static func titleFont(forLanguageCode languageCode: String? = Locale.current.languageCode) -> DynamicFont {
+            isJapanLocale(languageCode: languageCode) ? titleFontRegular : titleFont
         }
-        static var textAlignmentForCurrentLocale: TextAlignment {
-            isJapanLocale ? .leading : .center
+
+        static func textAlignment(forLanguageCode languageCode: String? = Locale.current.languageCode) -> TextAlignment {
+            isJapanLocale(languageCode: languageCode) ? .leading : .center
         }
-        static var horizontalAlignmentForCurrentLocale: HorizontalAlignment {
-            isJapanLocale ? .leading : .center
+
+        static func horizontalAlignment(
+            forLanguageCode languageCode: String? = Locale.current.languageCode
+        ) -> HorizontalAlignment {
+            isJapanLocale(languageCode: languageCode) ? .leading : .center
         }
-        static var frameAlignmentForCurrentLocale: Alignment {
-            isJapanLocale ? .leading : .center
+
+        static func frameAlignment(forLanguageCode languageCode: String? = Locale.current.languageCode) -> Alignment {
+            isJapanLocale(languageCode: languageCode) ? .leading : .center
         }
+
+        static func linksTextAlignment(for variant: OnboardingVariant) -> TextAlignment {
+            return (variant == .brandRefresh || isJapanLocale()) ? .leading : .center
+        }
+
+        static func linksHorizontalAlignment(for variant: OnboardingVariant) -> HorizontalAlignment {
+            return (variant == .brandRefresh || isJapanLocale()) ? .leading : .center
+        }
+
+        static func tosImageHeight(for variant: OnboardingVariant) -> CGFloat {
+            if variant == .brandRefresh {
+                return 180
+            } else {
+                return tosImageHeight
+            }
+        }
+
         static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
         static let primaryActionGlassFont = FXFontStyles.Bold.headline.scaledSwiftUIFont()
         static let secondaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
@@ -88,9 +111,6 @@ enum UX {
         static let buttonMinHeight: CGFloat = 140
         static let textAreaMinHeight: CGFloat = 60
         static let containerSpacing: CGFloat = 0
-
-        static let radioButtonSelectedImage = "radioButtonSelected"
-        static let radioButtonNotSelectedImage = "radioButtonNotSelected"
     }
 
     struct Onboarding {
@@ -116,7 +136,6 @@ enum UX {
         struct Logo {
             static let rotationDuration: TimeInterval = 2.0
             static let rotationAngle: Double = .pi * 2.0
-            static let image = "firefoxLoader"
             static let animationKey = "rotationAnimation"
             static let animationKeyPath = "transform.rotation.z"
         }
@@ -130,8 +149,14 @@ enum UX {
         static let glassCornerRadius: CGFloat = 25
     }
 
-    enum Background {
-        static let brandRefreshLight = "backgroundBrandRefreshLight"
-        static let brandRefreshDark = "backgroundBrandRefreshDark"
+    enum Image {
+        static let welcomeBrandRefreshName = "onboardingWelcomeBrandRefresh"
+
+        static func tosImage(for variant: OnboardingVariant, fallback: UIImage?) -> UIImage? {
+            if variant == .brandRefresh {
+                return UIImage(named: welcomeBrandRefreshName, in: .module, with: nil)
+            }
+            return fallback
+        }
     }
 }

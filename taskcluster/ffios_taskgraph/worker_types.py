@@ -13,6 +13,10 @@ from voluptuous import Optional, Required
         Optional("bump-files"): [str],
         Optional("push"): bool,
         Optional("branch"): str,
+        Optional("next-version"): str,
+        Optional("create-branch-info"): {
+            "branch-name": str
+        },
     },
 )
 def build_version_bump_payload(config, task, task_def):
@@ -23,17 +27,18 @@ def build_version_bump_payload(config, task, task_def):
     scope_prefix = f"project:mobile:{config.params['project']}:treescript:action"
     task_def["payload"] = {}
 
-    if worker["bump"]:
+    if "bump" in worker:
         if not worker["bump-files"]:
             raise Exception("Version Bump requested without bump-files")
 
         bump_info = {}
-        bump_info["next_version"] = config.params["next_version"]
+        # Next version could come from either shipit or automatically from version bump transform
+        bump_info["next_version"] = config.params.get("next_version") or worker.get("next-version")
         bump_info["files"] = worker["bump-files"]
         task_def["payload"]["version_bump_info"] = bump_info
         scopes.append(f"{scope_prefix}:version_bump")
 
-    if worker["push"]:
+    if worker.get("push"):
         task_def["payload"]["push"] = True
 
     if worker.get("force-dry-run"):
@@ -41,6 +46,12 @@ def build_version_bump_payload(config, task, task_def):
 
     if worker.get("branch"):
         task_def["payload"]["branch"] = worker["branch"]
+
+    if worker.get("create-branch-info"):
+        task_def["payload"]["create_branch_info"] = {
+            "branch_name": worker["create-branch-info"]["branch-name"],
+        }
+        scopes.append(f"{scope_prefix}:create_branch")
 
 
 @payload_builder(
@@ -105,4 +116,3 @@ def build_shipit_release_payload(config, task, task_def):
         "version": task["worker"]["version"],
         "cron_revision": task["worker"]["revision"],
     }
-

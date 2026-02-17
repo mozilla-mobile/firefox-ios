@@ -85,7 +85,7 @@ final class LiteLLMClientTests: XCTestCase {
         XCTAssertEqual(choice.delta.content, "Chunked text.")
     }
 
-    func testMakeRequestBuildsURLRequestNonStreaming() throws {
+    func testMakeRequestBuildsURLRequestNonStreaming() async throws {
         let subject = createSubject()
         let config = SummarizerConfig(
             instructions: "instructions",
@@ -95,7 +95,7 @@ final class LiteLLMClientTests: XCTestCase {
                 "stream": false
             ]
         )
-        let urlRequest = try subject.makeRequest(messages: Self.mockMessages, config: config)
+        let urlRequest = try await subject.makeRequest(messages: Self.mockMessages, config: config)
 
         XCTAssertEqual(urlRequest.httpMethod, LiteLLMClient.postMethod)
         XCTAssertEqual(urlRequest.url?.absoluteString, "\(Self.mockAPIEndpoint)/chat/completions")
@@ -121,7 +121,7 @@ final class LiteLLMClientTests: XCTestCase {
         XCTAssertEqual(first["role"] as? String, "system")
     }
 
-    func testMakeRequestBuildsURLRequestStreaming() throws {
+    func testMakeRequestBuildsURLRequestStreaming() async throws {
         let subject = createSubject()
         let config = SummarizerConfig(
             instructions: "instructions",
@@ -131,7 +131,7 @@ final class LiteLLMClientTests: XCTestCase {
                 "stream": true
             ]
         )
-        let urlRequest = try subject.makeRequest(messages: Self.mockMessages, config: config)
+        let urlRequest = try await subject.makeRequest(messages: Self.mockMessages, config: config)
 
         // Verify headers for streaming mode
         let headers = try XCTUnwrap(urlRequest.allHTTPHeaderFields, "Expected headers to be non‑nil")
@@ -146,7 +146,7 @@ final class LiteLLMClientTests: XCTestCase {
 
     private func createSubject() -> LiteLLMClient {
         let subject = LiteLLMClient(
-            apiKey: Self.mockAPIKey,
+            authenticator: BearerRequestAuth(apiKey: Self.mockAPIKey),
             baseURL: URL(string: Self.mockAPIEndpoint)!
         )
         trackForMemoryLeaks(subject)

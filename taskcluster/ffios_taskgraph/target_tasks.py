@@ -74,6 +74,10 @@ def target_tasks_ship(full_task_graph, parameters, graph_config):
         product_type="firefox",
     )
 
+@register_target_task("merge_automation")
+def target_tasks_merge_automation(full_task_graph, parameters, graph_config):
+    return [l for l, t in full_task_graph.tasks.items() if t.kind == "branch-version-bump"]
+
 @register_target_task("promote_focus")
 def target_tasks_promote_focus(full_task_graph, parameters, graph_config):
     return _filter_release_promotion(

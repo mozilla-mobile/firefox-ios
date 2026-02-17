@@ -63,6 +63,7 @@ struct HomepageLayoutMeasurementCache {
             let containerWidth: Double
             let shouldShowSection: Bool
             let contentSizeCategory: UIContentSizeCategory
+            let scrollDirection: ScrollDirection
         }
 
         struct Result: Equatable {

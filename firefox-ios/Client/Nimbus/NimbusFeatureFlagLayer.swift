@@ -16,6 +16,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
+        case .adsClient:
+            return checkAdsClientFeature(from: nimbus)
+
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
@@ -91,9 +94,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .otherErrorPages:
             return checkOtherErrorPagesFeature(from: nimbus)
 
-        case .privacyNotice:
-            return checkPrivacyNoticeFeature(from: nimbus)
-
         case .recentSearches:
             return checkRecentSearchesFeature(from: nimbus)
 
@@ -135,6 +135,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .hostedSummarizerShakeGesture:
            return checkHostedSummarizerShakeGesture(from: nimbus)
+
+        case .summarizerAppAttestAuth:
+            return checkAppleSummarizerFeature(from: nimbus)
 
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
@@ -189,9 +192,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
-
-        case .updatedPasswordManager:
-            return checkUpdatedPasswordManagerFeature(from: nimbus)
 
         case .voiceSearch:
             return checkVoiceSearchFeature(from: nimbus)
@@ -394,6 +394,11 @@ final class NimbusFeatureFlagLayer: Sendable {
         return config.status
     }
 
+    private func checkAdsClientFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.adsClient.value()
+        return config.status
+    }
+
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
         return config.status
@@ -464,10 +469,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.nativeErrorPageFeature.value().otherErrorPages
     }
 
-    private func checkPrivacyNoticeFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.privacyNoticeFeature.value().enabled
-    }
-
     // MARK: - Summarizer Feature
     private func checkAppleSummarizerFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appleSummarizerFeature.value()
@@ -497,9 +498,8 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.hostedSummarizerFeature.value().shakeGesture
     }
 
-    private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.updatedPasswordManagerFeature.value()
-        return config.status
+    private func checkSummarizerAppAttestAuthFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.summarizerAppAttestAuthFeature.value().enabled
     }
 
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {

@@ -211,7 +211,7 @@ final class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .relayMask:
-            return RelayMaskSettingsViewController(profile: profile, windowUUID: windowUUID)
+            return RelayMaskSettingsViewController(profile: profile, windowUUID: windowUUID, tabManager: tabManager)
 
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC

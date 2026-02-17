@@ -94,6 +94,30 @@
 /* Option for the light theme in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "Cler";
 
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "Tscherna in design";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "Cuntinuar";
+
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "Cumenza a tippar per vesair propostas da tschertga, tias websites frequentas, segnapaginas, la cronologia e maschinas da tschertgar – tut en il medem lieu.";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Tscherna tia trav d’adressas";
+
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Fa a savair ils partenaris da marketing da %2$@ co ti has scuvert %1$@ e che ti dovras il program. Questas datas na vegnan mai vendidas.";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Co nus utilisain las datas";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "Betg ussa";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Ans gida a crear in meglier internet";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automatic";
 
@@ -142,14 +166,26 @@
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "Access a tes segnapaginas, a tia cronologia ed a tes pleds-clav sin mintga apparat.";
 
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "Tes segnapaginas, pleds-clav e dapli sincronisads sin mintga apparat. Tut è protegì grazia al criptadi – uschia che mo ti pos acceder.";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "Cumenzar a sincronisar";
+
+/* Button to start the Sync setup process. */
+"Onboarding.Modern.Sync.SignIn.Action.v145" = "Cumenzar a sincronisar";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.Skip.Action.v140" = "Betg ussa";
 
+/* Button to skip the Sync setup during onboarding. */
+"Onboarding.Modern.Sync.Skip.Action.v145" = "Betg ussa";
+
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Sync.Title.v140" = "Cuntinuescha immediatamain là nua che ti has chalà";
+
+/* Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Sync.Title.v145" = "Prenda %@ cun tai sin tut tias aventuras en il web";
 
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "Cuntinuar";

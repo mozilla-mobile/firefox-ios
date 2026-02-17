@@ -68,6 +68,9 @@ buildServer.json
 # IDEA
 .idea
 
+# Zed
+.zed
+
 # Required for Glean
 firefox-ios/Client/Generated
 firefox-ios/Sync/Generated
@@ -139,3 +142,6 @@ ContentBlockingLists/disconnect-*
 focus-ios/shavar-*
 firefox-ios/shavar-*
 shavar-*
+
+# Licenses.html generation
+LicensePlistTemp

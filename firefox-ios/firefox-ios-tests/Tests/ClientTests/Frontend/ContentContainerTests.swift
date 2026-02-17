@@ -11,6 +11,7 @@ import XCTest
 final class ContentContainerTests: XCTestCase {
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
+    private var tabManager: MockTabManager!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -18,11 +19,13 @@ final class ContentContainerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.overlayModeManager = MockOverlayModeManager()
+        self.tabManager = MockTabManager()
     }
 
     override func tearDown() async throws {
         self.profile = nil
         self.overlayModeManager = nil
+        self.tabManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -50,6 +53,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -61,6 +65,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -123,6 +128,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -176,6 +182,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -218,6 +225,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -241,6 +249,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = createSubject()
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -286,6 +295,7 @@ final class ContentContainerTests: XCTestCase {
 
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -304,6 +314,7 @@ final class ContentContainerTests: XCTestCase {
     private func createHomepage() -> HomepageViewController {
         return HomepageViewController(
             windowUUID: WindowUUID.XCTestDefaultUUID,
+            tabManager: tabManager,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )

@@ -185,7 +185,10 @@
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Decile adiós a los rastreadores siniestros";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Abrir enlaces con privacidad incorporada";
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Abrir enlaces con privacidad integrada";
+
+/* Title for the welcome card in the v149 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Abrir todos los enlaces con privacidad integrada";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automático";

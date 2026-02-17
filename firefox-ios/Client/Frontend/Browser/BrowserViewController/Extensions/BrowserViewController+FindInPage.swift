@@ -31,9 +31,12 @@ extension BrowserViewController {
         }
     }
 
+    // Used only on iOS 15
     private func useCustomFindInteraction(isVisible: Bool, tab: Tab? = nil) {
         if isVisible {
-            if findInPageBar == nil { setupFindInPage() }
+            if findInPageBar == nil {
+                setupFindInPage()
+            }
 
             self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
@@ -55,8 +58,7 @@ extension BrowserViewController {
         ).isActive = true
 
         findInPageBar.applyTheme(theme: currentTheme())
-
-        updateViewConstraints()
+        updateConstraintsForFindInPageChanges()
 
         // We make the find-in-page bar the first responder below, causing the keyboard delegates
         // to fire. This, in turn, will animate the Find in Page container since we use the same
@@ -73,7 +75,15 @@ extension BrowserViewController {
         webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
         bottomContentStackView.removeArrangedView(findInPageBar)
         self.findInPageBar = nil
-        updateViewConstraints()
+        updateConstraintsForFindInPageChanges()
+    }
+
+    private func updateConstraintsForFindInPageChanges() {
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateConstraintsForKeyboard()
+        }
     }
 }
 

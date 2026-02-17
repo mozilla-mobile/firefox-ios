@@ -180,7 +180,7 @@ let package = Package(
             swiftSettings: [
             ]
         ),
-        .target(name: "TestKit"),
+        .target(name: "TestKit", dependencies: ["Shared"]),
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
@@ -209,7 +209,8 @@ let package = Package(
             dependencies: [
                 "Common",
                 "ComponentLibrary",
-                "Down"
+                "Down",
+                "JWTKit"
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
@@ -263,15 +264,8 @@ let package = Package(
         .target(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],
-            resources: [
-                .process("Shaders")
-            ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-            ],
-            linkerSettings: [
-                .linkedFramework("Metal"),
-                .linkedFramework("MetalKit")
             ]),
         .testTarget(
             name: "OnboardingKitTests",

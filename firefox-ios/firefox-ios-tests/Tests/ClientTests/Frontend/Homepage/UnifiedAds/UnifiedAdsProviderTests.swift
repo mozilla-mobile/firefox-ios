@@ -3,23 +3,81 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
 import XCTest
 
 @testable import Client
 
+class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
+    var mockAdsImages: [String: MozAdsImage]?
+    var mockAdsTiles: [String: MozAdsTile]?
+    var mockError: Error?
+
+    func clearCache() throws {}
+
+    func cycleContextId() throws -> String {
+        return "test-context-id"
+    }
+
+    func recordClick(clickUrl: String) throws {}
+
+    func recordImpression(impressionUrl: String) throws {}
+
+    func reportAd(reportUrl: String) throws {}
+
+    func requestImageAds(
+        mozAdRequests: [MozAdsPlacementRequest],
+        options: MozAdsRequestOptions?
+    ) throws -> [String: MozAdsImage] {
+        if let error = mockError {
+            throw error
+        }
+        return mockAdsImages ?? [:]
+    }
+
+    func requestSpocAds(
+        mozAdRequests: [MozillaAppServices.MozAdsPlacementRequestWithCount],
+        options: MozillaAppServices.MozAdsRequestOptions?
+    ) throws -> [String: [MozillaAppServices.MozAdsSpoc]] {
+        return [:]
+    }
+
+    func requestTileAds(
+        mozAdRequests: [MozillaAppServices.MozAdsPlacementRequest],
+        options: MozillaAppServices.MozAdsRequestOptions?
+    ) throws -> [String: MozillaAppServices.MozAdsTile] {
+        if let error = mockError {
+            throw error
+        }
+        return mockAdsTiles ?? [:]
+    }
+}
+
 @MainActor
 class UnifiedAdsProviderTests: XCTestCase {
+    private var mockAdsClient: MockMozAdsClient!
     private var networking: MockUnifiedTileNetworking!
 
     override func setUp() async throws {
         try await super.setUp()
         TelemetryContextualIdentifier.setupContextId()
+        mockAdsClient = MockMozAdsClient()
+        setupNimbusAdsClientTesting(isEnabled: false)
         networking = MockUnifiedTileNetworking()
     }
 
     override func tearDown() async throws {
+        mockAdsClient = nil
         networking = nil
         try await super.tearDown()
+    }
+
+    private func setupNimbusAdsClientTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.adsClient.with { _, _ in
+            return AdsClient(
+                status: isEnabled
+            )
+        }
     }
 
     func testFetchTile_givenErrorResponse_thenFailsWithError() {
@@ -182,11 +240,87 @@ class UnifiedAdsProviderTests: XCTestCase {
         }
     }
 
+    // MARK: - Ads Client Tests
+
+    func testFetchTilesWithAdsClient_whenSuccessful_thenReturnsTiles() {
+        setupNimbusAdsClientTesting(isEnabled: true)
+
+        let adTile1 = MozAdsTile(
+            blockKey: "12345",
+            callbacks: MozAdsCallbacks(
+                click: "https://www.test2.com",
+                impression: "https://www.test3.com",
+                report: nil
+            ),
+            format: "tile",
+            imageUrl: "https://www.test4.com",
+            name: "newtab_mobile_tile_1",
+            url: "https://www.test1.com"
+        )
+
+        let adTile2 = MozAdsTile(
+            blockKey: "6789",
+            callbacks: MozAdsCallbacks(
+                click: "https://www.test6.com",
+                impression: "https://www.test7.com",
+                report: nil
+            ),
+            format: "tile",
+            imageUrl: "https://www.test8.com",
+            name: "newtab_mobile_tile_2",
+            url: "https://www.test5.com"
+        )
+
+        mockAdsClient.mockAdsTiles = [
+            "newtab_mobile_tile_1": adTile1,
+            "newtab_mobile_tile_2": adTile2
+        ]
+
+        let subject = createSubject()
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 2)
+                let actual = Dictionary(uniqueKeysWithValues: tiles.map { ($0.name, $0.url) })
+                let expected = [
+                    "newtab_mobile_tile_1": "https://www.test1.com",
+                    "newtab_mobile_tile_2": "https://www.test5.com"
+                ]
+                XCTAssertEqual(actual, expected)
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testFetchTilesWithAdsClient_whenError_thenFailsWithError() {
+        setupNimbusAdsClientTesting(isEnabled: true)
+
+        mockAdsClient.mockError = NSError(domain: "test", code: 1)
+
+        let subject = createSubject()
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .failure(error as UnifiedAdsProvider.Error):
+                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+        }
+    }
+
     // MARK: - Helper functions
 
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsProvider {
         let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
-        let subject = UnifiedAdsProvider(networking: networking, urlCache: cache)
+        let factory = MockMozAdsClientFactory(mockClient: mockAdsClient)
+        let subject = UnifiedAdsProvider(
+            adsClientFactory: factory,
+            networking: networking,
+            urlCache: cache
+        )
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

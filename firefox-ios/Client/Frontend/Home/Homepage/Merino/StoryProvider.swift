@@ -9,11 +9,13 @@ import Shared
 protocol StoryProviderInterface: Sendable {
     func fetchHomepageStories() async -> [MerinoStory]
     func fetchDiscoverMoreStories() async -> [MerinoStory]
+    func prefetchStories() async
 }
 
 final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     private struct Constants {
         static let defaultNumberOfHomepageStories = 9
+        static let defaultNumberOfHomepageStoriesForCustomizedScrollDirection = 100
         static let defaultNumberOfDiscoverMoreStories = 100
     }
 
@@ -24,11 +26,20 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     }
 
     func fetchHomepageStories() async -> [MerinoStory] {
-        return await fetchStories(Constants.defaultNumberOfHomepageStories)
+        let numberOfRequestedStories = await isHomepageStoriesScrollDirectionCustomized
+            ? Constants.defaultNumberOfHomepageStoriesForCustomizedScrollDirection
+            : Constants.defaultNumberOfHomepageStories
+        return await fetchStories(numberOfRequestedStories)
     }
 
     func fetchDiscoverMoreStories() async -> [MerinoStory] {
         return await fetchStories(Constants.defaultNumberOfDiscoverMoreStories)
+    }
+
+    func prefetchStories() async {
+        // Because a prefetch basically warms the cache, we don't actually need
+        // to do anything with the results
+        _ = try? await merinoAPI.fetchStories(Constants.defaultNumberOfDiscoverMoreStories)
     }
 
     private func fetchStories(_ numberOfRequestedStories: Int) async -> [MerinoStory] {

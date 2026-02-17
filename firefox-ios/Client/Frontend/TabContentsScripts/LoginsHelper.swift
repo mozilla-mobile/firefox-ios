@@ -422,8 +422,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
     @MainActor
     public static func setUpdatedPasswordEnabled(with tab: Tab?) {
         guard let tab = tab else { return }
-        let status = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.updatedPasswordManager, checking: .buildOnly)
-        let jsUpdatedPasswordEnabled = "window.__firefox__.logins.isUpdatedPasswordManagerEnabled(\(status))"
+        let jsUpdatedPasswordEnabled = "window.__firefox__.logins.isUpdatedPasswordManagerEnabled(true)"
         tab.webView?.evaluateJavascriptInDefaultContentWorld(jsUpdatedPasswordEnabled)
     }
 

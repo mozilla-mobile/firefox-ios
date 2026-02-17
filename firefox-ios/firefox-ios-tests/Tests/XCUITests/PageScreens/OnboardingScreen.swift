@@ -79,14 +79,19 @@ final class OnboardingScreen {
         }
     }
 
-    func waitForCurrentScreenElements() {
-        let img = app.images["\(rootA11yId)ImageView"]
+    func waitForCurrentScreenElements(waitForImage: Bool = true) {
         let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
         let desc = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
         let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
         let secondary = sel.secondaryButton(rootId: rootA11yId).element(in: app)
 
-        BaseTestCase().waitForElementsToExist([img, title, desc, primary])
+        if waitForImage {
+            let img = app.images["\(rootA11yId)ImageView"]
+            BaseTestCase().waitForElementsToExist([img, title, desc, primary])
+        } else {
+            BaseTestCase().waitForElementsToExist([title, desc, primary])
+        }
+
         // The secundary button only exists in some screens
         if secondary.exists { BaseTestCase().mozWaitForElementToExist(secondary) }
     }
@@ -133,5 +138,78 @@ final class OnboardingScreen {
         BaseTestCase().mozWaitForElementToExist(next)
         next.waitAndTap()
         currentScreen += 1
+    }
+
+    // MARK: - Channel-specific flows
+
+    /// Handles the initial gate based on app channel (Firefox Beta, Firefox, Fennec)
+    func handleFirstRunGate(isFirefoxBeta: Bool, isFirefox: Bool) {
+        if !isFirefoxBeta && !isFirefox {
+            // Fennec: Shows Terms of Service with "Agree and Continue" button
+            agreeAndContinue()
+        } else {
+            // Firefox/Firefox Beta: Shows "Continue" button
+            let continueButton = sel.CONTINUE_BUTTON.element(in: app)
+            BaseTestCase().mozWaitForElementToExist(continueButton)
+            continueButton.tap()
+        }
+    }
+
+    /// Completes the Firefox Beta onboarding flow
+    /// Beta has a different flow with specific screen IDs
+    func completeBetaOnboardingFlow() {
+        // Screen 0: Skip (secondary button)
+        let screen0Secondary = sel.betaSecondaryButton(screenIndex: 0).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(screen0Secondary)
+        screen0Secondary.tap()
+
+        // Screen 1: Continue (primary button)
+        let screen1Primary = sel.betaPrimaryButton(screenIndex: 1).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(screen1Primary)
+        screen1Primary.tap()
+
+        // Screen 2: Continue (primary button)
+        let screen2Primary = sel.betaPrimaryButton(screenIndex: 2).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(screen2Primary)
+        screen2Primary.tap()
+
+        // Screen 3: Not now (secondary button)
+        let screen3Secondary = sel.betaSecondaryButton(screenIndex: 3).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(screen3Secondary)
+        screen3Secondary.tap()
+
+        // After Beta flow, we're at the first standard onboarding screen
+        currentScreen = 0
+    }
+
+    /// Completes the standard onboarding tour (for Firefox and Fennec)
+    /// - Parameters:
+    ///   - isIPad: Whether running on iPad (skips fifth screen)
+    ///   - afterBetaFlow: If true, the first screen may not have an image
+    func completeStandardOnboardingFlow(isIPad: Bool, afterBetaFlow: Bool = false) {
+        // First screen - already shown after gate
+        // After Beta flow, the first standard screen may not have an image
+        waitForCurrentScreenElements(waitForImage: !afterBetaFlow)
+
+        // Navigate to second screen
+        goToNextScreen()
+        waitForCurrentScreenElements()
+
+        // Navigate to third screen
+        goToNextScreen()
+        assertCurrentScreenElements()
+
+        // Navigate to fourth screen
+        goToNextScreen()
+        assertCurrentScreenElements(secondaryExists: false)
+
+        // Fifth screen (iPhone only)
+        if !isIPad {
+            goToNextScreenViaPrimary()
+            assertCurrentScreenElements(secondaryExists: false)
+        }
+
+        // Finish onboarding
+        finishOnboarding()
     }
 }

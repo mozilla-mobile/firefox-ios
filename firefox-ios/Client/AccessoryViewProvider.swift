@@ -45,7 +45,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         return featureFlags.getCustomState(for: .searchBarPosition) ?? .bottom
     }
 
-    private var toolbarItems: [UIBarButtonItem] {
+    var toolbarItems: [UIBarButtonItem] {
         guard #available(iOS 26.0, *) else {
             return [
                 navigationButtonsBarItem,

@@ -7,8 +7,14 @@
 /* On certificate error page, this is the security information shown in the advanced section. */
 "NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "ਇਹ ਸਾਈਟ ਨਾ-ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨਾਂ ਲਈ ਇਜਾਜ਼ਤ ਨਹੀਂ ਦਿੰਦੀ ਹੈ।";
 
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "ਤੁਹਾਨੂੰ ਆਪਣੇ Wi-Fi ਨੈੱਟਵਰਕ ਵਿੱਚ ਸਾਈਨ-ਇਨ ਕਰਨ ਦੀ ਲੋੜ ਹੋ ਸਕਦੀ ਹੈ ਜਾਂ ਆਪਣੀਆਂ VPN ਸੈਟਿੰਗਾਂ ਦੀ ਜਾਂਚ ਕਰੋ।";
+
 /* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
 "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "ਜੇ ਤੁਸੀਂ ਕਾਰਪੋਰੇਟ ਨੈੱਟਵਰਕ ਵਰਤ ਰਹੇ ਹੋ ਤਾਂ ਤੁਹਾਡੀ ਸਹਿਯੋਗ ਟੀਮ ਕੋਲ ਹੋਰ ਜਾਣਕਾਰੀ ਹੋ ਸਕਦੀ ਹੈ।";
+
+/* On certificate error page, this is the description explaining the security risk. */
+"NativeErrorPage.BadCertDomain.Description.v149" = "ਸਾਈਟ ਦਾ ਦਿਖਾਵਾ ਕਰਕੇ ਕੋਈ ਤੁਹਾਡੀ ਨਿੱਜੀ ਜਾਣਕਾਰੀ ਨੂੰ ਚੋਰੀ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਸਕਦਾ ਹੈ। ਤੁਹਾਡੀ ਕਨੈਕਸ਼ਨ ਸੈਟਿੰਗਾਂ ਵੀ ਗਲਤ ਢੰਗ ਨਾਲ ਸੈੱਟ ਅੱਪ ਕੀਤੀਆਂ ਹੋ ਸਕਦੀਆਂ ਹਨ।";
 
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
 "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "ਗਲਤੀ ਕੋਡ: %@";

@@ -25,12 +25,7 @@ extension View {
     }
 
     private func primaryButtonColor(theme: Theme, variant: OnboardingVariant) -> UIColor {
-        switch variant {
-        case .brandRefresh:
-            return theme.colors.actionPrimaryBrandRefresh
-        default:
-            return theme.colors.actionPrimary
-        }
+        return theme.colors.actionPrimary
     }
 
     @ViewBuilder
@@ -49,14 +44,17 @@ extension View {
     }
 
     @ViewBuilder
-    func skipButtonStyle(theme: Theme) -> some View {
+    func skipButtonStyle(theme: Theme, variant: OnboardingVariant) -> some View {
         if #available(iOS 26.0, *) {
             self.buttonStyle(.glassProminent)
                 .tint(theme.colors.layer2.color)
                 .foregroundStyle(theme.colors.textSecondary.color)
         } else {
+            let textColor = variant == .brandRefresh
+                ? theme.colors.textSecondary.color
+                : theme.colors.iconOnColor.color
             self.buttonStyle(.borderless)
-                .foregroundStyle(theme.colors.iconOnColor.color)
+                .foregroundStyle(textColor)
         }
     }
 

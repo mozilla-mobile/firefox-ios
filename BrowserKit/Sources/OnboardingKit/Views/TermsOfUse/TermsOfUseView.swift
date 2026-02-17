@@ -90,14 +90,18 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     @ViewBuilder
     private var regularImageView: some View {
-        if let img = viewModel.configuration.image {
+        if let img = imageForVariant {
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.tosImageHeight)
+                .frame(height: UX.CardView.tosImageHeight(for: viewModel.variant))
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
         }
+    }
+
+    private var imageForVariant: UIImage? {
+        return UX.Image.tosImage(for: viewModel.variant, fallback: viewModel.configuration.image)
     }
 
     // MARK: - Compact Layout
@@ -147,7 +151,10 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     // MARK: - Subviews
 
     var links: some View {
-        VStack(alignment: UX.CardView.horizontalAlignmentForCurrentLocale, spacing: UX.Onboarding.Spacing.standard) {
+        VStack(
+            alignment: UX.CardView.linksHorizontalAlignment(for: viewModel.variant),
+            spacing: UX.Onboarding.Spacing.standard
+        ) {
             ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
                 AttributedLinkText<TermsOfUseAction>(
                     textColor: theme.colors.textSecondary,
@@ -155,7 +162,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
-                    textAlignment: UX.CardView.textAlignmentForCurrentLocale,
+                    textAlignment: UX.CardView.linksTextAlignment(for: viewModel.variant),
                     linkAction: viewModel.handleEmbededLinkAction(action:)
                 )
             }
@@ -164,21 +171,16 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     }
 
     private var linkColor: UIColor {
-        switch viewModel.variant {
-        case .brandRefresh:
-            return theme.colors.actionPrimaryBrandRefresh
-        default:
-            return theme.colors.actionPrimary
-        }
+        return theme.colors.actionPrimary
     }
 
     @ViewBuilder
     func imageView(scale: CGFloat) -> some View {
-        if let img = viewModel.configuration.image {
+        if let img = imageForVariant {
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.tosImageHeight * scale)
+                .frame(height: UX.CardView.tosImageHeight(for: viewModel.variant) * scale)
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
         }
@@ -186,7 +188,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     var titleView: some View {
         Text(viewModel.configuration.title)
-            .font(UX.CardView.titleFontForCurrentLocale)
+            .font(UX.CardView.titleFont())
             .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
@@ -199,8 +201,8 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             .fixedSize(horizontal: false, vertical: true)
             .font(UX.CardView.bodyFont)
             .foregroundColor(Color(theme.colors.textSecondary))
-            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
-            .frame(maxWidth: .infinity, alignment: UX.CardView.frameAlignmentForCurrentLocale)
+            .multilineTextAlignment(UX.CardView.textAlignment())
+            .frame(maxWidth: .infinity, alignment: UX.CardView.frameAlignment())
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)DescriptionLabel")
             .accessibilityLabel(viewModel.configuration.body)
     }

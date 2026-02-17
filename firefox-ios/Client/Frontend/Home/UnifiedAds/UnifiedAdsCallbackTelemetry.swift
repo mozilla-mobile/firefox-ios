@@ -89,16 +89,14 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     private func sendGleanImpressionTelemetry(tileSite: Site, position: Int) {
         sponsoredTileGleanTelemetry.sendImpressionTelemetry(
             tileSite: tileSite,
-            position: position,
-            isUnifiedAdsEnabled: true
+            position: position
         )
     }
 
     private func sendGleanClickTelemetry(tileSite: Site, position: Int) {
         sponsoredTileGleanTelemetry.sendClickTelemetry(
             tileSite: tileSite,
-            position: position,
-            isUnifiedAdsEnabled: true
+            position: position
         )
     }
 }

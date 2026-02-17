@@ -44,13 +44,13 @@
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Cerca o insere adresse";
 
 /* This is the navigation title for the Shortcuts Library view */
-"FirefoxHomepage.Shortcuts.Library.Title.v143" = "Vias breve";
+"FirefoxHomepage.Shortcuts.Library.Title.v143" = "Accessos directe";
 
 /* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
 "FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "Appunctate: %@";
 
 /* This is the section title for the Shortcuts section on Firefox Homepage. */
-"FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Vias breve";
+"FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Accessos directe";
 
 /* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
 "FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ de %2$@";

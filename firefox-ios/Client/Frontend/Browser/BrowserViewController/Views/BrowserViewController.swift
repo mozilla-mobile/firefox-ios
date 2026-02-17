@@ -137,7 +137,6 @@ class BrowserViewController: UIViewController,
     private lazy var statusBarOverlay: StatusBarOverlay = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.statusBarOverlay
     }
-    private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
         AddressToolbarContainer(isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled,
                                 toolbarHelper: self.toolbarHelper)
@@ -469,7 +468,7 @@ class BrowserViewController: UIViewController,
         return featureFlagStatus
     }
 
-    private var isSnapKitRemovalEnabled: Bool {
+    var isSnapKitRemovalEnabled: Bool {
         return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
     }
 
@@ -533,6 +532,13 @@ class BrowserViewController: UIViewController,
             return newHandler
         }
     }
+
+    lazy var browserLayoutManager: BrowserViewControllerLayoutManager = {
+        return BrowserViewControllerLayoutManager(
+            parentView: view,
+            headerView: header
+        )
+    }()
 
     init(
         profile: Profile,
@@ -659,12 +665,11 @@ class BrowserViewController: UIViewController,
     func searchBarPositionDidChange(newSearchBarPosition: SearchBarPosition?) {
         guard let newSearchBarPosition else { return }
 
-        let searchBarView: TopBottomInterchangeable = addressToolbarContainer
         let newPositionIsBottom = newSearchBarPosition == .bottom
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
 
-        searchBarView.removeFromParent()
-        searchBarView.addToParent(parent: newParent, addToTop: !newPositionIsBottom)
+        addressToolbarContainer.removeFromParent()
+        addressToolbarContainer.addToParent(parent: newParent, addToTop: !newPositionIsBottom)
 
         if isSwipingTabsEnabled {
             webPagePreview.invalidateScreenshotData()
@@ -678,7 +683,7 @@ class BrowserViewController: UIViewController,
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         updateHeaderConstraints()
-        searchBarView.updateConstraints()
+        addressToolbarContainer.updateConstraints()
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
         if isToolbarTranslucencyRefactorEnabled {
@@ -1575,19 +1580,6 @@ class BrowserViewController: UIViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        // Remove existing constraints
-        statusBarOverlay.removeConstraints(statusBarOverlayConstraints)
-        statusBarOverlayConstraints.removeAll()
-
-        // Set new constraints for the statusBarOverlay
-        statusBarOverlayConstraints.append(contentsOf: [
-            statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
-            statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            statusBarOverlay.bottomAnchor.constraint(equalTo: header.bottomAnchor)
-        ])
-        NSLayoutConstraint.activate(statusBarOverlayConstraints)
-
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         checkForJSAlerts()
         adjustURLBarHeightBasedOnLocationViewHeight()
@@ -1682,6 +1674,7 @@ class BrowserViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+
         DispatchQueue.main.async { [self] in
             // Only update position if device size class changed (rotation, split view, etc.)
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
@@ -1738,6 +1731,11 @@ class BrowserViewController: UIViewController,
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            statusBarOverlay.bottomAnchor.constraint(equalTo: header.bottomAnchor),
         ])
 
         let topTouchAreaHeight = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
@@ -1753,7 +1751,12 @@ class BrowserViewController: UIViewController,
             ])
         }
 
-        updateHeaderConstraints()
+        if isSnapKitRemovalEnabled {
+            browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
+            browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+        } else {
+            updateHeaderConstraints()
+        }
         setupBlurViews()
     }
 
@@ -1783,11 +1786,17 @@ class BrowserViewController: UIViewController,
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
-    // MARK: - Snapkit related
 
+    // MARK: - Snapkit related
     private func updateHeaderConstraints() {
+        guard !isSnapKitRemovalEnabled else {
+            browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+            return
+        }
+
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
+
         header.snp.remakeConstraints { make in
             // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
             // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
@@ -1805,7 +1814,8 @@ class BrowserViewController: UIViewController,
                 make.height.equalTo(0)
             } else {
                 if let scrollController = scrollController as? LegacyTabScrollProvider {
-                    scrollController.headerTopConstraint = make.top.equalTo(topConstraint).constraint
+                    let topConstraint = make.top.equalTo(topConstraint).constraint
+                    scrollController.headerTopConstraint = ConstraintReference(snapKit: topConstraint)
                 } else {
                     headerTopConstraint = make.top.equalTo(topConstraint).constraint
                 }
@@ -1817,10 +1827,32 @@ class BrowserViewController: UIViewController,
     override func updateViewConstraints() {
         topTouchAreaHeightConstraint?.constant = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
 
-        readerModeBar?.snp.remakeConstraints { make in
-            make.height.equalTo(UIConstants.ToolbarHeight)
+        if !isSnapKitRemovalEnabled {
+            readerModeBar?.snp.remakeConstraints { make in
+                make.height.equalTo(UIConstants.ToolbarHeight)
+            }
         }
 
+        updateOverKeyboardContainerConstraints()
+        updateBottomContainerConstraints()
+        updateBottomContentStackViewConstraints()
+        updateConstraintsForKeyboard()
+
+        super.updateViewConstraints()
+    }
+
+    private func updateBottomContainerConstraints() {
+        bottomContainer.snp.remakeConstraints { make in
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            } else {
+                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            }
+            make.leading.trailing.equalTo(view)
+        }
+    }
+
+    func updateOverKeyboardContainerConstraints() {
         overKeyboardContainer.snp.remakeConstraints { make in
             if let scrollController = scrollController as? LegacyTabScrollProvider {
                 scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
@@ -1835,27 +1867,20 @@ class BrowserViewController: UIViewController,
             }
             make.leading.trailing.equalTo(view)
         }
+    }
 
-        bottomContainer.snp.remakeConstraints { make in
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-            } else {
-                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-            }
-            make.leading.trailing.equalTo(view)
-        }
-
+    private func updateBottomContentStackViewConstraints() {
         bottomContentStackView.snp.remakeConstraints { remake in
             adjustBottomContentStackView(remake)
         }
+    }
 
+    func updateConstraintsForKeyboard() {
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
             scrollController.hideToolbars(animated: true)
         } else {
             adjustBottomSearchBarForKeyboard()
         }
-
-        super.updateViewConstraints()
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
@@ -1946,6 +1971,10 @@ class BrowserViewController: UIViewController,
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+
+        // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
+        // FXIOS-11036 - Investigate improvement to JavaScript alert dequeueing
+        checkForJSAlerts()
     }
 
     /// Embed a ContentContainable inside the content container
@@ -2016,7 +2045,8 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if webView.url == nil {
+        // TODO: FXIOS-14783 - Investigate proper solution to needsReload
+        if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
             // The web view can go gray if it was zombified due to memory pressure.
             // When this happens, the URL is nil, so try restoring the page upon selection.
             logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
@@ -2091,7 +2121,9 @@ class BrowserViewController: UIViewController,
         }
 
         microsurvey.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
@@ -2113,7 +2145,9 @@ class BrowserViewController: UIViewController,
         }
 
         self.microsurvey = nil
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
     }
 
     // MARK: - Native Error Page
@@ -4096,7 +4130,15 @@ class BrowserViewController: UIViewController,
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
             Task { @MainActor [weak self] in
                 guard let targetView = tab.webView?.accessoryView else { return }
-                self?.configureRelayContextualHint(for: targetView)
+                // For iPad, try to make the CFR point more precisely to the actual autofill button, since
+                // the keyboards are significantly larger and the accessory is offset to the side of the screen.
+                if UIDevice.current.userInterfaceIdiom == .pad,
+                   let toolbarButton = targetView.toolbarItems.first(where: { $0 is AutofillAccessoryViewButtonItem }),
+                   let buttonView = toolbarButton.customView {
+                    self?.configureRelayContextualHint(for: buttonView)
+                } else {
+                    self?.configureRelayContextualHint(for: targetView)
+                }
             }
         }
     }
@@ -4726,7 +4768,8 @@ extension BrowserViewController: TabManagerDelegate {
             needsReload = false
         }
 
-        if needsReload {
+        // TODO: FXIOS-14783 - Investigate proper solution to needsReload
+        if needsReload, selectedTab.url?.absoluteString != "about:blank" {
             selectedTab.reloadPage()
         }
     }
@@ -5031,8 +5074,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 // MARK: JSPromptAlertControllerDelegate
 
-extension BrowserViewController: WKJavascriptPromptAlertControllerDelegate {
-    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
+extension BrowserViewController: JavascriptPromptAlertControllerDelegate {
+    func promptAlertControllerDidDismiss(_ alertController: JavaScriptPromptAlertController) {
         logger.log("JS prompt was dismissed. Will dequeue next alert.",
                    level: .info,
                    category: .webview)

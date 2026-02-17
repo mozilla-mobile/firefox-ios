@@ -6,7 +6,7 @@ import DeviceCheck
 import Foundation
 
 /// Protocol defining the requirements for an App Attest service.
-public protocol AppAttestServiceProtocol {
+public protocol AppAttestServiceProtocol: Sendable {
     var isSupported: Bool { get }
     func generateKey() async throws -> String
     func attestKey(_ keyId: String, clientDataHash: Data) async throws -> Data
