@@ -23,6 +23,8 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private var overlayManager: OverlayModeManager
+    private let tabManager: TabManager
+    private let logger: Logger
     var contentType: ContentType = .nativeErrorPage
     private var nativeErrorPageState: NativeErrorPageState
 
@@ -128,16 +130,20 @@ final class NativeErrorPageViewController: UIViewController,
         }
     }
 
-    init(
+   init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         overlayManager: OverlayModeManager,
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        tabManager: TabManager,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.overlayManager = overlayManager
         self.notificationCenter = notificationCenter
+        self.tabManager = tabManager
+        self.logger = logger
         nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
 
         super.init(
@@ -339,44 +345,47 @@ final class NativeErrorPageViewController: UIViewController,
 
     @objc
     private func didTapViewCertificate() {
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        guard let tabManager = try? windowManager.tabManager(for: windowUUID),
-              let selectedTab = tabManager.selectedTab,
-              let errorURL = selectedTab.webView?.url else { return }
-        let internalURL = InternalURL(errorURL)
-        guard internalURL?.isErrorPage == true else { return }
-        let originalURL = nativeErrorPageState.url ?? internalURL?.originalURLFromErrorPage ?? errorURL
-        let certificates = ErrorPageHelper.certificatesFromErrorURL(errorURL, logger: DefaultLogger.shared)
-        guard !certificates.isEmpty else { return }
+        guard let selectedTab = tabManager.selectedTab,
+              let errorURL = selectedTab.webView?.url,
+              let internalURL = InternalURL(errorURL),
+              internalURL.isErrorPage else { return }
+        let originalURL = nativeErrorPageState.url ?? internalURL.originalURLFromErrorPage ?? errorURL
+        guard !CertificateHelper.certificatesFromErrorURL(errorURL, logger: logger).isEmpty else { return }
 
-        let topLevelDomain = originalURL.host ?? originalURL.absoluteString
-        let certificatesModel = CertificatesModel(
-            topLevelDomain: topLevelDomain,
-            title: nativeErrorPageState.title,
-            URL: originalURL.absoluteString,
-            certificates: certificates
+        let destination = NavigationDestination(
+            .certificatesFromErrorPage,
+            url: originalURL,
+            errorPageURL: errorURL,
+            certificateTitle: nativeErrorPageState.title
         )
-
-        let certificatesController = CertificatesViewController(
-            with: certificatesModel,
-            windowUUID: windowUUID
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShowCertificatesFromErrorPage
+            )
         )
-
-        if let navigationController = navigationController {
-            navigationController.pushViewController(certificatesController, animated: true)
-        } else {
-            let navController = UINavigationController(rootViewController: certificatesController)
-            present(navController, animated: true)
-        }
     }
 
     @objc
     private func didTapLearnMore() {
-        guard let url = SupportUtils.URLForTopic("what-does-your-connection-is-not-secure-mean") else { return }
+        guard let url = SupportUtils.URLForTopic("what-does-your-connection-is-not-secure-mean") else {
+            logger.log(
+                "NativeErrorPage: Unable to create Learn More support URL",
+                level: .warning,
+                category: .lifecycle
+            )
+            return
+        }
 
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        guard let tabManager = try? windowManager.tabManager(for: windowUUID) else { return }
-        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+        let destination = NavigationDestination(.nativeErrorPageLearnMore, url: url)
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnNativeErrorPageLearnMore
+            )
+        )
     }
 
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {
