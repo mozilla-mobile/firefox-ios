@@ -191,7 +191,7 @@ class BlockedTrackersTableViewController: UIViewController,
         guard let footerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: BlockedTrackersFooterView.cellIdentifier
         ) as? BlockedTrackersFooterView else { return nil }
-        
+
         footerView.trackersBlockedInfoTextView.delegate = self
         footerView.makeAttributedDescription(
             with: model.getTrackersBlockedModeText(),
