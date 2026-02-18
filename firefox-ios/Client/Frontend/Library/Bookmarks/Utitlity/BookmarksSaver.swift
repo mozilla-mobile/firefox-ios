@@ -105,7 +105,7 @@ struct DefaultBookmarksSaver: BookmarksSaver {
         let bookmarkExists = await withCheckedContinuation { continuation in
             profile.places.getBookmark(guid: recentBookmarkFolderGuid)
                 .uponQueue(.main) { result in
-                    continuation.resume(returning: result.successValue != nil)
+                    continuation.resume(returning: (result.successValue ?? nil) != nil)
                 }
         }
 
