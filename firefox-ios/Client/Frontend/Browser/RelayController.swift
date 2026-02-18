@@ -164,7 +164,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         if let relayClient {
             self.client = relayClient
         }
-        
+
         self.accountStatusProvider = if let relayAccountStatusProvider { relayAccountStatusProvider } else {
             RelayAccountStatusProviderImplementation(logger: logger)
         }
