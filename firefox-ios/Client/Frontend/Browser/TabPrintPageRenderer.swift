@@ -14,6 +14,7 @@ final class TabPrintPageRenderer: UIPrintPageRenderer {
 
     private let tabDisplayTitle: String
     private let tabURL: URL?
+    private var formatter: UIViewPrintFormatter?
 
     let textAttributes = [NSAttributedString.Key.font: UX.textFont]
     let dateString: String
@@ -21,6 +22,8 @@ final class TabPrintPageRenderer: UIPrintPageRenderer {
     required init(tabDisplayTitle: String, tabURL: URL?, viewPrintFormatter: UIViewPrintFormatter?) {
         self.tabDisplayTitle = tabDisplayTitle
         self.tabURL = tabURL
+        self.formatter = viewPrintFormatter
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
@@ -31,7 +34,7 @@ final class TabPrintPageRenderer: UIPrintPageRenderer {
         self.footerHeight = UX.marginScale * UX.insets
         self.headerHeight = UX.marginScale * UX.insets
 
-        if let formatter = viewPrintFormatter {
+        if let formatter {
             formatter.perPageContentInsets = UIEdgeInsets(equalInset: UX.insets)
             addPrintFormatter(formatter, startingAtPageAt: 0)
         }
