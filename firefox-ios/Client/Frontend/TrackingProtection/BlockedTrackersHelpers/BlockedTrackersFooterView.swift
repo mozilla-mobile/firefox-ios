@@ -8,6 +8,10 @@ import Shared
 
 class BlockedTrackersFooterView: UITableViewHeaderFooterView,
                                  ReusableCell {
+    private enum UX {
+        static let footerLeadingAnchorMultiplier: CGFloat = 1.7
+    }
+
     let trackersBlockedInfoTextView: UITextView = .build { textView in
         textView.isEditable = false
         textView.isScrollEnabled = false
@@ -33,7 +37,7 @@ class BlockedTrackersFooterView: UITableViewHeaderFooterView,
         NSLayoutConstraint.activate([
             trackersBlockedInfoTextView.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
-                constant: 1.7 * TPMenuUX.UX.horizontalMargin // to align with the cell images
+                constant: UX.footerLeadingAnchorMultiplier * TPMenuUX.UX.horizontalMargin // to align with the cell images
             ),
             trackersBlockedInfoTextView.trailingAnchor.constraint(
                 equalTo: trailingAnchor,

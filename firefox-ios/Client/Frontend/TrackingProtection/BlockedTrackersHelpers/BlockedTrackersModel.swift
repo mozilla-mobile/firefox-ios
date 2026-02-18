@@ -80,7 +80,8 @@ struct BlockedTrackersTableModel {
 
     func getTrackersBlockedModeText() -> String {
         let strengthKey = ProfilePrefsReader.prefix + ContentBlockingConfig.Prefs.StrengthKey
-        if let userDefaults, userDefaults.string(forKey: strengthKey) == BlockingStrength.strict.rawValue {
+        let isStrictMode = userDefaults?.string(forKey: strengthKey) == BlockingStrength.strict.rawValue
+        if isStrictMode {
             return String(
                 format: .Menu.EnhancedTrackingProtection.trackersBlockedStrictModeFooterText,
                 String.Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink

@@ -187,22 +187,20 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 0 {
-            guard let footerView = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: BlockedTrackersFooterView.cellIdentifier
-            ) as? BlockedTrackersFooterView else { return UIView() }
-
-            footerView.trackersBlockedInfoTextView.delegate = self
-            footerView.makeAttributedDescription(
-                with: model.getTrackersBlockedModeText(),
-                linkedText: .Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink,
-                url: SupportUtils.URLForTopic("tracking-protection-ios"),
-                and: currentTheme()
-            )
-            footerView.applyTheme(theme: currentTheme())
-            return footerView
-        }
-        return nil
+        guard section == 0 else { return nil }
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: BlockedTrackersFooterView.cellIdentifier
+        ) as? BlockedTrackersFooterView else { return nil }
+        
+        footerView.trackersBlockedInfoTextView.delegate = self
+        footerView.makeAttributedDescription(
+            with: model.getTrackersBlockedModeText(),
+            linkedText: .Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink,
+            url: SupportUtils.URLForTopic("tracking-protection-ios"),
+            and: currentTheme()
+        )
+        footerView.applyTheme(theme: currentTheme())
+        return footerView
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
