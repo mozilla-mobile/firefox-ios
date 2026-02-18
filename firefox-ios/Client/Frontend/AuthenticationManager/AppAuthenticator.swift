@@ -5,6 +5,7 @@
 import LocalAuthentication
 import WebKit
 
+// TODO: @dicarobinho Let's move this in another file with the extension
 protocol LAContextProtocol {
     func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool
     func evaluatePolicy(_ policy: LAPolicy, localizedReason: String, reply: @escaping @Sendable (Bool, Error?) -> Void)
@@ -44,8 +45,10 @@ final class AppAuthenticator: AppAuthenticationProtocol {
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
+            isAuthenticating = true
             authenticateWithDeviceOwnerAuthentication { result in
                 DispatchQueue.main.async {
+                    self.isAuthenticating = false
                     switch result {
                     case .success:
                         completion(.deviceOwnerAuthenticated)
@@ -56,6 +59,7 @@ final class AppAuthenticator: AppAuthenticationProtocol {
             }
         } else {
             DispatchQueue.main.async {
+                self.isAuthenticating = false
                 completion(.passCodeRequired)
             }
         }
@@ -110,6 +114,6 @@ final class AppAuthenticator: AppAuthenticationProtocol {
     }
 
     var canAuthenticateDeviceOwner: Bool {
-        return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+        return context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
 }
