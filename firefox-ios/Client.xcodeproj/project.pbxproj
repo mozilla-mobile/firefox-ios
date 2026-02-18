@@ -1469,6 +1469,9 @@
 		BDB4E7212F337AAB000DB45F /* LocationTextFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB4E7202F337AAB000DB45F /* LocationTextFieldTests.swift */; };
 		BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */; };
 		BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */; };
+		C209316E2F3CA52E00F0B05C /* VoiceSearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C209316D2F3CA52E00F0B05C /* VoiceSearchCoordinator.swift */; };
+		C20931702F3CA5E200F0B05C /* VoiceSearchKit in Frameworks */ = {isa = PBXBuildFile; productRef = C209316F2F3CA5E200F0B05C /* VoiceSearchKit */; };
+		C20931722F3CAB0100F0B05C /* VoiceSearchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20931712F3CAB0100F0B05C /* VoiceSearchCoordinatorTests.swift */; };
 		C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */; };
 		C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */; };
 		C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */; };
@@ -9926,6 +9929,8 @@
 		C1C54E119D804703437D116C /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C1DF4F71AB33BAB7B199F361 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C1F24EFFB6E9B114849A4DB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
+		C209316D2F3CA52E00F0B05C /* VoiceSearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSearchCoordinator.swift; sourceTree = "<group>"; };
+		C20931712F3CAB0100F0B05C /* VoiceSearchCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSearchCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerTests.swift; sourceTree = "<group>"; };
 		C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewModel.swift; sourceTree = "<group>"; };
 		C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntensityVisualEffectView.swift; sourceTree = "<group>"; };
@@ -11433,6 +11438,7 @@
 				216A0D762A40E7AB008077BA /* Redux in Frameworks */,
 				0B6D1C882E15456F00919F1E /* SummarizeKit in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
+				C20931702F3CA5E200F0B05C /* VoiceSearchKit in Frameworks */,
 				5A8FD0EC293A7D5E00333AA7 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13674,6 +13680,7 @@
 				21FBB4032ADECEFF002D9AB7 /* TabTray */,
 				B236204E2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift */,
 				0B6153DF2E24E316000D2FBD /* SummarizeCoordinator.swift */,
+				C209316D2F3CA52E00F0B05C /* VoiceSearchCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -13703,6 +13710,7 @@
 				C81C66C329F00D1000F6422F /* UserActivityRouteTests.swift */,
 				61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */,
 				0B6153E12E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift */,
+				C20931712F3CAB0100F0B05C /* VoiceSearchCoordinatorTests.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -17046,6 +17054,7 @@
 				8C51ED732DE0A64D00B3E58A /* OnboardingKit */,
 				0B6D1C872E15456F00919F1E /* SummarizeKit */,
 				ED4F77DF2F364BF800E7A7FB /* CopyWithUpdates */,
+				C209316F2F3CA5E200F0B05C /* VoiceSearchKit */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -18656,6 +18665,7 @@
 				E1549A632D9D268B00895330 /* ReaderModeSettingsButton.swift in Sources */,
 				AB4FB4D52C89FAFD005EF0CC /* BlockedTrackersTableController.swift in Sources */,
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
+				C209316E2F3CA52E00F0B05C /* VoiceSearchCoordinator.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
 				C8B41E0A29F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift in Sources */,
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
@@ -19880,6 +19890,7 @@
 				C24A0D2F2F3A7E7E00BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift in Sources */,
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
+				C20931722F3CAB0100F0B05C /* VoiceSearchCoordinatorTests.swift in Sources */,
 				8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
 				21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */,
@@ -31870,6 +31881,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AB2AC6612BCFD0A200022AAB /* XCRemoteSwiftPackageReference "swift-certificates" */;
 			productName = X509;
+		};
+		C209316F2F3CA5E200F0B05C /* VoiceSearchKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VoiceSearchKit;
 		};
 		C26B96D62F29188100D4B140 /* TestKit */ = {
 			isa = XCSwiftPackageProductDependency;
