@@ -101,14 +101,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
         closeButton.isHidden = hideCloseButton
 
-        // When homepage is blank, we need to use firefoxFavIcon
-        if tab.url == nil {
-            favicon.manuallySetImage(
-                UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
-        } else {
-            favicon.manuallySetImage(
-                UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
-        }
+        favicon.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
 
         favicon.backgroundColor = .clear
 

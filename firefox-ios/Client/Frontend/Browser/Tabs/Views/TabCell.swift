@@ -123,17 +123,13 @@ final class TabCell: UICollectionViewCell,
             let title = String.TabsTray.TabsSelectorBlankTabsTitle
             titleText.text = title
             accessibilityLabel = getA11yTitleLabel(tabModel: tabModel, tabTitle: title)
-            let identifier = ImageIdentifiers.firefoxFavicon
-            if let firefoxFavicon = UIImage(named: identifier) {
-                favicon.manuallySetImage(firefoxFavicon)
-            }
         } else {
             titleText.text = tabModel.tabTitle
             accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
-            let identifier = StandardImageIdentifiers.Large.globe
-            if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
-                favicon.manuallySetImage(globeFavicon)
-            }
+        }
+
+        if let firefoxFavicon = UIImage(named: ImageIdentifiers.firefoxFavicon) {
+            favicon.manuallySetImage(firefoxFavicon)
         }
 
         isAccessibilityElement = true
