@@ -75,10 +75,12 @@ final class MockSummarizerNimbusUtils: SummarizerNimbusUtils {
     var appleSummarizerEnabled = false
     var hostedSummarizerEnabled = false
     var shakeGestureFeatureFlagEnabled = false
+    var appAttestAuthEnabled = false
 
     private(set) var isAppleSummarizerEnabledCallCount = 0
     private(set) var isHostedSummarizerEnabledCallCount = 0
     private(set) var isShakeGestureFeatureFlagEnabledCallCount = 0
+    private(set) var isAppAttestAuthEnabledCallCount = 0
 
     func isAppleSummarizerEnabled() -> Bool {
         isAppleSummarizerEnabledCallCount += 1
@@ -93,5 +95,10 @@ final class MockSummarizerNimbusUtils: SummarizerNimbusUtils {
     func isShakeGestureFeatureFlagEnabled() -> Bool {
         isShakeGestureFeatureFlagEnabledCallCount += 1
         return shakeGestureFeatureFlagEnabled
+    }
+
+    func isAppAttestAuthEnabled() -> Bool {
+        isAppAttestAuthEnabledCallCount += 1
+        return appAttestAuthEnabled
     }
 }

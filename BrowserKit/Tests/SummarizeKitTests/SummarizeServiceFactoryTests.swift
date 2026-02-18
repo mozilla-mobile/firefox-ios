@@ -68,6 +68,19 @@ final class SummarizeServiceFactoryTests: XCTestCase {
         XCTAssertNil(result)
     }
 
+    func test_make_whenAppAttestAuthEnabled_returnsNilForAppAttestConfigNotAvailable() throws {
+        let subject = createSubject()
+
+        let result = subject.make(
+            isAppleSummarizerEnabled: false,
+            isHostedSummarizerEnabled: true,
+            isAppAttestAuthEnabled: true,
+            config: nil
+        )
+
+        XCTAssertNil(result)
+    }
+
     func test_make_returnsNilWhenSummarizerAvailable() throws {
         let subject = createSubject()
 
