@@ -530,7 +530,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ScreenshotSetting(settings: self),
             DeleteLoginsKeysSetting(settings: self),
             DeleteAutofillKeysSetting(settings: self),
-            DeleteAppAttestKeySetting(settings: self),
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self),
@@ -538,6 +537,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
