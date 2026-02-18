@@ -34,6 +34,7 @@ protocol RelayControllerProtocol {
     /// same one that was focused originally in `emailFieldFocused`. If the two differ, the
     /// operation is cancelled.
     /// - Parameter tab: the tab to populate. The email field is expected to be focused, otherwise a JS error will be logged.
+    /// - Parameter completion: the completion block called once the action is resolved.
     @MainActor
     func populateEmailFieldWithRelayMask(for tab: Tab,
                                          completion: @escaping RelayPopulateCompletion)
@@ -42,6 +43,10 @@ protocol RelayControllerProtocol {
     /// - Parameter tab: the current tab.
     @MainActor
     func emailFieldFocused(in tab: Tab)
+}
+
+protocol RelayAccountStatusProvider {
+    var accountStatus: RelayAccountStatus { get set }
 }
 
 /// Describes the result of an attempt to generate a Relay mask for an email field.
@@ -69,6 +74,21 @@ enum RelayAccountStatus {
     case unknown
     /// The account status is actively being updated.
     case updating
+}
+
+@MainActor
+final class RelayAccountStatusProviderImplementation: RelayAccountStatusProvider {
+    private let logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
+    internal var accountStatus: RelayAccountStatus = .unknown {
+        didSet {
+            logger.log("Updated Relay account status from \(oldValue) to: \(accountStatus)", level: .info, category: .relay)
+        }
+    }
 }
 
 @MainActor
@@ -116,16 +136,19 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private var isGeneratingMask = false
     private let notificationCenter: NotificationProtocol
     private weak var focusedTab: Tab?
-    private var accountStatus: RelayAccountStatus = .unknown {
-        didSet {
-            logger.log("Updated Relay account status from \(oldValue) to: \(accountStatus)", level: .info, category: .relay)
-        }
+    private var accountStatusProvider: RelayAccountStatusProvider
+    private var accountStatus: RelayAccountStatus {
+        get { accountStatusProvider.accountStatus }
+        set { accountStatusProvider.accountStatus = newValue }
     }
 
     // MARK: - Init
 
     init(logger: Logger = DefaultLogger.shared,
          profile: Profile = AppContainer.shared.resolve(),
+         relayClient: RelayClientProtocol? = nil,
+         relayRSClient: RelayRemoteSettingsClientProtocol? = nil,
+         relayAccountStatusProvider: RelayAccountStatusProvider? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
          config: RelayClientConfiguration = .prod,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -137,7 +160,17 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         self.notificationCenter = notificationCenter
         self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
 
-        configureRelayRSClient()
+        if let relayClient {
+            self.client = relayClient
+        }
+        
+        self.accountStatusProvider = if let relayAccountStatusProvider { relayAccountStatusProvider } else {
+            RelayAccountStatusProviderImplementation(logger: logger)
+        }
+
+        self.relayRSClient = if let relayRSClient { relayRSClient } else {
+            RelayRemoteSettingsClient(rsService: profile.remoteSettingsService)
+        }
         beginObserving()
         performPostLaunchUpdate()
     }
@@ -309,10 +342,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             }
         }
         return (nil, .error)
-    }
-
-    private func configureRelayRSClient() {
-        relayRSClient = RelayRemoteSettingsClient(rsService: profile.remoteSettingsService)
     }
 
     private func beginObserving() {

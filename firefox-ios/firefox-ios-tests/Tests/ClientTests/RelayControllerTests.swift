@@ -37,7 +37,7 @@ final class MockRelayRemoteSettingsClient: RelayRemoteSettingsClientProtocol {
     let mockShouldShowValue = true
 
     func shouldShowRelay(host: String, domain: String, isRelayUser: Bool) -> Bool {
-        return mockShouldShowValue
+        return domain == "goodwebsite.com"
     }
 }
 
@@ -57,6 +57,17 @@ final class MockRelayClient: RelayClientProtocol {
     }
 }
 
+final class MockRelayAccountStatusProvider: RelayAccountStatusProvider {
+    let mockValue: RelayAccountStatus
+    init(mockValue: RelayAccountStatus) {
+        self.mockValue = mockValue
+    }
+    var accountStatus: RelayAccountStatus {
+        get { return mockValue }
+        set { }
+    }
+}
+
 @MainActor
 class RelayControllerTests: XCTestCase {
     override func setUp() {
@@ -69,20 +80,94 @@ class RelayControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - Tests
+    // MARK: - RelayControllerProtocol Tests
 
-    func testRelayControllerByDefaultDoesNotShowPromptOrSettings() {
+    func testRelayControllerDoesNotShowPromptOrSettingsWithoutAccount() {
         let subject = createSubject()
 
         XCTAssertFalse(subject.shouldDisplayRelaySettings())
-        XCTAssertFalse(subject.shouldDisplayRelaySettings())
+    }
+
+    func testRelayControllerShowsSettingsIfAccountAvailable() {
+        let subject = createSubject(accountStatus: .available)
+
+        XCTAssertTrue(subject.shouldDisplayRelaySettings())
+    }
+
+    func testRelayShouldDisplayPromptForValidAllowListURL() {
+        let subject = createSubject(accountStatus: .available)
+
+        XCTAssertTrue(subject.emailFocusShouldDisplayRelayPrompt(url: URL(string: "https://goodwebsite.com")!))
+    }
+
+    func testRelayShouldNotDisplayPromptForBlockListURL() {
+        let subject = createSubject(accountStatus: .available)
+
+        XCTAssertFalse(subject.emailFocusShouldDisplayRelayPrompt(url: URL(string: "https://badwebsite.com")!))
+    }
+
+    func testRelayPopulateFieldGeneratesMaskAndCallsCompletionBlock() {
+        let subject = createSubject(accountStatus: .available)
+
+        let mockTab = MockTab(profile: AppContainer.shared.resolve(), windowUUID: .XCTestDefaultUUID)
+        mockTab.webView = MockTabWebView(tab: mockTab)
+
+        let expectation = expectation(description: "Completion called")
+
+        subject.populateEmailFieldWithRelayMask(for: mockTab) { result in
+            XCTAssertEqual(result, .newMaskGenerated)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 1.0)
+    }
+
+    func testRelayPopulateFieldSucceedsIfFocusedOnCorrectTab() {
+        let subject = createSubject(accountStatus: .available)
+
+        let mockTab1 = MockTab(profile: AppContainer.shared.resolve(), windowUUID: .XCTestDefaultUUID)
+        mockTab1.webView = MockTabWebView(tab: mockTab1)
+
+        let mockTab2 = MockTab(profile: AppContainer.shared.resolve(), windowUUID: .XCTestDefaultUUID)
+        mockTab2.webView = MockTabWebView(tab: mockTab2)
+
+        subject.emailFieldFocused(in: mockTab1)
+
+        let expectation = expectation(description: "Completion called")
+
+        subject.populateEmailFieldWithRelayMask(for: mockTab1) { result in
+            XCTAssertEqual(result, .newMaskGenerated)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 1.0)
+    }
+
+    func testRelayPopulateFieldIsAbortedIfFocusedOnWrongTab() {
+        let subject = createSubject(accountStatus: .available)
+
+        let mockTab1 = MockTab(profile: AppContainer.shared.resolve(), windowUUID: .XCTestDefaultUUID)
+        mockTab1.webView = MockTabWebView(tab: mockTab1)
+
+        let mockTab2 = MockTab(profile: AppContainer.shared.resolve(), windowUUID: .XCTestDefaultUUID)
+        mockTab2.webView = MockTabWebView(tab: mockTab2)
+
+        subject.emailFieldFocused(in: mockTab2)
+
+        subject.populateEmailFieldWithRelayMask(for: mockTab1) { result in
+            // Note: we do _not_ expect the completion to run in this scenario,
+            // so if it is called we fail the test immediately.
+            XCTFail()
+        }
+        wait(1)
     }
 
     // MARK: - Subject
 
-    func createSubject() -> RelayController {
+    func createSubject(accountStatus: RelayAccountStatus = .unknown) -> RelayController {
         return RelayController(logger: MockLogger(),
                                profile: AppContainer.shared.resolve(),
+                               relayClient: MockRelayClient(),
+                               relayRSClient: MockRelayRemoteSettingsClient(),
+                               relayAccountStatusProvider: MockRelayAccountStatusProvider(mockValue: accountStatus),
                                gleanWrapper: MockGleanWrapper(),
                                config: .prod,
                                notificationCenter: MockNotificationCenter())
