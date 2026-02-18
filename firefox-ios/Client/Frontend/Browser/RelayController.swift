@@ -46,6 +46,7 @@ protocol RelayControllerProtocol {
 }
 
 protocol RelayAccountStatusProvider {
+    @MainActor
     var accountStatus: RelayAccountStatus { get set }
 }
 

@@ -59,19 +59,22 @@ final class MockRelayClient: RelayClientProtocol {
 
 final class MockRelayAccountStatusProvider: RelayAccountStatusProvider {
     let mockValue: RelayAccountStatus
+    var wrappedValue: RelayAccountStatus = .unknown
+
     init(mockValue: RelayAccountStatus) {
         self.mockValue = mockValue
     }
+
     var accountStatus: RelayAccountStatus {
         get { return mockValue }
-        set { }
+        set { wrappedValue = newValue }
     }
 }
 
 @MainActor
 class RelayControllerTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
 
