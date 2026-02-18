@@ -166,13 +166,15 @@ class RelayControllerTests: XCTestCase {
     // MARK: - Subject
 
     func createSubject(accountStatus: RelayAccountStatus = .unknown) -> RelayController {
-        return RelayController(logger: MockLogger(),
-                               profile: AppContainer.shared.resolve(),
-                               relayClient: MockRelayClient(),
-                               relayRSClient: MockRelayRemoteSettingsClient(),
-                               relayAccountStatusProvider: MockRelayAccountStatusProvider(mockValue: accountStatus),
-                               gleanWrapper: MockGleanWrapper(),
-                               config: .prod,
-                               notificationCenter: MockNotificationCenter())
+        let subject =  RelayController(logger: MockLogger(),
+                                       profile: AppContainer.shared.resolve(),
+                                       relayClient: MockRelayClient(),
+                                       relayRSClient: MockRelayRemoteSettingsClient(),
+                                       relayAccountStatusProvider: MockRelayAccountStatusProvider(mockValue: accountStatus),
+                                       gleanWrapper: MockGleanWrapper(),
+                                       config: .prod,
+                                       notificationCenter: MockNotificationCenter())
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
