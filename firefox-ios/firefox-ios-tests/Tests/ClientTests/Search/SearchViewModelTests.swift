@@ -539,6 +539,12 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(mockRecentSearchProvider.clearRecentSearchCalledCount, 1)
     }
 
+    func test_updateBottomSearchBarState_setsValueCorrectly() {
+        let subject = createSubject()
+        subject.updateBottomSearchBarState(isBottomSearchBar: true)
+        XCTAssertTrue(subject.isBottomSearchBar)
+    }
+
     private func createSubject(
         isPrivate: Bool = false,
         isBottomSearchBar: Bool = false,
