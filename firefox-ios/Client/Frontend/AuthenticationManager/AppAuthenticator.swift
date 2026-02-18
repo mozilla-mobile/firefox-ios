@@ -5,14 +5,6 @@
 import LocalAuthentication
 import WebKit
 
-// TODO: @dicarobinho Let's move this in another file with the extension
-protocol LAContextProtocol {
-    func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool
-    func evaluatePolicy(_ policy: LAPolicy, localizedReason: String, reply: @escaping @Sendable (Bool, Error?) -> Void)
-}
-
-extension LAContext: LAContextProtocol {}
-
 enum AuthenticationError: Error {
     case failedEvaluation(message: String)
     case failedAuthentication(message: String)

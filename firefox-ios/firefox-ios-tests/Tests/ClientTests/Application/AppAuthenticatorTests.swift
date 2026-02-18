@@ -13,16 +13,36 @@ final class AppAuthenticatorTests: XCTestCase {
 
     func test_getAuthenticationState_whenCanEvaluate_setsIsAuthenticatingTrue_thenFalse() {
         let subject = createSubject(canEvaluate: true, shouldSucceed: true)
+        let expectation = expectation(description: "Authentication state should be returned")
+
         XCTAssertFalse(subject.isAuthenticating)
 
-        // TODO: @dicarobinho
+        subject.getAuthenticationState { state in
+            XCTAssertFalse(subject.isAuthenticating)
+            XCTAssertEqual(state, .deviceOwnerAuthenticated)
+            expectation.fulfill()
+        }
+
+        XCTAssertTrue(subject.isAuthenticating)
+
+        wait(for: [expectation], timeout: 1.0)
     }
 
     func test_getAuthenticationState_whenCannotEvaluate_setsIsAuthenticatingTrue_thenFalse() {
         let subject = createSubject(canEvaluate: false, shouldSucceed: false)
+        let expectation = expectation(description: "Authentication state should be returned")
+
         XCTAssertFalse(subject.isAuthenticating)
 
-        // TODO: @dicarobinho
+        subject.getAuthenticationState { state in
+            XCTAssertFalse(subject.isAuthenticating)
+            XCTAssertEqual(state, .passCodeRequired)
+            expectation.fulfill()
+        }
+
+        XCTAssertFalse(subject.isAuthenticating)
+
+        wait(for: [expectation], timeout: 1.0)
     }
 
     // MARK: - authenticateWithDeviceOwnerAuthentication
@@ -45,16 +65,50 @@ final class AppAuthenticatorTests: XCTestCase {
 
     func test_authenticate_whenCanEvaluateButContextFails_setsIsAuthenticatingTrue_thenFalse() {
         let subject = createSubject(canEvaluate: true, shouldSucceed: false)
+        let expectation = expectation(description: "Authentication should fail")
+
         XCTAssertFalse(subject.isAuthenticating)
 
-        // TODO: @dicarobinho
+        subject.authenticateWithDeviceOwnerAuthentication { result in
+            XCTAssertFalse(subject.isAuthenticating)
+
+            switch result {
+            case .success:
+                XCTFail("Expected failure but got success")
+            case .failure:
+                break
+            }
+
+            expectation.fulfill()
+        }
+
+        XCTAssertTrue(subject.isAuthenticating)
+
+        wait(for: [expectation], timeout: 1.0)
     }
 
     func test_authenticate_whenCannotEvaluate_setsIsAuthenticatingTrue_thenFalse() {
         let subject = createSubject(canEvaluate: false, shouldSucceed: false)
+        let expectation = expectation(description: "Authentication should fail immediately")
+
         XCTAssertFalse(subject.isAuthenticating)
 
-        // TODO: @dicarobinho
+        subject.authenticateWithDeviceOwnerAuthentication { result in
+            XCTAssertFalse(subject.isAuthenticating)
+
+            switch result {
+            case .success:
+                XCTFail("Expected failure but got success")
+            case .failure:
+                break
+            }
+
+            expectation.fulfill()
+        }
+
+        XCTAssertTrue(subject.isAuthenticating)
+
+        wait(for: [expectation], timeout: 1.0)
     }
 
     // MARK: - Helper
