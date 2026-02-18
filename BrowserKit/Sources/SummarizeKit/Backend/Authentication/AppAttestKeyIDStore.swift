@@ -20,7 +20,7 @@
 /// - DCAppAttestService: https://developer.apple.com/documentation/devicecheck/dcappattestservice
 /// - Secure API Access using App Attest: https://docs.google.com/document/d/1uI5pl2h60_9tjiAqEdKBZD9JANQdcHP7lXSe5uxCPrg/edit?tab=t.0
 /// - MLPA: https://docs.google.com/document/d/1xnCHRxNolNS25sKiAZPxtrovKahkYHZ3aVqc_FMyJv0/edit?tab=t.7yctgzn2nekp#heading=h.ihbllvivx85y
-public protocol AppAttestKeyIDStore {
+public protocol AppAttestKeyIDStore: Sendable {
     func loadKeyID() -> String?
     func saveKeyID(_ keyID: String) throws
     func clearKeyID() throws

@@ -5,7 +5,7 @@
 import Foundation
 
 /// Represents a single message exchanged with the LLM.
-public struct LiteLLMMessage: Codable {
+public struct LiteLLMMessage: Codable, Sendable {
     public let role: LiteLLMRole
     public let content: String
 

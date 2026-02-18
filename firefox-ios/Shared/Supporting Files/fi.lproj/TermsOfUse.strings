@@ -34,3 +34,9 @@
 /* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
 "TermsOfUse.Title.v142" = "Meillä on päivitys";
 
+/* Title shown at the top of the Terms of Use bottom sheet for variant 1. */
+"TermsOfUse.TitleValue1.v147" = "Käyttöehdot";
+
+/* Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.TitleValue2.v147" = "Ilmoitus %@-selaimelta";
+

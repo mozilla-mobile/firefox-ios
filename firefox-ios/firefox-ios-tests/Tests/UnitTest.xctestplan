@@ -13,11 +13,6 @@
       "targets" : [
         {
           "containerPath" : "container:..\/BrowserKit",
-          "identifier" : "Common",
-          "name" : "Common"
-        },
-        {
-          "containerPath" : "container:..\/BrowserKit",
           "identifier" : "ComponentLibrary",
           "name" : "ComponentLibrary"
         },
@@ -90,11 +85,82 @@
           "containerPath" : "container:Client.xcodeproj",
           "identifier" : "2FCAE2191ABB51F800877008",
           "name" : "Storage"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "ActionExtensionKit",
+          "name" : "ActionExtensionKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "JWTKit",
+          "name" : "JWTKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "Shared",
+          "name" : "Shared"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "SummarizeKit",
+          "name" : "SummarizeKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "OnboardingKit",
+          "name" : "OnboardingKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "VoiceSearchKit",
+          "name" : "VoiceSearchKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "UnifiedSearchKit",
+          "name" : "UnifiedSearchKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "Common",
+          "name" : "Common"
         }
       ]
     }
   },
   "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "ActionExtensionKitTests",
+        "name" : "ActionExtensionKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "OnboardingKitTests",
+        "name" : "OnboardingKitTests"
+      }
+    },
+    {
+      "skippedTests" : [
+        "SummarizeViewModelTests\/test_summarize_throwsSummarizeError()"
+      ],
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "SummarizeKitTests",
+        "name" : "SummarizeKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "ComponentLibraryTests",
+        "name" : "ComponentLibraryTests"
+      }
+    },
     {
       "skippedTests" : [
         "MetaGlobalTests\/testHappyOptimisticStateMachine()",
@@ -111,51 +177,34 @@
     },
     {
       "target" : {
-        "containerPath" : "container:",
-        "identifier" : "VoiceSearchKitTests",
-        "name" : "VoiceSearchKitTests"
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "MenuKitTests",
+        "name" : "MenuKitTests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "TabDataStoreTests",
-        "name" : "TabDataStoreTests"
+        "identifier" : "ReduxTests",
+        "name" : "ReduxTests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "SiteImageViewTests",
-        "name" : "SiteImageViewTests"
+        "identifier" : "ToolbarKitTests",
+        "name" : "ToolbarKitTests"
       }
     },
     {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "SummarizeKitTests",
-        "name" : "SummarizeKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "ContentBlockingGeneratorTests",
-        "name" : "ContentBlockingGeneratorTests"
-      }
-    },
-    {
+      "skippedTests" : [
+        "RustLoginsTests\/testUpdateLogin()",
+        "TestBrowserDB\/testMovesDB()"
+      ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "2FA436041ABB83B4008031D1",
-        "name" : "AccountTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "E6F9650B1B2F1CF20034B023",
-        "name" : "SharedTests"
+        "identifier" : "2FCAE2231ABB51F800877008",
+        "name" : "StorageTests"
       }
     },
     {
@@ -168,15 +217,29 @@
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "ToolbarKitTests",
-        "name" : "ToolbarKitTests"
+        "identifier" : "TabDataStoreTests",
+        "name" : "TabDataStoreTests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "WebEngineTests",
-        "name" : "WebEngineTests"
+        "identifier" : "VoiceSearchKitTests",
+        "name" : "VoiceSearchKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "ContentBlockingGeneratorTests",
+        "name" : "ContentBlockingGeneratorTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "E69DB07C1E97DEA9008A67E6",
+        "name" : "SyncTelemetryTests"
       }
     },
     {
@@ -237,17 +300,6 @@
       }
     },
     {
-      "skippedTests" : [
-        "RustLoginsTests\/testUpdateLogin()",
-        "TestBrowserDB\/testMovesDB()"
-      ],
-      "target" : {
-        "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "2FCAE2231ABB51F800877008",
-        "name" : "StorageTests"
-      }
-    },
-    {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "CommonTests",
@@ -257,36 +309,29 @@
     {
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "E69DB07C1E97DEA9008A67E6",
-        "name" : "SyncTelemetryTests"
+        "identifier" : "2FA436041ABB83B4008031D1",
+        "name" : "AccountTests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "ReduxTests",
-        "name" : "ReduxTests"
+        "identifier" : "SiteImageViewTests",
+        "name" : "SiteImageViewTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "E6F9650B1B2F1CF20034B023",
+        "name" : "SharedTests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "ActionExtensionKitTests",
-        "name" : "ActionExtensionKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "OnboardingKitTests",
-        "name" : "OnboardingKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "MenuKitTests",
-        "name" : "MenuKitTests"
+        "identifier" : "WebEngineTests",
+        "name" : "WebEngineTests"
       }
     }
   ],

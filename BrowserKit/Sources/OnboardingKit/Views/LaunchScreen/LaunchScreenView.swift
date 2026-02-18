@@ -31,7 +31,7 @@ public struct LaunchScreenBackgroundView: View {
 
 public class LaunchScreenLoaderView: UIView {
     private let imageView: UIImageView = .build {
-        $0.image = UIImage(named: UX.LaunchScreen.Logo.image, in: Bundle.module, with: nil)
+        $0.image = UIImage(named: OnboardingImageIdentifiers.firefoxLoader, in: Bundle.module, with: nil)
         $0.contentMode = .scaleAspectFit
     }
 

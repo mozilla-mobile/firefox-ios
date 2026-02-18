@@ -109,6 +109,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
                              toastContainer: UIView())
 
         let secondHomepage = HomepageViewController(windowUUID: windowUUID,
+                                                    tabManager: MockTabManager(),
                                                     overlayManager: overlayModeManager,
                                                     toastContainer: UIView())
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))

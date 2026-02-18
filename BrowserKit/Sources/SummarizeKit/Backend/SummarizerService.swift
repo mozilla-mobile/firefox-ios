@@ -74,7 +74,7 @@ public final class DefaultSummarizerService: SummarizerService {
                 do {
                     let text = try await self.extractSummarizableText(from: webView)
                     summarizerLifecycle?.summarizerServiceDidStart(text)
-                    let stream = summarizer.summarizeStreamed(text)
+                    let stream = try await summarizer.summarizeStreamed(text)
                     var summary = ""
 
                     for try await chunk in stream {

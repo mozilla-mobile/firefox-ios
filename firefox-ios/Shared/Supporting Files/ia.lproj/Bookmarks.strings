@@ -53,7 +53,7 @@
 "Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Altere optiones";
 
 /* The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button */
-"Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "Remover del vias breve";
+"Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "Remover del accessos directe";
 
 /* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Salvate in “Marcapaginas”";

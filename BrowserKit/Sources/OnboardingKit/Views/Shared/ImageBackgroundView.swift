@@ -33,9 +33,9 @@ struct ImageBackgroundView: ThemeableView {
     private func imageName(for themeType: ThemeType) -> String {
         switch themeType {
         case .light:
-            return UX.Background.brandRefreshLight
+            return OnboardingImageIdentifiers.backgroundBrandRefreshLight
         default:
-            return UX.Background.brandRefreshDark
+            return OnboardingImageIdentifiers.backgroundBrandRefreshDark
         }
     }
 }
