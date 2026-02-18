@@ -1280,6 +1280,7 @@
 		8C51ED702DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C51ED6F2DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift */; };
 		8C51ED722DE0A5B500B3E58A /* OnboardingKitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C51ED712DE0A5B500B3E58A /* OnboardingKitViewModel.swift */; };
 		8C51ED742DE0A64D00B3E58A /* OnboardingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C51ED732DE0A64D00B3E58A /* OnboardingKit */; };
+		8C61A2812F3371330021C88D /* BrowserViewControllerKVOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C61A2802F3371330021C88D /* BrowserViewControllerKVOTests.swift */; };
 		8C6AF26A2D38FB1500254698 /* GleanLifecycleObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6AF2692D38FB1500254698 /* GleanLifecycleObserverTests.swift */; };
 		8C77849F2DF33707001FB8B0 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C77849E2DF33707001FB8B0 /* OnboardingService.swift */; };
 		8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */; };
@@ -9341,6 +9342,7 @@
 		8C51ED6B2DE0A49800B3E58A /* NimbusOnboardingKitFeatureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingKitFeatureLayer.swift; sourceTree = "<group>"; };
 		8C51ED6F2DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingKitCardInfoModel.swift; sourceTree = "<group>"; };
 		8C51ED712DE0A5B500B3E58A /* OnboardingKitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingKitViewModel.swift; sourceTree = "<group>"; };
+		8C61A2802F3371330021C88D /* BrowserViewControllerKVOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerKVOTests.swift; sourceTree = "<group>"; };
 		8C6AF2692D38FB1500254698 /* GleanLifecycleObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanLifecycleObserverTests.swift; sourceTree = "<group>"; };
 		8C77849E2DF33707001FB8B0 /* OnboardingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingService.swift; sourceTree = "<group>"; };
 		8C7A4A32A98AD1B79E3D69BE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -11903,6 +11905,7 @@
 		2151EF582F2AB962007B67A6 /* BrowserViewController */ = {
 			isa = PBXGroup;
 			children = (
+				8C61A2802F3371330021C88D /* BrowserViewControllerKVOTests.swift */,
 				217C6F322F3BD9C40085D9B9 /* Constraints */,
 				21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */,
 				E16941B32C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift */,
@@ -19658,6 +19661,7 @@
 				AAD9D64B2EB25B3500BFECAF /* TranslationsMiddlewareTests.swift in Sources */,
 				C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */,
 				0B7B05432D64C08F007FD7AC /* MockURLProtocol.swift in Sources */,
+				8C61A2812F3371330021C88D /* BrowserViewControllerKVOTests.swift in Sources */,
 				21FB43CB2E7AF25D00A8818D /* MockHistoryHandler.swift in Sources */,
 				E1EAA5EF2D49182700D3039C /* NavigationBarStateTests.swift in Sources */,
 				613489A52D9443610009AF01 /* ToastTelemetryTests.swift in Sources */,

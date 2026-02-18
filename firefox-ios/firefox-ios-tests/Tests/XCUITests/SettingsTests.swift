@@ -127,36 +127,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // SmokeTest
     func testImageOnOff() {
-        // Select no images or hide images, check it's hidden or not
-        app.launch()
-        waitUntilPageLoad()
-
-        // Select hide images under Browsing Settings page
-        let blockImagesSwitch = app.otherElements.tables.cells.switches[
-            AccessibilityIdentifiers.Settings.BlockImages.title
-        ]
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
-
-        mozWaitForElementToExist(blockImagesSwitch)
-        app.swipeUp()
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: false)
-
-        // Select show images
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        mozWaitForElementToExist(blockImagesSwitch)
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: true)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307058
-    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
-    // SmokeTest TAE
-    func testImageOnOff_TAE() {
         let settingsScreen = SettingScreen(app: app)
         // Select no images or hide images, check it's hidden or not
         app.launch()
@@ -177,7 +147,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         // Select show images
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
-        settingsScreen.waitForBrowsingLinksSection()
+        _ = settingsScreen.waitForBlockImagesSwitch()
         navigator.performAction(Action.ToggleNoImageMode)
         settingsScreen.assertShowImagesState(showImages: true)
     }
@@ -185,13 +155,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2951435
     // Smoketest
     func testSettingsOptionSubtitles() {
-        app.launch()
-        validateSettingsUIOptions()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2951435
-    // Smoketest TAE
-    func testSettingsOptionSubtitles_TAE() {
         app.launch()
         let settingsScreen = SettingScreen(app: app)
         navigator.nowAt(NewTabScreen)

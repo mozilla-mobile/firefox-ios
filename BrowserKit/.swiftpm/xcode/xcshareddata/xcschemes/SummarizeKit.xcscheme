@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1610"
+   LastUpgradeVersion = "2620"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES"
-      buildArchitectures = "Automatic">
+      buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -15,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Shared"
-               BuildableName = "Shared"
-               BlueprintName = "Shared"
+               BlueprintIdentifier = "SummarizeKit"
+               BuildableName = "SummarizeKit"
+               BlueprintName = "SummarizeKit"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,9 +32,9 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Shared"
-            BuildableName = "Shared"
-            BlueprintName = "Shared"
+            BlueprintIdentifier = "SummarizeKit"
+            BuildableName = "SummarizeKit"
+            BlueprintName = "SummarizeKit"
             ReferencedContainer = "container:">
          </BuildableReference>
       </CodeCoverageTargets>
@@ -44,9 +43,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SharedTests"
-               BuildableName = "SharedTests"
-               BlueprintName = "SharedTests"
+               BlueprintIdentifier = "SummarizeKitTests"
+               BuildableName = "SummarizeKitTests"
+               BlueprintName = "SummarizeKitTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -72,9 +71,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Shared"
-            BuildableName = "Shared"
-            BlueprintName = "Shared"
+            BlueprintIdentifier = "SummarizeKit"
+            BuildableName = "SummarizeKit"
+            BlueprintName = "SummarizeKit"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

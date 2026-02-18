@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1610"
+   LastUpgradeVersion = "2620"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Shared"
-               BuildableName = "Shared"
-               BlueprintName = "Shared"
+               BlueprintIdentifier = "ActionExtensionKit"
+               BuildableName = "ActionExtensionKit"
+               BlueprintName = "ActionExtensionKit"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,9 +33,9 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Shared"
-            BuildableName = "Shared"
-            BlueprintName = "Shared"
+            BlueprintIdentifier = "ActionExtensionKit"
+            BuildableName = "ActionExtensionKit"
+            BlueprintName = "ActionExtensionKit"
             ReferencedContainer = "container:">
          </BuildableReference>
       </CodeCoverageTargets>
@@ -44,9 +44,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SharedTests"
-               BuildableName = "SharedTests"
-               BlueprintName = "SharedTests"
+               BlueprintIdentifier = "ActionExtensionKitTests"
+               BuildableName = "ActionExtensionKitTests"
+               BlueprintName = "ActionExtensionKitTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -72,9 +72,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Shared"
-            BuildableName = "Shared"
-            BlueprintName = "Shared"
+            BlueprintIdentifier = "ActionExtensionKit"
+            BuildableName = "ActionExtensionKit"
+            BlueprintName = "ActionExtensionKit"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

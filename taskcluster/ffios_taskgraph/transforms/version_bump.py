@@ -33,4 +33,8 @@ def version_bump_task(config, tasks):
 
         task["worker"]["next-version"] = str(version)
         task["worker"].update(branch=config.params["head_ref"])
+
+        if config.params.get("merge_config", {}).get("force-dry-run"):
+            task["worker"]["force-dry-run"] = True
+
         yield task
