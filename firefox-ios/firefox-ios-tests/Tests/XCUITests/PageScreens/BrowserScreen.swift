@@ -293,4 +293,14 @@ final class BrowserScreen {
             }
         }
     }
+
+    func assertSuggestedLinesNotEmpty() {
+        let suggestedLines = app.tables.firstMatch.cells
+        XCTAssertNotEqual(suggestedLines.count, 0, "Expected suggestions to appear")
+    }
+
+    func tapSaveButtonIfExist() {
+        let saveButton = sel.SAVE_BUTTON.element(in: app)
+        saveButton.tapIfExists()
+    }
  }

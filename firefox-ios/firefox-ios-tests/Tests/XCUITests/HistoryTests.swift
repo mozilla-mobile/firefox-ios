@@ -31,8 +31,7 @@ class HistoryTests: BaseTestCase {
     let testWithDB = [
         "testOpenHistoryFromBrowserContextMenuOptions",
         "testClearHistoryFromSettings",
-        "testClearRecentHistory",
-        "testClearRecentHistory_TAE"
+        "testClearRecentHistory"
     ]
 
     // This DDBB contains those 4 websites listed in the name

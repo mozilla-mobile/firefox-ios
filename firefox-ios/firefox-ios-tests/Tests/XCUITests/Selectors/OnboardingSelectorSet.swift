@@ -22,6 +22,7 @@ protocol OnboardingSelectorsSet {
     var CLOSE_BUTTON: Selector { get }
     var NAVBAR_SYNC_AND_SAVE: Selector { get }
     var CLOSE_TOUR_BUTTON: Selector { get }
+    var PAGE_CONTROL: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -36,6 +37,7 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         static let closeButton = "CloseButton"
         static let syncAndSaveData = "Sync and Save Data"
         static let closeTourButton = AccessibilityIdentifiers.Onboarding.closeButton
+        static let pageControl = AccessibilityIdentifiers.Onboarding.pageControl
     }
 
     let AGREE_AND_CONTINUE_BUTTON = Selector.buttonId(
@@ -156,8 +158,14 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         )
     }
 
+    let PAGE_CONTROL = Selector.pageIndicatorById(
+        IDs.pageControl,
+        description: "Page control indicator showing onboarding progress",
+        groups: ["onboarding"]
+    )
+
     var all: [Selector] {
-        [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
-         DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON]
+        [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, MANAGE_TEXT_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
+         DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON, PAGE_CONTROL]
     }
 }

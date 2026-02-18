@@ -78,6 +78,8 @@ final class LocationView: UIView,
     }
 
     private lazy var urlTextFieldColor: UIColor = .label
+    // FXIOS-14906: https://mozilla-hub.atlassian.net/browse/FXIOS-14906
+    private lazy var urlTextFieldPlaceholderColor: UIColor = .clear
     private lazy var urlTextFieldSubdomainColor: UIColor = .clear
     private lazy var lockIconImageColor: UIColor = .clear
     private lazy var safeListedURLImageColor: UIColor = .clear
@@ -156,6 +158,20 @@ final class LocationView: UIView,
         // Skip if urlTextField has already resigned to avoid redundant state changes
         guard urlTextField.isFirstResponder else { return true }
         return urlTextField.resignFirstResponder()
+    }
+
+    func configureNonInteractive(_ config: LocationViewConfiguration, uxConfig: AddressToolbarUXConfiguration) {
+        isURLTextFieldCentered = uxConfig.isLocationTextCentered
+        hasAlternativeLocationColor = uxConfig.hasAlternativeLocationColor
+        configureLockIconButton(config)
+        configureURLPlaceholder(basedOn: config)
+        setTextFieldPlaceholder(color: urlTextFieldPlaceholderColor)
+        urlTextField.text = config.url?.absoluteString
+        updateIconContainer(iconContainerCornerRadius: uxConfig.toolbarCornerRadius,
+                            isURLTextFieldCentered: isURLTextFieldCentered,
+                            locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
+        layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
+        formatAndTruncateURLTextField()
     }
 
     func configure(_ config: LocationViewConfiguration,
@@ -487,16 +503,7 @@ final class LocationView: UIView,
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ config: LocationViewConfiguration) {
         let configurationIsEditing = config.isEditing
-        isEditing = configurationIsEditing
-
-        if !isEditing && config.url != nil {
-            // allow proper centering of the urlTextField removing placeholder size.
-            urlTextField.placeholder = nil
-        } else {
-            urlTextField.placeholder = config.urlTextFieldPlaceholder
-        }
-        urlAbsolutePath = config.url?.absoluteString
-
+        configureURLPlaceholder(basedOn: config)
         // This code is fragile and needs to be called in this exact location or it will break.
         // This is because when we rotate the device, a `keyboardWillHide` notification is fired
         // even though we have set the text field to the first responder. When that notification fires
@@ -535,6 +542,17 @@ final class LocationView: UIView,
                 urlTextField.selectAll(nil)
             }
         }
+    }
+
+    private func configureURLPlaceholder(basedOn config: LocationViewConfiguration) {
+        isEditing = config.isEditing
+        if !isEditing && config.url != nil {
+            // allow proper centering of the urlTextField removing placeholder size.
+            urlTextField.placeholder = nil
+        } else {
+            urlTextField.placeholder = config.urlTextFieldPlaceholder
+        }
+        urlAbsolutePath = config.url?.absoluteString
     }
 
     private func formatAndTruncateURLTextField() {
@@ -750,10 +768,8 @@ final class LocationView: UIView,
         lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.textColor = urlTextFieldColor
-        urlTextField.attributedPlaceholder = NSAttributedString(
-            string: urlTextField.placeholder ?? "",
-            attributes: [.foregroundColor: colors.textPrimary]
-        )
+        setTextFieldPlaceholder(color: colors.textPrimary)
+        urlTextFieldPlaceholderColor = colors.textPrimary
         safeListedURLImageColor = colors.iconAccentBlue
         lockIconImageColor = colors.textSecondary
 
@@ -761,6 +777,14 @@ final class LocationView: UIView,
         // Applying the theme to urlTextField can cause the url formatting to get removed
         // so we apply it again
         formatAndTruncateURLTextField()
+    }
+
+    private func setTextFieldPlaceholder(color: UIColor) {
+        guard let placeholder = urlTextField.placeholder, !placeholder.isEmpty else { return }
+        urlTextField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [.foregroundColor: color]
+        )
     }
 
     // MARK: - UIGestureRecognizerDelegate
