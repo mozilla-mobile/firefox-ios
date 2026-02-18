@@ -1,3 +1,18 @@
+/* Body of notification sent to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "ស្វែងរកអ្វីមួយនៅជិតៗ។ ឬរកឃើញអ្វីមួយគួរឱ្យរីករាយ។";
+
+/* Title of notification sent to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "ចាប់ផ្តើមការស្វែងរកដំបូងរបស់អ្នក";
+
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
+"Engagement.Notification.Treatment.A.Body.v114" = "ការរុករកឯកជនក្នុង %@ មិនរក្សាទុកព័ត៌មានរបស់អ្នក និងទប់ស្កាត់កម្មវិធីតាមដានលាក់ខ្លួន។";
+
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "រុករកដោយគ្មានស្នាមសម្គាល់";
+
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
+"Engagement.Notification.Treatment.B.Body.v114" = "រុករកដោយគ្មានការរក្សាទុកខូគី ឬប្រវត្តិនៅក្នុង %@។";
+
 /* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.B.Title.v114" = "សាកល្បងការរុករកឯកជន";
 

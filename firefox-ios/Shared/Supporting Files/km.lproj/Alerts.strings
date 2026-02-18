@@ -1,8 +1,17 @@
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com' */
+"Alerts.AddToCalendar.Body.v134" = "%@ កំពុងស្នើសុំទាញយកឯកសារ និងបន្ថែមព្រឹត្តិការណ៍ទៅក្នុងប្រតិទិនរបស់អ្នក។";
+
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert in case the website doesn't have a base domain. */
+"Alerts.AddToCalendar.BodyDefault.v134" = "គេហទំព័រនេះកំពុងស្នើសុំទាញយកឯកសារ និងបន្ថែមព្រឹត្តិការណ៍ទៅក្នុងប្រតិទិនរបស់អ្នក។";
+
 /* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the affirmative action for the alert, confirming that you do want to add the event to the calendar. */
 "Alerts.AddToCalendar.Button.Add.v134" = "បន្ថែម";
 
 /* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert. */
 "Alerts.AddToCalendar.Title.v134" = "បន្ថែមទៅក្នុងប្រតិទិន?";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
+"Alerts.FeltDeletion.Body.v122" = "បិទផ្ទាំងឯកជនទាំងអស់ ហើយលុបប្រវត្តិ ខូគី និងទិន្នន័យគេហទំព័រផ្សេងទៀតទាំងអស់។";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
 "Alerts.FeltDeletion.Button.Cancel.v122" = "បោះបង់";
@@ -10,6 +19,21 @@
 /* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar. */
 "Alerts.FeltDeletion.Button.Cancel.v134" = "បោះបង់";
 
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that. */
+"Alerts.FeltDeletion.Button.Confirm.v122" = "លុបទិន្នន័យនៃការប្រើប្រាស់វគ្គ";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert. */
+"Alerts.FeltDeletion.Title.v122" = "បញ្ចប់វគ្គឯកជនរបស់អ្នក?";
+
 /* The title for the negative action of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
 "Alerts.RestoreTabs.Button.No.v109" = "ទេ";
+
+/* The title for the affirmative action of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed, and will restore existing tabs. */
+"Alerts.RestoreTabs.Button.Yes.v109" = "ស្ដារផ្ទាំងឡើងវិញ";
+
+/* The body of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed. */
+"Alerts.RestoreTabs.Message.v109" = "សូមអភ័យទោសចំពោះរឿងនោះ។ ស្ដារផ្ទាំងឡើងវិញដើម្បីបន្តកន្លែងដែលអ្នកបានចាកចេញ។";
+
+/* The title of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed. %@ is the name of the app (e.g. Firefox). */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ គាំង។ ស្ដារផ្ទាំងរបស់អ្នកឡើងវិញ?";
 

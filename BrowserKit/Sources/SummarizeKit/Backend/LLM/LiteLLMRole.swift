@@ -8,6 +8,6 @@ import Foundation
 /// - `system`: trusted policy/constraints the model must follow
 /// - `user`: untrusted input that should never override `system` content
 /// - `assistant`: model output
-public enum LiteLLMRole: String, Codable {
+public enum LiteLLMRole: String, Codable, Sendable {
     case system, user, assistant
 }

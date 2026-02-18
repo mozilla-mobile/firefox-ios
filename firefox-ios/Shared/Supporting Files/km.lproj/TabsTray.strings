@@ -1,3 +1,45 @@
+/* When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs */
+"CloseTabsToast.Button.v113" = "មិនធ្វើវិញ";
+
+/* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
+"CloseTabsToast.SingleTabTitle.v113" = "ផ្ទាំងត្រូវបានបិទ";
+
+/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. %d is the number of tabs. */
+"CloseTabsToast.Title.v113" = "ផ្ទាំង​ត្រូវ​បាន​បិទ៖ %d";
+
+/* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
+"InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "បិទ";
+
+/* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
+"TabsTray.Sync.SyncTabsDisabled.v116" = "បើកសមកាលកម្មផ្ទាំងដើម្បីបង្ហាញបញ្ជីនៃផ្ទាំងពីឧបករណ៍ផ្សេងទៀតរបស់អ្នក ។";
+
+/* Button label to sync tabs in your account */
+"TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "ផ្ទាំងធ្វើសមកាលកម្ម";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.TabsSelectorNormalTabsTitle.v140" = "ផ្ទាំង";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.TabsSelectorSyncedTabsTitle.v140" = "ធ្វើសមកាលកម្ម";
+
+/* Text for a button in the tabs tray used to open another menu to close older tabs. */
+"TabTrayCloseOldTabsTitle.v140" = "បិទផ្ទាំងចាស់ៗ…";
+
+/* Text for a button in the tabs tray used delete current active tabs. %@ is for the number of tabs that will be going to be closed. */
+"TabTrayCloseOneTabTitle.v145" = "បិទផ្ទាំង (%@)";
+
+/* Text for the menu title under the tabs tray in which users can close tabs older than a certain period of time. */
+"TabTrayCloseTabsOlderThanTitle.v140" = "បិទផ្ទាំងចាស់ជាង…";
+
+/* The label for a button that closes tabs older than 1 day ago. Shown in a menu under the tabs tray. */
+"TabTrayOneDayAgoTitle.v140" = "1 ថ្ងៃមុន";
+
 /* The label for a button that closes tabs older than 1 month ago. Shown in a menu under the tabs tray. */
 "TabTrayOneMonthAgoTitle.v140" = "1 ខែមុន";
+
+/* The label for a button that closes tabs older than 1 week ago. Shown in a menu under the tabs tray. */
+"TabTrayOneWeekAgoTitle.v140" = "1 សប្តាហ៍មុន";
+
+/* Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total. */
+"TabTraySelectorAccessibilityHint.v139" = "%1$@ នៃ %2$@";
 

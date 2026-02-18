@@ -6,13 +6,12 @@ import Common
 import XCTest
 
 class SettingsTests: FeatureFlaggedTestBase {
-    var settingsScreen: SettingScreen!
-
     override func tearDown() async throws {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
             name.contains("testBrowsingSettingsOptionSubtitles") ||
             name.contains("testSettingsOptionSubtitlesDarkMode") ||
-            name.contains("testSettingsOptionSubtitlesDarkModeLandscape") {
+            name.contains("testSettingsOptionSubtitlesDarkModeLandscape") ||
+            name.contains("testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn") {
             switchThemeToDarkOrLight(theme: "Light")
         }
         XCUIDevice.shared.orientation = .portrait
@@ -255,6 +254,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3135841
     func testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()
@@ -272,6 +272,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3376443
     func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
@@ -284,6 +285,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(summarizeSettings)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3135845
     func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()

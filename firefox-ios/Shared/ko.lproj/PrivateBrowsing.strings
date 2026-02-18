@@ -11,10 +11,10 @@
 "Learn More" = "자세히 보기";
 
 /* Toggled OFF accessibility value */
-"Off" = "끄기";
+"Off" = "꺼짐";
 
 /* Toggled ON accessibility value */
-"On" = "켜기";
+"On" = "켜짐";
 
 /* Title displayed for when there are no open tabs while in private mode */
 "Private Browsing" = "사생활 보호 탐색";

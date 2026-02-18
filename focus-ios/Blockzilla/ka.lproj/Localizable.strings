@@ -331,8 +331,14 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რომლებიც გვეხმარება, გავაუმჯობესოთ %@.";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რაც დაგვეხმარება, გავაუმჯობესოთ %@.";
+
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ დროდადრო დააყენებს და ჩაატარებს კვლევებს.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ შემთხვევითობით ირჩევს მომხმარებლებს შესაძლებლობების შესამოწმებლად, რაც საყოველთაოდ აუმჯობესებს ხარისხს.";
 
 /* Title for section in settings menu */
 "Settings.general" = "ზოგადი";

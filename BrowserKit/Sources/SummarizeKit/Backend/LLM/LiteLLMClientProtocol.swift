@@ -17,5 +17,5 @@ protocol LiteLLMClientProtocol: Sendable {
     func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
         config: SummarizerConfig
-    ) -> AsyncThrowingStream<String, Error>
+    ) async throws -> AsyncThrowingStream<String, Error>
 }

@@ -41,7 +41,7 @@
 "Summarizer.RetryButton.Label.v142" = "Tentar novamente";
 
 /* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
-"Summarizer.TabSnapshot.Accessibility.Label.v145" = "Arraste ou toque na página web para fechar o resumo";
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "Arraste ou toque na página para fechar o resumo";
 
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "Permitir";
@@ -62,7 +62,7 @@
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Saiba mais";
 
 /* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "Permitir resumos de páginas?";
+"Summarizer.ToS.Alert.Title.Label.v142" = "Permitir resumo de páginas?";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Como funciona";

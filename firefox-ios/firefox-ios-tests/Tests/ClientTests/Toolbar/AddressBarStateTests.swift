@@ -229,6 +229,34 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
+    func test_summarizeModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn() {
+        setIsHostedSummarizerFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(
+            state: initialState,
+            reducer: reducer
+        )
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                canSummarize: true,
+                readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didSummarizeSettingsChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .summarizer)
+        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.lightning)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
     func test_websiteLoadingStateDidChangeAction_withLoadingTrue_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()

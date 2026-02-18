@@ -4,13 +4,13 @@
 
 import Foundation
 
-protocol URLSessionDataTaskProtocol {
+public protocol URLSessionDataTaskProtocol {
     func resume()
 }
 
 extension URLSessionDataTask: URLSessionDataTaskProtocol {}
 
-protocol URLSessionUploadTaskProtocol {
+public protocol URLSessionUploadTaskProtocol {
     var countOfBytesClientExpectsToSend: Int64 { get set }
     var countOfBytesClientExpectsToReceive: Int64 { get set }
     func resume()

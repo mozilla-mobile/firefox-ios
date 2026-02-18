@@ -4,11 +4,17 @@
 /* Button label for cancelling editing of the credit card details shown in the form */
 "CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "បោះបង់";
 
+/* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardExpirationDateTitle.v112" = "ផុតកំណត់ ខែ/ឆ្នាំ";
+
 /* Title label for user to input their credit card number printed on their credit card in the text box below. */
 "CreditCard.EditCard.CardNumberTitle.v112" = "លេខ​កាត";
 
 /* Button label for closing the view where user can view their credit card info */
 "CreditCard.EditCard.CloseNavBarButtonLabel.v113" = "បិទ";
+
+/* Label for concealing contents of the credit card number */
+"CreditCard.EditCard.ConcealLabel.v114" = "លាក់";
 
 /* Label for copying contents of the form */
 "CreditCard.EditCard.CopyLabel.v113" = "ចម្លង";
@@ -28,11 +34,17 @@
 /* Title label for button that allows user to remove their saved credit card. */
 "CreditCard.EditCard.RemoveCardButtonTitle.v112" = "ដកកាតចេញ";
 
+/* Label for revealing the contents of the credit card number */
+"CreditCard.EditCard.RevealLabel.v114" = "បង្ហាញ";
+
 /* Title label for user to pick a credit card from the list below to be updated. */
 "CreditCard.EditCard.SavedCardListTitle.v112" = "កាតដែលបានរក្សាទុក";
 
 /* Button label for saving the credit card details user entered in the form */
 "CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "រក្សា​ទុក";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "រក្សាទុក និងបំពេញវិធីសាស្ត្រទូទាត់";
 
 /* Title label for the view where user can view their credit card info */
 "CreditCard.EditCard.ViewCreditCardTitle.v116" = "មើលកាត";
