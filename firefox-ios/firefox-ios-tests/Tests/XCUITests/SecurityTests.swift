@@ -29,7 +29,7 @@ class SecurityTests: BaseTestCase {
                 app.webViews.staticTexts["Sign in to Mozilla"],
                 app.webViews.staticTexts["To continue to www.google.com"],
                 app.webViews.secureTextFields["Password"],
-                app.webViews.buttons["Sign In"],
+                app.webViews.buttons["Sign In"]
             )
         }
         browserScreen.assertAddressBar_LockIconExist()

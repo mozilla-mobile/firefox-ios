@@ -22,7 +22,6 @@ public final class SummarizeController: UIViewController, Themeable {
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
         static let tabSnapshotLoadingTransformPercentage: CGFloat = 0.5
         static let summaryViewEdgePadding: CGFloat = 12.0
-        static let streamingRevealDelay: TimeInterval = 4.0
         static let summaryLabelHorizontalPadding: CGFloat = 12.0
         static let panCloseSummaryVelocityThreshold: CGFloat = 600.0
         static let panCloseSummaryHeightPercentageThreshold: CGFloat = 0.25
@@ -42,6 +41,7 @@ public final class SummarizeController: UIViewController, Themeable {
         backgroundGradient: backgroundGradient,
         borderOverlayController: borderOverlayHostingController
     )
+    var snapshotLayoutCalculator: SnapshotLayoutCalculator = DefaultSnapshotLayoutCalculator()
     private let configuration: SummarizeViewConfiguration
     private let viewModel: SummarizeViewModel
     private let webView: WKWebView
@@ -94,8 +94,13 @@ public final class SummarizeController: UIViewController, Themeable {
         $0.isAccessibilityElement = true
     }
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
-    private lazy var backgroundGradient = CAGradientLayer()
     private lazy var tabSnapshotPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan))
+
+    private lazy var backgroundGradient = CAGradientLayer()
+    /// The Layout Guide for the top half of the bounds when in Portrait,
+    /// Otherwise in Landscape it becomes equal to the controller's `view` layout guide.
+    private let topHalfBoundGuide = UILayoutGuide()
+    private var topHalfBoundGuideBottomAnchor: NSLayoutConstraint?
 
     /// Border overlay when loading the summary report
     private lazy var borderOverlayHostingController: UIHostingController<BorderView> = {
@@ -107,10 +112,12 @@ public final class SummarizeController: UIViewController, Themeable {
         return host
     }()
     private let summaryView: SummaryView = .build()
-
-    // For the MVP only the portrait orientation is supported
-    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
+    private var layoutContext: LayoutContext {
+        return LayoutContext(
+            viewSize: view.bounds.size,
+            traitCollection: traitCollection,
+            tabSnapshotTopOffset: configuration.tabSnapshot.tabSnapshotTopOffset
+        )
     }
 
     public init(
@@ -156,10 +163,7 @@ public final class SummarizeController: UIViewController, Themeable {
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         animationController.animateViewDidAppear(
-            snapshotTransform: CGAffineTransform(
-                translationX: 0.0,
-                y: view.frame.height * UX.tabSnapshotLoadingTransformPercentage
-            )
+            snapshotTransform: snapshotLayoutCalculator.calculateViewDidAppearTransform(context: layoutContext)
         ) { [weak self] in
             self?.viewModel.unblockSummarization()
             self?.setupDismissGestures()
@@ -167,6 +171,16 @@ public final class SummarizeController: UIViewController, Themeable {
         // Ensure that the layout is resolved before shimmering
         let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textOnDark
         loadingLabel.startShimmering(light: textColor, dark: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha))
+    }
+
+    override public func viewWillTransition(
+        to size: CGSize,
+        with coordinator: any UIViewControllerTransitionCoordinator
+    ) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate { [self] _ in
+            adjustLayoutForRotation()
+        }
     }
 
     private func configure() {
@@ -212,12 +226,11 @@ public final class SummarizeController: UIViewController, Themeable {
         tabSnapshot.image = configuration.tabSnapshot.tabSnapshot
         tabSnapshotTopConstraint?.constant = configuration.tabSnapshot.tabSnapshotTopOffset
 
-        let topHalfBoundGuide = UILayoutGuide()
         view.addLayoutGuide(topHalfBoundGuide)
 
+        makeTopHalfBoundGuideBottomAnchor()
         NSLayoutConstraint.activate([
             topHalfBoundGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             topHalfBoundGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topHalfBoundGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
@@ -256,6 +269,27 @@ public final class SummarizeController: UIViewController, Themeable {
         borderOverlayHostingController.didMove(toParent: self)
     }
 
+    private func adjustLayoutForRotation() {
+        // TODO: - FXIOS-14913 store initial layout to be able to restore the snapshot when rotating back to original layout
+        snapshotLayoutCalculator.didRotateInterface = true
+        // remove any running animation cause they will look off on rotation
+        tabSnapshotContainer.layer.removeAllAnimations()
+
+        setupLoadingBackgroundGradient()
+        topHalfBoundGuideBottomAnchor?.isActive = false
+        makeTopHalfBoundGuideBottomAnchor()
+        tabSnapshotContainer.transform = snapshotLayoutCalculator.calculateDidRotateTransform(context: layoutContext)
+    }
+
+    private func makeTopHalfBoundGuideBottomAnchor() {
+        if layoutContext.isLandscapeLayout {
+            topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        } else {
+            topHalfBoundGuideBottomAnchor = topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.centerYAnchor)
+        }
+        topHalfBoundGuideBottomAnchor?.isActive = true
+    }
+
     private func setupLoadingBackgroundGradient() {
         backgroundGradient.frame = view.bounds
         backgroundGradient.locations = [0.0, 1.0]
@@ -286,13 +320,8 @@ public final class SummarizeController: UIViewController, Themeable {
         tabSnapshotContainer.addGestureRecognizer(tabSnapshotPanGesture)
         configureSummaryView(summary: summary)
 
-        let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
-        let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
         animationController.animateToSummary(
-            snapshotTransform: CGAffineTransform(
-                translationX: 0.0,
-                y: tabSnapshotYTransform
-            ),
+            snapshotTransform: snapshotLayoutCalculator.calculateSummaryTransform(context: layoutContext),
             applyTheme: applyTheme
         ) { [weak self] in
             self?.onSummaryDisplayed()
@@ -357,10 +386,7 @@ public final class SummarizeController: UIViewController, Themeable {
 
         tabSnapshotContainer.removeGestureRecognizer(tabSnapshotPanGesture)
         animationController.animateToInfo(
-            snapshotTransform: CGAffineTransform(
-                translationX: 0.0,
-                y: view.frame.height * UX.tabSnapshotLoadingTransformPercentage
-            )
+            snapshotTransform: snapshotLayoutCalculator.calculateInfoTransform(context: layoutContext)
         ) { [weak self] in
             self?.onSummaryDisplayed()
             self?.applyTheme()
@@ -368,7 +394,9 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     private func dismissSummary(completion: (() -> Void)? = nil) {
-        animationController.animateToDismiss(snapshotTransform: .identity) { [weak self] in
+        animationController.animateToDismiss(
+            snapshotTransform: snapshotLayoutCalculator.calculateDismissTransform(context: layoutContext)
+        ) { [weak self] in
             completion?()
             self?.dismiss(animated: true)
         }
@@ -382,7 +410,6 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     // MARK: - TabSnapshot Gesture
-
     @objc
     private func dismissSummaryFromGesture(_ gesture: UITapGestureRecognizer) {
         dismissSummary()

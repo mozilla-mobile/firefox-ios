@@ -108,7 +108,7 @@ final class AddressToolbarContainerModel: Equatable {
     /// Returns a skeleton (placeholder) `AddressToolbarConfiguration` for the address bar.
     /// This method is intended to provide a minimal configuration for loading or placeholder states,
     /// with only essential actions and UI elements set up. Most properties are left empty or set to default values.
-    /// - Parameter tab: The tab whose URL, secure content status, and reader mode state are used to configure
+    /// - Parameter tab: The tab whose URL, secure content status are used to configure
     /// and determine which page actions should be displayed.
     ///   used to determine trailing actions.
     /// - Returns: A skeleton `AddressToolbarConfiguration` suitable for placeholder or loading UI.
@@ -128,6 +128,7 @@ final class AddressToolbarContainerModel: Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.shareButton
         )
 
+        // Trailing Page Actions
         let reloadAction: ToolbarActionConfiguration = .init(
             actionType: .reload,
             iconName: StandardImageIdentifiers.Medium.arrowClockwise,
@@ -157,9 +158,6 @@ final class AddressToolbarContainerModel: Equatable {
                 StandardImageIdentifiers.Small.shieldCheckmarkFill :
                 StandardImageIdentifiers.Small.shieldSlashFillMulticolor
             lockIconNeedsTheming = hasSecureContent
-        } else {
-            lockIconImageName = nil
-            lockIconNeedsTheming = true
         }
 
         let locationViewConfiguration = LocationViewConfiguration(

@@ -39,6 +39,7 @@ final class SummarizeControllerTests: XCTestCase {
     private var webView: MockWebView!
     private var viewModel: MockSummarizeViewModel!
     private var animationController: MockAnimationController!
+    private var snapshotLayoutCalculator: MockSnapshotLayoutCalculator!
     private let configuration = SummarizeViewConfiguration(
         titleLabelA11yId: "",
         compactTitleLabelA11yId: "",
@@ -94,6 +95,7 @@ final class SummarizeControllerTests: XCTestCase {
         webView = MockWebView(URL(string: "https://www.example.com")!)
         viewModel = MockSummarizeViewModel()
         animationController = MockAnimationController()
+        snapshotLayoutCalculator = MockSnapshotLayoutCalculator()
         AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
     }
 
@@ -103,6 +105,7 @@ final class SummarizeControllerTests: XCTestCase {
         webView = nil
         viewModel = nil
         animationController = nil
+        snapshotLayoutCalculator = nil
         AppContainer.shared.reset()
         try await super.tearDown()
     }
@@ -120,6 +123,7 @@ final class SummarizeControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.setTosScreenShownCalled, 1)
         XCTAssertEqual(animationController.animateToInfoCalled, 1)
         XCTAssertEqual(animationController.animateToSummaryCalled, 0)
+        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateInfoTransform, 1)
         XCTAssertTrue(onSummarizeDisplayCalled)
     }
 
@@ -135,6 +139,7 @@ final class SummarizeControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.summarizeCalled, 1)
         XCTAssertEqual(animationController.animateToSummaryCalled, 1)
         XCTAssertEqual(animationController.animateToInfoCalled, 0)
+        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateSummaryTransform, 1)
         XCTAssertTrue(onSummarizeDisplayCalled)
     }
 
@@ -145,6 +150,16 @@ final class SummarizeControllerTests: XCTestCase {
 
         XCTAssertEqual(viewModel.unblockSummarizationCalled, 1)
         XCTAssertEqual(animationController.animateViewDidAppearCalled, 1)
+        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateViewDidAppearTransform, 1)
+    }
+
+    func test_viewWillTransition() {
+        let subject = createSubject()
+
+        subject.viewWillTransition(to: .zero, with: MockUIViewControllerTransitionCoordinator())
+
+        XCTAssertTrue(snapshotLayoutCalculator.didRotateInterface)
+        XCTAssertEqual(snapshotLayoutCalculator.didCallCalculateDidRotateTransform, 1)
     }
 
     func test_dismiss() {
@@ -170,6 +185,7 @@ final class SummarizeControllerTests: XCTestCase {
             onSummaryDisplayed: onSummaryDisplayed
         )
         controller.animationController = animationController
+        controller.snapshotLayoutCalculator = snapshotLayoutCalculator
         trackForMemoryLeaks(controller)
         return controller
     }
