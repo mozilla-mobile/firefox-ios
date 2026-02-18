@@ -105,13 +105,7 @@ struct DefaultBookmarksSaver: BookmarksSaver {
         let bookmarkExists = await withCheckedContinuation { continuation in
             profile.places.getBookmark(guid: recentBookmarkFolderGuid)
                 .uponQueue(.main) { result in
-                    let exists: Bool
-                    if let node = result.successValue, node != nil {
-                        exists = true
-                    } else {
-                        exists = false
-                    }
-                    continuation.resume(returning: exists)
+                    continuation.resume(returning: result.successValue != nil)
                 }
         }
 
