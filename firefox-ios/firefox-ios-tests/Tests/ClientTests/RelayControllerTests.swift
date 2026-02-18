@@ -85,31 +85,31 @@ class RelayControllerTests: XCTestCase {
 
     // MARK: - RelayControllerProtocol Tests
 
-    func testRelayControllerDoesNotShowPromptOrSettingsWithoutAccount() {
+    func test_relayController_doesNotShowPromptOrSettings_withoutAccount() {
         let subject = createSubject()
 
         XCTAssertFalse(subject.shouldDisplayRelaySettings())
     }
 
-    func testRelayControllerShowsSettingsIfAccountAvailable() {
+    func test_relayController_showsSettings_ifAccountAvailable() {
         let subject = createSubject(accountStatus: .available)
 
         XCTAssertTrue(subject.shouldDisplayRelaySettings())
     }
 
-    func testRelayShouldDisplayPromptForValidAllowListURL() {
+    func test_relayShouldDisplayPrompt_forValidAllowListURL() {
         let subject = createSubject(accountStatus: .available)
 
         XCTAssertTrue(subject.emailFocusShouldDisplayRelayPrompt(url: URL(string: "https://goodwebsite.com")!))
     }
 
-    func testRelayShouldNotDisplayPromptForBlockListURL() {
+    func test_relayShouldNotDisplayPrompt_forBlockListURL() {
         let subject = createSubject(accountStatus: .available)
 
         XCTAssertFalse(subject.emailFocusShouldDisplayRelayPrompt(url: URL(string: "https://badwebsite.com")!))
     }
 
-    func testRelayPopulateFieldGeneratesMaskAndCallsCompletionBlock() {
+    func test_relayPopulateField_generatesMaskAndCallsCompletionBlock() {
         let subject = createSubject(accountStatus: .available)
 
         let mockTab = MockTab(profile: AppContainer.shared.resolve(), windowUUID: .XCTestDefaultUUID)
@@ -124,7 +124,7 @@ class RelayControllerTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
 
-    func testRelayPopulateFieldSucceedsIfFocusedOnCorrectTab() {
+    func test_relayPopulateField_succeedsIfFocusedOnCorrectTab() {
         let subject = createSubject(accountStatus: .available)
 
         let mockTab1 = MockTab(profile: AppContainer.shared.resolve(), windowUUID: .XCTestDefaultUUID)
@@ -144,7 +144,7 @@ class RelayControllerTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
 
-    func testRelayPopulateFieldIsAbortedIfFocusedOnWrongTab() {
+    func test_relayPopulateField_isAbortedIfFocusedOnWrongTab() {
         let subject = createSubject(accountStatus: .available)
 
         let mockTab1 = MockTab(profile: AppContainer.shared.resolve(), windowUUID: .XCTestDefaultUUID)
