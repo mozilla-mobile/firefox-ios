@@ -10,67 +10,6 @@ import Shared
 import Common
 @testable import Client
 
-struct MockRelayAddress {
-    static let mockAddress1 = RelayAddress(
-        maskType: "",
-        enabled: true,
-        description: "description",
-        generatedFor: "etsy.com",
-        blockListEmails: false,
-        usedOn: nil,
-        id: 1234,
-        address: "",
-        domain: 0,
-        fullAddress: "test@mock.com",
-        createdAt: "",
-        lastModifiedAt: "",
-        lastUsedAt: nil,
-        numForwarded: 0,
-        numBlocked: 0,
-        numLevelOneTrackersBlocked: 0,
-        numReplied: 0,
-        numSpam: 0
-    )
-}
-
-final class MockRelayRemoteSettingsClient: RelayRemoteSettingsClientProtocol {
-    let mockShouldShowValue = true
-
-    func shouldShowRelay(host: String, domain: String, isRelayUser: Bool) -> Bool {
-        return domain == "goodwebsite.com"
-    }
-}
-
-final class MockRelayClient: RelayClientProtocol {
-    func acceptTerms() throws { }
-
-    func createAddress(description: String, generatedFor: String, usedOn: String) throws -> MozillaAppServices.RelayAddress {
-        return MockRelayAddress.mockAddress1
-    }
-
-    func fetchAddresses() throws -> [MozillaAppServices.RelayAddress] {
-        return [MockRelayAddress.mockAddress1]
-    }
-
-    func fetchProfile() throws -> MozillaAppServices.RelayProfile {
-        fatalError() // Currently unused in unit tests.
-    }
-}
-
-final class MockRelayAccountStatusProvider: RelayAccountStatusProvider {
-    let mockValue: RelayAccountStatus
-    var wrappedValue: RelayAccountStatus = .unknown
-
-    init(mockValue: RelayAccountStatus) {
-        self.mockValue = mockValue
-    }
-
-    var accountStatus: RelayAccountStatus {
-        get { return mockValue }
-        set { wrappedValue = newValue }
-    }
-}
-
 @MainActor
 class RelayControllerTests: XCTestCase {
     override func setUp() async throws {
@@ -155,12 +94,14 @@ class RelayControllerTests: XCTestCase {
 
         subject.emailFieldFocused(in: mockTab2)
 
+        let expectation = expectation(description: "Completion not called")
+        expectation.isInverted = true
+
         subject.populateEmailFieldWithRelayMask(for: mockTab1) { result in
-            // Note: we do _not_ expect the completion to run in this scenario,
-            // so if it is called we fail the test immediately.
-            XCTFail()
+            // Note: we do _not_ expect the completion to run in this scenario
+            expectation.fulfill()
         }
-        wait(1)
+        waitForExpectations(timeout: 1.0)
     }
 
     // MARK: - Subject
@@ -176,5 +117,66 @@ class RelayControllerTests: XCTestCase {
                                        notificationCenter: MockNotificationCenter())
         trackForMemoryLeaks(subject)
         return subject
+    }
+}
+
+struct MockRelayAddress {
+    static let mockAddress1 = RelayAddress(
+        maskType: "",
+        enabled: true,
+        description: "description",
+        generatedFor: "etsy.com",
+        blockListEmails: false,
+        usedOn: nil,
+        id: 1234,
+        address: "",
+        domain: 0,
+        fullAddress: "test@mock.com",
+        createdAt: "",
+        lastModifiedAt: "",
+        lastUsedAt: nil,
+        numForwarded: 0,
+        numBlocked: 0,
+        numLevelOneTrackersBlocked: 0,
+        numReplied: 0,
+        numSpam: 0
+    )
+}
+
+final class MockRelayRemoteSettingsClient: RelayRemoteSettingsClientProtocol {
+    let mockShouldShowValue = true
+
+    func shouldShowRelay(host: String, domain: String, isRelayUser: Bool) -> Bool {
+        return domain == "goodwebsite.com"
+    }
+}
+
+final class MockRelayClient: RelayClientProtocol {
+    func acceptTerms() throws { }
+
+    func createAddress(description: String, generatedFor: String, usedOn: String) throws -> MozillaAppServices.RelayAddress {
+        return MockRelayAddress.mockAddress1
+    }
+
+    func fetchAddresses() throws -> [MozillaAppServices.RelayAddress] {
+        return [MockRelayAddress.mockAddress1]
+    }
+
+    func fetchProfile() throws -> MozillaAppServices.RelayProfile {
+        fatalError() // Currently unused in unit tests.
+    }
+}
+
+final class MockRelayAccountStatusProvider: RelayAccountStatusProvider {
+    let mockValue: RelayAccountStatus
+    var wrappedValue: RelayAccountStatus = .unknown
+
+    init(mockValue: RelayAccountStatus) {
+        self.mockValue = mockValue
+    }
+
+    var accountStatus: RelayAccountStatus {
+        get { return mockValue }
+        set { wrappedValue = newValue }
     }
 }
