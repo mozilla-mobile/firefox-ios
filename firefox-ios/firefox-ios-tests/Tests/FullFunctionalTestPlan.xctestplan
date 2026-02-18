@@ -190,6 +190,7 @@
         "LoginTest\/testSavedLoginAutofilled_TAE()",
         "LoginTest\/testVerifyUpdatedPasswordIsSaved()",
         "LoginTest\/testVerifyUpdatedPasswordIsSaved_TAE()",
+        "ModernOnboardingTests\/testModernOnboardingFullFlowWithToS()",
         "NavigationTest\/testLongPressLinkOptions()",
         "NavigationTest\/testLongPressLinkOptions_TAE()",
         "NavigationTest\/testNavigationPreservesDesktopSiteOnSameHost()",
