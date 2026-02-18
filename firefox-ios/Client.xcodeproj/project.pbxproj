@@ -320,6 +320,7 @@
 		217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217AEF75284666D4004EED37 /* IntroViewModelTests.swift */; };
 		217C6A792F3A7A370085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C6A782F3A7A090085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift */; };
 		217C6F312F3BD5E00085D9B9 /* BrowserViewControllerConstraintTestsBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C6F302F3BD5D20085D9B9 /* BrowserViewControllerConstraintTestsBase.swift */; };
+		217C7C2D2F4507170085D9B9 /* BrowserViewControllerKeyboardConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C7C2C2F4507000085D9B9 /* BrowserViewControllerKeyboardConstraintTests.swift */; };
 		218457C62F22A4E800B4FF23 /* TabTrayStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218457C52F22A4E200B4FF23 /* TabTrayStateTests.swift */; };
 		21872A232E3CFEA500241A8A /* TabScrollHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21872A222E3CFEA500241A8A /* TabScrollHandlerTests.swift */; };
 		2191D4472DC3BC1200E1A839 /* ZoomTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2191D4462DC3BC1200E1A839 /* ZoomTelemetry.swift */; };
@@ -3028,6 +3029,7 @@
 		217AEF75284666D4004EED37 /* IntroViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModelTests.swift; sourceTree = "<group>"; };
 		217C6A782F3A7A090085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerDynamicViewConstraintsTests.swift; sourceTree = "<group>"; };
 		217C6F302F3BD5D20085D9B9 /* BrowserViewControllerConstraintTestsBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerConstraintTestsBase.swift; sourceTree = "<group>"; };
+		217C7C2C2F4507000085D9B9 /* BrowserViewControllerKeyboardConstraintTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerKeyboardConstraintTests.swift; sourceTree = "<group>"; };
 		218457C52F22A4E200B4FF23 /* TabTrayStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayStateTests.swift; sourceTree = "<group>"; };
 		21872A222E3CFEA500241A8A /* TabScrollHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollHandlerTests.swift; sourceTree = "<group>"; };
 		2191D4462DC3BC1200E1A839 /* ZoomTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomTelemetry.swift; sourceTree = "<group>"; };
@@ -12012,6 +12014,7 @@
 		217C6F322F3BD9C40085D9B9 /* Constraints */ = {
 			isa = PBXGroup;
 			children = (
+				217C7C2C2F4507000085D9B9 /* BrowserViewControllerKeyboardConstraintTests.swift */,
 				217C6F302F3BD5D20085D9B9 /* BrowserViewControllerConstraintTestsBase.swift */,
 				21365E3D2F314D1D0000C369 /* ConstraintReferenceTests.swift */,
 				217C6A782F3A7A090085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift */,
@@ -19690,6 +19693,7 @@
 				8A83B74C2A265061002FF9AC /* LibraryCoordinatorTests.swift in Sources */,
 				8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */,
 				21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */,
+				217C7C2D2F4507170085D9B9 /* BrowserViewControllerKeyboardConstraintTests.swift in Sources */,
 				F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */,
 				AA24AD342E7C3AD2008659A3 /* MockTrendingSearchEngine.swift in Sources */,
 				ED07C0F22CCAFED1006C0627 /* SearchEngineSelectionStateTests.swift in Sources */,

@@ -4992,7 +4992,14 @@ extension BrowserViewController {
 extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateOverKeyboardContainerConstraints()
+            updateConstraintsForKeyboard()
+        }
+
         if isSwipingTabsEnabled {
             addressToolbarContainer.hideSkeletonBars()
         }
@@ -5027,7 +5034,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         keyboardState = nil
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateOverKeyboardContainerConstraints()
+            updateConstraintsForKeyboard()
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,
@@ -5066,12 +5078,19 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateOverKeyboardContainerConstraints()
+            updateConstraintsForKeyboard()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,
