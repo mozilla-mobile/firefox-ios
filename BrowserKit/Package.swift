@@ -249,7 +249,7 @@ let package = Package(
         ),
         .testTarget(
             name: "VoiceSearchKitTests",
-            dependencies: ["VoiceSearchKit"]
+            dependencies: ["VoiceSearchKit", "TestKit"]
         ),
         .target(
             name: "ContentBlockingGenerator",
