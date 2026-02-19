@@ -1,3 +1,30 @@
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle.v140" = "Historias";
+
+/* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
+"FirefoxHome.PrivacyNotice.Body.v148" = "Hemos actualizado nuestro %1$@ para reflejar las últimas características en %2$@. %3$@";
+
+/* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
+"FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "Más información";
+
+/* Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice. */
+"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "Aviso de privacidad";
+
+/* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
+"FirefoxHome.ScreenTitle.v144" = "Página de inicio";
+
+/* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
+"FirefoxHome.Stories.AllStoriesButtonTitle.v145" = "Todas las historias";
+
+/* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
+"FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Todas las historias";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Popular hoy";
+
+/* This is the title of the Stories section on Firefox Homepage. */
+"FirefoxHome.Stories.SectionTitle.v140" = "Historias";
+
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Datos de navegación privada borrados";
 
@@ -9,4 +36,22 @@
 
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "No dejes rastros en este dispositivo";
+
+/* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
+"FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "Recargar página";
+
+/* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
+"FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Buscar o ingresar dirección";
+
+/* This is the navigation title for the Shortcuts Library view */
+"FirefoxHomepage.Shortcuts.Library.Title.v143" = "Atajos";
+
+/* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
+"FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "Fijado: %@";
+
+/* This is the section title for the Shortcuts section on Firefox Homepage. */
+"FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Atajos";
+
+/* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
+"FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ de %2$@";
 

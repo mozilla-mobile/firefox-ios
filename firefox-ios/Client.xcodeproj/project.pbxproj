@@ -4772,6 +4772,7 @@
 		434341FA2A2DF9FB00D08DF6 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/UpdateCard.strings; sourceTree = "<group>"; };
 		434369DC2BA85B630004271D /* ug */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ug; path = ug.lproj/BottomSheet.strings; sourceTree = "<group>"; };
 		434396F12DDB47C40017A18A /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Shopping.strings; sourceTree = "<group>"; };
+		43439A3B2F47298600CA0ADC /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Summarizer.strings"; sourceTree = "<group>"; };
 		4343A5D32EE1A3E2002FE739 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/RelayMask.strings; sourceTree = "<group>"; };
 		4343A5D42EE1A3E2002FE739 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/SearchZero.strings; sourceTree = "<group>"; };
 		4343A5D52EE1A3E2002FE739 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Summarize.strings; sourceTree = "<group>"; };
@@ -20675,6 +20676,7 @@
 				43B8964A2EB3818B00A77D8F /* sq */,
 				4343A5D62EE1A3E2002FE739 /* hr */,
 				4308BBE62F34B528000A13FD /* km */,
+				43439A3B2F47298600CA0ADC /* es-MX */,
 			);
 			name = Summarizer.strings;
 			sourceTree = "<group>";
