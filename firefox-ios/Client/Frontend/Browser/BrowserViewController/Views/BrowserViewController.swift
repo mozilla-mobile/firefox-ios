@@ -160,7 +160,7 @@ class BrowserViewController: UIViewController,
     // Constraints used to show/hide toolbars
     var headerTopConstraint: Constraint?
     var overKeyboardContainerConstraint: Constraint?
-    var bottomContainerConstraint: Constraint?
+    var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
@@ -1768,6 +1768,11 @@ class BrowserViewController: UIViewController,
         if isSnapKitRemovalEnabled {
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+
+            NSLayoutConstraint.activate([
+                bottomContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                bottomContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            ])
         } else {
             updateHeaderConstraints()
         }
@@ -1856,11 +1861,31 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateBottomContainerConstraints() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapKitBottomContainerConstraints()
+            return
+        }
+
+        let constraint = bottomContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        constraint.isActive = true
+        let constraintReference = ConstraintReference(native: constraint)
+
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.bottomContainerConstraint = constraintReference
+        } else {
+            bottomContainerConstraint = constraintReference
+        }
+    }
+
+    private func updateSnapKitBottomContainerConstraints() {
         bottomContainer.snp.remakeConstraints { make in
+            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
+            let constraintReference = ConstraintReference(snapKit: constraint)
+
             if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+                scrollController.bottomContainerConstraint = constraintReference
             } else {
-                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+                bottomContainerConstraint = constraintReference
             }
             make.leading.trailing.equalTo(view)
         }
