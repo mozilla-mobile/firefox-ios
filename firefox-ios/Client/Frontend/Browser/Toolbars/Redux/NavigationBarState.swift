@@ -319,7 +319,7 @@ struct NavigationBarState: StateType, Equatable {
 
         return ToolbarActionConfiguration(
             actionType: .tabs,
-            iconName: StandardImageIdentifiers.Large.tab,
+//            iconName: StandardImageIdentifiers.Large.tab,
             badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
             maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,

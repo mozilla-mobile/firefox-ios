@@ -10,7 +10,7 @@ protocol ToolbarButtonCaching: AnyObject {
     /// This improves performance by reusing buttons instead of creating new instances.
     var cachedButtonReferences: [String: ToolbarButton] { get set }
 
-    // Returns true if a cached button matching the given `ToolbarElement` exists, else false.
+    /// Returns true if a cached button matching the given `ToolbarElement` exists, else false.
     /// - Parameter toolbarElement: The `ToolbarElement` to check if cached button exists.
     /// - Returns: true if cached button exist, else false.
     func hasCachedButton(for toolbarElement: ToolbarElement) -> Bool
@@ -37,7 +37,7 @@ extension ToolbarButtonCaching {
         if let cachedButton = cachedButtonReferences[cacheKey] {
             button = cachedButton
         } else {
-            button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
+            button = toolbarElement.numberOfTabs != nil ? StackedTabButton() : ToolbarButton()
             cachedButtonReferences[cacheKey] = button
         }
 
