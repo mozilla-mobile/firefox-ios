@@ -885,10 +885,6 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         super.applyTheme()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
