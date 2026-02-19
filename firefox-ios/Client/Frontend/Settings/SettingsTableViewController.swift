@@ -813,6 +813,61 @@ class WithoutAccountSetting: AccountSetting {
     }
 }
 
+/// A setting that displays a picker menu allowing users to select from multiple predefined options.
+class PickerSetting: Setting {
+    private let pickerButton: UIButton = .build {
+        $0.showsMenuAsPrimaryAction = true
+        $0.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate),
+                    for: .normal)
+    }
+    private let pickerOptions: [String]
+    private let onOptionSelected: (String) -> Void
+    private var menuItems: [UIAction] {
+        return pickerOptions.map { option in
+            return UIAction(title: option) { [weak self] _ in
+                self?.selectedOption = option
+                self?.onOptionSelected(option)
+            }
+        }
+    }
+    private let pickerButtonAccessibilityLabel: String
+    private var selectedOption: String
+    
+    /// Initializes a new picker setting with the specified configuration.
+    ///
+    /// - Parameters:
+    ///   - selectedOption: The currently selected option to display in the picker.
+    ///   - pickerOptions: An array of available options to display in the picker menu.
+    ///   - pickerButtonAccessibilityLabel: The accessibility label for the picker button.
+    ///   - onOptionSelected: A closure called when a new option is selected, passing the selected option as a parameter.
+    init(
+        selectedOption: String,
+        pickerOptions: [String],
+        pickerButtonAccessibilityLabel: String,
+        onOptionSelected: @escaping (String) -> Void
+    ) {
+        self.selectedOption = selectedOption
+        self.pickerOptions = pickerOptions
+        self.onOptionSelected = onOptionSelected
+        self.pickerButtonAccessibilityLabel = pickerButtonAccessibilityLabel
+        super.init()
+    }
+    
+    override func onConfigureCell(_ cell: UITableViewCell, theme: any Theme) {
+        super.onConfigureCell(cell, theme: theme)
+        cell.textLabel?.text = selectedOption
+        cell.textLabel?.accessibilityLabel = selectedOption
+        
+        pickerButton.sizeToFit()
+        pickerButton.menu = UIMenu(children: menuItems)
+        pickerButton.tintColor = theme.colors.iconPrimary
+        pickerButton.accessibilityLabel = pickerButtonAccessibilityLabel
+        pickerButton.accessibilityIdentifier = AccessibilityIdentifiers.Settings.settingPickerButton
+        cell.selectionStyle = .none
+        cell.accessoryView = pickerButton
+    }
+}
+
 protocol SettingsDelegate: AnyObject {
     @MainActor
     func settingsOpenURLInNewTab(_ url: URL)

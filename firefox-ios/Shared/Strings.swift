@@ -3042,6 +3042,32 @@ extension String {
                     comment: "This is the footer text for the gestures features under the Summarize settings section."
                 )
             }
+            public struct LanguageSection {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Summarize.LanguageSection.Title.v149",
+                    tableName: "Settings",
+                    value: "Language",
+                    comment: "The title for the language choose section for the summarizer inside the Summarize settings."
+                )
+                public static let WebsiteLanguageLabel = MZLocalizedString(
+                    key: "Settings.Summarize.LanguageSection.WebsiteLanguageLabel.v149",
+                    tableName: "Settings",
+                    value: "Website Language",
+                    comment: "The label for the picker option to select the website language for the summarizer inside the Summarize settings."
+                )
+                public static let PreferredAppLanguageLabel = MZLocalizedString(
+                    key: "Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149",
+                    tableName: "Settings",
+                    value: "Preferred App Language",
+                    comment: "The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings."
+                )
+                public static let PickerButtonAccessibilityLabel = MZLocalizedString(
+                    key: "Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149",
+                    tableName: "Settings",
+                    value: "Pick a language",
+                    comment: "The accessibility label for the language picker button in the Summarize settings."
+                )
+            }
         }
 
         public struct Appearance {

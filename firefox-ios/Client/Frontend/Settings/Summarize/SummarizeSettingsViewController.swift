@@ -93,56 +93,16 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
     private var languageSection: SettingSection {
         return SettingSection(
             title: NSAttributedString(string: "LANGUAGE"),
-            footerTitle: NSAttributedString(string: "Change the default language for the summarized content"),
             children: [
                 PickerSetting(
                     selectedOption: "Website Language",
                     pickerOptions: ["Website Language", "App Language", "English", "Spanish"],
+                    pickerButtonAccessibilityLabel: .Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel,
                     onOptionSelected: { _ in
                         self.tableView.reloadData()
                     }
                 )
             ]
         )
-    }
-}
-
-// TODO: - Handle accessibility, Add Docs, Handle correct integration with super class, Add Button as property and theme it
-class PickerSetting: Setting {
-    private let pickerOptions: [String]
-    private let onOptionSelected: (String) -> Void
-    private var menuItems: [UIAction] {
-        return pickerOptions.map { option in
-            return UIAction(title: option) { [weak self] _ in
-                self?.selectedOption = option
-                self?.onOptionSelected(option)
-            }
-        }
-    }
-    private var selectedOption: String
-    
-    init(
-        selectedOption: String,
-        pickerOptions: [String],
-        onOptionSelected: @escaping (
-            String
-        ) -> Void
-    ) {
-        self.selectedOption = selectedOption
-        self.pickerOptions = pickerOptions
-        self.onOptionSelected = onOptionSelected
-        super.init()
-    }
-    
-    override func onConfigureCell(_ cell: UITableViewCell, theme: any Theme) {
-        super.onConfigureCell(cell, theme: theme)
-        cell.textLabel?.text = selectedOption
-        let pickerButton = UIButton()
-        pickerButton.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        pickerButton.showsMenuAsPrimaryAction = true
-        pickerButton.sizeToFit()
-        pickerButton.menu = UIMenu(children: menuItems)
-        pickerButton.tintColor = theme.colors.iconPrimary
-        cell.accessoryView = pickerButton
     }
 }
