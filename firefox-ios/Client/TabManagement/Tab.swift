@@ -702,13 +702,19 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             }
         }
 
-        // Do not reload from origin for homepage internal URLs
-        if let webView, webView.url != nil && !(InternalURL(webView.url)?.isAboutHomeURL ?? false) {
-            webView.reloadFromOrigin()
-            logger.log("Reloaded zombified tab from origin",
-                       level: .debug,
-                       category: .tabs)
-            return
+        if let webView, webView.url != nil {
+            // FXIOS-14783: Experimentation on removing isAboutHome
+            // isAboutHome: Do not reload from origin for homepage internal URLs
+            let isAboutHome = InternalURL(url)?.isAboutHomeURL ?? false
+            let experimentEnabled = featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly)
+
+            if experimentEnabled || !isAboutHome {
+                webView.reloadFromOrigin()
+                logger.log("Reloaded zombified tab from origin",
+                           level: .debug,
+                           category: .tabs)
+                return
+            }
         }
 
         if let webView = self.webView {
