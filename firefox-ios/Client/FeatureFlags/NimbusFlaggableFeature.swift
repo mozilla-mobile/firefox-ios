@@ -29,6 +29,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageSearchBar
     case homepageStoriesScrollDirection
     case homepageStoryCategories
+    case needsReloadRefactor
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -178,6 +179,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .microsurvey,
                 .modernOnboardingUI,
                 .nativeErrorPage,
+                .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
                 .recentSearches,

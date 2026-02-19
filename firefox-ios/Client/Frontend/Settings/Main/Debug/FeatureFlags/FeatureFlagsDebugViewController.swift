@@ -262,6 +262,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             ) { [weak self] _ in
                 self?.reloadView()
             },
+            FeatureFlagsBoolSetting(
+                with: .needsReloadRefactor,
+                titleText: format(string: "Needs Reload Refactor"),
+                statusText: format(string: "Toggle to enable the needs reload refactor")
+            ) { [weak self] _ in
+                self?.reloadView()
+            }
         ]
 
         // Conditionally add the Apple Summarizer only if the compile time check for the FoundationModels is true
