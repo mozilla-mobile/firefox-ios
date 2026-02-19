@@ -19,6 +19,7 @@ protocol SummarizerNimbusUtils {
 
     func isAppleSummarizerEnabled() -> Bool
     func isHostedSummarizerEnabled() -> Bool
+    func isAppAttestAuthEnabled() -> Bool
     func isShakeGestureFeatureFlagEnabled() -> Bool
 }
 
@@ -98,5 +99,9 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     func isShakeGestureFeatureFlagEnabled() -> Bool {
         return isAppleSummarizerShakeGestureEnabled() || isHostedSummarizerShakeGestureEnabled()
+    }
+
+    func isAppAttestAuthEnabled() -> Bool {
+        return featureFlags.isFeatureEnabled(.summarizerAppAttestAuth, checking: .buildOnly)
     }
 }

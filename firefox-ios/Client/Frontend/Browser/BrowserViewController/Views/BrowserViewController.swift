@@ -1930,15 +1930,25 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustBottomSearchBarForKeyboard() {
+        let keyboardHeight = keyboardState?.intersectionHeightForView(view)
+        let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
+
+        // To avoid some UI glitches, when authentication is in progress
+        // we don't need to update/change keyboard spacer
+        guard !appAuthenticator.isAuthenticating else {
+            guard isBottomSearchBar, isKeyboardVisible, keyboardHeight != nil else {
+                overKeyboardContainer.removeKeyboardSpacer()
+                return
+            }
+            return
+        }
+
         /// On iOS 26+, we use `UIKeyboardLayoutGuide` (https://developer.apple.com/documentation/uikit/uikeyboardlayoutguide)
         /// to avoid keyboard frame calculation issues. The legacy `keyboardFrameEndUserInfoKey` API returns
         /// incorrect keyboard frames when autofill displays suggested credentials above the keyboard.
         /// It  might be an apple bug.
         /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
         let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
-
-        let keyboardHeight = keyboardState?.intersectionHeightForView(view)
-        let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
 
         guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
             overKeyboardContainer.removeKeyboardSpacer()

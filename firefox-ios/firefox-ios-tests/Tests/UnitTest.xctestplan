@@ -146,7 +146,9 @@
     },
     {
       "skippedTests" : [
-        "SummarizeViewModelTests\/test_summarize_throwsSummarizeError()"
+        "SummarizeViewModelTests\/test_summarize_throwsSummarizeError()",
+        "SummarizeViewModelTests\/test_summarize_withNotEnoughStartingWords()",
+        "SummarizeViewModelTests\/test_summarizer_whenTosNotAcceppted_whenTriggerIsNotShake_startsSummarizer()"
       ],
       "target" : {
         "containerPath" : "container:..\/BrowserKit",

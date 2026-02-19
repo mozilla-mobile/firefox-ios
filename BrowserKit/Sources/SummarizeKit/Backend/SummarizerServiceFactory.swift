@@ -10,6 +10,7 @@ public protocol SummarizerServiceFactory {
 
     func make(isAppleSummarizerEnabled: Bool,
               isHostedSummarizerEnabled: Bool,
+              isAppAttestAuthEnabled: Bool,
               config: SummarizerConfig?) -> SummarizerService?
 
     /// Returns the max words that the summarizer Service can handle.
@@ -23,6 +24,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
 
     public func make(isAppleSummarizerEnabled: Bool,
                      isHostedSummarizerEnabled: Bool,
+                     isAppAttestAuthEnabled: Bool,
                      config: SummarizerConfig?) -> SummarizerService? {
         let maxWords = maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
                                 isHostedSummarizerEnabled: isHostedSummarizerEnabled)
@@ -36,11 +38,11 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
                 maxWords: maxWords
             )
         } else {
-            guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
-                  let model = config.options["model"] as? String, !model.isEmpty,
-                  let key = LiteLLMConfig.apiKey else { return nil }
-            let authenticator = BearerRequestAuth(apiKey: key)
-            let llmClient = LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
+            guard isHostedSummarizerEnabled,
+                  let llmClient = makeLiteLLMClient(config: config, isAppAttestAuthEnabled: isAppAttestAuthEnabled) else {
+                return nil
+            }
+
             let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
             return DefaultSummarizerService(
                 summarizer: llmSummarizer,
@@ -50,11 +52,9 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         }
         #else
         guard isHostedSummarizerEnabled,
-              let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
-              let model = config.options["model"] as? String, !model.isEmpty,
-              let key = LiteLLMConfig.apiKey else { return nil }
-        let authenticator = BearerRequestAuth(apiKey: key)
-        let llmClient = LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
+              let llmClient = makeLiteLLMClient(config: config, isAppAttestAuthEnabled: isAppAttestAuthEnabled) else {
+            return nil
+        }
         let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
         return DefaultSummarizerService(
             summarizer: llmSummarizer,
@@ -72,5 +72,30 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             return LiteLLMConfig.maxWords
         }
         return 0
+    }
+
+    private func makeLiteLLMClient(
+        config: SummarizerConfig,
+        isAppAttestAuthEnabled: Bool
+    ) -> LiteLLMClient? {
+        guard let model = config.options["model"] as? String, !model.isEmpty else {
+            return nil
+        }
+
+        if isAppAttestAuthEnabled {
+            guard let endPoint = MLPAConstants.completionsEndpoint,
+                  let client = try? AppAttestClient(remoteServer: MLPAAppAttestServer()) else {
+                return nil
+            }
+            let authenticator = AppAttestRequestAuth(appAttestClient: client)
+            return LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
+        } else {
+            guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
+                  let key = LiteLLMConfig.apiKey else {
+                return nil
+            }
+            let authenticator = BearerRequestAuth(apiKey: key)
+            return LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
+        }
     }
 }
