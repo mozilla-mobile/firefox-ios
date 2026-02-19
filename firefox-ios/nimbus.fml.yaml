@@ -32,7 +32,7 @@ include:
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
-  - nimbus-features/needsReloadRefactorFeature.yaml
+  - nimbus-features/needsReloadRefactor.yaml
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml

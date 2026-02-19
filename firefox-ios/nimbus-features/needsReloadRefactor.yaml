@@ -1,12 +1,12 @@
-# The configuration for the needsReloadRefactorFeature feature
+# The configuration for the needsReloadRefactor technical refactor
 features:
-  needs-reload-refactor-feature:
+  needs-reload-refactor:
     description: >
       This is a technical refactor which cleans up the reloading of the webview
     variables:
       enabled:
         description: >
-          Whether or not this feature is enabled
+          Whether or not this refactor is enabled
         type: Boolean
         default: false
     defaults:
