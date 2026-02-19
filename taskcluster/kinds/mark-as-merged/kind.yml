@@ -1,0 +1,31 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - ffios_taskgraph.transforms.mark_as_merged:transforms
+    - taskgraph.transforms.task:transforms
+
+kind-dependencies:
+    - branch-version-bump
+
+tasks:
+    mark-as-merged:
+        name: mark-as-merged
+        description: mark merge automation as completed in shipit
+        dependencies:
+            branch-version-bump: branch-version-bump-task
+        run-on-tasks-for: []
+        worker-type: ship-it
+        worker:
+            implementation: scriptworker-shipit-merge
+        scopes:
+            by-level:
+                '3':
+                    - project:mobile:releng:ship-it:server:production
+                    - project:mobile:releng:ship-it:action:mark-as-merged
+                default:
+                    - project:mobile:releng:ship-it:server:staging
+                    - project:mobile:releng:ship-it:action:mark-as-merged

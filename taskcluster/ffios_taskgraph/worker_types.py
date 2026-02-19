@@ -117,3 +117,14 @@ def build_shipit_release_payload(config, task, task_def):
         "version": task["worker"]["version"],
         "cron_revision": task["worker"]["revision"],
     }
+
+@payload_builder(
+    "scriptworker-shipit-merge",
+    schema={
+        Required("merge-automation-id"): int,
+    }
+)
+def build_shipit_release_payload(config, task, task_def):
+    task_def["payload"] = {
+        "automation_id": task["worker"]["merge-automation-id"],
+    }
