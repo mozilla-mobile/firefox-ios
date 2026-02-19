@@ -43,6 +43,9 @@ protocol RelayControllerProtocol {
     /// - Parameter tab: the current tab.
     @MainActor
     func emailFieldFocused(in tab: Tab)
+
+    @MainActor
+    var telemetry: RelayMaskTelemetry { get }
 }
 
 protocol RelayAccountStatusProvider {
@@ -114,8 +117,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     // MARK: - Properties
-
-    static let shared = RelayController()
 
     let telemetry: RelayMaskTelemetry
 

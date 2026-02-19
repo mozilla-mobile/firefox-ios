@@ -114,6 +114,7 @@ class BrowserViewController: UIViewController,
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
     let recordVisitManager: RecordVisitObserving
+    let relayController: RelayController
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -576,6 +577,7 @@ class BrowserViewController: UIViewController,
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
+        self.relayController = RelayController()
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -635,7 +637,6 @@ class BrowserViewController: UIViewController,
 
         crashTracker.updateData()
         ratingPromptManager.showRatingPromptIfNeeded()
-        _ = RelayController.shared // Ensure RelayController is init'd early to allow for account notification observers.
     }
 
     private func didAddPendingBlobDownloadToQueue() {
@@ -4151,9 +4152,9 @@ class BrowserViewController: UIViewController,
         guard let tab, let tabURL = tab.url else { return }
         guard RelayController.isFeatureEnabled else { return }
 
-        if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
-            RelayController.shared.telemetry.showPrompt()
-            RelayController.shared.emailFieldFocused(in: tab)
+        if relayController.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            relayController.telemetry.showPrompt()
+            relayController.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
             Task { @MainActor [weak self] in
@@ -4174,7 +4175,7 @@ class BrowserViewController: UIViewController,
     private func handleUseRelayMaskTapped() {
         guard RelayController.isFeatureEnabled else { return }
         guard let currentTab = tabManager.selectedTab else { return }
-        RelayController.shared.populateEmailFieldWithRelayMask(for: currentTab) { [weak self] result in
+        relayController.populateEmailFieldWithRelayMask(for: currentTab) { [weak self] result in
             self?.handleRelayMaskResult(result)
         }
     }
