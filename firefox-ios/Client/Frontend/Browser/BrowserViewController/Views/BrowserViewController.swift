@@ -1769,10 +1769,7 @@ class BrowserViewController: UIViewController,
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
 
-            NSLayoutConstraint.activate([
-                bottomContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                bottomContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            ])
+            setupBottomContainerConstraints()
         } else {
             updateHeaderConstraints()
         }
@@ -1807,6 +1804,23 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Snapkit related
+
+    private func setupBottomContainerConstraints() {
+        NSLayoutConstraint.activate([
+            bottomContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        let constraint = bottomContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        constraint.isActive = true
+        let constraintReference = ConstraintReference(native: constraint)
+
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.bottomContainerConstraint = constraintReference
+        } else {
+            bottomContainerConstraint = constraintReference
+        }
+    }
+
     private func updateHeaderConstraints() {
         guard !isSnapKitRemovalEnabled else {
             browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
@@ -1865,16 +1879,7 @@ class BrowserViewController: UIViewController,
             updateSnapKitBottomContainerConstraints()
             return
         }
-
-        let constraint = bottomContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        constraint.isActive = true
-        let constraintReference = ConstraintReference(native: constraint)
-
-        if let scrollController = scrollController as? LegacyTabScrollProvider {
-            scrollController.bottomContainerConstraint = constraintReference
-        } else {
-            bottomContainerConstraint = constraintReference
-        }
+        // TODO: Yoana if there is nothing to do change guard to if
     }
 
     private func updateSnapKitBottomContainerConstraints() {
