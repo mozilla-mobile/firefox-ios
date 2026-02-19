@@ -19,7 +19,7 @@ struct SpeechAnalyzerEngineTests {
         }
 
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false)
-        let subject = createSubject(authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
             try await subject.prepare()
@@ -36,7 +36,7 @@ struct SpeechAnalyzerEngineTests {
         }
 
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: true)
-        let subject = createSubject(authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
             try await subject.prepare()
@@ -53,7 +53,7 @@ struct SpeechAnalyzerEngineTests {
         }
 
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: false)
-        let subject = createSubject(authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
             try await subject.prepare()
@@ -70,7 +70,7 @@ struct SpeechAnalyzerEngineTests {
         }
 
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let subject = createSubject(authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
         try await subject.prepare()
 
         #expect(session.setCategoryCalls.count == 1)
@@ -89,8 +89,9 @@ struct SpeechAnalyzerEngineTests {
         guard #available(iOS 26.0, *) else {
             return
         }
+
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let subject = createSubject(authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
         try await subject.prepare()
 
         #expect(session.setCategoryCalls.count == 1)
@@ -111,7 +112,7 @@ struct SpeechAnalyzerEngineTests {
         }
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
         let engine = MockAudioEngine()
-        let subject = createSubject(engine: engine, authorizer: authorizer)
+        let subject = await createSubject(engine: engine, authorizer: authorizer)
 
         try await subject.stop()
 
@@ -119,6 +120,7 @@ struct SpeechAnalyzerEngineTests {
     }
 
     @available(iOS 26.0, *)
+    @MainActor
     private func createSubject(
         engine: AudioEngineProvider = MockAudioEngine(),
         authorizer: AuthorizeProvider

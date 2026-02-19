@@ -2,8 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// TODO: FXIOS-14934 - remove preconcurrency
 @preconcurrency import AVFoundation
-@preconcurrency import Speech
+import Speech
 import Common
 import CoreMedia
 
@@ -17,7 +18,8 @@ import CoreMedia
 ///
 /// This type is an `actor` to keep audio/transcription state safe across concurrent calls.
 @available(iOS 26.0, *)
-final actor SpeechAnalyzerEngine: TranscriptionEngine {
+@MainActor
+final class SpeechAnalyzerEngine: TranscriptionEngine {
     // TODO: FXIOS-14882 - Refactor audio portion to be in its own manager
     private let audioEngine: AudioEngineProvider
     private let audioSession: AudioSessionProvider
@@ -51,6 +53,7 @@ final actor SpeechAnalyzerEngine: TranscriptionEngine {
         try configureAudioSession()
     }
 
+    // TODO: FXIOS-14878 - Refactor and extract similar audio code for both speech framework
     /// Starts transcription and streams results through `continuation`.
     ///
     /// This method:
@@ -104,7 +107,7 @@ final actor SpeechAnalyzerEngine: TranscriptionEngine {
 
         resultsTask?.cancel()
         resultsTask = Task { [weak self] in
-            guard let self, let transcriber = await self.transcriber else { return }
+            guard let self, let transcriber = self.transcriber else { return }
             do {
                 for try await result in transcriber.results {
                     let chunk = String(result.text.characters)
