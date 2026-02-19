@@ -17973,7 +17973,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which periphery >/dev/null; then\n    periphery scan --config \"${SRCROOT}/.periphery.yml\" --skip-build --format xcode -- -destination \"generic/platform=iOS Simulator\"\nelse\n    echo \"warning: periphery not installed, install from https://github.com/peripheryapp/periphery\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which periphery >/dev/null; then\n    periphery scan --config \"${SRCROOT}/.periphery.yml\" --format xcode -- -destination \"generic/platform=iOS Simulator\"\nelse\n    echo \"warning: periphery not installed, install from https://github.com/peripheryapp/periphery\"\nfi\n";
 		};
 		C31224262EB9944500683849 /* Strip Symbols */ = {
 			isa = PBXShellScriptBuildPhase;
