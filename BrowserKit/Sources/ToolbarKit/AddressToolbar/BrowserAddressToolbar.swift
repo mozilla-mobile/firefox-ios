@@ -116,6 +116,18 @@ public class BrowserAddressToolbar: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+    public func configureNonInteractive(
+        config: AddressToolbarConfiguration,
+        leadingSpace: CGFloat,
+        trailingSpace: CGFloat
+    ) {
+        previousConfiguration = config
+        configureUX(config: config.uxConfiguration, toolbarPosition: .bottom)
+        updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
+        locationView.configureNonInteractive(config.locationViewConfiguration, uxConfig: config.uxConfiguration)
+        updateActions(config: config, animated: false)
+    }
+
     public func configure(config: AddressToolbarConfiguration,
                           toolbarPosition: AddressToolbarPosition,
                           toolbarDelegate: any AddressToolbarDelegate,
@@ -142,7 +154,7 @@ public class BrowserAddressToolbar: UIView,
                   animated: animated)
     }
 
-    public func configure(
+    private func configure(
         config: AddressToolbarConfiguration,
         isUnifiedSearchEnabled: Bool,
         addressBarPosition: AddressToolbarPosition,

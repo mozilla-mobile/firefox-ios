@@ -47,7 +47,7 @@ class OnboardingTests: BaseTestCase {
         try await super.tearDown()
     }
 
-    // Smoketest TAE
+    // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2575178
     func testFirstRunTour() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
@@ -65,7 +65,7 @@ class OnboardingTests: BaseTestCase {
         // Complete the standard onboarding tour (Firefox/Fennec)
         onboardingScreen.completeStandardOnboardingFlow(isIPad: iPad())
 
-        // Verify we landed on homepage with TopSites
+        // Dismiss new changes pop up if exists
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 
@@ -152,35 +152,6 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306814
     func testOnboardingSignIn() {
-        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
-        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
-
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        // Swipe to the second screen
-        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
-        currentScreen += 1
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        XCTAssertEqual("Stay encrypted when you hop between devices", app.staticTexts["\(rootA11yId)TitleLabel"].label)
-        XCTAssertEqual("Firefox encrypts your passwords, bookmarks, and more when you’re synced.",
-                       app.staticTexts["\(rootA11yId)DescriptionLabel"].label)
-        XCTAssertEqual("Sign In", app.buttons["\(rootA11yId)PrimaryButton"].label)
-        XCTAssertEqual("Skip", app.buttons["\(rootA11yId)SecondaryButton"].label)
-        // Tap on Sign In
-        app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
-        mozWaitForElementToExist(app.navigationBars["Sync and Save Data"])
-        XCTAssertTrue(app.buttons["QRCodeSignIn.button"].exists)
-        XCTAssertEqual("Ready to Scan", app.buttons["QRCodeSignIn.button"].label)
-        XCTAssertTrue(app.buttons["EmailSignIn.button"].exists)
-        XCTAssertEqual("Use Email Instead", app.buttons["EmailSignIn.button"].label)
-        app.buttons["Done"].waitAndTap()
-        app.buttons["CloseButton"].waitAndTap()
-    }
-
-    // Smoketest TAE
-    // https://mozilla.testrail.io/index.php?/cases/view/2306814
-    func testOnboardingSignIn_TAE() {
-        let onboardingScreen = OnboardingScreen(app: app)
-
         onboardingScreen.agreeAndContinue()
         onboardingScreen.swipeToNextScreen()
 
@@ -199,19 +170,6 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testCloseTour() {
-        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
-        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
-
-        app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].waitAndTap()
-        // Dismiss new changes pop up if exists
-        app.buttons["Close"].tapIfExists()
-        let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        mozWaitForElementToExist(topSites)
-    }
-
-    // Smoketest TAE
-    // https://mozilla.testrail.io/index.php?/cases/view/2306816
-    func testCloseTour_TAE() {
         onboardingScreen.agreeAndContinue()
         onboardingScreen.closeTourIfNeeded()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
@@ -346,8 +304,6 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/3193571
     func testValidateContinueButton() {
-        let onboardingScreen = OnboardingScreen(app: app)
-
         onboardingScreen.assertContinueButtonIsOnTheBottom()
         onboardingScreen.agreeAndContinue()
         onboardingScreen.waitForCurrentScreenElements()

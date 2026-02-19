@@ -3799,6 +3799,11 @@ extension String {
             tableName: nil,
             value: "Private",
             comment: "The title on the button to look at private tabs.")
+        public static let TabsSelectorBlankTabsTitle = MZLocalizedString(
+            key: "TabTray.TabsSelectorBlankTabsTitle.v149",
+            tableName: "TabsTray",
+            value: "New Tab",
+            comment: "When user choose to have Blank Page as homepage, this will be displayed as tab title.")
 
         public struct CloseTabsToast {
             public static let Title = MZLocalizedString(

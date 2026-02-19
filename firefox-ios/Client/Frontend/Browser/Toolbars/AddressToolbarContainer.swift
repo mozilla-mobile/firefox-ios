@@ -376,33 +376,18 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func configureSkeletonAddressBars(previousTab: Tab?, forwardTab: Tab?) {
-        guard let model, let state else { return }
-        leftSkeletonAddressBar.configure(
-            config: model.configureSkeletonAddressBar(
-                with: previousTab?.url?.displayURL,
-                isReaderModeAvailableOrActive: previousTab?.readerModeAvailableOrActive
-            ),
-            toolbarPosition: state.toolbarPosition,
-            toolbarDelegate: self,
+        guard let model else { return }
+        leftSkeletonAddressBar.configureNonInteractive(
+            config: model.getSkeletonAddressBarConfiguration(for: previousTab),
             leadingSpace: UX.skeletonBarOffset,
-            trailingSpace: -UX.skeletonBarOffset,
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            animated: model.shouldAnimate
+            trailingSpace: -UX.skeletonBarOffset
+        )
+        rightSkeletonAddressBar.configureNonInteractive(
+            config: model.getSkeletonAddressBarConfiguration(for: forwardTab),
+            leadingSpace: -UX.skeletonBarOffset,
+            trailingSpace: UX.skeletonBarOffset
         )
         leftSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.leadingSkeleton
-
-        rightSkeletonAddressBar.configure(
-            config: model.configureSkeletonAddressBar(
-                with: forwardTab?.url?.displayURL,
-                isReaderModeAvailableOrActive: forwardTab?.readerModeAvailableOrActive
-            ),
-            toolbarPosition: state.toolbarPosition,
-            toolbarDelegate: self,
-            leadingSpace: -UX.skeletonBarOffset,
-            trailingSpace: UX.skeletonBarOffset,
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            animated: model.shouldAnimate
-        )
         rightSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton
     }
 

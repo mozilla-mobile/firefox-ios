@@ -79,7 +79,10 @@ final class OnboardingScreen {
         }
     }
 
-    func waitForCurrentScreenElements(waitForImage: Bool = true) {
+    func waitForCurrentScreenElements(checkCloseButton: Bool = false,
+                                      checkPageControl: Bool = false,
+                                      waitForImage: Bool = true) {
+        let img = app.images["\(rootA11yId)ImageView"]
         let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
         let desc = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
         let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
@@ -92,6 +95,19 @@ final class OnboardingScreen {
             BaseTestCase().waitForElementsToExist([title, desc, primary])
         }
 
+        var elementsToCheck = [img, title, desc, primary]
+
+        if checkCloseButton {
+            let closeBtn = sel.CLOSE_TOUR_BUTTON.element(in: app)
+            elementsToCheck.append(closeBtn)
+        }
+
+        if checkPageControl {
+            let pageCtrl = sel.PAGE_CONTROL.element(in: app)
+            elementsToCheck.append(pageCtrl)
+        }
+
+        BaseTestCase().waitForElementsToExist(elementsToCheck)
         // The secundary button only exists in some screens
         if secondary.exists { BaseTestCase().mozWaitForElementToExist(secondary) }
     }
@@ -193,7 +209,7 @@ final class OnboardingScreen {
 
         // Navigate to second screen
         goToNextScreen()
-        waitForCurrentScreenElements()
+        waitForCurrentScreenElements(checkCloseButton: true, checkPageControl: true)
 
         // Navigate to third screen
         goToNextScreen()

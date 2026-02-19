@@ -4,6 +4,8 @@
 <dict>
 	<key>BuildSystemType</key>
 	<string>Latest</string>
+	<key>IDEWorkspaceSharedSettings_AutocreateContextsIfNeeded</key>
+	<false/>
 	<key>PreviewsEnabled</key>
 	<false/>
 </dict>
