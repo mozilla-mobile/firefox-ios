@@ -21,7 +21,7 @@ enum SelectorStrategy {
     case tableCellButtonById(String)
     case navigationBarByIdOrLabel(String)
     case linkStaticTextById(String)
-}
+    case pageIndicatorById(String)}
 
 // Selector model (with metadata)
 struct Selector {
@@ -82,6 +82,8 @@ extension Selector {
             return app.navigationBars[value]
         case .linkStaticTextById(let id):
             return app.links.staticTexts[id]
+        case .pageIndicatorById:
+            return app.pageIndicators[value]
         }
     }
 
@@ -123,6 +125,8 @@ extension Selector {
             return app.navigationBars.matching(identifier: value)
         case .linkStaticTextById(let id):
             return app.links.staticTexts.matching(identifier: id)
+        case .pageIndicatorById:
+            return app.pageIndicators.matching(identifier: value)
         }
     }
 

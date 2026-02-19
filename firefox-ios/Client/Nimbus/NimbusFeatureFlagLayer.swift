@@ -137,7 +137,7 @@ final class NimbusFeatureFlagLayer: Sendable {
            return checkHostedSummarizerShakeGesture(from: nimbus)
 
         case .summarizerAppAttestAuth:
-            return checkAppleSummarizerFeature(from: nimbus)
+            return checkSummarizerAppAttestAuthFeature(from: nimbus)
 
         case .summarizerLanguageExpansion:
             return checkSummarizerLanguageExpansionFeature(from: nimbus)

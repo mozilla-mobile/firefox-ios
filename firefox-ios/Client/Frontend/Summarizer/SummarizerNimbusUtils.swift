@@ -20,6 +20,7 @@ protocol SummarizerNimbusUtils {
 
     func isAppleSummarizerEnabled() -> Bool
     func isHostedSummarizerEnabled() -> Bool
+    func isAppAttestAuthEnabled() -> Bool
     func isShakeGestureFeatureFlagEnabled() -> Bool
     func languageExpansionConfiguration(
         from nimbusFeature: SummarizerLanguageExpansionFeature
@@ -94,6 +95,10 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     func isHostedSummarizerEnabled() -> Bool {
         return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
+    }
+
+    func isAppAttestAuthEnabled() -> Bool {
+        return featureFlags.isFeatureEnabled(.summarizerAppAttestAuth, checking: .buildOnly)
     }
 
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {

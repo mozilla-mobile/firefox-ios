@@ -12,6 +12,7 @@ from voluptuous import Optional, Required
         Required("bump"): bool,
         Optional("bump-files"): [str],
         Optional("push"): bool,
+        Optional("force-dry-run"): bool,
         Optional("branch"): str,
         Optional("next-version"): str,
         Optional("create-branch-info"): {
