@@ -2768,6 +2768,12 @@ extension String {
             value: "Drag or tap the web page to close the summary",
             comment: "The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page."
         )
+        public static let ToastLabel = MZLocalizedString(
+            key: "Summarizer.ToastLabel.v149",
+            tableName: "Summarizer",
+            value: "Summary not available",
+            comment: "The label for the toast that shows when shaking and the summary is not available for that page."
+        )
     }
 }
 
@@ -3040,6 +3046,32 @@ extension String {
                     tableName: "Settings",
                     value: "Shake your device from side to side to summarize a page.",
                     comment: "This is the footer text for the gestures features under the Summarize settings section."
+                )
+            }
+            public struct LanguageSection {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Summarize.LanguageSection.Title.v149",
+                    tableName: "Settings",
+                    value: "Language",
+                    comment: "The title for the language choose section for the summarizer inside the Summarize settings."
+                )
+                public static let WebsiteLanguageLabel = MZLocalizedString(
+                    key: "Settings.Summarize.LanguageSection.WebsiteLanguageLabel.v149",
+                    tableName: "Settings",
+                    value: "Website Language",
+                    comment: "The label for the picker option to select the website language for the summarizer inside the Summarize settings."
+                )
+                public static let PreferredAppLanguageLabel = MZLocalizedString(
+                    key: "Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149",
+                    tableName: "Settings",
+                    value: "Preferred App Language",
+                    comment: "The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings."
+                )
+                public static let PickerButtonAccessibilityLabel = MZLocalizedString(
+                    key: "Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149",
+                    tableName: "Settings",
+                    value: "Pick a language",
+                    comment: "The accessibility label for the language picker button in the Summarize settings."
                 )
             }
         }
@@ -5382,6 +5414,12 @@ extension String {
                 tableName: "MainMenu",
                 value: "Summarize Page",
                 comment: "On the main menu, the title for the action that will summarize the content of the webpage.")
+            public static let ReaderViewTitle = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ReaderView.Title.v149",
+                tableName: "MainMenu",
+                value: "Reader View",
+                comment: "On the main menu, the title for the action that will show the reader view for the webpage."
+            )
 
             public struct Translation {
                 public static let TranslatePageTitle = MZLocalizedString(
