@@ -18,6 +18,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         setHostedSummarizerFeature()
         setIsAppleIntelligenceAvailable()
         setLanguageExpansionFeature()
+        setIsAppAttestAuthEnabled()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
@@ -145,21 +146,21 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
     }
 
     func test_isAppleSummarizerEnabled_whenLangExpansionDisabledAndNonEnLocale() {
-        let subject = createSubject(locale: itTestLocale)
+        let subject = createSubject(currentLocale: itTestLocale)
         setLanguageExpansionFeature(isEnabled: false)
 
         XCTAssertFalse(subject.isAppleSummarizerEnabled())
     }
 
     func test_isAppleSummarizerEnabled_whenLangExpansionDisabledAndAppleIntelligenceDisabled() {
-        let subject = createSubject(locale: itTestLocale)
+        let subject = createSubject(currentLocale: itTestLocale)
         setLanguageExpansionFeature(isEnabled: false)
         setIsAppleIntelligenceAvailable(isEnabled: false)
         XCTAssertFalse(subject.isAppleSummarizerEnabled())
     }
 
     func test_isAppleSummarizerEnabled_whenLangExpansionEnabledAndLocaleNotEn() {
-        let subject = createSubject(locale: itTestLocale)
+        let subject = createSubject(currentLocale: itTestLocale)
 
         XCTAssertTrue(subject.isAppleSummarizerEnabled())
     }
@@ -177,6 +178,20 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         setHostedSummarizerFeature(isEnabled: false)
 
         XCTAssertFalse(subject.isHostedSummarizerEnabled())
+    }
+
+    // MARK: - isAppAuthAttestEnabled
+    func test_isAppAuthAttestEnabled_whenFeatureFlagEnabled() {
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.isAppAttestAuthEnabled())
+    }
+
+    func test_isAppAuthAttestEnabled_whenFeatureFlagDisabled() {
+        let subject = createSubject()
+        setIsAppAttestAuthEnabled(isEnabled: false)
+
+        XCTAssertFalse(subject.isAppAttestAuthEnabled())
     }
 
     // MARK: - isShakeGestureFeatureFlagEnabled
@@ -197,15 +212,12 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
     // MARK: - languageExpansionConfiguration
     func test_languageExpansionConfiguration() {
         let subject = createSubject()
-        let testLocales = [
-            NimbusLocale(countryCode: "US", languageCode: "en"),
-            NimbusLocale(countryCode: nil, languageCode: "es")
-        ]
+        let testLocales = ["en-US", "zh-Latn-HK"]
         setLanguageExpansionFeature(
             isEnabled: false,
             supportWebsiteLanguage: false,
             supportDeviceLanguage: false,
-            supportedLocales: testLocales
+            supportedLocaleIdentifiers: testLocales
         )
 
         let config = subject.languageExpansionConfiguration()
@@ -214,17 +226,17 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         XCTAssertFalse(config.isDeviceLanguageSupported)
         XCTAssertFalse(config.isWebsiteDeviceLanguageSupported)
         XCTAssertEqual(config.supportedLocales.count, testLocales.count)
-        XCTAssertEqual(config.supportedLocales[0].identifier, "en-US")
-        XCTAssertEqual(config.supportedLocales[1].identifier, "es")
+        XCTAssertEqual(config.supportedLocales[0].identifier, testLocales[0])
+        XCTAssertEqual(config.supportedLocales[1].identifier, testLocales[1])
     }
 
     // MARK: - Helpers
     private func createSubject(
-        locale: Locale = Locale(identifier: "en")
+        currentLocale: Locale = Locale(identifier: "en")
     ) -> DefaultSummarizerNimbusUtils {
         return DefaultSummarizerNimbusUtils(
             profile: profile,
-            deviceLocale: locale,
+            localeProvider: MockLocaleProvider(current: currentLocale),
             appleIntelligenceUtil: AppleIntelligenceUtil(
                 userDefaults: userDefaults
             )
@@ -252,18 +264,24 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         )
     }
 
+    private func setIsAppAttestAuthEnabled(isEnabled: Bool = true) {
+        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _, _ in
+            return SummarizerAppAttestAuthFeature(enabled: isEnabled)
+        }
+    }
+
     private func setLanguageExpansionFeature(
         isEnabled: Bool = true,
         supportWebsiteLanguage: Bool = true,
         supportDeviceLanguage: Bool = true,
-        supportedLocales: [NimbusLocale] = []
+        supportedLocaleIdentifiers: [String] = []
     ) {
         FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
             return SummarizerLanguageExpansionFeature(
                 enabled: isEnabled,
                 supportDeviceLanguage: supportDeviceLanguage,
                 supportWebsiteLanguage: supportWebsiteLanguage,
-                supportedLocales: supportedLocales
+                supportedLocales: supportedLocaleIdentifiers
             )
         }
     }

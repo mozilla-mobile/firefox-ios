@@ -30,7 +30,7 @@ protocol SummarizerNimbusUtils {
 /// Tiny utility to simplify checking for availability of the summarizers
 struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     private let prefs: Prefs
-    private let deviceLocale: Locale
+    private let localeProvider: LocaleProvider
     private let appleIntelligenceUtil: AppleIntelligenceUtil
 
     var isSummarizeFeatureToggledOn: Bool {
@@ -62,11 +62,11 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
-        deviceLocale: Locale = Locale.current,
+        localeProvider: LocaleProvider = SystemLocaleProvider(),
         appleIntelligenceUtil: AppleIntelligenceUtil = AppleIntelligenceUtil()
     ) {
         self.prefs = profile.prefs
-        self.deviceLocale = deviceLocale
+        self.localeProvider = localeProvider
         self.appleIntelligenceUtil = appleIntelligenceUtil
     }
 
@@ -86,7 +86,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
             if languageExpansionConfiguration().isFeatureEnabled {
                 return appleIntelligenceUtil.isAppleIntelligenceAvailable
             }
-            let isEngLang = deviceLocale.languageCode == "en"
+            let isEngLang = localeProvider.current.languageCode == "en"
             return isEngLang && appleIntelligenceUtil.isAppleIntelligenceAvailable
         #else
             return false
@@ -132,11 +132,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
             isWebsiteDeviceLanguageSupported: nimbusFeature.supportWebsiteLanguage,
             isDeviceLanguageSupported: nimbusFeature.supportDeviceLanguage,
             supportedLocales: nimbusFeature.supportedLocales.map({
-                var identifier = $0.languageCode
-                if let countryCode = $0.countryCode {
-                    identifier.append("-\(countryCode)")
-                }
-                return Locale(identifier: identifier)
+                return Locale(identifier: $0)
             })
         )
     }
