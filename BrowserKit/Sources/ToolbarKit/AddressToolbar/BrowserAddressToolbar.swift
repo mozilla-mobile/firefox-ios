@@ -123,7 +123,7 @@ public class BrowserAddressToolbar: UIView,
     ) {
         previousConfiguration = config
         configureUX(config: config.uxConfiguration, toolbarPosition: .bottom)
-        updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
+        updateSpacing(leading: leadingSpace, trailing: trailingSpace)
         locationView.configureNonInteractive(config.locationViewConfiguration, uxConfig: config.uxConfiguration)
         updateActions(config: config, animated: false)
     }
@@ -147,7 +147,7 @@ public class BrowserAddressToolbar: UIView,
         previousConfiguration = config
         toolbarTopBorderView.accessibilityIdentifier = config.borderConfiguration.a11yIdentifier
         configureUX(config: config.uxConfiguration, toolbarPosition: toolbarPosition)
-        updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
+        updateSpacing(leading: leadingSpace, trailing: trailingSpace)
         configure(config: config,
                   isUnifiedSearchEnabled: isUnifiedSearchEnabled,
                   addressBarPosition: toolbarPosition,
@@ -364,9 +364,7 @@ public class BrowserAddressToolbar: UIView,
         }
     }
 
-    private func updateSpacing(uxConfig: AddressToolbarUXConfiguration,
-                               leading: CGFloat,
-                               trailing: CGFloat) {
+    private func updateSpacing(leading: CGFloat, trailing: CGFloat) {
         leadingNavigationActionStackConstraint?.constant = leading
         trailingBrowserActionStackConstraint?.constant = -trailing
     }
