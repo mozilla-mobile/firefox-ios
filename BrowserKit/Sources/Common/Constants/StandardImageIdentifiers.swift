@@ -18,7 +18,6 @@ public struct StandardImageIdentifiers {
         public static let externalLink = "externalLinkSmall"
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
-        public static let pinBadgeFill = "pinBadgeFillSmall"
         public static let shieldCheckmarkFill = "shieldCheckmarkFillSmall"
         public static let shieldSlashFillMulticolor = "shieldSlashFillMulticolorSmall"
     }
@@ -86,7 +85,6 @@ public struct StandardImageIdentifiers {
         public static let link = "linkLarge"
         public static let location = "locationLarge"
         public static let lock = "lockLarge"
-        public static let lockFill = "lockFillLarge"
         public static let lockSlash = "lockSlashLarge"
         public static let login = "loginLarge"
         public static let logoFirefox = "logoFirefoxLarge"

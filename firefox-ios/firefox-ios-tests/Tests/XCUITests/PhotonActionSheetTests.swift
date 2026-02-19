@@ -52,7 +52,7 @@ class PhotonActionSheetTests: BaseTestCase {
         app.tables.cells.buttons[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
         // Check that it has been unpinned
         if #available(iOS 17, *) {
-            mozWaitForElementToNotExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+            mozWaitForElementToNotExist(app.links["Example Domain"].images[StandardImageIdentifiers.Large.pinFill])
         } else {
             mozWaitForElementToNotExist(app.links["Example Domain"].images.element(boundBy: 1))
         }
