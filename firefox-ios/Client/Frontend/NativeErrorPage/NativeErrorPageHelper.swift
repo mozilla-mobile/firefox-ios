@@ -16,16 +16,6 @@ let CertErrorCodes: [Int: String] = [
     -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
 ]
 
-/// NSURLError codes for certificate errors that should trigger native error page.
-/// Used consistently across BrowserViewController, ErrorPageHelper, and middleware.
-/// This replaces the legacy CertErrors in ErrorPageHelper.swift.
-let CertErrors: [Int] = [
-    NSURLErrorServerCertificateUntrusted,
-    NSURLErrorServerCertificateHasBadDate,
-    NSURLErrorServerCertificateHasUnknownRoot,
-    NSURLErrorServerCertificateNotYetValid
-]
-
 class NativeErrorPageHelper {
     /// Holds the parsed certificate details extracted from an NSError.
     struct CertDetails {
