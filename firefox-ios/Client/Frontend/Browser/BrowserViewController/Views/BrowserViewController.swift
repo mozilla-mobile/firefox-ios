@@ -1863,22 +1863,16 @@ class BrowserViewController: UIViewController,
         }
 
         updateOverKeyboardContainerConstraints()
-        updateBottomContainerConstraints()
+        updateSnapKitBottomContainerConstraints()
         updateBottomContentStackViewConstraints()
         updateConstraintsForKeyboard()
 
         super.updateViewConstraints()
     }
 
-    private func updateBottomContainerConstraints() {
-        guard isSnapKitRemovalEnabled else {
-            updateSnapKitBottomContainerConstraints()
-            return
-        }
-        // TODO: Yoana if there is nothing to do change guard to if
-    }
-
     private func updateSnapKitBottomContainerConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         bottomContainer.snp.remakeConstraints { make in
             let constraint = make.bottom.equalTo(view.snp.bottom).constraint
             let constraintReference = ConstraintReference(snapKit: constraint)
