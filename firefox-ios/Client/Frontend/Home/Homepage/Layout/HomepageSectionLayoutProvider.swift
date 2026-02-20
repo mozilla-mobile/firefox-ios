@@ -150,6 +150,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
         switch section {
+        case .header:
+            return createHeaderSectionLayout(for: environment)
         case .searchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
@@ -210,6 +212,25 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             leading: leadingInset,
             bottom: bottomInsets,
             trailing: leadingInset)
+
+        return section
+    }
+
+    private func createHeaderSectionLayout(
+        for environment: NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection {
+        let section = createSingleItemSectionLayout(
+            for: environment.traitCollection,
+            topInsets: UX.standardInset,
+            bottomInsets: UX.HeaderConstants.bottomSpacing
+        )
+
+        let containerWidth = environment.container.contentSize.width
+        let showiPadSetup = UIDevice.current.userInterfaceIdiom == .pad && environment.traitCollection.horizontalSizeClass != .compact
+        let headerWidth = HomepageHeaderCell.contentWidth(for: showiPadSetup))
+        let horizontalInset = max(0, (containerWidth - headerWidth) / 2)
+        section.contentInsets.leading = horizontalInset
+        section.contentInsets.trailing = horizontalInset
 
         return section
     }

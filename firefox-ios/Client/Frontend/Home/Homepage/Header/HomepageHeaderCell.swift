@@ -43,10 +43,10 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
-    static func contentWidth(for showiPadSetup: Bool) -> CGFloat {
-        return UX.Logo.logoSizeConstant(for: showiPadSetup)
-        + UX.TextImage.textImageSpacing(for: showiPadSetup)
-        + UX.TextImage.textImageWidthConstant(for: showiPadSetup)
+    static func contentWidth(isiPadSetup: Bool) -> CGFloat {
+        return UX.Logo.logoSizeConstant(for: isiPadSetup)
+        + UX.TextImage.textImageSpacing(for: isiPadSetup)
+        + UX.TextImage.textImageWidthConstant(for: isiPadSetup)
     }
 
     private var headerState: HeaderState?
