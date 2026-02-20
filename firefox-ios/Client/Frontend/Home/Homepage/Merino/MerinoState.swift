@@ -3,11 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Foundation
 import Redux
 import Shared
 
 /// State for the Merino stories section that is used in the homepage
+@CopyWithUpdates
 struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
     let merinoData: [MerinoStoryConfiguration]
@@ -61,8 +63,7 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return MerinoState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             merinoData: pocketStories,
             shouldShowSection: !pocketStories.isEmpty && state.shouldShowSection
         )
@@ -75,19 +76,13 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return MerinoState(
-            windowUUID: state.windowUUID,
-            merinoData: state.merinoData,
+        return state.copyWithUpdates(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: MerinoState) -> MerinoState {
-        return MerinoState(
-            windowUUID: state.windowUUID,
-            merinoData: state.merinoData,
-            shouldShowSection: state.shouldShowSection
-        )
+        return state.copyWithUpdates()
     }
 
     private static func initializeSectionHeaderState() -> SectionHeaderConfiguration {
