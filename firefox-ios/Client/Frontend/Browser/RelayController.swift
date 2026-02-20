@@ -34,6 +34,7 @@ protocol RelayControllerProtocol {
     /// same one that was focused originally in `emailFieldFocused`. If the two differ, the
     /// operation is cancelled.
     /// - Parameter tab: the tab to populate. The email field is expected to be focused, otherwise a JS error will be logged.
+    /// - Parameter completion: the completion block called once the action is resolved.
     @MainActor
     func populateEmailFieldWithRelayMask(for tab: Tab,
                                          completion: @escaping RelayPopulateCompletion)
@@ -42,6 +43,11 @@ protocol RelayControllerProtocol {
     /// - Parameter tab: the current tab.
     @MainActor
     func emailFieldFocused(in tab: Tab)
+}
+
+protocol RelayAccountStatusProvider {
+    @MainActor
+    var accountStatus: RelayAccountStatus { get set }
 }
 
 /// Describes the result of an attempt to generate a Relay mask for an email field.
@@ -72,13 +78,28 @@ enum RelayAccountStatus {
 }
 
 @MainActor
+final class RelayAccountStatusProviderImplementation: RelayAccountStatusProvider {
+    private let logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
+    internal var accountStatus: RelayAccountStatus = .unknown {
+        didSet {
+            logger.log("Updated Relay account status from \(oldValue) to: \(accountStatus)", level: .info, category: .relay)
+        }
+    }
+}
+
+@MainActor
 final class RelayController: RelayControllerProtocol, Notifiable {
     private enum RelayOAuthClientID: String {
         case release = "9ebfe2c2f9ea3c58"
         case stage = "41b4363ae36440a9"
     }
 
-    private enum RelayClientConfiguration {
+    enum RelayClientConfiguration {
         case prod
         case staging
 
@@ -99,6 +120,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     let telemetry: RelayMaskTelemetry
 
     static let isFeatureEnabled = {
+        if AppConstants.isRunningUnitTest { return true }
 #if targetEnvironment(simulator) && MOZ_CHANNEL_developer
         return true
 #else
@@ -109,24 +131,28 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private let logger: Logger
     private let profile: Profile
     private let config: RelayClientConfiguration
-    private var relayRSClient: RelayRemoteSettingsClient?
-    private var client: RelayClient?
+    private var relayRSClient: RelayRemoteSettingsClientProtocol?
+    private var client: RelayClientProtocol?
     private var isCreatingClient = false
     private var isGeneratingMask = false
     private let notificationCenter: NotificationProtocol
     private weak var focusedTab: Tab?
-    private var accountStatus: RelayAccountStatus = .unknown {
-        didSet {
-            logger.log("Updated Relay account status from \(oldValue) to: \(accountStatus)", level: .info, category: .relay)
-        }
+    private var accountStatusProvider: RelayAccountStatusProvider
+    private var accountStatus: RelayAccountStatus {
+        get { accountStatusProvider.accountStatus }
+        set { accountStatusProvider.accountStatus = newValue }
     }
 
     // MARK: - Init
 
-    private init(logger: Logger = DefaultLogger.shared,
-                 profile: Profile = AppContainer.shared.resolve(),
-                 gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
-                 notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(logger: Logger = DefaultLogger.shared,
+         profile: Profile = AppContainer.shared.resolve(),
+         relayClient: RelayClientProtocol? = nil,
+         relayRSClient: RelayRemoteSettingsClientProtocol? = nil,
+         relayAccountStatusProvider: RelayAccountStatusProvider? = nil,
+         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+         config: RelayClientConfiguration = .prod,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.logger = logger
         self.profile = profile
         let isStaging = profile.prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
@@ -135,7 +161,17 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         self.notificationCenter = notificationCenter
         self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
 
-        configureRelayRSClient()
+        if let relayClient {
+            self.client = relayClient
+        }
+
+        self.accountStatusProvider = if let relayAccountStatusProvider { relayAccountStatusProvider } else {
+            RelayAccountStatusProviderImplementation(logger: logger)
+        }
+
+        self.relayRSClient = if let relayRSClient { relayRSClient } else {
+            RelayRemoteSettingsClient(rsService: profile.remoteSettingsService)
+        }
         beginObserving()
         performPostLaunchUpdate()
     }
@@ -270,8 +306,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     }
 
     nonisolated private func generateRelayMask(for websiteDomain: String,
-                                               client: RelayClient) async -> (mask: String?,
-                                                                              result: RelayMaskGenerationResult) {
+                                               client: RelayClientProtocol) async -> (mask: String?,
+                                                                                      result: RelayMaskGenerationResult) {
         do {
             logger.log("Relay: createAddress()", level: .info, category: .relay)
             let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
@@ -307,10 +343,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             }
         }
         return (nil, .error)
-    }
-
-    private func configureRelayRSClient() {
-        relayRSClient = RelayRemoteSettingsClient(rsService: profile.remoteSettingsService)
     }
 
     private func beginObserving() {

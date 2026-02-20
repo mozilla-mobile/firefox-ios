@@ -276,7 +276,9 @@ final class LaunchCoordinator: BaseCoordinator,
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: flowViewModel
+            viewModel: flowViewModel,
+            pageControlAccessibilityId: AccessibilityIdentifiers.Onboarding.pageControl,
+            closeButtonAccessibilityId: AccessibilityIdentifiers.Onboarding.closeButton
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)

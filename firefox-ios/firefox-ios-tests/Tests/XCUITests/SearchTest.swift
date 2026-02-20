@@ -259,6 +259,7 @@ class SearchTests: FeatureFlaggedTestBase {
         changeSearchEngine(searchEngine: "Bing")
         changeSearchEngine(searchEngine: "DuckDuckGo")
         changeSearchEngine(searchEngine: "Google")
+        changeSearchEngine(searchEngine: "Perplexity")
         changeSearchEngine(searchEngine: "Wikipedia")
         changeSearchEngine(searchEngine: "eBay")
     }
@@ -272,6 +273,7 @@ class SearchTests: FeatureFlaggedTestBase {
         changeSearchEngine_TAE(searchEngine: "Bing")
         changeSearchEngine_TAE(searchEngine: "DuckDuckGo")
         changeSearchEngine_TAE(searchEngine: "Google")
+        changeSearchEngine_TAE(searchEngine: "Perplexity")
         changeSearchEngine_TAE(searchEngine: "Wikipedia")
         changeSearchEngine_TAE(searchEngine: "eBay")
     }

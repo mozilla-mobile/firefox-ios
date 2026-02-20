@@ -53,6 +53,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
     case summarizerAppAttestAuth
+    case summarizerLanguageExpansion
     case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case tabTrayTranslucency
@@ -99,6 +100,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
+                .summarizerLanguageExpansion,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -185,6 +187,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizerShakeGesture,
                 .relayIntegration,
                 .summarizerAppAttestAuth,
+                .summarizerLanguageExpansion,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,

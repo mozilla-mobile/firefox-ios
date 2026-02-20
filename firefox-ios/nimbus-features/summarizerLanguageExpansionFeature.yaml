@@ -1,0 +1,40 @@
+# The configuration for the summarizerLanguageExpansionFeature feature
+# Please remember to add this feature to the feature flag spreadsheet.
+features:
+  summarizer-language-expansion-feature:
+    description: >
+      The feature flag to manage the rollout of the summarizer language expansion.
+    variables:
+      enabled:
+        description: >
+          Whether the feature is enabled or not.
+        type: Boolean
+        default: false
+      supportWebsiteLanguage:
+        description: >
+          Whether to support the website language for summarization.
+        type: Boolean
+        default: false
+      supportDeviceLanguage:
+        description: >
+          Whether to support the device language for summarization.
+        type: Boolean
+        default: false
+      supportedLocales:
+        description: >
+          The list of supported locale identifiers for the summarizer language expansion according to BCP47 standard.
+          i.e "en-US" for English (United States).
+        type: List<String>
+        default:
+          - "en"
+          - "fr"
+          - "es"
+          - "de"
+          - "pt"
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
