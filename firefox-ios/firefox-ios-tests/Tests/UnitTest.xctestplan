@@ -131,8 +131,6 @@
   },
   "testTargets" : [
     {
-<<<<<<< HEAD
-=======
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "ActionExtensionKitTests",
@@ -164,7 +162,6 @@
       }
     },
     {
->>>>>>> main
       "skippedTests" : [
         "MetaGlobalTests\/testHappyOptimisticStateMachine()",
         "MetaGlobalTests\/testMetaGlobalAndCryptoKeysFresh()",
@@ -172,8 +169,6 @@
         "MetaGlobalTests\/testUpdatedCryptoKeys()",
         "StateTests\/testPickling()"
       ],
-<<<<<<< HEAD
-=======
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
         "identifier" : "282731671ABC9BE700AA1954",
@@ -241,81 +236,10 @@
       }
     },
     {
->>>>>>> main
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
         "identifier" : "E69DB07C1E97DEA9008A67E6",
         "name" : "SyncTelemetryTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "VoiceSearchKitTests",
-        "name" : "VoiceSearchKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "TabDataStoreTests",
-        "name" : "TabDataStoreTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "SiteImageViewTests",
-        "name" : "SiteImageViewTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "SummarizeKitTests",
-        "name" : "SummarizeKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "ContentBlockingGeneratorTests",
-        "name" : "ContentBlockingGeneratorTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "2FA436041ABB83B4008031D1",
-        "name" : "AccountTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "E6F9650B1B2F1CF20034B023",
-        "name" : "SharedTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "JWTKitTests",
-        "name" : "JWTKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "ToolbarKitTests",
-        "name" : "ToolbarKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "WebEngineTests",
-        "name" : "WebEngineTests"
       }
     },
     {
@@ -376,29 +300,14 @@
       }
     },
     {
-      "skippedTests" : [
-        "RustLoginsTests\/testUpdateLogin()",
-        "TestBrowserDB\/testMovesDB()"
-      ],
       "target" : {
-<<<<<<< HEAD
-        "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "2FCAE2231ABB51F800877008",
-        "name" : "StorageTests"
-=======
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "CommonTests",
         "name" : "CommonTests"
->>>>>>> main
       }
     },
     {
       "target" : {
-<<<<<<< HEAD
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "CommonTests",
-        "name" : "CommonTests"
-=======
         "containerPath" : "container:Client.xcodeproj",
         "identifier" : "2FA436041ABB83B4008031D1",
         "name" : "AccountTests"
@@ -409,47 +318,20 @@
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "SiteImageViewTests",
         "name" : "SiteImageViewTests"
->>>>>>> main
       }
     },
     {
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "E69DB07C1E97DEA9008A67E6",
-        "name" : "SyncTelemetryTests"
+        "identifier" : "E6F9650B1B2F1CF20034B023",
+        "name" : "SharedTests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
-<<<<<<< HEAD
-        "identifier" : "ReduxTests",
-        "name" : "ReduxTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "ActionExtensionKitTests",
-        "name" : "ActionExtensionKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "OnboardingKitTests",
-        "name" : "OnboardingKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "MenuKitTests",
-        "name" : "MenuKitTests"
-=======
         "identifier" : "WebEngineTests",
         "name" : "WebEngineTests"
->>>>>>> main
       }
     }
   ],
