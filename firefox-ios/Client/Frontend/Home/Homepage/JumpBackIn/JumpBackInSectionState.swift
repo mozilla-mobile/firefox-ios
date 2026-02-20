@@ -3,11 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Redux
 import Shared
 import Storage
 
 /// State for the jump back in section that is used in the homepage view
+@CopyWithUpdates
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     let jumpBackInTabs: [JumpBackInTabConfiguration]
@@ -88,8 +90,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return JumpBackInSectionState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             jumpBackInTabs: recentTabs.compactMap { tab in
                 let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
                 let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
@@ -99,9 +100,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
                     descriptionText: site.tileURL.shortDisplayString.capitalized,
                     siteURL: itemURL
                 )
-            },
-            mostRecentSyncedTab: state.mostRecentSyncedTab,
-            shouldShowSection: state.shouldShowSection
+            }
         )
     }
 
@@ -119,15 +118,12 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         let site = Site.createBasicSite(url: itemURL, title: mostRecentSyncedTab.tab.title)
         let descriptionText = mostRecentSyncedTab.client.name
 
-        return JumpBackInSectionState(
-            windowUUID: state.windowUUID,
-            jumpBackInTabs: state.jumpBackInTabs,
+        return state.copyWithUpdates(
             mostRecentSyncedTab: JumpBackInSyncedTabConfiguration(
                 titleText: site.title,
                 descriptionText: descriptionText,
                 url: mostRecentSyncedTab.tab.URL
-            ),
-            shouldShowSection: state.shouldShowSection
+            )
         )
     }
 
@@ -138,20 +134,12 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return JumpBackInSectionState(
-            windowUUID: state.windowUUID,
-            jumpBackInTabs: state.jumpBackInTabs,
-            mostRecentSyncedTab: state.mostRecentSyncedTab,
+        return state.copyWithUpdates(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: JumpBackInSectionState) -> JumpBackInSectionState {
-        return JumpBackInSectionState(
-            windowUUID: state.windowUUID,
-            jumpBackInTabs: state.jumpBackInTabs,
-            mostRecentSyncedTab: state.mostRecentSyncedTab,
-            shouldShowSection: state.shouldShowSection
-        )
+        return state.copyWithUpdates()
     }
 }
