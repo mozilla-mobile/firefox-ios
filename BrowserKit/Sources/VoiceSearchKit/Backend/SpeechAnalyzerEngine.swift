@@ -16,7 +16,7 @@ import CoreMedia
 /// - Capture microphone audio via `AVAudioEngine` and feed it into `SpeechAnalyzer`
 /// - Stream transcription results through an `AsyncThrowingStream` continuation
 ///
-/// This type is an `actor` to keep audio/transcription state safe across concurrent calls.
+/// This type is an `@MainActor` class to keep audio/transcription state safe across concurrent calls.
 @available(iOS 26.0, *)
 @MainActor
 final class SpeechAnalyzerEngine: TranscriptionEngine {
@@ -32,7 +32,6 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     private var inputContinuation: AsyncStream<AnalyzerInput>.Continuation?
 
     private var resultsTask: Task<Void, Error>?
-    private var analyzerTask: Task<Void, Error>?
 
     init(
         locale: Locale = Locale.current,
@@ -94,18 +93,8 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
             self.inputContinuation = continuation
         }
 
-        analyzerTask?.cancel()
-        analyzerTask = Task {
-            do {
-                try await analyzer.start(inputSequence: stream)
-            } catch is CancellationError {
-                // TODO: FXIOS-14931 Add logger
-            } catch {
-                continuation.finish(throwing: error)
-            }
-        }
+        try await analyzer.start(inputSequence: stream)
 
-        resultsTask?.cancel()
         resultsTask = Task { [weak self] in
             guard let self, let transcriber = self.transcriber else { return }
             do {
@@ -120,8 +109,6 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
                         continuation.finish()
                     }
                 }
-            } catch is CancellationError {
-                // TODO: FXIOS-14931 Add logger
             } catch {
                 continuation.finish(throwing: error)
             }
@@ -140,10 +127,6 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
 
         try await analyzer?.finalizeAndFinishThroughEndOfInput()
 
-        analyzerTask?.cancel()
-        analyzerTask = nil
-
-        resultsTask?.cancel()
         resultsTask = nil
 
         transcriber = nil
@@ -183,8 +166,12 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         audioEngine.inputNode.removeTap(onBus: 0)
         audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat) { [weak self] buffer, time in
             guard let self else { return }
-            guard let converted = try? self.convertIfNeeded(buffer, to: targetFormat, with: converter) else { return }
-            continuation.yield(AnalyzerInput(buffer: converted))
+            do {
+                guard let converted = try? self.convertIfNeeded(buffer, to: targetFormat, with: converter) else { return }
+                continuation.yield(AnalyzerInput(buffer: converted))
+            } catch {
+                // TODO: FXIOS-14931 Add logger
+            }
         }
 
         audioEngine.prepare()
