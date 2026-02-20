@@ -11,8 +11,7 @@ import Speech
 /// - Managing permissions
 /// - Capturing microphone audio
 /// - Streaming transcription results
-@MainActor
-final class SFSpeechRecognizerEngine: TranscriptionEngine {
+final actor SFSpeechRecognizerEngine: TranscriptionEngine {
     private let audioEngine: AudioEngineProvider
     private let audioSession: AudioSessionProvider
 
@@ -49,6 +48,9 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
 
         let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         recognitionRequest.requiresOnDeviceRecognition = true
+        if #available(iOS 16.0, *) {
+            recognitionRequest.addsPunctuation = true
+        }
         self.request = recognitionRequest
 
         // Remove any previous input from microphone and capture audio
@@ -72,14 +74,20 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
                 return
             }
             guard let result else { return }
+            // TODO: Should add safe guard for accessing this 0
+            let confidence = result.bestTranscription.segments[0].confidence
+
             let chunk = result.bestTranscription.formattedString
+
+            let shouldFinish = result.isFinal || result.speechRecognitionMetadata != nil || confidence > 0.0
+
             let speechResult = SpeechResult(
                 text: chunk,
-                isFinal: result.isFinal
+                isFinal: shouldFinish
             )
             continuation.yield(speechResult)
-            // TODO: FXIOS-14893 - Improve detection
-            if result.isFinal || result.speechRecognitionMetadata != nil {
+
+            if shouldFinish {
                 continuation.finish()
             }
         }

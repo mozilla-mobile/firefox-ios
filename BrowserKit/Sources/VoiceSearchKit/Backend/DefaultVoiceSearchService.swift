@@ -9,11 +9,11 @@ final class DefaultVoiceSearchService: VoiceSearchService {
     private let engine: TranscriptionEngine
 
     init() {
-        if #available(iOS 26.0, *) {
-            self.engine = SpeechAnalyzerEngine()
-        } else {
+//        if #available(iOS 26.0, *) {
+//            self.engine = SpeechAnalyzerEngine()
+//        } else {
             self.engine = SFSpeechRecognizerEngine()
-        }
+//        }
     }
 
     func record() async throws -> AsyncThrowingStream<SpeechResult, any Error> {
