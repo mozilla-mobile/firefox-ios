@@ -163,6 +163,11 @@ class BrowserViewController: UIViewController,
     var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
 
+    // Other constraints
+    var bottomContentMaxBottomConstraints: [NSLayoutConstraint] = []
+    var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
+    var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
+
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
         view.backgroundColor = self.currentTheme().colors.layerScrim
@@ -1770,6 +1775,7 @@ class BrowserViewController: UIViewController,
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
 
             setupBottomContainerConstraints()
+            setupBottomContentStackViewConstraints()
         } else {
             updateHeaderConstraints()
         }
@@ -1908,9 +1914,45 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateBottomContentStackViewConstraints() {
+    private func updateSnapKitBottomContentStackViewConstraints() {
+        guard !isSnapKitRemovalEnabled else {
+            return
+        }
+
         bottomContentStackView.snp.remakeConstraints { remake in
-            adjustBottomContentStackView(remake)
+            adjustSnapKitBottomContentStackView(remake)
+        }
+    }
+
+    private func updateBottomContentStackViewConstraints() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapKitBottomContentStackViewConstraints()
+            return
+        }
+
+        if isBottomSearchBar {
+            NSLayoutConstraint.activate(bottomContentMaxBottomConstraints)
+            bottomContentStackViewKeyboardConstraint?.isActive = false
+            bottomContentStackViewBasicConstraint?.isActive = false
+
+            if !isToolbarTranslucencyRefactorEnabled {
+                view.layoutIfNeeded()
+            }
+        } else {
+            if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
+                bottomContentStackViewKeyboardConstraint?.constant = -keyboardHeight
+                bottomContentStackViewKeyboardConstraint?.isActive = true
+                NSLayoutConstraint.deactivate(bottomContentMaxBottomConstraints)
+                bottomContentStackViewBasicConstraint?.isActive = false
+            } else if !navigationToolbarContainer.isHidden {
+                NSLayoutConstraint.activate(bottomContentMaxBottomConstraints)
+                bottomContentStackViewKeyboardConstraint?.isActive = false
+                bottomContentStackViewBasicConstraint?.isActive = false
+            } else {
+                bottomContentStackViewBasicConstraint?.isActive = true
+                NSLayoutConstraint.deactivate(bottomContentMaxBottomConstraints)
+                bottomContentStackViewKeyboardConstraint?.isActive = false
+            }
         }
     }
 
@@ -1936,7 +1978,36 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+    private func setupBottomContentStackViewConstraints() {
+        guard isSnapKitRemovalEnabled else { return }
+
+        NSLayoutConstraint.activate([
+            bottomContentStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomContentStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            bottomContentStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomContentStackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+
+            // Height is set by content - this removes run time error
+            bottomContentStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 0),
+        ])
+
+        bottomContentMaxBottomConstraints = [
+            bottomContentStackView.bottomAnchor.constraint(lessThanOrEqualTo: overKeyboardContainer.topAnchor),
+            bottomContentStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ]
+        bottomContentStackViewKeyboardConstraint = bottomContentStackView.bottomAnchor.constraint(
+            equalTo: view.bottomAnchor
+        )
+        bottomContentStackViewBasicConstraint = bottomContentStackView.bottomAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.bottomAnchor
+        )
+
+        bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+    }
+
+    private func adjustSnapKitBottomContentStackView(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         remake.left.equalTo(view.safeArea.left)
         remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
@@ -1947,13 +2018,15 @@ class BrowserViewController: UIViewController,
         bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         if isBottomSearchBar {
-            adjustBottomContentBottomSearchBar(remake)
+            adjustSnapKitBottomContentBottomSearchBar(remake)
         } else {
-            adjustBottomContentTopSearchBar(remake)
+            adjustSnapKitBottomContentTopSearchBar(remake)
         }
     }
 
-    private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
         } else if !navigationToolbarContainer.isHidden {
@@ -1964,7 +2037,9 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         if !isToolbarTranslucencyRefactorEnabled {
