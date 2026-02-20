@@ -187,4 +187,24 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         middleware.termsOfUseProvider(AppState(), gestureAction2)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 2)
     }
+
+    func testMiddleware_termsShown_firstTime_recordsImpression() {
+        XCTAssertNil(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown))
+
+        let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
+        middleware.termsOfUseProvider(AppState(), shownAction)
+
+        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
+    }
+
+    func testMiddleware_termsShown_onResumeFromBackgroundOrLinks_doesNotRecordAgain() {
+        let shownAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
+        middleware.termsOfUseProvider(AppState(), shownAction1)
+        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
+
+        let shownAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
+        middleware.termsOfUseProvider(AppState(), shownAction2)
+
+        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
+    }
 }
