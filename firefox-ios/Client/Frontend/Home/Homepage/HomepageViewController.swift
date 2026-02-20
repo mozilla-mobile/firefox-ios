@@ -517,14 +517,14 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .privacyNotice:
-            return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
-                configurePrivacyNoticeCell(cell: cell)
-            }
         case .header(let state):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
                 cell.configure(headerState: state)
                 cell.applyTheme(theme: currentTheme)
+            }
+        case .privacyNotice:
+            return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
+                configurePrivacyNoticeCell(cell: cell)
             }
         case .messageCard(let config):
             return configuredCell(cellType: HomepageMessageCardCell.self, at: indexPath) { cell in

@@ -37,8 +37,8 @@ final class HomepageDiffableDataSource:
     }
 
     enum HomeItem: Hashable, Sendable {
-        case privacyNotice
         case header(HeaderState)
+        case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
@@ -51,8 +51,8 @@ final class HomepageDiffableDataSource:
 
         static var cellTypes: [ReusableCell.Type] {
             return [
-                PrivacyNoticeCell.self,
                 HomepageHeaderCell.self,
+                PrivacyNoticeCell.self,
                 HomepageMessageCardCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
@@ -92,13 +92,13 @@ final class HomepageDiffableDataSource:
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
 
+        snapshot.appendSections([.header])
+        snapshot.appendItems([.header(state.headerState)], toSection: .header)
+
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
             snapshot.appendItems([.privacyNotice], toSection: .privacyNotice)
         }
-
-        snapshot.appendSections([.header])
-        snapshot.appendItems([.header(state.headerState)], toSection: .header)
 
         if let configuration = state.messageState.messageCardConfiguration {
             snapshot.appendSections([.messageCard])

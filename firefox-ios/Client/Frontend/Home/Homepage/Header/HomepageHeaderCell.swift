@@ -11,7 +11,6 @@ import Shared
 // Contains the firefox logo and the private browsing shortcut button
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     enum UX {
-        static let iPhoneTopConstant: CGFloat = 16
         static let iPadTopConstant: CGFloat = 54
         static let circleSize = CGRect(width: 40, height: 40)
 
@@ -25,9 +24,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         }
 
         struct TextImage {
-            static let iPhoneWidth: CGFloat = 70
+            static let iPhoneWidth: CGFloat = 90
             static let iPadWidth: CGFloat = 133
-            static let iPhoneLeadingConstant: CGFloat = 9
+            static let iPhoneLeadingConstant: CGFloat = 10
             static let iPadLeadingConstant: CGFloat = 17
             static let trailingConstant: CGFloat = -15
 
@@ -115,7 +114,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     private func setupConstraints(for iPadSetup: Bool) {
         NSLayoutConstraint.deactivate(headerConstraints)
-        let topAnchorConstant = iPadSetup ? UX.iPadTopConstant : UX.iPhoneTopConstant
+        let topAnchorConstant = iPadSetup ? UX.iPadTopConstant : 0
         headerConstraints = [
             stackContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topAnchorConstant),
             stackContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
