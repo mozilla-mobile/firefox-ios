@@ -1806,6 +1806,8 @@ class BrowserViewController: UIViewController,
     // MARK: - Snapkit related
 
     private func setupBottomContainerConstraints() {
+        guard isSnapKitRemovalEnabled else { return }
+
         NSLayoutConstraint.activate([
             bottomContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -1816,9 +1818,8 @@ class BrowserViewController: UIViewController,
 
         if let scrollController = scrollController as? LegacyTabScrollProvider {
             scrollController.bottomContainerConstraint = constraintReference
-        } else {
-            bottomContainerConstraint = constraintReference
         }
+        bottomContainerConstraint = constraintReference
     }
 
     private func updateHeaderConstraints() {
@@ -1887,6 +1888,14 @@ class BrowserViewController: UIViewController,
                 bottomContainerConstraint = constraintReference
             }
             make.leading.trailing.equalTo(view)
+        }
+    }
+
+    func updateBottomContainerConstraints() {
+        guard isSnapKitRemovalEnabled else { return }
+
+        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
+            bottomContainerConstraint?.update(offset: bottomContainer.frame.height)
         }
     }
 
