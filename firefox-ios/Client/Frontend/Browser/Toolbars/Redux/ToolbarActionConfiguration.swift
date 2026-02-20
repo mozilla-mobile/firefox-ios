@@ -24,6 +24,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
         case translate
         case dataClearance
         case cancelEdit
+        case voiceSearch
     }
 
     var actionType: ActionType

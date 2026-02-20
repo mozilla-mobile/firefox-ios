@@ -314,6 +314,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
             }
+        case .voiceSearch:
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: action.windowUUID,
+                    actionType: GeneralBrowserActionType.showVoiceSearch
+                )
+            )
         case .translate:
             // The effects of tapping on the translate button is also handled in
             // the `TranslationsMiddleware`. This is because we want to

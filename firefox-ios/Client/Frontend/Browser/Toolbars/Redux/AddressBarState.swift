@@ -61,6 +61,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
         contextualHintType: ContextualHintType.dataClearance.rawValue,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
+    
+    private static let voiceSearchAction = ToolbarActionConfiguration(
+        actionType: .voiceSearch,
+        iconName: StandardImageIdentifiers.Large.microphone,
+        isEnabled: true,
+        a11yLabel: "Toggle Voice search",
+        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
     init(windowUUID: WindowUUID) {
         self.init(
@@ -1139,7 +1146,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         guard !hasEmptySearchField, // When the search field is empty we show no actions
               !isEditing
-        else { return actions }
+        else {
+            actions.append(voiceSearchAction)
+            return actions
+        }
 
         let isSummarizeFeatureForToolbarOn = DefaultSummarizerNimbusUtils().isToolbarButtonEnabled
         if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active, !UIWindow.isLandscape {

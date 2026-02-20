@@ -2935,6 +2935,8 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
             }
+        case .voiceSearch:
+            navigationHandler?.showVoiceSearch()
         }
     }
 
