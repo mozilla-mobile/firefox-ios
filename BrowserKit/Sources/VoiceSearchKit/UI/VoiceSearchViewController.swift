@@ -152,6 +152,14 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
                 }),
             for: .touchUpInside
         )
+        closeButton.addAction(
+            UIAction(
+                handler: { [weak self] _ in
+                    self?.viewModel.stopRecordingVoice()
+                    self?.dismiss(animated: true)
+                }),
+            for: .touchUpInside
+        )
     }
 
     private func onStateChange(state: VoiceSearchViewModel.State) {
