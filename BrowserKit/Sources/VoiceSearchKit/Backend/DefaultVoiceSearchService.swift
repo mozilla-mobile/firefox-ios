@@ -32,7 +32,7 @@ final class DefaultVoiceSearchService: VoiceSearchService {
     func stopRecording() async throws {
         try await engine.stop()
     }
-    
+
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
         // TODO: FXIOS-14949 - add search results
         return .success(SearchResult.empty())
