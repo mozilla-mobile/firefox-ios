@@ -191,6 +191,7 @@
 		1D5A117A2EAEC51100DD27F7 /* ResetSearchEnginePrefsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */; };
 		1D5CBF492B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
 		1D5CBF4A2B17E3CB0001D033 /* NotificationPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */; };
+		1D62C5272EE8E77F00C6BCB9 /* RelayControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */; };
 		1D6ECD2F2EC2CDC10017EC7A /* AutofillRelayMaskSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6ECD2E2EC2CDB90017EC7A /* AutofillRelayMaskSetting.swift */; };
 		1D6ED1C52EC3C43A0017EC7A /* RelayMaskSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */; };
 		1D6EDA4A2ED65DB40017EC7A /* RelayMaskTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6EDA492ED65DB00017EC7A /* RelayMaskTelemetry.swift */; };
@@ -2891,6 +2892,7 @@
 		1D5A0F5B2EA2FB4800DD27F7 /* RelayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayController.swift; sourceTree = "<group>"; };
 		1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetSearchEnginePrefsSetting.swift; sourceTree = "<group>"; };
 		1D5CBF482B17E3CB0001D033 /* NotificationPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPayloads.swift; sourceTree = "<group>"; };
+		1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayControllerTests.swift; sourceTree = "<group>"; };
 		1D6ECD2E2EC2CDB90017EC7A /* AutofillRelayMaskSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillRelayMaskSetting.swift; sourceTree = "<group>"; };
 		1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayMaskSettingsViewController.swift; sourceTree = "<group>"; };
 		1D6EDA492ED65DB00017EC7A /* RelayMaskTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayMaskTelemetry.swift; sourceTree = "<group>"; };
@@ -16368,6 +16370,7 @@
 				8ABCFEA42B45CAC300C2988A /* PrivateBrowsingTelemetryTests.swift */,
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
+				1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */,
 				8AFA66012CA2935C0008D0F6 /* RemoteSettings */,
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
 				615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */,
@@ -19921,6 +19924,7 @@
 				C23889E32A50319A00429673 /* ShareSheetCoordinatorTests.swift in Sources */,
 				8A4880822E68AF8E00AD43D5 /* GleanOhttpUploaderTests.swift in Sources */,
 				E1312FD129D237EE008DDA85 /* NotificationSurfaceManagerTests.swift in Sources */,
+				1D62C5272EE8E77F00C6BCB9 /* RelayControllerTests.swift in Sources */,
 				21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */,
 				61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */,
 				5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */,

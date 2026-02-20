@@ -337,7 +337,6 @@
         "LoginTest\/testVerifyUpdatedPasswordIsSaved_TAE()",
         "MicrosurveyTests",
         "ModernOnboardingTests\/testModernOnboardingAccessibility()",
-        "ModernOnboardingTests\/testModernOnboardingFullFlowToSAlreadyAccepted()",
         "ModernOnboardingTests\/testModernOnboardingMultipleChoiceUI()",
         "ModernOnboardingTests\/testModernOnboardingSecondaryNavigation()",
         "ModernOnboardingTests\/testModernOnboardingSkipButton()",

@@ -8,15 +8,18 @@ import Testing
 @testable import VoiceSearchKit
 
 @Suite
-@MainActor
-struct SFSpeechRecognizerEngineTests {
+struct SpeechAnalyzerEngineTests {
     // TODO: FXIOS-14891 Add more test to improve code coverage and check for memory leaks
     let session = MockAudioSession()
 
     @Test
     func test_prepare_microphoneDenied_speechDenied_throwsError() async {
+        guard #available(iOS 26.0, *) else {
+            return
+        }
+
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false)
-        let subject = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
             try await subject.prepare()
@@ -28,8 +31,12 @@ struct SFSpeechRecognizerEngineTests {
 
     @Test
     func test_prepare_microphoneDenied_speechGranted_throwsError() async {
+        guard #available(iOS 26.0, *) else {
+            return
+        }
+
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: true)
-        let subject = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
             try await subject.prepare()
@@ -41,11 +48,15 @@ struct SFSpeechRecognizerEngineTests {
 
     @Test
     func test_prepare_microphoneGranted_speechDenied_throwsError() async {
+        guard #available(iOS 26.0, *) else {
+            return
+        }
+
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: false)
-        let engine = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
-            try await engine.prepare()
+            try await subject.prepare()
         }
 
         #expect(session.setCategoryCalls.isEmpty)
@@ -54,8 +65,12 @@ struct SFSpeechRecognizerEngineTests {
 
     @Test
     func test_prepare_microphoneGranted_speechGranted_returnsExpectedCalls() async throws {
+        guard #available(iOS 26.0, *) else {
+            return
+        }
+
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let subject = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
         try await subject.prepare()
 
         #expect(session.setCategoryCalls.count == 1)
@@ -71,8 +86,12 @@ struct SFSpeechRecognizerEngineTests {
 
     @Test
     func test_stop_returnsExpectedCalls() async throws {
+        guard #available(iOS 26.0, *) else {
+            return
+        }
+
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let subject = SFSpeechRecognizerEngine(audioSession: session, authorizer: authorizer)
+        let subject = await createSubject(authorizer: authorizer)
         try await subject.prepare()
 
         #expect(session.setCategoryCalls.count == 1)
@@ -88,12 +107,28 @@ struct SFSpeechRecognizerEngineTests {
 
     @Test
     func test_stop_createsRecognitionTask() async throws {
+        guard #available(iOS 26.0, *) else {
+            return
+        }
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
         let engine = MockAudioEngine()
-        let subject = SFSpeechRecognizerEngine(audioEngine: engine, audioSession: session, authorizer: authorizer)
+        let subject = await createSubject(engine: engine, authorizer: authorizer)
 
-        await subject.stop()
+        try await subject.stop()
 
         #expect(engine.stopCallCount == 1)
+    }
+
+    @available(iOS 26.0, *)
+    @MainActor
+    private func createSubject(
+        engine: AudioEngineProvider = MockAudioEngine(),
+        authorizer: AuthorizeProvider
+    ) -> SpeechAnalyzerEngine {
+        return SpeechAnalyzerEngine(
+            audioEngine: engine,
+            audioSession: session,
+            authorizer: authorizer
+        )
     }
 }

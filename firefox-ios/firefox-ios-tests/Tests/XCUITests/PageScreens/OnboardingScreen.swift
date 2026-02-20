@@ -336,6 +336,8 @@ final class OnboardingScreen {
             assertToolbarCustomizationScreen()
             selectToolbarPosition("Bottom")
             goToNextScreenViaPrimary()
+        } else {
+            currentScreen += 1
         }
 
         assertThemeCustomizationScreen()

@@ -1038,11 +1038,21 @@ extension String {
         }
 
         public struct Pocket {
+            public static let NewsSectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.NewsSectionTitle.v149",
+                tableName: "FirefoxHomepage",
+                value: "News",
+                comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
             public static let PopularTodaySectionTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.PopularTodaySectionTitle.v145",
                 tableName: "FirefoxHomepage",
                 value: "Popular Today",
                 comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
+            public static let NewsAffordanceLabel = MZLocalizedString(
+                key: "FirefoxHome.Stories.NewsAffordanceLabel.v149",
+                tableName: "FirefoxHomepage",
+                value: "News",
+                comment: "This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles")
             public static let AllStoriesButtonTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.AllStoriesButtonTitle.v145",
                 tableName: "FirefoxHomepage",

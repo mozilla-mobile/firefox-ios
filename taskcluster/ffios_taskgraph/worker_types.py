@@ -124,7 +124,7 @@ def build_shipit_release_payload(config, task, task_def):
         Required("merge-automation-id"): int,
     }
 )
-def build_shipit_release_payload(config, task, task_def):
+def build_shipit_merge_payload(config, task, task_def):
     task_def["payload"] = {
         "automation_id": task["worker"]["merge-automation-id"],
     }
