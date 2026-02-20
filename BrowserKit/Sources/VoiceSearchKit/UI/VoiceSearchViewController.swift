@@ -71,7 +71,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
-        self.viewModel = VoiceSearchViewModel(service: MockVoiceSearchService())
+        self.viewModel = VoiceSearchViewModel(service: DefaultVoiceSearchService())
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
