@@ -1891,14 +1891,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func updateBottomContainerConstraints() {
-        guard isSnapKitRemovalEnabled else { return }
-
-        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            bottomContainerConstraint?.update(offset: bottomContainer.frame.height)
-        }
-    }
-
     func updateOverKeyboardContainerConstraints() {
         overKeyboardContainer.snp.remakeConstraints { make in
             if let scrollController = scrollController as? LegacyTabScrollProvider {
@@ -1923,9 +1915,7 @@ class BrowserViewController: UIViewController,
     }
 
     func updateConstraintsForKeyboard() {
-        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: true)
-        } else {
+        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             adjustBottomSearchBarForKeyboard()
         }
     }
