@@ -24,6 +24,6 @@ class MockRelayController: RelayControllerProtocol {
     }
 
     var telemetry: Client.RelayMaskTelemetry {
-        fatalError("Not supported in mock currently")
+        return Client.RelayMaskTelemetry(gleanWrapper: MockGleanWrapper())
     }
 }
