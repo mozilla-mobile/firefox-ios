@@ -1,5 +1,5 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
-"Bookmarks.EmptyState.Nested.Body.v135" = "Během procházení si můžete přidávat záložky, abyste později našli své oblíbené stránky.";
+"Bookmarks.EmptyState.Nested.Body.v135" = "Během procházení internetu si můžete přidávat záložky, abyste později našli své oblíbené stránky.";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Title.v135" = "Tato složka je prázdná";

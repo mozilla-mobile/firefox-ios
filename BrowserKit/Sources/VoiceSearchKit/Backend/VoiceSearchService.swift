@@ -13,10 +13,6 @@ struct SpeechResult: Equatable {
     }
 }
 
-enum SpeechError: Error, Equatable {
-    case unknown
-}
-
 struct SearchResult: Equatable {
     let title: String
     let body: String

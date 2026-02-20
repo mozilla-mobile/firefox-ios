@@ -1,0 +1,9 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "អ្នកមិនមានឧបករណ៍ផ្សេងទៀត ដែលភ្ជាប់ទៅគណនីនេះសម្រាប់ធ្វើសមកាលកម្មទេ។";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "អ្នកមិនទាន់ចូលគណនីរបស់អ្នកទេ។";
+
+/* The Toast message that appears when the user press copy on the share sheet with a file like a pdf */
+"ShareExtension.FileCopiedToClipboard.Title.v139" = "ឯកសារត្រូវបានចម្លងទៅក្ដារតម្បៀតខ្ទាស់";
+

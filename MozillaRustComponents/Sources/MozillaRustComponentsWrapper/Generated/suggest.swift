@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -738,13 +757,13 @@ public protocol SuggestStoreProtocol: AnyObject, Sendable {
  * on the first launch.
  */
 open class SuggestStore: SuggestStoreProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -754,48 +773,49 @@ open class SuggestStore: SuggestStoreProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_suggest_fn_clone_suggeststore(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_suggest_fn_clone_suggeststore(self.handle, $0) }
     }
     /**
      * Creates a Suggest store.
      */
 public convenience init(path: String, remoteSettingsService: RemoteSettingsService) {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_suggest_fn_constructor_suggeststore_new(
         FfiConverterString.lower(path),
         FfiConverterTypeRemoteSettingsService_lower(remoteSettingsService),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_suggest_fn_free_suggeststore(pointer, $0) }
+        try! rustCall { uniffi_suggest_fn_free_suggeststore(handle, $0) }
     }
 
     
@@ -806,7 +826,8 @@ public convenience init(path: String, remoteSettingsService: RemoteSettingsServi
      */
 open func anyDismissedSuggestions()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_any_dismissed_suggestions(self.uniffiClonePointer(),$0
+    uniffi_suggest_fn_method_suggeststore_any_dismissed_suggestions(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -815,7 +836,8 @@ open func anyDismissedSuggestions()throws  -> Bool  {
      * Removes all content from the database.
      */
 open func clear()throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_clear(self.uniffiClonePointer(),$0
+    uniffi_suggest_fn_method_suggeststore_clear(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -824,7 +846,8 @@ open func clear()throws   {try rustCallWithError(FfiConverterTypeSuggestApiError
      * Clear dismissed suggestions
      */
 open func clearDismissedSuggestions()throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_clear_dismissed_suggestions(self.uniffiClonePointer(),$0
+    uniffi_suggest_fn_method_suggeststore_clear_dismissed_suggestions(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -839,7 +862,8 @@ open func clearDismissedSuggestions()throws   {try rustCallWithError(FfiConverte
      * suggestion originates outside this component.
      */
 open func dismissByKey(key: String)throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_dismiss_by_key(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_dismiss_by_key(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(key),$0
     )
 }
@@ -851,7 +875,8 @@ open func dismissByKey(key: String)throws   {try rustCallWithError(FfiConverterT
      * Dismissed suggestions cannot be fetched again.
      */
 open func dismissBySuggestion(suggestion: Suggestion)throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_dismiss_by_suggestion(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_dismiss_by_suggestion(
+            self.uniffiCloneHandle(),
         FfiConverterTypeSuggestion_lower(suggestion),$0
     )
 }
@@ -866,7 +891,8 @@ open func dismissBySuggestion(suggestion: Suggestion)throws   {try rustCallWithE
      * Dismissed suggestions will not be returned again
      */
 open func dismissSuggestion(suggestionUrl: String)throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_dismiss_suggestion(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_dismiss_suggestion(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(suggestionUrl),$0
     )
 }
@@ -879,7 +905,8 @@ open func dismissSuggestion(suggestionUrl: String)throws   {try rustCallWithErro
      */
 open func fetchGeonameAlternates(geoname: Geoname)throws  -> GeonameAlternates  {
     return try  FfiConverterTypeGeonameAlternates_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_fetch_geoname_alternates(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_fetch_geoname_alternates(
+            self.uniffiCloneHandle(),
         FfiConverterTypeGeoname_lower(geoname),$0
     )
 })
@@ -893,7 +920,8 @@ open func fetchGeonameAlternates(geoname: Geoname)throws  -> GeonameAlternates  
      */
 open func fetchGeonames(query: String, matchNamePrefix: Bool, filter: [Geoname]?)throws  -> [GeonameMatch]  {
     return try  FfiConverterSequenceTypeGeonameMatch.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_fetch_geonames(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_fetch_geonames(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(query),
         FfiConverterBool.lower(matchNamePrefix),
         FfiConverterOptionSequenceTypeGeoname.lower(filter),$0
@@ -906,7 +934,8 @@ open func fetchGeonames(query: String, matchNamePrefix: Bool, filter: [Geoname]?
      */
 open func fetchGlobalConfig()throws  -> SuggestGlobalConfig  {
     return try  FfiConverterTypeSuggestGlobalConfig_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_fetch_global_config(self.uniffiClonePointer(),$0
+    uniffi_suggest_fn_method_suggeststore_fetch_global_config(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -916,7 +945,8 @@ open func fetchGlobalConfig()throws  -> SuggestGlobalConfig  {
      */
 open func fetchProviderConfig(provider: SuggestionProvider)throws  -> SuggestProviderConfig?  {
     return try  FfiConverterOptionTypeSuggestProviderConfig.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_fetch_provider_config(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_fetch_provider_config(
+            self.uniffiCloneHandle(),
         FfiConverterTypeSuggestionProvider_lower(provider),$0
     )
 })
@@ -927,7 +957,8 @@ open func fetchProviderConfig(provider: SuggestionProvider)throws  -> SuggestPro
      */
 open func ingest(constraints: SuggestIngestionConstraints)throws  -> SuggestIngestionMetrics  {
     return try  FfiConverterTypeSuggestIngestionMetrics_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_ingest(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_ingest(
+            self.uniffiCloneHandle(),
         FfiConverterTypeSuggestIngestionConstraints_lower(constraints),$0
     )
 })
@@ -941,7 +972,8 @@ open func ingest(constraints: SuggestIngestionConstraints)throws  -> SuggestInge
      * method does not interrupt any ongoing ingests.
      */
 open func interrupt(kind: InterruptKind? = nil)  {try! rustCall() {
-    uniffi_suggest_fn_method_suggeststore_interrupt(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_interrupt(
+            self.uniffiCloneHandle(),
         FfiConverterOptionTypeInterruptKind.lower(kind),$0
     )
 }
@@ -957,7 +989,8 @@ open func interrupt(kind: InterruptKind? = nil)  {try! rustCall() {
      */
 open func isDismissedByKey(key: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_is_dismissed_by_key(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_is_dismissed_by_key(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(key),$0
     )
 })
@@ -972,7 +1005,8 @@ open func isDismissedByKey(key: String)throws  -> Bool  {
      */
 open func isDismissedBySuggestion(suggestion: Suggestion)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_is_dismissed_by_suggestion(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_is_dismissed_by_suggestion(
+            self.uniffiCloneHandle(),
         FfiConverterTypeSuggestion_lower(suggestion),$0
     )
 })
@@ -983,7 +1017,8 @@ open func isDismissedBySuggestion(suggestion: Suggestion)throws  -> Bool  {
      */
 open func query(query: SuggestionQuery)throws  -> [Suggestion]  {
     return try  FfiConverterSequenceTypeSuggestion.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_query(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_query(
+            self.uniffiCloneHandle(),
         FfiConverterTypeSuggestionQuery_lower(query),$0
     )
 })
@@ -994,13 +1029,15 @@ open func query(query: SuggestionQuery)throws  -> [Suggestion]  {
      */
 open func queryWithMetrics(query: SuggestionQuery)throws  -> QueryWithMetricsResult  {
     return try  FfiConverterTypeQueryWithMetricsResult_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststore_query_with_metrics(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststore_query_with_metrics(
+            self.uniffiCloneHandle(),
         FfiConverterTypeSuggestionQuery_lower(query),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -1008,33 +1045,24 @@ open func queryWithMetrics(query: SuggestionQuery)throws  -> QueryWithMetricsRes
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeSuggestStore: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = SuggestStore
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> SuggestStore {
-        return SuggestStore(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> SuggestStore {
+        return SuggestStore(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: SuggestStore) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: SuggestStore) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SuggestStore {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: SuggestStore, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1042,14 +1070,14 @@ public struct FfiConverterTypeSuggestStore: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSuggestStore_lift(_ pointer: UnsafeMutableRawPointer) throws -> SuggestStore {
-    return try FfiConverterTypeSuggestStore.lift(pointer)
+public func FfiConverterTypeSuggestStore_lift(_ handle: UInt64) throws -> SuggestStore {
+    return try FfiConverterTypeSuggestStore.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSuggestStore_lower(_ value: SuggestStore) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeSuggestStore_lower(_ value: SuggestStore) -> UInt64 {
     return FfiConverterTypeSuggestStore.lower(value)
 }
 
@@ -1098,13 +1126,13 @@ public protocol SuggestStoreBuilderProtocol: AnyObject, Sendable {
  * the data_path and cache_path strings.
  */
 open class SuggestStoreBuilder: SuggestStoreBuilderProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -1114,43 +1142,44 @@ open class SuggestStoreBuilder: SuggestStoreBuilderProtocol, @unchecked Sendable
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_suggest_fn_clone_suggeststorebuilder(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_suggest_fn_clone_suggeststorebuilder(self.handle, $0) }
     }
 public convenience init() {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_suggest_fn_constructor_suggeststorebuilder_new($0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_suggest_fn_free_suggeststorebuilder(pointer, $0) }
+        try! rustCall { uniffi_suggest_fn_free_suggeststorebuilder(handle, $0) }
     }
 
     
@@ -1158,7 +1187,8 @@ public convenience init() {
     
 open func build()throws  -> SuggestStore  {
     return try  FfiConverterTypeSuggestStore_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
-    uniffi_suggest_fn_method_suggeststorebuilder_build(self.uniffiClonePointer(),$0
+    uniffi_suggest_fn_method_suggeststorebuilder_build(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1168,7 +1198,8 @@ open func build()throws  -> SuggestStore  {
      */
 open func cachePath(path: String) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
-    uniffi_suggest_fn_method_suggeststorebuilder_cache_path(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststorebuilder_cache_path(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(path),$0
     )
 })
@@ -1176,7 +1207,8 @@ open func cachePath(path: String) -> SuggestStoreBuilder  {
     
 open func dataPath(path: String) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
-    uniffi_suggest_fn_method_suggeststorebuilder_data_path(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststorebuilder_data_path(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(path),$0
     )
 })
@@ -1191,7 +1223,8 @@ open func dataPath(path: String) -> SuggestStoreBuilder  {
      */
 open func loadExtension(library: String, entryPoint: String?) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
-    uniffi_suggest_fn_method_suggeststorebuilder_load_extension(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststorebuilder_load_extension(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(library),
         FfiConverterOptionString.lower(entryPoint),$0
     )
@@ -1200,7 +1233,8 @@ open func loadExtension(library: String, entryPoint: String?) -> SuggestStoreBui
     
 open func remoteSettingsBucketName(bucketName: String) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
-    uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_bucket_name(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_bucket_name(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(bucketName),$0
     )
 })
@@ -1208,7 +1242,8 @@ open func remoteSettingsBucketName(bucketName: String) -> SuggestStoreBuilder  {
     
 open func remoteSettingsServer(server: RemoteSettingsServer) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
-    uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_server(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_server(
+            self.uniffiCloneHandle(),
         FfiConverterTypeRemoteSettingsServer_lower(server),$0
     )
 })
@@ -1216,13 +1251,15 @@ open func remoteSettingsServer(server: RemoteSettingsServer) -> SuggestStoreBuil
     
 open func remoteSettingsService(rsService: RemoteSettingsService) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
-    uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_service(self.uniffiClonePointer(),
+    uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_service(
+            self.uniffiCloneHandle(),
         FfiConverterTypeRemoteSettingsService_lower(rsService),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -1230,33 +1267,24 @@ open func remoteSettingsService(rsService: RemoteSettingsService) -> SuggestStor
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeSuggestStoreBuilder: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = SuggestStoreBuilder
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> SuggestStoreBuilder {
-        return SuggestStoreBuilder(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> SuggestStoreBuilder {
+        return SuggestStoreBuilder(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: SuggestStoreBuilder) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: SuggestStoreBuilder) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SuggestStoreBuilder {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: SuggestStoreBuilder, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1264,14 +1292,14 @@ public struct FfiConverterTypeSuggestStoreBuilder: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSuggestStoreBuilder_lift(_ pointer: UnsafeMutableRawPointer) throws -> SuggestStoreBuilder {
-    return try FfiConverterTypeSuggestStoreBuilder.lift(pointer)
+public func FfiConverterTypeSuggestStoreBuilder_lift(_ handle: UInt64) throws -> SuggestStoreBuilder {
+    return try FfiConverterTypeSuggestStoreBuilder.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSuggestStoreBuilder_lower(_ value: SuggestStoreBuilder) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeSuggestStoreBuilder_lower(_ value: SuggestStoreBuilder) -> UInt64 {
     return FfiConverterTypeSuggestStoreBuilder.lower(value)
 }
 
@@ -1281,7 +1309,7 @@ public func FfiConverterTypeSuggestStoreBuilder_lower(_ value: SuggestStoreBuild
 /**
  * A set of names for a single entity.
  */
-public struct AlternateNames {
+public struct AlternateNames: Equatable, Hashable {
     /**
      * The entity's primary name. For a `Geoname`, this is `Geoname::name`.
      */
@@ -1315,35 +1343,15 @@ public struct AlternateNames {
         self.localized = localized
         self.abbreviation = abbreviation
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension AlternateNames: Sendable {}
 #endif
-
-
-extension AlternateNames: Equatable, Hashable {
-    public static func ==(lhs: AlternateNames, rhs: AlternateNames) -> Bool {
-        if lhs.primary != rhs.primary {
-            return false
-        }
-        if lhs.localized != rhs.localized {
-            return false
-        }
-        if lhs.abbreviation != rhs.abbreviation {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(primary)
-        hasher.combine(localized)
-        hasher.combine(abbreviation)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1384,7 +1392,7 @@ public func FfiConverterTypeAlternateNames_lower(_ value: AlternateNames) -> Rus
 /**
  * Additional data about how an FTS match was made
  */
-public struct FtsMatchInfo {
+public struct FtsMatchInfo: Equatable, Hashable {
     /**
      * Was this a prefix match (`water b` matched against `water bottle`)
      */
@@ -1406,31 +1414,15 @@ public struct FtsMatchInfo {
         self.prefix = prefix
         self.stemming = stemming
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension FtsMatchInfo: Sendable {}
 #endif
-
-
-extension FtsMatchInfo: Equatable, Hashable {
-    public static func ==(lhs: FtsMatchInfo, rhs: FtsMatchInfo) -> Bool {
-        if lhs.prefix != rhs.prefix {
-            return false
-        }
-        if lhs.stemming != rhs.stemming {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(prefix)
-        hasher.combine(stemming)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1474,7 +1466,7 @@ public func FfiConverterTypeFtsMatchInfo_lower(_ value: FtsMatchInfo) -> RustBuf
  *
  * [1]: https://download.geonames.org/export/dump/readme.txt
  */
-public struct Geoname {
+public struct Geoname: Equatable, Hashable {
     /**
      * The `geonameid` straight from the geoname table.
      */
@@ -1582,63 +1574,15 @@ public struct Geoname {
         self.latitude = latitude
         self.longitude = longitude
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Geoname: Sendable {}
 #endif
-
-
-extension Geoname: Equatable, Hashable {
-    public static func ==(lhs: Geoname, rhs: Geoname) -> Bool {
-        if lhs.geonameId != rhs.geonameId {
-            return false
-        }
-        if lhs.geonameType != rhs.geonameType {
-            return false
-        }
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.countryCode != rhs.countryCode {
-            return false
-        }
-        if lhs.featureClass != rhs.featureClass {
-            return false
-        }
-        if lhs.featureCode != rhs.featureCode {
-            return false
-        }
-        if lhs.adminDivisionCodes != rhs.adminDivisionCodes {
-            return false
-        }
-        if lhs.population != rhs.population {
-            return false
-        }
-        if lhs.latitude != rhs.latitude {
-            return false
-        }
-        if lhs.longitude != rhs.longitude {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(geonameId)
-        hasher.combine(geonameType)
-        hasher.combine(name)
-        hasher.combine(countryCode)
-        hasher.combine(featureClass)
-        hasher.combine(featureCode)
-        hasher.combine(adminDivisionCodes)
-        hasher.combine(population)
-        hasher.combine(latitude)
-        hasher.combine(longitude)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1693,7 +1637,7 @@ public func FfiConverterTypeGeoname_lower(_ value: Geoname) -> RustBuffer {
 /**
  * Alternate names for a geoname and its country and admin divisions.
  */
-public struct GeonameAlternates {
+public struct GeonameAlternates: Equatable, Hashable {
     /**
      * Names for the geoname itself.
      */
@@ -1729,35 +1673,15 @@ public struct GeonameAlternates {
         self.country = country
         self.adminDivisions = adminDivisions
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension GeonameAlternates: Sendable {}
 #endif
-
-
-extension GeonameAlternates: Equatable, Hashable {
-    public static func ==(lhs: GeonameAlternates, rhs: GeonameAlternates) -> Bool {
-        if lhs.geoname != rhs.geoname {
-            return false
-        }
-        if lhs.country != rhs.country {
-            return false
-        }
-        if lhs.adminDivisions != rhs.adminDivisions {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(geoname)
-        hasher.combine(country)
-        hasher.combine(adminDivisions)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1798,7 +1722,7 @@ public func FfiConverterTypeGeonameAlternates_lower(_ value: GeonameAlternates) 
 /**
  * A fetched geoname with info on how it was matched.
  */
-public struct GeonameMatch {
+public struct GeonameMatch: Equatable, Hashable {
     /**
      * The geoname that was matched.
      */
@@ -1828,35 +1752,15 @@ public struct GeonameMatch {
         self.matchType = matchType
         self.prefix = prefix
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension GeonameMatch: Sendable {}
 #endif
-
-
-extension GeonameMatch: Equatable, Hashable {
-    public static func ==(lhs: GeonameMatch, rhs: GeonameMatch) -> Bool {
-        if lhs.geoname != rhs.geoname {
-            return false
-        }
-        if lhs.matchType != rhs.matchType {
-            return false
-        }
-        if lhs.prefix != rhs.prefix {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(geoname)
-        hasher.combine(matchType)
-        hasher.combine(prefix)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1897,7 +1801,7 @@ public func FfiConverterTypeGeonameMatch_lower(_ value: GeonameMatch) -> RustBuf
 /**
  * Single sample for a Glean labeled_timing_distribution
  */
-public struct LabeledTimingSample {
+public struct LabeledTimingSample: Equatable, Hashable {
     public var label: String
     /**
      * Time in microseconds
@@ -1913,31 +1817,15 @@ public struct LabeledTimingSample {
         self.label = label
         self.value = value
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension LabeledTimingSample: Sendable {}
 #endif
-
-
-extension LabeledTimingSample: Equatable, Hashable {
-    public static func ==(lhs: LabeledTimingSample, rhs: LabeledTimingSample) -> Bool {
-        if lhs.label != rhs.label {
-            return false
-        }
-        if lhs.value != rhs.value {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(label)
-        hasher.combine(value)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1973,7 +1861,7 @@ public func FfiConverterTypeLabeledTimingSample_lower(_ value: LabeledTimingSamp
 }
 
 
-public struct QueryWithMetricsResult {
+public struct QueryWithMetricsResult: Equatable, Hashable {
     public var suggestions: [Suggestion]
     /**
      * Samples for the `suggest.query_time` metric
@@ -1989,31 +1877,15 @@ public struct QueryWithMetricsResult {
         self.suggestions = suggestions
         self.queryTimes = queryTimes
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension QueryWithMetricsResult: Sendable {}
 #endif
-
-
-extension QueryWithMetricsResult: Equatable, Hashable {
-    public static func ==(lhs: QueryWithMetricsResult, rhs: QueryWithMetricsResult) -> Bool {
-        if lhs.suggestions != rhs.suggestions {
-            return false
-        }
-        if lhs.queryTimes != rhs.queryTimes {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(suggestions)
-        hasher.combine(queryTimes)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2052,7 +1924,7 @@ public func FfiConverterTypeQueryWithMetricsResult_lower(_ value: QueryWithMetri
 /**
  * Global Suggest configuration data.
  */
-public struct SuggestGlobalConfig {
+public struct SuggestGlobalConfig: Equatable, Hashable {
     public var showLessFrequentlyCap: Int32
 
     // Default memberwise initializers are never public by default, so we
@@ -2060,27 +1932,15 @@ public struct SuggestGlobalConfig {
     public init(showLessFrequentlyCap: Int32) {
         self.showLessFrequentlyCap = showLessFrequentlyCap
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SuggestGlobalConfig: Sendable {}
 #endif
-
-
-extension SuggestGlobalConfig: Equatable, Hashable {
-    public static func ==(lhs: SuggestGlobalConfig, rhs: SuggestGlobalConfig) -> Bool {
-        if lhs.showLessFrequentlyCap != rhs.showLessFrequentlyCap {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(showLessFrequentlyCap)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2117,7 +1977,7 @@ public func FfiConverterTypeSuggestGlobalConfig_lower(_ value: SuggestGlobalConf
 /**
  * Constraints limit which suggestions to ingest from Remote Settings.
  */
-public struct SuggestIngestionConstraints {
+public struct SuggestIngestionConstraints: Equatable, Hashable {
     public var providers: [SuggestionProvider]?
     public var providerConstraints: SuggestionProviderConstraints?
     /**
@@ -2137,35 +1997,15 @@ public struct SuggestIngestionConstraints {
         self.providerConstraints = providerConstraints
         self.emptyOnly = emptyOnly
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SuggestIngestionConstraints: Sendable {}
 #endif
-
-
-extension SuggestIngestionConstraints: Equatable, Hashable {
-    public static func ==(lhs: SuggestIngestionConstraints, rhs: SuggestIngestionConstraints) -> Bool {
-        if lhs.providers != rhs.providers {
-            return false
-        }
-        if lhs.providerConstraints != rhs.providerConstraints {
-            return false
-        }
-        if lhs.emptyOnly != rhs.emptyOnly {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(providers)
-        hasher.combine(providerConstraints)
-        hasher.combine(emptyOnly)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2208,7 +2048,7 @@ public func FfiConverterTypeSuggestIngestionConstraints_lower(_ value: SuggestIn
  *
  * These are recorded during [crate::Store::ingest] and returned to the consumer to record.
  */
-public struct SuggestIngestionMetrics {
+public struct SuggestIngestionMetrics: Equatable, Hashable {
     /**
      * Samples for the `suggest.ingestion_time` metric
      */
@@ -2230,31 +2070,15 @@ public struct SuggestIngestionMetrics {
         self.ingestionTimes = ingestionTimes
         self.downloadTimes = downloadTimes
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SuggestIngestionMetrics: Sendable {}
 #endif
-
-
-extension SuggestIngestionMetrics: Equatable, Hashable {
-    public static func ==(lhs: SuggestIngestionMetrics, rhs: SuggestIngestionMetrics) -> Bool {
-        if lhs.ingestionTimes != rhs.ingestionTimes {
-            return false
-        }
-        if lhs.downloadTimes != rhs.downloadTimes {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ingestionTimes)
-        hasher.combine(downloadTimes)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2294,7 +2118,7 @@ public func FfiConverterTypeSuggestIngestionMetrics_lower(_ value: SuggestIngest
  * Some providers manage multiple suggestion subtypes. Queries, ingests, and
  * other operations on those providers must be constrained to a desired subtype.
  */
-public struct SuggestionProviderConstraints {
+public struct SuggestionProviderConstraints: Equatable, Hashable {
     /**
      * Which dynamic suggestions should we fetch or ingest? Corresponds to the
      * `suggestion_type` value in dynamic suggestions remote settings records.
@@ -2320,31 +2144,15 @@ public struct SuggestionProviderConstraints {
         self.dynamicSuggestionTypes = dynamicSuggestionTypes
         self.ampAlternativeMatching = ampAlternativeMatching
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SuggestionProviderConstraints: Sendable {}
 #endif
-
-
-extension SuggestionProviderConstraints: Equatable, Hashable {
-    public static func ==(lhs: SuggestionProviderConstraints, rhs: SuggestionProviderConstraints) -> Bool {
-        if lhs.dynamicSuggestionTypes != rhs.dynamicSuggestionTypes {
-            return false
-        }
-        if lhs.ampAlternativeMatching != rhs.ampAlternativeMatching {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(dynamicSuggestionTypes)
-        hasher.combine(ampAlternativeMatching)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2383,7 +2191,7 @@ public func FfiConverterTypeSuggestionProviderConstraints_lower(_ value: Suggest
 /**
  * A query for suggestions to show in the address bar.
  */
-public struct SuggestionQuery {
+public struct SuggestionQuery: Equatable, Hashable {
     public var keyword: String
     public var providers: [SuggestionProvider]
     public var providerConstraints: SuggestionProviderConstraints?
@@ -2397,39 +2205,15 @@ public struct SuggestionQuery {
         self.providerConstraints = providerConstraints
         self.limit = limit
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SuggestionQuery: Sendable {}
 #endif
-
-
-extension SuggestionQuery: Equatable, Hashable {
-    public static func ==(lhs: SuggestionQuery, rhs: SuggestionQuery) -> Bool {
-        if lhs.keyword != rhs.keyword {
-            return false
-        }
-        if lhs.providers != rhs.providers {
-            return false
-        }
-        if lhs.providerConstraints != rhs.providerConstraints {
-            return false
-        }
-        if lhs.limit != rhs.limit {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(keyword)
-        hasher.combine(providers)
-        hasher.combine(providerConstraints)
-        hasher.combine(limit)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2471,7 +2255,7 @@ public func FfiConverterTypeSuggestionQuery_lower(_ value: SuggestionQuery) -> R
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum AmpMatchingStrategy {
+public enum AmpMatchingStrategy: Equatable, Hashable {
     
     /**
      * Disable keywords added via keyword expansion.
@@ -2487,8 +2271,12 @@ public enum AmpMatchingStrategy {
      * Use FTS matching against the title field
      */
     case ftsAgainstTitle
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension AmpMatchingStrategy: Sendable {}
@@ -2549,17 +2337,10 @@ public func FfiConverterTypeAmpMatchingStrategy_lower(_ value: AmpMatchingStrate
 }
 
 
-extension AmpMatchingStrategy: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum GeonameMatchType {
+public enum GeonameMatchType: Equatable, Hashable {
     
     case abbreviation
     case airportCode
@@ -2567,8 +2348,12 @@ public enum GeonameMatchType {
      * This includes any names that aren't abbreviations or airport codes.
      */
     case name
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension GeonameMatchType: Sendable {}
@@ -2629,20 +2414,13 @@ public func FfiConverterTypeGeonameMatchType_lower(_ value: GeonameMatchType) ->
 }
 
 
-extension GeonameMatchType: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * The type of a geoname.
  */
 
-public enum GeonameType {
+public enum GeonameType: Equatable, Hashable {
     
     case country
     /**
@@ -2656,8 +2434,12 @@ public enum GeonameType {
      */
     case city
     case other
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension GeonameType: Sendable {}
@@ -2732,20 +2514,13 @@ public func FfiConverterTypeGeonameType_lower(_ value: GeonameType) -> RustBuffe
 }
 
 
-extension GeonameType: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * What should be interrupted when [SuggestStore::interrupt] is called?
  */
 
-public enum InterruptKind {
+public enum InterruptKind: Equatable, Hashable {
     
     /**
      * Interrupt read operations like [SuggestStore::query]
@@ -2760,8 +2535,12 @@ public enum InterruptKind {
      * Interrupt both read and write operations,
      */
     case readWrite
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension InterruptKind: Sendable {}
@@ -2822,19 +2601,12 @@ public func FfiConverterTypeInterruptKind_lower(_ value: InterruptKind) -> RustB
 }
 
 
-extension InterruptKind: Equatable, Hashable {}
-
-
-
-
-
-
 
 /**
  * The error type for all Suggest component operations. These errors are
  * exposed to your application, which should handle them as needed.
  */
-public enum SuggestApiError: Swift.Error {
+public enum SuggestApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -2851,8 +2623,21 @@ public enum SuggestApiError: Swift.Error {
     case Interrupted
     case Other(reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension SuggestApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2926,28 +2711,13 @@ public func FfiConverterTypeSuggestApiError_lower(_ value: SuggestApiError) -> R
     return FfiConverterTypeSuggestApiError.lower(value)
 }
 
-
-extension SuggestApiError: Equatable, Hashable {}
-
-
-
-
-extension SuggestApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * Per-provider configuration data.
  */
 
-public enum SuggestProviderConfig {
+public enum SuggestProviderConfig: Equatable, Hashable {
     
     case weather(
         /**
@@ -2962,8 +2732,12 @@ public enum SuggestProviderConfig {
          * API change.) This threshold does not apply to city and region names.
          */minKeywordLength: Int32
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension SuggestProviderConfig: Sendable {}
@@ -3015,20 +2789,13 @@ public func FfiConverterTypeSuggestProviderConfig_lower(_ value: SuggestProvider
 }
 
 
-extension SuggestProviderConfig: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * A suggestion from the database to show in the address bar.
  */
 
-public enum Suggestion {
+public enum Suggestion: Equatable, Hashable {
     
     case amp(title: String, url: String, rawUrl: String, icon: Data?, iconMimetype: String?, fullKeyword: String, blockId: Int64, advertiser: String, iabCategory: String, categories: [Int32], impressionUrl: String, clickUrl: String, rawClickUrl: String, score: Double, ftsMatchInfo: FtsMatchInfo?
     )
@@ -3052,8 +2819,12 @@ public enum Suggestion {
          * the wrapped string to [crate::SuggestStore::dismiss_suggestion].
          */dismissalKey: String?, score: Double
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension Suggestion: Sendable {}
@@ -3209,13 +2980,6 @@ public func FfiConverterTypeSuggestion_lower(_ value: Suggestion) -> RustBuffer 
 }
 
 
-extension Suggestion: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3224,7 +2988,7 @@ extension Suggestion: Equatable, Hashable {}
  * Provider configs are associated with integer keys stored in the database.
  */
 
-public enum SuggestionProvider : UInt8 {
+public enum SuggestionProvider: UInt8, Equatable, Hashable {
     
     case amp = 1
     case wikipedia = 2
@@ -3234,8 +2998,12 @@ public enum SuggestionProvider : UInt8 {
     case weather = 7
     case fakespot = 8
     case dynamic = 9
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension SuggestionProvider: Sendable {}
@@ -3326,25 +3094,22 @@ public func FfiConverterTypeSuggestionProvider_lower(_ value: SuggestionProvider
 }
 
 
-extension SuggestionProvider: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * Subject type for Yelp suggestion.
  */
 
-public enum YelpSubjectType : UInt8 {
+public enum YelpSubjectType: UInt8, Equatable, Hashable {
     
     case service = 0
     case business = 1
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension YelpSubjectType: Sendable {}
@@ -3397,13 +3162,6 @@ public func FfiConverterTypeYelpSubjectType_lift(_ buf: RustBuffer) throws -> Ye
 public func FfiConverterTypeYelpSubjectType_lower(_ value: YelpSubjectType) -> RustBuffer {
     return FfiConverterTypeYelpSubjectType.lower(value)
 }
-
-
-extension YelpSubjectType: Equatable, Hashable {}
-
-
-
-
 
 
 #if swift(>=5.8)
@@ -4035,88 +3793,88 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_suggest_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_suggest_checksum_func_raw_suggestion_url_matches() != 23311) {
+    if (uniffi_suggest_checksum_func_raw_suggestion_url_matches() != 61462) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_any_dismissed_suggestions() != 57138) {
+    if (uniffi_suggest_checksum_method_suggeststore_any_dismissed_suggestions() != 41516) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_clear() != 24590) {
+    if (uniffi_suggest_checksum_method_suggeststore_clear() != 17574) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_clear_dismissed_suggestions() != 39430) {
+    if (uniffi_suggest_checksum_method_suggeststore_clear_dismissed_suggestions() != 21297) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_dismiss_by_key() != 48043) {
+    if (uniffi_suggest_checksum_method_suggeststore_dismiss_by_key() != 56209) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_dismiss_by_suggestion() != 22306) {
+    if (uniffi_suggest_checksum_method_suggeststore_dismiss_by_suggestion() != 57118) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_dismiss_suggestion() != 47056) {
+    if (uniffi_suggest_checksum_method_suggeststore_dismiss_suggestion() != 33000) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_fetch_geoname_alternates() != 45937) {
+    if (uniffi_suggest_checksum_method_suggeststore_fetch_geoname_alternates() != 60828) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_fetch_geonames() != 64684) {
+    if (uniffi_suggest_checksum_method_suggeststore_fetch_geonames() != 64800) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_fetch_global_config() != 45439) {
+    if (uniffi_suggest_checksum_method_suggeststore_fetch_global_config() != 23207) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_fetch_provider_config() != 15656) {
+    if (uniffi_suggest_checksum_method_suggeststore_fetch_provider_config() != 16664) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_ingest() != 35498) {
+    if (uniffi_suggest_checksum_method_suggeststore_ingest() != 56852) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_interrupt() != 26986) {
+    if (uniffi_suggest_checksum_method_suggeststore_interrupt() != 46232) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_is_dismissed_by_key() != 29440) {
+    if (uniffi_suggest_checksum_method_suggeststore_is_dismissed_by_key() != 49909) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_is_dismissed_by_suggestion() != 6416) {
+    if (uniffi_suggest_checksum_method_suggeststore_is_dismissed_by_suggestion() != 46020) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_query() != 856) {
+    if (uniffi_suggest_checksum_method_suggeststore_query() != 18358) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_query_with_metrics() != 14851) {
+    if (uniffi_suggest_checksum_method_suggeststore_query_with_metrics() != 3909) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_build() != 42072) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_build() != 30982) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_cache_path() != 55168) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_cache_path() != 24621) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_data_path() != 48491) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_data_path() != 21293) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_load_extension() != 7246) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_load_extension() != 44656) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_bucket_name() != 41780) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_bucket_name() != 12709) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_server() != 19990) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_server() != 34776) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_service() != 25201) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_service() != 6794) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_constructor_suggeststore_new() != 7882) {
+    if (uniffi_suggest_checksum_constructor_suggeststore_new() != 4502) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_constructor_suggeststorebuilder_new() != 1218) {
+    if (uniffi_suggest_checksum_constructor_suggeststorebuilder_new() != 5502) {
         return InitializationResult.apiChecksumMismatch
     }
 

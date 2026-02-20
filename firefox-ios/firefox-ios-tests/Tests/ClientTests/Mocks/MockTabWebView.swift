@@ -19,6 +19,7 @@ final class MockTabWebView: TabWebView {
     var loadedURL: URL?
     var takeSnapshotWasCalled = false
     var takeSnapshotShouldFail = false
+    var mockHasOnlySecureContent = false
 
     override var title: String? {
         return mockTitle
@@ -26,6 +27,10 @@ final class MockTabWebView: TabWebView {
 
     override var url: URL? {
         return loadedURL
+    }
+
+    override var hasOnlySecureContent: Bool {
+        return mockHasOnlySecureContent
     }
 
     override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {

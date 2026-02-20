@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "이렇게 하면 브라우저의 문제를 진단하고 해결하는데 도움이 됩니다.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@는 기능과 성능, 업데이트 간의 안정성을 개선합니다. 변경 사항이 원격으로 적용되었습니다.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@가 주소창에 입력한 내용을 검색엔진에 전송합니다.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla는 %@ 이용에 더 나은 서비스를 제공하고 향상시키는 데 오직 필요한 정보만을 수집합니다.";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla는 %@ 이용에 더 나은 서비스를 제공하고 향상시키는 데 오직 필요한 정보만을 수집합니다.";
+
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@가 때때로 연구를 설치하고 실행할 수 있습니다.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@는 기능을 테스트할 사용자를 무작위로 선택하여, 모두를 위해 품질을 향상시킵니다.";
 
 /* Title for section in settings menu */
 "Settings.general" = "일반";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "홈 스크린 팁 표시";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "원격 개선 허용";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "연구";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "연구 기능 허용";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Touch ID를 사용해서 앱 잠금 해제";

@@ -56,10 +56,10 @@
 "MainMenu.BookmarkPage.Title.v141" = "페이지 북마크";
 
 /* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
-"MainMenu.DesktopSiteOff.Title.v142" = "끄기";
+"MainMenu.DesktopSiteOff.Title.v142" = "꺼짐";
 
 /* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
-"MainMenu.DesktopSiteOn.Title.v142" = "켜기";
+"MainMenu.DesktopSiteOn.Title.v142" = "켜짐";
 
 /* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
 "MainMenu.HeaderBanner.Subtitle.v142" = "몇 초 정도 걸립니다. 언제든지 바꿀 수 있습니다.";
@@ -68,10 +68,10 @@
 "MainMenu.HeaderBanner.Title.v142" = "%@를 기본 브라우저로 설정";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
-"MainMenu.Off.Title.v141" = "끄기";
+"MainMenu.Off.Title.v141" = "꺼짐";
 
 /* On the main menu, a title for a label that indicate the current option/action state is on. */
-"MainMenu.On.Title.v141" = "켜기";
+"MainMenu.On.Title.v141" = "켜짐";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "북마크";
@@ -425,8 +425,8 @@
 "MainMenu.ToolsSection.Translation.Translated.Title.v145" = "번역됨";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
-"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "끄기";
+"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "꺼짐";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON. */
-"MainMenu.WebsiteDarkModeOnV2.Title.v142" = "켜기";
+"MainMenu.WebsiteDarkModeOnV2.Title.v142" = "켜짐";
 

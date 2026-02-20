@@ -140,7 +140,7 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     init(
         databasePrefix: String = "mock",
         firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
-        remoteSettingsService: RemoteSettingsService = RemoteSettingsService(noPointer: .init()),
+        remoteSettingsService: RemoteSettingsService = RemoteSettingsService(unsafeFromHandle: 0),
         injectedPinnedSites: MockablePinnedSites? = nil
     ) {
         files = MockFiles()

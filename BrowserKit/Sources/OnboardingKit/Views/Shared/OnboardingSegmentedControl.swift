@@ -7,17 +7,23 @@ import Common
 
 struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View {
     let theme: Theme
+    let variant: OnboardingVariant
     @Binding var selection: Action
     let items: [OnboardingMultipleChoiceButtonModel<Action>]
+    let a11yIdRoot: String
 
     init(
         theme: Theme,
+        variant: OnboardingVariant,
         selection: Binding<Action>,
-        items: [OnboardingMultipleChoiceButtonModel<Action>]
+        items: [OnboardingMultipleChoiceButtonModel<Action>],
+        a11yIdRoot: String
     ) {
         self.theme = theme
+        self.variant = variant
         self._selection = selection
         self.items = items
+        self.a11yIdRoot = a11yIdRoot
     }
 
     var body: some View {
@@ -35,6 +41,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     private func segmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
         OnboardingSegmentedButton(
             theme: theme,
+            variant: variant,
             item: item,
             isSelected: item.action == selection,
             action: {
@@ -46,6 +53,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
             }
         )
         .accessibilityLabel("\(item.title)")
+        .accessibilityIdentifier("\(a11yIdRoot)SegmentedButton.\(item.title)")
         .accessibilityAddTraits(
             item.action == selection ? .isSelected : []
         )

@@ -77,24 +77,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
-    func test_shouldShowImpressionTriggeredAction_sendsTelemetryData() throws {
-        let subject = createSubject()
-        let action = GeneralBrowserAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-        )
-
-        subject.homepageProvider(AppState(), action)
-
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-    }
-
     func test_tapOnBookmarksShowMoreButtonAction_sendTelemetryData() throws {
         let subject = createSubject()
         let action = NavigationBrowserAction(
@@ -562,10 +544,9 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(configuredPrivacyNoticeActionCount, 1)
         XCTAssertEqual(configuredPrivacyNoticeActionType, .configuredPrivacyNotice)
-        XCTAssertEqual(configuredPrivacyNoticeAction.shouldShowPrivacyNotice, mockPrivacyNoticeHelper.shouldShowResult)
     }
 
-    func test_initializeAction_dispatchesConfiguresPrivacyNotice_withFalseValue() throws {
+    func test_initializeAction_doesNotDispatchConfiguresPrivacyNotice() throws {
         let mockPrivacyNoticeHelper = MockPrivacyNoticeHelper()
         mockPrivacyNoticeHelper.shouldShowResult = false
         let subject = createSubject(privacyNoticeHelper: mockPrivacyNoticeHelper)
@@ -575,27 +556,12 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.initialize
         )
 
-        let dispatchExpectation = XCTestExpectation(description: "Privacy notice configured middleware action dispatched")
-
-        mockStore.dispatchCalled = {
-            dispatchExpectation.fulfill()
-        }
-
         subject.homepageProvider(AppState(), action)
 
-        wait(for: [dispatchExpectation], timeout: 1)
+        let configuredPrivacyNoticeActions = mockStore.dispatchedActions.compactMap { $0 as? HomepageAction }
+            .filter { ($0.actionType as? HomepageMiddlewareActionType) == .configuredPrivacyNotice }
 
-        let (configuredPrivacyNoticeAction, configuredPrivacyNoticeActionCount) = try getActionInfo(
-            for: .configuredPrivacyNotice
-        )
-
-        let configuredPrivacyNoticeActionType = try XCTUnwrap(
-            configuredPrivacyNoticeAction.actionType as? HomepageMiddlewareActionType
-        )
-
-        XCTAssertEqual(configuredPrivacyNoticeActionCount, 1)
-        XCTAssertEqual(configuredPrivacyNoticeActionType, .configuredPrivacyNotice)
-        XCTAssertEqual(configuredPrivacyNoticeAction.shouldShowPrivacyNotice, mockPrivacyNoticeHelper.shouldShowResult)
+        XCTAssertEqual(configuredPrivacyNoticeActions.count, 0)
     }
 
     // MARK: - Helpers

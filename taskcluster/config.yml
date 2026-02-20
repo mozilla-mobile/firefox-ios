@@ -59,6 +59,8 @@ release-promotion:
             target-tasks-method: push
         ship:
             target-tasks-method: ship
+        merge_automation:
+            target-tasks-method: merge_automation
         promote_focus:
             target-tasks-method: promote_focus
         push_focus:

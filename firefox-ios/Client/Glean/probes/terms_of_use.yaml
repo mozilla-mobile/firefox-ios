@@ -30,7 +30,7 @@ terms_of_use:
   shown:
     type: event
     description: |
-      User viewed the terms of use bottom sheet.
+      User viewed the terms of use.
       
       **Developer Note**: This replaces the old `termsofuse.impression` metric.
     extra_keys: &tou_extra_keys
@@ -41,7 +41,7 @@ terms_of_use:
       surface:
         type: string
         description: |
-          The surface where ToU was shown (e.g. bottom_sheet, onboarding).
+          The surface where ToU was shown (e.g. bottom_sheet, onboarding, homepage).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
     data_reviews:

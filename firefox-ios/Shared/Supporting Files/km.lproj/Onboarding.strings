@@ -1,0 +1,474 @@
+/* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
+"DefaultBrowserPopup.ButtonTitle.v114" = "ចូលទៅកាន់​ការកំណត់";
+
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their browser is the default browser. %@ is the app name (e.g. Firefox). If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.DescriptionFooter.v124" = "*តើ %@ ជា​លំនាំដើម​របស់​អ្នក​ហើយ​ឬ​នៅ?* បិទ​សារ​នេះ ហើយ​ចុច​លើ​រំលង។";
+
+/* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.FirstLabel.v114" = "1. ចូលទៅកាន់ *ការកំណត់*";
+
+/* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.SecondLabel.v114" = "2. ចុច *​កម្មវិធី​រុករក​លំនាំដើម*";
+
+/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. %@ is the app name (e.g. Firefox). The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.ThirdLabel.v114" = "3. ជ្រើសរើស *%@*";
+
+/* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
+"DefaultBrowserPopup.Title.v114" = "ប្តូរកម្មវិធីរុករកលំនាំដើមរបស់អ្នក";
+
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Customization.Intro.Continue.Action.v123" = "ប្ដូរតាមបំណង %@";
+
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "កំណត់​រចនាប័ទ្ម និង​របារ​ឧបករណ៍​របស់​អ្នក​ឲ្យ​ត្រូវ​នឹង​រចនាប័ទ្ម​រុករក​តែ​មួយ​គត់​របស់​អ្នក។";
+
+/* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
+"Onboarding.Customization.Intro.Skip.Action.v123" = "ចាប់​ផ្ដើម​រុករក";
+
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Customization.Intro.Title.v123" = "%@ ធ្វើឱ្យអ្នកស្ថិតក្នុងការគ្រប់គ្រង";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Continue.Action.v123" = "រក្សាទុក និងបន្ត";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
+"Onboarding.Customization.Theme.Dark.Action.v123" = "ងងឹត";
+
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "មើល​បណ្ដាញ​ក្នុង​ពន្លឺ​ល្អ​បំផុត។";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
+"Onboarding.Customization.Theme.Light.Action.v123" = "ភ្លឺ";
+
+/* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Skip.Action.v123" = "រំលង";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "ប្រព័ន្ធស្វ័យប្រវត្តិ";
+
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v123" = "ជ្រើសរើសរចនាប័ទ្ម";
+
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v143" = "ជ្រើសរើស​រចនាប័ទ្ម​របស់​អ្នក";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Customization.Toolbar.Bottom.Action.v123" = "ប៊ូតុង";
+
+/* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "រក្សាទុក និងចាប់ផ្តើមរុករក";
+
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "រក្សាការស្វែងរកតាមលទ្ធភាពដែលអាចធ្វើទៅបាន។";
+
+/* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
+"Onboarding.Customization.Toolbar.Skip.Action.v123" = "រំលង";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Title.v123" = "ជ្រើសរើសទីតាំងរបារឧបករណ៍";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Customization.Toolbar.Top.Action.v123" = "កំពូល";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v114" = "អ៊ីនឌី។ មិនរកប្រាក់ចំណេញ។ ដើម្បីប្រយោជន៍។";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v114" = "ប្ដេជ្ញាចិត្តចំពោះការសន្យានៃអ៊ីនធឺណិតកាន់តែប្រសើរសម្រាប់មនុស្សគ្រប់គ្នា។";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v115" = "រំលង";
+
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "ស្វ័យប្រវត្តិ";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "បន្ត";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "ងងឹត";
+
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "ជ្រើសរើសរចនាប័ទ្មដែលអ្នកចូលចិត្ត ឬឱ្យ %@ ផ្គូផ្គងនឹងឧបករណ៍របស់អ្នក ដើម្បីឱ្យអ្នកគ្រប់គ្រងបាន។";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "ភ្លឺ";
+
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "ជ្រើសរើសរចនាប័ទ្មរបស់អ្នក";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "បន្ត";
+
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "ចាប់ផ្តើមវាយអក្សរ ដើម្បីទទួលបានសំណើស្វែងរក គេហទំព័រដែលអ្នកចូលញឹកញាប់ ចំណាំ ប្រវត្តិ និងម៉ាស៊ីនស្វែងរក — ទាំងអស់នៅកន្លែងតែមួយ។";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "ជ្រើសរើសរបារអាសយដ្ឋានរបស់អ្នក";
+
+/* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "ចែករំលែកពីរបៀបដែលអ្នកបានស្គាល់ %1$@ និងការប្រើប្រាស់វា ជាមួយដៃគូទីផ្សាររបស់ %2$@។ ទិន្នន័យនេះមិនត្រូវបានលក់ឡើយ។";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "របៀបដែលយើងប្រើប្រាស់ទិន្នន័យ";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "មិន​មែន​ឥឡូវ";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "ជួយយើងបង្កើតអ៊ីនធឺណិតឱ្យកាន់តែប្រសើរ";
+
+/* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "ស្វែងរកមុខងារឯកជនភាពក្នុង %@ ហើយផ្ញើផ្ទាំងរវាងឧបករណ៍របស់អ្នកដោយសុវត្ថិភាព។";
+
+/* Button to skip the notification card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "មិន​មែន​ឥឡូវ";
+
+/* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "ការជូនដំណឹងជួយឱ្យអ្នកមានសុវត្ថិភាពជាងមុនជាមួយ %@";
+
+/* Button to turn on notifications in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "បើកការជូនដំណឹង";
+
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "ទាញយកចំណាំ ពាក្យសម្ងាត់ និងអ្វីៗផ្សេងទៀតលើឧបករណ៍ណាក៏បានភ្លាមៗ។ ទិន្នន័យផ្ទាល់ខ្លួនរបស់អ្នកនៅតែមានសុវត្ថិភាពដោយការអ៊ិនគ្រីប។";
+
+/* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "ចាប់ផ្តើមធ្វើសមកាលកម្ម";
+
+/* Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "មិន​មែន​ឥឡូវ";
+
+/* Title for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "បន្តភ្លាមៗពីកន្លែងដែលអ្នកឈប់";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "យល់ព្រម និងបន្ត";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "បន្ត";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "លឿន មានសុវត្ថិភាព និងមិនលក់ទិន្នន័យរបស់អ្នកឡើយ។ ការរុករកកាន់តែប្រសើរឡើង។";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "គ្រប់គ្រងការកំណត់";
+
+/* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "ដើម្បីជួយកែលម្អកម្មវិធីរុករក %1$@ ផ្ញើទិន្នន័យវិនិច្ឆ័យ និងអន្តរកម្មទៅ %2$@។ %3$@";
+
+/* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ យកចិត្តទុកដាក់ចំពោះភាពឯកជនរបស់អ្នក។ សូមអានបន្ថែមនៅក្នុង %2$@ របស់យើង";
+
+/* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "ការជូនដំណឹង​អំពី​ឯកជនភាព";
+
+/* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "តាមរយៈការបន្ត អ្នកយល់ព្រមតាម %@";
+
+/* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ លក្ខខណ្ឌនៃការប្រើប្រាស់";
+
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "ត្រៀមខ្លួនរុករកដោយសេរី";
+
+/* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "កំណត់ជាកម្មវិធីរុករកលំនាំដើម";
+
+/* Description for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "យើងការពារទិន្នន័យរបស់អ្នក និងទប់ស្កាត់ក្រុមហ៊ុនពីការតាមដានការចុចរបស់អ្នកដោយស្វ័យប្រវត្តិ។";
+
+/* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "មិន​មែន​ឥឡូវ";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "និយាយថាលា ទៅកម្មវិធីតាមដានរំខាន";
+
+/* Title for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "បើកតំណរបស់អ្នកជាមួយឯកជនភាពដែលភ្ជាប់មកជាមួយ";
+
+/* Title for the welcome card in the v149 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "បើកតំណភ្ជាប់ទាំងអស់របស់អ្នកជាមួយនឹងភាពឯកជនដែលភ្ជាប់មកជាមួយ";
+
+/* Option for the automatic theme. */
+"Onboarding.Modern.Customization.Theme.Automatic.v145" = "ស្វ័យប្រវត្តិ";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "បន្ត";
+
+/* Option for the dark theme. */
+"Onboarding.Modern.Customization.Theme.Dark.v145" = "ងងឹត";
+
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "ជ្រើសរើសរចនាប័ទ្មដែលអ្នកចូលចិត្ត ឬឱ្យ %@ ផ្គូផ្គងនឹងឧបករណ៍របស់អ្នក ដើម្បីឱ្យអ្នកគ្រប់គ្រងបាន។";
+
+/* Option for the light theme. */
+"Onboarding.Modern.Customization.Theme.Light.v145" = "ភ្លឺ";
+
+/* Title for the theme selection card. */
+"Onboarding.Modern.Customization.Theme.Title.v145" = "ជ្រើសរើសរចនាប័ទ្មរបស់អ្នក";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "ប៊ូតុង";
+
+/* Action to set the toolbar to the bottom. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "ប៊ូតុង";
+
+/* Continue button on the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "បន្ត";
+
+/* Description for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "ចាប់ផ្តើមវាយអក្សរ ដើម្បីទទួលបានសំណើស្វែងរក គេហទំព័រដែលអ្នកចូលញឹកញាប់ ចំណាំ ប្រវត្តិ និងម៉ាស៊ីនស្វែងរក — ទាំងអស់នៅកន្លែងតែមួយ។";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Modern.Customization.Toolbar.Title.v140" = "ជ្រើសរើសកន្លែងដែលត្រូវដាក់របារអាសយដ្ឋានរបស់អ្នក";
+
+/* Title for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "ជ្រើសរើសរបារអាសយដ្ឋានរបស់អ្នក";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "នៅលើ";
+
+/* Action to set the toolbar to the top. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "កំពូល";
+
+/* Button to skip the entire onboarding flow. */
+"Onboarding.Modern.General.Skip.v145" = "រំលង";
+
+/* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Sync.Description.v140" = "ទទួលបានចំណាំ ប្រវត្តិ និងពាក្យសម្ងាត់របស់អ្នកនៅលើគ្រប់ឧបករណ៍។";
+
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "ចំណាំ ពាក្យសម្ងាត់ និងអ្វីៗផ្សេងទៀតរបស់អ្នក អាចធ្វើសមកាលកម្មលើឧបករណ៍ណាក៏បាន។ អ្វីៗទាំងអស់ត្រូវបានការពារដោយការអ៊ិនគ្រីប ដូច្នេះមានតែអ្នកប៉ុណ្ណោះដែលអាចចូលប្រើបាន។";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.SignIn.Action.v140" = "ចាប់ផ្តើមធ្វើសមកាលកម្ម";
+
+/* Button to start the Sync setup process. */
+"Onboarding.Modern.Sync.SignIn.Action.v145" = "ចាប់ផ្តើមធ្វើសមកាលកម្ម";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.Skip.Action.v140" = "មិន​មែន​ឥឡូវ";
+
+/* Button to skip the Sync setup during onboarding. */
+"Onboarding.Modern.Sync.Skip.Action.v145" = "មិន​មែន​ឥឡូវ";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Sync.Title.v140" = "បន្តភ្លាមៗពីកន្លែងដែលអ្នកឈប់";
+
+/* Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Sync.Title.v145" = "យក %@ ទៅជាមួយក្នុងការរុករកគ្រប់ទីកន្លែងរបស់អ្នក";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "បន្ត";
+
+/* Title for the confirmation button on the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "បន្ត";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "ការការពារព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នកដោយស្វ័យប្រវត្តិ\nផ្ទុកគេហទំព័របានលឿន និងស្វែងរកបានឆ្លាតវៃជាងមុន\nនាំមកជូនអ្នកដោយអង្គការមិនស្វែងរកប្រាក់ចំណេញ %@ ដែលទទួលការជឿទុកចិត្តអស់ជាង 20 ឆ្នាំ។";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.Modern.TermsOfService.ManageLink.v140" = "គ្រប់គ្រង";
+
+/* The text for the Manage settings link button. */
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "គ្រប់គ្រងការកំណត់";
+
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "ដើម្បីជួយកែលម្អកម្មវិធីរុករក %1$@ ផ្ញើទិន្នន័យវិនិច្ឆ័យ និងអន្តរកម្មទៅ %2$@ ។ %3$@";
+
+/* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "ដើម្បីជួយកែលម្អកម្មវិធីរុករក %1$@ ផ្ញើទិន្នន័យវិនិច្ឆ័យ និងអន្តរកម្មទៅ %2$@ ។ %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ យកចិត្តទុកដាក់ចំពោះភាពឯកជនរបស់អ្នក។ សូមអានបន្ថែមនៅក្នុង %2$@ របស់យើង";
+
+/* Agreement text for Privacy Notice. %1$@ is the app name (e.g. Firefox), %2$@ is the placeholder for the Privacy Notice link. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "%1$@ យកចិត្តទុកដាក់ចំពោះភាពឯកជនរបស់អ្នក។ សូមអានបន្ថែមនៅក្នុង %2$@ របស់យើង";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "ការជូនដំណឹង​អំពី​ឯកជនភាព។";
+
+/* The text for the Privacy Notice link button. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "ការជូនដំណឹង​អំពី​ឯកជនភាព។";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "ស្វែងយល់​បន្ថែម";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "របាយការណ៍​អំពី​ការគាំង​អនុញ្ញាត​ឱ្យ​យើង​ធ្វើ​ការវិនិច្ឆ័យ និង​ជួសជុល​បញ្ហា​ជាមួយ​កម្មវិធី​រុករក។ %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "ផ្ញើរបាយការណ៍គាំងដោយស្វ័យប្រវត្តិ";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "ទិន្នន័យអំពីឧបករណ៍របស់អ្នក ការកំណត់រចនាសម្ព័ន្ធផ្នែករឹង និងរបៀបដែលអ្នកប្រើប្រាស់ %1$@ ជួយកែលម្អមុខងារ ដំណើរការ និងស្ថេរភាពសម្រាប់មនុស្សគ្រប់គ្នា។ %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "ផ្ញើទិន្នន័យបច្ចេកទេស និងអន្តរកម្មទៅ %@";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "ជួយយើងធ្វើឱ្យ %@ កាន់តែប្រសើរឡើង";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "ផ្ទុកគេហទំព័របានលឿនរហ័ស\nការពារ ការតាមដានដោយស្វ័យប្រវត្តិ\nធ្វើសមកាលកម្មលើឧបករណ៍ទាំងអស់របស់អ្នក";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "តាមរយៈការបន្ត អ្នកយល់ព្រមតាម %@";
+
+/* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "តាមរយៈការបន្ត អ្នកយល់ព្រមតាម %@";
+
+/* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "%@ លក្ខខណ្ឌនៃការប្រើប្រាស់។";
+
+/* Title for the Terms of Service screen in the onboarding process. */
+"Onboarding.Modern.TermsOfService.Title.v140" = "ធ្វើឱ្យប្រសើរឡើងនូវការរុករករបស់អ្នក";
+
+/* Title for the Terms of Service screen in the v2 onboarding flow. */
+"Onboarding.Modern.TermsOfService.Title.v145" = "គ្រប់គ្រងអ៊ីនធឺណិតដោយខ្លួនឯង";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ លក្ខខណ្ឌនៃការប្រើប្រាស់។";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Modern.Welcome.ActionTreatementA.v140" = "កំណត់​ជា​កម្មវិធី​រុករក​ តាម​​លំនាំដើម";
+
+/* Action button to set the app as the default browser. */
+"Onboarding.Modern.Welcome.ActionTreatmentA.v145" = "កំណត់ជាកម្មវិធីរុករកលំនាំដើម";
+
+/* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Welcome.Description.v140" = "ជម្រើសមួយការពារអ្នកគ្រប់ទីកន្លែង ដែលអ្នកទៅនៅលើគេហទំព័រ។ អ្នកអាចផ្លាស់ប្តូរវានៅពេលក្រោយបាន។";
+
+/* Description for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Description.v145" = "ជម្រើសតែមួយការពារអ្នកគ្រប់ទីកន្លែងលើបណ្ដាញ។ អ្នកអាចផ្លាស់ប្តូរវានៅពេលក្រោយបាន។";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
+"Onboarding.Modern.Welcome.Skip.v140" = "មិន​មែន​ឥឡូវ";
+
+/* Button to skip the welcome card. */
+"Onboarding.Modern.Welcome.Skip.v145" = "មិន​មែន​ឥឡូវ";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Welcome.Title.v140" = "និយាយលាហើយ ចំពោះការផ្សាយពាណិជ្ជកម្មគួរឱ្យខ្លាច";
+
+/* Title for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Title.v145" = "និយាយថាលា ទៅកម្មវិធីតាមដានរំខាន";
+
+/* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
+"Onboarding.Notification.Continue.Action.v114" = "បន្ត";
+
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Notification.Description.v120" = "ផ្ញើផ្ទាំងរវាងឧបករណ៍របស់អ្នកដោយសុវត្ថិភាព និងស្វែងរកមុខងារឯកជនភាពផ្សេងទៀតនៅក្នុង %@។";
+
+/* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
+"Onboarding.Notification.Skip.Action.v115" = "រំលង";
+
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Notification.Title.v120" = "ការជូនដំណឹងជួយអ្នកឱ្យមានសុវត្ថិភាពជាងមុនជាមួយ %@";
+
+/* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
+"Onboarding.Notification.TurnOnNotifications.Action.v114" = "បើកការជូនដំណឹង";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Sync.Description.v123" = "%@ អ៊ិនគ្រីបពាក្យសម្ងាត់ ចំណាំ និងច្រើនទៀតរបស់អ្នក នៅពេលអ្នកត្រូវបានធ្វើសមកាលកម្ម។";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Sync.SignIn.Action.v114" = "ចូល";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v114" = "រំលង";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v120" = "រក្សាការអ៊ិនគ្រីបនៅពេលអ្នកប្តូររវាងឧបករណ៍នានា";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v140" = "បន្ត";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.TermsOfService.ManageLink.v135" = "គ្រប់គ្រង";
+
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "ដើម្បីជួយកែលម្អកម្មវិធីរុករក %1$@ ផ្ញើទិន្នន័យវិនិច្ឆ័យ និងអន្តរកម្មទៅ %2$@ ។ %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ យកចិត្តទុកដាក់ចំពោះភាពឯកជនរបស់អ្នក។ សូមអានបន្ថែមនៅក្នុង %2$@ របស់យើង";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "ការជូនដំណឹង​អំពី​ឯកជនភាព។";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "ស្វែងយល់​បន្ថែម";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "របាយការណ៍​អំពី​ការគាំង​អនុញ្ញាត​ឱ្យ​យើង​ធ្វើ​ការវិនិច្ឆ័យ និង​ជួសជុល​បញ្ហា​ជាមួយ​កម្មវិធី​រុករក។ %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "ផ្ញើរបាយការណ៍គាំងដោយស្វ័យប្រវត្តិ";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "ទិន្នន័យអំពីឧបករណ៍របស់អ្នក ការកំណត់រចនាសម្ព័ន្ធផ្នែករឹង និងរបៀបដែលអ្នកប្រើប្រាស់ %1$@ ជួយកែលម្អមុខងារ ដំណើរការ និងស្ថេរភាពសម្រាប់មនុស្សគ្រប់គ្នា។ %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "ផ្ញើទិន្នន័យបច្ចេកទេស និងអន្តរកម្មទៅ %@";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "ជួយយើងធ្វើឱ្យ %@ កាន់តែប្រសើរឡើង";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. */
+"Onboarding.TermsOfService.Subtitle.v136" = "លឿនរហ័ស និងការរុករកមានសុវត្ថិភាព";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "តាមរយៈការបន្ត អ្នកយល់ព្រមតាម %@";
+
+/* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfService.Title.v135" = "សូមស្វាគមន៍មកកាន់ %@";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ លក្ខខណ្ឌនៃការប្រើប្រាស់។";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v114" = "ផ្ទាំងរូបភាពបុរាណ";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v114" = "ផ្ទាំងរូបភាពបោះពុម្ពមានកំណត់";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v114" = "កំណត់ផ្ទាំងរូបភាព";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v114" = "ជ្រើសរើសផ្ទាំងរូបភាពដែលបង្ហាញពីអ្នក។";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.SelectorTitle.v114" = "សាកល្បងពណ៌ចម្រុះ";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox). */
+"Onboarding.Wallpaper.Title.v114" = "ជ្រើសរើសផ្ទាំងរូបភាព %@";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.Welcome.Action.v114" = "ចាប់ផ្តើម";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Welcome.ActionTreatementA.v114" = "កំណត់​ជា​កម្មវិធី​រុករក​​លំនាំដើម";
+
+/* Accessibility label for close button that dismisses the welcome onboarding screen. %@ is the app name (e.g. Firefox). */
+"Onboarding.Welcome.Close.AccessibilityLabel.v121" = "បិទ ហើយ​ចេញ​ពី %@ inboarding";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Description.TreatementA.v120" = "កម្មវិធីរុករក ដែលមិនស្វែងរកប្រាក់ចំណេញរបស់យើង ជួយបញ្ឈប់ក្រុមហ៊ុនពីការតាមដានអ្នកដោយសម្ងាត់នៅលើអ៊ីនធឺណិត។";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Welcome.Description.v120" = "កម្មវិធីរុករក ដែលមិនស្វែងរកប្រាក់ចំណេញរបស់យើងជួយបញ្ឈប់ក្រុមហ៊ុន ពីការតាមដានអ្នកដោយសម្ងាត់នៅលើអ៊ីនធឺណិត។";
+
+/* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Link.Action.v114" = "ស្វែងយល់បន្ថែមនៅក្នុងការជូនដំណឹងអំពីភាពឯកជនរបស់យើង";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
+"Onboarding.Welcome.Skip.v114" = "រំលង";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.TreatementA.v120" = "យើងពេញចិត្តរក្សាសុវត្ថិភាពរបស់អ្នក";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v114" = "សូមស្វាគមន៍មកកាន់អ៊ីនធឺណិតឯករាជ្យ";
+

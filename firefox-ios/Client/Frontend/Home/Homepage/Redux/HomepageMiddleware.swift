@@ -31,7 +31,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
 
     lazy var homepageProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case HomepageActionType.viewDidAppear, GeneralBrowserActionType.didSelectedTabChangeToHomepage:
+        case HomepageActionType.viewDidAppear:
             self.homepageTelemetry.sendHomepageImpressionEvent()
 
         case NavigationBrowserActionType.tapOnBookmarksShowMoreButton:
@@ -79,13 +79,14 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func dispatchPrivacyNoticeConfigurationAction(action: Action) {
-        store.dispatch(
-            HomepageAction(
-                shouldShowPrivacyNotice: privacyNoticeHelper.shouldShowPrivacyNotice(),
-                windowUUID: action.windowUUID,
-                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+        if privacyNoticeHelper.shouldShowPrivacyNotice() {
+            store.dispatch(
+                HomepageAction(
+                    windowUUID: action.windowUUID,
+                    actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+                )
             )
-        )
+        }
     }
 
     private func dispatchSearchBarConfigurationAction(action: Action) {

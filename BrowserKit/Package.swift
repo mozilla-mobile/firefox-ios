@@ -29,6 +29,8 @@ let package = Package(
         .library(
             name: "WebEngine",
             targets: ["WebEngine"]),
+        .library(name: "TestKit",
+                 targets: ["TestKit"]),
         .library(
             name: "ToolbarKit",
             targets: ["ToolbarKit"]),
@@ -114,7 +116,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
+            dependencies: [
+                "SiteImageView",
+                "TestKit",
+                .product(name: "GCDWebServers", package: "GCDWebServer")
+            ],
             resources: [
                 .copy("Resources/mozilla.ico"),
                 .copy("Resources/inf-nan.svg"),
@@ -145,7 +151,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "TabDataStoreTests",
-            dependencies: ["TabDataStore"],
+            dependencies: ["TabDataStore", "TestKit"],
             swiftSettings: [
             ]
         ),
@@ -170,10 +176,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "WebEngineTests",
-            dependencies: ["WebEngine"],
+            dependencies: ["WebEngine", "TestKit"],
             swiftSettings: [
             ]
         ),
+        .target(name: "TestKit", dependencies: ["Shared"]),
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
@@ -182,7 +189,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"],
+            dependencies: ["ToolbarKit", "TestKit"],
             swiftSettings: [
         ]),
         .target(
@@ -202,14 +209,15 @@ let package = Package(
             dependencies: [
                 "Common",
                 "ComponentLibrary",
-                "Down"
+                "Down",
+                "JWTKit"
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]
         ),
         .testTarget(name: "SummarizeKitTests",
-                    dependencies: ["SummarizeKit"],
+                    dependencies: ["SummarizeKit", "TestKit"],
                     swiftSettings: [
                         .unsafeFlags(["-enable-testing"]),
                     ]),
@@ -241,7 +249,7 @@ let package = Package(
         ),
         .testTarget(
             name: "VoiceSearchKitTests",
-            dependencies: ["VoiceSearchKit"]
+            dependencies: ["VoiceSearchKit", "TestKit"]
         ),
         .target(
             name: "ContentBlockingGenerator",
@@ -256,15 +264,8 @@ let package = Package(
         .target(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],
-            resources: [
-                .process("Shaders")
-            ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-            ],
-            linkerSettings: [
-                .linkedFramework("Metal"),
-                .linkedFramework("MetalKit")
             ]),
         .testTarget(
             name: "OnboardingKitTests",

@@ -308,55 +308,59 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     // MARK: - Authentication
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodServerTrust() {
+    func testWebViewDidReceiveChallenge_MethodServerTrust() async {
         let subject = createSubject()
 
-        subject.webView(
+        // Get the (disposition, credential) result tuple
+        let result = await subject.webView(
             anyWebView(),
-            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
-        ) { disposition, credential in
-            XCTAssertEqual(disposition, .performDefaultHandling)
-            XCTAssertNil(credential)
-        }
+            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
+        )
+
+        XCTAssertEqual(result.0, .performDefaultHandling)
+        XCTAssertNil(result.1)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPDigest() {
+    func testWebViewDidReceiveChallenge_MethodHTTPDigest() async {
         let subject = createSubject()
 
-        subject.webView(
+        // Get the (disposition, credential) result tuple
+        let result = await subject.webView(
             anyWebView(),
-            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
-        ) { disposition, credential in
-            XCTAssertEqual(disposition, .performDefaultHandling)
-            XCTAssertNil(credential)
-        }
+            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
+        )
+
+        XCTAssertEqual(result.0, .performDefaultHandling)
+        XCTAssertNil(result.1)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPNTLM() {
+    func testWebViewDidReceiveChallenge_MethodHTTPNTLM() async {
         let subject = createSubject()
 
-        subject.webView(
+        // Get the (disposition, credential) result tuple
+        let result = await subject.webView(
             anyWebView(),
-            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
-        ) { disposition, credential in
-            XCTAssertEqual(disposition, .performDefaultHandling)
-            XCTAssertNil(credential)
-        }
+            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
+        )
+
+        XCTAssertEqual(result.0, .performDefaultHandling)
+        XCTAssertNil(result.1)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPBasic() {
+    func testWebViewDidReceiveChallenge_MethodHTTPBasic() async {
         let subject = createSubject()
 
-        subject.webView(
+        // Get the (disposition, credential) result tuple
+        let result = await subject.webView(
             anyWebView(),
-            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
-        ) { disposition, credential in
-            XCTAssertEqual(disposition, .performDefaultHandling)
-            XCTAssertNil(credential)
-        }
+            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
+        )
+
+        XCTAssertEqual(result.0, .performDefaultHandling)
+        XCTAssertNil(result.1)
     }
 
     @MainActor

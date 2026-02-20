@@ -323,7 +323,7 @@
 "Settings.detailTextCrashReports.V2" = "To pomaga nam w diagnozowaniu i naprawianiu problemów z przeglądarką.";
 
 /* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextRollouts" = "%@ ulepszy funkcje oraz zwiększy wydajność i stabilność z każdą aktualizacją. Zmiany zostaną zastosowane zdalnie.";
+"Settings.detailTextRollouts" = "%@ ulepszy funkcje oraz zwiększy wydajność i stabilność pomiędzy aktualizacjami. Zmiany zostaną zastosowane zdalnie.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ będzie wysyłał słowa wpisywane na pasku adresu do wyszukiwarki.";

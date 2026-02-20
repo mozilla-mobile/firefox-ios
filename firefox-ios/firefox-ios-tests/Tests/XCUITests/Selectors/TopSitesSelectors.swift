@@ -23,7 +23,7 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         static let pinSlash = StandardImageIdentifiers.Large.pinSlash
     }
 
-    let TOP_SITE_ITEM_CELL = Selector.anyId(
+    let TOP_SITE_ITEM_CELL = Selector.linkById(
         IDs.itemCell,
         description: "Generic Top Site cell group",
         groups: ["homepage", "topsites"]
@@ -35,7 +35,7 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         groups: ["homepage", "topsites"]
     )
 
-    let TOPSITE_YOUTUBE = Selector.linkStaticTextByLabel(
+    let TOPSITE_YOUTUBE = Selector.linkStaticTextById(
         IDs.youtube,
         description: "YouTube Top Site link label inside a Link element",
         groups: ["homepage", "topsites"]

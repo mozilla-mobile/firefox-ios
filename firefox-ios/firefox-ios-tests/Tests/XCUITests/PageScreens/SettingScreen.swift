@@ -209,4 +209,28 @@ final class SettingScreen {
                        "1",
                        "Expected 'Crash reports' switch to be ON (value = 1), but got \(String(describing: value))")
     }
+
+    private var closePrivateTabsSwitch: XCUIElement {
+        let settingTable = sel.SETTINGS_TABLE.element(in: app)
+        let toggle = sel.CLOSE_PRIVATE_TABS_SWITCH.value
+        return settingTable.cells.switches[toggle]
+    }
+
+    func disableClosePrivateTabs() {
+        let switchElement = closePrivateTabsSwitch
+        BaseTestCase().mozWaitForElementToExist(switchElement)
+        BaseTestCase().scrollToElement(switchElement)
+        if switchElement.value as? String == "1" {
+            switchElement.waitAndTap()
+        }
+    }
+
+    func enableClosePrivateTabs() {
+        let switchElement = closePrivateTabsSwitch
+        BaseTestCase().mozWaitForElementToExist(switchElement)
+        BaseTestCase().scrollToElement(switchElement)
+        if switchElement.value as? String == "0" {
+            switchElement.waitAndTap()
+        }
+    }
 }

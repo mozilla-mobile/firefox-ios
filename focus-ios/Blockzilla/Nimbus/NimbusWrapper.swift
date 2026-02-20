@@ -53,7 +53,7 @@ final class NimbusWrapper {
     }()
 
     func initializeRustComponents() {
-        Viaduct.shared.useReqwestBackend()
+        Viaduct.shared.initialize()
     }
 
     func initialize() {

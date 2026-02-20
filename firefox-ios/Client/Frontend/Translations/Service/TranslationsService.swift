@@ -42,7 +42,7 @@ final class TranslationsService: TranslationsServiceProtocol {
         // Only offer translation if we have a model pair (direct or via pivot).
         // NOTE: `fetchModels` inspects Remote Settings metadata and returns JSON data
         // describing the pipeline, it does not fetch large model attachments.
-        guard modelsFetcher.fetchModels(from: pageLanguage, to: deviceLanguage) != nil else { return false }
+        guard await modelsFetcher.fetchModels(from: pageLanguage, to: deviceLanguage) != nil else { return false }
         return true
     }
 

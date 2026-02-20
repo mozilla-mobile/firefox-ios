@@ -7,6 +7,12 @@
 /* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
 "TermsOfUse.Description.v142" = "%@ 利用規約を導入し、プライバシー通知を更新しました。";
 
+/* Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text. */
+"TermsOfUse.LearnMoreHere.v147" = "詳細は %@ をご覧ください。";
+
+/* Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for variants 1 and 2. */
+"TermsOfUse.Link.HereText.v147" = "利用規約について";
+
 /* Link shown in the Terms of Use sheet to direct users to more details about the update. */
 "TermsOfUse.Link.LearnMore.v142" = "詳細情報";
 
@@ -27,4 +33,10 @@
 
 /* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
 "TermsOfUse.Title.v142" = "更新情報があります";
+
+/* Title shown at the top of the Terms of Use bottom sheet for variant 1. */
+"TermsOfUse.TitleValue1.v147" = "利用規約";
+
+/* Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.TitleValue2.v147" = "%@ からのメモ";
 

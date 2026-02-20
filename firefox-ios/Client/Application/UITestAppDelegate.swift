@@ -241,7 +241,9 @@ class UITestAppDelegate: AppDelegate {
         KingfisherManager.shared.cache.clearDiskCache()
 
         // Clear the cookie/url cache
-        URLCache.shared.removeAllCachedResponses()
+        // removeAllCachedResponses() crashes on iOS 17 simulators from Xcode 26
+        // https://github.com/mozilla-mobile/firefox-ios/issues/30947
+        // URLCache.shared.removeAllCachedResponses()
         let storage = HTTPCookieStorage.shared
         if let cookies = storage.cookies {
             for cookie in cookies {

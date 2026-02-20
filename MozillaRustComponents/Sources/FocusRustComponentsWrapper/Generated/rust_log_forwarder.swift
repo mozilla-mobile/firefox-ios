@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -445,7 +464,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 }
 
 
-public struct Record {
+public struct Record: Equatable, Hashable {
     public var level: Level
     public var target: String
     public var message: String
@@ -457,35 +476,15 @@ public struct Record {
         self.target = target
         self.message = message
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Record: Sendable {}
 #endif
-
-
-extension Record: Equatable, Hashable {
-    public static func ==(lhs: Record, rhs: Record) -> Bool {
-        if lhs.level != rhs.level {
-            return false
-        }
-        if lhs.target != rhs.target {
-            return false
-        }
-        if lhs.message != rhs.message {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(level)
-        hasher.combine(target)
-        hasher.combine(message)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -525,15 +524,19 @@ public func FfiConverterTypeRecord_lower(_ value: Record) -> RustBuffer {
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum Level {
+public enum Level: Equatable, Hashable {
     
     case error
     case warn
     case info
     case debug
     case trace
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension Level: Sendable {}
@@ -606,13 +609,6 @@ public func FfiConverterTypeLevel_lower(_ value: Level) -> RustBuffer {
 }
 
 
-extension Level: Equatable, Hashable {}
-
-
-
-
-
-
 
 
 
@@ -632,6 +628,20 @@ fileprivate struct UniffiCallbackInterfaceAppServicesLogger {
     // This creates 1-element array, since this seems to be the only way to construct a const
     // pointer that we can pass to the Rust code.
     static let vtable: [UniffiVTableCallbackInterfaceAppServicesLogger] = [UniffiVTableCallbackInterfaceAppServicesLogger(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterCallbackInterfaceAppServicesLogger.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface AppServicesLogger: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterCallbackInterfaceAppServicesLogger.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface AppServicesLogger: handle missing in uniffiClone")
+            }
+        },
         log: { (
             uniffiHandle: UInt64,
             record: RustBuffer,
@@ -655,12 +665,6 @@ fileprivate struct UniffiCallbackInterfaceAppServicesLogger {
                 makeCall: makeCall,
                 writeReturn: writeReturn
             )
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterCallbackInterfaceAppServicesLogger.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface AppServicesLogger: handle missing in uniffiFree")
-            }
         }
     )]
 }
@@ -784,7 +788,7 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_rust_log_forwarder_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {

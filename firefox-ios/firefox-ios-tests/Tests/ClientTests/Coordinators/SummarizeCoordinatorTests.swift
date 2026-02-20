@@ -26,6 +26,7 @@ class MockSummarizerServiceFactory: SummarizerServiceFactory {
 
     func make(isAppleSummarizerEnabled: Bool,
               isHostedSummarizerEnabled: Bool,
+              isAppAttestAuthEnabled: Bool,
               config: SummarizerConfig?) -> SummarizerService? {
         return DefaultSummarizerService(summarizer: MockSummarizer(), lifecycleDelegate: lifecycleDelegate, maxWords: 10)
     }

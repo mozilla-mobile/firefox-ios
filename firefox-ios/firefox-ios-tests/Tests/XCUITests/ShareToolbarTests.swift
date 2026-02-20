@@ -173,11 +173,15 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     private func validateMarkupTool() {
         // The Markup tool opens
         if #available(iOS 26, *) {
-            if iPad() {
+            if !iPad() {
                 app.navigationBars.buttons["More"].waitAndTap()
+                mozWaitForElementToExist(app.buttons["Markup"])
+                mozWaitForElementToExist(app.buttons["Close"])
+                mozWaitForElementToExist(app.otherElements["Drawing-Palette"])
+            } else {
+                mozWaitForElementToExist(app.switches["Markup"])
+                mozWaitForElementToExist(app.buttons["close"])
             }
-            // iOS 26: The markup isn't shown in debug description
-            // https://github.com/mozilla-mobile/firefox-ios/issues/31552
         } else {
             mozWaitForElementToExist(app.switches["Markup"])
             mozWaitForElementToExist(app.buttons["Done"])

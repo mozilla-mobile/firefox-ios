@@ -8,17 +8,24 @@ import ComponentLibrary
 
 extension View {
     @ViewBuilder
-    func primaryButtonStyle(theme: Theme) -> some View {
+    func primaryButtonStyle(theme: Theme, variant: OnboardingVariant) -> some View {
+        let buttonColor = primaryButtonColor(theme: theme, variant: variant)
+
         if #available(iOS 26.0, *) {
             self.buttonStyle(.glassProminent)
-                .tint(theme.colors.actionPrimary.color)
+                .tint(buttonColor.color)
                 .font(UX.CardView.primaryActionGlassFont)
+                .foregroundStyle(theme.colors.textInverted.color)
         } else {
             self.buttonStyle(.borderless)
-                .background(theme.colors.actionPrimary.color)
+                .background(buttonColor.color)
                 .font(UX.CardView.primaryActionFont)
                 .foregroundStyle(theme.colors.textInverted.color)
         }
+    }
+
+    private func primaryButtonColor(theme: Theme, variant: OnboardingVariant) -> UIColor {
+        return theme.colors.actionPrimary
     }
 
     @ViewBuilder
@@ -37,26 +44,31 @@ extension View {
     }
 
     @ViewBuilder
-    func skipButtonStyle(theme: Theme) -> some View {
+    func skipButtonStyle(theme: Theme, variant: OnboardingVariant) -> some View {
         if #available(iOS 26.0, *) {
             self.buttonStyle(.glassProminent)
                 .tint(theme.colors.layer2.color)
                 .foregroundStyle(theme.colors.textSecondary.color)
         } else {
+            let textColor = variant == .brandRefresh
+                ? theme.colors.textSecondary.color
+                : theme.colors.iconOnColor.color
             self.buttonStyle(.borderless)
-                .foregroundStyle(theme.colors.iconOnColor.color)
+                .foregroundStyle(textColor)
         }
     }
 
     @ViewBuilder
-    func cardBackground(theme: Theme, cornerRadius: CGFloat = 0.0) -> some View {
-        if #available(iOS 26, *) {
-            self.glassEffect(.clear.interactive().tint(theme.colors.layer2.color.opacity(0.95)),
+    func cardBackground(theme: Theme, cornerRadius: CGFloat = 0.0, variant: OnboardingVariant? = nil) -> some View {
+        let backgroundColor = theme.colors.layer2.color
+
+        if #available(iOS 26, *), variant != .brandRefresh {
+            self.glassEffect(.clear.interactive().tint(backgroundColor.opacity(0.95)),
                              in: .rect(cornerRadius: cornerRadius))
         } else {
             self.background(
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(theme.colors.layer2.color)
+                    .fill(backgroundColor)
                     .accessibilityHidden(true)
             )
         }
@@ -86,6 +98,7 @@ struct OnboardingPrimaryButton: View {
     let action: () -> Void
     let theme: Theme
     let accessibilityIdentifier: String
+    let variant: OnboardingVariant
 
     var body: some View {
         Button(action: {
@@ -99,7 +112,7 @@ struct OnboardingPrimaryButton: View {
         })
         .accessibilityLabel(title)
         .accessibility(identifier: accessibilityIdentifier)
-        .primaryButtonStyle(theme: theme)
+        .primaryButtonStyle(theme: theme, variant: variant)
         .backgroundClipShape()
     }
 }

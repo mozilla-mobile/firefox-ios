@@ -31,6 +31,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         static let offset: CGFloat = 48
         static let swipingDuration: TimeInterval = 0.25
         static let swipingVelocity: CGFloat = 250
+        static let minSwipeThresholdDivisor: CGFloat = 20
+        static let halfwayThresholdDivisor: CGFloat = 2
         static let webPagePreviewAddNewTabScale: CGFloat = 0.6
         static let webPagePreviewAddNewTabXOffset: CGFloat = 40.0
         static let webPagePreviewAddNewTabScaleCoefficientA: CGFloat = 0.2
@@ -50,7 +52,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     private let tabManager: TabManager
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
-    var homepageScreenshotToolProvider: (() -> Screenshotable?)?
     var newTabSettingsProvider: (() -> NewTabPage?)?
     weak var delegate: AddressBarPanGestureHandler.Delegate?
     private var homepageScreenshot: UIImage?
@@ -189,15 +190,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
             delegate?.swipeGestureDidBegin()
         case .changed:
-            if nextTab == nil, homepageScreenshot == nil {
-                let homepageScreenshotTool = homepageScreenshotToolProvider?()
-                homepageScreenshot = homepageScreenshotTool?.screenshot(bounds: CGRect(
-                    x: 0.0,
-                    y: -contentContainer.frame.origin.y,
-                    width: webPagePreview.frame.width,
-                    height: webPagePreview.frame.height
-                ))
-            }
             handleGestureChangedState(translation: translation, nextTab: nextTab)
         case .ended, .cancelled, .failed:
             let velocity = gesture.velocity(in: contentContainer)
@@ -228,7 +220,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             case .homePage:
                 webPagePreview.setScreenshot(url: NewTabHomePageAccessors.getHomePage(prefs))
             case .topSites:
-                webPagePreview.setScreenshot(homepageScreenshot)
+                webPagePreview.setScreenshot(nil)
             case nil, .blankPage:
                 webPagePreview.setScreenshot(url: nil)
             }
@@ -243,10 +235,12 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         let shouldShowNewTab = shouldAddNewTab(translation: translation.x, nextTab: nextTab)
 
         // Determine if the transition should be completed based on the translation and velocity.
-        // If the user swiped more than half of the screen or had a velocity higher that the constant,
-        // then we can complete the transition.
-        let shouldCompleteTransition = (abs(translation.x) > contentContainer.frame.width / 2
-                                        || abs(velocity.x) > UX.swipingVelocity) && (shouldShowNewTab || nextTab != nil)
+        // If the user swiped more than half of the screen or had a velocity higher than the constant
+        // and covered a minimal distance then we can complete the transition.
+        let shouldCompleteTransition = didExceedSwipeThreshold(
+            translation: translation,
+            velocity: velocity
+        ) && (shouldShowNewTab || nextTab != nil)
 
         let contentWidth = contentContainer.frame.width
         let isPanningLeft = translation.x < 0
@@ -295,6 +289,18 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             }
             delegate?.swipeGestureDidEnd()
         }
+    }
+
+    private func didExceedSwipeThreshold(translation: CGPoint, velocity: CGPoint) -> Bool {
+        // Minimum horizontal distance required for fast swipes to prevent unintended tab switches
+        // when swiping vertically (e.g., scrolling content). This ensures that high-velocity gestures
+        // must have sufficient horizontal movement before triggering a tab transition.
+        let minThreshold = contentContainer.frame.width / UX.minSwipeThresholdDivisor
+        let translationX = abs(translation.x)
+        let passedHalfway = translationX > contentContainer.frame.width / UX.halfwayThresholdDivisor
+        let fastSwipeWithMinDistance = abs(velocity.x) > UX.swipingVelocity && translationX > minThreshold
+
+        return passedHalfway || fastSwipeWithMinDistance
     }
 
     private func applyCurrentTabTransform(_ translation: CGFloat, shouldAddNewTab: Bool) {

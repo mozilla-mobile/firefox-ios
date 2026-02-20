@@ -19,6 +19,9 @@ protocol BrowserSelectorsSet {
     var BOOK_OF_MOZILLA_TEXT: Selector { get }
     var ADDRESSTOOLBAR_LOCKICON: Selector { get }
     var TOPTABS_COLLECTIONVIEW: Selector { get }
+    var MICROSURVEY_CLOSE_BUTTON: Selector { get }
+    var BOOK_OF_MOZILLA_TEXT_IN_TABLE: Selector { get }
+    var SAVE_BUTTON: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -33,11 +36,13 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let clearTextLabel = "Clear text"
         static let downloadLabel = "Downloads"
         static let cancelButtonUrlBar = AccessibilityIdentifiers.Browser.UrlBar.cancelButton
-        static let privateBrowsdingLabel = "Private Browsing"
+        static let privateBrowsingLabel = "Private Browsing"
         static let cancelButton = "Cancel"
         static let rfc = "RFC 2606"
         static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon
         static let topTabsCollectionView = AccessibilityIdentifiers.Browser.TopTabs.collectionView
+        static let microsurveyCloseButton = AccessibilityIdentifiers.Microsurvey.Prompt.closeButton
+        static let saveButton = "Save"
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -89,7 +94,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
     )
 
     let PRIVATE_BROWSING = Selector.staticTextId(
-        IDs.privateBrowsdingLabel,
+        IDs.privateBrowsingLabel,
         description: "Private Browsing Label",
         groups: ["browser"]
     )
@@ -124,6 +129,24 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser"]
     )
 
+    let MICROSURVEY_CLOSE_BUTTON = Selector.buttonId(
+        IDs.microsurveyCloseButton,
+        description: "Microsurvey close button",
+        groups: ["browser", "microsurvey"]
+    )
+
+    let BOOK_OF_MOZILLA_TEXT_IN_TABLE = Selector.staticTextInTablesByLabel(
+        "The Book of Mozilla",
+        description: "StaticText 'The Book of Mozilla' within table",
+        groups: ["browser", "visualCheck"]
+    )
+
+    let SAVE_BUTTON = Selector.buttonByLabel(
+        IDs.saveButton,
+        description: "Save button for bookmarks and general actions",
+        groups: ["browser", "bookmarks"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -151,6 +174,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
     var all: [Selector] { [ADDRESS_BAR, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
-                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, TOPTABS_COLLECTIONVIEW]
+                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, TOPTABS_COLLECTIONVIEW,
+                           MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE, SAVE_BUTTON]
     }
 }

@@ -46,7 +46,6 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         let navigationUrl = navigationAction.request.url
-        let navigationUrlString = navigationUrl?.absoluteString ?? ""
 
         // Check for "data" scheme using WebViewNavigationHandlerImplementation
         let navigationHandler = WebViewNavigationHandlerImplementation { _ in }
@@ -66,59 +65,75 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        if navigationUrl == nil || navigationUrlString.isEmpty {
-            newTab.url = URL(string: "about:blank")
-        }
+        // Set new tab url to about:blank because webViews created through this callback are always popups
+        newTab.url = URL(string: "about:blank")
+
+        // Select the new tab immediately
+        tabManager.selectTab(newTab)
 
         return newTab.webView
-    }
-
-    private func handleJavaScriptAlert<T: WKJavaScriptAlertInfo>(
-        _ alert: T,
-        for webView: WKWebView,
-        spamCallback: @escaping @MainActor () -> Void
-    ) {
-        if jsAlertExceedsSpamLimits(webView) {
-            handleSpammedJSAlert(spamCallback)
-        } else if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript \(alert.type.rawValue) panel will be presented.", level: .info, category: .webview)
-            let alertController = alert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
-        } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript \(alert.type.rawValue) panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(alert)
-        }
     }
 
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor () -> Void
-    ) {
-        let messageAlert = MessageAlert(message: message,
-                                        frame: frame,
-                                        completionHandler: completionHandler)
+        initiatedByFrame frame: WKFrameInfo
+    ) async {
+        var messageAlert = MessageAlert(message: message,
+                                        frame: frame)
 
-        handleJavaScriptAlert(messageAlert, for: webView) {
-            completionHandler()
+        if jsAlertExceedsSpamLimits(webView) {
+            await handleSpammedJSAlert()
+        } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(messageAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
+            await withCheckedContinuation { (continuation: CheckedContinuation<Void?, Never>) in
+                messageAlert.continuation = continuation
+
+                let alertController = messageAlert.alertController()
+                alertController.delegate = self
+                present(alertController, animated: true)
+            }
+        } else if let promptingTab = tabManager[webView] {
+            logger.log("JavaScript \(messageAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
+
+            await withCheckedContinuation { (continuation: CheckedContinuation<Void?, Never>) in
+                messageAlert.continuation = continuation
+                promptingTab.queueJavascriptAlertPrompt(messageAlert)
+            }
         }
     }
 
     func webView(
         _ webView: WKWebView,
         runJavaScriptConfirmPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (Bool) -> Void
-    ) {
-        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame) { confirm in
-            self.logger.log("JavaScript confirm panel was completed with result: \(confirm)", level: .info, category: .webview)
-            completionHandler(confirm)
-        }
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> Bool {
+        var confirmAlert = ConfirmPanelAlert(message: message, frame: frame)
 
-        handleJavaScriptAlert(confirmAlert, for: webView) {
-            completionHandler(false)
+        if jsAlertExceedsSpamLimits(webView) {
+            await handleSpammedJSAlert()
+            return false
+        } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(confirmAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
+            return await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
+                confirmAlert.continuation = continuation
+
+                let alertController = confirmAlert.alertController()
+                alertController.delegate = self
+                present(alertController, animated: true)
+            }
+        } else if let promptingTab = tabManager[webView] {
+            logger.log("JavaScript \(confirmAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
+
+            return await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
+                confirmAlert.continuation = continuation
+                promptingTab.queueJavascriptAlertPrompt(confirmAlert)
+            }
+        } else {
+            logger.log("JavaScript \(confirmAlert.type.rawValue) not shown. This shouldn't happen.",
+                       level: .warning,
+                       category: .webview)
+            return false
         }
     }
 
@@ -126,16 +141,34 @@ extension BrowserViewController: WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (String?) -> Void
-    ) {
-        let textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText) { input in
-            self.logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
-            completionHandler(input)
-        }
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> String? {
+        var textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText)
 
-        handleJavaScriptAlert(textInputAlert, for: webView) {
-            completionHandler("")
+        if jsAlertExceedsSpamLimits(webView) {
+            await handleSpammedJSAlert()
+            return nil
+        } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(textInputAlert.type.rawValue) panel will be presented.", level: .info, category: .webview)
+            return await withCheckedContinuation { (continuation: CheckedContinuation<String?, Never>) in
+                textInputAlert.continuation = continuation
+
+                let alertController = textInputAlert.alertController()
+                alertController.delegate = self
+                present(alertController, animated: true)
+            }
+        } else if let promptingTab = tabManager[webView] {
+            logger.log("JavaScript \(textInputAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
+
+            return await withCheckedContinuation { (continuation: CheckedContinuation<String?, Never>) in
+                textInputAlert.continuation = continuation
+                promptingTab.queueJavascriptAlertPrompt(textInputAlert)
+            }
+        } else {
+            logger.log("JavaScript \(textInputAlert.type.rawValue) not shown. This shouldn't happen.",
+                       level: .warning,
+                       category: .webview)
+            return nil
         }
     }
 
@@ -197,10 +230,10 @@ extension BrowserViewController: WKUIDelegate {
 
     // MARK: - Helpers
 
-    private func handleSpammedJSAlert(_ callback: @escaping @MainActor () -> Void) {
+    private func handleSpammedJSAlert() async {
         // User is being spammed. Squelch alert. Note that we have to do this after
         // a delay to avoid JS that could spin the CPU endlessly.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { callback() }
+        try? await Task.sleep(nanoseconds: 5_000_000_000)
     }
 
     private func contextMenuConfiguration(for url: URL,
@@ -468,6 +501,7 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
+
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
@@ -647,7 +681,9 @@ extension BrowserViewController: WKNavigationDelegate {
     private func handleStoreURLNavigation(url: URL) {
         // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
         // Otherwise the AppStoreAlert is shown on the wrong tab
-        let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
+        // TODO: FXIOS-14796 - Investigate if we can remove the handleStoreURLNavigation delay
+        let delaySelectingNewPopupTab: TimeInterval = 0.2
+        let delay: DispatchTime = .now() + delaySelectingNewPopupTab
         DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
             self?.showAppStoreAlert { isOpened in
                 if isOpened {
@@ -1026,6 +1062,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     store.dispatch(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
+                    // We can fall into here for bad certificates (e.g. self-signed)
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
                 }
             } else {
@@ -1034,51 +1071,53 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    @MainActor
     func webView(
         _ webView: WKWebView,
-        didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-    ) {
-        guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
-            handleServerTrust(
-                challenge: challenge,
-                dispatchQueue: self.userInitiatedQueue,
-                completionHandler: completionHandler
-            )
-            return
-        }
+        respondTo challenge: URLAuthenticationChallenge
+    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        let authenticationMethod = challenge.protectionSpace.authenticationMethod
+        let defaultHandling: (URLSession.AuthChallengeDisposition, URLCredential?) = (.performDefaultHandling, nil)
 
-        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic ||
-              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest ||
-              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
-              let tab = tabManager[webView]
-        else {
-            completionHandler(.performDefaultHandling, nil)
-            return
-        }
-
-        // If this is a request to our local web server, use our private credentials.
-        if challenge.protectionSpace.host == "localhost" &&
-            challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
-            completionHandler(.useCredential, WebServer.sharedInstance.credentials)
-            return
-        }
-
-        let loginsHelper = tab.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
-        Authenticator.handleAuthRequest(
-            self,
-            challenge: challenge,
-            loginsHelper: loginsHelper
-        ) { res in
-            Task { @MainActor in
-                switch res {
-                case .success(let credentials):
-                    completionHandler(.useCredential, credentials.credentials)
-                case .failure:
-                    completionHandler(.rejectProtectionSpace, nil)
-                }
+        if authenticationMethod == NSURLAuthenticationMethodServerTrust {
+            guard let serverTrust = challenge.protectionSpace.serverTrust else {
+                return defaultHandling
             }
+
+            return await handleServerTrust(
+                serverTrust: serverTrust,
+                challengeHost: challenge.protectionSpace.host,
+                challengePort: challenge.protectionSpace.port
+            )
+        } else if authenticationMethod == NSURLAuthenticationMethodHTTPBasic
+                    || authenticationMethod == NSURLAuthenticationMethodHTTPDigest
+                    || authenticationMethod == NSURLAuthenticationMethodNTLM {
+            guard let tab = tabManager[webView] else {
+                return defaultHandling
+            }
+
+            // If this is a request to our local web server, use our private credentials.
+            if challenge.protectionSpace.host == "localhost",
+                challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
+                return (.useCredential, WebServer.sharedInstance.credentials)
+            }
+
+            let loginsHelper = tab.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
+
+            do {
+                // Show authentication alert forms
+                let loginEntry = try await Authenticator.handleAuthRequestAsync(
+                    self,
+                    challenge: challenge,
+                    loginsHelper: loginsHelper,
+                )
+
+                return (.useCredential, loginEntry.credentials)
+            } catch {
+                // For example, an error is thrown when the user taps "Cancel" on the authentication prompt
+                return (.rejectProtectionSpace, nil)
+            }
+        } else {
+            return defaultHandling
         }
     }
 
@@ -1308,31 +1347,33 @@ private extension BrowserViewController {
         return false
     }
 
+    /// Handles a certificate challenge. Checks if the certificate has previously been accepted by the user. If not,
+    /// perform the default handling.
+    /// Note: This path can be tested with incorrect certificates on badssl.com.
     func handleServerTrust(
-        challenge: URLAuthenticationChallenge,
-        dispatchQueue: DispatchQueueInterface,
-        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-    ) {
-        dispatchQueue.async {
-            // If this is a certificate challenge, see if the certificate has previously been
-            // accepted by the user.
-            let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
+        serverTrust: sending SecTrust,
+        challengeHost: String,
+        challengePort: Int,
+    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        let origin = "\(challengeHost):\(challengePort)"
 
-            guard let trust = challenge.protectionSpace.serverTrust,
-                  let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
-                  self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
-            else {
-                ensureMainThread {
-                    completionHandler(.performDefaultHandling, nil)
-                }
-                return
+        /// FXIOS-8697: Do not call `SecTrustCopyCertificateChain` on the main thread, as it may perform network operations
+        /// to evaluate the trust (via SecTrustEvaluateIfNecessary), which can block the current thread.
+        let backgroundTask: Task<(URLSession.AuthChallengeDisposition, URLCredential?), Never>
+        = Task.detached(priority: .userInitiated) {
+            guard let certChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate],
+                  let firstCert = certChain.first,
+                  self.profile.certStore.containsCertificate(firstCert, forOrigin: origin) else {
+                return (.performDefaultHandling, nil)
             }
 
-            let credential = URLCredential(trust: trust)
-            ensureMainThread {
-                completionHandler(.useCredential, credential)
-            }
+            // Note: Temporary credentials are added when a user has tapped the "visit anyway" button on one of our error
+            // pages (i.e. "This Connection is Untrusted"). The CertStore credentials are not persisted between runs.
+            let credential = URLCredential(trust: serverTrust)
+            return (.useCredential, credential)
         }
+
+        return await backgroundTask.value
     }
 }
 

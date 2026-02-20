@@ -53,6 +53,14 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
             // depending if summarize content setting toggle is On or Off
             self.settings = self.generateSettings()
             self.tableView.reloadData()
+
+            store.dispatch(
+                ToolbarAction(
+                    canSummarize: isOn,
+                    windowUUID: self.windowUUID,
+                    actionType: ToolbarActionType.didSummarizeSettingsChange
+                )
+            )
         }
         return SettingSection(
             title: nil,

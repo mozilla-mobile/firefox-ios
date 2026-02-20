@@ -137,10 +137,10 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Adder al pagina initial";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Via breve";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Accesso directe";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Adder al vias breve";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Adder al accessos directe";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Adder marcapaginas";
@@ -155,7 +155,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Remover del lista de lectura";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Remover del vias breve";
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Remover del accessos directe";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";
@@ -176,10 +176,10 @@
 "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Adder al pagina initial";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
-"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Via breve";
+"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Accesso directe";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Adder al vias breve";
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Adder al accessos directe";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
 "MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Adder marcapagina";
@@ -194,7 +194,7 @@
 "MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "Remover del lista de lectura";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Remover del vias breve";
+"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Remover del accessos directe";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
 "MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "PDF";

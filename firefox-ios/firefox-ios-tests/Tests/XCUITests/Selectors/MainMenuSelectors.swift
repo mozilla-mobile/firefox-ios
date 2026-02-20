@@ -30,25 +30,25 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
-    let BOOKMARKS_BUTTON = Selector.buttonId(
+    let BOOKMARKS_BUTTON = Selector.tableCellButtonById(
         IDs.bookmarks,
         description: "Bookmarks button in Main Menu",
         groups: ["MainMenu"]
     )
 
-    let HISTORY_BUTTON = Selector.buttonId(
+    let HISTORY_BUTTON = Selector.tableCellButtonById(
         IDs.history,
         description: "History button in Main Menu",
         groups: ["MainMenu"]
     )
 
-    let DOWNLOADS_BUTTON = Selector.buttonId(
+    let DOWNLOADS_BUTTON = Selector.tableCellButtonById(
         IDs.downloads,
         description: "Downloads button in Main Menu",
         groups: ["MainMenu"]
     )
 
-    let PASSWORDS_BUTTON = Selector.buttonId(
+    let PASSWORDS_BUTTON = Selector.tableCellButtonById(
         IDs.passwords,
         description: "Passwords button in Main Menu",
         groups: ["MainMenu"]
