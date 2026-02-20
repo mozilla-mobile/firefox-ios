@@ -226,8 +226,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
 
         let containerWidth = environment.container.contentSize.width
-        let showiPadSetup = UIDevice.current.userInterfaceIdiom == .pad && environment.traitCollection.horizontalSizeClass != .compact
-        let headerWidth = HomepageHeaderCell.contentWidth(for: showiPadSetup))
+        let showiPadSetup = UIDevice.current.userInterfaceIdiom == .pad
+                            && environment.traitCollection.horizontalSizeClass != .compact
+        let headerWidth = HomepageHeaderCell.contentWidth(isiPadSetup: showiPadSetup)
         let horizontalInset = max(0, (containerWidth - headerWidth) / 2)
         section.contentInsets.leading = horizontalInset
         section.contentInsets.trailing = horizontalInset
