@@ -134,7 +134,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func popToBVC()
-    
+
     @MainActor
     func showVoiceSearch()
 }

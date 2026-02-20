@@ -61,7 +61,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         contextualHintType: ContextualHintType.dataClearance.rawValue,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
-    
+
     private static let voiceSearchAction = ToolbarActionConfiguration(
         actionType: .voiceSearch,
         iconName: StandardImageIdentifiers.Large.microphone,

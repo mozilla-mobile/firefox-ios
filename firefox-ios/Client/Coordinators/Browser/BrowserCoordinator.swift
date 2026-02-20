@@ -1114,7 +1114,7 @@ class BrowserCoordinator: BaseCoordinator,
     func popToBVC() {
         _ = router.popToViewController(browserViewController, reason: .deeplink)
     }
-    
+
     func showVoiceSearch() {
         let coordinator = VoiceSearchCoordinator(
             parentCoordinatorDelegate: self,
@@ -1122,7 +1122,6 @@ class BrowserCoordinator: BaseCoordinator,
             themeManager: themeManager,
             router: router
         ) { _ in
-            
         }
         add(child: coordinator)
         coordinator.start()
