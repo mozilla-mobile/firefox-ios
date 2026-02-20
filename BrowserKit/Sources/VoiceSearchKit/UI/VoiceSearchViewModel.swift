@@ -29,7 +29,7 @@ final class VoiceSearchViewModel {
     }
 
     private func recordVoiceTask() async {
-        let stream = service.recordVoice()
+        guard let stream = try? await service.record() else { return }
         do {
             for try await result in stream {
                 try Task.checkCancellation()
@@ -47,10 +47,10 @@ final class VoiceSearchViewModel {
         }
     }
 
-    func stopRecordingVoice() {
+    func stopRecordingVoice() async {
         recordVoiceTask?.cancel()
         recordVoiceTask = nil
-        service.stopRecordingVoice()
+        try? await service.stopRecording()
         guard let recentSpeechResult, searchResultTask == nil else { return }
         searchResultTask = Task { [weak self] in
             do {

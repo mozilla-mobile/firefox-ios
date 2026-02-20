@@ -29,9 +29,9 @@ enum SearchResultError: Error, Equatable {
 
 protocol VoiceSearchService: Sendable {
     /// Starts the voice record operation and return a stream with the accumulated results from the speech.
-    func recordVoice() -> AsyncThrowingStream<SpeechResult, Error>
+    func record() async throws -> AsyncThrowingStream<SpeechResult, Error>
 
-    func stopRecordingVoice()
+    func stopRecording() async throws
 
     /// Performs a search with the provided query text parameter.
     func search(text: String) async -> Result<SearchResult, SearchResultError>
