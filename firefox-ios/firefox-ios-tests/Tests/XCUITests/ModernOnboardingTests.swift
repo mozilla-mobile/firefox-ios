@@ -134,6 +134,8 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         if !iPad() {
             onboardingScreen.selectToolbarPosition("Bottom")
             onboardingScreen.goToNextScreenViaPrimary()
+        } else {
+            onboardingScreen.currentScreen += 1
         }
 
         onboardingScreen.assertThemeCustomizationScreen()
@@ -162,6 +164,8 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         if !iPad() {
             onboardingScreen.selectToolbarPosition("Bottom")
             onboardingScreen.goToNextScreenViaPrimary()
+        } else {
+            onboardingScreen.currentScreen += 1
         }
 
         onboardingScreen.selectTheme("System Auto")
@@ -190,6 +194,8 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         if !iPad() {
             onboardingScreen.selectToolbarPosition("Bottom")
             onboardingScreen.goToNextScreenViaPrimary()
+        } else {
+            onboardingScreen.currentScreen += 1
         }
 
         onboardingScreen.selectTheme("System Auto")
@@ -233,7 +239,11 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
 
         let secondaryButton = app.buttons["\(onboardingScreen.rootA11yId)SecondaryButton"]
         secondaryButton.waitAndTap()
-        onboardingScreen.currentScreen += 1
+        if !iPad() {
+            onboardingScreen.currentScreen += 1
+        } else {
+            onboardingScreen.currentScreen += 2
+        }
 
         // Should be on toolbar (iPhone) or theme (iPad) screen
         if iPad() {
