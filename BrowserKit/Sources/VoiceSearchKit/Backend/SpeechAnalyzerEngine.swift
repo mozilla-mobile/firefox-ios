@@ -167,7 +167,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat) { [weak self] buffer, time in
             guard let self else { return }
             do {
-                guard let converted = try? self.convertIfNeeded(buffer, to: targetFormat, with: converter) else { return }
+                guard let converted = try self.convertIfNeeded(buffer, to: targetFormat, with: converter) else { return }
                 continuation.yield(AnalyzerInput(buffer: converted))
             } catch {
                 // TODO: FXIOS-14931 Add logger
