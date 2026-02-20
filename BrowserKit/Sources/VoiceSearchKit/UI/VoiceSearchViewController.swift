@@ -97,12 +97,16 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         configureButtons()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
-        backgroundRecordEffect.startAnimating()
-        audioWaveform.startAnimating()
         viewModel.onStateChange = { [weak self] in
             self?.onStateChange(state: $0)
         }
         viewModel.startRecordingVoice()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        backgroundRecordEffect.startAnimating()
+        audioWaveform.startAnimating()
     }
 
     private func setupSubviews() {

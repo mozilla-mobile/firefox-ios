@@ -18,8 +18,7 @@ import CoreMedia
 ///
 /// This type is an `@MainActor` class to keep audio/transcription state safe across concurrent calls.
 @available(iOS 26.0, *)
-@MainActor
-final class SpeechAnalyzerEngine: TranscriptionEngine {
+final actor SpeechAnalyzerEngine: TranscriptionEngine {
     // TODO: FXIOS-14882 - Refactor audio portion to be in its own manager
     private let audioEngine: AudioEngineProvider
     private let audioSession: AudioSessionProvider
@@ -71,7 +70,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         let transcriber = SpeechTranscriber(
             locale: resolvedLocale,
             transcriptionOptions: [],
-            reportingOptions: [.volatileResults],
+            reportingOptions: [.volatileResults, .fastResults],
             attributeOptions: [.transcriptionConfidence]
         )
         self.transcriber = transcriber
@@ -96,7 +95,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         try await analyzer.start(inputSequence: stream)
 
         resultsTask = Task { [weak self] in
-            guard let self, let transcriber = self.transcriber else { return }
+            guard let self, let transcriber = await self.transcriber else { return }
             do {
                 for try await result in transcriber.results {
                     let chunk = String(result.text.characters)
