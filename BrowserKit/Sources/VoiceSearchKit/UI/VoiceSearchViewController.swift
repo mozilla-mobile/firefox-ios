@@ -102,8 +102,8 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         }
         viewModel.startRecordingVoice()
     }
-    
-    public override func viewWillAppear(_ animated: Bool) {
+
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
