@@ -114,7 +114,7 @@ class BrowserViewController: UIViewController,
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
     let recordVisitManager: RecordVisitObserving
-    let relayController: RelayController
+    let relayController: RelayControllerProtocol
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -555,7 +555,8 @@ class BrowserViewController: UIViewController,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated),
-        recordVisitManager: RecordVisitObserving? = nil
+        recordVisitManager: RecordVisitObserving? = nil,
+        relayController: RelayControllerProtocol = RelayController()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
@@ -577,7 +578,7 @@ class BrowserViewController: UIViewController,
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
-        self.relayController = RelayController()
+        self.relayController = relayController
 
         super.init(nibName: nil, bundle: nil)
         didInit()
