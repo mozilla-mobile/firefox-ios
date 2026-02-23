@@ -814,55 +814,63 @@ class WithoutAccountSetting: AccountSetting {
 }
 
 /// A setting that displays a picker menu allowing users to select from multiple predefined options.
-class PickerSetting: Setting {
-    private let pickerButton: UIButton = .build {
-        $0.showsMenuAsPrimaryAction = true
-        $0.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate),
-                    for: .normal)
-    }
-    private let pickerOptions: [String]
-    private let onOptionSelected: (String) -> Void
+class PickerSetting<Value: Equatable>: Setting {
+    private let pickerOptions: [(value: Value, displayString: String)]
+    private let onOptionSelected: (Value) -> Void
     private var menuItems: [UIAction] {
         return pickerOptions.map { option in
-            return UIAction(title: option) { [weak self] _ in
-                self?.selectedOption = option
-                self?.onOptionSelected(option)
+            return UIAction(title: option.displayString) { [weak self] _ in
+                self?.selectedDisplayString = option.displayString
+                self?.onOptionSelected(option.value)
             }
         }
     }
     private let pickerButtonAccessibilityLabel: String
-    private var selectedOption: String
-    
+    private let pickerButtonAccessibilityIdentifier: String
+    private var selectedDisplayString: String
+
     /// Initializes a new picker setting with the specified configuration.
     ///
     /// - Parameters:
-    ///   - selectedOption: The currently selected option to display in the picker.
-    ///   - pickerOptions: An array of available options to display in the picker menu.
-    ///   - pickerButtonAccessibilityLabel: The accessibility label for the picker button.
-    ///   - onOptionSelected: A closure called when a new option is selected, passing the selected option as a parameter.
+    ///   - selectedValue: The currently selected value that determines which option appears as selected.
+    ///   - pickerOptions: An array of tuples pairing each selectable value with its localized display string.
+    ///   - accessibilityIdentifier: The accessibility identifier for the setting cell.
+    ///   - pickerButtonAccessibilityLabel: The accessibility label for the picker button control.
+    ///   - pickerButtonAccessibilityIdentifier: The accessibility identifier for the picker button control.
+    ///   - onOptionSelected: A closure called when a new option is selected, receiving the selected value (not the display string).
     init(
-        selectedOption: String,
-        pickerOptions: [String],
+        selectedValue: Value,
+        pickerOptions: [(value: Value, displayString: String)],
+        accessibilityIdentifier: String,
         pickerButtonAccessibilityLabel: String,
-        onOptionSelected: @escaping (String) -> Void
+        pickerButtonAccessibilityIdentifier: String,
+        onOptionSelected: @escaping (Value) -> Void
     ) {
-        self.selectedOption = selectedOption
+        self.selectedDisplayString = pickerOptions.first(where: { $0.value == selectedValue })?.displayString ?? ""
         self.pickerOptions = pickerOptions
         self.onOptionSelected = onOptionSelected
         self.pickerButtonAccessibilityLabel = pickerButtonAccessibilityLabel
+        self.pickerButtonAccessibilityIdentifier = pickerButtonAccessibilityIdentifier
         super.init()
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
-    
+
     override func onConfigureCell(_ cell: UITableViewCell, theme: any Theme) {
         super.onConfigureCell(cell, theme: theme)
-        cell.textLabel?.text = selectedOption
-        cell.textLabel?.accessibilityLabel = selectedOption
-        
+        cell.textLabel?.text = selectedDisplayString
+
+        let pickerButton = UIButton()
+        pickerButton.showsMenuAsPrimaryAction = true
+        pickerButton.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        pickerButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
         pickerButton.sizeToFit()
         pickerButton.menu = UIMenu(children: menuItems)
         pickerButton.tintColor = theme.colors.iconPrimary
         pickerButton.accessibilityLabel = pickerButtonAccessibilityLabel
-        pickerButton.accessibilityIdentifier = AccessibilityIdentifiers.Settings.settingPickerButton
+        pickerButton.accessibilityIdentifier = pickerButtonAccessibilityIdentifier
         cell.selectionStyle = .none
         cell.accessoryView = pickerButton
     }

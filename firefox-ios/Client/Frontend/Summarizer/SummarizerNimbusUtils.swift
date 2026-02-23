@@ -129,8 +129,6 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     ) -> SummarizerLanguageExpansionConfiguration {
         return SummarizerLanguageExpansionConfiguration(
             isFeatureEnabled: nimbusFeature.enabled,
-            isWebsiteDeviceLanguageSupported: nimbusFeature.supportWebsiteLanguage,
-            isDeviceLanguageSupported: nimbusFeature.supportDeviceLanguage,
             supportedLocales: nimbusFeature.supportedLocales.map({
                 return Locale(identifier: $0)
             })

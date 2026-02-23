@@ -32,8 +32,7 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
         let summarizeContentEnabled = prefs.boolForKey(PrefsKeys.Summarizer.summarizeContentFeature) ?? true
 
         // Shows and hides the gesture section
-        // based on the summarize feature being enabled
-        // and shake gesture feature flag is true
+        // based on the summarize feature being enabled.
         guard summarizeContentEnabled else {
             return [summarizeSection]
         }
@@ -44,7 +43,7 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
         if nimbusUtils.isLanguageExpansionEnabled {
             sections.append(languageSection)
         }
-        
+
         return sections
     }
 
@@ -97,17 +96,25 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
             children: [shakeGestureSetting]
         )
     }
-    
+
     private var languageSection: SettingSection {
+        let configuration = nimbusUtils.languageExpansionConfiguration(
+            from: FxNimbus.shared.features.summarizerLanguageExpansionFeature.value()
+        )
         return SettingSection(
-            title: NSAttributedString(string: "LANGUAGE"),
+            title: NSAttributedString(string: .Settings.Summarize.LanguageSection.Title),
             children: [
                 PickerSetting(
-                    selectedOption: "Website Language",
-                    pickerOptions: ["Website Language", "App Language", "English", "Spanish"],
+                    selectedValue: configuration.selectedPreference(prefs: prefs),
+                    pickerOptions: configuration.settingOptions,
+                    accessibilityIdentifier: AccessibilityIdentifiers.Settings.Summarize.languageCell,
                     pickerButtonAccessibilityLabel: .Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel,
-                    onOptionSelected: { _ in
-                        self.tableView.reloadData()
+                    pickerButtonAccessibilityIdentifier:
+                        AccessibilityIdentifiers.Settings.Summarize.languageCellPickerButton,
+                    onOptionSelected: { [weak self] selectedOption in
+                        guard let self else { return }
+                        configuration.save(preference: selectedOption, prefs: prefs)
+                        tableView.reloadData()
                     }
                 )
             ]

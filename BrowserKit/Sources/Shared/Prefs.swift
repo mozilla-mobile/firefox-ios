@@ -81,6 +81,7 @@ public struct PrefsKeys {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
         public static let summarizeContentFeature = "summarizeContentFeature"
         public static let shakeGestureEnabled = "shakeGestureEnabledKey"
+        public static let selectedLanguage = "selectedLanguage"
     }
 
     public struct AppVersion {
