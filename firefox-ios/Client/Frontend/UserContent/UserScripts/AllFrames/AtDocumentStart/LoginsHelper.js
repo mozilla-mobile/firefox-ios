@@ -486,7 +486,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       if (pendingEmailField && pendingEmailField === LoginManagerContent.activeField) {
           pendingEmailField.setUserInput(email);
       }
-      pendingEmailField = null;
       LoginManagerContent.fromFill = false
   }
 
