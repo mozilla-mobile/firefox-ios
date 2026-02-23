@@ -10,18 +10,21 @@ import Shared
 @MainActor
 final class TermsOfUseMiddlewareTests: XCTestCase {
     private var profile: MockProfile!
+    private var mockGleanWrapper: MockGleanWrapper!
     private var middleware: TermsOfUseMiddleware!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        middleware = TermsOfUseMiddleware(profile: profile)
+        mockGleanWrapper = MockGleanWrapper()
+        middleware = TermsOfUseMiddleware(profile: profile, telemetry: TermsOfUseTelemetry(gleanWrapper: mockGleanWrapper))
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
         profile = nil
+        mockGleanWrapper = nil
         middleware = nil
         try await super.tearDown()
     }
@@ -123,6 +126,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         XCTAssertEqual(remindersCount, 0, "First gesture dismissal should not increment reminders count")
         XCTAssertNotNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }
 
     func testMiddleware_secondDismissal_incrementsRemindersCount() {
@@ -139,6 +143,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         XCTAssertEqual(remindersCount, 1, "Second gesture dismissal should increment reminders count to 1")
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 2)
     }
 
     func testMiddleware_remindMeLaterTapped_firstDismissal_doesNotIncrementCount() {
@@ -186,25 +191,23 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
                                               actionType: TermsOfUseActionType.gestureDismiss)
         middleware.termsOfUseProvider(AppState(), gestureAction2)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 2)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 3)
     }
 
     func testMiddleware_termsShown_firstTime_recordsImpression() {
-        XCTAssertNil(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown))
-
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction)
 
-        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }
 
     func testMiddleware_termsShown_onResumeFromBackgroundOrLinks_doesNotRecordAgain() {
         let shownAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction1)
-        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
 
         let shownAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction2)
 
-        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }
 }
